@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_autotext.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:45 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:23:42 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -66,15 +66,15 @@ testcase tEditAutotext_1
         if Autotext.Exists then Autotext.Close
         Call hCloseDocument
         goto endsub
-    endif       
+    end if       
     wait 500
     Kontext "Autotext"
     Autotext.Close
     
     printlog " Insert some text and format text"
-    Call wDokSchreiben("This becomes an autotext!")
+    Call wTypeKeys("This becomes an autotext!")
     ' Format word 'This'
-    Call wDokSchreiben("<Home><Right>")
+    Call wTypeKeys("<Home><Right>")
     FormatCharacter
     Kontext
     Active.SetPage TabFont
@@ -92,7 +92,7 @@ testcase tEditAutotext_1
                 catch
                 endcatch
             next i
-        endif
+        end if
         Vergleich1$ = FontWest.GetSelText                
         Vergleich2$ = StyleWest.GetSelText
         SizeWest.Select 5
@@ -110,12 +110,12 @@ testcase tEditAutotext_1
                 catch
                 endcatch
             next i
-        endif
+        end if
         Vergleich1$ = Font.GetSelText
         Vergleich2$ = Style.GetSelText
         Size.Select 5
         Vergleich3$ = Size.GetSelText
-    endif
+    end if
     wait 100
     Kontext
     Active.Setpage TabHyperlinkZeichen
@@ -125,8 +125,8 @@ testcase tEditAutotext_1
     Vergleich4$ = TargetFrame.GetSelText
     TabHyperlinkZeichen.Ok
 
-    Call wDokSchreiben("<End>")
-    Call wDokSchreiben("<Shift Home>")
+    Call wTypeKeys("<End>")
+    Call wTypeKeys("<Shift Home>")
 
     printlog " Call Edit / Autotext"
     EditAutotext
@@ -134,7 +134,7 @@ testcase tEditAutotext_1
     if Active.Exists then
         QAErrorlog Active.Gettext
         Active.Ok
-    endif
+    end if
     Kontext "Autotext"
     printlog " Uncheck 'Preview and Select first group in List"
     Vorschau_anzeigen.Uncheck
@@ -145,7 +145,7 @@ testcase tEditAutotext_1
         if Autotext.Exists then Autotext.Close
         Call hCloseDocument
         goto endsub
-    endif  
+    end if  
     wait 500
 
     printlog " Insert a name for the Autotext and a Shortcut"
@@ -160,7 +160,7 @@ testcase tEditAutotext_1
         Autotext.Close
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     
     wait 500
     try
@@ -183,8 +183,8 @@ testcase tEditAutotext_1
             Autotext.Cancel
             Call hCloseDocument
             goto endsub
-        endif
-    endif
+        end if
+    end if
 
     if wSelectAutotextCategory("AANewCategory") = false then
         Warnlog "Created autotext category not found!"    
@@ -198,7 +198,7 @@ testcase tEditAutotext_1
                 printlog "Autotext has been found!"
                 Autotext.Ok
                 j = sAll + 2
-            endif
+            end if
         next j
         printlog " Check if content has been added to named autotext"
         Kontext "Autotext"
@@ -207,12 +207,12 @@ testcase tEditAutotext_1
             Autotext.Close
         else
             Call wDocSetContext
-            Call wDokSchreiben("<Shift Home>")
+            Call wTypeKeys("<Shift Home>")
             EditCopy
             if GetClipboardtext <> "This becomes an autotext!" then
                 Warnlog "Autotext has no content!"
             else
-                Call wDokSchreiben ("<Home><Right>")
+                Call wTypeKeys ("<Home><Right>")
                 FormatCharacter
                 Kontext
                 Active.SetPage TabFont
@@ -225,7 +225,7 @@ testcase tEditAutotext_1
                     if Vergleich1$ <> Font.GetSelText then Warnlog "Wrong Font in Autotext!"
                     if Vergleich2$ <> Style.GetSelText then Warnlog "Wrong Fontstyle in Autotext!"
                     if Vergleich3$ <> Size.GetSelText then Warnlog "Wrong Fontsize in Autotext!"
-                endif
+                end if
                 wait 100
                 Kontext
                 Active.Setpage TabHyperlinkZeichen
@@ -233,9 +233,9 @@ testcase tEditAutotext_1
                 if UrlName.Gettext <> "http://www.irgendwas.de/" then Warnlog "Wrong hyperlink has been added to text!"
                 if Vergleich4$ <> TargetFrame.GetSelText then QAerrorlog "#i74539#Wrong targetFrame has been added to text!"
                 TabHyperlinkZeichen.Cancel
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
 
     printlog " Delete whole category with created autotext"
     Call wDeleteAutotextCategory( "AANewCategory" )
@@ -266,15 +266,15 @@ testcase tEditAutotext_2
         if Autotext.Exists then Autotext.Close
         Call hCloseDocument
         goto endsub
-    endif       
+    end if       
     wait 500
     Kontext "Autotext"
     Autotext.Close
     Call wDocSetContext
     printlog " Insert some text and format text"
-    Call wDokSchreiben("This becomes an autotext!")
+    Call wTypeKeys("This becomes an autotext!")
     ' Format word 'This'
-    Call wDokSchreiben("<Home><Right>")
+    Call wTypeKeys("<Home><Right>")
     FormatCharacter
     Kontext
     Active.SetPage TabFont
@@ -292,7 +292,7 @@ testcase tEditAutotext_2
                 catch
                 endcatch
             next i
-        endif
+        end if
         Vergleich1$ = FontWest.GetSelText
         Vergleich2$ = StyleWest.GetSelText
         SizeWest.Select 5
@@ -310,12 +310,12 @@ testcase tEditAutotext_2
                 catch
                 endcatch
             next i
-        endif
+        end if
         Vergleich1$ = Font.GetSelText
         Vergleich2$ = Style.GetSelText
         Size.Select 5
         Vergleich3$ = Size.GetSelText
-    endif
+    end if
     wait 100
     Kontext
     Active.Setpage TabHyperlinkZeichen
@@ -325,8 +325,8 @@ testcase tEditAutotext_2
     Vergleich4$ = TargetFrame.GetSelText
     TabHyperlinkZeichen.Ok
 
-    Call wDokSchreiben("<End>")
-    Call wDokSchreiben("<Shift Home>")
+    Call wTypeKeys("<End>")
+    Call wTypeKeys("<Shift Home>")
 
     printlog " Call Edit / Autotext"
     EditAutotext
@@ -334,7 +334,7 @@ testcase tEditAutotext_2
     if Active.Exists then
         QAErrorlog Active.Gettext
         Active.Ok
-    endif
+    end if
     Kontext "Autotext"
 
     printlog " Uncheck 'Preview and Select first group in List"
@@ -346,7 +346,7 @@ testcase tEditAutotext_2
         if Autotext.Exists then Autotext.Close
         Call hCloseDocument
         goto endsub
-    endif  
+    end if  
     wait 500
 
     printlog " Insert a name for the Autotext and a Shortcut"
@@ -376,8 +376,8 @@ testcase tEditAutotext_2
             Autotext.Cancel
             Call hCloseDocument
             goto endsub
-        endif
-    endif
+        end if
+    end if
 
     if wSelectAutotextCategory("AANewCategory") = false then
         Warnlog "Created autotext category not found!"    
@@ -391,7 +391,7 @@ testcase tEditAutotext_2
                 printlog "Autotext has been found!"
                 Autotext.Ok
                 j = sAll + 2
-            endif
+            end if
         next j
         printlog " Check if content has been added to named autotext"
         Kontext "Autotext"
@@ -400,13 +400,13 @@ testcase tEditAutotext_2
             Autotext.Close
         else
             Call wDocSetContext
-            Call wDokSchreiben("<Home><Up>" , 4)
-            Call wDokSchreiben("<Shift End>")
+            Call wTypeKeys("<Home><Up>" , 4)
+            Call wTypeKeys("<Shift End>")
             EditCopy
             if GetClipboardtext <> "This becomes an autotext!" then
                 Warnlog "Autotext has no content!"
             else
-                Call wDokSchreiben ("<Home><Right>")
+                Call wTypeKeys ("<Home><Right>")
                 FormatCharacter
                 Kontext
                 Active.SetPage TabFont
@@ -419,7 +419,7 @@ testcase tEditAutotext_2
                     if Vergleich1$ = Font.GetSelText then Warnlog "Wrong Font in Autotext!"
                     if Vergleich2$ = Style.GetSelText then Warnlog "Wrong Fontstyle in Autotext!"
                     if Vergleich3$ = Size.GetSelText then Warnlog "Wrong Fontsize in Autotext!"
-                endif
+                end if
                 wait 100
                 Kontext
                 Active.Setpage TabHyperlinkZeichen
@@ -427,9 +427,9 @@ testcase tEditAutotext_2
                 if UrlName.Gettext = "http://www.irgendwas.de/" then Warnlog "Wrong hyperlink has been added to text!"
                 if Vergleich4$ = TargetFrame.GetSelText then Warnlog "Wrong targetFrame has been added to text!"
                 TabHyperlinkZeichen.Cancel
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
 
     printlog " Delete whole category with created autotext"
     Call wDeleteAutotextCategory( "AANewCategory" )
@@ -462,7 +462,7 @@ QaErrorLog "#i# - tEditAutotext_3 outcommented due to crash."
     if Active.Exists then
         QAErrorlog Active.Gettext
         Active.Ok
-    endif
+    end if
 
     printlog "  - Select and Insert all Autotexts "
     printlog " Select and Insert all autotexts"
@@ -516,7 +516,7 @@ testcase tEditAutotext_4
         if Autotext.Exists then Autotext.Close
         Call hCloseDocument
         goto endsub
-    endif
+    end if
 
     printlog " Close dialog and check if categorie has been created"
     Kontext "Autotext"
@@ -527,7 +527,7 @@ testcase tEditAutotext_4
         if Autotext.Exists then Autotext.Close
         Call hCloseDocument        
         goto endsub
-    endif
+    end if
 
     Bereiche.Click
     Kontext "BereicheBearbeitenAutotext"
@@ -544,8 +544,8 @@ testcase tEditAutotext_4
             if Active.GetRT = 304 then
                 QAErrorlog Active.Gettext
                 Active.Ok
-            endif
-        endif            
+            end if
+        end if            
     else
         Warnlog "Categorie couldn't be renamed (Button is disabled), no further test!"
         Kontext "BereicheBearbeitenAutotext"
@@ -555,7 +555,7 @@ testcase tEditAutotext_4
         AutoText.Close
         Call hCloseDocument                        
         goto endsub
-    endif
+    end if
 
     Kontext "BereicheBearbeitenAutotext"
     if BereicheBearbeitenAutotext.Exists then BereicheBearbeitenAutotext.Ok 
@@ -566,7 +566,7 @@ testcase tEditAutotext_4
     if wSelectAutotextCategory("AAAAAArrghh") = false then
         Warnlog "Categorie hasn't been correctly renamed"
         AlterWert=Liste.Gettext
-    endif
+    end if
 
     printlog " Delete new categorie"    
     printlog "  - Delete new categorie"
@@ -577,8 +577,8 @@ testcase tEditAutotext_4
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif        
+        end if
+    end if        
     Kontext "BereicheBearbeitenAutoText"
     Bereich.SetText "AAAAAArrghh"
     printlog " Select 'Delete', close document and check if categorie has been deleted"
@@ -586,7 +586,7 @@ testcase tEditAutotext_4
         Loeschen.Click
     else
         Warnlog "Categorie couldn't be deleted (Button is disabled)!"
-    endif
+    end if
 
     BereicheBearbeitenAutoText.OK
     Kontext "MessageBox"
@@ -599,8 +599,8 @@ testcase tEditAutotext_4
             if Active.GetRT = 304 then
                 QAErrorlog Active.Gettext
                 Active.Ok
-            endif
-        endif    
+            end if
+        end if    
         if wSelectAutotextCategory("AAAAAArrghh") = false then
             Warnlog "After denying the 'Deletemessage' the categorie has been deleted!"
         else
@@ -611,8 +611,8 @@ testcase tEditAutotext_4
                 if Active.GetRT = 304 then
                     QAErrorlog Active.Gettext
                     Active.Ok
-                endif
-            endif                
+                end if
+            end if                
             Kontext "BereicheBearbeitenAutoText"
             Bereich.SetText "AAAAAArrghh"
             if Loeschen.IsEnabled then
@@ -625,17 +625,17 @@ testcase tEditAutotext_4
                     if Active.GetRT = 304 then
                         QAErrorlog Active.Gettext
                         Active.Ok
-                    endif
-                endif                    
+                    end if
+                end if                    
                 Sleep 2
                 if wSelectAutotextCategory("AAAAAArrghh") = true then
                     Warnlog "Though the categorie has been deleted it is always there!"
-                endif
+                end if
             else
                 Warnlog "Area couldn't be deleted (Button is disabled)!"
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
 
     Kontext "Autotext"
     if Autotext.Exists then Autotext.Close
@@ -651,7 +651,7 @@ testcase tEditAutotext_5
     Call hNewDocument
     printlog " try to insert  autotexts with Shotcut"
 
-    Call wDokSchreiben "<Return>", 3
+    Call wTypeKeys "<Return>", 3
     Call wBlindtextEinfuegen
 
     Kontext "Active"
@@ -660,7 +660,7 @@ testcase tEditAutotext_5
         Active.OK
     end if
     Sleep 1
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
     Sleep 1
     EditCopy
     printlog " Check if autotext has been inserted"
