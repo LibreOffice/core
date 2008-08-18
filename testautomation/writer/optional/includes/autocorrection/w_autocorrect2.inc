@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_autocorrect2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:54:41 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:23:31 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -152,7 +152,7 @@ testcase tToolsAutocorrectWordCompletion_2
    MinWortlaenge.SetText sMinWordLength
    TabWortergaenzung.OK
 
-    Call wDokSchreiben "Hello World ! This is a StarOffice Test .<Return>"
+    Call wTypeKeys "Hello World ! This is a StarOffice Test .<Return>"
     Sleep 3
 
     ToolsAutocorrect
@@ -212,66 +212,66 @@ testcase tToolsAutocorrectWordCompletion_3
 
    'forward with <CTRL-Tab>
     For i = 0 to j
-        Call wDokSchreiben aTestWord(i)
-        Call wDokSchreiben "<Return>"
+        Call wTypeKeys aTestWord(i)
+        Call wTypeKeys "<Return>"
     next i
     Sleep 2
 
     For i = 0 to j
-        Call wDokSchreiben sPartOfTestWord
+        Call wTypeKeys sPartOfTestWord
 
-        if i > 0 then Call wDokSchreiben "<MOD1 TAB>", i
+        if i > 0 then Call wTypeKeys "<MOD1 TAB>", i
         Sleep 2
 
-        Call wDokSchreiben "<Return>"
+        Call wTypeKeys "<Return>"
         Sleep 2
-        Call wDokSchreiben "<Shift Home>"
+        Call wTypeKeys "<Shift Home>"
         Sleep 2
         EditCopy
         Sleep 2
         if GetClipboardText <> aTestWord(i) then Warnlog "#102535# Should be " +aTestWord(i) +" but get " +GetClipboardText
-        Call wDokSchreiben "<Delete>"
+        Call wTypeKeys "<Delete>"
     next i
 
    'endless loop test
-    Call wDokSchreiben sPartOfTestWord
-    Call wDokSchreiben "<MOD1 TAB>", j+1
+    Call wTypeKeys sPartOfTestWord
+    Call wTypeKeys "<MOD1 TAB>", j+1
     Sleep 2
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Sleep 2
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     Sleep 2
     EditCopy
     Sleep 2
     if GetClipboardText <> aTestWord(0) then Warnlog "#102535# Should be " +aTestWord(0) +" but get " +GetClipboardText
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Delete>"
 
    'backwards with <SHIFT-CTRL-Tab>
     For i = j to 0 step -1
-        Call wDokSchreiben sPartOfTestWord
+        Call wTypeKeys sPartOfTestWord
 
-        Call wDokSchreiben "<MOD1 TAB>", j
+        Call wTypeKeys "<MOD1 TAB>", j
 
-        if i > 0 then Call wDokSchreiben "<Shift MOD1 TAB>", i
+        if i > 0 then Call wTypeKeys "<Shift MOD1 TAB>", i
 
         Sleep 2
-        Call wDokSchreiben "<Return>"
+        Call wTypeKeys "<Return>"
         Sleep 2
-        Call wDokSchreiben "<Shift Home>"
+        Call wTypeKeys "<Shift Home>"
         Sleep 2
         EditCopy
         Sleep 2
         if GetClipboardText <> aTestWord(j-i) then Warnlog "#102535# Should be " +aTestWord(j-i) +" but get " +GetClipboardText
-        Call wDokSchreiben "<Delete>"
+        Call wTypeKeys "<Delete>"
     next i
 
    'endless loop test
-    Call wDokSchreiben sPartOfTestWord
-    Call wDokSchreiben "<Shift MOD1 TAB>"
+    Call wTypeKeys sPartOfTestWord
+    Call wTypeKeys "<Shift MOD1 TAB>"
     Sleep 2
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Sleep 2
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     Sleep 2
     EditCopy
     Sleep 2
@@ -363,13 +363,13 @@ testcase tToolsAutocorrectWordCompletion_5
     'Delete all entries in the list
      fDeleteAllEntries()
 
-     Call wDokSchreiben sTestWord1
+     Call wTypeKeys sTestWord1
 
     'Open 2nd file
      Call hNewDocument
 
-       Call wDokSchreiben sTestWord2
-       Call wDokSchreiben sTestWord3
+       Call wTypeKeys sTestWord2
+       Call wTypeKeys sTestWord3
 
     ToolsAutocorrect
     Active.Setpage TabWortergaenzung
@@ -406,13 +406,13 @@ testcase tToolsAutocorrectWordCompletion_5
        KeepList.Uncheck
      TabWortergaenzung.OK
 
-     Call wDokSchreiben sTestWord1
+     Call wTypeKeys sTestWord1
 
     'Open 2nd file
      Call hNewDocument
 
-       Call wDokSchreiben sTestWord2
-       Call wDokSchreiben sTestWord3
+       Call wTypeKeys sTestWord2
+       Call wTypeKeys sTestWord3
 
     ToolsAutocorrect
     Active.Setpage TabWortergaenzung
@@ -464,18 +464,18 @@ testcase tToolsAutocorrectWordCompletion_x
   'Show as Tip -- uncheck (default)
    Call hNewDocument
 
-     Call wDokSchreiben sTestWord
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys sTestWord
+     Call wTypeKeys "<Return>"
      Sleep 1
-     Call wDokSchreiben sPartOfTestWord
+     Call wTypeKeys sPartOfTestWord
      Sleep 4
-     Call wDokSchreiben "<Return>"
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys "<Return>"
+     Call wTypeKeys "<Shift Home>"
 
      Sleep 1
-     Call wDokSchreiben "StaS"
+     Call wTypeKeys "StaS"
      Sleep 4
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
 
    Call hCloseDocument
 
