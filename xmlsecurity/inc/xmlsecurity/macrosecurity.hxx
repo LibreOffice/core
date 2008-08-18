@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macrosecurity.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,7 @@ private:
     HelpButton          maHelpBtn;
     PushButton          maResetBtn;
 
+    cssu::Reference< cssu::XComponentContext >  mxCtx;
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
     SvtSecurityOptions                                          maSecOptions;
 
@@ -84,7 +85,7 @@ private:
 
     DECL_LINK(          OkBtnHdl, void* );
 public:
-    MacroSecurity( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
+    MacroSecurity( Window* pParent, const cssu::Reference< cssu::XComponentContext>& rxCtx, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
     virtual             ~MacroSecurity();
 
     inline void     EnableReset( bool _bEnable = true );
