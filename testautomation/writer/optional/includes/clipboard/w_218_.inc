@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_218_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:47 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:25:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -57,8 +57,8 @@ testcase HTMLToDRAWText
   printlog " + Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
   printlog "  Jump to beginning of document "
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Shift Down><Shift End>"
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Shift Down><Shift End>"
   EditCopy
 
   gApplication = "DRAW"
@@ -111,14 +111,14 @@ testcase HTMLToDRAWField
     printlog " + Copy selected text "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben "<Down>",2
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Down>",2
+    Call wTypeKeys "<Home><Shift End>"
     try
         EditCopy
     catch
-        Call wDokSchreiben "<Down>",1
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Down>",1
+        Call wTypeKeys "<Home><Shift End>"
         EditCopy
     endcatch
     gApplication = "DRAW"
@@ -171,9 +171,9 @@ testcase HTMLToDRAWTable
   printlog " + Copy selected table "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
   printlog "  Jump to beginning of document "
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Down>",5
-  Call wDokSchreiben "<Mod1 A>",2
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Down>",5
+  Call wTypeKeys "<Mod1 A>",2
   EditCopy
 
   gApplication = "DRAW"
@@ -225,8 +225,8 @@ testcase HTMLToDRAWGraphicLinked
     printlog " + Copy selected Linked Graphic "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
     EditCopy
     
     gApplication = "DRAW"
@@ -278,9 +278,9 @@ testcase HTMLToDRAWControl
     printlog " + Copy selected Control "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
     EditCopy
     
     gApplication = "DRAW"
@@ -332,9 +332,9 @@ testcase HTMLToDRAWFloatingFrame
     printlog " + Copy selected Floating Frame "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>",2
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>",2
     try
         EditCopy
     catch
