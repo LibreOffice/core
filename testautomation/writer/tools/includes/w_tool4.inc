@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_tool4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:43:40 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -64,7 +64,7 @@ function CountItemsInNavigatorGroup(Group as integer) as Integer
             Auswahlliste.Select j
             Auswahlliste.TypeKeys "-"
         next j
-    endif
+    end if
     
     Wait 500
     'Select group given by the function
@@ -94,10 +94,10 @@ function wCheckOutline(WhatToFind as string) as boolean
         EditCopy
         if GetClipboardText = WhatToFind then
           wCheckOutline = True
-        endif
+        end if
      else
       wCheckOutline = True
-     endif
+     end if
 end function
 
 '*******************************************************************
@@ -119,37 +119,34 @@ end function
 function wGetSpellcheckDocumentName(xCategory as integer) as string
     Dim sTemp as string, sReturn as string
     '/// This function is to return the document to load in spellcheck test
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-        
+'       
     select case xCategory
         case 1:
-            select case sLocale(1)
+            select case iSprache
                 case 81, 82, 86, 88
                     sReturn = "None"
                 case 1
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\spellcheck\st1_2_01.odt")
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\spellcheck\st1_2_01.odt")
                 case 3
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\spellcheck\st1_2_03.odt")
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\spellcheck\st1_2_03.odt")
                 case 7
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\spellcheck\st1_2_07.odt")                                        
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\spellcheck\st1_2_07.odt")
                 case else
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\spellcheck\st1_2_" & sLocale(1) & ".odt")
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\spellcheck\st1_2_" & iSprache & ".odt")
             end select
 
         case 2:  
-            select case sLocale(1)
+            select case iSprache
                 case 81, 82, 86, 88
                     sReturn = "None"
                 case 1
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\linguistik\001.odt")
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\linguistik\001.odt")
                 case 3
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\linguistik\003.odt")
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\linguistik\003.odt")
                 case 7
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\linguistik\007.odt")                    
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\linguistik\007.odt")
                 case else
-                    sTemp = Convertpath(gTesttoolpath + "writer\level1\input\linguistik\0" & sLocale(1) & ".odt")
+                    sTemp = Convertpath(gTesttoolpath + "writer\optional\input\linguistik\0" & iSprache & ".odt")
             end select    
     end select
 
@@ -158,8 +155,8 @@ function wGetSpellcheckDocumentName(xCategory as integer) as string
             sReturn = sTemp
         else
             sReturn = "Empty"
-        endif
-    endif
+        end if
+    end if
     
     wGetSpellcheckDocumentName = sReturn
     
