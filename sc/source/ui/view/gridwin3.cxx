@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin3.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,49 +206,31 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
 void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, ULONG nLayer )
 {
     // #109985#
-    sal_uInt16 nPaintMode(0);
-    sal_Bool bDrawAtAll(sal_False);
     const ScViewOptions& rOpts = pViewData->GetOptions();
 
-    //#i80528# reduced to on/off support
-    if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE))
-    {
-        bDrawAtAll = sal_True;
-    }
-    else
-    {
-        nPaintMode |= SDRPAINTMODE_SC_HIDE_OLE;
-    }
+    // use new flags at SdrPaintView for hiding objects
+    const bool bDrawOle(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE));
+    const bool bDrawChart(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART));
+    const bool bDrawDraw(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW));
 
-    //#i80528# reduced to on/off support
-    if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART))
+    if(bDrawOle || bDrawChart || bDrawDraw)
     {
-        bDrawAtAll = sal_True;
-    }
-    else
-    {
-        nPaintMode |= SDRPAINTMODE_SC_HIDE_CHART;
-    }
+        ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
 
-    //#i80528# reduced to on/off support
-    if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW))
-    {
-        bDrawAtAll = sal_True;
-    }
-    else
-    {
-        nPaintMode |= SDRPAINTMODE_SC_HIDE_DRAW;
-    }
+        if(pDrView)
+        {
+            pDrView->setHideOle(!bDrawOle);
+            pDrView->setHideChart(!bDrawChart);
+            pDrView->setHideDraw(!bDrawDraw);
+        }
 
-    if(bDrawAtAll)
-    {
         if(SC_UPDATE_CHANGED == eMode)
         {
-            rOutputData.DrawingSingle((sal_uInt16)nLayer, nPaintMode);
+            rOutputData.DrawingSingle((sal_uInt16)nLayer);
         }
         else
         {
-            rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer, nPaintMode);
+            rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer);
         }
     }
 }
