@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helpids.hrc,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,8 +74,8 @@
 #define HID_RPT_PROP_TYPE                       (HID_RPT_START + 36)
 #define HID_RPT_PROP_MASTERFIELDS               (HID_RPT_START + 37)
 #define HID_RPT_PROP_DETAILFIELDS               (HID_RPT_START + 38)
-// free
-// free
+#define HID_RPT_PROP_AREA                       (HID_RPT_START + 39)
+#define UID_RPT_RPT_PROP_DLG_AREA               (HID_RPT_START + 40)
 // free
 // free
 // free
