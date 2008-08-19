@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdomedia.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,13 +107,6 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 UINT16 SdrMediaObj::GetObjIdentifier() const
 {
     return UINT16( OBJ_MEDIA );
-}
-
-// ------------------------------------------------------------------------------
-
-sal_Bool SdrMediaObj::DoPaintObject(XOutputDevice& /*rXOut*/, const SdrPaintInfoRec& /*rInfoRec*/) const
-{
-    return true;
 }
 
 // ------------------------------------------------------------------------------
