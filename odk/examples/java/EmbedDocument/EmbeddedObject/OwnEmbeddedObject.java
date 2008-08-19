@@ -1,6 +1,5 @@
 package org.openoffice.examples.embedding;
 
-import com.sun.org.apache.xerces.internal.impl.dtd.models.CMAny;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
