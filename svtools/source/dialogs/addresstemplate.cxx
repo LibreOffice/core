@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addresstemplate.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1085,15 +1085,19 @@ public:
                 ++m_pImpl->nLastVisibleListIndex;
 
             // increment ...
-            ++ ++ pLeftLabelControl;
-            ++ ++ pRightLabelControl;
-            ++ ++ pLeftColumnLabel;
-            ++ ++ pRightColumnLabel;
+            if ( i < FIELD_PAIRS_VISIBLE - 1 )
+            {   // (not in the very last round, here the +=2 could result in an invalid
+                // iterator position, which causes an abort in a non-product version
+                pLeftLabelControl += 2;
+                pRightLabelControl += 2;
+                pLeftColumnLabel += 2;
+                pRightColumnLabel += 2;
 
-            ++ ++ pLeftListControl;
-            ++ ++ pRightListControl;
-            ++ ++ pLeftAssignment;
-            ++ ++ pRightAssignment;
+                pLeftListControl += 2;
+                pRightListControl += 2;
+                pLeftAssignment += 2;
+                pRightAssignment += 2;
+            }
         }
 
         if (_bAdjustFocus && (nOldFocusRow >= 0))
