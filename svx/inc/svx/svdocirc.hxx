@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocirc.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ public:
 
 class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
 {
+private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
@@ -71,6 +72,10 @@ class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
 
     // only for SdrCircleAttributes
     SdrObjKind GetCircleKind() const { return meCircleKind; }
+
+    // DrawContact section
+private:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 protected:
      SdrObjKind                 meCircleKind;
@@ -111,9 +116,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual void RecalcBoundRect();
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
