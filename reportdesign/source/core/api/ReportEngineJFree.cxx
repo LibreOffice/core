@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportEngineJFree.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,53 +380,6 @@ void SAL_CALL OReportEngineJFree::setActiveConnection( const uno::Reference< sdb
     if ( !_activeconnection.is() )
         throw lang::IllegalArgumentException();
     set(PROPERTY_ACTIVECONNECTION,_activeconnection,m_xActiveConnection);
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString OReportEngineJFree::getOrderStatement() const
-{
-    OSL_ENSURE(m_xActiveConnection.is(),"OReportEngineJFree::getOrderStatement: The ActiveConnection can not be NULL here!");
-    OSL_ENSURE(m_xReport.is(),"OReportEngineJFree::getOrderStatement: The ReportDefinition can not be NULL here!");
-
-    // retrieve columns of the object we're bound to
-    uno::Reference< lang::XComponent > xHoldAlive;
-    ::dbtools::SQLExceptionInfo aErrorInfo;
-    uno::Reference< container::XNameAccess> xColumns( ::dbtools::getFieldsByCommandDescriptor(
-        m_xActiveConnection, m_xReport->getCommandType(), m_xReport->getCommand(), xHoldAlive, & aErrorInfo ) );
-    if ( aErrorInfo.isValid() )
-        aErrorInfo.doThrow();
-    if ( !xColumns.is() )
-    {
-        DBG_WARNING( "OReportEngineJFree::getOrderStatement: could not retrieve the columns for the ORDER statement!" );
-        return ::rtl::OUString();
-    }
-
-    // set order for groups
-    ::rtl::OUStringBuffer aOrder;
-
-    const ::rtl::OUString sQuote = m_xActiveConnection->getMetaData()->getIdentifierQuoteString();
-
-    uno::Reference< report::XGroups> xGroups = m_xReport->getGroups();
-    const sal_Int32 nCount = xGroups->getCount();
-    for (sal_Int32 i = 0; i < nCount; ++i )
-    {
-        uno::Reference< report::XGroup> xGroup(xGroups->getByIndex(i),uno::UNO_QUERY);
-        ::rtl::OUString sExpression = xGroup->getExpression();
-        if ( xColumns->hasByName(sExpression) )
-            sExpression = ::dbtools::quoteName( sQuote, sExpression );
-        sExpression = sExpression.trim(); // Trim away white spaces
-        if (sExpression.getLength() > 0)
-        {
-            aOrder.append( sExpression );
-            if (aOrder.getLength() > 0)
-                aOrder.appendAscii( " " );
-            if ( !xGroup->getSortAscending() )
-                aOrder.appendAscii( "DESC" );
-            if ( (i+1) < nCount )
-                aOrder.appendAscii( "," );
-        }
-    }
-
-    return aOrder.makeStringAndClear();
 }
 // =============================================================================
 } // namespace reportdesign
