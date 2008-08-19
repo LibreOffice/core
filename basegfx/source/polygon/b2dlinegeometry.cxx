@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dlinegeometry.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
+#include <cstdio>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -38,6 +39,107 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    namespace tools
+    {
+        B2DPolyPolygon createAreaGeometryForLineStartEnd(
+            const B2DPolygon& rCandidate,
+            const B2DPolyPolygon& rArrow,
+            bool bStart,
+            double fWidth,
+            double fCandidateLength,
+            double fDockingPosition, // 0->top, 1->bottom
+            double* pConsumedLength)
+        {
+            B2DPolyPolygon aRetval;
+            OSL_ENSURE(rCandidate.count() > 1L, "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
+            OSL_ENSURE(rArrow.count() > 0L, "createAreaGeometryForLineStartEnd: Empty arrow PolyPolygon (!)");
+            OSL_ENSURE(fWidth > 0.0, "createAreaGeometryForLineStartEnd: Width too small (!)");
+            OSL_ENSURE(fDockingPosition >= 0.0 && fDockingPosition <= 1.0,
+                "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0] (!)");
+
+            if(fWidth < 0.0)
+            {
+                fWidth = -fWidth;
+            }
+
+            if(rCandidate.count() > 1 && rArrow.count() && !fTools::equalZero(fWidth))
+            {
+                if(fDockingPosition < 0.0)
+                {
+                    fDockingPosition = 0.0;
+                }
+                else if(fDockingPosition > 1.0)
+                {
+                    fDockingPosition = 1.0;
+                }
+
+                // init return value from arrow
+                aRetval.append(rArrow);
+
+                // get size of the arrow
+                const B2DRange aArrowSize(getRange(rArrow));
+
+                // build ArrowTransform
+                B2DHomMatrix aArrowTransform;
+
+                // center in X, align with axis in Y
+                aArrowTransform.translate(-aArrowSize.getCenter().getX(), -aArrowSize.getMinimum().getY());
+
+                // scale to target size
+                const double fArrowScale(fWidth / (aArrowSize.getRange().getX()));
+                aArrowTransform.scale(fArrowScale, fArrowScale);
+
+                // get arrow size in Y
+                B2DPoint aUpperCenter(aArrowSize.getCenter().getX(), aArrowSize.getMaximum().getY());
+                aUpperCenter *= aArrowTransform;
+                const double fArrowYLength(B2DVector(aUpperCenter).getLength());
+
+                // move arrow to have docking position centered
+                aArrowTransform.translate(0.0, -fArrowYLength * fDockingPosition);
+
+                // prepare polygon length
+                if(fTools::equalZero(fCandidateLength))
+                {
+                    fCandidateLength = getLength(rCandidate);
+                }
+
+                // get the polygon vector we want to plant this arrow on
+                const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition));
+                const B2DVector aHead(rCandidate.getB2DPoint((bStart) ? 0L : rCandidate.count() - 1L));
+                const B2DVector aTail(getPositionAbsolute(rCandidate,
+                    (bStart) ? fConsumedLength : fCandidateLength - fConsumedLength, fCandidateLength));
+
+                // from that vector, take the needed rotation and add rotate for arrow to transformation
+                const B2DVector aTargetDirection(aHead - aTail);
+                const double fRotation(atan2(aTargetDirection.getY(), aTargetDirection.getX()) + (90.0 * F_PI180));
+
+                // rotate around docking position
+                aArrowTransform.rotate(fRotation);
+
+                // move arrow docking position to polygon head
+                aArrowTransform.translate(aHead.getX(), aHead.getY());
+
+                // transform retval and close
+                aRetval.transform(aArrowTransform);
+                aRetval.setClosed(true);
+
+                // if pConsumedLength is asked for, fill it
+                if(pConsumedLength)
+                {
+                    *pConsumedLength = fConsumedLength;
+                }
+            }
+
+            return aRetval;
+        }
+    } // end of namespace tools
+} // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,392 +148,546 @@ namespace basegfx
     // anonymus namespace for local helpers
     namespace
     {
-        // create area geometry for given edge. Edge is defined with the
-        // points rEdgeStart and rEdgeEnd. fHalfLineWidth defines the relative width.
-        // The created polygon will be positively oriented and free of
-        // self intersections.
-        // bCreateInBetweenPoints defines if EdgeStart and EdgeEnd themselves will
-        // be added (see comment in implementation).
-        B2DPolygon createAreaGeometryForEdge(
-            const B2DPoint& rEdgeStart,
-            const B2DPoint& rEdgeEnd,
-            double fHalfLineWidth,
-            bool bCreateInBetweenPoints)
+        bool impIsSimpleEdge(const B2DCubicBezier& rCandidate, double fMaxCosQuad, double fMaxPartOfEdgeQuad)
         {
-            OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForEdge: LineWidth too small (!)");
-            B2DPolygon aRetval;
+            // isBezier() is true, already tested by caller
+            const B2DVector aEdge(rCandidate.getEndPoint() - rCandidate.getStartPoint());
 
-            // get perpendicular vector for reaching the outer edges
-            const B2DVector aEdgeVector(rEdgeEnd - rEdgeStart);
-            B2DVector aPerpendEdgeVector(getNormalizedPerpendicular(aEdgeVector));
-            aPerpendEdgeVector *= fHalfLineWidth;
-
-            // create polygon for edge
-            // Unfortunately, while it would be geometrically correct to not add
-            // the in-between points rEdgeEnd and rEdgeStart, it leads to rounding
-            // errors when converting to integer polygon coordiates for painting.
-            aRetval.append(rEdgeStart - aPerpendEdgeVector);
-            aRetval.append(rEdgeEnd - aPerpendEdgeVector);
-
-            if(bCreateInBetweenPoints)
+            if(aEdge.equalZero())
             {
-                aRetval.append(rEdgeEnd);
+                // start and end point the same, but control vectors used -> baloon curve loop
+                // is not a simple edge
+                return false;
             }
 
-            aRetval.append(rEdgeEnd + aPerpendEdgeVector);
-            aRetval.append(rEdgeStart + aPerpendEdgeVector);
+            // get tangentA and scalar with edge
+            const B2DVector aTangentA(rCandidate.getTangent(0.0));
+            const double fScalarAE(aEdge.scalar(aTangentA));
 
-            if(bCreateInBetweenPoints)
+            if(fTools::lessOrEqual(fScalarAE, 0.0))
             {
-                aRetval.append(rEdgeStart);
+                // angle between TangentA and Edge is bigger or equal 90 degrees
+                return false;
             }
 
-            aRetval.setClosed(true);
+            // get self-scalars for E and A
+            const double fScalarE(aEdge.scalar(aEdge));
+            const double fScalarA(aTangentA.scalar(aTangentA));
+            const double fLengthCompareE(fScalarE * fMaxPartOfEdgeQuad);
 
-#ifdef DBG_UTIL
-            // check orientation (debug only)
-            if(tools::getOrientation(aRetval) == ORIENTATION_NEGATIVE)
+            if(fTools::moreOrEqual(fScalarA, fLengthCompareE))
             {
-                OSL_ENSURE(false, "createAreaGeometryForEdge: orientation of return value is negative (!)");
+                // length of TangentA is more than fMaxPartOfEdge of length of edge
+                return false;
             }
-#endif
 
-            return aRetval;
+            if(fTools::lessOrEqual(fScalarAE * fScalarAE, fScalarA * fScalarE * fMaxCosQuad))
+            {
+                // angle between TangentA and Edge is bigger or equal angle defined by fMaxCos
+                return false;
+            }
+
+            // get tangentB and scalar with edge
+            const B2DVector aTangentB(rCandidate.getTangent(1.0));
+            const double fScalarBE(aEdge.scalar(aTangentB));
+
+            if(fTools::lessOrEqual(fScalarBE, 0.0))
+            {
+                // angle between TangentB and Edge is bigger or equal 90 degrees
+                return false;
+            }
+
+            // get self-scalar for B
+            const double fScalarB(aTangentB.scalar(aTangentB));
+
+            if(fTools::moreOrEqual(fScalarB, fLengthCompareE))
+            {
+                // length of TangentB is more than fMaxPartOfEdge of length of edge
+                return false;
+            }
+
+            if(fTools::lessOrEqual(fScalarBE * fScalarBE, fScalarB * fScalarE * fMaxCosQuad))
+            {
+                // angle between TangentB and Edge is bigger or equal defined by fMaxCos
+                return false;
+            }
+
+            return true;
         }
 
-        // create join polygon for given angle. Angle is defined with the
-        // points rLeft, rCenter and rRight. The given join type defines how
-        // the join segment will be created. fHalfLineWidth defines the relative width.
-        // fDegreeStepWidth is used when rounding edges.
-        // fMiterMinimumAngle is used to define when miter is forced to bevel.
-        // The created polygon will be positively or neuteral oriented and free of
-        // self intersections.
-        B2DPolygon createAreaGeometryForJoin(
-            const B2DPoint& rLeft,
-            const B2DPoint& rCenter,
-            const B2DPoint& rRight,
-            double fHalfLineWidth,
-            tools::B2DLineJoin eJoin,
-            double fDegreeStepWidth,
-            double /*fMiterMinimumAngle*/)
+        void impSubdivideToSimple(const B2DCubicBezier& rCandidate, B2DPolygon& rTarget, double fMaxCosQuad, double fMaxPartOfEdgeQuad, sal_uInt32 nMaxRecursionDepth)
         {
-            OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
-            OSL_ENSURE(fDegreeStepWidth > 0.0, "createAreaGeometryForJoin: DegreeStepWidth too small (!)");
-            OSL_ENSURE(tools::B2DLINEJOIN_NONE != eJoin, "createAreaGeometryForJoin: B2DLINEJOIN_NONE not allowed (!)");
-            B2DPolygon aRetval;
-
-            // get perpendicular vector for left and right
-            const B2DVector aLeftVector(rCenter - rLeft);
-            B2DVector aPerpendLeftVector(getNormalizedPerpendicular(aLeftVector));
-            const B2DVector aRightVector(rRight - rCenter);
-            B2DVector aPerpendRightVector(getNormalizedPerpendicular(aRightVector));
-
-            // get vector orientation
-            B2VectorOrientation aOrientation(getOrientation(aPerpendLeftVector, aPerpendRightVector));
-
-            if(ORIENTATION_NEUTRAL != aOrientation)
+            if(!nMaxRecursionDepth || impIsSimpleEdge(rCandidate, fMaxCosQuad, fMaxPartOfEdgeQuad))
             {
-                // prepare perpend vectors to be able to go from left to right.
-                // also multiply with fHalfLineWidth to get geometric vectors with correct length
-                if(ORIENTATION_POSITIVE == aOrientation)
-                {
-                    // mirror to have them above the edge vectors
-                    const double fNegativeHalfLineWidth(-fHalfLineWidth);
-                    aPerpendLeftVector *= fNegativeHalfLineWidth;
-                    aPerpendRightVector *= fNegativeHalfLineWidth;
-                }
-                else
-                {
-                    // exchange left and right
-                    const B2DVector aTemp(aPerpendLeftVector.getX() * fHalfLineWidth, aPerpendLeftVector.getY() * fHalfLineWidth);
-                    aPerpendLeftVector.setX(aPerpendRightVector.getX() * fHalfLineWidth);
-                    aPerpendLeftVector.setY(aPerpendRightVector.getY() * fHalfLineWidth);
-                    aPerpendRightVector = aTemp;
-                }
+                rTarget.appendBezierSegment(rCandidate.getControlPointA(), rCandidate.getControlPointB(), rCandidate.getEndPoint());
+            }
+            else
+            {
+                B2DCubicBezier aLeft, aRight;
+                rCandidate.split(0.5, &aLeft, &aRight);
 
-                // test if for Miter, the angle is too small
-                if(tools::B2DLINEJOIN_MITER == eJoin)
-                {
-                    const double fAngle(fabs(aPerpendLeftVector.angle(aPerpendRightVector)));
+                impSubdivideToSimple(aLeft, rTarget, fMaxCosQuad, fMaxPartOfEdgeQuad, nMaxRecursionDepth - 1);
+                impSubdivideToSimple(aRight, rTarget, fMaxCosQuad, fMaxPartOfEdgeQuad, nMaxRecursionDepth - 1);
+            }
+        }
 
-                    if((F_PI - fAngle) < (15.0 * F_PI180))
+        B2DPolygon subdivideToSimple(const B2DPolygon& rCandidate, double fMaxCosQuad, double fMaxPartOfEdgeQuad)
+        {
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(rCandidate.areControlPointsUsed() && nPointCount)
+            {
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+                B2DPolygon aRetval;
+                B2DCubicBezier aEdge;
+
+                // prepare edge for loop
+                aEdge.setStartPoint(rCandidate.getB2DPoint(0));
+                aRetval.append(aEdge.getStartPoint());
+
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // fill B2DCubicBezier
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    aEdge.setControlPointA(rCandidate.getNextControlPoint(a));
+                    aEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                    aEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
+
+                    // get rid of unnecessary bezier segments
+                    aEdge.testAndSolveTrivialBezier();
+
+                    if(aEdge.isBezier())
                     {
-                        // force to bevel
-                        eJoin = tools::B2DLINEJOIN_BEVEL;
-                    }
-                }
+                        // before splitting recursively with internal simple criteria, use
+                        // ExtremumPosFinder to remove those
+                        ::std::vector< double > aExtremumPositions;
 
-                // create specific edge polygon
-                switch(eJoin)
-                {
-                    case tools::B2DLINEJOIN_MIDDLE :
-                    case tools::B2DLINEJOIN_BEVEL :
-                    {
-                        // create polygon for edge, go from left to right
-                        aRetval.append(rCenter);
-                        aRetval.append(rCenter + aPerpendLeftVector);
-                        aRetval.append(rCenter + aPerpendRightVector);
-                        aRetval.setClosed(true);
+                        aExtremumPositions.reserve(4);
+                        aEdge.getAllExtremumPositions(aExtremumPositions);
 
-                        break;
-                    }
-                    case tools::B2DLINEJOIN_MITER :
-                    {
-                        // create first polygon part for edge, go from left to right
-                        aRetval.append(rCenter);
-                        aRetval.append(rCenter + aPerpendLeftVector);
+                        const sal_uInt32 nCount(aExtremumPositions.size());
 
-                        double fCutPos(0.0);
-                        const B2DPoint aLeftCutPoint(rCenter + aPerpendLeftVector);
-                        const B2DPoint aRightCutPoint(rCenter + aPerpendRightVector);
-
-                        if(ORIENTATION_POSITIVE == aOrientation)
+                        if(nCount)
                         {
-                            tools::findCut(aLeftCutPoint, aLeftVector, aRightCutPoint, -aRightVector, CUTFLAG_ALL, &fCutPos);
-
-                            if(0.0 != fCutPos)
+                            if(nCount > 1)
                             {
-                                const B2DPoint aCutPoint(
-                                    interpolate(aLeftCutPoint, aLeftCutPoint + aLeftVector, fCutPos));
-                                aRetval.append(aCutPoint);
+                                // create order from left to right
+                                ::std::sort(aExtremumPositions.begin(), aExtremumPositions.end());
+                            }
+
+                            for(sal_uInt32 b(0); b < nCount;)
+                            {
+                                // split aEdge at next split pos
+                                B2DCubicBezier aLeft;
+                                const double fSplitPos(aExtremumPositions[b++]);
+
+                                aEdge.split(fSplitPos, &aLeft, &aEdge);
+                                aLeft.testAndSolveTrivialBezier();
+
+                                // consume left part
+                                if(aLeft.isBezier())
+                                {
+                                    impSubdivideToSimple(aLeft, aRetval, fMaxCosQuad, fMaxPartOfEdgeQuad, 6);
+                                }
+                                else
+                                {
+                                    aRetval.append(aLeft.getEndPoint());
+                                }
+
+                                if(b < nCount)
+                                {
+                                    // correct the remaining split positions to fit to shortened aEdge
+                                    const double fScaleFactor(1.0 / (1.0 - fSplitPos));
+
+                                    for(sal_uInt32 c(b); c < nCount; c++)
+                                    {
+                                        aExtremumPositions[c] = (aExtremumPositions[c] - fSplitPos) * fScaleFactor;
+                                    }
+                                }
+                            }
+
+                            // test the shortened rest of aEdge
+                            aEdge.testAndSolveTrivialBezier();
+
+                            // consume right part
+                            if(aEdge.isBezier())
+                            {
+                                impSubdivideToSimple(aEdge, aRetval, fMaxCosQuad, fMaxPartOfEdgeQuad, 6);
+                            }
+                            else
+                            {
+                                aRetval.append(aEdge.getEndPoint());
                             }
                         }
                         else
                         {
-                            // peroendiculars are exchanged, also use exchanged EdgeVectors
-                            tools::findCut(aLeftCutPoint, -aRightVector, aRightCutPoint, aLeftVector, CUTFLAG_ALL, &fCutPos);
-
-                            if(0.0 != fCutPos)
-                            {
-                                const B2DPoint aCutPoint(
-                                    interpolate(aLeftCutPoint, aLeftCutPoint - aRightVector, fCutPos));
-                                aRetval.append(aCutPoint);
-                            }
+                            impSubdivideToSimple(aEdge, aRetval, fMaxCosQuad, fMaxPartOfEdgeQuad, 6);
                         }
-
-                        // create last polygon part for edge
-                        aRetval.append(rCenter + aPerpendRightVector);
-                        aRetval.setClosed(true);
-
-                        break;
                     }
-                    case tools::B2DLINEJOIN_ROUND :
+                    else
                     {
-                        // create first polygon part for edge, go from left to right
-                        aRetval.append(rCenter);
-                        aRetval.append(rCenter + aPerpendLeftVector);
-
-                        // get angle and prepare
-                        double fAngle(aPerpendLeftVector.angle(aPerpendRightVector));
-                        const bool bNegative(fAngle < 0.0);
-                        if(bNegative)
-                        {
-                            fAngle = fabs(fAngle);
-                        }
-
-                        // substract first step, first position is added to
-                        // the polygon yet
-                        fAngle -= fDegreeStepWidth;
-
-                        // create points as long as angle is > 0.0
-                        if(fAngle > 0.0)
-                        {
-                            // get start angle
-                            double fAngleOfLeftPerpendVector(
-                                atan2(aPerpendLeftVector.getY(), aPerpendLeftVector.getX()));
-
-                            while(fAngle > 0.0)
-                            {
-                                // calculate rotated vector
-                                fAngleOfLeftPerpendVector += (bNegative ? -fDegreeStepWidth : fDegreeStepWidth);
-                                const B2DVector aRotatedVector(
-                                    rCenter.getX() + (cos(fAngleOfLeftPerpendVector) * fHalfLineWidth),
-                                    rCenter.getY() + (sin(fAngleOfLeftPerpendVector) * fHalfLineWidth));
-
-                                // add point
-                                aRetval.append(aRotatedVector);
-
-                                // substract next step
-                                fAngle -= fDegreeStepWidth;
-                            }
-                        }
-
-                        // create last polygon part for edge
-                        aRetval.append(rCenter + aPerpendRightVector);
-                        aRetval.setClosed(true);
-
-                        break;
+                        // straight edge, add point
+                        aRetval.append(aEdge.getEndPoint());
                     }
-                    case tools::B2DLINEJOIN_NONE:
-                        break; // nothing to add to aRetVal
-                    default:
-                        OSL_ENSURE(false,
-                                   "createAreaGeometryForJoin(): unexpected case.");
+
+                    // prepare edge for next step
+                    aEdge.setStartPoint(aEdge.getEndPoint());
+                }
+
+                // copy closed flag and check for double points
+                aRetval.setClosed(rCandidate.isClosed());
+                aRetval.removeDoublePoints();
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
+        B2DPolygon createAreaGeometryForEdge(const B2DCubicBezier& rEdge, double fHalfLineWidth)
+        {
+            // create polygon for edge
+            // Unfortunately, while it would be geometrically correct to not add
+            // the in-between points EdgeEnd and EdgeStart, it leads to rounding
+            // errors when converting to integer polygon coordinates for painting
+            const B2DVector aEdgeVector(rEdge.getEndPoint() - rEdge.getStartPoint());
+
+            if(rEdge.isBezier())
+            {
+                // prepare target and data common for upper and lower
+                B2DPolygon aBezierPolygon;
+                const double fEdgeLength(aEdgeVector.getLength());
+                const bool bIsEdgeLengthZero(fTools::equalZero(fEdgeLength));
+                const B2DVector aTangentA(rEdge.getTangent(0.0));
+                const B2DVector aTangentB(rEdge.getTangent(1.0));
+
+                // create upper edge.
+                {
+                    // create displacement vectors and check if they cut
+                    const B2DVector aPerpendStart(getNormalizedPerpendicular(aTangentA) * -fHalfLineWidth);
+                    const B2DVector aPerpendEnd(getNormalizedPerpendicular(aTangentB) * -fHalfLineWidth);
+                    double fCut(0.0);
+                    const tools::CutFlagValue aCut(tools::findCut(
+                        rEdge.getStartPoint(), aPerpendStart,
+                        rEdge.getEndPoint(), aPerpendEnd,
+                        CUTFLAG_ALL, &fCut));
+
+                    if(CUTFLAG_NONE != aCut)
+                    {
+                        // calculate cut point and add
+                        const B2DPoint aCutPoint(rEdge.getStartPoint() + (aPerpendStart * fCut));
+                        aBezierPolygon.append(aCutPoint);
+                    }
+                    else
+                    {
+                        // create scaled bezier segment
+                        const B2DPoint aStart(rEdge.getStartPoint() + aPerpendStart);
+                        const B2DPoint aEnd(rEdge.getEndPoint() + aPerpendEnd);
+                        const B2DVector aEdge(aEnd - aStart);
+                        const double fLength(aEdge.getLength());
+                        const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
+                        const B2DVector fRelNext(rEdge.getControlPointA() - rEdge.getStartPoint());
+                        const B2DVector fRelPrev(rEdge.getControlPointB() - rEdge.getEndPoint());
+
+                        aBezierPolygon.append(aStart);
+                        aBezierPolygon.appendBezierSegment(aStart + (fRelNext * fScale), aEnd + (fRelPrev * fScale), aEnd);
+                    }
+                }
+
+                // append original in-between point
+                aBezierPolygon.append(rEdge.getEndPoint());
+
+                // create lower edge.
+                {
+                    // create displacement vectors and check if they cut
+                    const B2DVector aPerpendStart(getNormalizedPerpendicular(aTangentA) * fHalfLineWidth);
+                    const B2DVector aPerpendEnd(getNormalizedPerpendicular(aTangentB) * fHalfLineWidth);
+                    double fCut(0.0);
+                    const tools::CutFlagValue aCut(tools::findCut(
+                        rEdge.getEndPoint(), aPerpendEnd,
+                        rEdge.getStartPoint(), aPerpendStart,
+                        CUTFLAG_ALL, &fCut));
+
+                    if(CUTFLAG_NONE != aCut)
+                    {
+                        // calculate cut point and add
+                        const B2DPoint aCutPoint(rEdge.getEndPoint() + (aPerpendEnd * fCut));
+                        aBezierPolygon.append(aCutPoint);
+                    }
+                    else
+                    {
+                        // create scaled bezier segment
+                        const B2DPoint aStart(rEdge.getEndPoint() + aPerpendEnd);
+                        const B2DPoint aEnd(rEdge.getStartPoint() + aPerpendStart);
+                        const B2DVector aEdge(aEnd - aStart);
+                        const double fLength(aEdge.getLength());
+                        const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
+                        const B2DVector fRelNext(rEdge.getControlPointB() - rEdge.getEndPoint());
+                        const B2DVector fRelPrev(rEdge.getControlPointA() - rEdge.getStartPoint());
+
+                        aBezierPolygon.append(aStart);
+                        aBezierPolygon.appendBezierSegment(aStart + (fRelNext * fScale), aEnd + (fRelPrev * fScale), aEnd);
+                    }
+                }
+
+                // append original in-between point
+                aBezierPolygon.append(rEdge.getStartPoint());
+
+                // close and return
+                aBezierPolygon.setClosed(true);
+                return aBezierPolygon;
+            }
+            else
+            {
+                const B2DVector aPerpendEdgeVector(getNormalizedPerpendicular(aEdgeVector) * fHalfLineWidth);
+                B2DPolygon aEdgePolygon;
+
+                // create upper edge
+                aEdgePolygon.append(rEdge.getStartPoint() - aPerpendEdgeVector);
+                aEdgePolygon.append(rEdge.getEndPoint() - aPerpendEdgeVector);
+
+                // append original in-between point
+                aEdgePolygon.append(rEdge.getEndPoint());
+
+                // create lower edge
+                aEdgePolygon.append(rEdge.getEndPoint() + aPerpendEdgeVector);
+                aEdgePolygon.append(rEdge.getStartPoint() + aPerpendEdgeVector);
+
+                // append original in-between point
+                aEdgePolygon.append(rEdge.getStartPoint());
+
+                // close and return
+                aEdgePolygon.setClosed(true);
+                return aEdgePolygon;
+            }
+        }
+
+        B2DPolygon createAreaGeometryForJoin(
+            const B2DVector& rTangentPrev,
+            const B2DVector& rTangentEdge,
+            const B2DVector& rPerpendPrev,
+            const B2DVector& rPerpendEdge,
+            const B2DPoint& rPoint,
+            double fHalfLineWidth,
+            B2DLineJoin eJoin,
+            double fMiterMinimumAngle)
+        {
+            OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
+            OSL_ENSURE(B2DLINEJOIN_NONE != eJoin, "createAreaGeometryForJoin: B2DLINEJOIN_NONE not allowed (!)");
+
+            // LineJoin from tangent rPerpendPrev to tangent rPerpendEdge in rPoint
+            B2DPolygon aEdgePolygon;
+            const B2DPoint aStartPoint(rPoint + rPerpendPrev);
+            const B2DPoint aEndPoint(rPoint + rPerpendEdge);
+
+            // test if for Miter, the angle is too small and the fallback
+            // to bevel needs to be used
+            if(B2DLINEJOIN_MITER == eJoin)
+            {
+                const double fAngle(fabs(rPerpendPrev.angle(rPerpendEdge)));
+
+                if((F_PI - fAngle) < fMiterMinimumAngle)
+                {
+                    // fallback to bevel
+                    eJoin = B2DLINEJOIN_BEVEL;
                 }
             }
 
-#ifdef DBG_UTIL
-            // check orientation (debug only)
-            if(tools::getOrientation(aRetval) == ORIENTATION_NEGATIVE)
-            {
-                OSL_ENSURE(false, "createAreaGeometryForJoin: orientation of return value is negative (!)");
-            }
-#endif
+            // create first polygon part for edge
+            aEdgePolygon.append(aEndPoint);
+            aEdgePolygon.append(rPoint);
+            aEdgePolygon.append(aStartPoint);
 
-            return aRetval;
+            if(B2DLINEJOIN_MITER == eJoin)
+            {
+                // Look for the cut point between start point along rTangentPrev and
+                // end point along rTangentEdge. -rTangentEdge should be used, but since
+                // the cut value is used for interpolating along the first edge, the negation
+                // is not needed since the same fCut will be found on the first edge.
+                // If it exists, insert it to complete the mitered fill polygon.
+                double fCutPos(0.0);
+                tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CUTFLAG_ALL, &fCutPos);
+
+                if(0.0 != fCutPos)
+                {
+                    const B2DPoint aCutPoint(interpolate(aStartPoint, aStartPoint + rTangentPrev, fCutPos));
+                    aEdgePolygon.append(aCutPoint);
+                }
+            }
+            else if(B2DLINEJOIN_ROUND == eJoin)
+            {
+                // use tooling to add needed EllipseSegment
+                double fAngleStart(atan2(rPerpendPrev.getY(), rPerpendPrev.getX()));
+                double fAngleEnd(atan2(rPerpendEdge.getY(), rPerpendEdge.getX()));
+
+                // atan2 results are [-PI .. PI], consolidate to [0.0 .. 2PI]
+                if(fAngleStart < 0.0)
+                {
+                    fAngleStart += F_2PI;
+                }
+
+                if(fAngleEnd < 0.0)
+                {
+                    fAngleEnd += F_2PI;
+                }
+
+                aEdgePolygon.append(tools::createPolygonFromEllipseSegment(rPoint, fHalfLineWidth, fHalfLineWidth, fAngleStart, fAngleEnd));
+            }
+
+            // create last polygon part for edge
+            aEdgePolygon.setClosed(true);
+
+            return aEdgePolygon;
         }
     } // end of anonymus namespace
 
     namespace tools
     {
-        B2DPolyPolygon createAreaGeometryForPolygon(const B2DPolygon& rCandidate,
+        B2DPolyPolygon createAreaGeometry(
+            const B2DPolygon& rCandidate,
             double fHalfLineWidth,
             B2DLineJoin eJoin,
-            double fDegreeStepWidth,
+            double fMaxAllowedAngle,
+            double fMaxPartOfEdge,
             double fMiterMinimumAngle)
         {
-            OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForPolygon: LineWidth too small (!)");
-            OSL_ENSURE(fDegreeStepWidth > 0.0, "createAreaGeometryForPolygon: DegreeStepWidth too small (!)");
-            B2DPolyPolygon aRetval;
-            const sal_uInt32 nCount(rCandidate.count());
-
-            if(rCandidate.isClosed())
+            if(fMaxAllowedAngle > F_PI2)
             {
-                const bool bNeedToCreateJoinPolygon(B2DLINEJOIN_NONE != eJoin);
-                bool bLastNeededToCreateJoinPolygon(false);
+                fMaxAllowedAngle = F_PI2;
+            }
+            else if(fMaxAllowedAngle < 0.01 * F_PI2)
+            {
+                fMaxAllowedAngle = 0.01 * F_PI2;
+            }
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
+            if(fMaxPartOfEdge > 1.0)
+            {
+                fMaxPartOfEdge = 1.0;
+            }
+            else if(fMaxPartOfEdge < 0.01)
+            {
+                fMaxPartOfEdge = 0.01;
+            }
+
+            if(fMiterMinimumAngle > F_PI)
+            {
+                fMiterMinimumAngle = F_PI;
+            }
+            else if(fMiterMinimumAngle < 0.01 * F_PI)
+            {
+                fMiterMinimumAngle = 0.01 * F_PI;
+            }
+
+            B2DPolygon aCandidate(rCandidate);
+            const double fMaxCos(cos(fMaxAllowedAngle));
+
+            aCandidate.removeDoublePoints();
+            aCandidate = subdivideToSimple(aCandidate, fMaxCos * fMaxCos, fMaxPartOfEdge * fMaxPartOfEdge);
+
+            const sal_uInt32 nPointCount(aCandidate.count());
+
+            if(nPointCount)
+            {
+                B2DPolyPolygon aRetval;
+                const bool bEventuallyCreateLineJoin(B2DLINEJOIN_NONE != eJoin);
+                const bool bIsClosed(aCandidate.isClosed());
+                const sal_uInt32 nEdgeCount(bIsClosed ? nPointCount : nPointCount - 1);
+
+                if(nEdgeCount)
                 {
-                    // get left, right, prev and next positions for edge
-                    B2DPoint aEdgeStart(rCandidate.getB2DPoint(a));
-                    B2DPoint aEdgeEnd(rCandidate.getB2DPoint((a + 1L) % nCount));
+                    B2DCubicBezier aEdge;
+                    B2DCubicBezier aPrev;
 
-                    // create geometry for edge and add to result
-                    B2DPolygon aEdgePolygon(createAreaGeometryForEdge(
-                        aEdgeStart, aEdgeEnd, fHalfLineWidth,
-                        bNeedToCreateJoinPolygon || bLastNeededToCreateJoinPolygon));
-                    aRetval.append(aEdgePolygon);
+                    // prepare edge
+                    aEdge.setStartPoint(aCandidate.getB2DPoint(0));
 
-                    if(bNeedToCreateJoinPolygon)
+                    if(bIsClosed && bEventuallyCreateLineJoin)
                     {
-                        // create fill polygon for linejoin and add to result
-                        B2DPoint aNextEdge(rCandidate.getB2DPoint((a + 2L) % nCount));
-                        B2DPolygon aJoinPolygon(createAreaGeometryForJoin(
-                            aEdgeStart, aEdgeEnd, aNextEdge, fHalfLineWidth, eJoin, fDegreeStepWidth, fMiterMinimumAngle));
-
-                        if(aRetval.count())
-                        {
-                            aRetval.append(aJoinPolygon);
-                        }
+                        // prepare previous edge
+                        const sal_uInt32 nPrevIndex(nPointCount - 1);
+                        aPrev.setStartPoint(aCandidate.getB2DPoint(nPrevIndex));
+                        aPrev.setControlPointA(aCandidate.getNextControlPoint(nPrevIndex));
+                        aPrev.setControlPointB(aCandidate.getPrevControlPoint(0));
+                        aPrev.setEndPoint(aEdge.getStartPoint());
                     }
 
-                    bLastNeededToCreateJoinPolygon = bNeedToCreateJoinPolygon;
-                }
-            }
-            else if(nCount > 1L)
-            {
-                bool bLastNeededToCreateJoinPolygon(false);
-
-                for(sal_uInt32 a(0L); a < nCount - 1L; a++)
-                {
-                    // get left, right positions for edge
-                    B2DPoint aEdgeStart(rCandidate.getB2DPoint(a));
-                    B2DPoint aEdgeEnd(rCandidate.getB2DPoint(a + 1L));
-                    const bool bNeedToCreateJoinPolygon((a + 2L < nCount) && B2DLINEJOIN_NONE != eJoin);
-
-                    // create geometry for edge and add to result
-                    B2DPolygon aEdgePolygon(
-                        createAreaGeometryForEdge(aEdgeStart, aEdgeEnd, fHalfLineWidth,
-                        bNeedToCreateJoinPolygon || bLastNeededToCreateJoinPolygon));
-                    aRetval.append(aEdgePolygon);
-
-                    // test if next exists
-                    if(bNeedToCreateJoinPolygon)
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
                     {
-                        // create fill polygon for linejoin and add to result
-                        B2DPoint aNextEdge(rCandidate.getB2DPoint((a + 2L)));
-                        B2DPolygon aJoinPolygon(createAreaGeometryForJoin(
-                            aEdgeStart, aEdgeEnd, aNextEdge, fHalfLineWidth, eJoin, fDegreeStepWidth, fMiterMinimumAngle));
+                        // fill current Edge
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        aEdge.setControlPointA(aCandidate.getNextControlPoint(a));
+                        aEdge.setControlPointB(aCandidate.getPrevControlPoint(nNextIndex));
+                        aEdge.setEndPoint(aCandidate.getB2DPoint(nNextIndex));
 
-                        if(aRetval.count())
+                        // check and create linejoin
+                        if(bEventuallyCreateLineJoin && (bIsClosed || 0 != a))
                         {
-                            aRetval.append(aJoinPolygon);
+                            const B2DVector aTangentPrev(aPrev.getTangent(1.0));
+                            const B2DVector aTangentEdge(aEdge.getTangent(0.0));
+                            B2VectorOrientation aOrientation(getOrientation(aTangentPrev, aTangentEdge));
+
+                            if(ORIENTATION_NEUTRAL == aOrientation)
+                            {
+                                // they are parallell or empty; if they are both not zero and point
+                                // in opposite direction, a half-circle is needed
+                                if(!aTangentPrev.equalZero() && !aTangentEdge.equalZero())
+                                {
+                                    const double fAngle(fabs(aTangentPrev.angle(aTangentEdge)));
+
+                                    if(fTools::equal(fAngle, F_PI))
+                                    {
+                                        // for half-circle production, fallback to positive
+                                        // orientation
+                                        aOrientation = ORIENTATION_POSITIVE;
+                                    }
+                                }
+                            }
+
+                            if(ORIENTATION_POSITIVE == aOrientation)
+                            {
+                                const B2DVector aPerpendPrev(getNormalizedPerpendicular(aTangentPrev) * -fHalfLineWidth);
+                                const B2DVector aPerpendEdge(getNormalizedPerpendicular(aTangentEdge) * -fHalfLineWidth);
+
+                                aRetval.append(createAreaGeometryForJoin(
+                                    aTangentPrev, aTangentEdge,
+                                    aPerpendPrev, aPerpendEdge,
+                                    aEdge.getStartPoint(), fHalfLineWidth,
+                                    eJoin, fMiterMinimumAngle));
+                            }
+                            else if(ORIENTATION_NEGATIVE == aOrientation)
+                            {
+                                const B2DVector aPerpendPrev(getNormalizedPerpendicular(aTangentPrev) * fHalfLineWidth);
+                                const B2DVector aPerpendEdge(getNormalizedPerpendicular(aTangentEdge) * fHalfLineWidth);
+
+                                aRetval.append(createAreaGeometryForJoin(
+                                    aTangentEdge, aTangentPrev,
+                                    aPerpendEdge, aPerpendPrev,
+                                    aEdge.getStartPoint(), fHalfLineWidth,
+                                    eJoin, fMiterMinimumAngle));
+                            }
                         }
+
+                        // create geometry for edge
+                        aRetval.append(createAreaGeometryForEdge(aEdge, fHalfLineWidth));
+
+                        // prepare next step
+                        if(bEventuallyCreateLineJoin)
+                        {
+                            aPrev = aEdge;
+                        }
+
+                        aEdge.setStartPoint(aEdge.getEndPoint());
                     }
-
-                    bLastNeededToCreateJoinPolygon = bNeedToCreateJoinPolygon;
                 }
+
+                return aRetval;
             }
-
-            return aRetval;
-        }
-
-        B2DPolyPolygon createAreaGeometryForLineStartEnd(
-            const B2DPolygon& rCandidate,
-            const B2DPolyPolygon& rArrow,
-            bool bStart,
-            double fWidth,
-            double fDockingPosition, // 0->top, 1->bottom
-            double* pConsumedLength)
-        {
-            OSL_ENSURE(rCandidate.count() > 1L, "createAreaGeometryForLineStartEnd: Line polygon has too less points too small (!)");
-            OSL_ENSURE(rArrow.count() > 0L, "createAreaGeometryForLineStartEnd: No arrow PolyPolygon (!)");
-            OSL_ENSURE(fWidth > 0.0, "createAreaGeometryForLineStartEnd: Width too small (!)");
-            OSL_ENSURE(fDockingPosition >= 0.0 && fDockingPosition <= 1.0,
-                "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0] (!)");
-
-            // init return value from arrow
-            B2DPolyPolygon aRetval(rArrow);
-
-            // get size of the arrow
-            const B2DRange aArrowSize(getRange(rArrow));
-
-            // build ArrowTransform
-            B2DHomMatrix aArrowTransform;
-
-            // center in X, align with axis in Y
-            aArrowTransform.translate(-aArrowSize.getCenter().getX(), -aArrowSize.getMinimum().getY());
-
-            // scale to target size
-            const double fArrowScale(fWidth / (aArrowSize.getRange().getX()));
-            aArrowTransform.scale(fArrowScale, fArrowScale);
-
-            // get arrow size in Y
-            B2DPoint aUpperCenter(aArrowSize.getCenter().getX(), aArrowSize.getMaximum().getY());
-            aUpperCenter *= aArrowTransform;
-            const double fArrowYLength(B2DVector(aUpperCenter).getLength());
-
-            // move arrow to have docking position centered
-            aArrowTransform.translate(0.0, -fArrowYLength * fDockingPosition);
-
-            // get the polygon vector we want to plant this arrow on
-            const double fCandidateLength(getLength(rCandidate));
-            const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition));
-            const B2DVector aHead(rCandidate.getB2DPoint((bStart) ? 0L : rCandidate.count() - 1L));
-            const B2DVector aTail(getPositionAbsolute(rCandidate,
-                (bStart) ? fConsumedLength : fCandidateLength - fConsumedLength, fCandidateLength));
-
-            // from that vector, take the needed rotation and add rotate for arrow to transformation
-            const B2DVector aTargetDirection(aHead - aTail);
-            const double fRotation(atan2(aTargetDirection.getY(), aTargetDirection.getX()) + (90.0 * F_PI180));
-
-            // rotate around docking position
-            aArrowTransform.rotate(fRotation);
-
-            // move arrow docking position to polygon head
-            aArrowTransform.translate(aHead.getX(), aHead.getY());
-
-            // transform retval and close
-            aRetval.transform(aArrowTransform);
-            aRetval.setClosed(true);
-
-            // if pConsumedLength is asked for, fill it
-            if(pConsumedLength)
+            else
             {
-                *pConsumedLength = fConsumedLength;
+                return B2DPolyPolygon(rCandidate);
             }
-
-            return aRetval;
         }
     } // end of namespace tools
 } // end of namespace basegfx
