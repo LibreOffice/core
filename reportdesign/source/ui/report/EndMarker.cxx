@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EndMarker.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,8 @@
 #include "precompiled_reportdesign.hxx"
 #include "EndMarker.hxx"
 #include "ColorChanger.hxx"
-#include "ViewsWindow.hxx"
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
+#include "SectionWindow.hxx"
 #include "helpids.hrc"
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
@@ -51,6 +49,7 @@ OEndMarker::OEndMarker(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
     DBG_CTOR( rpt_OEndMarker,NULL);
     SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
+    SetPaintTransparent(TRUE);
 }
 // -----------------------------------------------------------------------------
 OEndMarker::~OEndMarker()
@@ -60,11 +59,15 @@ OEndMarker::~OEndMarker()
 // -----------------------------------------------------------------------------
 void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 {
+    Fraction aCornerSpace(long(CORNER_SPACE));
+    aCornerSpace *= GetMapMode().GetScaleX();
+    const long nCornerSpace = aCornerSpace;
+
     Size aSize = GetSizePixel();
-    aSize.Width() += CORNER_SPACE;
-    Rectangle aWholeRect(Point(-CORNER_SPACE,0),aSize);
+    aSize.Width() += nCornerSpace;
+    Rectangle aWholeRect(Point(-nCornerSpace,0),aSize);
     PolyPolygon aPoly;
-    aPoly.Insert(Polygon(aWholeRect,CORNER_SPACE,CORNER_SPACE));
+    aPoly.Insert(Polygon(aWholeRect,nCornerSpace,nCornerSpace));
 
     Color aStartColor(m_nColor);
     aStartColor.IncreaseLuminance(10);
@@ -77,30 +80,27 @@ void OEndMarker::Paint( const Rectangle& /*rRect*/ )
     Gradient aGradient(GRADIENT_LINEAR,aStartColor,aEndColor);
     aGradient.SetSteps(static_cast<USHORT>(aSize.Height()));
 
-    DrawGradient(aPoly ,aGradient);
+    DrawGradient(PixelToLogic(aPoly) ,aGradient);
     if ( m_bMarked )
     {
-        Rectangle aRect( Point(-CORNER_SPACE,CORNER_SPACE),
-                         Size(aSize.Width()- CORNER_SPACE,aSize.Height() - CORNER_SPACE- CORNER_SPACE));
+        Rectangle aRect( Point(-nCornerSpace,nCornerSpace),
+                         Size(aSize.Width()- nCornerSpace,aSize.Height() - nCornerSpace- nCornerSpace));
         ColorChanger aColors( this, COL_WHITE, COL_WHITE );
-        DrawPolyLine(Polygon(aRect),LineInfo(LINE_SOLID,2));
+        DrawPolyLine(Polygon(PixelToLogic(aRect)),LineInfo(LINE_SOLID,2));
     }
 }
 // -----------------------------------------------------------------------
 void OEndMarker::ImplInitSettings()
 {
-    //SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    /*SetBackground( );*/
-    SetBackground( Wallpaper( m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor ) );
+    SetBackground( Wallpaper( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor)  );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
-    //SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDarkShadowColor() );
 }
 // -----------------------------------------------------------------------
 void OEndMarker::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !rMEvt.IsLeft() && !rMEvt.IsRight())
         return;
-    static_cast<OViewsWindow*>(GetParent())->showProperties(this);
+    static_cast<OSectionWindow*>(GetParent())->showProperties();
 }
 // =======================================================================
 }
