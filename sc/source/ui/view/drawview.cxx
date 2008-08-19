@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/writingmodeitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <sfx2/bindings.hxx>
@@ -394,19 +393,8 @@ void ScDrawView::RecalcScale()
                             aScaleX,aScaleY );
 }
 
-// #110094#-17 Not used
-//void ScDrawView::PaintObject( SdrObject* pObject, OutputDevice* pDev ) const
-//{
-//  pXOut->SetOutDev( pDev );
-//  SdrPaintInfoRec aInfoRec;
-//  pObject->Paint( *pXOut, aInfoRec );
-//}
-
 void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
 {
-    // needed for plug-ins etc.
-    // query for status embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE is in SdrOle2Obj::DoPaintObject
-
     if ( pViewData )
         pViewData->GetViewShell()->ConnectObject( pOleObj );
 }
