@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlayline.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,7 @@ namespace sdr
 
         sal_Bool OverlayLineStriped::isHit(const basegfx::B2DPoint& rPos, double fTol) const
         {
-            if(isHittable())
+            if(isHittable() && !getBasePosition().equal(getSecondPosition()))
             {
                 return basegfx::tools::isInEpsilonRange(getBasePosition(), getSecondPosition(), rPos, fTol);
             }
