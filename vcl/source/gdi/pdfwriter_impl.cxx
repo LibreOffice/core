@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.132 $
+ * $Revision: 1.133 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
@@ -8438,24 +8439,47 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
     }
     else
     {
-        basegfx::B2DPolygon aPoly( rPoly.getB2DPolygon() );
-        basegfx::B2DPolyPolygon aPolyPoly( basegfx::tools::applyLineDashing( aPoly, rInfo.m_aDashArray ) );
-        sal_uInt32 nPolygons = aPolyPoly.count();
-        for( sal_uInt32 nPoly = 0; nPoly < nPolygons; nPoly++ )
+        basegfx::B2DPolygon aPoly(rPoly.getB2DPolygon());
+        basegfx::B2DPolyPolygon aPolyPoly;
+
+        basegfx::tools::applyLineDashing(aPoly, rInfo.m_aDashArray, &aPolyPoly);
+
+        // Old applyLineDashing subdivided the polygon. New one will create bezier curve segments.
+        // To mimic old behaviour, apply subdivide here. If beziers shall be written (better quality)
+        // this line needs to be removed and the loop below adapted accordingly
+        aPolyPoly = basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+
+        const sal_uInt32 nPolygonCount(aPolyPoly.count());
+
+        for( sal_uInt32 nPoly = 0; nPoly < nPolygonCount; nPoly++ )
         {
             aLine.append( (nPoly != 0 && (nPoly & 7) == 0) ? "\n" : " " );
             aPoly = aPolyPoly.getB2DPolygon( nPoly );
-            DBG_ASSERT( aPoly.count() == 2, "erroneous sub polygon" );
-            basegfx::B2DPoint aStart = aPoly.getB2DPoint( 0 );
-            basegfx::B2DPoint aStop  = aPoly.getB2DPoint( 1 );
-            m_aPages.back().appendPoint( Point( FRound(aStart.getX()),
-                                                FRound(aStart.getY()) ),
-                                         aLine );
-            aLine.append( " m " );
-            m_aPages.back().appendPoint( Point( FRound(aStop.getX()),
-                                                FRound(aStop.getY()) ),
-                                         aLine );
-            aLine.append( " l" );
+            const sal_uInt32 nPointCount(aPoly.count());
+
+            if(nPointCount)
+            {
+                const sal_uInt32 nEdgeCount(aPoly.isClosed() ? nPointCount : nPointCount - 1);
+                basegfx::B2DPoint aCurrent(aPoly.getB2DPoint(0));
+
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const basegfx::B2DPoint aNext(aPoly.getB2DPoint(nNextIndex));
+
+                    m_aPages.back().appendPoint( Point( FRound(aCurrent.getX()),
+                                                        FRound(aCurrent.getY()) ),
+                                                 aLine );
+                    aLine.append( " m " );
+                    m_aPages.back().appendPoint( Point( FRound(aNext.getX()),
+                                                        FRound(aNext.getY()) ),
+                                                 aLine );
+                    aLine.append( " l" );
+
+                    // prepare next edge
+                    aCurrent = aNext;
+                }
+            }
         }
         aLine.append( " S " );
         writeBuffer( aLine.getStr(), aLine.getLength() );
