@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofvirtobj.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfVirtObj : public ViewContactOfSdrObj
+        class SVX_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
         {
         protected:
             // internal access to SdrObject. Iplementation in *.cxx to avoid
@@ -53,14 +53,15 @@ namespace sdr
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfVirtObj(SdrVirtObj& rObj);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewContactOfVirtObj();
 
             // Access to possible sub-hierarchy
             virtual sal_uInt32 GetObjectCount() const;
+
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
