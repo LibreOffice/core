@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xtable.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,6 @@ class Color;
 class Bitmap;
 class VirtualDevice;
 class XOutdevItemPool;
-class XOutputDevice;
 
 // Breite und Hoehe der LB-Bitmaps
 #define BITMAP_WIDTH  32
@@ -398,34 +397,32 @@ public:
 // -------------------
 // class XLineEndList
 // -------------------
+class impXLineEndList;
 
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
-protected:
-    VirtualDevice*      pVD;
-    XOutputDevice*      pXOut;
-    XFillAttrSetItem*   pXFSet;
-    XLineAttrSetItem*   pXLSet;
+private:
+    impXLineEndList*    mpData;
+
+    void impCreate();
+    void impDestroy();
 
 public:
-                    XLineEndList( const String& rPath,
-                                    XOutdevItemPool* pXPool = NULL,
-                                    USHORT nInitSize = 16,
-                                    USHORT nReSize = 16 );
-    virtual         ~XLineEndList();
+    XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    virtual ~XLineEndList();
 
     using XPropertyList::Replace;
-    XLineEndEntry*  Replace(XLineEndEntry* pEntry, long nIndex );
+    XLineEndEntry* Replace(XLineEndEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
-    XLineEndEntry*  Remove(long nIndex);
+    XLineEndEntry* Remove(long nIndex);
     using XPropertyList::Get;
-    XLineEndEntry*  GetLineEnd(long nIndex) const;
+    XLineEndEntry* GetLineEnd(long nIndex) const;
 
-    virtual BOOL    Load();
-    virtual BOOL    Save();
-    virtual BOOL    Create();
-    virtual BOOL    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // --------------------
@@ -458,34 +455,32 @@ public:
 // -------------------
 // class XDashList
 // -------------------
+class impXDashList;
 
 class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
-protected:
-    VirtualDevice*      pVD;
-    XOutputDevice*      pXOut;
-    XFillAttrSetItem*   pXFSet;
-    XLineAttrSetItem*   pXLSet;
+private:
+    impXDashList*       mpData;
+
+    void impCreate();
+    void impDestroy();
 
 public:
-                    XDashList( const String& rPath,
-                                XOutdevItemPool* pXPool = NULL,
-                                USHORT nInitSize = 16,
-                                USHORT nReSize = 16 );
-    virtual         ~XDashList();
+    XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    virtual ~XDashList();
 
     using XPropertyList::Replace;
-    XDashEntry* Replace(XDashEntry* pEntry, long nIndex );
+    XDashEntry* Replace(XDashEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
     XDashEntry* Remove(long nIndex);
     using XPropertyList::Get;
     XDashEntry* GetDash(long nIndex) const;
 
-    virtual BOOL    Load();
-    virtual BOOL    Save();
-    virtual BOOL    Create();
-    virtual BOOL    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // --------------------
@@ -518,33 +513,32 @@ public:
 // -------------------
 // class XHatchList
 // -------------------
+class impXHatchList;
 
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
-protected:
-    VirtualDevice*      pVD;
-    XOutputDevice*      pXOut;
-    XFillAttrSetItem*   pXFSet;
+private:
+    impXHatchList*      mpData;
+
+    void impCreate();
+    void impDestroy();
 
 public:
-                    XHatchList( const String& rPath,
-                                XOutdevItemPool* pXPool = NULL,
-                                USHORT nInitSize = 16,
-                                USHORT nReSize = 16 );
-                    ~XHatchList();
+    XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    ~XHatchList();
 
     using XPropertyList::Replace;
-    XHatchEntry*    Replace(XHatchEntry* pEntry, long nIndex );
+    XHatchEntry* Replace(XHatchEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
-    XHatchEntry*    Remove(long nIndex);
+    XHatchEntry* Remove(long nIndex);
     using XPropertyList::Get;
-    XHatchEntry*    GetHatch(long nIndex) const;
+    XHatchEntry* GetHatch(long nIndex) const;
 
-    virtual BOOL    Load();
-    virtual BOOL    Save();
-    virtual BOOL    Create();
-    virtual BOOL    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // ---------------------
@@ -577,33 +571,32 @@ public:
 // -------------------
 // class XGradientList
 // -------------------
+class impXGradientList;
 
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
-protected:
-    VirtualDevice*      pVD;
-    XOutputDevice*      pXOut;
-    XFillAttrSetItem*   pXFSet;
+private:
+    impXGradientList*   mpData;
+
+    void impCreate();
+    void impDestroy();
 
 public:
-                    XGradientList( const String& rPath,
-                                    XOutdevItemPool* pXPool = NULL,
-                                    USHORT nInitSize = 16,
-                                    USHORT nReSize = 16 );
-    virtual         ~XGradientList();
+    XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    virtual ~XGradientList();
 
     using XPropertyList::Replace;
-    XGradientEntry* Replace(XGradientEntry* pEntry, long nIndex );
+    XGradientEntry* Replace(XGradientEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
     XGradientEntry* Remove(long nIndex);
     using XPropertyList::Get;
     XGradientEntry* GetGradient(long nIndex) const;
 
-    virtual BOOL    Load();
-    virtual BOOL    Save();
-    virtual BOOL    Create();
-    virtual BOOL    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // ---------------------
