@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdtrans.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,7 @@
 #include <math.h>
 #include <svx/xpoly.hxx>
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <svtools/syslocale.hxx>
