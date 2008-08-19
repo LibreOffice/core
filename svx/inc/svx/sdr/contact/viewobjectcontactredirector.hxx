@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactredirector.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,18 +32,15 @@
 #define _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 
 #include "svx/svxdllapi.h"
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-namespace sdr
-{
-    namespace contact
-    {
-        class DisplayInfo;
-        class ViewObjectContact;
-    } // end of namespace contact
-} // end of namespace sdr
+namespace sdr { namespace contact {
+    class DisplayInfo;
+    class ViewObjectContact;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +63,9 @@ namespace sdr
 
             // all default implementations just call the same methods at the original. To do something
             // different, overload the method and at least do what the method does.
-            virtual void PaintObject(ViewObjectContact& rOriginal, DisplayInfo& rDisplayInfo);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+                const sdr::contact::ViewObjectContact& rOriginal,
+                const sdr::contact::DisplayInfo& rDisplayInfo);
         };
     } // end of namespace contact
 } // end of namespace sdr
