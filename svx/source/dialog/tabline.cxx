@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabline.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,26 +149,30 @@ SvxLineTabDialog::~SvxLineTabDialog()
 
 void SvxLineTabDialog::SavePalettes()
 {
+    SfxObjectShell* pShell = SfxObjectShell::Current();
     if( mpNewColorTab != pDrawModel->GetColorTable() )
     {
         if(mbDeleteColorTable)
             delete pDrawModel->GetColorTable();
         pDrawModel->SetColorTable( mpNewColorTab );
-        SfxObjectShell::Current()->PutItem( SvxColorTableItem( mpNewColorTab, SID_COLOR_TABLE ) );
+        if ( pShell )
+            pShell->PutItem( SvxColorTableItem( mpNewColorTab, SID_COLOR_TABLE ) );
         pColorTab = pDrawModel->GetColorTable();
     }
     if( pNewDashList != pDrawModel->GetDashList() )
     {
         delete pDrawModel->GetDashList();
         pDrawModel->SetDashList( pNewDashList );
-        SfxObjectShell::Current()->PutItem( SvxDashListItem( pNewDashList, SID_DASH_LIST ) );
+        if ( pShell )
+            pShell->PutItem( SvxDashListItem( pNewDashList, SID_DASH_LIST ) );
         pDashList = pDrawModel->GetDashList();
     }
     if( pNewLineEndList != pDrawModel->GetLineEndList() )
     {
         delete pDrawModel->GetLineEndList();
         pDrawModel->SetLineEndList( pNewLineEndList );
-        SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pNewLineEndList, SID_LINEEND_LIST ) );
+        if ( pShell )
+            pShell->PutItem( SvxLineEndListItem( pNewLineEndList, SID_LINEEND_LIST ) );
         pLineEndList = pDrawModel->GetLineEndList();
     }
 
@@ -182,7 +186,8 @@ void SvxLineTabDialog::SavePalettes()
         pDashList->Save();
 
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxDashListItem( pDashList, SID_DASH_LIST ) );
+        if ( pShell )
+            pShell->PutItem( SvxDashListItem( pDashList, SID_DASH_LIST ) );
     }
 
     if( nLineEndListState & CT_MODIFIED )
@@ -191,7 +196,8 @@ void SvxLineTabDialog::SavePalettes()
         pLineEndList->Save();
 
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
+        if ( pShell )
+            pShell->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
     }
 
     if( mnColorTableState & CT_MODIFIED )
@@ -200,7 +206,8 @@ void SvxLineTabDialog::SavePalettes()
         pColorTab->Save();
 
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxColorTableItem( pColorTab, SID_COLOR_TABLE ) );
+        if ( pShell )
+            pShell->PutItem( SvxColorTableItem( pColorTab, SID_COLOR_TABLE ) );
     }
 }
 
