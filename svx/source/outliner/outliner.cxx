@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -975,157 +975,100 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     aTextPos.Y() = rStartPos.Y() + aBulletArea.Left();
                 }
 
-                if ( !bStrippingPortions )
+                if ( nOrientation )
                 {
-                    if ( nOrientation )
-                    {
-                        // Sowohl TopLeft als auch BottomLeft nicht ganz richtig, da
-                        // in EditEngine BaseLine...
-                        double nRealOrientation = nOrientation*F_PI1800;
-                        double nCos = cos( nRealOrientation );
-                        double nSin = sin( nRealOrientation );
-                        Point aRotatedPos;
-                        // Translation...
-                        aTextPos -= rOrigin;
-                        // Rotation...
-                        aRotatedPos.X()=(long)   (nCos*aTextPos.X() + nSin*aTextPos.Y());
-                        aRotatedPos.Y()=(long) - (nSin*aTextPos.X() - nCos*aTextPos.Y());
-                        aTextPos = aRotatedPos;
-                        // Translation...
-                        aTextPos += rOrigin;
-                        Font aRotatedFont( aBulletFont );
-                        aRotatedFont.SetOrientation( nOrientation );
-                        pOutDev->SetFont( aRotatedFont );
-                    }
-
-                    // #105803# VCL will care for brackets and so on...
-                    ULONG nLayoutMode = pOutDev->GetLayoutMode();
-                    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
-                    if ( bRightToLeftPara )
-                        nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
-                    pOutDev->SetLayoutMode( nLayoutMode );
-
-                    pOutDev->DrawText( aTextPos, pPara->GetText() );
-
-/*
-                    // HACK #47227#
-                    // Seitennummer im Gliederungsmodus ausgeben...
-                    if ( pPara->HasFlag(PARAFLAG_ISPAGE) && ( pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER ) )
-                    {
-                        long nPage = nFirstPage-1;
-                        for ( USHORT n = 0; n <= nPara; n++ )
-                        {
-                            Paragraph* p = pParaList->GetParagraph( n );
-                            if ( p->HasFlag(PARAFLAG_ISPAGE) )
-                                nPage++;
-                        }
-
-                        long nFontHeight = 0;
-                        if ( !pEditEngine->IsFlatMode() )
-                        {
-                            const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)pEditEngine->GetParaAttrib( nPara, EE_CHAR_FONTHEIGHT );
-                            nFontHeight = rFH.GetHeight();
-                            nFontHeight /= 5;
-                        }
-                        else
-                        {
-                            const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)pEditEngine->GetEmptyItemSet().Get( EE_CHAR_FONTHEIGHT );
-                            nFontHeight = rFH.GetHeight();
-                            nFontHeight *= 10;
-                            nFontHeight /= 25;
-                        }
-                        Size aFontSz( 0, nFontHeight );
-
-                        LanguageType eLang = pEditEngine->GetDefaultLanguage();
-                        // USHORT nScriptType = GetScriptTypeOfLanguage( eLang );
-                        Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
-                        aNewFont.SetSize( aFontSz );
-                        aNewFont.SetAlign( aBulletFont.GetAlign() );
-                        aNewFont.SetVertical( bVertical );
-                        aNewFont.SetOrientation( bVertical ? 2700 : 0 );
-                        aNewFont.SetColor( aBulletFont.GetColor() );
-                        pOutDev->SetFont( aNewFont );
-                        String aPageText = String::CreateFromInt32( nPage );
-                        Size aTextSz;
-                        aTextSz.Width() = pOutDev->GetTextWidth( aPageText );
-                        aTextSz.Height() = pOutDev->GetTextHeight();
-                        long nBulletHeight = !bVertical ? aBulletArea.GetHeight() : aBulletArea.GetWidth();
-                        if ( !bVertical )
-                        {
-                            aTextPos.Y() -= nBulletHeight / 2;
-                            aTextPos.Y() += aTextSz.Height() / 2;
-                            if ( !bRightToLeftPara )
-                            {
-                                aTextPos.X() -= aTextSz.Width();
-                                aTextPos.X() -= aTextSz.Height() / 8;
-                            }
-                            else
-                            {
-                                aTextPos.X() += aTextSz.Width();
-                                aTextPos.X() += aTextSz.Height() / 8;
-                            }
-                        }
-                        else
-                        {
-                            aTextPos.Y() -= aTextSz.Width();
-                            aTextPos.Y() -= aTextSz.Height() / 8;
-                            aTextPos.X() += nBulletHeight / 2;
-                            aTextPos.X() -= aTextSz.Height() / 2;
-                        }
-                        pOutDev->DrawText( aTextPos, aPageText );
-                    }
-*/
+                    // Sowohl TopLeft als auch BottomLeft nicht ganz richtig, da
+                    // in EditEngine BaseLine...
+                    double nRealOrientation = nOrientation*F_PI1800;
+                    double nCos = cos( nRealOrientation );
+                    double nSin = sin( nRealOrientation );
+                    Point aRotatedPos;
+                    // Translation...
+                    aTextPos -= rOrigin;
+                    // Rotation...
+                    aRotatedPos.X()=(long)   (nCos*aTextPos.X() + nSin*aTextPos.Y());
+                    aRotatedPos.Y()=(long) - (nSin*aTextPos.X() - nCos*aTextPos.Y());
+                    aTextPos = aRotatedPos;
+                    // Translation...
+                    aTextPos += rOrigin;
+                    Font aRotatedFont( aBulletFont );
+                    aRotatedFont.SetOrientation( nOrientation );
+                    pOutDev->SetFont( aRotatedFont );
                 }
-                else
+
+                // #105803# VCL will care for brackets and so on...
+                ULONG nLayoutMode = pOutDev->GetLayoutMode();
+                nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
+                if ( bRightToLeftPara )
+                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
+                pOutDev->SetLayoutMode( nLayoutMode );
+
+                if(bStrippingPortions)
                 {
-                    Font aSvxFont( aBulletFont );
+                    const Font aSvxFont(pOutDev->GetFont());
                     sal_Int32* pBuf = new sal_Int32[ pPara->GetText().Len() ];
                     pOutDev->GetTextArray( pPara->GetText(), pBuf );
-                    // aTextPos ist Bottom, jetzt die Baseline liefern:
-                    FontMetric aMetric( pOutDev->GetFontMetric() );
-                    aTextPos.Y() -= aMetric.GetDescent();
 
-                    // #101498#
-                    DrawingText( aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf, aSvxFont, nPara, 0xFFFF, 0xFF);
+                    if(bSymbol)
+                    {
+                        // aTextPos is Bottom, go to Baseline
+                        FontMetric aMetric(pOutDev->GetFontMetric());
+                        aTextPos.Y() -= aMetric.GetDescent();
+                    }
+
+                    DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf,
+                        aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color());
 
                     delete[] pBuf;
                 }
+                else
+                {
+                    pOutDev->DrawText( aTextPos, pPara->GetText() );
+                }
+
                 pOutDev->SetFont( aOldFont );
             }
             else
             {
-                if ( !bStrippingPortions )
+                if ( pFmt->GetBrush()->GetGraphicObject() )
                 {
-                    if ( pFmt->GetBrush()->GetGraphicObject() )
+                    Point aBulletPos;
+                    if ( !bVertical )
                     {
-                        Point aBulletPos;
-                        if ( !bVertical )
-                        {
-                            aBulletPos.Y() = rStartPos.Y() + aBulletArea.Top();
-                            if ( !bRightToLeftPara )
-                                aBulletPos.X() = rStartPos.X() + aBulletArea.Left();
-                            else
-                                aBulletPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Right();
-                        }
+                        aBulletPos.Y() = rStartPos.Y() + aBulletArea.Top();
+                        if ( !bRightToLeftPara )
+                            aBulletPos.X() = rStartPos.X() + aBulletArea.Left();
                         else
-                        {
-                            aBulletPos.X() = rStartPos.X() - aBulletArea.Bottom();
-                            aBulletPos.Y() = rStartPos.Y() + aBulletArea.Left();
-                        }
+                            aBulletPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Right();
+                    }
+                    else
+                    {
+                        aBulletPos.X() = rStartPos.X() - aBulletArea.Bottom();
+                        aBulletPos.Y() = rStartPos.Y() + aBulletArea.Left();
+                    }
 
+                    if(bStrippingPortions)
+                    {
+                        if(aDrawBulletHdl.IsSet())
+                        {
+                            // call something analog to aDrawPortionHdl (if set) and feed it something
+                            // analog to DrawPortionInfo...
+                            // created aDrawBulletHdl, Set/GetDrawBulletHdl.
+                            // created DrawBulletInfo and added handling to sdrtextdecomposition.cxx
+                            DrawBulletInfo aDrawBulletInfo(
+                                *pFmt->GetBrush()->GetGraphicObject(),
+                                aBulletPos,
+                                pPara->aBulSize);
+
+                            aDrawBulletHdl.Call(&aDrawBulletInfo);
+                        }
+                    }
+                    else
+                    {
                         // MT: Remove CAST when KA made the Draw-Method const
                         ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletPos, pPara->aBulSize );
                     }
                 }
-            }
-
-            // #110496# Issue cell break comment after the bullet, to
-            // separate it from the following item text
-            GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
-            if( pMtf != NULL &&
-                IsVerboseTextComments() )
-            {
-                pMtf->AddAction( new MetaCommentAction( "XTEXT_EOC" ) );
             }
         }
 
@@ -1802,14 +1745,26 @@ void Outliner::StripPortions()
 }
 
 // #101498#
-void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft)
+void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
+    USHORT nPara, USHORT nIndex, BYTE nRightToLeft,
+    const EEngineData::WrongSpellVector* pWrongSpellVector,
+    const SvxFieldData* pFieldData,
+    bool bEndOfLine,
+    bool bEndOfParagraph,
+    bool bEndOfBullet,
+    const ::com::sun::star::lang::Locale* pLocale,
+    const Color& rTextLineColor)
 {
     DBG_CHKTHIS(Outliner,0);
 
-    // #101498#
-    DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, nRightToLeft);
+    if(aDrawPortionHdl.IsSet())
+    {
+        // #101498#
+        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, pWrongSpellVector,
+            pFieldData, pLocale, rTextLineColor, nRightToLeft, bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
-    aDrawPortionHdl.Call( &aInfo );
+        aDrawPortionHdl.Call( &aInfo );
+    }
 }
 
 long Outliner::RemovingPagesHdl( OutlinerView* pView )
@@ -2065,17 +2020,6 @@ void Outliner::ImplBlockInsertionCallbacks( BOOL b )
     }
 }
 
-// #110496#
-void Outliner::EnableVerboseTextComments( BOOL bEnable )
-{
-    pEditEngine->EnableVerboseTextComments( bEnable );
-}
-
-BOOL Outliner::IsVerboseTextComments() const
-{
-    return pEditEngine->IsVerboseTextComments();
-}
-
 IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
 {
     if ( !bBlockInsCallback )
@@ -2160,13 +2104,13 @@ sal_Bool DrawPortionInfo::IsRTL() const
         // Use Bidi functions from icu 2.0 to calculate if this portion
         // is RTL or not.
         UErrorCode nError(U_ZERO_ERROR);
-        UBiDi* pBidi = ubidi_openSized(rText.Len(), 0, &nError);
+        UBiDi* pBidi = ubidi_openSized(mrText.Len(), 0, &nError);
         nError = U_ZERO_ERROR;
 
         // I do not have this info here. Is it necessary? I'll have to ask MT.
         const BYTE nDefaultDir = UBIDI_LTR; //IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
 
-        ubidi_setPara(pBidi, rText.GetBuffer(), rText.Len(), nDefaultDir, NULL, &nError);
+        ubidi_setPara(pBidi, mrText.GetBuffer(), mrText.Len(), nDefaultDir, NULL, &nError);
         nError = U_ZERO_ERROR;
 
 //        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));
@@ -2186,3 +2130,4 @@ sal_Bool DrawPortionInfo::IsRTL() const
     return (1 == (mnBiDiLevel % 2));
 }
 
+// eof
