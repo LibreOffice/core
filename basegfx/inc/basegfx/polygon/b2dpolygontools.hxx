@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -79,7 +78,29 @@ namespace basegfx
         bool isInside(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
         bool isInside(const B2DPolygon& rCandidate, const B2DPolygon& rPolygon, bool bWithBorder = false);
 
-        // get size of polygon. Control vectors are included in that ranges.
+        /** Get the range of a polygon including bezier control points
+
+            For detailed discussion, see B2DPolygon::getB2DRange()
+
+            @param rCandidate
+            The B2DPolygon eventually containing bezier segments
+
+            @return
+            The outer range of the bezier curve containing bezier control points
+        */
+        B2DRange getRangeWithControlPoints(const B2DPolygon& rCandidate);
+
+        /** Get the range of a polygon
+
+            This method creates the outer range of the subdivided bezier curve.
+            For detailed discussion see B2DPolygon::getB2DRange()
+
+            @param rCandidate
+            The B2DPolygon eventually containing bezier segments
+
+            @return
+            The outer range of the bezier curve
+        */
         B2DRange getRange(const B2DPolygon& rCandidate);
 
         // get signed area of polygon
@@ -88,10 +109,10 @@ namespace basegfx
         // get area of polygon
         double getArea(const B2DPolygon& rCandidate);
 
-        // get length of polygon edge from point nIndex to nIndex + 1
+        /** get length of polygon edge from point nIndex to nIndex + 1 */
         double getEdgeLength(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
-        // get length of polygon
+        /** get length of polygon */
         double getLength(const B2DPolygon& rCandidate);
 
         // get position on polygon for absolute given distance. If
@@ -119,16 +140,13 @@ namespace basegfx
         // Continuity check for point with given index
         B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
-        // remove intersections
-        B2DPolyPolygon removeIntersections(const B2DPolygon& rCandidate, bool bKeepOrientations = true);
-
         // Subdivide all contained curves. Use distanceBound value if given.
         B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound = 0.0);
 
         // Subdivide all contained curves. Use angleBound value if given.
         B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 0.0);
 
-        // #i37443# Subdivide all contained curves. Use distanceBound value if given.
+        // #i37443# Subdivide all contained curves.
         B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount = 0L);
 
         // Definitions for the cut flags used from the findCut methods
@@ -177,11 +195,45 @@ namespace basegfx
             const B2DVector& rEdgeDelta,
             double* pCut = 0L);
 
-        // Apply Line Dashing. This cuts the Polygon into line pieces
-        // which are inserted as single polygons into the result.
-        // If fFullDashDotLen is not given it will be calculated from the given
-        // raDashDotArray.
-        B2DPolyPolygon applyLineDashing(const B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
+        /** Apply given LineDashing to given polygon
+
+            This method is used to cut down line polygons to the needed
+            pieces when a dashing needs to be applied.
+            It is now capable of keeping contained bezier segments.
+            It is also capable of delivering line and non-line portions
+            depending on what target polygons You provide. This is useful
+            e.g. for dashed lines with two colors.
+            If the last and the first snippet in one of the results have
+            a common start/end ppoint, they will be merged to achieve as
+            view as needed result line snippets. This is also relevant for
+            further processing the results.
+
+            @param rCandidate
+            The polygon based on which the snippets will be created.
+
+            @param rDotDashArray
+            The line pattern given as array of length values
+
+            @param pLineTarget
+            The target for line snippets, e.g. the first entry will be
+            a line segment with length rDotDashArray[0]. The given
+            polygon will be emptied as preparation.
+
+            @param pGapTarget
+            The target for gap snippets, e.g. the first entry will be
+            a line segment with length rDotDashArray[1]. The given
+            polygon will be emptied as preparation.
+
+            @param fFullDashDotLen
+            The sumed-up length of the rDotDashArray. If zero, it will
+            be calculated internally.
+        */
+        void applyLineDashing(
+            const B2DPolygon& rCandidate,
+            const ::std::vector<double>& rDotDashArray,
+            B2DPolyPolygon* pLineTarget,
+            B2DPolyPolygon* pGapTarget = 0,
+            double fFullDashDotLen = 0.0);
 
         // test if point is inside epsilon-range around an edge defined
         // by the two given points. Can be used for HitTesting. The epsilon-range
@@ -235,17 +287,50 @@ namespace basegfx
          */
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius );
 
-        /** append given unit circle quadrant with start point, the control vectors and end point to the given polygon
+        /** append a unit circle with one point and the control vectors to the given polygon
+         */
+        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, bool bEndPoint);
+
+        /** append a segment of unit circle with one point and the control vectors to the given polygon
+         */
+        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd, bool bEndPoint);
+
+        /** create a polygon which describes the unit circle and close it
+
+            @param nStartQuadrant
+            To be able to rebuild the old behaviour where the circles started at bottom,
+            this parameter is used. Default is 0 which is the first quadrant and the
+            polygon's start point will be the rightmost one. When using e.g. 1, the
+            first created quadrant will start at the YMax-position (with Y down on screens,
+            this is the lowest one). This is needed since when lines are dashed, toe old
+            geometry started at bottom point, else it would look different.
+         */
+        B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant = 0);
+
+        /** Create an ellipse polygon with given radii.
+
+            This method creates an ellipse approximation consisting of
+            four cubic bezier segments, which approximate the given
+            ellipse with an error of less than 0.5 percent.
+
+            @param rCenter
+            Center point of the circle
+
+            @param fRadiusX
+            Radius of the ellipse in X direction
+
+            @param fRadiusY
+            Radius of the ellipse in Y direction
+         */
+        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
+
+        /** append a unit circle with one point and the control vectors to the given polygon
          */
         void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant);
 
         /** append a segment of unit circle with start point, the control vectors and end point to the given polygon
          */
         void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd);
-
-        /** create a polygon which describes the unit circle and close it
-         */
-        B2DPolygon createPolygonFromUnitCircle();
 
         /** Create an ellipse polygon with given radii.
 
@@ -318,8 +403,19 @@ namespace basegfx
         // matrix and the resulting x,y is used to form the new polygon.
         B2DPolygon createB2DPolygonFromB3DPolygon(const B3DPolygon& rCandidate, const B3DHomMatrix& rMat);
 
+        // create simplified version of the original polygon by
+        // replacing segments with spikes/loops and self intersections
+        // by several trivial sub-segments
+        B2DPolygon createSimplifiedPolygon(const B2DPolygon&);
+
+        // calculate the distance to the given endless ray and return. The relative position on the edge is returned in Cut.
+        // That position may be less than 0.0 or more than 1.0
+        double getDistancePointToEndlessRay(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut);
+
         // calculate the smallest distance to given edge and return. The relative position on the edge is returned in Cut.
-        double getSmallestDistancePointToEdge(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double* pCut = 0L);
+        // That position is in the range [0.0 .. 1.0] and the returned distance is adapted accordingly to the start or end
+        // point of the edge
+        double getSmallestDistancePointToEdge(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut);
 
         // for each contained edge calculate the smallest distance. Return the index to the smallest
         // edge in rEdgeIndex. The relative position on the edge is returned in rCut.
@@ -359,7 +455,7 @@ namespace basegfx
         B2DPolygon removeNeutralPoints(const B2DPolygon& rCandidate);
 
         // tests if polygon is convex
-        bool isConvex(const ::basegfx::B2DPolygon& rCandidate);
+        bool isConvex(const B2DPolygon& rCandidate);
 
         // calculates the orientation at edge nIndex
         B2VectorOrientation getOrientationForIndex(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
@@ -382,7 +478,18 @@ namespace basegfx
         // triangles.
         void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget);
 
-        bool isPolyPolygonEqualRectangle( const ::basegfx::B2DPolyPolygon& rPolyPoly, const ::basegfx::B2DRange& rRect );
+        // grow for polygon. Move all geometry in each point in the direction of the normal in that point
+        // with the given amount. Value may be negative.
+        B2DPolygon growInNormalDirection(const B2DPolygon& rCandidate, double fValue);
+
+        // force all sub-polygons to a point count of nSegments
+        B2DPolygon reSegmentPolygon(const B2DPolygon& rCandidate, sal_uInt32 nSegments);
+
+        // create polygon state at t from 0.0 to 1.0 between the two polygons. Both polygons must have the same
+        // organisation, e.g. same amount of points
+        B2DPolygon interpolate(const B2DPolygon& rOld1, const B2DPolygon& rOld2, double t);
+
+        bool isPolyPolygonEqualRectangle( const B2DPolyPolygon& rPolyPoly, const B2DRange& rRect );
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         B2DPolygon simplifyCurveSegments(const B2DPolygon& rCandidate);
@@ -391,6 +498,75 @@ namespace basegfx
         // polygon will be rotated. This is only valid for closed polygons, for non-closed ones
         // an assertion will be triggered
         B2DPolygon makeStartPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndexOfNewStatPoint);
+
+        /** create edges of given length along given B2DPolygon
+
+            @param rCandidate
+            The polygon to move along. Points at the given polygon are created, starting
+            at position fStart and stopping at less or equal to fEnd. The closed state is
+            preserved.
+            The polygon is subdivided if curve segments are included. That subdivision is the base
+            for the newly created points.
+            If the source is closed, the indirectly existing last edge may NOT have the
+            given length.
+            If the source is open, all edges will have the given length. You may use the last
+            point of the original when You want to add the last edge Yourself.
+
+            @param fLength
+            The length of the created edges. If less or equal zero, an empty polygon is returned.
+
+            @param fStart
+            The start distance for the first to be generated point. Use 0.0 to get the
+            original start point. Negative values are truncated to 0.0.
+
+            @param fEnd
+            The maximum distance for the last point. No more points behind this distance will be created.
+            Use 0.0 to proccess the whole polygon. Negative values are truncated to 0.0. It also
+            needs to be more or equal to fStart, else it is truncated to fStart.
+
+            @return
+            The newly created polygon
+         */
+        B2DPolygon createEdgesOfGivenLength(const B2DPolygon& rCandidate, double fLength, double fStart = 0.0, double fEnd = 0.0);
+
+        /** Create Waveline along given polygon
+            The implementation is based on createEdgesOfGivenLength and creates a curve
+            segment with the given dimensions for each created line segment. The polygon
+            is treated as if opened (closed state will be ignored) and only for whole
+            edges a curve segment will be created (no rest handling)
+
+            @param rCandidate
+            The polygon along which the waveline will be created
+
+            @param fWaveWidth
+            The length of a single waveline curve segment
+
+            @param fgWaveHeight
+            The height of the waveline (amplitude)
+        */
+        B2DPolygon createWaveline(const B2DPolygon& rCandidate, double fWaveWidth, double fWaveHeight);
+
+        /** split each edge of a polygon in exactly nSubEdges equidistant edges
+
+            @param rCandidate
+            The source polygon. If too small (no edges), nSubEdges too small (<2)
+            or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
+            Else for each edge nSubEdges will be created. Closed state is preserved.
+
+            @param nSubEdges
+            How many edges shall be created as replacement for each single edge
+
+            @param bHandleCurvedEdges
+            Process curved edges or not. If to handle the curved edges will be splitted
+            into nSubEdges part curved edges of equidistant bezier distances. If not,
+            curved edges will just be copied.
+
+            @param bHandleStraightEdges
+            Process straight edges or not. If to handle the straight edges will be splitted
+            into nSubEdges part curved edges of equidistant length. If not,
+            straight edges will just be copied.
+        */
+        B2DPolygon reSegmentPolygonEdges(const B2DPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D Polygons
