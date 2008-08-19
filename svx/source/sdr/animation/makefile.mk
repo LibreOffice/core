@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,10 +43,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-        $(SLO)$/animationinfo.obj			\
-        $(SLO)$/ainfotext.obj				\
-        $(SLO)$/ainfoscrolltext.obj			\
-        $(SLO)$/ainfographic.obj			\
         $(SLO)$/animationstate.obj			\
         $(SLO)$/objectanimator.obj			\
         $(SLO)$/scheduler.obj
