@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.57 $
+# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,6 +70,7 @@ SHL1STDLIBS+= \
     $(BASICLIB) \
     $(CPPCANVASLIB) \
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
@@ -198,6 +199,7 @@ SHL4STDLIBS= \
     $(SFXLIB) \
     $(BASICLIB) \
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(GOODIESLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
