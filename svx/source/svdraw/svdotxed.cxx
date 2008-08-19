@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotxed.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -270,6 +270,11 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( rOutl.GetParagraphCount() );
             pNewText = rOutl.CreateParaObject( 0, nParaAnz );
         }
+
+        // need to end edit mode early since SetOutlinerParaObject already
+        // uses GetCurrentBoundRect() which needs to take the text into account
+        // to work correct
+        mbInEditMode = FALSE;
         SetOutlinerParaObject(pNewText);
     }
 
