@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewsWindow.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,13 +47,9 @@
 #include <boost/shared_ptr.hpp>
 
 #include <MarkedSection.hxx>
+#include <SectionWindow.hxx>
 
-class Splitter;
 class SdrHdl;
-namespace comphelper
-{
-    class OPropertyChangeMultiplexer;
-}
 namespace rptui
 {
     class OReportWindow;
@@ -61,6 +57,7 @@ namespace rptui
     class OEndMarker;
     class OReportSection;
     class OSectionView;
+
 
     // -----------------------------------------------------------------------------
     struct RectangleLess : public ::std::binary_function< Rectangle, Rectangle, bool>
@@ -90,25 +87,55 @@ namespace rptui
         }
     };
 
+    class OWindowPositionCorrector
+    {
+        ::std::vector< ::std::pair<Window*,Point> > m_aChildren;
+        long m_nDeltaX;
+        long m_nDeltaY;
+    public:
+        OWindowPositionCorrector(Window* _pWindow,long _nDeltaX, long _nDeltaY) :m_nDeltaX(_nDeltaX), m_nDeltaY(_nDeltaY)
+        {
+            USHORT nCount = _pWindow->GetChildCount();
+            m_aChildren.reserve(nCount);
+            while( nCount )
+            {
+                Window* pChild = _pWindow->GetChild(--nCount);
+                m_aChildren.push_back(::std::pair<Window*,Point>(pChild,pChild->GetPosPixel()));
+            }
+        }
+        ~OWindowPositionCorrector()
+        {
+            ::std::vector< ::std::pair<Window*,Point> >::iterator aIter = m_aChildren.begin();
+            ::std::vector< ::std::pair<Window*,Point> >::iterator aEnd = m_aChildren.end();
+            for (; aIter != aEnd; ++aIter)
+            {
+                const Point aPos = aIter->first->GetPosPixel();
+                if ( aPos == aIter->second )
+                    aIter->first->SetPosPixel(Point(m_nDeltaX,m_nDeltaY) + aPos);
+            }
+        }
+    };
+
     class OViewsWindow :    public Window
-                        ,   public ::cppu::BaseMutex
-                        ,   public ::comphelper::OPropertyChangeListener
                         ,   public SfxListener
                         ,   public IMarkedSection
     {
-        typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>              TRectangleMap;
+        typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
     public:
-        typedef ::std::pair< ::boost::shared_ptr<OEndMarker>,::boost::shared_ptr<Splitter> >                TSplitterPair;
-        typedef ::std::pair< ::boost::shared_ptr<OReportSection> , ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> >
-                                                                                                            TReportPair;
-        typedef ::std::pair< TReportPair, TSplitterPair  >                                                  TSectionPair;
-        typedef ::std::vector< TSectionPair >                                                               TSectionsMap;
+        typedef ::std::vector< ::boost::shared_ptr<OSectionWindow> >                                TSectionsMap;
 
-        struct TReportPairHelper : public ::std::unary_function< TSectionsMap::value_type, ::boost::shared_ptr<OReportSection> >
+        struct TReportPairHelper : public ::std::unary_function< TSectionsMap::value_type, OReportSection >
         {
-            const ::boost::shared_ptr<OReportSection>& operator() (const TSectionsMap::value_type& lhs) const
+            OReportSection& operator() (const TSectionsMap::value_type& lhs) const
             {
-                return lhs.first.first;
+                return lhs->getReportSection();
+            }
+        };
+        struct TStartMarkerHelper : public ::std::unary_function< TSectionsMap::value_type, OStartMarker >
+        {
+            OStartMarker& operator() (const TSectionsMap::value_type& lhs) const
+            {
+                return lhs->getStartMarker();
             }
         };
     private:
@@ -125,10 +152,7 @@ namespace rptui
         TSectionsMap::iterator getIteratorAtPos(USHORT _nPos);
         void collectRectangles(TRectangleMap& _rMap,bool _bBoundRects);
         void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize);
-
-        DECL_LINK(StartSplitHdl, Splitter*);
-        DECL_LINK(SplitHdl, Splitter*);
-        DECL_LINK(EndSplitHdl, Splitter*);
+        void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
 
         OViewsWindow(OViewsWindow&);
         void operator =(OViewsWindow&);
@@ -138,16 +162,18 @@ namespace rptui
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
         virtual void MouseButtonUp( const MouseEvent& rMEvt );
         using Window::Notify;
+        virtual void Paint( const Rectangle& rRect );
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
-        // OPropertyChangeListener
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:
-        OViewsWindow( Window* _pParent,OReportWindow* _pReportWindow);
+        OViewsWindow(
+            OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
 
         // windows overload
         virtual void Resize();
+
+        void resize(const OSectionWindow& _rSectionWindow);
 
         /** late ctor
         */
@@ -175,7 +201,7 @@ namespace rptui
         * \param _nPos
         * \return the section at this pos or an empty section
         */
-        ::boost::shared_ptr<OReportSection> getSection(const USHORT _nPos) const;
+        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const USHORT _nPos) const;
 
         void            showView(USHORT _nPos,BOOL _bShow);
 
@@ -189,13 +215,8 @@ namespace rptui
         BOOL            isDragStripes() const;
 
         /** returns the total accumulated height of all sections until _pSection is reached
-            @param  _pSection Defines the end of accumulation, can be <NULL/>
         */
-        sal_Int32       getTotalHeight(const OReportSection* _pSection = NULL) const;
-
-        /** returns the height of the first spliiter.
-        */
-        sal_Int32       getSplitterHeight() const;
+        sal_Int32       getTotalHeight() const;
 
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
@@ -222,7 +243,7 @@ namespace rptui
 
         /** All objects will be marked.
         */
-        void SelectAll();
+        void SelectAll(const sal_uInt16 _nObjectType);
 
         /** returns <TRUE/> when a object is marked
         */
@@ -239,7 +260,7 @@ namespace rptui
         /** returns the report section window for the given xsection
             @param  _xSection   the section
         */
-        ::boost::shared_ptr<OReportSection> getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        ::boost::shared_ptr<OSectionWindow> getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode
@@ -255,29 +276,22 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
-        /** get section from point inside.
-            @param  _aPosition
-        */
-        ::boost::shared_ptr<OReportSection> getSection(const Point& _aPosition);
-
         // IMarkedSection
-        ::boost::shared_ptr<OReportSection> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
         virtual void markSection(const sal_uInt16 _nPos);
 
         /** align all marked objects in all sections
         */
         void alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects = false);
 
-        /** shows the properties of the section corresponding to the end marker
-        *
-        * \param _pEndMarker must be not <NULL/>
-        */
-        void showProperties(const OEndMarker* _pEndMarker);
-
         /** creates a default object
         *
         */
         void createDefault();
+
+        /** shows or hides the ruler.
+        */
+        void showRuler(sal_Bool _bShow);
 
         /** returns the currently set shape type.
         *
@@ -287,15 +301,16 @@ namespace rptui
 
         /** returns the current position in the list
         */
-        USHORT getPosition(const OReportSection* _pSection = NULL) const;
+        USHORT getPosition(const OSectionWindow* _pSectionWindow = NULL) const;
 
         /** calls on every section BrkAction
         *
         */
         void BrkAction();
         void BegMarkObj(const Point& _aPnt,const OSectionView* _pSection);
+
     private:
-        void BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView* _pSection);
+        void BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView& _rSection);
         void EndDragObj_removeInvisibleObjects();
         Point m_aDragDelta;
         ::std::vector<SdrObject*> m_aBegDragTempList;
@@ -323,6 +338,25 @@ namespace rptui
         // void MovAction2(const Point& rPnt,const OSectionView* _pSection);
 
         sal_uInt32 getMarkedObjectCount() const;
+
+        /** fills the positions of all collapsed sections.
+        *
+        * \param _rCollapsedPositions Out parameter which holds afterwards all positions of the collapsed sections.
+        */
+        void fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const;
+
+        /** collpase all sections given by their position
+        *
+        * \param _aCollpasedSections The position of the sections which should be collapsed.
+        */
+        void collapseSections(const com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections);
+
+        /** zoom the ruler and view windows
+        */
+        void zoom(const sal_Int16 _nZoom);
+
+        void scrollChildren(long nDeltaX, long nDeltaY);
+
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
