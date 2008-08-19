@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SelectionBrowseBox.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,7 +243,19 @@ void OSelectionBrowseBox::initialize()
     if(xConnection.is())
     {
         const IParseContext& rContext = static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext();
-        IParseContext::InternationalKeyCode eFunctions[] = { IParseContext::KEY_AVG,IParseContext::KEY_COUNT,IParseContext::KEY_MAX,IParseContext::KEY_MIN,IParseContext::KEY_SUM };
+        IParseContext::InternationalKeyCode eFunctions[] = { IParseContext::KEY_AVG,IParseContext::KEY_COUNT,IParseContext::KEY_MAX
+            ,IParseContext::KEY_MIN,IParseContext::KEY_SUM
+            ,IParseContext::KEY_EVERY
+            ,IParseContext::KEY_ANY
+            ,IParseContext::KEY_SOME
+            ,IParseContext::KEY_STDDEV_POP
+            ,IParseContext::KEY_STDDEV_SAMP
+            ,IParseContext::KEY_VAR_SAMP
+            ,IParseContext::KEY_VAR_POP
+            ,IParseContext::KEY_COLLECT
+            ,IParseContext::KEY_FUSION
+            ,IParseContext::KEY_INTERSECTION
+        };
 
         String sGroup = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount() - 1);
         m_aFunctionStrings = m_aFunctionStrings.GetToken(0);
