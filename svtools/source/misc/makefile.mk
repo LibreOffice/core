@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.44 $
+# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -81,6 +81,7 @@ SLOFILES=\
     $(SLO)$/restrictedpaths.obj     \
     $(SLO)$/dialogclosedlistener.obj\
     $(SLO)$/dialogcontrolling.obj   \
+    $(SLO)$/chartprettypainter.obj \
     $(SLO)$/sharecontrolfile.obj   \
     $(SLO)$/documentlockfile.obj   \
     $(SLO)$/langtab.obj
