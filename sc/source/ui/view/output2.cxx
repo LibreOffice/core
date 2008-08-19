@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output2.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
-#include <math.h>
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
@@ -78,7 +77,9 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
-            //! Autofilter-Breite mit column.cxx zusammenfassen
+#include <math.h>
+
+//! Autofilter-Breite mit column.cxx zusammenfassen
 #define DROPDOWN_BITMAP_SIZE        17
 
 #define DRAWTEXT_MAX    32767
