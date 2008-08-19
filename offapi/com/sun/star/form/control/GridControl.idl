@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GridControl.idl,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,11 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module form {  module control {
+module com {  module sun {  module star {  module form {
+
+published interface XGridControl;
+
+module control {
 
 //=============================================================================
 
@@ -103,6 +107,8 @@ published service GridControl
         a table control bound to a data source is given implicitly (by the cursor position of the data source).</p>
     */
     interface com::sun::star::form::XGrid;
+
+    [optional] interface com::sun::star::form::XGridControl;
 
     /** used to broadcast modifications made by the user (within the active cell)
     */
