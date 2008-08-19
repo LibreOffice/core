@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fucon3d.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@
 #include <svx/cube3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/camera3d.hxx>
-#include <svx/xoutx.hxx>
 
 #include "app.hrc"
 #include "res_bmp.hrc"
