@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -102,7 +102,6 @@ SLOFILES = \
     $(SLO)$/fmdispatch.obj  \
     $(SLO)$/datanavi.obj \
     $(SLO)$/xfm_addcondition.obj \
-    $(SLO)$/formpdfexport.obj \
     $(SLO)$/datalistener.obj \
     $(SLO)$/fmscriptingenv.obj \
     $(SLO)$/stringlistresource.obj \
