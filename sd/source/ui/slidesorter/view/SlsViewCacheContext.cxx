@@ -8,7 +8,7 @@
  *
  * $RCSfile: SlsViewCacheContext.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <vcl/window.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -77,8 +78,11 @@ void ViewCacheContext::NotifyPreviewCreation (
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     if (pDescriptor.get() != NULL)
     {
-        const Rectangle aDirtyBox (pDescriptor->GetViewObjectContact()->GetViewContact().GetPaintRectangle());
-        mrView.InvalidateAllWin(aDirtyBox);
+        // use direct view-invalidate here and no ActionChanged() at the VC
+        // ince the VC is a PageObjectViewObjectContact and in it's ActionChanged()
+        // implementation invalidates the cache entry again
+        pDescriptor->GetViewObjectContact()->GetObjectContact().InvalidatePartOfView(
+            pDescriptor->GetViewObjectContact()->getObjectRange());
     }
     else
     {
