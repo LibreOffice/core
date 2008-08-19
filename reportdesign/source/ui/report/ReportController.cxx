@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,12 +59,12 @@
 #include <tools/diagnose_ex.h>
 #include "rptui_slotid.hrc"
 #include "reportformula.hxx"
+
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/types.hxx>
-#include <svx/fmview.hxx>
-#include <svx/paperinf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/types.hxx>
+
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/view/PaperFormat.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
@@ -93,51 +93,60 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include "DesignView.hxx"
-#include "ModuleHelper.hxx"
-#include "RptObject.hxx"
-#include "Undo.hxx"
-#include <svx/dataaccessdescriptor.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+
+#include <svx/fmview.hxx>
+#include <svx/paperinf.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
-#include "uistrings.hrc"
-#include <svtools/cliplistener.hxx>
-#include "RptDef.hxx"
-#include "ReportSection.hxx"
-#include "SectionView.hxx"
-#include "UndoActions.hxx"
-#include "dlgpage.hxx"
-#ifndef _RPTUI_DLGRESID_HRC
-#include "RptResId.hrc"
-#endif
+#include <svx/dataaccessdescriptor.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/sizeitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <vos/mutex.hxx>
-#include "PropertyForward.hxx"
-#include <svtools/aeitem.hxx> //CHINA001
+#include <svx/zoomitem.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/flagsdef.hxx> //CHINA001
+#include <svx/svdpagv.hxx>
+
+#include "DesignView.hxx"
+#include "ModuleHelper.hxx"
+#include "RptObject.hxx"
+#include "Undo.hxx"
+#include "uistrings.hrc"
+#include "RptDef.hxx"
+#include "ReportSection.hxx"
+#include "SectionView.hxx"
+#include "UndoActions.hxx"
+#include "dlgpage.hxx"
+#include "RptResId.hrc"
+
+#include <svtools/itempool.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/aeitem.hxx> //CHINA001
+#include <svtools/cliplistener.hxx>
+
+#include <vos/mutex.hxx>
+#include "PropertyForward.hxx"
+#include "SectionWindow.hxx"
+
 #include <toolkit/helper/convert.hxx>
 #include "GroupsSorting.hxx"
 #include "PageNumber.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "UndoEnv.hxx"
 #include "InsertFunctions.hxx"
-#include <svx/svdpagv.hxx>
+
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
-
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/confignode.hxx>
@@ -161,6 +170,7 @@ using namespace ::dbtools;
 using namespace ::rptui;
 using namespace ::dbaui;
 using namespace ::comphelper;
+using namespace ::cppu;
 
 // -----------------------------------------------------------------------------
 namespace
@@ -262,10 +272,14 @@ Reference< XInterface > OReportController::create(Reference< XComponentContext >
 {
     return *(new OReportController(xContext));
 }
+
+#define PROPERTY_ID_ZOOMVALUE   1
+
 DBG_NAME( rpt_OReportController )
 // -----------------------------------------------------------------------------
 OReportController::OReportController(Reference< XComponentContext > const & xContext)
 : OReportController_BASE(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY))
+,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
 ,m_aSelectionListeners( m_aMutex )
 ,m_pMyOwnView(NULL)
 ,m_pClipbordNotifier(NULL)
@@ -273,7 +287,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 ,m_xContext(xContext)
 ,m_nSplitPos(-1)
 ,m_nPageNum(-1)
-//,m_nExecuteReportEvent(0)
+,m_nZoomValue(100)
 ,m_bShowRuler(sal_True)
 ,m_bGridVisible(sal_True)
 ,m_bGridUse(sal_True)
@@ -285,6 +299,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 {
     m_sMode =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal"));
     DBG_CTOR( rpt_OReportController,NULL);
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomValue")),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,      &m_nZoomValue,      ::getCppuType(reinterpret_cast< sal_Int16*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 OReportController::~OReportController()
@@ -326,9 +341,9 @@ void OReportController::disposing()
     {
         try
         {
-            ::boost::shared_ptr<OReportSection> pSection = m_pMyOwnView->getMarkedSection();
-            if ( pSection )
-                pSection->deactivateOle();
+            ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_pMyOwnView->getMarkedSection();
+            if ( pSectionWindow )
+                pSectionWindow->getReportSection().deactivateOle();
             getUndoMgr()->Clear();      // clear all undo redo things
             listen(false);
         }
@@ -507,6 +522,10 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_TERMINATE_INPLACEACTIVATION:
             aReturn.bEnabled = sal_True;
             break;
+        case SID_SELECT_ALL_EDITS:
+        case SID_SELECT_ALL_LABELS:
+            aReturn.bEnabled = sal_True;
+            break;
         case SID_RPT_NEW_FUNCTION:
             aReturn.bEnabled = isEditable();
             break;
@@ -525,9 +544,9 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && !m_pMyOwnView->isHandleEvent(_nId);
             if ( aReturn.bEnabled )
             {
-                ::boost::shared_ptr<OReportSection> pSection = m_pMyOwnView->getMarkedSection();
-                if ( pSection )
-                    aReturn.bEnabled = !pSection->isUiActive();
+                ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_pMyOwnView->getMarkedSection();
+                if ( pSectionWindow )
+                    aReturn.bEnabled = !pSectionWindow->getReportSection().isUiActive();
             }
             {
                 ::rtl::OUString sText = String(ModuleRes(RID_STR_DELETE));
@@ -872,6 +891,28 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_PRINTPREVIEW:
             aReturn.bEnabled = sal_False;
             break;
+        case SID_ATTR_ZOOM:
+            aReturn.bEnabled = sal_True;
+            {
+                SvxZoomItem aZoom(SVX_ZOOM_PERCENT,m_nZoomValue);
+                aZoom.SetValueSet(SVX_ZOOM_ENABLE_50|SVX_ZOOM_ENABLE_75|SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_150|SVX_ZOOM_ENABLE_200);
+                aZoom.QueryValue(aReturn.aValue);
+                //aReturn.sTitle = ::rtl::OUString::valueOf((sal_Int32)m_nZoomValue);
+            }
+            break;
+        case SID_ATTR_ZOOMSLIDER:
+            aReturn.bEnabled = sal_True;
+            {
+                SvxZoomSliderItem aZoomSlider(m_nZoomValue);
+                aZoomSlider.AddSnappingPoint(50);
+                aZoomSlider.AddSnappingPoint(75);
+                aZoomSlider.AddSnappingPoint(100);
+                aZoomSlider.AddSnappingPoint(150);
+                aZoomSlider.AddSnappingPoint(200);
+                aZoomSlider.QueryValue(aReturn.aValue);
+                //aReturn.sTitle = ::rtl::OUString::valueOf((sal_Int32)m_nZoomValue);
+            }
+            break;
         default:
             aReturn = OReportController_BASE::GetState(_nId);
     }
@@ -1045,7 +1086,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             alignControlsWithUndo(RID_STR_UNDO_ALIGNMENT,ControlModification::BOTTOM,SID_SECTION_ALIGN_DOWN == _nId);
             break;
         case SID_SELECTALL:
-            m_pMyOwnView->SelectAll();
+            m_pMyOwnView->SelectAll(OBJ_NONE);
             break;
         case SID_SELECTALL_IN_SECTION:
             {
@@ -1058,11 +1099,17 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             m_pMyOwnView->SetMode(RPTUI_SELECT);
             InvalidateFeature( SID_OBJECT_SELECT );
             break;
+        case SID_SELECT_ALL_EDITS:
+            m_pMyOwnView->SelectAll(OBJ_DLG_FORMATTEDFIELD);
+            break;
+        case SID_SELECT_ALL_LABELS:
+            m_pMyOwnView->SelectAll(OBJ_DLG_FIXEDTEXT);
+            break;
         case SID_TERMINATE_INPLACEACTIVATION:
             {
-                ::boost::shared_ptr<OReportSection> pSection = m_pMyOwnView->getMarkedSection();
+                ::boost::shared_ptr<OSectionWindow> pSection = m_pMyOwnView->getMarkedSection();
                 if ( pSection )
-                    pSection->deactivateOle();
+                    pSection->getReportSection().deactivateOle();
             }
             break;
         case SID_SELECT:
@@ -1545,18 +1592,24 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             InvalidateAll();
             return;
         case SID_GROUP:
-    //        {
-    //            ::boost::shared_ptr<OReportSection> pReportSection = m_pMyOwnView->getMarkedSection();
-                //if ( pReportSection.get() )
-                //{
-    //                ::std::vector< uno::Reference< uno::XInterface > > aSelection;
-    //                uno::Reference<report::XSection> xSection = pReportSection->getSection();
-    //                const String sUndoAction(ModuleRes(RID_STR_UNDO_GROUP));
-    //                getUndoMgr()->EnterListAction( sUndoAction, String() );
-
-    //                getUndoMgr()->LeaveListAction();
-    //            }
-    //        }
+            break;
+        case SID_ATTR_ZOOM:
+            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
+            {
+                SvxZoomItem aZoomItem;
+                aZoomItem.PutValue(aArgs[0].Value);
+                m_nZoomValue = aZoomItem.GetValue();
+                impl_zoom_nothrow();
+            } // if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
+            break;
+        case SID_ATTR_ZOOMSLIDER:
+            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("ZoomSlider") )
+            {
+                SvxZoomSliderItem aZoomSlider;
+                aZoomSlider.PutValue(aArgs[0].Value);
+                m_nZoomValue = aZoomSlider.GetValue();
+                impl_zoom_nothrow();
+            }
             break;
         default:
             OReportController_BASE::Execute(_nId,aArgs);
@@ -1623,7 +1676,10 @@ void OReportController::impl_initialize( )
                 m_nPageNum = -1;
         }
         m_pMyOwnView->collapseSections(m_aCollapsedSections);
+        impl_zoom_nothrow();
+        m_pMyOwnView->Resize();
         m_pMyOwnView->Invalidate();
+        InvalidateAll();
 
         if ( m_bShowProperties && m_nPageNum == -1 )
         {
@@ -1729,6 +1785,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DbSortingAndGrouping",      SID_SORTINGANDGROUPING,         CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:PageHeaderFooter",          SID_PAGEHEADERFOOTER,           CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:ReportHeaderFooter",        SID_REPORTHEADERFOOTER,         CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:ZoomSlider",                SID_ATTR_ZOOMSLIDER,            CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:Zoom",                      SID_ATTR_ZOOM,                  CommandGroup::VIEW );
     //implDescribeSupportedFeature( ".uno:SwitchControlDesignMode", SID_FM_DESIGN_MODE,             CommandGroup::VIEW );
 
     implDescribeSupportedFeature( ".uno:ConditionalFormatting",     SID_CONDITIONALFORMATTING,      CommandGroup::FORMAT );
@@ -1954,6 +2012,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:NextMark",                      SID_NEXT_MARK);
     implDescribeSupportedFeature( ".uno:PrevMark",                      SID_PREV_MARK);
     implDescribeSupportedFeature( ".uno:TerminateInplaceActivation",    SID_TERMINATE_INPLACEACTIVATION);
+    implDescribeSupportedFeature( ".uno:SelectAllLabels",               SID_SELECT_ALL_LABELS);
+    implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OReportController::getUndoMgr()
@@ -2478,15 +2538,19 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
             aProps[nCount].Value <<= aCollapsedSections;
         }
 
-        ::boost::shared_ptr<OReportSection> pSection = m_pMyOwnView->getMarkedSection();
-        if ( pSection.get() )
+        ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_pMyOwnView->getMarkedSection();
+        if ( pSectionWindow.get() )
         {
             const sal_Int32 nCount = aProps.getLength();
             aProps.realloc( nCount + 1 );
             aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MarkedSection"));
-            aProps[nCount].Value <<= (sal_Int32)pSection->getPage()->GetPageNum();
-        }
-    }
+            aProps[nCount].Value <<= (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum();
+        } // if ( pSectionWindow.get() )
+    } // if ( m_pMyOwnView )
+    const sal_Int32 nCount = aProps.getLength();
+    aProps.realloc( nCount + 1 );
+    aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomFactor"));
+    aProps[nCount].Value <<= m_nZoomValue;
     return uno::makeAny(aProps);
 }
 // -----------------------------------------------------------------------------
@@ -2526,6 +2590,8 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& Data) throw( un
                 pPropsIter->Value >>= m_aCollapsedSections;
             else if ( pPropsIter->Name.equalsAscii("MarkedSection") )
                 pPropsIter->Value >>= m_nPageNum;
+            else if ( pPropsIter->Name.equalsAscii("ZoomFactor") )
+                pPropsIter->Value >>= m_nZoomValue;
         }
     }
 }
@@ -2735,14 +2801,6 @@ void OReportController::insertGraphic()
     }
 }
 // -----------------------------------------------------------------------------
-void OReportController::displayDesignFloater(sal_Bool _bShow)
-{
-    if ( m_pGroupsFloater && isUiVisible() )
-    {
-        m_pGroupsFloater->Show( m_bGroupFloaterWasVisible && _bShow);
-    }
-}
-// -----------------------------------------------------------------------------
 ::boost::shared_ptr<rptui::OReportModel> OReportController::getSdrModel()
 {
     if ( !m_aReportModel )
@@ -2841,11 +2899,11 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 {
     SequenceAsHashMap aMap(_aArgs);
     m_pMyOwnView->setMarked(_xSection ,sal_True);
-    ::boost::shared_ptr<OReportSection> pReportSection = m_pMyOwnView->getMarkedSection();
-    if ( !pReportSection )
+    ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_pMyOwnView->getMarkedSection();
+    if ( !pSectionWindow )
         return;
 
-    OSL_ENSURE(pReportSection->getSection() == _xSection,"Invalid section after marking the corrct one.");
+    OSL_ENSURE(pSectionWindow->getReportSection().getSection() == _xSection,"Invalid section after marking the corrct one.");
 
     sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN);
     const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN);
@@ -2858,13 +2916,13 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     uno::Reference< report::XReportComponent> xShapeProp;
     if ( _nObjectId == OBJ_CUSTOMSHAPE )
     {
-        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pReportSection->getPage(),m_aReportModel.get() );
+        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
-        pReportSection->createDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond")),pNewControl); // TODO: use real custom shape type
+        pSectionWindow->getReportSection().createDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond")),pNewControl); // TODO: use real custom shape type
     } // if ( _nObjectId == OBJ_CUSTOMSHAPE )
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
     {
-        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pReportSection->getPage(),m_aReportModel.get() );
+        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
 
         pNewControl->SetLogicRect(Rectangle(3000,500,8000,5500)); // switch height and width
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY_THROW);
@@ -2880,7 +2938,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         FmFormView::createControlLabelPair(NULL,m_pMyOwnView
                             ,nLeftMargin,0
                             ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
-                         NULL,pReportSection->getPage(),m_aReportModel.get(),
+                         NULL,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
 
         delete pLabel;
@@ -2941,7 +2999,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         aPos.X = nPaperWidth - nShapeWidth;
     xShapeProp->setPosition(aPos);
 
-    correctOverlapping(pNewControl,pReportSection);
+    correctOverlapping(pNewControl,pSectionWindow->getReportSection());
 }
 // -----------------------------------------------------------------------------
 void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
@@ -3009,10 +3067,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     m_pMyOwnView->unmarkAllObjects(NULL);
     //////////////////////////////////////////////////////////////////////
     // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
-    ::boost::shared_ptr<OReportSection> pReportSection[2];
-    pReportSection[0] = m_pMyOwnView->getMarkedSection();
+    ::boost::shared_ptr<OSectionWindow> pSectionWindow[2];
+    pSectionWindow[0] = m_pMyOwnView->getMarkedSection();
 
-    if ( !pReportSection[0].get() )
+    if ( !pSectionWindow[0] )
         return;
 
     uno::Reference<report::XSection> xCurrentSection = m_pMyOwnView->getCurrentSection();
@@ -3037,7 +3095,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
 
             m_pMyOwnView->setMarked(xSection,sal_True);
-            pReportSection[0] = m_pMyOwnView->getMarkedSection();
+            pSectionWindow[0] = m_pMyOwnView->getMarkedSection();
 
             sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN);
             awt::Point aPos = aMap.getUnpackedValueOrDefault(PROPERTY_POSITION,awt::Point(nLeftMargin,0));
@@ -3046,17 +3104,17 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
             // LLA: new feature, add the Label in dependency of the given DND_ACTION one section up, normal or one section down
             sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DNDAction")), sal_Int8(0));
-            pReportSection[1] = pReportSection[0];
+            pSectionWindow[1] = pSectionWindow[0];
             // ::boost::shared_ptr<OReportSection> pReportSectionPost;
             sal_Bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
             {
                 // Add the Label one Section up
-                pReportSection[1] = m_pMyOwnView->getMarkedSection(bLabelAboveTextField ? PREVIOUS : POST);
-                if (!pReportSection[1].get())
+                pSectionWindow[1] = m_pMyOwnView->getMarkedSection(bLabelAboveTextField ? PREVIOUS : POST);
+                if (!pSectionWindow[1])
                 {
                     // maybe out of bounds
-                    pReportSection[1] = pReportSection[0];
+                    pSectionWindow[1] = pSectionWindow[0];
                 }
             }
             // clear all selections
@@ -3161,13 +3219,13 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN);
             const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE).Width - nRightMargin;
             OSectionView* pSectionViews[2];
-            pSectionViews[0] = pReportSection[1]->getView();
-            pSectionViews[1] = pReportSection[0]->getView();
+            pSectionViews[0] = &pSectionWindow[1]->getReportSection().getSectionView();
+            pSectionViews[1] = &pSectionWindow[0]->getReportSection().getSectionView();
             // find this in svx
             FmFormView::createControlLabelPair(pSectionViews[0],m_pMyOwnView
                 ,nLeftMargin,0
                 ,xField,xNumberFormats,nOBJID,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
-                pReportSection[1]->getPage(),pReportSection[0]->getPage(),m_aReportModel.get(),
+                pSectionWindow[1]->getReportSection().getPage(),pSectionWindow[0]->getReportSection().getPage(),m_aReportModel.get(),
                 pControl[0],pControl[1]);
             //m_pMyOwnView->GetModel()->GetUndoEnv().UnLock();
             if ( pControl[0] && pControl[1] )
@@ -3239,7 +3297,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         if (bLabelAboveTextField)
                         {
                             // move the label down near the splitter
-                            const uno::Reference<report::XSection> xLabelSection = pReportSection[1]->getSection();
+                            const uno::Reference<report::XSection> xLabelSection = pSectionWindow[1]->getReportSection().getSection();
                             aPosLabel.Y = xLabelSection->getHeight() - xShapePropLabel->getHeight();
                         }
                         else
@@ -3255,7 +3313,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i) // insert controls
                     {
-                        correctOverlapping(pControl[i],pReportSection[1-i]);
+                        correctOverlapping(pControl[i],pSectionWindow[1-i]->getReportSection());
                     }
 
                     if (!bLabelAboveTextField )
@@ -3274,7 +3332,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             bool bHasToMove = false;
                             while ( bOverlapping )
                             {
-                                const SdrObject* pOverlappedObj = isOver(aLabelAndTextfield, *pReportSection[0]->getPage(), *pSectionViews[0], true, pControl, 2);
+                                const SdrObject* pOverlappedObj = isOver(aLabelAndTextfield, *pSectionWindow[0]->getReportSection().getPage(), *pSectionViews[0], true, pControl, 2);
                                 bOverlapping = pOverlappedObj != NULL;
                                 if ( bOverlapping )
                                 {
@@ -3322,9 +3380,9 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 OSectionView* OReportController::getCurrentSectionView() const
 {
     OSectionView* pSectionView = NULL;
-    ::boost::shared_ptr<OReportSection> pReportSection = m_pMyOwnView->getMarkedSection();
-    if ( pReportSection.get() )
-        pSectionView = pReportSection->getView();
+    ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_pMyOwnView->getMarkedSection();
+    if ( pSectionWindow.get() )
+        pSectionView = &pSectionWindow->getReportSection().getSectionView();
     return pSectionView;
 }
 // -----------------------------------------------------------------------------
@@ -3607,12 +3665,12 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
 // -----------------------------------------------------------------------------
 void OReportController::markSection(const bool _bNext)
 {
-    ::boost::shared_ptr<OReportSection> pSection = m_pMyOwnView->getMarkedSection();
+    ::boost::shared_ptr<OSectionWindow> pSection = m_pMyOwnView->getMarkedSection();
     if ( pSection )
     {
-        ::boost::shared_ptr<OReportSection> pPrevSection = m_pMyOwnView->getMarkedSection(_bNext ? POST : PREVIOUS);
+        ::boost::shared_ptr<OSectionWindow> pPrevSection = m_pMyOwnView->getMarkedSection(_bNext ? POST : PREVIOUS);
         if ( pPrevSection != pSection && pPrevSection )
-            select(uno::makeAny(pPrevSection->getSection()));
+            select(uno::makeAny(pPrevSection->getReportSection().getSection()));
         else
             select(uno::makeAny(m_xReportDefinition));
     }
@@ -3621,7 +3679,7 @@ void OReportController::markSection(const bool _bNext)
         m_pMyOwnView->markSection(_bNext ? 0 : m_pMyOwnView->getSectionCount() - 1);
         pSection = m_pMyOwnView->getMarkedSection();
         if ( pSection )
-            select(uno::makeAny(pSection->getSection()));
+            select(uno::makeAny(pSection->getReportSection().getSection()));
     }
 }
 // -----------------------------------------------------------------------------
@@ -3672,6 +3730,7 @@ void OReportController::checkChartEnabled()
         }
     }
 }
+// -----------------------------------------------------------------------------
 
 // css.frame.XTitle
 ::rtl::OUString SAL_CALL OReportController::getTitle()
@@ -3685,6 +3744,35 @@ void OReportController::checkChartEnabled()
     return xTitle->getTitle ();
 }
 // -----------------------------------------------------------------------------
+void OReportController::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
+{
+    _rDefault <<= sal_Int16(100);
+}
+// -----------------------------------------------------------------------------
+// comphelper::OPropertyArrayUsageHelper
+::cppu::IPropertyArrayHelper* OReportController::createArrayHelper( ) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+
+// cppu::OPropertySetHelper
+::cppu::IPropertyArrayHelper& SAL_CALL OReportController::getInfoHelper()
+{
+    typedef ::comphelper::OPropertyArrayUsageHelper<OReportController_BASE> OReportController_PROP;
+    return *OReportController_PROP::getArrayHelper();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle,const Any& _aValue) throw (Exception)
+{
+    if ( _nHandle == PROPERTY_ID_ZOOMVALUE )
+    {
+        _aValue >>= m_nZoomValue;
+        impl_zoom_nothrow();
+    }
+}
 void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -3753,6 +3841,20 @@ void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty
                 _rState.aValue = aTemp;
         }
     } // if ( _rState.bEnabled )
+}
+// -----------------------------------------------------------------------------
+void OReportController::impl_zoom_nothrow()
+{
+    Fraction aZoom(m_nZoomValue,100);
+    MapMode aMapMode = m_pMyOwnView->GetMapMode();
+    aMapMode.SetScaleX(aZoom);
+    aMapMode.SetScaleY(aZoom);
+    m_pMyOwnView->SetMapMode(aMapMode);
+    m_pMyOwnView->zoom(m_nZoomValue);
+    // TRY
+    /*m_pMyOwnView->Invalidate(INVALIDATE_NOCHILDREN);*/
+    InvalidateFeature(SID_ATTR_ZOOM);
+    InvalidateFeature(SID_ATTR_ZOOMSLIDER);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
