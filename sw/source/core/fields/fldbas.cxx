@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fldbas.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,12 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+
+#include <math.h>
+#ifdef MAC
+#include <stdlib.h>
+#endif
+#include <float.h>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
