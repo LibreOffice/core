@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocapt.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,7 @@ public:
 class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 {
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+private:
 
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()
     friend class sdr::properties::CaptionProperties;
@@ -75,6 +76,10 @@ class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
     friend class                SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
 
 protected:
+    // DrawContact section
+private:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
     Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
     sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE
@@ -98,15 +103,15 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual void RecalcBoundRect();
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void operator=(const SdrObject& rObj);
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = TRUE; }
+    sal_Bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }
+
     // for calc: fixed note tail position.
     void SetFixedTail() { mbFixedTail = TRUE; }
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -168,6 +173,9 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     inline const Point& GetFixedTailPos() const  {return maFixedTailPos;}
+
+    // geometry access
+    ::basegfx::B2DPolygon getTailPolygon() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
