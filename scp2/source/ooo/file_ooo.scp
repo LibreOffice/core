@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.262 $
+ * $Revision: 1.263 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3137,6 +3137,15 @@ End
 File gid_File_Extension_Dictionary_Th
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-th.oxt";
+	Styles = (PACKED);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Vi
+	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Name = "dict-vi.oxt";
 	Styles = (PACKED);
 	UnixRights = 444;
 End
