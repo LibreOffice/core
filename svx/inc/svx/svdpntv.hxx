@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpntv.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,6 @@ class SdrPage;
 class SdrView;
 class SfxItemSet;
 class SfxStyleSheet;
-class XOutputDevice;
 class SdrOle2Obj;
 class SdrModel;
 class SdrObject;
@@ -139,7 +138,6 @@ protected:
     class ImplEncirclementOverlay*              mpEncirclementOverlay;
 
     SdrModel*                   pMod;
-    XOutputDevice*              pXOut;
 #ifdef DBG_UTIL
     SdrItemBrowser*             pItemBrowser;
 #endif
@@ -220,6 +218,11 @@ protected:
     unsigned                    mbPreviewRenderer : 1;
     unsigned                    bBordVisibleOnlyLeftRight : 1;
 
+    // flags for calc for suppressing OLE, CHART or DRAW objects
+    unsigned                    mbHideOle : 1;
+    unsigned                    mbHideChart : 1;
+    unsigned                    mbHideDraw : 1;
+
 public:
     // #114898#
     // interface for PagePaintingAllowed flag
@@ -291,9 +294,6 @@ protected:
 
 public:
     TYPEINFO();
-
-    // access to contained XOutDev
-    XOutputDevice* GetExtendedOutputDevice() const { return pXOut; }
 
     virtual void ClearPageView();
 //  virtual void ClearAll();
@@ -372,9 +372,12 @@ public:
     bool IsLayerPrintable(const String& rName) const;
     void SetAllLayersPrintable(BOOL bPrn=TRUE);
 
+    // PrePaint call forwarded from app windows
+    void PrePaint();
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used internally for Draw/Impress/sch/chart2
-    virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
     //
@@ -385,7 +388,7 @@ public:
     // EndCompleteRedraw does the necessary refreshes, evtl. paints text edit and overlay and evtl destroys the
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
     SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, USHORT nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
     void EndCompleteRedraw(SdrPaintWindow& rPaintWindow);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,6 +432,14 @@ public:
 
     sal_Bool IsPreviewRenderer() const { return (sal_Bool )mbPreviewRenderer; }
     void SetPreviewRenderer(bool bOn) { if((unsigned)bOn != mbPreviewRenderer) { mbPreviewRenderer=bOn; }}
+
+    // access methods for calc hide object modes
+    bool getHideOle() const { return mbHideOle; }
+    bool getHideChart() const { return mbHideChart; }
+    bool getHideDraw() const { return mbHideDraw; }
+    void setHideOle(bool bNew) { if(bNew != (bool)mbHideOle) mbHideOle = bNew; }
+    void setHideChart(bool bNew) { if(bNew != (bool)mbHideChart) mbHideChart = bNew; }
+    void setHideDraw(bool bNew) { if(bNew != (bool)mbHideDraw) mbHideDraw = bNew; }
 
     /*alt*/void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; SetGridWidth(Fraction(rSiz.Width(),1),Fraction(rSiz.Height(),1)); }
     /*alt*/void SetGridFine(const Size& rSiz) { aGridFin=rSiz; if (aGridFin.Height()==0) aGridFin.Height()=aGridFin.Width(); if (bGridVisible) InvalidateAllWin(); } // #40479#
