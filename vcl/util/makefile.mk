@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.111 $
+# $Revision: 1.112 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -275,6 +275,7 @@ SHL2STDLIBS=\
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
             $(VOSLIB)           \
+            $(BASEGFXLIB)	\
             $(SALLIB)
 
 # prepare linking of Xinerama
