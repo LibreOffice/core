@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textproperties.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,24 +36,16 @@
 #include <svtools/itemiter.hxx>
 #include <svtools/smplhint.hxx>
 #include <svx/svddef.hxx>
-
-//#ifndef _EEITEM_HXX
-//#include <svx/eeitem.hxx>
-//#endif
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/writingmodeitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/xflclit.hxx>
-
-
 #include <svx/adjitem.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/editeng.hxx>
 #include <svx/flditem.hxx>
-
-// #i25616#
 #include <svx/xlnwtit.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
