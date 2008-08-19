@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dflyobj.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,8 +55,6 @@ public:
     SwFlyDrawObj();
     ~SwFlyDrawObj();
 
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
-
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
     virtual UINT32 GetObjInventor()     const;
@@ -73,6 +71,16 @@ class SwVirtFlyDrawObj : public SdrVirtObj
 {
     SwFlyFrm *pFlyFrm;
 
+private:
+    // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
+    // not used but something own (top left of new SnapRect minus top left
+    // of original SnapRect)
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
+public:
+    // for paints triggered form ExecutePrimitive
+    void wrap_DoPaintObject() const;
+
 public:
     TYPEINFO();
 
@@ -81,7 +89,6 @@ public:
 
     //Ueberladene Methoden der Basisklasse SdrVirtObj
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
