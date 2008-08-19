@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statemnt.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,6 +160,8 @@ USHORT StatementCommand::nDirPos = 0;
 Dir *StatementCommand::pDir = NULL;
 pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = NULL;
 
+
+#define RESET_APPLICATION_TO_BACKING_WINDOW
 
 
 #define SET_WINP_CLOSING(pWin) \
@@ -456,10 +458,12 @@ StatementSlot::StatementSlot()
 : nAnzahl( 0 )
 , pItemArr(NULL)
 , nFunctionId( 0 )
+, bMenuClosed(FALSE)
 {}
 
 StatementSlot::StatementSlot( ULONG nSlot, SfxPoolItem* pItem )
 : pItemArr(NULL)
+, bMenuClosed(FALSE)
 {
     QueStatement( NULL );
     nFunctionId = USHORT(nSlot);
@@ -585,6 +589,37 @@ BOOL StatementSlot::Execute()
     m_pDbgWin->AddText( String::CreateFromInt32( nFunctionId ) );
     m_pDbgWin->AddText( "\n" );
 #endif
+
+    PopupMenu *pPopup = NULL;
+    MenuBar *pMenuBar = NULL;
+    Menu *pMenu;
+
+    GetCurrentMenues( pPopup, pMenuBar, pMenu );
+    if ( pPopup )
+    {
+        if ( !bMenuClosed )
+        {
+            pPopup->EndExecute(0);
+            aSubMenuId1 = SmartId();
+            aSubMenuId2 = SmartId();
+            aSubMenuId3 = SmartId();
+            pMenuWindow = NULL;
+            bMenuClosed = TRUE;
+#if OSL_DEBUG_LEVEL > 1
+            m_pDbgWin->AddText( "Closed contextmenu\n" );
+#endif
+            return FALSE;
+        }
+        else if ( nRetryCount-- )
+        {
+#if OSL_DEBUG_LEVEL > 1
+            m_pDbgWin->AddText( "Waiting for contextmenu to close\n" );
+#endif
+            return FALSE;
+        }
+        else
+            ReportError( GEN_RES_STR0( S_MENU_NOT_CLOSING ) );
+    }
 
     Advance();
 
@@ -2780,50 +2815,16 @@ BOOL StatementCommand::Execute()
                 MenuBar *pMenuBar = NULL;
                 Menu *pMenu;
 
-                if ( WinPtrValid( pMenuWindow ) )
-                    pMenuBar = pMenuWindow->GetMenuBar();
-
-                if ( pMenuBar )     // use MenuBar as base
-                    pMenu = pMenuBar;
-                else        // use contextmenu as base
-                {
-                    pMenu = PopupMenu::GetActivePopupMenu();
-                    pPopup = PopupMenu::GetActivePopupMenu();
-                }
+                USHORT nErr = GetCurrentMenues( pPopup, pMenuBar, pMenu );
 
                 if ( !pMenu )
                 {
-                    ReportError( GEN_RES_STR0( S_NO_POPUP ) );
+                    if ( nErr == 1 )
+                        ReportError( GEN_RES_STR0( S_NO_POPUP ) );
+                    else
+                        ReportError( GEN_RES_STR0( S_NO_SUBMENU ) );
                     break;
                 }
-
-                if ( aSubMenuId1.GetNum() )
-                {
-                    pPopup = pMenu->GetPopupMenu(
-                        sal::static_int_cast< USHORT >(aSubMenuId1.GetNum()));
-                    pMenu = pPopup;
-                }
-
-                if ( pMenu && aSubMenuId2.GetNum() )
-                {
-                    pPopup = pMenu->GetPopupMenu(
-                        sal::static_int_cast< USHORT >(aSubMenuId2.GetNum()));
-                    pMenu = pPopup;
-                }
-
-                if ( pMenu && aSubMenuId3.GetNum() )
-                {
-                    pPopup = pMenu->GetPopupMenu(
-                        sal::static_int_cast< USHORT >(aSubMenuId3.GetNum()));
-                    pMenu = pPopup;
-                }
-
-                if ( !pMenu )
-                {
-                    ReportError( GEN_RES_STR0( S_NO_SUBMENU ) );
-                    break;
-                }
-
 
                 USHORT nItemCount = 0;
                 switch ( nMethodId )
@@ -3751,6 +3752,45 @@ BOOL StatementList::ValueOK( SmartId aId, String aBezeichnung, ULONG nValue, ULO
     return TRUE;
 }
 
+USHORT StatementList::GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu )
+{
+    if ( WinPtrValid( pMenuWindow ) )
+        pMenuBar = pMenuWindow->GetMenuBar();
+
+    if ( pMenuBar )     // use MenuBar as base
+        pMenu = pMenuBar;
+    else        // use contextmenu as base
+    {
+        pMenu = PopupMenu::GetActivePopupMenu();
+        pPopup = PopupMenu::GetActivePopupMenu();
+    }
+
+    if ( !pMenu )
+        return 1;
+
+    if ( aSubMenuId1.GetNum() )
+    {
+        pPopup = pMenu->GetPopupMenu(
+            sal::static_int_cast< USHORT >(aSubMenuId1.GetNum()));
+        pMenu = pPopup;
+    }
+
+    if ( pMenu && aSubMenuId2.GetNum() )
+    {
+        pPopup = pMenu->GetPopupMenu(
+            sal::static_int_cast< USHORT >(aSubMenuId2.GetNum()));
+        pMenu = pPopup;
+    }
+
+    if ( pMenu && aSubMenuId3.GetNum() )
+    {
+        pPopup = pMenu->GetPopupMenu(
+            sal::static_int_cast< USHORT >(aSubMenuId3.GetNum()));
+        pMenu = pPopup;
+    }
+
+    return 0;
+}
 
 void StatementControl::AnimateMouse( Window *pControl, TTHotSpots aWohin )
 {
@@ -4530,7 +4570,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
 BOOL StatementControl::Execute()
 {
     Window *pControl;
-    BOOL bNormalWeiter = TRUE;
+    BOOL bStatementDone = TRUE;
 
 
     if ( IsError )
@@ -5407,7 +5447,8 @@ BOOL StatementControl::Execute()
                                         Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                        ImplMouseButtonDown( pTB, aMEvnt, FORCE_DIRECT_CALL );
+                                        ImplMouseButtonDown( pTB, aMEvnt);
+                                        ImplMouseButtonUp( pTB, aMEvnt);
 
                                         // Das Fenster ist offen.
                                         aSubMenuId1 = SmartId();
@@ -6248,9 +6289,6 @@ protected:
                     MoreDialog:
                     switch( nMethodId )
                     {
-
-                        // (Rect GetRect)
-
                         case M_AnimateMouse :
                             AnimateMouse( pControl, MitteOben);
                             break;
@@ -6272,7 +6310,6 @@ protected:
                         }
                         case M_Cancel:
                         {
-//                              Window *pChild = ImpGetChild( pControl, WINDOW_CANCELBUTTON );
                             Window *pChild = GetWinByRT( pControl, WINDOW_CANCELBUTTON );
                             if( ControlOK( pChild, "Cancel Button" ) )
                             {
@@ -6536,12 +6573,26 @@ protected:
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "\n" );
 #endif
-    if (bNormalWeiter)
+    if ( bStatementDone )
     {
         SendProfile( UIdString( aUId ).Append('.').Append( MethodString( nMethodId ) ) );
         delete this;
     }
-    return bNormalWeiter;
+    else
+    {
+        if ( nRetryCount-- )
+        {
+#if OSL_DEBUG_LEVEL > 1
+            m_pDbgWin->AddText( CUniString("Reschedule command (requed) (").Append( UniString::CreateFromInt32(nRetryCount) ).AppendAscii(")\n") );
+#endif
+            QueStatement( this );   // will que at the start of the list
+        }
+        else
+        {
+            bStatementDone=TRUE;
+        }
+    }
+    return bStatementDone;
 
 #define FINISH_NEXT
 #define FINISH_SAME
