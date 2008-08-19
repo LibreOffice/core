@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scheduler.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,8 +137,11 @@ namespace sdr
             // reset
             void Reset(sal_uInt32 nTime);
 
-            // execute
-            void Execute();
+            // execute all ripe events, removes executed ones from the scheduler
+            void triggerEvents();
+
+            // re-start or stop timer according to event list
+            void checkTimeout();
 
             // insert/remove events, wrapper to EventList methods
             void InsertEvent(Event* pNew);
