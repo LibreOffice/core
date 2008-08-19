@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: op.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 
 #include <tools/solar.h>
 #include <rtl/math.hxx>
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -59,7 +60,7 @@
 #include "op.h"
 #include "optab.h"
 #include "tool.h"
-#include "math.h"
+//#include "math.h"
 #include "decl.h"
 #include "lotform.hxx"
 #include "lotrange.hxx"
@@ -70,6 +71,14 @@
 
 #include <vector>
 #include <map>
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#if defined( MAC ) || defined( ICC )
+#include <stdlib.h>
+#endif
 
 extern sal_Char*    pAnsi;          // -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
 extern sal_Char*    pErgebnis;      // -> memory.cxx, Ergebnispuffer
