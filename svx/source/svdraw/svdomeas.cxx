@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdomeas.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include <math.h>
 #include "svditext.hxx" //
 #include <svx/xpoly.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/svdtrans.hxx>
 #include "svdtouch.hxx"
 #include <svx/svdhdl.hxx>
@@ -60,18 +59,18 @@
 #include <svx/outlobj.hxx>
 #include <svx/outliner.hxx>
 #include <svx/editobj.hxx>
-
 #include <svx/svdfield.hxx>
 #include <svx/flditem.hxx>
-
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svtools/syslocale.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/measureproperties.hxx>
+#include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -228,10 +227,19 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
 
 sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::MeasureProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrMeasureObj(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -380,6 +388,21 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.nTextFixedAngle   =((SdrMeasureTextFixedAngleItem&   )rSet.Get(SDRATTR_MEASURETEXTFIXEDANGLE   )).GetValue();
 }
 
+long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, long nNewWidth, bool bCenter)
+{
+    const basegfx::B2DRange aPolygonRange(rPolyPolygon.getB2DRange());
+    const double fOldWidth(aPolygonRange.getWidth() > 1.0 ? aPolygonRange.getWidth() : 1.0);
+    const double fScale((double)nNewWidth / fOldWidth);
+    long nHeight(basegfx::fround(aPolygonRange.getHeight() * fScale));
+
+    if(bCenter)
+    {
+        nHeight /= 2L;
+    }
+
+    return nHeight;
+}
+
 void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const
 {
     Point aP1(rRec.aPt1);
@@ -416,8 +439,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     basegfx::B2DPolyPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
     bArrow1Center = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
     bArrow2Center = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
-    nArrow1Len = XOutputDevice::getLineStartEndDistance(aPol1, nArrow1Wdt, bArrow1Center) - 1;
-    nArrow2Len = XOutputDevice::getLineStartEndDistance(aPol2, nArrow2Wdt, bArrow2Center) - 1;
+    nArrow1Len = impGetLineStartEndDistance(aPol1, nArrow1Wdt, bArrow1Center) - 1;
+    nArrow2Len = impGetLineStartEndDistance(aPol2, nArrow2Wdt, bArrow2Center) - 1;
 
     // nArrowLen ist bei bCenter bereits halbiert
     // Bei 2 Pfeilen a 4mm ist unter 10mm Schluss.
@@ -588,84 +611,6 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol) 
     aRetval.append(aPartPolyA);
 
     return aRetval;
-}
-
-sal_Bool SdrMeasureObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
-    //// Hidden objects on masterpages, draw nothing
-    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-    //  return TRUE;
-
-    // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetObjectItemSet();
-
-    // perepare ItemSet to avoid old XOut line drawing
-    SfxItemSet aEmptySet(*rSet.GetPool());
-    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-
-    // #b4899532# if not filled but fill draft, avoid object being invisible in using
-    // a hair linestyle and COL_LIGHTGRAY
-    SfxItemSet aItemSet(rSet);
-
-    // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
-
-    // Shadows
-    BOOL bShadOn = ((SdrShadowItem&)(aItemSet.Get(SDRATTR_SHADOW))).GetValue();
-    if( bShadOn && pLineGeometry.get() )
-    {
-        // draw the line geometry
-        ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
-    }
-
-    // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aEmptySet);
-
-    // !!! aGeo muss noch fuer Textausgabe gesetzt werden !!!
-    // aRect ebenso
-    ImpMeasureRec aRec;
-    ImpMeasurePoly aMPol;
-    ImpTakeAttr(aRec);
-    ImpCalcGeometrics(aRec,aMPol);
-    bool bMerk1=rXOut.IsLineStart();
-    bool bMerk2=rXOut.IsLineEnd();
-    if (aMPol.nMainlineAnz>1) {
-        // Je 1 Linienende temporaer abschalten
-        rXOut.OverrideLineEnd(FALSE);
-        rXOut.DrawLine(aMPol.aMainline1.aP1,aMPol.aMainline1.aP2);
-        rXOut.OverrideLineEnd(bMerk2);
-        rXOut.OverrideLineStart(FALSE);
-        rXOut.DrawLine(aMPol.aMainline2.aP1,aMPol.aMainline2.aP2);
-        rXOut.OverrideLineStart(bMerk1);
-    } else {
-        rXOut.DrawLine(aMPol.aMainline1.aP1,aMPol.aMainline1.aP2);
-    }
-    rXOut.OverrideLineStart(FALSE);
-    rXOut.OverrideLineEnd(FALSE);
-    if (aMPol.nMainlineAnz>2) {
-        rXOut.DrawLine(aMPol.aMainline3.aP1,aMPol.aMainline3.aP2);
-    }
-    rXOut.DrawLine(aMPol.aHelpline1.aP1,aMPol.aHelpline1.aP2);
-    rXOut.DrawLine(aMPol.aHelpline2.aP1,aMPol.aHelpline2.aP2);
-
-    // Own line drawing
-    if( pLineGeometry.get() )
-    {
-        // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
-    }
-
-    sal_Bool bOk(sal_True);
-    if (bTextDirty) UndirtyText();
-    bOk = SdrTextObj::DoPaintObject(rXOut, rInfoRec);
-
-    // #110094#-13
-    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-    //  bOk=PaintGluePoints(rXOut,rInfoRec);
-    //}
-
-    return bOk;
 }
 
 FASTBOOL SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
@@ -1123,7 +1068,7 @@ FASTBOOL SdrMeasureObj::MovCreate(SdrDragStat& rStat)
         aPt1-=rStat.Now();
     }
     SetTextDirty();
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     return TRUE;
 }
@@ -1220,31 +1165,6 @@ long SdrMeasureObj::GetRotateAngle() const
     return GetAngle(aPt2-aPt1);
 }
 
-void SdrMeasureObj::RecalcBoundRect()
-{
-    if (bTextDirty) UndirtyText();
-    ImpMeasureRec aRec;
-    ImpMeasurePoly aMPol;
-    ImpTakeAttr(aRec);
-    ImpCalcGeometrics(aRec,aMPol);
-    XPolyPolygon aXPP(ImpCalcXPoly(aMPol));
-    aOutRect=aXPP.GetBoundRect();
-
-    // Strichstaerke und Linienenden drauftun
-    long nLineWdt=ImpGetLineWdt();
-    long nLEndWdt=ImpGetLineEndAdd();
-    if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
-    if (nLineWdt!=0) {
-        aOutRect.Left  ()-=nLineWdt;
-        aOutRect.Top   ()-=nLineWdt;
-        aOutRect.Right ()+=nLineWdt;
-        aOutRect.Bottom()+=nLineWdt;
-    }
-
-    ImpAddShadowToBoundRect();
-    ImpAddTextToBoundRect();
-}
-
 void SdrMeasureObj::RecalcSnapRect()
 {
     // #94520# Added correct implementation here.
@@ -1316,91 +1236,14 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-::std::auto_ptr< SdrLineGeometry > SdrMeasureObj::CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const
-{
-    basegfx::B2DPolyPolygon aAreaPolyPolygon;
-    basegfx::B2DPolyPolygon aLinePolyPolygon;
-
-    // get XOR Poly as base
-    XPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
-
-    // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon);
-    UINT16 nCount(aTmpPolyPolygon.Count());
-    basegfx::B2DPolygon aCandidate;
-    UINT16 nLoopStart(0);
-
-    if(nCount == 3)
-    {
-        // three lines, first one is the middle one
-        aCandidate = basegfx::B2DPolygon(aTmpPolyPolygon[0].getB2DPolygon());
-        aLineCreator.AddPolygon(aCandidate);
-
-        aLineAttr.ForceNoArrowsLeft(sal_True);
-        aLineAttr.ForceNoArrowsRight(sal_True);
-        nLoopStart = 1;
-    }
-    else if(nCount == 4)
-    {
-        // four lines, middle line with gap, so there are two lines used
-        // which have one arrow each
-        aLineAttr.ForceNoArrowsRight(sal_True);
-
-        aCandidate = basegfx::B2DPolygon(aTmpPolyPolygon[0].getB2DPolygon());
-        aLineCreator.AddPolygon(aCandidate);
-
-        aLineAttr.ForceNoArrowsRight(sal_False);
-        aLineAttr.ForceNoArrowsLeft(sal_True);
-
-        aCandidate = basegfx::B2DPolygon(aTmpPolyPolygon[1].getB2DPolygon());
-        aLineCreator.AddPolygon(aCandidate);
-
-        aLineAttr.ForceNoArrowsRight(sal_True);
-        nLoopStart = 2;
-    }
-    else if(nCount == 5)
-    {
-        // five lines, first two are the outer ones
-        aLineAttr.ForceNoArrowsRight(sal_True);
-
-        aCandidate = basegfx::B2DPolygon(aTmpPolyPolygon[0].getB2DPolygon());
-        aLineCreator.AddPolygon(aCandidate);
-
-        aLineAttr.ForceNoArrowsRight(sal_False);
-        aLineAttr.ForceNoArrowsLeft(sal_True);
-
-        aCandidate = basegfx::B2DPolygon(aTmpPolyPolygon[1].getB2DPolygon());
-        aLineCreator.AddPolygon(aCandidate);
-
-        aLineAttr.ForceNoArrowsRight(sal_True);
-        nLoopStart = 2;
-    }
-
-    for(;nLoopStart<nCount;nLoopStart++)
-    {
-        aCandidate = basegfx::B2DPolygon(aTmpPolyPolygon[nLoopStart].getB2DPolygon());
-        aLineCreator.AddPolygon(aCandidate);
-    }
-
-    if(aAreaPolyPolygon.count() || aLinePolyPolygon.count())
-    {
-        return ::std::auto_ptr< SdrLineGeometry > (new SdrLineGeometry(
-            aAreaPolyPolygon, aLinePolyPolygon, aLineAttr, bForceOnePixel, bForceTwoPixel));
-    }
-    else
-    {
-        return ::std::auto_ptr< SdrLineGeometry > (NULL);
-    }
-}
-
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
 
-    // get local ItemSet
+    // get local ItemSet and StyleSheet
     SfxItemSet aSet(GetObjectItemSet());
+    SfxStyleSheet* pStyleSheet = GetStyleSheet();
 
     // prepare group
     SdrObjGroup* pGroup = new SdrObjGroup;
@@ -1421,6 +1264,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aPolyPoly);
         pPath->SetModel(GetModel());
         pPath->SetMergedItemSet(aSet);
+        pPath->SetStyleSheet(pStyleSheet, true);
         pGroup->GetSubList()->NbcInsertObject(pPath);
         aSet.Put(XLineStartWidthItem(0L));
         aSet.Put(XLineEndWidthItem(0L));
@@ -1438,8 +1282,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
         pPath = new SdrPathObj(OBJ_PATHLINE, aPolyPoly);
         pPath->SetModel(GetModel());
-
         pPath->SetMergedItemSet(aSet);
+        pPath->SetStyleSheet(pStyleSheet, true);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1450,8 +1294,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aPolyPoly.append(aTmpPolyPolygon[1].getB2DPolygon());
         pPath = new SdrPathObj(OBJ_PATHLINE, aPolyPoly);
         pPath->SetModel(GetModel());
-
         pPath->SetMergedItemSet(aSet);
+        pPath->SetStyleSheet(pStyleSheet, true);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1470,8 +1314,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
         pPath = new SdrPathObj(OBJ_PATHLINE, aPolyPoly);
         pPath->SetModel(GetModel());
-
         pPath->SetMergedItemSet(aSet);
+        pPath->SetStyleSheet(pStyleSheet, true);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1482,8 +1326,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aPolyPoly.append(aTmpPolyPolygon[1].getB2DPolygon());
         pPath = new SdrPathObj(OBJ_PATHLINE, aPolyPoly);
         pPath->SetModel(GetModel());
-
         pPath->SetMergedItemSet(aSet);
+        pPath->SetStyleSheet(pStyleSheet, true);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1497,8 +1341,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aPolyPoly.append(aTmpPolyPolygon[nLoopStart].getB2DPolygon());
         pPath = new SdrPathObj(OBJ_PATHLINE, aPolyPoly);
         pPath->SetModel(GetModel());
-
         pPath->SetMergedItemSet(aSet);
+        pPath->SetStyleSheet(pStyleSheet, true);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
     }
