@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmstring.src,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -471,6 +471,46 @@ Resource RID_RSC_SQL_INTERNATIONAL
     String 14
     {
         Text [ en-US ] = "Sum";
+    };
+    String 15
+    {
+        Text [ en-US ] = "Every";
+    };
+    String 16
+    {
+        Text [ en-US ] = "Any";
+    };
+    String 17
+    {
+        Text [ en-US ] = "Some";
+    };
+    String 18
+    {
+        Text [ en-US ] = "STDDEV_POP";
+    };
+    String 19
+    {
+        Text [ en-US ] = "STDDEV_SAMP";
+    };
+    String 20
+    {
+        Text [ en-US ] = "VAR_SAMP";
+    };
+    String 21
+    {
+        Text [ en-US ] = "VAR_POP";
+    };
+    String 22
+    {
+        Text [ en-US ] = "Collect";
+    };
+    String 23
+    {
+        Text [ en-US ] = "Fusion";
+    };
+    String 24
+    {
+        Text [ en-US ] = "Intersection";
     };
 };
 
