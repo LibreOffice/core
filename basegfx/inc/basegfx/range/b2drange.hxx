@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2drange.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
-
 #include <vector>
 
 
@@ -43,6 +42,7 @@ namespace basegfx
 {
     // predeclarations
     class B2IRange;
+    class B2DHomMatrix;
 
     class B2DRange
     {
@@ -113,10 +113,11 @@ namespace basegfx
                 || maRangeY != rRange.maRangeY);
         }
 
-        void operator=(const B2DRange& rRange)
+        B2DRange& operator=(const B2DRange& rRange)
         {
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
+            return *this;
         }
 
         bool equal(const B2DRange& rRange) const
