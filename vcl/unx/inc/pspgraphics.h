@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pspgraphics.h,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,7 @@ public:
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths );
+    virtual bool            drawPolyLine( const basegfx::B2DPolygon&, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin);
     virtual sal_Bool        drawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
                                                 const BYTE* pFlgAry );
