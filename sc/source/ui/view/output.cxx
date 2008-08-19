@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +50,6 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
 
-#include <math.h>
-
 #include "output.hxx"
 #include "document.hxx"
 #include "cell.hxx"
@@ -70,6 +68,8 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "postit.hxx"
+
+#include <math.h>
 
 using namespace com::sun::star;
 
@@ -1165,7 +1165,6 @@ void ScOutputData::DrawFrame()
     //  for display mode / B&W printing. The VCL DrawMode handling doesn't work for lines
     //  that are drawn with DrawRect, so if the line/background bits are set, the DrawMode
     //  must be reset and the border colors handled here.
-    //  (Similar to fix for #72796# in SdrObject::ImpDrawLineGeometry)
 
     if ( ( nOldDrawMode & DRAWMODE_WHITEFILL ) && ( nOldDrawMode & DRAWMODE_BLACKLINE ) )
     {
