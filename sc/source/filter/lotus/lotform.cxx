@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lotform.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include "root.hxx"
 #include "ftools.hxx"
 #include "tool.h"
+
 #include <math.h>
 
 extern WKTYP                eTyp;
