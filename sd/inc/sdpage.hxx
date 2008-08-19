@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpage.hxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -353,8 +353,8 @@ public:
         like printing.
     */
     virtual bool checkVisibility(
-        ::sdr::contact::ViewObjectContact& rOriginal,
-        ::sdr::contact::DisplayInfo& rDisplayInfo,
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
 
     /** callback from the sd::View when a new paragraph for one object on this page is created */
