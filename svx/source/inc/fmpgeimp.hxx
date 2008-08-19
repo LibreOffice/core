@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmpgeimp.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,8 +75,8 @@ class SVX_DLLPRIVATE FmFormPageImpl
     FmFormPage*     pPage;
     Link            m_aFormsCreationHdl;
 
-    sal_Bool        m_bFirstActivation  : 1;
-    sal_Bool        m_bAttemptedFormCreation : 2;
+    sal_Bool        m_bFirstActivation;
+    bool            m_bAttemptedFormCreation;
 
 protected:
     FmFormPageImpl(FmFormPage* _pPage);
@@ -168,6 +168,12 @@ public:
 
     ::rtl::OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
     ::rtl::OUString getUniqueName(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& xNamedSet) const;
+
+
+private:
+    FmFormPageImpl();                                   // never implemented
+    FmFormPageImpl( const FmFormPageImpl& );            // never implemented
+    FmFormPageImpl& operator=( const FmFormPageImpl& ); // never implemented
 };
 
 
