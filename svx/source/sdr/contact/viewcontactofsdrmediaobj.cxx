@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrmediaobj.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
+#include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
 
 namespace sdr { namespace contact {
 
@@ -54,13 +55,6 @@ ViewContactOfSdrMediaObj::~ViewContactOfSdrMediaObj()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool ViewContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
-{
-    return ViewContactOfSdrObj::PaintObject( rDisplayInfo, rPaintRectangle, rAssociatedVOC );
-}
-
-// ------------------------------------------------------------------------------
-
 ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
     return *( new ViewObjectContactOfSdrMediaObj( rObjectContact, *this, static_cast< SdrMediaObj& >( GetSdrObject() ).getMediaProperties() ) );
@@ -72,11 +66,14 @@ bool ViewContactOfSdrMediaObj::hasPreferredSize() const
 {
     // #i71805# Since we may have a whole bunch of VOCs here, make a loop
     // return true if all have their preferred size
+    const sal_uInt32 nCount(getViewObjectContactCount());
     bool bRetval(true);
 
-    for(sal_uInt32 a(0L); bRetval && a < maVOCList.Count(); a++)
+    for(sal_uInt32 a(0); bRetval && a < nCount; a++)
     {
-        if(!static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->hasPreferredSize())
+        ViewObjectContact* pCandidate = getViewObjectContact(a);
+
+        if(pCandidate && !static_cast< ViewObjectContactOfSdrMediaObj* >(pCandidate)->hasPreferredSize())
         {
             bRetval = false;
         }
@@ -91,9 +88,12 @@ Size ViewContactOfSdrMediaObj::getPreferredSize() const
 {
     // #i71805# Since we may have a whole bunch of VOCs here, make a loop
     // return first useful size -> the size from the first which is visualized as a window
-    for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+    const sal_uInt32 nCount(getViewObjectContactCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        Size aSize(static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->getPreferredSize());
+        ViewObjectContact* pCandidate = getViewObjectContact(a);
+        Size aSize(pCandidate ? static_cast< ViewObjectContactOfSdrMediaObj* >(pCandidate)->getPreferredSize() : Size());
 
         if(0 != aSize.getWidth() || 0 != aSize.getHeight())
         {
@@ -109,9 +109,16 @@ Size ViewContactOfSdrMediaObj::getPreferredSize() const
 void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
     // #i71805# Since we may have a whole bunch of VOCs here, make a loop
-    for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+    const sal_uInt32 nCount(getViewObjectContactCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        static_cast< ViewObjectContactOfSdrMediaObj* >(maVOCList.GetObject(a))->updateMediaItem(rItem);
+        ViewObjectContact* pCandidate = getViewObjectContact(a);
+
+        if(pCandidate)
+        {
+            static_cast< ViewObjectContactOfSdrMediaObj* >(pCandidate)->updateMediaItem(rItem);
+        }
     }
 }
 
@@ -119,9 +126,16 @@ void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) co
 
 void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
-    for( sal_uInt32 n(0L); n < maVOCList.Count(); n++ )
+    const sal_uInt32 nCount(getViewObjectContactCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( n ) )->executeMediaItem( rItem );
+        ViewObjectContact* pCandidate = getViewObjectContact(a);
+
+        if(pCandidate)
+        {
+            static_cast< ViewObjectContactOfSdrMediaObj* >(pCandidate)->executeMediaItem(rItem);
+        }
     }
 }
 
@@ -129,23 +143,40 @@ void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rIt
 
 void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState )
 {
-    static_cast< SdrMediaObj& >( GetSdrObject() ).mediaPropertiesChanged( rNewState );
+    static_cast< SdrMediaObj& >(GetSdrObject()).mediaPropertiesChanged(rNewState);
 }
-
-// ------------------------------------------------------------------------------
-// #i72701#
-sal_Bool ViewContactOfSdrMediaObj::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
-{
-    // set pos/size of associated media window
-    const ViewObjectContactOfSdrMediaObj& rVOC(dynamic_cast< const ViewObjectContactOfSdrMediaObj& >(rAssociatedVOC));
-    rVOC.checkMediaWindowPosition(rDisplayInfo);
-
-    // call parent
-    return ViewContactOfSdrObj::ShouldPaintObject(rDisplayInfo, rAssociatedVOC);
-}
-
-// ------------------------------------------------------------------------------
 
 }} // end of namespace sdr::contact
 
+namespace sdr
+{
+    namespace contact
+    {
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence() const
+        {
+            // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
+            // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
+            const Rectangle& rRectangle(GetSdrMediaObj().GetGeoRect());
+            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+
+            // create object transform
+            basegfx::B2DHomMatrix aTransform;
+            aTransform.set(0, 0, aRange.getWidth());
+            aTransform.set(1, 1, aRange.getHeight());
+            aTransform.set(0, 2, aRange.getMinX());
+            aTransform.set(1, 2, aRange.getMinY());
+
+            // create media primitive
+            const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
+            const rtl::OUString& rURL(GetSdrMediaObj().getURL());
+            const sal_uInt32 nPixelBorder(4L);
+            const drawinglayer::primitive2d::Primitive2DReference xRetval(new drawinglayer::primitive2d::MediaPrimitive2D(
+                aTransform, rURL, aBackgroundColor, nPixelBorder));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
 // eof
