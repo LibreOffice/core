@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofe3dscene.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,26 @@
 #define _SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
 class E3dScene;
+
+namespace drawinglayer {
+    namespace geometry {
+        class ViewInformation3D;
+    }
+    namespace attribute {
+        class SdrSceneAttribute;
+        class SdrLightingAttribute;
+    }
+}
+
+namespace basegfx {
+    class B3DRange;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,39 +62,65 @@ namespace sdr
         class ViewContactOfE3dScene : public ViewContactOfSdrObj
         {
         protected:
-            // internal access to SdrObject
+            // Create a Object-Specific ViewObjectContact, set ViewContact and
+            // ObjectContact. Always needs to return something. Default is to create
+            // a standard ViewObjectContact containing the given ObjectContact and *this
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+
+        public:
+            // basic constructor, used from SdrObject.
+            ViewContactOfE3dScene(E3dScene& rScene);
+            virtual ~ViewContactOfE3dScene();
+
+            // access to SdrObject
             E3dScene& GetE3dScene() const
             {
                 return (E3dScene&)GetSdrObject();
             }
 
-            // method to recalculate the PaintRectangle if the validity flag shows that
-            // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-            // only needs to refresh maPaintRectangle itself.
-            virtual void CalcPaintRectangle();
+            // React on changes of the object of this ViewContact
+            virtual void ActionChanged();
 
-        public:
-            // basic constructor, used from SdrObject.
-            ViewContactOfE3dScene(E3dScene& rScene);
+            // access to ViewInformation3D and ObjectTransformation
+            const drawinglayer::geometry::ViewInformation3D& getViewInformation3D(const ::basegfx::B3DRange& rContentRange) const;
+            const drawinglayer::geometry::ViewInformation3D& getViewInformation3D() const;
+            const basegfx::B2DHomMatrix& getObjectTransformation() const;
 
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
-            virtual ~ViewContactOfE3dScene();
+            // attribute providers
+            const drawinglayer::attribute::SdrSceneAttribute& getSdrSceneAttribute() const;
+            const drawinglayer::attribute::SdrLightingAttribute& getSdrLightingAttribute() const;
 
-            // When ShouldPaintObject() returns sal_True, the object itself is painted and
-            // PaintObject() is called.
-            virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
+            // scene primitive creators. If pLayerVisibility is given, a visibility test with the LayerID and the
+            // given SetOfByte is done.
+            drawinglayer::primitive2d::Primitive2DSequence createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const;
 
-            // These methods decide which parts of the objects will be painted:
-            // When ShouldPaintDrawHierarchy() returns sal_True, the DrawHierarchy of the object is painted.
-            // Else, the flags and rectangles of the VOCs of the sub-hierarchy are set to the values of the
-            // object's VOC.
-            virtual sal_Bool ShouldPaintDrawHierarchy(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
+            // helpers to get the sequence of all contained 3D primitives and it's range,
+            // regardless of layer or visibility constraints and using a neutral ViewInformation3D
+            drawinglayer::primitive3d::Primitive3DSequence getAllPrimitive3DSequence() const;
+            basegfx::B3DRange getAllContentRange3D() const;
 
-            // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
+        protected:
+            // the 3d transformation stack
+            drawinglayer::geometry::ViewInformation3D*          mpViewInformation3D;
+
+            // the object transformation
+            basegfx::B2DHomMatrix*                              mpObjectTransformation;
+
+            // attributes
+            drawinglayer::attribute::SdrSceneAttribute*         mpSdrSceneAttribute;
+            drawinglayer::attribute::SdrLightingAttribute*      mpSdrLightingAttribute;
+
+            // create methods for ViewInformation3D and ObjectTransformation
+            void createViewInformation3D(const ::basegfx::B3DRange& rContentRange);
+            void createObjectTransformation();
+
+            // attribute creators
+            void createSdrSceneAttribute();
+            void createSdrLightingAttribute();
+
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
