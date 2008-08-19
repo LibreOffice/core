@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: declare.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:05 $
+'* last change: $Author: vg $ $Date: 2008-08-19 12:49:25 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -236,9 +236,9 @@ sub TestExit
 
    Kontext
 end sub
-'
+
 '-------------------------------------------------------------------------------
-'
+
 sub hOfficeStarten
     dim sUnoPort as string
     dim sPlatformProgramPath as string
@@ -299,9 +299,9 @@ sub hOfficeStarten
    end if
    wait 3000
 end sub
-'
+
 '-------------------------------------------------------------------------------
-'
+
 function TrimTab ( sTrimmer as String ) as String
    Dim sInterim as String
 
@@ -310,9 +310,9 @@ function TrimTab ( sTrimmer as String ) as String
    TrimTab = rTrimTab ( sInterim )
 
 end function
-'
+
 '-------------------------------------------------------------------------------
-'
+
 function lTrimTab ( slTrimmer as String ) as String
    Dim i, iLen as Integer
    Dim sInterim as String
@@ -329,9 +329,9 @@ function lTrimTab ( slTrimmer as String ) as String
    next i
    lTrimTab = sInterim
 end function
-'
+
 '-------------------------------------------------------------------------------
-'
+
 function rTrimTab ( srTrimmer as String ) as String
    Dim i, iLen as Integer
    Dim sInterim as String
@@ -348,4 +348,22 @@ function rTrimTab ( srTrimmer as String ) as String
    next i
    rTrimTab = sInterim
 end function
+
+'-------------------------------------------------------------------------------
+
+sub StartTheOffice
+    '/// this routine is not intended to be called from within a testscript.
+    '/// this routine will get called by the VCL TestTool application, in case it recognizes there is no soffice.bin running anymore or not responding anymore
+    '/// this happens usually after OpenOffice.org crashed
+    'keep it as short as possible! 
+    warnlog "OpenOffice.org application crashed or can not be started. Double click the above error message if exists for the culprint."
+    hOfficeStarten()
+    try
+        catchGPF false
+    catch
+    endcatch
+    hDisableQuickstarterAPI()
+    ' set global variable for backwards compatibility
+    gStartTheOffice = TRUE
+end sub
 
