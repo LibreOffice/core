@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationstate.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,9 @@
 #define _SDR_ANIMATION_ANIMATIONSTATE_HXX
 
 #include <sal/types.h>
-
 #include <vector>
 #include <svx/sdr/animation/scheduler.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -45,11 +45,6 @@ namespace sdr
     {
         class ViewObjectContact;
     } // end of namespace contact
-    namespace animation
-    {
-        class AnimationInfo;
-        class ObjectAnimator;
-    } // end of namespace animation
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
@@ -58,33 +53,29 @@ namespace sdr
 {
     namespace animation
     {
-        class AnimationState : public Event
+        class PrimitiveAnimation : public Event
         {
         protected:
             // the animated VOC
-            sdr::contact::ViewObjectContact&        mrVOContact;
+            sdr::contact::ViewObjectContact&                    mrVOContact;
 
-            // get associated AnimationInfo
-            AnimationInfo& GetAnimationInfo() const;
+            // the vetor of animated primitives
+            drawinglayer::primitive2d::Primitive2DSequence      maAnimatedPrimitives;
 
-            // get associated ObectAnimator
-            ObjectAnimator& GetObjectAnimator() const;
+            // local helpers
+            double getSmallestNextTime(double fCurrentTime);
+            void prepareNextEvent();
 
         public:
             // basic constructor.
-            AnimationState(
-                sdr::contact::ViewObjectContact& rVOContact);
+            PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DSequence& rAnimatedPrimitives);
 
             // destructor
-            virtual ~AnimationState();
+            virtual ~PrimitiveAnimation();
 
             // execute event, from base class Event
             virtual void Trigger(sal_uInt32 nTime);
         };
-
-        // typedef for a list of AnimationState
-        typedef ::std::vector< AnimationState* > AnimationStateVector;
-
     } // end of namespace animation
 } // end of namespace sdr
 
