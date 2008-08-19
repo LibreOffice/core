@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shortcut_ooo.scp,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,7 +123,7 @@ End
 Shortcut gid_Shortcut_Lib_Hsqldb_2
     FileID = gid_File_Lib_Hsqldb_2;
     Dir = gid_Dir_Program;
-    Name = "libhsqldb2.jnilib";
+    Name = "libhsqldb.jnilib";
     Styles = (NETWORK, RELATIVE);
 End
 
