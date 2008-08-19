@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartWindow.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@ public:
     void clear();
 
     //from base class Window:
+    virtual void PrePaint();
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual void MouseMove( const MouseEvent& rMEvt );
