@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objtest.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1335,18 +1335,29 @@ void TestToolObj::SendViaSocket()
     }
 
     if ( !pCommunicationManager->IsCommunicationRunning() )
-        if ( !pCommunicationManager->StartCommunication( ProgPath, pImpl->ProgParam, pImpl->pChildEnv ) )
+    {
+        // first try to run basic sub "startTheOffice" see i86540
+        SbxVariable* pMeth = pImpl->pMyBasic->Find( CUniString( "startTheOffice" ), SbxCLASS_DONTCARE);
+        if( !pImpl->bIsStart && pMeth && pMeth->ISA(SbxMethod) )
         {
-            ADD_ERROR(ERR_RESTART_FAIL,GEN_RES_STR1(S_APPLICATION_START_FAILED, ProgPath));
+            pImpl->pMyBasic->Call( CUniString( "startTheOffice" ) );
         }
         else
         {
-            if ( !pImpl->bIsStart )
+            pImpl->pMyBasic->ResetError();  // reset error produced by failed Find above
+            if ( !pCommunicationManager->StartCommunication( ProgPath, pImpl->ProgParam, pImpl->pChildEnv ) )
             {
-                ADD_ERROR(ERR_RESTART,GEN_RES_STR0(S_APPLICATION_RESTARTED));
+                ADD_ERROR(ERR_RESTART_FAIL,GEN_RES_STR1(S_APPLICATION_START_FAILED, ProgPath));
+            }
+            else
+            {
+                if ( !pImpl->bIsStart )
+                {
+                    ADD_ERROR(ERR_RESTART,GEN_RES_STR0(S_APPLICATION_RESTARTED));
+                }
             }
         }
-
+    }
 
     bReturnOK = FALSE;
     if ( pCommunicationManager->GetLastNewLink() )
@@ -2921,7 +2932,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.39 $
+    // search $Revision: 1.40 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
