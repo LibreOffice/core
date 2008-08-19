@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpagv.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,8 +75,6 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 class SVX_DLLPUBLIC SdrPageView : public SfxListener
 {
-    const ::sdr::contact::DisplayInfo*                              mpDisplayInfo;
-
 protected:
     SdrView&                                                        mrView;
     SdrPage*                                                        mpPage;
@@ -188,15 +186,16 @@ public:
     // rRect bezieht sich auf die Page
     void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=FALSE);
 
+    // PrePaint call forwarded from app windows
+    void PrePaint();
+
     // rReg bezieht sich auf's OutDev, nicht auf die Page
-    void CompleteRedraw(
-        SdrPaintWindow& rPaintWindow, const Region& rReg, sal_uInt16 nPaintMode,
-        ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
+    void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
 
     // write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
-    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0L, sal_uInt16 nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
+    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
     void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 
     Rectangle GetPageRect() const;
@@ -298,19 +297,6 @@ public:
     // #103911# Set/Get document color for svx at SdrPageViews
     void SetApplicationDocumentColor(Color aDocumentColor);
     Color GetApplicationDocumentColor() const;
-
-    void SetCurrentPaintingDisplayInfo(const ::sdr::contact::DisplayInfo* pDisplayInfo)
-    {
-        if(pDisplayInfo != mpDisplayInfo)
-        {
-            mpDisplayInfo = pDisplayInfo;
-        }
-    }
-
-    const ::sdr::contact::DisplayInfo* GetCurrentPaintingDisplayInfo() const
-    {
-        return mpDisplayInfo;
-    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
