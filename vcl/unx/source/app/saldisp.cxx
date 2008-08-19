@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.100 $
+ * $Revision: 1.101 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3037,8 +3037,8 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
 SalColormap::SalColormap( const BitmapPalette &rPalette )
     : m_pDisplay( GetX11SalData()->GetDisplay() ),
       m_hColormap( None ),
-      m_nWhitePixel( 0xFFFFFFFF ),
-      m_nBlackPixel( 0xFFFFFFFF ),
+      m_nWhitePixel( SALCOLOR_NONE ),
+      m_nBlackPixel( SALCOLOR_NONE ),
       m_nUsed( rPalette.GetEntryCount() ),
       m_nScreen( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() )
 {
@@ -3050,9 +3050,9 @@ SalColormap::SalColormap( const BitmapPalette &rPalette )
         m_aPalette[i] = MAKE_SALCOLOR( rColor.GetRed(),
                                        rColor.GetGreen(),
                                        rColor.GetBlue() );
-        if( m_nBlackPixel == 0xFFFFFFFF && SALCOLOR_BLACK == m_aPalette[i] )
+        if( (m_nBlackPixel == SALCOLOR_NONE) && (SALCOLOR_BLACK == m_aPalette[i]) )
             m_nBlackPixel = i;
-        else if( m_nWhitePixel == 0xFFFFFFFF && SALCOLOR_WHITE == m_aPalette[i] )
+        else if( (m_nWhitePixel == SALCOLOR_NONE) && (SALCOLOR_WHITE == m_aPalette[i]) )
             m_nWhitePixel = i;
     }
 }
@@ -3174,14 +3174,14 @@ void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
     if( this != &GetX11SalData()->GetDisplay()->GetColormap(m_nScreen) )
     {
-        m_nBlackPixel = 0xFFFFFFFF;
-        m_nWhitePixel = 0xFFFFFFFF;
+        m_nBlackPixel = SALCOLOR_NONE;
+        m_nWhitePixel = SALCOLOR_NONE;
     }
 
     if( rPalette.GetEntryCount() > m_nUsed )
     {
-        m_nBlackPixel = 0xFFFFFFFF;
-        m_nWhitePixel = 0xFFFFFFFF;
+        m_nBlackPixel = SALCOLOR_NONE;
+        m_nWhitePixel = SALCOLOR_NONE;
         m_nUsed = rPalette.GetEntryCount();
         m_aPalette = std::vector<SalColor>(m_nUsed);
     }
@@ -3192,9 +3192,9 @@ void SalColormap::SetPalette( const BitmapPalette &rPalette )
         m_aPalette[i] = MAKE_SALCOLOR( rColor.GetRed(),
                                        rColor.GetGreen(),
                                        rColor.GetBlue() );
-        if( m_nBlackPixel == 0xFFFFFFFF && SALCOLOR_BLACK == m_aPalette[i] )
+        if( (m_nBlackPixel == SALCOLOR_NONE) && (SALCOLOR_BLACK == m_aPalette[i]) )
             m_nBlackPixel = i;
-        else if( m_nWhitePixel == 0xFFFFFFFF && SALCOLOR_WHITE == m_aPalette[i] )
+        else if( (m_nWhitePixel == SALCOLOR_NONE) && (SALCOLOR_WHITE == m_aPalette[i]) )
             m_nWhitePixel = i;
     }
 }
@@ -3325,7 +3325,7 @@ BOOL SalColormap::GetXPixels( XColor &rColor,
 
 Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 {
-    if( 0xFFFFFFFF == nSalColor )     return 0;
+    if( SALCOLOR_NONE == nSalColor )  return 0;
     if( SALCOLOR_BLACK == nSalColor ) return m_nBlackPixel;
     if( SALCOLOR_WHITE == nSalColor ) return m_nWhitePixel;
 
