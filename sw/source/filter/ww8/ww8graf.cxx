@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8graf.cxx,v $
- * $Revision: 1.153 $
+ * $Revision: 1.154 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,21 +473,21 @@ SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
 
 ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
 {
-    USHORT nPCnt = pDrawEditEngine->GetParagraphCount();
+    USHORT nPCnt = mpDrawEditEngine->GetParagraphCount();
     USHORT nSP = 0;
     USHORT nEP = 0;
     while(      (nSP < nPCnt)
-            &&  (nCpStart >= pDrawEditEngine->GetTextLen( nSP ) + 1) )
+            &&  (nCpStart >= mpDrawEditEngine->GetTextLen( nSP ) + 1) )
     {
-        nCpStart -= pDrawEditEngine->GetTextLen( nSP ) + 1;
+        nCpStart -= mpDrawEditEngine->GetTextLen( nSP ) + 1;
         nSP++;
     }
         // Beim Ende erst 1 Zeichen spaeter auf naechste Zeile umschalten,
         // da sonst Zeilenattribute immer eine Zeile zu weit reichen.
     while(      (nEP < nPCnt)
-            &&  (nCpEnd > pDrawEditEngine->GetTextLen( nEP ) + 1) )
+            &&  (nCpEnd > mpDrawEditEngine->GetTextLen( nEP ) + 1) )
     {
-        nCpEnd -= pDrawEditEngine->GetTextLen( nEP ) + 1;
+        nCpEnd -= mpDrawEditEngine->GetTextLen( nEP ) + 1;
         nEP++;
     }
     return ESelection( nSP, (USHORT)nCpStart, nEP, (USHORT)nCpEnd );
@@ -604,15 +604,12 @@ public:
     }
 };
 
-// InsertTxbxAttrs() setzt zwischen StartCp und EndCp die Attribute.
+// InsertAttrsAsDrawingAttrs() setzt zwischen StartCp und EndCp die Attribute.
 // Dabei werden Style-Attribute als harte Attribute, Absatz- und Zeichen-
 // attribute gesetzt.
-void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
-    bool bONLYnPicLocFc)
+void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
+    ManTypes eType, bool bONLYnPicLocFc)
 {
-    ManTypes eType =
-        pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX;
-
     /*
      Save and create new plcxman for this drawing object, of the type that
      will include the para end mark inside a paragraph property range, as
@@ -621,7 +618,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
-    pPlcxMan = new WW8PLCFMan(pSBase, static_cast< short >(eType), nStartCp, true);
+    pPlcxMan = new WW8PLCFMan(pSBase, eType, nStartCp, true);
 
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext, nEnd, nStartReplace=0;
@@ -629,7 +626,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     bool bDoingSymbol = false;
     sal_Unicode cReplaceSymbol = cSymbol;
 
-    SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
+    SfxItemSet *pS = new SfxItemSet(mpDrawEditEngine->GetEmptyItemSet());
     WW8PLCFManResult aRes;
 
     std::deque<Chunk> aChunks;
@@ -683,7 +680,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
                         String sTemp;
                         sTemp.Fill(writer_cast<xub_StrLen>(
                             nTxtStart - nStartReplace), cReplaceSymbol);
-                        pDrawEditEngine->QuickInsertText(sTemp,
+                        mpDrawEditEngine->QuickInsertText(sTemp,
                             GetESelection(nStartReplace - nStartCp,
                             nTxtStart - nStartCp ) );
                     }
@@ -760,10 +757,10 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
 
             if( pS->Count() )
             {
-                pDrawEditEngine->QuickSetAttribs( *pS,
+                mpDrawEditEngine->QuickSetAttribs( *pS,
                     GetESelection( nTxtStart - nStartCp, nEnd - nStartCp ) );
                 delete pS;
-                pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
+                pS = new SfxItemSet(mpDrawEditEngine->GetEmptyItemSet());
             }
         }
         nStart = nNext;
@@ -781,7 +778,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     {
         ESelection aSel(GetESelection(aIter->GetStartPos()-nStartCp,
             aIter->GetEndPos()-nStartCp));
-        String aString(pDrawEditEngine->GetText(aSel));
+        String aString(mpDrawEditEngine->GetText(aSel));
         xub_StrLen nOrigLen = aString.Len();
         long nDummy(0);
         lcl_StripFields(aString, nDummy);
@@ -791,12 +788,12 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
         {
             SvxURLField aURL(aIter->GetURL(), aString,
                 SVXURLFORMAT_APPDEFAULT);
-            pDrawEditEngine->QuickInsertField(SvxFieldItem(aURL, EE_FEATURE_FIELD), aSel);
+            mpDrawEditEngine->QuickInsertField(SvxFieldItem(aURL, EE_FEATURE_FIELD), aSel);
             nChanged = nOrigLen - 1;
         }
         else
         {
-            pDrawEditEngine->QuickInsertText(aString, aSel);
+            mpDrawEditEngine->QuickInsertText(aString, aSel);
             nChanged = nOrigLen - aString.Len();
         }
         for (myIter aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
@@ -908,9 +905,10 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 
 // TxbxText() holt aus WW-File den Text und gibt diesen und den Anfangs- und
 // den um -2 (bzw. -1 bei Ver8) korrigierten End-Cp zurueck
-bool SwWW8ImplReader::GetTxbxText(String& rString, long nStartCp, long nEndCp)
+bool SwWW8ImplReader::GetRangeAsDrawingString(String& rString, long nStartCp, long nEndCp, ManTypes eType)
 {
-    nDrawTxbx++;
+    WW8_CP nOffset = pWwFib->GetBaseCp(eType);
+
     bool bOk = false;
     ASSERT(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
     if (nStartCp == nEndCp)
@@ -919,16 +917,58 @@ bool SwWW8ImplReader::GetTxbxText(String& rString, long nStartCp, long nEndCp)
     {
         // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
         USHORT nLen = pSBase->WW8ReadString(*pStrm, rString,
-            nStartCp + nDrawCpO, nEndCp - nStartCp, GetCurrentCharSet());
+            nStartCp + nOffset, nEndCp - nStartCp, GetCurrentCharSet());
         ASSERT(nLen, "+Wo ist der Grafik-Text (8) ?");
         if (nLen)
         {
             bOk = true;
             if( 0x0d == rString.GetChar(nLen - 1) )
                 rString.Erase(nLen - 1);
+
+            rString.SearchAndReplaceAll( 0xb, 0xa );
         }
     }
     return bOk;
+}
+
+OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
+{
+    OutlinerParaObject* pRet = 0;
+
+    if (GetRangeAsDrawingString( rString, nStartCp, nEndCp, eType ))
+    {
+        if (!mpDrawEditEngine)
+            mpDrawEditEngine = new EditEngine(0);
+
+        mpDrawEditEngine->SetText(rString);
+        InsertAttrsAsDrawingAttrs(nStartCp, nEndCp, eType);
+
+        //Annotations typically begin with a (useless) 0x5
+    if ((eType == MAN_AND) && mpDrawEditEngine->GetTextLen())
+    {
+        ESelection aFirstChar(0, 0, 0, 1);
+            if (mpDrawEditEngine->GetText( aFirstChar ) == String(sal_Unicode(0x5)))
+            mpDrawEditEngine->QuickDelete(aFirstChar);
+        }
+
+        pRet = new OutlinerParaObject(*mpDrawEditEngine->CreateTextObject());
+
+        mpDrawEditEngine->SetText( aEmptyStr );
+        mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());
+
+        //Strip out fields, leaving the result
+        long nDummy(0);
+        lcl_StripFields(rString, nDummy);
+        //Strip out word's special characters for the simple string
+        rString.EraseAllChars(0x1);
+        rString.EraseAllChars(0x5);
+        rString.EraseAllChars(0x8);
+        rString.SearchAndReplaceAllAscii("\007\007", String::CreateFromAscii("\007\012"));
+        rString.SearchAndReplaceAll(0x7, ' ');
+
+    }
+
+    return pRet;
 }
 
 // InsertTxbxText() fuegt fuer TextBoxen und CaptionBoxen den Text
@@ -942,25 +982,20 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     SwFrmFmt* pFlyFmt = 0;
     ULONG nOld = pStrm->Tell();
 
+    ManTypes eType = pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX;
+
     rbEraseTextObj = false;
 
     String aString;
     WW8_CP nStartCp, nEndCp;
     bool bContainsGraphics = false;
     bool bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
-        nSequence ) && GetTxbxText( aString, nStartCp, nEndCp );
+        nSequence ) && GetRangeAsDrawingString( aString, nStartCp, nEndCp, eType );
 
-    if( !pbTestTxbxContainsText )
-    {
-        if( bTextWasRead )
-            while( STRING_NOTFOUND != aString.SearchAndReplace( 0xb, ' ' ))
-                ;   // HardNewline kann EE noch nicht in der EE-Core
-    }
-
-    if (!pDrawEditEngine)
-        pDrawEditEngine = new EditEngine(0);
+    if (!mpDrawEditEngine)
+        mpDrawEditEngine = new EditEngine(0);
     if( pObjSiz )
-        pDrawEditEngine->SetPaperSize( *pObjSiz );
+        mpDrawEditEngine->SetPaperSize( *pObjSiz );
 
     String aOrigString(aString);
     if( bTextWasRead )
@@ -1066,7 +1101,8 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         }
                         else
                         {
-                            InsertTxbxAttrs(nNewStartCp, nNewStartCp+1, true);
+                            InsertAttrsAsDrawingAttrs(nNewStartCp, nNewStartCp+1,
+                                eType, true);
                             pFlyFmt = ImportGraf(bMakeSdrGrafObj ? pTextObj : 0,
                                 pOldFlyFmt);
                         }
@@ -1122,13 +1158,13 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     {
         if( bTextWasRead )
         {
-            pDrawEditEngine->SetText(aOrigString);
-            InsertTxbxAttrs(nStartCp, nEndCp, false);
+            mpDrawEditEngine->SetText(aOrigString);
+            InsertAttrsAsDrawingAttrs(nStartCp, nEndCp, eType);
         }
 
         bool bVertical = pTextObj->IsVerticalWriting() ? true : false;
         OutlinerParaObject* pOp = new OutlinerParaObject(
-            *pDrawEditEngine->CreateTextObject());
+            *mpDrawEditEngine->CreateTextObject());
         pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
         pOp->SetVertical( bVertical );
         pTextObj->NbcSetOutlinerParaObject( pOp );
@@ -1140,8 +1176,8 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         // Vorgehen: Text loeschen = auf 1 Absatz reduzieren
         // und an diesem Absatz die Absatzattribute und Styles loeschen
         // (Empfehlung JOE)
-        pDrawEditEngine->SetText( aEmptyStr );
-        pDrawEditEngine->SetParaAttribs(0, pDrawEditEngine->GetEmptyItemSet());
+        mpDrawEditEngine->SetText( aEmptyStr );
+        mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());
     }
 
     pStrm->Seek( nOld );
@@ -1149,6 +1185,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         *pbContainsGraphics = bContainsGraphics;
     return pFlyFmt;
 }
+
 
 bool SwWW8ImplReader::TxbxChainContainsRealText(USHORT nTxBxS, long& rStartCp,
     long&  rEndCp)
@@ -2487,12 +2524,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     ::SetProgressState(nProgress, mpDocShell);     // Update
 
-    nDrawCpO =    pWwFib->ccpText + pWwFib->ccpFtn
-                + pWwFib->ccpHdr  + pWwFib->ccpMcr
-                + pWwFib->ccpAtn  + pWwFib->ccpEdn;
-
-    if( pPlcxMan->GetManType() == MAN_HDFT )
-        nDrawCpO += pWwFib->ccpTxbx;
+    nDrawCpO = pWwFib->GetBaseCp(pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX);
 
     GrafikCtor();
 
@@ -3019,8 +3051,8 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             // lies den Text ein
             bTxbxFlySection = true;
             bool bJoined = ReadText(nStartCp, (nEndCp-nStartCp),
-                static_cast< short >(MAN_MAINTEXT == pPlcxMan->GetManType() ?
-                        MAN_TXBX : MAN_TXBX_HDFT));
+                MAN_MAINTEXT == pPlcxMan->GetManType() ?
+                        MAN_TXBX : MAN_TXBX_HDFT);
 
             pWWZOrder->OutsideEscher();
 
@@ -3184,7 +3216,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 
 void SwWW8ImplReader::GrafikDtor()
 {
-    DELETEZ(pDrawEditEngine); // evtl. von Grafik angelegt
+    DELETEZ(mpDrawEditEngine); // evtl. von Grafik angelegt
     DELETEZ(pWWZOrder);       // dito
 }
 
