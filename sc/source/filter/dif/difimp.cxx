@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: difimp.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <svtools/zforlist.hxx>
-#include <math.h>
 
 #include "dif.hxx"
 #include "filter.hxx"
@@ -48,6 +46,7 @@
 #include "docpool.hxx"
 #include "attrib.hxx"
 
+#include <math.h>
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
 const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
