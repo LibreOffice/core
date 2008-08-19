@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxids.hrc,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1104,6 +1104,7 @@
 #define SID_FM_CONVERTTO_NAVIGATIONBAR                  ( SID_SVX_START + 772 )
 #define SID_FM_SHOW_DATANAVIGATOR                       ( SID_SVX_START + 773 )
 #define SID_FM_DATANAVIGATOR_CONTROL                    ( SID_SVX_START + 774 )
+#define SID_FM_REFRESH_FORM_CONTROL                     ( SID_SVX_START + 775 )
 #define SID_MORE_FMSLOTS_END                            ( SID_SVX_START + 850 )
 
 #define SID_HLINKBAR_LINK                               ( SID_SVX_START + 851 )
