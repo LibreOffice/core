@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit.hxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +101,7 @@ class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
 #include <svx/SpellPortions.hxx>
 
+#include <svx/eedata.hxx>
 
 class SvUShorts;
 class SvxNumberFormat;
@@ -495,9 +496,6 @@ private:
     sal_Bool            bUseAutoColor;
     sal_Bool            bForceAutoColor;
     sal_Bool            bCallParaInsertedOrDeleted;
-    sal_Bool            bVerboseTextComments; // #110496# Optional mtf
-                                              // comments for text
-                                              // layout (paras, lines etc)
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
     sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
 
@@ -704,15 +702,7 @@ private:
         the output string at hand. This is necessary for slideshow
         text effects.
      */
-    void                ImplDrawWithComments( SvxFont&                              rFont,
-                                              const ::com::sun::star::lang::Locale& rLocale,
-                                              OutputDevice&                         rOut,
-                                              GDIMetaFile&                          rMtf,
-                                              const Point&                          rPos,
-                                              const String&                         rTxt,
-                                              const USHORT                          nIdx,
-                                              const USHORT                          nLen,
-                                              const sal_Int32*                          pDXArray ) const;
+    void ImplFillTextMarkingVector(const ::com::sun::star::lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const USHORT nIdx, const USHORT nLen) const;
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -1024,10 +1014,6 @@ public:
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-
-    // #110496#
-    void                EnableVerboseTextComments( BOOL bEnable ) { bVerboseTextComments=bEnable; }
-    BOOL                IsVerboseTextComments() const { return bVerboseTextComments; }
 
     BOOL                mbLastTryMerge;
 
