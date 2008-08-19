@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +111,8 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 
 using ::rtl::OUString;
+
+#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 using namespace ::osl;
 using namespace ::vos;
@@ -1540,8 +1542,7 @@ class ImplRenderPaintProc : public ::sdr::contact::ViewObjectContactRedirector
     SdrPageView*            pSdrPageView;
     vcl::PDFExtOutDevData*  pPDFExtOutDevData;
 
-    sal_Bool ImplBegStructureTag( SdrObject& rObject );
-    void ImplEndStructureTag();
+    vcl::PDFWriter::StructElement ImplBegStructureTag( SdrObject& rObject );
 
 public:
     sal_Bool IsVisible  ( const SdrObject* pObj ) const;
@@ -1552,7 +1553,9 @@ public:
 
     // all default implementations just call the same methods at the original. To do something
     // different, overload the method and at least do what the method does.
-    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
+    virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
 ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData )
@@ -1721,9 +1724,10 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
     }
 }
 
-sal_Bool ImplRenderPaintProc::ImplBegStructureTag( SdrObject& rObject )
+vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObject& rObject )
 {
-    vcl::PDFWriter::StructElement eElement = vcl::PDFWriter::NonStructElement;
+    vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
+
     if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
         sal_uInt32 nInventor   = rObject.GetObjInventor();
@@ -1742,43 +1746,48 @@ sal_Bool ImplRenderPaintProc::ImplBegStructureTag( SdrObject& rObject )
                 eElement = vcl::PDFWriter::Figure;
         }
     }
-    sal_Bool bRet = eElement != vcl::PDFWriter::NonStructElement;
-    if ( bRet )
-        pPDFExtOutDevData->BeginStructureElement( eElement );
-    return bRet;
+
+    return eElement;
 }
 
-void ImplRenderPaintProc::ImplEndStructureTag()
-{
-    if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
-        pPDFExtOutDevData->EndStructureElement();
-}
-
-// all default implementations just call the same methods at the original. To do something
-// different, overload the method and at least do what the method does.
-void ImplRenderPaintProc::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
+drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+
     if(pObject)
     {
+        drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
         if(pObject->GetPage())
         {
             if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
             {
                 if(IsVisible(pObject) && IsPrintable(pObject))
                 {
-                    sal_Bool bStructureUsed = ImplBegStructureTag( *pObject );
-                    rOriginal.PaintObject(rDisplayInfo);
-                    if ( bStructureUsed )
-                        ImplEndStructureTag();
+                    const vcl::PDFWriter::StructElement eElement(ImplBegStructureTag( *pObject ));
+                    const bool bTagUsed(vcl::PDFWriter::NonStructElement != eElement);
+
+                    xRetval = ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+
+                    if(xRetval.hasElements() && bTagUsed)
+                    {
+                        // embed Primitive2DSequence in a structure tag element for
+                        // exactly this purpose (StructureTagPrimitive2D)
+                        const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::StructureTagPrimitive2D(eElement, xRetval));
+                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                    }
                 }
             }
         }
+
+        return xRetval;
     }
     else
     {
         // not an object, maybe a page
-        rOriginal.PaintObject(rDisplayInfo);
+        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
     }
 }
 
@@ -1906,7 +1915,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         // hint value if screen display. Only then the AutoColor mechanisms shall be applied
                         rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
                     }
-                    pView->SdrPaintView::CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
+                    pView->SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
 
                     if ( pPDFExtOutDevData )
                     {
@@ -2128,7 +2137,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 }
                             }
                         }
-                        pView->DrawAllMarked( *pOut, aOrigin );
+                        pView->DrawMarkedObj(*pOut);
                     }
                 }
 
