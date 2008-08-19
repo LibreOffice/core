@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactoftextobj.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,10 +56,6 @@ namespace sdr
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfTextObj(SdrTextObj& rTextObj);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewContactOfTextObj();
         };
     } // end of namespace contact
