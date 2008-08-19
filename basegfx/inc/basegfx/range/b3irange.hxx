@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3irange.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,11 +116,12 @@ namespace basegfx
                 || maRangeZ != rRange.maRangeZ);
         }
 
-        void operator=(const B3IRange& rRange)
+        B3IRange& operator=(const B3IRange& rRange)
         {
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
             maRangeZ = rRange.maRangeZ;
+            return *this;
         }
 
         sal_Int32 getMinX() const
