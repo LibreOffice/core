@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outleeng.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,16 @@ public:
     virtual void        ParagraphConnected( USHORT nLeftParagraph, USHORT nRightParagraph );
 
     // #101498#
-    virtual void        DrawingText(const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft);
+    virtual void DrawingText(
+        const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
+        USHORT nPara, USHORT nIndex, BYTE nRightToLeft,
+        const EEngineData::WrongSpellVector* pWrongSpellVector,
+        const SvxFieldData* pFieldData,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        bool bEndOfBullet,
+        const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rTextLineColor);
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void        ParaAttribsChanged( USHORT nPara );
