@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbagrid.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,9 +259,8 @@ namespace dbaui
     protected:
         ::svx::ODataAccessDescriptor    m_aDataDescriptor;
         SbaGridListener*                m_pMasterListener;
-        ULONG                           m_nAsyncDropEvent;
-        USHORT                          m_nLastColId;
-        long                            m_nLastRowId;
+
+        sal_Int32                       m_nAsyncDropEvent;
 
         USHORT                          m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
@@ -319,9 +318,11 @@ namespace dbaui
         virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu);
         virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
+        // DbGridControl overridables
+        virtual void onRowChange();
+        virtual void onColumnChange();
+
         // my own overridables
-        virtual void RowChanged();  // the default implementation calls the according link (if set)
-        virtual void ColChanged();
         virtual void BeforeDrop();
         virtual void AfterDrop();
 
