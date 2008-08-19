@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -129,6 +129,7 @@ IDLFILES=\
     XRowSetSupplier.idl \
     XSingleSelectQueryAnalyzer.idl \
     XSingleSelectQueryComposer.idl \
+    XSubDocument.idl \
     XSQLErrorBroadcaster.idl \
     XSQLErrorListener.idl \
     XSQLQueryComposer.idl \
