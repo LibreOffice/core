@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocirc.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +37,10 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
-
 #include <svx/svdocirc.hxx>
 #include <math.h>
 #include <svx/xpool.hxx>
 #include "svdtouch.hxx"
-#include "svdxout.hxx"
 #include <svx/svdattr.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdattrx.hxx>
@@ -58,11 +56,14 @@
 #include <svx/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
+#include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
 
 void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
 {
@@ -100,10 +101,19 @@ void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
 
 sdr::properties::BaseProperties* SdrCircObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::CircleProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrCircObj(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -301,169 +311,6 @@ void SdrCircObj::RecalcXPoly()
     mpXPoly = new XPolygon(aPolyCirc);
 }
 
-void SdrCircObj::RecalcBoundRect()
-{
-    SetWinkPnt(aRect,nStartWink,aPnt1);
-    SetWinkPnt(aRect,nEndWink,aPnt2);
-    bBoundRectDirty=FALSE;
-    aOutRect=GetSnapRect();
-    long nLineWdt=ImpGetLineWdt();
-    nLineWdt++; nLineWdt/=2;
-    if (nLineWdt!=0) {
-        long nWink=nEndWink-nStartWink;
-        if (nWink<0) nWink+=36000;
-        if (meCircleKind==OBJ_SECT && nWink<18000) nLineWdt*=2; // doppelt, wegen evtl. spitzen Ecken
-        if (meCircleKind==OBJ_CCUT && nWink<18000) nLineWdt*=2; // doppelt, wegen evtl. spitzen Ecken
-    }
-    if (meCircleKind==OBJ_CARC) { // ggf. Linienenden beruecksichtigen
-        long nLEndWdt=ImpGetLineEndAdd();
-        if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
-    }
-
-    if(ImpAddLineGeomteryForMiteredLines())
-    {
-        nLineWdt = 0;
-    }
-
-    if (nLineWdt!=0) {
-        aOutRect.Left  ()-=nLineWdt;
-        aOutRect.Top   ()-=nLineWdt;
-        aOutRect.Right ()+=nLineWdt;
-        aOutRect.Bottom()+=nLineWdt;
-    }
-    ImpAddShadowToBoundRect();
-    ImpAddTextToBoundRect();
-}
-
-sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    bool bHideContour(IsHideContour());
-
-    // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetObjectItemSet();
-
-    // perepare ItemSet to avoid old XOut line drawing
-    SfxItemSet aEmptySet(*rSet.GetPool());
-    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-
-    // #b4899532# if not filled but fill draft, avoid object being invisible in using
-    // a hair linestyle and COL_LIGHTGRAY
-    SfxItemSet aItemSet(rSet);
-
-    // #103692# prepare ItemSet for shadow fill attributes
-    SfxItemSet aShadowSet(aItemSet);
-
-    // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
-
-    // Shadows
-    if(!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
-    {
-        if( meCircleKind==OBJ_CARC )
-            rXOut.SetFillAttr(aEmptySet);
-        else
-            rXOut.SetFillAttr(aShadowSet);
-
-        UINT32 nXDist=((SdrShadowXDistItem&)(aItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(aItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-
-        // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aEmptySet);
-
-        if (PaintNeedsXPolyCirc())
-        {
-            if( OBJ_CARC != meCircleKind )
-            {
-                XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
-                aX.Move(nXDist,nYDist);
-
-                // #100127# Output original geometry for metafiles
-                ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
-
-                rXOut.DrawPolygon(aX.getB2DPolygon());
-            }
-        } else {
-            // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
-
-            Rectangle aR(aRect);
-            aR.Move(nXDist,nYDist);
-            if (meCircleKind==OBJ_CIRC) {
-                rXOut.DrawEllipse(aR);
-            } else {
-                GetCurrentBoundRect(); // fuer aPnt1,aPnt2
-                Point aTmpPt1(aPnt1);
-                Point aTmpPt2(aPnt2);
-                aTmpPt1.X()+=nXDist;
-                aTmpPt1.Y()+=nYDist;
-                aTmpPt2.X()+=nXDist;
-                aTmpPt2.Y()+=nYDist;
-                switch (meCircleKind) {
-                    case OBJ_SECT: rXOut.DrawPie(aR,aTmpPt1,aTmpPt2); break;
-                    case OBJ_CARC: rXOut.DrawArc(aR,aTmpPt1,aTmpPt2); break;
-                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::DoPaintObject(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
-                    default: break;
-                }
-            }
-        }
-
-        // new shadow line drawing
-        if( pLineGeometry.get() )
-        {
-            // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
-        }
-    }
-
-    // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aEmptySet);
-    rXOut.SetFillAttr( aItemSet );
-
-    if (!bHideContour) {
-        if (PaintNeedsXPolyCirc())
-        {
-            if( OBJ_CARC != meCircleKind )
-            {
-                const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
-
-                // #100127# Output original geometry for metafiles
-                ImpGraphicFill aFill( *this, rXOut, aItemSet );
-                rXOut.DrawPolygon(rXP.getB2DPolygon());
-            }
-        } else {
-            // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, aItemSet );
-
-            if (meCircleKind==OBJ_CIRC) {
-                rXOut.DrawEllipse(aRect);
-            } else {
-                GetCurrentBoundRect(); // fuer aPnt1,aPnt2
-                switch (meCircleKind) {
-                    case OBJ_SECT: rXOut.DrawPie(aRect,aPnt1,aPnt2); break;
-                    case OBJ_CARC: rXOut.DrawArc(aRect,aPnt1,aPnt2); break;
-                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::DoPaintObject(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
-                    default: break;
-                }
-            }
-        }
-    }
-
-    // Own line drawing
-    if(!bHideContour && pLineGeometry.get() )
-    {
-        // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
-    }
-
-    bool bOk=true;
-    if (HasText()) {
-        bOk=SdrTextObj::DoPaintObject(rXOut,rInfoRec);
-    }
-
-    return bOk;
-}
-
 SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
@@ -574,7 +421,7 @@ SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
                 if (meCircleKind==OBJ_CCUT) { // Kreisabschnitt noch die Sehne und die MaeuseEcke (Dreieck) testen
                     if (IsRectTouchesLine(aP1,aP2,aR)) bRet = sal_True; // die Sehne
                     else if (bFilled) { // und nun die Maeusescke
-                        const Polygon aPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
+                        const Polygon aPoly(GetXPoly().getB2DPolygon().getDefaultAdaptiveSubdivision());
                         bRet=IsPointInsidePoly(aPoly,rPnt);
                     }
                 }
@@ -1000,7 +847,7 @@ FASTBOOL SdrCircObj::MovCreate(SdrDragStat& rStat)
     ImpJustifyRect(aRect);
     nStartWink=pU->nStart;
     nEndWink=pU->nEnd;
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     SetXPolyDirty();
     return TRUE;
