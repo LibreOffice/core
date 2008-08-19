@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contwnd.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/xoutx.hxx>
 #include <xoutbmp.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
@@ -145,6 +144,8 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
         if ( pPage && pPage->GetObjCount() )
         {
             SdrPathObj* pPathObj = (SdrPathObj*)pPage->GetObj(0L);
+            // Not sure if subdivision is needed for ContourWindow, but maybe it cannot handle
+            // curves at all. Keeping subdivision here for security
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));
             aPolyPoly = PolyPolygon(aB2DPolyPolygon);
         }
