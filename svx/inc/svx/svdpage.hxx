@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpage.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,8 +85,6 @@ namespace sdr
 //#endif // __PRIVATE
 
 class SdrPage;
-class XOutputDevice;
-class SdrPaintInfoRec;
 class SdrModel;
 class SfxItemPool;
 class SdrPageView;
@@ -137,6 +135,9 @@ protected:
 //#if 0 // _SOLAR__PRIVATE
     FASTBOOL ImpGetFillColor(SdrObject* pObj, Color& rCol) const;
 //#endif // __PRIVATE
+private:
+    /// simple ActionChildInserted forwarder to have it on a central place
+    void impChildInserted(SdrObject& rChild) const;
 public:
     TYPEINFO();
     SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=NULL);
@@ -420,7 +421,8 @@ private:
     sdr::contact::ViewContact*                                      mpViewContact;
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
-    virtual sdr::contact::ViewContact& GetViewContact() const;
+    sdr::contact::ViewContact& GetViewContact() const;
+    void FlushViewContact() const;
 
     // #110094# DrawContact support: Methods for handling Page changes
     void ActionChanged() const;
@@ -577,8 +579,8 @@ public:
         like printing.
     */
     virtual bool checkVisibility(
-        ::sdr::contact::ViewObjectContact& rOriginal,
-        ::sdr::contact::DisplayInfo& rDisplayInfo,
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
 
 //////////////////////////////////////////////////////////////////////////////
@@ -608,7 +610,9 @@ public:
 
     // all default implementations just call the same methods at the original. To do something
     // different, overload the method and at least do what the method does.
-    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
+    virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
 //////////////////////////////////////////////////////////////////////////////
