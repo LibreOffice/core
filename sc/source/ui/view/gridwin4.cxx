@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin4.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -311,6 +311,24 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
     }
 
     UpdateHeaderOverlay();      // uses aInvertRect
+}
+
+//------------------------------------------------------------------------
+
+void __EXPORT ScGridWindow::PrePaint()
+{
+    // forward PrePaint to DrawingLayer
+    ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+
+    if(pTabViewShell)
+    {
+        SdrView* pDrawView = pTabViewShell->GetSdrView();
+
+        if(pDrawView)
+        {
+            pDrawView->PrePaint();
+        }
+    }
 }
 
 //------------------------------------------------------------------------
