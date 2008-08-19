@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -63,8 +63,7 @@ XCUFILES= \
     WebWizard.xcu \
     FormWizard.xcu \
     Writer.xcu \
-    Paths.xcu \
-    ExtendedColorScheme.xcu
+    Paths.xcu
 
 MODULEFILES= \
     Common-brand.xcu \
@@ -94,7 +93,6 @@ MODULEFILES= \
     Embedding-math.xcu   \
     Embedding-base.xcu   \
     Embedding-writer.xcu \
-    Embedding-report.xcu \
     UI-brand.xcu
 
 
@@ -102,13 +100,11 @@ LOCALIZEDFILES= \
     Common.xcu \
     SFX.xcu \
     DataAccess.xcu \
-    Embedding.xcu \
     TableWizard.xcu \
     UI.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
-    Writer.xcu \
-    ExtendedColorScheme.xcu
+    Writer.xcu
 
 .INCLUDE :  target.mk
 
