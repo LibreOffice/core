@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygontools.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,9 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-
 #include <vector>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b3dpoint.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,13 +50,97 @@ namespace basegfx
         // B3DPolyPolygon tools
 
         // get size of PolyPolygon. Control vectors are included in that ranges.
-        ::basegfx::B3DRange getRange(const ::basegfx::B3DPolyPolygon& rCandidate);
+        B3DRange getRange(const B3DPolyPolygon& rCandidate);
 
-        // Apply Line Dashing. This cuts every contained PolyPolygon into line pieces
-        // which are inserted as single polygons into the result.
-        // If fFullDashDotLen is not given it will be calculated from the given
-        // raDashDotArray.
-        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
+        /** Apply given LineDashing to given polyPolygon
+
+            For a description see applyLineDashing in b2dpolygontoos.hxx
+        */
+        void applyLineDashing(
+            const B3DPolyPolygon& rCandidate,
+            const ::std::vector<double>& rDotDashArray,
+            B3DPolyPolygon* pLineTarget,
+            B3DPolyPolygon* pGapTarget = 0,
+            double fFullDashDotLen = 0.0);
+
+        /** Create a unit 3D line polyPolygon which defines a cube.
+         */
+        B3DPolyPolygon createUnitCubePolyPolygon();
+
+        /** Create a unit 3D fill polyPolygon which defines a cube.
+         */
+        B3DPolyPolygon createUnitCubeFillPolyPolygon();
+
+        /** Create a 3D line polyPolygon from a B3DRange which defines a cube.
+         */
+        B3DPolyPolygon createCubePolyPolygonFromB3DRange( const B3DRange& rRange);
+
+        /** Create a 3D fill polyPolygon from a B3DRange which defines a cube.
+         */
+        B3DPolyPolygon createCubeFillPolyPolygonFromB3DRange( const B3DRange& rRange);
+
+        /** Create a unit 3D line polyPolygon which defines a sphere with the given count of hor and ver segments.
+            Result will be centered at (0.0, 0.0, 0.0) and sized [-1.0 .. 1.0] in all dimensions.
+            If nHorSeg == 0 and/or nVerSeg == 0, a default will be calculated to have a step at least each 15 degrees.
+            With VerStart, VerStop and hor range in cartesian may be specified to create a partial sphere only.
+         */
+        B3DPolyPolygon createUnitSpherePolyPolygon(
+            sal_uInt32 nHorSeg = 0L, sal_uInt32 nVerSeg = 0L,
+            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fHorStart = 0.0, double fHorStop = F_2PI);
+
+        /** Create a 3D line polyPolygon from a B3DRange which defines a sphere with the given count of hor and ver segments.
+            If nHorSeg == 0 and/or nVerSeg == 0, a default will be calculated to have a step at least each 15 degrees.
+            With VerStart, VerStop and hor range in cartesian may be specified to create a partial sphere only.
+         */
+        B3DPolyPolygon createSpherePolyPolygonFromB3DRange(
+            const B3DRange& rRange,
+            sal_uInt32 nHorSeg = 0L, sal_uInt32 nVerSeg = 0L,
+            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fHorStart = 0.0, double fHorStop = F_2PI);
+
+        /** same as createUnitSpherePolyPolygon, but creates filled polygons (closed and oriented)
+            There is one extra, the bool bNormals defines if normals will be set, default is false
+         */
+        B3DPolyPolygon createUnitSphereFillPolyPolygon(
+            sal_uInt32 nHorSeg = 0L, sal_uInt32 nVerSeg = 0L,
+            bool bNormals = false,
+            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fHorStart = 0.0, double fHorStop = F_2PI);
+
+        /** same as createSpherePolyPolygonFromB3DRange, but creates filled polygons (closed and oriented)
+            There is one extra, the bool bNormals defines if normals will be set, default is false
+         */
+        B3DPolyPolygon createSphereFillPolyPolygonFromB3DRange(
+            const B3DRange& rRange,
+            sal_uInt32 nHorSeg = 0L, sal_uInt32 nVerSeg = 0L,
+            bool bNormals = false,
+            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fHorStart = 0.0, double fHorStop = F_2PI);
+
+        /** Create/replace normals for given 3d geometry with default normals from given center to outside.
+            rCandidate: the 3d geometry to change
+            rCenter:    the center of the 3d geometry
+         */
+        B3DPolyPolygon applyDefaultNormalsSphere( const B3DPolyPolygon& rCandidate, const B3DPoint& rCenter);
+
+        /** invert normals for given 3d geometry.
+         */
+        B3DPolyPolygon invertNormals( const B3DPolyPolygon& rCandidate);
+
+        /** Create/replace texture coordinates for given 3d geometry with parallel projected one
+            rRange: the full range of the 3d geometry
+            If bChangeX, x texture coordinate will be recalculated.
+            If bChangeY, y texture coordinate will be recalculated.
+         */
+        B3DPolyPolygon applyDefaultTextureCoordinatesParallel( const B3DPolyPolygon& rCandidate, const B3DRange& rRange, bool bChangeX = true, bool bChangeY = true);
+
+        /** Create/replace texture coordinates for given 3d geometry with spherical one
+            rCenter: the centre of the used 3d geometry
+            If bChangeX, x texture coordinate will be recalculated.
+            If bChangeY, y texture coordinate will be recalculated.
+         */
+        B3DPolyPolygon applyDefaultTextureCoordinatesSphere( const B3DPolyPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX = true, bool bChangeY = true);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 3D PolyPolygons
