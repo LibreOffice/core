@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XDatabaseMetaData.idl,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,12 +60,15 @@
     metadata is not available, these methods should throw a
     <type scope="com::sun::star::sdbc">SQLException</type>
     .
+    That a value of <type scope="com::sun::star::sdbc">XResultSet</type> is <NULL/>
+    can be chaked with the method <member scope="com::sun::star::sdbc">XResultSet::wasNull()</member>.
+    In the text only "(may be <NULL/>)" is mentioned for this case.
     </p>
     <p>Some of these methods take arguments that are String patterns. These
     arguments all have names such as fooPattern. Within a pattern String, "%"
     means match any substring of 0 or more characters, and "_" means match
     any one character. Only metadata entries matching the search pattern
-    are returned. If a search pattern argument is set to a <NULL/> ref,
+    are returned. If a search pattern argument is set to <VOID/>,
     that argument's criteria will be dropped from the search.
     </p>
     <p>
@@ -1240,7 +1243,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param procedureNamePattern
@@ -1338,7 +1341,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         REMARKS can be defined by the database.
         </p>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param procedureNamePattern
@@ -1389,7 +1392,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         all tables.
         </p>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param tableNamePattern
@@ -1547,7 +1550,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param tableNamePattern
@@ -1602,7 +1605,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name ; "" retrieves those without a schema
         @param table
@@ -1657,7 +1660,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param tableNamePattern
@@ -1722,7 +1725,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1784,7 +1787,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1825,7 +1828,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1940,7 +1943,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -2055,7 +2058,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -2173,13 +2176,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param primaryCatalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param primarySchema
             a schema name; "" retrieves those without a schema
         @param primaryTable
             the table name that exports the key
         @param foreignCatalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param foreignSchema
             a schema name; "" retrieves those without a schema
         @param foreignTable
@@ -2362,7 +2365,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -2575,7 +2578,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         result set is returned.
         </p>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <NULL/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param typeNamePattern
