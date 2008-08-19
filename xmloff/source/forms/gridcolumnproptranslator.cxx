@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridcolumnproptranslator.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,8 +137,8 @@ namespace xmloff
         //====================================================================
         //= OMergedPropertySetInfo
         //====================================================================
-        typedef ::cppu::WeakImplHelper1 <   XPropertySetInfo
-                                        >   OMergedPropertySetInfo_Base;
+        typedef ::cppu::WeakAggImplHelper1  <   XPropertySetInfo
+                                            >   OMergedPropertySetInfo_Base;
         class OMergedPropertySetInfo : public OMergedPropertySetInfo_Base
         {
         private:
