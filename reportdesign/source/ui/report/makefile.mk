@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,11 +43,11 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
+            $(SLO)$/SectionWindow.obj			\
             $(SLO)$/ReportController.obj		\
             $(SLO)$/ReportSection.obj			\
             $(SLO)$/SectionView.obj				\
             $(SLO)$/ViewsWindow.obj				\
-            $(SLO)$/SectionsWindow.obj			\
             $(SLO)$/ScrollHelper.obj			\
             $(SLO)$/StartMarker.obj				\
             $(SLO)$/EndMarker.obj				\
