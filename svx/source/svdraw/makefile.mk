@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.27 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,11 +52,12 @@ SLOFILES=\
          $(SLO)$/svdcrtv.obj         \
          $(SLO)$/svdograf.obj        \
          $(SLO)$/svdoole2.obj        \
-         $(SLO)$/chartprettypainter.obj \
          $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdmrkv.obj         \
          $(SLO)$/svdogrp.obj         \
          $(SLO)$/svdotxln.obj        \
+         $(SLO)$/svdotextdecomposition.obj		\
+         $(SLO)$/svdotextpathdecomposition.obj	\
          $(SLO)$/svdouno.obj         \
          $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdpagv.obj		 \
@@ -99,7 +100,6 @@ SLOFILES=\
          $(SLO)$/svdlayer.obj        \
          $(SLO)$/svdmark.obj         \
          $(SLO)$/svdmrkv1.obj        \
-         $(SLO)$/impgrfll.obj        \
          $(SLO)$/sdrcomment.obj         \
          $(SLO)$/sdrmasterpagedescriptor.obj         \
          $(SLO)$/sdrpagewindow.obj         \
@@ -116,7 +116,8 @@ SLOFILES=\
          $(SLO)$/svdedtv.obj         \
          $(SLO)$/selectioncontroller.obj \
          $(SLO)$/polypolygoneditor.obj \
-         $(SLO)$/svdomedia.obj
+         $(SLO)$/svdomedia.obj			\
+         $(SLO)$/impgrfll.obj
 
 SRS1NAME=svdstr
 SRC1FILES= svdstr.src
