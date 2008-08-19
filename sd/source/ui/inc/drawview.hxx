@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ public:
     virtual ~DrawView (void);
 
     virtual void MarkListHasChanged();
-    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
     virtual BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
