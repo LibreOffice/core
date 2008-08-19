@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialogs.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -671,7 +671,8 @@ void MiscOptions::Save( Config &aConfig )
     aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
 
     aConfig.SetGroup("OOoProgramDir");
-    aConfig.WriteKey( "Current", ByteString( aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( C_KEY_AKTUELL, ByteString( aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( C_KEY_TYPE, ByteString( "PATH" ) );
 }
 
 
@@ -844,6 +845,7 @@ void GenericOptions::ShowSelectPath( const String aType )
         nMoveButtons += nDelta;
         aMoveTimer.Start();
         bShowSelectPath = TRUE;
+        aPbSelectPath.Show( TRUE );
         aPbSelectPath.Enable( TRUE );
     }
     else if ( !aType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
@@ -860,7 +862,7 @@ IMPL_LINK( GenericOptions, MoveButtons, AutoTimer*, aTimer )
     if ( nMoveButtons == 0 )
     {
         aTimer->Stop();
-//        aPbSelectPath.Enable( bShowSelectPath );
+        aPbSelectPath.Show( bShowSelectPath );
         return 0;
     }
 
