@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.156 $
+ * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1056,18 +1056,9 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         rEntry.m_aPicture = rRenderPeer.CreatePicture ( rEntry.m_aPixmap, pVisualFormat, CPRepeat, aAttr );
     }
 
-    // set font foreground
-    GC nGC = SelectFont();
-    XGCValues aGCVal;
-    XGetGCValues( pDisplay, nGC, GCForeground, &aGCVal );
-    aGCVal.clip_mask = None;
-    GC tmpGC = XCreateGC( pDisplay, rEntry.m_aPixmap, GCForeground | GCClipMask, &aGCVal );
-    XDrawPoint( pDisplay, rEntry.m_aPixmap, tmpGC, 0, 0 );
-
-    XRenderColor aRenderColor = { 0, 0, 0, 0xffff };
-    rRenderPeer.FillRectangle( PictOpAdd, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
-
-    XFreeGC( pDisplay, tmpGC );
+    // set font foreground color and opacity
+    XRenderColor aRenderColor = GetXRenderColor( nTextPixel_ );
+    rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // notify xrender of target drawable
     XRenderPictureAttributes aAttr;
