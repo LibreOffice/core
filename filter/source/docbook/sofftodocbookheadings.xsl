@@ -9,7 +9,7 @@
  
   $RCSfile: sofftodocbookheadings.xsl,v $
  
-  $Revision: 1.10 $
+  $Revision: 1.11 $
  
   This file is part of OpenOffice.org.
  
@@ -30,8 +30,7 @@
  
 -->
 <xsl:stylesheet version="1.0" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config" office:class="text" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="office meta table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
-	<xsl:output method="xml" indent="yes" omit-xml-declaration="no"/>
-	<xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//OASIS//DTD DocBook XML V4.1.2//EN" doctype-system="http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"/>
+	<xsl:output method="xml" indent="yes" omit-xml-declaration="no" version="1.0" encoding="UTF-8" doctype-public="-//OASIS//DTD DocBook XML V4.1.2//EN" doctype-system="http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"/>
 
 
 	<!-- Heading will be mapped to sections.
@@ -130,10 +129,10 @@
 
 
 	<!-- START -->
-	<xsl:template match="/office:document">
+	<xsl:template match="/*">
 		<xsl:element name="article">
 			<xsl:attribute name="lang">
-				<xsl:value-of select="/office:document/office:meta/dc:language"/>
+				<xsl:value-of select="/*/office:meta/dc:language"/>
 			</xsl:attribute>            
             <!-- page style header -->
             <xsl:call-template name="page-style">
