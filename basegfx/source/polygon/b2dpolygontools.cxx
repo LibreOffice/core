@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/curve/b2dbeziertools.hxx>
 
 #include <numeric>
 #include <limits>
@@ -155,6 +156,10 @@ namespace basegfx
             {
                 const double fSignedArea(getSignedArea(rCandidate));
 
+                if(fTools::equalZero(fSignedArea))
+                {
+                    // ORIENTATION_NEUTRAL, already set
+                }
                 if(fSignedArea > 0.0)
                 {
                     eRetval = ORIENTATION_POSITIVE;
@@ -171,45 +176,6 @@ namespace basegfx
         B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex)
         {
             return rCandidate.getContinuityInPoint(nIndex);
-        }
-
-        B2DPolyPolygon removeIntersections(const B2DPolygon& rCandidate, bool bKeepOrientations)
-        {
-            B2DPolyPolygon aRetval;
-
-            if(rCandidate.count() > 2L)
-            {
-                aRetval = SolveCrossovers(rCandidate);
-
-                if(bKeepOrientations && aRetval.count() > 1L)
-                {
-                    // there were cuts done, correct orientations
-                    const B2VectorOrientation aOriginalOrientation(getOrientation(rCandidate));
-                    B2DPolyPolygon aNewRetval;
-
-                    for(sal_uInt32 a(0L); a < aRetval.count(); a++)
-                    {
-                        B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
-                        const B2VectorOrientation aOrientation(getOrientation(aCandidate));
-
-                        if(aOriginalOrientation != aOrientation
-                            && ORIENTATION_NEUTRAL != aOrientation)
-                        {
-                            aCandidate.flip();
-                        }
-
-                        aNewRetval.append(aCandidate);
-                    }
-
-                    aRetval = aNewRetval;
-                }
-            }
-            else
-            {
-                aRetval.append(rCandidate);
-            }
-
-            return aRetval;
         }
 
         B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound)
@@ -426,7 +392,7 @@ namespace basegfx
 
         bool isInside(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder)
         {
-            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? adaptiveSubdivideByCount(rCandidate, 6L) : rCandidate);
+            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
 
             if(bWithBorder && isPointOnPolygon(aCandidate, rPoint, true))
             {
@@ -485,8 +451,8 @@ namespace basegfx
 
         bool isInside(const B2DPolygon& rCandidate, const B2DPolygon& rPolygon, bool bWithBorder)
         {
-            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? adaptiveSubdivideByCount(rCandidate, 6L) : rCandidate);
-            const B2DPolygon aPolygon(rPolygon.areControlPointsUsed() ? adaptiveSubdivideByCount(rPolygon, 6L) : rPolygon);
+            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
+            const B2DPolygon aPolygon(rPolygon.areControlPointsUsed() ? rPolygon.getDefaultAdaptiveSubdivision() : rPolygon);
             const sal_uInt32 nPointCount(aPolygon.count());
 
             for(sal_uInt32 a(0L); a < nPointCount; a++)
@@ -502,53 +468,39 @@ namespace basegfx
             return true;
         }
 
-        B2DRange getRange(const B2DPolygon& rCandidate)
+        B2DRange getRangeWithControlPoints(const B2DPolygon& rCandidate)
         {
             const sal_uInt32 nPointCount(rCandidate.count());
             B2DRange aRetval;
 
-            if(rCandidate.areControlPointsUsed())
+            if(nPointCount)
             {
-                if(nPointCount)
-                {
-                    B2DPoint aCurrent(rCandidate.getB2DPoint(0));
+                const bool bControlPointsUsed(rCandidate.areControlPointsUsed());
 
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
+                for(sal_uInt32 a(0); a < nPointCount; a++)
+                {
+                    aRetval.expand(rCandidate.getB2DPoint(a));
+
+                    if(bControlPointsUsed)
                     {
-                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                        const B2DPoint aNext(rCandidate.getB2DPoint(nNextIndex));
-
-                        aRetval.expand(aCurrent);
-
-                        const B2DPoint aControlPointNext(rCandidate.getNextControlPoint(a));
-                        const B2DPoint aControlPointPrev(rCandidate.getPrevControlPoint(nNextIndex));
-
-                        if(!aControlPointNext.equal(aCurrent) || !aControlPointPrev.equal(aNext))
-                        {
-                            aRetval.expand(aControlPointNext);
-                            aRetval.expand(aControlPointPrev);
-                        }
-
-                        // prepare next step
-                        aCurrent = aNext;
+                        aRetval.expand(rCandidate.getNextControlPoint(a));
+                        aRetval.expand(rCandidate.getPrevControlPoint(a));
                     }
-                }
-            }
-            else
-            {
-                for(sal_uInt32 a(0L); a < nPointCount; a++)
-                {
-                    const B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
-                    aRetval.expand(aTestPoint);
                 }
             }
 
             return aRetval;
         }
 
+        B2DRange getRange(const B2DPolygon& rCandidate)
+        {
+            // changed to use internally buffered version at B2DPolygon
+            return rCandidate.getB2DRange();
+        }
+
         double getSignedArea(const B2DPolygon& rCandidate)
         {
-            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? adaptiveSubdivideByCount(rCandidate, 6L) : rCandidate);
+            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
             double fRetval(0.0);
             const sal_uInt32 nPointCount(aCandidate.count());
 
@@ -564,6 +516,14 @@ namespace basegfx
                 }
 
                 fRetval /= 2.0;
+
+                // correct to zero if small enough. Also test the quadratic
+                // of the result since the precision is near quadratic due to
+                // the algorithm
+                if(fTools::equalZero(fRetval) || fTools::equalZero(fRetval * fRetval))
+                {
+                    fRetval = 0.0;
+                }
             }
 
             return fRetval;
@@ -589,20 +549,31 @@ namespace basegfx
 
         double getEdgeLength(const B2DPolygon& rCandidate, sal_uInt32 nIndex)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "getEdgeLength: ATM works not for curves (!)");
-            OSL_ENSURE(nIndex < rCandidate.count(), "getEdgeLength: Access to polygon out of range (!)");
-            double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
+            OSL_ENSURE(nIndex < nPointCount, "getEdgeLength: Access to polygon out of range (!)");
+            double fRetval(0.0);
 
-            if(nIndex < nPointCount)
+            if(nPointCount)
             {
-                if(rCandidate.isClosed() || ((nIndex + 1L) != nPointCount))
+                const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+
+                if(rCandidate.areControlPointsUsed())
                 {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                    const B2DPoint aCurrentPoint(rCandidate.getB2DPoint(nIndex));
-                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                    const B2DVector aVector(aNextPoint - aCurrentPoint);
-                    fRetval = aVector.getLength();
+                    B2DCubicBezier aEdge;
+
+                    aEdge.setStartPoint(rCandidate.getB2DPoint(nIndex));
+                    aEdge.setControlPointA(rCandidate.getNextControlPoint(nIndex));
+                    aEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                    aEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
+
+                    fRetval = aEdge.getLength();
+                }
+                else
+                {
+                    const B2DPoint aCurrent(rCandidate.getB2DPoint(nIndex));
+                    const B2DPoint aNext(rCandidate.getB2DPoint(nNextIndex));
+
+                    fRetval = B2DVector(aNext - aCurrent).getLength();
                 }
             }
 
@@ -611,21 +582,41 @@ namespace basegfx
 
         double getLength(const B2DPolygon& rCandidate)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "getLength: ATM works not for curves (!)");
             double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 1L)
+            if(nPointCount)
             {
-                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
 
-                for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                if(rCandidate.areControlPointsUsed())
                 {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                    const B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
-                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                    const B2DVector aVector(aNextPoint - aCurrentPoint);
-                    fRetval += aVector.getLength();
+                    B2DCubicBezier aEdge;
+                    aEdge.setStartPoint(rCandidate.getB2DPoint(0));
+
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                    {
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        aEdge.setControlPointA(rCandidate.getNextControlPoint(a));
+                        aEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                        aEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
+
+                        fRetval += aEdge.getLength();
+                        aEdge.setStartPoint(aEdge.getEndPoint());
+                    }
+                }
+                else
+                {
+                    B2DPoint aCurrent(rCandidate.getB2DPoint(0));
+
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                    {
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        const B2DPoint aNext(rCandidate.getB2DPoint(nNextIndex));
+
+                        fRetval += B2DVector(aNext - aCurrent).getLength();
+                        aCurrent = aNext;
+                    }
                 }
             }
 
@@ -636,7 +627,6 @@ namespace basegfx
         {
             B2DPoint aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
-            const sal_uInt32 nPointCountMinusOne(nPointCount - 1L);
 
             if( 1L == nPointCount )
             {
@@ -645,10 +635,9 @@ namespace basegfx
             }
             else if(nPointCount > 1L)
             {
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
                 sal_uInt32 nIndex(0L);
                 bool bIndexDone(false);
-                const double fZero(0.0);
-                double fEdgeLength(fZero);
 
                 // get length if not given
                 if(fTools::equalZero(fLength))
@@ -656,9 +645,9 @@ namespace basegfx
                     fLength = getLength(rCandidate);
                 }
 
-                // handle fDistance < 0.0
-                if(fTools::less(fDistance, fZero))
+                if(fTools::less(fDistance, 0.0))
                 {
+                    // handle fDistance < 0.0
                     if(rCandidate.isClosed())
                     {
                         // if fDistance < 0.0 increment with multiple of fLength
@@ -668,14 +657,13 @@ namespace basegfx
                     else
                     {
                         // crop to polygon start
-                        fDistance = fZero;
+                        fDistance = 0.0;
                         bIndexDone = true;
                     }
                 }
-
-                // handle fDistance >= fLength
-                if(fTools::moreOrEqual(fDistance, fLength))
+                else if(fTools::moreOrEqual(fDistance, fLength))
                 {
+                    // handle fDistance >= fLength
                     if(rCandidate.isClosed())
                     {
                         // if fDistance >= fLength decrement with multiple of fLength
@@ -685,40 +673,35 @@ namespace basegfx
                     else
                     {
                         // crop to polygon end
-                        fDistance = fZero;
-                        nIndex = nPointCountMinusOne;
+                        fDistance = 0.0;
+                        nIndex = nEdgeCount;
                         bIndexDone = true;
                     }
                 }
 
                 // look for correct index. fDistance is now [0.0 .. fLength[
-                if(!bIndexDone)
-                {
-                    do
-                    {
-                        // get length of next edge
-                        fEdgeLength = getEdgeLength(rCandidate, nIndex);
+                double fEdgeLength(getEdgeLength(rCandidate, nIndex));
 
-                        // edge found must be on the half-open range
-                        // [0,fEdgeLength).
-                        // Note that in theory, we cannot move beyond
-                        // the last polygon point, since fDistance>=fLength
-                        // is checked above. Unfortunately, with floating-
-                        // point calculations, this case might happen.
-                        // Handled by nIndex check below
-                        if( nIndex < nPointCountMinusOne &&
-                            fDistance >= fEdgeLength )
-                        {
-                            // go to next edge
-                            fDistance -= fEdgeLength;
-                            nIndex++;
-                        }
-                        else
-                        {
-                            // it's on this edge, stop
-                            bIndexDone = true;
-                        }
-                    } while (!bIndexDone);
+                while(!bIndexDone)
+                {
+                    // edge found must be on the half-open range
+                    // [0,fEdgeLength).
+                    // Note that in theory, we cannot move beyond
+                    // the last polygon point, since fDistance>=fLength
+                    // is checked above. Unfortunately, with floating-
+                    // point calculations, this case might happen.
+                    // Handled by nIndex check below
+                    if(nIndex < nEdgeCount && fTools::moreOrEqual(fDistance, fEdgeLength))
+                    {
+                        // go to next edge
+                        fDistance -= fEdgeLength;
+                        fEdgeLength = getEdgeLength(rCandidate, ++nIndex);
+                    }
+                    else
+                    {
+                        // it's on this edge, stop
+                        bIndexDone = true;
+                    }
                 }
 
                 // get the point using nIndex
@@ -728,21 +711,50 @@ namespace basegfx
                 // length is in fEdgeLength.
                 if(!fTools::equalZero(fDistance))
                 {
-                    sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                    double fRelative(fZero);
-
-                    if(!fTools::equalZero(fEdgeLength))
+                    if(fTools::moreOrEqual(fDistance, fEdgeLength))
                     {
-                        // clamp fRelative to [0,1] range. Borderline cases
-                        // can happen, since this is floating point arithmetic.
-                        fRelative = ::std::max(0.0,
-                                               ::std::min(1.0,
-                                                          fDistance / fEdgeLength) );
+                        // end point of choosen edge
+                        const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+                        aRetval = rCandidate.getB2DPoint(nNextIndex);
                     }
+                    else if(fTools::equalZero(fDistance))
+                    {
+                        // start point of choosen edge
+                        aRetval = aRetval;
+                    }
+                    else
+                    {
+                        // inside edge
+                        const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+                        const B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                        bool bDone(false);
 
-                    // add calculated average value to the return value
-                    aRetval = interpolate(aRetval, aNextPoint, fRelative);
+                        // add calculated average value to the return value
+                        if(rCandidate.areControlPointsUsed())
+                        {
+                            // get as bezier segment
+                            const B2DCubicBezier aBezierSegment(
+                                aRetval, rCandidate.getNextControlPoint(nIndex),
+                                rCandidate.getPrevControlPoint(nNextIndex), aNextPoint);
+
+                            if(aBezierSegment.isBezier())
+                            {
+                                // use B2DCubicBezierHelper to bridge the non-linear gap between
+                                // length and bezier distances
+                                const B2DCubicBezierHelper aBezierSegmentHelper(aBezierSegment);
+                                const double fBezierDistance(aBezierSegmentHelper.distanceToRelative(fDistance));
+
+                                aRetval = aBezierSegment.interpolatePoint(fBezierDistance);
+                                bDone = true;
+                            }
+                        }
+
+                        if(!bDone)
+                        {
+                            const double fRelativeInEdge(fDistance / fEdgeLength);
+                            aRetval = interpolate(aRetval, aNextPoint, fRelativeInEdge);
+                        }
+                    }
                 }
             }
 
@@ -764,112 +776,198 @@ namespace basegfx
 
         B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "getSnippetAbsolute: ATM works not for curves (!)");
-            B2DPolygon aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            // get length if not given
-            if(fTools::equalZero(fLength))
+            if(nPointCount)
             {
-                fLength = getLength(rCandidate);
-            }
-
-            // test and correct fFrom
-            if(fFrom < 0.0)
-            {
-                fFrom = 0.0;
-            }
-
-            // test and correct fTo
-            if(fTo > fLength)
-            {
-                fTo = fLength;
-            }
-
-            // test and correct relationship of fFrom, fTo
-            if(fFrom > fTo)
-            {
-                fFrom = fTo = (fFrom + fTo) / 2.0;
-            }
-
-            if(0.0 == fFrom && fTo == fLength)
-            {
-                // result is the whole polygon
-                aRetval = rCandidate;
-            }
-            else
-            {
-                double fPositionOfStart(0.0);
-                bool bStartDone(false);
-                bool bEndDone(false);
-
-                for(sal_uInt32 a(0L); !(bStartDone && bEndDone) && a < nPointCount; a++)
+                // get length if not given
+                if(fTools::equalZero(fLength))
                 {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                    const B2DPoint aStart(rCandidate.getB2DPoint(a));
-                    const B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
-                    const B2DVector aEdgeVector(aEnd - aStart);
-                    const double fEdgeLength(aEdgeVector.getLength());
+                    fLength = getLength(rCandidate);
+                }
 
-                    if(!bStartDone)
+                // test and correct fFrom
+                if(fTools::less(fFrom, 0.0))
+                {
+                    fFrom = 0.0;
+                }
+
+                // test and correct fTo
+                if(fTools::more(fTo, fLength))
+                {
+                    fTo = fLength;
+                }
+
+                // test and correct relationship of fFrom, fTo
+                if(fTools::more(fFrom, fTo))
+                {
+                    fFrom = fTo = (fFrom + fTo) / 2.0;
+                }
+
+                if(fTools::equalZero(fFrom) && fTools::equal(fTo, fLength))
+                {
+                    // no change, result is the whole polygon
+                    return rCandidate;
+                }
+                else
+                {
+                    B2DPolygon aRetval;
+                    const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+                    double fPositionOfStart(0.0);
+                    bool bStartDone(false);
+                    bool bEndDone(false);
+
+                    for(sal_uInt32 a(0L); !(bStartDone && bEndDone) && a < nEdgeCount; a++)
                     {
-                        if(0.0 == fFrom)
+                        const double fEdgeLength(getEdgeLength(rCandidate, a));
+
+                        if(!bStartDone)
                         {
-                            aRetval.append(aStart);
-                            bStartDone = true;
-                        }
-                        else if(fFrom >= fPositionOfStart && fFrom < fPositionOfStart + fEdgeLength)
-                        {
-                            // calculate and add start point
-                            if(0.0 != fEdgeLength)
+                            if(fTools::equalZero(fFrom))
                             {
-                                aRetval.append(interpolate(aStart, aEnd, (fFrom - fPositionOfStart) / fEdgeLength));
+                                aRetval.append(rCandidate.getB2DPoint(a));
+
+                                if(rCandidate.areControlPointsUsed())
+                                {
+                                    aRetval.setNextControlPoint(aRetval.count() - 1, rCandidate.getNextControlPoint(a));
+                                }
+
+                                bStartDone = true;
+                            }
+                            else if(fTools::moreOrEqual(fFrom, fPositionOfStart) && fTools::less(fFrom, fPositionOfStart + fEdgeLength))
+                            {
+                                // calculate and add start point
+                                if(fTools::equalZero(fEdgeLength))
+                                {
+                                    aRetval.append(rCandidate.getB2DPoint(a));
+
+                                    if(rCandidate.areControlPointsUsed())
+                                    {
+                                        aRetval.setNextControlPoint(aRetval.count() - 1, rCandidate.getNextControlPoint(a));
+                                    }
+                                }
+                                else
+                                {
+                                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                                    const B2DPoint aStart(rCandidate.getB2DPoint(a));
+                                    const B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
+                                    bool bDone(false);
+
+                                    if(rCandidate.areControlPointsUsed())
+                                    {
+                                        const B2DCubicBezier aBezierSegment(
+                                            aStart, rCandidate.getNextControlPoint(a),
+                                            rCandidate.getPrevControlPoint(nNextIndex), aEnd);
+
+                                        if(aBezierSegment.isBezier())
+                                        {
+                                            // use B2DCubicBezierHelper to bridge the non-linear gap between
+                                            // length and bezier distances
+                                            const B2DCubicBezierHelper aBezierSegmentHelper(aBezierSegment);
+                                            const double fBezierDistance(aBezierSegmentHelper.distanceToRelative(fFrom - fPositionOfStart));
+                                            B2DCubicBezier aRight;
+
+                                            aBezierSegment.split(fBezierDistance, 0, &aRight);
+                                            aRetval.append(aRight.getStartPoint());
+                                            aRetval.setNextControlPoint(aRetval.count() - 1, aRight.getControlPointA());
+                                            bDone = true;
+                                        }
+                                    }
+
+                                    if(!bDone)
+                                    {
+                                        const double fRelValue((fFrom - fPositionOfStart) / fEdgeLength);
+                                        aRetval.append(interpolate(aStart, aEnd, fRelValue));
+                                    }
+                                }
+
+                                bStartDone = true;
+
+                                // if same point, end is done, too.
+                                if(fFrom == fTo)
+                                {
+                                    bEndDone = true;
+                                }
+                            }
+                        }
+
+                        if(!bEndDone && fTools::moreOrEqual(fTo, fPositionOfStart) && fTools::less(fTo, fPositionOfStart + fEdgeLength))
+                        {
+                            // calculate and add end point
+                            if(fTools::equalZero(fEdgeLength))
+                            {
+                                const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                                aRetval.append(rCandidate.getB2DPoint(nNextIndex));
+
+                                if(rCandidate.areControlPointsUsed())
+                                {
+                                    aRetval.setPrevControlPoint(aRetval.count() - 1, rCandidate.getPrevControlPoint(nNextIndex));
+                                }
                             }
                             else
                             {
-                                aRetval.append(aStart);
+                                const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                                const B2DPoint aStart(rCandidate.getB2DPoint(a));
+                                const B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
+                                bool bDone(false);
+
+                                if(rCandidate.areControlPointsUsed())
+                                {
+                                    const B2DCubicBezier aBezierSegment(
+                                        aStart, rCandidate.getNextControlPoint(a),
+                                        rCandidate.getPrevControlPoint(nNextIndex), aEnd);
+
+                                    if(aBezierSegment.isBezier())
+                                    {
+                                        // use B2DCubicBezierHelper to bridge the non-linear gap between
+                                        // length and bezier distances
+                                        const B2DCubicBezierHelper aBezierSegmentHelper(aBezierSegment);
+                                        const double fBezierDistance(aBezierSegmentHelper.distanceToRelative(fTo - fPositionOfStart));
+                                        B2DCubicBezier aLeft;
+
+                                        aBezierSegment.split(fBezierDistance, &aLeft, 0);
+                                        aRetval.append(aLeft.getEndPoint());
+                                        aRetval.setPrevControlPoint(aRetval.count() - 1, aLeft.getControlPointB());
+                                        bDone = true;
+                                    }
+                                }
+
+                                if(!bDone)
+                                {
+                                    const double fRelValue((fTo - fPositionOfStart) / fEdgeLength);
+                                    aRetval.append(interpolate(aStart, aEnd, fRelValue));
+                                }
                             }
 
-                            bStartDone = true;
+                            bEndDone = true;
+                        }
 
-                            // if same point, end is done, too.
-                            if(fFrom == fTo)
+                        if(!bEndDone)
+                        {
+                            if(bStartDone)
                             {
-                                bEndDone = true;
+                                // add segments end point
+                                const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                                aRetval.append(rCandidate.getB2DPoint(nNextIndex));
+
+                                if(rCandidate.areControlPointsUsed())
+                                {
+                                    aRetval.setPrevControlPoint(aRetval.count() - 1, rCandidate.getPrevControlPoint(nNextIndex));
+                                    aRetval.setNextControlPoint(aRetval.count() - 1, rCandidate.getNextControlPoint(nNextIndex));
+                                }
                             }
+
+                            // increment fPositionOfStart
+                            fPositionOfStart += fEdgeLength;
                         }
                     }
-
-                    if(!bEndDone && fTo >= fPositionOfStart && fTo < fPositionOfStart + fEdgeLength)
-                    {
-                        // calculate and add end point
-                        if(0.0 != fEdgeLength)
-                        {
-                            aRetval.append(interpolate(aStart, aEnd, (fTo - fPositionOfStart) / fEdgeLength));
-                        }
-                        else
-                        {
-                            aRetval.append(aEnd);
-                        }
-
-                        bEndDone = true;
-                    }
-
-                    if(!bEndDone)
-                    {
-                        if(bStartDone)
-                        {
-                            // add segments end point
-                            aRetval.append(aEnd);
-                        }
-
-                        // increment fPositionOfStart
-                        fPositionOfStart += fEdgeLength;
-                    }
+                    return aRetval;
                 }
             }
-
-            return aRetval;
+            else
+            {
+                return rCandidate;
+            }
         }
 
         B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength)
@@ -1156,8 +1254,7 @@ namespace basegfx
                 {
                     double fValue = (rPoint.getX() - rEdgeStart.getX()) / rEdgeDelta.getX();
 
-                    if(fTools::more(fValue, fZero)
-                        && fTools::less(fValue, fOne))
+                    if(fTools::more(fValue, fZero) && fTools::less(fValue, fOne))
                     {
                         if(pCut)
                         {
@@ -1196,103 +1293,255 @@ namespace basegfx
             return false;
         }
 
-        B2DPolyPolygon applyLineDashing(const B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
+        void applyLineDashing(const B2DPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fDotDashLength)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "applyLineDashing: ATM works not for curves (!)");
-            B2DPolyPolygon aRetval;
+            const sal_uInt32 nPointCount(rCandidate.count());
+            const sal_uInt32 nDotDashCount(rDotDashArray.size());
 
-            if(0.0 == fFullDashDotLen && rCandidate.count() && raDashDotArray.size())
+            if(fTools::lessOrEqual(fDotDashLength, 0.0))
             {
-                // calculate fFullDashDotLen from raDashDotArray
-                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+                fDotDashLength = ::std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(rCandidate.count() && fFullDashDotLen > 0.0)
+            if(fTools::more(fDotDashLength, 0.0) && (pLineTarget || pGapTarget) && nPointCount)
             {
-                // prepare candidate, evtl. remove curves
-                B2DPolygon aCandidate(rCandidate);
-
-                if(aCandidate.areControlPointsUsed())
+                // clear targets
+                if(pLineTarget)
                 {
-                    aCandidate = adaptiveSubdivideByAngle(aCandidate);
+                    pLineTarget->clear();
                 }
 
-                const sal_uInt32 nCount(aCandidate.isClosed() ? aCandidate.count() : aCandidate.count() - 1L);
-                sal_uInt32 nDashDotIndex(0L);
-                double fDashDotLength(raDashDotArray[nDashDotIndex]);
-
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                if(pGapTarget)
                 {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, aCandidate));
-                    const B2DPoint aStart(aCandidate.getB2DPoint(a));
-                    const B2DPoint aEnd(aCandidate.getB2DPoint(nNextIndex));
-                    B2DVector aVector(aEnd - aStart);
-                    double fLength(aVector.getLength());
-                    double fPosOnVector(0.0);
+                    pGapTarget->clear();
+                }
 
-                    // normalize vector for further usage as multiplication base
-                    aVector.normalize();
+                // prepare current edge's start
+                B2DCubicBezier aCurrentEdge;
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+                aCurrentEdge.setStartPoint(rCandidate.getB2DPoint(0));
 
-                    while(fLength >= fDashDotLength)
+                // prepare DotDashArray iteration and the line/gap switching bool
+                sal_uInt32 nDotDashIndex(0);
+                bool bIsLine(true);
+                double fDotDashMovingLength(rDotDashArray[0]);
+                B2DPolygon aSnippet;
+
+                // iterate over all edges
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // update current edge (fill in C1, C2 and end point)
+                    double fLastDotDashMovingLength(0.0);
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    aCurrentEdge.setControlPointA(rCandidate.getNextControlPoint(a));
+                    aCurrentEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                    aCurrentEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
+
+                    // check if we have a trivial bezier segment -> possible fallback to edge
+                    aCurrentEdge.testAndSolveTrivialBezier();
+
+                    if(aCurrentEdge.isBezier())
                     {
-                        // handle [fPosOnVector .. fPosOnVector+fDashDotLength]
-                        if(!(nDashDotIndex % 2L))
+                        // bezier segment
+                        const B2DCubicBezierHelper aCubicBezierHelper(aCurrentEdge);
+                        const double fEdgeLength(aCubicBezierHelper.getLength());
+
+                        if(!fTools::equalZero(fEdgeLength))
                         {
-                            B2DPolygon aResult;
-
-                            // add start point
-                            if(0.0 == fPosOnVector)
+                            while(fTools::less(fDotDashMovingLength, fEdgeLength))
                             {
-                                aResult.append(aStart);
+                                // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
+                                const bool bHandleLine(bIsLine && pLineTarget);
+                                const bool bHandleGap(!bIsLine && pGapTarget);
+
+                                if(bHandleLine || bHandleGap)
+                                {
+                                    const double fBezierSplitStart(aCubicBezierHelper.distanceToRelative(fLastDotDashMovingLength));
+                                    const double fBezierSplitEnd(aCubicBezierHelper.distanceToRelative(fDotDashMovingLength));
+                                    B2DCubicBezier aBezierSnippet(aCurrentEdge.snippet(fBezierSplitStart, fBezierSplitEnd));
+
+                                    if(!aSnippet.count())
+                                    {
+                                        aSnippet.append(aBezierSnippet.getStartPoint());
+                                    }
+
+                                    aSnippet.appendBezierSegment(aBezierSnippet.getControlPointA(), aBezierSnippet.getControlPointB(), aBezierSnippet.getEndPoint());
+
+                                    if(bHandleLine)
+                                    {
+                                        pLineTarget->append(aSnippet);
+                                    }
+                                    else
+                                    {
+                                        pGapTarget->append(aSnippet);
+                                    }
+
+                                    aSnippet.clear();
+                                }
+
+                                // prepare next DotDashArray step and flip line/gap flag
+                                fLastDotDashMovingLength = fDotDashMovingLength;
+                                fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                                bIsLine = !bIsLine;
                             }
-                            else
+
+                            // append closing snippet [fLastDotDashMovingLength, fEdgeLength]
+                            const bool bHandleLine(bIsLine && pLineTarget);
+                            const bool bHandleGap(!bIsLine && pGapTarget);
+
+                            if(bHandleLine || bHandleGap)
                             {
-                                aResult.append( B2DPoint(aStart + (aVector * fPosOnVector)) );
+                                B2DCubicBezier aRight;
+                                const double fBezierSplit(aCubicBezierHelper.distanceToRelative(fLastDotDashMovingLength));
+
+                                aCurrentEdge.split(fBezierSplit, 0, &aRight);
+
+                                if(!aSnippet.count())
+                                {
+                                    aSnippet.append(aRight.getStartPoint());
+                                }
+
+                                aSnippet.appendBezierSegment(aRight.getControlPointA(), aRight.getControlPointB(), aRight.getEndPoint());
                             }
 
-                            // add end point
-                            aResult.append( B2DPoint(aStart + (aVector * (fPosOnVector + fDashDotLength))) );
-
-                            // add line to PolyPolygon
-                            aRetval.append(aResult);
+                            // prepare move to next edge
+                            fDotDashMovingLength -= fEdgeLength;
                         }
+                    }
+                    else
+                    {
+                        // simple edge
+                        const double fEdgeLength(aCurrentEdge.getEdgeLength());
 
-                        // consume from fDashDotLength
-                        fPosOnVector += fDashDotLength;
-                        fLength -= fDashDotLength;
-                        nDashDotIndex = (nDashDotIndex + 1L) % raDashDotArray.size();
-                        fDashDotLength = raDashDotArray[nDashDotIndex];
+                        if(!fTools::equalZero(fEdgeLength))
+                        {
+                            while(fTools::less(fDotDashMovingLength, fEdgeLength))
+                            {
+                                // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
+                                const bool bHandleLine(bIsLine && pLineTarget);
+                                const bool bHandleGap(!bIsLine && pGapTarget);
+
+                                if(bHandleLine || bHandleGap)
+                                {
+                                    if(!aSnippet.count())
+                                    {
+                                        aSnippet.append(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fLastDotDashMovingLength / fEdgeLength));
+                                    }
+
+                                    aSnippet.append(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fDotDashMovingLength / fEdgeLength));
+
+                                    if(bHandleLine)
+                                    {
+                                        pLineTarget->append(aSnippet);
+                                    }
+                                    else
+                                    {
+                                        pGapTarget->append(aSnippet);
+                                    }
+
+                                    aSnippet.clear();
+                                }
+
+                                // prepare next DotDashArray step and flip line/gap flag
+                                fLastDotDashMovingLength = fDotDashMovingLength;
+                                fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                                bIsLine = !bIsLine;
+                            }
+
+                            // append snippet [fLastDotDashMovingLength, fEdgeLength]
+                            const bool bHandleLine(bIsLine && pLineTarget);
+                            const bool bHandleGap(!bIsLine && pGapTarget);
+
+                            if(bHandleLine || bHandleGap)
+                            {
+                                if(!aSnippet.count())
+                                {
+                                    aSnippet.append(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fLastDotDashMovingLength / fEdgeLength));
+                                }
+
+                                aSnippet.append(aCurrentEdge.getEndPoint());
+                            }
+
+                            // prepare move to next edge
+                            fDotDashMovingLength -= fEdgeLength;
+                        }
                     }
 
-                    // handle [fPosOnVector .. fPosOnVector+fLength (bzw. end)]
-                    if((fLength > 0.0) && (!(nDashDotIndex % 2L)))
+                    // prepare next edge step (end point gets new start point)
+                    aCurrentEdge.setStartPoint(aCurrentEdge.getEndPoint());
+                }
+
+                // append last intermediate results (if exists)
+                if(aSnippet.count())
+                {
+                    if(bIsLine && pLineTarget)
                     {
-                        B2DPolygon aResult;
-
-                        // add start point
-                        if(0.0 == fPosOnVector)
-                        {
-                            aResult.append(aStart);
-                        }
-                        else
-                        {
-                            // add modified start
-                            aResult.append( B2DPoint(aStart + (aVector * fPosOnVector)) );
-                        }
-
-                        // add end point
-                        aResult.append(aEnd);
-
-                        // add line to PolyPolygon
-                        aRetval.append(aResult);
+                        pLineTarget->append(aSnippet);
                     }
+                    else if(!bIsLine && pGapTarget)
+                    {
+                        pGapTarget->append(aSnippet);
+                    }
+                }
 
-                    // consume from fDashDotLength
-                    fDashDotLength -= fLength;
+                // check if start and end polygon may be merged
+                if(pLineTarget)
+                {
+                    const sal_uInt32 nCount(pLineTarget->count());
+
+                    if(nCount > 1)
+                    {
+                        // these polygons were created above, there exists none with less than two points,
+                        // thus dircet point access below is allowed
+                        const B2DPolygon aFirst(pLineTarget->getB2DPolygon(0));
+                        B2DPolygon aLast(pLineTarget->getB2DPolygon(nCount - 1));
+
+                        if(aFirst.getB2DPoint(0).equal(aLast.getB2DPoint(aLast.count() - 1)))
+                        {
+                            // start of first and end of last are the same -> merge them
+                            aLast.append(aFirst);
+                            aLast.removeDoublePoints();
+                            pLineTarget->setB2DPolygon(0, aLast);
+                            pLineTarget->remove(nCount - 1);
+                        }
+                    }
+                }
+
+                if(pGapTarget)
+                {
+                    const sal_uInt32 nCount(pGapTarget->count());
+
+                    if(nCount > 1)
+                    {
+                        // these polygons were created above, there exists none with less than two points,
+                        // thus dircet point access below is allowed
+                        const B2DPolygon aFirst(pGapTarget->getB2DPolygon(0));
+                        B2DPolygon aLast(pGapTarget->getB2DPolygon(nCount - 1));
+
+                        if(aFirst.getB2DPoint(0).equal(aLast.getB2DPoint(aLast.count() - 1)))
+                        {
+                            // start of first and end of last are the same -> merge them
+                            aLast.append(aFirst);
+                            aLast.removeDoublePoints();
+                            pGapTarget->setB2DPolygon(0, aLast);
+                            pGapTarget->remove(nCount - 1);
+                        }
+                    }
                 }
             }
+            else
+            {
+                // parameters make no sense, just add source to targets
+                if(pLineTarget)
+                {
+                    pLineTarget->append(rCandidate);
+                }
 
-            return aRetval;
+                if(pGapTarget)
+                {
+                    pGapTarget->append(rCandidate);
+                }
+            }
         }
 
         // test if point is inside epsilon-range around an edge defined
@@ -1385,33 +1634,44 @@ namespace basegfx
         // with distance fDistance and rounded edges (start and end point).
         bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
         {
-            if(rCandidate.areControlPointsUsed())
+            // force to non-bezier polygon
+            const B2DPolygon aCandidate(rCandidate.getDefaultAdaptiveSubdivision());
+            const sal_uInt32 nPointCount(aCandidate.count());
+
+            if(nPointCount)
             {
-                // call myself recursively with subdivided input
-                const B2DPolygon aCandidate(adaptiveSubdivideByAngle(rCandidate));
-                return isInEpsilonRange(aCandidate, rTestPosition, fDistance);
-            }
-            else
-            {
-                if(rCandidate.count())
+                const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                B2DPoint aCurrent(aCandidate.getB2DPoint(0));
+
+                if(nEdgeCount)
                 {
-                    const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
-
-                    for(sal_uInt32 a(0L); a < nEdgeCount; a++)
+                    // edges
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
                     {
-                        B2DPoint aStart(rCandidate.getB2DPoint(a));
-                        const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                        B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
 
-                        if(isInEpsilonRange(aStart, aEnd, rTestPosition, fDistance))
+                        if(isInEpsilonRange(aCurrent, aNext, rTestPosition, fDistance))
                         {
                             return true;
                         }
+
+                        // prepare next step
+                        aCurrent = aNext;
                     }
                 }
-
-                return false;
+                else
+                {
+                    // no edges, but points -> not closed. Check single point. Just
+                    // use isInEpsilonRange with twice the same point, it handles those well
+                    if(isInEpsilonRange(aCurrent, aCurrent, rTestPosition, fDistance))
+                    {
+                        return true;
+                    }
+                }
             }
+
+            return false;
         }
 
         B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadius )
@@ -1466,8 +1726,25 @@ namespace basegfx
 
             if(fZero == fRadiusX || fZero == fRadiusY)
             {
-                // at least in one direction no radius, use rectangle
-                return createPolygonFromRect( rRect );
+                B2DPolygon aRetval;
+
+                // at least in one direction no radius, use rectangle.
+                // Do not use createPolygonFromRect() here since original
+                // creator (historical reasons) still creates a start point at the
+                // bottom center, so do the same here to get the same line patterns.
+                // Due to this the order of points is different, too.
+                const B2DPoint aBottomCenter(rRect.getCenter().getX(), rRect.getMaxY());
+                aRetval.append(aBottomCenter);
+
+                aRetval.append( B2DPoint( rRect.getMinX(), rRect.getMaxY() ) );
+                aRetval.append( B2DPoint( rRect.getMinX(), rRect.getMinY() ) );
+                aRetval.append( B2DPoint( rRect.getMaxX(), rRect.getMinY() ) );
+                aRetval.append( B2DPoint( rRect.getMaxX(), rRect.getMaxY() ) );
+
+                // close
+                aRetval.setClosed( true );
+
+                return aRetval;
             }
             else if(fOne == fRadiusX && fOne == fRadiusY)
             {
@@ -1485,46 +1762,53 @@ namespace basegfx
                 const double fBowY((rRect.getHeight() / 2.0) * fRadiusY);
                 const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
 
-                // create first bow
-                const B2DPoint aBottomRight(rRect.getMaxX(), rRect.getMaxY());
+                // create start point at bottom center
+                if(fOne != fRadiusX)
                 {
-                    const B2DPoint aStart(aBottomRight + B2DPoint(0.0, -fBowY));
-                    const B2DPoint aStop(aBottomRight + B2DPoint(-fBowX, 0.0));
+                    const B2DPoint aBottomCenter(rRect.getCenter().getX(), rRect.getMaxY());
+                    aRetval.append(aBottomCenter);
+                }
+
+                // create first bow
+                {
+                    const B2DPoint aBottomRight(rRect.getMaxX(), rRect.getMaxY());
+                    const B2DPoint aStart(aBottomRight + B2DPoint(-fBowX, 0.0));
+                    const B2DPoint aStop(aBottomRight + B2DPoint(0.0, -fBowY));
                     aRetval.append(aStart);
                     aRetval.appendBezierSegment(interpolate(aStart, aBottomRight, fKappa), interpolate(aStop, aBottomRight, fKappa), aStop);
                 }
 
                 // create second bow
-                const B2DPoint aBottomLeft(rRect.getMinX(), rRect.getMaxY());
                 {
-                    const B2DPoint aStart(aBottomLeft + B2DPoint(fBowX, 0.0));
-                    const B2DPoint aStop(aBottomLeft + B2DPoint(0.0, -fBowY));
+                    const B2DPoint aTopRight(rRect.getMaxX(), rRect.getMinY());
+                    const B2DPoint aStart(aTopRight + B2DPoint(0.0, fBowY));
+                    const B2DPoint aStop(aTopRight + B2DPoint(-fBowX, 0.0));
                     aRetval.append(aStart);
-                    aRetval.appendBezierSegment(interpolate(aStart, aBottomLeft, fKappa), interpolate(aStop, aBottomLeft, fKappa), aStop);
+                    aRetval.appendBezierSegment(interpolate(aStart, aTopRight, fKappa), interpolate(aStop, aTopRight, fKappa), aStop);
                 }
 
                 // create third bow
-                const B2DPoint aTopLeft(rRect.getMinX(), rRect.getMinY());
                 {
-                    const B2DPoint aStart(aTopLeft + B2DPoint(0.0, fBowY));
-                    const B2DPoint aStop(aTopLeft + B2DPoint(fBowX, 0.0));
+                    const B2DPoint aTopLeft(rRect.getMinX(), rRect.getMinY());
+                    const B2DPoint aStart(aTopLeft + B2DPoint(fBowX, 0.0));
+                    const B2DPoint aStop(aTopLeft + B2DPoint(0.0, fBowY));
                     aRetval.append(aStart);
                     aRetval.appendBezierSegment(interpolate(aStart, aTopLeft, fKappa), interpolate(aStop, aTopLeft, fKappa), aStop);
                 }
 
                 // create forth bow
-                const B2DPoint aTopRight(rRect.getMaxX(), rRect.getMinY());
                 {
-                    const B2DPoint aStart(aTopRight + B2DPoint(-fBowX, 0.0));
-                    const B2DPoint aStop(aTopRight + B2DPoint(0.0, fBowY));
+                    const B2DPoint aBottomLeft(rRect.getMinX(), rRect.getMaxY());
+                    const B2DPoint aStart(aBottomLeft + B2DPoint(0.0, -fBowY));
+                    const B2DPoint aStop(aBottomLeft + B2DPoint(fBowX, 0.0));
                     aRetval.append(aStart);
-                    aRetval.appendBezierSegment(interpolate(aStart, aTopRight, fKappa), interpolate(aStop, aTopRight, fKappa), aStop);
+                    aRetval.appendBezierSegment(interpolate(aStart, aBottomLeft, fKappa), interpolate(aStop, aBottomLeft, fKappa), aStop);
                 }
 
                 // close
                 aRetval.setClosed( true );
 
-                // remove double created points if there is extreme radius
+                // remove double created points if there are extreme radii envolved
                 if(fOne == fRadiusX || fOne == fRadiusY)
                 {
                     aRetval.removeDoublePoints();
@@ -1590,15 +1874,15 @@ namespace basegfx
             }
         }
 
-        B2DPolygon createPolygonFromUnitCircle()
+        B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
         {
             B2DPolygon aRetval;
 
             // create unit-circle with all 4 segments, close it
-            appendUnitCircleQuadrant(aRetval, 0);
-            appendUnitCircleQuadrant(aRetval, 1);
-            appendUnitCircleQuadrant(aRetval, 2);
-            appendUnitCircleQuadrant(aRetval, 3);
+            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
+            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
+            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
+            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
             aRetval.setClosed(true);
 
             // remove double points between segments created by segmented creation
@@ -1675,9 +1959,8 @@ namespace basegfx
                         B2DCubicBezier aCubicBezier(
                             aQuadrant.getB2DPoint(0L), aQuadrant.getNextControlPoint(0L),
                             aQuadrant.getPrevControlPoint(1L), aQuadrant.getB2DPoint(1L));
-                        B2DCubicBezier aCubicBezierWaste;
 
-                        aCubicBezier.split(fStart, aCubicBezier, aCubicBezierWaste);
+                        aCubicBezier.split(fStart, &aCubicBezier, 0);
                         rPolygon.append(aCubicBezier.getEndPoint());
                     }
                 }
@@ -1686,23 +1969,8 @@ namespace basegfx
                     B2DCubicBezier aCubicBezier(
                         aQuadrant.getB2DPoint(0L), aQuadrant.getNextControlPoint(0L),
                         aQuadrant.getPrevControlPoint(1L), aQuadrant.getB2DPoint(1L));
-                    B2DCubicBezier aCubicBezierWaste;
 
-                    if(!bEndIsOne)
-                    {
-                        aCubicBezier.split(fEnd, aCubicBezier, aCubicBezierWaste);
-
-                        if(!bStartIsZero)
-                        {
-                            fStart /= fEnd;
-                        }
-                    }
-
-                    if(!bStartIsZero)
-                    {
-                        aCubicBezier.split(fStart, aCubicBezierWaste, aCubicBezier);
-                    }
-
+                    aCubicBezier = aCubicBezier.snippet(fStart, fEnd);
                     rPolygon.append(aCubicBezier.getStartPoint());
                     rPolygon.appendBezierSegment(aCubicBezier.getControlPointA(), aCubicBezier.getControlPointB(), aCubicBezier.getEndPoint());
                 }
@@ -1984,7 +2252,7 @@ namespace basegfx
 
         bool isPointOnPolygon(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithPoints)
         {
-            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? adaptiveSubdivideByCount(rCandidate, 6L) : rCandidate);
+            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
             const sal_uInt32 nPointCount(aCandidate.count());
 
             if(nPointCount > 1L)
@@ -2232,10 +2500,35 @@ namespace basegfx
             return aRetval;
         }
 
+        double getDistancePointToEndlessRay(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut)
+        {
+            if(rPointA.equal(rPointB))
+            {
+                rCut = 0.0;
+                const B2DVector aVector(rTestPoint - rPointA);
+                return aVector.getLength();
+            }
+            else
+            {
+                // get the relative cut value on line vector (Vector1) for cut with perpendicular through TestPoint
+                const B2DVector aVector1(rPointB - rPointA);
+                const B2DVector aVector2(rTestPoint - rPointA);
+                const double fDividend((aVector2.getX() * aVector1.getX()) + (aVector2.getY() * aVector1.getY()));
+                const double fDivisor((aVector1.getX() * aVector1.getX()) + (aVector1.getY() * aVector1.getY()));
+
+                rCut = fDividend / fDivisor;
+
+                const B2DPoint aCutPoint(rPointA + rCut * aVector1);
+                const B2DVector aVector(rTestPoint - aCutPoint);
+                return aVector.getLength();
+            }
+        }
+
         double getSmallestDistancePointToEdge(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double& rCut)
         {
             if(rPointA.equal(rPointB))
             {
+                rCut = 0.0;
                 const B2DVector aVector(rTestPoint - rPointA);
                 return aVector.getLength();
             }
@@ -2447,17 +2740,31 @@ namespace basegfx
                 // predecessor
                 if(!rCandidate.isPrevControlPointUsed(nIndex))
                 {
-                    const sal_uInt32 nPrevIndex((nIndex + (nPointCount - 1)) % nPointCount);
-                    rCandidate.setPrevControlPoint(nIndex, interpolate(rCandidate.getB2DPoint(nIndex), rCandidate.getB2DPoint(nPrevIndex), 1.0 / 3.0));
-                    bRetval = true;
+                    if(!rCandidate.isClosed() && 0 == nIndex)
+                    {
+                        // do not create previous vector for start point of open polygon
+                    }
+                    else
+                    {
+                        const sal_uInt32 nPrevIndex((nIndex + (nPointCount - 1)) % nPointCount);
+                        rCandidate.setPrevControlPoint(nIndex, interpolate(rCandidate.getB2DPoint(nIndex), rCandidate.getB2DPoint(nPrevIndex), 1.0 / 3.0));
+                        bRetval = true;
+                    }
                 }
 
                 // successor
                 if(!rCandidate.isNextControlPointUsed(nIndex))
                 {
-                    const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
-                    rCandidate.setNextControlPoint(nIndex, interpolate(rCandidate.getB2DPoint(nIndex), rCandidate.getB2DPoint(nNextIndex), 1.0 / 3.0));
-                    bRetval = true;
+                    if(!rCandidate.isClosed() && nIndex + 1 == nPointCount)
+                    {
+                        // do not create next vector for end point of open polygon
+                    }
+                    else
+                    {
+                        const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+                        rCandidate.setNextControlPoint(nIndex, interpolate(rCandidate.getB2DPoint(nIndex), rCandidate.getB2DPoint(nNextIndex), 1.0 / 3.0));
+                        bRetval = true;
+                    }
                 }
             }
 
@@ -2492,15 +2799,33 @@ namespace basegfx
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex))
                         {
-                            const sal_uInt32 nPrevIndex((nIndex + (nPointCount - 1)) % nPointCount);
-                            rCandidate.setPrevControlPoint(nIndex, interpolate(aCurrentPoint, rCandidate.getB2DPoint(nPrevIndex), 1.0 / 3.0));
+                            if(!rCandidate.isClosed() && 0 == nIndex)
+                            {
+                                // remove existing previous vector for start point of open polygon
+                                rCandidate.resetPrevControlPoint(nIndex);
+                            }
+                            else
+                            {
+                                const sal_uInt32 nPrevIndex((nIndex + (nPointCount - 1)) % nPointCount);
+                                rCandidate.setPrevControlPoint(nIndex, interpolate(aCurrentPoint, rCandidate.getB2DPoint(nPrevIndex), 1.0 / 3.0));
+                            }
+
                             bRetval = true;
                         }
 
                         if(rCandidate.isNextControlPointUsed(nIndex))
                         {
-                            const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
-                            rCandidate.setNextControlPoint(nIndex, interpolate(aCurrentPoint, rCandidate.getB2DPoint(nNextIndex), 1.0 / 3.0));
+                            if(!rCandidate.isClosed() && nIndex == nPointCount + 1)
+                            {
+                                // remove next vector for end point of open polygon
+                                rCandidate.resetNextControlPoint(nIndex);
+                            }
+                            else
+                            {
+                                const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+                                rCandidate.setNextControlPoint(nIndex, interpolate(aCurrentPoint, rCandidate.getB2DPoint(nNextIndex), 1.0 / 3.0));
+                            }
+
                             bRetval = true;
                         }
 
@@ -2510,6 +2835,7 @@ namespace basegfx
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex) && rCandidate.isNextControlPointUsed(nIndex))
                         {
+                            // lengths both exist since both are used
                             B2DVector aVectorPrev(rCandidate.getPrevControlPoint(nIndex) - aCurrentPoint);
                             B2DVector aVectorNext(rCandidate.getNextControlPoint(nIndex) - aCurrentPoint);
                             const double fLenPrev(aVectorPrev.getLength());
@@ -2518,9 +2844,9 @@ namespace basegfx
                             aVectorNext.normalize();
                             const B2VectorOrientation aOrientation(getOrientation(aVectorPrev, aVectorNext));
 
-                            if(ORIENTATION_NEUTRAL == aOrientation)
+                            if(ORIENTATION_NEUTRAL == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
                             {
-                                // already parallel, check length
+                                // parallel and opposite direction; check length
                                 if(fTools::equal(fLenPrev, fLenNext))
                                 {
                                     // this would be even C2, but we want C1. Use the lengths of the corresponding edges.
@@ -2537,7 +2863,7 @@ namespace basegfx
                             }
                             else
                             {
-                                // not parallel, set vectors and length
+                                // not parallel or same direction, set vectors and length
                                 const B2DVector aNormalizedPerpendicular(getNormalizedPerpendicular(aVectorPrev + aVectorNext));
 
                                 if(ORIENTATION_POSITIVE == aOrientation)
@@ -2562,6 +2888,7 @@ namespace basegfx
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex) && rCandidate.isNextControlPointUsed(nIndex))
                         {
+                            // lengths both exist since both are used
                             B2DVector aVectorPrev(rCandidate.getPrevControlPoint(nIndex) - aCurrentPoint);
                             B2DVector aVectorNext(rCandidate.getNextControlPoint(nIndex) - aCurrentPoint);
                             const double fCommonLength((aVectorPrev.getLength() + aVectorNext.getLength()) / 2.0);
@@ -2569,9 +2896,9 @@ namespace basegfx
                             aVectorNext.normalize();
                             const B2VectorOrientation aOrientation(getOrientation(aVectorPrev, aVectorNext));
 
-                            if(ORIENTATION_NEUTRAL == aOrientation)
+                            if(ORIENTATION_NEUTRAL == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
                             {
-                                // already parallel, set length. Use one direction for better numerical correctness
+                                // parallel and opposite direction; set length. Use one direction for better numerical correctness
                                 const B2DVector aScaledDirection(aVectorPrev * fCommonLength);
 
                                 rCandidate.setControlPoints(nIndex,
@@ -2580,7 +2907,7 @@ namespace basegfx
                             }
                             else
                             {
-                                // not parallel, set vectors and length
+                                // not parallel or same direction, set vectors and length
                                 const B2DVector aNormalizedPerpendicular(getNormalizedPerpendicular(aVectorPrev + aVectorNext));
                                 const B2DVector aPerpendicular(aNormalizedPerpendicular * fCommonLength);
 
@@ -2608,34 +2935,226 @@ namespace basegfx
             return bRetval;
         }
 
-        bool isPolyPolygonEqualRectangle( const ::basegfx::B2DPolyPolygon& rPolyPoly,
-                                          const ::basegfx::B2DRange&       rRect )
+        B2DPolygon growInNormalDirection(const B2DPolygon& rCandidate, double fValue)
+        {
+            if(0.0 != fValue)
+            {
+                if(rCandidate.areControlPointsUsed())
+                {
+                    // call myself recursively with subdivided input
+                    const B2DPolygon aCandidate(adaptiveSubdivideByAngle(rCandidate));
+                    return growInNormalDirection(aCandidate, fValue);
+                }
+                else
+                {
+                    B2DPolygon aRetval;
+                    const sal_uInt32 nPointCount(rCandidate.count());
+
+                    if(nPointCount)
+                    {
+                        B2DPoint aPrev(rCandidate.getB2DPoint(nPointCount - 1L));
+                        B2DPoint aCurrent(rCandidate.getB2DPoint(0L));
+
+                        for(sal_uInt32 a(0L); a < nPointCount; a++)
+                        {
+                            const B2DPoint aNext(rCandidate.getB2DPoint(a + 1L == nPointCount ? 0L : a + 1L));
+                            const B2DVector aBack(aPrev - aCurrent);
+                            const B2DVector aForw(aNext - aCurrent);
+                            const B2DVector aPerpBack(getNormalizedPerpendicular(aBack));
+                            const B2DVector aPerpForw(getNormalizedPerpendicular(aForw));
+                            B2DVector aDirection(aPerpBack - aPerpForw);
+                            aDirection.normalize();
+                            aDirection *= fValue;
+                            aRetval.append(aCurrent + aDirection);
+
+                            // prepare next step
+                            aPrev = aCurrent;
+                            aCurrent = aNext;
+                        }
+                    }
+
+                    // copy closed state
+                    aRetval.setClosed(rCandidate.isClosed());
+
+                    return aRetval;
+                }
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
+        B2DPolygon reSegmentPolygon(const B2DPolygon& rCandidate, sal_uInt32 nSegments)
+        {
+            B2DPolygon aRetval;
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount && nSegments)
+            {
+                // get current segment count
+                const sal_uInt32 nSegmentCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+
+                if(nSegmentCount == nSegments)
+                {
+                    aRetval = rCandidate;
+                }
+                else
+                {
+                    const double fLength(getLength(rCandidate));
+                    const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nSegments : nSegments + 1L);
+
+                    for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                    {
+                        const double fRelativePos((double)a / (double)nSegments); // 0.0 .. 1.0
+                        const B2DPoint aNewPoint(getPositionRelative(rCandidate, fRelativePos, fLength));
+                        aRetval.append(aNewPoint);
+                    }
+
+                    // copy closed flag
+                    aRetval.setClosed(rCandidate.isClosed());
+                }
+            }
+
+            return aRetval;
+        }
+
+        B2DPolygon reSegmentPolygonEdges(const B2DPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges)
+        {
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount < 2 || nSubEdges < 2 || (!bHandleCurvedEdges && !bHandleStraightEdges))
+            {
+                // nothing to do:
+                // - less than two points -> no edge at all
+                // - less than two nSubEdges -> no resegment necessary
+                // - neither bHandleCurvedEdges nor bHandleStraightEdges -> nothing to do
+                return rCandidate;
+            }
+            else
+            {
+                B2DPolygon aRetval;
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+                B2DCubicBezier aCurrentEdge;
+
+                // prepare first edge and add start point to target
+                aCurrentEdge.setStartPoint(rCandidate.getB2DPoint(0));
+                aRetval.append(aCurrentEdge.getStartPoint());
+
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // fill edge
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    aCurrentEdge.setControlPointA(rCandidate.getNextControlPoint(a));
+                    aCurrentEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                    aCurrentEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
+
+                    if(aCurrentEdge.isBezier())
+                    {
+                        if(bHandleCurvedEdges)
+                        {
+                            for(sal_uInt32 b(nSubEdges); b > 1; b--)
+                            {
+                                const double fSplitPoint(1.0 / b);
+                                B2DCubicBezier aLeftPart;
+
+                                aCurrentEdge.split(fSplitPoint, &aLeftPart, &aCurrentEdge);
+                                aRetval.appendBezierSegment(aLeftPart.getControlPointA(), aLeftPart.getControlPointB(), aLeftPart.getEndPoint());
+                            }
+                        }
+
+                        // copy remaining segment to target
+                        aRetval.appendBezierSegment(aCurrentEdge.getControlPointA(), aCurrentEdge.getControlPointB(), aCurrentEdge.getEndPoint());
+                    }
+                    else
+                    {
+                        if(bHandleStraightEdges)
+                        {
+                            for(sal_uInt32 b(nSubEdges); b > 1; b--)
+                            {
+                                const double fSplitPoint(1.0 / b);
+                                const B2DPoint aSplitPoint(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fSplitPoint));
+
+                                aRetval.append(aSplitPoint);
+                                aCurrentEdge.setStartPoint(aSplitPoint);
+                            }
+                        }
+
+                        // copy remaining segment to target
+                        aRetval.append(aCurrentEdge.getEndPoint());
+                    }
+
+                    // prepare next step
+                    aCurrentEdge.setStartPoint(aCurrentEdge.getEndPoint());
+                }
+
+                // copy closed flag and return
+                aRetval.setClosed(rCandidate.isClosed());
+                return aRetval;
+            }
+        }
+
+        B2DPolygon interpolate(const B2DPolygon& rOld1, const B2DPolygon& rOld2, double t)
+        {
+            OSL_ENSURE(rOld1.count() == rOld2.count(), "B2DPolygon interpolate: Different geometry (!)");
+
+            if(fTools::lessOrEqual(t, 0.0) || rOld1 == rOld2)
+            {
+                return rOld1;
+            }
+            else if(fTools::moreOrEqual(t, 1.0))
+            {
+                return rOld2;
+            }
+            else
+            {
+                B2DPolygon aRetval;
+                const bool bInterpolateVectors(rOld1.areControlPointsUsed() || rOld2.areControlPointsUsed());
+                aRetval.setClosed(rOld1.isClosed() && rOld2.isClosed());
+
+                for(sal_uInt32 a(0L); a < rOld1.count(); a++)
+                {
+                    aRetval.append(interpolate(rOld1.getB2DPoint(a), rOld2.getB2DPoint(a), t));
+
+                    if(bInterpolateVectors)
+                    {
+                        aRetval.setPrevControlPoint(a, interpolate(rOld1.getPrevControlPoint(a), rOld2.getPrevControlPoint(a), t));
+                        aRetval.setNextControlPoint(a, interpolate(rOld1.getNextControlPoint(a), rOld2.getNextControlPoint(a), t));
+                    }
+                }
+
+                return aRetval;
+            }
+        }
+
+        bool isPolyPolygonEqualRectangle( const B2DPolyPolygon& rPolyPoly,
+                                          const B2DRange&      rRect )
         {
             // exclude some cheap cases first
             if( rPolyPoly.count() != 1 )
                 return false;
 
             // fill array with rectangle vertices
-            const ::basegfx::B2DPoint aPoints[] =
+            const B2DPoint aPoints[] =
               {
-                  ::basegfx::B2DPoint(rRect.getMinX(),rRect.getMinY()),
-                  ::basegfx::B2DPoint(rRect.getMaxX(),rRect.getMinY()),
-                  ::basegfx::B2DPoint(rRect.getMaxX(),rRect.getMaxY()),
-                  ::basegfx::B2DPoint(rRect.getMinX(),rRect.getMaxY())
+                  B2DPoint(rRect.getMinX(),rRect.getMinY()),
+                  B2DPoint(rRect.getMaxX(),rRect.getMinY()),
+                  B2DPoint(rRect.getMaxX(),rRect.getMaxY()),
+                  B2DPoint(rRect.getMinX(),rRect.getMaxY())
               };
 
-            const ::basegfx::B2DPolygon& rPoly( rPolyPoly.getB2DPolygon(0) );
+            const B2DPolygon& rPoly( rPolyPoly.getB2DPolygon(0) );
             const sal_uInt32 nCount( rPoly.count() );
             const double epsilon = ::std::numeric_limits<double>::epsilon();
 
             for(unsigned int j=0; j<4; ++j)
             {
-                const ::basegfx::B2DPoint &p1 = aPoints[j];
-                const ::basegfx::B2DPoint &p2 = aPoints[(j+1)%4];
+                const B2DPoint &p1 = aPoints[j];
+                const B2DPoint &p2 = aPoints[(j+1)%4];
                 bool bPointOnBoundary = false;
                 for( sal_uInt32 i=0; i<nCount; ++i )
                 {
-                    const ::basegfx::B2DPoint p(rPoly.getB2DPoint(i));
+                    const B2DPoint p(rPoly.getB2DPoint(i));
 
                     //     1 | x0 y0 1 |
                     // A = - | x1 y1 1 |
@@ -2658,6 +3177,87 @@ namespace basegfx
             }
 
             return true;
+        }
+
+
+        // create simplified version of the original polygon by
+        // replacing segments with spikes/loops and self intersections
+        // by several trivial sub-segments
+        B2DPolygon createSimplifiedPolygon( const B2DPolygon& rCandidate )
+        {
+            const sal_uInt32 nCount(rCandidate.count());
+
+            if(nCount && rCandidate.areControlPointsUsed())
+            {
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nCount : nCount - 1);
+                B2DPolygon aRetval;
+                B2DCubicBezier aSegment;
+
+                aSegment.setStartPoint(rCandidate.getB2DPoint(0));
+                aRetval.append(aSegment.getStartPoint());
+
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // fill edge
+                    const sal_uInt32 nNextIndex((a + 1) % nCount);
+                    aSegment.setControlPointA(rCandidate.getNextControlPoint(a));
+                    aSegment.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                    aSegment.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
+
+                    if(aSegment.isBezier())
+                    {
+                        double fExtremumPos(0.0);
+                        sal_uInt32 nExtremumCounter(4);
+
+                        while(nExtremumCounter-- && aSegment.isBezier() && aSegment.getMinimumExtremumPosition(fExtremumPos))
+                        {
+                            // split off left, now extremum-free part and append
+                            B2DCubicBezier aLeft;
+
+                            aSegment.split(fExtremumPos, &aLeft, &aSegment);
+                            aLeft.testAndSolveTrivialBezier();
+                            aSegment.testAndSolveTrivialBezier();
+
+                            if(aLeft.isBezier())
+                            {
+                                aRetval.appendBezierSegment(aLeft.getControlPointA(), aLeft.getControlPointB(), aLeft.getEndPoint());
+                            }
+                            else
+                            {
+                                aRetval.append(aLeft.getEndPoint());
+                            }
+                        }
+
+                        // append (evtl. reduced) rest of Segment
+                        if(aSegment.isBezier())
+                        {
+                            aRetval.appendBezierSegment(aSegment.getControlPointA(), aSegment.getControlPointB(), aSegment.getEndPoint());
+                        }
+                        else
+                        {
+                            aRetval.append(aSegment.getEndPoint());
+                        }
+                    }
+                    else
+                    {
+                        // simple edge, append end point
+                        aRetval.append(aSegment.getEndPoint());
+                    }
+
+                    // prepare next edge
+                    aSegment.setStartPoint(aSegment.getEndPoint());
+                }
+
+                // copy closed flag and check for double points
+                aRetval.setClosed(rCandidate.isClosed());
+                aRetval.removeDoublePoints();
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
         }
 
         // #i76891#
@@ -2743,6 +3343,167 @@ namespace basegfx
             }
 
             return rCandidate;
+        }
+
+        B2DPolygon createEdgesOfGivenLength(const B2DPolygon& rCandidate, double fLength, double fStart, double fEnd)
+        {
+            B2DPolygon aRetval;
+
+            if(fLength < 0.0)
+            {
+                fLength = 0.0;
+            }
+
+            if(!fTools::equalZero(fLength))
+            {
+                if(fStart < 0.0)
+                {
+                    fStart = 0.0;
+                }
+
+                if(fEnd < 0.0)
+                {
+                    fEnd = 0.0;
+                }
+
+                if(fEnd < fStart)
+                {
+                    fEnd = fStart;
+                }
+
+                // iterate and consume pieces with fLength. First subdivide to reduce input to line segments
+                const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
+                const sal_uInt32 nPointCount(aCandidate.count());
+
+                if(nPointCount > 1)
+                {
+                    const bool bEndActive(!fTools::equalZero(fEnd));
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
+                    B2DPoint aCurrent(aCandidate.getB2DPoint(0));
+                    double fPositionInEdge(fStart);
+                    double fAbsolutePosition(fStart);
+
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                    {
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
+                        const B2DVector aEdge(aNext - aCurrent);
+                        double fEdgeLength(aEdge.getLength());
+
+                        if(!fTools::equalZero(fEdgeLength))
+                        {
+                            while(fTools::less(fPositionInEdge, fEdgeLength))
+                            {
+                                // move position on edge forward as long as on edge
+                                const double fScalar(fPositionInEdge / fEdgeLength);
+                                aRetval.append(aCurrent + (aEdge * fScalar));
+                                fPositionInEdge += fLength;
+
+                                if(bEndActive)
+                                {
+                                    fAbsolutePosition += fLength;
+
+                                    if(fTools::more(fAbsolutePosition, fEnd))
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // substract length of current edge
+                            fPositionInEdge -= fEdgeLength;
+                        }
+
+                        if(bEndActive && fTools::more(fAbsolutePosition, fEnd))
+                        {
+                            break;
+                        }
+
+                        // prepare next step
+                        aCurrent = aNext;
+                    }
+
+                    // keep closed state
+                    aRetval.setClosed(aCandidate.isClosed());
+                }
+                else
+                {
+                    // source polygon has only one point, return unchanged
+                    aRetval = aCandidate;
+                }
+            }
+
+            return aRetval;
+        }
+
+        B2DPolygon createWaveline(const B2DPolygon& rCandidate, double fWaveWidth, double fWaveHeight)
+        {
+            B2DPolygon aRetval;
+
+            if(fWaveWidth < 0.0)
+            {
+                fWaveWidth = 0.0;
+            }
+
+            if(fWaveHeight < 0.0)
+            {
+                fWaveHeight = 0.0;
+            }
+
+            const bool bHasWidth(!fTools::equalZero(fWaveWidth));
+            const bool bHasHeight(!fTools::equalZero(fWaveHeight));
+
+            if(bHasWidth)
+            {
+                if(bHasHeight)
+                {
+                    // width and height, create waveline. First subdivide to reduce input to line segments
+                    // of WaveWidth. Last segment may be missing. If this turns out to be a problem, it
+                    // may be added here again using the original last point from rCandidate. It may
+                    // also be the case that rCandidate was closed. To simplify things it is handled here
+                    // as if it was opened.
+                    // Result from createEdgesOfGivenLength contains no curved segments, handle as straight
+                    // edges.
+                    const B2DPolygon aEqualLenghEdges(createEdgesOfGivenLength(rCandidate, fWaveWidth));
+                    const sal_uInt32 nPointCount(aEqualLenghEdges.count());
+
+                    if(nPointCount > 1)
+                    {
+                        // iterate over straight edges, add start point
+                        B2DPoint aCurrent(aEqualLenghEdges.getB2DPoint(0));
+                        aRetval.append(aCurrent);
+
+                        for(sal_uInt32 a(0); a < nPointCount - 1; a++)
+                        {
+                            const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                            const B2DPoint aNext(aEqualLenghEdges.getB2DPoint(nNextIndex));
+                            const B2DVector aEdge(aNext - aCurrent);
+                            const B2DVector aPerpendicular(getNormalizedPerpendicular(aEdge));
+                            const B2DVector aControlOffset((aEdge * 0.467308) - (aPerpendicular * fWaveHeight));
+
+                            // add curve segment
+                            aRetval.appendBezierSegment(
+                                aCurrent + aControlOffset,
+                                aNext - aControlOffset,
+                                aNext);
+
+                            // prepare next step
+                            aCurrent = aNext;
+                        }
+                    }
+                }
+                else
+                {
+                    // width but no height -> return original polygon
+                    aRetval = rCandidate;
+                }
+            }
+            else
+            {
+                // no width -> no waveline, stay empty and return
+            }
+
+            return aRetval;
         }
 
         //////////////////////////////////////////////////////////////////////
