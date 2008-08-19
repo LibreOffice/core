@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,6 +160,13 @@ namespace dbaui
             @param  _nKind  the kind of the component
         */
         bool impl_activateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind,const ElementOpenMode _eOpenMode) const;
+
+        /** deactivates the current table or query  frame when existing
+            @param  _sName  the name of the component
+            @param  _nKind  the kind of the component
+        */
+        void impl_deActivateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind);
+
         /** returns the database name
             @return
                 the database name
@@ -255,19 +262,6 @@ namespace dbaui
         void deleteObjects( ElementType _eType,
                             const ::std::vector< ::rtl::OUString>& _rList,
                             bool _bConfirm );
-
-        /** deletes multiple elements from the given container
-            @param  _rxNames
-                the object container
-            @param  _rList
-                The names of the elements to delete
-            @param  _bConfirm
-                determines whether the user must confirm the deletion
-        */
-        void deleteObjects( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& _rxNames,
-                            const ::std::vector< ::rtl::OUString>& _rList,
-                            bool _bConfirm );
-
 
         /** deletes tables.
             @param  _rList
