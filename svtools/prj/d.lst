@@ -324,6 +324,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\contextmenuhelper.hxx %_DEST%\inc%_EXT%\svtools\contextmenuhelper.hxx
 ..\inc\extcolorcfg.hxx %_DEST%\inc%_EXT%\svtools\extcolorcfg.hxx
 
+..\inc\svtools\chartprettypainter.hxx %_DEST%\inc%_EXT%\svtools\chartprettypainter.hxx
 ..\inc\svtools\extensionlistbox.hxx %_DEST%\inc%_EXT%\svtools\extensionlistbox.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
