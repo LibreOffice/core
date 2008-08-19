@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -837,23 +837,16 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( rController->commitCurrentControl() && rController->commitCurrentRecord() )
                 GetImpl()->ExecuteSearch();
             rReq.Done();
-        } break;
+        }
+        break;
 
-        // first, prev, next, last, and absolute affect the nav controller, not the
-        // active controller
         case SID_FM_RECORD_FIRST:
         case SID_FM_RECORD_PREV:
         case SID_FM_RECORD_NEXT:
         case SID_FM_RECORD_LAST:
         case SID_FM_RECORD_NEW:
-        {
-            const ::svx::ControllerFeatures& rController = GetImpl()->getNavControllerFeatures();
-            rController->execute( nSlot );
-            rReq.Done();
-            }
-        break;
-
         case SID_FM_REFRESH:
+        case SID_FM_REFRESH_FORM_CONTROL:
         case SID_FM_RECORD_DELETE:
         case SID_FM_RECORD_UNDO:
         case SID_FM_RECORD_SAVE:
@@ -863,10 +856,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_AUTOFILTER:
         case SID_FM_ORDERCRIT:
         case SID_FM_FORM_FILTERED:
-            // these are the slots whose implementations are already moved in the impl class
-            GetImpl()->ExecuteFormSlot( nSlot, GetImpl()->getActiveForm(), GetImpl()->getActiveController() );
+        {
+            GetImpl()->ExecuteFormSlot( nSlot );
             rReq.Done();
-            break;
+        }
+        break;
 
         case SID_FM_RECORD_ABSOLUTE:
         {
@@ -1160,6 +1154,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_FILTER_START:
             case SID_FM_AUTOFILTER:
             case SID_FM_REFRESH:
+            case SID_FM_REFRESH_FORM_CONTROL:
             case SID_FM_VIEW_AS_GRID:
                 GetFormState(rSet,nWhich);
                 break;
@@ -1271,30 +1266,31 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             }
             break;
 
-            case SID_FM_RECORD_NEXT:
-            case SID_FM_RECORD_NEW:
+            // first, prev, next, last, and absolute affect the nav controller, not the
+            // active controller
             case SID_FM_RECORD_FIRST:
             case SID_FM_RECORD_PREV:
+            case SID_FM_RECORD_NEXT:
             case SID_FM_RECORD_LAST:
+            case SID_FM_RECORD_NEW:
             case SID_FM_RECORD_SAVE:
             case SID_FM_RECORD_UNDO:
             case SID_FM_RECORD_DELETE:
             case SID_FM_REFRESH:
+            case SID_FM_REFRESH_FORM_CONTROL:
             case SID_FM_REMOVE_FILTER_SORT:
             case SID_FM_SORTUP:
             case SID_FM_SORTDOWN:
             case SID_FM_AUTOFILTER:
             case SID_FM_ORDERCRIT:
-                // delegate
-                bEnable = GetImpl()->getActiveControllerFeatures()->isEnabled( nWhich );
+                bEnable = GetImpl()->IsFormSlotEnabled( nWhich );
                 break;
 
             case SID_FM_FORM_FILTERED:
             {
                 FeatureState aState;
-                GetImpl()->getActiveControllerFeatures()->getState( nWhich, aState );
+                bEnable = GetImpl()->IsFormSlotEnabled( nWhich, &aState );
 
-                bEnable = aState.Enabled;
                 rSet.Put( SfxBoolItem( nWhich, ::comphelper::getBOOL( aState.State ) ) );
             }
             break;
