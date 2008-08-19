@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clippingfunctor.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,8 @@ namespace slideshow
         private:
             ParametricPolyPolygonSharedPtr     mpParametricPoly;
             ::basegfx::B2DHomMatrix            maStaticTransformation;
-            ::basegfx::B2DPolyPolygon          maBackgroundRect;
+            // AW: Not needed
+            // ::basegfx::B2DPolyPolygon          maBackgroundRect;
             bool                               mbForwardParameterSweep;
             bool                               mbSubtractPolygon;
             const bool                         mbScaleIsotrophically;
