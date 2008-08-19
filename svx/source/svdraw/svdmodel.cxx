@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdmodel.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +41,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#ifndef _STRING_H
 #include <tools/string.hxx>
-#endif
 #include <svtools/whiter.hxx>
 #include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -58,7 +56,6 @@
 #include <svx/editeng.hxx>   // Fuer EditEngine::CreatePool()
 
 #include <svx/xtable.hxx>
-#include <svx/xoutx.hxx>
 
 #include "svditer.hxx"
 #include <svx/svdtrans.hxx>
@@ -142,7 +139,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pLinkManager=NULL;
     pUndoStack=NULL;
     pRedoStack=NULL;
-    pAktPaintPV=NULL;
     nMaxUndoCount=16;
     pAktUndoGroup=NULL;
     nUndoLevel=0;
