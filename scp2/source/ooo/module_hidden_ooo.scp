@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.117 $
+ * $Revision: 1.118 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -312,13 +312,13 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Localedata_Euro,
 	gid_File_Lib_Localedata_Others,
 	gid_File_Lib_Hsqldb_2,
-	gid_File_Lib_Jdbc_2,
+	gid_File_Lib_Jdbc,
 	gid_File_Lib_Mcnttype,
 	gid_File_Lib_Mozab_2,
 	gid_File_Lib_Mozabdrv,
 	gid_File_Lib_Mozbootstrap,
-	gid_File_Lib_Mysql_2,
-	gid_File_Lib_Odbc_2,
+	gid_File_Lib_Mysql,
+	gid_File_Lib_Odbc,
 	gid_File_Lib_Officebean,
 	gid_File_Lib_Openssl,
 	gid_File_Lib_Package2,
@@ -377,7 +377,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Stdc_3,
 	gid_File_Lib_Stdc_5,
 	gid_File_Lib_Accessbridge,
-	gid_File_Lib_Ado_2,
+	gid_File_Lib_Ado,
 	gid_File_Lib_Dl,
 	gid_File_Lib_Dnd,
 	gid_File_Lib_Dtrans,
@@ -657,7 +657,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Common_Xcs,
     gid_File_Oo_Office_Common_Xcu,
 	gid_File_Oo_Office_Extendedcolorscheme_Xcs,
-	gid_File_Oo_Office_Extendedcolorscheme_Xcu,
 	gid_File_Oo_Office_OptionsDialog_Xcs,
 	gid_File_Oo_Office_Recovery_Xcs,
 	gid_File_Oo_Office_Compatibility_Xcs,
