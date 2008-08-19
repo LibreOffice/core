@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.hxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,7 +206,7 @@ public:
         sWWStyleName = rName;
         nWWStyleId = nId;
     }
-    const USHORT GetWWStyleId() const { return nWWStyleId; }
+    USHORT GetWWStyleId() const { return nWWStyleId; }
     const String& GetOrgWWName() const
     {
         return sWWStyleName;
