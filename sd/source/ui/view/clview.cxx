@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clview.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,9 +101,9 @@ void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg,USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector )
+void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
-    DrawView::CompleteRedraw(pOutDev, rReg, nPaintMode, pRedirector);
+    DrawView::CompleteRedraw(pOutDev, rReg, pRedirector);
 }
 
 
