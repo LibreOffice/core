@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datasource.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,91 +42,41 @@
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_SEQSTREAM_HXX
-#include <comphelper/seqstream.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
-#include <com/sun/star/sdbc/XDriverManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
-#include <com/sun/star/ucb/AuthenticationRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
-#include <com/sun/star/reflection/XProxyFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
-#include <typelib/typedescription.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#include <comphelper/interaction.hxx>
-#endif
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
-#include <unotools/sharedunocomponent.hxx>
-#endif
-#ifndef _RTL_DIGEST_H_
-#include <rtl/digest.h>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#endif
-
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/view/XPrintable.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbc/XDriverManager.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/view/XPrintable.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/extract.hxx>
+#include <comphelper/guarding.hxx>
+#include <comphelper/interaction.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
+#include <connectivity/dbexception.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <rtl/digest.h>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
+#include <typelib/typedescription.hxx>
+#include <unotools/confignode.hxx>
+#include <unotools/sharedunocomponent.hxx>
 
 #include <algorithm>
 
@@ -828,6 +778,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
                 m_pImpl->getDefaultDataSourceSettings()
             );
 
+            impl_insertJavaDriverClassPath_nothrow(aDriverInfo);
+
             if ( m_pImpl->isEmbeddedDatabase() )
             {
                 sal_Int32 nCount = aDriverInfo.getLength();
@@ -1501,6 +1453,28 @@ Reference< XInterface > ODatabaseSource::getThis() const
     return *const_cast< ODatabaseSource* >( this );
 }
 // -----------------------------------------------------------------------------
+void ODatabaseSource::impl_insertJavaDriverClassPath_nothrow(Sequence< PropertyValue >& _rDriverInfo)
+{
+    Reference< XPropertySet > xPropertySet( m_pImpl->m_xSettings, UNO_QUERY_THROW );
+    ::rtl::OUString sJavaDriverClass;
+    xPropertySet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))) >>= sJavaDriverClass;
+    if ( sJavaDriverClass.getLength() )
+    {
+        static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths"));
+        ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+            m_pImpl->m_aContext.getLegacyServiceFactory(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+        if ( aNamesRoot.isValid() && aNamesRoot.hasByName( sJavaDriverClass ) )
+        {
+            ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( sJavaDriverClass );
+            ::rtl::OUString sURL;
+            OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
+
+            ::comphelper::NamedValueCollection aDriverSettings( _rDriverInfo );
+            aDriverSettings.put( "JavaDriverClassPath", sURL );
+            aDriverSettings >>= _rDriverInfo;
+        }
+    }
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
