@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svditext.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,7 @@
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
 
-#ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
-#endif
 
 
 #endif  // _SVDITEXT_HXX
