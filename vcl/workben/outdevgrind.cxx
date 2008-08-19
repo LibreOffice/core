@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdevgrind.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,7 +235,8 @@ void setupMethodStubs( functor_vector_type& res )
     add(res,
         "DrawPolygon",
         boost::bind(
-            &OutputDevice::DrawPolygon,
+            (void (OutputDevice::*)( const Polygon& ))
+                &OutputDevice::DrawPolygon,
             _1,
             aPoly ));
 
@@ -243,7 +244,8 @@ void setupMethodStubs( functor_vector_type& res )
     add(res,
         "DrawPolyPolygon",
         boost::bind(
-            &OutputDevice::DrawPolyPolygon,
+            (void (OutputDevice::*)( const PolyPolygon& ))
+                &OutputDevice::DrawPolyPolygon,
             _1,
             aPolyPoly ));
 
