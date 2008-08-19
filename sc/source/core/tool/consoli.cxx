@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: consoli.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +36,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
-#include <math.h>
-#include <string.h>
+
 #include "consoli.hxx"
 #include "document.hxx"
 #include "olinetab.hxx"
@@ -45,6 +44,9 @@
 #include "subtotal.hxx"
 #include "errorcodes.hxx"
 #include "cell.hxx"
+
+#include <math.h>
+#include <string.h>
 
 #define SC_CONS_NOTFOUND    -1
 
