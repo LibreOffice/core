@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolygontools.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,7 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b3drange.hxx>
-
+#include <basegfx/point/b2dpoint.hxx>
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ namespace basegfx
 
         // Get successor and predecessor indices. Returning the same index means there
         // is none. Same for successor.
-        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate)
+        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const B3DPolygon& rCandidate)
         {
             OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
@@ -75,7 +75,7 @@ namespace basegfx
             }
         }
 
-        sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate)
+        sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const B3DPolygon& rCandidate)
         {
             OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
@@ -89,14 +89,14 @@ namespace basegfx
             }
         }
 
-        ::basegfx::B3DRange getRange(const ::basegfx::B3DPolygon& rCandidate)
+        B3DRange getRange(const B3DPolygon& rCandidate)
         {
-            ::basegfx::B3DRange aRetval;
+            B3DRange aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
 
             for(sal_uInt32 a(0L); a < nPointCount; a++)
             {
-                const ::basegfx::B3DPoint aTestPoint(rCandidate.getB3DPoint(a));
+                const B3DPoint aTestPoint(rCandidate.getB3DPoint(a));
                 aRetval.expand(aTestPoint);
             }
 
@@ -105,35 +105,40 @@ namespace basegfx
 
         B3DVector getNormal(const B3DPolygon& rCandidate)
         {
-            B3DVector aRetval;
-            const sal_uInt32 nPointCount(rCandidate.count());
+            return rCandidate.getNormal();
+        }
 
-            if(nPointCount > 2)
+        B3DVector getPositiveOrientedNormal(const B3DPolygon& rCandidate)
+        {
+            B3DVector aRetval(rCandidate.getNormal());
+
+            if(ORIENTATION_NEGATIVE == getOrientation(rCandidate))
             {
-                const B3DPoint aPrevPnt(rCandidate.getB3DPoint(nPointCount - 1L));
-                B3DPoint aCurrPnt(rCandidate.getB3DPoint(0L));
-                B3DVector aLastVector(aPrevPnt - aCurrPnt);
-
-                for(sal_uInt32 a(0L); a < nPointCount; a++)
-                {
-                    const bool bLast(a + 1L == nPointCount);
-                    const B3DPoint aNextPnt(rCandidate.getB3DPoint(bLast ? 0L : a + 1L));
-                    const B3DVector aNextVector(aNextPnt - aCurrPnt);
-                    aRetval += aLastVector.getPerpendicular(aNextVector);
-
-                    // prepare next run
-                    if(!bLast)
-                    {
-                        aLastVector = -aNextVector;
-                        aCurrPnt = aNextPnt;
-                    }
-                }
-
-                // normalize result
-                aRetval.normalize();
+                aRetval = -aRetval;
             }
 
             return aRetval;
+        }
+
+        B2VectorOrientation getOrientation(const B3DPolygon& rCandidate)
+        {
+            B2VectorOrientation eRetval(ORIENTATION_NEUTRAL);
+
+            if(rCandidate.count() > 2L)
+            {
+                const double fSignedArea(getSignedArea(rCandidate));
+
+                if(fSignedArea > 0.0)
+                {
+                    eRetval = ORIENTATION_POSITIVE;
+                }
+                else if(fSignedArea < 0.0)
+                {
+                    eRetval = ORIENTATION_NEGATIVE;
+                }
+            }
+
+            return eRetval;
         }
 
         double getSignedArea(const B3DPolygon& rCandidate)
@@ -143,24 +148,25 @@ namespace basegfx
 
             if(nPointCount > 2)
             {
-                const B3DVector aNormal(getNormal(rCandidate));
+                const B3DVector aAbsNormal(absolute(getNormal(rCandidate)));
                 sal_uInt16 nCase(3); // default: ignore z
 
-                if(fabs(aNormal.getX()) > fabs(aNormal.getY()))
+                if(aAbsNormal.getX() > aAbsNormal.getY())
                 {
-                    if(fabs(aNormal.getX()) > fabs(aNormal.getZ()))
+                    if(aAbsNormal.getX() > aAbsNormal.getZ())
                     {
                         nCase = 1; // ignore x
                     }
                 }
-                else if(fabs(aNormal.getY()) > fabs(aNormal.getZ()))
+                else if(aAbsNormal.getY() > aAbsNormal.getZ())
                 {
                     nCase = 2; // ignore y
                 }
 
+                B3DPoint aPreviousPoint(rCandidate.getB3DPoint(nPointCount - 1L));
+
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
-                    const B3DPoint aPreviousPoint(rCandidate.getB3DPoint((!a) ? nPointCount - 1L : a - 1L));
                     const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(a));
 
                     switch(nCase)
@@ -178,19 +184,21 @@ namespace basegfx
                             fRetval -= aPreviousPoint.getY() * aCurrentPoint.getX();
                             break;
                     }
-                }
 
+                    // prepare next step
+                    aPreviousPoint = aCurrentPoint;
+                }
 
                 switch(nCase)
                 {
                     case 1: // ignore x
-                        fRetval /= 2.0 * aNormal.getX();
+                        fRetval /= 2.0 * aAbsNormal.getX();
                         break;
                     case 2: // ignore y
-                        fRetval /= 2.0 * aNormal.getY();
+                        fRetval /= 2.0 * aAbsNormal.getY();
                         break;
                     case 3: // ignore z
-                        fRetval /= 2.0 * aNormal.getZ();
+                        fRetval /= 2.0 * aAbsNormal.getZ();
                         break;
                 }
             }
@@ -216,7 +224,7 @@ namespace basegfx
             return fRetval;
         }
 
-        double getEdgeLength(const ::basegfx::B3DPolygon& rCandidate, sal_uInt32 nIndex)
+        double getEdgeLength(const B3DPolygon& rCandidate, sal_uInt32 nIndex)
         {
             OSL_ENSURE(nIndex < rCandidate.count(), "getEdgeLength: Access to polygon out of range (!)");
             double fRetval(0.0);
@@ -237,7 +245,7 @@ namespace basegfx
             return fRetval;
         }
 
-        double getLength(const ::basegfx::B3DPolygon& rCandidate)
+        double getLength(const B3DPolygon& rCandidate)
         {
             double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
@@ -259,9 +267,9 @@ namespace basegfx
             return fRetval;
         }
 
-        ::basegfx::B3DPoint getPositionAbsolute(const ::basegfx::B3DPolygon& rCandidate, double fDistance, double fLength)
+        B3DPoint getPositionAbsolute(const B3DPolygon& rCandidate, double fDistance, double fLength)
         {
-            ::basegfx::B3DPoint aRetval;
+            B3DPoint aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
 
             if(nPointCount > 1L)
@@ -272,13 +280,13 @@ namespace basegfx
                 double fEdgeLength(fZero);
 
                 // get length if not given
-                if(::basegfx::fTools::equalZero(fLength))
+                if(fTools::equalZero(fLength))
                 {
                     fLength = getLength(rCandidate);
                 }
 
                 // handle fDistance < 0.0
-                if(::basegfx::fTools::less(fDistance, fZero))
+                if(fTools::less(fDistance, fZero))
                 {
                     if(rCandidate.isClosed())
                     {
@@ -295,7 +303,7 @@ namespace basegfx
                 }
 
                 // handle fDistance >= fLength
-                if(::basegfx::fTools::moreOrEqual(fDistance, fLength))
+                if(fTools::moreOrEqual(fDistance, fLength))
                 {
                     if(rCandidate.isClosed())
                     {
@@ -320,7 +328,7 @@ namespace basegfx
                         // get length of next edge
                         fEdgeLength = getEdgeLength(rCandidate, nIndex);
 
-                        if(::basegfx::fTools::moreOrEqual(fDistance, fEdgeLength))
+                        if(fTools::moreOrEqual(fDistance, fEdgeLength))
                         {
                             // go to next edge
                             fDistance -= fEdgeLength;
@@ -339,29 +347,29 @@ namespace basegfx
 
                 // if fDistance != 0.0, move that length on the edge. The edge
                 // length is in fEdgeLength.
-                if(!::basegfx::fTools::equalZero(fDistance))
+                if(!fTools::equalZero(fDistance))
                 {
                     sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                    const ::basegfx::B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
+                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
                     double fRelative(fZero);
 
-                    if(!::basegfx::fTools::equalZero(fEdgeLength))
+                    if(!fTools::equalZero(fEdgeLength))
                     {
                         fRelative = fDistance / fEdgeLength;
                     }
 
                     // add calculated average value to the return value
-                    aRetval += ::basegfx::interpolate(aRetval, aNextPoint, fRelative);
+                    aRetval += interpolate(aRetval, aNextPoint, fRelative);
                 }
             }
 
             return aRetval;
         }
 
-        ::basegfx::B3DPoint getPositionRelative(const ::basegfx::B3DPolygon& rCandidate, double fDistance, double fLength)
+        B3DPoint getPositionRelative(const B3DPolygon& rCandidate, double fDistance, double fLength)
         {
             // get length if not given
-            if(::basegfx::fTools::equalZero(fLength))
+            if(fTools::equalZero(fLength))
             {
                 fLength = getLength(rCandidate);
             }
@@ -371,79 +379,369 @@ namespace basegfx
             return getPositionAbsolute(rCandidate, fDistance * fLength, fLength);
         }
 
-        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
+        void applyLineDashing(const B3DPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B3DPolyPolygon* pLineTarget, B3DPolyPolygon* pGapTarget, double fDotDashLength)
         {
-            ::basegfx::B3DPolyPolygon aRetval;
+            const sal_uInt32 nPointCount(rCandidate.count());
+            const sal_uInt32 nDotDashCount(rDotDashArray.size());
 
-            if(0.0 == fFullDashDotLen && raDashDotArray.size())
+            if(fTools::lessOrEqual(fDotDashLength, 0.0))
             {
-                // calculate fFullDashDotLen from raDashDotArray
-                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+                fDotDashLength = ::std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(rCandidate.count() && fFullDashDotLen > 0.0)
+            if(fTools::more(fDotDashLength, 0.0) && (pLineTarget || pGapTarget) && nPointCount)
             {
-                const sal_uInt32 nCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
-                sal_uInt32 nDashDotIndex(0L);
-                double fDashDotLength(raDashDotArray[nDashDotIndex]);
-
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                // clear targets
+                if(pLineTarget)
                 {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                    const ::basegfx::B3DPoint aStart(rCandidate.getB3DPoint(a));
-                    const ::basegfx::B3DPoint aEnd(rCandidate.getB3DPoint(nNextIndex));
-                    ::basegfx::B3DVector aVector(aEnd - aStart);
-                    double fLength(aVector.getLength());
-                    double fPosOnVector(0.0);
-                    aVector.normalize();
+                    pLineTarget->clear();
+                }
 
-                    while(fLength >= fDashDotLength)
+                if(pGapTarget)
+                {
+                    pGapTarget->clear();
+                }
+
+                // prepare current edge's start
+                B3DPoint aCurrentPoint(rCandidate.getB3DPoint(0));
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+
+                // prepare DotDashArray iteration and the line/gap switching bool
+                sal_uInt32 nDotDashIndex(0);
+                bool bIsLine(true);
+                double fDotDashMovingLength(rDotDashArray[0]);
+                B3DPolygon aSnippet;
+
+                // iterate over all edges
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // update current edge
+                    double fLastDotDashMovingLength(0.0);
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
+                    const double fEdgeLength(B3DVector(aNextPoint - aCurrentPoint).getLength());
+
+                    while(fTools::less(fDotDashMovingLength, fEdgeLength))
                     {
-                        // handle [fPosOnVector .. fPosOnVector+fDashDotLength]
-                        if(nDashDotIndex % 2)
-                        {
-                            ::basegfx::B3DPolygon aResult;
+                        // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
+                        const bool bHandleLine(bIsLine && pLineTarget);
+                        const bool bHandleGap(!bIsLine && pGapTarget);
 
-                            // add start point
-                            if(fPosOnVector == 0.0)
+                        if(bHandleLine || bHandleGap)
+                        {
+                            if(!aSnippet.count())
                             {
-                                aResult.append(aStart);
+                                aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
+                            }
+
+                            aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fDotDashMovingLength / fEdgeLength));
+
+                            if(bHandleLine)
+                            {
+                                pLineTarget->append(aSnippet);
                             }
                             else
                             {
-                                aResult.append( B3DPoint(aStart + (aVector * fPosOnVector)) );
+                                pGapTarget->append(aSnippet);
                             }
 
-                            // add end point
-                            aResult.append( B3DPoint(aStart + (aVector * (fPosOnVector + fDashDotLength))) );
-
-                            // add line to PolyPolygon
-                            aRetval.append(aResult);
+                            aSnippet.clear();
                         }
 
-                        // consume from fDashDotLength
-                        fPosOnVector += fDashDotLength;
-                        fLength -= fDashDotLength;
-                        nDashDotIndex = (nDashDotIndex + 1L) % raDashDotArray.size();
-                        fDashDotLength = raDashDotArray[nDashDotIndex];
+                        // prepare next DotDashArray step and flip line/gap flag
+                        fLastDotDashMovingLength = fDotDashMovingLength;
+                        fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                        bIsLine = !bIsLine;
                     }
 
-                    // handle [fPosOnVector .. fPosOnVector+fLength (bzw. end)]
-                    if((fLength > 0.0) && (nDashDotIndex % 2))
+                    // append snippet [fLastDotDashMovingLength, fEdgeLength]
+                    const bool bHandleLine(bIsLine && pLineTarget);
+                    const bool bHandleGap(!bIsLine && pGapTarget);
+
+                    if(bHandleLine || bHandleGap)
                     {
-                        ::basegfx::B3DPolygon aResult;
+                        if(!aSnippet.count())
+                        {
+                            aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
+                        }
 
-                        // add start and end point
-                        const ::basegfx::B3DPoint aPosA(aStart + (aVector * fPosOnVector));
-                        aResult.append(aPosA);
-                        aResult.append(aEnd);
-
-                        // add line to PolyPolygon
-                        aRetval.append(aResult);
+                        aSnippet.append(aNextPoint);
                     }
 
-                    // consume from fDashDotLength
-                    fDashDotLength -= fLength;
+                    // prepare move to next edge
+                    fDotDashMovingLength -= fEdgeLength;
+
+                    // prepare next edge step (end point gets new start point)
+                    aCurrentPoint = aNextPoint;
+                }
+
+                // append last intermediate results (if exists)
+                if(aSnippet.count())
+                {
+                    if(bIsLine && pLineTarget)
+                    {
+                        pLineTarget->append(aSnippet);
+                    }
+                    else if(!bIsLine && pGapTarget)
+                    {
+                        pGapTarget->append(aSnippet);
+                    }
+                }
+
+                // check if start and end polygon may be merged
+                if(pLineTarget)
+                {
+                    const sal_uInt32 nCount(pLineTarget->count());
+
+                    if(nCount > 1)
+                    {
+                        // these polygons were created above, there exists none with less than two points,
+                        // thus dircet point access below is allowed
+                        const B3DPolygon aFirst(pLineTarget->getB3DPolygon(0));
+                        B3DPolygon aLast(pLineTarget->getB3DPolygon(nCount - 1));
+
+                        if(aFirst.getB3DPoint(0).equal(aLast.getB3DPoint(aLast.count() - 1)))
+                        {
+                            // start of first and end of last are the same -> merge them
+                            aLast.append(aFirst);
+                            aLast.removeDoublePoints();
+                            pLineTarget->setB3DPolygon(0, aLast);
+                            pLineTarget->remove(nCount - 1);
+                        }
+                    }
+                }
+
+                if(pGapTarget)
+                {
+                    const sal_uInt32 nCount(pGapTarget->count());
+
+                    if(nCount > 1)
+                    {
+                        // these polygons were created above, there exists none with less than two points,
+                        // thus dircet point access below is allowed
+                        const B3DPolygon aFirst(pGapTarget->getB3DPolygon(0));
+                        B3DPolygon aLast(pGapTarget->getB3DPolygon(nCount - 1));
+
+                        if(aFirst.getB3DPoint(0).equal(aLast.getB3DPoint(aLast.count() - 1)))
+                        {
+                            // start of first and end of last are the same -> merge them
+                            aLast.append(aFirst);
+                            aLast.removeDoublePoints();
+                            pGapTarget->setB3DPolygon(0, aLast);
+                            pGapTarget->remove(nCount - 1);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // parameters make no sense, just add source to targets
+                if(pLineTarget)
+                {
+                    pLineTarget->append(rCandidate);
+                }
+
+                if(pGapTarget)
+                {
+                    pGapTarget->append(rCandidate);
+                }
+            }
+        }
+
+        B3DPolygon applyDefaultNormalsSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter)
+        {
+            B3DPolygon aRetval(rCandidate);
+
+            for(sal_uInt32 a(0L); a < aRetval.count(); a++)
+            {
+                B3DVector aVector(aRetval.getB3DPoint(a) - rCenter);
+                aVector.normalize();
+                aRetval.setNormal(a, aVector);
+            }
+
+            return aRetval;
+        }
+
+        B3DPolygon invertNormals( const B3DPolygon& rCandidate)
+        {
+            B3DPolygon aRetval(rCandidate);
+
+            if(aRetval.areNormalsUsed())
+            {
+                for(sal_uInt32 a(0L); a < aRetval.count(); a++)
+                {
+                    aRetval.setNormal(a, -aRetval.getNormal(a));
+                }
+            }
+
+            return aRetval;
+        }
+
+        B3DPolygon applyDefaultTextureCoordinatesParallel( const B3DPolygon& rCandidate, const B3DRange& rRange, bool bChangeX, bool bChangeY)
+        {
+            B3DPolygon aRetval(rCandidate);
+
+            if(bChangeX || bChangeY)
+            {
+                // create projection of standard texture coordinates in (X, Y) onto
+                // the 3d coordinates straight
+                const double fWidth(rRange.getWidth());
+                const double fHeight(rRange.getHeight());
+                const bool bWidthSet(!fTools::equalZero(fWidth));
+                const bool bHeightSet(!fTools::equalZero(fHeight));
+                const double fOne(1.0);
+
+                for(sal_uInt32 a(0L); a < aRetval.count(); a++)
+                {
+                    const B3DPoint aPoint(aRetval.getB3DPoint(a));
+                    B2DPoint aTextureCoordinate(aRetval.getTextureCoordinate(a));
+
+                    if(bChangeX)
+                    {
+                        if(bWidthSet)
+                        {
+                            aTextureCoordinate.setX((aPoint.getX() - rRange.getMinX()) / fWidth);
+                        }
+                        else
+                        {
+                            aTextureCoordinate.setX(0.0);
+                        }
+                    }
+
+                    if(bChangeY)
+                    {
+                        if(bHeightSet)
+                        {
+                            aTextureCoordinate.setY(fOne - ((aPoint.getY() - rRange.getMinY()) / fHeight));
+                        }
+                        else
+                        {
+                            aTextureCoordinate.setY(fOne);
+                        }
+                    }
+
+                    aRetval.setTextureCoordinate(a, aTextureCoordinate);
+                }
+            }
+
+            return aRetval;
+        }
+
+        B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX, bool bChangeY)
+        {
+            B3DPolygon aRetval(rCandidate);
+
+            if(bChangeX || bChangeY)
+            {
+                // create texture coordinates using sphere projection to cartesian coordinates,
+                // use object's center as base
+                const double fOne(1.0);
+                const sal_uInt32 nPointCount(aRetval.count());
+                bool bPolarPoints(false);
+                sal_uInt32 a;
+
+                // create center cartesian coordinates to have a possibility to decide if on boundary
+                // transitions which value to choose
+                const B3DRange aPlaneRange(getRange(rCandidate));
+                const B3DPoint aPlaneCenter(aPlaneRange.getCenter() - rCenter);
+                const double fXCenter(fOne - ((atan2(aPlaneCenter.getZ(), aPlaneCenter.getX()) + F_PI) / F_2PI));
+
+                for(a = 0L; a < nPointCount; a++)
+                {
+                    const B3DVector aVector(aRetval.getB3DPoint(a) - rCenter);
+                    const double fY(fOne - ((atan2(aVector.getY(), aVector.getXZLength()) + F_PI2) / F_PI));
+                    B2DPoint aTexCoor(aRetval.getTextureCoordinate(a));
+
+                    if(fTools::equalZero(fY))
+                    {
+                        // point is a north polar point, no useful X-coordinate can be created.
+                        if(bChangeY)
+                        {
+                            aTexCoor.setY(0.0);
+
+                            if(bChangeX)
+                            {
+                                bPolarPoints = true;
+                            }
+                        }
+                    }
+                    else if(fTools::equal(fY, fOne))
+                    {
+                        // point is a south polar point, no useful X-coordinate can be created. Set
+                        // Y-coordinte, though
+                        if(bChangeY)
+                        {
+                            aTexCoor.setY(fOne);
+
+                            if(bChangeX)
+                            {
+                                bPolarPoints = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        double fX(fOne - ((atan2(aVector.getZ(), aVector.getX()) + F_PI) / F_2PI));
+
+                        // correct cartesinan point coordiante dependent from center value
+                        if(fX > fXCenter + 0.5)
+                        {
+                            fX -= fOne;
+                        }
+                        else if(fX < fXCenter - 0.5)
+                        {
+                            fX += fOne;
+                        }
+
+                        if(bChangeX)
+                        {
+                            aTexCoor.setX(fX);
+                        }
+
+                        if(bChangeY)
+                        {
+                            aTexCoor.setY(fY);
+                        }
+                    }
+
+                    aRetval.setTextureCoordinate(a, aTexCoor);
+                }
+
+                if(bPolarPoints)
+                {
+                    // correct X-texture coordinates if polar points are contained. Those
+                    // coordinates cannot be correct, so use prev or next X-coordinate
+                    for(a = 0L; a < nPointCount; a++)
+                    {
+                        B2DPoint aTexCoor(aRetval.getTextureCoordinate(a));
+
+                        if(fTools::equalZero(aTexCoor.getY()) || fTools::equal(aTexCoor.getY(), fOne))
+                        {
+                            // get prev, next TexCoor and test for pole
+                            const B2DPoint aPrevTexCoor(aRetval.getTextureCoordinate(a ? a - 1L : nPointCount - 1L));
+                            const B2DPoint aNextTexCoor(aRetval.getTextureCoordinate((a + 1L) % nPointCount));
+                            const bool bPrevPole(fTools::equalZero(aPrevTexCoor.getY()) || fTools::equal(aPrevTexCoor.getY(), fOne));
+                            const bool bNextPole(fTools::equalZero(aNextTexCoor.getY()) || fTools::equal(aNextTexCoor.getY(), fOne));
+
+                            if(!bPrevPole && !bNextPole)
+                            {
+                                // both no poles, mix them
+                                aTexCoor.setX((aPrevTexCoor.getX() + aNextTexCoor.getX()) / 2.0);
+                            }
+                            else if(!bNextPole)
+                            {
+                                // copy next
+                                aTexCoor.setX(aNextTexCoor.getX());
+                            }
+                            else
+                            {
+                                // copy prev, even if it's a pole, hopefully it is already corrected
+                                aTexCoor.setX(aPrevTexCoor.getX());
+                            }
+
+                            aRetval.setTextureCoordinate(a, aTexCoor);
+                        }
+                    }
                 }
             }
 
