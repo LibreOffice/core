@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notxtfrm.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <svtools/embedhlp.hxx>
-#include <svx/chartprettypainter.hxx>
+#include <svtools/chartprettypainter.hxx>
 
 using namespace com::sun::star;
 
