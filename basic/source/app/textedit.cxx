@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textedit.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,9 +133,6 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
                 ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, TRUE );
-
-            // Lästiges anpassen für 2 Zeichen am Zeilenende statt einem(Hartverdrateter Default)
-            pTextEngine->SetMaxTextLen( STRING_MAXLEN - pTextEngine->GetParagraphCount() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
@@ -855,12 +852,11 @@ DBG_CHKTHIS(TextEdit,0);
         if ( bFileWasUTF8 || bSaveAsUTF8 )
         {
             aStrm << TT_SIGNATURE_FOR_UNICODE_TEXTFILES;
-            aStrm << sal_Char(_CR);
             aStrm << sal_Char(_LF);
             aFileEncoding = RTL_TEXTENCODING_UTF8;
         }
         String aSave = GetText();
-        aSave.ConvertLineEnd(LINEEND_CRLF);
+        aSave.ConvertLineEnd(LINEEND_LF);
         aStrm << ByteString( aSave, aFileEncoding ).GetBuffer();
         if( aStrm.GetError() != SVSTREAM_OK )
             bOk = FALSE;
