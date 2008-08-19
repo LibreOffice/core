@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svddrgv.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,6 @@
 #include <svx/svddrgv.hxx>
 #include "xattr.hxx"
 #include <svx/xpoly.hxx>
-#include "svdxout.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
@@ -224,7 +223,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
             {
                 if (pPV->HasMarkedObjPageView())
                 {
-                    const basegfx::B2DRange aBoundRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(pPV->getDragPoly())));
+                    const basegfx::B2DRange aBoundRange(basegfx::tools::getRange(pPV->getDragPoly()));
                     const Rectangle aR(FRound(aBoundRange.getMinX()), FRound(aBoundRange.getMinY()), FRound(aBoundRange.getMaxX()), FRound(aBoundRange.getMaxY()));
 
                     if (b1st) {
