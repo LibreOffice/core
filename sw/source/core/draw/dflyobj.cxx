@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dflyobj.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,19 @@ using namespace ::com::sun::star;
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
+// AW: For VCOfDrawVirtObj and stuff
+#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
+#include <svx/sdr/contact/viewcontactofvirtobj.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 static BOOL bInResize = FALSE;
@@ -105,20 +118,6 @@ SwFlyDrawObj::~SwFlyDrawObj()
 
 /*************************************************************************
 |*
-|*  SwFlyDrawObj::Paint()
-|*
-|*  Ersterstellung      MA 08. Dec. 94
-|*  Letzte Aenderung    MA 20. May. 95
-|*
-*************************************************************************/
-
-sal_Bool SwFlyDrawObj::DoPaintObject(XOutputDevice& , const SdrPaintInfoRec& ) const
-{
-    return TRUE;
-}
-
-/*************************************************************************
-|*
 |*  SwFlyDrawObj::Factory-Methoden
 |*
 |*  Ersterstellung      MA 23. Feb. 95
@@ -151,6 +150,156 @@ UINT16 __EXPORT SwFlyDrawObj::GetObjVersion() const
 |*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
+
+//////////////////////////////////////////////////////////////////////////////////////
+// AW: Need own primitive to get the FlyFrame paint working
+
+// Unique PrimitiveID. If more will be needed, create an own file in SW following
+// the example in SD
+#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D                      (PRIMITIVE2D_ID_RANGE_SW| 0)
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class SwVirtFlyDrawObjPrimitive : public BasePrimitive2D
+        {
+        private:
+            const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
+
+        public:
+            SwVirtFlyDrawObjPrimitive(const SwVirtFlyDrawObj& rSwVirtFlyDrawObj)
+            :   BasePrimitive2D(),
+                mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj)
+            {
+            }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // getDecomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const SwVirtFlyDrawObjPrimitive& rCompare = (SwVirtFlyDrawObjPrimitive&)rPrimitive;
+
+                return (&mrSwVirtFlyDrawObj == &rCompare.mrSwVirtFlyDrawObj);
+            }
+
+            return false;
+        }
+
+        basegfx::B2DRange SwVirtFlyDrawObjPrimitive::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            // fallback on FlyFrame SnapRect
+            const Rectangle& rSnapRect = mrSwVirtFlyDrawObj.GetSnapRect();
+
+            return basegfx::B2DRange(rSnapRect.Left(), rSnapRect.Top(), rSnapRect.Right(), rSnapRect.Bottom());
+        }
+
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            // This is the callback to keep the FlyFrame painting in SW alive as long as it
+            // is not changed to primitives. This is the method which will be called by the processors
+            // when they do not know this primitive (and they do not). Inside wrap_DoPaintObject
+            // there needs to be a test that paint is only done during SW repaints (see there).
+            // Using this mechanism guarantees the correct Z-Order of the VirtualObject-based FlyFrames.
+            mrSwVirtFlyDrawObj.wrap_DoPaintObject();
+
+            // call parent
+            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+        }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(SwVirtFlyDrawObjPrimitive, PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D)
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////////////
+// AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
+// since offset is defined different from SdrVirtObj's sdr::contact::ViewContactOfVirtObj.
+// For paint, that offset is used by setting at the OutputDevice; for primitives this is
+// not possible since we have no OutputDevice, but define the geometry itself.
+
+namespace sdr
+{
+    namespace contact
+    {
+        class VCOfSwVirtFlyDrawObj : public ViewContactOfVirtObj
+        {
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            // basic constructor, used from SdrObject.
+            VCOfSwVirtFlyDrawObj(SwVirtFlyDrawObj& rObj)
+            :   ViewContactOfVirtObj(rObj)
+            {
+            }
+            virtual ~VCOfSwVirtFlyDrawObj();
+
+            // access to SwVirtFlyDrawObj
+            SwVirtFlyDrawObj& GetSwVirtFlyDrawObj() const
+            {
+                return (SwVirtFlyDrawObj&)mrObject;
+            }
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+namespace sdr
+{
+    namespace contact
+    {
+        drawinglayer::primitive2d::Primitive2DSequence VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const SdrObject& rReferencedObject = GetSwVirtFlyDrawObj().GetReferencedObj();
+
+            if(rReferencedObject.ISA(SwFlyDrawObj))
+            {
+                // create an own specialized primitive which is used as repaint callpoint (see primitive
+                // implementation above)
+                const drawinglayer::primitive2d::Primitive2DReference xPrimitive(new drawinglayer::primitive2d::SwVirtFlyDrawObjPrimitive(GetSwVirtFlyDrawObj()));
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPrimitive, 1);
+            }
+
+            return xRetval;
+        }
+
+        VCOfSwVirtFlyDrawObj::~VCOfSwVirtFlyDrawObj()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
+{
+    // need an own ViewContact (VC) to allow creation of a specialized primitive
+    // for being able to visualize the FlyFrames in primitive renderers
+    return new sdr::contact::VCOfSwVirtFlyDrawObj(*this);
+}
 
 SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     SdrVirtObj( rNew ),
@@ -199,30 +348,43 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 |*
 *************************************************************************/
 
-sal_Bool SwVirtFlyDrawObj::DoPaintObject(XOutputDevice& , const SdrPaintInfoRec& rInfoRec) const
+void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
-    //#110094#-2
-    // Moved here from SwViewImp::PaintDispatcher
-    sal_Bool bDrawObject(sal_True);
+    ViewShell* pShell = pFlyFrm->GetShell();
 
-    if(!SwFlyFrm::IsPaint((SdrObject*)this, pFlyFrm->GetShell()))
+    // Only paint when we have a current shell and a DrawingLayer paint is in progress.
+    // This avcoids evtl. problems with renderers which do processing stuff,
+    // but no paints. IsPaintInProgress() depends on SW repaint, so, as long
+    // as SW paints self and calls DrawLayer() for Heaven and Hell, this will
+    // be correct
+    if(pShell && pShell->IsDrawingLayerPaintInProgress())
     {
-        bDrawObject = sal_False;
-    }
+        sal_Bool bDrawObject(sal_True);
 
-    if(bDrawObject)
-    {
-        if ( !pFlyFrm->IsFlyInCntFrm() ) //FlyInCnt werden von den TxtPortions gepaintet.
+        if(!SwFlyFrm::IsPaint((SdrObject*)this, pShell))
         {
-            //Rect auf den Fly begrenzen.
-            SwRect aRect( rInfoRec.aDirtyRect );
-            if ( rInfoRec.aDirtyRect.IsEmpty() )
-                aRect = GetFlyFrm()->Frm();
-            pFlyFrm->Paint( aRect );
+            bDrawObject = sal_False;
+        }
+
+        if(bDrawObject)
+        {
+            if(!pFlyFrm->IsFlyInCntFrm())
+            {
+                // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
+                // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
+                // excludes shears and rotates which are not expressable in MapMode.
+                OutputDevice* pOut = pShell->GetOut();
+
+                pOut->Push(PUSH_MAPMODE);
+                pOut->SetMapMode(pShell->getPrePostMapMode());
+
+                // paint the FlyFrame (use standard VCL-Paint)
+                pFlyFrm->Paint(GetFlyFrm()->Frm());
+
+                pOut->Pop();
+            }
         }
     }
-
-    return TRUE;
 }
 
 /*************************************************************************
