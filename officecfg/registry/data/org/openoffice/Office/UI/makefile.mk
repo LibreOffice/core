@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -72,8 +72,6 @@ LOCALIZEDFILES= \
     WriterWebWindowState.xcu \
     WriterCommands.xcu\
     GenericCategories.xcu\
-    ReportCommands.xcu \
-    DbReportWindowState.xcu
 
 XCUFILES= \
     $(LOCALIZEDFILES) \
