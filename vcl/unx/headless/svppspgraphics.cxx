@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svppspgraphics.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,13 +325,7 @@ void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
 }
 
-bool PspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
-{
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
-        return false;
-}
-
-bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/ )
 {
         // TODO: implement and advertise OutDevSupport_B2DDraw support
         return false;
@@ -357,6 +351,12 @@ sal_Bool PspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
     m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, (Point**)pPtAry, (BYTE**)pFlgAry);
     return sal_True;
+}
+
+bool PspGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+    // TODO: implement and advertise OutDevSupport_B2DDraw support
+    return false;
 }
 
 void PspGraphics::invert( ULONG /*nPoints*/,
