@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.243 $
+ * $Revision: 1.244 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,10 @@
 #endif
 
 #include <sal/alloca.h>
+
+#include <cmath>
+#include <cstring>
+
 #include <memory>
 #include <algorithm>
 
