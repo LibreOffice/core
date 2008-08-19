@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generictoolbarcontroller.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,8 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <classes/resource.hrc>
+#include <classes/fwkresid.hxx>
 #include <comphelper/uieventslogger.hxx>
 
 using namespace ::com::sun::star::awt;
@@ -252,6 +254,29 @@ throw ( RuntimeException )
             }
             else
             {
+                // Replacement for place holders
+                if ( aStrValue.matchAsciiL( "($1)", 4 ))
+                {
+                    String aResStr = String( FwkResId( STR_UPDATEDOC ));
+                    rtl::OUString aTmp( aResStr );
+                    aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+                    aTmp += aStrValue.copy( 4 );
+                    aStrValue = aTmp;
+                }
+                else if ( aStrValue.matchAsciiL( "($2)", 4 ))
+                {
+                    String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
+                    rtl::OUString aTmp( aResStr );
+                    aTmp += aStrValue.copy( 4 );
+                    aStrValue = aTmp;
+                }
+                else if ( aStrValue.matchAsciiL( "($3)", 4 ))
+                {
+                    String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
+                    rtl::OUString aTmp( aResStr );
+                    aTmp += aStrValue.copy( 4 );
+                    aStrValue = aTmp;
+                }
                 ::rtl::OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
                 m_pToolbar->SetItemText( m_nID, aText );
                 m_pToolbar->SetQuickHelpText( m_nID, aText );
