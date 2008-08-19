@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterController.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsFontProvider.hxx"
-#include "view/SlsHighlightObject.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "cache/SlsPageCacheManager.hxx"
 
@@ -127,8 +126,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       maTotalWindowArea(),
       mnPaintEntranceCount(0),
       mbIsContextMenuOpen(false),
-      mpProperties(new Properties()),
-      mpHighlightObject(NULL)
+      mpProperties(new Properties())
 {
     ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
     OSL_ASSERT(pWindow!=NULL);
@@ -314,6 +312,15 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 
 
 
+void SlideSorterController::PrePaint()
+{
+    // forward VCLs PrePaint window event to DrawingLayer
+    mrView.PrePaint();
+}
+
+
+
+
 void SlideSorterController::Paint (
     const Rectangle& rBBox,
     ::Window* pWindow)
@@ -328,7 +335,7 @@ void SlideSorterController::Paint (
                 GetSelectionManager()->MakeSelectionVisible();
 
             mrView.SetApplicationDocumentColor(GetProperties()->GetBackgroundColor());
-            mrView.CompleteRedraw(pWindow, Region(rBBox), 0, 0);
+            mrView.CompleteRedraw(pWindow, Region(rBBox), 0);
         }
         catch (const Exception&)
         {
@@ -508,24 +515,10 @@ void SlideSorterController::PreModelChange (void)
     mpPageSelector->PrepareModelChange();
     GetCurrentSlideManager()->PrepareModelChange();
 
-    // The highlight object will be destroyed in
-    // SlideSorterView::PreModelChange() along with the page objects.
-    mpHighlightObject = NULL;
-
     ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
     if (pWindow != NULL)
         mrView.PreModelChange();
 
-    if (mpHighlightObject != NULL)
-    {
-        SdrPage* pPage = mpHighlightObject->GetPage();
-        if (pPage != NULL)
-        {
-            pPage->RemoveObject(mpHighlightObject->GetOrdNum());
-            delete mpHighlightObject;
-        }
-        mpHighlightObject = NULL;
-    }
     mbPostModelChangePending = true;
 }
 
@@ -543,18 +536,6 @@ void SlideSorterController::PostModelChange (const bool bSkipModelResync)
         GetCurrentSlideManager()->HandleModelChange();
 
         mrView.PostModelChange ();
-
-        mpHighlightObject = new HighlightObject(mrSlideSorter);
-        if (mpHighlightObject != NULL)
-        {
-            mrView.AddSdrObject(*mpHighlightObject);
-            // Move to below all other objects in paint order.
-            SdrPage* pPage = mpHighlightObject->GetPage();
-            if (pPage != NULL)
-            {
-                pPage->SetObjectOrdNum(mpHighlightObject->GetOrdNum(), 0);
-            }
-        }
 
         pWindow->SetViewOrigin (Point (0,0));
         pWindow->SetViewSize (mrView.GetModelArea().GetSize());
@@ -1058,15 +1039,6 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 }
 
 
-
-
-view::HighlightObject* SlideSorterController::GetHighlightObject (void) const
-{
-    if (GetProperties()->IsHighlightCurrentSlide())
-        return mpHighlightObject;
-    else
-        return NULL;
-}
 
 
 //===== SlideSorterController::ModelChangeLock ================================
