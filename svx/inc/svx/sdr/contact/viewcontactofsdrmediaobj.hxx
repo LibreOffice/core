@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrmediaobj.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,20 +54,15 @@ namespace sdr
 
             // basic constructor, used from SdrObject.
             ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewContactOfSdrMediaObj();
 
-            // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
-
-            // #i72701#
-            virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
         public:
+
+            // access to SdrMediaObj
+            SdrMediaObj& GetSdrMediaObj() const
+            {
+                return (SdrMediaObj&)GetSdrObject();
+            }
 
             bool    hasPreferredSize() const;
             Size    getPreferredSize() const;
@@ -83,6 +78,11 @@ namespace sdr
 
             // get notified if some properties have changed
             virtual void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
