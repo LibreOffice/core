@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,8 @@
 class AquaSalFrame;
 class AquaSalBitmap;
 class ImplDevFontAttributes;
+
+class CGRect;
 
 // mac specific physically available font face
 class ImplMacFontData : public ImplFontData
@@ -166,8 +168,8 @@ public:
 
     bool                CheckContext();
     void                UpdateWindow( NSRect& rRect ); // delivered in NSView coordinates
-    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
     void                RefreshRect( const CGRect& );
+    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
 
@@ -183,10 +185,10 @@ public:
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths );
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin);
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
