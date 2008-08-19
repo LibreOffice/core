@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrobjcustomshape.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,10 @@
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <svditer.hxx>
+#include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,16 +53,110 @@ namespace sdr
         {
         }
 
-        // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-        // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfSdrObjCustomShape::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence() const
         {
-            // copy the saved original PaintMode from the DisplayInfo to the old
-            // structures so that it is available for the old 3D rendering.
-            rDisplayInfo.GetPaintInfoRec()->nOriginalDrawMode = rDisplayInfo.GetOriginalDrawMode();
-            rDisplayInfo.GetPaintInfoRec()->bNotActive = rDisplayInfo.IsGhostedDrawModeActive();
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const SfxItemSet& rItemSet = GetCustomShapeObj().GetMergedItemSet();
+            SdrText* pSdrText = GetCustomShapeObj().getText(0);
 
-            return ViewContactOfTextObj::PaintObject( rDisplayInfo, rPaintRectangle, rAssociatedVOC );
+            if(pSdrText)
+            {
+                drawinglayer::attribute::SdrShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrShadowTextAttribute(rItemSet, *pSdrText);
+                drawinglayer::primitive2d::Primitive2DSequence xGroup;
+                bool bHasText(pAttribute && pAttribute->getText());
+
+                // create Primitive2DSequence from sub-geometry
+                const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
+
+                if(pSdrObjRepresentation)
+                {
+                    SdrObjListIter aIterator(*pSdrObjRepresentation);
+
+                    while(aIterator.IsMore())
+                    {
+                        SdrObject& rCandidate = *aIterator.Next();
+                        const drawinglayer::primitive2d::Primitive2DSequence xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
+                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xGroup, xNew);
+                    }
+                }
+
+                if(bHasText || xGroup.hasElements())
+                {
+                    // prepare text box geometry
+                    ::basegfx::B2DHomMatrix aTextBoxMatrix;
+
+                    if(bHasText)
+                    {
+                        // take unrotated snap rect as default, then get the
+                        // unrotated text box. Rotation needs to be done centered
+                        Rectangle aTextBound(GetCustomShapeObj().GetGeoRect());
+                        GetCustomShapeObj().GetTextBounds(aTextBound);
+                        const ::basegfx::B2DRange aTextBoxRange(aTextBound.Left(), aTextBound.Top(), aTextBound.Right(), aTextBound.Bottom());
+
+                        // fill object matrix
+                        if(!::basegfx::fTools::equalZero(aTextBoxRange.getWidth()))
+                        {
+                            aTextBoxMatrix.set(0, 0, aTextBoxRange.getWidth());
+                        }
+
+                        if(!::basegfx::fTools::equalZero(aTextBoxRange.getHeight()))
+                        {
+                            aTextBoxMatrix.set(1, 1, aTextBoxRange.getHeight());
+                        }
+
+                        const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
+                        const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
+
+                        if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !::basegfx::fTools::equalZero(fExtraTextRotation))
+                        {
+                            const double fHalfWidth(aTextBoxRange.getWidth() * 0.5);
+                            const double fHalfHeight(aTextBoxRange.getHeight() * 0.5);
+
+                            // move to it's own center to rotate around it
+                            aTextBoxMatrix.translate(-fHalfWidth, -fHalfHeight);
+
+                            if(rGeoStat.nShearWink)
+                            {
+                                aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
+                            }
+
+                            if(rGeoStat.nDrehWink)
+                            {
+                                aTextBoxMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
+                            }
+
+                            if(!::basegfx::fTools::equalZero(fExtraTextRotation))
+                            {
+                                aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
+                            }
+
+                            // move back
+                            aTextBoxMatrix.translate(fHalfWidth, fHalfHeight);
+                        }
+
+                        aTextBoxMatrix.translate(aTextBoxRange.getMinX(), aTextBoxRange.getMinY());
+                    }
+
+                    // make sure a (even empty) SdrShadowTextAttribute exists for
+                    // primitive creation
+                    if(!pAttribute)
+                    {
+                        pAttribute = new drawinglayer::attribute::SdrShadowTextAttribute(0L, 0L);
+                    }
+
+                    // create primitive
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
+                        *pAttribute, xGroup, aTextBoxMatrix));
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                }
+
+                if(pAttribute)
+                {
+                    delete pAttribute;
+                }
+            }
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr
