@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,6 +233,7 @@
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
 #endif
+#include <cppuhelper/exc_hlp.hxx>
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
@@ -249,6 +250,8 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #endif
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::view;
@@ -273,6 +276,9 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 namespace css = ::com::sun::star;
+
+using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
+namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 
 
 #define DEFAULT_WIDTH  10000
@@ -1148,24 +1154,13 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 ||  ( aCommand.Name.compareToAscii( "store" ) == 0 )
                 )
         {
-            Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-            if ( xPersist.is() )
-            {
-                xPersist->storeOwn();
-                notifyDataSourceModified();
-            }
+            impl_store_throw();
         }
         else if (   ( aCommand.Name.compareToAscii( "shutdown" ) == 0 ) // compatibility
                 ||  ( aCommand.Name.compareToAscii( "close" ) == 0 )
                 )
         {
-            bool bSuccess = prepareClose();
-            if ( bSuccess && m_xEmbeddedObject.is() )
-            {
-                m_xEmbeddedObject->changeState( EmbedStates::LOADED );
-                bSuccess = m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED;
-            }
-            aRet <<= bSuccess;
+            aRet <<= impl_close_throw();
         }
         else
         {
@@ -1848,6 +1843,131 @@ Reference< ::com::sun::star::util::XCloseable> ODocumentDefinition::getComponent
     }
     return xComp;
 }
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    Reference< XDatabaseDocumentUI > lcl_getDatabaseDocumentUI( ODatabaseModelImpl& _rModelImpl )
+    {
+        Reference< XDatabaseDocumentUI > xUI;
+
+        Reference< XModel > xModel( _rModelImpl.getModel_noCreate() );
+        if ( xModel.is() )
+            xUI.set( xModel->getCurrentController(), UNO_QUERY );
+        return xUI;
+    }
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bForEditing )
+{
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    if ( !m_pImpl || !m_pImpl->m_pDataSource )
+        throw DisposedException();
+
+    Reference< XDatabaseDocumentUI > xUI( lcl_getDatabaseDocumentUI( *m_pImpl->m_pDataSource ) );
+    if ( !xUI.is() )
+    {
+        // no XDatabaseDocumentUI -> just execute the respective command
+        m_bOpenInDesign = _bForEditing;
+        Any aComponent;
+        onCommandOpenSomething( Any(), true, NULL, aComponent, aGuard );
+        Reference< XComponent > xComponent;
+        OSL_VERIFY( aComponent >>= xComponent );
+        return xComponent;
+    }
+
+    Reference< XComponent > xComponent;
+    try
+    {
+        ::rtl::OUString sName( m_pImpl->m_aProps.aTitle );
+        sal_Int32 nObjectType = m_bForm ? DatabaseObject::FORM : DatabaseObject::REPORT;
+        aGuard.clear();
+
+        xComponent = xUI->loadComponent(
+            nObjectType, sName, _bForEditing
+        );
+    }
+    catch( RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        throw WrappedTargetException(
+            ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+    }
+    return xComponent;
+}
+
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_store_throw()
+{
+    Reference<XEmbedPersist> xPersist( m_xEmbeddedObject, UNO_QUERY );
+    if ( xPersist.is() )
+    {
+        xPersist->storeOwn();
+        notifyDataSourceModified();
+    }
+}
+
+// -----------------------------------------------------------------------------
+bool ODocumentDefinition::impl_close_throw()
+{
+    bool bSuccess = prepareClose();
+    if ( bSuccess && m_xEmbeddedObject.is() )
+    {
+        m_xEmbeddedObject->changeState( EmbedStates::LOADED );
+        bSuccess = m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED;
+    }
+    return bSuccess;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL ODocumentDefinition::open(  ) throw (WrappedTargetException, RuntimeException)
+{
+    return impl_openUI_nolck_throw( false );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL ODocumentDefinition::openDesign(  ) throw (WrappedTargetException, RuntimeException)
+{
+    return impl_openUI_nolck_throw( true );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    try
+    {
+        impl_store_throw();
+    }
+    catch( RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        throw WrappedTargetException(
+            ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+    }
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL ODocumentDefinition::close(  ) throw (WrappedTargetException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    sal_Bool bSuccess = sal_False;
+    try
+    {
+        bSuccess = impl_close_throw();
+    }
+    catch( RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        throw WrappedTargetException(
+            ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+    }
+    return bSuccess;
+}
+
+
 // -----------------------------------------------------------------------------
 void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)
 {
