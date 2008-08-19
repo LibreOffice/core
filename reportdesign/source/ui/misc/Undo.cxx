@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Undo.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -342,25 +342,6 @@ void OGroupSectionUndo::implReRemove( )
 
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;
-}
-//----------------------------------------------------------------------------
-TYPEINIT1( OToggleSlotUndo,         OCommentUndoAction );
-//----------------------------------------------------------------------------
-OToggleSlotUndo::OToggleSlotUndo(OReportModel& _rMod,sal_uInt16 _nSlot,USHORT nCommentID)
-: OCommentUndoAction(_rMod,nCommentID)
-,m_nSlot(_nSlot)
-{
-}
-//----------------------------------------------------------------------------
-void OToggleSlotUndo::Undo()
-{
-    const uno::Sequence< beans::PropertyValue > aArgs;
-    m_pController->executeChecked(m_nSlot,aArgs);
-}
-//----------------------------------------------------------------------------
-void OToggleSlotUndo::Redo()
-{
-    Undo();
 }
 //----------------------------------------------------------------------------
 TYPEINIT1( OGroupUndo,         OCommentUndoAction );
