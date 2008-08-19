@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generalpage.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,9 +52,8 @@
 #ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
 #endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
+#include <sfx2/docfilt.hxx>
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
@@ -85,7 +84,7 @@
 #ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
 #endif
-
+#include "UITools.hxx"
 //.........................................................................
 namespace dbaui
 {
@@ -599,8 +598,23 @@ namespace dbaui
     IMPL_LINK(OGeneralPage, OnOpenDocument, PushButton*, /*_pBox*/)
     {
         ::sfx2::FileDialogHelper aFileDlg( WB_OPEN, ::String::CreateFromAscii("sdatabase") );
+        const SfxFilter* pFilter = getStandardDatabaseFilter();
+        if ( pFilter )
+        {
+//          aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
+        }
         if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
+            if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() )
+            {
+                String sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
+                InfoBox aError(this, sMessage);
+                aError.Execute();
+                m_aRB_GetExistingDatabase.Check();
+                OnSetupModeSelected(&m_aRB_GetExistingDatabase);
+                return 0L;
+            }
             m_aBrowsedDocument.sURL = aFileDlg.GetPath();
             m_aBrowsedDocument.sFilter = String();
             m_aChooseDocumentHandler.Call( this );
