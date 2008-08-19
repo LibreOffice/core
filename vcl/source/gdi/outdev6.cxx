@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +49,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
+#include <math.h>
 #include <vcl/window.h>
 #include <vcl/svdata.hxx>
 
@@ -153,6 +154,66 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
+}
+
+// ------------------------------------------------------------------------
+// Caution: This method is nearly the same as
+// void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
+// so when changes are made here do not forget to make change sthere, too
+
+void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
+{
+    DBG_TRACE( "OutputDevice::DrawTransparent(B2D&,transparency)" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    // AW: Do NOT paint empty PolyPolygons
+    if(!rB2DPolyPoly.count())
+        return;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+    if( mbInitFillColor )
+        ImplInitFillColor();
+
+    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    {
+#ifdef UNX
+        // b2dpolygon support not implemented yet on non-UNX platforms
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
+        aB2DPP.transform( aTransform );
+
+        if( mpGraphics->DrawPolyPolygon( aB2DPP, fTransparency, this ) )
+        {
+#if 0
+            // MetaB2DPolyPolygonAction is not implemented yet:
+            // according to AW adding it is very dangerous since there is a lot
+            // of code that uses the metafile actions directly and unless every
+            // place that does this knows about the new action we need to fallback
+            if( mpMetaFile )
+                mpMetaFile->AddAction( new MetaB2DPolyPolygonAction( rB2DPolyPoly ) );
+#else
+            if( mpMetaFile )
+                mpMetaFile->AddAction( new MetaTransparentAction( PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
+#endif
+            return;
+        }
+#endif
+    }
+
+    // fallback to old polygon drawing if needed
+    const PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
+    DrawTransparent(PolyPolygon(rB2DPolyPoly), static_cast< sal_uInt16 >(fTransparency * 100.0));
 }
 
 // ------------------------------------------------------------------------
