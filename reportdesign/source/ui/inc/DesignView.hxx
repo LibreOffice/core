@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesignView.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/splitwin.hxx>
 #include <MarkedSection.hxx>
+#include "ScrollHelper.hxx"
 
 class KeyEvent;
 class MouseEvent;
@@ -59,7 +60,6 @@ class Window;
 
 namespace rptui
 {
-    class OScrollWindowHelper;
     class OReportSection;
     class OUnoObject;
     class OSectionView;
@@ -73,12 +73,11 @@ namespace rptui
     class ODesignView : public dbaui::ODataView, public SfxBroadcaster, public IMarkedSection
     {
     private:
-        //Splitter                          m_aSplitter;
-        SplitWindow*                        m_pSplitWin;
+        SplitWindow                         m_aSplitWin;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
         OReportController&                  m_rReportController;
-        OScrollWindowHelper*                m_pScrollWindow;
+        OScrollWindowHelper                 m_aScrollWindow;
         Window*                             m_pTaskPane;
         PropBrw*                            m_pPropWin;
         OAddFieldWindow*                    m_pAddField;
@@ -93,7 +92,7 @@ namespace rptui
         Size                                m_aGridSize;
         BOOL                                m_bGridVisible;
         BOOL                                m_bGridSnap;
-        BOOL                                m_bInSplitHandler;
+        BOOL                                m_bDeleted;
 
 
         DECL_LINK( MarkTimeout, Timer * );
@@ -166,12 +165,12 @@ namespace rptui
 
         /** All objects will be marked.
         */
-        void            SelectAll();
+        void            SelectAll(const sal_uInt16 _nObjectType);
 
         /// checks if a selection exists
         BOOL            HasSelection();
 
-        void            UpdatePropertyBrowserDelayed(OSectionView* _pView);
+        void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 
         USHORT          getSectionCount() const;
 
@@ -193,7 +192,6 @@ namespace rptui
         inline BOOL     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
-        BOOL            isDragStripes() const;
         /** turns the grid on or off
         *
         * \param _bGridVisible
@@ -233,7 +231,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > getCurrentControlModel() const;
 
         // IMarkedSection
-        ::boost::shared_ptr<OReportSection> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
         virtual void markSection(const sal_uInt16 _nPos);
 
         /** fills the positions of all collapsed sections.
@@ -261,8 +259,6 @@ namespace rptui
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */
-        void            setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
-
         void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
@@ -274,6 +270,10 @@ namespace rptui
         sal_Bool        isHandleEvent(sal_uInt16 _nId) const;
 
         sal_uInt32      getMarkedObjectCount() const;
+
+        /** zoom the ruler and view windows
+        */
+        void            zoom(const sal_Int16 _nZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
