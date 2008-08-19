@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,8 @@ TARGET=matrix
 # --- Files -------------------------------------
 
 SLOFILES= \
-                $(SLO)$/b2dhommatrix.obj	\
+                $(SLO)$/b2dhommatrix.obj		\
+                $(SLO)$/b2dhommatrixtools.obj	\
                 $(SLO)$/b3dhommatrix.obj
             
 # --- Targets ----------------------------------
