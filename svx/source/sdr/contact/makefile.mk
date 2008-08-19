@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,31 +47,50 @@ EXCEPTIONSFILES=\
         $(SLO)$/viewobjectcontactofunocontrol.obj
 
 SLOFILES=\
-        $(EXCEPTIONSFILES)                              \
-        $(SLO)$/displayinfo.obj							\
-        $(SLO)$/viewcontact.obj							\
-        $(SLO)$/viewcontactpainthelper.obj				\
-        $(SLO)$/viewcontactofsdrobj.obj					\
-        $(SLO)$/viewcontactofvirtobj.obj				\
-        $(SLO)$/viewcontactoftextobj.obj				\
-        $(SLO)$/viewcontactofsdrpage.obj				\
-        $(SLO)$/viewcontactofmasterpagedescriptor.obj	\
-        $(SLO)$/viewcontactofgroup.obj					\
-        $(SLO)$/viewcontactofe3dscene.obj				\
-        $(SLO)$/viewcontactofpageobj.obj				\
-        $(SLO)$/viewcontactofgraphic.obj				\
-        $(SLO)$/objectcontact.obj						\
-        $(SLO)$/objectcontactofobjlistpainter.obj		\
-        $(SLO)$/objectcontactofpageview.obj				\
-        $(SLO)$/viewobjectcontact.obj					\
-        $(SLO)$/viewobjectcontactredirector.obj			\
-        $(SLO)$/vocbitmapbuffer.obj						\
-        $(SLO)$/vocofmasterpagedescriptor.obj			\
-        $(SLO)$/viewobjectcontactlist.obj				\
-        $(SLO)$/viewcontactofsdrobjcustomshape.obj      \
-        $(SLO)$/viewcontactofsdrmediaobj.obj			\
-        $(SLO)$/viewobjectcontactofsdrmediaobj.obj		\
-        $(SLO)$/viewcontactofunocontrol.obj				\
+        $(EXCEPTIONSFILES)									\
+        $(SLO)$/displayinfo.obj								\
+        $(SLO)$/viewcontact.obj								\
+        $(SLO)$/viewcontactofe3d.obj						\
+        $(SLO)$/viewcontactofsdrobj.obj						\
+        $(SLO)$/viewcontactofvirtobj.obj					\
+        $(SLO)$/viewcontactoftextobj.obj					\
+        $(SLO)$/viewcontactofsdrrectobj.obj					\
+        $(SLO)$/viewcontactofsdrpathobj.obj					\
+        $(SLO)$/viewcontactofsdrole2obj.obj					\
+        $(SLO)$/viewcontactofsdrcircobj.obj					\
+        $(SLO)$/viewcontactofsdrcaptionobj.obj				\
+        $(SLO)$/viewcontactofsdrmeasureobj.obj				\
+        $(SLO)$/viewcontactofsdredgeobj.obj					\
+        $(SLO)$/viewcontactofsdrpage.obj					\
+        $(SLO)$/viewcontactofmasterpagedescriptor.obj		\
+        $(SLO)$/viewcontactofgroup.obj						\
+        $(SLO)$/viewcontactofe3dscene.obj					\
+        $(SLO)$/viewcontactofe3dcube.obj					\
+        $(SLO)$/viewcontactofe3dextrude.obj					\
+        $(SLO)$/viewcontactofe3dlathe.obj					\
+        $(SLO)$/viewcontactofe3dsphere.obj					\
+        $(SLO)$/viewcontactofe3dpolygon.obj					\
+        $(SLO)$/viewcontactofpageobj.obj					\
+        $(SLO)$/viewcontactofgraphic.obj					\
+        $(SLO)$/viewcontactofsdrobjcustomshape.obj			\
+        $(SLO)$/viewcontactofsdrmediaobj.obj				\
+        $(SLO)$/viewcontactofunocontrol.obj					\
+        $(SLO)$/objectcontact.obj							\
+        $(SLO)$/objectcontacttools.obj						\
+        $(SLO)$/objectcontactofobjlistpainter.obj			\
+        $(SLO)$/objectcontactofpageview.obj					\
+        $(SLO)$/viewobjectcontact.obj						\
+        $(SLO)$/viewobjectcontactofe3d.obj					\
+        $(SLO)$/viewobjectcontactredirector.obj				\
+        $(SLO)$/viewobjectcontactofsdrmediaobj.obj			\
+        $(SLO)$/viewobjectcontactofgroup.obj				\
+        $(SLO)$/viewobjectcontactofe3dscene.obj				\
+        $(SLO)$/viewobjectcontactofsdrpage.obj				\
+        $(SLO)$/viewobjectcontactofsdrobj.obj				\
+        $(SLO)$/viewobjectcontactofpageobj.obj				\
+        $(SLO)$/viewobjectcontactofsdrole2obj.obj			\
+        $(SLO)$/viewobjectcontactofgraphic.obj				\
+        $(SLO)$/viewobjectcontactofmasterpagedescriptor.obj	\
         $(SLO)$/sdrmediawindow.obj					
         
 .INCLUDE :  target.mk
