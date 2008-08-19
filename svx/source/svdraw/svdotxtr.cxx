@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotxtr.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,17 +37,13 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoutl.hxx>
-#include "svdtxhdl.hxx"  // DrawTextToPath fuer Convert
 #include <svx/svdpage.hxx>   // fuer Convert
 #include <svx/svdmodel.hxx>  // fuer Convert
 #include <svx/outliner.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
-
-// #i37011#
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
+#include "svdtxhdl.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
