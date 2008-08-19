@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.196 $
+ * $Revision: 1.197 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,7 +137,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#   include <svtools/itemiter.hxx>  //SfxItemIter
+#include <svtools/itemiter.hxx>  //SfxItemIter
+
+#include <stdio.h>
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
@@ -1663,7 +1665,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
-    long nStartCp, long nLen, short nType )
+    long nStartCp, long nLen, ManTypes nType )
 {
     // rettet Flags u.ae. u. setzt sie zurueck
     WW8ReaderSave aSave( this );
@@ -1699,8 +1701,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     {
         const WW8_ATRD* pDescri = (const WW8_ATRD*)pSD->GetData();
 
-        const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
-        if( pA )
+        if (const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst)))
             sAuthor = *pA;
         else
         {
@@ -1710,43 +1711,29 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         }
     }
 
-    SwNodeIndex aNdIdx( rDoc.GetNodes().GetEndOfExtras() );
-    aNdIdx = *rDoc.GetNodes().MakeTextSection(aNdIdx, SwNormalStartNode,
-        rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false));
+    sal_uInt32 nDateTime = 0;
 
+    if (BYTE * pExtended = pPlcxMan->GetExtendedAtrds()) // Word < 2002 has no date data for comments
     {
-        SwPaM *pTempPaM = pPaM;
-        SwPaM aPaM(aNdIdx);
-        pPaM = &aPaM;
-        Read_HdFtFtnText( &aNdIdx, pRes->nCp2OrIdx, pRes->nMemLen, MAN_AND );
-        pPaM = pTempPaM;
+        ULONG nIndex = pSD->GetIdx() & 0xFFFF; //Index is (stupidly) multiplexed for WW8PLCFx_SubDocs
+        if (pWwFib->lcbAtrdExtra/18 > nIndex)
+            nDateTime = SVBT32ToUInt32(*(SVBT32*)(pExtended+(nIndex*18)));
     }
 
-    // erzeuge das PostIt
-    DateTime aDate;
+    DateTime aDate = sw::ms::DTTM2DateTime(nDateTime);
+
     String sTxt;
+    OutlinerParaObject *pOutliner = ImportAsOutliner( sTxt, pRes->nCp2OrIdx,
+        pRes->nCp2OrIdx + pRes->nMemLen, MAN_AND );
 
-    {   // Text aus den Nodes in den String uebertragen
-        SwNodeIndex aIdx( aNdIdx, 1 ),
-                    aEnd( *aNdIdx.GetNode().EndOfSectionNode() );
-        SwTxtNode* pTxtNd;
-        while( aIdx != aEnd )
-        {
-            if( 0 != ( pTxtNd = aIdx.GetNode().GetTxtNode() ))
-            {
-                if( sTxt.Len() )
-                    sTxt += '\x0a';     // Zeilenumbruch
-                sTxt += pTxtNd->GetExpandTxt();
-            }
-            aIdx++;
-        }
-        rDoc.DeleteSection( &aNdIdx.GetNode() );
-        this->pFmtOfJustInsertedApo = 0;
-    }
+    this->pFmtOfJustInsertedApo = 0;
+    SwPostItField aPostIt(
+        (SwPostItFieldType*)rDoc.GetSysFldType(RES_POSTITFLD), sAuthor,
+        sTxt, aDate );
+    aPostIt.SetTextObject(pOutliner);
 
-    rDoc.Insert( *pPaM, SwFmtFld( SwPostItField(
-        (SwPostItFieldType*)rDoc.GetSysFldType( RES_POSTITFLD ), sAuthor, sTxt,
-        aDate )), 0);
+    rDoc.Insert(*pPaM, SwFmtFld(aPostIt), 0);
+
     return 0;
 }
 
@@ -2974,7 +2961,7 @@ void SwWW8ImplReader::CloseAttrEnds()
     EndSpecial();
 }
 
-bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
+bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 {
     sw::log::Environment eContext = sw::log::eMainText;
     if (nType == MAN_MAINTEXT)
@@ -3237,8 +3224,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pNode_FLY_AT_CNTNT = 0;
     pDrawModel = 0;
     pDrawPg = 0;
-    nDrawTxbx = 0;
-    pDrawEditEngine = 0;
+    mpDrawEditEngine = 0;
     pWWZOrder = 0;
     pFormImpl = 0;
     mpChosenOutlineNumRule = 0;
