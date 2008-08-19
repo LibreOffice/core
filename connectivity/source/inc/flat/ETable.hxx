@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ETable.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,6 @@ namespace connectivity
 
         public:
             //  DECLARE_CTY_DEFAULTS( OFlatTable_BASE);
-            OFlatTable( sdbcx::OCollection* _pTables,OFlatConnection* _pConnection);
             OFlatTable( sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
