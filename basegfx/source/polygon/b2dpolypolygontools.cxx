@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygontools.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,24 +84,48 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolyPolygon removeIntersections(const B2DPolyPolygon& rCandidate)
+        B2DPolyPolygon correctOutmostPolygon(const B2DPolyPolygon& rCandidate)
         {
-            return SolveCrossovers(rCandidate, false);
-        }
+            const sal_uInt32 nCount(rCandidate.count());
 
-        B2DPolyPolygon removeAllIntersections(const B2DPolyPolygon& rCandidate)
-        {
-            return SolveCrossovers(rCandidate);
-        }
+            if(nCount > 1L)
+            {
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                {
+                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                    sal_uInt32 nDepth(0L);
 
-        B2DPolyPolygon removeNeutralPolygons(const B2DPolyPolygon& rCandidate, bool bUseOr)
-        {
-            B2DPolyPolygon aRetval(rCandidate);
+                    for(sal_uInt32 b(0L); b < nCount; b++)
+                    {
+                        if(b != a)
+                        {
+                            const B2DPolygon aCompare(rCandidate.getB2DPolygon(b));
 
-            aRetval = StripNeutralPolygons(aRetval);
-            aRetval = StripDispensablePolygons(aRetval, !bUseOr);
+                            if(tools::isInside(aCompare, aCandidate, true))
+                            {
+                                nDepth++;
+                            }
+                        }
+                    }
 
-            return aRetval;
+                    if(!nDepth)
+                    {
+                        B2DPolyPolygon aRetval(rCandidate);
+
+                        if(a != 0L)
+                        {
+                            // exchange polygon a and polygon 0L
+                            aRetval.setB2DPolygon(0L, aCandidate);
+                            aRetval.setB2DPolygon(a, rCandidate.getB2DPolygon(0L));
+                        }
+
+                        // exit
+                        return aRetval;
+                    }
+                }
+            }
+
+            return rCandidate;
         }
 
         B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound)
@@ -218,6 +242,20 @@ namespace basegfx
             }
         }
 
+        B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate)
+        {
+            B2DRange aRetval;
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                aRetval.expand(tools::getRangeWithControlPoints(aCandidate));
+            }
+
+            return aRetval;
+        }
+
         B2DRange getRange(const B2DPolyPolygon& rCandidate)
         {
             B2DRange aRetval;
@@ -232,110 +270,40 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolyPolygon applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
+        void applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fFullDashDotLen)
         {
-            B2DPolyPolygon aRetval;
-
-            if(0.0 == fFullDashDotLen && raDashDotArray.size())
+            if(0.0 == fFullDashDotLen && rDotDashArray.size())
             {
-                // calculate fFullDashDotLen from raDashDotArray
-                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+                // calculate fFullDashDotLen from rDotDashArray
+                fFullDashDotLen = ::std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
             if(rCandidate.count() && fFullDashDotLen > 0.0)
             {
+                B2DPolyPolygon aLineTarget, aGapTarget;
+
                 for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
                 {
-                    B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                    aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
-                }
-            }
+                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
-            return aRetval;
-        }
+                    applyLineDashing(
+                        aCandidate,
+                        rDotDashArray,
+                        pLineTarget ? &aLineTarget : 0,
+                        pGapTarget ? &aGapTarget : 0,
+                        fFullDashDotLen);
 
-        B2DPolyPolygon mergeDashedLines(const B2DPolyPolygon& rCandidate)
-        {
-            B2DPolyPolygon aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
-
-            if(nPolygonCount)
-            {
-                B2DPolygon aMergePolygon;
-
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-                {
-                    if(aMergePolygon.count())
+                    if(pLineTarget)
                     {
-                        B2DPolygon aNewCandidate = rCandidate.getB2DPolygon(a);
-
-                        if(aNewCandidate.count())
-                        {
-                            // does aNewCandidate start where aMergePolygon ends?
-                            if(aNewCandidate.getB2DPoint(0L) == aMergePolygon.getB2DPoint(aMergePolygon.count() - 1L))
-                            {
-                                // copy remaining points to aMergePolygon
-                                for(sal_uInt32 b(1L); b < aNewCandidate.count(); b++)
-                                {
-                                    aMergePolygon.append(aNewCandidate.getB2DPoint(b));
-                                }
-                            }
-                            else
-                            {
-                                // new start point, add aMergePolygon
-                                aRetval.append(aMergePolygon);
-
-                                // set aMergePolygon to the new polygon
-                                aMergePolygon = aNewCandidate;
-                            }
-                        }
+                        pLineTarget->append(aLineTarget);
                     }
-                    else
+
+                    if(pGapTarget)
                     {
-                        // set aMergePolygon to the new polygon
-                        aMergePolygon = rCandidate.getB2DPolygon(a);
-                    }
-                }
-
-                // append the last used merge polygon
-                if(aMergePolygon.count())
-                {
-                    aRetval.append(aMergePolygon);
-                }
-
-                // test if last and first need to be appended, too
-                if(aRetval.count() > 1)
-                {
-                    B2DPolygon aFirst = aRetval.getB2DPolygon(0L);
-                    B2DPolygon aLast = aRetval.getB2DPolygon(aRetval.count() - 1L);
-
-                    if(aFirst.getB2DPoint(0L) == aLast.getB2DPoint(aLast.count() - 1L))
-                    {
-                        // copy remaining points to aLast
-                        for(sal_uInt32 a(1L); a < aFirst.count(); a++)
-                        {
-                            aLast.append(aFirst.getB2DPoint(a));
-                        }
-
-                        // create new retval
-                        B2DPolyPolygon aNewRetval;
-
-                        // copy the unchanged part polygons
-                        for(sal_uInt32 b(1L); b < aRetval.count() - 1L; b++)
-                        {
-                            aNewRetval.append(aRetval.getB2DPolygon(b));
-                        }
-
-                        // append new part polygon
-                        aNewRetval.append(aLast);
-
-                        // use as return value
-                        aRetval = aNewRetval;
+                        pGapTarget->append(aGapTarget);
                     }
                 }
             }
-
-            return aRetval;
         }
 
         bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
@@ -484,6 +452,54 @@ namespace basegfx
             }
         }
 
+        B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue)
+        {
+            if(0.0 != fValue)
+            {
+                B2DPolyPolygon aRetval;
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    aRetval.append(growInNormalDirection(rCandidate.getB2DPolygon(a), fValue));
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
+        void correctGrowShrinkPolygonPair(B2DPolyPolygon& /*rOriginal*/, B2DPolyPolygon& /*rGrown*/)
+        {
+        }
+
+        B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments)
+        {
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            {
+                aRetval.append(reSegmentPolygon(rCandidate.getB2DPolygon(a), nSegments));
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon interpolate(const B2DPolyPolygon& rOld1, const B2DPolyPolygon& rOld2, double t)
+        {
+            OSL_ENSURE(rOld1.count() == rOld2.count(), "B2DPolyPolygon interpolate: Different geometry (!)");
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < rOld1.count(); a++)
+            {
+                aRetval.append(interpolate(rOld1.getB2DPolygon(a), rOld2.getB2DPolygon(a), t));
+            }
+
+            return aRetval;
+        }
+
         bool isRectangle( const B2DPolyPolygon& rPoly )
         {
             // exclude some cheap cases first
@@ -511,6 +527,18 @@ namespace basegfx
             {
                 return rCandidate;
             }
+        }
+
+        B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges)
+        {
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            {
+                aRetval.append(reSegmentPolygonEdges(rCandidate.getB2DPolygon(a), nSubEdges, bHandleCurvedEdges, bHandleStraightEdges));
+            }
+
+            return aRetval;
         }
 
         //////////////////////////////////////////////////////////////////////
