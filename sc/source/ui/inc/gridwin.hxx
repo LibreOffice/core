@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -314,6 +314,7 @@ private:
 protected:
     using Window::Resize;
     virtual void    Resize( const Size& rSize );
+    virtual void    PrePaint();
     virtual void    Paint( const Rectangle& rRect );
     virtual void    KeyInput(const KeyEvent& rKEvt);
     virtual void    GetFocus();
