@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MDriver.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include "MDriver.hxx"
 #include "MConnection.hxx"
 #include "connectivity/dbexception.hxx"
+#include <tools/solar.h>
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -154,7 +155,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     else
     {
         ::rtl::OUString sMsg = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Could not load the library "));
-        sMsg += ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
+        sMsg += ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
         ::dbtools::throwGenericSQLException(sMsg,*this);
     }
 
@@ -292,7 +293,7 @@ bool MozabDriver::ensureInit()
 
     OSL_ENSURE(NULL == m_pCreationFunc, "MozabDriver::ensureInit: inconsistence: already have a factory function!");
 
-    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
+    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
 
     // load the dbtools library
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
