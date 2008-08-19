@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofgraphic.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
+#include <svx/sdr/contact/viewobjectcontactofgraphic.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/sdr/animation/ainfographic.hxx>
+#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <svtools/itemset.hxx>
+
+#ifndef ITEMID_GRF_CROP
+#define ITEMID_GRF_CROP 0
+#endif
+
+#include <svx/sdgcpitm.hxx>
+#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/event/eventhandler.hxx>
-
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include "svdstr.hrc"
 #include <svdglob.hxx>
 
@@ -45,527 +56,166 @@
 
 namespace sdr
 {
-    namespace event
-    {
-        class AsynchGraphicLoadingEvent : public BaseEvent
-        {
-            // the ViewContactOfGraphic to work with
-            sdr::contact::ViewContactOfGraphic&     mrVCOGraphic;
-
-        public:
-            // basic constructor.
-            AsynchGraphicLoadingEvent(
-                EventHandler& rEventHandler, sdr::contact::ViewContactOfGraphic& rVCOGraphic);
-
-            // destructor
-            virtual ~AsynchGraphicLoadingEvent();
-
-            // the called method if the event is triggered
-            virtual void ExecuteEvent();
-        };
-
-        AsynchGraphicLoadingEvent::AsynchGraphicLoadingEvent(
-            EventHandler& rEventHandler, sdr::contact::ViewContactOfGraphic& rVCOGraphic)
-        :   BaseEvent(rEventHandler),
-            mrVCOGraphic(rVCOGraphic)
-        {
-        }
-
-        AsynchGraphicLoadingEvent::~AsynchGraphicLoadingEvent()
-        {
-            mrVCOGraphic.ForgetAsynchGraphicLoadingEvent(this);
-        }
-
-        void AsynchGraphicLoadingEvent::ExecuteEvent()
-        {
-            mrVCOGraphic.DoAsynchGraphicLoading();
-        }
-    } // end of namespace event
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
     namespace contact
     {
-        // Test graphics state and eventually trigger a SwapIn event or an Asynchronous
-        // load event. Return value gives info if SwapIn was triggered.
-        sal_Bool ViewContactOfGraphic::ImpPrepareForPaint(
-            DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+        // Create a Object-Specific ViewObjectContact, set ViewContact and
+        // ObjectContact. Always needs to return something.
+        ViewObjectContact& ViewContactOfGraphic::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
-            sal_Bool bRetval(sal_False);
-            SdrGrafObj& rGrafObj = GetGrafObject();
+            ViewObjectContact* pRetval = new ViewObjectContactOfGraphic(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
 
-            // 2nd part should not be necessary when all graphics creationg instances set
-            // the SwapState correctly. It was there for historical reasons since before
-            // the SwapState could be set it was simply 'tried' to SwapIn a GRAPHIC_NONE
-            if(rGrafObj.IsSwappedOut() /*|| (GRAPHIC_NONE == rGrafObj.GetGraphicType())*/)
-            {
-                if(rGrafObj.IsLinkedGraphic())
-                {
-                    // update graphic link
-                    rGrafObj.ImpUpdateGraphicLink();
-                }
-                else
-                {
-                    // SwapIn needs to be done. Decide if it can be done asynchronious.
-                    sal_Bool bSwapInAsynchronious(sal_False);
-                    ObjectContact& rObjectContact = rAssociatedVOC.GetObjectContact();
-
-                    // only when allowed from configuration
-                    if(rObjectContact.IsAsynchronGraphicsLoadingAllowed())
-                    {
-                        // direct output or vdev output (PageView buffering)
-                        if(rDisplayInfo.OutputToWindow() || rDisplayInfo.OutputToVirtualDevice())
-                        {
-                            // only when no metafile recording
-                            if(!rDisplayInfo.OutputToRecordingMetaFile())
-                            {
-                                // allow asynchronious loading
-                                bSwapInAsynchronious = sal_True;
-                            }
-                        }
-                    }
-
-                    if(bSwapInAsynchronious)
-                    {
-                        // maybe it's on the way, then do nothing
-                        if(!mpAsynchLoadEvent)
-                        {
-                            // Trigger asynchronious SwapIn.
-                            sdr::event::TimerEventHandler& rEventHandler = rObjectContact.GetEventHandler();
-
-                            mpAsynchLoadEvent = new sdr::event::AsynchGraphicLoadingEvent(
-                                rEventHandler, *this);
-                        }
-                    }
-                    else
-                    {
-                        if ( rDisplayInfo.OutputToPrinter() )   // #i76395# preview mechanism is only active if
-                            rGrafObj.ForceSwapIn();             // swapin is called from inside paint, so mbInsidePaint
-                        else                                    // has to be false to be able to print with high resolution
-                        {
-                            // SwapIn direct
-                            rGrafObj.mbInsidePaint = sal_True;
-                            rGrafObj.ForceSwapIn();
-                            rGrafObj.mbInsidePaint = sal_False;
-                        }
-                        bRetval = sal_True;
-                    }
-                }
-            }
-            else
-            {
-                // it is not swapped out, somehow it was loaded. In that case, forget
-                // about an existing triggered event
-                if(mpAsynchLoadEvent)
-                {
-                    // just delete it, this will remove it from the EventHandler and
-                    // will trigger ForgetAsynchGraphicLoadingEvent from the destructor
-                    delete mpAsynchLoadEvent;
-                }
-            }
-
-            return bRetval;
-        }
-
-        // method to create a AnimationInfo. Needs to give a result if
-        // SupportsAnimation() is overloaded and returns sal_True.
-        sdr::animation::AnimationInfo* ViewContactOfGraphic::CreateAnimationInfo()
-        {
-            sdr::animation::AnimationInfo* pRetval = 0L;
-            SdrGrafObj& rGrafObj = GetGrafObject();
-
-            if(GRAPHIC_BITMAP == rGrafObj.GetGraphicType() && rGrafObj.IsAnimated())
-            {
-                pRetval = new sdr::animation::AInfoGraphic(GetGrafObject());
-            }
-
-            if(!pRetval)
-            {
-                // something went wrong
-                DBG_ERROR("ViewContactOfGraphic::CreateAnimationInfo(): no anim, but SupportsAnimation (!)");
-                pRetval = new sdr::animation::AInfoDummy();
-            }
-
-            return pRetval;
-        }
-
-        // For draft object display
-        sal_Bool ViewContactOfGraphic::PaintGraphicDraft(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            sal_Bool bRetval(sal_False);
-            SdrGrafObj& rGrafObj = GetGrafObject();
-
-            // paint a shadowed frame in object size, not filled
-            Rectangle aUnrotatedRectangle;
-            rGrafObj.TakeUnrotatedSnapRect(aUnrotatedRectangle);
-            const GeoStat& rGeometric = rGrafObj.GetGeoStat();
-            bRetval = PaintShadowedFrame(rDisplayInfo, rPaintRectangle, aUnrotatedRectangle, rGeometric, sal_False);
-
-            // draw a draft bitmap
-            Bitmap aDraftBitmap(ResId(BMAP_GrafikEi, *ImpGetResMgr()));
-            Rectangle aBitmapOutRect;
-            bRetval |= PaintDraftBitmap(rDisplayInfo, aBitmapOutRect, aUnrotatedRectangle, rGeometric, aDraftBitmap);
-            rPaintRectangle.Union(aBitmapOutRect);
-
-            // Build the text for the draft object
-            XubString aDraftText = rGrafObj.GetFileName();
-
-            if(!aDraftText.Len())
-            {
-                aDraftText = rGrafObj.GetName();
-
-                // if loading add a hint for that
-                if(mpAsynchLoadEvent)
-                {
-                    aDraftText.AppendAscii(" ...");
-                }
-            }
-
-            if(aDraftText.Len())
-            {
-                OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
-                const Size aBitmapSize(pOutDev->PixelToLogic(aDraftBitmap.GetSizePixel()));
-
-                if(aUnrotatedRectangle.GetWidth() > aBitmapSize.Width())
-                {
-                    // calc a rectangle right from graphic
-                    Rectangle aRightRectangle(aUnrotatedRectangle);
-                    aRightRectangle.Left() += aBitmapSize.Width();
-
-                    // Paint DraftText
-                    Rectangle aTextOutRect;
-                    bRetval |= PaintDraftText(rDisplayInfo, aTextOutRect, aRightRectangle, rGeometric, aDraftText, rGrafObj.IsLinkedGraphic());
-                    rPaintRectangle.Union(aTextOutRect);
-                }
-            }
-
-            // If there is text in the object below, render it, too.
-            if(rGrafObj.HasText())
-            {
-                // force only text paint at SdrObject
-                rGrafObj.SdrTextObj::DoPaintObject(
-                    *rDisplayInfo.GetExtendedOutputDevice(),
-                    *rDisplayInfo.GetPaintInfoRec());
-                bRetval = sal_True;
-                rPaintRectangle.Union(rGrafObj.SdrTextObj::GetCurrentBoundRect());
-            }
-
-            return bRetval;
-        }
-
-        // For empty Graphic PresObj display
-        sal_Bool ViewContactOfGraphic::PaintGraphicPresObj(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            sal_Bool bRetval(sal_False);
-            OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
-            MapMode aDstMapMode(pOutDev->GetMapMode().GetMapUnit());
-            rPaintRectangle = GetPaintRectangle();
-            Point aPos(rPaintRectangle.Center());
-            Size aSize;
-
-            // get size of the graphic in output device units
-            SdrGrafObj& rGrafObj = GetGrafObject();
-            const MapMode& rGrafMapMode = rGrafObj.GetGrafPrefMapMode();
-            const Size& rGrafPrefSize = rGrafObj.GetGrafPrefSize();
-
-            if(MAP_PIXEL == rGrafMapMode.GetMapUnit())
-            {
-                aSize = pOutDev->PixelToLogic(rGrafPrefSize, aDstMapMode);
-            }
-            else
-            {
-                aSize = pOutDev->LogicToLogic(rGrafPrefSize, rGrafMapMode, aDstMapMode);
-            }
-
-            // calculate upper left position for painting the graphic
-            aPos.X() -= (aSize.Width() >> 1);
-            aPos.Y() -= (aSize.Height() >> 1);
-
-            if(aPos.X() >= rPaintRectangle.Left() && aPos.Y() >= rPaintRectangle.Top())
-            {
-                // centered graphic fits inside object
-                if(GRAPHIC_BITMAP == rGrafObj.GetGraphicType())
-                {
-                    rGrafObj.DrawGraphic(pOutDev, aPos, aSize);
-                }
-                else
-                {
-                    const sal_uInt32 nOldDrawMode(pOutDev->GetDrawMode());
-
-                    if(0L != (nOldDrawMode & DRAWMODE_GRAYBITMAP ))
-                    {
-                        // If GRAYBITMAP is used, render MetaFiles with gray, too
-                        sal_uInt32 nNewDrawMode(nOldDrawMode);
-
-                        nNewDrawMode &= ~(DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_NOFILL);
-                        nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL;
-
-                        pOutDev->SetDrawMode(nNewDrawMode);
-                    }
-
-                    // paint graphic
-                    rGrafObj.DrawGraphic(pOutDev, aPos, aSize);
-
-                    // restore DrawMode
-                    pOutDev->SetDrawMode(nOldDrawMode);
-                }
-
-                // set parameters
-                bRetval = sal_True;
-            }
-            else
-            {
-                // paint a shadowed frame in object size, filled
-                Rectangle aUnrotatedRectangle;
-                rGrafObj.TakeUnrotatedSnapRect(aUnrotatedRectangle);
-                const GeoStat& rGeometric = rGrafObj.GetGeoStat();
-                bRetval = PaintShadowedFrame(rDisplayInfo, rPaintRectangle, aUnrotatedRectangle, rGeometric, sal_True);
-            }
-
-            // If there is text in the object below, render it, too.
-            if(rGrafObj.HasText())
-            {
-                // force only text paint at SdrObject
-                rGrafObj.SdrTextObj::DoPaintObject(
-                    *rDisplayInfo.GetExtendedOutputDevice(),
-                    *rDisplayInfo.GetPaintInfoRec());
-                bRetval = sal_True;
-                rPaintRectangle.Union(rGrafObj.SdrTextObj::GetCurrentBoundRect());
-            }
-
-            return bRetval;
-        }
-
-        // Decide if graphic should be painted as draft
-        sal_Bool ViewContactOfGraphic::DoPaintGraphicDraft() const
-        {
-            SdrGrafObj& rGrafObj = GetGrafObject();
-
-            if( !rGrafObj.mbIsPreview && rGrafObj.IsSwappedOut())
-            {
-                return sal_True;
-            }
-
-            if(GRAPHIC_DEFAULT == rGrafObj.GetGraphicType() || GRAPHIC_NONE == rGrafObj.GetGraphicType())
-            {
-                return sal_True;
-            }
-
-            if(rGrafObj.IsEmptyPresObj())
-            {
-                return sal_True;
-            }
-
-            return sal_False;
-        }
-
-        void ViewContactOfGraphic::StopGettingViewed()
-        {
-            // call parent
-            ViewContactOfTextObj::StopGettingViewed();
-
-            // If there is an event triggered and no one is visualizing this object,
-            // get rid of the event
-            if(mpAsynchLoadEvent)
-            {
-                // just delete it, this will remove it from the EventHandler and
-                // will trigger ForgetAsynchGraphicLoadingEvent from the destructor
-                delete mpAsynchLoadEvent;
-            }
+            return *pRetval;
         }
 
         ViewContactOfGraphic::ViewContactOfGraphic(SdrGrafObj& rGrafObj)
-        :   ViewContactOfTextObj(rGrafObj),
-            mpAsynchLoadEvent(0L)
+        :   ViewContactOfTextObj(rGrafObj)
         {
         }
 
         ViewContactOfGraphic::~ViewContactOfGraphic()
         {
-            DBG_ASSERT(0L == mpAsynchLoadEvent,
-                "ViewContactOfGraphic destructor: mpAsynchLoadEvent is not empty, call PrepareDelete() before deleting (!)");
         }
 
-        // Prepare deletion of this object. Tghis needs to be called always
-        // before really deleting this objects. This is necessary since in a c++
-        // destructor no virtual function calls are allowed. To avoid this problem,
-        // it is required to first call PrepareDelete().
-        void ViewContactOfGraphic::PrepareDelete()
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGraphic::createViewIndependentPrimitive2DSequence() const
         {
-            // call parent
-            ViewContactOfTextObj::PrepareDelete();
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            SdrText* pSdrText = GetGrafObject().getText(0);
 
-            // evtl. delete the asynch loading event
-            if(mpAsynchLoadEvent)
+            if(pSdrText)
             {
-                // just delete it, this will remove it from the EventHandler and
-                // will trigger ForgetAsynchGraphicLoadingEvent from the destructor
-                delete mpAsynchLoadEvent;
-            }
-        }
+                const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
+                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(rItemSet, *pSdrText);
+                bool bVisible(pAttribute && pAttribute->isVisible());
 
-        // When ShouldPaintObject() returns sal_True, the object itself is painted and
-        // PaintObject() is called.
-        sal_Bool ViewContactOfGraphic::ShouldPaintObject(
-            DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
-        {
-            // Test if its a empty presobj, those should not be printed
-            if(GetGrafObject().IsEmptyPresObj() && rDisplayInfo.OutputToPrinter())
-            {
-                return sal_False;
-            }
+                // create and fill GraphicAttr
+                GraphicAttr aLocalGrafInfo;
+                const sal_uInt16 nTrans(((SdrGrafTransparenceItem&)rItemSet.Get(SDRATTR_GRAFTRANSPARENCE)).GetValue());
+                const SdrGrafCropItem& rCrop((const SdrGrafCropItem&)rItemSet.Get(SDRATTR_GRAFCROP));
+                aLocalGrafInfo.SetLuminance(((SdrGrafLuminanceItem&)rItemSet.Get(SDRATTR_GRAFLUMINANCE)).GetValue());
+                aLocalGrafInfo.SetContrast(((SdrGrafContrastItem&)rItemSet.Get(SDRATTR_GRAFCONTRAST)).GetValue());
+                aLocalGrafInfo.SetChannelR(((SdrGrafRedItem&)rItemSet.Get(SDRATTR_GRAFRED)).GetValue());
+                aLocalGrafInfo.SetChannelG(((SdrGrafGreenItem&)rItemSet.Get(SDRATTR_GRAFGREEN)).GetValue());
+                aLocalGrafInfo.SetChannelB(((SdrGrafBlueItem&)rItemSet.Get(SDRATTR_GRAFBLUE)).GetValue());
+                aLocalGrafInfo.SetGamma(((SdrGrafGamma100Item&)rItemSet.Get(SDRATTR_GRAFGAMMA)).GetValue() * 0.01);
+                aLocalGrafInfo.SetTransparency((BYTE)::basegfx::fround(Min(nTrans, (USHORT)100) * 2.55));
+                aLocalGrafInfo.SetInvert(((SdrGrafInvertItem&)rItemSet.Get(SDRATTR_GRAFINVERT)).GetValue());
+                aLocalGrafInfo.SetDrawMode(((SdrGrafModeItem&)rItemSet.Get(SDRATTR_GRAFMODE)).GetValue());
+                aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
-            // return parent
-            return ViewContactOfTextObj::ShouldPaintObject(rDisplayInfo, rAssociatedVOC);
-        }
-
-        sal_Bool ViewContactOfGraphic::PaintObject(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
-            const ViewObjectContact& rAssociatedVOC)
-        {
-            sal_Bool bRetval(sal_False);
-
-            // Test graphics state and eventually trigger a SwapIn event or an Asynchronous
-            // load event. Return value gives info if SwapIn was triggered.
-            sal_Bool bSwapInDone = ImpPrepareForPaint(rDisplayInfo, rAssociatedVOC);
-            sal_Bool bSwapInExclusiveForPrinting = (bSwapInDone && rDisplayInfo.OutputToPrinter());
-
-            if(DoPaintGraphicDraft())
-            {
-                if(GetGrafObject().IsEmptyPresObj())
+                if(!bVisible && 255L != aLocalGrafInfo.GetTransparency())
                 {
-                    // Draw empty Graphic PresObj
-                    bRetval = PaintGraphicPresObj(rDisplayInfo, rPaintRectangle, rAssociatedVOC);
-                }
-                else
-                {
-                    // Draw as draft
-                    bRetval = PaintGraphicDraft(rDisplayInfo, rPaintRectangle, rAssociatedVOC);
-                }
-            }
-            else
-            {
-                // call parent
-                bRetval = ViewContactOfTextObj::PaintObject(rDisplayInfo, rPaintRectangle, rAssociatedVOC);
-            }
+                    // content is visible, so force some fill stuff
+                    delete pAttribute;
+                    bVisible = true;
 
-            // If graphic was only swapped in for printing, swap  out again
-            if(bSwapInExclusiveForPrinting)
-            {
-                GetGrafObject().ForceSwapOut();
-            }
-            else
-            {
-                // if was swapped in, animation may be possible now.
-                if(bSwapInDone)
-                {
-                    // check existing animation. This may create or delete an AnimationInfo.
-                    CheckAnimationFeatures();
+                    // check shadow
+                    drawinglayer::attribute::SdrShadowAttribute* pShadow = drawinglayer::primitive2d::createNewSdrShadowAttribute(rItemSet);
 
-                    if(maVOCList.Count() > 1L)
+                    if(pShadow && !pShadow->isVisible())
                     {
-                        // more VOCs then only rAssociatedVOC use this object. Tell them about the
-                        // change. Since we want no extra-redraw of rAssociatedVOC, i do not call
-                        // ActionCanged() here, but invalidate the single VOCs except the current one.
-                        for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
-                        {
-                            ViewObjectContact* pCandidate = maVOCList.GetObject(a);
-                            DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
+                        delete pShadow;
+                        pShadow = 0L;
+                    }
 
-                            if(pCandidate != &rAssociatedVOC)
+                    // create new attribute set
+                    pAttribute = new drawinglayer::attribute::SdrLineFillShadowTextAttribute(0L, 0L, 0L, pShadow, 0L, 0L);
+                }
+
+                if(pAttribute)
+                {
+                    if(pAttribute->isVisible() || bVisible)
+                    {
+                        // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
+                        // which will use the primitive data we just create in the near future
+                        const Rectangle& rRectangle = GetGrafObject().GetGeoRect();
+                        const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+                        ::basegfx::B2DHomMatrix aObjectMatrix;
+
+                        // look for mirroring
+                        const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
+                        const sal_Int32 nDrehWink(rGeoStat.nDrehWink);
+                        const bool bRota180(18000 == nDrehWink);
+                        const bool bMirrored(GetGrafObject().IsMirrored());
+                        const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
+                        bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
+                        bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
+
+                        // set mirror flags at LocalGrafInfo. Take into account that the geometry in
+                        // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
+                        // that old behaviour (as long as part of the model data), correct the H/V flags
+                        // accordingly. The created bitmapPrimitive WILL use the rotation, too.
+                        if(bRota180)
+                        {
+                            // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
+                            // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
+                            bHMirr = !bHMirr;
+                            bVMirr = false;
+                        }
+
+                        if(bHMirr || bVMirr)
+                        {
+                            aLocalGrafInfo.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
+                        }
+
+                        // fill object matrix
+                        const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
+                        const double fRotate(nDrehWink ? (36000 - nDrehWink) * F_PI18000 : 0.0);
+                        aObjectMatrix.scale(aObjectRange.getWidth(), aObjectRange.getHeight());
+                        aObjectMatrix.shearX(fShearX);
+                        aObjectMatrix.rotate(fRotate);
+                        aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+
+                        if(GetGrafObject().IsEmptyPresObj())
+                        {
+                            // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
+                            // with the content which is the placeholder graphic
+                            GraphicObject aEmptyGraphicObject;
+                            GraphicAttr aEmptyGraphicAttr;
+                            drawinglayer::attribute::SdrLineFillShadowTextAttribute aEmptyAttributes(0, 0, 0, 0, 0, 0);
+
+                            // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
+                            const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                                aObjectMatrix, *pAttribute, aEmptyGraphicObject, aEmptyGraphicAttr));
+                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
+
+                            // SdrGrafPrimitive2D with content (which is the preview graphic) scaled to smaller size and
+                            // without attributes
+                            basegfx::B2DHomMatrix aSmallerMatrix;
+                            const Size& rGrafPrefSize = GetGrafObject().GetGrafPrefSize();
+                            const double fOffsetX((aObjectRange.getWidth() - rGrafPrefSize.getWidth()) / 2.0);
+                            const double fOffsetY((aObjectRange.getHeight() - rGrafPrefSize.getHeight()) / 2.0);
+
+                            if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
                             {
-                                pCandidate->ActionChanged();
+                                aSmallerMatrix.scale(rGrafPrefSize.getWidth(), rGrafPrefSize.getHeight());
+                                aSmallerMatrix.translate(fOffsetX, fOffsetY);
+                                aSmallerMatrix.shearX(fShearX);
+                                aSmallerMatrix.rotate(fRotate);
+                                aSmallerMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+
+                                const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                                    aSmallerMatrix, aEmptyAttributes, GetGrafObject().GetGraphicObject(), aLocalGrafInfo));
+
+                                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReferenceB);
                             }
                         }
+                        else
+                        {
+                            // create primitive
+                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                                aObjectMatrix, *pAttribute, GetGrafObject().GetGraphicObject(), aLocalGrafInfo));
+                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                        }
                     }
+
+                    delete pAttribute;
                 }
             }
 
-            return bRetval;
+            return xRetval;
         }
 
-        // React on removal of the object of this ViewContact,
-        // DrawHierarchy needs to be changed
-        void ViewContactOfGraphic::ActionRemoved()
-        {
-            // call parent
-            ViewContactOfTextObj::ActionRemoved();
-
-            // If an event is triggered, get rid of it since object is no longer
-            // visible
-            if(mpAsynchLoadEvent)
-            {
-                // just delete it, this will remove it from the EventHandler and
-                // will trigger ForgetAsynchGraphicLoadingEvent from the destructor
-                delete mpAsynchLoadEvent;
-            }
-        }
-
-        sal_Bool ViewContactOfGraphic::SupportsAnimation() const
-        {
-            // #116168# If object is in destruction, force animation support to sal_False
-            if(GetGrafObject().IsInDestruction())
-            {
-                return sal_False;
-            }
-
-            // Is animation allowed?
-            if(!GetGrafObject().IsGrafAnimationAllowed())
-            {
-                return sal_False;
-            }
-
-            // Is the graphica animated at all?
-            if(!GetGrafObject().IsAnimated())
-            {
-                return sal_False;
-            }
-
-            // Is bitmap type?
-            if(GRAPHIC_BITMAP != GetGrafObject().GetGraphicType())
-            {
-                return sal_False;
-            }
-
-            // It's a bitmap and it's animated and animation is allowed.
-            return sal_True;
-        }
-
-        // This is the call from the asynch graphic loading. This may only be called from
-        // AsynchGraphicLoadingEvent::ExecuteEvent(). Do load the graphics. The event will
-        // be deleted (consumed) and ForgetAsynchGraphicLoadingEvent will be called.
-        void ViewContactOfGraphic::DoAsynchGraphicLoading()
-        {
-            DBG_ASSERT(mpAsynchLoadEvent,
-                "ViewContactOfGraphic::DoAsynchGraphicLoading: I did not trigger a event, why am i called (?)");
-
-            // swap it in
-            SdrGrafObj& rGrafObj = GetGrafObject();
-            rGrafObj.ForceSwapIn();
-
-            // Invalidate paint area and check existing animation (which may have changed).
-            ActionChanged();
-        }
-
-        // This is the call from the destructor of the asynch graphic loading event.
-        // No one else has to call this. It is needed to let this object forget about
-        // the event. The parameter allows checking for the correct event.
-        void ViewContactOfGraphic::ForgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent)
-        {
-            (void) pEvent; // suppress warning
-            DBG_ASSERT(mpAsynchLoadEvent,
-                "ViewContactOfGraphic::ForgetAsynchGraphicLoadingEvent: I did not trigger a event, why am i called (?)");
-            DBG_ASSERT(mpAsynchLoadEvent == pEvent,
-                "ViewContactOfGraphic::ForgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
-
-            // forget event
-            mpAsynchLoadEvent = 0L;
-        }
     } // end of namespace contact
 } // end of namespace sdr
 
