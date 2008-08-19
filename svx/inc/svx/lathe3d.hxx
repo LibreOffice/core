@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lathe3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,10 @@
 
 class SVX_DLLPUBLIC E3dLatheObj : public E3dCompoundObject
 {
+private:
+    // #110094# DrawContact section
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // Partcodes fuer Wireframe-Generierung: Standard oder Deckelflaeche
