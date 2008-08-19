@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShape2d.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/sdasaitm.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xoutx.hxx>
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
 #include <svx/xfillit0.hxx>
@@ -689,6 +688,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     // bTextFlow needs to be set before clearing the TextDirection Item
 
     ClearItem( SDRATTR_TEXTDIRECTION ); //SJ: vertical writing is not required, by removing this item no outliner is created
+
+    // For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
+    ClearItem(SDRATTR_SHADOW);
 
     Point aP( pCustomShapeObj->GetSnapRect().Center() );
     Size aS( pCustomShapeObj->GetLogicRect().GetSize() );
@@ -1813,7 +1815,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     if ( vObjectList.size() )
     {
         const SfxItemSet& rCustomShapeSet = pCustomShapeObj->GetMergedItemSet();
-        const sal_Bool  bShadow(((SdrShadowItem&)rCustomShapeSet.Get( SDRATTR_SHADOW )).GetValue());
+        // For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
+        // const sal_Bool   bShadow(((SdrShadowItem&)rCustomShapeSet.Get( SDRATTR_SHADOW )).GetValue());
         Color           aBasicColor( COL_WHITE );
         Color           aFillColor;
         sal_uInt32      nColorCount = nColorData >> 28;
@@ -1850,10 +1853,11 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
             // a single object, correct some values
             SdrPathObj* pObj(vObjectList[0L]);
 
-            if(bShadow)
-            {
-                pObj->SetMergedItem(SdrShadowItem(sal_True));
-            }
+// For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
+//          if(bShadow)
+//          {
+//              pObj->SetMergedItem(SdrShadowItem(sal_True));
+//          }
 
             if(!pObj->IsLine())
             {
