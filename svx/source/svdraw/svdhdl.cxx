@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdhdl.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +38,7 @@
 #include <svx/svdmrkv.hxx>
 #include <vcl/window.hxx>
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 #include <tools/poly.hxx>
 #include <vcl/bmpacc.hxx>
 #include <goodies/b3dcolor.hxx>
@@ -1367,24 +1365,27 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                             basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
                             basegfx::B2DPoint aPosition2(aPos.X(), aPos.Y());
 
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlayLineStriped(
-                                    aPosition1,
-                                    aPosition2
-                                );
-                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
-
-                            // OVERLAYMANAGER
-                            if(pNewOverlayObject)
+                            if(!aPosition1.equal(aPosition2))
                             {
-                                // line part is not hittable
-                                pNewOverlayObject->setHittable(sal_False);
+                                ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                    ::sdr::overlay::OverlayLineStriped(
+                                        aPosition1,
+                                        aPosition2
+                                    );
+                                DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
-                                // color(?)
-                                pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
+                                // OVERLAYMANAGER
+                                if(pNewOverlayObject)
+                                {
+                                    // line part is not hittable
+                                    pNewOverlayObject->setHittable(sal_False);
 
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
+                                    // color(?)
+                                    pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
+
+                                    rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                    maOverlayGroup.append(*pNewOverlayObject);
+                                }
                             }
                         }
                     }
