@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdmodel.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,7 +239,6 @@ protected:
     UINT16          nStreamCompressMode;  // Komprimiert schreiben?
     UINT16          nStreamNumberFormat;
     UINT16          nDefaultTabulator;
-    const SdrPageView*    pAktPaintPV;
     UINT32          nMaxUndoCount;
     FASTBOOL        bSaveNative;
     BOOL            bStarDrawPreviewMode;
@@ -547,10 +546,6 @@ public:
     // nur noch in dem Bereich, wo sich auch tatsaechlich Text befindet.
     FASTBOOL        IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
     void            SetPickThroughTransparentTextFrames(FASTBOOL bOn) { bTransparentTextFrames=bOn; }
-
-    // Die Seite, die gerade an einer View gepaintet wird.
-    const SdrPageView*    GetPaintingPageView() const                 { return pAktPaintPV; }
-    void            SetPaintingPageView(const SdrPageView* pPV)       { pAktPaintPV=pPV; }
 
     // Darf denn das Model ueberhaupt veraendert werden?
     // Wird nur von den Possibility-Methoden der View ausgewerdet.
