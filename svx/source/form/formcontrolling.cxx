@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formcontrolling.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,6 +108,8 @@ namespace svx
                         { FMURL_RECORD_SAVE,          SID_FM_RECORD_SAVE,         FormFeature::SaveRecordChanges },
                         { FMURL_RECORD_DELETE,        SID_FM_RECORD_DELETE,       FormFeature::DeleteRecord },
                         { FMURL_FORM_REFRESH,         SID_FM_REFRESH,             FormFeature::ReloadForm },
+                        { FMURL_FORM_REFRESH_CURRENT_CONTROL,
+                                                      SID_FM_REFRESH_FORM_CONTROL,FormFeature::RefreshCurrentControl },
                         { FMURL_RECORD_UNDO,          SID_FM_RECORD_UNDO,         FormFeature::UndoRecordChanges },
                         { FMURL_FORM_SORT_UP,         SID_FM_SORTUP,              FormFeature::SortAscending },
                         { FMURL_FORM_SORT_DOWN,       SID_FM_SORTDOWN,            FormFeature::SortDescending },
@@ -525,6 +527,7 @@ namespace svx
             SID_FM_FILTERCRIT,
             SID_FM_FORM_FILTERED,
             SID_FM_REFRESH,
+            SID_FM_REFRESH_FORM_CONTROL,
             SID_FM_SEARCH,
             SID_FM_FILTER_START,
             SID_FM_VIEW_AS_GRID
