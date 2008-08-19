@@ -5,7 +5,7 @@
  */
 
 package com.sun.star.sdbcx.comp.hsqldb;
-import com.sun.star.embed.ElementModes;
+
 /**
  *
  * @author  oj93728
@@ -20,7 +20,7 @@ public class StorageNativeOutputStream {
     public StorageNativeOutputStream(String _name,Object _key) {
         name = _name;
         key = _key;
-        openStream(name, (String)key, ElementModes.WRITE | ElementModes.TRUNCATE);
+        openStream(name, (String)key, NativeStorageAccess.WRITE | NativeStorageAccess.TRUNCATE);
     }
 
     public native void openStream(String name,String key, int mode);
