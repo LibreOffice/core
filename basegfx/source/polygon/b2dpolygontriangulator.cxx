@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontriangulator.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,17 +410,10 @@ namespace basegfx
     {
         B2DPolygon triangulate(const B2DPolygon& rCandidate)
         {
-            if(rCandidate.areControlPointsUsed())
-            {
-                OSL_ENSURE(false, "triangulate: works not for curves (!)");
-                B2DPolygon aCandidate = tools::adaptiveSubdivideByAngle(rCandidate);
-                return triangulate(aCandidate);
-            }
-
             B2DPolygon aRetval;
 
-            // remove double and neutral points
-            B2DPolygon aCandidate(rCandidate);
+            // subdivide locally (triangulate does not work with beziers), remove double and neutral points
+            B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
             aCandidate.removeDoublePoints();
             aCandidate = tools::removeNeutralPoints(aCandidate);
 
@@ -439,9 +432,8 @@ namespace basegfx
                 else
                 {
                     // polygon is concave.
-                    B2DPolyPolygon aPolyPolygon;
-                    aPolyPolygon.append(rCandidate);
-                    Triangulator aTriangulator(aPolyPolygon);
+                    const B2DPolyPolygon aCandPolyPoly(aCandidate);
+                    Triangulator aTriangulator(aCandPolyPoly);
                     aRetval = aTriangulator.getResult();
                 }
             }
@@ -451,24 +443,20 @@ namespace basegfx
 
         B2DPolygon triangulate(const B2DPolyPolygon& rCandidate)
         {
-            if(rCandidate.areControlPointsUsed())
-            {
-                OSL_ENSURE(false, "triangulate: works not for curves (!)");
-                B2DPolyPolygon aCandidate = tools::adaptiveSubdivideByAngle(rCandidate);
-                return triangulate(aCandidate);
-            }
-
             B2DPolygon aRetval;
 
-            if(1L == rCandidate.count())
+            // subdivide locally (triangulate does not work with beziers)
+            B2DPolyPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
+
+            if(1L == aCandidate.count())
             {
                 // single polygon -> single polygon triangulation
-                const B2DPolygon aSinglePolygon(rCandidate.getB2DPolygon(0L));
+                const B2DPolygon aSinglePolygon(aCandidate.getB2DPolygon(0L));
                 aRetval = triangulate(aSinglePolygon);
             }
             else
             {
-                Triangulator aTriangulator(rCandidate);
+                Triangulator aTriangulator(aCandidate);
                 aRetval = aTriangulator.getResult();
             }
 
