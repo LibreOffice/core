@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,7 +31,7 @@
 
 PRJ	= ..$/..$/..$/..$/..$/..
 PRJNAME = reportdesign
-TARGET  = sun-report-builder
+TARGET= rpt_java_css_util
 PACKAGE = com$/sun$/star$/report$/util
 
 # --- Settings -----------------------------------------------------
