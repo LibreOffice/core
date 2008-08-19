@@ -9,7 +9,7 @@
  
   $RCSfile: style_collector.xsl,v $
  
-  $Revision: 1.2 $
+  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -61,7 +61,7 @@
 		xmlns:xt="http://www.jclark.com/xt"
 		xmlns:common="http://exslt.org/common"
 		xmlns:xalan="http://xml.apache.org/xalan"
-		exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink xt common xalan">
+		exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi xt common xalan">
 
 
 
@@ -645,8 +645,6 @@
 	<!-- REASON FOR TEMPLATE:
 	   The OpenOffice style properities gathered in the variable 'globalData' have to be mapped to the CSS style format
 	-->
-	<xsl:key name="elementUsingStyle" match="/*/office:body//*" use="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name | @table:default-cell-style-name"/>
-
 	<xsl:template name="map-odf-properties">
 		<xsl:param name="globalData" />
 		<xsl:element name="all-styles" namespace="">
@@ -662,6 +660,11 @@
 		</xsl:element>
 	</xsl:template>
 
+	<xsl:key name="elementUsingStyle" match="/*/office:body//*" use="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name | @table:default-cell-style-name"/>
+	<xsl:key name="listLabelStyle" match="/*/office:styles/text:list-style/* | /*/office:automatic-styles/text:list-style/*  |
+									  /*/office:styles/style:graphic-properties/text:list-style/* | /*/office:automatic-styles/style:graphic-properties/text:list-style/*" use="@text:style-name"/>
+
+
 	<xsl:variable name="documentRoot" select="/" />
 	<xsl:template name="writeUsedStyles">
 		<xsl:param name="globalData" />
@@ -670,7 +673,9 @@
 		<!-- for-each changes the key environment from the previously globalData back to the document root  -->
 		<xsl:for-each select="$documentRoot">
 			<!-- only styles, which are used in the content are written as CSS styles -->
-			<xsl:if test="key('elementUsingStyle', $style/@style:name)/@* or $globalData/office:styles/text:notes-configuration[@text:citation-style-name =  $style/@style:name or @text:citation-body-style-name=$style/@style:name]">
+			<xsl:if test="key('elementUsingStyle', $style/@style:name)/@*
+			or key('listLabelStyle', $style/@style:name)/@*
+			or $globalData/office:styles/text:notes-configuration[@text:citation-style-name =  $style/@style:name or @text:citation-body-style-name=$style/@style:name]">
 				<!-- if there are consecutive paragraphs with borders, only the first and the last have the top/bottom border
 				unless style:join-border="false" -->
 				<xsl:choose>
