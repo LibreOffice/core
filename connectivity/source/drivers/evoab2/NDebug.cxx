@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NDebug.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #include "precompiled_connectivity.hxx"
 #include "NDebug.hxx"
 #include <osl/diagnose.h>
-
+#ifdef DEBUG
 void evo_traceStringMessage( const sal_Char *pFormat,
                              const ::rtl::OUString& rString )
 {
@@ -40,3 +40,4 @@ void evo_traceStringMessage( const sal_Char *pFormat,
     aStr = ::rtl::OUStringToOString (rString, RTL_TEXTENCODING_UTF8);
     OSL_TRACE(pFormat, (const sal_Char *) aStr );
 }
+#endif
