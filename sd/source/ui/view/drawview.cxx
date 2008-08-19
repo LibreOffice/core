@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,6 @@
 #ifndef _SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/xoutx.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
@@ -495,7 +494,7 @@ BOOL DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAtt
 |*
 \************************************************************************/
 
-void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
     if( mpVDev )
     {
@@ -523,45 +522,8 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT 
 
     if(bStandardPaint)
     {
-        ::sd::View::CompleteRedraw(pOutDev, rReg, nPaintMode, pRedirector);
+        ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
     }
-}
-
-/*************************************************************************
-|*
-|* Paint-Proc filtert fuer die Praesentation Objekte heraus, die unsichtbar
-|* sind oder anders dargestellt werden muessen.
-|*
-\************************************************************************/
-
-class DrawViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
-{
-    DrawView&                           mrDrawView;
-
-public:
-    DrawViewRedirector(DrawView& rDrawView);
-    virtual ~DrawViewRedirector();
-
-    // all default implementations just call the same methods at the original. To do something
-    // different, overload the method and at least do what the method does.
-    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
-};
-
-DrawViewRedirector::DrawViewRedirector(DrawView& rDrawView)
-:   mrDrawView(rDrawView)
-{
-}
-
-DrawViewRedirector::~DrawViewRedirector()
-{
-}
-
-// all default implementations just call the same methods at the original. To do something
-// different, overload the method and at least do what the method does.
-void DrawViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
-{
-    // not an object, maybe a page
-    rOriginal.PaintObject(rDisplayInfo);
 }
 
 /*************************************************************************
