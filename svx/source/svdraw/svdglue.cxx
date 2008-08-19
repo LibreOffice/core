@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdglue.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -370,63 +370,6 @@ USHORT SdrGluePointList::Insert(const SdrGluePoint& rGP)
     }
     aList.Insert(pGP,nInsPos);
     return nInsPos;
-}
-
-void SdrGluePointList::DrawAll(OutputDevice& rOut, const SdrObject* pObj) const
-{
-    USHORT nAnz=GetCount();
-    if (nAnz!=0)
-    {
-        Color aBackPenColor(COL_WHITE);
-
-        bool bMapMerk=rOut.IsMapModeEnabled();
-        rOut.SetLineColor( aBackPenColor );
-        USHORT nNum;
-
-        for (nNum=0; nNum<nAnz; nNum++)
-        {
-            const SdrGluePoint* pGP=GetObject(nNum);
-            Point aPt(pObj!=NULL ? pGP->GetAbsolutePos(*pObj) : pGP->GetPos());
-            aPt=rOut.LogicToPixel(aPt);
-            rOut.EnableMapMode(FALSE);
-            long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
-            rOut.DrawLine(Point(x-2,y-3),Point(x+3,y+2));
-            rOut.DrawLine(Point(x-3,y-2),Point(x+2,y+3));
-            rOut.DrawLine(Point(x-3,y+2),Point(x+2,y-3));
-            rOut.DrawLine(Point(x-2,y+3),Point(x+3,y-2));
-
-            if (!pGP->IsPercent())
-            {
-                switch (pGP->GetHorzAlign())
-                {
-                    case SDRHORZALIGN_LEFT  : rOut.DrawLine(Point(x-3,y-1),Point(x-3,y+1)); break;
-                    case SDRHORZALIGN_RIGHT : rOut.DrawLine(Point(x+3,y-1),Point(x+3,y+1)); break;
-                }
-                switch (pGP->GetVertAlign())
-                {
-                    case SDRVERTALIGN_TOP   : rOut.DrawLine(Point(x-1,y-3),Point(x+1,y-3)); break;
-                    case SDRVERTALIGN_BOTTOM: rOut.DrawLine(Point(x-1,y+3),Point(x+1,y+3)); break;
-                }
-            }
-            rOut.EnableMapMode(bMapMerk);
-        }
-
-        for (nNum=0; nNum<nAnz; nNum++)
-        {
-            const SdrGluePoint* pGP=GetObject(nNum);
-
-            // #i38892#
-            rOut.SetLineColor( pGP->IsUserDefined() ? COL_LIGHTBLUE : COL_BLACK );
-
-            Point aPt(pObj!=NULL ? pGP->GetAbsolutePos(*pObj) : pGP->GetPos());
-            aPt=rOut.LogicToPixel(aPt);
-            rOut.EnableMapMode(FALSE);
-            long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
-            rOut.DrawLine(Point(x-2,y-2),Point(x+2,y+2));
-            rOut.DrawLine(Point(x-2,y+2),Point(x+2,y-2));
-            rOut.EnableMapMode(bMapMerk);
-        }
-    }
 }
 
 void SdrGluePointList::Invalidate(Window& rWin, const SdrObject* pObj) const
