@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inspection.src,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,4 +247,8 @@ String RID_STR_MASTERLABEL
 String RID_STR_PREVIEW_COUNT
 {
     Text [ en-US ] = "Preview Row(s)" ;
+};
+String RID_STR_AREA
+{
+    Text [ en-US ] = "Area" ;
 };
