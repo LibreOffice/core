@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormFeature.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,6 +138,15 @@ constants FormFeature
         and <member scope="com::sun::star::sdb">RowSet::Order</member> properties of the form.</p>
     */
     const short RemoveFilterAndSort = 18;
+
+    /** refreshs the current control
+
+        <p>Basically, this means calling XRefreshable::refresh on the current control, if it supports
+        this interface.</p>
+
+        @since OOo 3.1
+    */
+    const short RefreshCurrentControl = 19;
 };
 
 //=============================================================================
