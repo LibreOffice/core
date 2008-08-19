@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofunocontrol.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,12 @@ namespace sdr { namespace contact {
         ::std::auto_ptr< ViewContactOfUnoControl_Impl >   m_pImpl;
 
     public:
+        // access to SdrObject
+        SdrUnoObj& GetSdrUnoObj() const
+        {
+            return ((SdrUnoObj&)GetSdrObject());
+        }
+
         ViewContactOfUnoControl( SdrUnoObj& _rUnoObject );
         virtual ~ViewContactOfUnoControl();
 
@@ -76,23 +82,18 @@ namespace sdr { namespace contact {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
             getTemporaryControlForWindow( const Window& _rWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer ) const;
 
-        /** invalidates all ViewObjectContacts
-
-            This method is necessary when an SdrUnoObj changes completely, e.g. when
-            some foreign instance set a new ->XControlModel.
-        */
-        void    invalidateAllContacts( const SdrUnoObjAccessControl&  );
-
     protected:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact );
-
-        // ViewContactOfSdrObj overridables
-        virtual sal_Bool ShouldPaintObject( DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC );
 
     private:
         ViewContactOfUnoControl();                                            // never implemented
         ViewContactOfUnoControl( const ViewContactOfUnoControl& );              // never implemented
         ViewContactOfUnoControl& operator=( const ViewContactOfUnoControl& );   // never implemented
+
+    protected:
+        // This method is responsible for creating the graphical visualisation data
+        // ONLY based on model data
+        virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
     };
 
 //........................................................................
@@ -100,4 +101,4 @@ namespace sdr { namespace contact {
 //........................................................................
 
 #endif // SVX_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
-
+// eof
