@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygon.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@ namespace basegfx
 {
     class B3DPolygon;
     class B3DHomMatrix;
+    class B2DHomMatrix;
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -74,8 +75,23 @@ namespace basegfx
         // polygon interface
         sal_uInt32 count() const;
 
+        // B3DPolygon interface
         B3DPolygon getB3DPolygon(sal_uInt32 nIndex) const;
         void setB3DPolygon(sal_uInt32 nIndex, const B3DPolygon& rPolygon);
+
+        // BColor interface
+        bool areBColorsUsed() const;
+        void clearBColors();
+
+        // Normals interface
+        void transformNormals(const B3DHomMatrix& rMatrix);
+        bool areNormalsUsed() const;
+        void clearNormals();
+
+        // TextureCoordinate interface
+        void transformTextureCoordiantes(const B2DHomMatrix& rMatrix);
+        bool areTextureCoordinatesUsed() const;
+        void clearTextureCoordinates();
 
         // insert/append single polygon
         void insert(sal_uInt32 nIndex, const B3DPolygon& rPolygon, sal_uInt32 nCount = 1);
