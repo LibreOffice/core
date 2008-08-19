@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewshel.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1441,6 +1441,13 @@ void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
 ::sd::Window* ViewShell::GetActiveWindow (void) const
 {
     return mpActiveWindow;
+}
+
+
+
+
+void ViewShell::PrePaint()
+{
 }
 
 
