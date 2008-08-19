@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataAccess.xcs,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,6 +158,16 @@
 				</info>
 			</prop>
 		</group>
+        <group oor:name="DriverClassPath">
+          <info>
+            <desc>Specifies the path or jar to the Java driver class.</desc>
+          </info>
+          <prop oor:name="Path" oor:type="xs:string">
+            <info>
+              <desc>Specifies the class path where the JDBC driver class can be found.</desc>
+            </info>
+          </prop>
+        </group>
 		<group oor:name="UserDefinedDriver">
 			<info>
 				<desc>Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
@@ -276,7 +286,19 @@
 				</info>
 			</set>
 		</group>
-		
+
+        <group oor:name="JDBC">
+          <info>
+            <desc>Specifies all information which is needed for the connections established using JDBC.</desc>
+          </info>
+          <set oor:name="DriverClassPaths" oor:node-type="DriverClassPath">
+            <info>
+              <desc>Specifies the class paths where to find JDBC database drivers. The node name specifies the name
+                    of the JDBC driver which is to be loaded.</desc>
+            </info>
+          </set>
+        </group>
+
 		<set oor:name="RegisteredNames" oor:node-type="DatabaseNameSetting">
 			<info>
 				<desc>Specifies all names which are registered.</desc>
