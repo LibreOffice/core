@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1960,41 +1960,41 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             if ( !xConnection.is() )
                 break;
 
-        ::std::auto_ptr< DatabaseObjectView > pDesigner;
-        ::comphelper::NamedValueCollection aArguments( _rAdditionalArguments );
+            ::std::auto_ptr< DatabaseObjectView > pDesigner;
+            ::comphelper::NamedValueCollection aArguments( _rAdditionalArguments );
 
-        Any aDataSource;
-        if ( _eOpenMode == E_OPEN_DESIGN )
-        {
-            sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
-
-            if ( _eType == E_TABLE )
+            Any aDataSource;
+            if ( _eOpenMode == E_OPEN_DESIGN )
             {
-                if ( impl_isAlterableView_nothrow( _sName ) )
-                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true, bQuerySQLMode ) );
-                else
-                    pDesigner.reset( new TableDesigner( getORB(), this, m_aCurrentFrame.getFrame() ) );
+                sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
+
+                if ( _eType == E_TABLE )
+                {
+                    if ( impl_isAlterableView_nothrow( _sName ) )
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true, bQuerySQLMode ) );
+                    else
+                        pDesigner.reset( new TableDesigner( getORB(), this, m_aCurrentFrame.getFrame() ) );
+                }
+                else if ( _eType == E_QUERY )
+                {
+                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false, bQuerySQLMode ) );
+                }
+                aDataSource <<= m_xDataSource;
             }
-            else if ( _eType == E_QUERY )
+            else
             {
-                pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false, bQuerySQLMode ) );
-            }
-            aDataSource <<= m_xDataSource;
-        }
-        else
-        {
-            pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
+                pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
 
-            if ( !aArguments.has( (::rtl::OUString)PROPERTY_SHOWMENU ) )
-                aArguments.put( (::rtl::OUString)PROPERTY_SHOWMENU, makeAny( (sal_Bool)sal_True ) );
+                if ( !aArguments.has( (::rtl::OUString)PROPERTY_SHOWMENU ) )
+                    aArguments.put( (::rtl::OUString)PROPERTY_SHOWMENU, makeAny( (sal_Bool)sal_True ) );
 
-                aDataSource <<= getDatabaseName();
+                    aDataSource <<= getDatabaseName();
             }
 
-        Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArguments.getPropertyValues() ), UNO_QUERY );
-        addDocumentListener( xComponent, NULL );
-        m_aSpecialSubFrames.insert(TFrames::value_type(_sName,
-                        TTypeFrame(TTypeOpenMode(_eType,_eOpenMode),xComponent)));
+            Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArguments.getPropertyValues() ), UNO_QUERY );
+            addDocumentListener( xComponent, NULL );
+            m_aSpecialSubFrames.insert(TFrames::value_type(_sName,
+                            TTypeFrame(TTypeOpenMode(_eType,_eOpenMode),xComponent)));
         }
     }
     break;
@@ -3081,12 +3081,27 @@ bool OApplicationController::impl_activateSubFrame_throw(const ::rtl::OUString& 
             }
             break;
         } // if ( aFind->second.first.first == _nKind && aFind->second.first.second == _eOpenMode )
-    } // while ( aFind != m_aSpecialSubFrames.end() )
+    }
     return bFound;
 }
-
+// -----------------------------------------------------------------------------
+void OApplicationController::impl_deActivateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind)
+{
+    TFrames aCopy = m_aSpecialSubFrames;
+    TFrames::iterator aFind = aCopy.find(_sName);
+    for(;aFind != aCopy.end();++aFind)
+    {
+        if ( aFind->second.first.first == _nKind )
+        {
+            Reference< XFrame> xFrame(aFind->second.second,UNO_QUERY);
+            if ( xFrame.is() )
+            {
+                ::comphelper::disposeComponent(xFrame);
+            }
+        } // if ( aFind->second.first.first == _nKind && aFind->second.first.second == _eOpenMode )
+    }
+}
 //........................................................................
 }   // namespace dbaui
 //........................................................................
-
 
