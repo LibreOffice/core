@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: master.inc,v $
 '*
-'* $Revision: 1.4 $
+'* $Revision: 1.5 $
 '*
-'* last change: $Author: obo $ $Date: 2008-07-25 08:03:15 $
+'* last change: $Author: vg $ $Date: 2008-08-19 12:49:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -431,8 +431,6 @@ sub hStartTheOffice (optional sProfPath as String, optional sProfParameter as St
     '///+</ol>
     'Disable Quickstarter internaly
     hDisableQuickstarterAPI 
-    ' put application on MacOS X to most front
-    raiseApplication
 end sub
 
 '-------------------------------------------------------------------------
@@ -466,8 +464,6 @@ sub ExitRestartTheOffice (optional sProfPath as String, optional sProfParameter 
     endcatch
     'Disable Quickstarter internaly
     hDisableQuickstarterAPI 
-    ' put application on MacOS X to most front
-    raiseApplication
     ' Recover to backingwindow, until resetApplication can handle this
     for i = 1 to getDocumentCount
         hCloseDocument() 
@@ -548,6 +544,8 @@ sub PleaseRecover (sWhat as String)
     try
         call hCloseAllToolbars
         'All error-strings are in sError
+        gStartTheOffice = FALSE
+        'This is the trigger for a restart after application crashed:
         sError = ResetApplication                       
         'If sError = empty then no error occured.
         if sError <> "" then                            
@@ -555,8 +553,12 @@ sub PleaseRecover (sWhat as String)
             warnlog sError
         end if
     catch
-        printlog "global::system::inc::PleaseRecover: No office running while trying to recover: " + sError
-        sInterrupt = TRUE
+        if NOT gStartTheOffice then
+            printlog "global::system::inc::PleaseRecover: No office running while trying to recover: " + sError + " " + sWhat
+            sInterrupt = TRUE
+        else
+            resetApplication
+        endif
     endcatch
 
     try
@@ -1098,5 +1100,21 @@ sub sStartUpOffice (optional sProfPath as String, optional sProfParameter as Str
         '///+ <li><i>Factory</i>-parameter which depends on the value of <b>gApplication</b> (WRITER, CALC, ...)</li></ul>        
         Start sAppExe, sParameter & " " & sFactory
     end if      
+end sub
+
+sub StartTheOffice
+    '/// this routine is not intended to be called from within a testscript.
+    '/// this routine will get called by the VCL TestTool application, in case it recognizes there is no soffice.bin running anymore or not responding anymore
+    '/// this happens usually after OpenOffice.org crashed
+    'keep it as short as possible! 
+    warnlog "OpenOffice.org application crashed or can not be started. Double click the above error message if exists for the culprint."
+    sStartUpOffice()
+    try
+        catchGPF false
+    catch
+    endcatch
+    hDisableQuickstarterAPI()
+    ' set global variable for backwards compatibility
+    gStartTheOffice = TRUE
 end sub
 
