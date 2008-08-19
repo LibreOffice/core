@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofunocontrol.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,9 @@
 #include "sdrpaintwindow.hxx"
 #include <tools/diagnose_ex.h>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 
 //........................................................................
 namespace sdr { namespace contact {
@@ -56,6 +59,7 @@ namespace sdr { namespace contact {
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XControlContainer;
+    using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
@@ -148,50 +152,38 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    void ViewContactOfUnoControl::invalidateAllContacts( const SdrUnoObjAccessControl&  )
+    drawinglayer::primitive2d::Primitive2DSequence ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
     {
-        while ( maVOCList.Count() )
+        Reference< XControlModel > xControlModel = GetSdrUnoObj().GetUnoControlModel();
+
+        if(xControlModel.is())
         {
-            ViewObjectContact* pVOC( maVOCList.GetObject( 0 ) );
-#ifdef DBG_UTIL
-            const sal_uInt32 nCountBefore( maVOCList.Count() );
-#endif
-            pVOC->PrepareDelete();
-            delete pVOC;
-            DBG_ASSERT( maVOCList.Count() < nCountBefore,
-                "ViewContactOfUnoControl::invalidateAllContacts: prepare for an infinite loop!" );
+            // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
+            // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
+            // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
+            const Rectangle& rRectangle(GetSdrUnoObj().GetGeoRect());
+            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+
+            // create object transform
+            basegfx::B2DHomMatrix aTransform;
+            aTransform.set(0, 0, aRange.getWidth());
+            aTransform.set(1, 1, aRange.getHeight());
+            aTransform.set(0, 2, aRange.getMinX());
+            aTransform.set(1, 2, aRange.getMinY());
+
+            // create control primitive WITHOUT evtl. existing XControl; this would be done in
+            // the VOC in createPrimitive2DSequence()
+            const drawinglayer::primitive2d::Primitive2DReference xRetval(new drawinglayer::primitive2d::ControlPrimitive2D(
+                aTransform, xControlModel));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
         }
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool ViewContactOfUnoControl::ShouldPaintObject( DisplayInfo& _rDisplayInfo, const ViewObjectContact& _rAssociatedVOC )
-    {
-        // position the control
-        // That's needed for alive mode, where the control is in fact a visible VCL window. In this
-        // case, if the base classes ShouldPaintObject returns FALSE, there would be artifacts
-        // since the VCL window is not moved to the proper position.
-        // #i72694# / 2006-12-18 / frank.schoenheit@sun.com
-
-        const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
-        // #i74769# to not resize and position at each DrawLayer() use FormControl flag
-        if ( _rDisplayInfo.GetControlLayerPainting() )
+        else
         {
-            rVOC.positionControlForPaint( _rDisplayInfo );
+            // Use parent implementation. This should never be needed, see documentation in
+            // ViewContact::createViewIndependentPrimitive2DSequence()
+            return ViewContactOfSdrObj::createViewIndependentPrimitive2DSequence();
         }
-
-        // don't paint if the base class tells so
-        if ( !ViewContactOfSdrObj::ShouldPaintObject( _rDisplayInfo, _rAssociatedVOC ) )
-            return false;
-
-        // always paint in design mode
-        SdrPageView* pPageView = _rDisplayInfo.GetPageView();
-        bool bIsDesignMode = pPageView ? pPageView->GetView().IsDesignMode() : false;
-        if ( bIsDesignMode )
-            return true;
-
-        // in alive mode, don't paint if the control is not visible.
-        // #i82791#
-        return rVOC.isControlVisible();
     }
 
 //........................................................................
