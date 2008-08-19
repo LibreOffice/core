@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.hxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <ring.hxx>
 #include <swrect.hxx>
 #include <errhdl.hxx>
+#include <vcl/mapmod.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -245,13 +246,17 @@ public:
 protected:
     sal_uInt32              mnPrePostPaintCount;
     OutputDevice*           mpPrePostOutDev;
+    MapMode                 maPrePostMapMode;
 public:
+    void PrePaint();
     void DLPrePaint2(const Region& rRegion);
     void DLPostPaint2();
+    const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
     //////////////////////////////////////////////////////////////////////////////
 
     virtual void Paint(const Rectangle &rRect);
     sal_Bool IsPaintInProgress() const { return bPaintInProgress; }
+    bool IsDrawingLayerPaintInProgress() const { return 0 != mnPrePostPaintCount; }
 
     //Benachrichtung, dass sich der sichtbare Bereich geaendert hat.
     //VisArea wird neu gesetzt, anschliessend wird gescrollt.
