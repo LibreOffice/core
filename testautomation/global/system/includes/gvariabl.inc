@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: gvariabl.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:05 $
+'* last change: $Author: vg $ $Date: 2008-08-19 12:49:36 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -149,6 +149,7 @@ Global gUseSysDlg                   '///+ gUseSysDlg => FALSE : use internal fil
 Global gOOO as boolean              '///+ gOOO => if an OpenOffice.org-version is tested, this variable is TRUE
 Global gOOoShutdownTimeOut as integer'///+ gOOoShutdownTimeOut => max. time to wait in seconds, after quiting OOo
 Global gOOoStartupTimeOut as integer'///+ gOOoStartupTimeOut => max. time to wait in seconds, for starting OOo
+Global gStartTheOffice as boolean '///+ gStartTheOffice => indicates an alternative startroutine is run
 
 '///* variables only for creating the status-pages
 Global gTestDate as String          '///+ gTestDate : fix date of startup
