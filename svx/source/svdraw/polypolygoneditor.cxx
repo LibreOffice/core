@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polypolygoneditor.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,8 +91,9 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
             bool bCandidateChanged(false);
             const sal_uInt32 nCount(aCandidate.count());
 
-            if(nCount && (nPntNum < nCount || aCandidate.isClosed()))
+            if(nCount && (nPntNum + 1 < nCount || aCandidate.isClosed()))
             {
+                // it's a valid edge, check control point usage
                 const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
                 const bool bContolUsed(aCandidate.areControlPointsUsed()
                     && (aCandidate.isNextControlPointUsed(nPntNum) || aCandidate.isPrevControlPointUsed(nNextIndex)));
