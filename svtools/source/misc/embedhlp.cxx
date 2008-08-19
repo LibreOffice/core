@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embedhlp.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_svtools.hxx"
 
 #include <svtools/embedhlp.hxx>
-
 #include <svtools/filter.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
