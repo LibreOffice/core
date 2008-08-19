@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lathe3d.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,21 +35,26 @@
 #include "svdglob.hxx"
 #include <tools/poly.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/xoutx.hxx>
 #include "globl3d.hxx"
 #include <svx/lathe3d.hxx>
 #include <svx/xpoly.hxx>
-
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/sdr/properties/e3dlatheproperties.hxx>
+#include <svx/sdr/contact/viewcontactofe3dlathe.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfE3dLathe(*this);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
