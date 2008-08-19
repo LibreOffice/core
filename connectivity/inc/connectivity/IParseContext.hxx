@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IParseContext.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,17 @@ namespace connectivity
             KEY_COUNT,
             KEY_MAX,
             KEY_MIN,
-            KEY_SUM
+            KEY_SUM,
+            KEY_EVERY,
+            KEY_ANY,
+            KEY_SOME,
+            KEY_STDDEV_POP,
+            KEY_STDDEV_SAMP,
+            KEY_VAR_SAMP,
+            KEY_VAR_POP,
+            KEY_COLLECT,
+            KEY_FUSION,
+            KEY_INTERSECTION
         };
 
     public:
