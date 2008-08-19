@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dmultirange.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,17 +35,10 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2dmultirange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef BOOST_BIND_HPP_INCLUDED
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <boost/bind.hpp>
-#endif
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
 #include <boost/mem_fn.hpp>
-#endif
-
 #include <algorithm>
 #include <vector>
 
@@ -200,8 +193,9 @@ namespace basegfx
             // remove redundant intersections. Note: since all added
             // rectangles are positively oriented, this method cannot
             // generate any holes.
-            aRes = ::basegfx::tools::removeAllIntersections(aRes);
-            aRes = ::basegfx::tools::removeNeutralPolygons(aRes, sal_True);
+            aRes = basegfx::tools::solveCrossovers(aRes);
+            aRes = basegfx::tools::stripNeutralPolygons(aRes);
+            aRes = basegfx::tools::stripDispensablePolygons(aRes, false);
 
             return aRes;
         }
