@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rptui_slotid.hrc,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +200,9 @@
 
 #define SID_NEXT_MARK                           ( SID_RPTUI_START +  159 )
 #define SID_PREV_MARK                           ( SID_RPTUI_START +  160 )
+
+#define SID_SELECT_ALL_LABELS                   ( SID_RPTUI_START +  161 )
+#define SID_SELECT_ALL_EDITS                    ( SID_RPTUI_START +  162 )
 
 
 #endif // _RPTUI_SLOTID_HRC_
