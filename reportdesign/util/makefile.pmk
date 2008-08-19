@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.pmk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,11 +30,15 @@
 #*************************************************************************
 
 XSLDIR=$(SOLARXMLDIR)$/processing
-XCSROOT=$(SOLARXMLDIR)
-ABSXCSROOT=$(SOLARXMLDIR)
+ABSXCSROOT=$(PWD)$/$(MISC)$/$(EXTNAME)
+# ABSXCSROOT=$(MISC)$/$(EXTNAME)
+XCSROOT=..
+# XCSROOT=$(SOLARXMLDIR)
+# ABSXCSROOT=$(SOLARXMLDIR)
 DTDDIR=$(SOLARXMLDIR)
 PROCESSOUT=$(MISC)$/$(EXTNAME)
 PROCESSORDIR=$(SOLARBINDIR)
+
 
 # no validation by inspector class
 NO_INSPECTION=TRUE
