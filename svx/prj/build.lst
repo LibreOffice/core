@@ -1,4 +1,4 @@
-sx	svx	:	SUN:officenames connectivity xmloff linguistic jvmfwk avmedia configmgr ucb fileaccess NULL
+sx	svx	:	SUN:officenames connectivity xmloff linguistic jvmfwk avmedia configmgr ucb fileaccess drawinglayer NULL
 sx	svx										usr1	-	all	sx_mkout NULL
 sx	svx\inc									nmake	-	all	sx_inc NULL
 sx	svx\uiconfig\layout									nmake	-	all	sx_layout NULL
@@ -20,10 +20,12 @@ sx	svx\source\xoutdev						nmake	-	all	sx_xout sx_items sx_inc NULL
 sx	svx\source\editeng						nmake	-	all	sx_eeng sx_inc NULL
 sx	svx\source\outliner						nmake	-	all	sx_outl sx_inc NULL
 sx	svx\source\svdraw						nmake	-	all	sx_draw sx_inc NULL
+sx	svx\source\sdr\attribute				nmake	-	all	sx_attribute sx_inc NULL
+sx	svx\source\sdr\primitive2d				nmake	-	all	sx_primitive2d sx_inc NULL
+sx	svx\source\sdr\primitive3d				nmake	-	all	sx_primitive3d sx_inc NULL
 sx  svx\source\table						nmake	-	all sx_table NULL
 sx	svx\source\sdr\properties				nmake	-	all	sx_properties sx_inc NULL
 sx	svx\source\sdr\contact					nmake	-	all	sx_contact sx_inc NULL
-sx	svx\source\sdr\mixer					nmake	-	all	sx_mixer sx_inc NULL
 sx	svx\source\sdr\event					nmake	-	all	sx_event sx_inc NULL
 sx	svx\source\sdr\animation				nmake	-	all	sx_animation sx_inc NULL
 sx	svx\source\sdr\overlay					nmake	-	all	sx_overlay sx_inc NULL
@@ -47,5 +49,5 @@ sx	svx\source\xml							nmake	-	all	sx_xml sx_inc NULL
 sx	svx\source\accessibility				nmake	-	all	sx_accessibility sx_inc NULL
 sx	svx\source\customshapes					nmake	-	all sx_customshapes sx_inc NULL
 sx	svx\source\toolbars						nmake	-	all sx_toolbars sx_inc NULL
-sx	svx\util								nmake	-	all	sx_util sx_3deng sx_dlg sx_draw sx_properties sx_contact sx_mixer sx_event sx_animation sx_overlay sx_eeng sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_msfilt sx_opt sx_outl sx_rtf sx_sdi sx_stbc sx_tbxc sx_undrw sx_unedt sx_ungal sx_xml sx_xout sx_accessibility sx_intro sx_init sx_customshapes sx_toolbars sx_table sx_smarttags NULL
+sx	svx\util								nmake	-	all	sx_util sx_3deng sx_dlg sx_draw sx_attribute sx_properties sx_contact sx_event sx_animation sx_primitive2d sx_primitive3d sx_overlay sx_eeng sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_msfilt sx_opt sx_outl sx_rtf sx_sdi sx_stbc sx_tbxc sx_undrw sx_unedt sx_ungal sx_xml sx_xout sx_accessibility sx_intro sx_init sx_customshapes sx_toolbars sx_table sx_smarttags NULL
 sx	svx\source\gengal						nmake	-	all	sx_gengal sx_util NULL
