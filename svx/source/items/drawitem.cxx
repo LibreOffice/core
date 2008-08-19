@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawitem.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <svx/svxids.hrc>
 
 
-#include <svx/xoutx.hxx>
 #include "drawitem.hxx"
 #include <svx/xtable.hxx>
 
