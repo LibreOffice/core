@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YUser.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,11 +67,6 @@ void OMySQLUser::refreshGroups()
 }
 // -------------------------------------------------------------------------
 OUserExtend::OUserExtend(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : OMySQLUser(_xConnection)
-{
-    construct();
-}
-// -------------------------------------------------------------------------
-OUserExtend::OUserExtend(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::rtl::OUString& _Name) : OMySQLUser(_xConnection,_Name)
 {
     construct();
 }
