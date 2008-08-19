@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectcontactofpageview.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,21 +46,15 @@ namespace sdr
 {
     namespace contact
     {
-        class ObjectContactOfPageView : public ObjectContact
+        class ObjectContactOfPageView : public ObjectContact, public Timer
         {
         protected:
             // the owner of this ObjectContactOfPageView. Set from constructor and not
             // to be changed in any way.
-            SdrPageWindow&                                  mrPageWindow;
-
-            // The last remembered StartPoint of the hierarchy
-            SdrPage*                                        mpRememberedStartPage;
+            SdrPageWindow&                                      mrPageWindow;
 
             // Process the whole displaying, the real version
             void DoProcessDisplay(DisplayInfo& rDisplayInfo);
-
-            // Update Draw Hierarchy data
-            virtual void EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo);
 
         public:
             // access to SdrPageWindow
@@ -71,50 +65,78 @@ namespace sdr
 
             // basic constructor, used from SdrPageView.
             ObjectContactOfPageView(SdrPageWindow& rPageWindow);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ObjectContactOfPageView();
 
-            // A ViewObjectContact was deleted and shall be forgotten.
-            // #i29181# Overload to clear selection at associated view
-            virtual void RemoveViewObjectContact(ViewObjectContact& rVOContact);
+            // LazyInvalidate request. This is used from the VOCs to mark that they
+            // got invalidated by an ActionCanged() call. An active view needs to remember
+            // this and take action on it. Default implementation directly calls back
+            // triggerLazyInvalidate() wich promptly handles the request
+            virtual void setLazyInvalidate(ViewObjectContact& rVOC);
+
+            // call this to support evtl. preparations for repaint
+            virtual void PrepareProcessDisplay();
+
+            // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+            virtual void Timeout();
 
             // Process the whole displaying
             virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
 
             // test if visualizing of entered groups is switched on at all
-            virtual sal_Bool DoVisualizeEnteredGroup() const;
+            virtual bool DoVisualizeEnteredGroup() const;
 
-            // Get the active group (the entered group). To get independent
-            // from the old object/view classes return values use the new
-            // classes.
-            virtual ViewContact* GetActiveGroupContact() const;
+            // get active group's (the entered group) ViewContact
+            virtual const ViewContact* getActiveViewContact() const;
 
             // Invalidate given rectangle at the window/output which is represented by
             // this ObjectContact.
-            virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
+            virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const;
 
-            // #i42815#
             // Get info if given Rectangle is visible in this view
-            virtual sal_Bool IsAreaVisible(const Rectangle& rRectangle) const;
+            virtual bool IsAreaVisible(const basegfx::B2DRange& rRange) const;
 
             // Get info about the need to visualize GluePoints. The default
             // is that it is not necessary.
-            virtual sal_Bool AreGluePointsVisible() const;
+            virtual bool AreGluePointsVisible() const;
 
             // check if text animation is allowed.
-            virtual sal_Bool IsTextAnimationAllowed() const;
+            virtual bool IsTextAnimationAllowed() const;
 
             // check if graphic animation is allowed.
-            virtual sal_Bool IsGraphicAnimationAllowed() const;
+            virtual bool IsGraphicAnimationAllowed() const;
 
             // check if asynchronious graphis loading is allowed. Default is sal_False.
-            virtual sal_Bool IsAsynchronGraphicsLoadingAllowed() const;
+            virtual bool IsAsynchronGraphicsLoadingAllowed() const;
 
             // check if buffering of MasterPages is allowed. Default is sal_False.
-            virtual sal_Bool IsMasterPageBufferingAllowed() const;
+            virtual bool IsMasterPageBufferingAllowed() const;
+
+            // print? Default is false
+            virtual bool isOutputToPrinter() const;
+
+            // window? Default is true
+            virtual bool isOutputToWindow() const;
+
+            // VirtualDevice? Default is false
+            virtual bool isOutputToVirtualDevice() const;
+
+            // recording MetaFile? Default is false
+            virtual bool isOutputToRecordingMetaFile() const;
+
+            // gray display mode
+            virtual bool isDrawModeGray() const;
+
+            // gray display mode
+            virtual bool isDrawModeBlackWhite() const;
+
+            // high contrast display mode
+            virtual bool isDrawModeHighContrast() const;
+
+            // overloaded access to SdrPageView
+            virtual SdrPageView* TryToGetSdrPageView() const;
+
+            // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+            virtual OutputDevice* TryToGetOutputDevice() const;
 
             /** sets all UNO controls which are associated with this ObjectContact to
                 design or alive mode.
