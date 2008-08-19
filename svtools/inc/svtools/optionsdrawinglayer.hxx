@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optionsdrawinglayer.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,6 +167,15 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
         void SetMaximumPaperRightMargin(sal_uInt32 nNew);
         void SetMaximumPaperTopMargin(sal_uInt32 nNew);
         void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
+
+        // primitives
+        sal_Bool    IsAntiAliasing() const;
+        sal_uInt32  GetQuadratic3DRenderLimit() const;
+        sal_uInt32  GetQuadraticFormControlRenderLimit() const;
+
+        void        SetAntiAliasing( sal_Bool bState );
+           void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
+           void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
