@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svddrgmt.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 
 #include "xattr.hxx"
 #include <svx/xpoly.hxx>
-#include "svdxout.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
