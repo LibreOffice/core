@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit2.cxx,v $
- * $Revision: 1.123 $
+ * $Revision: 1.124 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bAddExtLeading      = FALSE;
     bUndoEnabled        = TRUE;
     bCallParaInsertedOrDeleted = FALSE;
-    bVerboseTextComments= FALSE;
     bImpConvertFirstCall= FALSE;
     bFirstWordCapitalization    = TRUE;
 
