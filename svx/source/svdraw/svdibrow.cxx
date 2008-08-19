@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdibrow.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,9 +68,7 @@
 #include <svtools/ptitem.hxx>
 #include <svtools/rectitem.hxx>
 
-#ifndef _SFXRNGITEM_HXX
 #include <svtools/rngitem.hxx>
-#endif
 #include <sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
