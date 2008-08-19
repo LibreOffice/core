@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -983,3 +983,33 @@ void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
     }
 }
 
+/** returns a StarOffice API wrapper for the given SdrPage */
+uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ()
+{
+    if(pPage)
+    {
+        uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+
+        return xDrawPage;
+    }
+
+    return uno::Reference< drawing::XDrawPage >();
+}
+
+/** returns the SdrObject from the given StarOffice API wrapper */
+SdrPage* GetSdrPageFromXDrawPage( uno::Reference< drawing::XDrawPage > xDrawPage ) throw()
+{
+    if(xDrawPage.is())
+    {
+        SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xDrawPage );
+
+        if(pDrawPage)
+        {
+            return pDrawPage->GetSdrPage();
+        }
+    }
+
+    return NULL;
+}
+
+// eof
