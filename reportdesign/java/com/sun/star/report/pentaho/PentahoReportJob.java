@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportJob.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -353,7 +353,10 @@ public class PentahoReportJob implements ReportJob
         }
         catch (final Exception e)
         {
-            throw new ReportExecutionException("Failed to process the report", e);
+            String message = e.getMessage();
+            if ( message.length() == 0 )
+                message = "Failed to process the report";
+            throw new ReportExecutionException(message, e);
         }
 
     }
