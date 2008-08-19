@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: reportformula.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,9 +69,6 @@ namespace rptui
 
         /// constructs a ReportFormula object from a string
         ReportFormula( const ::rtl::OUString& _rFormula );
-
-        /// constructs a ReportFormula object from a string
-        ReportFormula( const ::com::sun::star::uno::Any& _rWrappedFormula );
 
         /// constructs a ReportFormula by BindType
         ReportFormula( const BindType _eType, const ::rtl::OUString& _rFieldOrExpression );
