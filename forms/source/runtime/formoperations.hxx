@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formoperations.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,6 +240,17 @@ namespace frm
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     impl_getCurrentBoundField_nothrow( ) const;
+
+        /** returns the control model of the current control
+
+            If the current control is a grid control, then the returned model is the
+            model of the current <em>column</em> in the grid.
+
+            @precond
+                m_xController.is()
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+                    impl_getCurrentControlModel_throw() const;
 
         /// determines if we have a valid cursor
         inline  bool    impl_hasCursor_nothrow() const { return m_xCursorProperties.is(); }
