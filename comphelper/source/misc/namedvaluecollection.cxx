@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedvaluecollection.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 /** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
 #include <hash_map>
@@ -183,8 +184,15 @@ namespace comphelper
                 m_pImpl->aValues[ aPropertyValue.Name ] = aPropertyValue.Value;
             else if ( *pArgument >>= aNamedValue )
                 m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
-            else
-                OSL_ENSURE( !pArgument->hasValue(), "NamedValueCollection::impl_assign: encountered a value which I cannot handle!" );
+#if OSL_DEBUG_LEVEL > 0
+            else if ( pArgument->hasValue() )
+            {
+                ::rtl::OStringBuffer message;
+                message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
+                message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
+                OSL_ENSURE( false, message.makeStringAndClear() );
+            }
+#endif
         }
     }
 
