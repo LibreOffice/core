@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,8 @@
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
@@ -64,6 +64,7 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #endif
+#include <com/sun/star/sdb/XSubDocument.hpp>
 
 //........................................................................
 namespace dbaccess
@@ -77,7 +78,8 @@ namespace dbaccess
 //=                   document
 //==========================================================================
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::embed::XComponentSupplier
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::embed::XComponentSupplier
+                            ,   ::com::sun::star::sdb::XSubDocument
                             >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
@@ -126,6 +128,12 @@ public:
     // XComponentSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XSubDocument
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL open(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL openDesign(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL store(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL close(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
@@ -160,6 +168,13 @@ public:
 
     static ::com::sun::star::uno::Sequence< sal_Int8 > getDefaultDocumentTypeClassId();
 
+    static ::rtl::OUString GetDocumentServiceFromMediaType( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage
+                                                    ,const ::rtl::OUString& sEntName
+                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+                                                    ,::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
+                                                    );
+
+private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
         @param _bOpenedInDesignMode
             determines whether the embedded object has been opened for designing it or for data display
@@ -181,11 +196,20 @@ public:
     */
     void impl_removeFrameFromDesktop_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
-    static ::rtl::OUString GetDocumentServiceFromMediaType( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage
-                                                    ,const ::rtl::OUString& sEntName
-                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-                                                    ,::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
-                                                    );
+    /** opens the UI for this sub document
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        impl_openUI_nolck_throw( bool _bForEditing );
+
+    /** stores our document, if it's already loaded
+    */
+    void
+        impl_store_throw();
+
+    /** closes our document, if it's open
+    */
+    bool
+        impl_close_throw();
 
 protected:
     // OPropertyArrayUsageHelper
