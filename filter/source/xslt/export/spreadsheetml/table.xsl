@@ -9,7 +9,7 @@
  
   $RCSfile: table.xsl,v $
  
-  $Revision: 1.7 $
+  $Revision: 1.8 $
  
   This file is part of OpenOffice.org.
  
@@ -78,7 +78,7 @@
 				<xsl:choose>
 					<xsl:when test="$columnNodes/@table:number-columns-repeated">
 						<xsl:value-of select="count($columnNodes)
-											+ sum($columnNodes/@table:number-columns-repeated)
+											+ number(sum($columnNodes/@table:number-columns-repeated))
 											- count($columnNodes/@table:number-columns-repeated)" />
 					</xsl:when>
 					<xsl:otherwise>
@@ -286,7 +286,7 @@
 				<xsl:variable name="rowsCreatedByRepetition">
 				<xsl:choose>
 					<xsl:when test="$rowNodesSetA/@table:number-rows-repeated">
-						<xsl:value-of select="sum($rowNodesSetA/@table:number-rows-repeated)
+						<xsl:value-of select="number(sum($rowNodesSetA/@table:number-rows-repeated))
 											- count($rowNodesSetA/@table:number-rows-repeated)" />
 					</xsl:when>
 					<xsl:otherwise>0</xsl:otherwise>
