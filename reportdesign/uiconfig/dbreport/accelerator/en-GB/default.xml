@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <accel:item accel:code="KEY_R" accel:mod1="true" xlink:href=".uno:SelectReport"/>
-    <accel:item accel:code="KEY_RETURN" accel:mod2="true" xlink:href=".uno:ControlProperties"/>
-    <accel:item accel:code="KEY_F4" xlink:href=".uno:ControlProperties"/>
-    <accel:item accel:code="KEY_F5" xlink:href=".uno:ReportNavigator"/>
-    <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Escape"/>
-    <accel:item accel:code="KEY_G" accel:mod1="true" xlink:href=".uno:DbSortingAndGrouping"/>
-    <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href=".uno:ExecuteReport"/>
-    <accel:item accel:code="KEY_A" accel:mod1="true" accel:shift="true" xlink:href=".uno:SelectAllInSection"/>
-    <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
-    <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href=".uno:Undo"/>
-    <accel:item accel:code="KEY_TAB" accel:mod1="true" xlink:href=".uno:NextMark"/>
-    <accel:item accel:code="KEY_TAB" accel:mod1="true" accel:shift="true" xlink:href=".uno:PrevMark"/>
+  <accel:item accel:code="KEY_R" accel:mod1="true" xlink:href=".uno:SelectReport"/>
+  <accel:item accel:code="KEY_RETURN" accel:mod2="true" xlink:href=".uno:ControlProperties"/>
+  <accel:item accel:code="KEY_F4" xlink:href=".uno:ControlProperties"/>
+  <accel:item accel:code="KEY_F5" xlink:href=".uno:ReportNavigator"/>
+  <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Escape"/>
+  <accel:item accel:code="KEY_G" accel:mod1="true" xlink:href=".uno:DbSortingAndGrouping"/>
+  <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href=".uno:ExecuteReport"/>
+  <accel:item accel:code="KEY_A" accel:mod1="true" accel:shift="true" xlink:href=".uno:SelectAllInSection"/>
+  <accel:item accel:code="KEY_T" accel:mod1="true" accel:shift="false" xlink:href=".uno:SelectAllLabels"/>
+  <accel:item accel:code="KEY_F" accel:mod1="true" accel:shift="false" xlink:href=".uno:SelectAllEdits"/>
+  <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
+  <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href=".uno:Undo"/>
+  <accel:item accel:code="KEY_TAB" accel:mod1="true" xlink:href=".uno:NextMark"/>
+  <accel:item accel:code="KEY_TAB" accel:mod1="true" accel:shift="true" xlink:href=".uno:PrevMark"/>
 </accel:acceleratorlist>
