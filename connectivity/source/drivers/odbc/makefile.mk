@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -67,7 +67,7 @@ SLOFILES=\
 
 # --- ODBC BASE Library -----------------------------------
 
-SHL1TARGET=	$(ODBC2_TARGET)$(ODBC2_MAJOR)
+SHL1TARGET=	$(ODBC2_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(DBTOOLSLIB)				\
@@ -97,7 +97,7 @@ SLO2FILES=\
 
 # --- ODBC Library -----------------------------------
 
-SHL2TARGET=	$(ODBC_TARGET)$(ODBC_MAJOR)
+SHL2TARGET=	$(ODBC_TARGET)$(DLLPOSTFIX)
 SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\
     $(ODBCBASELIB)				\
