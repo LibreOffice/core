@@ -10,7 +10,7 @@
 //
 // $RCSfile: sqlflex.l,v $
 //
-// $Revision: 1.34 $
+// $Revision: 1.35 $
 //
 // This file is part of OpenOffice.org.
 //
@@ -157,6 +157,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Cc][Hh][Ee][Cc][Kk]							{SQL_NEW_KEYWORD(SQL_TOKEN_CHECK); return SQL_TOKEN_CHECK; }
 [Cc][Ee][Ii][Ll][Ii][Nn][Gg]					{SQL_NEW_KEYWORD(SQL_TOKEN_CEILING); return SQL_TOKEN_CEILING; }
 [Cc][Oo][Ll][Ll][Aa][Tt][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_COLLATE); return SQL_TOKEN_COLLATE; }
+COLLECT                                         {SQL_NEW_KEYWORD(SQL_TOKEN_COLLECT); return SQL_TOKEN_COLLECT; }
 [Cc][Oo][Mm][Mm][Ii][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_COMMIT); return SQL_TOKEN_COMMIT; }
 [Cc][Oo][Nn][Cc][Aa][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_CONCAT); return SQL_TOKEN_CONCAT; }
 [Cc][Oo][Nn][Tt][Ii][Nn][Uu][Ee]				{SQL_NEW_KEYWORD(SQL_TOKEN_CONTINUE); return SQL_TOKEN_CONTINUE; }
@@ -196,6 +197,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Dd][Oo][Uu][Bb][Ll][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_DOUBLE); return SQL_TOKEN_DOUBLE; }
 [Dd][Rr][Oo][Pp]								{SQL_NEW_KEYWORD(SQL_TOKEN_DROP); return SQL_TOKEN_DROP; }
 
+EVERY                                           {SQL_NEW_KEYWORD(SQL_TOKEN_EVERY); return SQL_TOKEN_EVERY; }
 [Ee][Ss][Cc][Aa][Pp][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_ESCAPE); return SQL_TOKEN_ESCAPE; }
 [Ee][Xx][Cc][Ee][Pp][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_EXCEPT); return SQL_TOKEN_EXCEPT; }
 [Ee][Xx][Ii][Ss][Tt][Ss]						{SQL_NEW_KEYWORD(SQL_TOKEN_EXISTS); return SQL_TOKEN_EXISTS; }
@@ -212,6 +214,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ff][Oo][Uu][Nn][Dd]							{SQL_NEW_KEYWORD(SQL_TOKEN_FOUND); return SQL_TOKEN_FOUND; }
 [Ff][Rr][Oo][Mm]								{SQL_NEW_KEYWORD(SQL_TOKEN_FROM); return SQL_TOKEN_FROM; }
 [Ff][Uu][Ll][Ll]								{SQL_NEW_KEYWORD(SQL_TOKEN_FULL); return SQL_TOKEN_FULL; }
+FUSION                                          {SQL_NEW_KEYWORD(SQL_TOKEN_FUSION); return SQL_TOKEN_FUSION; }
 
 [Gg][Rr][Aa][Nn][Tt]							{SQL_NEW_KEYWORD(SQL_TOKEN_GRANT); return SQL_TOKEN_GRANT; }
 [Gg][Rr][Oo][Uu][Pp]							{SQL_NEW_KEYWORD(SQL_TOKEN_GROUP); return SQL_TOKEN_GROUP; }
@@ -224,6 +227,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ii][Nn][Ss][Ee][Rr][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_INSERT); return SQL_TOKEN_INSERT; }
 [Ii][Nn][Tt]([Ee][Gg][Ee][Rr])?					{SQL_NEW_KEYWORD(SQL_TOKEN_INTEGER); return SQL_TOKEN_INTEGER; }
 [Ii][Nn][Tt][Ee][Rr][Ss][Ee][Cc][Tt]			{SQL_NEW_KEYWORD(SQL_TOKEN_INTERSECT); return SQL_TOKEN_INTERSECT; }
+INTERSECTION			                        {SQL_NEW_KEYWORD(SQL_TOKEN_INTERSECTION); return SQL_TOKEN_INTERSECTION; }
 [Ii][Nn][Tt][Oo]								{SQL_NEW_KEYWORD(SQL_TOKEN_INTO); return SQL_TOKEN_INTO; }
 [Ii][Ss]										{SQL_NEW_KEYWORD(SQL_TOKEN_IS); return SQL_TOKEN_IS; }
 
@@ -303,6 +307,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ss][Oo][Uu][Nn][Dd][Ee][Xx]					{SQL_NEW_KEYWORD(SQL_TOKEN_SOUNDEX); return SQL_TOKEN_SOUNDEX; }
 [Ss][Pp][Aa][Cc][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_SPACE); return SQL_TOKEN_SPACE; }
 [Ss][Qq][Rr][Tt]								{SQL_NEW_KEYWORD(SQL_TOKEN_SQRT); return SQL_TOKEN_SQRT; }
+STDDEV_POP                                      {SQL_NEW_KEYWORD(SQL_TOKEN_STDDEV_POP); return SQL_TOKEN_STDDEV_POP; }
+STDDEV_SAMP                                     {SQL_NEW_KEYWORD(SQL_TOKEN_STDDEV_SAMP); return SQL_TOKEN_STDDEV_SAMP; }
 [Ss][Uu][Bb][Ss][Tt][Rr][Ii][Nn][Gg]			{SQL_NEW_KEYWORD(SQL_TOKEN_SUBSTRING); return SQL_TOKEN_SUBSTRING; }
 [Ss][Uu][Mm]									{SQL_NEW_KEYWORD(SQL_TOKEN_SUM); return SQL_TOKEN_SUM; }
 
@@ -334,6 +340,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Uu][Ss][Ee][Rr]								{SQL_NEW_KEYWORD(SQL_TOKEN_USER); return SQL_TOKEN_USER; }
 [Uu][Ss][Ii][Nn][Gg]							{SQL_NEW_KEYWORD(SQL_TOKEN_USING); return SQL_TOKEN_USING; }
 
+VAR_POP                                         {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_POP); return SQL_TOKEN_VAR_POP; }
+VAR_SAMP                                        {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_SAMP); return SQL_TOKEN_VAR_SAMP; }
 [Vv][Aa][Ll][Uu][Ee][Ss]						{SQL_NEW_KEYWORD(SQL_TOKEN_VALUES); return SQL_TOKEN_VALUES; }
 [Vv][Ii][Ee][Ww]								{SQL_NEW_KEYWORD(SQL_TOKEN_VIEW); return SQL_TOKEN_VIEW; }
 
@@ -540,7 +548,17 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
 		case IParseContext::KEY_MAX:		nTokenID = SQL_TOKEN_MAX;		break;
 		case IParseContext::KEY_MIN:		nTokenID = SQL_TOKEN_MIN;		break;
 		case IParseContext::KEY_SUM:		nTokenID = SQL_TOKEN_SUM;		break;
-        default:
+        case IParseContext::KEY_EVERY:      nTokenID = SQL_TOKEN_EVERY;     break;
+        case IParseContext::KEY_ANY:        nTokenID = SQL_TOKEN_ANY;       break;
+        case IParseContext::KEY_SOME:       nTokenID = SQL_TOKEN_SOME;      break;
+        case IParseContext::KEY_STDDEV_POP: nTokenID = SQL_TOKEN_STDDEV_POP; break;
+        case IParseContext::KEY_STDDEV_SAMP: nTokenID = SQL_TOKEN_STDDEV_SAMP; break;
+        case IParseContext::KEY_VAR_SAMP:   nTokenID = SQL_TOKEN_VAR_SAMP;  break;
+        case IParseContext::KEY_VAR_POP:    nTokenID = SQL_TOKEN_VAR_POP;   break;
+        case IParseContext::KEY_COLLECT:    nTokenID = SQL_TOKEN_COLLECT;   break;
+        case IParseContext::KEY_FUSION:     nTokenID = SQL_TOKEN_FUSION;    break;
+        case IParseContext::KEY_INTERSECTION: nTokenID = SQL_TOKEN_INTERSECTION; break;
+                default:
             OSL_ENSURE( false, "mapEnumToToken: unsupported key!" );
 	}
 	return nTokenID;
@@ -571,6 +589,16 @@ sal_Int32 gatherName(const sal_Char* text)
 		case IParseContext::KEY_MAX:
 		case IParseContext::KEY_MIN:
 		case IParseContext::KEY_SUM:
+        case IParseContext::KEY_EVERY:      
+        case IParseContext::KEY_ANY:        
+        case IParseContext::KEY_SOME:       
+        case IParseContext::KEY_STDDEV_POP: 
+        case IParseContext::KEY_STDDEV_SAMP:
+        case IParseContext::KEY_VAR_SAMP:   
+        case IParseContext::KEY_VAR_POP:    
+        case IParseContext::KEY_COLLECT:    
+        case IParseContext::KEY_FUSION:     
+        case IParseContext::KEY_INTERSECTION:    
 			nToken = mapEnumToToken(eKeyCode);
 			SQL_NEW_KEYWORD(nToken); 
 			return nToken;
@@ -605,6 +633,16 @@ sal_Int32 gatherNamePre(const sal_Char* text)
 		case IParseContext::KEY_MAX:
 		case IParseContext::KEY_MIN:
 		case IParseContext::KEY_SUM:
+        case IParseContext::KEY_EVERY:      
+        case IParseContext::KEY_ANY:        
+        case IParseContext::KEY_SOME:       
+        case IParseContext::KEY_STDDEV_POP: 
+        case IParseContext::KEY_STDDEV_SAMP:
+        case IParseContext::KEY_VAR_SAMP:   
+        case IParseContext::KEY_VAR_POP:    
+        case IParseContext::KEY_COLLECT:    
+        case IParseContext::KEY_FUSION:     
+        case IParseContext::KEY_INTERSECTION:
 			nToken = mapEnumToToken(eKeyCode);
 			SQL_NEW_KEYWORD(nToken);
 			break;
