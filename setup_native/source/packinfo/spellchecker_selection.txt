@@ -27,8 +27,7 @@ sl = "en-US,sl"
 sv = "de,en-US,sv"
 sw = "en-US,sw"
 th = "en-US,th"
+vi = "en-US,fr,vi"
 zh-TW = "en-US"
 zh-CN = "en-US"
 zu = "en-US,zu"
-
-
