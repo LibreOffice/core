@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgpage.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,21 +29,18 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#include <svtools/intitem.hxx> //add CHINA001
-#ifndef _SVX_DIALOGS_HRC
+
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/tabarea.hxx>
-#include "dlgpage.hxx"
-#include "ModuleHelper.hxx"
-#ifndef _RPTUI_DLGRESID_HRC
-#include "RptResId.hrc"
-#endif
-#include <svtools/cjkoptions.hxx>
-#include <svtools/aeitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxenum.hxx>
+#include "dlgpage.hxx"
+#include "ModuleHelper.hxx"
+#include "RptResId.hrc"
+#include <svtools/intitem.hxx> //add CHINA001
+#include <svtools/cjkoptions.hxx>
+#include <svtools/aeitem.hxx>
 
 namespace rptui
 {
