@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b1drange.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,9 +85,10 @@ namespace basegfx
             return (maRange != rRange.maRange);
         }
 
-        void operator=(const B1DRange& rRange)
+        B1DRange& operator=(const B1DRange& rRange)
         {
             maRange = rRange.maRange;
+            return *this;
         }
 
         bool equal(const B1DRange& rRange) const
