@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_sd.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -790,7 +790,6 @@
 #include "svx/xmlcnitm.hxx"
 #include "svx/xmlsecctrl.hxx"
 #include "svx/xoutbmp.hxx"
-#include "svx/xoutx.hxx"
 #include "svx/xpoly.hxx"
 #include "svx/xtable.hxx"
 #include "svx/xtextit0.hxx"
