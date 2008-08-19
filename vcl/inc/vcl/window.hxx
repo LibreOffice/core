@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -597,6 +597,7 @@ public:
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        KeyUp( const KeyEvent& rKEvt );
+    virtual void        PrePaint();
     virtual void        Paint( const Rectangle& rRect );
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
     virtual void        Move();
