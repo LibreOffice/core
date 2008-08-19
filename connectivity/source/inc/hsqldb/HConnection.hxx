@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HConnection.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getTableEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& DocumentUI, const ::rtl::OUString& TableName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         private:
+#if 0
+        // TODO: resource
             /** creates the dialog used for editing a linked table
 
                 @param _rTableName
@@ -132,6 +134,7 @@ namespace connectivity
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxDocumentUI,
                         const ::rtl::OUString& _rTableName
                     );
+#endif
 
             /** retrieves our table container
                 @return
