@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpoint.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -82,4 +84,5 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
+//////////////////////////////////////////////////////////////////////////////
 // eof
