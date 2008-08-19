@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfunc.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,18 +87,21 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 {
     aScrollTimer.Stop();
 
-    OReportWindow* pReportWindow = m_pParent->getViewsWindow()->getView();
+    OReportWindow* pReportWindow = m_pParent->getSectionWindow()->getViewsWindow()->getView();
     OScrollWindowHelper* pScrollWindow = pReportWindow->getScrollWindow();
 
     Size aOut = pReportWindow->GetOutputSizePixel();
-    aOut.Width() -= REPORT_STARTMARKER_WIDTH;
+    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
+    aStartWith *= m_pParent->GetMapMode().GetScaleX();
+
+    aOut.Width() -= (long)aStartWith;
 
     Rectangle aOutRect( pScrollWindow->getScrollOffset(), aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     //Rectangle aWorkArea = m_pParent->getView()->GetWorkArea();
     Point aGcc3WorkaroundTemporary;
     Rectangle aWorkArea(aGcc3WorkaroundTemporary,pScrollWindow->getTotalSize());
-    aWorkArea.Right() -= REPORT_STARTMARKER_WIDTH;
+    aWorkArea.Right() -= (long)aStartWith;
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {
@@ -126,7 +129,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
 DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
 :m_pParent(_pParent),
- m_pView(_pParent->getView()),
+ m_rView(_pParent->getSectionView()),
  m_xOverlappingObj(NULL),
  m_pOverlappingObj(NULL),
  m_bSelectionMode(false),
@@ -135,7 +138,7 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
 {
     // m_pParent = _pParent;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
-    m_pView->SetActualWin( m_pParent);
+    m_rView.SetActualWin( m_pParent);
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
@@ -200,11 +203,11 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
                 uno::Sequence<beans::PropertyValue> aArgs(1);
                 aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowProperties"));
                 aArgs[0].Value <<= sal_True;
-                m_pParent->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
-                m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pParent->getView());
+                m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
+                m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
                 // TODO character in shapes
                 //    SdrViewEvent aVEvt;
-                // m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                // m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
                 //    if ( aVEvt.pRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
                 //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.pRootObj),rMEvt, FALSE);
                 bHandled = TRUE;
@@ -212,28 +215,28 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            SdrHdl* pHdl = m_pView->PickHandle(m_aMDPos);
-            //m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
+            SdrHdl* pHdl = m_rView.PickHandle(m_aMDPos);
+            //m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(m_pView);
 
             // if selected object was hit, drag object
-            if ( pHdl!=NULL || m_pView->IsMarkedHit(m_aMDPos) )
+            if ( pHdl!=NULL || m_rView.IsMarkedHit(m_aMDPos) )
             {
                 bHandled = TRUE;
                 m_pParent->CaptureMouse();
-                m_pParent->getViewsWindow()->BegDragObj(m_aMDPos, pHdl,m_pView);
+                m_pParent->getSectionWindow()->getViewsWindow()->BegDragObj(m_aMDPos, pHdl,&m_rView);
             }
         }
     }
     else if ( rMEvt.IsRight() && !rMEvt.IsLeft() && rMEvt.GetClicks() == 1 ) // mark object when context menu was selected
     {
-        SdrPageView* pPV = m_pView->GetSdrPageView();
+        SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
-        if ( m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
-            m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
+        if ( m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
         if ( aVEvt.pRootObj )
-            m_pView->MarkObj(aVEvt.pRootObj, pPV);
+            m_rView.MarkObj(aVEvt.pRootObj, pPV);
         else
-            m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
 
         bHandled = TRUE;
     }
@@ -249,7 +252,7 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
 {
     BOOL bHandled = FALSE;
-    m_pParent->getViewsWindow()->stopScrollTimer();
+    m_pParent->getSectionWindow()->getViewsWindow()->stopScrollTimer();
     return bHandled;
 }
 // -----------------------------------------------------------------------------
@@ -260,9 +263,9 @@ void DlgEdFunc::checkTwoCklicks(const MouseEvent& rMEvt)
     const USHORT nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( m_pView->AreObjectsMarked() )
+        if ( m_rView.AreObjectsMarked() )
         {
-            const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)
             {
                 const SdrMark* pMark = rMarkList.GetMark(0);
@@ -300,25 +303,25 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
         {
             case KEY_ESCAPE:
             {
-                if ( m_pParent->getViewsWindow()->IsAction() )
+                if ( m_pParent->getSectionWindow()->getViewsWindow()->IsAction() )
                 {
-                    m_pParent->getViewsWindow()->BrkAction();
-                    bReturn = TRUE;
-                } // if ( m_pParent->getViewsWindow()->IsAction() )
-                else if ( m_pView->IsTextEdit() )
-                {
-                    m_pView->SdrEndTextEdit();
+                    m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
                     bReturn = TRUE;
                 }
-                else if ( m_pView->AreObjectsMarked() )
+                else if ( m_rView.IsTextEdit() )
                 {
-                    const SdrHdlList& rHdlList = m_pView->GetHdlList();
+                    m_rView.SdrEndTextEdit();
+                    bReturn = TRUE;
+                }
+                else if ( m_rView.AreObjectsMarked() )
+                {
+                    const SdrHdlList& rHdlList = m_rView.GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
                     if ( pHdl )
                         ((SdrHdlList&)rHdlList).ResetFocusHdl();
                     else
-                        m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
-                        //m_pView->UnmarkAll();
+                        m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+                        //m_rView.UnmarkAll();
 
                     deactivateOle(true);
                     bReturn = FALSE;
@@ -334,22 +337,22 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                 if ( !rCode.IsMod1() && !rCode.IsMod2() )
                 {
                     // mark next object
-                    if ( !m_pView->MarkNextObj( !rCode.IsShift() ) )
+                    if ( !m_rView.MarkNextObj( !rCode.IsShift() ) )
                     {
                         // if no next object, mark first/last
-                        m_pView->UnmarkAllObj();
-                        m_pView->MarkNextObj( !rCode.IsShift() );
+                        m_rView.UnmarkAllObj();
+                        m_rView.MarkNextObj( !rCode.IsShift() );
                     }
 
-                    if ( m_pView->AreObjectsMarked() )
-                        m_pView->MakeVisible( m_pView->GetAllMarkedRect(), *m_pParent);
+                    if ( m_rView.AreObjectsMarked() )
+                        m_rView.MakeVisible( m_rView.GetAllMarkedRect(), *m_pParent);
 
                     bReturn = TRUE;
                 }
                 else if ( rCode.IsMod1() && rCode.IsMod2())
                 {
                     // selected handle
-                    const SdrHdlList& rHdlList = m_pView->GetHdlList();
+                    const SdrHdlList& rHdlList = m_rView.GetHdlList();
                     ((SdrHdlList&)rHdlList).TravelFocusHdl( !rCode.IsShift() );
 
                     // guarantee visibility of focused handle
@@ -358,7 +361,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     {
                         Point aHdlPosition( pHdl->GetPos() );
                         Rectangle aVisRect( aHdlPosition - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
-                        m_pView->MakeVisible( aVisRect, *m_pParent);
+                        m_rView.MakeVisible( aVisRect, *m_pParent);
                     }
 
                     bReturn = TRUE;
@@ -370,14 +373,14 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
             case KEY_LEFT:
             case KEY_RIGHT:
             {
-                m_pParent->getViewsWindow()->handleKey(rCode);
+                m_pParent->getSectionWindow()->getViewsWindow()->handleKey(rCode);
                 bReturn = TRUE;
             }
             break;
             case KEY_RETURN:
                 if ( !rCode.IsMod1() )
                 {
-                    const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+                    const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
                     if ( rMarkList.GetMarkCount() == 1 )
                     {
                         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -387,10 +390,10 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                 break;
             default:
             {
-                bReturn = m_pView->KeyInput(_rEvent, m_pParent);
+                bReturn = m_rView.KeyInput(_rEvent, m_pParent);
             }
             break;
-        } // switch ( nCode )
+        }
     }
 
     if ( bReturn && m_pParent->IsMouseCaptured() )
@@ -415,9 +418,9 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
                 SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
                 if ( pOleObj->GetObjRef().is() )
                 {
-                    if (m_pView->IsTextEdit())
+                    if (m_rView.IsTextEdit())
                     {
-                        m_pView->SdrEndTextEdit();
+                        m_rView.SdrEndTextEdit();
                     }
 
                     pOleObj->AddOwnLightClient();
@@ -426,7 +429,7 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
                     {
                         pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
                         m_bUiActive = true;
-                        OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+                        OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
                         m_bShowPropertyBrowser = rController.isCommandChecked(SID_SHOW_PROPERTYBROWSER);
                         if ( m_bShowPropertyBrowser )
                             rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
@@ -457,14 +460,14 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
                 m_bUiActive = false;
                 if ( m_bShowPropertyBrowser )
                 {
-                    OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+                    OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
                     rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
                 }
 
                 if ( _bSelect )
                 {
-                    SdrPageView* pPV = m_pView->GetSdrPageView();
-                    m_pView->MarkObj(pObj, pPV);
+                    SdrPageView* pPV = m_rView.GetSdrPageView();
+                    m_rView.MarkObj(pObj, pPV);
                 }
             } // if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
         }
@@ -516,7 +519,7 @@ bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
     bool bOverlapping = false;
     SdrViewEvent aVEvt;
-    bOverlapping = m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
+    bOverlapping = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
     if (bOverlapping && aVEvt.pObj)
     {
         colorizeOverlappedObject(aVEvt.pObj);
@@ -531,15 +534,15 @@ bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 // -----------------------------------------------------------------------------
 void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
 {
-    if ( m_pParent->getViewsWindow()->IsDragObj() )
+    if ( m_pParent->getSectionWindow()->getViewsWindow()->IsDragObj() )
     {
         if ( isRectangleHit(rMEvt) )
-            m_pParent->getViewsWindow()->BrkAction();
+            m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
         // object was dragged
         Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
         if (m_bSelectionMode)
         {
-            m_pParent->getViewsWindow()->EndAction();
+            m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
         }
         else
         {
@@ -549,19 +552,19 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
             {
                 aPnt.Y() = 0;
             }
-            m_pParent->getViewsWindow()->EndDragObj( bControlKeyPressed, m_pView, aPnt );
+            m_pParent->getSectionWindow()->getViewsWindow()->EndDragObj( bControlKeyPressed, &m_rView, aPnt );
         }
-        m_pParent->getViewsWindow()->ForceMarkedToAnotherPage();
+        m_pParent->getSectionWindow()->getViewsWindow()->ForceMarkedToAnotherPage();
         m_pParent->Invalidate(INVALIDATE_CHILDREN);
     }
     else
-        m_pParent->getViewsWindow()->EndAction();
+        m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
 }
 // -----------------------------------------------------------------------------
 bool DlgEdFunc::isOnlyCustomShapeMarked()
 {
     bool bReturn = true;
-    const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
     for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
     {
         SdrMark* pMark = rMarkList.GetMark(i);
@@ -585,13 +588,13 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
     }
 
     SdrViewEvent aVEvt;
-    const SdrHitKind eHit = m_pView->PickAnything(rMEvt, SDRMOUSEMOVE, aVEvt);
+    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEMOVE, aVEvt);
     bool bIsSetPoint = (eHit == SDRHIT_UNMARKEDOBJECT);
     if ( !bIsSetPoint )
     {
         // no drag rect, we have to check every single select rect
-        //const Rectangle& rRect = m_pView->GetDragStat().GetActionRect();
-        const SdrDragStat& rDragStat = m_pView->GetDragStat();
+        //const Rectangle& rRect = m_rView.GetDragStat().GetActionRect();
+        const SdrDragStat& rDragStat = m_rView.GetDragStat();
         if (rDragStat.GetDragMethod() != NULL)
         {
             SdrObjListIter aIter(*m_pParent->getPage(),IM_DEEPNOGROUPS);
@@ -599,7 +602,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
             // loop through all marked objects and check if there new rect overlapps an old one.
             while( (pObjIter = aIter.Next()) != NULL && !bIsSetPoint)
             {
-                if ( m_pView->IsObjMarked(pObjIter)
+                if ( m_rView.IsObjMarked(pObjIter)
                      && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
                 {
                     Rectangle aNewRect = pObjIter->GetLastBoundRect();
@@ -617,7 +620,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                         ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());
 
 
-                    SdrObject* pObjOverlapped = isOver(aNewRect,*m_pParent->getPage(),*m_pView,false,pObjIter);
+                    SdrObject* pObjOverlapped = isOver(aNewRect,*m_pParent->getPage(),m_rView,false,pObjIter);
                     bIsSetPoint = pObjOverlapped ? true : false;
                     if (pObjOverlapped && !m_bSelectionMode)
                     {
@@ -656,14 +659,14 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
 DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
 {
-    m_pParent->getView()->SetCreateMode( TRUE );
+    m_rView.SetCreateMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    m_pParent->getView()->SetEditMode( TRUE );
+    m_rView.SetEditMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
@@ -674,26 +677,26 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         return TRUE;
 
     SdrViewEvent aVEvt;
-    const SdrHitKind eHit = m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
     if( eHit != SDRHIT_UNMARKEDOBJECT )
     {
         // if no action, create object
-        if ( !m_pParent->getViewsWindow()->IsAction() )
+        if ( !m_pParent->getSectionWindow()->getViewsWindow()->IsAction() )
         {
             deactivateOle(true);
-            if ( m_pParent->getViewsWindow()->HasSelection() )
-                m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
-            m_pView->BegCreateObj(m_aMDPos);
-            m_pParent->getViewsWindow()->createDefault();
+            if ( m_pParent->getSectionWindow()->getViewsWindow()->HasSelection() )
+                m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(&m_rView);
+            m_rView.BegCreateObj(m_aMDPos);
+            m_pParent->getSectionWindow()->getViewsWindow()->createDefault();
         }
     }
     else
     {
         if( !rMEvt.IsShift() )
-            m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
 
-        m_pParent->getViewsWindow()->BegMarkObj( m_aMDPos,m_pView );
+        m_pParent->getSectionWindow()->getViewsWindow()->BegMarkObj( m_aMDPos,&m_rView );
     }
 
     return TRUE;
@@ -710,28 +713,28 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
     BOOL bReturn = TRUE;
     // object creation active?
-    if ( m_pView->IsCreateObj() )
+    if ( m_rView.IsCreateObj() )
     {
-        if ( isOver(m_pView->GetCreateObj(),*m_pParent->getPage(),*m_pView) )
+        if ( isOver(m_rView.GetCreateObj(),*m_pParent->getPage(),m_rView) )
         {
-            m_pParent->getViewsWindow()->BrkAction();
+            m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
             // BrkAction disables the create mode
-            m_pView->SetCreateMode( TRUE );
+            m_rView.SetCreateMode( TRUE );
             return TRUE;
         }
 
-        m_pView->EndCreateObj(SDRCREATE_FORCEEND);
+        m_rView.EndCreateObj(SDRCREATE_FORCEEND);
 
-        if ( !m_pView->AreObjectsMarked() )
+        if ( !m_rView.AreObjectsMarked() )
         {
-            m_pView->MarkObj(aPos, nHitLog);
+            m_rView.MarkObj(aPos, nHitLog);
         }
 
-        bReturn = m_pView->AreObjectsMarked();
+        bReturn = m_rView.AreObjectsMarked();
         if ( bReturn )
         {
-            OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
-            const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+            OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
+            const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
             for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
             {
                 SdrMark* pMark = rMarkList.GetMark(i);
@@ -747,20 +750,18 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     else
         checkMovementAllowed(rMEvt);
 
-    if ( m_pView && !m_pView->AreObjectsMarked() &&
+    if ( !m_rView.AreObjectsMarked() &&
          Abs(m_aMDPos.X() - aPos.X()) < nHitLog &&
          Abs(m_aMDPos.Y() - aPos.Y()) < nHitLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
-        SdrPageView* pPV = m_pView->GetSdrPageView();
+        SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
-        m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-        m_pView->MarkObj(aVEvt.pRootObj, pPV);
+        m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        m_rView.MarkObj(aVEvt.pRootObj, pPV);
     } // ift() && !rMEvt.IsMod2() )
-
     checkTwoCklicks(rMEvt);
-
-    m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pView);
+    m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
     return bReturn;
 }
 
@@ -772,25 +773,25 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
         return TRUE;
     const Point aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( m_pView->IsCreateObj() )
+    if ( m_rView.IsCreateObj() )
     {
-        m_pView->SetOrtho(SdrObjCustomShape::doConstructOrthogonal(m_pView->getSectionWindow()->getViewsWindow()->getShapeType()) ? !rMEvt.IsShift() : rMEvt.IsShift());
-        m_pView->SetAngleSnapEnabled(rMEvt.IsShift());
+        m_rView.SetOrtho(SdrObjCustomShape::doConstructOrthogonal(m_rView.getReportSection()->getSectionWindow()->getViewsWindow()->getShapeType()) ? !rMEvt.IsShift() : rMEvt.IsShift());
+        m_rView.SetAngleSnapEnabled(rMEvt.IsShift());
     }
 
     bool bIsSetPoint = false;
-    if ( m_pView->IsAction() )
+    if ( m_rView.IsAction() )
     {
         bIsSetPoint = setMovementPointer(rMEvt);
         ForceScroll(aPos);
-        m_pParent->getViewsWindow()->MovAction(aPos,m_pView, m_pView->GetDragMethod() == NULL, false);
+        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == NULL, false);
     }
 
-    //if ( isOver(m_pView->GetCreateObj(),*m_pParent->getPage(),*m_pView) )
+    //if ( isOver(m_rView.GetCreateObj(),*m_pParent->getPage(),*m_pView) )
     //    m_pParent->SetPointer( Pointer(POINTER_NOTALLOWED));
     //else
     if ( !bIsSetPoint )
-        m_pParent->SetPointer( m_pView->GetPreferedPointer( aPos, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferedPointer( aPos, m_pParent) );
 
     return TRUE;
 }
@@ -817,38 +818,38 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         return TRUE;
 
     SdrViewEvent aVEvt;
-    const SdrHitKind eHit = m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
     if( eHit == SDRHIT_UNMARKEDOBJECT )
     {
         // if not multi selection, unmark all
         if ( !rMEvt.IsShift() )
-            m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
 
-        if ( m_pView->MarkObj(m_aMDPos) && rMEvt.IsLeft() )
+        if ( m_rView.MarkObj(m_aMDPos) && rMEvt.IsLeft() )
         {
             // drag object
-            m_pParent->getViewsWindow()->BegDragObj(m_aMDPos, m_pView->PickHandle(m_aMDPos), m_pView);
+            m_pParent->getSectionWindow()->getViewsWindow()->BegDragObj(m_aMDPos, m_rView.PickHandle(m_aMDPos), &m_rView);
         }
         else
         {
             // select object
-            m_pParent->getViewsWindow()->BegMarkObj(m_aMDPos,m_pView);
+            m_pParent->getSectionWindow()->getViewsWindow()->BegMarkObj(m_aMDPos,&m_rView);
         }
     }
     else
     {
         if( !rMEvt.IsShift() )
-            m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
-            //m_pView->UnmarkAll();
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+            //m_rView.UnmarkAll();
 
         if ( rMEvt.GetClicks() == 1 )
         {
             m_bSelectionMode = true;
-            m_pParent->getViewsWindow()->BegMarkObj( m_aMDPos ,m_pView);
+            m_pParent->getSectionWindow()->getViewsWindow()->BegMarkObj( m_aMDPos ,&m_rView);
         }
         else
         {
-            m_pView->SdrBeginTextEdit( aVEvt.pRootObj,m_pView->GetSdrPageView(),m_pParent,sal_False );
+            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent,sal_False );
         }
     }
 
@@ -868,13 +869,13 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() )                     // left mousebutton pressed
         checkMovementAllowed(rMEvt);
 
-    m_pParent->getViewsWindow()->EndAction();
-
+    m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
     checkTwoCklicks(rMEvt);
 
-    m_pParent->SetPointer( m_pView->GetPreferedPointer( aPnt, m_pParent) );
+    m_pParent->SetPointer( m_rView.GetPreferedPointer( aPnt, m_pParent) );
+
     if ( !m_bUiActive )
-        m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pView);
+        m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
     m_bSelectionMode = false;
     return TRUE;
 }
@@ -889,24 +890,24 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     const Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
     bool bIsSetPoint = false;
 
-    if ( m_pView->IsAction() ) // Drag Mode
+    if ( m_rView.IsAction() ) // Drag Mode
     {
         bIsSetPoint = setMovementPointer(rMEvt);
         ForceScroll(aPnt);
-        if (m_pView->GetDragMethod()==NULL)
+        if (m_rView.GetDragMethod()==NULL)
         {
-            m_pParent->getViewsWindow()->MovAction(aPnt, m_pView, true, false);
+            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, true, false);
         }
         else
         {
             bool bControlKey = rMEvt.IsMod1();
-            m_pParent->getViewsWindow()->MovAction(aPnt, m_pView, false, bControlKey);
+            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, false, bControlKey);
         }
     }
 
     if ( !bIsSetPoint )
     {
-        m_pParent->SetPointer( m_pView->GetPreferedPointer( aPnt, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferedPointer( aPnt, m_pParent) );
 
         // restore color
         unColorizeOverlappedObj();
@@ -918,17 +919,17 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 //void DlgEdFuncSelect::SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, BOOL bQuickDrag)
 //{
 //
-//  SdrPageView* pPV = m_pView->GetSdrPageView();
+//  SdrPageView* pPV = m_rView.GetSdrPageView();
 //  if( _pTextObj && _pTextObj->GetPage() == pPV->GetPage() )
 //  {
-//      m_pView->SetCurrentObj(OBJ_TEXT);
-//      m_pView->SetEditMode(SDREDITMODE_EDIT);
+//      m_rView.SetCurrentObj(OBJ_TEXT);
+//      m_rView.SetEditMode(SDREDITMODE_EDIT);
 //
 //      BOOL bEmptyOutliner = FALSE;
 //
-//      if (!_pTextObj->GetOutlinerParaObject() && m_pView->GetTextEditOutliner())
+//      if (!_pTextObj->GetOutlinerParaObject() && m_rView.GetTextEditOutliner())
 //      {
-//          ::SdrOutliner* pOutl = m_pView->GetTextEditOutliner();
+//          ::SdrOutliner* pOutl = m_rView.GetTextEditOutliner();
 //          ULONG nParaAnz = pOutl->GetParagraphCount();
 //          Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 //
@@ -942,7 +943,7 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 //          }
 //      }
 //
-//      if (_pTextObj != m_pView->GetTextEditObject() || bEmptyOutliner)
+//      if (_pTextObj != m_rView.GetTextEditObject() || bEmptyOutliner)
 //      {
 //          UINT32 nInv = _pTextObj->GetObjInventor();
 //          UINT16 nSdrObjKind = _pTextObj->GetObjIdentifier();
@@ -993,7 +994,7 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 //
 //              if (bEmptyOutliner)
 //              {
-//                  m_pView->SdrEndTextEdit(sal_True);
+//                  m_rView.SdrEndTextEdit(sal_True);
 //              }
 //
 //              if( _pTextObj )
@@ -1005,17 +1006,17 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 //                      pOutl->SetVertical( TRUE );
 //
 //
-//                  if (m_pView->SdrBeginTextEdit(_pTextObj, pPV, pParent, sal_True, pOutl) && _pTextObj->GetObjInventor() == SdrInventor)
+//                  if (m_rView.SdrBeginTextEdit(_pTextObj, pPV, pParent, sal_True, pOutl) && _pTextObj->GetObjInventor() == SdrInventor)
 //                  {
 //                      //bFirstObjCreated = TRUE;
 //                      //DeleteDefaultText();
 //
-//                      OutlinerView* pOLV = m_pView->GetTextEditOutlinerView();
+//                      OutlinerView* pOLV = m_rView.GetTextEditOutlinerView();
 //
 //                      nSdrObjKind = _pTextObj->GetObjIdentifier();
 //
 //                      SdrViewEvent aVEvt;
-//                      SdrHitKind eHit = m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+//                      SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 //
 //                      if (eHit == SDRHIT_TEXTEDIT)
 //                      {
