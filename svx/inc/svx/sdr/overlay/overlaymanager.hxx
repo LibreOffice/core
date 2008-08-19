@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaymanager.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <vcl/mapmod.hxx>
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"
+#include <svtools/optionsdrawinglayer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -80,6 +81,9 @@ namespace sdr
             Color                                   maStripeColorA; // defaults to Color(COL_BLACK)
             Color                                   maStripeColorB; // defaults to Color(COL_WHITE)
             sal_uInt32                              mnStripeLengthPixel; // defaults to 4L
+
+            // hold an incarnation of Drawinglayer configuration options
+            SvtOptionsDrawinglayer                  maDrawinglayerOpt;
 
             // internal
             void ImpDrawMembers(const basegfx::B2DRange& rRange, OutputDevice& rDestinationDevice) const;
