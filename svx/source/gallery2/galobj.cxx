@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: galobj.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -577,7 +577,6 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
             pOut->Push();
             pOut->SetMapMode( aMap );
             aView.ShowSdrPage( const_cast< FmFormPage* >( pPage ));
-//            aView.ShowSdrPage( const_cast< FmFormPage* >( pPage ), Point() );
             aView.CompleteRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
             pOut->Pop();
 
