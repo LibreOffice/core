@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xepivot.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 
 #include <algorithm>
 #include <math.h>
+
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 #include <svtools/zformat.hxx>
