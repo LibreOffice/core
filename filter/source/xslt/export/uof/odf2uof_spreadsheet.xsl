@@ -215,13 +215,13 @@
 					<xsl:if test="/office:document/office:body/office:spreadsheet/table:database-ranges/table:database-range">
 						<表:区域公式集 uof:locID="s0122">
 							<表:区域公式 uof:locID="s0123" uof:attrList="类型">
+								<xsl:attribute name="表:类型">table</xsl:attribute>                            
 								<xsl:for-each select="/office:document/office:body/office:spreadsheet/table:database-ranges/table:database-range">
 									<表:区域 uof:locID="s0007">
 										<xsl:value-of select="@table:target-range-address"/>
 									</表:区域>
 									<表:公式 uof:locID="s0125"/>
 								</xsl:for-each>
-								<xsl:attribute name="表:类型">table</xsl:attribute>
 							</表:区域公式>
 						</表:区域公式集>
 					</xsl:if>
@@ -453,6 +453,7 @@
 			<xsl:attribute name="uof:attrList">最大行 最大列 缺省行高 缺省列宽</xsl:attribute>
 			<xsl:variable name="group-column" select="./table:table-column-group"/>
 			<xsl:variable name="group-row" select="./table:table-row-group"/>
+			<xsl:apply-templates select="@table:style-name"/>            
 			<xsl:for-each select="table:table-column">
 				<表:列 uof:locID="s0048" uof:attrList="列号 隐藏 列宽 式样引用 跨度">
 					<xsl:attribute name="表:列号"><xsl:value-of select="position()"/></xsl:attribute>
@@ -464,16 +465,15 @@
 					<xsl:attribute name="表:跨度"><xsl:choose><xsl:when test="@table:number-columns-repeated"><xsl:value-of select="@table:number-columns-repeated"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose></xsl:attribute>
 				</表:列>
 			</xsl:for-each>
-			<xsl:apply-templates select="@table:style-name"/>
 			<xsl:variable name="columnNodes" select="table:table-column"/>
 			<xsl:variable name="columnsRepeated" select="table:table-column/@table:number-columns-repeated"/>
 			<xsl:variable name="columnCount">
 				<xsl:choose>
 					<xsl:when test="$columnNodes[last()]/@table:number-columns-repeated &gt; 99">
-						<xsl:value-of select="count($columnNodes)+ sum($columnsRepeated)- count($columnsRepeated)- $columnNodes[last()]/@table:number-columns-repeated+ 1"/>
+						<xsl:value-of select="count($columnNodes)+ number(sum($columnsRepeated))- count($columnsRepeated)- $columnNodes[last()]/@table:number-columns-repeated+ 1"/>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="count($columnNodes)+ sum($columnsRepeated)- count($columnsRepeated)"/>
+						<xsl:value-of select="count($columnNodes)+ number(sum($columnsRepeated))- count($columnsRepeated)"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
@@ -539,8 +539,8 @@
 		</xsl:element>
 		<xsl:for-each select="table:table-row-group">
 			<xsl:call-template name="table:table-row-group">
-				<xsl:with-param name="start" select="count(preceding::table:table-row) + sum(preceding::table:table-row/@table:number-rows-repeated) - count(preceding::table:table-row[@table:number-rows-repeated])"/>
-				<xsl:with-param name="end" select="count(preceding::table:table-row) + sum(preceding::table:table-row/@table:number-rows-repeated) - count(preceding::table:table-row[@table:number-rows-repeated]) + sum(descendant::table:table-row/@table:number-rows-repeated) + count(descendant::table:table-row) - count(descendant::table:table-row[@table:number-rows-repeated])"/>
+				<xsl:with-param name="start" select="count(preceding::table:table-row) + number(sum(preceding::table:table-row/@table:number-rows-repeated)) - count(preceding::table:table-row[@table:number-rows-repeated])"/>
+				<xsl:with-param name="end" select="count(preceding::table:table-row) + number(sum(preceding::table:table-row/@table:number-rows-repeated)) - count(preceding::table:table-row[@table:number-rows-repeated]) + number(sum(descendant::table:table-row/@table:number-rows-repeated)) + count(descendant::table:table-row) - count(descendant::table:table-row[@table:number-rows-repeated])"/>
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>
@@ -556,8 +556,8 @@
 		</xsl:element>
 		<xsl:for-each select="table:table-column-group">
 			<xsl:call-template name="table:table-column-group">
-				<xsl:with-param name="start" select="count(preceding::table:table-column) + sum(preceding::table:table-column/@table:number-columns-repeated) - count(preceding::table:table-column[@table:number-columns-repeated])"/>
-				<xsl:with-param name="end" select="count(preceding::table:table-column) + sum(preceding::table:table-column/@table:number-columns-repeated) - count(preceding::table:table-column[@table:number-columns-repeated]) + sum(descendant::table:table-column/@table:number-columns-repeated) + count(descendant::table:table-column) - count(descendant::table:table-column[@table:number-columns-repeated])"/>
+				<xsl:with-param name="start" select="count(preceding::table:table-column) + number(sum(preceding::table:table-column/@table:number-columns-repeated)) - count(preceding::table:table-column[@table:number-columns-repeated])"/>
+				<xsl:with-param name="end" select="count(preceding::table:table-column) + number(sum(preceding::table:table-column/@table:number-columns-repeated)) - count(preceding::table:table-column[@table:number-columns-repeated]) + number(sum(descendant::table:table-column/@table:number-columns-repeated)) + count(descendant::table:table-column) - count(descendant::table:table-column[@table:number-columns-repeated])"/>
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>
@@ -703,7 +703,7 @@
 			<xsl:attribute name="uof:locID">s0049</xsl:attribute>
 			<xsl:attribute name="uof:attrList">行号 隐藏 行高 式样引用 跨度</xsl:attribute>
 			<xsl:if test="./table:table-cell/@office:value-type">
-				<xsl:attribute name="表:行号"><xsl:value-of select="count(preceding::table:table-row[not(@table:number-rows-repeated)])+1+sum(preceding::table:table-row[@table:number-rows-repeated]/@table:number-rows-repeated)"/></xsl:attribute>
+				<xsl:attribute name="表:行号"><xsl:value-of select="count(preceding::table:table-row[not(@table:number-rows-repeated)])+1+number(sum(preceding::table:table-row[@table:number-rows-repeated]/@table:number-rows-repeated))"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="@table:visibility = 'collapse' or @table:visibility = 'filter'">
 				<xsl:attribute name="表:隐藏">true</xsl:attribute>
@@ -4035,6 +4035,9 @@
 		<xsl:if test="($styleProperties/@fo:text-align) or ($styleProperties/@style:vertical-align) or ($styleProperties/@fo:wrap-option) or($styleProperties/@fo:margin-left) or ($styleProperties/@style:rotation-angle) or ($styleProperties/@style:direction)">
 			<xsl:element name="表:对齐格式">
 				<xsl:attribute name="uof:locID">s0114</xsl:attribute>
+				<xsl:if test="$styleProperties/@fo:margin-left">
+					<xsl:attribute name="表:缩进"><xsl:variable name="margin"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$styleProperties/@fo:margin-left"/><xsl:with-param name="rounding-factor" select="1"/></xsl:call-template></xsl:variable><xsl:value-of select="number($margin) div 10"/></xsl:attribute>
+				</xsl:if>                
 				<xsl:element name="表:水平对齐方式">
 					<xsl:attribute name="uof:locID">s0115</xsl:attribute>
 					<xsl:choose>
@@ -4062,9 +4065,6 @@
 							<xsl:otherwise>distributed</xsl:otherwise>
 						</xsl:choose>
 					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$styleProperties/@fo:margin-left">
-					<xsl:attribute name="表:缩进"><xsl:variable name="margin"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$styleProperties/@fo:margin-left"/><xsl:with-param name="rounding-factor" select="1"/></xsl:call-template></xsl:variable><xsl:value-of select="number($margin) div 10"/></xsl:attribute>
 				</xsl:if>
 				<xsl:element name="表:文字方向">
 					<xsl:attribute name="uof:locID">s0118</xsl:attribute>
@@ -4660,7 +4660,7 @@
 			<xsl:attribute name="图:标识符"><xsl:value-of select="concat($pic-name,'_',$picnumber)"/></xsl:attribute>
 			<xsl:attribute name="图:层次"><xsl:choose><xsl:when test="name(parent::node())='draw:g'"><xsl:value-of select="position()"/></xsl:when><xsl:when test="@draw:z-index"><xsl:value-of select="@draw:z-index"/></xsl:when></xsl:choose></xsl:attribute>
 			<xsl:if test="$nodename='draw:g'">
-				<xsl:attribute name="图:组合列表"><xsl:for-each select="child::*[1]"><xsl:variable name="node1"><xsl:value-of select="@draw:style-name | @draw:id"/></xsl:variable><xsl:variable name="picnumber2"><xsl:value-of select="count(preceding::*[@draw:style-name=$node1 | @draw:id=$node1])"/></xsl:variable><xsl:call-template name="zuheliebiao"><xsl:with-param name="allnode"><xsl:value-of select="concat($node1,'_',$picnumber2)"/></xsl:with-param><xsl:with-param name="pos" select="2"/></xsl:call-template></xsl:for-each></xsl:attribute>
+				<xsl:attribute name="图:组合列表"><xsl:for-each select="child::*[1]"><xsl:variable name="node1"><xsl:value-of select="@draw:style-name | @draw:id"/></xsl:variable><xsl:variable name="picnumber2"><xsl:value-of select="count(preceding::*[@draw:style-name=$node1 or @draw:id=$node1])"/></xsl:variable><xsl:call-template name="zuheliebiao"><xsl:with-param name="allnode"><xsl:value-of select="concat($node1,'_',$picnumber2)"/></xsl:with-param><xsl:with-param name="pos" select="2"/></xsl:call-template></xsl:for-each></xsl:attribute>
 			</xsl:if>
 			<xsl:if test=".//office:binary-data">
 				<xsl:attribute name="图:其他对象"><xsl:choose><xsl:when test="@draw:name"><xsl:value-of select="@draw:name"/></xsl:when><xsl:otherwise><xsl:value-of select="concat($pic-name,'_b1')"/></xsl:otherwise></xsl:choose></xsl:attribute>
@@ -5605,6 +5605,32 @@
 			</xsl:if>
 		</xsl:element>
 	</xsl:template>
+	<xsl:template name="hexNumber2dec">
+		<xsl:param name="hex-value"/>
+		<xsl:choose>
+			<xsl:when test="$hex-value = 'A' or ($hex-value = 'a')">
+				<xsl:value-of select="10"/>
+			</xsl:when>
+			<xsl:when test="$hex-value = 'B' or ($hex-value = 'b')">
+				<xsl:value-of select="11"/>
+			</xsl:when>
+			<xsl:when test="$hex-value = 'C' or ($hex-value = 'c')">
+				<xsl:value-of select="12"/>
+			</xsl:when>
+			<xsl:when test="$hex-value = 'D' or ($hex-value = 'd')">
+				<xsl:value-of select="13"/>
+			</xsl:when>
+			<xsl:when test="$hex-value = 'E' or ($hex-value = 'e')">
+				<xsl:value-of select="14"/>
+			</xsl:when>
+			<xsl:when test="$hex-value = 'F' or ($hex-value = 'f')">
+				<xsl:value-of select="15"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$hex-value"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>    
 	<xsl:template name="hex2decimal">
 		<xsl:param name="hex-number"/>
 		<xsl:param name="index"/>
@@ -5755,7 +5781,7 @@
 					<xsl:variable name="left-top">
 						<xsl:call-template name="search-left-top-validation">
 							<xsl:with-param name="validation-name" select="@table:name"/>
-							<xsl:with-param name="tableslist" select="//office:body/office:spreadsheet/table:table"/>
+							<xsl:with-param name="tableslist" select="/*/office:body/office:spreadsheet/table:table"/>
 							<xsl:with-param name="return" select="''"/>
 						</xsl:call-template>
 					</xsl:variable>
