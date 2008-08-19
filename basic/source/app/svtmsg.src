@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svtmsg.src,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,7 +214,7 @@ String S_TEAROFF_FAILED
 // Has to stay in for old res files
 String S_NO_SELECTED_ENTRY_DEPRECATED
 {
-    Text[ en-US ] = "No entry is selected in TreeListBox at ($Arg1)";
+    Text[ en-US ] = "No entry is selected in TreeListB”x at ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
@@ -335,4 +335,8 @@ String S_NO_LIST_BOX_STRING
 String S_SLOT_IN_EXECUTE
 {
     Text[ en-US ] = "Another Slot is being executed already.";
+};
+String S_MENU_NOT_CLOSING
+{
+    Text[ en-US ] = "Menu not closing.";
 };
