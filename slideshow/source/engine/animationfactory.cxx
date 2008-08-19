@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationfactory.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,8 +248,8 @@ namespace slideshow
 
                     // TODO(F2): Since getPositionRelative() currently
                     // cannot handle beziers, have to subdivide.
-                    maPathPoly = ::basegfx::tools::adaptiveSubdivideByAngle(
-                        aPolyPoly.getB2DPolygon(0) );
+                    // AW: Should be no longer necessary; getPositionRelative is now bezier-safe
+                    maPathPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly.getB2DPolygon(0) );
                 }
 
                 ~PathAnimation()
