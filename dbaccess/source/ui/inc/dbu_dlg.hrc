@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbu_dlg.hrc,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@
 #define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STR_DLG_START + 8
 #define STR_DATASOURCE_DEFAULTNAME          RID_STR_DLG_START + 9
 #define STR_ERR_EMPTY_DSN_NAME              RID_STR_DLG_START + 10
-    // FREE
+#define STR_ERR_USE_CONNECT_TO              RID_STR_DLG_START + 11
 #define STR_ALREADYEXISTOVERWRITE           RID_STR_DLG_START + 12
 #define STR_QUERY_DROP_ALL                  RID_STR_DLG_START + 13
 #define STR_INDEX_NAME_ALREADY_USED         RID_STR_DLG_START + 14
