@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salatslayout.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,7 +391,7 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
                                        drawRect.right - drawRect.left,
                                        drawRect.bottom - drawRect.top );
             aRect = CGContextConvertRectToDeviceSpace( rAquaGraphics.mrContext, aRect );
-            rAquaGraphics.RefreshRect( aRect.origin.x, aRect.origin.y, aRect.size.width+1, aRect.size.height+1 );
+            rAquaGraphics.RefreshRect( aRect );
         }
     }
 
