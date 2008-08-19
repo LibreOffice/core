@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.157 $
+ * $Revision: 1.158 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,6 +116,7 @@ struct ESelection;
 class SfxItemSet;
 class _ReadFieldParams;
 class wwZOrderer;
+class OutlinerParaObject;
 namespace com{namespace sun {namespace star{
     namespace beans{ class XPropertySet;}
     namespace form { class XFormComponent;}
@@ -952,7 +953,7 @@ private:
 
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;
-    EditEngine* pDrawEditEngine;
+    EditEngine* mpDrawEditEngine;
     wwZOrderer *pWWZOrder;
 
     SwFieldType* pNumFldType;   // fuer Nummernkreis
@@ -986,7 +987,6 @@ private:
     USHORT nProgress;           // %-Angabe fuer Progressbar
     USHORT nColls;              // Groesse des Arrays
     USHORT nAktColl;            // gemaess WW-Zaehlung
-    USHORT nDrawTxbx;           // Nummer der Textbox ( noetig ?? )
     USHORT nFldNum;             // laufende Nummer dafuer
     USHORT nLFOPosition;
 
@@ -1113,13 +1113,13 @@ private:
     long ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine);
     void ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLine);
     void CloseAttrEnds();
-    bool ReadText(long nStartCp, long nTextLen, short nType);
+    bool ReadText(long nStartCp, long nTextLen, ManTypes nType);
 
     void ReadRevMarkAuthorStrTabl( SvStream& rStrm, INT32 nTblPos,
         INT32 nTblSiz, SwDoc& rDoc );
 
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
-                           long nLen, short nType );
+                           long nLen, ManTypes nType );
 
     void ImportTox( int nFldId, String aStr );
 
@@ -1273,11 +1273,12 @@ private:
         SfxAllItemSet &rSet);
     ESelection GetESelection( long nCpStart, long nCpEnd );
     void InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl );
-    void InsertTxbxAttrs(long nStartCp, long nEndCp, bool bONLYnPicLocFc);
+    void InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
     bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, USHORT nTxBxS,
         USHORT nSequence);
-    bool GetTxbxText(String& rString, long StartCp, long nEndCp);
+    bool GetRangeAsDrawingString(String& rString, long StartCp, long nEndCp, ManTypes eType);
+    OutlinerParaObject* ImportAsOutliner(String &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
     SwFrmFmt* InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
         USHORT nTxBxS, USHORT nSequence, long nPosCp, SwFrmFmt* pFlyFmt,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
@@ -1554,7 +1555,7 @@ public:     // eigentlich private, geht aber leider nur public
     USHORT GetNAktColl()  const     { return nAktColl; }
     void SetNAktColl( USHORT nColl ) { nAktColl = nColl;    }
     void SetAktItemSet( SfxItemSet* pItemSet ) { pAktItemSet = pItemSet; }
-    const USHORT StyleUsingLFO( USHORT nLFOIndex ) const ;
+    USHORT StyleUsingLFO( USHORT nLFOIndex ) const ;
     const SwFmt* GetStyleWithOrgWWName( String& rName ) const ;
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
