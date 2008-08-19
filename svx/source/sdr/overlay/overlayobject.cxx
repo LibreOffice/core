@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlayobject.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,14 +74,12 @@ namespace sdr
         {
             if(getOverlayManager())
             {
-                basegfx::B2DPolygon aPolygon;
-                aPolygon.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMinY()));
-                aPolygon.append(basegfx::B2DPoint(rRange.getMaxX(), rRange.getMinY()));
-                aPolygon.append(basegfx::B2DPoint(rRange.getMaxX(), rRange.getMaxY()));
-                aPolygon.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
-                aPolygon.setClosed(true);
+                const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
 
-                ImpDrawPolygonStriped(rOutputDevice, aPolygon);
+                if(aPolygon.count())
+                {
+                    ImpDrawPolygonStriped(rOutputDevice, aPolygon);
+                }
             }
         }
 
@@ -91,17 +89,21 @@ namespace sdr
             {
                 const basegfx::B2DPoint aStart(x1, y1);
                 const basegfx::B2DPoint aEnd(x2, y2);
-                basegfx::B2DPolygon aPolygon;
-                aPolygon.append(aStart);
-                aPolygon.append(aEnd);
 
-                ImpDrawPolygonStriped(rOutputDevice, aPolygon);
+                if(!aStart.equal(aEnd))
+                {
+                    basegfx::B2DPolygon aPolygon;
+                    aPolygon.append(aStart);
+                    aPolygon.append(aEnd);
+
+                    ImpDrawPolygonStriped(rOutputDevice, aPolygon);
+                }
             }
         }
 
         void OverlayObject::ImpDrawLineStriped(OutputDevice& rOutputDevice, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd)
         {
-            if(getOverlayManager())
+            if(getOverlayManager() && !rStart.equal(rEnd))
             {
                 basegfx::B2DPolygon aPolygon;
                 aPolygon.append(rStart);
@@ -113,7 +115,7 @@ namespace sdr
 
         void OverlayObject::ImpDrawPolygonStriped(OutputDevice& rOutputDevice, const basegfx::B2DPolygon& rPolygon)
         {
-            if(getOverlayManager())
+            if(getOverlayManager() && rPolygon.count())
             {
                 const sal_uInt32 nLenPixel(getOverlayManager()->getStripeLengthPixel());
                 const Size aDashSizePixel(nLenPixel, nLenPixel);
@@ -121,22 +123,15 @@ namespace sdr
                 const double fDashLength(aDashSizeLogic.Width());
                 const double fFullDotDashLength(fDashLength + fDashLength);
 
-                // fill DashDot vector A
-                ::std::vector<double> aDashDotArrayA;
-                aDashDotArrayA.push_back(fDashLength);
-                aDashDotArrayA.push_back(fDashLength);
-
-                // fill DashDot vector B
-                ::std::vector<double> aDashDotArrayB;
-                aDashDotArrayB.push_back(0.0);
-                aDashDotArrayB.push_back(fDashLength);
-                aDashDotArrayB.push_back(fDashLength);
+                // fill DashDot vector
+                ::std::vector<double> aDotDashArray;
+                aDotDashArray.push_back(fDashLength);
+                aDotDashArray.push_back(fDashLength);
 
                 // get dash polygons
-                basegfx::B2DPolyPolygon aStripesA = basegfx::tools::applyLineDashing(rPolygon, aDashDotArrayA, fFullDotDashLength);
-                aStripesA = basegfx::tools::mergeDashedLines(aStripesA);
-                basegfx::B2DPolyPolygon aStripesB = basegfx::tools::applyLineDashing(rPolygon, aDashDotArrayB, fFullDotDashLength);
-                aStripesB = basegfx::tools::mergeDashedLines(aStripesB);
+                basegfx::B2DPolyPolygon aStripesA;
+                basegfx::B2DPolyPolygon aStripesB;
+                basegfx::tools::applyLineDashing(rPolygon, aDotDashArray, &aStripesA, &aStripesB, fFullDotDashLength);
 
                 // draw stripes A
                 if(aStripesA.count())
