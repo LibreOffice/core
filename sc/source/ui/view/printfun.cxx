@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printfun.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -597,13 +597,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(pViewData->GetLogicMode(pViewData->GetActivePart()));
 
-    // #109985#
-    // Use a PaintMode which paints all SDRPAINTMODE_SC_ flags
-    sal_uInt16 nAllPaintMode(0);
-
     // #i72502#
     const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
-    aOutputData.PrintDrawingLayer(SC_LAYER_BACK, nAllPaintMode, aMMOffset);
+    aOutputData.PrintDrawingLayer(SC_LAYER_BACK, aMMOffset);
 
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(aMode);
@@ -658,9 +654,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     }
 
     // #i72502#
-    // USe a paint mode which draws all SDRPAINTMODE_SC_ flags
-    aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, nAllPaintMode, aMMOffset);
-    aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, nAllPaintMode, aMMOffset);
+    aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, aMMOffset);
+    aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, aMMOffset);
     aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 
     // #114135#
@@ -1666,19 +1661,17 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     // #114135#
     aOutputData.SetDrawView( pDrawView );
 
-    // #109985#
     // test if all paint parts are hidden, then a paint is not necessary at all
-    //if (nObjectFlags)
-    const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
     const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
+    const bool bHideAllDrawingLayer(pDrawView && pDrawView->getHideOle() && pDrawView->getHideChart() && pDrawView->getHideDraw());
 
-    if(nPaintModeHideAll != (mnPaintMode & nPaintModeHideAll))
+    if(!bHideAllDrawingLayer)
     {
         pDev->SetMapMode(aLogicMode);
         //  hier kein Clipping setzen (Mapmode wird verschoben)
 
         // #i72502#
-        aOutputData.PrintDrawingLayer(SC_LAYER_BACK, mnPaintMode, aMMOffset);
+        aOutputData.PrintDrawingLayer(SC_LAYER_BACK, aMMOffset);
     }
 
     pDev->SetMapMode(aOffsetMode);
@@ -1741,21 +1734,15 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
 //  pDev->SetMapMode(aDrawMode);
 
-    // #109985#
     // test if all paint parts are hidden, then a paint is not necessary at all
-    //if (nObjectFlags)
-    if(nPaintModeHideAll != (mnPaintMode & nPaintModeHideAll))
+    if(!bHideAllDrawingLayer)
     {
         // #i72502#
-        aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, mnPaintMode, aMMOffset);
+        aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, aMMOffset);
     }
 
-    // #109985#
-    // Use a PaintMode which paints all SDRPAINTMODE_SC_ flags
-    sal_uInt16 nPaintMode(0);
-
     // #i72502#
-    aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, nPaintMode, aMMOffset);
+    aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, aMMOffset);
     aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 }
 
@@ -2155,34 +2142,13 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
             nY1 = nRepeatEndRow + 1;
     BOOL bDoRepRow = (aAreaParam.bRepeatRow && nY1 > nRepeatEndRow);
 
-    // #109985#
-    mnPaintMode = 0;
-
-    if(!aTableParam.bDrawings)
+    // use new object hide flags in SdrPaintView
+    if(pDrawView)
     {
-        mnPaintMode |= SDRPAINTMODE_SC_HIDE_DRAW;
+        pDrawView->setHideOle(!aTableParam.bObjects);
+        pDrawView->setHideChart(!aTableParam.bCharts);
+        pDrawView->setHideDraw(!aTableParam.bDrawings);
     }
-
-    if(!aTableParam.bObjects)
-    {
-        mnPaintMode |= SDRPAINTMODE_SC_HIDE_OLE;
-    }
-
-    if(!aTableParam.bCharts)
-    {
-        mnPaintMode |= SDRPAINTMODE_SC_HIDE_CHART;
-    }
-
-    /*
-    nObjectFlags = 0;
-    if ( aTableParam.bDrawings )
-        nObjectFlags |= SC_OBJECTS_DRAWING;
-    if ( aTableParam.bObjects )
-        nObjectFlags |= SC_OBJECTS_OLE;
-    if ( aTableParam.bCharts )
-        nObjectFlags |= SC_OBJECTS_CHARTS;
-    */
-
 
     if ( pPrinter && bDoPrint )
         pPrinter->StartPage();
