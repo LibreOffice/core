@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navtoolbar.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,6 +254,7 @@ namespace frm
             { SID_FM_RECORD_NEW,            false, false },
             { SID_FM_RECORD_DELETE,         false, false },
             { SID_FM_REFRESH,               false, false },
+            { SID_FM_REFRESH_FORM_CONTROL,  false, false },
             { 0, false, false },
             { SID_FM_SORTUP,                false, false },
             { SID_FM_SORTDOWN,              false, false },
@@ -381,7 +382,7 @@ namespace frm
         case eRecordActions:
         {
             static const USHORT aActionIds[] = {
-                SID_FM_RECORD_SAVE, SID_FM_RECORD_UNDO, SID_FM_RECORD_NEW, SID_FM_RECORD_DELETE, SID_FM_REFRESH, 0
+                SID_FM_RECORD_SAVE, SID_FM_RECORD_UNDO, SID_FM_RECORD_NEW, SID_FM_RECORD_DELETE, SID_FM_REFRESH, SID_FM_REFRESH_FORM_CONTROL, 0
             };
             pGroupIds = aActionIds;
         }
