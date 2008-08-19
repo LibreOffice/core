@@ -9,7 +9,7 @@
  *
  * $RCSfile: ReportBuilderLayouter.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -646,10 +646,12 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     }
                     else
                     {
+// TODO: there seems to be some problems with copy all properties from the design template to the current design
                         final FontDescriptor aFD = _aSO.getFontDescriptor();
                         if (aFD != null)
                         {
                             xFixedText.setFontDescriptor(aFD);
+                            copyProperties(_aSO.getParent(), xFixedText);
                         }
                         nHeight = _aSO.getHeight(500);
                     }
@@ -712,10 +714,12 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 int nHeight = 500;
                 if (_aSO != null)
                 {
+// TODO: there seems to be some problems with copy all properties from the design template to the current design
                     final FontDescriptor aFD = _aSO.getFontDescriptor();
                     if (aFD != null)
                     {
                         xFormattedField.setFontDescriptor(aFD);
+                        copyProperties(_aSO.getParent(), xFormattedField);
                     }
                     nHeight = _aSO.getHeight(500);
                 }
@@ -1164,7 +1168,21 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     Object aClone = aComponent.createClone();
                     if (aClone != null)
                     {
+                        String sName = aComponent.getName();
+                        com.sun.star.awt.Point aPosition = aComponent.getPosition();
+                        Size aSize = aComponent.getSize();
+
                         XShape aShape = (XShape)UnoRuntime.queryInterface(XShape.class, aClone);
+                        String sShapeType = aShape.getShapeType();
+                        com.sun.star.awt.Point aShapePoint = aShape.getPosition();
+                        Size aShapeSize = aShape.getSize();
+
+                        // normally 'createClone' will create a real clone of the component,
+                        // but there seems some problems, we have to controll.
+                        copyProperties(aComponent, aClone);
+
+                        // aShape.setPosition(aComponent.getPosition());
+                        // aShape.setSize(aComponent.getSize());
                         _xToSection.add(aShape);
                     }
                 }
@@ -1317,6 +1335,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 return;
             }
 
+            // TODO: how should we arrive this code (set page and pagecount in the middle of the page footer)
+            // If there exists a design template, don't use it.
+
             // we don't have a default report definition
             final String sPageOf = getResource().getResText(UIConsts.RID_REPORT + 89); // 'Page #page# of #count#'
 
@@ -1397,6 +1418,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             m_aFieldTypes  = aOther.m_aFieldTypes;
             // m_nLeftIndent = aOther.m_nLeftIndent;
             m_xDesignTemplate = aOther.m_xDesignTemplate;
+
+            // dirty PageWidth
+            m_nPageWidth = -1;
         }
     }
 
