@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FixedText.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,6 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 :FixedTextBase(m_aMutex)
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_bMultiLine(sal_False)
 {
     DBG_CTOR( rpt_OFixedText,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
@@ -74,7 +73,6 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 :FixedTextBase(m_aMutex)
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_bMultiLine(sal_False)
 {
     DBG_CTOR( rpt_OFixedText,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
@@ -260,17 +258,6 @@ uno::Reference< uno::XInterface > SAL_CALL OFixedText::getParent(  ) throw (uno:
 void SAL_CALL OFixedText::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException)
 {
     OShapeHelper::setParent(Parent,this);
-}
-// -----------------------------------------------------------------------------
-::sal_Bool SAL_CALL OFixedText::getMultiLine() throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return m_bMultiLine;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::setMultiLine( ::sal_Bool _multiline ) throw (uno::RuntimeException)
-{
-    set(PROPERTY_MULTILINE,_multiline,m_bMultiLine);
 }
 // -----------------------------------------------------------------------------
 uno::Reference< report::XFormatCondition > SAL_CALL OFixedText::createFormatCondition(  ) throw (uno::Exception, uno::RuntimeException)
