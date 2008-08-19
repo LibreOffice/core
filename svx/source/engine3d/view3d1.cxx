@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view3d1.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,20 +36,10 @@
 #include "svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xoutx.hxx>
-
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/xtable.hxx>
-
-#ifndef _FM_FMVIEW_HXX
 #include <svx/fmview.hxx>
-#endif
-
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/dialmgr.hxx>
 #include "globl3d.hxx"
 #include <svx/obj3d.hxx>
