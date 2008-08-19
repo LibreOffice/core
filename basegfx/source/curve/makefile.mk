@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,7 +34,7 @@ PRJNAME=basegfx
 TARGET=curve
 
 #UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-#ENABLE_EXCEPTIONS=FALSE
+ENABLE_EXCEPTIONS=FALSE
 #USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
