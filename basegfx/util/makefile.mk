@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,10 @@ LIB1FILES=\
     $(SLB)$/range.lib	\
     $(SLB)$/tuple.lib	\
     $(SLB)$/tools.lib	\
-    $(SLB)$/vector.lib
+    $(SLB)$/vector.lib	\
+    $(SLB)$/color.lib	\
+    $(SLB)$/pixel.lib	\
+    $(SLB)$/raster.lib
 
 SHL1TARGET= basegfx$(DLLPOSTFIX)
 .IF "$(GUI)" == "OS2"
