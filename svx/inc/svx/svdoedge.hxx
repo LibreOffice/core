@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,6 +163,7 @@ public:
 
 class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
+private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
@@ -170,6 +171,10 @@ class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 
     friend class                SdrCreateView;
     friend class                ImpEdgeHdl;
+
+    // DrawContact section
+private:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 protected:
     SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
@@ -249,10 +254,8 @@ public:
     const SdrObjConnection& GetConnection(FASTBOOL bTail1) const { return *(bTail1 ? &aCon1 : &aCon2); }
     FASTBOOL CheckNodeConnection(FASTBOOL bTail1) const;
 
-    virtual void RecalcBoundRect();
     virtual void RecalcSnapRect();
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void operator=(const SdrObject& rObj);
     virtual void TakeObjNameSingul(String& rName) const;
@@ -314,6 +317,9 @@ public:
 
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
+
+    // for geometry access
+    ::basegfx::B2DPolygon getEdgeTrack() const;
 
     // helper method for SdrDragMethod::AddConnectorOverlays. Adds a overlay polygon for
     // this connector to rResult.
