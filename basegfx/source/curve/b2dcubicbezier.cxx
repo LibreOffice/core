@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dcubicbezier.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -404,6 +404,16 @@ namespace basegfx
         );
     }
 
+    bool B2DCubicBezier::equal(const B2DCubicBezier& rBezier) const
+    {
+        return (
+            maStartPoint.equal(rBezier.maStartPoint)
+            && maEndPoint.equal(rBezier.maEndPoint)
+            && maControlPointA.equal(rBezier.maControlPointA)
+            && maControlPointB.equal(rBezier.maControlPointB)
+        );
+    }
+
     // test if vectors are used
     bool B2DCubicBezier::isBezier() const
     {
@@ -421,63 +431,111 @@ namespace basegfx
         {
             const B2DVector aEdge(maEndPoint - maStartPoint);
 
-            // controls parallel to edge can be trivial. No edge -> not parallel -> control can not be trivial
+            // controls parallel to edge can be trivial. No edge -> not parallel -> control can
+            // still not be trivial (e.g. ballon loop)
             if(!aEdge.equalZero())
             {
+                // get control vectors
                 const B2DVector aVecA(maControlPointA - maStartPoint);
                 const B2DVector aVecB(maControlPointB - maEndPoint);
-                const bool bAIsZero(aVecA.equalZero());
-                const bool bBIsZero(aVecB.equalZero());
-                bool bACanBeZero(false);
-                bool bBCanBeZero(false);
 
-                if(!bAIsZero)
+                // check if trivial per se
+                bool bAIsTrivial(aVecA.equalZero());
+                bool bBIsTrivial(aVecB.equalZero());
+
+                // if A is not zero, check if it could be
+                if(!bAIsTrivial)
                 {
-                    // parallel to edge?
-                    if(areParallel(aVecA, aEdge))
+                    // parallel to edge? Check aVecA, aEdge
+                    // B2DVector::areParallel is too correct, uses differences in the e15 region,
+                    // thus do own test here
+                    const double fValA(aVecA.getX() * aEdge.getY());
+                    const double fValB(aVecA.getY() * aEdge.getX());
+
+                    if(fTools::equalZero(fabs(fValA) - fabs(fValB)))
                     {
-                        // get scale to edge
+                        // get scale to edge. Use bigger distance for numeric quality
                         const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) ? aVecA.getX() / aEdge.getX() : aVecA.getY() / aEdge.getY());
 
                         // end point of vector in edge range?
-                        if(fTools::more(fScale, 0.0) && fTools::lessOrEqual(fScale, 1.0))
+                        if(fTools::moreOrEqual(fScale, 0.0) && fTools::lessOrEqual(fScale, 1.0))
                         {
-                            bACanBeZero = true;
+                            bAIsTrivial = true;
                         }
                     }
                 }
 
-                if(!bBIsZero)
+                // if B is not zero, check if it could be, but only if A is already trivial;
+                // else solve to trivial will not be possible for whole edge
+                if(bAIsTrivial && !bBIsTrivial)
                 {
-                    // parallel to edge?
-                    if(areParallel(aVecB, aEdge))
+                    // parallel to edge? Check aVecB, aEdge
+                    const double fValA(aVecB.getX() * aEdge.getY());
+                    const double fValB(aVecB.getY() * aEdge.getX());
+
+                    if(fTools::equalZero(fabs(fValA) - fabs(fValB)))
                     {
-                        // get scale to edge
+                        // get scale to edge. Use bigger distance for numeric quality
                         const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) ? aVecB.getX() / aEdge.getX() : aVecB.getY() / aEdge.getY());
 
                         // end point of vector in edge range? Caution: controlB is directed AGAINST edge
-                        if(fTools::less(fScale, 0.0) && fTools::moreOrEqual(fScale, -1.0))
+                        if(fTools::lessOrEqual(fScale, 0.0) && fTools::moreOrEqual(fScale, -1.0))
                         {
-                            bBCanBeZero = true;
+                            bBIsTrivial = true;
                         }
                     }
                 }
 
                 // if both are/can be reduced, do it.
                 // Not possible if only one is/can be reduced (!)
-                if((bAIsZero || bACanBeZero) && (bBIsZero || bBCanBeZero))
+                if(bAIsTrivial && bBIsTrivial)
                 {
-                    if(!bAIsZero)
-                    {
-                        maControlPointA = maStartPoint;
-                    }
-
-                    if(!bBIsZero)
-                    {
-                        maControlPointB = maEndPoint;
-                    }
+                    maControlPointA = maStartPoint;
+                    maControlPointB = maEndPoint;
                 }
             }
+        }
+    }
+
+    namespace {
+        double impGetLength(const B2DCubicBezier& rEdge, double fDeviation, sal_uInt32 nRecursionWatch)
+        {
+            const double fEdgeLength(rEdge.getEdgeLength());
+            const double fControlPolygonLength(rEdge.getControlPolygonLength());
+            const double fCurrentDeviation(fTools::equalZero(fControlPolygonLength) ? 0.0 : 1.0 - (fEdgeLength / fControlPolygonLength));
+
+            if(!nRecursionWatch || fTools:: lessOrEqual(fCurrentDeviation, fDeviation))
+            {
+                return (fEdgeLength + fControlPolygonLength) * 0.5;
+            }
+            else
+            {
+                B2DCubicBezier aLeft, aRight;
+                const double fNewDeviation(fDeviation * 0.5);
+                const sal_uInt32 nNewRecursionWatch(nRecursionWatch - 1);
+
+                rEdge.split(0.5, &aLeft, &aRight);
+
+                return impGetLength(aLeft, fNewDeviation, nNewRecursionWatch)
+                    + impGetLength(aRight, fNewDeviation, nNewRecursionWatch);
+            }
+        }
+    }
+
+    double B2DCubicBezier::getLength(double fDeviation) const
+    {
+        if(isBezier())
+        {
+            if(fDeviation < 0.00000001)
+            {
+                fDeviation = 0.00000001;
+            }
+
+            return impGetLength(*this, fDeviation, 6);
+        }
+        else
+        {
+            return B2DVector(getEndPoint() - getStartPoint()).getLength();
         }
     }
 
@@ -516,12 +574,70 @@ namespace basegfx
         }
     }
 
+    B2DVector B2DCubicBezier::getTangent(double t) const
+    {
+        if(fTools::lessOrEqual(t, 0.0))
+        {
+            // tangent in start point
+            B2DVector aTangent(getControlPointA() - getStartPoint());
+
+            if(!aTangent.equalZero())
+            {
+                return aTangent;
+            }
+
+            // start point and control vector are the same, fallback
+            // to implicit start vector to control point B
+            aTangent = (getControlPointB() - getStartPoint()) * 0.3;
+
+            if(!aTangent.equalZero())
+            {
+                return aTangent;
+            }
+
+            // not a bezier at all, return edge vector
+            return (getEndPoint() - getStartPoint()) * 0.3;
+        }
+        else if(fTools::moreOrEqual(t, 1.0))
+        {
+            // tangent in end point
+            B2DVector aTangent(getEndPoint() - getControlPointB());
+
+            if(!aTangent.equalZero())
+            {
+                return aTangent;
+            }
+
+            // end point and control vector are the same, fallback
+            // to implicit start vector from control point A
+            aTangent = (getEndPoint() - getControlPointA()) * 0.3;
+
+            if(!aTangent.equalZero())
+            {
+                return aTangent;
+            }
+
+            // not a bezier at all, return edge vector
+            return (getEndPoint() - getStartPoint()) * 0.3;
+        }
+        else
+        {
+            // t is in ]0.0 .. 1.0[. Split and extract
+            B2DCubicBezier aRight;
+            split(t, 0, &aRight);
+
+            return aRight.getControlPointA() - aRight.getStartPoint();
+        }
+    }
+
     // #i37443# adaptive subdivide by nCount subdivisions
     void B2DCubicBezier::adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount) const
     {
-        for(sal_uInt32 a(0L); a < nCount; a++)
+        const double fLenFact(1.0 / static_cast< double >(nCount + 1));
+
+        for(sal_uInt32 a(1); a <= nCount; a++)
         {
-            const double fPos(double(a + 1L) / double(nCount + 1L));
+            const double fPos(static_cast< double >(a) * fLenFact);
             rTarget.append(interpolatePoint(fPos));
         }
 
@@ -666,9 +782,14 @@ namespace basegfx
         return sqrt(fQuadDist);
     }
 
-    void B2DCubicBezier::split(double t, B2DCubicBezier& rBezierA, B2DCubicBezier& rBezierB) const
+    void B2DCubicBezier::split(double t, B2DCubicBezier* pBezierA, B2DCubicBezier* pBezierB) const
     {
         OSL_ENSURE(t >= 0.0 && t <= 1.0, "B2DCubicBezier::split: Access out of range (!)");
+
+        if(!pBezierA && !pBezierB)
+        {
+            return;
+        }
 
         if(isBezier())
         {
@@ -679,30 +800,114 @@ namespace basegfx
             const B2DPoint aS2R(interpolate(aS1C, aS1R, t));
             const B2DPoint aS3C(interpolate(aS2L, aS2R, t));
 
-            rBezierA.setStartPoint(maStartPoint);
-            rBezierA.setEndPoint(aS3C);
-            rBezierA.setControlPointA(aS1L);
-            rBezierA.setControlPointB(aS2L);
+            if(pBezierA)
+            {
+                pBezierA->setStartPoint(maStartPoint);
+                pBezierA->setEndPoint(aS3C);
+                pBezierA->setControlPointA(aS1L);
+                pBezierA->setControlPointB(aS2L);
+            }
 
-            rBezierB.setStartPoint(aS3C);
-            rBezierB.setEndPoint(maEndPoint);
-            rBezierB.setControlPointA(aS2R);
-            rBezierB.setControlPointB(aS1R);
+            if(pBezierB)
+            {
+                pBezierB->setStartPoint(aS3C);
+                pBezierB->setEndPoint(maEndPoint);
+                pBezierB->setControlPointA(aS2R);
+                pBezierB->setControlPointB(aS1R);
+            }
         }
         else
         {
             const B2DPoint aSplit(interpolate(maStartPoint, maEndPoint, t));
 
-            rBezierA.setStartPoint(maStartPoint);
-            rBezierA.setEndPoint(aSplit);
-            rBezierA.setControlPointA(maStartPoint);
-            rBezierA.setControlPointB(aSplit);
+            if(pBezierA)
+            {
+                pBezierA->setStartPoint(maStartPoint);
+                pBezierA->setEndPoint(aSplit);
+                pBezierA->setControlPointA(maStartPoint);
+                pBezierA->setControlPointB(aSplit);
+            }
 
-            rBezierB.setStartPoint(aSplit);
-            rBezierB.setEndPoint(maEndPoint);
-            rBezierB.setControlPointA(aSplit);
-            rBezierB.setControlPointB(maEndPoint);
+            if(pBezierB)
+            {
+                pBezierB->setStartPoint(aSplit);
+                pBezierB->setEndPoint(maEndPoint);
+                pBezierB->setControlPointA(aSplit);
+                pBezierB->setControlPointB(maEndPoint);
+            }
         }
+    }
+
+    B2DCubicBezier B2DCubicBezier::snippet(double fStart, double fEnd) const
+    {
+        B2DCubicBezier aRetval;
+
+        if(fTools::more(fStart, 1.0))
+        {
+            fStart = 1.0;
+        }
+        else if(fTools::less(fStart, 0.0))
+        {
+            fStart = 0.0;
+        }
+
+        if(fTools::more(fEnd, 1.0))
+        {
+            fEnd = 1.0;
+        }
+        else if(fTools::less(fEnd, 0.0))
+        {
+            fEnd = 0.0;
+        }
+
+        if(fEnd <= fStart)
+        {
+            // empty or NULL, create single point at center
+            const double fSplit((fEnd + fStart) * 0.5);
+            const B2DPoint aPoint(interpolate(getStartPoint(), getEndPoint(), fSplit));
+            aRetval.setStartPoint(aPoint);
+            aRetval.setEndPoint(aPoint);
+            aRetval.setControlPointA(aPoint);
+            aRetval.setControlPointB(aPoint);
+        }
+        else
+        {
+            if(isBezier())
+            {
+                // copy bezier; cut off right, then cut off left. Do not forget to
+                // adapt cut value when both cuts happen
+                const bool bEndIsOne(fTools::equal(fEnd, 1.0));
+                const bool bStartIsZero(fTools::equalZero(fStart));
+                aRetval = *this;
+
+                if(!bEndIsOne)
+                {
+                    aRetval.split(fEnd, &aRetval, 0);
+
+                    if(!bStartIsZero)
+                    {
+                        fStart /= fEnd;
+                    }
+                }
+
+                if(!bStartIsZero)
+                {
+                    aRetval.split(fStart, 0, &aRetval);
+                }
+            }
+            else
+            {
+                // no bezier, create simple edge
+                const B2DPoint aPointA(interpolate(getStartPoint(), getEndPoint(), fStart));
+                const B2DPoint aPointB(interpolate(getStartPoint(), getEndPoint(), fEnd));
+                aRetval.setStartPoint(aPointA);
+                aRetval.setEndPoint(aPointB);
+                aRetval.setControlPointA(aPointA);
+                aRetval.setControlPointB(aPointB);
+            }
+        }
+
+        return aRetval;
     }
 
     B2DRange B2DCubicBezier::getRange() const
@@ -713,6 +918,120 @@ namespace basegfx
         aRetval.expand(maControlPointB);
 
         return aRetval;
+    }
+
+    bool B2DCubicBezier::getMinimumExtremumPosition(double& rfResult) const
+    {
+        ::std::vector< double > aAllResults;
+
+        aAllResults.reserve(4);
+        getAllExtremumPositions(aAllResults);
+
+        const sal_uInt32 nCount(aAllResults.size());
+
+        if(!nCount)
+        {
+            return false;
+        }
+        else if(1 == nCount)
+        {
+            rfResult = aAllResults[0];
+            return true;
+        }
+        else
+        {
+            rfResult = *(::std::min_element(aAllResults.begin(), aAllResults.end()));
+            return true;
+        }
+    }
+
+    namespace
+    {
+        inline void impCheckExtremumResult(double fCandidate, ::std::vector< double >& rResult)
+        {
+            // check for range ]0.0 .. 1.0[ with excluding 1.0 and 0.0 clearly
+            // by using the equalZero test, NOT ::more or ::less which will use the
+            // ApproxEqual() which is too exact here
+            if(fCandidate > 0.0 && !fTools::equalZero(fCandidate))
+            {
+                if(fCandidate < 1.0 && !fTools::equalZero(fCandidate - 1.0))
+                {
+                    rResult.push_back(fCandidate);
+                }
+            }
+        }
+    }
+
+    void B2DCubicBezier::getAllExtremumPositions(::std::vector< double >& rResults) const
+    {
+        rResults.clear();
+
+        // calculate the x-extrema parameters by zeroing first x-derivative
+        // of the cubic bezier's parametric formula, which results in a
+        // quadratic equation: dBezier/dt = t*t*fAX - 2*t*fBX + fCX
+        const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
+        const double fAX = 3 * (maControlPointA.getX() - maControlPointB.getX()) + aRelativeEndPoint.getX();
+        const double fBX = 2 * maControlPointA.getX() - maControlPointB.getX() - maStartPoint.getX();
+        double fCX(maControlPointA.getX() - maStartPoint.getX());
+
+        if(fTools::equalZero(fCX))
+        {
+            // detect fCX equal zero and truncate to real zero value in that case
+            fCX = 0.0;
+        }
+
+        if( !fTools::equalZero(fAX) )
+        {
+            // derivative is polynomial of order 2 => use binomial formula
+            const double fD = fBX*fBX - fAX*fCX;
+            if( fD >= 0.0 )
+            {
+                const double fS = sqrt(fD);
+                // same as above but for very small fAX and/or fCX
+                // this has much better numerical stability
+                // see NRC chapter 5-6 (thanks THB!)
+                const double fQ = fBX + ((fBX >= 0) ? +fS : -fS);
+                impCheckExtremumResult(fQ / fAX, rResults);
+                impCheckExtremumResult(fCX / fQ, rResults);
+            }
+        }
+        else if( !fTools::equalZero(fBX) )
+        {
+            // derivative is polynomial of order 1 => one extrema
+            impCheckExtremumResult(fCX / (2 * fBX), rResults);
+        }
+
+        // calculate the y-extrema parameters by zeroing first y-derivative
+        const double fAY = 3 * (maControlPointA.getY() - maControlPointB.getY()) + aRelativeEndPoint.getY();
+        const double fBY = 2 * maControlPointA.getY() - maControlPointB.getY() - maStartPoint.getY();
+        double fCY(maControlPointA.getY() - maStartPoint.getY());
+
+        if(fTools::equalZero(fCY))
+        {
+            // detect fCY equal zero and truncate to real zero value in that case
+            fCY = 0.0;
+        }
+
+        if( !fTools::equalZero(fAY) )
+        {
+            // derivative is polynomial of order 2 => use binomial formula
+            const double fD = fBY*fBY - fAY*fCY;
+            if( fD >= 0 )
+            {
+                const double fS = sqrt(fD);
+                // same as above but for very small fAX and/or fCX
+                // this has much better numerical stability
+                // see NRC chapter 5-6 (thanks THB!)
+                const double fQ = fBY + ((fBY >= 0) ? +fS : -fS);
+                impCheckExtremumResult(fQ / fAY, rResults);
+                impCheckExtremumResult(fCY / fQ, rResults);
+            }
+        }
+        else if( !fTools::equalZero(fBY) )
+        {
+            // derivative is polynomial of order 1 => one extrema
+            impCheckExtremumResult(fCY / (2 * fBY), rResults);
+        }
     }
 } // end of namespace basegfx
 
