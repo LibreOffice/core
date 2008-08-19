@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clippingfunctor.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,11 @@
 #include "clippingfunctor.hxx"
 #include "transitiontools.hxx"
 
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+
 namespace slideshow
 {
     namespace internal
@@ -46,7 +51,8 @@ namespace slideshow
                                          bool                                    bModeIn ) :
             mpParametricPoly( rPolygon ),
             maStaticTransformation(),
-            maBackgroundRect( createUnitRect() ),
+            // AW: Not needed
+            // maBackgroundRect( createUnitRect() ),
             mbForwardParameterSweep( true ),
             mbSubtractPolygon( false ),
             mbScaleIsotrophically( rTransitionInfo.mbScaleIsotrophically ),
@@ -63,10 +69,11 @@ namespace slideshow
             // polygon to subtract from sufficiently large.
 
             // blow up unit rect to (-1,-1),(2,2)
-            ::basegfx::B2DHomMatrix aMatrix;
-            aMatrix.scale(3.0,3.0);
-            aMatrix.translate(-1.0,-1.0);
-            maBackgroundRect.transform( aMatrix );
+            // AW: Not needed, just use range
+            // ::basegfx::B2DHomMatrix aMatrix;
+            // aMatrix.scale(3.0,3.0);
+            // aMatrix.translate(-1.0,-1.0);
+            // maBackgroundRect.transform( aMatrix );
 
             // extract modification info from maTransitionInfo
             // -----------------------------------------------
@@ -176,8 +183,10 @@ namespace slideshow
                 aClipPoly.flip();
 
             // currently, clipper cannot cope with curves. Subdivide first
-            if( aClipPoly.areControlPointsUsed() )
-                aClipPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aClipPoly);
+            // AW: Should be no longer necessary; clipping tools are now bezier-safe
+            // if( aClipPoly.areControlPointsUsed() )
+            //    aClipPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aClipPoly);
+
             if( mbSubtractPolygon )
             {
                 // subtract given polygon from background
@@ -186,26 +195,25 @@ namespace slideshow
                 // calc maBackgroundRect \ aClipPoly
                 // =================================
 
-                aClipPoly = ::basegfx::tools::correctOrientations( aClipPoly );
-                aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
-                aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
-                aClipPoly.flip();
-                ::basegfx::B2DPolyPolygon aTmp( maBackgroundRect );
-                ::std::swap( aClipPoly, aTmp );
-                aClipPoly.append( aTmp );
+                // AW: Simplified
+                // use a range with fixed size (-1,-1),(2,2)
+                const basegfx::B2DRange aBackgroundRange(-1, -1, 2, 2);
+                const basegfx::B2DRange aClipPolyRange(aClipPoly.getB2DRange());
 
-                // TODO(P1): If former aClipPoly is _strictly_ inside
-                // maBackgroundRect, no need to remove intersections
-                // (but this optimization strictly speaking belongs
-                // into removeIntersections...)
-                aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
-                aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
-
-                // #72995# one more call to resolve self intersections which
-                // may have been built by substracting (see bug)
-                //aMergePolyPolygonA.Merge(FALSE);
-                aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
-                aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
+                if(aBackgroundRange.isInside(aClipPolyRange))
+                {
+                    // combine polygons; make the clip polygon the hole
+                    aClipPoly = ::basegfx::tools::correctOrientations(aClipPoly);
+                    aClipPoly.flip();
+                    aClipPoly.insert(0, basegfx::tools::createPolygonFromRect(aBackgroundRange));
+                }
+                else
+                {
+                    // when not completely inside aBackgroundRange clipping is needed
+                    // substract aClipPoly from aBackgroundRange
+                    const basegfx::B2DPolyPolygon aBackgroundPolyPoly(basegfx::tools::createPolygonFromRect(aBackgroundRange));
+                    aClipPoly = basegfx::tools::solvePolygonOperationDiff(aBackgroundPolyPoly, aClipPoly);
+                }
             }
 
             // scale polygon up to current shape size
