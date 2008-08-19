@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HStorageMap.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,6 @@ namespace connectivity
 
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   getInputStream();
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>  getOutputStream();
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream>        getStream();
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      getSeek();
         };
 
