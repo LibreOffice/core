@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NativeStorageAccess.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +39,23 @@ package com.sun.star.sdbcx.comp.hsqldb;
  *
  * @author  oj93728
  */
-import com.sun.star.embed.ElementModes;
 
 public class NativeStorageAccess {
     static { NativeLibraries.load(); }
 
+    public static final int READ            = 1;
+    public static final int SEEKABLE        = 2;
+    public static final int SEEKABLEREAD    = 3;
+    public static final int WRITE           = 4;
+    public static final int READWRITE       = 7;
+    public static final int TRUNCATE        = 8;
+
     /** Creates a new instance of StorageAccess */
     public NativeStorageAccess(String name,String _mode,Object key) throws java.io.IOException{
         try {
-            int mode = ElementModes.SEEKABLEREAD;
+            int mode = NativeStorageAccess.SEEKABLEREAD;
             if ( _mode.equals("rw") )
-                mode = ElementModes.READWRITE | ElementModes.SEEKABLE;
+                mode = NativeStorageAccess.READWRITE | NativeStorageAccess.SEEKABLE;
 
             openStream(name, (String)key, mode);
         } catch(Exception e){
