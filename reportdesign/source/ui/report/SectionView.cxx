@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SectionView.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,7 @@ void OSectionView::MarkListHasChanged()
         //m_pReportWindow->unmarkAllObjects(this); // WHY
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         m_pReportWindow->getReportView()->Broadcast( aHint );
-        m_pReportWindow->getReportView()->UpdatePropertyBrowserDelayed(this);
+        m_pReportWindow->getReportView()->UpdatePropertyBrowserDelayed(*this);
     }
 }
 
