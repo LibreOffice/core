@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotxdr.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,7 +279,7 @@ FASTBOOL SdrTextObj::MovCreate(SdrDragStat& rStat)
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // fuer ObjName
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     if (HAS_BASE(SdrRectObj,this)) {
         ((SdrRectObj*)this)->SetXPolyDirty();
