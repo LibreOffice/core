@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdglue.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,7 +138,6 @@ public:
     const SdrGluePoint& operator[](USHORT nPos) const                       { return *GetObject(nPos); }
     USHORT              FindGluePoint(USHORT nId) const;
     USHORT              HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack=FALSE, FASTBOOL bNext=FALSE, USHORT nId0=0) const;
-    void                DrawAll(OutputDevice& rOut, const SdrObject* pObj) const;
     void                Invalidate(Window& rWin, const SdrObject* pObj) const;
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
     void                SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj);
