@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkeddocuments.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -474,8 +474,7 @@ namespace dbaui
         {
             Any aAny = ::cppu::getCaughtException();
             com::sun::star::sdbc::SQLException a;
-            if ((aAny >>= a) &&
-                (a.ErrorCode != dbtools::ParameterInteractionCancelled))
+            if ( !(aAny >>= a) || (a.ErrorCode != dbtools::ParameterInteractionCancelled) )
             {
                 com::sun::star::sdbc::SQLException aSQLException;
                 aSQLException.Message = e.Message;
@@ -488,10 +487,6 @@ namespace dbaui
                 String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
                 sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
                 aInfo.prepend(sMessage);
-
-                // sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
-                // ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
-                // aError.Execute();
             }
         }
         if (aInfo.isValid())
