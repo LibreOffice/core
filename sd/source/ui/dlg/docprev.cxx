@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docprev.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,7 +284,7 @@ void SdDocPreviewWin::updateViewSettings()
         StandardCheckVisisbilityRedirector aRedirector;
         const Rectangle aRedrawRectangle = Rectangle( Point(), aNewSize );
         Region aRedrawRegion(aRedrawRectangle);
-        pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,0,&aRedirector);
+        pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,&aRedirector);
 
             aVDev.Pop();
 
