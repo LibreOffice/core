@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofunocontrol.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,34 +99,14 @@ namespace sdr { namespace contact {
 
         /** positions the control for subsequent paint operations
         */
-        void    positionControlForPaint( DisplayInfo& _rDisplayInfo ) const;
+        void    positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const;
 
     protected:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
         ~ViewObjectContactOfUnoControl();
 
-        // ViewObjectContact overridables
-        virtual void PaintObject( DisplayInfo& _rDisplayInfo );
-
-        // own overridables
-        /** paint the control
-
-            All necessary preparations have been done, the method just needs to draw the control
-            onto the device.
-
-            The control to be painted can be obtained at our impl class, and is guaranteed to not be <NULL/>
-            when this method is called.
-
-            @param _rDisplayInfo
-                the display info from the ->PaintObject call
-
-            @param _pObject
-                the SdrObject for the control to paint. Guaranteed to not be <NULL/>.
-        */
-        virtual void doPaintObject(
-            const DisplayInfo& _rDisplayInfo,
-            const SdrUnoObj* _pUnoObject
-        ) const = 0;
+        // support for Primitive2D
+        virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
     private:
         ViewObjectContactOfUnoControl();                                                  // never implemented
@@ -143,12 +123,6 @@ namespace sdr { namespace contact {
         UnoControlDefaultContact( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
         ~UnoControlDefaultContact();
 
-        // ViewObjectContactOfUnoControl overridables
-        virtual void doPaintObject(
-            const DisplayInfo& _rDisplayInfo,
-            const SdrUnoObj* _pUnoObject
-        ) const;
-
     private:
         UnoControlDefaultContact();                                             // never implemented
         UnoControlDefaultContact( const UnoControlDefaultContact& );            // never implemented
@@ -163,12 +137,6 @@ namespace sdr { namespace contact {
     public:
         UnoControlWindowContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
         ~UnoControlWindowContact();
-
-        // ViewObjectContactOfUnoControl overridables
-        virtual void doPaintObject(
-            const DisplayInfo& _rDisplayInfo,
-            const SdrUnoObj* _pUnoObject
-        ) const;
 
     private:
         UnoControlWindowContact();                                              // never implemented
@@ -185,12 +153,6 @@ namespace sdr { namespace contact {
         UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
         ~UnoControlPrintOrPreviewContact();
 
-        // ViewObjectContactOfUnoControl overridables
-        virtual void doPaintObject(
-            const DisplayInfo& _rDisplayInfo,
-            const SdrUnoObj* _pUnoObject
-        ) const;
-
     private:
         UnoControlPrintOrPreviewContact();                                                 // never implemented
         UnoControlPrintOrPreviewContact( const UnoControlPrintOrPreviewContact& );            // never implemented
@@ -205,12 +167,6 @@ namespace sdr { namespace contact {
     public:
         UnoControlPDFExportContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
         ~UnoControlPDFExportContact();
-
-        // ViewObjectContactOfUnoControl overridables
-        virtual void doPaintObject(
-            const DisplayInfo& _rDisplayInfo,
-            const SdrUnoObj* _pUnoObject
-        ) const;
 
     private:
         UnoControlPDFExportContact();                                               // never implemented
