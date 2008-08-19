@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uistrings.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,9 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_SCOPE               );
 DECLARE_CONSTASCII_USTRING(PROPERTY_CHARTTYPE           );
 DECLARE_CONSTASCII_USTRING(PROPERTY_PREVIEW_COUNT       );
 DECLARE_CONSTASCII_USTRING(PROPERTY_TITLE               );
+DECLARE_CONSTASCII_USTRING(PROPERTY_AREA                );
+
+DECLARE_CONSTASCII_USTRING(PROPERTY_FILLCOLOR           );
 }
 
 #endif // REPORTDESIGN_SHARED_UISTRINGS_HRC
