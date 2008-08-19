@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpagv.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,7 @@
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <svx/svdoutl.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdouno.hxx>
@@ -47,7 +45,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/outliner.hxx>
-#include "svdxout.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
@@ -183,8 +180,7 @@ SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 //////////////////////////////////////////////////////////////////////////////
 
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
-:   mpDisplayInfo(0L),
-    mrView(rNewView),
+:   mrView(rNewView),
     // #103911# col_auto color lets the view takes the default SvxColorConfig entry
     maDocumentColor( COL_AUTO ),
     maBackgroundColor(COL_AUTO ), // #i48367# also react on autocolor
@@ -217,12 +213,6 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
 SdrPageView::~SdrPageView()
 {
-    if (GetView().GetModel()->GetPaintingPageView() == this)
-    {
-        // Abmelden
-        GetView().GetModel()->SetPaintingPageView(0L);
-    }
-
     DBG_DTOR(SdrPageView,NULL);
 
     // cleanup window vector
@@ -356,9 +346,22 @@ void SdrPageView::PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPageView::CompleteRedraw(
-    SdrPaintWindow& rPaintWindow, const Region& rReg, sal_uInt16 nPaintMode,
-    ::sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageView::PrePaint()
+{
+    const sal_uInt32 nCount(PageWindowCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        SdrPageWindow* pCandidate = GetPageWindow(a);
+
+        if(pCandidate)
+        {
+            pCandidate->PrePaint();
+        }
+    }
+}
+
+void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     if(GetPage())
     {
@@ -374,7 +377,7 @@ void SdrPageView::CompleteRedraw(
 
         // do the redraw
         pPageWindow->PrepareRedraw(rReg);
-        pPageWindow->RedrawAll(nPaintMode, pRedirector);
+        pPageWindow->RedrawAll(pRedirector);
 
         // get rid of temp PageWindow
         if(bIsTempTarget)
@@ -394,7 +397,7 @@ void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
     mpPreparedPageWindow = pKnownTarget;
 }
 
-void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     if(GetPage())
     {
@@ -405,7 +408,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
             if(pKnownTarget)
             {
                 // paint known target
-                pKnownTarget->RedrawLayer(nPaintMode, &nID, pRedirector);
+                pKnownTarget->RedrawLayer(&nID, pRedirector);
             }
             else
             {
@@ -428,7 +431,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
                     pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
 
                     // redraw the layer
-                    pPreparedTarget->RedrawLayer(nPaintMode, &nID, pRedirector);
+                    pPreparedTarget->RedrawLayer(&nID, pRedirector);
 
                     // restore the ExistingPageWindow
                     pPreparedTarget->unpatchPaintWindow();
@@ -454,7 +457,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
                     }
 
-                    aTemporaryPageWindow.RedrawLayer(nPaintMode, &nID, pRedirector);
+                    aTemporaryPageWindow.RedrawLayer(&nID, pRedirector);
                 }
             }
         }
@@ -464,7 +467,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
             for(sal_uInt32 a(0L); a < PageWindowCount(); a++)
             {
                 SdrPageWindow* pTarget = GetPageWindow(a);
-                pTarget->RedrawLayer(nPaintMode, &nID, pRedirector);
+                pTarget->RedrawLayer(&nID, pRedirector);
             }
         }
     }
