@@ -9,7 +9,7 @@
  
   $RCSfile: wordml2ooo.xsl,v $
  
-  $Revision: 1.12 $
+  $Revision: 1.13 $
  
   This file is part of OpenOffice.org.
  
@@ -71,7 +71,7 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template match="w:wordDocument">
-        <office:document office:mimetype="application/x-vnd.oasis.openoffice.text" office:version="1.0">
+        <office:document office:mimetype="application/vnd.oasis.opendocument.text" office:version="1.0">
 	    <fla:fla.activate/>
             <xsl:apply-templates select="o:DocumentProperties"/>
             <xsl:apply-templates select="w:docOleData" mode="init"/>
