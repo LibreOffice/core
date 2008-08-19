@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdograf.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@ namespace sdr
     } // end of namespace properties
     namespace contact
     {
-        class ViewContactOfGraphic;
+        class ViewObjectContactOfGraphic;
     } // end of namespace contact
 } // end of namespace sdr
 
@@ -85,7 +85,7 @@ public:
 class GraphicObject;
 class SdrGraphicLink;
 
-class SVX_DLLPUBLIC SdrGrafObj: public SdrRectObj
+class SVX_DLLPUBLIC SdrGrafObj : public SdrRectObj
 {
 private:
     // BaseProperties section
@@ -98,8 +98,8 @@ private:
     // to allow sdr::properties::GraphicProperties access to SetXPolyDirty()
     friend class sdr::properties::GraphicProperties;
 
-    // to allow sdr::contact::ViewContactOfGraphic access to ImpUpdateGraphicLink()
-    friend class sdr::contact::ViewContactOfGraphic;
+    // to allow sdr::contact::ViewObjectContactOfGraphic access to ImpUpdateGraphicLink()
+    friend class sdr::contact::ViewObjectContactOfGraphic;
 
     friend class SdrGraphicLink;
 
@@ -132,10 +132,6 @@ protected:
     sal_Bool                ImpUpdateGraphicLink() const;
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
 
-    // #i25616#
-    void ImpDoPaintGrafObjShadow(XOutputDevice& rOut) const;
-    void ImpDoPaintGrafObj(XOutputDevice& rOut) const;
-
 public:
 
                             TYPEINFO();
@@ -158,15 +154,11 @@ public:
     // #111096#
     // Keep ATM for SD.
     sal_Bool IsAnimated() const;
-    // sal_Bool IsTransparent() const; -> warning SdrObject::IsTransparent, removed. Replace with <pGraphic->IsTransparent()>
     sal_Bool IsEPS() const;
     sal_Bool IsSwappedOut() const;
 
     const MapMode&          GetGrafPrefMapMode() const;
     const Size&             GetGrafPrefSize() const;
-
-    sal_Bool DrawGraphic(OutputDevice* pOut, const Point& rPt, const Size& rSz,
-        const GraphicAttr* pAttr = 0L, sal_uInt32 nFlags = GRFMGR_DRAW_STANDARD) const;
 
     void                    SetGrafStreamURL( const String& rGraphicStreamURL );
     String                  GetGrafStreamURL() const;
@@ -188,7 +180,6 @@ public:
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16          GetObjIdentifier() const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual SdrObject*      CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
 
     virtual void            TakeObjNameSingul(String& rName) const;
