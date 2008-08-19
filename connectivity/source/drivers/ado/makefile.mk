@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,7 +83,7 @@ SLOFILES=\
         $(SLO)$/adoimp.obj
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(ADO_TARGET)$(ADO_MAJOR)
+SHL1TARGET=	$(ADO_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
