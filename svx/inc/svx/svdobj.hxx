@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdobj.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@
 class SfxBroadcaster;
 class Pointer;
 class AutoTimer;
-class XOutputDevice;
 class OutlinerParaObject;
 class SdrOutliner;
 class SdrDragStat;
@@ -85,7 +84,6 @@ class XLineAttrSetItem;
 class SfxItemPool;
 class PolyPolygon;
 class SfxPoolItem;
-class SdrLineGeometry;
 class SdrVirtObj;
 
 namespace sdr
@@ -146,29 +144,6 @@ enum SdrObjKind {OBJ_NONE       = 0,  // Abstraktes Objekt (SdrObject)
                  OBJ_MEDIA      =34,  // Media shape
                  OBJ_TABLE      =35,  // Table
                  OBJ_MAXI};
-
-// Paintmodes, die den SdrObject::Paint-Methoden mitgegeben werden.
-#define SDRPAINTMODE_MASTERPAGE     0x0001 /* Obj gehoert zur eingeblendeten Masterpage */
-#define SDRPAINTMODE_TEXTEDIT       0x0002 /* An diesem Objekt ist z.Zt. TextEdit aktiv */
-
-#define SDRPAINTMODE_ANILIKEPRN     0x0020 /* Animationen so malen, als ob gedruckt wird (z.B. fuer Laufschrift im SdrPageObj) */
-
-//#i80528# for TakeContour, a special paint mode is needed to not run into a recurive
-// loop when painting objects containing text. Also used for graphics to paint just a polygon
-// in that case
-#define SDRPAINTMODE_CONTOUR        0x0040
-
-// #109985#
-// New paint modes to support SC features showing/hiding/drafting special object types
-#define SDRPAINTMODE_SC_HIDE_OLE    0x0200 /* SC paint optins VOBJ_MODE_SHOW VOBJ_TYPE_OLE */
-#define SDRPAINTMODE_SC_HIDE_CHART  0x0400 /* SC paint optins VOBJ_MODE_SHOW VOBJ_TYPE_CHART */
-#define SDRPAINTMODE_SC_HIDE_DRAW   0x0800 /* SC paint optins VOBJ_MODE_SHOW VOBJ_TYPE_DRAW */
-#define SDRPAINTMODE_SC_ALL_HIDE (SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW)
-
-// #110496# Verbose metafile creation for slideshow
-#define SDRPAINTMODE_VERBOSE_MTF    0x8000
-
-/* ... to be continued */
 
 enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // Nur verschoben, Groesse unveraendert
                       SDRUSERCALL_RESIZE,           // Groesse und evtl. auch Pos veraendert
@@ -269,7 +244,7 @@ public:
     virtual FASTBOOL HasMacro (const SdrObject* pObj) const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    virtual void PaintMacro (XOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual FASTBOOL DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
@@ -409,48 +384,6 @@ public:
     {}
 };
 
-//************************************************************
-//   Hilfsklasse SdrObjTransformInfoRec
-//************************************************************
-
-class SdrPaintInfoRec
-{
-public:
-    SetOfByte                   aPaintLayer;    // Visible layers for paint
-    Rectangle                   aDirtyRect;     // The invalidated rect. Empty means: draw all
-    Rectangle                   aCheckRect;     // DirtyRect, a little bigger and relative to PageView
-    const SdrPageView*          pPV;            // Die PageView wird u.a. vom TextObj benoetigt fuer Paint wenn TextEdit
-    const SdrObjList*           pAktList;       // Current list, copy of pAktList from SdrPageView
-
-    USHORT                      nPaintMode;     // OR-ed list of paintmodes, see SDRPAINTMODE_ defines
-    UINT32                      nOriginalDrawMode;  // rescued nOriginalDrawMode from Outdev
-
-    BOOL                        bPrinter;       // Is OutDev a printer?
-    BOOL                        bNotActive;     // visualizing entered groups active?
-    BOOL                        bOriginalDrawModeSet;   // to know if nOriginalDrawMode is rescued from Outdev
-
-    // #111096#
-    // to-be-painted VirtualDevice for animation bitmap playing and were to paint it
-    sal_Bool                    mbUseBitmapEx;
-    BitmapEx                    maBitmapEx;
-    Point                       maPosition;
-
-public:
-    SdrPaintInfoRec()
-    :   aPaintLayer(TRUE),
-        pPV(NULL),
-        pAktList(NULL),
-        nPaintMode(0),
-        nOriginalDrawMode(0L),
-        bPrinter(FALSE),
-        bNotActive(TRUE),
-        bOriginalDrawModeSet(FALSE),
-        mbUseBitmapEx(sal_False),
-        maBitmapEx(),
-        maPosition()
-    {}
-};
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // To make things more safe, allow users of the object to register at it. The users need to be derived
 // from SdrObjectUser to get a call. The users do not need to call RemoveObjectUser() at the object
@@ -505,11 +438,8 @@ private:
     sdr::contact::ViewContact*                                      mpViewContact;
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
-    virtual sdr::contact::ViewContact& GetViewContact() const;
-
-    // DrawContact support: Methods for handling DrawHierarchy changes
-    void ActionRemoved() const;
-    void ActionInserted() const;
+    sdr::contact::ViewContact& GetViewContact() const;
+    void FlushViewContact() const;
 
     // DrawContact support: Methods for handling Object changes
     void ActionChanged() const;
@@ -537,7 +467,6 @@ protected:
 
     // Objekt zeigt nur auf ein Anderes
     unsigned                    bVirtObj : 1;
-    unsigned                    bBoundRectDirty : 1;
     unsigned                    bSnapRectDirty : 1;
     unsigned                    bNetLock : 1;   // ni
     unsigned                    bInserted : 1;  // nur wenn TRUE gibt's RepaintBroadcast & SetModify
@@ -757,69 +686,10 @@ public:
     // Modified-Flag am Model setzen
     virtual void SetChanged();
 
-    // Liefert Paint ein FALSE, so wurde das Paint durch einen Event abgebrochen.
-    // Der Parameter nPaintMode wurde Writer-speziefisch eingebaut. Beim CompleteRedraw
-    // an der View kann ein USHORT mitgegeben werden, der dann bis hier zum Objekt
-    // durchgereicht wird. rDirtyRect beschreibt den Bereich, der am OutputDevice
-    // Invalidiert wurde. rDirtyRect kann groesser sein als das Objekt selbst.
-    // Wird ein leeres Rectangle uebergeben, so soll stattdessen ein unendlich
-    // grosses Rechteck gelten.
-    // virtual FASTBOOL Paint(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const;
-
     // Tooling for painting a single object to a OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
-    sal_Bool SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const;
+    sal_Bool SingleObjectPainter(OutputDevice& rOut) const;
 
-    // #110094#-13
-    //virtual FASTBOOL PaintGluePoints(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const;
-
-    /** Line geometry creation and output (used during Paint())
-
-        @attention Not intended for use outside SVX. Therefore,
-        SdrLineGeometry is opaque here.
-
-        This method sets up some attributes and then delegates to
-        CreateLinePoly().
-
-        @param rXOut
-        Output device that specifies required resolution
-
-        @param rSet
-        Item set attributing the line style
-
-        @return the generated line geometry. Ownership of the pointer
-        transfers to the caller.
-     */
-    ::std::auto_ptr< SdrLineGeometry > ImpPrepareLineGeometry(XOutputDevice& rXOut, const SfxItemSet& rSet) const;
-    void ImpDrawLineGeometry(   XOutputDevice&  rXOut,
-                                Color&              rColor,
-                                sal_uInt16          nTransparence,
-                                SdrLineGeometry&    rLineGeometry,
-                                sal_Int32           nDX=0,
-                                sal_Int32           nDY=0           ) const;
-    void ImpDrawShadowLineGeometry(XOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const;
-    void ImpDrawColorLineGeometry(XOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const;
-    /** Line geometry creation and output (used during Paint())
-
-        @attention Not intended for use outside SVX. Therefore,
-        SdrLineGeometry is opaque here.
-
-        @param rOut
-        Output device that specifies required resolution
-
-        @param bForceOnePixel
-        Force generated line geometry to be a hair line of one pixel width (in device resolution)
-
-        @param bForceTwoPixel
-        Force generated line geometry to be a hair line of two pixel
-        width (in device resolution). This is achieved by outputting a
-        one pixel hair line four times.
-
-        @return the generated line geometry. Ownership of the pointer
-        transfers to the caller.
-     */
-    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const;
     BOOL LineGeometryUsageIsNecessary() const;
 
     // HitTest, 2. Stufe. nTol ist die zulaessige Toleranz in logischen Einheiten.
@@ -1029,7 +899,7 @@ public:
     virtual FASTBOOL HasMacro() const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
-    virtual void PaintMacro (XOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
+    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual FASTBOOL DoMacro (const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     sal_Bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
@@ -1211,7 +1081,6 @@ public:
     // #116168#
     // Give info if object is in destruction
     sal_Bool IsInDestruction() const;
-    bool ImpAddLineGeomteryForMiteredLines();
 
     // #i34682#
     // return if fill is != XFILL_NONE
