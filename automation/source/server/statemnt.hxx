@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statemnt.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -258,6 +258,8 @@ protected:
     Window* GetFadeSplitWin( Window *pBase, WindowAlign nAlign, BOOL MaybeBase = TRUE );
     BOOL ValueOK(SmartId nId, String aBezeichnung, ULONG nValue, ULONG nMax);
 
+    USHORT GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu );
+
 public:
 //  void AddStatement( StatementList *pNewStatement );
 
@@ -329,6 +331,7 @@ protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aArgs;
     USHORT nFunctionId;     // can get removed when the old (numeric) slothandling is removed
     String aUnoUrl;
+    BOOL bMenuClosed;
 
     StatementSlot();
     void AddReferer();
