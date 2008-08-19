@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_base.scp,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,51 +116,3 @@ File gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
     Name = "/registry/spool/fcfg_database_others.xcu";
 End
 
-File gid_File_Registry_Spool_Oo_Setup_Report_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-report.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Embedding_Report_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
-    Name = "/registry/spool/org/openoffice/Office/Embedding-report.xcu";
-End
-
-File gid_File_Oo_Office_Reportdesign_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
-    Name = "/registry/schema/org/openoffice/Office/ReportDesign.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Dbreportwindowstate_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/DbReportWindowState.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Dbreportwindowstate_xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/DbReportWindowState.xcu";
-End
-
-File gid_File_Oo_Office_Ui_Reportcommands_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/ReportCommands.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Reportcommands_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/ReportCommands.xcu";
-End
