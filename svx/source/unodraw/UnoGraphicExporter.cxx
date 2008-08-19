@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoGraphicExporter.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,6 @@
 #include <svx/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/xoutx.hxx>
 #include "xoutbmp.hxx"
 #include "impgrf.hxx"
 #include "unoapi.hxx"
@@ -104,57 +103,6 @@ using namespace ::com::sun::star::task;
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// #114389# use new redirector instead of pPaintProc
-
-class ImplLocalRedirector : public ::sdr::contact::ViewObjectContactRedirector
-{
-public:
-    ImplLocalRedirector() : ViewObjectContactRedirector() {}
-    virtual ~ImplLocalRedirector();
-
-    // all default implementations just call the same methods at the original. To do something
-    // different, overload the method and at least do what the method does.
-    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
-};
-
-ImplLocalRedirector::~ImplLocalRedirector()
-{
-}
-
-void ImplLocalRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
-{
-    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-    sal_Bool bDoPaint(sal_False);
-
-    if(pObject)
-    {
-        if(pObject->IsEmptyPresObj())
-        {
-            // do not paint empty PresObjs, but the background obejct.
-            // SInce the new mechanism does not paint the background object
-            // at all, it is not necessary to test for it here and the whole
-            // method may be simplified soon. For testing for BackgroundObj
-            // You may use pObject->IsMasterPageBackgroundObject().
-        }
-        else
-        {
-            // paint non-empty PresObjs
-            bDoPaint = sal_True;
-        }
-    }
-    else
-    {
-        // no SdrObject, may be SdrPage. Do paint.
-        bDoPaint = sal_True;
-    }
-
-    if(bDoPaint)
-    {
-        rOriginal.PaintObject(rDisplayInfo);
-    }
-}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -270,37 +218,6 @@ namespace svx
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.GraphicExporter" ) );
     }
 
-    GDIMetaFile& RemoveClipRegionActions( GDIMetaFile& o_rMtf, const GDIMetaFile& i_rMtf )
-    {
-        const ULONG nActionCount( i_rMtf.GetActionCount() );
-
-        o_rMtf.Clear();
-        o_rMtf.SetPrefSize( i_rMtf.GetPrefSize() );
-        o_rMtf.SetPrefMapMode( i_rMtf.GetPrefMapMode() );
-
-        // examine actions and remove ClipRegion-Actions.
-        for ( ULONG nAction = 0; nAction < nActionCount; nAction++ )
-        {
-            MetaAction* pCopyAction = ( (GDIMetaFile&) i_rMtf ).CopyAction( nAction );
-
-            if( pCopyAction )
-            {
-                switch( pCopyAction->GetType() )
-                {
-                    case( META_CLIPREGION_ACTION ) :
-                        pCopyAction->Delete();
-                    break;
-
-                    default:
-                        o_rMtf.AddAction( pCopyAction );
-                    break;
-                }
-            }
-        }
-
-        return o_rMtf;
-    }
-
     /** creates a bitmap that is optionaly transparent from a metafile
     */
     BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSize )
@@ -352,7 +269,9 @@ public:
     ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage );
     virtual ~ImplExportCheckVisisbilityRedirector();
 
-    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
+    virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo);
 
 private:
     SdrPage*    mpCurrentPage;
@@ -367,7 +286,9 @@ ImplExportCheckVisisbilityRedirector::~ImplExportCheckVisisbilityRedirector()
 {
 }
 
-void ImplExportCheckVisisbilityRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
+drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
 
@@ -379,13 +300,15 @@ void ImplExportCheckVisisbilityRedirector::PaintObject(::sdr::contact::ViewObjec
 
         if( (pPage == 0) || pPage->checkVisibility(rOriginal, rDisplayInfo, false) )
         {
-            rOriginal.PaintObject(rDisplayInfo);
+            return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
         }
+
+        return drawinglayer::primitive2d::Primitive2DSequence();
     }
     else
     {
         // not an object, maybe a page
-        rOriginal.PaintObject(rDisplayInfo);
+        return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
     }
 }
 
@@ -503,7 +426,7 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
 
     ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-    pView->CompleteRedraw(pVDev, aRegion, 0, &aRedirector);
+    pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
 
     delete pView;
     return pVDev;
@@ -819,16 +742,10 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     aVDev.SetRelativeMapMode( aVMap );
                     aVDev.IntersectClipRegion( aClipRect );
 
-                    sal_uInt16 nPaintMode(0);
-
-                    // #110496# Enable verbose metafile comments
-                    if( rSettings.mbVerboseComments )
-                        nPaintMode|=SDRPAINTMODE_VERBOSE_MTF;
-
                     // Use new StandardCheckVisisbilityRedirector
                     ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                    pView->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
+                    pView->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), &aRedirector);
 
                     aVDev.Pop();
 
@@ -837,8 +754,15 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     aMtf.SetPrefMapMode( aMap );
                     aMtf.SetPrefSize( aNewSize );
 
-                    GDIMetaFile aMtf2;
-                    aGraphic = Graphic( RemoveClipRegionActions( aMtf2, aMtf ) );
+                    // AW: Here the current version was filtering out the META_CLIPREGION_ACTIONs
+                    // from the metafile. I asked some other developers why this was done, but no
+                    // one knew a direct reason. Since it's in for long time, it may be an old
+                    // piece of code. MetaFiles save and load ClipRegions with polygons with preserving
+                    // the polygons, so a resolution-indepent roundtrip is supported. Removed this
+                    // code since it destroys some MetaFiles where ClipRegions are used. Anyways,
+                    // just filtering them out is a hack, at least the encapsulated content would need
+                    // to be clipped geometrically.
+                    aGraphic = Graphic(aMtf);
                 }
 
                 if( rSettings.mbTranslucent )
@@ -959,22 +883,32 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
         {
             // create a metafile for all shapes
             VirtualDevice   aOut;
-            XOutputDevice aXOut( &aOut );
 
             // calculate bound rect for all shapes
             Rectangle aBound;
 
-            std::vector< SdrObject* >::iterator aIter = aShapes.begin();
-            const std::vector< SdrObject* >::iterator aEnd = aShapes.end();
-
-            while( aIter != aEnd )
+            if(rSettings.mbExportOnlyBackground)
             {
-                SdrObject* pObj = (*aIter++);
-                Rectangle aR1(pObj->GetCurrentBoundRect());
-                if (aBound.IsEmpty())
-                    aBound=aR1;
-                else
-                    aBound.Union(aR1);
+                // shape is MPBGO and if it's not yet set, it's size will
+                // be empty when using GetCurrentBoundRect(). Since anyways
+                // the page size is used by MPBGO and MPBGO is EOLd, get
+                // the wanted size from the page model directly
+                aBound = Rectangle(Point(0,0), pPage->GetSize());
+            }
+            else
+            {
+                std::vector< SdrObject* >::iterator aIter = aShapes.begin();
+                const std::vector< SdrObject* >::iterator aEnd = aShapes.end();
+
+                while( aIter != aEnd )
+                {
+                    SdrObject* pObj = (*aIter++);
+                    Rectangle aR1(pObj->GetCurrentBoundRect());
+                    if (aBound.IsEmpty())
+                        aBound=aR1;
+                    else
+                        aBound.Union(aR1);
+                }
             }
 
             aOut.EnableOutput( FALSE );
@@ -990,36 +924,27 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             aOutMap.SetOrigin( Point( -aBound.TopLeft().X(), -aBound.TopLeft().Y() ) );
             aOut.SetRelativeMapMode( aOutMap );
 
-            SdrPaintInfoRec aInfoRec;
-            aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
-
-            // #110496# Enable verbose metafile comments
-            if( rSettings.mbVerboseComments )
-                aInfoRec.nPaintMode|=SDRPAINTMODE_VERBOSE_MTF;
-
             sdr::contact::DisplayInfo aDisplayInfo;
-            aDisplayInfo.SetProcessedPage( mpCurrentPage );
-            aDisplayInfo.SetMasterPagePainting( pPage->IsMasterPage() );
-            if( mpCurrentPage && pPage->IsMasterPage() )
-                aDisplayInfo.SetProcessLayers( mpCurrentPage->TRG_GetMasterPageVisibleLayers() );
 
-            aIter = aShapes.begin();
-            while( aIter != aEnd )
+            if(mpCurrentPage)
             {
-                SdrObject* pObj = (*aIter++);
+                if(mpCurrentPage->TRG_HasMasterPage() && pPage->IsMasterPage())
+                {
+                    // MasterPage is processed as another page's SubContent
+                    aDisplayInfo.SetProcessLayers(mpCurrentPage->TRG_GetMasterPageVisibleLayers());
+                    aDisplayInfo.SetSubContentActive(true);
+                }
+            }
 
-                sdr::contact::ViewContactOfSdrObj aViewContact( *pObj );
-                sdr::contact::ObjectContactOfPagePainter aObjectContact( pPage, false );
-                sdr::contact::ViewObjectContact aOriginal( aObjectContact, aViewContact);
+            if(aShapes.size())
+            {
+                // more effective way to paint a vector of SdrObjects. Hand over the processed page
+                // to have it in the
+                sdr::contact::ObjectContactOfObjListPainter aMultiObjectPainter(aOut, aShapes, mpCurrentPage);
+                ImplExportCheckVisisbilityRedirector aCheckVisibilityRedirector(mpCurrentPage);
+                aMultiObjectPainter.SetViewObjectContactRedirector(&aCheckVisibilityRedirector);
 
-                // #i70852# why was this pObj->SdrObject::GetLayer()? This would not use the correct GetLayer()
-                // for FmFormObj. Changed.
-                if( aDisplayInfo.GetProcessLayers().IsSet(pObj->GetLayer()) )
-                    if( (pObj->GetPage() == 0) || pObj->GetPage()->checkVisibility(aOriginal, aDisplayInfo, false) )
-                        pObj->SingleObjectPainter(aXOut,aInfoRec); // #110094#-17
-
-
-                aOriginal.PrepareDelete();
+                aMultiObjectPainter.ProcessDisplay(aDisplayInfo);
             }
 
             aMtf.Stop();
