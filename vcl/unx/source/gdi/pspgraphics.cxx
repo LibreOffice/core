@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pspgraphics.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,10 +408,10 @@ bool PspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fT
         return false;
 }
 
-bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+bool PspGraphics::drawPolyLine( const basegfx::B2DPolygon&, const basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/)
 {
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
-        return false;
+    // TODO: a PS printer can draw B2DPolyLines almost directly
+    return false;
 }
 
 sal_Bool PspGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
