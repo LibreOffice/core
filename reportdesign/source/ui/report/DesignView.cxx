@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesignView.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,13 +29,9 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#ifndef RPT_DESIGNVIEW_HXX
 #include "DesignView.hxx"
-#endif
 #include <tools/debug.hxx>
-#ifndef DBUI_TABLECONTROLLER_HXX
 #include "ReportController.hxx"
-#endif
 #include <comphelper/types.hxx>
 #include <svtools/syslocale.hxx>
 #include "RptDef.hxx"
@@ -43,20 +39,15 @@
 #include "RptObject.hxx"
 #include "propbrw.hxx"
 #include <toolkit/helper/convert.hxx>
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "AddField.hxx"
 #include "ScrollHelper.hxx"
 #include "Navigator.hxx"
+#include "SectionWindow.hxx"
 #include <vcl/svapp.hxx>
 
 namespace rptui
@@ -155,8 +146,9 @@ ODesignView::ODesignView(   Window* pParent,
                             const Reference< XMultiServiceFactory >& _rxOrb,
                             OReportController& _rController) :
     ODataView( pParent, _rController, _rxOrb, WB_DIALOGCONTROL )
-    //,m_aSplitter(this,WB_HSCROLL)
+    ,m_aSplitWin(this)
     ,m_rReportController( _rController )
+    ,m_aScrollWindow(this)
     ,m_pPropWin(NULL)
     ,m_pAddField(NULL)
     ,m_pCurrentView(NULL)
@@ -168,33 +160,28 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_aGridSize( 250, 250 )    // 100TH_MM
     ,m_bGridVisible(TRUE)
     ,m_bGridSnap(TRUE)
-    ,m_bInSplitHandler( FALSE )
+    ,m_bDeleted( FALSE )
 {
     DBG_CTOR( rpt_ODesignView,NULL);
     SetHelpId(UID_RPT_RPT_APP_VIEW);
     ImplInitSettings();
 
-    m_pSplitWin = new OwnSplitWindow( this );
-
     SetMapMode( MapMode( MAP_100TH_MM ) );
-
-    m_pScrollWindow = new OScrollWindowHelper(this);
-    //m_pScrollWindow->Show();
 
     // now create the task pane on the right side :-)
     m_pTaskPane = new OTaskWindow(this);
     //m_pTaskPane->Show();
 
-    m_pSplitWin->InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
-    m_pSplitWin->InsertItem( REPORT_ID, m_pScrollWindow, 100/*m_pScrollWindow->getMaxMarkerWidth(sal_False)*/, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE  /*SWIB_COLSET*/);
-    //m_pSplitWin->InsertItem( TASKPANE_ID, m_pTaskPane, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
+    m_aSplitWin.InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
+    m_aSplitWin.InsertItem( REPORT_ID, &m_aScrollWindow, 100/*m_aScrollWindow.getMaxMarkerWidth(sal_False)*/, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE  /*SWIB_COLSET*/);
+    //m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
 
     // Splitter einrichten
     //m_aSplitter.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
-    m_pSplitWin->SetSplitHdl(LINK(this, ODesignView,SplitHdl));
-    m_pSplitWin->ShowAutoHideButton();
-    m_pSplitWin->SetAlign(WINDOWALIGN_LEFT);
-    m_pSplitWin->Show();
+    m_aSplitWin.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
+    m_aSplitWin.ShowAutoHideButton();
+    m_aSplitWin.SetAlign(WINDOWALIGN_LEFT);
+    m_aSplitWin.Show();
 
     m_aMarkTimer.SetTimeout( 100 );
     m_aMarkTimer.SetTimeoutHdl( LINK( this, ODesignView, MarkTimeout ) );
@@ -204,6 +191,9 @@ ODesignView::ODesignView(   Window* pParent,
 ODesignView::~ODesignView()
 {
     DBG_DTOR( rpt_ODesignView,NULL);
+    m_bDeleted = TRUE;
+    Hide();
+    m_aScrollWindow.Hide();
     m_aMarkTimer.Stop();
     if ( m_pPropWin )
     {
@@ -224,25 +214,16 @@ ODesignView::~ODesignView()
         m_pReportExplorer = NULL;
     }
     {
-        ::std::auto_ptr<Window> aT3(m_pScrollWindow);
-        m_pScrollWindow = NULL;
-    }
-    {
         ::std::auto_ptr<Window> aTemp2(m_pTaskPane);
         m_pTaskPane = NULL;
     }
-    {
-        ::std::auto_ptr<Window> aTemp2(m_pSplitWin);
-        m_pSplitWin = NULL;
-    }
-
 }
 // -----------------------------------------------------------------------------
 void ODesignView::initialize()
 {
     SetMapMode( MapMode( MAP_100TH_MM ) );
-    m_pScrollWindow->initialize();
-    m_pScrollWindow->Show();
+    m_aScrollWindow.initialize();
+    m_aScrollWindow.Show();
 }
 //-----------------------------------------------------------------------------
 void ODesignView::DataChanged( const DataChangedEvent& rDCEvt )
@@ -308,7 +289,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
         } // if ( 0 != _rPlaygroundSize.Width() )
 
         Size aReportWindowSize(aPlaygroundSize);
-        if ( m_pSplitWin->IsItemValid(TASKPANE_ID) )
+        if ( m_aSplitWin.IsItemValid(TASKPANE_ID) )
         {
             // normalize the split pos
             const long nSplitterWidth = GetSettings().GetStyleSettings().GetSplitSize();
@@ -325,15 +306,15 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
                 getController().setSplitPos(nSplitPos);
 
                 const long nTaskPaneSize = static_cast<long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/aPlaygroundSize.Width());
-                if ( m_pSplitWin->GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
+                if ( m_aSplitWin.GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
                 {
-                    m_pSplitWin->SetItemSize( REPORT_ID, 99 - nTaskPaneSize );
-                    m_pSplitWin->SetItemSize( TASKPANE_ID, nTaskPaneSize );
+                    m_aSplitWin.SetItemSize( REPORT_ID, 99 - nTaskPaneSize );
+                    m_aSplitWin.SetItemSize( TASKPANE_ID, nTaskPaneSize );
                 }
             }
         }
         // set the size of the report window
-        m_pSplitWin->SetPosSizePixel( _rPlayground.TopLeft(),aPlaygroundSize );
+        m_aSplitWin.SetPosSizePixel( _rPlayground.TopLeft(),aPlaygroundSize );
     }
         // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
@@ -369,22 +350,19 @@ void ODesignView::SetMode( DlgEdMode _eNewMode )
     m_eMode = _eNewMode;
     if ( m_eMode == RPTUI_SELECT )
         m_eActObj = OBJ_NONE;
-    if ( m_pScrollWindow )
-        m_pScrollWindow->SetMode(_eNewMode);
+
+    m_aScrollWindow.SetMode(_eNewMode);
 }
 //----------------------------------------------------------------------------
 void ODesignView::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
 {
     m_eActObj = eObj;
-    if ( m_pScrollWindow )
-        m_pScrollWindow->SetInsertObj( eObj,_sShapeType );
+    m_aScrollWindow.SetInsertObj( eObj,_sShapeType );
 }
 //----------------------------------------------------------------------------
 rtl::OUString ODesignView::GetInsertObjString() const
 {
-    if ( m_pScrollWindow )
-        return m_pScrollWindow->GetInsertObjString();
-    return rtl::OUString();
+    return m_aScrollWindow.GetInsertObjString();
 }
 //----------------------------------------------------------------------------
 
@@ -404,45 +382,42 @@ void ODesignView::Cut()
 
 void ODesignView::Copy()
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->Copy();
+    m_aScrollWindow.Copy();
 }
 
 //----------------------------------------------------------------------------
 
 void ODesignView::Paste()
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->Paste();
+    m_aScrollWindow.Paste();
 }
 //----------------------------------------------------------------------------
 void ODesignView::Delete()
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->Delete();
+    m_aScrollWindow.Delete();
 }
 //----------------------------------------------------------------------------
 BOOL ODesignView::HasSelection()
 {
-    return m_pScrollWindow && m_pScrollWindow->HasSelection();
+    return m_aScrollWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 
 BOOL ODesignView::IsPasteAllowed()
 {
-    return m_pScrollWindow && m_pScrollWindow->IsPasteAllowed();
+    return m_aScrollWindow.IsPasteAllowed();
 }
 
 //----------------------------------------------------------------------------
-void ODesignView::UpdatePropertyBrowserDelayed(OSectionView* _pView)
+void ODesignView::UpdatePropertyBrowserDelayed(OSectionView& _rView)
 {
-    if ( m_pCurrentView != _pView )
+    if ( m_pCurrentView != &_rView )
     {
-        if ( m_pCurrentView && m_pScrollWindow )
-            m_pScrollWindow->setMarked(m_pCurrentView,sal_False);
-        m_pCurrentView = _pView;
-        if ( m_pCurrentView && m_pScrollWindow )
-            m_pScrollWindow->setMarked(m_pCurrentView,sal_True);
+        if ( m_pCurrentView )
+            m_aScrollWindow.setMarked(m_pCurrentView,sal_False);
+        m_pCurrentView = &_rView;
+        if ( m_pCurrentView )
+            m_aScrollWindow.setMarked(m_pCurrentView,sal_True);
         m_xReportComponent.clear();
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         Broadcast( aHint );
@@ -453,44 +428,38 @@ void ODesignView::UpdatePropertyBrowserDelayed(OSectionView* _pView)
 //----------------------------------------------------------------------------
 void ODesignView::toggleGrid(sal_Bool _bGridVisible)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->toggleGrid(_bGridVisible);
+     m_aScrollWindow.toggleGrid(_bGridVisible);
 }
 //----------------------------------------------------------------------------
 USHORT ODesignView::getSectionCount() const
 {
-    USHORT nRet = 0;
-    if ( m_pScrollWindow )
-        nRet = m_pScrollWindow->getSectionCount();
-    return nRet;
+    return m_aScrollWindow.getSectionCount();
 }
 //----------------------------------------------------------------------------
 void ODesignView::showRuler(sal_Bool _bShow)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->showRuler(_bShow);
+     m_aScrollWindow.showRuler(_bShow);
 }
 //----------------------------------------------------------------------------
 void ODesignView::removeSection(USHORT _nPosition)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->removeSection(_nPosition);
+     m_aScrollWindow.removeSection(_nPosition);
 }
 //----------------------------------------------------------------------------
 void ODesignView::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,USHORT _nPosition)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->addSection(_xSection,_sColorEntry,_nPosition);
+     m_aScrollWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
 // -----------------------------------------------------------------------------
 void ODesignView::GetFocus()
 {
     Window::GetFocus();
-    if ( m_pScrollWindow )
+
+    if ( !m_bDeleted )
     {
-        ::boost::shared_ptr<OReportSection> pSection = m_pScrollWindow->getMarkedSection();
-        if ( pSection )
-            pSection->GrabFocus();
+        ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_aScrollWindow.getMarkedSection();
+        if ( pSectionWindow )
+            pSectionWindow->GrabFocus();
     }
 }
 // -----------------------------------------------------------------------------
@@ -507,40 +476,33 @@ void ODesignView::ImplInitSettings()
 //-----------------------------------------------------------------------------
 IMPL_LINK( ODesignView, SplitHdl, void*,  )
 {
-    m_bInSplitHandler = sal_True;
-    //const long nTest = m_aSplitter.GetSplitPosPixel();
-
     const Size aOutputSize = GetOutputSizePixel();
-    const long nTest = aOutputSize.Width() * m_pSplitWin->GetItemSize(TASKPANE_ID) / 100;
+    const long nTest = aOutputSize.Width() * m_aSplitWin.GetItemSize(TASKPANE_ID) / 100;
     long nMinWidth = static_cast<long>(0.1*aOutputSize.Width());
     if ( m_pPropWin && m_pPropWin->IsVisible() )
         nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
 
-    if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_pScrollWindow->getMaxMarkerWidth(sal_False) )
+    if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow.getMaxMarkerWidth(sal_False) )
     {
         long nOldSplitPos = getController().getSplitPos();
         getController().setSplitPos(nTest);
         if ( nOldSplitPos != -1 && nOldSplitPos <= nTest )
         {
-            Invalidate(INVALIDATE_NOCHILDREN);
+            Invalidate(/*INVALIDATE_NOCHILDREN*/);
         }
     }
-
-    m_bInSplitHandler = sal_False;
 
     return 0L;
 }
 //-----------------------------------------------------------------------------
-void ODesignView::SelectAll()
+void ODesignView::SelectAll(const sal_uInt16 _nObjectType)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->SelectAll();
+     m_aScrollWindow.SelectAll(_nObjectType);
 }
 //-----------------------------------------------------------------------------
 void ODesignView::unmarkAllObjects(OSectionView* _pSectionView)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->unmarkAllObjects(_pSectionView);
+    m_aScrollWindow.unmarkAllObjects(_pSectionView);
 }
 //-----------------------------------------------------------------------------
 void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
@@ -563,11 +525,12 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
         m_pTaskPane->Invalidate();
 
         if ( bWillBeVisible )
-            m_pSplitWin->InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE/*|SWIB_COLSET */);
+            m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE/*|SWIB_COLSET */);
         else
-            m_pSplitWin->RemoveItem(TASKPANE_ID);
+            m_aSplitWin.RemoveItem(TASKPANE_ID);
 
-        Invalidate(/*INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE*/);
+        // TRY
+        // Invalidate(/*INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE*/);
         if ( bWillBeVisible )
             m_aMarkTimer.Start();
     }
@@ -579,7 +542,7 @@ void ODesignView::showProperties(const uno::Reference< uno::XInterface>& _xRepor
     {
         m_xReportComponent = _xReportComponent;
         if ( m_pCurrentView )
-            m_pScrollWindow->setMarked(m_pCurrentView,sal_False);
+            m_aScrollWindow.setMarked(m_pCurrentView,sal_False);
         m_pCurrentView = NULL;
         m_aMarkTimer.Start();
     }
@@ -595,7 +558,7 @@ void ODesignView::toggleReportExplorer()
     if ( !m_pReportExplorer )
     {
         OReportController& rReportController = getController();
-        m_pReportExplorer = new ONavigator(this,&rReportController);
+        m_pReportExplorer = new ONavigator(this,rReportController);
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
@@ -624,7 +587,7 @@ void ODesignView::toggleAddField()
         }
         else if ( m_pCurrentView )
         {
-            uno::Reference< report::XSection > xSection = m_pCurrentView->getSectionWindow()->getSection();
+            uno::Reference< report::XSection > xSection = m_pCurrentView->getReportSection()->getSection();
             xReport = xSection->getReportDefinition();
         }
         m_pAddField = new OAddFieldWindow(rReportController,this);
@@ -640,7 +603,7 @@ uno::Reference< report::XSection > ODesignView::getCurrentSection() const
 {
     uno::Reference< report::XSection > xSection;
     if ( m_pCurrentView )
-        xSection = m_pCurrentView->getSectionWindow()->getSection();
+        xSection = m_pCurrentView->getReportSection()->getSection();
 
     // why do we need the code below?
     //else
@@ -656,32 +619,29 @@ uno::Reference< report::XReportComponent > ODesignView::getCurrentControlModel()
     uno::Reference< report::XReportComponent > xModel;
     if ( m_pCurrentView )
     {
-        xModel = m_pCurrentView->getSectionWindow()->getCurrentControlModel();
+        xModel = m_pCurrentView->getReportSection()->getCurrentControlModel();
     }
     return xModel;
 }
 // -------------------------------------------------------------------------
-::boost::shared_ptr<OReportSection> ODesignView::getMarkedSection(NearSectionAccess nsa) const
+::boost::shared_ptr<OSectionWindow> ODesignView::getMarkedSection(NearSectionAccess nsa) const
 {
-    return  m_pScrollWindow ? m_pScrollWindow->getMarkedSection(nsa) : ::boost::shared_ptr<OReportSection>();
+    return  m_aScrollWindow.getMarkedSection(nsa);
 }
 // -------------------------------------------------------------------------
 void ODesignView::markSection(const sal_uInt16 _nPos)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->markSection(_nPos);
+    m_aScrollWindow.markSection(_nPos);
 }
 // -----------------------------------------------------------------------------
 void ODesignView::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->fillCollapsedSections(_rCollapsedPositions);
+    m_aScrollWindow.fillCollapsedSections(_rCollapsedPositions);
 }
 // -----------------------------------------------------------------------------
 void ODesignView::collapseSections(const uno::Sequence< beans::PropertyValue>& _aCollpasedSections)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->collapseSections(_aCollpasedSections);
+    m_aScrollWindow.collapseSections(_aCollpasedSections);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODesignView::getCurrentPage() const
@@ -697,51 +657,38 @@ void ODesignView::setCurrentPage(const ::rtl::OUString& _sLastActivePage)
 // -----------------------------------------------------------------------------
 void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
+    m_aScrollWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODesignView::isAlignPossible() const
 {
-    ::boost::shared_ptr<OReportSection> pMarkedSection = getMarkedSection();
-    return pMarkedSection.get() && pMarkedSection->getView()->IsAlignPossible();
+    ::boost::shared_ptr<OSectionWindow> pMarkedSection = getMarkedSection();
+    return pMarkedSection.get() && pMarkedSection->getReportSection().getSectionView().IsAlignPossible();
 }
-// -------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
     if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
         return sal_False;
-    return m_pScrollWindow && m_pScrollWindow->handleKeyEvent(_rEvent);
-}
-//------------------------------------------------------------------------
-void ODesignView::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
-{
-    if ( m_pScrollWindow )
-        m_pScrollWindow->setMarked(_pSectionView,_bMark);
+    return m_aScrollWindow.handleKeyEvent(_rEvent);
 }
 //------------------------------------------------------------------------
 void ODesignView::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
 {
-    if ( m_pScrollWindow )
-    {
-        m_pScrollWindow->setMarked(_xSection,_bMark);
-        if ( _bMark )
-            UpdatePropertyBrowserDelayed(getMarkedSection()->getView());
-        else
-            m_pCurrentView = NULL;
-    }
+    m_aScrollWindow.setMarked(_xSection,_bMark);
+    if ( _bMark )
+        UpdatePropertyBrowserDelayed(getMarkedSection()->getReportSection().getSectionView());
+    else
+        m_pCurrentView = NULL;
 }
 //------------------------------------------------------------------------
 void ODesignView::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _aShapes,sal_Bool _bMark)
 {
-    if ( m_pScrollWindow )
-    {
-        m_pScrollWindow->setMarked(_aShapes,_bMark);
-        if ( _aShapes.hasElements() && _bMark )
-            showProperties(_aShapes[0]);
-        else
-            m_xReportComponent.clear();
-    }
+    m_aScrollWindow.setMarked(_aShapes,_bMark);
+    if ( _aShapes.hasElements() && _bMark )
+        showProperties(_aShapes[0]);
+    else
+        m_xReportComponent.clear();
 }
 //------------------------------------------------------------------------------
 void ODesignView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -757,11 +704,11 @@ void ODesignView::MouseButtonDown( const MouseEvent& rMEvt )
 uno::Any ODesignView::getCurrentlyShownProperty() const
 {
     uno::Any aRet;
-    ::boost::shared_ptr<OReportSection> pSection = getMarkedSection();
-    if ( pSection )
+    ::boost::shared_ptr<OSectionWindow> pSectionWindow = getMarkedSection();
+    if ( pSectionWindow )
     {
         ::std::vector< uno::Reference< uno::XInterface > > aSelection;
-        pSection->fillControlModelSelection(aSelection);
+        pSectionWindow->getReportSection().fillControlModelSelection(aSelection);
         if ( !aSelection.empty() )
         {
             ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aSelection.begin();
@@ -778,26 +725,18 @@ uno::Any ODesignView::getCurrentlyShownProperty() const
 // -----------------------------------------------------------------------------
 void ODesignView::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->fillControlModelSelection(_rSelection);
+    m_aScrollWindow.fillControlModelSelection(_rSelection);
 }
 // -----------------------------------------------------------------------------
 void ODesignView::setGridSnap(BOOL bOn)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->setGridSnap(bOn);
+    m_aScrollWindow.setGridSnap(bOn);
 
 }
 // -----------------------------------------------------------------------------
 void ODesignView::setDragStripes(BOOL bOn)
 {
-    if ( m_pScrollWindow )
-        m_pScrollWindow->setDragStripes(bOn);
-}
-// -----------------------------------------------------------------------------
-BOOL ODesignView::isDragStripes() const
-{
-    return m_pScrollWindow ? m_pScrollWindow->isDragStripes() : FALSE;
+    m_aScrollWindow.setDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODesignView::isHandleEvent(sal_uInt16 /*_nId*/) const
@@ -807,7 +746,12 @@ sal_Bool ODesignView::isHandleEvent(sal_uInt16 /*_nId*/) const
 // -----------------------------------------------------------------------------
 sal_uInt32 ODesignView::getMarkedObjectCount() const
 {
-    return m_pScrollWindow ? m_pScrollWindow->getMarkedObjectCount() : 0;
+    return m_aScrollWindow.getMarkedObjectCount();
+}
+// -----------------------------------------------------------------------------
+void ODesignView::zoom(const sal_Int16 _nZoom)
+{
+    m_aScrollWindow.zoom(_nZoom);
 }
 //============================================================================
 } // rptui
