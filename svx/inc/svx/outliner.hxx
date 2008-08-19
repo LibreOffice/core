@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,10 @@
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
 #include "svx/svxdllapi.h"
+
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
+#endif
 
 #include <tools/rtti.hxx>   // wegen typedef TypeId
 #include <vector>
@@ -84,6 +88,10 @@ class SvxForbiddenCharactersTable;
 
 #include <vos/ref.hxx>
 #include <svx/svxfont.hxx>
+#include <svx/eedata.hxx>
+
+class SvxFieldData;
+//////////////////////////////////////////////////////////////////////////////
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
@@ -392,33 +400,82 @@ DECLARE_LIST(ViewList,OutlinerView*)
 class SVX_DLLPUBLIC DrawPortionInfo
 {
 public:
-    const Point&    rStartPos;
+    const Point&        mrStartPos;
+    const String&       mrText;
+    sal_uInt16          mnTextStart;
+    sal_uInt16          mnTextLen;
+    sal_uInt16          mnPara;
+    xub_StrLen          mnIndex;
+    const SvxFont&      mrFont;
+    const sal_Int32*    mpDXArray;
 
-    const String&   rText;
-    USHORT          nTextStart;
-    USHORT          nTextLen;
-
-    USHORT          nPara;
-    xub_StrLen      nIndex;
-
-    const SvxFont&  rFont;
-
-    const sal_Int32*     pDXArray;
+    const EEngineData::WrongSpellVector*  mpWrongSpellVector;
+    const SvxFieldData* mpFieldData;
+    const ::com::sun::star::lang::Locale* mpLocale;
+    const Color maTextLineColor;
 
     // #101498# BiDi level needs to be transported, too.
-    BYTE            mnBiDiLevel;
+    BYTE                mnBiDiLevel;
+
+    // bitfield
+    unsigned            mbEndOfLine : 1;
+    unsigned            mbEndOfParagraph : 1;
+    unsigned            mbEndOfBullet : 1;
 
     BYTE GetBiDiLevel() const { return mnBiDiLevel; }
     sal_Bool IsRTL() const;
 
-    DrawPortionInfo( const Point& rPos, const String& rTxt, USHORT nTxtStart, USHORT nTxtLen,
-        const SvxFont& rFnt, USHORT nPar, xub_StrLen nIdx, const sal_Int32* pDXArr, BYTE nBiDiLevel)
-        :   rStartPos(rPos), rText(rTxt), nPara(nPar), nIndex(nIdx),
-            rFont(rFnt), pDXArray(pDXArr), mnBiDiLevel(nBiDiLevel)
-        {
-            nTextStart = nTxtStart;
-            nTextLen = nTxtLen;
-        }
+    DrawPortionInfo(
+        const Point& rPos,
+        const String& rTxt,
+        sal_uInt16 nTxtStart,
+        sal_uInt16 nTxtLen,
+        const SvxFont& rFnt,
+        sal_uInt16 nPar,
+        xub_StrLen nIdx,
+        const sal_Int32* pDXArr,
+        const EEngineData::WrongSpellVector* pWrongSpellVector,
+        const SvxFieldData* pFieldData,
+        const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rTextLineColor,
+        BYTE nBiDiLevel,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        bool bEndOfBullet)
+    :   mrStartPos(rPos),
+        mrText(rTxt),
+        mnTextStart(nTxtStart),
+        mnTextLen(nTxtLen),
+        mnPara(nPar),
+        mnIndex(nIdx),
+        mrFont(rFnt),
+        mpDXArray(pDXArr),
+        mpWrongSpellVector(pWrongSpellVector),
+        mpFieldData(pFieldData),
+        mpLocale(pLocale),
+        maTextLineColor(rTextLineColor),
+        mnBiDiLevel(nBiDiLevel),
+        mbEndOfLine(bEndOfLine),
+        mbEndOfParagraph(bEndOfParagraph),
+        mbEndOfBullet(bEndOfBullet)
+    {}
+};
+
+class SVX_DLLPUBLIC DrawBulletInfo
+{
+public:
+    const GraphicObject maBulletGraphicObject;
+    Point               maBulletPosition;
+    Size                maBulletSize;
+
+    DrawBulletInfo(
+        const GraphicObject& rBulletGraphicObject,
+        const Point& rBulletPosition,
+        const Size& rBulletSize)
+    :   maBulletGraphicObject(rBulletGraphicObject),
+        maBulletPosition(rBulletPosition),
+        maBulletSize(rBulletSize)
+    {}
 };
 
 struct SVX_DLLPUBLIC PaintFirstLineInfo
@@ -542,6 +599,7 @@ class SVX_DLLPUBLIC Outliner
     Paragraph*          pHdlParagraph;
     ULONG               mnFirstSelPage;
     Link                aDrawPortionHdl;
+    Link                aDrawBulletHdl;
     Link                aExpandHdl;
     Link                aParaInsertedHdl;
     Link                aParaRemovingHdl;
@@ -761,6 +819,9 @@ public:
     void            SetDrawPortionHdl(const Link& rLink){aDrawPortionHdl=rLink;}
     Link            GetDrawPortionHdl() const { return aDrawPortionHdl; }
 
+    void            SetDrawBulletHdl(const Link& rLink){aDrawBulletHdl=rLink;}
+    Link            GetDrawBulletHdl() const { return aDrawBulletHdl; }
+
     void            SetPaintFirstLineHdl(const Link& rLink) { maPaintFirstLineHdl = rLink; }
     Link            GetPaintFirstLineHdl() const { return maPaintFirstLineHdl; }
 
@@ -815,9 +876,16 @@ public:
     void            StripPortions();
 
     // #101498#
-    virtual void    DrawingText( const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen,
-                        const sal_Int32* pDXArray, const SvxFont& rFont,
-                        USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft);
+    virtual void DrawingText(
+        const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen,
+        const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+        const EEngineData::WrongSpellVector* pWrongSpellVector,
+        const SvxFieldData* pFieldData,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        bool bEndOfBullet,
+        const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rTextLineColor);
 
     Size            CalcTextSize();
 
@@ -940,30 +1008,6 @@ public:
     void SetLevelDependendStyleSheet( USHORT nPara );
 
     USHORT  GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
-
-    // #110496#
-    /** Enable/disable verbose comments of recorded metafiles
-
-        This method decorates recorded metafiles with XTEXT_EOx
-        comments, to transport the logical text structure like
-        paragraph, line, sentence, word and cell breaks.
-
-        Specifically, comment actions named XTEXT_EOC contain the
-        index of the last glyph of a character, XTEXT_EOW contain the
-        index of the last glyph of a word, and XTEXT_EOS the last
-        index of a sentence, respectively. The named three comment
-        actions appear after a text rendering action
-        (e.g. META_TEXT_ACTION), and the index values reference
-        character indices in this last text render action (this is
-        because text render actions cannot be split up in a
-        output-preserving way).
-
-        XTEXT_EOL and XTEXT_EOP appear after the end of a line or a
-        paragraph, respectively, and don't carry a glyph index (as
-        they cannot appear inbetween a META_TEXT_ACTION).
-     */
-    void            EnableVerboseTextComments( BOOL bEnable = TRUE );
-    BOOL            IsVerboseTextComments() const;
 
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence
