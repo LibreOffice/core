@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.60 $
+# $Revision: 1.61 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,9 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/animation.lib \
     $(SLB)$/overlay.lib \
+    $(SLB)$/attribute.lib \
+    $(SLB)$/primitive2d.lib \
+    $(SLB)$/primitive3d.lib \
     $(SLB)$/svdraw.lib \
     $(SLB)$/form.lib
 
@@ -87,8 +90,7 @@ LIB3FILES=\
     $(SLB)$/toolbars.lib \
     $(SLB)$/properties.lib \
     $(SLB)$/contact.lib \
-    $(SLB)$/mixer.lib \
-        $(SLB)$/event.lib
+    $(SLB)$/event.lib
 
 LIB4TARGET= $(SLB)$/$(TARGET)_4.lib
 LIB4FILES=\
@@ -113,6 +115,7 @@ SHL1STDLIBS= \
             $(XMLOFFLIB) \
             $(GOODIESLIB) \
             $(BASEGFXLIB) \
+            $(DRAWINGLAYERLIB) \
             $(BASICLIB) \
             $(LNGLIB) \
             $(SVTOOLLIB) \
