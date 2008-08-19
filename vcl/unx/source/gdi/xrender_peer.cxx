@@ -44,9 +44,13 @@ using namespace rtl;
 
 XRenderPeer::XRenderPeer()
 :   mpDisplay( GetX11SalData()->GetDisplay()->GetDisplay() ),
-    mpGlyphFormat( NULL ),
+    mpStandardFormatA8( NULL ),
     mnRenderVersion( 0 ),
     mpRenderLib( NULL )
+#ifndef XRENDER_LINK
+,   mpXRenderCompositeTrapezoids( NULL )
+,   mpXRenderAddTraps( NULL )
+#endif // XRENDER_LINK
 {
     InitRenderLib();
 }
@@ -109,6 +113,11 @@ void XRenderPeer::InitRenderLib()
     if( !pFunc ) return;
     mpXRenderFindVisualFormat = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
 
+    OUString aStdFormatFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindStandardFormat"));
+    pFunc = osl_getFunctionSymbol( mpRenderLib, aStdFormatFuncName.pData);
+    if( !pFunc ) return;
+    mpXRenderFindStandardFormat = (XRenderPictFormat*(*)(Display*,int))pFunc;
+
     OUString aFmtFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindFormat"));
     pFunc = osl_getFunctionSymbol( mpRenderLib, aFmtFuncName.pData);
     if( !pFunc ) return;
@@ -118,7 +127,7 @@ void XRenderPeer::InitRenderLib()
     OUString aCreatGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreateGlyphSet"));
     pFunc = osl_getFunctionSymbol( mpRenderLib, aCreatGlyphFuncName.pData);
     if( !pFunc ) return;
-    mpXRenderCreateGlyphSet = (GlyphSet(*)(Display*,XRenderPictFormat*))pFunc;
+    mpXRenderCreateGlyphSet = (GlyphSet(*)(Display*,const XRenderPictFormat*))pFunc;
 
     OUString aFreeGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphSet"));
     pFunc = osl_getFunctionSymbol( mpRenderLib, aFreeGlyphFuncName.pData);
@@ -140,12 +149,12 @@ void XRenderPeer::InitRenderLib()
     pFunc = osl_getFunctionSymbol( mpRenderLib, aCompStringFuncName.pData);
     if( !pFunc ) return;
     mpXRenderCompositeString32 = (void(*)(Display*,int,Picture,Picture,
-        XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int))pFunc;
+        const XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int))pFunc;
 
     OUString aCreatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
     pFunc = osl_getFunctionSymbol( mpRenderLib, aCreatPicFuncName.pData);
     if( !pFunc ) return;
-    mpXRenderCreatePicture = (Picture(*)(Display*,Drawable,XRenderPictFormat*,
+    mpXRenderCreatePicture = (Picture(*)(Display*,Drawable,const XRenderPictFormat*,
         unsigned long,const XRenderPictureAttributes*))pFunc;
 
     OUString aSetClipFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderSetPictureClipRegion"));
@@ -169,7 +178,23 @@ void XRenderPeer::InitRenderLib()
     if( !pFunc ) return;
     mpXRenderFillRectangle = (void(*)(Display*,int,Picture,const XRenderColor*,
         int,int,unsigned int,unsigned int))pFunc;
+
+    OUString aCompositeTrapsFuncName( RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeTrapezoids"));
+    pFunc=osl_getFunctionSymbol( mpRenderLib, aCompositeTrapsFuncName.pData);
+#if 0 // not having trapezoid support is supported
+    if( !pFunc ) return;
 #endif
+    mpXRenderCompositeTrapezoids = (void(*)(Display*,int,Picture,Picture,
+        const XRenderPictFormat*,int,int,const XTrapezoid*,int))pFunc;
+
+    OUString aAddTrapsFuncName( RTL_CONSTASCII_USTRINGPARAM("XRenderAddTraps"));
+    pFunc=osl_getFunctionSymbol( mpRenderLib, aAddTrapsFuncName.pData);
+#if 0 // not having trapezoid support is supported
+    if( !pFunc ) return;
+#endif
+    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const XTrap*,int))pFunc;
+
+#endif // XRENDER_LINK
 
     // needed to initialize libXrender internals, we already know its there
 #ifdef XRENDER_LINK
@@ -203,8 +228,8 @@ sal_uInt32 XRenderPeer::InitRenderText( int nMaxDepth )
 
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
-    mpGlyphFormat = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
-    if( !mpGlyphFormat )
+    mpStandardFormatA8 = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
+    if( !mpStandardFormatA8 )
         return 0;
 
     // and the visual must be supported too on at least one screen
