@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridctrl.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,10 +115,11 @@ class DbGridColumn;
 DECLARE_LIST(DbGridColumns, DbGridColumn*)
 
 //==================================================================
-class FmGridSelectionListener
+class FmGridListener
 {
 public:
     virtual void selectionChanged() = 0;
+    virtual void columnChanged() = 0;
 };
 
 #define GRID_COLUMN_NOT_FOUND   ((sal_uInt16)-1)
@@ -249,7 +250,7 @@ private:
         // construct analogous to the data source proplistener/multiplexer above :
         // DisposeListenerGridBridge is a bridge from FmXDisposeListener which I don't want to be derived from
 
-    FmGridSelectionListener*                        m_pSelectionListener;
+    FmGridListener*                                 m_pGridListener;
 
 protected:
     CursorWrapper*  m_pDataCursor;      // Cursor fuer Updates
@@ -277,6 +278,8 @@ private:
     sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
                                         // (with respect to the data source capabilities)
                                         // defaults to (insert | update | delete)
+    USHORT              m_nLastColId;
+    long                m_nLastRowId;
 
     sal_Bool            m_bDesignMode : 1;      // default = sal_False
     sal_Bool            m_bRecordCountFinal : 1;
@@ -348,6 +351,12 @@ protected:
     virtual void FieldListenerDisposing(sal_uInt16 _nId);
 
     virtual void disposing(sal_uInt16 _nId, const ::com::sun::star::lang::EventObject& _rEvt);
+
+    // own overridables
+    /// called when the current row changed
+    virtual void onRowChange();
+    /// called when the current column changed
+    virtual void onColumnChange();
 
     // DragSourceHelper overridables
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
@@ -504,8 +513,8 @@ public:
     void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
 
     // selectin listener handling
-    FmGridSelectionListener*    getSelectionListener() const { return m_pSelectionListener; }
-    void                        setSelectionListener(FmGridSelectionListener* _pListener) { m_pSelectionListener = _pListener; }
+    FmGridListener*             getGridListener() const { return m_pGridListener; }
+    void                        setGridListener( FmGridListener* _pListener ) { m_pGridListener = _pListener; }
 
     // helper class to grant access to selected methods from within the DbCellControl class
     struct GrantCellControlAccess
