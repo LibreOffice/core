@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,7 +86,7 @@ SHL1VERSIONMAP=$(JDBC_TARGET).map
 
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(JDBC_TARGET)$(JDBC_MAJOR)
+SHL1TARGET=	$(JDBC_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
