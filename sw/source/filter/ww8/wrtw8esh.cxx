@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8esh.cxx,v $
- * $Revision: 1.103 $
+ * $Revision: 1.104 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1361,76 +1361,77 @@ void SwWW8Writer::WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp)
     if (!pTxtObj)
         return;
 
+    if (const OutlinerParaObject* pParaObj = sw::hack::GetOutlinerParaObject(*pTxtObj))
+        WriteOutliner(*pParaObj, nTyp);
+}
+
+void SwWW8Writer::WriteOutliner(const OutlinerParaObject& rParaObj, BYTE nTyp)
+{
     bool bAnyWrite = false;
-    const OutlinerParaObject* pParaObj =
-        sw::hack::GetOutlinerParaObject(*pTxtObj);
-    if (pParaObj)
+    const EditTextObject& rEditObj = rParaObj.GetTextObject();
+    WW8_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
+
+    USHORT nPara = rEditObj.GetParagraphCount();
+    BYTE bNul = 0;
+    for( USHORT n = 0; n < nPara; ++n )
     {
-        const EditTextObject& rEditObj = pParaObj->GetTextObject();
-        WW8_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
+        if( n )
+            aAttrIter.NextPara( n );
 
-        USHORT nPara = rEditObj.GetParagraphCount();
-        BYTE bNul = 0;
-        for( USHORT n = 0; n < nPara; ++n )
-        {
-            if( n )
-                aAttrIter.NextPara( n );
+        rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
-            rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
+        ASSERT( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
 
-            ASSERT( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
+        String aStr( rEditObj.GetText( n ));
+        xub_StrLen nAktPos = 0;
+        xub_StrLen nEnd = aStr.Len();
+        do {
+            xub_StrLen nNextAttr = aAttrIter.WhereNext();
+            rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
-            String aStr( rEditObj.GetText( n ));
-            xub_StrLen nAktPos = 0;
-            xub_StrLen nEnd = aStr.Len();
-            do {
-                xub_StrLen nNextAttr = aAttrIter.WhereNext();
-                rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
+            if( nNextAttr > nEnd )
+                nNextAttr = nEnd;
 
-                if( nNextAttr > nEnd )
-                    nNextAttr = nEnd;
+            bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
+            if( !bTxtAtr )
+                OutSwString( aStr, nAktPos, nNextAttr - nAktPos,
+                                true, eChrSet );
 
-                bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
-                if( !bTxtAtr )
-                    OutSwString( aStr, nAktPos, nNextAttr - nAktPos,
-                                    true, eChrSet );
+                        // Am Zeilenende werden die Attribute bis ueber das CR
+                        // aufgezogen. Ausnahme: Fussnoten am Zeilenende
+            if( nNextAttr == nEnd && !bTxtAtr )
+                WriteCR();              // CR danach
 
-                            // Am Zeilenende werden die Attribute bis ueber das CR
-                            // aufgezogen. Ausnahme: Fussnoten am Zeilenende
-                if( nNextAttr == nEnd && !bTxtAtr )
-                    WriteCR();              // CR danach
-
-                                                // Ausgabe der Zeichenattribute
-                aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
-                pChpPlc->AppendFkpEntry( Strm().Tell(),
-                                                pO->Count(), pO->GetData() );
-                pO->Remove( 0, pO->Count() );                   // leeren
-
-                            // Ausnahme: Fussnoten am Zeilenende
-                if( nNextAttr == nEnd && bTxtAtr )
-                    WriteCR();              // CR danach
-
-                nAktPos = nNextAttr;
-                eChrSet = eNextChrSet;
-                aAttrIter.NextPos();
-            }
-            while( nAktPos < nEnd );
-
-            ASSERT( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
-
-            pO->Insert( bNul, pO->Count() );        // Style # as short
-            pO->Insert( bNul, pO->Count() );
-
-            aAttrIter.OutParaAttr(false);
-
-            ULONG nPos = Strm().Tell();
-            pPapPlc->AppendFkpEntry( Strm().Tell(),
+                                            // Ausgabe der Zeichenattribute
+            aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
+            pChpPlc->AppendFkpEntry( Strm().Tell(),
                                             pO->Count(), pO->GetData() );
-            pO->Remove( 0, pO->Count() );                       // leeren
-            pChpPlc->AppendFkpEntry( nPos );
+            pO->Remove( 0, pO->Count() );                   // leeren
+
+                        // Ausnahme: Fussnoten am Zeilenende
+            if( nNextAttr == nEnd && bTxtAtr )
+                WriteCR();              // CR danach
+            nAktPos = nNextAttr;
+            eChrSet = eNextChrSet;
+            aAttrIter.NextPos();
         }
-        bAnyWrite = 0 != nPara;
+        while( nAktPos < nEnd );
+
+        ASSERT( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
+
+        pO->Insert( bNul, pO->Count() );        // Style # as short
+        pO->Insert( bNul, pO->Count() );
+
+        aAttrIter.OutParaAttr(false);
+
+        ULONG nPos = Strm().Tell();
+        pPapPlc->AppendFkpEntry( Strm().Tell(),
+                                        pO->Count(), pO->GetData() );
+        pO->Remove( 0, pO->Count() );                       // leeren
+        pChpPlc->AppendFkpEntry( nPos );
     }
+
+    bAnyWrite = 0 != nPara;
     if( !bAnyWrite )
         WriteStringAsPara( aEmptyStr );
 }
