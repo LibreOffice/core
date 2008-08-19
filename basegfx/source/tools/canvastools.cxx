@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvastools.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,34 +34,33 @@
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/geometry/RealRectangle3D.hpp>
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/geometry/AffineMatrix3D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-
 #include <basegfx/tools/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
 #include <basegfx/tools/canvastools.hxx>
-
 #include <limits>
-
 
 using namespace ::com::sun::star;
 
@@ -368,6 +367,42 @@ namespace basegfx
             return output;
         }
 
+        ::basegfx::B2DHomMatrix homMatrixFromAffineMatrix( const geometry::AffineMatrix2D& input )
+        {
+            ::basegfx::B2DHomMatrix output;
+
+            output.set(0,0, input.m00);
+            output.set(0,1, input.m01);
+            output.set(0,2, input.m02);
+            output.set(1,0, input.m10);
+            output.set(1,1, input.m11);
+            output.set(1,2, input.m12);
+
+            return output;
+        }
+
+        ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& input )
+        {
+            ::basegfx::B3DHomMatrix output;
+
+            output.set(0,0, input.m00);
+            output.set(0,1, input.m01);
+            output.set(0,2, input.m02);
+            output.set(0,3, input.m03);
+
+            output.set(1,0, input.m10);
+            output.set(1,1, input.m11);
+            output.set(1,2, input.m12);
+            output.set(1,3, input.m13);
+
+            output.set(2,0, input.m20);
+            output.set(2,1, input.m21);
+            output.set(2,2, input.m22);
+            output.set(2,3, input.m23);
+
+            return output;
+        }
+
         geometry::AffineMatrix2D& affineMatrixFromHomMatrix( geometry::AffineMatrix2D&      output,
                                                              const ::basegfx::B2DHomMatrix& input)
         {
@@ -377,6 +412,28 @@ namespace basegfx
             output.m10 = input.get(1,0);
             output.m11 = input.get(1,1);
             output.m12 = input.get(1,2);
+
+            return output;
+        }
+
+        geometry::AffineMatrix3D& affineMatrixFromHomMatrix3D(
+            geometry::AffineMatrix3D& output,
+            const ::basegfx::B3DHomMatrix&  input)
+        {
+            output.m00 = input.get(0,0);
+            output.m01 = input.get(0,1);
+            output.m02 = input.get(0,2);
+            output.m03 = input.get(0,3);
+
+            output.m10 = input.get(1,0);
+            output.m11 = input.get(1,1);
+            output.m12 = input.get(1,2);
+            output.m13 = input.get(1,3);
+
+            output.m20 = input.get(2,0);
+            output.m21 = input.get(2,1);
+            output.m22 = input.get(2,2);
+            output.m23 = input.get(2,3);
 
             return output;
         }
@@ -419,6 +476,16 @@ namespace basegfx
                                               rRect.getMaxY() );
         }
 
+        geometry::RealRectangle3D rectangle3DFromB3DRectangle( const ::basegfx::B3DRange& rRect )
+        {
+            return geometry::RealRectangle3D( rRect.getMinX(),
+                                              rRect.getMinY(),
+                                              rRect.getMinZ(),
+                                              rRect.getMaxX(),
+                                              rRect.getMaxY(),
+                                              rRect.getMaxZ());
+        }
+
         ::basegfx::B2DVector b2DSizeFromRealSize2D( const geometry::RealSize2D& rSize )
         {
             return ::basegfx::B2DVector( rSize.Width,
@@ -437,6 +504,16 @@ namespace basegfx
                                         rRect.Y1,
                                         rRect.X2,
                                         rRect.Y2 );
+        }
+
+        ::basegfx::B3DRange b3DRectangleFromRealRectangle3D( const geometry::RealRectangle3D& rRect )
+        {
+            return ::basegfx::B3DRange( rRect.X1,
+                                        rRect.Y1,
+                                        rRect.Z1,
+                                        rRect.X2,
+                                        rRect.Y2,
+                                        rRect.Z2);
         }
 
         geometry::IntegerSize2D integerSize2DFromB2ISize( const ::basegfx::B2IVector& rSize )
@@ -538,6 +615,63 @@ namespace basegfx
                                         ceil(rRange.getMaxY()) );
         }
 
+        // Geometry comparisons
+        // ===================================================================
+
+        bool RealSize2DAreEqual( const ::com::sun::star::geometry::RealSize2D& rA, const ::com::sun::star::geometry::RealSize2D& rB )
+        {
+            return (rA.Width == rB.Width && rA.Height == rB.Height);
+        }
+
+        bool RealPoint2DAreEqual( const ::com::sun::star::geometry::RealPoint2D& rA, const ::com::sun::star::geometry::RealPoint2D& rB )
+        {
+            return (rA.X == rB.X && rA.Y == rB.Y);
+        }
+
+        bool RealRectangle2DAreEqual( const ::com::sun::star::geometry::RealRectangle2D& rA, const ::com::sun::star::geometry::RealRectangle2D& rB )
+        {
+            return (rA.X1 == rB.X1 && rA.Y1 == rB.Y1 && rA.X2 == rB.X2 && rA.Y2 == rB.Y2);
+        }
+
+        bool RealRectangle3DAreEqual( const ::com::sun::star::geometry::RealRectangle3D& rA, const ::com::sun::star::geometry::RealRectangle3D& rB )
+        {
+            return (rA.X1 == rB.X1 && rA.Y1 == rB.Y1 && rA.Z1 == rB.Z1 && rA.X2 == rB.X2 && rA.Y2 == rB.Y2 && rA.Z2 == rB.Z2);
+        }
+
+        bool AffineMatrix2DAreEqual( const ::com::sun::star::geometry::AffineMatrix2D& rA, const ::com::sun::star::geometry::AffineMatrix2D& rB )
+        {
+            return (rA.m00 == rB.m00 && rA.m01 == rB.m01 && rA.m02 == rB.m02 && rA.m10 == rB.m10 && rA.m11 == rB.m11 && rA.m12 == rB.m12);
+        }
+
+        bool IntegerSize2DAreEqual( const ::com::sun::star::geometry::IntegerSize2D& rA, const ::com::sun::star::geometry::IntegerSize2D& rB )
+        {
+            return (rA.Width == rB.Width && rA.Height == rB.Height);
+        }
+
+        bool IntegerPoint2DAreEqual( const ::com::sun::star::geometry::IntegerPoint2D& rA, const ::com::sun::star::geometry::IntegerPoint2D& rB )
+        {
+            return (rA.X == rB.X && rA.Y == rB.Y);
+        }
+
+        bool IntegerRectangle2DAreEqual( const ::com::sun::star::geometry::IntegerRectangle2D& rA, const ::com::sun::star::geometry::IntegerRectangle2D& rB )
+        {
+            return (rA.X1 == rB.X1 && rA.Y1 == rB.Y1 && rA.X2 == rB.X2 && rA.Y2 == rB.Y2);
+        }
+
+        bool awtSizeAreEqual( const ::com::sun::star::awt::Size& rA, const ::com::sun::star::awt::Size& rB )
+        {
+            return (rA.Width == rB.Width && rA.Height == rB.Height);
+        }
+
+        bool awtPointAreEqual( const ::com::sun::star::awt::Point& rA, const ::com::sun::star::awt::Point& rB )
+        {
+            return (rA.X == rB.X && rA.Y == rB.Y);
+        }
+
+        bool awtRectangleAreEqual( const ::com::sun::star::awt::Rectangle& rA, const ::com::sun::star::awt::Rectangle& rB )
+        {
+            return (rA.X == rB.X && rA.Y == rB.Y && rA.Width == rB.Width && rA.Height == rB.Height);
+        }
     } // namespace bgfxtools
 
 } // namespace canvas
