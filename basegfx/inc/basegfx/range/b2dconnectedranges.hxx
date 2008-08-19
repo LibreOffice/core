@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dconnectedranges.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <osl/diagnose.h>
 #include <basegfx/range/b2drange.hxx>
-
 #include <list>
 #include <utility>
 #include <algorithm>

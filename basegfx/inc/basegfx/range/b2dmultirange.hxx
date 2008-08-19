@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dmultirange.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #define _BGFX_RANGE_B2DMULTIRANGE_HXX
 
 #include <o3tl/cow_wrapper.hxx>
-
 #include <memory>
 
 
