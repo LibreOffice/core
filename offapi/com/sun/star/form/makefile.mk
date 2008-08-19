@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,6 +84,8 @@ IDLFILES=\
     XFormsSupplier2.idl\
     XGrid.idl\
     XGridColumnFactory.idl\
+    XGridControl.idl\
+    XGridControlListener.idl\
     XGridFieldDataSupplier.idl\
     XGridPeer.idl\
     XImageProducerSupplier.idl\
