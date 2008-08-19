@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontact.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,29 +35,25 @@
 
 #include <vector>
 #include <tools/debug.hxx>
-#include <svx/sdr/contact/viewobjectcontactlist.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
 class Region;
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ObjectContact;
-        class ViewContact;
-        class ViewObjectContactRedirector;
-    } // end of namespace contact
-    namespace animation
-    {
-        class AnimationState;
-        class AnimationInfo;
-    } // end of namespace animation
-} // end of namespace sdr
+namespace sdr { namespace contact {
+    class DisplayInfo;
+    class ObjectContact;
+    class ViewContact;
+    class ViewObjectContactRedirector;
+}}
+
+namespace sdr { namespace animation {
+    class PrimitiveAnimation;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -67,53 +63,46 @@ namespace sdr
     {
         class SVX_DLLPUBLIC ViewObjectContact
         {
+        private:
             // must-exist and constant contacts
-            ObjectContact&                              mrObjectContact;
-            ViewContact&                                mrViewContact;
+            ObjectContact&                                  mrObjectContact;
+            ViewContact&                                    mrViewContact;
 
-            // for building up a mirror of the draw object hierarchy. One
-            // parent pointer and a list of sub objects.
-            ViewObjectContact*                          mpParent;
-            ViewObjectContactList                       maVOCList;
+            // This range defines the object's BoundRect
+            basegfx::B2DRange                               maObjectRange;
 
-            // The AnimationState if the object supports animation.
-            sdr::animation::AnimationState*             mpAnimationState;
+            // PrimitiveSequence of the ViewContact. This contains all necessary information
+            // for the graphical visualisation and needs to be supported by all VCs which
+            // can be visualized.
+            drawinglayer::primitive2d::Primitive2DSequence  mxPrimitive2DSequence;
 
-        protected:
-            // This rectangle remembers the last positive paint output rectangle.
-            // It is then used for invalidating. It needs to be set together with
-            // the mbIsPainted flag.
-            Rectangle                                   maPaintedRectangle;
+            // the PrimitiveAnimation if Primitive2DSequence contains animations
+            sdr::animation::PrimitiveAnimation*             mpPrimitiveAnimation;
 
             // bitfield
-            // This flag describes if the object corresponding to this VOC
-            // was painted and thus would need to be invalidated if changes
-            // happen. Init with sal_False.
-            unsigned                                    mbIsPainted : 1;
+            // This bool gets set when the object gets invalidated by ActionChanged() and
+            // can be used from the OC to late-invalidates
+            unsigned                                        mbLazyInvalidate : 1;
 
-            // This flag remembers if the DrawHierarchy below this entry is
-            // valid or not. Init with sal_False.
-            unsigned                                    mbdrawHierarchyValid : 1;
+        protected:
+            // make redirector a protected friend, it needs to call createPrimitives as default action
+            friend class ViewObjectContactRedirector;
 
-            // method to get the AnimationState. Needs to give a result. It will
-            // return a existing one or create a new one using CreateAnimationState()
-            // at the AnimationInfo.
-            sdr::animation::AnimationState* GetAnimationState(sdr::animation::AnimationInfo& rInfo) const;
+            // Called from getPrimitive2DSequence() when vector has changed. Evaluate object animation
+            // and setup accordingly
+            void checkForPrimitive2DAnimations();
+
+            // This method is responsible for creating the graphical visualisation data which is
+            // stored/cached in the local primitive. Default gets view-independent Primitive
+            // from the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes care of
+            // visibility, handles glue and ghosted.
+            // This method will not handle included hierarchies and not check geometric visibility.
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
         public:
             // basic constructor.
             ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewObjectContact();
-
-            // Prepare deletion of this object. This needs to be called always
-            // before really deleting this objects. This is necessary since in a c++
-            // destructor no virtual function calls are allowed. To avoid this problem,
-            // it is required to first call PrepareDelete().
-            virtual void PrepareDelete();
 
             // access to ObjectContact
             ObjectContact& GetObjectContact() const { return mrObjectContact; }
@@ -121,83 +110,43 @@ namespace sdr
             // access to ViewContact
             ViewContact& GetViewContact() const { return mrViewContact; }
 
-            // access to parent
-            void SetParent(ViewObjectContact* pNew) { mpParent = pNew; }
-            ViewObjectContact* GetParent() const { return mpParent; }
+            // get the oebject's size range
+            const basegfx::B2DRange& getObjectRange() const;
 
             // A ViewObjectContact was deleted and shall be forgotten.
             void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
-            // This method recursively rebuilds the draw hierarchy structure in parallel
-            // to the SdrObject structure.
-            void BuildDrawHierarchy(ObjectContact& rObjectContact, ViewContact& rSourceNode);
-
-            // This method recursively checks the draw hierarchy structure in parallel
-            // to the SdrObject structure and rebuilds the invalid parts.
-            void CheckDrawHierarchy(ObjectContact& rObjectContact);
-
-            // This method only recursively clears the draw hierarchy structure between the
-            // DrawObjectContacts, it does not delete any to make them reusable.
-            void ClearDrawHierarchy();
-
-            // Paint this object. This is before evtl. SubObjects get painted. This method
-            // needs to set the flag mbIsPainted and to set the
-            // maPaintedRectangle member. This information is later used for invalidates
-            // and repaints.
-            virtual void PaintObject(DisplayInfo& rDisplayInfo);
-
-            // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-            virtual void PrePaintObject(DisplayInfo& rDisplayInfo);
-            virtual void PostPaintObject(DisplayInfo& rDisplayInfo);
-
-            // Paint this objects DrawHierarchy
-            virtual void PaintDrawHierarchy(DisplayInfo& rDisplayInfo);
-
-            // This method recursively paints the draw hierarchy. It is also the
-            // start point for the mechanism seen from the ObjectContact.
-            void PaintObjectHierarchy(DisplayInfo& rDisplayInfo);
-
-            // Get info if this is the active group of the view
-            sal_Bool IsActiveGroup() const;
-
             // React on changes of the object of this ViewContact
             virtual void ActionChanged();
 
-            // Get info if it's painted
-            sal_Bool IsPainted() const;
+            // LazyInvalidate handling
+            void triggerLazyInvalidate();
 
-            // Get info about the painted rectangle
-            const Rectangle& GetPaintedRectangle() const;
+            // Check if this primitive is animated in any OC (View) which means it has
+            // generated a PrimitiveAnimation
+            bool isAnimated() const { return (0 != mpPrimitiveAnimation); }
 
             // Take some action when new objects are inserted
-            virtual void ActionChildInserted(const Rectangle& rInitialRectangle);
+            virtual void ActionChildInserted(ViewContact& rChild);
 
-            // Get info about validity of DrawHierarchy,
-            // set to invalid
-            sal_Bool IsDrawHierarchyValid() const;
-            void InvalidateDrawHierarchy();
+            // access to the local primitive. This will ensure that the local primitive is
+            // current in comparing the local one with a fresh created incarnation
+            // This method will not handle included hierarchies and not check visibility.
+            drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
-            // If DrawHierarchy is handled by a object itself, the sub-objects are set
-            // to be equally painted to that object
-            void CopyPaintFlagsFromParent(const ViewObjectContact& rParent);
+            // test this VOC for visibility concerning model-view stuff like e.g. Layer
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
 
-            // take care for clean shutdown of an existing AnimationState
-            void DeleteAnimationState();
+            // test this VOC for ghosted mode
+            virtual bool isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const;
 
-            // Check for AnimationFeatures. Take necessary actions to evtl. create
-            // an AnimationState and register at the ObjectContact's animator
-            void CheckForAnimationFeatures(sdr::animation::AnimationInfo& rInfo);
+            // process this primitive: Eventually also recursively travel an existing hierarchy,
+            // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
 
-            // Test if this VOC has an animation state and thus is animated
-            sal_Bool HasAnimationState() const;
-
-            // get the correct redirector
-            ViewObjectContactRedirector* GetRedirector() const;
+            // just process the sub-hierarchy, used as tooling from getPrimitive2DSequenceHierarchy
+            drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const;
         };
-
-        // typedefs for a list of ViewObjectContact
-        typedef ::std::vector< ViewObjectContact* > ViewObjectContactVector;
-
     } // end of namespace contact
 } // end of namespace sdr
 
