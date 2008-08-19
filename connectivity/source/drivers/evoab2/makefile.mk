@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,7 +77,7 @@ SHL1VERSIONMAP=$(TARGET).map
 
 # --- Library -----------------------------------
 #SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
-SHL1TARGET=	$(EVOAB_TARGET)2
+SHL1TARGET=	$(EVOAB_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
