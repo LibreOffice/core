@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdovirt.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <svx/svdovirt.hxx>
 #include <svx/xpool.hxx>
-#include "svdxout.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdhdl.hxx>
@@ -158,15 +157,6 @@ void SdrVirtObj::RecalcBoundRect()
 void SdrVirtObj::SetChanged()
 {
     SdrObject::SetChanged();
-}
-
-sal_Bool SdrVirtObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    Point aOfs(rOut.GetOffset());
-    rOut.SetOffset(aOfs+aAnchor);
-    sal_Bool bRet(rRefObj.DoPaintObject(rOut, rInfoRec));
-    rOut.SetOffset(aOfs);
-    return bRet;
 }
 
 SdrObject* SdrVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
@@ -635,9 +625,9 @@ Pointer SdrVirtObj::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
     return rRefObj.GetMacroPointer(rRec); // Todo: Positionsversatz
 }
 
-void SdrVirtObj::PaintMacro(XOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
+void SdrVirtObj::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
 {
-    rRefObj.PaintMacro(rXOut,rDirtyRect,rRec); // Todo: Positionsversatz
+    rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // Todo: Positionsversatz
 }
 
 FASTBOOL SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
