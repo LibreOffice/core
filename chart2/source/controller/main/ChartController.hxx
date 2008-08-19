@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,6 +96,7 @@ class WindowController
 public:
     virtual ~WindowController() {};
 
+    virtual void PrePaint()=0;
     virtual void execute_Paint( const Rectangle& rRect )=0;
     virtual void execute_MouseButtonDown( const MouseEvent& rMEvt )=0;
     virtual void execute_MouseMove( const MouseEvent& rMEvt )=0;
@@ -440,6 +441,7 @@ public:
     //-----------------------------------------------------------------
     // chart2::WindowController
     //-----------------------------------------------------------------
+    virtual void PrePaint();
     virtual void execute_Paint( const Rectangle& rRect );
     virtual void execute_MouseButtonDown( const MouseEvent& rMEvt );
     virtual void execute_MouseMove( const MouseEvent& rMEvt );
