@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: objectcontacttools.cxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
+
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <vcl/outdev.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <vcl/gdimtf.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
+#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
+#include <drawinglayer/processor2d/canvasprocessor.hxx>
+#include <vcl/window.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+            OutputDevice& rTargetOutDev,
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
+            bool bTryToTestCanvas)
+        {
+            const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
+            const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+
+            if(bOutputToRecordingMetaFile)
+            {
+                // create MetaFile Vcl-Processor and process
+                return new drawinglayer::processor2d::VclMetafileProcessor2D(rViewInformation2D, rTargetOutDev);
+            }
+            else
+            {
+                if(bTryToTestCanvas)
+                {
+                    // create test-cancas-Processor
+                    return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev.GetCanvas());
+                }
+                else
+                {
+                    // create Pixel Vcl-Processor
+                    return new drawinglayer::processor2d::VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
+                }
+            }
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+// eof
