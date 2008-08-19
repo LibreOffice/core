@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdrpagewindow.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@
 // predeclarations
 
 class Region;
-class SdrPaintInfoRec;
 class SdrUnoObj;
 class SdrPageView;
 
@@ -68,9 +67,13 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
+namespace basegfx
+{
+    class B2DRange;
+} // end of namespace basegfx
+
 class SdrUnoControlList;
 class SdrPaintWindow;
-class Rectangle;
 class Link;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,10 +98,6 @@ class SVX_DLLPUBLIC SdrPageWindow
     // #110094# ObjectContact section
     sdr::contact::ObjectContact* CreateViewSpecificObjectContact();
 
-    // support method for creating PageInfoRecs for painting
-    SdrPaintInfoRec* ImpCreateNewPageInfoRec(const Rectangle& rDirtyRect,
-        sal_uInt16 nPaintMode, const SdrLayerID* pId) const;
-
 public:
     SdrPageWindow(SdrPageView& rNewPageView, SdrPaintWindow& rPaintWindow);
     ~SdrPageWindow();
@@ -117,12 +116,13 @@ public:
     void unpatchPaintWindow();
 
     // the repaint method. For migration from pPaintProc, use one more parameter
+    void PrePaint();
     void PrepareRedraw(const Region& rReg);
-    void RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector) const;
-    void RedrawLayer(sal_uInt16 nPaintMode, const SdrLayerID* pId, ::sdr::contact::ViewObjectContactRedirector* pRedirector) const;
+    void RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const;
+    void RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const;
 
     // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
-    void Invalidate(const Rectangle& rRectangle);
+    void InvalidatePageWindow(const basegfx::B2DRange& rRange);
 
     // #110094# ObjectContact section
     sdr::contact::ObjectContact& GetObjectContact() const;
