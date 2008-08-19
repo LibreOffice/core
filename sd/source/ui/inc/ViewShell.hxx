@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewShell.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,6 +206,7 @@ public:
     const Rectangle& GetAllWindowRect (void);
 
     // Mouse- & Key-Events
+    virtual void PrePaint();
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
     virtual BOOL KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
