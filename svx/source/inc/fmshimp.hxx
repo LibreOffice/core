@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.hxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#include <com/sun/star/form/runtime/FeatureState.hpp>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdmark.hxx>
@@ -562,17 +563,12 @@ public:
         <p>Warning. Only a small set of slots implemented currently.</p>
         @param _nSlot
             the slot to execute
-        @param _rxForm
-            the form for which the slot is to be executed
-        @param _rxController
-            the controller to use for committing modified controls. Will not
-            be used if <NULL/>
     */
-    void    ExecuteFormSlot(
-                sal_Int32 _nSlot,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController
-            );
+    void    ExecuteFormSlot( sal_Int32 _nSlot );
+
+    /** determines whether the current form slot is currently enabled
+    */
+    bool    IsFormSlotEnabled( sal_Int32 _nSlot, ::com::sun::star::form::runtime::FeatureState* _pCompleteState = NULL );
 
 protected:
     DECL_LINK(OnCursorActionDone, FmCursorActionThread*);
