@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodraw.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -478,7 +478,16 @@ uno::Any SwXDrawPage::queryInterface( const uno::Type& aType )
     uno::Any aRet = SwXDrawPageBaseClass::queryInterface(aType);
     if(!aRet.hasValue())
     {
-        aRet = GetSvxPage()->queryAggregation(aType);
+        // secure with checking if page exists. This may not be the case
+        // either for new SW docs with no yet graphics usage or when
+        // the doc is closed and someone else still holds a UNO reference
+        // to the XDrawPage (in that case, pDoc is set to 0)
+        SwFmDrawPage* pPage = GetSvxPage();
+
+        if(pPage)
+        {
+            aRet = pPage->queryAggregation(aType);
+        }
     }
     return aRet;
 }
@@ -841,6 +850,13 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
     }
     return pDrawPage;
 }
+
+// renamed and outlined to detect where it's called
+void SwXDrawPage::InvalidateSwDoc()
+{
+    pDoc = 0;
+}
+
 /****************************************************************************
 
 ****************************************************************************/
