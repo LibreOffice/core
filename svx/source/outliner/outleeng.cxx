@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outleeng.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,7 @@ void OutlinerEditEng::PaintingFirstLine( USHORT nPara, const Point& rStartPos, l
         PaintFirstLineInfo aInfo( nPara, rStartPos, nBaseLineY, rOrigin, nOrientation, pOutDev );
         pOwner->maPaintFirstLineHdl.Call( &aInfo );
     }
+
     pOwner->PaintBullet( nPara, rStartPos, rOrigin, nOrientation, pOutDev );
 }
 
@@ -154,22 +155,49 @@ XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
 }
 
 // #101498#
-void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft)
+void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen,
+    const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft,
+    const EEngineData::WrongSpellVector* pWrongSpellVector,
+    const SvxFieldData* pFieldData,
+    bool bEndOfLine,
+    bool bEndOfParagraph,
+    bool bEndOfBullet,
+    const ::com::sun::star::lang::Locale* pLocale,
+    const Color& rTextLineColor)
 {
-    if ( nIndex == 0 )
+    // why do bullet here at all? Just use GetEditEnginePtr()->PaintingFirstLine
+    // inside of ImpEditEngine::Paint which calls pOwner->PaintBullet with the correct
+    // values for hor and ver. No change for not-layouting (painting).
+    // changed, bullet rendering now using PaintBullet via
+/*  if ( nIndex == 0 )
     {
         // Dann das Bullet 'malen', dort wird bStrippingPortions ausgewertet
         // und Outliner::DrawingText gerufen
 
         // DrawingText liefert die BaseLine, DrawBullet braucht Top().
-        Point aCorrectedPos( rStartPos );
-        aCorrectedPos.Y() = GetDocPosTopLeft( nPara ).Y();
-        aCorrectedPos.Y() += GetFirstLineOffset( nPara );
-        pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
-    }
+
+        if(true)
+        {
+            // ##
+            // another error: This call happens when only stripping, but the position
+            // is already aligned to text output. For bullet rendering, it needs to be reset
+            // to the correct value in x and y. PaintBullet takes care of X-start offset itself
+            const Point aDocPosTopLeft(GetDocPosTopLeft( nPara ));
+            const Point aCorrectedPos(rStartPos.X() - aDocPosTopLeft.X(), aDocPosTopLeft.Y() + GetFirstLineOffset( nPara ));
+            pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
+        }
+        else
+        {
+            Point aCorrectedPos( rStartPos );
+            aCorrectedPos.Y() = GetDocPosTopLeft( nPara ).Y();
+            aCorrectedPos.Y() += GetFirstLineOffset( nPara );
+            pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
+        }
+    } */
 
     // #101498#
-    pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft);
+    pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft,
+        pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rTextLineColor);
 }
 
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
