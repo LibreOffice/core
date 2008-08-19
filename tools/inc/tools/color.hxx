@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: color.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,10 @@
 class SvStream;
 class ResId;
 #include <tools/solar.h>
+
+#ifndef _BGFX_COLOR_BCOLOR_HXX
+#include <basegfx/color/bcolor.hxx>
+#endif
 
 // --------------------
 // - ColorCount-Types -
@@ -128,6 +132,15 @@ public:
                         Color( const ResId& rResId );
                          // This ctor is defined in svtools, not tools!
 
+                        // constructor to create a tools-Color from ::basegfx::BColor
+                        explicit Color(const ::basegfx::BColor& rBColor)
+                        {
+                            mnColor = RGB_COLORDATA(
+                                UINT8((rBColor.getRed() * 255.0) + 0.5),
+                                UINT8((rBColor.getGreen() * 255.0) + 0.5),
+                                UINT8((rBColor.getBlue() * 255.0) + 0.5));
+                        }
+
     void                SetRed( UINT8 nRed );
     UINT8               GetRed() const { return COLORDATA_RED( mnColor ); }
     void                SetGreen( UINT8 nGreen );
@@ -178,6 +191,9 @@ public:
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Color& rColor );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Color& rColor );
+
+    // get ::basegfx::BColor from this color
+    ::basegfx::BColor getBColor() const { return ::basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0); }
 };
 
 inline void Color::SetRed( UINT8 nRed )
