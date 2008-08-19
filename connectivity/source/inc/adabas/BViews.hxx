@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BViews.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,6 @@ namespace connectivity
             // only the name is identical to ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
 
-            void appendNew(const ::rtl::OUString& _rsNewTable);
             void dropByNameImpl(const ::rtl::OUString& elementName);
         };
     }
