@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofgroup.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,12 @@
 #include <svx/sdr/contact/viewcontactofgroup.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontactofgroup.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -40,12 +46,14 @@ namespace sdr
 {
     namespace contact
     {
-        // method to recalculate the PaintRectangle if the validity flag shows that
-        // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-        // only needs to refresh maPaintRectangle itself.
-        void ViewContactOfGroup::CalcPaintRectangle()
+        // Create a Object-Specific ViewObjectContact, set ViewContact and
+        // ObjectContact. Always needs to return something.
+        ViewObjectContact& ViewContactOfGroup::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
-            maPaintRectangle = GetSdrObjGroup().GetCurrentBoundRect();
+            ViewObjectContact* pRetval = new ViewObjectContactOfGroup(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContactOfGroup::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
         }
 
         ViewContactOfGroup::ViewContactOfGroup(SdrObjGroup& rGroup)
@@ -57,27 +65,41 @@ namespace sdr
         {
         }
 
-        // When ShouldPaintObject() returns sal_True, the object itself is painted and
-        // PaintObject() is called.
-        sal_Bool ViewContactOfGroup::ShouldPaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGroup::createViewIndependentPrimitive2DSequence() const
         {
-            // Do not paint groups themthelves only when they are empty
-            if(!GetSdrObjGroup().GetSubList() || !GetSdrObjGroup().GetSubList()->GetObjCount())
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const sal_uInt32 nObjectCount(GetObjectCount());
+
+            if(nObjectCount)
             {
-                // Paint empty group to get a replacement visualisation
-                return sal_True;
+                // collect all sub-primitives
+                for(sal_uInt32 a(0); a < nObjectCount; a++)
+                {
+                    const ViewContact& rCandidate(GetViewContact(a));
+                    const drawinglayer::primitive2d::Primitive2DSequence aCandSeq(rCandidate.getViewIndependentPrimitive2DSequence());
+
+                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, aCandSeq);
+                }
             }
 
-            return sal_False;
-        }
+            if(xRetval.hasElements())
+            {
+                return xRetval;
+            }
+            else
+            {
+                // create a gray placeholder hairline polygon in object size. Use the model data directly. For empty groups,
+                // this is SdrObject::aOutRect, as can be seen in SdrObjGroup::GetSnapRect(). Access that using GetLastBoundRect()
+                // to not execute anything.
+                const Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
+                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(
+                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(), aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom())));
+                const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aGrayTone));
 
-        // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-        // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfGroup::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // Paint the object. If this is called, the group is empty.
-            // Paint a replacement object.
-            return PaintReplacementObject(rDisplayInfo, rPaintRectangle);
+                // The replacement object may also get a text like 'empty group' here later
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr
