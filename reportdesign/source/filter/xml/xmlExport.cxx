@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include "RptDef.hxx"
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
@@ -1458,19 +1459,6 @@ void ORptExport::_ExportStyles(BOOL bUsed)
 sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
 {
     return SvXMLExport::exportDoc( eClass );
-}
-// -----------------------------------------------------------------------------
-void ORptExport::GetViewSettings(Sequence<PropertyValue>& /*aProps*/)
-{
-    /*Reference<XReportDefinition> xReport(getReportDefinition());
-    if ( xReport.is() && (Reference<frame::XController > xController = xReport->getCurrentController()).is() )
-    {
-        xController->getViewData() >>= aProps;
-    }*/
-}
-// -----------------------------------------------------------------------------
-void ORptExport::GetConfigurationSettings(Sequence<PropertyValue>& /*aProps*/)
-{
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
