@@ -126,7 +126,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\itemwin.hxx %_DEST%\inc%_EXT%\svx\itemwin.hxx
 ..\inc\svx\keepitem.hxx %_DEST%\inc%_EXT%\svx\keepitem.hxx
 ..\inc\svx\kernitem.hxx %_DEST%\inc%_EXT%\svx\kernitem.hxx
-..\inc\svx\label3d.hxx %_DEST%\inc%_EXT%\svx\label3d.hxx
 ..\inc\svx\langbox.hxx %_DEST%\inc%_EXT%\svx\langbox.hxx
 ..\inc\svx\langitem.hxx %_DEST%\inc%_EXT%\svx\langitem.hxx
 ..\inc\layctrl.hxx %_DEST%\inc%_EXT%\svx\layctrl.hxx
@@ -156,7 +155,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\passwd.hxx %_DEST%\inc%_EXT%\svx\passwd.hxx
 ..\inc\svx\pbinitem.hxx %_DEST%\inc%_EXT%\svx\pbinitem.hxx
 ..\inc\svx\pmdlitem.hxx %_DEST%\inc%_EXT%\svx\pmdlitem.hxx
-..\inc\svx\pntobj3d.hxx %_DEST%\inc%_EXT%\svx\pntobj3d.hxx
 ..\inc\svx\polysc3d.hxx %_DEST%\inc%_EXT%\svx\polysc3d.hxx
 ..\inc\postattr.hxx %_DEST%\inc%_EXT%\svx\postattr.hxx
 ..\inc\svx\postitem.hxx %_DEST%\inc%_EXT%\svx\postitem.hxx
@@ -245,7 +243,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\svdomeas.hxx %_DEST%\inc%_EXT%\svx\svdomeas.hxx
 ..\inc\svx\svdomedia.hxx %_DEST%\inc%_EXT%\svx\svdomedia.hxx
 ..\inc\svx\svdoole2.hxx %_DEST%\inc%_EXT%\svx\svdoole2.hxx
-..\inc\svx\chartprettypainter.hxx %_DEST%\inc%_EXT%\svx\chartprettypainter.hxx
 ..\inc\svx\svdopage.hxx %_DEST%\inc%_EXT%\svx\svdopage.hxx
 ..\inc\svx\svdopath.hxx %_DEST%\inc%_EXT%\svx\svdopath.hxx
 ..\inc\svx\svdorect.hxx %_DEST%\inc%_EXT%\svx\svdorect.hxx
@@ -399,7 +396,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\xlntrit.hxx %_DEST%\inc%_EXT%\svx\xlntrit.hxx
 ..\inc\svx\xlnwtit.hxx %_DEST%\inc%_EXT%\svx\xlnwtit.hxx
 ..\inc\xoutbmp.hxx %_DEST%\inc%_EXT%\svx\xoutbmp.hxx
-..\inc\svx\xoutx.hxx %_DEST%\inc%_EXT%\svx\xoutx.hxx
 ..\inc\svx\xpoly.hxx %_DEST%\inc%_EXT%\svx\xpoly.hxx
 ..\inc\svx\xpool.hxx %_DEST%\inc%_EXT%\svx\xpool.hxx
 ..\inc\svx\xpool.hxx %_DEST%\inc%_EXT%\xpool.hxx
@@ -424,6 +420,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\outlobj.hxx %_DEST%\inc%_EXT%\svx\outlobj.hxx
 ..\inc\svx\editdata.hxx %_DEST%\inc%_EXT%\svx\editdata.hxx
 ..\inc\svx\editeng.hxx %_DEST%\inc%_EXT%\svx\editeng.hxx
+..\inc\svx\eedata.hxx %_DEST%\inc%_EXT%\svx\eedata.hxx
 ..\inc\svx\editobj.hxx %_DEST%\inc%_EXT%\svx\editobj.hxx
 ..\inc\editstat.hxx %_DEST%\inc%_EXT%\svx\editstat.hxx
 ..\inc\editund2.hxx %_DEST%\inc%_EXT%\svx\editund2.hxx
@@ -575,7 +572,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 ..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
 ..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
-..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
 ..\inc\svx\sdr\contact\objectcontactofpageview.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofpageview.hxx
 ..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
 ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
@@ -588,9 +584,12 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
 ..\inc\svx\sdr\contact\viewcontactofsdrpage.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrpage.hxx
 ..\inc\svx\sdr\contact\viewcontactoftextobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactoftextobj.hxx
+..\inc\svx\sdr\contact\viewcontactofvirtobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofvirtobj.hxx
 ..\inc\svx\sdr\contact\viewobjectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontact.hxx
-..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
+..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactredirector.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactredirector.hxx
+..\inc\svx\sdr\contact\viewobjectcontactofpageobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactofpageobj.hxx
+..\inc\svx\sdr\contact\viewobjectcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactofsdrobj.hxx
 ..\inc\svx\sdr\contact\vocbitmapbuffer.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\vocbitmapbuffer.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
