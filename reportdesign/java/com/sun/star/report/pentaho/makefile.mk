@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,7 +31,7 @@
 
 PRJ	= ..$/..$/..$/..$/..$/..
 PRJNAME = reportdesign
-TARGET  = sun-report-builder
+TARGET=sun-report-builder
 PACKAGE = com$/sun$/star$/report$/pentaho
 # we have circular dependencies
 nodep=true
