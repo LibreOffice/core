@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,9 +194,6 @@ protected:
     virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool();
     virtual XMLShapeExport*         CreateShapeExport();
-
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
     virtual                 ~ORptExport(){};
 public:
