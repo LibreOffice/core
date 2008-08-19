@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawViewWrapper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,8 +82,7 @@ public:
     //----------------------
     //pMarkHandleProvider can be NULL; ownership is not taken
     void setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider );
-    void CompleteRedraw( OutputDevice* pOut, const Region& rReg, USHORT nPaintMode = 0,
-                         ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L );
+    void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
 
     SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;
