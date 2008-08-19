@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpage.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,22 +36,17 @@
 // HACK
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
-#ifndef _SVSTOR_HXX //autogen
 #include <sot/storage.hxx>
-#endif
 #include <svx/svdview.hxx>
 #include <string.h>
 #ifndef _STRING_H
 #define _STRING_H
 #endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 #include <tools/diagnose_ex.h>
 
 #include <svx/svdetc.hxx>
-#include "svdxout.hxx"
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx> // fuer SwapInAll()
@@ -70,19 +65,12 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-
-// #110094#
 #include <svx/sdr/contact/viewcontactofsdrpage.hxx>
-
-// StandardCheckVisisbilityRedirector
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-
-// #111111#
 #include <algorithm>
 
 using namespace ::com::sun::star;
-
 
 namespace {
 void DumpObjectList (const ::std::vector<SdrObjectWeakRef>& rContainer)
@@ -261,7 +249,6 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 
 void SdrObjList::Clear()
 {
-    // #110094#-9
     sal_Bool bObjectsRemoved(sal_False);
 
     while( ! maList.empty())
@@ -270,8 +257,9 @@ void SdrObjList::Clear()
         SdrObject* pObj = maList.back();
         RemoveObjectFromContainer(maList.size()-1);
 
-        // #110094#
-        pObj->ActionRemoved();
+        // FlushViewContact() is done since SdrObject::Free is not guaranteed
+        // to delete the object and thus refresh visualisations
+        pObj->FlushViewContact();
 
         bObjectsRemoved = sal_True;
 
@@ -362,6 +350,16 @@ void SdrObjList::SetRectsDirty()
     if (pUpList!=NULL) pUpList->SetRectsDirty();
 }
 
+void SdrObjList::impChildInserted(SdrObject& rChild) const
+{
+    sdr::contact::ViewContact* pParent = rChild.GetViewContact().GetParentContact();
+
+    if(pParent)
+    {
+        pParent->ActionChildInserted(rChild.GetViewContact());
+    }
+}
+
 void SdrObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* /*pReason*/)
 {
     DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcInsertObject(NULL)");
@@ -376,8 +374,9 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRea
         pObj->SetObjList(this);
         pObj->SetPage(pPage);
 
-        // #110094#
-        pObj->ActionInserted();
+        // #110094# Inform the parent about change to allow invalidations at
+        // evtl. existing parent visualisations
+        impChildInserted(*pObj);
 
         if (!bRectsDirty) {
             aOutRect.Union(pObj->GetCurrentBoundRect());
@@ -442,8 +441,8 @@ SdrObject* SdrObjList::NbcRemoveObject(ULONG nObjNum)
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
-    // #110094#
-    pObj->ActionRemoved();
+    // FlushViewContact() clears the VOC's and those invalidate
+    pObj->FlushViewContact();
 
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
@@ -474,9 +473,11 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
     RemoveObjectFromContainer(nObjNum);
 
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
-    if (pObj!=NULL) {
-        // #110094#
-        pObj->ActionRemoved();
+    if(pObj)
+    {
+        // FlushViewContact() clears the VOC's and those invalidate
+        pObj->FlushViewContact();
+
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
         if (pModel!=NULL) {
             // Hier muss ein anderer Broadcast her!
@@ -496,9 +497,11 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
             }
         }
         SetRectsDirty();
-        if (pOwnerObj!=NULL && GetObjCount()==0)
+
+        if(pOwnerObj && !GetObjCount())
         {
-            // only repaint here
+            // empty group created; it needs to be repainted since it's
+            // visualisation changes
             pOwnerObj->ActionChanged();
         }
     }
@@ -523,15 +526,16 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         pObj->SetPage(NULL);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
-        // #110094#
-        pObj->ActionRemoved();
+        // FlushViewContact() clears the VOC's and those invalidate
+        pObj->FlushViewContact();
 
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
         pNewObj->SetPage(pPage);
 
-        // #110094#
-        pNewObj->ActionInserted();
+        // #110094#  Inform the parent about change to allow invalidations at
+        // evtl. existing parent visualisations
+        impChildInserted(*pNewObj);
 
         pNewObj->SetInserted(TRUE);
         SetRectsDirty();
@@ -569,15 +573,16 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         pObj->SetPage(NULL);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
-        // #110094#
-        pObj->ActionRemoved();
+        // FlushViewContact() clears the VOC's and those invalidate
+        pObj->FlushViewContact();
 
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
         pNewObj->SetPage(pPage);
 
-        // #110094#
-        pNewObj->ActionInserted();
+        // #110094#  Inform the parent about change to allow invalidations at
+        // evtl. existing parent visualisations
+        impChildInserted(*pNewObj);
 
         pNewObj->SetInserted(TRUE);
         if (pModel!=NULL) {
@@ -610,13 +615,11 @@ SdrObject* SdrObjList::NbcSetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::NbcSetObjectOrdNum: ZObjekt hat keinen Inserted-Status");
         RemoveObjectFromContainer(nOldObjNum);
 
-        // #110094#
-        pObj->ActionRemoved();
-
         InsertObjectIntoContainer(*pObj,nNewObjNum);
 
-        // #110094#
-        pObj->ActionInserted();
+        // #110094# No need to delete visualisation data since same object
+        // gets inserted again. Also a single ActionChanged is enough
+        pObj->ActionChanged();
 
         pObj->SetOrdNum(nNewObjNum);
         bObjOrdNumsDirty=TRUE;
@@ -639,18 +642,16 @@ SdrObject* SdrObjList::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: ZObjekt hat keinen Inserted-Status");
         RemoveObjectFromContainer(nOldObjNum);
-
-        // #110094#
-        pObj->ActionRemoved();
-
         InsertObjectIntoContainer(*pObj,nNewObjNum);
 
-        // #110094#
-        pObj->ActionInserted();
+        // #110094#No need to delete visualisation data since same object
+        // gets inserted again. Also a single ActionChanged is enough
+        pObj->ActionChanged();
 
         pObj->SetOrdNum(nNewObjNum);
         bObjOrdNumsDirty=TRUE;
-        if (pModel!=NULL) {
+        if (pModel!=NULL)
+        {
             // Hier muss ein anderer Broadcast her!
             if (pObj->GetPage()!=NULL) pModel->Broadcast(SdrHint(*pObj));
             pModel->SetChanged();
@@ -1230,6 +1231,15 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
     return *mpViewContact;
 }
 
+void SdrPage::FlushViewContact() const
+{
+    if(mpViewContact)
+    {
+        delete mpViewContact;
+        ((SdrPage*)this)->mpViewContact = 0;
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPage,SdrObjList);
@@ -1326,10 +1336,10 @@ SdrPage::~SdrPage()
     // #110094#
     if(mpViewContact)
     {
-        mpViewContact->PrepareDelete();
         delete mpViewContact;
         mpViewContact = 0L;
     }
+
     DBG_DTOR(SdrPage,NULL);
 }
 
@@ -1404,9 +1414,24 @@ SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
 
 void SdrPage::SetSize(const Size& aSiz)
 {
-    nWdt=aSiz.Width();
-    nHgt=aSiz.Height();
-    SetChanged();
+    bool bChanged(false);
+
+    if(aSiz.Width() != nWdt)
+    {
+        nWdt = aSiz.Width();
+        bChanged = true;
+    }
+
+    if(aSiz.Height() != nHgt)
+    {
+        nHgt = aSiz.Height();
+        bChanged = true;
+    }
+
+    if(bChanged)
+    {
+        SetChanged();
+    }
 }
 
 Size SdrPage::GetSize() const
@@ -1446,35 +1471,72 @@ INT32 SdrPage::GetHgt() const
 
 void  SdrPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
 {
-    nBordLft=nLft;
-    nBordUpp=nUpp;
-    nBordRgt=nRgt;
-    nBordLwr=nLwr;
-    SetChanged();
+    bool bChanged(false);
+
+    if(nBordLft != nLft)
+    {
+        nBordLft = nLft;
+        bChanged = true;
+    }
+
+    if(nBordUpp != nUpp)
+    {
+        nBordUpp = nUpp;
+        bChanged = true;
+    }
+
+    if(nBordRgt != nRgt)
+    {
+        nBordRgt = nRgt;
+        bChanged = true;
+    }
+
+    if(nBordLwr != nLwr)
+    {
+        nBordLwr =  nLwr;
+        bChanged = true;
+    }
+
+    if(bChanged)
+    {
+        SetChanged();
+    }
 }
 
 void  SdrPage::SetLftBorder(INT32 nBorder)
 {
-    nBordLft=nBorder;
-    SetChanged();
+    if(nBordLft != nBorder)
+    {
+        nBordLft = nBorder;
+        SetChanged();
+    }
 }
 
 void  SdrPage::SetUppBorder(INT32 nBorder)
 {
-    nBordUpp=nBorder;
-    SetChanged();
+    if(nBordUpp != nBorder)
+    {
+        nBordUpp = nBorder;
+        SetChanged();
+    }
 }
 
 void  SdrPage::SetRgtBorder(INT32 nBorder)
 {
-    nBordRgt=nBorder;
-    SetChanged();
+    if(nBordRgt != nBorder)
+    {
+        nBordRgt=nBorder;
+        SetChanged();
+    }
 }
 
 void  SdrPage::SetLwrBorder(INT32 nBorder)
 {
-    nBordLwr=nBorder;
-    SetChanged();
+    if(nBordLwr != nBorder)
+    {
+        nBordLwr=nBorder;
+        SetChanged();
+    }
 }
 
 INT32 SdrPage::GetLftBorder() const
@@ -1580,7 +1642,7 @@ void SdrPage::TRG_SetMasterPage(SdrPage& rNew)
         TRG_ClearMasterPage();
 
     mpMasterPageDescriptor = new ::sdr::MasterPageDescriptor(*this, rNew);
-    GetViewContact().ActionChildInserted(rNew.GetViewContact());
+    GetViewContact().ActionChanged();
 }
 
 void SdrPage::TRG_ClearMasterPage()
@@ -1588,8 +1650,9 @@ void SdrPage::TRG_ClearMasterPage()
     if(mpMasterPageDescriptor)
     {
         SetChanged();
-        sdr::contact::ViewContact& rMasterPageViewContact = mpMasterPageDescriptor->GetUsedPage().GetViewContact();
-        rMasterPageViewContact.ActionRemoved();
+
+        // the FlushViewContact() will do needed invalidates by deleting the involved VOCs
+        mpMasterPageDescriptor->GetUsedPage().FlushViewContact();
 
         delete mpMasterPageDescriptor;
         mpMasterPageDescriptor = 0L;
@@ -1831,8 +1894,8 @@ Color SdrPage::GetPageBackgroundColor() const
     like printing.
 */
 bool SdrPage::checkVisibility(
-    ::sdr::contact::ViewObjectContact& /*rOriginal*/,
-    ::sdr::contact::DisplayInfo& /*rDisplayInfo*/,
+    const sdr::contact::ViewObjectContact& /*rOriginal*/,
+    const sdr::contact::DisplayInfo& /*rDisplayInfo*/,
     bool /*bEdit*/)
 {
     // this will be handled in the application if needed
@@ -1902,7 +1965,9 @@ StandardCheckVisisbilityRedirector::~StandardCheckVisisbilityRedirector()
 {
 }
 
-void StandardCheckVisisbilityRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
+drawinglayer::primitive2d::Primitive2DSequence StandardCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
 
@@ -1912,14 +1977,16 @@ void StandardCheckVisisbilityRedirector::PaintObject(::sdr::contact::ViewObjectC
         {
             if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
             {
-                rOriginal.PaintObject(rDisplayInfo);
+                return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
             }
         }
+
+        return drawinglayer::primitive2d::Primitive2DSequence();
     }
     else
     {
         // not an object, maybe a page
-        rOriginal.PaintObject(rDisplayInfo);
+        return ::sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
     }
 }
 
