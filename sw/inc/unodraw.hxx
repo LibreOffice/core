@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodraw.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,7 +124,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     SwFmDrawPage*   GetSvxPage();
-    void    Invalidate() {pDoc = 0;}
+    // renamed and outlined to detect where it's called
+    void    InvalidateSwDoc(); // {pDoc = 0;}
 };
 /* -----------------22.01.99 10:20-------------------
  *
