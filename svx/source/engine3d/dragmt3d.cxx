@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dragmt3d.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include <tools/shl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/obj3d.hxx>
@@ -46,9 +45,7 @@
 #include <svx/e3dundo.hxx>
 #include "dragmt3d.hxx"
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
