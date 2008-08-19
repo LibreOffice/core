@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ namespace sdr { namespace contact {
 ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                                                 ViewContact& rViewContact,
                                                                 const ::avmedia::MediaItem& rMediaItem ) :
-    ViewObjectContact( rObjectContact, rViewContact ),
+    ViewObjectContactOfSdrObj( rObjectContact, rViewContact ),
     mpMediaWindow( NULL )
 {
     Window* pWindow = getWindow();
@@ -76,90 +76,8 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
 
 ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 {
-    DBG_ASSERT( !mpMediaWindow, "ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj(): mpMediaWindow != NULL" );
-}
-
-// ------------------------------------------------------------------------------
-
-void ViewObjectContactOfSdrMediaObj::PrepareDelete()
-{
-    ViewObjectContact::PrepareDelete();
     delete mpMediaWindow;
     mpMediaWindow = NULL;
-}
-
-// ------------------------------------------------------------------------------
-
-void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
-{
-    SdrObject* pObj = GetViewContact().TryToGetSdrObject();
-
-    ViewObjectContact::PaintObject( rDisplayInfo );
-
-    if( pObj )
-    {
-        Rectangle       aPaintRect( pObj->GetCurrentBoundRect() );
-        OutputDevice*   pOutDev = rDisplayInfo.GetOutputDevice();
-        sal_Int32       nOffset( pOutDev->PixelToLogic( Size( 4, 4 ) ).Width() );
-        bool            bWasPainted = false;
-
-        aPaintRect.Left() += nOffset;
-        aPaintRect.Top() += nOffset;
-        aPaintRect.Right() -= nOffset;
-        aPaintRect.Bottom() -= nOffset;
-
-        if( !mpMediaWindow )
-        {
-            //OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
-
-            if( pOutDev &&
-                ( aPaintRect.Left() < aPaintRect.Right() &&
-                  aPaintRect.Top() < aPaintRect.Bottom() ) )
-            {
-                const Color aBackgroundColor( 67, 67, 67 );
-
-                pOutDev->SetLineColor( aBackgroundColor );
-                pOutDev->SetFillColor( aBackgroundColor );
-                pOutDev->DrawRect( aPaintRect );
-
-                if( pObj->ISA( SdrMediaObj ) )
-                {
-                    const Graphic& rGraphic = static_cast< SdrMediaObj* >( pObj )->getGraphic();
-
-                    if( rGraphic.GetType() != GRAPHIC_NONE )
-                    {
-                        rGraphic.Draw( pOutDev, aPaintRect.TopLeft(), aPaintRect.GetSize() );
-                    }
-                }
-
-                bWasPainted = true;
-            }
-        }
-        else
-        {
-            // #i72701#
-            // Take care of position
-            checkMediaWindowPosition(rDisplayInfo);
-
-            // make visible and invalidate associated window
-            mpMediaWindow->show();
-
-            Window* pWindow = mpMediaWindow->getWindow();
-
-            if(pWindow)
-            {
-                pWindow->Invalidate();
-            }
-
-            bWasPainted = true;
-        }
-
-        if( bWasPainted )
-        {
-            mbIsPainted = sal_True;
-            maPaintedRectangle = pObj->GetCurrentBoundRect();
-        }
-    }
 }
 
 // ------------------------------------------------------------------------------
@@ -238,37 +156,54 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
 }
 
 // ------------------------------------------------------------------------------
-// #i72701#
-
-void ViewObjectContactOfSdrMediaObj::checkMediaWindowPosition(DisplayInfo& rDisplayInfo) const
-{
-    if(mpMediaWindow)
-    {
-        SdrObject* pObj = GetViewContact().TryToGetSdrObject();
-
-        if(pObj)
-        {
-            // get pixel rect
-            OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
-            Rectangle aPaintRectPixel(pOutDev->LogicToPixel(pObj->GetCurrentBoundRect()));
-
-            // shrink by 4 pixel to avoid control overlap
-            aPaintRectPixel.Left() += 4L;
-            aPaintRectPixel.Top() += 4L;
-            aPaintRectPixel.Right() -= 4L;
-            aPaintRectPixel.Bottom() -= 4L;
-
-            // justify rect. Take no special action when the rect is empty
-            aPaintRectPixel.Justify();
-
-            // set size
-            mpMediaWindow->setPosSize(aPaintRectPixel);
-        }
-    }
-}
-
-// ------------------------------------------------------------------------------
 
 }} // end of namespace sdr::contact
 
+//////////////////////////////////////////////////////////////////////////////
+// primitive stuff
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/tools/canvastools.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrMediaObj::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        {
+            // call parent and get Primitive2D. This includes visibility test already
+            drawinglayer::primitive2d::Primitive2DSequence xRetval(ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo));
+
+            // if mpMediaWindow is used, make sure position and size is correct. Also test visibility
+            // to detect invisible objects (e.g. control layer painting (!))
+            if(mpMediaWindow && xRetval.hasElements())
+            {
+                // get range
+                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+                const ::basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
+
+                // create view rectangle
+                ::basegfx::B2DRange aViewRange(aRange);
+                aViewRange.transform(rViewInformation2D.getViewTransformation());
+
+                const Rectangle aViewRectangle(
+                    (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
+                    (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
+
+                mpMediaWindow->setPosSize(aViewRectangle);
+            }
+
+            return xRetval;
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
 // eof
