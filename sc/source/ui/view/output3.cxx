@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output3.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/xoutx.hxx>
 #include <vcl/svapp.hxx>
 
 #include "output.hxx"
@@ -161,13 +160,22 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 }
 
 // #i72502#
-void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, const Point& rMMOffset)
+void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset)
 {
-    // #109985#
-    const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
+    bool bHideAllDrawingLayer(false);
+
+    if(pViewShell || pDrawView)
+    {
+        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
+
+        if(pLocalDrawView)
+        {
+            bHideAllDrawingLayer = pLocalDrawView->getHideOle() && pLocalDrawView->getHideChart() && pLocalDrawView->getHideDraw();
+        }
+    }
 
     // #109985#
-    if((nPaintModeHideAll == nPaintMode) || (!pDoc->GetDrawLayer()))
+    if(bHideAllDrawingLayer || (!pDoc->GetDrawLayer()))
     {
         return;
     }
@@ -180,7 +188,7 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 n
     }
 
     // #109985#
-    DrawSelectiveObjects( nLayer, nPaintMode);
+    DrawSelectiveObjects( nLayer );
 
     if (!bMetaFile)
     {
@@ -189,7 +197,7 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 n
 }
 
 // #109985#
-void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode)
+void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
@@ -227,9 +235,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt1
 
             if(pPageView)
             {
-                // Region aDrawRegion(rRect);
-                // pPageView->DrawLayer(nLayer, aDrawRegion, pDev, nPaintMode);
-                pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), pDev, nPaintMode);
+                pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), pDev);
             }
         }
     }
@@ -238,214 +244,12 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt1
 
     // #109985#
     return;
-
-/*  SdrOutliner& rOutl = pModel->GetDrawOutliner();
-    rOutl.EnableAutoColor( bUseStyleColor );
-    rOutl.SetDefaultHorizontalTextDirection(
-                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
-
-    XOutputDevice* pXOut = new XOutputDevice( pDev );
-    pXOut->SetOutDev( pDev );
-    SdrPaintInfoRec aInfoRec;
-
-    if ( pViewShell )
-    {
-        SdrView* pDrawView = pViewShell->GetSdrView();
-        if (pDrawView)
-            aInfoRec.pPV = pDrawView->GetPageViewByIndex(0);
-    }
-
-    BOOL bDidDummy = FALSE;
-
-    SdrPage* pPage = pModel->GetPage(nTab);
-    DBG_ASSERT(pPage,"Page nicht gefunden");
-    if (!pPage)
-        return;
-
-    if ( aInfoRec.pPV && aInfoRec.pPV->GetObjList() == pPage )
-        aInfoRec.bNotActive = FALSE;
-
-    //  handle high contrast draw modes in addition to the group draw modes,
-    //  aInfoRec.nOriginalDrawMode must include the high contrast bits if used
-    ULONG nOldDrawMode = pDev->GetDrawMode();
-    if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
-    }
-
-    //  DrawMode handling copied from SdrObjList::Paint
-    UINT32 nWasDrawMode = pDev->GetDrawMode();
-    if(!aInfoRec.bOriginalDrawModeSet)
-    {
-        // Original-Paintmode retten
-        aInfoRec.bOriginalDrawModeSet = TRUE;
-        aInfoRec.nOriginalDrawMode = pDev->GetDrawMode();
-    }
-    if(aInfoRec.pPV && aInfoRec.bNotActive)
-    {
-        if(aInfoRec.pPV->GetView().DoVisualizeEnteredGroup())
-        {
-            // Darstellung schmal
-            pDev->SetDrawMode(nWasDrawMode | (
-                DRAWMODE_GHOSTEDLINE|DRAWMODE_GHOSTEDFILL|DRAWMODE_GHOSTEDTEXT|DRAWMODE_GHOSTEDBITMAP|DRAWMODE_GHOSTEDGRADIENT));
-        }
-    }
-    else
-    {
-        // Darstellung normal
-        pDev->SetDrawMode(aInfoRec.nOriginalDrawMode);
-    }
-
-    //  Paint ueber SdrObjListIter geht bei 3D-Objekten schief
-
-    ULONG nObjCount = pPage->GetObjCount();
-    for (ULONG nObjNum = 0; nObjNum<nObjCount; nObjNum++)
-    {
-        SdrObject* pObject = pPage->GetObj(nObjNum);
-
-        if ( pObject->GetLayer()==(SdrLayerID) nLayer && pObject != pSkipPaintObj )
-        {
-            // #62107# nur das anfassen, was ueberhaupt gepainted werden koennte,
-            // damit nicht unnoetig durch Cache-Miss nachgeladen wird
-
-            Rectangle aObjRect = pObject->GetBoundRect();
-            if ( aObjRect.IsOver( rRect ) )
-            {
-                BOOL bDraw;
-                BOOL bDummy;
-                UINT16 nSdrObjKind = pObject->GetObjIdentifier();
-                if (nSdrObjKind == OBJ_OLE2)
-                {
-                    if ( pDoc->IsChart( pObject ) )
-                    {
-                        bDraw = (nObjectFlags & SC_OBJECTS_CHARTS) != 0;
-                        bDummy = (nDummyFlags & SC_OBJECTS_CHARTS) != 0;
-                    }
-                    else
-                    {
-                        bDraw = (nObjectFlags & SC_OBJECTS_OLE) != 0;
-                        bDummy = (nDummyFlags & SC_OBJECTS_OLE) != 0;
-                    }
-                }
-                else if (nSdrObjKind == OBJ_GRAF)       // Grafiken zusammen mit Ole-Objekten
-                {
-                    bDraw = (nObjectFlags & SC_OBJECTS_OLE) != 0;
-                    bDummy = (nDummyFlags & SC_OBJECTS_OLE) != 0;
-                }
-                else
-                {
-                    bDraw = (nObjectFlags & SC_OBJECTS_DRAWING) != 0;
-                    bDummy = (nDummyFlags & SC_OBJECTS_DRAWING) != 0;
-                }
-
-                if (bDraw || bDummy)
-                {
-                    BOOL bClip = !rRect.IsInside( aObjRect );
-                    BOOL bPush = FALSE;
-
-                    if (bClip && bDraw && nSdrObjKind == OBJ_GRAF)
-                    {
-                        //  #80136# don't call GetGraphic here
-                        //  (would swap the graphic in and reschedule)
-                        //  GetGraphicType / IsAnimated don't swap in
-
-                        SdrGrafObj* pGrafObj = (SdrGrafObj*)pObject;
-                        GraphicType eType = pGrafObj->GetGraphicType();
-                        if ( eType == GRAPHIC_GDIMETAFILE || pGrafObj->IsAnimated() )
-                            bClip = FALSE;
-                    }
-
-                    //  #36427#/#37790#: VC-Objekte pfuschen mit den ClipRegions rum,
-                    //  darum fuer Metafiles Push/Pop aussenherum.
-                    //! Hier wieder raus, wenn die VC-Objekte richtig funktionieren!
-//                  if ( bMetaFile && bDraw && !bClip && pObject->ISA(VCSbxDrawObject) )
-//                      bPush = TRUE;
-
-                    if (bClip)
-                    {
-                        if (bMetaFile)
-                        {
-                            pDev->Push();
-                            pDev->IntersectClipRegion( rRect );
-                        }
-                        else
-                        {
-                            if ( nLayer != SC_LAYER_BACK )
-                            {   // #29660# HACK:
-                                // untere Gitterlinie blieb manchmal stehen,
-                                // anscheinend Rundungsfehler in ClipRegion
-                                // vom Grafiktreiber
-                                Rectangle aPix = pDev->LogicToPixel(rRect);
-                                aPix.Bottom() += 1;
-                                Rectangle aNew = pDev->PixelToLogic(aPix);
-                                pDev->SetClipRegion( aNew );
-                            }
-                            else
-                                pDev->SetClipRegion( rRect );
-                        }
-                    }
-                    else if (bPush)         // nur Push/Pop
-                        pDev->Push();
-
-                    if (bDraw)
-                    {
-                        //  set model's hyphenator on demand
-                        if ( ((const SfxBoolItem&)pObject->GetItemSet().Get(EE_PARA_HYPHENATE)).GetValue() )
-                            pModel->UseHyphenator();
-
-                        if (pObject == pEditObj)
-                        {
-                            aInfoRec.nPaintMode|=SDRPAINTMODE_TEXTEDIT;
-                            pObject->Paint( *pXOut, aInfoRec );
-                            aInfoRec.nPaintMode&=~SDRPAINTMODE_TEXTEDIT;
-                        }
-                        else
-                            pObject->Paint( *pXOut, aInfoRec );
-                        bDidDummy = FALSE;
-
-                            // Plugins connecten, wenn sichtbar:
-
-                        if ( pViewShell && pObject->ISA(SdrOle2Obj) )
-                        {
-                            SdrOle2Obj* pOleObj = (SdrOle2Obj*)pObject;
-                            ConnectObject( pOleObj->GetObjRef(), pOleObj );
-                        }
-                    }
-                    else
-                    {
-                        if (!bDidDummy)
-                        {
-                            pDev->SetFillColor(COL_LIGHTGRAY);
-                            pDev->SetLineColor(COL_BLACK);
-                            bDidDummy = TRUE;
-                        }
-                        pDev->DrawRect( aObjRect );
-                    }
-
-                    if (bClip || bPush)     // bei bPush ist auch bMetaFile=TRUE
-                    {
-                        if (bMetaFile)
-                            pDev->Pop();
-                        else
-                            pDev->SetClipRegion();
-                    }
-                }
-            }
-        }
-    }
-
-//  pDev->SetDrawMode(aInfoRec.nOriginalDrawMode);
-    pDev->SetDrawMode(nOldDrawMode);
-
-    delete pXOut;
-    */
 }
 
 //  Teile nur fuer Bildschirm
 
 // #109985#
-void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode)
+void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
     BOOL    bHad    = FALSE;
     long    nPosY   = nScrY;
@@ -463,14 +267,14 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPain
         }
         else if (bHad)
         {
-            DrawSelectiveObjects( nLayer, nPaintMode);
+            DrawSelectiveObjects( nLayer );
             bHad = FALSE;
         }
         nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
-        DrawSelectiveObjects( nLayer, nPaintMode);
+        DrawSelectiveObjects( nLayer );
 }
 
 
