@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactoftableobj.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,18 +51,18 @@ namespace sdr
         {
         protected:
             // internal access to SdrTextObj
-            ::sdr::table::SdrTableObj& GetTextObj() const
+            ::sdr::table::SdrTableObj& GetTableObj() const
             {
                 return (::sdr::table::SdrTableObj&)GetSdrObject();
             }
 
+            // This method is responsible for creating the graphical visualisation data derived ONLY from
+            // the model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfTableObj(::sdr::table::SdrTableObj& rTextObj);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewContactOfTableObj();
         };
     } // end of namespace contact
