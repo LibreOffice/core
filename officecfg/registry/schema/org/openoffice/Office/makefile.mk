@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,8 +77,7 @@ XCSFILES= \
     ExtendedColorScheme.xcs \
     TypeDetection.xcs \
     TabBrowse.xcs \
-    Paths.xcs	\
-    ReportDesign.xcs
+    Paths.xcs
 
 .INCLUDE :  target.mk
 
