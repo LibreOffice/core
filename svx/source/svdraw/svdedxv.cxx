@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedxv.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,7 @@
 #include <svx/svdedxv.hxx>
 #include <svtools/solar.hrc>
 
-#ifndef _STRING_H
-#include <tools/string.h>
-#endif
+//#include <tools/string.h>
 #include <svtools/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/hatch.hxx>
@@ -54,7 +52,6 @@
 #include "svditext.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/sdtfchim.hxx>
-#include "svdxout.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
 #include "svditer.hxx"
@@ -658,12 +655,9 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
         pTextEditOutliner->SetBeginPasteOrDropHdl(LINK(this,SdrObjEditView,BeginPasteOrDropHdl));
         pTextEditOutliner->SetEndPasteOrDropHdl(LINK(this,SdrObjEditView, EndPasteOrDropHdl));
 
-        // we set a SdrPaintInfoRec temporarely at the outliner so the calc field value hdl from
-        // the application knows the context
-        SdrPaintInfoRec aPaintInfoRec;
-        aPaintInfoRec.pPV = pTextEditPV;
-        aPaintInfoRec.nPaintMode = 0;
-        pTextEditOutliner->SetPaintInfoRec( &aPaintInfoRec );
+        // It is just necessary to make the visualized page known. Set it.
+        pTextEditOutliner->setVisualizedPage(pPV ? pPV->GetPage() : 0);
+
         pTextEditOutliner->SetTextObjNoInit( dynamic_cast< SdrTextObj* >( mxTextEditObj.get() ) );
 
         if(mxTextEditObj->BegTextEdit(*pTextEditOutliner))
@@ -785,7 +779,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
                 GetModel()->Broadcast(aHint);
             }
 
-            pTextEditOutliner->ClearPaintInfoRec();
+            pTextEditOutliner->setVisualizedPage(0);
 
             if( mxSelectionController.is() )
                 mxSelectionController->onSelectionHasChanged();
@@ -802,7 +796,9 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
         }
     }
     if (pTextEditOutliner != NULL)
-        pTextEditOutliner->ClearPaintInfoRec();
+    {
+        pTextEditOutliner->setVisualizedPage(0);
+    }
 
     // wenn hier angekommen, dann ist irgendwas schief gelaufen
     if(!bDontDeleteOutliner)
@@ -962,7 +958,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
         for (ULONG i=pTEOutliner->GetViewCount(); i>0;) {
             i--;
             OutlinerView* pOLV=pTEOutliner->GetView(i);
-            USHORT nMorePix=pOLV->GetInvalidateMore();
+            USHORT nMorePix=pOLV->GetInvalidateMore() + 10; // solaris aw033 test #i#
             Window* pWin=pOLV->GetWindow();
             Rectangle aRect(pOLV->GetOutputArea());
             pTEOutliner->RemoveView(i);
@@ -979,6 +975,17 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             aRect.Bottom()+=nMorePix;
             aRect=pWin->PixelToLogic(aRect);
             InvalidateOneWin(*pWin,aRect);
+//          pWin->Invalidate(INVALIDATE_UPDATE);
+
+//          pWin->Update();
+//          pWin->Flush();
+            pWin->SetFillColor();
+            pWin->SetLineColor(COL_BLACK);
+            pWin->DrawPixel(aRect.TopLeft());
+            pWin->DrawPixel(aRect.TopRight());
+            pWin->DrawPixel(aRect.BottomLeft());
+            pWin->DrawPixel(aRect.BottomRight());
+            //pWin->DrawRect(aRect);
         }
         // und auch den Outliner selbst
         if (!bTextEditDontDelete) delete pTEOutliner;
@@ -1754,9 +1761,8 @@ BOOL SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj,
 
 void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
 {
-    if (pMacroObj!=NULL && bMacroDown) {
-        pXOut->SetOutDev(pMacroWin);
-        pXOut->SetOffset(Point()); //aOfs);
+    if (pMacroObj!=NULL && bMacroDown)
+    {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos=rUpPos;
         aHitRec.aDownPos=aMacroDownPos;
@@ -1764,17 +1770,15 @@ void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
         aHitRec.pOut=pMacroWin;
-        pMacroObj->PaintMacro(*pXOut,Rectangle(),aHitRec);
-        pXOut->SetOffset(Point(0,0));
+        pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
         bMacroDown=FALSE;
     }
 }
 
 void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
 {
-    if (pMacroObj!=NULL && !bMacroDown) {
-        pXOut->SetOutDev(pMacroWin);
-        pXOut->SetOffset(Point());
+    if (pMacroObj!=NULL && !bMacroDown)
+    {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos=rDownPos;
         aHitRec.aDownPos=aMacroDownPos;
@@ -1783,8 +1787,7 @@ void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=TRUE;
         aHitRec.pOut=pMacroWin;
-        pMacroObj->PaintMacro(*pXOut,Rectangle(),aHitRec);
-        pXOut->SetOffset(Point(0,0));
+        pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
         bMacroDown=TRUE;
     }
 }
