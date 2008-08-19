@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vdraw.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,6 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/xoutx.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -231,10 +230,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         }
 
         pOutDev->Push( PUSH_LINECOLOR ); // #114231#
-        // Region aDrawRegion(_rRect.SVRect());
-        //GetPageView()->DrawLayer( _nLayerID, aDrawRegion, pOutDev,
-        //              GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
-        GetPageView()->DrawLayer( _nLayerID, pOutDev, GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
+        GetPageView()->DrawLayer(_nLayerID, pOutDev);
         pOutDev->Pop();
 
         // OD 29.08.2002 #102450#
