@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: strings.src,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,6 +189,11 @@ String RID_STR_TABLE_DOES_NOT_EXIST
     Text [ en-US ] = "There exists no table named \"$table$\".";
 };
 
+String RID_STR_QUERY_DOES_NOT_EXIST
+{
+    Text [ en-US ] = "There exists no query named \"$table$\".";
+};
+
 String RID_STR_CONFLICTING_NAMES
 {
     Text [ en-US ] = "There are tables in the database whose names conflict with the names of existing queries. To make full use of all queries and tables, make sure they have distinct names.";
@@ -228,5 +233,9 @@ String RID_STR_OBJECT_CONTAINER_MISMATCH
 String RID_STR_OBJECT_ALREADY_CONTAINED
 {
     Text [ en-US ] = "The object already is, with a different name, part of the container.";
+};
+String RID_STR_NAME_NOT_FOUND
+{
+    Text [ en-US ] = "Unable to find the document '$name$'.";
 };
 
