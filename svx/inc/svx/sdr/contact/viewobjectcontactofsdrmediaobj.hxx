@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofsdrmediaobj.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACTOFSDRMEDIAOBJ_HXX
 #define _SDR_CONTACT_VIEWOBJECTCONTACTOFSDRMEDIAOBJ_HXX
 
+#include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 
 namespace avmedia { class MediaItem; }
@@ -42,17 +43,13 @@ namespace sdr
     {
         class SdrMediaWindow;
 
-        class ViewObjectContactOfSdrMediaObj : public ViewObjectContact
+        class ViewObjectContactOfSdrMediaObj : public ViewObjectContactOfSdrObj
         {
         public:
 
             ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                             ViewContact& rViewContact,
                                             const ::avmedia::MediaItem& rMediaItem );
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewObjectContactOfSdrMediaObj();
 
         public:
@@ -65,26 +62,17 @@ namespace sdr
             void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
             void    executeMediaItem( const ::avmedia::MediaItem& rItem );
 
-            // #i72701#
-            void checkMediaWindowPosition(DisplayInfo& rDisplayInfo) const;
-
-        protected:
-
-            // Prepare deletion of this object. This needs to be called always
-            // before really deleting this objects. This is necessary since in a c++
-            // destructor no virtual function calls are allowed. To avoid this problem,
-            // it is required to first call PrepareDelete().
-            virtual void PrepareDelete();
-
-            // Paint this object. This is before evtl. SubObjects get painted. This method
-            // needs to set the flag mbIsPainted and to set the
-            // maPaintedRectangle member. This information is later used for invalidates
-            // and repaints.
-            virtual void PaintObject(DisplayInfo& rDisplayInfo);
-
         private:
 
             ::sdr::contact::SdrMediaWindow* mpMediaWindow;
+
+            //////////////////////////////////////////////////////////////////////////////
+            // primitive stuff
+        public:
+            // process this primitive: ask for isPrimitiveVisible() and take necessary actions
+            // to give useful data to the processor in DisplayInfo. Eventually also
+            // recursively travel a existing hierarchy, e.g. for group objects
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
         };
     } // end of namespace contact
 } // end of namespace sdr
