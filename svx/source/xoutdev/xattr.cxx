@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xattr.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@
 #include "svdstr.hrc"
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/itemtype.hxx>
 #include <svx/xdef.hxx>
@@ -685,7 +684,6 @@ bool XDash::operator==(const XDash& rDash) const
              nDashLen   == rDash.nDashLen   &&
              nDistance  == rDash.nDistance );
 }
-
 
 // XDash is translated into an array of doubles which describe the lengths of the
 // dashes, dots and empty passages. It returns the complete length of the full DashDot
