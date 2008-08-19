@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dcubicbezier.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,12 +66,33 @@ namespace basegfx
         // compare operators
         bool operator==(const B2DCubicBezier& rBezier) const;
         bool operator!=(const B2DCubicBezier& rBezier) const;
+        bool equal(const B2DCubicBezier& rBezier) const;
 
         // test if vectors are used
         bool isBezier() const;
 
         // test if contained bezier is trivial and reset vectors accordingly
         void testAndSolveTrivialBezier();
+
+        /** get length of edge
+
+            This method handles beziers and simple edges. For
+            beziers, the deviation describes the maximum allowed
+            deviation from the real edge length. The default
+            allows a deviation of 1% from the correct length.
+
+            For beziers, there is no direct way to get the length,
+            thus this method may subdivide the bezier edge and may
+            not be cheap.
+
+            @param fDeviation
+            The maximal allowed deviation between correct length
+            and bezier edge length
+
+            @return
+            The length of the edge
+        */
+        double getLength(double fDeviation = 0.01) const;
 
         // get distance between start and end point
         double getEdgeLength() const;
@@ -92,13 +113,31 @@ namespace basegfx
         B2DPoint getControlPointB() const { return maControlPointB; }
         void setControlPointB(const B2DPoint& rValue) { maControlPointB = rValue; }
 
-        // adaptive subdivide by angle criteria
-        // no start point is added, but all necessary created edges
-        // #i37443# allow the criteria to get unsharp in recursions
+        /** get the tangent in point t
+
+            This method handles all the exceptions, e.g. when control point
+            A is equal to start point and/or control point B is equal to end
+            point
+
+            @param t
+            The bezier index in the range [0.0 .. 1.0]. It will be truncated.
+
+            @return
+            The tangent vector in point t
+        */
+        B2DVector getTangent(double t) const;
+
+        /** adaptive subdivide by angle criteria
+            no start point is added, but all necessary created edges
+            and the end point
+            #i37443# allow the criteria to get unsharp in recursions
+        */
         void adaptiveSubdivideByAngle(B2DPolygon& rTarget, double fAngleBound, bool bAllowUnsharpen) const;
 
-        // #i37443# adaptive subdivide by nCount subdivisions
-        // no start point is added, but all necessary created edges
+        /** #i37443# adaptive subdivide by nCount subdivisions
+            no start point is added, but all necessary created edges
+            and the end point
+        */
         void adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount) const;
 
         /** Subdivide cubic bezier segment.
@@ -108,7 +147,8 @@ namespace basegfx
             such that the maximal orthogonal distance from any of the
             segments to the true curve is less than the given error
             value.
-            No start point is added, but all necessary created edges.
+            No start point is added, but all necessary created edges
+            and the end point
 
             @param rPoly
             Output polygon. The subdivided bezier segment is added to
@@ -131,10 +171,38 @@ namespace basegfx
         double getSmallestDistancePointToBezierSegment(const B2DPoint& rTestPoint, double& rCut) const;
 
         // do a split at position t and fill both resulting segments
-        void split(double t, B2DCubicBezier& rBezierA, B2DCubicBezier& rBezierB) const;
+        void split(double t, B2DCubicBezier* pBezierA, B2DCubicBezier* pBezierB) const;
+
+        // extract snippet from fStart to fEnd from this bezier
+        B2DCubicBezier snippet(double fStart, double fEnd) const;
 
         // get range including conrol points
         B2DRange getRange() const;
+
+        /** Get the minimum extremum position t
+
+            @param rfResult
+            Will be changed and set to a eventually found split value which should be in the
+            range [0.0 .. 1.0]. It will be the smallest current extremum; there may be more
+
+            @return
+            Returns true if there was at least one extremum found
+        */
+        bool getMinimumExtremumPosition(double& rfResult) const;
+
+        /** Get all extremum pos of this segment
+
+            This method will calculate all extremum positions of the segment
+            and add them to rResults if they are in the range ]0.0 .. 1.0[
+
+            @param rResults
+            The vector of doubles where the results will be added. Evtl.
+            existing contents will be removed since an empty vector is a
+            necessary result to express that there are no extreme positions
+            anymore. Since there is an upper maximum of 4 values, it makes
+            sense to use reserve(4) at the vector as preparation.
+        */
+        void getAllExtremumPositions(::std::vector< double >& rResults) const;
     };
 } // end of namespace basegfx
 
