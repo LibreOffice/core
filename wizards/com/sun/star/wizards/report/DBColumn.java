@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBColumn.java,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -450,7 +450,8 @@ public class DBColumn
             catch(Exception exception)
             {
                 exception.printStackTrace(System.out);
-            }}
+            }
+    }
 
     private boolean isNameCell(XTextCursor xCellCursor, String CurFieldName, String CompString)
         {
@@ -468,7 +469,21 @@ public class DBColumn
                     XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                     XPropertySet xMaster = xDependent.getTextFieldMaster();
                     String UserFieldName = (String) xMaster.getPropertyValue("Name");
-                    boolean bIsNameCell = ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)));
+                    boolean bIsNameCell = false;
+                    if ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)))
+                    {
+                        bIsNameCell = true;
+                    }
+                    else
+                    {
+                        // stupid hack, 'Title' is not a real good Table-Cell-Name
+                        // take a look at xmloff/source/text/txtvfldi.txt, there exists 2 '_renamed_' strings
+                        String sLocalCurFieldName = CurFieldName + "_renamed_";
+                        if (UserFieldName.startsWith(sLocalCurFieldName))
+                        {
+                            bIsNameCell = true;
+                        }
+                    }
                     return bIsNameCell;
                 }
             }
