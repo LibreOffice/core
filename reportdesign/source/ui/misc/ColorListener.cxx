@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ColorListener.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +93,7 @@ void OColorListener::setCollapsed(sal_Bool _bCollapsed)
 void OColorListener::setMarked(sal_Bool _bMark)
 {
     m_bMarked = _bMark;
+    Invalidate();
 }
 // =======================================================================
 }
