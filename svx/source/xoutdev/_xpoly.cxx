@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _xpoly.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 
-#include <svx/xoutx.hxx>
 #include <svx/xpoly.hxx>
 #include "xpolyimp.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -705,7 +704,7 @@ Rectangle XPolygon::GetBoundRect() const
         // get a relatively correct BoundRect. Numerically, this is not
         // correct and never was.
 
-        const basegfx::B2DRange aPolygonRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon())));
+        const basegfx::B2DRange aPolygonRange(basegfx::tools::getRange(getB2DPolygon()));
         aRetval = Rectangle(
             FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
             FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
