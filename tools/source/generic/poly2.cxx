@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poly2.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,23 +45,15 @@ extern "C"
 #endif // HAVE_GPC_H
 }
 
-/*
-#include <cstring>
-#include <cmath>
-*/
+#include <rtl/math.hxx>
 #include <poly.h>
-#ifndef _POLY_HXX
 #include <tools/poly.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 // ---------------
 // - PolyPolygon -
@@ -514,13 +506,8 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 
     // normalize the two polypolygons before. Force properly oriented
     // polygons.
-    if( aMergePolyPolygonA.areControlPointsUsed() )
-        aMergePolyPolygonA = basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonA);
-    aMergePolyPolygonA = basegfx::tools::correctOrientations( aMergePolyPolygonA );
-
-    if( aMergePolyPolygonB.areControlPointsUsed() )
-        aMergePolyPolygonB = basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonB);
-    aMergePolyPolygonB = basegfx::tools::correctOrientations( aMergePolyPolygonB );
+    aMergePolyPolygonA = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonA );
+    aMergePolyPolygonB = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonB );
 
     switch( nOperation )
     {
@@ -529,61 +516,22 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 
         case GPC_UNION:
         {
-            // simple merge all contained parts (OR)
-            aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            // merge A and B (OR)
+            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
         case GPC_DIFF:
         {
-            // take selected poly 2..n (is in Polygon B), merge them, flipdirections
-            // and merge with poly 1
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-            aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-            aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
-            aMergePolyPolygonB.flip();
-            aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-
-            // #72995# one more call to resolve self intersections which
-            // may have been built by substracting (see bug)
-            //aMergePolyPolygonA.Merge(FALSE);
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            // substract B from A (DIFF)
+            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
         case GPC_XOR:
         {
-            // compute XOR between poly A and B. As basegfx clipper
-            // has no direct support for this, we first compute the
-            // intersection and the union of the two polygons, and
-            // then subtract the intersection from the union
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-            aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-            aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
-            basegfx::B2DPolyPolygon aAintersectsB( aMergePolyPolygonA );
-
-            // A /\ B
-            aAintersectsB.append(aMergePolyPolygonB);
-            aAintersectsB = basegfx::tools::removeAllIntersections(aAintersectsB);
-            aAintersectsB = basegfx::tools::removeNeutralPolygons(aAintersectsB, sal_False);
-
-            // A + B
-            aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-
-            // (A+B) \ (A/\B)
-            aAintersectsB.flip();
-            aMergePolyPolygonA.append(aAintersectsB);
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            // compute XOR between poly A and B
+            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
@@ -591,13 +539,7 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         case GPC_INT:
         {
             // cut poly 1 against polys 2..n (AND)
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-            aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-            aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
-            aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
     }
