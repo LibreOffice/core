@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfunc.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ class DlgEdFunc /* : public LinkHdl */
     void operator =(const DlgEdFunc&);
 protected:
     OReportSection* m_pParent;
-    OSectionView*   m_pView;
+    OSectionView&   m_rView;
     Timer           aScrollTimer;
     Point           m_aMDPos;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
