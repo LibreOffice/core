@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,8 @@
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
 #include <tools/poly.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/uno/Reference.h>
 
 #include <vector>
 
@@ -91,7 +93,6 @@ namespace basegfx {
     class B2DPolyPolygon;
     typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 }
-#include <com/sun/star/uno/Reference.h>
 
 namespace com {
 namespace sun {
@@ -469,6 +470,8 @@ public:
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
     SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
     SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
+    SAL_DLLPRIVATE ::basegfx::B2DPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolygon&  ) const;
+    SAL_DLLPRIVATE ::basegfx::B2DPolyPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolyPolygon& ) const;
     SAL_DLLPRIVATE Polygon      ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const;
     SAL_DLLPRIVATE PolyPolygon  ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const;
     SAL_DLLPRIVATE LineInfo     ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const;
@@ -683,6 +686,7 @@ public:
         @see DrawPolyPolygon
      */
     void                DrawPolyLine( const Polygon& rPoly );
+    void                DrawPolyLine( const basegfx::B2DPolygon&, double fLineWidth = 0.0, basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND );
 
     /** Render the given polygon as a line stroke
 
@@ -708,6 +712,7 @@ public:
         @see DrawPolyLine
      */
     void                DrawPolygon( const Polygon& rPoly );
+    void                DrawPolygon( const basegfx::B2DPolygon& );
 
     /** Render the given poly-polygon
 
@@ -720,6 +725,8 @@ public:
         @see DrawPolyLine
      */
     void                DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
+
     void                DrawRect( const Rectangle& rRect );
     void                DrawRect( const Rectangle& rRect,
                                   ULONG nHorzRount, ULONG nVertRound );
@@ -791,11 +798,9 @@ public:
     void                DrawWaveLine( const Point& rStartPos, const Point& rEndPos, USHORT nStyle );
     void                DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nFlags );
 
-    void                DrawTransparent( const PolyPolygon& rPolyPoly,
-                                         USHORT nTransparencePercent );
-    void                DrawTransparent( const GDIMetaFile& rMtf,
-                                         const Point& rPos, const Size& rSize,
-                                         const Gradient& rTransparenceGradient );
+    void                DrawTransparent( const PolyPolygon& rPolyPoly, USHORT nTransparencePercent );
+    void                DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
+    void                DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize, const Gradient& rTransparenceGradient );
 
     Color               GetPixel( const Point& rPt ) const;
     Color*              GetPixel( const Polygon& rPts ) const;
