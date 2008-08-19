@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpre.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@
 #include "scspew.hxx"
 #endif
 
+#include <math.h>
 #include <map>
 
 class ScDocument;
