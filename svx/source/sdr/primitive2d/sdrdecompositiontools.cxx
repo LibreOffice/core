@@ -1,0 +1,439 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrdecompositiontools.cxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/attribute/sdrattribute.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
+#include <drawinglayer/attribute/linestartendattribute.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <svx/svdotext.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
+#include <drawinglayer/animation/animationtiming.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DReference createPolyPolygonFillPrimitive(
+            const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const ::basegfx::B2DHomMatrix& rObjectTransform,
+            const attribute::SdrFillAttribute& rFill,
+            const attribute::FillGradientAttribute* pFillGradient)
+        {
+            // prepare fully scaled polygon
+            ::basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
+            aScaledPolyPolygon.transform(rObjectTransform);
+            BasePrimitive2D* pNewFillPrimitive = 0L;
+
+            if(rFill.isGradient())
+            {
+                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(aScaledPolyPolygon, rFill.getColor(), *rFill.getGradient());
+            }
+            else if(rFill.isHatch())
+            {
+                pNewFillPrimitive = new PolyPolygonHatchPrimitive2D(aScaledPolyPolygon, rFill.getColor(), *rFill.getHatch());
+            }
+            else if(rFill.isBitmap())
+            {
+                const ::basegfx::B2DRange aRange(::basegfx::tools::getRange(aScaledPolyPolygon));
+                pNewFillPrimitive = new PolyPolygonBitmapPrimitive2D(aScaledPolyPolygon, rFill.getColor(), rFill.getBitmap()->getFillBitmapAttribute(aRange));
+            }
+            else
+            {
+                pNewFillPrimitive = new PolyPolygonColorPrimitive2D(aScaledPolyPolygon, rFill.getColor());
+            }
+
+            if(0.0 != rFill.getTransparence())
+            {
+                // create simpleTransparencePrimitive, add created fill primitive
+                const Primitive2DReference xRefA(pNewFillPrimitive);
+                const Primitive2DSequence aContent(&xRefA, 1L);
+                return Primitive2DReference(new UnifiedAlphaPrimitive2D(aContent, rFill.getTransparence()));
+            }
+            else if(pFillGradient)
+            {
+                // create sequence with created fill primitive
+                const Primitive2DReference xRefA(pNewFillPrimitive);
+                const Primitive2DSequence aContent(&xRefA, 1L);
+
+                // create FillGradientPrimitive2D for transparence and add to new sequence
+                // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
+                const ::basegfx::B2DRange aRange(::basegfx::tools::getRange(aScaledPolyPolygon));
+                const Primitive2DReference xRefB(new FillGradientPrimitive2D(aRange, *pFillGradient));
+                const Primitive2DSequence aAlpha(&xRefB, 1L);
+
+                // create AlphaPrimitive2D using alpha and content
+                return Primitive2DReference(new AlphaPrimitive2D(aContent, aAlpha));
+            }
+            else
+            {
+                // add to decomposition
+                return Primitive2DReference(pNewFillPrimitive);
+            }
+        }
+
+        Primitive2DReference createPolygonLinePrimitive(
+            const ::basegfx::B2DPolygon& rUnitPolygon,
+            const ::basegfx::B2DHomMatrix& rObjectTransform,
+            const attribute::SdrLineAttribute& rLine,
+            const attribute::SdrLineStartEndAttribute* pStroke)
+        {
+            // prepare fully scaled polygon
+            ::basegfx::B2DPolygon aScaledPolygon(rUnitPolygon);
+            aScaledPolygon.transform(rObjectTransform);
+
+            // create line and stroke attribute
+            const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin());
+            const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
+            BasePrimitive2D* pNewLinePrimitive = 0L;
+
+            if(!rUnitPolygon.isClosed() && pStroke)
+            {
+                attribute::LineStartEndAttribute aStart(pStroke->getStartWidth(), pStroke->getStartPolyPolygon(), pStroke->isStartCentered());
+                attribute::LineStartEndAttribute aEnd(pStroke->getEndWidth(), pStroke->getEndPolyPolygon(), pStroke->isEndCentered());
+
+                // create data
+                pNewLinePrimitive = new PolygonStrokeArrowPrimitive2D(aScaledPolygon, aLineAttribute, aStrokeAttribute, aStart, aEnd);
+            }
+            else
+            {
+                // create data
+                pNewLinePrimitive = new PolygonStrokePrimitive2D(aScaledPolygon, aLineAttribute, aStrokeAttribute);
+            }
+
+            if(0.0 != rLine.getTransparence())
+            {
+                // create simpleTransparencePrimitive, add created fill primitive
+                const Primitive2DReference xRefA(pNewLinePrimitive);
+                const Primitive2DSequence aContent(&xRefA, 1L);
+                return Primitive2DReference(new UnifiedAlphaPrimitive2D(aContent, rLine.getTransparence()));
+            }
+            else
+            {
+                // add to decomposition
+                return Primitive2DReference(pNewLinePrimitive);
+            }
+        }
+
+        Primitive2DReference createTextPrimitive(
+            const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const ::basegfx::B2DHomMatrix& rObjectTransform,
+            const attribute::SdrTextAttribute& rText,
+            const attribute::SdrLineAttribute* pStroke,
+            bool bCellText)
+        {
+            ::basegfx::B2DHomMatrix aAnchorTransform(rObjectTransform);
+            SdrTextPrimitive2D* pNew = 0L;
+
+            if(rText.isContour())
+            {
+                // contour text
+                if(pStroke && 0.0 != pStroke->getWidth())
+                {
+                    // take line width into account and shrink contour polygon accordingly
+                    // decompose to get scale
+                    ::basegfx::B2DVector aScale, aTranslate;
+                    double fRotate, fShearX;
+                    rObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                    // scale outline to object's size to allow growing with value relative to that size
+                    // and also to keep aspect ratio
+                    ::basegfx::B2DHomMatrix aScaleTransform;
+                    aScaleTransform.set(0, 0, fabs(aScale.getX()));
+                    aScaleTransform.set(1, 1, fabs(aScale.getY()));
+                    ::basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
+                    aScaledUnitPolyPolygon.transform(aScaleTransform);
+
+                    // grow the polygon. To shrink, use negative value (half width)
+                    aScaledUnitPolyPolygon = ::basegfx::tools::growInNormalDirection(aScaledUnitPolyPolygon, -(pStroke->getWidth() * 0.5));
+
+                    // scale back to unit polygon
+                    aScaleTransform.set(0, 0, 0.0 != aScale.getX() ? 1.0 / aScale.getX() : 1.0);
+                    aScaleTransform.set(1, 1, 0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0);
+                    aScaledUnitPolyPolygon.transform(aScaleTransform);
+
+                    // create with unit polygon
+                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), aScaledUnitPolyPolygon, rObjectTransform);
+                }
+                else
+                {
+                    // create with unit polygon
+                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), rUnitPolyPolygon, rObjectTransform);
+                }
+            }
+            else if(rText.isFontwork() && !rText.isScroll())
+            {
+                // text on path, use scaled polygon. Not allowed when text scrolling is used.
+                ::basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
+                aScaledPolyPolygon.transform(rObjectTransform);
+                pNew = new SdrPathTextPrimitive2D(rText.getSdrText(), aScaledPolyPolygon);
+            }
+            else
+            {
+                // rObjectTransform is the whole SdrObject transformation from unit rectangle
+                // to it's size and position. Decompose to allow working with single values.
+                ::basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                rObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                // extract mirroring
+                const bool bMirrorX(::basegfx::fTools::less(aScale.getX(), 0.0));
+                const bool bMirrorY(::basegfx::fTools::less(aScale.getY(), 0.0));
+                aScale = basegfx::absolute(aScale);
+
+                // Get the real size, since polygon ountline and scale
+                // from the object transformation may vary (e.g. ellipse segments)
+                ::basegfx::B2DHomMatrix aJustScaleTransform;
+                aJustScaleTransform.set(0, 0, aScale.getX());
+                aJustScaleTransform.set(1, 1, aScale.getY());
+                ::basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
+                aScaledUnitPolyPolygon.transform(aJustScaleTransform);
+                const ::basegfx::B2DRange aSnapRange(::basegfx::tools::getRange(aScaledUnitPolyPolygon));
+
+                // create a range describing the wanted text position and size (aTextAnchorRange). This
+                // means to use the text distance values here
+                const ::basegfx::B2DPoint aTopLeft(aSnapRange.getMinX() + rText.getTextLeftDistance(), aSnapRange.getMinY() + rText.getTextUpperDistance());
+                const ::basegfx::B2DPoint aBottomRight(aSnapRange.getMaxX() - rText.getTextRightDistance(), aSnapRange.getMaxY() - rText.getTextLowerDistance());
+                ::basegfx::B2DRange aTextAnchorRange;
+                aTextAnchorRange.expand(aTopLeft);
+                aTextAnchorRange.expand(aBottomRight);
+
+                // now create a transformation from this basic range (aTextAnchorRange)
+                aAnchorTransform.identity();
+                aAnchorTransform.scale(aTextAnchorRange.getWidth(), aTextAnchorRange.getHeight());
+                aAnchorTransform.translate(aTextAnchorRange.getMinX(), aTextAnchorRange.getMinY());
+
+                // apply mirroring
+                aAnchorTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
+
+                // apply object's other transforms
+                aAnchorTransform.shearX(fShearX);
+                aAnchorTransform.rotate(fRotate);
+                aAnchorTransform.translate(aTranslate.getX(), aTranslate.getY());
+
+                if(rText.isFitToSize())
+                {
+                    // streched text in range
+                    pNew = new SdrStretchTextPrimitive2D(rText.getSdrText(), aAnchorTransform);
+                }
+                else // text in range
+                {
+                    // build new primitive
+                    pNew = new SdrBlockTextPrimitive2D(rText.getSdrText(), aAnchorTransform, rText.isScroll(), bCellText);
+                }
+            }
+
+            OSL_ENSURE(pNew != 0, "createTextPrimitive: no text primitive created (!)");
+
+            if(rText.isBlink())
+            {
+                // prepare animation and primitive list
+                drawinglayer::animation::AnimationEntryList aAnimationList;
+                rText.getBlinkTextTiming(aAnimationList);
+
+                if(0.0 != aAnimationList.getDuration())
+                {
+                    // create content sequence
+                    const Primitive2DReference xRefA(pNew);
+                    const Primitive2DSequence aContent(&xRefA, 1L);
+
+                    // create and add animated switch primitive
+                    return Primitive2DReference(new AnimatedBlinkPrimitive2D(aAnimationList, aContent, true));
+                }
+                else
+                {
+                    // add to decomposition
+                    return Primitive2DReference(pNew);
+                }
+            }
+            else if(rText.isScroll())
+            {
+                // get scroll direction
+                const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
+                const bool bHorizontal(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection);
+
+                // decompose to get separated values for the scroll box
+                ::basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                aAnchorTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                // build transform from scaled only to full AnchorTransform and inverse
+                ::basegfx::B2DHomMatrix aSRT;
+                aSRT.shearX(fShearX);
+                aSRT.rotate(fRotate);
+                aSRT.translate(aTranslate.getX(), aTranslate.getY());
+                ::basegfx::B2DHomMatrix aISRT(aSRT);
+                aISRT.invert();
+
+                // bring the primitive back to scaled only and get scaled range, create new clone for this
+                SdrTextPrimitive2D* pNew2 = pNew->createTransformedClone(aISRT);
+                OSL_ENSURE(pNew2, "createTextPrimitive: Could not create transformed clone of text primitive (!)");
+                delete pNew;
+                pNew = pNew2;
+
+                // create neutral geometry::ViewInformation2D for local range and decompose calls. This is okay
+                // since the decompose is view-independent
+                const uno::Sequence< beans::PropertyValue > xViewParameters;
+                geometry::ViewInformation2D aViewInformation2D(xViewParameters);
+
+                // get range
+                const ::basegfx::B2DRange aScaledRange(pNew->getB2DRange(aViewInformation2D));
+
+                // create left outside and right outside transformations. Also take care
+                // of the clip rectangle
+                ::basegfx::B2DHomMatrix aLeft, aRight;
+                ::basegfx::B2DPoint aClipTopLeft(0.0, 0.0);
+                ::basegfx::B2DPoint aClipBottomRight(aScale.getX(), aScale.getY());
+
+                if(bHorizontal)
+                {
+                    aClipTopLeft.setY(aScaledRange.getMinY());
+                    aClipBottomRight.setY(aScaledRange.getMaxY());
+                    aLeft.translate(-aScaledRange.getMaxX(), 0.0);
+                    aRight.translate(aScale.getX() - aScaledRange.getMinX(), 0.0);
+                }
+                else
+                {
+                    aClipTopLeft.setX(aScaledRange.getMinX());
+                    aClipBottomRight.setX(aScaledRange.getMaxX());
+                    aLeft.translate(0.0, -aScaledRange.getMaxY());
+                    aRight.translate(0.0, aScale.getY() - aScaledRange.getMinY());
+                }
+
+                aLeft *= aSRT;
+                aRight *= aSRT;
+
+                // prepare animation list
+                drawinglayer::animation::AnimationEntryList aAnimationList;
+
+                if(bHorizontal)
+                {
+                    rText.getScrollTextTiming(aAnimationList, aScale.getX(), aScaledRange.getWidth());
+                }
+                else
+                {
+                    rText.getScrollTextTiming(aAnimationList, aScale.getY(), aScaledRange.getHeight());
+                }
+
+                if(0.0 != aAnimationList.getDuration())
+                {
+                    // create a new Primitive2DSequence containing the animated text in it's scaled only state.
+                    // use the decomposition to force to simple text primitives, those will no longer
+                    // need the outliner for formatting (alternatively it is also possible to just add
+                    // pNew to aNewPrimitiveSequence)
+                    Primitive2DSequence aAnimSequence(pNew->get2DDecomposition(aViewInformation2D));
+                    delete pNew;
+
+                    // create a new animatedInterpolatePrimitive and add it
+                    std::vector< basegfx::B2DHomMatrix > aMatrixStack;
+                    aMatrixStack.push_back(aLeft);
+                    aMatrixStack.push_back(aRight);
+                    const Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, aAnimSequence, true));
+                    const Primitive2DSequence aContent(&xRefA, 1L);
+
+                    // scrolling needs an encapsulating clipping primitive
+                    const ::basegfx::B2DRange aClipRange(aClipTopLeft, aClipBottomRight);
+                    ::basegfx::B2DPolygon aClipPolygon(::basegfx::tools::createPolygonFromRect(aClipRange));
+                    aClipPolygon.transform(aSRT);
+                    return Primitive2DReference(new MaskPrimitive2D(::basegfx::B2DPolyPolygon(aClipPolygon), aContent));
+                }
+                else
+                {
+                    // add to decomposition
+                    return Primitive2DReference(pNew);
+                }
+            }
+            else
+            {
+                // add to decomposition
+                return Primitive2DReference(pNew);
+            }
+        }
+
+        Primitive2DReference createShadowPrimitive(
+            const Primitive2DSequence& rSource,
+            const attribute::SdrShadowAttribute& rShadow)
+        {
+            // create Shadow primitives. Need to be added in front, should use already created primitives
+            if(rSource.hasElements())
+            {
+                // prepare shadow offset
+                ::basegfx::B2DHomMatrix aShadowOffset;
+                aShadowOffset.set(0, 2, rShadow.getOffset().getX());
+                aShadowOffset.set(1, 2, rShadow.getOffset().getY());
+
+                // create shadow primitive and add content
+                const Primitive2DReference xRefShadow(new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rSource));
+
+                if(0.0 != rShadow.getTransparence())
+                {
+                    // create SimpleTransparencePrimitive2D
+                    const Primitive2DSequence aContent(&xRefShadow, 1L);
+                    return Primitive2DReference(new UnifiedAlphaPrimitive2D(aContent, rShadow.getTransparence()));
+                }
+                else
+                {
+                    // return directly
+                    return xRefShadow;
+                }
+            }
+            else
+            {
+                return Primitive2DReference();
+            }
+        }
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// eof
