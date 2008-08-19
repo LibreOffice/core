@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dcontact.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,9 +68,6 @@
 #include <editsh.hxx>
 #include <docary.hxx>
 
-// #108784#
-#include <svx/xoutx.hxx>
-
 // OD 2004-02-11 #110582#-2
 #include <flyfrms.hxx>
 
@@ -79,6 +76,19 @@
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+// AW: For VCOfDrawVirtObj and stuff
+#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
+#include <svx/sdr/contact/viewcontactofvirtobj.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
+#include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -2162,6 +2172,173 @@ void SwDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchored
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+// AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
+// since offset is defined different from SdrVirtObj's sdr::contact::ViewContactOfVirtObj.
+// For paint, that offset is used by setting at the OutputDevice; for primitives this is
+// not possible since we have no OutputDevice, but define the geometry itself.
+
+namespace sdr
+{
+    namespace contact
+    {
+        class VOCOfDrawVirtObj : public ViewObjectContactOfSdrObj
+        {
+        protected:
+            // This method is responsible for creating the graphical visualisation data which is
+            // stored/cached in the local primitive. Default gets view-independent Primitive
+            // from the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes care of
+            // visibility, handles glue and ghosted.
+            // This method will not handle included hierarchies and not check geometric visibility.
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+
+        public:
+            VOCOfDrawVirtObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
+            :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
+            {
+            }
+
+            virtual ~VOCOfDrawVirtObj();
+        };
+
+        class VCOfDrawVirtObj : public ViewContactOfVirtObj
+        {
+        protected:
+            // Create a Object-Specific ViewObjectContact, set ViewContact and
+            // ObjectContact. Always needs to return something. Default is to create
+            // a standard ViewObjectContact containing the given ObjectContact and *this
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+
+        public:
+            // basic constructor, used from SdrObject.
+            VCOfDrawVirtObj(SwDrawVirtObj& rObj)
+            :   ViewContactOfVirtObj(rObj)
+            {
+            }
+            virtual ~VCOfDrawVirtObj();
+
+            // access to SwDrawVirtObj
+            SwDrawVirtObj& GetSwDrawVirtObj() const
+            {
+                return (SwDrawVirtObj&)mrObject;
+            }
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+namespace sdr
+{
+    namespace contact
+    {
+        // recursively collect primitive data from given VOC with given offset
+        void impAddPrimitivesFromGroup(const ViewObjectContact& rVOC, const basegfx::B2DHomMatrix& rOffsetMatrix, const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DSequence& rxTarget)
+        {
+            const sal_uInt32 nSubHierarchyCount(rVOC.GetViewContact().GetObjectCount());
+
+            for(sal_uInt32 a(0L); a < nSubHierarchyCount; a++)
+            {
+                const ViewObjectContact& rCandidate(rVOC.GetViewContact().GetViewContact(a).GetViewObjectContact(rVOC.GetObjectContact()));
+
+                if(rCandidate.GetViewContact().GetObjectCount())
+                {
+                    // is a group object itself, call resursively
+                    impAddPrimitivesFromGroup(rCandidate, rOffsetMatrix, rDisplayInfo, rxTarget);
+                }
+                else
+                {
+                    // single object, add primitives; check model-view visibility
+                    if(rCandidate.isPrimitiveVisible(rDisplayInfo))
+                    {
+                        drawinglayer::primitive2d::Primitive2DSequence aNewSequence(rCandidate.getPrimitive2DSequence(rDisplayInfo));
+
+                        if(aNewSequence.hasElements())
+                        {
+                            // get ranges
+                            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(rCandidate.GetObjectContact().getViewInformation2D());
+                            const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+                            basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(aNewSequence, rViewInformation2D));
+
+                            // correct with virtual object's offset
+                            aObjectRange.transform(rOffsetMatrix);
+
+                            // check geometrical visibility (with offset)
+                            if(!aViewRange.overlaps(aObjectRange))
+                            {
+                                // not visible, release
+                                aNewSequence.realloc(0);
+                            }
+                        }
+
+                        if(aNewSequence.hasElements())
+                        {
+                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rxTarget, aNewSequence);
+                        }
+                    }
+                }
+            }
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        {
+            const VCOfDrawVirtObj& rVC = static_cast< const VCOfDrawVirtObj& >(GetViewContact());
+            const SdrObject& rReferencedObject = rVC.GetSwDrawVirtObj().GetReferencedObj();
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            // create offset transformation
+            basegfx::B2DHomMatrix aOffsetMatrix;
+            const Point aLocalOffset(rVC.GetSwDrawVirtObj().GetOffset());
+
+            if(aLocalOffset.X() || aLocalOffset.Y())
+            {
+                aOffsetMatrix.set(0, 2, aLocalOffset.X());
+                aOffsetMatrix.set(1, 2, aLocalOffset.Y());
+            }
+
+            if(rReferencedObject.ISA(SdrObjGroup))
+            {
+                // group object. Since the VOC/OC/VC hierarchy does not represent the
+                // hierarchy virtual objects when they have group objects
+                // (ViewContactOfVirtObj::GetObjectCount() returns null for that purpose)
+                // to avoid multiple usages of VOCs (which would not work), the primitives
+                // for the sub-hierarchy need to be collected here
+
+                // Get the VOC of the referenced object (the Group) and fetch primitives from it
+                const ViewObjectContact& rVOCOfRefObj = rReferencedObject.GetViewContact().GetViewObjectContact(GetObjectContact());
+                impAddPrimitivesFromGroup(rVOCOfRefObj, aOffsetMatrix, rDisplayInfo, xRetval);
+            }
+            else
+            {
+                // single object, use method from referenced object to get the Primitive2DSequence
+                xRetval = rReferencedObject.GetViewContact().getViewIndependentPrimitive2DSequence();
+            }
+
+            if(xRetval.hasElements())
+            {
+                // create transform primitive
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::TransformPrimitive2D(aOffsetMatrix, xRetval));
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+
+            return xRetval;
+        }
+
+        VOCOfDrawVirtObj::~VOCOfDrawVirtObj()
+        {
+        }
+
+        ViewObjectContact& VCOfDrawVirtObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            return *(new VOCOfDrawVirtObj(rObjectContact, *this));
+        }
+
+        VCOfDrawVirtObj::~VCOfDrawVirtObj()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 // =============================================================================
 /** implementation of class <SwDrawVirtObj>
 
@@ -2171,6 +2348,11 @@ void SwDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchored
 */
 
 TYPEINIT1(SwDrawVirtObj,SdrVirtObj);
+
+sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::VCOfDrawVirtObj(*this);
+}
 
 // #108784#
 // implemetation of SwDrawVirtObj
@@ -2309,21 +2491,6 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
     SdrObject::NbcSetAnchorPos( rPnt );
 }
 
-const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
-{
-    if (bBoundRectDirty)
-    {
-        const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
-        const_cast<SwDrawVirtObj*>(this)->bBoundRectDirty = FALSE;
-    }
-    return aOutRect;
-}
-
-const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
-{
-    return aOutRect;
-}
-
 void SwDrawVirtObj::RecalcBoundRect()
 {
     // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
@@ -2331,54 +2498,16 @@ void SwDrawVirtObj::RecalcBoundRect()
     // its value by the 'BoundRect' of the referenced object.
     //aOutRect = rRefObj.GetCurrentBoundRect();
     //aOutRect += GetOffset();
-    Point aOffset = GetOffset();
-    aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
-}
 
-sal_Bool SwDrawVirtObj::DoPaintObject( XOutputDevice& rOut,
-                                       const SdrPaintInfoRec& rInfoRec ) const
-
-{
-    sal_Bool bRetval = sal_True;
-    const SdrObject& rReferencedObject = GetReferencedObj();
-
-    // rescue offset and set new one
-    const Point aOfs(rOut.GetOffset());
-    const Point aLocalOffset(GetOffset());
-    rOut.SetOffset(aOfs + aLocalOffset);
-    if ( rReferencedObject.ISA(SdrObjGroup) )
+    if(ReferencedObj().GetCurrentBoundRect().IsEmpty())
     {
-
-        // If it's a group object, paint the whole group content
-        // using a temporary ObjectContactOfObjListPainter
-        sdr::contact::SdrObjectVector aObjectVector;
-        aObjectVector.push_back(&((SdrObject&)rReferencedObject));
-
-        sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
-        sdr::contact::DisplayInfo aDisplayInfo;
-        SdrPaintInfoRec aCopyInfoRec(rInfoRec);
-        aCopyInfoRec.aCheckRect.Move( -aLocalOffset.X(), -aLocalOffset.Y() );
-        aCopyInfoRec.aDirtyRect.Move( -aLocalOffset.X(), -aLocalOffset.Y() );
-        aDisplayInfo.SetExtendedOutputDevice(&rOut);
-        aDisplayInfo.SetPaintInfoRec(&aCopyInfoRec);
-        aDisplayInfo.SetOutputDevice(rOut.GetOutDev());
-
-        // do processing
-        aPainter.ProcessDisplay(aDisplayInfo);
-
-        // prepare delete
-        aPainter.PrepareDelete();
+        aOutRect = Rectangle();
     }
     else
     {
-        // If it's a single object, paint it
-        bRetval = rRefObj.DoPaintObject(rOut, rInfoRec);
+        const Point aOffset(GetOffset());
+        aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
     }
-
-    // restore offset
-    rOut.SetOffset(aOfs);
-
-    return bRetval;
 }
 
 SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
