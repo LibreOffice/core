@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HViews.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,14 +170,3 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
     }
 }
 // -----------------------------------------------------------------------------
-void HViews::appendNew(const ::rtl::OUString& _rsNewTable)
-{
-    insertElement(_rsNewTable,NULL);
-    // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
-    m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
-}
-// -----------------------------------------------------------------------------
-
-
-
