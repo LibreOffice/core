@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cuitabarea.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,8 +157,6 @@ class SVX_DLLPUBLIC SvxTransparenceTabPage : public SvxTabPage
     // preview
     SvxXRectPreview     aCtlBitmapPreview;
     SvxXRectPreview     aCtlXRectPreview;
-    XOutputDevice       XOutBmp;
-    XOutputDevice       XOut;
     BOOL                bBitmap;
 
     XOutdevItemPool*    pXPool;
@@ -274,8 +272,6 @@ private:
     BOOL*               pbAreaTP;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
-    XOutputDevice       XOutBmp;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
@@ -373,7 +369,6 @@ private:
     BOOL                bDisable;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
     SfxMapUnit          ePoolUnit;
@@ -457,7 +452,6 @@ private:
     BOOL*               pbAreaTP;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XFillStyleItem      aXFStyleItem;
     XFillGradientItem   aXGradientItem;
     XFillAttrSetItem    aXFillAttr;
@@ -545,7 +539,6 @@ private:
     BOOL*               pbAreaTP;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XFillStyleItem      aXFStyleItem;
     XFillHatchItem      aXHatchItem;
     XFillAttrSetItem    aXFillAttr;
@@ -640,7 +633,6 @@ private:
     BOOL                bBmpChanged;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XFillStyleItem      aXFStyleItem;
     XFillBitmapItem     aXBitmapItem;
     XFillAttrSetItem    aXFillAttr;
@@ -750,8 +742,6 @@ private:
     BOOL                bDeleteColorTable;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOutOld;
-    XOutputDevice       XOutNew;
     XFillStyleItem      aXFStyleItem;
     XFillColorItem      aXFillColorItem;
     XFillAttrSetItem    aXFillAttr;
