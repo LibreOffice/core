@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,8 @@
 #include <svx/svdoashp.hxx>
 #include "unoapi.hxx"
 #include <svx/unoshape.hxx>
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
 #include <unotools/datetime.hxx>
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
@@ -51,9 +47,7 @@
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef __com_sun_star_awt_Rectangle_hpp_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
 #include "unopolyhelper.hxx"
 #include <comphelper/processfactory.hxx>
 #include <svtools/urihelper.hxx>
@@ -63,7 +57,6 @@
 #include <svx/svddrag.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
-#include "svdxout.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include "svditer.hxx"
@@ -82,20 +75,12 @@
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
 #include "../customshapes/EnhancedCustomShape2d.hxx"
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP__
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
-#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
-#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#endif
 #include <svx/writingmodeitem.hxx>
 
 //      textitem.hxx        editdata.hxx
@@ -103,9 +88,7 @@
 
 
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svtools/whiter.hxx>
 #include <svx/sdr/properties/customshapeproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
@@ -1716,52 +1699,6 @@ void SdrObjCustomShape::RecalcSnapRect()
 {
     SdrTextObj::RecalcSnapRect();
 }
-void SdrObjCustomShape::RecalcBoundRect()
-{
-    aOutRect = GetSnapRect();
-
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
-    {
-        aOutRect = pSdrObject->GetCurrentBoundRect();
-
-        // #i37011#
-        if(pSdrObject->ISA(SdrObjGroup))
-        {
-            const sal_Bool bShadow(((SdrShadowItem&)GetObjectItem( SDRATTR_SHADOW )).GetValue());
-
-            if(bShadow)
-            {
-                ImpAddShadowToBoundRect();
-            }
-        }
-    }
-
-    // add text to ImpAddTextToBoundrect:
-    if ( GetOutlinerParaObject() )
-    {
-        SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        Rectangle aTextRect;
-        Rectangle aAnchorRect;
-        TakeTextRect( rOutliner, aTextRect, TRUE, &aAnchorRect ); // EditText ignorieren!
-        rOutliner.Clear();
-
-        double fDrehWink = aGeo.nDrehWink;
-        fDrehWink /= 100.0;
-        fDrehWink += GetExtraTextRotation();
-        if ( fDrehWink != 0.0 )
-        {
-            Polygon aPol( aTextRect );
-            RotatePoly( aPol, aTextRect.TopLeft(), sin( F_PI180 * fDrehWink ), cos( F_PI180 * fDrehWink ) );
-            aOutRect.Union( aPol.GetBoundRect() );
-        }
-        else
-        {
-            aOutRect.Union( aTextRect );
-        }
-    }
-}
-
 const Rectangle& SdrObjCustomShape::GetSnapRect() const
 {
     return SdrTextObj::GetSnapRect();
@@ -2049,86 +1986,6 @@ void SdrObjCustomShape::NbcShear( const Point& /*rRef*/, long /*nWink*/, double 
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     InvalidateRenderGeometry();
 */
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-sal_Bool SdrObjCustomShape::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    sal_Bool bOk = sal_True;
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-
-    if(pSdrObject)
-    {
-        // #i37011#
-        ((SdrObject*)pSdrObject)->SetLayer(GetLayer());
-
-        if(pSdrObject->ISA(SdrObjGroup))
-        {
-            const SdrObject* pShadowGeometry = GetSdrObjectShadowFromCustomShape();
-            if(pShadowGeometry)
-            {
-                ((SdrObject*)pShadowGeometry)->SingleObjectPainter(rXOut, rInfoRec);
-            }
-
-            // paint object itself
-            ((SdrObject*)pSdrObject)->SingleObjectPainter(rXOut, rInfoRec);
-        }
-        else
-        {
-            // paint object itself
-            pSdrObject->DoPaintObject(rXOut, rInfoRec);
-        }
-    }
-
-    if(HasText() && !IsTextPath())
-    {
-        // paint text over object
-        double fTextRotation = GetExtraTextRotation();
-        if ( fTextRotation != 0.0 )
-        {
-            GeoStat aOldGeoStat( aGeo );
-            Rectangle aOldRect( aRect );
-            Rectangle aTextBound( aRect );
-            GetTextBounds( aTextBound );
-
-            // determining the correct refpoint
-            Point aRef( aTextBound.Center() );
-            Rectangle aUnrotatedSnapRect( aOutRect );
-            RotatePoint( aRef, aUnrotatedSnapRect.Center(), -aGeo.nSin, -aGeo.nCos );
-
-            long dx = aRect.Right()-aRect.Left();
-            long dy = aRect.Bottom()-aRect.Top();
-            Point aP( aRect.TopLeft() );
-            double sn = sin( F_PI180 * fTextRotation );
-            double cs = cos( F_PI180 * fTextRotation );
-            RotatePoint( aP, aRef, sn, cs );
-            ((SdrObjCustomShape*)this)->aRect.Left()=aP.X();
-            ((SdrObjCustomShape*)this)->aRect.Top()=aP.Y();
-            ((SdrObjCustomShape*)this)->aRect.Right()=aRect.Left()+dx;
-            ((SdrObjCustomShape*)this)->aRect.Bottom()=aRect.Top()+dy;
-            if ( aGeo.nDrehWink == 0 )
-            {
-                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( (sal_Int32)( fTextRotation * 100.0 ) );
-                ((SdrObjCustomShape*)this)->aGeo.nSin = sn;
-                ((SdrObjCustomShape*)this)->aGeo.nCos = cs;
-            }
-            else
-            {
-                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( aGeo.nDrehWink + (sal_Int32)( fTextRotation * 100.0 ) );
-                ((SdrObjCustomShape*)this)->aGeo.RecalcSinCos();
-            }
-            SdrTextObj::DoPaintObject( rXOut, rInfoRec );
-            ((SdrObjCustomShape*)this)->aGeo = aOldGeoStat;
-            ((SdrObjCustomShape*)this)->aRect = aOldRect;
-
-        }
-        else
-            SdrTextObj::DoPaintObject(rXOut, rInfoRec);
-    }
-    return bOk;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2721,7 +2578,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
         aIter++;
     }
 
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
 }
 
@@ -3396,7 +3253,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
 void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
-    bBoundRectDirty = TRUE;
+    SetBoundRectDirty();
     SetRectsDirty(TRUE);
     InvalidateRenderGeometry();
 }
@@ -3890,5 +3747,3 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
 }
 
 // eof
-
-
