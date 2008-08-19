@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr5.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,10 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -54,6 +58,8 @@
 #include "cellkeytranslator.hxx"
 #include "osversiondef.hxx"
 
+#include <string.h>
+#include <math.h>
 #include <vector>
 
 using ::std::vector;
