@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqliterator.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ namespace connectivity
 
         ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
-        void                traverseParameter(OSQLParseNode* _pParseNode,OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
+        void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
         // F"ugt eine Tabelle in die Map ein
         void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
@@ -86,6 +86,7 @@ namespace connectivity
                                                 ::rtl::OUString& aValue,
                                                 OSQLParseNode * pParameter);
         void traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder);
+        void                traverseParameters(const OSQLParseNode* pSelectNode);
 
         const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, ::rtl::OUString& aTableRange );
         void                    getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, ::rtl::OUString& aTableRange );
