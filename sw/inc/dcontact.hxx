@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dcontact.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,7 +286,6 @@ public:
     virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
 
-
 // OD 16.05.2003 #108784# - new class for re-direct methods calls at a 'virtual'
 //      drawing object to its referenced object.
 class SwDrawVirtObj : public SdrVirtObj
@@ -304,7 +303,13 @@ class SwDrawVirtObj : public SdrVirtObj
 
         using SdrVirtObj::GetPlusHdl;
 
-    public:
+   private:
+        // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
+        // not used but something own (top left of new SnapRect minus top left
+        // of original SnapRect)
+        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
+   public:
         TYPEINFO();
 
         SwDrawVirtObj( SdrObject&       _rNewObj,
@@ -338,10 +343,7 @@ class SwDrawVirtObj : public SdrVirtObj
 
         // #108784#
         // All overloaded methods which need to use the offset
-        virtual const Rectangle& GetCurrentBoundRect() const;
-        virtual const Rectangle& GetLastBoundRect() const;
         virtual void RecalcBoundRect();
-        virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
         virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const;
