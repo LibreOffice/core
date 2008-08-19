@@ -9,7 +9,7 @@
  
   $RCSfile: spreadsheetml2ooo.xsl,v $
  
-  $Revision: 1.6 $
+  $Revision: 1.7 $
  
   This file is part of OpenOffice.org.
  
@@ -35,7 +35,7 @@
 	<xsl:import href="../../common/measure_conversion.xsl"/>
 	<xsl:output indent="no" version="1.0" encoding="UTF-8" method="xml"/>
 	<xsl:template match="/">
-		<office:document office:mimetype="application/x-vnd.oasis.openoffice.spreadsheet" office:version="1.0">
+		<office:document office:mimetype="application/vnd.oasis.opendocument.spreadsheet" office:version="1.0">
 			<xsl:apply-templates select="ss:Workbook/o:DocumentProperties"/>
 			<xsl:apply-templates select="ss:Workbook/x:ExcelWorkbook"/>
 			<xsl:call-template name="font-declaration"/>
@@ -6726,7 +6726,7 @@
 				</xsl:choose>
 			</xsl:variable>
 			<xsl:choose>
-				<xsl:when test="$calculatedColumnStart &gt;= $calculatedCellPosition &lt;= $calculatedColumnEnd">
+				<xsl:when test="$calculatedColumnStart &gt;= $calculatedCellPosition and $calculatedCellPosition &lt;= $calculatedColumnEnd">
 					<xsl:value-of select="$columnXMLNode/@ss:StyleID"/>
 				</xsl:when>
 				<xsl:when test="$calculatedColumnEnd &lt;= $calculatedCellPosition">
