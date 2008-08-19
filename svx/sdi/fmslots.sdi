@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmslots.sdi,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,6 +289,11 @@ interface Form
         StateMethod = GetState ;
     ]
     SID_FM_REFRESH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_REFRESH_FORM_CONTROL
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
