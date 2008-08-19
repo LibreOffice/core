@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartWindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,15 @@ void ChartWindow::clear()
 {
     m_pWindowController=0;
     this->ReleaseMouse();
+}
+
+void ChartWindow::PrePaint()
+{
+    // forward VCLs PrePaint window event to DrawingLayer
+    if( m_pWindowController )
+    {
+        m_pWindowController->PrePaint();
+    }
 }
 
 void ChartWindow::Paint( const Rectangle& rRect )
