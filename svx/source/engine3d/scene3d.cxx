@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scene3d.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +47,7 @@
 #include <goodies/base3d.hxx>
 #include <svx/svdtrans.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/xlntrit.hxx>
@@ -226,7 +224,9 @@ E3dScene::E3dScene()
     bDoubleBuffered(FALSE),
     bClipping(FALSE),
     bFitInSnapRect(TRUE),
-    bDrawOnlySelected(FALSE),
+    bDither(false),
+    bWasSelectedWhenCopy(false),
+    bDrawOnlySelected(false),
     mfPolygonOffset(0.005) // #i71618#
 {
     // Defaults setzen
@@ -243,7 +243,9 @@ E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
     bDoubleBuffered(FALSE),
     bClipping(FALSE),
     bFitInSnapRect(TRUE),
-    bDrawOnlySelected(FALSE),
+    bDither(false),
+    bWasSelectedWhenCopy(false),
+    bDrawOnlySelected(false),
     mfPolygonOffset(0.005) // #i71618#
 {
     // Defaults setzen
@@ -360,52 +362,6 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
     }
 
     return nNewOrdNum;
-}
-
-/*************************************************************************
-|*
-|* Feststellen, ob die Szene transparente Teile enthaelt
-|*
-\************************************************************************/
-
-BOOL E3dScene::AreThereTransparentParts() const
-{
-    BOOL bRetval(FALSE);
-
-    SdrObjListIter a3DIterator(*pSub, IM_DEEPWITHGROUPS);
-    while ( !bRetval && a3DIterator.IsMore() )
-    {
-        SdrObject* pObj = a3DIterator.Next();
-
-        // Nur darstellbare Objekte bewerten
-        if(pObj->ISA(E3dCompoundObject))
-        {
-            // get const ItemSet reference
-            const SfxItemSet& rSet = pObj->GetMergedItemSet();
-
-            // Flaechenattribut testen
-            UINT16 nFillTrans = ((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue();
-            if(nFillTrans != 0)
-                bRetval = TRUE;
-
-            if(!bRetval)
-            {
-                // Linienattribut testen
-                UINT16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
-                if(nLineTransparence != 0)
-                    bRetval = TRUE;
-
-                if(!bRetval)
-                {
-                    // test FloatTransparence
-                    const XFillFloatTransparenceItem& rFloatTrans = ((const XFillFloatTransparenceItem&)(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)));
-                    if(rFloatTrans.IsEnabled())
-                        bRetval = TRUE;
-                }
-            }
-        }
-    }
-    return bRetval;
 }
 
 /*************************************************************************
@@ -531,13 +487,6 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
     GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
     GetCameraSet().SetViewportRectangle((Rectangle&)rCam.GetDeviceWindow());
 
-    // E3dLabel-Objekte muessen neu an die Projektion angepasst werden
-    if ( aLabelList.Count() > 0 )
-    {
-        SetBoundVolInvalid();
-        SetRectsDirty();
-    }
-
     // #110988#
     ImpCleanup3DDepthMapper();
 }
@@ -554,27 +503,6 @@ void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
 
     if ( p3DObj == this )
         return;
-
-    if ( p3DObj->ISA(E3dLabelObj) )
-    {
-        aLabelList.Insert((E3dLabelObj*) p3DObj, LIST_APPEND);
-    }
-
-    // falls Unterobjekte vorhanden sind, auch diese pruefen
-    if ( p3DObj->IsGroupObject() )
-    {
-        SdrObjListIter a3DIterator(*p3DObj, IM_DEEPWITHGROUPS);
-
-        while ( a3DIterator.IsMore() )
-        {
-            SdrObject* pObj = a3DIterator.Next();
-
-            if ( pObj->ISA(E3dLabelObj) )
-            {
-                aLabelList.Insert((E3dLabelObj*) pObj, LIST_APPEND);
-            }
-        }
-    }
 
     // #110988#
     ImpCleanup3DDepthMapper();
@@ -696,88 +624,6 @@ basegfx::B3DRange E3dScene::FitInSnapRect()
             aTfVec = GetCameraSet().ObjectToWorldCoor(aTfVec);
             aTfVec *= aWorldToDevice;
             aNewVol.expand(aTfVec);
-        }
-
-        // Labels behandeln
-        const sal_uInt32 nLabelCnt(aLabelList.Count());
-
-        if ( nLabelCnt )
-        {
-            // Vorlaeufige Projektion bestimmen und Transformation in
-            // ViewKoordinaten bestimmen
-            basegfx::B3DHomMatrix aMatWorldToView(GetCameraSet().GetOrientation());
-
-            if(aCamera.GetProjection() == PR_PERSPECTIVE)
-            {
-                aMatWorldToView.frustum(aNewVol.getMinX(), aNewVol.getMaxX(), aNewVol.getMinY(), aNewVol.getMaxY(), fZMin, fZMax);
-            }
-            else
-            {
-                aMatWorldToView.ortho(aNewVol.getMinX(), aNewVol.getMaxX(), aNewVol.getMinY(), aNewVol.getMaxY(), fZMin, fZMax);
-            }
-
-            // Logische Abmessungen der Szene holen
-            Rectangle aSceneRect = GetSnapRect();
-
-            // Matrix DeviceToView aufbauen
-            basegfx::B3DPoint aTranslate, aScale;
-
-            aTranslate.setX((double)aSceneRect.Left() + (aSceneRect.GetWidth() / 2.0));
-            aTranslate.setY((double)aSceneRect.Top() + (aSceneRect.GetHeight() / 2.0));
-            aTranslate.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
-
-            // Skalierung
-            aScale.setX((aSceneRect.GetWidth() - 1) / 2.0);
-            aScale.setY((aSceneRect.GetHeight() - 1) / -2.0);
-            aScale.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
-
-            aMatWorldToView.scale(aScale.getX(), aScale.getY(), aScale.getZ());
-            aMatWorldToView.translate(aTranslate.getX(), aTranslate.getY(), aTranslate.getZ());
-
-            // Inverse Matrix ViewToDevice aufbauen
-            basegfx::B3DHomMatrix aMatViewToWorld(aMatWorldToView);
-            aMatViewToWorld.invert();
-
-            for (sal_uInt32 i = 0; i < nLabelCnt; i++)
-            {
-                E3dLabelObj* p3DObj = aLabelList.GetObject(i);
-                const SdrObject* pObj = p3DObj->Get2DLabelObj();
-
-                // View- Abmessungen des Labels holen
-                const Rectangle& rObjRect = pObj->GetLogicRect();
-
-                // Position des Objektes in Weltkoordinaten ermitteln
-                basegfx::B3DHomMatrix aObjTrans(p3DObj->GetFullTransform());
-                // Here, without the 'B3DPoint operator*( const B3DHomMatrix& rMat, const B3DPoint& rPoint )'
-                // from b3dpoint.hxx, the wrong multiplication is taken (the one with B3DVector). This
-                // leads to wrong results since tre translation is not added to vector-matrix multiplications.
-                basegfx::B3DPoint aObjPos(aObjTrans * p3DObj->GetPosition());
-
-                // View-Position des Objektes feststellen
-                // nach ViewKoordinaten
-                aObjPos *= aMatWorldToView;
-
-                // Relative Position des Labels in View-Koordinaten
-                basegfx::B3DPoint aRelPosOne(
-                    pObj->GetRelativePos().X() + aObjPos.getX(),
-                    pObj->GetRelativePos().Y() + aObjPos.getY(),
-                    aObjPos.getZ());
-
-                basegfx::B3DPoint aRelPosTwo(
-                    aRelPosOne.getX() + (double)rObjRect.GetWidth(),
-                    aRelPosOne.getY() + (double)rObjRect.GetHeight(),
-                    aRelPosOne.getZ());
-
-                // Jetzt Eckpunkte in DeviceKoordinaten bestimmen und
-                // den Abmessungen hinzufuegen
-                aRelPosOne *= aMatViewToWorld;
-                aRelPosOne *= aWorldToDevice;
-                aNewVol.expand(aRelPosOne);
-
-                aRelPosTwo *= aMatViewToWorld;
-                aRelPosTwo *= aWorldToDevice;
-                aNewVol.expand(aRelPosTwo);
-            }
         }
 
         // Z-Werte eintragen
@@ -963,7 +809,6 @@ void E3dScene::operator=(const SdrObject& rObj)
 void E3dScene::RebuildLists()
 {
     // zuerst loeschen
-    aLabelList.Clear();
     SdrLayerID nCurrLayerID = GetLayer();
 
     SdrObjListIter a3DIterator(*pSub, IM_FLAT);
@@ -999,7 +844,6 @@ void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const
     E3dObject::SaveGeoData (rGeo);
 
     ((E3DSceneGeoData &) rGeo).aCamera                = aCamera;
-    ((E3DSceneGeoData &) rGeo).aLabelList             = aLabelList;
 }
 
 /*************************************************************************
@@ -1012,7 +856,6 @@ void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
 {
     E3dObject::RestGeoData (rGeo);
 
-    aLabelList = ((E3DSceneGeoData &) rGeo).aLabelList;
     SetCamera (((E3DSceneGeoData &) rGeo).aCamera);
     FitSnapRectToBoundVol();
 }
@@ -1385,7 +1228,7 @@ FASTBOOL E3dScene::MovCreate(SdrDragStat& rStat)
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     return TRUE;
 }
