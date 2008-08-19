@@ -11,7 +11,7 @@
 #
 # $RCSfile: makemani.pl,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ sub wanted;
 
 
 sub wanted {
-    /^.*\.xcu\z/s
+    /^.*\.xc(s|u)\z/s
     && ( push @findlist, $name );
 #    && ( push @findlist, $name ) && print("$name\n");
 }
@@ -97,7 +97,11 @@ my @bodylines;
 my @taillines = ("</manifest:manifest>");
 
 foreach my $i (@findlist) {
-    push @bodylines, " <manifest:file-entry manifest:media-type=\"application/vnd.sun.star.configuration-data\"";
+    if ($i =~ m/^.*\.xcu\z/s) {
+        push @bodylines, " <manifest:file-entry manifest:media-type=\"application/vnd.sun.star.configuration-data\"";
+    } else {
+        push @bodylines, " <manifest:file-entry manifest:media-type=\"application/vnd.sun.star.configuration-schema\"";
+    }
     push @bodylines, "              manifest:full-path=\"$i\"/>";
 }
 
