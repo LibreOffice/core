@@ -11,6 +11,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\matrix
 ..\inc\basegfx\matrix\b2dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b2dhommatrix.hxx
+..\inc\basegfx\matrix\b2dhommatrixtools.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b2dhommatrixtools.hxx
 ..\inc\basegfx\matrix\b3dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b3dhommatrix.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\point
@@ -55,6 +56,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\vector
 mkdir: %_DEST%\inc%_EXT%\basegfx\curve
 ..\inc\basegfx\curve\b2dcubicbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dcubicbezier.hxx
 ..\inc\basegfx\curve\b2dquadraticbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dquadraticbezier.hxx
+..\inc\basegfx\curve\b2dbeziertools.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dbeziertools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\numeric
 ..\inc\basegfx\numeric\ftools.hxx %_DEST%\inc%_EXT%\basegfx\numeric\ftools.hxx
@@ -75,6 +77,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
 ..\inc\basegfx\polygon\b3dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygontools.hxx
 ..\inc\basegfx\polygon\b3dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygontools.hxx
+..\inc\basegfx\polygon\b3dpolygonclipper.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygonclipper.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
 ..\inc\basegfx\tuple\b2dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2dtuple.hxx
@@ -89,3 +92,16 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\tools
 ..\inc\basegfx\tools\unopolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\tools\unopolypolygon.hxx
 ..\inc\basegfx\tools\rectcliptools.hxx %_DEST%\inc%_EXT%\basegfx\tools\rectcliptools.hxx
 ..\inc\basegfx\tools\tools.hxx %_DEST%\inc%_EXT%\basegfx\tools\tools.hxx
+
+mkdir: %_DEST%\inc%_EXT%\basegfx\color
+..\inc\basegfx\color\bcolor.hxx %_DEST%\inc%_EXT%\basegfx\color\bcolor.hxx
+..\inc\basegfx\color\bcolormodifier.hxx %_DEST%\inc%_EXT%\basegfx\color\bcolormodifier.hxx
+
+mkdir: %_DEST%\inc%_EXT%\basegfx\pixel
+..\inc\basegfx\pixel\bpixel.hxx %_DEST%\inc%_EXT%\basegfx\pixel\bpixel.hxx
+..\inc\basegfx\pixel\bzpixel.hxx %_DEST%\inc%_EXT%\basegfx\pixel\bzpixel.hxx
+
+mkdir: %_DEST%\inc%_EXT%\basegfx\raster
+..\inc\basegfx\raster\bpixelraster.hxx %_DEST%\inc%_EXT%\basegfx\raster\bpixelraster.hxx
+..\inc\basegfx\raster\bzpixelraster.hxx %_DEST%\inc%_EXT%\basegfx\raster\bzpixelraster.hxx
+..\inc\basegfx\raster\rasterconvert3d.hxx %_DEST%\inc%_EXT%\basegfx\raster\rasterconvert3d.hxx
