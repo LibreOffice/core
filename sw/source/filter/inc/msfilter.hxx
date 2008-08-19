@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msfilter.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,8 +60,9 @@ class WW8TabDesc;
 
 namespace myImplHelpers
 {
-    template<class C> class StyleMapperImpl;
+template<class C> class StyleMapperImpl;
 }
+
 class SwTxtFmtColl;
 class SwCharFmt;
 typedef myImplHelpers::StyleMapperImpl<SwTxtFmtColl> ParaMapper;
