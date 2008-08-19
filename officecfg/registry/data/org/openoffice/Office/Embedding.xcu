@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Embedding.xcu,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,226 +30,307 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Embedding">
-    <node oor:name="Verbs">
-        <node oor:name="PRIMARY" oor:op="replace">
-            <prop oor:name="VerbUIName">
-                 <value>Primary</value>
-                <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>0</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>0</value></prop>
-        </node>
-        <node oor:name="SHOW" oor:op="replace">
-            <prop oor:name="VerbUIName">
-
-                 <value xml:lang="en-US">~Edit</value>
-                <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-1</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>2</value></prop>
-        </node>
-        <node oor:name="OPEN" oor:op="replace">
-            <prop oor:name="VerbUIName">
-
-                 <value xml:lang="en-US">~Open</value>
-                <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-2</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>0</value></prop>
-        </node>
-        <node oor:name="HIDE" oor:op="replace">
-            <prop oor:name="VerbUIName">
-                 <value>Hide</value>
-                <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-3</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>0</value></prop>
-        </node>
-        <node oor:name="UIACTIVATE" oor:op="replace">
-            <prop oor:name="VerbUIName">
-                 <value>UI activate</value>
-                <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-4</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>0</value></prop>
-        </node>
-        <node oor:name="IPACTIVATE" oor:op="replace">
-            <prop oor:name="VerbUIName">
-                 <value>Activate inplace</value>
-                <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-5</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>0</value></prop>
-        </node>
-            <node oor:name="PROPERTIES" oor:op="replace">
-            <prop oor:name="VerbUIName">
-
-                <value xml:lang="en-US">Propert~ies...</value>
-                <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-7</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>2</value></prop>
-        </node>
-        <node oor:name="SAVECOPYAS" oor:op="replace">
-            <prop oor:name="VerbUIName">
-
-                 <value xml:lang="en-US">Save Copy ~as...</value>
-                <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
-            </prop>
-            <prop oor:name="VerbID"><value>-8</value></prop>
-            <prop oor:name="VerbFlags"><value>0</value></prop>
-            <prop oor:name="VerbAttributes"><value>2</value></prop>
-        </node>
+  <node oor:name="Verbs">
+    <node oor:name="PRIMARY" oor:op="replace">
+      <prop oor:name="VerbUIName">
+        <value>Primary</value>
+        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>0</value>
+      </prop>
     </node>
-    <node oor:name="Objects">
-        <node oor:name="970B1E81-CF2D-11CF-89CA-008029E4B0B1" oor:op="replace">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.sfx2.AppletObject</value></prop>
-            <prop oor:name="ObjectMiscStatus">
-                <value>4294969728</value>
-            </prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW IPACTIVATE PROPERTIES</value></prop>
-        </node>
-        <node oor:name="4CAA7761-6B8B-11CF-89CA-008029E4B0B1" oor:op="replace">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.sfx2.PluginObject</value></prop>
-            <prop oor:name="ObjectMiscStatus">
-                <value>2432</value>
-            </prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW IPACTIVATE PROPERTIES</value></prop>
-        </node>
-            <node oor:name="1A8A6701-DE58-11CF-89CA-008029E4B0B1" oor:op="replace">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.comp.sfx2.IFrameObject</value></prop>
-            <prop oor:name="ObjectMiscStatus">
-                <value>2432</value>
-            </prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW IPACTIVATE PROPERTIES</value></prop>
-        </node>
-        <node oor:name="47BBB4CB-CE4C-4E80-A591-42D9AE74950F" oor:op="replace" install:module="calc">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
-            <prop oor:name="ObjectMiscStatus"/>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value></prop>
-        </node>
-        <node oor:name="12DCAE26-281F-416F-A234-C3086127382E" oor:op="replace" install:module="chart">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.chart2.ChartDocument</value></prop>
-            <prop oor:name="ObjectMiscStatus">
-                <value>1</value>
-            </prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value></prop>
-        </node>
-        <node oor:name="4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3" oor:op="replace" install:module="draw">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.drawing.DrawingDocument</value></prop>
-            <prop oor:name="ObjectMiscStatus"/>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value></prop>
-        </node>
-        <node oor:name="9176E48A-637A-4D1F-803B-99D9BFAC1047" oor:op="replace" install:module="impress">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.presentation.PresentationDocument</value></prop>
-            <prop oor:name="ObjectMiscStatus"/>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value></prop>
-        </node>
-        <node oor:name="078B7ABA-54FC-457F-8551-6147E776A997" oor:op="replace" install:module="math">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.formula.FormulaProperties</value></prop>
-            <prop oor:name="ObjectMiscStatus"><value>8589934592</value></prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value></prop>
-        </node>
-        <node oor:name="8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6" oor:op="replace" install:module="writer">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.text.TextDocument</value></prop>
-            <prop oor:name="ObjectMiscStatus"/>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value></prop>
-        </node>
-        <node oor:name="D7896D52-B7AF-4820-9DFE-D404D015960F" oor:op="replace" install:module="report">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.report.ReportDefinition</value></prop>
-            <prop oor:name="ObjectMiscStatus">
-                <value>1</value>
-            </prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value></prop>
-        </node>
-        <node oor:name="80243D39-6741-46C5-926E-069164FF87BB" oor:op="replace" install:module="chart">
-            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
-            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.chart2.ChartDocument</value></prop>
-            <prop oor:name="ObjectDocumentFilterName"><value>StarOffice XML (Base) Report Chart</value></prop>
-            <prop oor:name="ObjectMiscStatus"><value>1</value></prop>
-            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value></prop>
-        </node>
+    <node oor:name="SHOW" oor:op="replace">
+      <prop oor:name="VerbUIName">
+
+        <value xml:lang="en-US">~Edit</value>
+        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-1</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>2</value>
+      </prop>
     </node>
-    <node oor:name="MimeTypeClassIDRelations">
-        <prop oor:name="application/vnd.sun.xml.report.chart" oor:op="replace" oor:type="xs:string">
-            <value>80243D39-6741-46C5-926E-069164FF87BB</value>
-        </prop>
-        <prop oor:name="application/vnd.sun.xml.report" oor:op="replace" oor:type="xs:string">
-            <value>D7896D52-B7AF-4820-9DFE-D404D015960F</value>
-        </prop>
+    <node oor:name="OPEN" oor:op="replace">
+      <prop oor:name="VerbUIName">
+
+        <value xml:lang="en-US">~Open</value>
+        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-2</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>0</value>
+      </prop>
     </node>
-    <node oor:name="ObjectNames">
-        <node oor:name="Calc" oor:op="replace" install:module="calc">
-            <prop oor:name="ObjectUIName">
-
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Spreadsheet</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>47BBB4CB-CE4C-4E80-A591-42D9AE74950F</value>
-            </prop>
-        </node>
-        <node oor:name="Chart" oor:op="replace" install:module="chart">
-            <prop oor:name="ObjectUIName">
-
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Chart</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>12DCAE26-281F-416F-A234-C3086127382E</value>
-            </prop>
-        </node>
-        <node oor:name="Draw" oor:op="replace" install:module="draw">
-            <prop oor:name="ObjectUIName">
-
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Drawing</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3</value>
-            </prop>
-        </node>
-        <node oor:name="Impress" oor:op="replace" install:module="impress">
-            <prop oor:name="ObjectUIName">
-
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Presentation</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>9176E48A-637A-4D1F-803B-99D9BFAC1047</value>
-            </prop>
-        </node>
-        <node oor:name="Math" oor:op="replace" install:module="math">
-            <prop oor:name="ObjectUIName">
-
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Formula</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>078B7ABA-54FC-457F-8551-6147E776A997</value>
-            </prop>
-        </node>
-        <node oor:name="Writer" oor:op="replace" install:module="writer">
-            <prop oor:name="ObjectUIName">
-
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Text</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6</value>
-            </prop>
-        </node>
+    <node oor:name="HIDE" oor:op="replace">
+      <prop oor:name="VerbUIName">
+        <value>Hide</value>
+        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-3</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>0</value>
+      </prop>
     </node>
+    <node oor:name="UIACTIVATE" oor:op="replace">
+      <prop oor:name="VerbUIName">
+        <value>UI activate</value>
+        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-4</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>0</value>
+      </prop>
+    </node>
+    <node oor:name="IPACTIVATE" oor:op="replace">
+      <prop oor:name="VerbUIName">
+        <value>Activate inplace</value>
+        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-5</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>0</value>
+      </prop>
+    </node>
+    <node oor:name="PROPERTIES" oor:op="replace">
+      <prop oor:name="VerbUIName">
+
+        <value xml:lang="en-US">Propert~ies...</value>
+        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-7</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>2</value>
+      </prop>
+    </node>
+    <node oor:name="SAVECOPYAS" oor:op="replace">
+      <prop oor:name="VerbUIName">
+
+        <value xml:lang="en-US">Save Copy ~as...</value>
+        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
+      </prop>
+      <prop oor:name="VerbID">
+        <value>-8</value>
+      </prop>
+      <prop oor:name="VerbFlags">
+        <value>0</value>
+      </prop>
+      <prop oor:name="VerbAttributes">
+        <value>2</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Objects">
+    <node oor:name="970B1E81-CF2D-11CF-89CA-008029E4B0B1" oor:op="replace">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.comp.sfx2.AppletObject</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>4294969728</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW IPACTIVATE PROPERTIES</value>
+      </prop>
+    </node>
+    <node oor:name="4CAA7761-6B8B-11CF-89CA-008029E4B0B1" oor:op="replace">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.comp.sfx2.PluginObject</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>2432</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW IPACTIVATE PROPERTIES</value>
+      </prop>
+    </node>
+    <node oor:name="1A8A6701-DE58-11CF-89CA-008029E4B0B1" oor:op="replace">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.comp.sfx2.IFrameObject</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>2432</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW IPACTIVATE PROPERTIES</value>
+      </prop>
+    </node>
+    <node oor:name="47BBB4CB-CE4C-4E80-A591-42D9AE74950F" oor:op="replace" install:module="calc">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.sheet.SpreadsheetDocument</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus"/>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
+      </prop>
+    </node>
+    <node oor:name="12DCAE26-281F-416F-A234-C3086127382E" oor:op="replace" install:module="chart">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.chart2.ChartDocument</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>1</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value>
+      </prop>
+    </node>
+    <node oor:name="4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3" oor:op="replace" install:module="draw">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.drawing.DrawingDocument</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus"/>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
+      </prop>
+    </node>
+    <node oor:name="9176E48A-637A-4D1F-803B-99D9BFAC1047" oor:op="replace" install:module="impress">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.presentation.PresentationDocument</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus"/>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
+      </prop>
+    </node>
+    <node oor:name="078B7ABA-54FC-457F-8551-6147E776A997" oor:op="replace" install:module="math">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.formula.FormulaProperties</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>8589934592</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
+      </prop>
+    </node>
+    <node oor:name="8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6" oor:op="replace" install:module="writer">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.text.TextDocument</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus"/>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="ObjectNames">
+    <node oor:name="Calc" oor:op="replace" install:module="calc">
+      <prop oor:name="ObjectUIName">
+
+        <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Spreadsheet</value>
+      </prop>
+      <prop oor:name="ClassID">
+        <value>47BBB4CB-CE4C-4E80-A591-42D9AE74950F</value>
+      </prop>
+    </node>
+    <node oor:name="Chart" oor:op="replace" install:module="chart">
+      <prop oor:name="ObjectUIName">
+
+        <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Chart</value>
+      </prop>
+      <prop oor:name="ClassID">
+        <value>12DCAE26-281F-416F-A234-C3086127382E</value>
+      </prop>
+    </node>
+    <node oor:name="Draw" oor:op="replace" install:module="draw">
+      <prop oor:name="ObjectUIName">
+
+        <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Drawing</value>
+      </prop>
+      <prop oor:name="ClassID">
+        <value>4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3</value>
+      </prop>
+    </node>
+    <node oor:name="Impress" oor:op="replace" install:module="impress">
+      <prop oor:name="ObjectUIName">
+
+        <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Presentation</value>
+      </prop>
+      <prop oor:name="ClassID">
+        <value>9176E48A-637A-4D1F-803B-99D9BFAC1047</value>
+      </prop>
+    </node>
+    <node oor:name="Math" oor:op="replace" install:module="math">
+      <prop oor:name="ObjectUIName">
+
+        <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Formula</value>
+      </prop>
+      <prop oor:name="ClassID">
+        <value>078B7ABA-54FC-457F-8551-6147E776A997</value>
+      </prop>
+    </node>
+    <node oor:name="Writer" oor:op="replace" install:module="writer">
+      <prop oor:name="ObjectUIName">
+
+        <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Text</value>
+      </prop>
+      <prop oor:name="ClassID">
+        <value>8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6</value>
+      </prop>
+    </node>
+  </node>
 </oor:component-data>
 
