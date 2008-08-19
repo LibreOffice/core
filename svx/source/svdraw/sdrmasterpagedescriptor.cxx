@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdrmasterpagedescriptor.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,6 @@ namespace sdr
 
         if(mpViewContact)
         {
-            mpViewContact->PrepareDelete();
             delete mpViewContact;
             mpViewContact = 0L;
         }
@@ -81,6 +80,15 @@ namespace sdr
         }
 
         return *mpViewContact;
+    }
+
+    void MasterPageDescriptor::FlushViewContact() const
+    {
+        if(mpViewContact)
+        {
+            delete mpViewContact;
+            ((MasterPageDescriptor*)this)->mpViewContact = 0;
+        }
     }
 
     // this method is called form the destructor of the referenced page.
