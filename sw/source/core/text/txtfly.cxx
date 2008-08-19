@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfly.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,10 @@
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
 #include "doc.hxx"
+
+#ifdef VERT_DISTANCE
+#include <math.h>
+#endif
 
 using namespace ::com::sun::star;
 
