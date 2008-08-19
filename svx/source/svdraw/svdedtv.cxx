@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <vcl/metaact.hxx>
 #include <svx/svdedtv.hxx>
-#include "svdxout.hxx"
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>  // fuer Possibilities
 #include <svx/svdopath.hxx>
