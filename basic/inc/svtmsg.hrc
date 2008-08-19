@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svtmsg.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,3 +116,4 @@
 #define S_CANNOT_FIND_FLOATING_WIN                  ( SVT_START +  70 )
 #define S_NO_LIST_BOX_STRING                        ( SVT_START +  71 )
 #define S_SLOT_IN_EXECUTE                           ( SVT_START +  72 )
+#define S_MENU_NOT_CLOSING                          ( SVT_START +  73 )
