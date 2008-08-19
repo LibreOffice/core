@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dhommatrix.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
+
 #include <rtl/instance.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <hommatrixtemplate.hxx>
@@ -463,7 +464,7 @@ namespace basegfx
         // get ShearXY
         rShear.setX(aCol0.scalar(aCol1));
 
-        if(::basegfx::fTools::equalZero(rShear.getX()))
+        if(fTools::equalZero(rShear.getX()))
         {
             rShear.setX(0.0);
         }
@@ -481,7 +482,7 @@ namespace basegfx
 
         const double fShearX(rShear.getX());
 
-        if(!::basegfx::fTools::equalZero(fShearX))
+        if(!fTools::equalZero(fShearX))
         {
             rShear.setX(rShear.getX() / rScale.getY());
         }
@@ -489,7 +490,7 @@ namespace basegfx
         // get ShearXZ
         rShear.setY(aCol0.scalar(aCol2));
 
-        if(::basegfx::fTools::equalZero(rShear.getY()))
+        if(fTools::equalZero(rShear.getY()))
         {
             rShear.setY(0.0);
         }
@@ -504,7 +505,7 @@ namespace basegfx
         // get ShearYZ
         rShear.setZ(aCol1.scalar(aCol2));
 
-        if(::basegfx::fTools::equalZero(rShear.getZ()))
+        if(fTools::equalZero(rShear.getZ()))
         {
             rShear.setZ(0.0);
         }
@@ -522,14 +523,14 @@ namespace basegfx
 
         const double fShearY(rShear.getY());
 
-        if(!::basegfx::fTools::equalZero(fShearY))
+        if(!fTools::equalZero(fShearY))
         {
             rShear.setY(rShear.getY() / rScale.getZ());
         }
 
         const double fShearZ(rShear.getZ());
 
-        if(!::basegfx::fTools::equalZero(fShearZ))
+        if(!fTools::equalZero(fShearZ))
         {
             rShear.setZ(rShear.getZ() / rScale.getZ());
         }
