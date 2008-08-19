@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectcontactofobjlistpainter.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdmodel.hxx>
+#include <drawinglayer/processor2d/vclprocessor2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -44,106 +48,13 @@ namespace sdr
 {
     namespace contact
     {
-        ObjectContactPainter::ObjectContactPainter(sal_Bool bBufferingAllowed)
-        :   mbIsInitialized(sal_False),
-            mbBufferingAllowed(bBufferingAllowed)
+        ObjectContactPainter::ObjectContactPainter()
         {
         }
 
         // The destructor.
         ObjectContactPainter::~ObjectContactPainter()
         {
-        }
-
-        // Update Draw Hierarchy data
-        void ObjectContactPainter::EnsureValidDrawHierarchy(DisplayInfo& /*rDisplayInfo*/)
-        {
-            const sal_uInt32 nCount(maDrawHierarchy.Count());
-
-            // #i35614#
-            if(mbIsInitialized && !nCount)
-            {
-                // DrawHierarchy is not only invalid, but also completely
-                // removed. Thus, we need to change the mbIsInitialized flag
-                // to express that state.
-                mbIsInitialized = sal_False;
-            }
-
-            if(mbIsInitialized)
-            {
-                // no new StartPoint, is the invalid flag set which means
-                // somewhere the sub-hierarchy is invalid?
-                if(!IsDrawHierarchyValid())
-                {
-                    // Yes, check the sub-hierarchies
-
-                    for(sal_uInt32 a(0L); a < nCount; a++)
-                    {
-                        ViewObjectContact& rVOContact = *(maDrawHierarchy.GetObject(a));
-
-                        rVOContact.CheckDrawHierarchy(*this);
-                    }
-                }
-            }
-            else
-            {
-                // build new hierarchy
-                const sal_uInt32 nCount2(GetPaintObjectCount());
-
-                for(sal_uInt32 a(0L); a < nCount2; a++)
-                {
-                    ViewContact& rViewContact = GetPaintObjectViewContact(a);
-                    ViewObjectContact& rViewObjectContact = rViewContact.GetViewObjectContact(*this);
-
-                    // set parent at ViewObjectContact
-                    rViewObjectContact.SetParent(0L);
-
-                    // build sub-hierarchy
-                    if(rViewContact.GetObjectCount())
-                    {
-                        rViewObjectContact.BuildDrawHierarchy(*this, rViewContact);
-                    }
-
-                    // Add to list
-                    maDrawHierarchy.Append(&rViewObjectContact);
-                }
-
-                // remember to be initialized
-                mbIsInitialized = sal_True;
-            }
-
-            // set DrawHierarchy valid
-            mbDrawHierarchyValid = sal_True;
-        }
-
-        // Process the whole displaying
-        void ObjectContactPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
-        {
-            if(!IsDrawHierarchyValid())
-            {
-                // The default implementation ensures a valid draw hierarchy.
-                EnsureValidDrawHierarchy(rDisplayInfo);
-            }
-
-            if( mbIsInitialized
-                && IsDrawHierarchyValid()
-                && rDisplayInfo.GetPaintInfoRec()
-                && rDisplayInfo.GetOutputDevice()
-                && GetPaintObjectCount())
-            {
-                // This class is normally used for producing a single output. Thus,
-                // buffering makes no sense and is switched off here.
-                rDisplayInfo.SetBufferingAllowed(mbBufferingAllowed);
-
-                // Paint Hierarchy
-                for(sal_uInt32 a(0L); a < maDrawHierarchy.Count(); a++)
-                {
-                    ViewObjectContact& rViewObjectContact = *(maDrawHierarchy.GetObject(a));
-
-                    // paint Hierarchy
-                    rViewObjectContact.PaintObjectHierarchy(rDisplayInfo);
-                }
-            }
         }
     } // end of namespace contact
 } // end of namespace sdr
@@ -162,20 +73,90 @@ namespace sdr
         ViewContact& ObjectContactOfObjListPainter::GetPaintObjectViewContact(sal_uInt32 nIndex) const
         {
             const SdrObject* pObj = maStartObjects[nIndex];
-            DBG_ASSERT(pObj, "ObjectContactOfObjListPainter::EnsureValidDrawHierarchy: Corrupt SdrObjectVector (!)");
+            DBG_ASSERT(pObj, "ObjectContactOfObjListPainter: Corrupt SdrObjectVector (!)");
             return pObj->GetViewContact();
         }
 
         ObjectContactOfObjListPainter::ObjectContactOfObjListPainter(
+            OutputDevice& rTargetDevice,
             const SdrObjectVector& rObjects,
-            sal_Bool bBufferingAllowed)
-        :   ObjectContactPainter(bBufferingAllowed),
-            maStartObjects(rObjects)
+            const SdrPage* pProcessedPage)
+        :   ObjectContactPainter(),
+            mrTargetOutputDevice(rTargetDevice),
+            maStartObjects(rObjects),
+            mpProcessedPage(pProcessedPage)
         {
         }
 
         ObjectContactOfObjListPainter::~ObjectContactOfObjListPainter()
         {
+        }
+
+        // Process the whole displaying
+        void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
+        {
+            const sal_uInt32 nCount(GetPaintObjectCount());
+
+            if(nCount)
+            {
+                OutputDevice* pTargetDevice = TryToGetOutputDevice();
+
+                if(pTargetDevice)
+                {
+                    // update current ViewInformation2D at the ObjectContact
+                    const GDIMetaFile* pMetaFile = pTargetDevice->GetConnectMetaFile();
+                    const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+                    basegfx::B2DRange aViewRange;
+
+                    // create ViewRange
+                    if(!bOutputToRecordingMetaFile)
+                    {
+                        // use visible pixels, but transform to world coordinates
+                        const Size aOutputSizePixel(pTargetDevice->GetOutputSizePixel());
+                        aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+                        aViewRange.transform(pTargetDevice->GetInverseViewTransformation());
+                    }
+
+                    // upate local ViewInformation2D
+                    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
+                        basegfx::B2DHomMatrix(),
+                        pTargetDevice->GetViewTransformation(),
+                        aViewRange,
+                        GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
+                        0.0,
+                        0);
+                    updateViewInformation2D(aNewViewInformation2D);
+
+                    // collect primitive data in a sequence; this will already use the updated ViewInformation2D
+                    drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
+
+                    for(sal_uInt32 a(0L); a < nCount; a++)
+                    {
+                        const ViewObjectContact& rViewObjectContact = GetPaintObjectViewContact(a).GetViewObjectContact(*this);
+
+                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xPrimitiveSequence,
+                            rViewObjectContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+                    }
+
+                    // if there is something to show, use a vclProcessor to render it
+                    if(xPrimitiveSequence.hasElements())
+                    {
+                        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = createBaseProcessor2DFromOutputDevice(
+                            *pTargetDevice, getViewInformation2D(), false);
+
+                        if(pProcessor2D)
+                        {
+                            pProcessor2D->process(xPrimitiveSequence);
+                            delete pProcessor2D;
+                        }
+                    }
+                }
+            }
+        }
+
+        OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const
+        {
+            return &mrTargetOutputDevice;
         }
     } // end of namespace contact
 } // end of namespace sdr
@@ -188,21 +169,21 @@ namespace sdr
     {
         sal_uInt32 ObjectContactOfPagePainter::GetPaintObjectCount() const
         {
-            return 1L;
+            return (GetStartPage() ? 1L : 0L);
         }
 
         ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*nIndex*/) const
         {
-            DBG_ASSERT(mpStartPage,
-                "ObjectContactOfPagePainter::GetPaintObjectViewContact: no mpStartPage set (!)");
-            return mpStartPage->GetViewContact();
+            DBG_ASSERT(GetStartPage(), "ObjectContactOfPagePainter::GetPaintObjectViewContact: no StartPage set (!)");
+            return GetStartPage()->GetViewContact();
         }
 
         ObjectContactOfPagePainter::ObjectContactOfPagePainter(
             const SdrPage* pPage,
-            sal_Bool bBufferingAllowed)
-        :   ObjectContactPainter(bBufferingAllowed),
-            mpStartPage(pPage)
+            ObjectContact& rOriginalObjectContact)
+        :   ObjectContactPainter(),
+            mrOriginalObjectContact(rOriginalObjectContact),
+            mxStartPage(const_cast< SdrPage* >(pPage)) // no SdrPageWeakRef available to hold a const SdrPage*
         {
         }
 
@@ -212,12 +193,15 @@ namespace sdr
 
         void ObjectContactOfPagePainter::SetStartPage(const SdrPage* pPage)
         {
-            if(pPage && pPage != mpStartPage)
+            if(pPage != GetStartPage())
             {
-                ClearDrawHierarchy();
-                mpStartPage = pPage;
-                mbIsInitialized = sal_False;
+                mxStartPage.reset(const_cast< SdrPage* >(pPage)); // no SdrPageWeakRef available to hold a const SdrPage*
             }
+        }
+
+        OutputDevice* ObjectContactOfPagePainter::TryToGetOutputDevice() const
+        {
+            return mrOriginalObjectContact.TryToGetOutputDevice();
         }
     } // end of namespace contact
 } // end of namespace sdr
