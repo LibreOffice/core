@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,10 +73,13 @@ namespace com { namespace sun { namespace star {
   namespace linguistic2 {
     class XSpellChecker1;
     class XHyphenator;
-}
+  }
   namespace datatransfer {
     class XTransferable;
-}
+  }
+  namespace lang {
+    struct Locale;
+  }
 }}}
 namespace svx{
 struct SpellPortion;
@@ -92,6 +95,11 @@ namespace basegfx { class B2DPolyPolygon; }
 #include "svx/svxdllapi.h"
 
 #include <tools/rtti.hxx>   // wegen typedef TypeId
+
+#include <svx/eedata.hxx>
+class SvxFieldData;
+
+//////////////////////////////////////////////////////////////////////////////
 
 /** values for GetAttribs
 */
@@ -405,16 +413,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                     CreateTransferable( const ESelection& rSelection ) const;
 
-    // #110496#
-    /** Enable/disable verbose comments of recorded metafiles
-
-        This method decorates recorded metafiles with XTEXT_EOx
-        comments, to transport the logical text structure like
-        paragraph, line, sentence, word and cell breaks.
-     */
-    void            EnableVerboseTextComments( BOOL bEnable = TRUE );
-    BOOL            IsVerboseTextComments() const;
-
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, musst be compatible in SRC638, change later...
     void            SetBeginMovingParagraphsHdl( const Link& rLink );
     void            SetEndMovingParagraphsHdl( const Link& rLink );
@@ -430,7 +428,16 @@ public:
     virtual void    ParagraphHeightChanged( USHORT nPara );
 
     // #101498#
-    virtual void    DrawingText( const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft);
+    virtual void DrawingText(
+        const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray,
+        const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+        const EEngineData::WrongSpellVector* pWrongSpellVector,
+        const SvxFieldData* pFieldData,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        bool bEndOfBullet,
+        const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rTextLineColor);
 
     virtual String  GetUndoComment( USHORT nUndoId ) const;
     virtual BOOL    FormattingParagraph( USHORT nPara );
