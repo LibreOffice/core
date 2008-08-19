@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,8 +48,6 @@ PRJINC=..$/..
 
 SLOFILES =      								\
     $(SLO)$/SlsFontProvider.obj					\
-    $(SLO)$/SlsHighlightObject.obj				\
-    $(SLO)$/SlsPageNotificationObjectContact.obj\
     $(SLO)$/SlsPageObject.obj					\
     $(SLO)$/SlsPageObjectViewContact.obj		\
     $(SLO)$/SlsPageObjectViewObjectContact.obj	\
