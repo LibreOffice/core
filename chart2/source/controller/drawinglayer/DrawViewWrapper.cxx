@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawViewWrapper.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,9 +259,7 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
     m_pMarkHandleProvider = pMarkHandleProvider;
 }
 
-void DrawViewWrapper::CompleteRedraw(
-    OutputDevice* pOut, const Region& rReg, USHORT /* nPaintMode */,
-    ::sdr::contact::ViewObjectContactRedirector* /* pRedirector */ )
+void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */)
 {
     svtools::ColorConfig aColorConfig;
     Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
