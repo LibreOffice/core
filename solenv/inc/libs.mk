@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.139 $
+# $Revision: 1.140 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.139 $$"
+LIBSMKREV!:="$$Revision: 1.140 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -105,8 +105,8 @@ STORELIB=-lstore
 SALLIB=-luno_sal
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : connectivity$/version.mk
-ODBCLIB=-lodbc$(ODBC_MAJOR)
-ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
+ODBCLIB=-lodbc$(DLLPOSTFIX)
+ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt$(UDK_MAJOR)
