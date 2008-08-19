@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2enums.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,17 @@ namespace basegfx
 
         /// mathematically neutral, thus parallel
         CONTINUITY_C2
+    };
+
+    /** Descriptor for possible line joins between two line segments
+    */
+    enum B2DLineJoin
+    {
+        B2DLINEJOIN_NONE,       // no rounding
+        B2DLINEJOIN_MIDDLE,     // calc middle value between joints
+        B2DLINEJOIN_BEVEL,      // join edges with line
+        B2DLINEJOIN_MITER,      // extend till cut
+        B2DLINEJOIN_ROUND       // create arc
     };
 
 } // end of namespace basegfx
