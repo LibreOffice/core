@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.78 $
+# $Revision: 1.79 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -185,19 +185,8 @@ SCPDEFS+=-DSYSTEM_BSH -DBSH_JAR=\""file://$(BSH_JAR)"\"
 SCPDEFS+=-DSYSTEM_HSQLDB -DHSQLDB_JAR=\""file://$(HSQLDB_JAR)"\"
 .ENDIF
 
-.IF "$(SYSTEM_XML_APIS)" == "YES"
-SCPDEFS+=-DSYSTEM_XML_APIS -DXML_APIS_JAR=\""file://$(XML_APIS_JAR)"\"
-.ENDIF
-
-.IF "$(SYSTEM_XERCES)" == "YES"
-SCPDEFS+=-DSYSTEM_XERCES -DXERCES_JAR=\""file://$(XERCES_JAR)"\"
-.ENDIF
-
-.IF "$(SYSTEM_XALAN)" == "YES"
-SCPDEFS+=-DSYSTEM_XALAN -DXALAN_JAR=\""file://$(XALAN_JAR)"\"
-.IF "$(SERIALIZER_JAR)" != ""
-SCPDEFS+=-DSYSTEM_SERIALIZER -DSERIALIZER_JAR=\""file://$(SERIALIZER_JAR)"\"
-.ENDIF
+.IF "$(SYSTEM_SAXON)" == "YES"
+SCPDEFS+=-DSYSTEM_SAXON -DSAXON_JAR=\""file://$(SAXON_JAR)"\"
 .ENDIF
 
 .IF "$(JDK)" == "gcj"
