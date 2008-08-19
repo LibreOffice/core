@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HStorageMap.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,11 +107,6 @@ namespace connectivity
             if ( !m_xOutputStream.is() )
                 m_xOutputStream = m_xStream->getOutputStream();
             return m_xOutputStream;
-        }
-        // -----------------------------------------------------------------------------
-        Reference< XStream> StreamHelper::getStream()
-        {
-            return m_xStream;
         }
         // -----------------------------------------------------------------------------
         Reference< XSeekable> StreamHelper::getSeek()
