@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,21 +32,37 @@
 PRJ=..$/..$/..$/..$/..
 
 PRJNAME=reportdesign
-TARGET=data_ooOffice
+TARGET=data_ooOOffice
 PACKAGE=org.openoffice.Office
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
 
+LOCALIZEDFILES= \
+    Embedding.xcu           \
+    ExtendedColorScheme.xcu \
+    DataAccess.xcu
+    
 XCUFILES= \
-    DataAccess.xcu \
+    $(LOCALIZEDFILES) \
     ReportDesign.xcu \
     Paths.xcu
 
-LOCALIZEDFILES= \
-    DataAccess.xcu
-
-MODULEFILES=
+MODULEFILES= Embedding-report.xcu
 
 .INCLUDE :  target.mk
+
+ALLTAR: "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Embedding.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/ExtendedColorScheme.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Paths.xcs"
+
+"$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Embedding.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Embedding.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+"$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/ExtendedColorScheme.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/ExtendedColorScheme.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+"$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Paths.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Paths.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
