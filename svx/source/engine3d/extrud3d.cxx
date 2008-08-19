@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extrud3d.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,17 +38,24 @@
 #include <svx/extrud3d.hxx>
 #include <svx/scene3d.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/xpoly.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/sdr/properties/e3dextrudeproperties.hxx>
+#include <svx/sdr/contact/viewcontactofe3dextrude.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfE3dExtrude(*this);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
