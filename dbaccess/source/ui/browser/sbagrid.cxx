@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbagrid.cxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.86 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -939,8 +939,6 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_pMasterListener(NULL)
     ,m_nAsyncDropEvent(0)
-    ,m_nLastColId((USHORT)-1)
-    ,m_nLastRowId(-1)
     ,m_nCurrentActionColId((USHORT)-1)
     ,m_bActivatingForDrop(sal_False)
 {
@@ -1168,13 +1166,6 @@ void SbaGridControl::Select()
 void SbaGridControl::CursorMoved()
 {
     FmGridControl::CursorMoved();
-    if (m_nLastRowId != GetCurRow())
-        RowChanged();
-    if (m_nLastColId != GetCurColumnId())
-        ColChanged();
-
-    m_nLastColId = GetCurColumnId();
-    m_nLastRowId = (sal_uInt16)GetCurRow();
 }
 
 //---------------------------------------------------------------------------------------
@@ -1194,18 +1185,19 @@ void SbaGridControl::DeactivateCell(sal_Bool bUpdate /*= sal_True*/)
 }
 
 //---------------------------------------------------------------------------------------
-void SbaGridControl::RowChanged()
+void SbaGridControl::onRowChange()
 {
-    if (m_pMasterListener)
+    if ( m_pMasterListener )
         m_pMasterListener->RowChanged();
 }
 
 //---------------------------------------------------------------------------------------
-void SbaGridControl::ColChanged()
+void SbaGridControl::onColumnChange()
 {
-    if (m_pMasterListener)
+    if ( m_pMasterListener )
         m_pMasterListener->ColumnChanged();
 }
+
 //---------------------------------------------------------------------------------------
 void SbaGridControl::BeforeDrop()
 {
