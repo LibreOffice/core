@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotxln.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +34,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
 #include <unotools/datetime.hxx>
 
 #include <svx/svdotext.hxx>
