@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygon.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 // predeclarations
 class ImplB2DPolyPolygon;
@@ -83,6 +84,24 @@ namespace basegfx
         // insert/append single polygon
         void insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
         void append(const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
+
+        /** Default adaptive subdivision access
+
+            For details refer to B2DPolygon::getDefaultAdaptiveSubdivision()
+
+            @return
+            The default subdivision of this polygon
+        */
+        B2DPolyPolygon getDefaultAdaptiveSubdivision() const;
+
+        /** Get the B2DRange (Rectangle dimensions) of this B2DPolyPolygon
+
+            For details refer to B2DPolygon::getB2DRange()
+
+            @return
+            The outer range of the bezier curve/polygon
+        */
+        B2DRange getB2DRange() const;
 
         // insert/append multiple polygons
         void insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon);
