@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GroupsSorting.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,47 +29,33 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "GroupsSorting.hxx"
-#ifndef RPTUI_GROUPSSORTING_HRC
 #include "GroupsSorting.hrc"
-#endif
 #include <connectivity/dbtools.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <tools/debug.hxx>
-#ifndef _RPTUI_DLGRESID_HRC
-#include "RptResId.hrc"
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
-#include "rptui_slotid.hrc"
-#endif
-#ifndef _RPTUI_MODULE_HELPER_DBU_HXX_
-#include "ModuleHelper.hxx"
-#endif
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
-#include "helpids.hrc"
-#endif
-#include <vcl/msgbox.hxx>
-#ifndef _GLOBLMN_HRC
-#include <svx/globlmn.hrc>
-#endif
-#ifndef _SBASLTID_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <com/sun/star/report/GroupOn.hpp>
-#include "GroupExchange.hxx"
-#ifndef RPTUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#include "UndoActions.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
-#include "uistrings.hrc"
-#endif
-#include "ReportController.hxx"
 #include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/report/GroupOn.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+
+#include <tools/debug.hxx>
+#include "RptResId.hrc"
+#include "rptui_slotid.hrc"
+#include "ModuleHelper.hxx"
+#include "helpids.hrc"
+
+#include <svx/globlmn.hrc>
+#include <svx/svxids.hrc>
+
+#include "GroupExchange.hxx"
+#include "UITools.hxx"
+#include "UndoActions.hxx"
+#include "uistrings.hrc"
+#include "ReportController.hxx"
+
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/property.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/msgbox.hxx>
 #include <algorithm>
 #include <boost/bind.hpp>
 
