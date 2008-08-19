@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: displayinfo.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,31 +35,17 @@
 #include <svx/svdsob.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/region.hxx>
-
 #include <vector>
 #include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-class SdrPageView;
-class XOutputDevice;
-class SdrPaintInfoRec;
-class OutputDevice;
 class SdrPage;
 
-namespace sdr
-{
-    namespace contact
-    {
-        class DisplayInfo;
-
-        // typedef for a vector of DisplayInfos
-        typedef ::std::vector< DisplayInfo* > DisplayInfoVector;
-
-        class ViewObjectContact;
-    } // end of namespace contact
-} // end of namespace sdr
+namespace sdr { namespace contact {
+    class ViewObjectContact;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -70,162 +56,84 @@ namespace sdr
         class SVX_DLLPUBLIC DisplayInfo
         {
         protected:
-            // the owner of this DisplayInfo. Set from constructor and not
-            // to be changed in any way. May be empty, too.
-            SdrPageView*                                    mpPageView;
-
             // For being able to detect the processed page, allow setting
-            // it at DisplayInfo. To allow access from old stuff, register
-            // the DisplayInfo at given SdrPageView, too. Init value is 0L.
-            SdrPage*                                        mpProcessedPage;
-
-            // To temporarily remember internally the current DispolayInfo
-            // which is set at the PaintView. This will be removes ASA CL
-            // will use the DrawXXX overlay mechanism (not yet available)
-            const DisplayInfo*                              mpLastDisplayInfo;
+            // it at DisplayInfo
+            //SdrPage*                                      mpProcessedPage;
 
             // The Layers which shall be processed (visible)
             SetOfByte                                       maProcessLayers;
-
-            // The OutputDevice to work on
-            OutputDevice*                                   mpOutputDevice;
 
             // The redraw area, in logical coordinates of OutputDevice. If Region
             // is empty, everything needs to be redrawn
             Region                                          maRedrawArea;
 
-            // a svtools::ColorConfig entry to have access to all current set
-            // colors
-            svtools::ColorConfig                            maColorConfig;
-
-            // old stuff, for first compatible tests
-            XOutputDevice*                                  mpExtOutputDevice;
-            SdrPaintInfoRec*                                mpPaintInfoRec;
-
-            // The root ViewObjectContact of the current visualisation. Set from
-            // ProccessDisplay()
-            ViewObjectContact*                              mpRootVOC;
-
             // bitfield
+
             // Internal flag to know when the control layer is painted. Default is
-            // sal_False. If set to sal_True, painting of the page, page borders and
-            // the rasters will be suppressed. This flag is set
-            // internally from the DoProcessDisplay mechanism to avoid double page
-            // painting when the control layer needs to be painted as last layer. For
-            // generally switching page painting on and off, use the PagePainting flag
-            // or the according flags at the view (->Is*Visible()).
-            unsigned                                        mbControlLayerPainting : 1;
+            // false. If set to true, painting of the page, page borders and
+            // the rasters will be suppressed as if mbPageProcessingActive is set (see there).
+            // This flag is set internally from the processing mechanism to avoid double page
+            // painting when the control layer needs to be painted as last layer
+            unsigned                                        mbControlLayerProcessingActive : 1;
 
-            // Flag to decide if page will be painted at all. This flag is user-defined
-            // and will not be changed from the DoProcessDisplay mechanism. Default is
-            // sal_True, thus set to sal_False if PagePainting should be suppressed.
-            unsigned                                        mbPagePainting : 1;
+            // Internal flag to decide if page stuff (background, border, MasterPage, grid, etc...)
+            // will be processed at all. This flag is user-defined and will not be changed from the
+            // processing mechanism. Default is true, thus set to false if PagePainting should be suppressed.
+            // For more granular switching page stuff painting on and off, use the according flags at the
+            // view (->Is*Visible())
+            unsigned                                        mbPageProcessingActive : 1;
 
-            // Flag to remember if EnteredGroupDrawMode is active
+            // Internal flag to remember if EnteredGroupDrawMode is active. Default is true
+            // since this mode starts activated and gets switched off when reacing
+            // the current group level. Should only be changed by instances which do
+            // primitive processing
             unsigned                                        mbGhostedDrawModeActive : 1;
 
-            // Flag to have more control over object output buffering. This
-            // is sal_True by default, but maybe set to sal_False from MasterPage Paints
-            // if MasterPage is painted in DrawPage mode.
-            unsigned                                        mbBufferingAllowed : 1;
-
-            // Flag if Paint shall be continued. This is initialized with sal_true
-            // and used from DoContinuePaint() together with CheckContinuePaint()
-            // which may use Application::AnyInput() to interrupt painting.
-            unsigned                                        mbContinuePaint : 1;
-
-            // Flag to know if a MasterPage is painted in MasterPage mode.
-            // Initialized to sal_False, this shopuld only be changed from
-            // the instance which is painting the MasterPage and knows about.
-            unsigned                                        mbMasterPagePainting : 1;
-
-            // This uses Application::AnyInput() and may change mbContinuePaint
-            // to interrupt the paint
-            void CheckContinuePaint();
+            // Internal flag to know if a MasterPage is processed as SubContent of another
+            // page. Initialized to false, this should only be changed from the instance which
+            // is processing the MasterPage asSubContent and knows what it does
+            unsigned                                        mbSubContentActive : 1;
 
         public:
-            // access to SdrPageView
-            SdrPageView* GetPageView() const
-            {
-                return mpPageView;
-            }
-
             // basic constructor.
-            DisplayInfo(SdrPageView* pView = 0L);
+            DisplayInfo();
 
             // destructor
             virtual ~DisplayInfo();
 
             // access to ProcessedPage, write is for internal use only.
-            // read is used from SdrPageView eventually, to identify the
-            // currently painting page. This is needed for things like
-            // PageNumber fields (outliner callback). For that purpose all page painting parts
-            // should use SetProcessedPage to set the currently rendered page,
-            // and also to reset that pointer again.
-            void SetProcessedPage(SdrPage* pNew);
-            const SdrPage* GetProcessedPage() const;
+            // read is used from various places eventually, to identify the
+            // currently painting page
+            //void SetProcessedPage(SdrPage* pNew);
+            //const SdrPage* GetProcessedPage() const;
 
             // access to ProcessLayers
             void SetProcessLayers(const SetOfByte& rSet);
             const SetOfByte& GetProcessLayers() const;
 
-            // access to ExtendedOutputDevice
-            void SetExtendedOutputDevice(XOutputDevice* pExtOut);
-            XOutputDevice* GetExtendedOutputDevice() const;
-
-            // access to PaintInfoRec
-            void SetPaintInfoRec(SdrPaintInfoRec* pInfoRec);
-            SdrPaintInfoRec* GetPaintInfoRec() const;
-
-            // access to OutputDevice
-            void SetOutputDevice(OutputDevice* pOutDev);
-            OutputDevice* GetOutputDevice() const;
-
             // access to RedrawArea
             void SetRedrawArea(const Region& rRegion);
             const Region& GetRedrawArea() const;
 
-            // Is OutDev a printer?
-            sal_Bool OutputToPrinter() const;
+            // Access to ControlLayerProcessingActive flag
+            void SetControlLayerProcessingActive(bool bDoPaint);
+            bool GetControlLayerProcessingActive() const;
 
-            // Is OutDev a window?
-            sal_Bool OutputToWindow() const;
-
-            // Is OutDev a VirtualDevice?
-            sal_Bool OutputToVirtualDevice() const;
-
-            // Is OutDev a recording MetaFile?
-            sal_Bool OutputToRecordingMetaFile() const;
-
-            // Access to ControlLayerPainting flag
-            void SetControlLayerPainting(sal_Bool bDoPaint);
-            sal_Bool GetControlLayerPainting() const;
-
-            // Access to PagePainting flag
-            void SetPagePainting(sal_Bool bDoPaint);
-            sal_Bool GetPagePainting() const;
+            // Access to PageProcessingActive flag
+            void SetPageProcessingActive(bool bDoPaint);
+            bool GetPageProcessingActive() const;
 
             // Access to svtools::ColorConfig
             const svtools::ColorConfig& GetColorConfig() const;
 
             // Save the original DrawMode from outdev
-            sal_uInt32 GetOriginalDrawMode() const;
-            sal_uInt32 GetCurrentDrawMode() const;
             void ClearGhostedDrawMode();
             void SetGhostedDrawMode();
-            sal_Bool IsGhostedDrawModeActive() const;
-
-            // access to buffering allowed flag
-            void SetBufferingAllowed(sal_Bool bNew);
-            sal_Bool IsBufferingAllowed() const;
-
-            // Check if painting should be continued. If not, return from paint
-            // as soon as possible.
-            sal_Bool DoContinuePaint();
+            bool IsGhostedDrawModeActive() const;
 
             // access to master page painting flag
-            sal_Bool GetMasterPagePainting() const;
-            void SetMasterPagePainting(sal_Bool bNew);
+            bool GetSubContentActive() const;
+            void SetSubContentActive(bool bNew);
         };
     } // end of namespace contact
 } // end of namespace sdr
