@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ios2met.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_goodies.hxx"
 
-
-#include <math.h>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <svtools/fltcall.hxx>
+
+#include <math.h>
 
 // MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
