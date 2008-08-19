@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: reportformula.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,15 +79,6 @@ namespace rptui
         :m_eType( Invalid )
     {
         impl_construct( _rFormula );
-    }
-
-    //--------------------------------------------------------------------
-    ReportFormula::ReportFormula( const Any& _rWrappedFormula )
-        :m_eType( Invalid )
-    {
-        ::rtl::OUString sFormula;
-        OSL_VERIFY( _rWrappedFormula >>= sFormula );
-        impl_construct( sFormula );
     }
 
     //--------------------------------------------------------------------
