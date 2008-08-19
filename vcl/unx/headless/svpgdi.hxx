@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpgdi.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,8 +124,8 @@ public:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
-    virtual bool                        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool                        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths );
+    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
+    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
     virtual void            drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
     virtual void            drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
@@ -141,6 +141,7 @@ public:
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const BYTE* const* pFlgAry );
+
     virtual void            copyArea( long nDestX,
                                       long nDestY,
                                       long nSrcX,
