@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpbitmap.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aLbBitmapsHidden    ( this, SVX_RES( FT_BITMAPS_HIDDEN ) ),
     aLbBitmaps          ( this, SVX_RES( LB_BITMAPS ) ),
     aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
     aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
     aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
     aBtnImport          ( this, SVX_RES( BTN_IMPORT ) ),
@@ -124,7 +124,6 @@ SvxBitmapTabPage::SvxBitmapTabPage
     pBitmapList( NULL ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
     aXFStyleItem        ( XFILL_BITMAP ),
     aXBitmapItem        ( String(), XOBitmap() ),
     aXFillAttr          ( pXPool ),
@@ -140,13 +139,7 @@ SvxBitmapTabPage::SvxBitmapTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXBitmapItem );
-    //XOut.SetFillAttr( aXFillAttr );
-
-    // Set line at the OutputDevice
-    XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+    //aCtlPreview.SetAttributes( aXFillAttr );
 
     aBtnAdd.SetClickHdl( LINK( this, SvxBitmapTabPage, ClickAddHdl_Impl ) );
     aBtnImport.SetClickHdl(
@@ -318,7 +311,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     // Bitmap holen und darstellen
     XFillBitmapItem aBmpItem( (const String &) String(), aBitmapCtl.GetXBitmap() );
     rXFSet.Put( aBmpItem );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
     ChangeBitmapHdl_Impl( this );
@@ -545,7 +538,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
         XFillBitmapItem aXBmpItem( (const String &) String(), *pXOBitmap );
         rXFSet.Put( aXBmpItem );
 
-        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+        aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
         bBmpChanged = FALSE;
@@ -1130,7 +1123,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangePixelColorHdl_Impl, void *, EMPTYARG )
 
     // Bitmap holen und darstellen
     rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
     bBmpChanged = TRUE;
@@ -1149,7 +1142,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl, void *, EMPTYARG )
 
     // Bitmap holen und darstellen
     rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
     bBmpChanged = TRUE;
@@ -1167,7 +1160,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
 
         // Bitmap holen und darstellen
         rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
-        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+        aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
         bBmpChanged = TRUE;
