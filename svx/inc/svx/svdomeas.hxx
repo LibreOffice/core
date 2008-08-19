@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdomeas.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,12 +71,17 @@ public:
 
 class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {
+private:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
 
     friend class                SdrMeasureField;
+
+    // DrawContact section
+private:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 protected:
     Point                       aPt1;
@@ -88,7 +93,7 @@ protected:
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
-    void SetTextDirty() { bTextDirty=TRUE; SetTextSizeDirty(); if (!bBoundRectDirty) { bBoundRectDirty = sal_True; SetRectsDirty(sal_True); } }
+    void SetTextDirty() { bTextDirty=TRUE; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(sal_True); } }
     void UndirtyText() const;
 
     virtual SdrObjGeoData* NewGeoData() const;
@@ -103,7 +108,6 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void operator=(const SdrObject& rObj);
@@ -137,7 +141,6 @@ public:
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
     virtual long GetRotateAngle() const;
-    virtual void RecalcBoundRect();
     virtual void RecalcSnapRect();
 
     virtual sal_uInt32 GetSnapPointCount() const;
@@ -149,7 +152,6 @@ public:
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
-    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const;
 
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;
