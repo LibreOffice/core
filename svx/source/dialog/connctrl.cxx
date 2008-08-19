@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: connctrl.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,6 @@
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-
-#include <svx/xoutx.hxx>
 
 #include <svx/svdoedge.hxx>
 #include <svx/svdattrx.hxx>
@@ -67,10 +65,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
                             pObjList( NULL ),
                             pView   ( NULL )
 {
-    pExtOutDev = new XOutputDevice( this );
-
     SetMapMode( MAP_100TH_MM );
-
     SetStyles();
 }
 
@@ -83,7 +78,6 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
     delete pObjList;
-    delete pExtOutDev;
 }
 
 /*************************************************************************
@@ -258,9 +252,6 @@ void SvxXConnectionPreview::Construct()
 
 void SvxXConnectionPreview::Paint( const Rectangle& )
 {
-    SdrPaintInfoRec aInfoRec;
-
-    //pEdgeObj->Paint( *pExtOutDev, aInfoRec );
     if( pObjList )
     {
         // #110094#
@@ -269,8 +260,6 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         // and a view. I will just try to provide a mechanism to paint such
         // objects without own model and without a page/view with the new
         // mechanism.
-        //
-        //pObjList->Paint( *pExtOutDev, aInfoRec );
 
         // New stuff: Use a ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
@@ -283,18 +272,11 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
             aObjectVector.push_back(pObject);
         }
 
-        sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+        sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
         sdr::contact::DisplayInfo aDisplayInfo;
-
-        aDisplayInfo.SetExtendedOutputDevice(pExtOutDev);
-        aDisplayInfo.SetPaintInfoRec(&aInfoRec);
-        aDisplayInfo.SetOutputDevice(pExtOutDev->GetOutDev());
 
         // do processing
         aPainter.ProcessDisplay(aDisplayInfo);
-
-        // prepare delete
-        aPainter.PrepareDelete();
     }
 }
 
