@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Window.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,15 +80,6 @@
 
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>
-
-/*
-// header for class E3dScene
-#include <svx/scene3d.hxx>
-// header for class XOutputDevice
-#include <svx/xoutx.hxx>
-// header for class ::basegfx::B3DPolygon
-#include <basegfx/polygon/b3dpolygon.hxx>
-*/
 
 #define DRGPIX    2     // Drag MinMove in Pixel
 
@@ -414,6 +405,17 @@ const short HITPIX=2; //hit-tolerance in pixel
 //-----------------------------------------------------------------
 // impl vcl window controller methods
 //-----------------------------------------------------------------
+void ChartController::PrePaint()
+{
+    // forward VCLs PrePaint window event to DrawingLayer
+    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+
+    if(pDrawViewWrapper)
+    {
+        pDrawViewWrapper->PrePaint();
+    }
+}
+
 void ChartController::execute_Paint( const Rectangle& rRect )
 {
     try
