@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BUser.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,11 +91,6 @@ void OAdabasUser::refreshGroups()
 }
 // -------------------------------------------------------------------------
 OUserExtend::OUserExtend(   OAdabasConnection* _pConnection) : OAdabasUser(_pConnection)
-{
-    construct();
-}
-// -------------------------------------------------------------------------
-OUserExtend::OUserExtend(   OAdabasConnection* _pConnection,const ::rtl::OUString& _Name) : OAdabasUser(_pConnection,_Name)
 {
     construct();
 }
