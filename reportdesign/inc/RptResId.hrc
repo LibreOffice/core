@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptResId.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,6 +226,7 @@
 #define RID_STR_PREVIEW_COUNT               (RID_STRING_START + 150)
 #define RID_ERR_NO_COMMAND                  (RID_STRING_START + 151)
 #define RID_ERR_NO_OBJECTS                  (RID_STRING_START + 152)
+#define RID_STR_AREA                        (RID_STRING_START + 153)
 
 // #define RID_STR_                     (RID_STRING_START + 130)
 // -----------------------------------------------------------------------
