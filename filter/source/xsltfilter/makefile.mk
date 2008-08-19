@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,39 +68,15 @@ SHL1STDLIBS= \
 #USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
-.IF "$(SYSTEM_XALAN)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XALAN_JAR)
-.IF "$(SERIALIZER_JAR)" != ""
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(SERIALIZER_JAR)
-.ENDIF
-.ELSE
-JARFILES += xalan.jar
-.ENDIF
-
-.IF "$(SYSTEM_XERCES)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
-.ELSE
-JARFILES += xercesImpl.jar
-.ENDIF
-
-.IF "$(SYSTEM_XML_APIS)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
-.ELSE
-JARFILES += xml-apis.jar
-.ENDIF
-
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 CUSTOMMANIFESTFILE = Manifest
 
 JARCOMPRESS		= TRUE
 JARCLASSDIRS	= XSLTransformer*.class XSLTFilterOLEExtracter*.class
 JARTARGET		= $(TARGET).jar
-JARCLASSDIRS 	+= XSLTXalanOLEExtracter*.class
 
 # --- Files --------------------------------------------------------
 JAVACLASSFILES=$(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class
-#this class we need xalan.jar.
-JAVACLASSFILES+=$(CLASSDIR)$/XSLTXalanOLEExtracter.class
 .ENDIF
 
 # --- Targets ------------------------------------------------------
