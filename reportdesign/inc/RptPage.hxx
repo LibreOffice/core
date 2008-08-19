@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptPage.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,12 +94,6 @@ public:
         @param  _xObject    the report component
     */
     void insertObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
-
-    //inline OReportSection* getReportSection() { return m_pView; }
-
-    /** sets the view to <NULL/>
-    */
-    //inline void clearSection() { m_pView = NULL; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const;
 };
