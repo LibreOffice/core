@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofe3dscene.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,121 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <svx/sdr/contact/viewobjectcontactofe3dscene.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b3drange.hxx>
+#include <drawinglayer/attribute/sdrattribute3d.hxx>
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
+#include <svx/sdr/contact/viewcontactofe3d.hxx>
+#include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
+#include <drawinglayer/primitive3d/transformprimitive3d.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    // pActiveVC is only true if ghosted is still activated and maybe needs to be switched off in this path
+    void createSubPrimitive3DVector(
+        const sdr::contact::ViewContact& rCandidate,
+        drawinglayer::primitive3d::Primitive3DSequence& o_rAllTarget,
+        drawinglayer::primitive3d::Primitive3DSequence* o_pVisibleTarget,
+        const SetOfByte* pVisibleLayerSet,
+        const bool bTestSelectedVisibility)
+    {
+        const sdr::contact::ViewContactOfE3dScene* pViewContactOfE3dScene = dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(&rCandidate);
+
+        if(pViewContactOfE3dScene)
+        {
+            const sal_uInt32 nChildrenCount(rCandidate.GetObjectCount());
+
+            if(nChildrenCount)
+            {
+                // provide new collection sequences
+                drawinglayer::primitive3d::Primitive3DSequence aNewAllTarget;
+                drawinglayer::primitive3d::Primitive3DSequence aNewVisibleTarget;
+
+                // add children recursively
+                for(sal_uInt32 a(0L); a < nChildrenCount; a++)
+                {
+                    createSubPrimitive3DVector(
+                        rCandidate.GetViewContact(a),
+                        aNewAllTarget,
+                        o_pVisibleTarget ? &aNewVisibleTarget : 0,
+                        pVisibleLayerSet,
+                        bTestSelectedVisibility);
+                }
+
+                // create transform primitive for the created content combining content and transformtion
+                const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::TransformPrimitive3D(
+                    pViewContactOfE3dScene->GetE3dScene().GetTransform(),
+                    aNewAllTarget));
+
+                // add created content to all target
+                drawinglayer::primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(o_rAllTarget, xReference);
+
+                // add created content to visibiel target if exists
+                if(o_pVisibleTarget)
+                {
+                    drawinglayer::primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(*o_pVisibleTarget, xReference);
+                }
+            }
+        }
+        else
+        {
+            // access view independent representation of rCandidate
+            const sdr::contact::ViewContactOfE3d* pViewContactOfE3d = dynamic_cast< const sdr::contact::ViewContactOfE3d* >(&rCandidate);
+
+            if(pViewContactOfE3d)
+            {
+                drawinglayer::primitive3d::Primitive3DSequence xPrimitive3DSeq(pViewContactOfE3d->getViewIndependentPrimitive3DSequence());
+
+                if(xPrimitive3DSeq.hasElements())
+                {
+                    // add to all target vector
+                    drawinglayer::primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(o_rAllTarget, xPrimitive3DSeq);
+
+                    if(o_pVisibleTarget)
+                    {
+                        // test visibility. Primitive is visible when both tests are true (AND)
+                        bool bVisible(true);
+
+                        if(pVisibleLayerSet)
+                        {
+                            // test layer visibility
+                            const E3dObject& rE3dObject = pViewContactOfE3d->GetE3dObject();
+                            const SdrLayerID aLayerID(rE3dObject.GetLayer());
+
+                            bVisible = pVisibleLayerSet->IsSet(aLayerID);
+                        }
+
+                        if(bVisible && bTestSelectedVisibility)
+                        {
+                            // test selected visibility (see 3D View's DrawMarkedObj implementation)
+                            const E3dObject& rE3dObject = pViewContactOfE3d->GetE3dObject();
+
+                            bVisible = rE3dObject.GetSelected();
+                        }
+
+                        if(bVisible && o_pVisibleTarget)
+                        {
+                            // add to visible target vector
+                            drawinglayer::primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(*o_pVisibleTarget, xPrimitive3DSeq);
+                        }
+                    }
+                }
+            }
+        }
+    }
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -40,90 +155,349 @@ namespace sdr
 {
     namespace contact
     {
-        // method to recalculate the PaintRectangle if the validity flag shows that
-        // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-        // only needs to refresh maPaintRectangle itself.
-        void ViewContactOfE3dScene::CalcPaintRectangle()
+        // Create a Object-Specific ViewObjectContact, set ViewContact and
+        // ObjectContact. Always needs to return something.
+        ViewObjectContact& ViewContactOfE3dScene::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
-            maPaintRectangle = GetE3dScene().GetCurrentBoundRect();
+            ViewObjectContact* pRetval = new ViewObjectContactOfE3dScene(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContactOfE3dScene::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
         }
 
         ViewContactOfE3dScene::ViewContactOfE3dScene(E3dScene& rScene)
-        :   ViewContactOfSdrObj(rScene)
+        :   ViewContactOfSdrObj(rScene),
+            mpViewInformation3D(0),
+            mpObjectTransformation(0),
+            mpSdrSceneAttribute(0),
+            mpSdrLightingAttribute(0)
         {
         }
 
         ViewContactOfE3dScene::~ViewContactOfE3dScene()
         {
+            delete mpViewInformation3D;
+            delete mpObjectTransformation;
+            delete mpSdrSceneAttribute;
+            delete mpSdrLightingAttribute;
         }
 
-        // When ShouldPaintObject() returns sal_True, the object itself is painted and
-        // PaintObject() is called.
-        sal_Bool ViewContactOfE3dScene::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
+        void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rContentRange)
         {
-            // Test layer visibility, force to flat SdrObject here for 3D (!)
-            if(!rDisplayInfo.GetProcessLayers().IsSet(GetSdrObject().SdrObject::GetLayer()))
+            basegfx::B3DHomMatrix aTransformation;
+            basegfx::B3DHomMatrix aOrientation;
+            basegfx::B3DHomMatrix aProjection;
+            basegfx::B3DHomMatrix aDeviceToView;
+
+            // create transformation (scene as group's transformation)
+            // For historical reasons, the outmost scene's transformation is handles as part of the
+            // view transformation. This means that the BoundRect of the contained 3D Objects is
+            // without that transformation and makes it necessary to NOT add the first scene to the
+            // Primitive3DSequence of contained objects.
             {
-                return sal_False;
+                aTransformation = GetE3dScene().GetTransform();
             }
 
-            // Test area visibility
-            const Region& rRedrawArea = rDisplayInfo.GetRedrawArea();
-
-            if(!rRedrawArea.IsEmpty() && !rRedrawArea.IsOver(GetPaintRectangle()))
+            // create orientation (world to camera coordinate system)
             {
-                return sal_False;
+                // calculate orientation from VRP, VPN and VUV
+                const B3dCamera& rSceneCamera = GetE3dScene().GetCameraSet();
+                const basegfx::B3DPoint aVRP(rSceneCamera.GetVRP());
+                const basegfx::B3DVector aVPN(rSceneCamera.GetVRP());
+                const basegfx::B3DVector aVUV(rSceneCamera.GetVUV());
+
+                aOrientation.orientation(aVRP, aVPN, aVUV);
             }
 
-            // Test calc hide/draft features
-            if(!DoPaintForCalc(rDisplayInfo))
+            // create projection (camera coordinate system to relative 2d where X,Y and Z are [0.0 .. 1.0])
             {
-                return sal_False;
+                const basegfx::B3DHomMatrix aWorldToCamera(aOrientation * aTransformation);
+                basegfx::B3DRange aCameraRange(rContentRange);
+                aCameraRange.transform(aWorldToCamera);
+
+                // remember Z-Values, but change orientation
+                const double fMinZ(-aCameraRange.getMaxZ());
+                const double fMaxZ(-aCameraRange.getMinZ());
+
+                // construct temorary matrix from world to device. Use unit values here to measure expansion
+                basegfx::B3DHomMatrix aWorldToDevice(aWorldToCamera);
+                const drawinglayer::attribute::SdrSceneAttribute& rSdrSceneAttribute = getSdrSceneAttribute();
+
+                if(::com::sun::star::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
+                {
+                    aWorldToDevice.frustum(-1.0, 1.0, -1.0, 1.0, fMinZ, fMaxZ);
+                }
+                else
+                {
+                    aWorldToDevice.ortho(-1.0, 1.0, -1.0, 1.0, fMinZ, fMaxZ);
+                }
+
+                // create B3DRange in device. This will create the real used ranges
+                // in camera space. Do not use the Z-Values, though.
+                basegfx::B3DRange aDeviceRange(rContentRange);
+                aDeviceRange.transform(aWorldToDevice);
+
+                // set projection
+                if(::com::sun::star::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
+                {
+                    aProjection.frustum(
+                        aDeviceRange.getMinX(), aDeviceRange.getMaxX(),
+                        aDeviceRange.getMinY(), aDeviceRange.getMaxY(),
+                        fMinZ, fMaxZ);
+                }
+                else
+                {
+                    aProjection.ortho(
+                        aDeviceRange.getMinX(), aDeviceRange.getMaxX(),
+                        aDeviceRange.getMinY(), aDeviceRange.getMaxY(),
+                        fMinZ, fMaxZ);
+                }
             }
 
-            // Always paint E3dScenes
-            return sal_True;
+            // create device to view transform
+            {
+                // create standard deviceToView projection for geometry
+                // input is [-1.0 .. 1.0] in X,Y and Z. bring to [0.0 .. 1.0]. Also
+                // necessary to flip Y due to screen orientation
+                // Z is not needed, but will also be brought to [0.0 .. 1.0]
+                aDeviceToView.scale(0.5, -0.5, 0.5);
+                aDeviceToView.translate(0.5, 0.5, 0.5);
+            }
+
+            const uno::Sequence< beans::PropertyValue > aEmptyProperties;
+            mpViewInformation3D = new drawinglayer::geometry::ViewInformation3D(aTransformation, aOrientation, aProjection, aDeviceToView, 0.0, aEmptyProperties);
         }
 
-        // These methods decide which parts of the objects will be painted:
-        // When ShouldPaintDrawHierarchy() returns sal_True, the DrawHierarchy of the object is painted.
-        // Else, the flags and rectangles of the VOCs of the sub-hierarchy are set to the values of the
-        // object's VOC.
-        sal_Bool ViewContactOfE3dScene::ShouldPaintDrawHierarchy(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
+        void ViewContactOfE3dScene::createObjectTransformation()
         {
-            // 3D Scenes do draw their hierarchy themselves, so switch off
-            // painting DrawHierarchy.
-            return sal_False;
+            // create 2d Object Transformation from relative point in 2d scene to world
+            mpObjectTransformation = new basegfx::B2DHomMatrix;
+            const Rectangle& rRectangle = GetE3dScene().GetSnapRect();
+
+            mpObjectTransformation->set(0, 0, rRectangle.getWidth());
+            mpObjectTransformation->set(1, 1, rRectangle.getHeight());
+            mpObjectTransformation->set(0, 2, rRectangle.Left());
+            mpObjectTransformation->set(1, 2, rRectangle.Top());
         }
 
-        // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-        // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfE3dScene::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
+        void ViewContactOfE3dScene::createSdrSceneAttribute()
         {
-            sal_Bool bRetval(sal_False);
+            const SfxItemSet& rItemSet = GetE3dScene().GetMergedItemSet();
+            mpSdrSceneAttribute = drawinglayer::primitive2d::createNewSdrSceneAttribute(rItemSet);
+        }
 
-            if(GetE3dScene().GetSubList() && GetE3dScene().GetSubList()->GetObjCount())
+        void ViewContactOfE3dScene::createSdrLightingAttribute()
+        {
+            const SfxItemSet& rItemSet = GetE3dScene().GetMergedItemSet();
+            mpSdrLightingAttribute = drawinglayer::primitive2d::createNewSdrLightingAttribute(rItemSet, GetE3dScene().GetLightGroup());
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const sal_uInt32 nChildrenCount(GetObjectCount());
+
+            if(nChildrenCount)
             {
-                // copy the saved original PaintMode from the DisplayInfo to the old
-                // structures so that it is available for the old 3D rendering.
-                rDisplayInfo.GetPaintInfoRec()->nOriginalDrawMode = rDisplayInfo.GetOriginalDrawMode();
-                rDisplayInfo.GetPaintInfoRec()->bNotActive = rDisplayInfo.IsGhostedDrawModeActive();
+                // create 3d scene primitive with visible content tested against rLayerVisibility
+                drawinglayer::primitive3d::Primitive3DSequence aAllSequence;
+                drawinglayer::primitive3d::Primitive3DSequence aVisibleSequence;
+                const bool bTestLayerVisibility(0 != pLayerVisibility);
+                const bool bTestSelectedVisibility(GetE3dScene().DoDrawOnlySelected());
+                const bool bTestVisibility(bTestLayerVisibility || bTestSelectedVisibility);
 
-                // Paint the 3D scene. Just hand over to the old Paint() ATM.
-                GetSdrObject().DoPaintObject(
-                    *rDisplayInfo.GetExtendedOutputDevice(),
-                    *rDisplayInfo.GetPaintInfoRec());
+                // add children recursively. Do NOT start with (*this), this would create
+                // a 3D transformPrimitive for the start scene. While this is theoretically not
+                // a bad thing, for historical reasons the transformation of the outmost scene
+                // is seen as part of the ViewTransformation (see text in createViewInformation3D)
+                for(sal_uInt32 a(0L); a < nChildrenCount; a++)
+                {
+                    createSubPrimitive3DVector(
+                        GetViewContact(a),
+                        aAllSequence,
+                        bTestLayerVisibility ? &aVisibleSequence : 0,
+                        bTestLayerVisibility ? pLayerVisibility : 0,
+                        bTestSelectedVisibility);
+                }
 
-                rPaintRectangle = GetPaintRectangle();
-                bRetval = sal_True;
+                const sal_uInt32 nAllSize(aAllSequence.hasElements() ? aAllSequence.getLength() : 0);
+                const sal_uInt32 nVisibleSize(aVisibleSequence.hasElements() ? aVisibleSequence.getLength() : 0);
+
+                if((bTestVisibility && nVisibleSize) || nAllSize)
+                {
+                    // for getting the 3D range using getB3DRangeFromPrimitive3DSequence a ViewInformation3D
+                    // needs to be given for evtl. decompositions. At the same time createViewInformation3D
+                    // currently is based on creating the target-ViewInformation3D using a given range. To
+                    // get the true range, use a neutral ViewInformation3D here. This leaves all matrices
+                    // on identity and the time on 0.0.
+                    const uno::Sequence< beans::PropertyValue > aEmptyProperties;
+                    const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);
+                    const basegfx::B3DRange aContentRange(drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(aAllSequence, aNeutralViewInformation3D));
+
+                    // create 2d primitive 3dscene with generated sub-list from collector
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ScenePrimitive2D(
+                        bTestVisibility ? aVisibleSequence : aAllSequence,
+                        getSdrSceneAttribute(),
+                        getSdrLightingAttribute(),
+                        getObjectTransformation(),
+                        getViewInformation3D(aContentRange)));
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                }
+            }
+
+            return xRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence() const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            if(GetObjectCount())
+            {
+                // create a default ScenePrimitive2D (without visibility test of members)
+                xRetval = createScenePrimitive2DSequence(0);
+            }
+
+            if(xRetval.hasElements())
+            {
+                return xRetval;
             }
             else
             {
-                // Paint a replacement object.
-                bRetval = PaintReplacementObject(rDisplayInfo, rPaintRectangle);
+                // create a gray placeholder hairline polygon in object size as empty 3D scene marker. Use object size
+                // model information directly, NOT getBoundRect()/getSnapRect() since these will
+                // be using the geometry data we get just asked for. AFAIK for empty 3D Scenes, the model data
+                // is SdrObject::aOutRect which i can access directly using GetLastBoundRect() here
+                const Rectangle aEmptySceneGeometry(GetE3dScene().GetLastBoundRect());
+                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(
+                    aEmptySceneGeometry.Left(), aEmptySceneGeometry.Top(),
+                    aEmptySceneGeometry.Right(), aEmptySceneGeometry.Bottom())));
+                const double fGrayTone(0xc0 / 255.0);
+                const basegfx::BColor aGrayTone(fGrayTone, fGrayTone, fGrayTone);
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aGrayTone));
+
+                // The replacement object may also get a text like 'empty 3D Scene' here later
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+        }
+
+        void ViewContactOfE3dScene::ActionChanged()
+        {
+            // call parent
+            ViewContactOfSdrObj::ActionChanged();
+
+            // mark locally cached values as invalid
+            delete mpViewInformation3D;
+            mpViewInformation3D = 0;
+
+            delete mpObjectTransformation;
+            mpObjectTransformation = 0;
+
+            delete mpSdrSceneAttribute;
+            mpSdrSceneAttribute = 0;
+
+            delete mpSdrLightingAttribute;
+            mpSdrLightingAttribute = 0;
+        }
+
+        const drawinglayer::geometry::ViewInformation3D& ViewContactOfE3dScene::getViewInformation3D() const
+        {
+            if(!mpViewInformation3D)
+            {
+                // this version will create the content range on demand locally and thus is less
+                // performant than the other one. Since the information is buffered the planned
+                // behaviour is that the version with the given range is used initially.
+                basegfx::B3DRange aContentRange(getAllContentRange3D());
+
+                if(aContentRange.isEmpty())
+                {
+                    // empty scene, no 3d action should be necessary. Prepare some
+                    // fallback size
+                    OSL_ENSURE(false, "No need to get ViewInformation3D from an empty scene (!)");
+                    aContentRange.expand(basegfx::B3DPoint(-100.0, -100.0, -100.0));
+                    aContentRange.expand(basegfx::B3DPoint( 100.0,  100.0,  100.0));
+                }
+
+                const_cast < ViewContactOfE3dScene* >(this)->createViewInformation3D(aContentRange);
             }
 
-            return bRetval;
+            return *mpViewInformation3D;
+        }
+
+        const drawinglayer::geometry::ViewInformation3D& ViewContactOfE3dScene::getViewInformation3D(const basegfx::B3DRange& rContentRange) const
+        {
+            if(!mpViewInformation3D)
+            {
+                const_cast < ViewContactOfE3dScene* >(this)->createViewInformation3D(rContentRange);
+            }
+
+            return *mpViewInformation3D;
+        }
+
+        const basegfx::B2DHomMatrix& ViewContactOfE3dScene::getObjectTransformation() const
+        {
+            if(!mpObjectTransformation)
+            {
+                const_cast < ViewContactOfE3dScene* >(this)->createObjectTransformation();
+            }
+
+            return *mpObjectTransformation;
+        }
+
+        const drawinglayer::attribute::SdrSceneAttribute& ViewContactOfE3dScene::getSdrSceneAttribute() const
+        {
+            if(!mpSdrSceneAttribute)
+            {
+                const_cast < ViewContactOfE3dScene* >(this)->createSdrSceneAttribute();
+            }
+
+            return *mpSdrSceneAttribute;
+        }
+
+        const drawinglayer::attribute::SdrLightingAttribute& ViewContactOfE3dScene::getSdrLightingAttribute() const
+        {
+            if(!mpSdrLightingAttribute)
+            {
+                const_cast < ViewContactOfE3dScene* >(this)->createSdrLightingAttribute();
+            }
+
+            return *mpSdrLightingAttribute;
+        }
+
+        drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3dScene::getAllPrimitive3DSequence() const
+        {
+            drawinglayer::primitive3d::Primitive3DSequence aAllPrimitive3DSequence;
+            const sal_uInt32 nChildrenCount(GetObjectCount());
+
+            // add children recursively. Do NOT start with (*this), this would create
+            // a 3D transformPrimitive for the start scene. While this is theoretically not
+            // a bad thing, for historical reasons the transformation of the outmost scene
+            // is seen as part of the ViewTransformation (see text in createViewInformation3D)
+            for(sal_uInt32 a(0L); a < nChildrenCount; a++)
+            {
+                createSubPrimitive3DVector(GetViewContact(a), aAllPrimitive3DSequence, 0, 0, false);
+            }
+
+            return aAllPrimitive3DSequence;
+        }
+
+        basegfx::B3DRange ViewContactOfE3dScene::getAllContentRange3D() const
+        {
+            const drawinglayer::primitive3d::Primitive3DSequence xAllSequence(getAllPrimitive3DSequence());
+            basegfx::B3DRange aAllContentRange3D;
+
+            if(xAllSequence.hasElements())
+            {
+                // for getting the 3D range using getB3DRangeFromPrimitive3DSequence a ViewInformation3D
+                // needs to be given for evtl. decompositions. Use a neutral ViewInformation3D here. This
+                // leaves all matrices on identity and the time on 0.0.
+                const uno::Sequence< beans::PropertyValue > aEmptyProperties;
+                const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);
+
+                aAllContentRange3D = drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(xAllSequence, aNeutralViewInformation3D);
+            }
+
+            return aAllContentRange3D;
         }
     } // end of namespace contact
 } // end of namespace sdr
