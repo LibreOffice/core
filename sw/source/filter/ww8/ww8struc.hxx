@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8struc.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -837,6 +837,17 @@ struct WW8_ATRD                 // fuer die 8-Version
                                     // annotation bookmark that locates the
                                     // range of CPs in the main document which
                                     // this annotation references.
+};
+
+struct WW8_ATRDEXTRA
+{
+    // ---  Extended bit since Word 2002 --- //
+
+    SVBT32 dttm;
+    SVBT16 bf;
+    SVBT32 cDepth;
+    SVBT32 diatrdParent;
+    SVBT32 Discussitem;
 };
 
 struct WW67_ATRD                // fuer die 6/7-Version
