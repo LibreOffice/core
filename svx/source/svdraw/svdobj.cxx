@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdobj.cxx,v $
- * $Revision: 1.98 $
+ * $Revision: 1.99 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/xpoly.hxx>
-#include "svdxout.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdhdl.hxx>
@@ -122,6 +121,10 @@
 #include <svx/unoshape.hxx>
 #include <vcl/virdev.hxx>
 
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
+#include <svx/polysc3d.hxx>
 #include "svx/svdotable.hxx"
 
 using namespace ::com::sun::star;
@@ -180,22 +183,25 @@ Pointer SdrObjUserData::GetMacroPointer(const SdrObjMacroHitRec& /*rRec*/, const
     return Pointer(POINTER_REFHAND);
 }
 
-void SdrObjUserData::PaintMacro(XOutputDevice& rXOut, const Rectangle& /*rDirtyRect*/, const SdrObjMacroHitRec& /*rRec*/, const SdrObject* pObj) const
+void SdrObjUserData::PaintMacro(OutputDevice& rOut, const Rectangle& /*rDirtyRect*/, const SdrObjMacroHitRec& /*rRec*/, const SdrObject* pObj) const
 {
-    if (pObj==NULL) return;
-    Color aBlackColor( COL_BLACK );
-    Color aTranspColor( COL_TRANSPARENT );
-    rXOut.OverrideLineColor( aBlackColor );
-    rXOut.OverrideFillColor( aTranspColor );
-    RasterOp eRop0=rXOut.GetRasterOp();
-    rXOut.SetRasterOp(ROP_INVERT);
-    basegfx::B2DPolyPolygon aPP(pObj->TakeXorPoly(sal_True));
-    const sal_uInt32 nAnz(aPP.count());
-    for(sal_uInt32 nNum(0L); nNum < nAnz; nNum++)
+    if(!pObj)
+        return;
+
+    const RasterOp eRop(rOut.GetRasterOp());
+    const basegfx::B2DPolyPolygon aPolyPolygon(pObj->TakeXorPoly(true));
+    const sal_uInt32 nCount(aPolyPolygon.count());
+
+    rOut.SetLineColor(COL_BLACK);
+    rOut.SetFillColor();
+    rOut.SetRasterOp(ROP_INVERT);
+
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        rXOut.DrawPolyLine(aPP.getB2DPolygon(nNum));
+        rOut.DrawPolyLine(aPolyPolygon.getB2DPolygon(a));
     }
-    rXOut.SetRasterOp(eRop0);
+
+    rOut.SetRasterOp(eRop);
 }
 
 FASTBOOL SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pObj*/)
@@ -359,32 +365,60 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
     return *mpViewContact;
 }
 
-// DrawContact support: Methods for handling DrawHierarchy changes
-void SdrObject::ActionRemoved() const
+void SdrObject::FlushViewContact() const
 {
-    // Do necessary ViewContact actions
-    GetViewContact().ActionRemoved();
-}
-
-// DrawContact support: Methods for handling DrawHierarchy changes
-void SdrObject::ActionInserted() const
-{
-    // Do necessary ViewContact actions
-    GetViewContact().ActionInserted();
+    if(mpViewContact)
+    {
+        delete mpViewContact;
+        ((SdrObject*)this)->mpViewContact = 0;
+    }
 }
 
 // DrawContact support: Methods for handling Object changes
 void SdrObject::ActionChanged() const
 {
-    // #i34008#
     // Forward change call to MasterPageDescriptor if BackgroundObject was changed
-    if(GetPage()
-        && GetPage()->GetBackgroundObj()
-        && GetPage()->GetBackgroundObj() == this)
+    const SdrPage* pObjectsPage = GetPage();
+
+    if(pObjectsPage)
     {
-        if(GetPage()->TRG_HasMasterPage())
+        // do the necessary ActionChange() forwards when a MasterPageBackgroundObject
+        // gets changed. This can be removed as soon as the MasterPageBackgroundObject
+        // handling is replaced with the proper ItemSet handling at the SdrPages. The
+        // needed ActionChanged calls will then be triggered by changing those ItemSets.
+        if(pObjectsPage->IsMasterPage())
         {
-            GetPage()->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+            if(IsMasterPageBackgroundObject())
+            {
+                SdrModel* pObjectsModel = GetModel();
+
+                if(pObjectsModel)
+                {
+                    const sal_uInt16 nCount(pObjectsModel->GetPageCount());
+
+                    for(sal_uInt16 a(0); a < nCount; a++)
+                    {
+                        const SdrPage* pUserPage = pObjectsModel->GetPage(a);
+
+                        if(pUserPage && pUserPage->TRG_HasMasterPage())
+                        {
+                            SdrPage& rUsedMasterPage = pUserPage->TRG_GetMasterPage();
+
+                            if(&rUsedMasterPage == pObjectsPage)
+                            {
+                                pUserPage->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(pObjectsPage->TRG_HasMasterPage() && pObjectsPage->GetBackgroundObj() == this)
+            {
+                pObjectsPage->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+            }
         }
     }
 
@@ -396,7 +430,7 @@ void SdrObject::ActionChanged() const
 
 void SdrObject::SetBoundRectDirty()
 {
-    bBoundRectDirty = sal_True;
+    aOutRect = Rectangle();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -419,7 +453,6 @@ SdrObject::SdrObject()
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =FALSE;
-    bBoundRectDirty  =TRUE;
     bSnapRectDirty   =TRUE;
     bNetLock         =FALSE;
     bInserted        =FALSE;
@@ -492,7 +525,6 @@ SdrObject::~SdrObject()
     // #110094#
     if(mpViewContact)
     {
-        mpViewContact->PrepareDelete();
         delete mpViewContact;
         mpViewContact = 0L;
     }
@@ -522,7 +554,7 @@ SdrObjPlusData* SdrObject::NewPlusData() const
 void SdrObject::SetRectsDirty(sal_Bool bNotMyself)
 {
     if (!bNotMyself) {
-        bBoundRectDirty=TRUE;
+        SetBoundRectDirty();
         bSnapRectDirty=TRUE;
     }
     if (pObjList!=NULL) {
@@ -860,10 +892,11 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 // GetCurrentBoundRect().
 const Rectangle& SdrObject::GetCurrentBoundRect() const
 {
-    if (bBoundRectDirty) {
-        ((SdrObject*)this)->RecalcBoundRect();
-        ((SdrObject*)this)->bBoundRectDirty=FALSE;
+    if(aOutRect.IsEmpty())
+    {
+        const_cast< SdrObject* >(this)->RecalcBoundRect();
     }
+
     return aOutRect;
 }
 
@@ -879,6 +912,28 @@ const Rectangle& SdrObject::GetLastBoundRect() const
 
 void SdrObject::RecalcBoundRect()
 {
+    // central new method which will calculate the BoundRect using primitive geometry
+    const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(GetViewContact().getViewIndependentPrimitive2DSequence());
+
+    if(xPrimitives.hasElements())
+    {
+        // use neutral ViewInformation
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+
+        // get the range of the primitives
+        const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
+
+        if(!aRange.isEmpty())
+        {
+            aOutRect = Rectangle(
+                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
+                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+        }
+    }
+    else
+    {
+        aOutRect = Rectangle();
+    }
 }
 
 void SdrObject::BroadcastObjectChange() const
@@ -918,508 +973,19 @@ void SdrObject::SetChanged()
     }
 }
 
-sal_Bool SdrObject::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfoRec*/) const
-{
-    Color aRedColor( COL_RED );
-    Color aYellowColor( COL_YELLOW );
-    rXOut.OverrideLineColor( aRedColor );
-    rXOut.OverrideFillColor( aYellowColor );
-    rXOut.DrawRect(GetCurrentBoundRect());
-
-    return TRUE;
-}
-
 // Tooling for painting a single object to a OutputDevice.
-sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 {
     sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(this);
+    aObjectVector.push_back(const_cast< SdrObject* >(this));
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aObjectVector, GetPage());
     sdr::contact::DisplayInfo aDisplayInfo;
-
-    aDisplayInfo.SetExtendedOutputDevice(&rXOut);
-    aDisplayInfo.SetPaintInfoRec((SdrPaintInfoRec*)&rInfoRec);
-    aDisplayInfo.SetOutputDevice(rXOut.GetOutDev());
 
     // do processing
     aPainter.ProcessDisplay(aDisplayInfo);
 
-    // prepare delete
-    aPainter.PrepareDelete();
-
     return sal_True;
-}
-
-::std::auto_ptr< SdrLineGeometry >  SdrObject::CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const
-{
-    basegfx::B2DPolyPolygon aAreaPolyPolygon;
-    basegfx::B2DPolyPolygon aLinePolyPolygon;
-
-    // get XOR Poly as base
-    basegfx::B2DPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
-
-    // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon);
-
-    // compute single lines
-    for(sal_uInt32 a(0L); a < aTmpPolyPolygon.count(); a++)
-    {
-        // expand splines into polygons and convert to double
-        basegfx::B2DPolygon aCandidate(aTmpPolyPolygon.getB2DPolygon(a));
-        aCandidate.removeDoublePoints();
-
-        if(aCandidate.areControlPointsUsed())
-        {
-            aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
-        }
-
-        aLineCreator.AddPolygon(aCandidate);
-    }
-
-    if(aAreaPolyPolygon.count() || aLinePolyPolygon.count())
-    {
-        return ::std::auto_ptr< SdrLineGeometry > (new SdrLineGeometry(
-            aAreaPolyPolygon, aLinePolyPolygon, aLineAttr, bForceOnePixel, bForceTwoPixel));
-    }
-    else
-    {
-        return ::std::auto_ptr< SdrLineGeometry > (NULL);
-    }
-}
-
-::std::auto_ptr< SdrLineGeometry > SdrObject::ImpPrepareLineGeometry( XOutputDevice& rXOut, const SfxItemSet& rSet) const
-{
-    XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
-    if(eXLS != XLINE_NONE)
-    {
-        // need to force single point line?
-        INT32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-        Size aSize(nLineWidth, nLineWidth);
-        aSize = rXOut.GetOutDev()->LogicToPixel(aSize);
-        BOOL bForceOnePixel(aSize.Width() <= 1 || aSize.Height() <= 1);
-        BOOL bForceTwoPixel(!bForceOnePixel && (aSize.Width() <= 2 || aSize.Height() <= 2));
-
-        // no force to two pixel when connected to MetaFile, so that not
-        // four lines instead of one is recorded (e.g.)
-        if(bForceTwoPixel && rXOut.GetOutDev()->GetConnectMetaFile())
-            bForceTwoPixel = FALSE;
-
-        // #78210# switch off bForceTwoPixel when line draft mode
-        if(bForceTwoPixel)
-        {
-            bForceTwoPixel = FALSE;
-            bForceOnePixel = TRUE;
-        }
-
-        // create line geometry
-        return CreateLinePoly(bForceOnePixel, bForceTwoPixel);
-    }
-
-    return ::std::auto_ptr< SdrLineGeometry > (0L);
-}
-
-void SdrObject::ImpDrawShadowLineGeometry(
-    XOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const
-{
-    sal_Int32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-    sal_Int32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-    const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-    Color aColor(rShadColItem.GetColorValue());
-    sal_uInt16 nTrans = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-
-    // draw shadow line geometry
-    ImpDrawLineGeometry(rXOut, aColor, nTrans, rLineGeometry, nXDist, nYDist);
-}
-
-void SdrObject::ImpDrawColorLineGeometry(
-    XOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const
-{
-    Color aColor = ((XLineColorItem&)rSet.Get(XATTR_LINECOLOR)).GetColorValue();
-    sal_uInt16 nTrans = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
-
-    // draw the line geometry
-    ImpDrawLineGeometry(rXOut, aColor, nTrans, rLineGeometry);
-}
-
-void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
-                                       Color&              rColor,
-                                       sal_uInt16           nTransparence,
-                                       SdrLineGeometry&    rLineGeometry,
-                                       sal_Int32            nDX,
-                                       sal_Int32            nDY             ) const
-{
-    Color aLineColor( rColor );
-
-    // #72796# black/white option active?
-    const UINT32 nOldDrawMode(rXOut.GetOutDev()->GetDrawMode());
-
-    // #72796# if yes, force to DRAWMODE_BLACKFILL for these are LINES to be drawn as polygons
-    if( ( nOldDrawMode & DRAWMODE_WHITEFILL ) && ( nOldDrawMode & DRAWMODE_BLACKLINE ) )
-    {
-        aLineColor = Color( COL_BLACK );
-        rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_WHITEFILL) );
-    }
-    else if( ( nOldDrawMode & DRAWMODE_SETTINGSFILL ) && ( nOldDrawMode & DRAWMODE_SETTINGSLINE ) )
-    {
-        svtools::ColorConfig aColorConfig;
-        aLineColor = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-        rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
-    }
-
-    // #103692# Hold local copy of geometry
-    basegfx::B2DPolyPolygon aAreaPolyPolygon(rLineGeometry.GetAreaPolyPolygon());
-    basegfx::B2DPolyPolygon aLinePolyPolygon(rLineGeometry.GetLinePolyPolygon());
-
-    // #103692# Offset geometry (extracted from SdrObject::ImpDrawShadowLineGeometry)
-    if( nDX || nDY )
-    {
-        // transformation necessary
-        basegfx::B2DHomMatrix aMatrix;
-
-        aMatrix.translate((double)nDX, (double)nDY);
-        aAreaPolyPolygon.transform(aMatrix);
-        aLinePolyPolygon.transform(aMatrix);
-    }
-
-    // #100127# Bracket output with a comment, if recording a Mtf
-    bool bMtfCommentWritten( false );
-    GDIMetaFile* pMtf=rXOut.GetOutDev()->GetConnectMetaFile();
-    if( pMtf )
-    {
-        basegfx::B2DPolyPolygon aPolyPoly(TakeXorPoly(TRUE));
-
-        // #103692# Offset original geometry, too
-        if( nDX || nDY )
-        {
-            // transformation necessary
-            basegfx::B2DHomMatrix aMatrix;
-            aMatrix.translate(nDX, nDY);
-            aPolyPoly.transform(aMatrix);
-        }
-
-        // for geometries with more than one polygon, dashing, arrows
-        // etc. become ambiguous (e.g. measure objects have no arrows
-        // on the end line), thus refrain from writing the comment
-        // here.
-        if( 1L == aPolyPoly.count() )
-        {
-            // add completely superfluous color action (gets overwritten
-            // below), to store our line color reliably
-            rXOut.GetOutDev()->SetLineColor(aLineColor);
-
-            const ImpLineStyleParameterPack& rLineParameters = rLineGeometry.GetLineAttr();
-            PolyPolygon aStartPoly( rLineParameters.GetStartPolyPolygon() );
-            PolyPolygon aEndPoly( rLineParameters.GetEndPolyPolygon() );
-
-            // scale arrows to specified stroke width
-            if( aStartPoly.Count() && aStartPoly.GetObject(0).GetSize() )
-            {
-                Rectangle aBounds( aStartPoly.GetBoundRect() );
-
-                // mirror and translate to origin
-                aStartPoly.Scale(-1,-1);
-                aStartPoly.Translate( Point(aBounds.GetWidth() / 2, aBounds.GetHeight()) );
-
-                if( aBounds.GetWidth() )
-                {
-                    // #104527# Avoid division by zero. If rLineParameters.GetLineWidth
-                    // is zero this is a hairline which can be handled as 1.0.
-                    double fLineWidth(rLineParameters.GetLineWidth() ? (double)rLineParameters.GetLineWidth() : 1.0);
-
-                    double fScale( (double)rLineParameters.GetStartWidth() / fLineWidth *
-                                   (double)SvtGraphicStroke::normalizedArrowWidth / (double)aBounds.GetWidth() );
-                    aStartPoly.Scale( fScale, fScale );
-                }
-
-                if( rLineParameters.IsStartCentered() )
-                    aStartPoly.Translate( Point(0, -aStartPoly.GetBoundRect().GetHeight() / 2) );
-            }
-            if( aEndPoly.Count() && aEndPoly.GetObject(0).GetSize() )
-            {
-                Rectangle aBounds( aEndPoly.GetBoundRect() );
-
-                // mirror and translate to origin
-                aEndPoly.Scale(-1,-1);
-                aEndPoly.Translate( Point(aBounds.GetWidth() / 2, aBounds.GetHeight()) );
-
-                if( aBounds.GetWidth() )
-                {
-                    // #104527# Avoid division by zero. If rLineParameters.GetLineWidth
-                    // is zero this is a hairline which we can be handled as 1.0.
-                    double fLineWidth(rLineParameters.GetLineWidth() ? (double)rLineParameters.GetLineWidth() : 1.0);
-
-                    double fScale( (double)rLineParameters.GetEndWidth() / fLineWidth *
-                                   (double)SvtGraphicStroke::normalizedArrowWidth / (double)aBounds.GetWidth() );
-                    aEndPoly.Scale( fScale, fScale );
-                }
-
-                if( rLineParameters.IsEndCentered() )
-                    aEndPoly.Translate( Point(0, -aEndPoly.GetBoundRect().GetHeight() / 2) );
-            }
-
-            SvtGraphicStroke::JoinType eJoin;
-            double fMiterLength = rLineParameters.GetLineWidth();
-            switch( rLineParameters.GetLineJoint() )
-            {
-                case XLINEJOINT_NONE: eJoin = SvtGraphicStroke::joinNone;break;
-                case XLINEJOINT_MIDDLE:
-                case XLINEJOINT_MITER:
-                {
-                    eJoin = SvtGraphicStroke::joinMiter;
-                    // assume GetLinejointMiterMinimumAngle returns degrees (currently returns 15.0)
-                    double fSin = rtl::math::sin( M_PI * rLineParameters.GetLinejointMiterMinimumAngle() / 360.0 );
-                    if( ! rtl::math::isNan( fSin ) )
-                        fMiterLength /= fSin;
-                }
-                break;
-                case XLINEJOINT_BEVEL: eJoin = SvtGraphicStroke::joinBevel;break;
-                default:
-                case XLINEJOINT_ROUND: eJoin = SvtGraphicStroke::joinRound;break;
-            }
-
-            const Polygon aSingleStrokePoly(aPolyPoly.getB2DPolygon(0L));
-            SvtGraphicStroke aStroke( aSingleStrokePoly,
-                                      aStartPoly,
-                                      aEndPoly,
-                                      nTransparence / 100.0,
-                                      rLineParameters.GetLineWidth(),
-                                      SvtGraphicStroke::capButt,
-                                      eJoin,
-                                      fMiterLength,
-                                      rLineParameters.IsLineStyleSolid() ? SvtGraphicStroke::DashArray() : rLineParameters.GetDotDash() );
-
-#ifdef DBG_UTIL
-            ::rtl::OString aStr( aStroke.toString() );
-#endif
-
-            SvMemoryStream  aMemStm;
-
-            aMemStm << aStroke;
-
-            pMtf->AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
-                                                    static_cast<const BYTE*>(aMemStm.GetData()),
-                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
-            bMtfCommentWritten = true;
-        }
-    }
-
-    if(nTransparence)
-    {
-        if(nTransparence != 100)
-        {
-            // to be shown line has transparence, output via MetaFile
-            UINT8 nScaledTrans((UINT8)((nTransparence * 255)/100));
-            Color aTransColor(nScaledTrans, nScaledTrans, nScaledTrans);
-            Gradient aGradient(GRADIENT_LINEAR, aTransColor, aTransColor);
-            GDIMetaFile aMetaFile;
-            VirtualDevice aVDev;
-
-            basegfx::B2DRange aFullRange;
-            //Volume3D aVolume;
-
-            MapMode aMap(rXOut.GetOutDev()->GetMapMode());
-
-            // StepCount to someting small
-            aGradient.SetSteps(3);
-
-            // get bounds of geometry
-            if(aAreaPolyPolygon.count())
-            {
-                basegfx::B2DRange aRange = basegfx::tools::getRange(aAreaPolyPolygon);
-                aFullRange.expand(aRange);
-            }
-
-            if(aLinePolyPolygon.count())
-            {
-                basegfx::B2DRange aRange = basegfx::tools::getRange(aLinePolyPolygon);
-                aFullRange.expand(aRange);
-            }
-
-            // get pixel size in logic coor for 1,2 pixel cases
-            Size aSizeSinglePixel(1, 1);
-
-            if(rLineGeometry.DoForceOnePixel() || rLineGeometry.DoForceTwoPixel())
-            {
-                aSizeSinglePixel = rXOut.GetOutDev()->PixelToLogic(aSizeSinglePixel);
-            }
-
-            // create BoundRectangle
-            basegfx::B2DTuple aMinimum(aFullRange.getMinimum());
-            basegfx::B2DTuple aMaximum(aFullRange.getMaximum());
-
-            Rectangle aBound(
-                FRound(aMinimum.getX()), FRound(aMinimum.getY()),
-                FRound(aMaximum.getX()), FRound(aMaximum.getY()));
-
-            if(rLineGeometry.DoForceOnePixel() || rLineGeometry.DoForceTwoPixel())
-            {
-                // enlarge aBound
-                if(rLineGeometry.DoForceTwoPixel())
-                {
-                    aBound.Right() += 2 * (aSizeSinglePixel.Width() - 1);
-                    aBound.Bottom() += 2 * (aSizeSinglePixel.Height() - 1);
-                }
-                else
-                {
-                    aBound.Right() += (aSizeSinglePixel.Width() - 1);
-                    aBound.Bottom() += (aSizeSinglePixel.Height() - 1);
-                }
-            }
-
-            // prepare VDev and MetaFile
-            aVDev.EnableOutput(FALSE);
-            aVDev.SetMapMode(rXOut.GetOutDev()->GetMapMode());
-            aMetaFile.Record(&aVDev);
-            aVDev.SetLineColor(aLineColor);
-            aVDev.SetFillColor(aLineColor);
-            aVDev.SetFont(rXOut.GetOutDev()->GetFont());
-            aVDev.SetDrawMode(rXOut.GetOutDev()->GetDrawMode());
-            aVDev.SetSettings(rXOut.GetOutDev()->GetSettings());
-            aVDev.SetRefPoint(rXOut.GetOutDev()->GetRefPoint());
-
-            // create output
-            if(aAreaPolyPolygon.count())
-            {
-                PolyPolygon aVCLPolyPoly(aAreaPolyPolygon);
-
-                for(UINT16 a=0;a<aVCLPolyPoly.Count();a++)
-                {
-                    aMetaFile.AddAction(new MetaPolygonAction(aVCLPolyPoly[a]));
-                }
-            }
-
-            if(aLinePolyPolygon.count())
-            {
-                PolyPolygon aVCLLinePoly(aLinePolyPolygon);
-
-                if(rLineGeometry.DoForceTwoPixel())
-                {
-                    UINT16 a;
-
-                    for(a=0;a<aVCLLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
-
-                    aVCLLinePoly.Move(aSizeSinglePixel.Width() - 1, 0);
-
-                    for(a=0;a<aVCLLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
-
-                    aVCLLinePoly.Move(0, aSizeSinglePixel.Height() - 1);
-
-                    for(a=0;a<aVCLLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
-
-                    aVCLLinePoly.Move(-aSizeSinglePixel.Width() - 1, 0);
-
-                    for(a=0;a<aVCLLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
-                }
-                else
-                {
-                    for(UINT16 a=0;a<aVCLLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
-                }
-            }
-
-            // draw metafile
-            aMetaFile.Stop();
-            aMetaFile.WindStart();
-            aMap.SetOrigin(aBound.TopLeft());
-            aMetaFile.SetPrefMapMode(aMap);
-            aMetaFile.SetPrefSize(aBound.GetSize());
-            rXOut.GetOutDev()->DrawTransparent(aMetaFile, aBound.TopLeft(), aBound.GetSize(), aGradient);
-        }
-    }
-    else
-    {
-        // no transparence, simple output
-        if(aAreaPolyPolygon.count())
-        {
-            PolyPolygon aVCLPolyPoly(aAreaPolyPolygon);
-
-            rXOut.GetOutDev()->SetLineColor();
-            rXOut.GetOutDev()->SetFillColor(aLineColor);
-
-            for(UINT16 a=0;a<aVCLPolyPoly.Count();a++)
-                rXOut.GetOutDev()->DrawPolygon(aVCLPolyPoly[a]);
-        }
-
-        if(aLinePolyPolygon.count())
-        {
-            PolyPolygon aVCLLinePoly(aLinePolyPolygon);
-            rXOut.GetOutDev()->SetLineColor(aLineColor);
-            rXOut.GetOutDev()->SetFillColor();
-
-            if(rLineGeometry.DoForceTwoPixel())
-            {
-                PolyPolygon aPolyPolyPixel( rXOut.GetOutDev()->LogicToPixel(aVCLLinePoly) );
-                BOOL bWasEnabled = rXOut.GetOutDev()->IsMapModeEnabled();
-                rXOut.GetOutDev()->EnableMapMode(FALSE);
-                UINT16 a;
-
-                for(a=0;a<aVCLLinePoly.Count();a++)
-                    rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
-
-                aPolyPolyPixel.Move(1,0);
-
-                for(a=0;a<aVCLLinePoly.Count();a++)
-                    rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
-
-                aPolyPolyPixel.Move(0,1);
-
-                for(a=0;a<aVCLLinePoly.Count();a++)
-                    rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
-
-                aPolyPolyPixel.Move(-1,0);
-
-                for(a=0;a<aVCLLinePoly.Count();a++)
-                    rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
-
-                rXOut.GetOutDev()->EnableMapMode(bWasEnabled);
-            }
-            else
-            {
-                for( UINT16 a = 0; a < aVCLLinePoly.Count(); a++ )
-                {
-                    const Polygon&  rPoly = aVCLLinePoly[ a ];
-                    BOOL            bDrawn = FALSE;
-
-                    if( rPoly.GetSize() == 2 )
-                    {
-                        if ( !rXOut.GetOutDev()->GetConnectMetaFile() )
-                        {
-                            const Line  aLine( rXOut.GetOutDev()->LogicToPixel( rPoly[ 0 ] ),
-                                               rXOut.GetOutDev()->LogicToPixel( rPoly[ 1 ] ) );
-
-                            if( aLine.GetLength() > 16000 )
-                            {
-                                Point       aPoint;
-                                Rectangle   aOutRect2( aPoint, rXOut.GetOutDev()->GetOutputSizePixel() );
-                                Line        aIntersection;
-
-                                if( aLine.Intersection( aOutRect2, aIntersection ) )
-                                {
-                                    rXOut.GetOutDev()->DrawLine( rXOut.GetOutDev()->PixelToLogic( aIntersection.GetStart() ),
-                                                                 rXOut.GetOutDev()->PixelToLogic( aIntersection.GetEnd() ) );
-                                }
-                                bDrawn = TRUE;
-                            }
-                        }
-                    }
-                    if( !bDrawn )
-                        rXOut.GetOutDev()->DrawPolyLine( rPoly );
-                }
-            }
-        }
-    }
-
-    // #100127# Bracket output with a comment, if recording a Mtf
-    if( bMtfCommentWritten && pMtf )
-        pMtf->AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_END" ) );
-
-    rXOut.GetOutDev()->SetDrawMode( nOldDrawMode );
 }
 
 BOOL SdrObject::LineGeometryUsageIsNecessary() const
@@ -1473,7 +1039,7 @@ void SdrObject::operator=(const SdrObject& rObj)
     mpProperties = &rObj.GetProperties().Clone(*this);
 
     pModel  =rObj.pModel;
-    aOutRect=rObj.GetCurrentBoundRect();
+    aOutRect=rObj.aOutRect;
     mnLayerID = rObj.mnLayerID;
     aAnchor =rObj.aAnchor;
     bVirtObj=rObj.bVirtObj;
@@ -1485,8 +1051,6 @@ void SdrObject::operator=(const SdrObject& rObj)
     bEmptyPresObj =rObj.bEmptyPresObj;
     //NotVisibleAsMaster wird nicht kopiert: nun doch! (25-07-1995, Joe)
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
-
-    bBoundRectDirty=rObj.bBoundRectDirty;
     bSnapRectDirty=TRUE; //rObj.bSnapRectDirty;
     bNotMasterCachable=rObj.bNotMasterCachable;
     if (pPlusData!=NULL) { delete pPlusData; pPlusData=NULL; }
@@ -1575,155 +1139,30 @@ basegfx::B2DPolyPolygon SdrObject::TakeXorPoly(sal_Bool /*bDetail*/) const
 
 basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 {
-    VirtualDevice   aBlackHole;
-    GDIMetaFile     aMtf;
-    SdrPaintInfoRec aPaintInfo;
-    basegfx::B2DPolygon aXPoly;
+    basegfx::B2DPolyPolygon aRetval;
+    const sdr::contact::ViewContact& rVC(GetViewContact());
+    const drawinglayer::primitive2d::Primitive2DSequence xSequence(rVC.getViewIndependentPrimitive2DSequence());
 
-    aBlackHole.EnableOutput( FALSE );
-    aBlackHole.SetDrawMode( DRAWMODE_NOFILL );
-
-    XOutputDevice   aXOut( &aBlackHole );
-    SdrObject*      pClone = Clone();
-
-    // #114164#
-    // there was a loop when asking the contour from a shape with textanimation.
-    // therefore we disable textanimation here since it doesn't add to the actual
-    // contour of this clone
-    if(pClone && ISA(SdrTextObj))
+    if(xSequence.hasElements())
     {
-        pClone->SetMergedItem( SdrTextAniKindItem(SDRTEXTANI_NONE));
-    }
+        // use neutral ViewInformation
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
 
-    if(pClone && ISA(SdrEdgeObj))
-    {
-        // #102344# Flat cloned SdrEdgeObj, copy connections to original object(s).
-        // This is deleted later at delete pClone.
-        SdrObject* pLeft = ((SdrEdgeObj*)this)->GetConnectedNode(TRUE);
-        SdrObject* pRight = ((SdrEdgeObj*)this)->GetConnectedNode(FALSE);
+        // create extractor, process and get result
+        drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
+        aExtractor.process(xSequence);
+        const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
+        const sal_uInt32 nSize(rResult.size());
 
-        if(pLeft)
+        // the topology for contour is correctly a vector of PolyPolygons; for
+        // historical reasons cut it back to a single PolyPolygon here
+        for(sal_uInt32 a(0); a < nSize; a++)
         {
-            pClone->ConnectToNode(TRUE, pLeft);
-        }
-
-        if(pRight)
-        {
-            pClone->ConnectToNode(FALSE, pRight);
+            aRetval.append(rResult[a]);
         }
     }
 
-    SfxItemSet aNewSet(*GetObjectItemPool());
-    aNewSet.Put(XLineStyleItem(XLINE_SOLID));
-    aNewSet.Put(XLineColorItem(String(), Color(COL_BLACK)));
-    aNewSet.Put(XFillStyleItem(XFILL_NONE));
-    pClone->SetMergedItemSet(aNewSet);
-
-    aMtf.Record( &aBlackHole );
-
-    //#i80528# SDRPAINTMODE_DRAFTTEXT|SDRPAINTMODE_DRAFTGRAF removed, need to test if contour
-    // still works. Maybe i need to add evaluation of graphic and text actions and create
-    // polygons accordingly.
-    // I knew it: With text-using objects, this runs into a recursion with SdrTextObj::DoPaintObject
-    // and the DrawOutliner setup. That setup uses TakeContour itself. Need to protect using the new
-    // SDRPAINTMODE_CONTOUR. I will also use that for graphics.
-    aPaintInfo.nPaintMode = SDRPAINTMODE_CONTOUR;
-
-    pClone->SingleObjectPainter( aXOut, aPaintInfo ); // #110094#-17
-    delete pClone;
-    aMtf.Stop();
-    aMtf.WindStart();
-    basegfx::B2DPolyPolygon aNewPoly;
-
-    for( ULONG nActionNum = 0, nActionAnz = aMtf.GetActionCount(); nActionNum < nActionAnz; nActionNum++ )
-    {
-        const MetaAction&   rAct = *aMtf.GetAction( nActionNum );
-        BOOL                bXPoly = FALSE;
-
-        switch( rAct.GetType() )
-        {
-            case META_RECT_ACTION:
-            {
-                const Rectangle& rRect = ( (const MetaRectAction&) rAct ).GetRect();
-
-                if( rRect.GetWidth() && rRect.GetHeight() )
-                {
-                    const basegfx::B2DRange aRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
-                    aXPoly = basegfx::tools::createPolygonFromRect(aRange);
-                    bXPoly = TRUE;
-                }
-            }
-            break;
-
-            case META_ELLIPSE_ACTION:
-            {
-                const Rectangle& rRect = ( (const MetaEllipseAction&) rAct ).GetRect();
-
-                if( rRect.GetWidth() && rRect.GetHeight() )
-                {
-                    aXPoly = basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(rRect.Center().X(), rRect.Center().Y()), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1);
-                    bXPoly = TRUE;
-                }
-            }
-            break;
-
-            case META_POLYGON_ACTION:
-            {
-                const Polygon& rPoly2 = ( (const MetaPolygonAction&) rAct ).GetPolygon();
-
-                if( rPoly2.GetSize() > 2 )
-                {
-                    aXPoly = rPoly2.getB2DPolygon();
-                    bXPoly = TRUE;
-                }
-            }
-            break;
-
-            case META_POLYPOLYGON_ACTION:
-            {
-                const PolyPolygon& rPolyPoly = ( (const MetaPolyPolygonAction&) rAct ).GetPolyPolygon();
-
-                if( rPolyPoly.Count() && ( rPolyPoly[ 0 ].GetSize() > 2 ) )
-                    aNewPoly.append( rPolyPoly.getB2DPolyPolygon() );
-            }
-            break;
-
-            case META_POLYLINE_ACTION:
-            {
-                const Polygon& rPoly2 = ( (const MetaPolyLineAction&) rAct ).GetPolygon();
-
-                if( rPoly2.GetSize() > 1 )
-                {
-                    aXPoly = rPoly2.getB2DPolygon();
-                    bXPoly = TRUE;
-                }
-            }
-            break;
-
-            case META_LINE_ACTION:
-            {
-                const Point aStart(((const MetaLineAction&) rAct ).GetStartPoint());
-                const Point aEnd(((const MetaLineAction&) rAct ).GetEndPoint());
-                aXPoly.clear();
-                aXPoly.append(basegfx::B2DPoint(aStart.X(), aStart.Y()));
-                aXPoly.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
-                bXPoly = TRUE;
-            }
-            break;
-
-            default:
-            break;
-        }
-
-        if( bXPoly )
-            aNewPoly.append( aXPoly );
-    }
-
-    // if we only have the outline of the object, we have _no_ contouir
-    if( 1L == aNewPoly.count() )
-        aNewPoly.clear();
-
-    return aNewPoly;
+    return aRetval;
 }
 
 sal_uInt32 SdrObject::GetHdlCount() const
@@ -1903,7 +1342,7 @@ FASTBOOL SdrObject::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aOutRect);
     rStat.SetActionRect(aOutRect);
     aOutRect.Justify();
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     return TRUE;
 }
@@ -2332,25 +1771,30 @@ Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
     return Pointer(POINTER_REFHAND);
 }
 
-void SdrObject::PaintMacro(XOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
+void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
-    if (pData!=NULL) {
-        pData->PaintMacro(rXOut,rDirtyRect,rRec,this);
-    } else {
-        Color aBlackColor( COL_BLACK );
-        Color aTranspColor( COL_TRANSPARENT );
-        rXOut.OverrideLineColor( aBlackColor );
-        rXOut.OverrideFillColor( aTranspColor );
-        RasterOp eRop0=rXOut.GetRasterOp();
-        rXOut.SetRasterOp(ROP_INVERT);
-        basegfx::B2DPolyPolygon aPP(TakeXorPoly(sal_True));
-        const sal_uInt32 nAnz(aPP.count());
-        for (sal_uInt32 nNum(0L); nNum < nAnz; nNum++)
+
+    if(pData)
+    {
+        pData->PaintMacro(rOut,rDirtyRect,rRec,this);
+    }
+    else
+    {
+        const RasterOp eRop(rOut.GetRasterOp());
+        const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly(true));
+        const sal_uInt32 nCount(aPolyPolygon.count());
+
+        rOut.SetLineColor(COL_BLACK);
+        rOut.SetFillColor();
+        rOut.SetRasterOp(ROP_INVERT);
+
+        for(sal_uInt32 a(0); a < nCount; a++)
         {
-            rXOut.DrawPolyLine(aPP.getB2DPolygon(nNum));
+            rOut.DrawPolyLine(aPolyPolygon.getB2DPolygon(a));
         }
-        rXOut.SetRasterOp(eRop0);
+
+        rOut.SetRasterOp(eRop);
     }
 }
 
@@ -2875,143 +2319,166 @@ SdrObject* SdrObject::GetConnectedNode(FASTBOOL /*bTail1*/) const
 
 SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) const
 {
-    BOOL bNoChange(TRUE);
+    bool bNoChange(true);
 
     if(pRet->LineGeometryUsageIsNecessary())
     {
-        ::std::auto_ptr< SdrLineGeometry > aLineGeom( pRet->CreateLinePoly(sal_False, sal_False));
-        if( aLineGeom.get() )
-        {
-            basegfx::B2DPolyPolygon aAreaPolyPolygon = aLineGeom->GetAreaPolyPolygon();
-            basegfx::B2DPolyPolygon aLinePolyPolygon = aLineGeom->GetLinePolyPolygon();
+        basegfx::B2DPolyPolygon aAreaPolyPolygon;
+        basegfx::B2DPolyPolygon aLinePolyPolygon;
+        const drawinglayer::primitive2d::Primitive2DSequence xSequence(pRet->GetViewContact().getViewIndependentPrimitive2DSequence());
 
-            // #107201#
-            // Since this may in some cases lead to a count of 0 after
-            // the merge i moved the merge to the front.
+        if(xSequence.hasElements())
+        {
+            // use neutral ViewInformation
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+
+            // create extractor, process and get result
+            drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+            aExtractor.process(xSequence);
+
+            aAreaPolyPolygon = aExtractor.getExtractedLineFills();
+            aLinePolyPolygon = aExtractor.getExtractedHairlines();
+        }
+
+        // Since this may in some cases lead to a count of 0 after
+        // the merge i moved the merge to the front.
+        if(aAreaPolyPolygon.count())
+        {
+            // bezier geometry got created, even for straight edges since the given
+            // object is a result of DoConvertToPolyObj. For conversion to contour
+            // this is not really needed and can be reduced again AFAP
+            aAreaPolyPolygon = basegfx::tools::simplifyCurveSegments(aAreaPolyPolygon);
+
+            // merge all to a decent result (try to use AND, but remember original)
+            const basegfx::B2DPolyPolygon aTemp(aAreaPolyPolygon);
+            aAreaPolyPolygon = basegfx::tools::solveCrossovers(aAreaPolyPolygon);
+            aAreaPolyPolygon = basegfx::tools::stripNeutralPolygons(aAreaPolyPolygon);
+            aAreaPolyPolygon = basegfx::tools::stripDispensablePolygons(aAreaPolyPolygon, false);
+
+            if(!aAreaPolyPolygon.count())
+            {
+                // OOps, AND is empty, this means there were no overlapping parts. Use
+                // remembered parts as result
+                aAreaPolyPolygon = aTemp;
+            }
+        }
+
+        //  || aLinePolyPolygon.Count() removed; the conversion is ONLY
+        // useful when new closed filled polygons are created
+        if(aAreaPolyPolygon.count() || (bForceLineDash && aLinePolyPolygon.count()))
+        {
+            SfxItemSet aSet(pRet->GetMergedItemSet());
+            XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+            SdrPathObj* aLinePolygonPart = NULL;
+            SdrPathObj* aLineHairlinePart = NULL;
+            bool bBuildGroup(false);
+
             if(aAreaPolyPolygon.count())
             {
-                aAreaPolyPolygon = basegfx::tools::removeAllIntersections(aAreaPolyPolygon);
-                aAreaPolyPolygon = basegfx::tools::removeNeutralPolygons(aAreaPolyPolygon, sal_True);
+                // create SdrObject for filled line geometry
+                aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aAreaPolyPolygon);
+                aLinePolygonPart->SetModel(pRet->GetModel());
+
+                // correct item properties
+                aSet.Put(XLineWidthItem(0L));
+                aSet.Put(XLineStyleItem(XLINE_NONE));
+                Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
+                UINT16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+                aSet.Put(XFillColorItem(XubString(), aColorLine));
+                aSet.Put(XFillStyleItem(XFILL_SOLID));
+                aSet.Put(XFillTransparenceItem(nTransLine));
+
+                aLinePolygonPart->SetMergedItemSet(aSet);
             }
 
-            //  || aLinePolyPolygon.Count() removed; the conversion is ONLY
-            // useful when new closed filled polygons are created
-            if(aAreaPolyPolygon.count() || (bForceLineDash && aLinePolyPolygon.count()))
+            if(aLinePolyPolygon.count())
             {
-                SfxItemSet aSet(pRet->GetMergedItemSet());
-                XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
-                SdrPathObj* aLinePolygonPart = NULL;
-                SdrPathObj* aLineLinePart = NULL;
-                BOOL bBuildGroup(FALSE);
+                // create SdrObject for hairline geometry
+                // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
+                // to get a non-filled object. If the poly is closed, the PathObj takes care for
+                // the correct closed state.
+                aLineHairlinePart = new SdrPathObj(OBJ_PATHLINE, aLinePolyPolygon);
+                aLineHairlinePart->SetModel(pRet->GetModel());
 
-                // #107600#
-                sal_Bool bAddOriginalGeometry(sal_False);
+                aSet.Put(XLineWidthItem(0L));
+                aSet.Put(XFillStyleItem(XFILL_NONE));
+                aSet.Put(XLineStyleItem(XLINE_SOLID));
 
-                if(aAreaPolyPolygon.count())
+                // it is also necessary to switch off line start and ends here
+                aSet.Put(XLineStartWidthItem(0));
+                aSet.Put(XLineEndWidthItem(0));
+
+                aLineHairlinePart->SetMergedItemSet(aSet);
+
+                if(aLinePolygonPart)
                 {
-                    aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aAreaPolyPolygon);
-                    aLinePolygonPart->SetModel(pRet->GetModel());
+                    bBuildGroup = true;
+                }
+            }
 
-                    aSet.Put(XLineWidthItem(0L));
-                    Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
-                    UINT16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
-                    aSet.Put(XFillColorItem(XubString(), aColorLine));
-                    aSet.Put(XFillStyleItem(XFILL_SOLID));
+            // check if original geometry should be added (e.g. filled and closed)
+            bool bAddOriginalGeometry(false);
+            SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
+
+            if(pPath && pPath->IsClosed())
+            {
+                if(eOldFillStyle != XFILL_NONE)
+                {
+                    // #107600# use new boolean here
+                    bAddOriginalGeometry = true;
+                }
+            }
+
+            // do we need a group?
+            if(bBuildGroup || bAddOriginalGeometry)
+            {
+                SdrObject* pGroup = new SdrObjGroup;
+                pGroup->SetModel(pRet->GetModel());
+
+                if(bAddOriginalGeometry)
+                {
+                    // Add a clone of the original geometry.
+                    aSet.ClearItem();
+                    aSet.Put(pRet->GetMergedItemSet());
                     aSet.Put(XLineStyleItem(XLINE_NONE));
-                    aSet.Put(XFillTransparenceItem(nTransLine));
-
-                    aLinePolygonPart->SetMergedItemSet(aSet);
-                }
-
-                if(aLinePolyPolygon.count())
-                {
-                    // #106907#
-                    // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
-                    // to get a non-filled object. If the poly is closed, the PathObj takes care for
-                    // the correct closed state.
-                    aLineLinePart = new SdrPathObj(OBJ_PATHLINE, aLinePolyPolygon);
-                    aLineLinePart->SetModel(pRet->GetModel());
-
                     aSet.Put(XLineWidthItem(0L));
-                    aSet.Put(XFillStyleItem(XFILL_NONE));
-                    aSet.Put(XLineStyleItem(XLINE_SOLID));
 
-                    // #106907#
-                    // it is also necessary to switch off line start and ends here
-                    aSet.Put(XLineStartWidthItem(0));
-                    aSet.Put(XLineEndWidthItem(0));
+                    SdrObject* pClone = pRet->Clone();
 
-                    aLineLinePart->SetMergedItemSet(aSet);
+                    pClone->SetModel(pRet->GetModel());
+                    pClone->SetMergedItemSet(aSet);
 
-                    if(aLinePolygonPart)
-                        bBuildGroup = TRUE;
+                    pGroup->GetSubList()->NbcInsertObject(pClone);
                 }
 
-                // #107600# This test does not depend on !bBuildGroup
-                SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
-                if(pPath && pPath->IsClosed())
+                if(aLinePolygonPart)
                 {
-                    if(eOldFillStyle != XFILL_NONE)
-                    {
-                        // #107600# use new boolean here
-                        bAddOriginalGeometry = sal_True;
-                    }
+                    pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart);
                 }
 
-                // #107600# ask for new boolean, too.
-                if(bBuildGroup || bAddOriginalGeometry)
+                if(aLineHairlinePart)
                 {
-                    SdrObject* pGroup = new SdrObjGroup;
-                    pGroup->SetModel(pRet->GetModel());
+                    pGroup->GetSubList()->NbcInsertObject(aLineHairlinePart);
+                }
 
-                    if(bAddOriginalGeometry)
-                    {
-                        // #107600# Add a clone of the original geometry.
-                        aSet.ClearItem();
-                        aSet.Put(pRet->GetMergedItemSet());
-                        aSet.Put(XLineStyleItem(XLINE_NONE));
-                        aSet.Put(XLineWidthItem(0L));
+                pRet = pGroup;
 
-                        SdrObject* pClone = pRet->Clone();
-
-                        pClone->SetModel(pRet->GetModel());
-                        pClone->SetMergedItemSet(aSet);
-
-                        pGroup->GetSubList()->NbcInsertObject(pClone);
-                    }
-
-                    if(aLinePolygonPart)
-                    {
-                        pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart);
-                    }
-
-                    if(aLineLinePart)
-                    {
-                        pGroup->GetSubList()->NbcInsertObject(aLineLinePart);
-                    }
-
-                    pRet = pGroup;
-
-                    // #107201#
+                // be more careful with the state describing bool
+                bNoChange = false;
+            }
+            else
+            {
+                if(aLinePolygonPart)
+                {
+                    pRet = aLinePolygonPart;
                     // be more careful with the state describing bool
-                    bNoChange = FALSE;
+                    bNoChange = false;
                 }
-                else
+                else if(aLineHairlinePart)
                 {
-                    if(aLinePolygonPart)
-                    {
-                        pRet = aLinePolygonPart;
-                        // #107201#
-                        // be more careful with the state describing bool
-                        bNoChange = FALSE;
-                    }
-                    else if(aLineLinePart)
-                    {
-                        pRet = aLineLinePart;
-                        // #107201#
-                        // be more careful with the state describing bool
-                        bNoChange = FALSE;
-                    }
+                    pRet = aLineHairlinePart;
+                    // be more careful with the state describing bool
+                    bNoChange = false;
                 }
             }
         }
@@ -3019,6 +2486,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
     if(bNoChange)
     {
+        // due to current method usage, create and return a clone when nothing has changed
         SdrObject* pClone = pRet->Clone();
         pClone->SetModel(pRet->GetModel());
         pRet = pClone;
@@ -3046,6 +2514,16 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) 
     }
     else
     {
+        if(pRet && pRet->ISA(SdrPathObj))
+        {
+            SdrPathObj* pPathObj = (SdrPathObj*)pRet;
+
+            // bezier geometry got created, even for straight edges since the given
+            // object is a result of DoConvertToPolyObj. For conversion to contour
+            // this is not really needed and can be reduced again AFAP
+            pPathObj->SetPathPoly(basegfx::tools::simplifyCurveSegments(pPathObj->GetPathPoly()));
+        }
+
         pRet = ImpConvertToContourObj(pRet, bForceLineDash);
     }
 
@@ -3530,81 +3008,6 @@ sal_Bool SdrObject::IsInDestruction() const
     if(pModel)
         return pModel->IsInDestruction();
     return sal_False;
-}
-
-bool SdrObject::ImpAddLineGeomteryForMiteredLines()
-{
-    //sal_Int32 nLineWidth(0L);
-    bool bRetval(false);
-
-    if(XLINE_NONE != ((const XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue())
-    {
-        if(0 != ((const XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue())
-        {
-            if(XLINEJOINT_MITER == ((const XLineJointItem&)(GetObjectItem(XATTR_LINEJOINT))).GetValue())
-            {
-                basegfx::B2DPolyPolygon aAreaPolyPolygon;
-                basegfx::B2DPolyPolygon aLinePolyPolygon;
-
-                // get XOR Poly as base
-                basegfx::B2DPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
-                ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), false);
-                ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon);
-
-                // compute single lines
-                for(sal_uInt32 a(0L); a < aTmpPolyPolygon.count(); a++)
-                {
-                    // expand splines into polygons and convert to double
-                    basegfx::B2DPolygon aCandidate(aTmpPolyPolygon.getB2DPolygon(a));
-                    aCandidate.removeDoublePoints();
-
-                    if(aCandidate.areControlPointsUsed())
-                    {
-                        aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
-                    }
-
-                    // convert line to single Polygons; make sure the part
-                    // polygons are all clockwise oriented
-                    aLineCreator.AddPolygon(aCandidate);
-                }
-
-                // get bounds for areas, expand aOutRect
-                if(aAreaPolyPolygon.count())
-                {
-                    basegfx::B2DRange aRange(basegfx::tools::getRange(aAreaPolyPolygon));
-                    basegfx::B2DTuple aMinimum(aRange.getMinimum());
-                    basegfx::B2DTuple aMaximum(aRange.getMaximum());
-
-                    const Rectangle aBound(
-                        FRound(aMinimum.getX()), FRound(aMinimum.getY()),
-                        FRound(aMaximum.getX()), FRound(aMaximum.getY()));
-
-                    if(aBound.Left() < aOutRect.Left())
-                    {
-                        aOutRect.Left() = aBound.Left();
-                        bRetval = true;
-                    }
-                    if(aBound.Right() > aOutRect.Right())
-                    {
-                        aOutRect.Right() = aBound.Right();
-                        bRetval = true;
-                    }
-                    if(aBound.Top() < aOutRect.Top())
-                    {
-                        aOutRect.Top() = aBound.Top();
-                        bRetval = true;
-                    }
-                    if(aBound.Bottom() > aOutRect.Bottom())
-                    {
-                        aOutRect.Bottom() = aBound.Bottom();
-                        bRetval = true;
-                    }
-                }
-            }
-        }
-    }
-
-    return bRetval;
 }
 
 // #i34682#
