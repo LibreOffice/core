@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDrawPage.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,54 +82,17 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         ::rtl::OUString sServiceName = pBaseObj->getServiceName();
         OSL_ENSURE(sServiceName.getLength(),"No Service Name given!");
 
-
-        //if ( !sServiceName.getLength() )
-        //{
-        //    if ( pObj->ISA(OCustomShape) )
-        //    {
-        //        sServiceName = SERVICE_SHAPE;
-        //    }
-        //    if ( pObj->ISA(SdrOle2Obj) )
-        //    {
-        //        SdrOle2Obj* pOle2Obj = dynamic_cast<SdrOle2Obj*>(pObj);
-        //        uno::Reference< lang::XServiceInfo > xOleModel(pOle2Obj->getXModel(),uno::UNO_QUERY);
-        //        if ( xOleModel.is() && xOleModel->supportsService(SERVICE_REPORTDEFINITION) )
-        //            sServiceName = SERVICE_REPORTDEFINITION;
-        //        else
-        //            sServiceName = SERVICE_OLEOBJECT;
-        //    }
-        //    else if ( pObj->ISA(OUnoObject) )
-        //    {
-        //        OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
-        //        switch(pUnoObj->getObjectId())
-        //        {
-        //            case OBJ_DLG_FORMATTEDFIELD:
-        //                sServiceName = SERVICE_FORMATTEDFIELD;
-        //                break;
-        //            case OBJ_DLG_HFIXEDLINE:
-        //                sServiceName = SERVICE_FIXEDLINE;
-        //                bChangeOrientation = true;
-        //                break;
-        //            case OBJ_DLG_VFIXEDLINE:
-        //                sServiceName = SERVICE_FIXEDLINE;
-        //                break;
-        //            case OBJ_DLG_FIXEDTEXT:
-        //                sServiceName = SERVICE_FIXEDTEXT;
-        //                break;
-        //            case OBJ_DLG_IMAGECONTROL:
-        //                sServiceName = SERVICE_IMAGECONTROL;
-        //                break;
-        //            default:
-        //                OSL_ENSURE(0,"Illegal case value");
-        //                break;
-        //        }
-        //    }
-        //}
         if ( pObj->ISA(OUnoObject) )
         {
             OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
-            bChangeOrientation = pUnoObj->GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
-
+            if ( pUnoObj->GetObjIdentifier() == OBJ_DLG_FIXEDTEXT )
+            {
+                uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
+                if ( xControlModel.is() )
+                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(sal_True));
+            }
+            else
+                bChangeOrientation = pUnoObj->GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
             SvxShapeControl* pShape = new SvxShapeControl( pObj );
             xShape.set(*pShape,uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
