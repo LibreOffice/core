@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FixedText.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@ namespace reportdesign
         friend class OShapeHelper;
         OReportControlModel                 m_aProps;
         ::rtl::OUString                     m_sLabel;
-        ::sal_Bool                          m_bMultiLine;
     private:
         OFixedText(const OFixedText&);
         OFixedText& operator=(const OFixedText&);
@@ -122,8 +121,6 @@ namespace reportdesign
         // XFixedText
         virtual ::rtl::OUString SAL_CALL getLabel() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setLabel( const ::rtl::OUString& _label ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL getMultiLine() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setMultiLine( ::sal_Bool _multiline ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::report::XReportControlFormat
         REPORTCONTROLFORMAT_HEADER()
