@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XFixedText.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,10 +45,6 @@ interface XFixedText
     /** specifies the label of the control.
      */
     [attribute,bound] string Label;
-
-    /** specifies that the text may be displayed on more than one line.
-     */
-    [attribute,bound] boolean MultiLine;
 };
 
 service FixedText : XFixedText;
