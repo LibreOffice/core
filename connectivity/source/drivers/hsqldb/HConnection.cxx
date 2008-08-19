@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HConnection.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,6 +275,8 @@ namespace connectivity { namespace hsqldb
         return xTables;
     }
 
+    //TODO: resource
+#if 0
     // -------------------------------------------------------------------
     Reference< XExecutableDialog > OHsqlConnection::impl_createLinkedTableEditor_throw( const Reference< XDatabaseDocumentUI >& _rxDocumentUI, const ::rtl::OUString& _rTableName )
     {
@@ -310,6 +312,7 @@ namespace connectivity { namespace hsqldb
         }
         return xDialog;
     }
+#endif
 
     // -------------------------------------------------------------------
     void OHsqlConnection::impl_checkExistingTable_throw( const ::rtl::OUString& _rTableName )
