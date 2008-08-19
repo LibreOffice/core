@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: obj3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,17 +78,6 @@ namespace sdr
         class E3dSphereProperties;
     } // end of namespace properties
 } // end of namespace sdr
-
-/*************************************************************************
-|*
-|* Defines fuer nDrawFlag in Paint3D
-|*
-\************************************************************************/
-
-#define E3D_DRAWFLAG_FILLED                     0x0001
-#define E3D_DRAWFLAG_OUTLINE                    0x0002
-#define E3D_DRAWFLAG_TRANSPARENT                0x0004
-#define E3D_DRAWFLAG_GHOSTED                    0x0008
 
 /*************************************************************************
 |*
@@ -166,13 +155,16 @@ class SVX_DLLPUBLIC E3dObject : public SdrAttrObj
 
     basegfx::B2DPolyPolygon ImpCreateWireframePoly() const;
 
-public:
-    TYPEINFO();
+protected:
+    // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
+    // and no instances should be created from anyone, so i move the constructors
+    // to protected area
     E3dObject();
     E3dObject(BOOL bIsFromChart);
 
+public:
+    TYPEINFO();
     virtual void RecalcSnapRect();
-    virtual void RecalcBoundRect();
     virtual void SetRectsDirty(sal_Bool bNotMyself = sal_False);
 
     virtual ~E3dObject();
@@ -196,18 +188,6 @@ public:
     virtual sal_uInt32 GetHdlCount() const;
     virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
     virtual FASTBOOL HasSpecialDrag() const;
-
-    // 3D-Zeichenmethode
-    virtual void Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
-        const SdrPaintInfoRec& rInfoRec, UINT16 nDrawFlags=0);
-
-    // Objekt als Kontur in das Polygon einfuegen
-    virtual basegfx::B2DPolyPolygon ImpTakeContour3D() const;
-
-    // Schatten fuer 3D-Objekte zeichnen
-    virtual void DrawShadows(Base3D *pBase3D, XOutputDevice& rXOut,
-        const Rectangle& rBound, const Volume3D& rVolume,
-        const SdrPaintInfoRec& rInfoRec);
 
     // 3D-Objekt in die Gruppe einfuegen; Eigentumsuebergang!
     virtual void Insert3DObj(E3dObject* p3DObj);
@@ -278,7 +258,7 @@ public:
     virtual void          RestGeoData(const SdrObjGeoData& rGeo);
 
     // Selektion Setzen/Lesen
-    BOOL GetSelected() { return bIsSelected; }
+    BOOL GetSelected() const { return bIsSelected; }
     void SetSelected(BOOL bNew);
 
     // Aufbrechen
@@ -500,7 +480,6 @@ public :
 
     virtual UINT16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
-    virtual void RecalcBoundRect();
     virtual const Volume3D& GetBoundVolume() const;
 
     // Hittest, wird an Geometrie weitergegeben
@@ -509,27 +488,6 @@ public :
     // #110988# test if given hit candidate point is inside bound volume of object. Used
     // from CheckHit.
     sal_Bool ImpIsInsideBoundVolume(const basegfx::B3DPoint& rFront, const basegfx::B3DPoint& rBack, const Point& rPnt) const;
-
-    // 3D-Zeichenmethode
-    virtual void Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
-        const SdrPaintInfoRec& rInfoRec, UINT16 nDrawFlags=0);
-
-    // Objekt als Kontur in das Polygon einfuegen
-    virtual basegfx::B2DPolyPolygon ImpTakeContour3D() const;
-
-    // Schatten fuer 3D-Objekte zeichnen
-    virtual void DrawShadows(Base3D *pBase3D, XOutputDevice& rXOut,
-        const Rectangle& rBound, const Volume3D& rVolume,
-        const SdrPaintInfoRec& rInfoRec);
-
-    // #78972#
-    basegfx::B2DPolyPolygon ImpGetShadowPolygon() const;
-    void ImpDrawShadowPolygon(const basegfx::B2DPolyPolygon& rPoly, XOutputDevice& rXOut);
-
-    // Bitmaps fuer 3D-Darstellung von Gradients und Hatches holen
-    AlphaMask GetAlphaMask(const SfxItemSet& rSet, const Size& rSizePixel);
-    Bitmap GetGradientBitmap(const SfxItemSet&);
-    Bitmap GetHatchBitmap(const SfxItemSet&);
 
     // Geometrieerzeugung
     void DestroyGeometry();
@@ -549,13 +507,6 @@ public :
     // Copy-Operator
     virtual void operator=(const SdrObject&);
 
-    // Ausgabeparameter an 3D-Kontext setzen
-    void SetBase3DParams(XOutputDevice& rOut, Base3D*, BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted);
-private:
-    SVX_DLLPRIVATE sal_Bool ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted);
-    SVX_DLLPRIVATE sal_Bool ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted);
-public:
-
     // DisplayGeometry rausruecken
     const B3dGeometry& GetDisplayGeometry() const;
 
@@ -564,11 +515,7 @@ public:
     BOOL DrawShadowAsOutline() const;
     INT32 GetShadowXDistance() const;
     INT32 GetShadowYDistance() const;
-    UINT16 GetShadowTransparence() const;
     BOOL DoDrawShadow();
-
-    // WireFrame Darstellung eines Objektes
-    void DrawObjectWireframe(XOutputDevice& rOut);
 
     // Nromalen invertiert benutzen
 private:
