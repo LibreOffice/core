@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentcontainer.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,8 @@
 #ifndef CONNECTIVITY_SQLERROR_HXX
 #include <connectivity/sqlerror.hxx>
 #endif
+#include "core_resource.hxx"
+#include "core_resource.hrc"
 
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
@@ -547,7 +549,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         ::rtl::OUString sName;
         if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
-            ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to find the document '$name$'." ) ) );
+            ::rtl::OUString sMessage( DBA_RES( RID_STR_NAME_NOT_FOUND ) );
                 // TODO: resource
             ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", _sURL );
             throw IllegalArgumentException( sMessage, *this, 1 );
