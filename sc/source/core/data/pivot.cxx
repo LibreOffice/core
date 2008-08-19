@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pivot.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +43,6 @@
 
 #include <svtools/zforlist.hxx>
 #include <tools/solar.h>
-#include <string.h>
-#include <math.h>
-
 
 #include "globstr.hrc"
 #include "global.hxx"
@@ -62,6 +59,8 @@
 #include "compiler.hxx"                         // fuer errNoValue
 #include "progress.hxx"
 
+#include <string.h>
+#include <math.h>
 
 // STATIC DATA -----------------------------------------------------------
 
