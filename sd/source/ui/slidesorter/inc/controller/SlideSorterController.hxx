@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterController.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,6 +138,9 @@ public:
     ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager (void) const;
     ::boost::shared_ptr<SlotManager> GetSlotManager (void) const;
     ::boost::shared_ptr<SelectionManager> GetSelectionManager (void) const;
+
+    // forward VCLs PrePaint window event to DrawingLayer
+    void PrePaint();
 
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
@@ -278,11 +281,6 @@ public:
     */
     ::boost::shared_ptr<Animator> GetAnimator (void) const;
 
-    /** The highlight object is used to highlight the current slide (when
-        that is activated in the Properties.)
-    */
-    view::HighlightObject* GetHighlightObject (void) const;
-
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
@@ -342,8 +340,6 @@ private:
         classes.
     */
     ::boost::shared_ptr<Properties> mpProperties;
-
-    view::HighlightObject* mpHighlightObject;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
