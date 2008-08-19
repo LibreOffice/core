@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,12 @@
 #ifndef SD_SLIDESORTER_PAGE_OBJECT_VIEW_OBJECT_CONTACT_HXX
 #define SD_SLIDESORTER_PAGE_OBJECT_VIEW_OBJECT_CONTACT_HXX
 
+#include <svx/sdr/contact/viewobjectcontactofpageobj.hxx>
 #include "model/SlsSharedPageDescriptor.hxx"
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
 #include <sfx2/viewfrm.hxx>
-
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
@@ -56,19 +56,19 @@ class Properties;
 
 namespace sd { namespace slidesorter { namespace view {
 
-class PageNotificationObjectContact;
 class SlideSorterView;
 
 /** This object-view-contact of page objects maintains a preview bitmap for
     the page to speed up redraws of the same.  It does so by colaborating
     with a cache of bitmaps (see ../cache).
-
-    This class started as a subclass of ::sdr::contact::VOCBitmapBuffer but
-    the class specific code had to be copied and adapted.  Therefore, it is
-    now derived directly from ::sdr::contact::ViewObjectContact.
 */
-class PageObjectViewObjectContact
-    : public ::sdr::contact::ViewObjectContact
+
+// needs to be derived from ViewObjectContactOfPageObj, else the calls to parent implementations
+// would use ViewObjectContact and thus not enable e.g. the correct primitive creation
+// for view-independent printer output
+// changed: ViewObjectContact -> ViewObjectContactOfPageObj
+
+class PageObjectViewObjectContact : public ::sdr::contact::ViewObjectContactOfPageObj
 {
 public:
     /** Create a new view-object-contact object for the given contact
@@ -91,13 +91,6 @@ public:
     */
     void SetCache (const ::boost::shared_ptr<cache::PageCache>& rpCache);
 
-    virtual void PaintObject (::sdr::contact::DisplayInfo& rDisplayInfo);
-
-    /** The object is about to be deleted.  Tell the cache that it has not
-        to rendere a preview anymore and absolutely must not call back.
-    */
-    virtual void PrepareDelete (void);
-
     /** Return the page that is painted by this object.
     */
     const SdrPage* GetPage (void) const;
@@ -105,12 +98,7 @@ public:
     /** This fallback method is called when no preview cache is available.
         It creates a preview for the page.
     */
-    BitmapEx CreatePreview (OutputDevice& rDevice) const;
-
-    /** This paint method calls the more specialized paint methods
-        that paint single aspects of the content.
-    */
-    virtual void PaintContent (OutputDevice& rDevice);
+    BitmapEx CreatePreview (const sdr::contact::DisplayInfo& rDisplayInfo);
 
     /** Return the page descriptor of the slide sorter model that is
         associated with the same page object as this contact object is.
@@ -151,18 +139,6 @@ public:
         OutputDevice* pDevice,
         int nPageCount);
 
-    /** Paint all parts of the frame arround a preview.  These are the
-        border, the selection frame, the focus rectangle, and the mouse over
-        effect.
-        @param rDevice
-            The output device to paint on.
-        @param bShowMouseOverEffect
-            This flag specifies whether to paint the mouse over effect or not.
-    */
-    void PaintFrame (
-        OutputDevice& rDevice,
-        bool bShowMouseOverEffect = false) const;
-
     /** Paint a mouse over effect.
         @param bVisible
             When bVisible is <FALSE/> then paint the area of the mouse over
@@ -189,6 +165,7 @@ public:
         FadeEffectIndicatorBoundingBox
     };
     enum CoordinateSystem { ModelCoordinateSystem, PixelCoordinateSystem };
+
     /** Return the bounding box of the page object or one of its graphical
         parts.
         @param rDevice
@@ -205,6 +182,12 @@ public:
         OutputDevice& rDevice,
         BoundingBoxType eType,
         CoordinateSystem eCoordinateSystem) const;
+
+    // create the graphical visualisation data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const sdr::contact::DisplayInfo& rDisplayInfo) const;
+
+    // access to the current page content primitive vector which may be used for visualisation
+    const drawinglayer::primitive2d::Primitive2DSequence& getCurrentPageContents() const { return mxCurrentPageContents; }
 
     /** This convenience method paints a dotted or dashed rectangle.  The
         length of dots or dashes is indepent of zoom factor or map mode.
@@ -233,6 +216,8 @@ public:
         const ColorSpec eSpec,
         const double nOpacity = 1.0) const;
 
+    virtual void ActionChanged (void);
+
 private:
     /// Gap between border of page object and inside of selection rectangle.
     static const sal_Int32 mnSelectionIndicatorOffset;
@@ -249,23 +234,21 @@ private:
     static const sal_Int32 mnMouseOverEffectOffset;
     static const sal_Int32 mnMouseOverEffectThickness;
 
-    model::SharedPageDescriptor mpPageDescriptor;
-
-    /** This flag is set to <FALSE/> when PrepareDelete() is called to
+    /** This flag is set to <TRUE/> when the destructor is called to
         indicate that further calls made to it must not call outside.
     */
-    bool mbIsValid;
-
-    bool mbInPrepareDelete;
+    bool mbInDestructor;
 
     /** Set this flag to <TRUE/> to update the background color on the next
         call to GetBackgroundColor().
     */
     mutable bool mbIsBackgroundColorUpdatePending;
 
-    ::boost::shared_ptr<cache::PageCache> mpCache;
+    /// The primitive sequence of the page contents, completely scaled
+    /// and prepared for painiting
+    drawinglayer::primitive2d::Primitive2DSequence      mxCurrentPageContents;
 
-    ::std::auto_ptr<PageNotificationObjectContact> mpNotifier;
+    ::boost::shared_ptr<cache::PageCache> mpCache;
 
     ::boost::shared_ptr<controller::Properties> mpProperties;
 
@@ -276,10 +259,8 @@ private:
     mutable Color maBackgroundColor;
 
     BitmapEx GetPreview (
-        OutputDevice& rDevice,
+        const sdr::contact::DisplayInfo& rDisplayInfo,
         const Rectangle& rNewSizePixel);
-
-    virtual void ActionChanged (void);
 
     /** Return the bounding box of where the page number is painted (when it
         is painted).
@@ -321,7 +302,8 @@ private:
 
     /** Paint the number of the page to the upper left of the page object.
     */
-    void PaintPageNumber (OutputDevice& rDevice) const;
+    void PaintPageNumber (
+        ::sdr::contact::DisplayInfo& rDisplayInfo);
 
     Color GetBackgroundColor (const OutputDevice& rDevice) const;
 };
