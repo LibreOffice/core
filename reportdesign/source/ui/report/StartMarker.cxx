@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StartMarker.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +31,12 @@
 #include "StartMarker.hxx"
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
 #include "ModuleHelper.hxx"
 #include "ColorChanger.hxx"
 #include "ReportDefines.hxx"
-#include "SectionsWindow.hxx"
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
+#include "SectionWindow.hxx"
 #include "helpids.hrc"
-#endif
 #include <vcl/help.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
@@ -50,7 +46,6 @@
 
 #define CORNER_SPACE     5
 #define TEXT_WIDTH      10
-#define STRT_BORDER      6
 
 //=====================================================================
 namespace rptui
@@ -65,17 +60,17 @@ oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 DBG_NAME( rpt_OStartMarker )
 // -----------------------------------------------------------------------------
-OStartMarker::OStartMarker(OSectionsWindow* _pParent,const ::rtl::OUString& _sColorEntry)
+OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 ,m_aVRuler(this,WB_VERT)
-,m_aText(this,WB_WORDBREAK)
+,m_aText(this,WB_HYPHENATION)
 ,m_aImage(this,WB_LEFT|WB_TOP)
 ,m_pParent(_pParent)
-,m_nCornerSize(CORNER_SPACE)
 ,m_bShowRuler(sal_True)
 {
     DBG_CTOR( rpt_OStartMarker,NULL);
     SetUniqueId(HID_RPT_STARTMARKER);
+
     osl_incrementInterlockedCount(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();
@@ -92,7 +87,7 @@ OStartMarker::OStartMarker(OSectionsWindow* _pParent,const ::rtl::OUString& _sCo
     m_aVRuler.SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-
+    SetPaintTransparent(TRUE);
 }
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
@@ -109,28 +104,35 @@ OStartMarker::~OStartMarker()
 // -----------------------------------------------------------------------------
 sal_Int32 OStartMarker::getMinHeight() const
 {
-    return m_aText.GetTextHeight() + 2*STRT_BORDER + 2;
+    Fraction aExtraWidth(long(2*REPORT_EXTRA_SPACE));
+    aExtraWidth *= GetMapMode().GetScaleX();
+    return LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() + (long)aExtraWidth;
 }
 // -----------------------------------------------------------------------------
 void OStartMarker::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
     //SetUpdateMode(FALSE);
-    Size aSize = GetSizePixel();
+    Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
-    if ( !isCollapsed() )
-        nSize = aSize.Width() - m_aVRuler.GetSizePixel().Width() - m_nCornerSize;
-    SetClipRegion(Region(Rectangle(Point(),Size( nSize,aSize.Height()))));
-    aSize.Width() += m_nCornerSize;
+    const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
 
-    Point aGcc3WorkaroundTemporary;
+    if ( !isCollapsed() )
+    {
+        const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
+        nSize = aSize.Width() - nVRulerWidth/* - m_nCornerSize*/;
+        SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size( nSize,aSize.Height())))));
+        aSize.Width() += nCornerWidth;
+    } // if ( !isCollapsed() )
+    else
+        SetClipRegion();
+
+    const Point aGcc3WorkaroundTemporary;
     Rectangle aWholeRect(aGcc3WorkaroundTemporary,aSize);
     {
         const ColorChanger aColors( this, m_nTextBoundaries, m_nColor );
-
-        //aGradient.SetBorder(static_cast<USHORT>(m_nCornerSize));
         PolyPolygon aPoly;
-        aPoly.Insert(Polygon(aWholeRect,m_nCornerSize,m_nCornerSize));
+        aPoly.Insert(Polygon(aWholeRect,nCornerWidth,nCornerWidth));
 
         Color aStartColor(m_nColor);
         aStartColor.IncreaseLuminance(10);
@@ -143,15 +145,15 @@ void OStartMarker::Paint( const Rectangle& rRect )
         Gradient aGradient(GRADIENT_LINEAR,aStartColor,aEndColor);
         aGradient.SetSteps(static_cast<USHORT>(aSize.Height()));
 
-        DrawGradient(aPoly ,aGradient);
+        DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
     if ( m_bMarked )
     {
-#define DIFF_DIST    2
-        Rectangle aRect( Point(m_nCornerSize,m_nCornerSize),
-                         Size(aSize.Width() - m_nCornerSize- m_nCornerSize,aSize.Height() - m_nCornerSize- m_nCornerSize));
+        const long nCornerHeight = long(CORNER_SPACE * (double)GetMapMode().GetScaleY());
+        Rectangle aRect( Point(nCornerWidth,nCornerHeight),
+                         Size(aSize.Width() - nCornerWidth - nCornerWidth,aSize.Height() - nCornerHeight - nCornerHeight));
         ColorChanger aColors( this, COL_WHITE, COL_WHITE );
-        DrawPolyLine(Polygon(aRect),LineInfo(LINE_SOLID,2));
+        DrawPolyLine(Polygon(PixelToLogic(aRect)),LineInfo(LINE_SOLID,2 ));
     }
 }
 // -----------------------------------------------------------------------------
@@ -188,22 +190,21 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
         m_aImage.SetImage(*pImage);
 
         m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
-        m_nCornerSize = CORNER_SPACE;
         if ( m_aCollapsedLink.IsSet() )
             m_aCollapsedLink.Call(this);
     }
 
-    m_pParent->showProperties(this);
+    m_pParent->showProperties();
 }
 // -----------------------------------------------------------------------
 void OStartMarker::initDefaultNodeImages()
 {
     if ( !s_pDefCollapsed )
     {
-        s_pDefCollapsed = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED) );
-        s_pDefCollapsedHC = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED_HC ) );
-        s_pDefExpanded = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED ) );
-        s_pDefExpandedHC = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED_HC ) );
+        s_pDefCollapsed     = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED      ) );
+        s_pDefCollapsedHC   = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED_HC   ) );
+        s_pDefExpanded      = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED       ) );
+        s_pDefExpandedHC    = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED_HC    ) );
     }
 
     Image* pImage = NULL;
@@ -224,33 +225,35 @@ void OStartMarker::initDefaultNodeImages()
 // -----------------------------------------------------------------------
 void OStartMarker::ImplInitSettings()
 {
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    // SetBackground( Wallpaper( COL_YELLOW ));
+    SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    //SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDarkShadowColor() );
     setColor();
 }
 //------------------------------------------------------------------------------
 void OStartMarker::Resize()
 {
-    const Size aOutputSize( GetOutputSize() );
-    const long nOutputWidth = aOutputSize.Width();
-    const long nOutputHeight    = aOutputSize.Height();
+    const Size aOutputSize( GetOutputSizePixel() );
+    const long nOutputWidth  = aOutputSize.Width();
+    const long nOutputHeight = aOutputSize.Height();
 
-    const Size aImageSize = m_aImage.GetImage().GetSizePixel();
-    sal_Int32 nY = ::std::min<sal_Int32>(static_cast<sal_Int32>(REPORT_EXTRA_SPACE),static_cast<sal_Int32>((nOutputHeight - aImageSize.Height()) * 0.5));
-    if ( m_bCollapsed )
-        nY = static_cast<sal_Int32>((nOutputHeight - aImageSize.Height()) * 0.5);
-    Point aPos(REPORT_EXTRA_SPACE,nY);
-
-    m_aImage.SetPosSizePixel(aPos,Size(aImageSize.Width() + REPORT_EXTRA_SPACE,nOutputHeight - 2*nY));
-    aPos.X() += aImageSize.Width() + REPORT_EXTRA_SPACE;
-    aPos.Y() -= 2;
-
+    Size aImageSize = m_aImage.GetImage().GetSizePixel();
+    const MapMode& rMapMode = GetMapMode();
+    aImageSize.Width() = long(aImageSize.Width() * (double)rMapMode.GetScaleX());
+    aImageSize.Height() = long(aImageSize.Height() * (double)rMapMode.GetScaleY());
     const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
-    const Point aRulerPos(nOutputWidth - nVRulerWidth - 5,0);
+    const Point aRulerPos(nOutputWidth - nVRulerWidth/* - 5*/,0);
+    Fraction aExtraWidth(long(REPORT_EXTRA_SPACE));
+    aExtraWidth *= rMapMode.GetScaleX();
 
-    m_aText.SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nOutputHeight - 2*aPos.Y()));
+    Point aPos(aImageSize.Width() + (long)(aExtraWidth + aExtraWidth), aExtraWidth);
 
+    m_aText.SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText.GetTextHeight())).Height())));
+
+    aPos.X() = aExtraWidth;
+    aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
+    m_aImage.SetPosSizePixel(aPos,aImageSize);/*Size(aImageSize.Width() + (long)aExtraWidth,aImageSize.Height() + (long)aExtraWidth));*/
+    //m_aImage.SetPosPixel(aPos);
 
     m_aVRuler.SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
 }
@@ -311,7 +314,16 @@ void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
     showRuler(_bCollapsed);
 }
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
+void OStartMarker::zoom(const sal_Int16 _nZoom)
+{
+    setZoomFactor(_nZoom,*this);
+    m_aVRuler.SetZoom(Fraction(_nZoom,100));
+    // setZoomFactor(_nZoom,m_aVRuler);
+    setZoomFactor(_nZoom,m_aText);
+    setZoomFactor(_nZoom,m_aImage);
+    Resize();
+    Invalidate();
+}
 // -----------------------------------------------------------------------
 // =======================================================================
 }
