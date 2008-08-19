@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,7 +62,7 @@ SHL1VERSIONMAP=$(MYSQL_TARGET).map
 
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(MYSQL_TARGET)$(MYSQL_MAJOR)
+SHL1TARGET=	$(MYSQL_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
