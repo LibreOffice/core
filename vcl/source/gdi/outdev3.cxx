@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.242 $
+ * $Revision: 1.243 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,7 @@
 #endif
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -5141,7 +5142,19 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     {
         ::rtl::OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
+        // get service provider
+        uno::Reference< lang::XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+
         uno::Reference< linguistic2::XHyphenator > xHyph;
+        if( xSMgr.is() )
+        {
+            uno::Reference< linguistic2::XLinguServiceManager> xLinguMgr(xSMgr->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LinguServiceManager"))),uno::UNO_QUERY);
+            if ( xLinguMgr.is() )
+            {
+                xHyph = xLinguMgr->getHyphenator();
+            }
+        }
+
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
@@ -5162,13 +5175,111 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                 if ( xBI.is() )
                 {
-                    static const com::sun::star::lang::Locale aDefLocale;
+                    static const com::sun::star::lang::Locale aDefLocale(Application::GetSettings().GetUILocale());
                     xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
+                    //aHyphOptions.hyphenIndex = nSoftBreak;
                     i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, aDefLocale, nPos, aHyphOptions, aUserOptions );
                     nBreakPos = (xub_StrLen)aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
+                    if ( nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION )
+                    {
+                        // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
+                        // die Silbentrennung jagen...
+                        // nMaxBreakPos ist das letzte Zeichen was in die Zeile passt,
+                        // nBreakPos ist der Wort-Anfang
+                        // Ein Problem gibt es, wenn das Dok so schmal ist, dass ein Wort
+                        // auf mehr als Zwei Zeilen gebrochen wird...
+                        if ( xHyph.is() )
+                        {
+                            sal_Unicode cAlternateReplChar = 0;
+                            sal_Unicode cAlternateExtraChar = 0;
+                            i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, aDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
+                //          sal_uInt16 nWordStart = nBreakPos;
+                //          sal_uInt16 nBreakPos_OLD = nBreakPos;
+                            sal_uInt16 nWordStart = nPos;
+                            sal_uInt16 nWordEnd = (USHORT) aBoundary.endPos;
+                            DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
+
+                            USHORT nWordLen = nWordEnd - nWordStart;
+                            if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
+                            {
+                                // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
+                                // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
+                                String aWord( aText, nWordStart, nWordLen );
+                                sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Vor dem angeknacksten Buchstaben
+                                uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
+                                if (xHyph.is())
+                                    xHyphWord = xHyph->hyphenate( aWord, aDefLocale, aWord.Len() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
+                                if (xHyphWord.is())
+                                {
+                                    sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
+                                    sal_uInt16 _nWordLen = 1 + xHyphWord->getHyphenPos();
+
+                                    if ( ( _nWordLen >= 2 ) && ( (nWordStart+_nWordLen) >= ( 2 ) ) )
+                                    {
+                                        if ( !bAlternate )
+                                        {
+                                            nBreakPos = nWordStart + _nWordLen;
+                                        }
+                                        else
+                                        {
+                                            String aAlt( xHyphWord->getHyphenatedWord() );
+
+                                            // Wir gehen von zwei Faellen aus, die nun
+                                            // vorliegen koennen:
+                                            // 1) packen wird zu pak-ken
+                                            // 2) Schiffahrt wird zu Schiff-fahrt
+                                            // In Fall 1 muss ein Zeichen ersetzt werden,
+                                            // in Fall 2 wird ein Zeichen hinzugefuegt.
+                                            // Die Identifikation wird erschwert durch Worte wie
+                                            // "Schiffahrtsbrennesseln", da der Hyphenator alle
+                                            // Position des Wortes auftrennt und "Schifffahrtsbrennnesseln"
+                                            // ermittelt. Wir koennen also eigentlich nicht unmittelbar vom
+                                            // Index des AlternativWord auf aWord schliessen.
+
+                                            // Das ganze geraffel wird durch eine Funktion am
+                                            // Hyphenator vereinfacht werden, sobald AMA sie einbaut...
+                                            sal_uInt16 nAltStart = _nWordLen - 1;
+                                            sal_uInt16 nTxtStart = nAltStart - (aAlt.Len() - aWord.Len());
+                                            sal_uInt16 nTxtEnd = nTxtStart;
+                                            sal_uInt16 nAltEnd = nAltStart;
+
+                                            // Die Bereiche zwischen den nStart und nEnd ist
+                                            // die Differenz zwischen Alternativ- und OriginalString.
+                                            while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.Len() &&
+                                                   aWord.GetChar(nTxtEnd) != aAlt.GetChar(nAltEnd) )
+                                            {
+                                                ++nTxtEnd;
+                                                ++nAltEnd;
+                                            }
+
+                                            // Wenn ein Zeichen hinzugekommen ist, dann bemerken wir es jetzt:
+                                            if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
+                                                aWord.GetChar( nTxtEnd ) == aAlt.GetChar(nAltEnd) )
+                                            {
+                                                ++nAltEnd;
+                                                ++nTxtStart;
+                                                ++nTxtEnd;
+                                            }
+
+                                            DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Falsche Annahme!" );
+
+                                            if ( nTxtEnd > nTxtStart )
+                                                cAlternateReplChar = aAlt.GetChar( nAltStart );
+                                            else
+                                                cAlternateExtraChar = aAlt.GetChar( nAltStart );
+
+                                            nBreakPos = nWordStart + nTxtStart;
+                                            if ( cAlternateReplChar )
+                                                nBreakPos++;
+                                        }
+                                    } // if (xHyphWord.is())
+                                } // if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
+                            } // if ( xHyph.is() )
+                        } // if ( nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION )
+                    }
                     nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
                 }
             }
