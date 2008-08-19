@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -809,14 +809,17 @@ void SwPostIt::CheckMetaText()
         sMeta.Erase(20);
         sMeta = sMeta + rtl::OUString::createFromAscii("...");
     }
+    bool bValidTimeStamp = true;
     if (mpFld->GetDate()==Date())
         sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_TODAY));
-    else
-    if (mpFld->GetDate()==Date(Date()-1))
+    else if (mpFld->GetDate()==Date(Date()-1))
         sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_YESTERDAY));
+    else if (mpFld->GetDate().IsValid())
+        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + rLocalData.getDate(mpFld->GetDate());
     else
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + rLocalData.getDate( mpFld->GetDate() );
-    sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( mpFld->GetTime(),false );
+        bValidTimeStamp = false;
+    if (bValidTimeStamp)
+        sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime(mpFld->GetTime(), false);
     if (mpMeta->GetText() != sMeta)
         mpMeta->SetText(sMeta);
 }
