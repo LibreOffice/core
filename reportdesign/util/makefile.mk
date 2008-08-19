@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -206,9 +206,20 @@ XMLFILES = $(EXTENSIONDIR)$/description.xml \
             $(EXTENSIONDIR)$/META-INF$/manifest.xml
 
 COMPONENT_MERGED_XCU= \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Setup.xcu \
             $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu \
             $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ReportDesign.xcu \
-            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Paths.xcu
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ExtendedColorScheme.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Embedding.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Paths.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/TypeDetection$/Filter.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/TypeDetection$/Types.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/ReportCommands.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/Controller.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/DbReportWindowState.xcu \
+            $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/UI$/DbReportWindowState.xcs \
+            $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/UI$/ReportCommands.xcs \
+            $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/ReportDesign.xcs
 
 COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
@@ -268,12 +279,12 @@ $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
 $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICENSE.html
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
-
+    
 $(COMPONENT_HELP) : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-    .ELSE			# "$(SOLAR_JAVA)"!=""
+.ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
 .ENDIF			# "$(SOLAR_JAVA)"!=""
 #
