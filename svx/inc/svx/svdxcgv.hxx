@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdxcgv.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,7 @@ protected:
 
 public:
     // Alle markierten Objekte auf dem angegebenen OutputDevice ausgeben.
-    virtual void        DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const;
+    virtual void        DrawMarkedObj(OutputDevice& rOut) const;
 
     // Z.B. fuer's Clipboard, Drag&Drop, ...
     // Alle markierten Objekte in ein Metafile stecken. Z.Zt. noch etwas
@@ -96,7 +96,6 @@ public:
     // der Default-Layer zugewiesen (Layer 0, (dokumentglobaler Standardlayer).
     virtual SdrModel*   GetMarkedObjModel() const;
 
-    void            DrawAllMarked(OutputDevice& rOut, const Point& rOfs) const { DrawMarkedObj(rOut,rOfs); }
     GDIMetaFile     GetAllMarkedMetaFile(BOOL bNoVDevIfOneMtfMarked=FALSE) const { return GetMarkedObjMetaFile(bNoVDevIfOneMtfMarked); }
     Bitmap          GetAllMarkedBitmap(BOOL bNoVDevIfOneBmpMarked=FALSE) const { return GetMarkedObjBitmap(bNoVDevIfOneBmpMarked); }
     Graphic         GetAllMarkedGraphic() const;
