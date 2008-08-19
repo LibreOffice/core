@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotable.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +43,13 @@
 class SvStream;
 class SfxStyleSheet;
 
+namespace sdr { namespace contact {
+    class ViewContactOfTableObj;
+}}
+
 namespace sdr { namespace table {
 
+class TableLayouter;
 struct ImplTableShadowPaintInfo;
 
 #ifndef CellRef
@@ -217,9 +222,6 @@ public:
     virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
-    virtual void RecalcBoundRect();
-
     virtual void SetChanged();
 
     virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;
@@ -324,13 +326,6 @@ public:
 private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 
-    void ImpAddBorderLinesToBoundRect();
-
-    // paint stuff
-    void ImpDoPaintTableCell(const sdr::table::CellPos& rPos, XOutputDevice& rXOut, const ImplTableShadowPaintInfo* pShadowInfo = 0 ) const;
-    void ImpDoPaintCellText(const sdr::table::CellPos& rPos, XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec ) const;
-    void ImplDoPaintBorders( XOutputDevice& rXOut, const ImplTableShadowPaintInfo* pShadowInfo = 0 ) const;
-
     // BaseProperties section
     SVX_DLLPRIVATE virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
@@ -345,6 +340,12 @@ protected:
 
 private:
     SdrOutliner* GetCellTextEditOutliner( const ::sdr::table::Cell& rCell ) const;
+
+private:
+    // for the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
+    // TableLayouter for position and attribute informations
+    friend class sdr::contact::ViewContactOfTableObj;
+    const TableLayouter& getTableLayouter() const;
 
     Rectangle   maLogicRect;
 private:
