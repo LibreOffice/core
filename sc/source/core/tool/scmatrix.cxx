@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmatrix.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_sc.hxx"
 
 #include <tools/debug.hxx>
-#include <math.h>
 
 #include "scmatrix.hxx"
 #include "global.hxx"
@@ -42,6 +41,8 @@
 #include <svtools/zforlist.hxx>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
+
+#include <math.h>
 
 //------------------------------------------------------------------------
 
