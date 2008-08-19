@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: showview.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,9 +154,9 @@ void ShowView::InvalidateOneWin (::Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void ShowView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void ShowView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
-    FmFormView::CompleteRedraw(pOutDev, rReg, SDRPAINTMODE_ANILIKEPRN, pRedirector);
+    FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector);
 }
 
 /*************************************************************************
