@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tplneend.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,10 +68,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -104,13 +101,12 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aBtnLoad            ( this, SVX_RES( BTN_LOAD ) ),
     aBtnSave            ( this, SVX_RES( BTN_SAVE ) ),
     aFiTip              ( this, SVX_RES( FI_TIP ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
 
     rOutAttrs           ( rInAttrs ),
     pPolyObj( NULL ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
     aXLStyle            ( XLINE_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
     aXColor             ( String(), COL_BLACK ),
@@ -131,7 +127,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet.Put( aXColor );
     rXLSet.Put( XLineStartWidthItem( aCtlPreview.GetOutputSize().Height()  / 2 ) );
     rXLSet.Put( XLineEndWidthItem( aCtlPreview.GetOutputSize().Height() / 2 ) );
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // #i34740#
     aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -299,7 +294,6 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
 
         rXLSet.Put( XLineStartItem( String(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( String(), pEntry->GetLineEnd() ) );
-        XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
         // #i34740#
         aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -344,7 +338,6 @@ IMPL_LINK( SvxLineEndDefTabPage, SelectLineEndHdl_Impl, void *, EMPTYARG )
 
         rXLSet.Put( XLineStartItem( String(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( String(), pEntry->GetLineEnd() ) );
-        XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
         // #i34740#
         aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
