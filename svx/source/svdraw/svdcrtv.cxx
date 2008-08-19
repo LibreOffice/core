@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdcrtv.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <svx/svdcrtv.hxx>
 #include "xattr.hxx"
-#include "svdxout.hxx"
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx> // Spezialbehandlung: Nach dem Create transparente Fuellung
 #include <svx/svdoedge.hxx>
@@ -615,6 +614,9 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
             aDragStat.NextMove(aPnt);
             pAktCreate->MovCreate(aDragStat);
 
+            // MovCreate changes the object, so use ActionChanged() on it
+            pAktCreate->ActionChanged();
+
             // replace for DrawCreateObjDiff
             HideCreateObj();
             ShowCreateObj();
@@ -812,8 +814,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
                 if(pAktCreate->ISA(SdrRectObj))
                 {
                     // ensure object has some size, necessary for SdrTextObj because
-                    // there are still untested divisions by that sizes in DoPaintObject
-                    // stuff (see assert in SdrRectObj::DoPaintObject).
+                    // there are still untested divisions by that sizes
                     Rectangle aCurrentSnapRect(pAktCreate->GetSnapRect());
 
                     if(!(aCurrentSnapRect.GetWidth() > 1 && aCurrentSnapRect.GetHeight() > 1))
