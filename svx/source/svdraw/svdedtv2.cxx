@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv2.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@
 
 // #i37011#
 #include <svx/svdoashp.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -970,15 +971,27 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                         // It is better to try to reduce to more simple polygons.
                         aTmpPoly = basegfx::tools::simplifyCurveSegments(aTmpPoly);
 
-                        aTmpPoly = basegfx::tools::correctOrientations(aTmpPoly);
+                        // for each part polygon as preparation, remove self-intersections
+                        // correct orientations and get rid of evtl. neutral polygons.
+                        aTmpPoly = basegfx::tools::prepareForPolygonOperation(aTmpPoly);
 
                         if(!bFirstObjectComplete)
                         {
-                            aMergePolyPolygonA.append(aTmpPoly);
+                            aMergePolyPolygonA = aTmpPoly;
                         }
                         else
                         {
-                            aMergePolyPolygonB.append(aTmpPoly);
+                            if(aMergePolyPolygonB.count())
+                            {
+                                // to topologically correctly collect the 2nd polygon
+                                // group it is necessary to OR the parts (each is seen as
+                                // XOR-FillRule polygon and they are drawn over each-other)
+                                aMergePolyPolygonB = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonB, aTmpPoly);
+                            }
+                            else
+                            {
+                                aMergePolyPolygonB = aTmpPoly;
+                            }
                         }
                     }
                 }
@@ -998,44 +1011,28 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         {
             case SDR_MERGE_MERGE:
             {
-                // simple merge all contained parts (OR)
-                aMergePolyPolygonA.append(aMergePolyPolygonB);
-                aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-                aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-
+                // merge all contained parts (OR)
+                static bool bTestXOR(false);
+                if(bTestXOR)
+                {
+                    aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
+                }
+                else
+                {
+                    aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
+                }
                 break;
             }
             case SDR_MERGE_SUBSTRACT:
             {
-                // take selected poly 2..n (is in Polygon B), merge them, flipdirections
-                // and merge with poly 1
-                aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-                aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-                aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-                aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
-                aMergePolyPolygonB.flip();
-                aMergePolyPolygonA.append(aMergePolyPolygonB);
-                aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-                aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-
-                // #72995# one more call to resolve self intersections which
-                // may have been built by substracting (see bug)
-                aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-                aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-
+                // Substract B from A
+                aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
                 break;
             }
             case SDR_MERGE_INTERSECT:
             {
-                // cut poly 1 against polys 2..n (AND)
-                aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-                aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-                aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-                aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
-                aMergePolyPolygonA.append(aMergePolyPolygonB);
-                aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-                aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_False);
-
+                // AND B and A
+                aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
                 break;
             }
         }
@@ -1145,7 +1142,12 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
         {
             // Obj merken fuer Attribute kopieren
             pAttrObj = pObj;
-            aPolyPolygon.insert(0L, ImpGetPolyPolygon(pObj, sal_True));
+
+            // unfortunately ConvertMarkedToPathObj has converted all
+            // involved polygon data to curve segments, even if not necessary.
+            // It is better to try to reduce to more simple polygons.
+            basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj, sal_True)));
+            aPolyPolygon.insert(0L, aTmpPoly);
 
             if(!pInsOL)
             {
