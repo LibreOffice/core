@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWindow.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <MarkedSection.hxx>
+#include "ViewsWindow.hxx"
 
 class Splitter;
 
@@ -53,19 +54,16 @@ namespace rptui
     class OEndMarker;
     class OReportPage;
     class DlgEdFunc;
-    class OSectionsWindow;
-    class OViewsWindow;
     class DlgEdFactory;
 
     class OReportWindow :    public Window, public IMarkedSection
     {
         Ruler                   m_aHRuler;
-
         ODesignView*            m_pView;
         OScrollWindowHelper*    m_pParent;
-        OSectionsWindow*        m_pSections;
-        OViewsWindow*           m_pViews;
-        DlgEdFactory*           m_pObjFac;
+        OViewsWindow            m_aViewsWindow;
+        ::std::auto_ptr<DlgEdFactory>
+                                m_pObjFac;
 
         void ImplInitSettings();
 
@@ -82,8 +80,6 @@ namespace rptui
         /** late ctor
         */
         void initialize();
-
-        DECL_LINK(Collapsed,OStartMarker*);
         // WINDOW overloads
         virtual void Resize();
 
@@ -118,7 +114,7 @@ namespace rptui
 
         /** All objects will be marked.
         */
-        void SelectAll();
+        void SelectAll(const sal_uInt16 _nObjectType);
 
         /** returns <TRUE/> when a object is marked
         */
@@ -166,17 +162,6 @@ namespace rptui
         */
         sal_Int32       getMaxMarkerWidth(sal_Bool _bWithEnd) const;
 
-        /** returns the height of the first spliiter.
-        */
-        sal_Int32       getSplitterHeight() const;
-
-        /** returns the minimum height of the section
-        *
-        * \param _nPos
-        * \return the height in pixel
-        */
-        sal_Int32       getMinHeight(USHORT _nPos) const;
-
         void            ScrollChildren(long nDeltaX, long nDeltaY);
 
         void            notifyHeightChanged();
@@ -207,7 +192,7 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OReportSection> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
         virtual void markSection(const sal_uInt16 _nPos);
 
 
@@ -232,6 +217,10 @@ namespace rptui
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 
         sal_uInt32 getMarkedObjectCount() const;
+
+        /** zoom the ruler and view windows
+        */
+        void zoom(const sal_Int16 _nZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
