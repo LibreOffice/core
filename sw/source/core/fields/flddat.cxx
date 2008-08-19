@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flddat.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include <math.h>
 #include <tools/datetime.hxx>
 #include <svtools/zforlist.hxx>
@@ -40,9 +38,7 @@
 #include <doc.hxx>
 #include <fldbas.hxx>
 #include <flddat.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 
 using namespace ::com::sun::star;
 /*--------------------------------------------------
