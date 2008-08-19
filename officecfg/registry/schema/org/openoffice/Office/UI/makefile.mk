@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,9 +77,7 @@ XCSFILES= \
     Effects.xcs \
     Category.xcs \
     GenericCategories.xcs \
-    GlobalSettings.xcs \
-    DbReportWindowState.xcs \
-    ReportCommands.xcs
+    GlobalSettings.xcs
 
 .INCLUDE :  target.mk
 
