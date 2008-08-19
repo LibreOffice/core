@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.305 $
+ * $Revision: 1.306 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,15 +42,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Adabas, adabas)
 #endif
 
 #if defined(WNT)
-
-File gid_File_Lib_Ado_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-    Name = "ado2.dll";
-End
-
+STD_UNO_LIB_FILE( gid_File_Lib_Ado, ado)
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Basctl, basctl)
@@ -278,16 +270,8 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 
-File gid_File_Lib_Dbodbcbase
-    TXT_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libodbcbase2,UNXSUFFIX));
-  #else
-    Name = "odbcbase2.dll";
-  #endif
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
+STD_LIB_FILE(gid_File_Lib_Odbcbase,odbcbase)
+
 
 File gid_File_Lib_Dbpool
     TXT_FILE_BODY;
@@ -440,14 +424,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Emser , emser)
 #endif
 
 #ifdef UNX
-
-File gid_File_Lib_Evoab_1
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libevoab1,UNXSUFFIX));
-End
+STD_UNO_LIB_FILE( gid_File_Lib_Evoab_1 , evoab)
 
 #ifdef ENABLE_KAB
 
@@ -491,13 +468,7 @@ End
 
 #ifdef ENABLE_EVOAB2
 
-File gid_File_Lib_Evoab_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libevoab2,UNXSUFFIX));
-End
+STD_UNO_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
 #endif
 
@@ -775,17 +746,7 @@ End
 
 #ifdef SOLAR_JAVA
 
-File gid_File_Lib_Jdbc_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libjdbc2,UNXSUFFIX));
-  #else
-    Name = "jdbc2.dll";
-  #endif
-End
+STD_UNO_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
 
 #endif
 
@@ -797,9 +758,9 @@ File gid_File_Lib_Hsqldb_2
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT2(libhsqldb2,UNXSUFFIX));
+    Name = STRING(CONCAT2(libhsqldb,UNXSUFFIX));
   #else
-    Name = "hsqldb2.dll";
+    Name = "hsqldb.dll";
   #endif
 End
 
@@ -907,35 +868,11 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) 
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
+    // (#i91209#)
 
-#ifndef MACOSX
-    // #i91209#
-
-File gid_File_Lib_Mozabdrv
-    TXT_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmozabdrv2,UNXSUFFIX));
-  #else
-    Name = "mozabdrv2.dll";
-  #endif
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
-
-File gid_File_Lib_Mozab_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmozab2,UNXSUFFIX));
-  #else
-    Name = "mozab2.dll";
-  #endif
-End
-
-#endif  // #ifndef MACOSX
+STD_UNO_LIB_FILE(gid_File_Lib_Mozab,mozab)
+STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
 #else
 
@@ -1040,29 +977,8 @@ End
 #endif
 #endif
 
-File gid_File_Lib_Mysql_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmysql2,UNXSUFFIX));
-  #else
-    Name = "mysql2.dll";
-  #endif
-End
-
-File gid_File_Lib_Odbc_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libodbc2,UNXSUFFIX));
-  #else
-    Name = "odbc2.dll";
-  #endif
-End
+STD_UNO_LIB_FILE(gid_File_Lib_Mysql,mysql)
+STD_UNO_LIB_FILE(gid_File_Lib_Odbc,odbc)
 
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 
