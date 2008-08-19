@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdorect.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,10 +57,16 @@ namespace sdr
 
 class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
+private:
+    // BaseProperties section
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
+
+    // DrawContact section
+private:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
 
@@ -74,8 +80,6 @@ protected:
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
     SdrObject* ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bForceFilled, FASTBOOL bForceTol=FALSE) const;
-
-    //void PaintIt(XOutputDevice& rOut, _BOOL bDown) const;
     void SetXPolyDirty();
 
     // RecalcXPoly sollte ueberladen werden. Dabei muss dann eine XPolygon
@@ -100,15 +104,9 @@ public:
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat);
     virtual ~SdrRectObj();
 
-    // #i25616#
-    void ImpDoPaintRectObjShadow(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const;
-    void ImpDoPaintRectObj(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const;
-
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual void RecalcBoundRect();
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
