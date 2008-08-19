@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi2.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -678,7 +678,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     // decide if alpha masking or transparency masking is needed
     BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( TRUE );
-    if( pAlphaBuffer )
+    if( pAlphaBuffer != NULL )
     {
         int nMaskFormat = pAlphaBuffer->mnFormat;
         const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, TRUE );
@@ -849,13 +849,6 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         return false;
 
     // create alpha Picture
-    static XRenderPictFormat* pAlphaFormat = NULL;
-    if( !pAlphaFormat )
-    {
-        XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
-        pAlphaFormat = rPeer.FindPictureFormat(
-            PictFormatAlphaMask|PictFormatDepth, aPictFormat );
-    }
 
     // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
     // problem is that they don't provide an 8bit Pixmap on a non-8bit display
@@ -886,9 +879,10 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
         *pCDst = ~*pCDst;
 
+    const XRenderPictFormat* pAlphaFormat = rPeer.GetStandardFormatA8();
     XImage* pAlphaImg = XCreateImage( pXDisplay, pDstXVisual, 8, ZPixmap, 0,
         pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
-        8, pAlphaBuffer->mnScanlineSize );
+        pAlphaFormat->depth, pAlphaBuffer->mnScanlineSize );
 
     Pixmap aAlphaPM = XCreatePixmap( pXDisplay, hDrawable_,
         rTR.mnDestWidth, rTR.mnDestHeight, 8 );
