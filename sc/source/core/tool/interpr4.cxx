@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr4.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,11 +45,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
-#include <math.h>
-#include <float.h>
-#include <map>
-#include <algorithm>
-#include <functional>
 
 #include <com/sun/star/table/XCellRange.hpp>
 
@@ -71,6 +66,12 @@
 #include "addinlis.hxx"
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
+
+#include <math.h>
+#include <float.h>
+#include <map>
+#include <algorithm>
+#include <functional>
 
 using namespace com::sun::star;
 
