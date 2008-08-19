@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfmtf.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +47,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 
-#ifndef _SVX_XGRAD_HXX //autogen
 #include <svx/xgrad.hxx>
-#endif
 #include <svx/xflgrit.hxx>
 #include <fontitem.hxx>
 #include <svx/akrnitem.hxx>
