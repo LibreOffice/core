@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,7 +124,10 @@ SvxDrawPage::~SvxDrawPage() throw()
 {
     DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );
     if( !mrBHelper.bDisposed )
-        disposing();
+    {
+        acquire();
+        dispose();
+    }
     DBG_DTOR(SvxDrawPage,NULL);
 }
 
@@ -196,6 +199,8 @@ void SvxDrawPage::disposing() throw()
 void SvxDrawPage::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
+    OGuard aSolarGuard( Application::GetSolarMutex() );
+
     // An frequently programming error is to release the last
     // reference to this object in the disposing message.
     // Make it rubust, hold a self Reference.
