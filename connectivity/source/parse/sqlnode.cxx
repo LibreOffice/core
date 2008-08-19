@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqlnode.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1953,19 +1953,20 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
     }
 
     else if(bNegate && (SQL_ISRULE(pSearchCondition,test_for_null) || SQL_ISRULE(pSearchCondition,in_predicate) ||
-                        SQL_ISRULE(pSearchCondition,like_predicate) || SQL_ISRULE(pSearchCondition,between_predicate) ||
-                        SQL_ISRULE(pSearchCondition,boolean_test) ))
+                        SQL_ISRULE(pSearchCondition,between_predicate) || SQL_ISRULE(pSearchCondition,boolean_test) ))
     {
         sal_uInt32 nNotPos = 0;
         // row_value_constructor not SQL_TOKEN_IN in_predicate_value
-        // row_value_constructor not SQL_TOKEN_LIKE num_value_exp opt_escape
         // row_value_constructor not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
-        if(SQL_ISRULE(pSearchCondition,in_predicate) || SQL_ISRULE(pSearchCondition,like_predicate) ||
-           SQL_ISRULE(pSearchCondition,between_predicate))
+        if  (   SQL_ISRULE( pSearchCondition, in_predicate )
+            ||  SQL_ISRULE( pSearchCondition, between_predicate )
+            )
             nNotPos = 1;
         // row_value_constructor SQL_TOKEN_IS not SQL_TOKEN_NULL
         // boolean_primary SQL_TOKEN_IS not truth_value
-        else if(SQL_ISRULE(pSearchCondition,test_for_null) || SQL_ISRULE(pSearchCondition,boolean_test))
+        else if (   SQL_ISRULE( pSearchCondition, test_for_null )
+                ||  SQL_ISRULE( pSearchCondition, boolean_test )
+                )
             nNotPos = 2;
 
         OSQLParseNode* pNot = pSearchCondition->getChild(nNotPos);
@@ -1976,6 +1977,17 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
             pNotNot = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
         pSearchCondition->replace(pNot, pNotNot);
         delete pNot;
+    }
+    else if(bNegate && (SQL_ISRULE(pSearchCondition,like_predicate)))
+    {
+        OSQLParseNode* pCheckForNOT = pSearchCondition->getChild( 1 );
+        if ( pCheckForNOT->getNodeType() == SQL_TOKEN_NOT )
+            delete pSearchCondition->removeAt( 1 );
+        else
+        {
+            OSQLParseNode* pNot = new OSQLParseNode( ::rtl::OUString::createFromAscii( "NOT" ), SQL_NODE_KEYWORD, SQL_TOKEN_NOT );
+            pSearchCondition->insert( 1, pNot );
+        }
     }
 }
 //-----------------------------------------------------------------------------
