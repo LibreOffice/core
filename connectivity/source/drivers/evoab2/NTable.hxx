@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NTable.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@ namespace connectivity
             OEvoabConnection* m_pConnection;
 
         public:
-            OEvoabTable(    sdbcx::OCollection* _pTables, OEvoabConnection* _pConnection);
             OEvoabTable(    sdbcx::OCollection* _pTables,
                     OEvoabConnection* _pConnection,
                     const ::rtl::OUString& _Name,
