@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdxcgv.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 #include <svx/svdoutl.hxx>
 #include "svditext.hxx"
 #include <svx/svdetc.hxx>
-#include "svdxout.hxx"
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx> // fuer kein OLE im SdrClipboardFormat
@@ -586,21 +585,24 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
             aMtf.Clear();
             aMtf.Record( &aOut );
 
-            DrawMarkedObj( aOut, aBound.TopLeft() );
+            // Replace offset given formally to DrawMarkedObj and used at XOutDev with relative
+            // MapMode (which was also used in XOutDev in that case). Goal is to paint the object
+            // as if TopLeft point is (0,0)
+            const Fraction aNeutralFraction(1, 1);
+            const MapMode aRelativeMapMode(MAP_RELATIVE, Point(-aBound.Left(), -aBound.Top()), aNeutralFraction, aNeutralFraction);
+            aOut.SetMapMode(aRelativeMapMode);
+
+            DrawMarkedObj(aOut);
 
             aMtf.Stop();
             aMtf.WindStart();
             aMtf.SetPrefMapMode( aMap );
 
-            // #i8506# Add something to the prefsize, to prevent
-            // the draw shapes from clipping away the right/bottom-
-            // most line. Honestly, I have not the slightest idea
-            // why exactly 32 does the trick here, but that's the
-            // smallest number which still works even for the highest
-            // zoom level.
-            // See also #108486# for further details.
-            aMtf.SetPrefSize( Size(aBoundSize.Width()+32,
-                                   aBoundSize.Height()+32) );
+            // removed PrefSize extension. It is principially wrong to set a reduced size at
+            // the created MetaFile. The mentioned errors occurr at output time since the integer
+            // MapModes from VCL lead to errors. It is now corrected in the VCLRenderer for
+            // primitives (and may later be done in breaking up a MetaFile to primitives)
+            aMtf.SetPrefSize(aBoundSize);
         }
     }
 
@@ -651,8 +653,6 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
         if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
         {
             VirtualDevice   aOut;
-            XOutputDevice aXOut( &aOut);
-            SdrPaintInfoRec aInfoRec;
             GDIMetaFile     aMtf;
             const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const MapMode   aMap( pModel->GetScaleUnit(),
@@ -664,9 +664,12 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
             aOut.SetMapMode( aMap );
             aMtf.Record( &aOut );
 
-            aXOut.SetOffset( Point( -aBoundRect.Left(), -aBoundRect.Top() ) );
-            aInfoRec.nPaintMode |= SDRPAINTMODE_ANILIKEPRN;
-            pObj->SingleObjectPainter( aXOut, aInfoRec ); // #110094#-17
+            // aXOut.SetOffset( Point( -aBoundRect.Left(), -aBoundRect.Top() ) );
+            MapMode aOffsetMapMode(aOut.GetMapMode());
+            aOffsetMapMode.SetOrigin(aBoundRect.TopLeft());
+            aOut.SetMapMode(aOffsetMapMode);
+
+            pObj->SingleObjectPainter( aOut ); // #110094#-17
 
             aMtf.Stop();
             aMtf.WindStart();
@@ -683,12 +686,9 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
+void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 {
     SortMarkedObjects();
-    pXOut->SetOutDev(&rOut);
-    SdrPaintInfoRec aInfoRec;
-    aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
 
     ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
@@ -715,16 +715,9 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
         for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
         {
             SdrMark*    pMark = rObjVector[ i ];
-            Point       aOfs( -rOfs.X(),-rOfs.Y() );
-
-            if( aOfs != pXOut->GetOffset() )
-                pXOut->SetOffset(aOfs);
-
-            pMark->GetMarkedSdrObj()->SingleObjectPainter( *pXOut, aInfoRec ); // #110094#-17
+            pMark->GetMarkedSdrObj()->SingleObjectPainter( rOut ); // #110094#-17
         }
     }
-
-    pXOut->SetOffset( Point(0,0) );
 }
 
 // -----------------------------------------------------------------------------
