@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoutl.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,24 +37,24 @@
 
 class SdrTextObj;
 class SdrPaintInfoRec;
+class SdrPage;
 
 class SVX_DLLPUBLIC SdrOutliner : public Outliner
 {
 protected:
     SdrObjectWeakRef mpTextObj;
-    const SdrPaintInfoRec* mpPaintInfoRec;
+    const SdrPage* mpVisualizedPage;
+
 public:
     SdrOutliner( SfxItemPool* pItemPool, USHORT nMode );
     virtual ~SdrOutliner() ;
 
     void  SetTextObj( const SdrTextObj* pObj );
     void SetTextObjNoInit( const SdrTextObj* pObj );
-
     const SdrTextObj* GetTextObj() const;
 
-    void SetPaintInfoRec( const SdrPaintInfoRec* pPaintInfoRec ) { mpPaintInfoRec = pPaintInfoRec; }
-    const SdrPaintInfoRec* GetPaintInfoRec() const { return mpPaintInfoRec; }
-    void ClearPaintInfoRec() { mpPaintInfoRec = NULL; }
+    void setVisualizedPage(const SdrPage* pPage) { if(pPage != mpVisualizedPage) mpVisualizedPage = pPage; }
+    const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
     virtual String  CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor);
 };
