@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dvector.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #define _BGFX_VECTOR_B3DVECTOR_HXX
 
 #include <basegfx/tuple/b3dtuple.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -321,5 +323,7 @@ namespace basegfx
         return aVec;
     }
 } // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif /* _BGFX_VECTOR_B3DVECTOR_HXX */
