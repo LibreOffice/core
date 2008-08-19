@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessiblecell.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,7 @@ void AccessibleCell::Init (void)
 {
     SdrView* pView = maShapeTreeInfo.GetSdrView();
     const Window* pWindow = maShapeTreeInfo.GetWindow ();
-    if( (pView != NULL) && (pWindow != NULL) && mxCell.is() && (mxCell->GetObject() != NULL))
+    if( (pView != NULL) && (pWindow != NULL) && mxCell.is())
     {
         OutlinerParaObject* pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
@@ -92,7 +92,7 @@ void AccessibleCell::Init (void)
         if( pOutlinerParaObject )
         {
             // non-empty text -> use full-fledged edit source right away
-            ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( *mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
+            ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
             mpText = new AccessibleTextHelper( pEditSource );
             mpText->SetEventSource(this);
         }
