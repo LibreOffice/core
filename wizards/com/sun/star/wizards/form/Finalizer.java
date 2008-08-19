@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Finalizer.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ public class Finalizer {
         );
         CurUnoDialog.insertLabel("lblProceed",
           new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(62),UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(154)}
+          new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(62),UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(185)}
         );
         XRadioButton optWorkWithForm = CurUnoDialog.insertRadioButton("optWorkWithForm", null,
           new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
