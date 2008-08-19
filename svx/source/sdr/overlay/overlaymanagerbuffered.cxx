@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaymanagerbuffered.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +111,7 @@ namespace sdr
             // #i29186#
             maBufferDevice.SetDrawMode(getOutputDevice().GetDrawMode());
             maBufferDevice.SetSettings(getOutputDevice().GetSettings());
+            maBufferDevice.SetAntialiasing(getOutputDevice().GetAntialiasing());
         }
 
         void OverlayManagerBuffered::ImpRestoreBackground() const
@@ -253,10 +254,11 @@ namespace sdr
             if(!maBufferRememberedRangePixel.isEmpty())
             {
                 // logic size for impDrawMember call
-                const Rectangle aRectangleLogic(getOutputDevice().PixelToLogic(Rectangle(
+                basegfx::B2DRange aBufferRememberedRangeLogic(
                     maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
-                    maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY())));
-                const basegfx::B2DRange aBufferRememberedRangeLogic(aRectangleLogic.Left(), aRectangleLogic.Top(), aRectangleLogic.Right(), aRectangleLogic.Bottom());
+                    maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
+                aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
+
                 const bool bTargetIsWindow(OUTDEV_WINDOW == rmOutputDevice.GetOutDevType());
                 Cursor* pCursor = 0;
 
@@ -283,6 +285,7 @@ namespace sdr
                     maOutputBufferDevice.EnableMapMode(sal_False);
                     maOutputBufferDevice.SetDrawMode(maBufferDevice.GetDrawMode());
                     maOutputBufferDevice.SetSettings(maBufferDevice.GetSettings());
+                    maOutputBufferDevice.SetAntialiasing(maBufferDevice.GetAntialiasing());
 
                     // calculate sizes
                     Rectangle aRegionRectanglePixel(
@@ -485,11 +488,28 @@ namespace sdr
             basegfx::B2DRange aDiscreteRange(rRange);
             aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
 
-            const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()));
-            const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+            if(maDrawinglayerOpt.IsAntiAliasing())
+            {
+                // assume AA needs one pixel more and invalidate one pixel more
+                const basegfx::B2DVector aDiscreteInLogic(getOutputDevice().GetViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const basegfx::B2IPoint aTopLeft(
+                    (sal_Int32)floor(aDiscreteRange.getMinX() - aDiscreteInLogic.getX()),
+                    (sal_Int32)floor(aDiscreteRange.getMinY() - aDiscreteInLogic.getY()));
+                const basegfx::B2IPoint aBottomRight(
+                    (sal_Int32)ceil(aDiscreteRange.getMaxX() + aDiscreteInLogic.getX()),
+                    (sal_Int32)ceil(aDiscreteRange.getMaxY() + aDiscreteInLogic.getY()));
 
-            maBufferRememberedRangePixel.expand(aTopLeft);
-            maBufferRememberedRangePixel.expand(aBottomRight);
+                maBufferRememberedRangePixel.expand(aTopLeft);
+                maBufferRememberedRangePixel.expand(aBottomRight);
+            }
+            else
+            {
+                const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()));
+                const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+
+                maBufferRememberedRangePixel.expand(aTopLeft);
+                maBufferRememberedRangePixel.expand(aBottomRight);
+            }
         }
 
         void OverlayManagerBuffered::SetRefreshWithPreRendering(sal_Bool bNew)
