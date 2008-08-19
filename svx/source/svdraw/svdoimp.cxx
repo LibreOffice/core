@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoimp.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnedcit.hxx>
-#include <xlinjoit.hxx>
+#include "xlinjoit.hxx"
 #include <svx/xlndsit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
