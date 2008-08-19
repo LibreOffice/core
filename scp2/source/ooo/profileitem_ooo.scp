@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -571,17 +571,8 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Classpath_Urls
 #ifdef SYSTEM_HSQLDB
     ValueList2 = HSQLDB_JAR;
 #endif
-#ifdef SYSTEM_XML_APIS
-    ValueList3 = XML_APIS_JAR;
-#endif
-#ifdef SYSTEM_XERCES
-    ValueList4 = XERCES_JAR;
-#endif
-#ifdef SYSTEM_XALAN
-    ValueList5 = XALAN_JAR;
-#endif
-#ifdef SYSTEM_SERIALIZER
-    ValueList6 = SERIALIZER_JAR;
+#ifdef SYSTEM_SAXON
+    ValueList3 = SAXON_JAR;
 #endif
 End
 
