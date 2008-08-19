@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dxf2mtf.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_goodies.hxx"
 
-#include <math.h>
 #include <string.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
 #include "dxf2mtf.hxx"
+
+#include <math.h>
 
 
 ULONG DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
