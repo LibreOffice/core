@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterView.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
-#include "view/SlsHighlightObject.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
 #include "controller/SlsProperties.hxx"
@@ -64,7 +63,6 @@
 #include <svtools/itempool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopage.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <com/sun/star/presentation/FadeEffect.hpp>
@@ -75,6 +73,10 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svtools/itempool.hxx>
+
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
+#endif
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -112,6 +114,14 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     SetPageVisible (FALSE);
     maPageModel.GetItemPool().FreezeIdRanges();
 
+    // call FreezeIdRanges() at the pool from the newly constructed SdrModel,
+    // else creating SfxItemSets on it will complain
+    maPageModel.GetItemPool().FreezeIdRanges();
+
+    // add the page to the model (no, this is NOT done by the constructor :-( )
+    maPageModel.InsertPage(mpPage);
+
+    // show page
     LocalModelHasChanged();
 }
 
@@ -136,8 +146,12 @@ SlideSorterView::~SlideSorterView (void)
     }
     mpPreviewCache.reset();
 
-    // Remove all page objects from the page.
-    mpPage->Clear();
+    // hide the page to avoid problems in the view when deleting
+    // visualized objects
+    HideSdrPage();
+
+    // Deletion of the objects and the page will be done in SdrModel
+    // destructor (as long as objects and pages are added)
 }
 
 
@@ -226,9 +240,6 @@ void SlideSorterView::ModelHasChanged (void)
         LocalModelHasChanged();
     }
 }
-
-
-
 
 void SlideSorterView::LocalModelHasChanged(void)
 {
@@ -390,17 +401,12 @@ void SlideSorterView::Layout ()
             model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
             SdrPageObj* pPageObject = pDescriptor->GetPageObject();
             Rectangle aPageObjectBox (mpLayouter->GetPageObjectBox (nIndex));
-            pPageObject->SetRelativePos (aPageObjectBox.TopLeft());
+            pPageObject->SetSnapRect(aPageObjectBox);
 
             nIndex += 1;
         }
         // Set the page so that it encloses all page objects.
         mpPage->SetSize (aViewBox.GetSize());
-
-        view::HighlightObject* pHighlightObject
-            = mrSlideSorter.GetController().GetHighlightObject();
-        if  (pHighlightObject != NULL)
-            pHighlightObject->UpdatePosition();
     }
 
     InvalidatePageObjectVisibilities ();
@@ -597,11 +603,7 @@ Rectangle SlideSorterView::GetPageBoundingBox (
 
 
 
-void SlideSorterView::CompleteRedraw (
-    OutputDevice* pDevice,
-    const Region& rPaintArea,
-    USHORT nPaintMode,
-    ::sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SlideSorterView::CompleteRedraw(OutputDevice* pDevice, const Region& rPaintArea, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     if (mnLockRedrawSmph == 0)
     {
@@ -614,13 +616,13 @@ void SlideSorterView::CompleteRedraw (
 
         // Call the base class InitRedraw even when re-drawing is locked to
         // let it remember the request for a redraw.
-        View::CompleteRedraw (pDevice, rPaintArea, nPaintMode, pRedirector);
+        View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
     }
     else
     {
         // In sd::View::CompleteRedraw() this call is recorded and given
         // region is painted when the view is unlocked.
-        View::CompleteRedraw (pDevice, rPaintArea, nPaintMode, pRedirector);
+        View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
     }
 }
 
