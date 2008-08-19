@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prltempl.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,8 +293,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         break;
     }
     SetText( aTitle );
-
-//  SetPalette( XOutputDevice::GetDitherPalette() );
 
     nDlgType = 1; // Vorlagen-Dialog
     nPageType = 0;
