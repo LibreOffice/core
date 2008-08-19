@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,20 +66,14 @@
 #include <svx/svdpagv.hxx>
 #include <tools/globname.hxx>
 #include <vcl/jobset.hxx>
-#ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 
 #include <sot/formats.hxx>
 #include <linkmgr.hxx>
-#ifndef SVTOOLS_TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
-
 #include <cppuhelper/implbase5.hxx>
 
 #include <svtools/solar.hrc>
-#include "svdxout.hxx"
 #include <svtools/urihelper.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -92,7 +86,8 @@
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
 #include "impgrf.hxx"
-#include <svx/chartprettypainter.hxx>
+#include <svtools/chartprettypainter.hxx>
+#include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -726,6 +721,14 @@ static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObj
     {
         return false;
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrOle2Obj(*this);
 }
 
 // -----------------------------------------------------------------------------
@@ -1518,164 +1521,6 @@ UINT16 SdrOle2Obj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    sal_Bool bOk(sal_True);
-
-    //charts must be painted resolution dependent!! #i82893#, #i75867#
-    if( IsChart() && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( rOut.GetOutDev() ) )
-        if( !rOut.GetOffset().nA && !rOut.GetOffset().nB )//offset!=0 is the scenario 'copy -> past special gdi metafile' which does not work with direct painting so far
-            if( ChartPrettyPainter::DoPrettyPaintChart( this->getXModel(), rOut.GetOutDev(), aRect ) )
-                return bOk;
-
-    if( !GetGraphic() )
-        ( (SdrOle2Obj*) this)->GetObjRef_Impl();    // try to create embedded object
-
-    if ( xObjRef.is() )
-    {
-        sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
-        if( !bSizProt && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE) )
-            ( (SdrOle2Obj*) this)->bSizProt = TRUE;
-
-        OutputDevice* pOut = rOut.GetOutDev();
-
-        //TODO/LATER: currently it's not possible to compare the windows, the XOutDev contains a virtual device
-        sal_Int32 nState = xObjRef->getCurrentState();
-        //if ( ( nState != embed::EmbedStates::INPLACE_ACTIVE && nState != embed::EmbedStates::UI_ACTIVE ) ||
-        //       pModel && SfxInPlaceClient::GetActiveWindow( pModel->GetPersist(), xObjRef ) != pOut )
-        {
-            if ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
-            {
-                // PlugIn-Objekt connecten
-                if (rInfoRec.pPV!=NULL)
-                {
-                    SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) this;
-                    SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
-                    pSdrView->DoConnect(pOle2Obj);
-                }
-            }
-
-            // #108759# Temporarily set the current background
-            // color, since OLEs rely on that during
-            // auto-colored text rendering
-            Wallpaper aOldBg( pOut->GetBackground() );
-
-            if( rInfoRec.pPV && GetPage() )
-                pOut->SetBackground( rInfoRec.pPV->GetView().CalcBackgroundColor( GetSnapRect(),
-                                                                                  rInfoRec.pPV->GetVisibleLayers(),
-                                                                                  *GetPage() ) );
-
-            pOut->Push( PUSH_CLIPREGION );
-            pOut->IntersectClipRegion( aRect );
-
-            GetGraphic();
-            PaintGraphic_Impl( rOut, rInfoRec, nState == embed::EmbedStates::ACTIVE );
-
-            /*
-            if ( !mpImpl->pMetaFile )
-                GetGDIMetaFile();
-            if ( mpImpl->pMetaFile )
-                mpImpl->pMetaFile->Play( pOut, aRect.TopLeft(), aRect.GetSize() );
-            //(*ppObjRef)->DoDraw(pOut,aRect.TopLeft(),aRect.GetSize(),JobSetup());
-            */
-
-            pOut->Pop();
-
-            // #108759# Restore old background
-            pOut->SetBackground( aOldBg );
-        }
-    }
-    else if ( GetGraphic() )
-    {
-        PaintGraphic_Impl( rOut, rInfoRec );
-    }
-    // #100499# OLE without context and without bitmap, do the same as
-    // for empty groups, additionally draw empty OLE bitmap
-    else
-    {
-        if(!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(GetLayer()))
-        {
-            OutputDevice* pOutDev = rOut.GetOutDev();
-
-            pOutDev->SetFillColor();
-            pOutDev->SetLineColor(Color(COL_LIGHTGRAY));
-            pOutDev->DrawRect(aOutRect);
-
-            Bitmap aBitmap(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr()));
-            Rectangle aSnapRect(GetSnapRect());
-            Size aBitmapSize(pOutDev->PixelToLogic(aBitmap.GetSizePixel()));
-
-            pOutDev->DrawBitmap(
-                aSnapRect.Center() - Point(aBitmapSize.Width() / 2, aBitmapSize.Height() / 2),
-                aBitmapSize,
-                aBitmap);
-        }
-    }
-
-    if (HasText())
-    {
-        bOk = SdrTextObj::DoPaintObject(rOut, rInfoRec);
-    }
-    return bOk;
-}
-
-void SdrOle2Obj::PaintGraphic_Impl( XOutputDevice& rOut, const SdrPaintInfoRec& /*rInfoRec*/, sal_Bool bActive ) const
-{
-    OutputDevice* pOutDev = rOut.GetOutDev();
-    OSL_ENSURE( pOutDev, "The device must be provided!\n" );
-    if ( !pOutDev )
-        return;
-
-    // In case High Contrast mode is requested try to get a graphical representation in this mode
-    // if it is not possible the replacement image should be used
-    Graphic* pGr = NULL;
-    if ( ( pOutDev->GetDrawMode() & DRAWMODE_SETTINGSFILL ) && xObjRef.is() )
-        pGr = xObjRef.GetHCGraphic();
-
-    if ( !pGr )
-        pGr = GetGraphic();
-
-    if ( pGr && pGr->GetType() != GRAPHIC_NONE )
-    {
-        if( IsEmptyPresObj() )
-        {
-            const MapMode   aDstMapMode( pOutDev->GetMapMode().GetMapUnit() );
-            Point           aPos(aRect.Center());
-            Size            aDstSize;
-
-            if( pGr->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-                aDstSize = pOutDev->PixelToLogic( pGr->GetPrefSize(), aDstMapMode );
-            else
-                aDstSize = pOutDev->LogicToLogic( pGr->GetPrefSize(), pGr->GetPrefMapMode(), aDstMapMode );
-
-            aPos.X()-=aDstSize.Width() /2;
-            aPos.Y()-=aDstSize.Height()/2;
-            if (aPos.X() >= aRect.Left() && aPos.Y() >= aRect.Top())
-                pGr->Draw(pOutDev,aPos, aDstSize);
-
-            svtools::ColorConfig aColorConfig;
-            svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
-
-            if( aColor.bIsVisible )
-            {
-                pOutDev->SetFillColor();
-                pOutDev->SetLineColor( aColor.nColor );
-                pOutDev->DrawRect(aRect);
-            }
-        }
-        else
-            pGr->Draw( pOutDev, aRect.TopLeft(), aRect.GetSize() );
-
-        // shade the representation if the object is activated outplace
-        if ( bActive )
-            ::svt::EmbeddedObjectRef::DrawShading( aRect, pOutDev );
-    }
-    else
-        ::svt::EmbeddedObjectRef::DrawPaintReplacement( aRect, mpImpl->aPersistName, pOutDev );
-}
-
-// -----------------------------------------------------------------------------
-
 SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     return ImpCheckHit(rPnt,nTol,pVisiLayer,TRUE,TRUE);
@@ -2292,6 +2137,91 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
 
     return sal_False;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* pPageVew) const
+{
+    bool bIsActive(false);
+    // copy of the old SdrOle2Obj::Do_PaintObject stuff which evtl. needs
+    // to be emulated.
+
+    // //charts must be painted resolution dependent!! #i82893#, #i75867#
+    // if( ChartPrettyPainter::IsChart(xObjRef) && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( rOut.GetOutDev() ) )
+    //     if( !rOut.GetOffset().nA && !rOut.GetOffset().nB )//offset!=0 is the scenario 'copy -> past special gdi metafile' which does not work with direct painting so far
+    //         if( ChartPrettyPainter::DoPrettyPaintChart( this->getXModel(), rOut.GetOutDev(), aRect ) )
+    //             return bOk;
+    //
+    // if( !GetGraphic() )
+    //     ( (SdrOle2Obj*) this)->GetObjRef_Impl();    // try to create embedded object
+
+    // this one can be used directly, just reformatting a bit
+    if(!GetGraphic())
+    {
+        // try to create embedded object
+        const_cast< SdrOle2Obj* >(this)->GetObjRef_Impl();
+    }
+
+    // if ( xObjRef.is() )
+    // {
+    //     sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
+    //     if( !bSizProt && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE) )
+    //      ( (SdrOle2Obj*) this)->bSizProt = TRUE;
+
+    // old stuff which relies on xObjRef and nMiscStatus
+    if(xObjRef.is())
+    {
+        const sal_Int64 nMiscStatus(xObjRef->getStatus(GetAspect()));
+
+        // this hack (to change model data during PAINT argh(!)) can also be reproduced
+        // directly
+        if(!IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
+        {
+            const_cast< SdrOle2Obj* >(this)->SetResizeProtect(true);
+        }
+
+    //     OutputDevice* pOut = rOut.GetOutDev();
+    //
+    //     //TODO/LATER: currently it's not possible to compare the windows, the XOutDev contains a virtual device
+    //     sal_Int32 nState = xObjRef->getCurrentState();
+    //     //if ( ( nState != embed::EmbedStates::INPLACE_ACTIVE && nState != embed::EmbedStates::UI_ACTIVE ) ||
+    //     //       pModel && SfxInPlaceClient::GetActiveWindow( pModel->GetPersist(), xObjRef ) != pOut )
+    //  {
+    //         if ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+    //      {
+    //          // PlugIn-Objekt connecten
+    //          if (rInfoRec.pPV!=NULL)
+    //          {
+    //              SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) this;
+    //              SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
+    //              pSdrView->DoConnect(pOle2Obj);
+    //          }
+    //      }
+
+        // nState is used in old paint to see if OLE is activated and to do
+        // a different paint
+        const sal_Int32 nState(xObjRef->getCurrentState());
+
+        bIsActive = (nState == embed::EmbedStates::ACTIVE);
+
+        // for this one i need the view.
+        if(pPageVew && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
+        {
+            // connect plugin object
+            pPageVew->GetView().DoConnect(const_cast< SdrOle2Obj* >(this));
+        }
+    }
+
+    return bIsActive;
+}
+
+Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap() const
+{
+    return Bitmap(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr()));
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 void SdrOle2Obj::SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow)
 {
     if ( xObjRef.is() && mpImpl->pLightClient )
@@ -2299,4 +2229,6 @@ void SdrOle2Obj::SetWindow(const com::sun::star::uno::Reference < com::sun::star
         mpImpl->pLightClient->setWindow(_xWindow);
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////
 // eof
