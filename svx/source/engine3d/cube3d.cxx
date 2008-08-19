@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cube3d.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,15 @@
 #include "globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <svx/sdr/contact/viewcontactofe3dcube.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfE3dCube(*this);
+}
 
 TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 
