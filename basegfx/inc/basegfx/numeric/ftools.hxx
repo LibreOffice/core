@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftools.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,6 @@
 #define _BGFX_NUMERIC_FTOOLS_HXX
 
 #include <rtl/math.hxx>
-
-#include <algorithm> // for min/max
-
 
 //////////////////////////////////////////////////////////////////////////////
 // standard PI defines from solar.h, but we do not want to link against tools
@@ -98,9 +95,37 @@ namespace basegfx
      */
     inline double pruneScaleValue( double fVal )
     {
-        return fVal < 0.0 ?
-            (::std::min(fVal,-0.00001)) :
-            (::std::max(fVal,0.00001));
+        // old version used ::std::min/max, but this collides if min is defined as preprocessor
+        // macro which is the case e.g with windows.h headers. The simplest way to avoid this is to
+        // just use the full comparison. I keep the original here, maybe there will be a better
+        // solution some day.
+        //
+        //return fVal < 0.0 ?
+        //    (::std::min(fVal,-0.00001)) :
+        //    (::std::max(fVal,0.00001));
+
+        if(fVal < 0.0)
+            return (fVal < -0.00001 ? fVal : -0.00001);
+        else
+            return (fVal > 0.00001 ? fVal : 0.00001);
+    }
+
+    /** clamp given value against given minimum and maximum values
+    */
+    template <class T> const T& clamp(const T& value, const T& minimum, const T& maximum)
+    {
+        if(value < minimum)
+        {
+            return minimum;
+        }
+        else if(value > maximum)
+        {
+            return maximum;
+        }
+        else
+        {
+            return value;
+        }
     }
 
     /** Convert value from degrees to radians
