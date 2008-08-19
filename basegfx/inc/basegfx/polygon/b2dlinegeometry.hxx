@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dlinegeometry.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,51 +42,102 @@ namespace basegfx
 {
     namespace tools
     {
-        /** Descriptor for type of Line Joint
+        /** Create line start/end geometry element, mostly arrows and things like that.
+
+            @param rCandidate
+            The polygon which needs to get that line ends and needs to have two points
+            at least.
+
+            @param rArrow
+            The line start/end geometry. It is assumed that the tip is pointing
+            upwards. Result will be rotated and scaled to fit.
+
+            @param bStart
+            describes if creation is for start or end of candidate.
+
+            @param fWidth
+            defines the size of the element, it's describing the target width in X
+            of the arrow.
+
+            @param fDockingPosition needs to be in [0.0 ..1.0] range, where 0.0 means
+            that the tip of the arrow will be aligned with the polygon start, 1.0 means
+            the bottom. The default of 0.5 describes a centered arrow.
+
+            @param pConsumedLength
+            Using this parameter it is possible to get back how much from the candidate
+            geometry is overlapped by the created element (consumed).
+
+            @param fCandidateLength
+            This should contain the length of rCandidate to allow work without
+            again calculating the length (which may be expensive with beziers). If 0.0 is
+            given, the length is calculated on demand.
+
+            @return
+            The Line start and end polygon, correctly rotated and scaled
         */
-        enum B2DLineJoin
-        {
-            B2DLINEJOIN_NONE,       // no rounding
-            B2DLINEJOIN_MIDDLE,     // calc middle value between joints
-            B2DLINEJOIN_BEVEL,      // join edges with line
-            B2DLINEJOIN_MITER,      // extend till cut
-            B2DLINEJOIN_ROUND       // create arc
-        };
-
-        // create area geometry for given polygon. Edges are joined using the given
-        // join type. fHalfLineWidth defines the relative width.
-        // fDegreeStepWidth is used when rounding edges.
-        // fMiterMinimumAngle is used to define when miter is forced to bevel.
-        // All created polygons will be positively or neuteral oriented and free of
-        // self intersections.
-        B2DPolyPolygon createAreaGeometryForPolygon(
-            const B2DPolygon& rCandidate,
-            double fHalfLineWidth,
-            B2DLineJoin eJoin,
-            double fDegreeStepWidth = (10.0 * F_PI180),
-            double fMiterMinimumAngle = (15.0 * F_PI180));
-
-        // create line start/end geometry element, mostly arrows and things like that.
-        // rCandidate is the polygon which needs to get that line ends and needs to have
-        // two points at least.
-        // rArrow is the line start/end geometry. It is assumed that the tip is pointing
-        // upwards. Result will be rotated and scaled to fit.
-        // bStart describes if creation is for start or end of candidate.
-        // fWidth defines the size of the element, it's describing the target width in X
-        // of the arrow.
-        // fDockingPosition needs to be in [0.0 ..1.0] range, where 0.0 means that the tip
-        // of the arrow will be aligned with the polygon start, 1.0 means the bottom. The
-        // default of 0.5 describes a centered arrow.
-        // With pConsumedLength it is possible to get back how much from the candidate
-        // geometry is overlapped by the creted element.
         B2DPolyPolygon createAreaGeometryForLineStartEnd(
             const B2DPolygon& rCandidate,
             const B2DPolyPolygon& rArrow,
             bool bStart,
             double fWidth,
+            double fCandidateLength = 0.0, // 0.0 -> calculate self
             double fDockingPosition = 0.5, // 0->top, 1->bottom
             double* pConsumedLength = 0L);
 
+        /** create filled polygon geometry for lines with a line width
+
+            This method will create bezier based, fillable polygons which
+            will resample the curve if it was extended for the given half
+            line width. It will remove extrema positions from contained
+            bezier segments and get as close as possible and defined by
+            the given parameters to the ideal result.
+
+            It will check edges for trivial bezier to avoid unnecessary
+            bezier polygons. Care is taken to produce the in-between
+            polygon points (the ones original on the source poygon) since
+            it has showed that without those, the raster converters leave
+            non-filled gaps.
+
+            @param rCandidate
+            The source polygon defining the hairline polygon path
+
+            @param fHalfLineWidth
+            The width of the line to one side
+
+            @param eJoin
+            The LineJoin if the edges meeting in a point do not have a C1
+            or C2 continuity
+
+            @param fMaxAllowedAngle
+            Allows to hand over the maximum allowed angle between an edge and
+            it's control vectors. The smaller, the more subdivisions will be
+            needed to create the filled geometry. Allowed range is cropped to
+            [F_PI2 .. 0.01 * F_PI2].
+
+            @param fMaxPartOfEdge
+            Allows to influence from with relative length of a control vector
+            compared to it's edge a split is forced. The smaller, the more
+            subdivisions will be needed to create the filled geometry. Allowed
+            range is cropped to [1.0 .. 0.01]
+
+            @praram fMiterMinimumAngle
+            The minimum wanted angle between two edges when edge rounding
+            is using miter. When an edge is smaller than this (tighter)
+            the usual fallback to bevel is used. Allowed range is cropped
+            to [F_PI .. 0.01 * F_PI].
+
+            @return
+            The PolyPolygon containing the geometry of the extended line by
+            it's line width. Contains bezier segments and edge roundings as
+            needed and defined.
+        */
+        B2DPolyPolygon createAreaGeometry(
+            const B2DPolygon& rCandidate,
+            double fHalfLineWidth,
+            B2DLineJoin eJoin = B2DLINEJOIN_ROUND,
+            double fMaxAllowedAngle = (12.5 * F_PI180),
+            double fMaxPartOfEdge = 0.4,
+            double fMiterMinimumAngle = (15.0 * F_PI180));
     } // end of namespace tools
 } // end of namespace basegfx
 
