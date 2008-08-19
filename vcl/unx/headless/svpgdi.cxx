@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpgdi.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -390,13 +390,7 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
     dbgOut( m_aDevice );
 }
 
-bool SvpSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
-{
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
-        return false;
-}
-
-bool SvpSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+bool SvpSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/ )
 {
         // TODO: implement and advertise OutDevSupport_B2DDraw support
         return false;
@@ -422,6 +416,12 @@ sal_Bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
                                                 const BYTE* const* )
 {
     return sal_False;
+}
+
+bool SvpSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+    // TODO: maybe BaseBmp can draw B2DPolyPolygons directly
+    return false;
 }
 
 void SvpSalGraphics::copyArea( long nDestX,
