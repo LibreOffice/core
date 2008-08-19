@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formnavigation.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -418,17 +418,18 @@ namespace frm
 
         switch ( _nFeatureId )
         {
-        case SID_FM_RECORD_ABSOLUTE: pAsciiURL = URL_FORM_POSITION;     break;
-        case SID_FM_RECORD_TOTAL   : pAsciiURL = URL_FORM_RECORDCOUNT;  break;
-        case SID_FM_RECORD_FIRST   : pAsciiURL = URL_RECORD_FIRST;      break;
-        case SID_FM_RECORD_PREV    : pAsciiURL = URL_RECORD_PREV;       break;
-        case SID_FM_RECORD_NEXT    : pAsciiURL = URL_RECORD_NEXT;       break;
-        case SID_FM_RECORD_LAST    : pAsciiURL = URL_RECORD_LAST;       break;
-        case SID_FM_RECORD_SAVE    : pAsciiURL = URL_RECORD_SAVE;       break;
-        case SID_FM_RECORD_UNDO    : pAsciiURL = URL_RECORD_UNDO;       break;
-        case SID_FM_RECORD_NEW     : pAsciiURL = URL_RECORD_NEW;        break;
-        case SID_FM_RECORD_DELETE  : pAsciiURL = URL_RECORD_DELETE;     break;
-        case SID_FM_REFRESH        : pAsciiURL = URL_FORM_REFRESH;      break;
+        case SID_FM_RECORD_ABSOLUTE     : pAsciiURL = URL_FORM_POSITION;     break;
+        case SID_FM_RECORD_TOTAL        : pAsciiURL = URL_FORM_RECORDCOUNT;  break;
+        case SID_FM_RECORD_FIRST        : pAsciiURL = URL_RECORD_FIRST;      break;
+        case SID_FM_RECORD_PREV         : pAsciiURL = URL_RECORD_PREV;       break;
+        case SID_FM_RECORD_NEXT         : pAsciiURL = URL_RECORD_NEXT;       break;
+        case SID_FM_RECORD_LAST         : pAsciiURL = URL_RECORD_LAST;       break;
+        case SID_FM_RECORD_SAVE         : pAsciiURL = URL_RECORD_SAVE;       break;
+        case SID_FM_RECORD_UNDO         : pAsciiURL = URL_RECORD_UNDO;       break;
+        case SID_FM_RECORD_NEW          : pAsciiURL = URL_RECORD_NEW;        break;
+        case SID_FM_RECORD_DELETE       : pAsciiURL = URL_RECORD_DELETE;     break;
+        case SID_FM_REFRESH             : pAsciiURL = URL_FORM_REFRESH;      break;
+        case SID_FM_REFRESH_FORM_CONTROL: pAsciiURL = URL_FORM_REFRESH_CURRENT_CONTROL; break;
 
         case SID_FM_SORTUP             : pAsciiURL = URL_FORM_SORT_UP;       break;
         case SID_FM_SORTDOWN           : pAsciiURL = URL_FORM_SORT_DOWN;     break;
@@ -468,6 +469,8 @@ namespace frm
             nFeatureId = SID_FM_RECORD_DELETE;
         else if ( _rCompleteURL == URL_FORM_REFRESH )
             nFeatureId = SID_FM_REFRESH;
+        else if ( _rCompleteURL == URL_FORM_REFRESH_CURRENT_CONTROL )
+            nFeatureId = SID_FM_REFRESH_FORM_CONTROL;
         else if ( _rCompleteURL == URL_FORM_SORT_UP )
             nFeatureId = SID_FM_SORTUP;
         else if ( _rCompleteURL == URL_FORM_SORT_DOWN )
