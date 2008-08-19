@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScrollHelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +41,11 @@
 #include <boost/shared_ptr.hpp>
 #include <vcl/dockwin.hxx>
 #include <MarkedSection.hxx>
+#include "ReportWindow.hxx"
 
 class SdrView;
 namespace rptui
 {
-    class OSectionsWindow;
     class ODesignView;
     class OReportWindow;
     class OSectionView;
@@ -68,7 +68,7 @@ namespace rptui
         Size                m_aTotalPixelSize;
         Point               m_aPixOffset;       // offset to virtual window (pixel)
         ODesignView*        m_pParent;
-        OReportWindow*      m_pChild;
+        OReportWindow       m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
                             m_pReportDefintionMultiPlexer; // listener for property changes
 
@@ -96,7 +96,7 @@ namespace rptui
         void                    initialize();
 
         inline Point            getScrollOffset() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
-        inline OReportWindow*   getReportWindow() const { return m_pChild; }
+        inline const OReportWindow& getReportWindow() const { return m_aReportWindow; }
         void                    setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
         inline ScrollBar*       GetHScroll() { return &m_aHScroll; }
@@ -130,7 +130,7 @@ namespace rptui
 
         /** All objects will be marked.
         */
-        void SelectAll();
+        void SelectAll(const sal_uInt16 _nObjectType);
 
         /** returns <TRUE/> when a object is marked
         */
@@ -190,7 +190,7 @@ namespace rptui
         void                    setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OReportSection> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
         virtual void markSection(const sal_uInt16 _nPos);
 
 
@@ -215,6 +215,10 @@ namespace rptui
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 
         sal_uInt32 getMarkedObjectCount() const;
+
+        /** zoom the ruler and view windows
+        */
+        void zoom(const sal_Int16 _nZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
