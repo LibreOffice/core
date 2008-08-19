@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SQLQueryComposer.java,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,28 +94,40 @@ public class SQLQueryComposer {
         return true;
     }
 
-    public void appendSelectClause(boolean _baddAliasFieldNames) throws SQLException {
+    public void appendSelectClause(boolean _baddAliasFieldNames) throws SQLException
+    {
         String sSelectBaseClause = "SELECT ";
         selectclause = sSelectBaseClause;
-        for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++) {
-            if (addtoSelectClause(CurDBMetaData.FieldColumns[i].DisplayFieldName)) {
+        for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++)
+        {
+            if (addtoSelectClause(CurDBMetaData.FieldColumns[i].DisplayFieldName))
+            {
                 int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldColumns[i].DisplayFieldName);
-                if (iAggregate > -1) {
+                if (iAggregate > -1)
+                {
                     selectclause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
                     if (_baddAliasFieldNames)
+                    {
                         selectclause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
-                } else {
+                    }
+                }
+                else
+                {
                     selectclause += getComposedAliasFieldName(CurDBMetaData.FieldColumns[i].DisplayFieldName);
                     if (_baddAliasFieldNames)
+                    {
                         selectclause += getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].DisplayFieldName);
+                }
                 }
                 selectclause += ", ";
             }
         }
-        if (selectclause.equals(sSelectBaseClause)){
+        if (selectclause.equals(sSelectBaseClause))
+        {
             selectclause = selectclause.substring(0, selectclause.length() - 1);
         }
-        else{
+        else
+        {
             selectclause = selectclause.substring(0, selectclause.length() - 2);
         }
     }
