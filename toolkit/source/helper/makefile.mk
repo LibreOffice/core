@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,6 +58,7 @@ SLOFILES=   \
             $(SLO)$/externallock.obj                \
             $(SLO)$/imagealign.obj                  \
             $(SLO)$/throbberimpl.obj                \
+            $(SLO)$/formpdfexport.obj				\
             $(SLO)$/accessibilityclient.obj         \
             $(SLO)$/fixedhyperbase.obj
 
