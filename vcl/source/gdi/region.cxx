@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -934,7 +934,10 @@ void Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
 
 void Region::ImplPolyPolyRegionToBandRegionFunc()
 {
-    const PolyPolygon aPolyPoly = GetPolyPolygon();
+    // ensure to subdivide when bezier segemnts are used, it's going to
+    // be expanded to rectangles
+    PolyPolygon aPolyPoly;
+    GetPolyPolygon().AdaptiveSubdivide(aPolyPoly);
 
     if ( mpImplRegion->mnRefCount > 1 )
         mpImplRegion->mnRefCount--;
