@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlinfo.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +186,7 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
     // #101500#
     Point aStart;
     sal_Bool bIsVertical(IsVertical());
-    mpOut->SetFont((const Font&)pInfo->rFont);
+    mpOut->SetFont((const Font&)pInfo->mrFont);
     FontMetric aFontMetric(mpOut->GetFontMetric());
     sal_Bool bUseBreakIterator(sal_False);
 
@@ -194,7 +194,7 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
     Reference < com::sun::star::i18n::XBreakIterator > xBreak;
     Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"));
-    ::com::sun::star::lang::Locale aFontLocale = SvxCreateLocale(pInfo->rFont.GetLanguage());
+    ::com::sun::star::lang::Locale aFontLocale = SvxCreateLocale(pInfo->mrFont.GetLanguage());
 
     if(xInterface.is())
     {
@@ -209,16 +209,16 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
 
     if(bIsVertical)
     {
-        aStart.X() = pInfo->rStartPos.X() + aTextOffset.X() - aFontMetric.GetDescent();
-        aStart.Y() = pInfo->rStartPos.Y() + aTextOffset.Y();
+        aStart.X() = pInfo->mrStartPos.X() + aTextOffset.X() - aFontMetric.GetDescent();
+        aStart.Y() = pInfo->mrStartPos.Y() + aTextOffset.Y();
 
         const Point aTopLeft(aStart.X(), aParaBound.Top());
         const Point aBottomRight(aStart.X() + aFontMetric.GetLineHeight(), aParaBound.Bottom());
         const Rectangle aCurRect(aTopLeft, aBottomRight);
 
-        if(pInfo->nPara != nCurPara)
+        if(pInfo->mnPara != nCurPara)
         {
-            nCurPara = pInfo->nPara;
+            nCurPara = pInfo->mnPara;
             pParagraphs[nCurPara].aRect = aCurRect;
         }
         else
@@ -228,16 +228,16 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
     }
     else
     {
-        aStart.X() = pInfo->rStartPos.X() + aTextOffset.X();
-        aStart.Y() = pInfo->rStartPos.Y() + aTextOffset.Y() - aFontMetric.GetAscent();
+        aStart.X() = pInfo->mrStartPos.X() + aTextOffset.X();
+        aStart.Y() = pInfo->mrStartPos.Y() + aTextOffset.Y() - aFontMetric.GetAscent();
 
         const Point aTopLeft(aParaBound.Left(), aStart.Y());
         const Point aBottomRight(aParaBound.Right(), aStart.Y() + aFontMetric.GetLineHeight());
         const Rectangle aCurRect(aTopLeft, aBottomRight);
 
-        if(pInfo->nPara != nCurPara)
+        if(pInfo->mnPara != nCurPara)
         {
-            nCurPara = pInfo->nPara;
+            nCurPara = pInfo->mnPara;
             pParagraphs[nCurPara].aRect = aCurRect;
         }
         else
@@ -246,15 +246,15 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
         }
     }
 
-    if(pInfo->nTextLen && (0xFFFF != pInfo->nIndex))
+    if(pInfo->mnTextLen && (0xFFFF != pInfo->mnIndex))
     {
-        pParagraphs[nCurPara].nCharCount += pInfo->nTextLen;
+        pParagraphs[nCurPara].nCharCount += pInfo->mnTextLen;
         sal_uInt16 nInsertIndex(0xffff);
 
         if(pInfo->IsRTL())
             nInsertIndex = (sal_uInt16)aCharacterList.Count();
 
-        for(sal_uInt16 nCharIndex(0); nCharIndex < pInfo->nTextLen; )
+        for(sal_uInt16 nCharIndex(0); nCharIndex < pInfo->mnTextLen; )
         {
             xub_StrLen nNextGlyphLen(1);
             sal_Bool bIsSingleSpace(sal_False);
@@ -262,14 +262,14 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
             if(bUseBreakIterator)
             {
                 sal_Int32 nDone(0L);
-                nNextGlyphLen = (xub_StrLen)xBreak->nextCharacters( pInfo->rText, pInfo->nTextStart, aFontLocale,
-                    CharacterIteratorMode::SKIPCELL, 1, nDone) - (pInfo->nTextStart);
+                nNextGlyphLen = (xub_StrLen)xBreak->nextCharacters( pInfo->mrText, pInfo->mnTextStart, aFontLocale,
+                    CharacterIteratorMode::SKIPCELL, 1, nDone) - (pInfo->mnTextStart);
             }
 
             if(!bIsSingleSpace)
             {
-                Size aGlyphSize(pInfo->rFont.GetPhysTxtSize(mpOut,
-                    pInfo->rText, nCharIndex + pInfo->nTextStart, nNextGlyphLen));
+                Size aGlyphSize(pInfo->mrFont.GetPhysTxtSize(mpOut,
+                    pInfo->mrText, nCharIndex + pInfo->mnTextStart, nNextGlyphLen));
 
                 if(bIsVertical)
                 {
@@ -280,18 +280,18 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
 
                 aCharacterList.Insert(new OutlinerCharacter(
                     aRect,
-                    pInfo->nPara,
-                    pInfo->rFont.GetColor()),
+                    pInfo->mnPara,
+                    pInfo->mrFont.GetColor()),
                     nInsertIndex);
 
                 long dx = 0;
-                if( pInfo->pDXArray )
-                    dx = (pInfo->pDXArray)[nCharIndex];
+                if( pInfo->mpDXArray )
+                    dx = (pInfo->mpDXArray)[nCharIndex];
 
                 if(bIsVertical)
-                    aStart.Y() = pInfo->rStartPos.Y() + aTextOffset.Y() + dx;
+                    aStart.Y() = pInfo->mrStartPos.Y() + aTextOffset.Y() + dx;
                 else
-                    aStart.X() = pInfo->rStartPos.X() + aTextOffset.X() + dx;
+                    aStart.X() = pInfo->mrStartPos.X() + aTextOffset.X() + dx;
             }
 
             nCharIndex = nCharIndex + nNextGlyphLen;
