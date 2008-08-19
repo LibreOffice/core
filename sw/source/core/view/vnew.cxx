@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vnew.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,7 +188,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     nStartAction( 0 ),
     nLockPaint( 0 ),
     mnPrePostPaintCount(0L), // #i72754#
-    mpPrePostOutDev(0) // #i72754#
+    mpPrePostOutDev(0), // #i72754#
+    maPrePostMapMode()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
@@ -268,7 +269,8 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     nStartAction( 0 ),
     nLockPaint( 0 ),
     mnPrePostPaintCount(0L), // #i72754#
-    mpPrePostOutDev(0) // #i72754#
+    mpPrePostOutDev(0), // #i72754#
+    maPrePostMapMode()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
