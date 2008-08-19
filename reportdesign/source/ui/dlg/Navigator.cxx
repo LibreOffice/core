@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Navigator.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,9 @@
 
 #include "Navigator.hxx"
 
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include "ReportController.hxx"
-#ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 #include "Undo.hxx"
 #include "reportformula.hxx"
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -47,21 +43,11 @@
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XShape.hpp>
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
@@ -173,7 +159,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
     ImageList                                                                   m_aNavigatorImagesHC;
     Point                                                                       m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
     DROP_ACTION                                                                 m_aDropActionType;
-    OReportController*                                                          m_pController;
+    OReportController&                                                          m_rController;
     SvLBoxEntry*                                                                m_pMasterReport;
     SvLBoxEntry*                                                                m_pDragedEntry;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pReportListener;
@@ -206,7 +192,7 @@ protected:
     void _elementReplaced( const container::ContainerEvent& _rEvent );
 
 public:
-    NavigatorTree(Window* pParent,OReportController* _pController );
+    NavigatorTree(Window* pParent,OReportController& _rController );
     virtual ~NavigatorTree();
 
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
@@ -237,25 +223,25 @@ private:
 };
 DBG_NAME(rpt_NavigatorTree)
 // -----------------------------------------------------------------------------
-NavigatorTree::NavigatorTree( Window* pParent,OReportController* _pController )
+NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
         ,comphelper::OSelectionChangeListener(m_aMutex)
         ,OPropertyChangeListener(m_aMutex)
         ,m_aTimerTriggered(-1,-1)
         ,m_aDropActionType( DA_SCROLLUP )
-        ,m_pController(_pController)
+        ,m_rController(_rController)
         ,m_pMasterReport(NULL)
         ,m_pDragedEntry(NULL)
         ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
 {
     DBG_CTOR(rpt_NavigatorTree,NULL);
-    m_pReportListener = new OPropertyChangeMultiplexer(this,m_pController->getReportDefinition().get());
+    m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
     m_pReportListener->addProperty(PROPERTY_PAGEFOOTERON);
     m_pReportListener->addProperty(PROPERTY_REPORTHEADERON);
     m_pReportListener->addProperty(PROPERTY_REPORTFOOTERON);
 
-    m_pSelectionListener = new OSelectionChangeMultiplexer(this,m_pController);
+    m_pSelectionListener = new OSelectionChangeMultiplexer(this,&m_rController);
 
     SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
@@ -330,7 +316,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             uno::Reference< report::XFunctionsSupplier> xSupplier(pData->getContent(),uno::UNO_QUERY);
             uno::Reference< report::XFunctions> xFunctions(pData->getContent(),uno::UNO_QUERY);
             uno::Reference< report::XGroup> xGroup(pData->getContent(),uno::UNO_QUERY);
-            sal_Bool bDeleteAllowed = m_pController->isEditable() && (xGroup.is() ||
+            sal_Bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
             PopupMenu aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
 
@@ -341,10 +327,10 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                 {
                     USHORT nId = aContextMenu.GetItemId(i);
 
-                    aContextMenu.CheckItem(nId,m_pController->isCommandChecked(nId));
-                    sal_Bool bEnabled = m_pController->isCommandEnabled(nId);
+                    aContextMenu.CheckItem(nId,m_rController.isCommandChecked(nId));
+                    sal_Bool bEnabled = m_rController.isCommandEnabled(nId);
                     if ( nId == SID_RPT_NEW_FUNCTION )
-                        aContextMenu.EnableItem(nId,m_pController->isEditable() && (xSupplier.is() || xFunctions.is()) );
+                        aContextMenu.EnableItem(nId,m_rController.isEditable() && (xSupplier.is() || xFunctions.is()) );
                     // special condition, check for function and group
                     else if ( nId == SID_DELETE )
                         aContextMenu.EnableItem(SID_DELETE,bDeleteAllowed);
@@ -369,7 +355,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                     aArgs[0].Name = PROPERTY_GROUP;
                     aArgs[0].Value <<= pData->getContent();
                 }
-                m_pController->executeUnChecked(nId,aArgs);
+                m_rController.executeUnChecked(nId,aArgs);
             }
 
             bHandled = sal_True;
@@ -494,7 +480,7 @@ IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
         uno::Any aSelection;
         if ( IsSelected(pEntry) )
             aSelection <<= static_cast<UserData*>(pEntry->GetUserData())->getContent();
-        m_pController->select(aSelection);
+        m_rController.select(aSelection);
         m_pSelectionListener->unlock();
     }
 
@@ -914,23 +900,23 @@ class ONavigatorImpl
     ONavigatorImpl(const ONavigatorImpl&);
     void operator =(const ONavigatorImpl&);
 public:
-    ONavigatorImpl(OReportController* _pController,ONavigator* _pParent);
+    ONavigatorImpl(OReportController& _rController,ONavigator* _pParent);
     virtual ~ONavigatorImpl();
 
     uno::Reference< report::XReportDefinition>  m_xReport;
-    ::rptui::OReportController*                 m_pController;
+    ::rptui::OReportController&                 m_rController;
     ::std::auto_ptr<NavigatorTree>              m_pNavigatorTree;
 };
 
-ONavigatorImpl::ONavigatorImpl(OReportController* _pController,ONavigator* _pParent)
-    :m_xReport(_pController->getReportDefinition())
-    ,m_pController(_pController)
-    ,m_pNavigatorTree(new NavigatorTree(_pParent,_pController))
+ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
+    :m_xReport(_rController.getReportDefinition())
+    ,m_rController(_rController)
+    ,m_pNavigatorTree(new NavigatorTree(_pParent,_rController))
 {
     reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
     aVisitor.start(m_xReport);
     m_pNavigatorTree->Expand(m_pNavigatorTree->find(m_xReport));
-    lang::EventObject aEvent(*m_pController);
+    lang::EventObject aEvent(m_rController);
     m_pNavigatorTree->_selectionChanged(aEvent);
 }
 //------------------------------------------------------------------------
@@ -946,12 +932,12 @@ const long LISTBOX_BORDER = 2;
 // class ONavigator
 //========================================================================
 ONavigator::ONavigator( Window* _pParent
-                        ,OReportController* _pController)
+                        ,OReportController& _rController)
     : FloatingWindow( _pParent, ModuleRes(RID_NAVIGATOR) )
 {
     DBG_CTOR( rpt_ONavigator,NULL);
 
-    m_pImpl.reset(new ONavigatorImpl(_pController,this));
+    m_pImpl.reset(new ONavigatorImpl(_rController,this));
 
     //Size aSpace = LogicToPixel( Size( 7, 120), MAP_APPFONT );
     //Size aOutSize(nMaxTextWidth + m_aHeader.GetSizePixel().Width() + 3*aSpace.Width(),aSpace.Height());
