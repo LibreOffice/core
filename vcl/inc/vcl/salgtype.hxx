@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgtype.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ typedef UINT32 SalColor;
 #define SALCOLOR_RED( n )           ((UINT8)((n)>>16))
 #define SALCOLOR_GREEN( n )         ((UINT8)(((UINT16)(n)) >> 8))
 #define SALCOLOR_BLUE( n )          ((UINT8)(n))
-
+#define SALCOLOR_NONE           (~(SalColor)0)
 // ------------
 // - SalPoint -
 // ------------
