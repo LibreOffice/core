@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,9 +97,6 @@ public:
     SCTAB           GetTab() const      { return nTab; }
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
-
-    // #110094#-17 Not used
-    // void         PaintObject( SdrObject* pObject, OutputDevice* pDev ) const;
 
     void            SetAnchor( ScAnchorType );
     ScAnchorType    GetAnchor() const;
