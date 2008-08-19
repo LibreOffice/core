@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportSection.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@ namespace rptui
     class OReportModel;
     class OReportPage;
     class OSectionView;
-    class OViewsWindow;
+    class OSectionWindow;
 
     class OReportSection :   public Window
                         ,   public ::cppu::BaseMutex
@@ -56,7 +56,7 @@ namespace rptui
     {
         OReportPage*                        m_pPage;
         OSectionView*                       m_pView;
-        OViewsWindow*                       m_pParent;
+        OSectionWindow*                     m_pParent;
         ::std::auto_ptr<DlgEdFunc>          m_pFunc;
         ::boost::shared_ptr<OReportModel>   m_pModel;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
@@ -82,14 +82,12 @@ namespace rptui
         virtual void        Paint( const Rectangle& rRect );
         virtual void        MouseMove( const MouseEvent& rMEvt );
         virtual void        Command( const CommandEvent& rCEvt );
-        virtual void        LoseFocus();
-        virtual void        GetFocus();
         virtual void        Resize();
 
         // OPropertyChangeListener
         virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:
-        OReportSection(OViewsWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         virtual ~OReportSection();
 
         // window overrides
@@ -116,7 +114,7 @@ namespace rptui
 
         /** All objects will be marked.
         */
-        void SelectAll();
+        void SelectAll(const sal_uInt16 _nObjectType);
 
         /** makes the grid visible
         *
@@ -124,8 +122,8 @@ namespace rptui
         */
         void SetGridVisible(BOOL _bVisible);
 
-        inline OViewsWindow*        getViewsWindow() const { return m_pParent; }
-        inline OSectionView*        getView() const { return m_pView; }
+        inline OSectionWindow*      getSectionWindow() const { return m_pParent; }
+        inline OSectionView&        getSectionView() const { return *m_pView; }
         inline OReportPage*         getPage() const { return m_pPage; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
 
