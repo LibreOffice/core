@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdtext.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@ class OutlinerParaObject;
 class SdrOutliner;
 class SdrTextObj;
 class SdrModel;
+class SfxItemSet;
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -51,7 +52,7 @@ namespace sdr { namespace properties {
 class SVX_DLLPUBLIC SdrText
 {
 public:
-    SdrText( SdrTextObj* pObject, OutlinerParaObject* pOutlinerParaObject = 0 );
+    SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = 0 );
     virtual ~SdrText();
 
     virtual void SetModel(SdrModel* pNewModel);
@@ -63,8 +64,12 @@ public:
     virtual void CheckPortionInfo( SdrOutliner& rOutliner );
     virtual void ReformatText();
 
+    // default uses GetObjectItemSet, but may be overloaded to
+    // return a text-specific ItemSet
+    virtual const SfxItemSet& GetItemSet() const;
+
     SdrModel* GetModel() const { return mpModel; }
-    SdrTextObj* GetObject() const { return mpObject; }
+    SdrTextObj& GetObject() const { return mrObject; }
 
     /** returns the current OutlinerParaObject and removes it from this instance */
     OutlinerParaObject* RemoveOutlinerParaObject();
@@ -76,7 +81,7 @@ protected:
 
 private:
     OutlinerParaObject* mpOutlinerParaObject;
-    SdrTextObj* mpObject;
+    SdrTextObj& mrObject;
     SdrModel* mpModel;
     bool mbPortionInfoChecked;
 };
