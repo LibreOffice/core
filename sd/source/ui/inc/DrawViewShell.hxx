@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawViewShell.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,7 @@ public:
 
     virtual void Shutdown (void);
 
+    void PrePaint();
     virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
     /** Set the position and size of the area which contains the GUI
