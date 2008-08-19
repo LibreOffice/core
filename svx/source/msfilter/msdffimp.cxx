@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msdffimp.cxx,v $
- * $Revision: 1.156 $
+ * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,9 +88,7 @@
 #endif
 #include <unotools/localfilehelper.hxx>
 #include <svx/escherex.hxx>
-#ifndef _BGFX_RANGE_B2IRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
