@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmview.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@ FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 
 class OutputDevice;
-class XOutputDevice;
 class FmFormModel;
 class FmPageViewWinRec;
 class FmFormObj;
