@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dvector.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #include "precompiled_basegfx.hxx"
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -99,4 +101,5 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
+//////////////////////////////////////////////////////////////////////////////
 // eof
