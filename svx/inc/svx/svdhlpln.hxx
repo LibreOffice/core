@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdhlpln.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@ public:
     const Point&    GetPos() const                    { return aPos; }
 
     Pointer         GetPointer() const;
-    void            Draw(OutputDevice& rOut, const Point& rOfs) const;
     FASTBOOL        IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
     // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
@@ -102,7 +101,6 @@ public:
     void               Move(USHORT nPos, USHORT nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
     SdrHelpLine&       operator[](USHORT nPos)                             { return *GetObject(nPos); }
     const SdrHelpLine& operator[](USHORT nPos) const                       { return *GetObject(nPos); }
-    void               DrawAll(OutputDevice& rOut, const Point& rOfs) const;
     USHORT             HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
 };
 
