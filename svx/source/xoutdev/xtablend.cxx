@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xtablend.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@
 
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnstwit.hxx>
@@ -69,6 +68,12 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
+#include <svx/svdorect.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 
 #define GLOBALOVERFLOW
 
@@ -165,56 +170,115 @@ BOOL XLineEndTable::CreateBitmapsForUI()
 // class XLineEndList
 // --------------------
 
-/*************************************************************************
-|*
-|* XLineEndList::XLineEndList()
-|*
-*************************************************************************/
-
-XLineEndList::XLineEndList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize),
-                pVD             ( NULL ),
-                pXOut           ( NULL ),
-                pXFSet          ( NULL ),
-                pXLSet          ( NULL )
+class impXLineEndList
 {
-    pBmpList = new List( nInitSize, nReSize );
+private:
+    VirtualDevice*          mpVirtualDevice;
+    SdrModel*               mpSdrModel;
+    SdrObject*              mpBackgroundObject;
+    SdrObject*              mpLineObject;
+
+public:
+    impXLineEndList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
+    :   mpVirtualDevice(pV),
+        mpSdrModel(pM),
+        mpBackgroundObject(pB),
+        mpLineObject(pL)
+    {}
+
+    ~impXLineEndList()
+    {
+        delete mpVirtualDevice;
+        SdrObject::Free(mpBackgroundObject);
+        SdrObject::Free(mpLineObject);
+        delete mpSdrModel;
+    }
+
+    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
+    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
+    SdrObject* getLineObject() const { return mpLineObject; }
+};
+
+void XLineEndList::impCreate()
+{
+    if(!mpData)
+    {
+        const Point aZero(0, 0);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+        VirtualDevice* pVirDev = new VirtualDevice;
+        OSL_ENSURE(0 != pVirDev, "XLineEndList: no VirtualDevice created!" );
+        pVirDev->SetMapMode(MAP_100TH_MM);
+        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH * 2, BITMAP_HEIGHT)));
+        pVirDev->SetOutputSize(aSize);
+        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+
+        SdrModel* pSdrModel = new SdrModel();
+        OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
+        pSdrModel->GetItemPool().FreezeIdRanges();
+
+        const Rectangle aBackgroundSize(aZero, aSize);
+        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        OSL_ENSURE(0 != pBackgroundObject, "XLineEndList: no BackgroundObject created!" );
+        pBackgroundObject->SetModel(pSdrModel);
+        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
+        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+        pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
+
+        const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
+        const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append(aStart);
+        aPolygon.append(aEnd);
+        SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
+        OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
+        pLineObject->SetModel(pSdrModel);
+        pLineObject->SetMergedItem(XLineStartWidthItem(aSize.Height()));
+        pLineObject->SetMergedItem(XLineEndWidthItem(aSize.Height()));
+        pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
+
+        mpData = new impXLineEndList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
+        OSL_ENSURE(0 != mpData, "XLineEndList: data creation went wrong!" );
+    }
 }
 
-/************************************************************************/
+void XLineEndList::impDestroy()
+{
+    if(mpData)
+    {
+        delete mpData;
+        mpData = 0;
+    }
+}
+
+XLineEndList::XLineEndList(const String& rPath, XOutdevItemPool* _pXPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
+:   XPropertyList(rPath, _pXPool, nInitSize, nReSize),
+    mpData(0)
+{
+    pBmpList = new List(nInitSize, nReSize);
+}
 
 XLineEndList::~XLineEndList()
 {
-    if( pVD )    delete pVD;
-    if( pXOut )  delete pXOut;
-    if( pXFSet ) delete pXFSet;
-    if( pXLSet ) delete pXLSet;
+    impDestroy();
 }
-
-/************************************************************************/
 
 XLineEndEntry* XLineEndList::Replace(XLineEndEntry* pEntry, long nIndex )
 {
     return (XLineEndEntry*) XPropertyList::Replace(pEntry, nIndex);
 }
 
-/************************************************************************/
-
 XLineEndEntry* XLineEndList::Remove(long nIndex)
 {
     return (XLineEndEntry*) XPropertyList::Remove(nIndex, 0);
 }
 
-/************************************************************************/
-
 XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 {
     return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
 }
-
-/************************************************************************/
 
 BOOL XLineEndList::Load()
 {
@@ -241,8 +305,6 @@ BOOL XLineEndList::Load()
     return( FALSE );
 }
 
-/************************************************************************/
-
 BOOL XLineEndList::Save()
 {
     INetURLObject aURL( aPath );
@@ -261,8 +323,6 @@ BOOL XLineEndList::Save()
     uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
-
-/************************************************************************/
 
 BOOL XLineEndList::Create()
 {
@@ -287,96 +347,52 @@ BOOL XLineEndList::Create()
     return( TRUE );
 }
 
-/************************************************************************/
-
 BOOL XLineEndList::CreateBitmapsForUI()
 {
+    impCreate();
+
     for( long i = 0; i < Count(); i++)
     {
         Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
-        DBG_ASSERT( pBmp, "XLineEndList: Bitmap(UI) konnte nicht erzeugt werden!" );
+        OSL_ENSURE(0 != pBmp, "XLineEndList: Bitmap(UI) could not be created!" );
 
         if( pBmp )
             pBmpList->Insert( pBmp, i );
     }
-    // Loeschen, da JOE den Pool vorm Dtor entfernt!
-    if( pVD )   { delete pVD;   pVD = NULL;     }
-    if( pXOut ) { delete pXOut; pXOut = NULL;   }
-    if( pXFSet ){ delete pXFSet; pXFSet = NULL; }
-    if( pXLSet ){ delete pXLSet; pXLSet = NULL; }
+
+    impDestroy();
 
     return( TRUE );
 }
 
-/************************************************************************/
-
 Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 {
-    Point   aZero;
-    Size    aVDSize;
+    impCreate();
+    VirtualDevice* pVD = mpData->getVirtualDevice();
+    SdrObject* pLine = mpData->getLineObject();
 
-    if( !pVD ) // und pXOut und pXFSet und pXLSet
+    pLine->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+    pLine->SetMergedItem(XLineStartItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
+    pLine->SetMergedItem(XLineEndItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
+
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(mpData->getBackgroundObject());
+    aObjectVector.push_back(pLine);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    aPainter.ProcessDisplay(aDisplayInfo);
+
+    const Point aZero(0, 0);
+    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
+
+    if(bDelete)
     {
-        pVD = new VirtualDevice;
-        DBG_ASSERT( pVD, "XLineEndList: Konnte kein VirtualDevice erzeugen!" );
-        pVD->SetMapMode( MAP_100TH_MM );
-        aVDSize = pVD->PixelToLogic( Size( BITMAP_WIDTH * 2, BITMAP_HEIGHT ) );
-        pVD->SetOutputSize( aVDSize );
-
-        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-        pVD->SetFillColor( rStyles.GetFieldColor() );
-        pVD->SetLineColor( rStyles.GetFieldColor() );
-
-        pXOut = new XOutputDevice( pVD );
-        DBG_ASSERT( pVD, "XLineEndList: Konnte kein XOutDevice erzeugen!" );
-
-        pXFSet = new XFillAttrSetItem( pXPool );
-        DBG_ASSERT( pVD, "XLineEndList: Konnte kein XFillAttrSetItem erzeugen!" );
-        pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_SOLID ) );
-        const StyleSettings& rStyleSettings = pVD->GetSettings().GetStyleSettings();
-        pXFSet->GetItemSet().Put( XFillColorItem( String(), rStyleSettings.GetFieldColor() ) );
-
-        pXLSet = new XLineAttrSetItem( pXPool );
-        DBG_ASSERT( pVD, "XLineEndList: Konnte kein XLineAttrSetItem erzeugen!" );
-        pXLSet->GetItemSet().Put( XLineStartWidthItem( aVDSize.Height() ) );
-        pXLSet->GetItemSet().Put( XLineEndWidthItem( aVDSize.Height() ) );
-        pXLSet->GetItemSet().Put( XLineColorItem( String(), RGB_Color( rStyles.GetFieldTextColor().GetColor() ) ) );
-
-    }
-    else
-        aVDSize = pVD->GetOutputSize();
-
-    pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-//-/    pXOut->SetLineAttr( *pXLSet );
-
-    pXOut->SetLineAttr( pXLSet->GetItemSet() );
-//-/    pXOut->SetFillAttr( *pXFSet );
-
-    pXOut->SetFillAttr( pXFSet->GetItemSet() );
-    pXOut->DrawRect( Rectangle( aZero, aVDSize ) );
-
-    pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-    pXLSet->GetItemSet().Put( XLineStartItem( String(), GetLineEnd( nIndex )->GetLineEnd() ) );
-    pXLSet->GetItemSet().Put( XLineEndItem( String(), GetLineEnd( nIndex )->GetLineEnd() ) );
-
-//-/    pXOut->SetLineAttr( *pXLSet );
-    pXOut->SetLineAttr( pXLSet->GetItemSet() );
-
-    pXOut->DrawLine( Point( 0, aVDSize.Height() / 2 ),
-                     Point( aVDSize.Width(), aVDSize.Height() / 2 ) );
-
-    Bitmap* pBitmap = new Bitmap( pVD->GetBitmap( aZero, aVDSize ) );
-
-    // Loeschen, da JOE den Pool vorm Dtor entfernt!
-    if( bDelete )
-    {
-        if( pVD )   { delete pVD;   pVD = NULL;     }
-        if( pXOut ) { delete pXOut; pXOut = NULL;   }
-        if( pXFSet ){ delete pXFSet; pXFSet = NULL; }
-        if( pXLSet ){ delete pXLSet; pXLSet = NULL; }
+        impDestroy();
     }
 
-    return( pBitmap );
+    return pBitmap;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof
