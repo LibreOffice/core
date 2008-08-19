@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +182,6 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
     virtual void RecalcSnapRect();
-    virtual void RecalcBoundRect();
 
     virtual const Rectangle& GetSnapRect()  const;
     virtual const Rectangle& GetCurrentBoundRect() const;
@@ -203,7 +202,6 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
 
     virtual FASTBOOL HasSpecialDrag() const;
     virtual FASTBOOL BegDrag( SdrDragStat& rDrag )  const;
