@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygoncutter.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/range/b2drange.hxx>
-
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
 #include <vector>
 #include <algorithm>
 
@@ -51,747 +52,605 @@ namespace basegfx
     {
         //////////////////////////////////////////////////////////////////////////////
 
-        bool impLeftOfEdges(const B2DPoint& rPrev, const B2DPoint& rCurr, const B2DPoint& rNext, const B2DPoint& rTest)
-        {
-            // tests if rTest is left of both directed line segments along the line rPrev, rCurr, rNext. Test is
-            // with border, so for rTest on border or rTest == rCtrr, true is returned, too.
-            const B2DVector aVecA(rCurr - rPrev); // A is edge vector from prev to curr
-            const B2DVector aVecB(rNext - rCurr); // B is edge vector from curr to next
-            const B2DVector aVecTest(rTest - rCurr); // testpoint seen as vector, too
-
-            if(aVecA.cross(aVecB) < 0.0)
-            {
-                // b is left turn seen from a, test if Test is left of both and so inside (left is seeen as inside)
-                const bool bBoolA(fTools::lessOrEqual(aVecA.cross(aVecTest), 0.0));
-                const bool bBoolB(fTools::lessOrEqual(aVecB.cross(aVecTest), 0.0));
-                return (bBoolA && bBoolB);
-            }
-            else
-            {
-                // b is right turn seen from a, test if Test is right of both and so outside (left is seeen as inside)
-                // #i81852# border is included (see above), use moreOrEqual(), not more()
-                const bool bBoolA(fTools::moreOrEqual(aVecA.cross(aVecTest), 0.0));
-                const bool bBoolB(fTools::moreOrEqual(aVecB.cross(aVecTest), 0.0));
-                return (!(bBoolA && bBoolB));
-            }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        struct impSortNode
-        {
-            B2DPoint                                maPoint;
-            sal_uInt32                              mnIndex;
-
-            // sort operator to be able to sort on coordinates to later see common points
-            bool operator<(const impSortNode& rComp) const
-            {
-                if(fTools::equal(maPoint.getX(), rComp.maPoint.getX()))
-                {
-                    if(fTools::equal(maPoint.getY(), rComp.maPoint.getY()))
-                    {
-                        return (mnIndex < rComp.mnIndex);
-                    }
-                    else
-                    {
-                        return fTools::less(maPoint.getY(), rComp.maPoint.getY());
-                    }
-                }
-                else
-                {
-                    return fTools::less(maPoint.getX(), rComp.maPoint.getX());
-                }
-            }
-        };
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        enum CommonPointType
-        {
-            COMMON_IS_PARALLEL,             // C0: parallel in one direction
-            COMMON_IS_PARALLEL_OPPOSITE,    // C2: parallel opposite directions
-            COMMON_IS_LEAVE,                // C1: A leaving B
-            COMMON_IS_LEAVE_OPPOSITE,       // C3: A leaving B in opposite direction
-            COMMON_IS_ENTER,                // C4: A entering B
-            COMMON_IS_ENTER_OPPOSITE,       // C5: A entering B in opposite direction
-            COMMON_IS_TOUCH,                // C6: A touching B
-            COMMON_IS_CROSS,                // C7: A crossing B
-            COMMON_IS_DEADEND               // C8: one or both are a deadend, so it's only a touch
-        };
-
-        CommonPointType impGetCommonPointType(const B2DPoint& rPoint, const B2DPoint& rPrevA, const B2DPoint& rNextA, const B2DPoint& rPrevB, const B2DPoint& rNextB)
-        {
-            if(rPrevA.equal(rNextA) || rPrevB.equal(rNextB))
-            {
-                return COMMON_IS_DEADEND;
-            }
-            else if(rPrevA.equal(rPrevB))
-            {
-                if(rNextA.equal(rNextB))
-                {
-                    return COMMON_IS_PARALLEL;
-                }
-                else
-                {
-                    return COMMON_IS_LEAVE;
-                }
-            }
-            else if(rPrevA.equal(rNextB))
-            {
-                if(rNextA.equal(rPrevB))
-                {
-                    return COMMON_IS_PARALLEL_OPPOSITE;
-                }
-                else
-                {
-                    return COMMON_IS_LEAVE_OPPOSITE;
-                }
-            }
-            else if(rNextA.equal(rNextB))
-            {
-                return COMMON_IS_ENTER;
-            }
-            else if(rNextA.equal(rPrevB))
-            {
-                return COMMON_IS_ENTER_OPPOSITE;
-            }
-            else
-            {
-                // C7, C8: check for crossover
-                const bool bSideOfPrevB(impLeftOfEdges(rPrevA, rPoint, rNextA, rPrevB));
-                const bool bSideOfNextB(impLeftOfEdges(rPrevA, rPoint, rNextA, rNextB));
-
-                if(bSideOfPrevB == bSideOfNextB)
-                {
-                    return COMMON_IS_TOUCH;
-                }
-                else
-                {
-                    return COMMON_IS_CROSS;
-                }
-            }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        struct impPolyPolygonPointNode
-        {
-            // B2DPolyPolygon related indices
-            sal_uInt32                              mnPoint;        // index of point in polygon
-            sal_uInt32                              mnPoly;         // index of polygon in polyPolygon
-
-            // impPolyPolygonPointNode related indices
-            sal_uInt32                              mnSelf;         // my own PointNode index in whole point array
-            sal_uInt32                              mnPrev;         // index to prev PointNode in whole point array
-            sal_uInt32                              mnNext;         // index to next PointNode in whole point array
-            sal_uInt32                              mnNextControl;  // index to PointNode holding NextControlPoint (normally same as mnSelf)
-
-            // bitfield
-            unsigned                                mbUsed : 1;     // used flag for later extraction
-        };
-
-        typedef ::std::vector< impPolyPolygonPointNode > impPolyPolygonPointVector;
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        void impSwitchNext(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB, impPolyPolygonPointVector& rPointVector)
-        {
-            // get next nodes
-            impPolyPolygonPointNode& rNextA = rPointVector[rCandA.mnNext];
-            impPolyPolygonPointNode& rNextB = rPointVector[rCandB.mnNext];
-
-            // switch prev/next indices
-            rCandA.mnNext = rNextB.mnSelf;
-            rNextB.mnPrev = rCandA.mnSelf;
-            rCandB.mnNext = rNextA.mnSelf;
-            rNextA.mnPrev = rCandB.mnSelf;
-
-            // switch NextControl indices to follow the correct curve
-            ::std::swap(rCandA.mnNextControl, rCandB.mnNextControl);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        B2DPoint impGetB2DPoint(const impPolyPolygonPointNode& rNode, const B2DPolyPolygon& rPolyPolygon)
-        {
-            return rPolyPolygon.getB2DPolygon(rNode.mnPoly).getB2DPoint(rNode.mnPoint);
-        }
-
-    } // end of anonymous namespace
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace basegfx
-{
-    namespace
-    {
-        //////////////////////////////////////////////////////////////////////////////
-
-        class impPolygonCrossoverSolver
-        {
-            const B2DPolygon&                           maOriginal;
-            B2DPolygon                                  maGeometry;
-            impPolyPolygonPointVector                   maPointVector;
-
-            // bitfield
-            unsigned                                    mbChanged : 1;
-
-            void impHandleCommon(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB)
-            {
-                const B2DPoint aPoint(maGeometry.getB2DPoint(rCandA.mnSelf));
-                B2DPoint aPrevA(maGeometry.getB2DPoint(rCandA.mnPrev));
-                B2DPoint aNextA(maGeometry.getB2DPoint(rCandA.mnNext));
-                B2DPoint aPrevB(maGeometry.getB2DPoint(rCandB.mnPrev));
-                B2DPoint aNextB(maGeometry.getB2DPoint(rCandB.mnNext));
-
-                if(maGeometry.areControlPointsUsed())
-                {
-                    // #i81852# Of course control point vectors need to be used for self-intersections, too
-                    const B2DPoint aCandidatePrevA(maGeometry.getPrevControlPoint(rCandA.mnPoint));
-                    const B2DPoint aCandidatePrevB(maGeometry.getPrevControlPoint(rCandB.mnPoint));
-                    const impPolyPolygonPointNode& rNextControlA = maPointVector[rCandA.mnNextControl];
-                    const B2DPoint aCandidateNextA(maGeometry.getNextControlPoint(rNextControlA.mnPoint));
-                    const impPolyPolygonPointNode& rNextControlB = maPointVector[rCandB.mnNextControl];
-                    const B2DPoint aCandidateNextB(maGeometry.getNextControlPoint(rNextControlB.mnPoint));
-
-                    if(!aCandidatePrevA.equal(aPoint))
-                    {
-                        aPrevA = aCandidatePrevA;
-                    }
-
-                    if(!aCandidatePrevB.equal(aPoint))
-                    {
-                        aPrevB = aCandidatePrevB;
-                    }
-
-                    if(!aCandidateNextA.equal(aPoint))
-                    {
-                        aNextA = aCandidateNextA;
-                    }
-
-                    if(!aCandidateNextB.equal(aPoint))
-                    {
-                        aNextB = aCandidateNextB;
-                    }
-                }
-
-                const CommonPointType aType(impGetCommonPointType(aPoint, aPrevA, aNextA, aPrevB, aNextB));
-
-                switch(aType)
-                {
-                    case COMMON_IS_LEAVE : // A leaving B
-                    case COMMON_IS_LEAVE_OPPOSITE : // A leaving B in opposite direction
-                    case COMMON_IS_ENTER : // A entering B
-                    case COMMON_IS_ENTER_OPPOSITE : // A entering B in opposite direction
-                    case COMMON_IS_CROSS : // A crossing B
-                    {
-                        impSwitchNext(rCandA, rCandB, maPointVector);
-                        mbChanged = true;
-                        break;
-                    }
-                    case COMMON_IS_PARALLEL:
-                    case COMMON_IS_PARALLEL_OPPOSITE:
-                    case COMMON_IS_TOUCH:
-                    case COMMON_IS_DEADEND:
-                        break;
-                }
-            }
-
-            void impBuildGraph()
-            {
-                sal_uInt32 a;
-
-                // prepare input: create all selfcuts and touches. After
-                // this step, there will be no cut or touch inside edges, only at points.
-                // Also remove double points to always have a edge length and direction.
-                maGeometry = tools::addPointsAtCutsAndTouches(maOriginal);
-                maGeometry.removeDoublePoints();
-
-                // create space in point and sort vector.
-                const sal_uInt32 nCount(maGeometry.count());
-                ::std::vector< impSortNode > aSortNodes;
-                maPointVector.resize(nCount);
-                aSortNodes.resize(nCount);
-
-                // fill data to points and sort vector
-                for(a = 0L; a < nCount; a++)
-                {
-                    impPolyPolygonPointNode& rNewPointNode = maPointVector[a];
-                    rNewPointNode.mnSelf = a;
-                    rNewPointNode.mnNextControl = a;
-                    rNewPointNode.mnPoint = a;
-                    rNewPointNode.mnPoly = 0L;
-                    rNewPointNode.mnPrev = (a != 0L) ? a - 1L : nCount - 1L;
-                    rNewPointNode.mnNext = (a + 1L == nCount) ? 0L : a + 1L;
-                    rNewPointNode.mbUsed = false;
-
-                    impSortNode& rNewSortNode = aSortNodes[a];
-                    rNewSortNode.maPoint = maGeometry.getB2DPoint(a);
-                    rNewSortNode.mnIndex = a;
-                }
-
-                // sort by point to identify common nodes
-                ::std::sort(aSortNodes.begin(), aSortNodes.end());
-
-                // handle common nodes
-                for(a = 0L; a < nCount; a++)
-                {
-                    // #129701# test b before using it, not after. Also use nCount instead of aSortNodes.size()
-                    for(sal_uInt32 b(a + 1L); b < nCount && aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint); b++)
-                    {
-                        impHandleCommon(maPointVector[aSortNodes[a].mnIndex], maPointVector[aSortNodes[b].mnIndex]);
-                    }
-                }
-            }
-
-        public:
-            impPolygonCrossoverSolver(const B2DPolygon& rPolygon)
-            :   maOriginal(rPolygon),
-                mbChanged(false)
-            {
-                if(maOriginal.count())
-                {
-                    impBuildGraph();
-                }
-            }
-
-            B2DPolyPolygon getB2DPolyPolygon()
-            {
-                if(mbChanged)
-                {
-                    B2DPolyPolygon aRetval;
-                    sal_uInt32 nPointsUsed(0L);
-
-                    for(sal_uInt32 a(0L); nPointsUsed != maGeometry.count() && a < maPointVector.size(); a++)
-                    {
-                        impPolyPolygonPointNode& rNode = maPointVector[a];
-
-                        if(!rNode.mbUsed)
-                        {
-                            B2DPolygon aNew;
-                            sal_uInt32 nCurr(rNode.mnSelf);
-                            const bool bControlPointsUsed(maGeometry.areControlPointsUsed());
-
-                            do
-                            {
-                                // get and add point
-                                impPolyPolygonPointNode& rCandidate = maPointVector[nCurr];
-                                const B2DPoint aNewPoint(maGeometry.getB2DPoint(rCandidate.mnPoint));
-                                aNew.append(aNewPoint);
-
-                                if(bControlPointsUsed)
-                                {
-                                    // apply control points to added point
-                                    const sal_uInt32 nIndex(aNew.count() - 1);
-                                    const impPolyPolygonPointNode& rNextControl = maPointVector[rCandidate.mnNextControl];
-
-                                    aNew.setControlPoints(nIndex,
-                                        maGeometry.getPrevControlPoint(rCandidate.mnPoint),
-                                        maGeometry.getNextControlPoint(rNextControl.mnPoint));
-                                }
-
-                                // check if last two edges build a dead end and maybe removed
-                                const sal_uInt32 nNewPointCount(aNew.count());
-
-                                if(nNewPointCount > 2 && aNew.getB2DPoint(nNewPointCount - 3).equal(aNewPoint))
-                                {
-                                    if(bControlPointsUsed)
-                                    {
-                                        // check if edges are the same including control points
-                                        if(aNew.getPrevControlPoint(nNewPointCount - 2).equal(aNew.getNextControlPoint(nNewPointCount - 2)))
-                                        {
-                                            if(aNew.getPrevControlPoint(nNewPointCount - 1).equal(aNew.getNextControlPoint(nNewPointCount - 3)))
-                                            {
-                                                // rescue nextControlPoint and remove
-                                                aNew.setNextControlPoint(nNewPointCount - 3, aNew.getNextControlPoint(nNewPointCount - 1));
-                                                aNew.remove(nNewPointCount - 2, 2);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // edges are the same, remove
-                                        aNew.remove(nNewPointCount - 2, 2);
-                                    }
-                                }
-
-                                // mark as used and go to next
-                                nPointsUsed++;
-                                rCandidate.mbUsed = true;
-                                nCurr = rCandidate.mnNext;
-                            }
-                            while(nCurr != rNode.mnSelf);
-
-                            if(aNew.count())
-                            {
-                                aNew.setClosed(true);
-                                aRetval.append(aNew);
-                            }
-                        }
-                    }
-
-                    return aRetval;
-                }
-                else
-                {
-                    return B2DPolyPolygon(maOriginal);
-                }
-            }
-        };
-
-        //////////////////////////////////////////////////////////////////////////////
-
-    } // end of anonymous namespace
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace basegfx
-{
-    namespace
-    {
-        //////////////////////////////////////////////////////////////////////////////
-
-        class impPolyPolygonCrossoverSolver
-        {
-            const B2DPolyPolygon&                       maOriginal;
-            B2DPolyPolygon                              maGeometry;
-            sal_uInt32                                  mnPointCount;
-            impPolyPolygonPointVector                   maPointVector;
-
-            // bitfield
-            unsigned                                    mbChanged : 1;
-
-            void impHandleLeaving(impPolyPolygonPointNode& rCandidateA, impPolyPolygonPointNode& rCandidateB, bool bOpposite, bool bSideOfLeave)
-            {
-                // go back on A and look for node entering B
-                sal_uInt32 nIndexA(rCandidateA.mnSelf);
-                sal_uInt32 nIndexB(rCandidateB.mnSelf);
-                bool bOnCommonEdge(true);
-
-                // go along common edge as long as we are on common edge, backward on
-                // A and depending on bOpposite along B. Since we are on a leave, there must
-                // exist an entering node, so the loop will end.
-                while(bOnCommonEdge)
-                {
-                    const sal_uInt32 nCandA(maPointVector[nIndexA].mnPrev);
-                    const sal_uInt32 nCandB((bOpposite) ? maPointVector[nIndexB].mnNext : maPointVector[nIndexB].mnPrev);
-                    const impPolyPolygonPointNode& rCandA = maPointVector[nCandA];
-                    const impPolyPolygonPointNode& rCandB = maPointVector[nCandB];
-                    const B2DPoint aPointA(impGetB2DPoint(rCandA, maGeometry));
-                    const B2DPoint aPointB(impGetB2DPoint(rCandB, maGeometry));
-
-                    if(aPointA.equal(aPointB))
-                    {
-                        // continue going along common edge
-                        nIndexA = nCandA;
-                        nIndexB = nCandB;
-                    }
-                    else
-                    {
-                        // done
-                        bOnCommonEdge = false;
-                    }
-                }
-
-                // now we have the last common edge in (nIndexA, nIndexB) which must be the
-                // entering edge. Get the point values from there for the crossover test
-                impPolyPolygonPointNode& rEnterCandA = maPointVector[nIndexA];
-                impPolyPolygonPointNode& rEnterCandB = maPointVector[nIndexB];
-
-                if(bOpposite)
-                {
-                    // #i81852# switch at enter and leave, make the common edge(s) an own neutral polygon
-                    // Always switch at bOpposite, no need to figure out enter/leave
-                    impSwitchNext(rEnterCandA, rEnterCandB, maPointVector);
-                    impSwitchNext(rCandidateA, rCandidateB, maPointVector);
-
-                    // set changed flag
-                    mbChanged = true;
-                }
-                else
-                {
-                    // #i81852# enter/leave needs to be figured out. Calculate points for test
-                    const B2DPoint aPoint(impGetB2DPoint(rEnterCandA, maGeometry));
-                    B2DPoint aPrevA(impGetB2DPoint(maPointVector[rEnterCandA.mnPrev], maGeometry));
-                    B2DPoint aNextA(impGetB2DPoint(maPointVector[rEnterCandA.mnNext], maGeometry));
-                    B2DPoint aNextB(impGetB2DPoint(maPointVector[rEnterCandB.mnNext], maGeometry));
-
-                    if(maGeometry.areControlPointsUsed())
-                    {
-                        // #i81852# of course also these points need to be adapted to control vectors
-                        const B2DPoint aCandidatePrevA(maGeometry.getB2DPolygon(rEnterCandA.mnPoly).getPrevControlPoint(rEnterCandA.mnPoint));
-                        const impPolyPolygonPointNode& rNextControlA = maPointVector[rEnterCandA.mnNextControl];
-                        const B2DPoint aCandidateNextA(maGeometry.getB2DPolygon(rNextControlA.mnPoly).getNextControlPoint(rNextControlA.mnPoint));
-                        const impPolyPolygonPointNode& rNextControlB = maPointVector[rEnterCandB.mnNextControl];
-                        const B2DPoint aCandidateNextB(maGeometry.getB2DPolygon(rNextControlB.mnPoly).getNextControlPoint(rNextControlB.mnPoint));
-
-                        if(!aCandidatePrevA.equal(aPoint))
-                        {
-                            aPrevA = aCandidatePrevA;
-                        }
-
-                        if(!aCandidateNextA.equal(aPoint))
-                        {
-                            aNextA = aCandidateNextA;
-                        }
-
-                        if(!aCandidateNextB.equal(aPoint))
-                        {
-                            aNextB = aCandidateNextB;
-                        }
-                    }
-
-                    const bool bSideOfEnter(impLeftOfEdges(aPrevA, aPoint, aNextA, aNextB));
-
-                    if(bSideOfLeave != bSideOfEnter)
-                    {
-                        // crossover, needs to be solved
-                        // switch at leave
-                        impSwitchNext(rCandidateA, rCandidateB, maPointVector);
-
-                        // set changed flag
-                        mbChanged = true;
-                    }
-                }
-            }
-
-            void impHandleCommon(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB)
-            {
-                const B2DPoint aPoint(impGetB2DPoint(rCandA, maGeometry));
-                B2DPoint aPrevA(impGetB2DPoint(maPointVector[rCandA.mnPrev], maGeometry));
-                B2DPoint aNextA(impGetB2DPoint(maPointVector[rCandA.mnNext], maGeometry));
-                B2DPoint aPrevB(impGetB2DPoint(maPointVector[rCandB.mnPrev], maGeometry));
-                B2DPoint aNextB(impGetB2DPoint(maPointVector[rCandB.mnNext], maGeometry));
-
-                if(maGeometry.areControlPointsUsed())
-                {
-                    // get the control points for the common points and use them if they are different. This will use
-                    // the tangent for the touch/crossover calculation
-                    const B2DPoint aCandidatePrevA(maGeometry.getB2DPolygon(rCandA.mnPoly).getPrevControlPoint(rCandA.mnPoint));
-                    const B2DPoint aCandidatePrevB(maGeometry.getB2DPolygon(rCandB.mnPoly).getPrevControlPoint(rCandB.mnPoint));
-                    const impPolyPolygonPointNode& rNextControlA = maPointVector[rCandA.mnNextControl];
-                    const B2DPoint aCandidateNextA(maGeometry.getB2DPolygon(rNextControlA.mnPoly).getNextControlPoint(rNextControlA.mnPoint));
-                    const impPolyPolygonPointNode& rNextControlB = maPointVector[rCandB.mnNextControl];
-                    const B2DPoint aCandidateNextB(maGeometry.getB2DPolygon(rNextControlB.mnPoly).getNextControlPoint(rNextControlB.mnPoint));
-
-                    if(!aCandidatePrevA.equal(aPoint))
-                    {
-                        aPrevA = aCandidatePrevA;
-                    }
-
-                    if(!aCandidatePrevB.equal(aPoint))
-                    {
-                        aPrevB = aCandidatePrevB;
-                    }
-
-                    if(!aCandidateNextA.equal(aPoint))
-                    {
-                        aNextA = aCandidateNextA;
-                    }
-
-                    if(!aCandidateNextB.equal(aPoint))
-                    {
-                        aNextB = aCandidateNextB;
-                    }
-                }
-
-                const CommonPointType aType(impGetCommonPointType(aPoint, aPrevA, aNextA, aPrevB, aNextB));
-
-                switch(aType)
-                {
-                    case COMMON_IS_LEAVE : // A leaving B
-                    {
-                        impHandleLeaving(rCandA, rCandB, false, impLeftOfEdges(aPrevA, aPoint, aNextA, aNextB));
-                        break;
-                    }
-                    case COMMON_IS_LEAVE_OPPOSITE : // A leaving B in opposite direction
-                    {
-                        // #i81852# Since opposite will always be switched, it is not necessary to calculate
-                        // the leave value for evaluation of cross/tutch
-                        impHandleLeaving(rCandA, rCandB, true, true);
-                        break;
-                    }
-                    case COMMON_IS_CROSS : // A crossing B
-                    {
-                        impSwitchNext(rCandA, rCandB, maPointVector);
-                        mbChanged = true;
-                        break;
-                    }
-                    case COMMON_IS_PARALLEL:
-                    case COMMON_IS_PARALLEL_OPPOSITE:
-                    case COMMON_IS_ENTER:
-                    case COMMON_IS_ENTER_OPPOSITE:
-                    case COMMON_IS_TOUCH:
-                    case COMMON_IS_DEADEND:
-                        break;
-                }
-            }
-
-            void impBuildGraph()
-            {
-                sal_uInt32 a, b, c;
-
-                // prepare input: create all selfcuts and touches. After
-                // this step, there will be no cut or touch inside edges, only at points.
-                // Self-intersections are not handled, should have been done outside this
-                // helper already.
-                // Also remove double points to always have a edge length and direction.
-                maGeometry = tools::addPointsAtCutsAndTouches(maOriginal, false);
-                maGeometry.removeDoublePoints();
-
-                // get mnPointCount
-                for(a = 0L; a < maGeometry.count(); a++)
-                {
-                    mnPointCount += maGeometry.getB2DPolygon(a).count();
-                }
-
-                // create space in point and sort vector.
-                ::std::vector< impSortNode > aSortNodes;
-                maPointVector.resize(mnPointCount);
-                aSortNodes.resize(mnPointCount);
-
-                // fill data to points and sort vector
-                for(a = c = 0L; a < maGeometry.count(); a++)
-                {
-                    const B2DPolygon aPartGeometry(maGeometry.getB2DPolygon(a));
-                    const sal_uInt32 nPartCount(aPartGeometry.count());
-                    const sal_uInt32 nNewPolyStart(c);
-
-                    for(b = 0L; b < nPartCount; b++, c++)
-                    {
-                        impPolyPolygonPointNode& rNewPointNode = maPointVector[c];
-                        rNewPointNode.mnSelf = c;
-                        rNewPointNode.mnNextControl = c;
-                        rNewPointNode.mnPoint = b;
-                        rNewPointNode.mnPoly = a;
-                        rNewPointNode.mnNext = nNewPolyStart + ((b + 1L == nPartCount) ? 0L : b + 1L);
-                        rNewPointNode.mnPrev = nNewPolyStart + ((b != 0L) ? b - 1L : nPartCount - 1L);
-                        rNewPointNode.mbUsed = false;
-
-                        impSortNode& rNewSortNode = aSortNodes[c];
-                        rNewSortNode.maPoint = aPartGeometry.getB2DPoint(b);
-                        rNewSortNode.mnIndex = c;
-                    }
-                }
-
-                // sort by point to identify common nodes
-                ::std::sort(aSortNodes.begin(), aSortNodes.end());
-
-                // handle common nodes
-                for(a = 0L; a < mnPointCount - 1L; a++)
-                {
-                    // #129701# test b before using it, not after. Also use mnPointCount instead of aSortNodes.size()
-                    for(b = a + 1L; b < mnPointCount && aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint); b++)
-                    {
-                        impHandleCommon(maPointVector[aSortNodes[a].mnIndex], maPointVector[aSortNodes[b].mnIndex]);
-                    }
-                }
-            }
-
-        public:
-            impPolyPolygonCrossoverSolver(const B2DPolyPolygon& rPolyPolygon)
-            :   maOriginal(rPolyPolygon),
-                mnPointCount(0L),
-                mbChanged(false)
-            {
-                if(maOriginal.count())
-                {
-                    impBuildGraph();
-                }
-            }
-
-            B2DPolyPolygon getB2DPolyPolygon()
-            {
-                if(mbChanged)
-                {
-                    B2DPolyPolygon aRetval;
-                    sal_uInt32 nPointsUsed(0L);
-
-                    for(sal_uInt32 a(0L); nPointsUsed != mnPointCount && a < maPointVector.size(); a++)
-                    {
-                        impPolyPolygonPointNode& rNode = maPointVector[a];
-
-                        if(!rNode.mbUsed)
-                        {
-                            B2DPolygon aNew;
-                            sal_uInt32 nCurr(rNode.mnSelf);
-                            const bool bControlPointsUsed(maGeometry.areControlPointsUsed());
-
-                            do
-                            {
-                                // get and add point
-                                impPolyPolygonPointNode& rCandidate = maPointVector[nCurr];
-                                const B2DPoint aNewPoint(impGetB2DPoint(rCandidate, maGeometry));
-                                aNew.append(aNewPoint);
-
-                                if(bControlPointsUsed)
-                                {
-                                    // apply control points to added point
-                                    const sal_uInt32 nIndex(aNew.count() - 1);
-                                    const impPolyPolygonPointNode& rNextControl = maPointVector[rCandidate.mnNextControl];
-
-                                    aNew.setControlPoints(nIndex,
-                                        maGeometry.getB2DPolygon(rCandidate.mnPoly).getPrevControlPoint(rCandidate.mnPoint),
-                                        maGeometry.getB2DPolygon(rNextControl.mnPoly).getNextControlPoint(rNextControl.mnPoint));
-                                }
-
-                                // check if last two edges build a dead end and maybe removed
-                                const sal_uInt32 nNewPointCount(aNew.count());
-
-                                if(nNewPointCount > 2 && aNew.getB2DPoint(nNewPointCount - 3).equal(aNewPoint))
-                                {
-                                    if(bControlPointsUsed)
-                                    {
-                                        // check if edges are the same including control points
-                                        if(aNew.getPrevControlPoint(nNewPointCount - 2).equal(aNew.getNextControlPoint(nNewPointCount - 2)))
-                                        {
-                                            if(aNew.getPrevControlPoint(nNewPointCount - 1).equal(aNew.getNextControlPoint(nNewPointCount - 3)))
-                                            {
-                                                // rescue nextControlPoint and remove
-                                                aNew.setNextControlPoint(nNewPointCount - 3, aNew.getNextControlPoint(nNewPointCount - 1));
-                                                aNew.remove(nNewPointCount - 2, 2);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // edges are the same, remove
-                                        aNew.remove(nNewPointCount - 2, 2);
-                                    }
-                                }
-
-                                // mark as used and go to next
-                                rCandidate.mbUsed = true;
-                                nCurr = rCandidate.mnNext;
-                            }
-                            while(nCurr != rNode.mnSelf);
-
-                            if(aNew.count())
-                            {
-                                aNew.setClosed(true);
-                                aRetval.append(aNew);
-                            }
-                        }
-                    }
-
-                    return aRetval;
-                }
-                else
-                {
-                    return B2DPolyPolygon(maOriginal);
-                }
-            }
-        };
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        struct impStripHelper
+        struct StripHelper
         {
             B2DRange                                maRange;
             sal_Int32                               mnDepth;
             B2VectorOrientation                     meOrinetation;
+        };
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        struct PN
+        {
+        public:
+            B2DPoint                maPoint;
+            sal_uInt32              mnI;
+            sal_uInt32              mnIP;
+            sal_uInt32              mnIN;
+        };
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        struct VN
+        {
+        public:
+            B2DVector               maPrev;
+            B2DVector               maNext;
+
+            // to have the correct curve segments in the crossover checks,
+            // it is necessary to keep the original next vectors, too. Else,
+            // it may happen to use a already switched next vector which
+            // would interpolate the wrong comparison point
+            B2DVector               maOriginalNext;
+        };
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        struct SN
+        {
+        public:
+            PN*                     mpPN;
+
+            bool operator<(const SN& rComp) const
+            {
+                if(fTools::equal(mpPN->maPoint.getX(), rComp.mpPN->maPoint.getX()))
+                {
+                    if(fTools::equal(mpPN->maPoint.getY(), rComp.mpPN->maPoint.getY()))
+                    {
+                        return (mpPN->mnI < rComp.mpPN->mnI);
+                    }
+                    else
+                    {
+                        return fTools::less(mpPN->maPoint.getY(), rComp.mpPN->maPoint.getY());
+                    }
+                }
+                else
+                {
+                    return fTools::less(mpPN->maPoint.getX(), rComp.mpPN->maPoint.getX());
+                }
+            }
+        };
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        typedef ::std::vector< PN > PNV;
+        typedef ::std::vector< VN > VNV;
+        typedef ::std::vector< SN > SNV;
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        class solver
+        {
+        private:
+            const B2DPolyPolygon    maOriginal;
+            PNV                     maPNV;
+            VNV                     maVNV;
+            SNV                     maSNV;
+
+            unsigned                mbIsCurve : 1;
+            unsigned                mbChanged : 1;
+
+            void impAddPolygon(const sal_uInt32 aPos, const B2DPolygon& rGeometry)
+            {
+                const sal_uInt32 nCount(rGeometry.count());
+                PN aNewPN;
+                VN aNewVN;
+                SN aNewSN;
+
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    const B2DPoint aPoint(rGeometry.getB2DPoint(a));
+                    aNewPN.maPoint = aPoint;
+                    aNewPN.mnI = aPos + a;
+                    aNewPN.mnIP = aPos + ((a != 0) ? a - 1 : nCount - 1);
+                    aNewPN.mnIN = aPos + ((a + 1 == nCount) ? 0 : a + 1);
+                    maPNV.push_back(aNewPN);
+
+                    if(mbIsCurve)
+                    {
+                        aNewVN.maPrev = rGeometry.getPrevControlPoint(a) - aPoint;
+                        aNewVN.maNext = rGeometry.getNextControlPoint(a) - aPoint;
+                        aNewVN.maOriginalNext = aNewVN.maNext;
+                        maVNV.push_back(aNewVN);
+                    }
+
+                    aNewSN.mpPN = &maPNV[maPNV.size() - 1];
+                    maSNV.push_back(aNewSN);
+                }
+            }
+
+            bool impLeftOfEdges(const B2DVector& rVecA, const B2DVector& rVecB, const B2DVector& rTest)
+            {
+                // tests if rTest is left of both directed line segments along the line -rVecA, rVecB. Test is
+                // with border.
+                if(rVecA.cross(rVecB) > 0.0)
+                {
+                    // b is left turn seen from a, test if Test is left of both and so inside (left is seeen as inside)
+                    const bool bBoolA(fTools::moreOrEqual(rVecA.cross(rTest), 0.0));
+                    const bool bBoolB(fTools::lessOrEqual(rVecB.cross(rTest), 0.0));
+
+                    return (bBoolA && bBoolB);
+                }
+                else
+                {
+                    // b is right turn seen from a, test if Test is right of both and so outside (left is seeen as inside)
+                    const bool bBoolA(fTools::lessOrEqual(rVecA.cross(rTest), 0.0));
+                    const bool bBoolB(fTools::moreOrEqual(rVecB.cross(rTest), 0.0));
+
+                    return (!(bBoolA && bBoolB));
+                }
+            }
+
+            void impSwitchNext(PN& rPNa, PN& rPNb)
+            {
+                ::std::swap(rPNa.mnIN, rPNb.mnIN);
+
+                if(mbIsCurve)
+                {
+                    VN& rVNa = maVNV[rPNa.mnI];
+                    VN& rVNb = maVNV[rPNb.mnI];
+
+                    ::std::swap(rVNa.maNext, rVNb.maNext);
+                }
+
+                if(!mbChanged)
+                {
+                    mbChanged = true;
+                }
+            }
+
+            B2DCubicBezier createSegment(const PN& rPN, bool bPrev) const
+            {
+                const B2DPoint& rStart(rPN.maPoint);
+                const B2DPoint& rEnd(maPNV[bPrev ? rPN.mnIP : rPN.mnIN].maPoint);
+                const B2DVector& rCPA(bPrev ? maVNV[rPN.mnI].maPrev : maVNV[rPN.mnI].maNext);
+                // Use maOriginalNext, not maNext to create the original (yet unchanged)
+                // curve segment. Otherwise, this segment would NOT ne correct.
+                const B2DVector& rCPB(bPrev ? maVNV[maPNV[rPN.mnIP].mnI].maOriginalNext : maVNV[maPNV[rPN.mnIN].mnI].maPrev);
+
+                return B2DCubicBezier(rStart, rStart + rCPA, rEnd + rCPB, rEnd);
+            }
+
+            void impHandleCommon(PN& rPNa, PN& rPNb)
+            {
+                if(mbIsCurve)
+                {
+                    const B2DCubicBezier aNextA(createSegment(rPNa, false));
+                    const B2DCubicBezier aPrevA(createSegment(rPNa, true));
+
+                    if(aNextA.equal(aPrevA))
+                    {
+                        // deadend on A (identical edge)
+                        return;
+                    }
+
+                    const B2DCubicBezier aNextB(createSegment(rPNb, false));
+                    const B2DCubicBezier aPrevB(createSegment(rPNb, true));
+
+                    if(aNextB.equal(aPrevB))
+                    {
+                        // deadend on B (identical edge)
+                        return;
+                    }
+
+                    if(aPrevA.equal(aPrevB))
+                    {
+                        // common edge in same direction
+                        if(aNextA.equal(aNextB))
+                        {
+                            // common edge in same direction continues
+                            return;
+                        }
+                        else
+                        {
+                            // common edge in same direction leave
+                            // action is done on enter
+                            return;
+                        }
+                    }
+                    else if(aPrevA.equal(aNextB))
+                    {
+                        // common edge in opposite direction
+                        if(aNextA.equal(aPrevB))
+                        {
+                            // common edge in opposite direction continues
+                            return;
+                        }
+                        else
+                        {
+                            // common edge in opposite direction leave
+                            impSwitchNext(rPNa, rPNb);
+                        }
+                    }
+                    else if(aNextA.equal(aNextB))
+                    {
+                        // common edge in same direction enter
+                        // search leave edge
+                        PN* pPNa2 = &maPNV[rPNa.mnIN];
+                        PN* pPNb2 = &maPNV[rPNb.mnIN];
+                        bool bOnEdge(true);
+
+                        do
+                        {
+                            const B2DCubicBezier aNextA2(createSegment(*pPNa2, false));
+                            const B2DCubicBezier aNextB2(createSegment(*pPNb2, false));
+
+                            if(aNextA2.equal(aNextB2))
+                            {
+                                pPNa2 = &maPNV[pPNa2->mnIN];
+                                pPNb2 = &maPNV[pPNb2->mnIN];
+                            }
+                            else
+                            {
+                                bOnEdge = false;
+                            }
+                        }
+                        while(bOnEdge && pPNa2 != &rPNa && pPNa2 != &rPNa);
+
+                        if(bOnEdge)
+                        {
+                            // loop over two identical polygon paths
+                            return;
+                        }
+                        else
+                        {
+                            // enter at rPNa, rPNb; leave at pPNa2, pPNb2. No common edges
+                            // at enter/leave. Check for crossover.
+                            const B2DVector aPrevCA(aPrevA.interpolatePoint(0.5) - aPrevA.getStartPoint());
+                            const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
+                            const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
+                            const bool bEnter(impLeftOfEdges(aPrevCA, aNextCA, aPrevCB));
+
+                            const B2DCubicBezier aNextA2(createSegment(*pPNa2, false));
+                            const B2DCubicBezier aPrevA2(createSegment(*pPNa2, true));
+                            const B2DCubicBezier aNextB2(createSegment(*pPNb2, false));
+                            const B2DVector aPrevCA2(aPrevA2.interpolatePoint(0.5) - aPrevA2.getStartPoint());
+                            const B2DVector aNextCA2(aNextA2.interpolatePoint(0.5) - aNextA2.getStartPoint());
+                            const B2DVector aNextCB2(aNextB2.interpolatePoint(0.5) - aNextB2.getStartPoint());
+                            const bool bLeave(impLeftOfEdges(aPrevCA2, aNextCA2, aNextCB2));
+
+                            if(bEnter != bLeave)
+                            {
+                                // crossover
+                                impSwitchNext(rPNa, rPNb);
+                            }
+                        }
+                    }
+                    else if(aNextA.equal(aPrevB))
+                    {
+                        // common edge in opposite direction enter
+                        impSwitchNext(rPNa, rPNb);
+                    }
+                    else
+                    {
+                        // no common edges, check for crossover
+                        const B2DVector aPrevCA(aPrevA.interpolatePoint(0.5) - aPrevA.getStartPoint());
+                        const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
+                        const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
+                        const B2DVector aNextCB(aNextB.interpolatePoint(0.5) - aNextB.getStartPoint());
+
+                        const bool bEnter(impLeftOfEdges(aPrevCA, aNextCA, aPrevCB));
+                        const bool bLeave(impLeftOfEdges(aPrevCA, aNextCA, aNextCB));
+
+                        if(bEnter != bLeave)
+                        {
+                            // crossover
+                            impSwitchNext(rPNa, rPNb);
+                        }
+                    }
+                }
+                else
+                {
+                    const B2DPoint& rNextA(maPNV[rPNa.mnIN].maPoint);
+                    const B2DPoint& rPrevA(maPNV[rPNa.mnIP].maPoint);
+
+                    if(rNextA.equal(rPrevA))
+                    {
+                        // deadend on A
+                        return;
+                    }
+
+                    const B2DPoint& rNextB(maPNV[rPNb.mnIN].maPoint);
+                    const B2DPoint& rPrevB(maPNV[rPNb.mnIP].maPoint);
+
+                    if(rNextB.equal(rPrevB))
+                    {
+                        // deadend on B
+                        return;
+                    }
+
+                    if(rPrevA.equal(rPrevB))
+                    {
+                        // common edge in same direction
+                        if(rNextA.equal(rNextB))
+                        {
+                            // common edge in same direction continues
+                            return;
+                        }
+                        else
+                        {
+                            // common edge in same direction leave
+                            // action is done on enter
+                            return;
+                        }
+                    }
+                    else if(rPrevA.equal(rNextB))
+                    {
+                        // common edge in opposite direction
+                        if(rNextA.equal(rPrevB))
+                        {
+                            // common edge in opposite direction continues
+                            return;
+                        }
+                        else
+                        {
+                            // common edge in opposite direction leave
+                            impSwitchNext(rPNa, rPNb);
+                        }
+                    }
+                    else if(rNextA.equal(rNextB))
+                    {
+                        // common edge in same direction enter
+                        // search leave edge
+                        PN* pPNa2 = &maPNV[rPNa.mnIN];
+                        PN* pPNb2 = &maPNV[rPNb.mnIN];
+                        bool bOnEdge(true);
+
+                        do
+                        {
+                            const B2DPoint& rNextA2(maPNV[pPNa2->mnIN].maPoint);
+                            const B2DPoint& rNextB2(maPNV[pPNb2->mnIN].maPoint);
+
+                            if(rNextA2.equal(rNextB2))
+                            {
+                                pPNa2 = &maPNV[pPNa2->mnIN];
+                                pPNb2 = &maPNV[pPNb2->mnIN];
+                            }
+                            else
+                            {
+                                bOnEdge = false;
+                            }
+                        }
+                        while(bOnEdge && pPNa2 != &rPNa && pPNa2 != &rPNa);
+
+                        if(bOnEdge)
+                        {
+                            // loop over two identical polygon paths
+                            return;
+                        }
+                        else
+                        {
+                            // enter at rPNa, rPNb; leave at pPNa2, pPNb2. No common edges
+                            // at enter/leave. Check for crossover.
+                            const B2DPoint& aPointE(rPNa.maPoint);
+                            const B2DVector aPrevAE(rPrevA - aPointE);
+                            const B2DVector aNextAE(rNextA - aPointE);
+                            const B2DVector aPrevBE(rPrevB - aPointE);
+
+                            const B2DPoint& aPointL(pPNa2->maPoint);
+                            const B2DVector aPrevAL(maPNV[pPNa2->mnIP].maPoint - aPointL);
+                            const B2DVector aNextAL(maPNV[pPNa2->mnIN].maPoint - aPointL);
+                            const B2DVector aNextBL(maPNV[pPNb2->mnIN].maPoint - aPointL);
+
+                            const bool bEnter(impLeftOfEdges(aPrevAE, aNextAE, aPrevBE));
+                            const bool bLeave(impLeftOfEdges(aPrevAL, aNextAL, aNextBL));
+
+                            if(bEnter != bLeave)
+                            {
+                                // crossover; switch start or end
+                                impSwitchNext(rPNa, rPNb);
+                            }
+                        }
+                    }
+                    else if(rNextA.equal(rPrevB))
+                    {
+                        // common edge in opposite direction enter
+                        impSwitchNext(rPNa, rPNb);
+                    }
+                    else
+                    {
+                        // no common edges, check for crossover
+                        const B2DPoint& aPoint(rPNa.maPoint);
+                        const B2DVector aPrevA(rPrevA - aPoint);
+                        const B2DVector aNextA(rNextA - aPoint);
+                        const B2DVector aPrevB(rPrevB - aPoint);
+                        const B2DVector aNextB(rNextB - aPoint);
+
+                        const bool bEnter(impLeftOfEdges(aPrevA, aNextA, aPrevB));
+                        const bool bLeave(impLeftOfEdges(aPrevA, aNextA, aNextB));
+
+                        if(bEnter != bLeave)
+                        {
+                            // crossover
+                            impSwitchNext(rPNa, rPNb);
+                        }
+                    }
+                }
+            }
+
+            void impSolve()
+            {
+                // sort by point to identify common nodes
+                ::std::sort(maSNV.begin(), maSNV.end());
+
+                // handle common nodes
+                const sal_uInt32 nNodeCount(maSNV.size());
+
+                for(sal_uInt32 a(0); a < nNodeCount - 1; a++)
+                {
+                    // test a before using it, not after. Also use nPointCount instead of aSortNodes.size()
+                    PN& rPNb = *(maSNV[a].mpPN);
+
+                    for(sal_uInt32 b(a + 1); b < nNodeCount && rPNb.maPoint.equal(maSNV[b].mpPN->maPoint); b++)
+                    {
+                        impHandleCommon(rPNb, *maSNV[b].mpPN);
+                    }
+                }
+            }
+
+        public:
+            solver(const B2DPolygon& rOriginal)
+            :   maOriginal(B2DPolyPolygon(rOriginal)),
+                mbIsCurve(false),
+                mbChanged(false)
+            {
+                const sal_uInt32 nOriginalCount(rOriginal.count());
+
+                if(nOriginalCount)
+                {
+                    B2DPolygon aGeometry(tools::addPointsAtCutsAndTouches(rOriginal));
+                    aGeometry.removeDoublePoints();
+                    aGeometry = tools::simplifyCurveSegments(aGeometry);
+                    mbIsCurve = aGeometry.areControlPointsUsed();
+
+                    const sal_uInt32 nPointCount(aGeometry.count());
+
+                    // If it's not a pezier polygon, at least four points are needed to create
+                    // a self-intersection. If it's a bezier polygon, the minimum point number
+                    // is two, since with a single point You get a curve, but no self-intersection
+                    if(nPointCount > 3 || (nPointCount > 1 && mbIsCurve))
+                    {
+                        // reserve space in point, control and sort vector.
+                        maSNV.reserve(nPointCount);
+                        maPNV.reserve(nPointCount);
+                        maVNV.reserve(mbIsCurve ? nPointCount : 0);
+
+                        // fill data
+                        impAddPolygon(0, aGeometry);
+
+                        // solve common nodes
+                        impSolve();
+                    }
+                }
+            }
+
+            solver(const B2DPolyPolygon& rOriginal)
+            :   maOriginal(rOriginal),
+                mbIsCurve(false),
+                mbChanged(false)
+            {
+                sal_uInt32 nOriginalCount(maOriginal.count());
+
+                if(nOriginalCount)
+                {
+                    B2DPolyPolygon aGeometry(tools::addPointsAtCutsAndTouches(maOriginal, true));
+                    aGeometry.removeDoublePoints();
+                    aGeometry = tools::simplifyCurveSegments(aGeometry);
+                    mbIsCurve = aGeometry.areControlPointsUsed();
+                    nOriginalCount = aGeometry.count();
+
+                    if(nOriginalCount)
+                    {
+                        sal_uInt32 nPointCount(0);
+                        sal_uInt32 a(0);
+
+                        // count points
+                        for(a = 0; a < nOriginalCount; a++)
+                        {
+                            const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
+                            const sal_uInt32 nCandCount(aCandidate.count());
+
+                            // If it's not a bezier curve, at least three points would be needed to have a
+                            // topological relevant (not empty) polygon. Since its not known here if trivial
+                            // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
+                            // more than one point.
+                            // For bezier curves, the minimum for defining an area is also one.
+                            if(nCandCount)
+                            {
+                                nPointCount += nCandCount;
+                            }
+                        }
+
+                        if(nPointCount)
+                        {
+                            // reserve space in point, control and sort vector.
+                            maSNV.reserve(nPointCount);
+                            maPNV.reserve(nPointCount);
+                            maVNV.reserve(mbIsCurve ? nPointCount : 0);
+
+                            // fill data
+                            sal_uInt32 nInsertIndex(0);
+
+                            for(a = 0; a < nOriginalCount; a++)
+                            {
+                                const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
+                                const sal_uInt32 nCandCount(aCandidate.count());
+
+                                // use same condition as above, the data vector is
+                                // pre-allocated
+                                if(nCandCount)
+                                {
+                                    impAddPolygon(nInsertIndex, aCandidate);
+                                    nInsertIndex += nCandCount;
+                                }
+                            }
+
+                            // solve common nodes
+                            impSolve();
+                        }
+                    }
+                }
+            }
+
+            B2DPolyPolygon getB2DPolyPolygon()
+            {
+                if(mbChanged)
+                {
+                    B2DPolyPolygon aRetval;
+                    const sal_uInt32 nCount(maPNV.size());
+                    sal_uInt32 nCountdown(nCount);
+
+                    for(sal_uInt32 a(0); nCountdown && a < nCount; a++)
+                    {
+                        PN& rPN = maPNV[a];
+
+                        if(SAL_MAX_UINT32 != rPN.mnI)
+                        {
+                            // unused node, start new part polygon
+                            B2DPolygon aNewPart;
+                            PN* pPNCurr = &rPN;
+
+                            do
+                            {
+                                const B2DPoint& rPoint = pPNCurr->maPoint;
+                                aNewPart.append(rPoint);
+
+                                if(mbIsCurve)
+                                {
+                                    const VN& rVNCurr = maVNV[pPNCurr->mnI];
+
+                                    if(!rVNCurr.maPrev.equalZero())
+                                    {
+                                        aNewPart.setPrevControlPoint(aNewPart.count() - 1, rPoint + rVNCurr.maPrev);
+                                    }
+
+                                    if(!rVNCurr.maNext.equalZero())
+                                    {
+                                        aNewPart.setNextControlPoint(aNewPart.count() - 1, rPoint + rVNCurr.maNext);
+                                    }
+                                }
+
+                                pPNCurr->mnI = SAL_MAX_UINT32;
+                                nCountdown--;
+                                pPNCurr = &(maPNV[pPNCurr->mnIN]);
+                            }
+                            while(pPNCurr != &rPN && SAL_MAX_UINT32 != pPNCurr->mnI);
+
+                            // close and add
+                            aNewPart.setClosed(true);
+                            aRetval.append(aNewPart);
+                        }
+                    }
+
+                    return aRetval;
+                }
+                else
+                {
+                    // no change, return original
+                    return maOriginal;
+                }
+            }
         };
 
         //////////////////////////////////////////////////////////////////////////////
@@ -807,42 +666,30 @@ namespace basegfx
     {
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon SolveCrossovers(const B2DPolyPolygon& rCandidate, bool bSelfCrossovers)
+        B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
-            B2DPolyPolygon aCandidate;
-
-            if(bSelfCrossovers)
+            if(rCandidate.count() > 1L)
             {
-                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-                {
-                    aCandidate.append(SolveCrossovers(rCandidate.getB2DPolygon(a)));
-                }
+                solver aSolver(rCandidate);
+                return aSolver.getB2DPolyPolygon();
             }
             else
             {
-                aCandidate = rCandidate;
+                return rCandidate;
             }
-
-            if(aCandidate.count() > 1L)
-            {
-                impPolyPolygonCrossoverSolver aSolver(aCandidate);
-                aCandidate = aSolver.getB2DPolyPolygon();
-            }
-
-            return aCandidate;
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon SolveCrossovers(const B2DPolygon& rCandidate)
+        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
         {
-            impPolygonCrossoverSolver aSolver(rCandidate);
+            solver aSolver(rCandidate);
             return aSolver.getB2DPolyPolygon();
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon StripNeutralPolygons(const B2DPolyPolygon& rCandidate)
+        B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aRetval;
 
@@ -861,7 +708,7 @@ namespace basegfx
 
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon StripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
+        B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
         {
             const sal_uInt32 nCount(rCandidate.count());
             B2DPolyPolygon aRetval;
@@ -878,13 +725,13 @@ namespace basegfx
                 else
                 {
                     sal_uInt32 a, b;
-                    ::std::vector< impStripHelper > aHelpers;
+                    ::std::vector< StripHelper > aHelpers;
                     aHelpers.resize(nCount);
 
                     for(a = 0L; a < nCount; a++)
                     {
                         const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-                        impStripHelper* pNewHelper = &(aHelpers[a]);
+                        StripHelper* pNewHelper = &(aHelpers[a]);
                         pNewHelper->maRange = tools::getRange(aCandidate);
                         pNewHelper->meOrinetation = tools::getOrientation(aCandidate);
                         pNewHelper->mnDepth = (ORIENTATION_NEGATIVE == pNewHelper->meOrinetation ? -1L : 0L);
@@ -893,12 +740,12 @@ namespace basegfx
                     for(a = 0L; a < nCount - 1L; a++)
                     {
                         const B2DPolygon aCandA(rCandidate.getB2DPolygon(a));
-                        impStripHelper& rHelperA = aHelpers[a];
+                        StripHelper& rHelperA = aHelpers[a];
 
                         for(b = a + 1L; b < nCount; b++)
                         {
                             const B2DPolygon aCandB(rCandidate.getB2DPolygon(b));
-                            impStripHelper& rHelperB = aHelpers[b];
+                            StripHelper& rHelperB = aHelpers[b];
                             const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && tools::isInside(aCandB, aCandA, true));
                             const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && tools::isInside(aCandA, aCandB, true));
 
@@ -949,7 +796,7 @@ namespace basegfx
 
                     for(a = 0L; a < nCount; a++)
                     {
-                        const impStripHelper& rHelper = aHelpers[a];
+                        const StripHelper& rHelper = aHelpers[a];
                         bool bAcceptEntry(bKeepAboveZero ? 1L <= rHelper.mnDepth : 0L == rHelper.mnDepth);
 
                         if(bAcceptEntry)
@@ -961,6 +808,125 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate)
+        {
+            solver aSolver(rCandidate);
+            B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
+
+            return correctOrientations(aRetval);
+        }
+
+        B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate)
+        {
+            solver aSolver(rCandidate);
+            B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
+
+            return correctOrientations(aRetval);
+        }
+
+        B2DPolyPolygon solvePolygonOperationOr(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
+        {
+            if(!rCandidateA.count())
+            {
+                return rCandidateB;
+            }
+            else if(!rCandidateB.count())
+            {
+                return rCandidateA;
+            }
+            else
+            {
+                // concatenate polygons, solve crossovers and throw away all sub-polygons
+                // which have a depth other than 0.
+                B2DPolyPolygon aRetval(rCandidateA);
+
+                aRetval.append(rCandidateB);
+                aRetval = solveCrossovers(aRetval);
+                aRetval = stripNeutralPolygons(aRetval);
+
+                return stripDispensablePolygons(aRetval, false);
+            }
+        }
+
+        B2DPolyPolygon solvePolygonOperationXor(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
+        {
+            if(!rCandidateA.count())
+            {
+                return rCandidateB;
+            }
+            else if(!rCandidateB.count())
+            {
+                return rCandidateA;
+            }
+            else
+            {
+                // XOR is pretty simple: By definition it is the simple concatenation of
+                // the single polygons since we imply XOR fill rule. Make it intersection-free
+                // and correct orientations
+                B2DPolyPolygon aRetval(rCandidateA);
+
+                aRetval.append(rCandidateB);
+                aRetval = solveCrossovers(aRetval);
+                aRetval = stripNeutralPolygons(aRetval);
+
+                return correctOrientations(aRetval);
+            }
+        }
+
+        B2DPolyPolygon solvePolygonOperationAnd(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
+        {
+            if(!rCandidateA.count())
+            {
+                return B2DPolyPolygon();
+            }
+            else if(!rCandidateB.count())
+            {
+                return B2DPolyPolygon();
+            }
+            else
+            {
+                // concatenate polygons, solve crossovers and throw away all sub-polygons
+                // with a depth of < 1. This means to keep all polygons where at least two
+                // polygons do overlap.
+                B2DPolyPolygon aRetval(rCandidateA);
+
+                aRetval.append(rCandidateB);
+                aRetval = solveCrossovers(aRetval);
+                aRetval = stripNeutralPolygons(aRetval);
+
+                return stripDispensablePolygons(aRetval, true);
+            }
+        }
+
+        B2DPolyPolygon solvePolygonOperationDiff(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
+        {
+            if(!rCandidateA.count())
+            {
+                return B2DPolyPolygon();
+            }
+            else if(!rCandidateB.count())
+            {
+                return rCandidateA;
+            }
+            else
+            {
+                // Make B topologically to holes and append to A
+                B2DPolyPolygon aRetval(rCandidateB);
+
+                aRetval.flip();
+                aRetval.append(rCandidateA);
+
+                // solve crossovers and throw away all sub-polygons which have a
+                // depth other than 0.
+                aRetval = basegfx::tools::solveCrossovers(aRetval);
+                aRetval = basegfx::tools::stripNeutralPolygons(aRetval);
+
+                return basegfx::tools::stripDispensablePolygons(aRetval, false);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////
