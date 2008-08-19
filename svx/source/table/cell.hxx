@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,7 @@ public:
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
 
-    const SfxItemSet& GetItemSet() const;
+    virtual const SfxItemSet& GetItemSet() const;
     void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems);
     void SetMergedItem(const SfxPoolItem& rItem);
 
