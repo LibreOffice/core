@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,7 +58,8 @@ SLOFILES= \
         $(SLO)$/b3dpolygon.obj						\
         $(SLO)$/b3dpolygontools.obj					\
         $(SLO)$/b3dpolypolygon.obj					\
-        $(SLO)$/b3dpolypolygontools.obj
+        $(SLO)$/b3dpolypolygontools.obj				\
+        $(SLO)$/b3dpolygonclipper.obj
 
 # --- Targets ----------------------------------
 
