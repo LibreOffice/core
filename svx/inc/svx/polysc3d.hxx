@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polysc3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,28 +48,6 @@ public:
     E3dPolyScene(E3dDefaultAttributes& rDefault);
 
     virtual UINT16 GetObjIdentifier() const;
-
-    // Zeichenmethode
-    virtual sal_Bool DoPaintObject(XOutputDevice&, const SdrPaintInfoRec&) const;
-
-    // Die Kontur fuer TextToContour
-    virtual basegfx::B2DPolyPolygon TakeContour() const;
-    virtual basegfx::B2DPolyPolygon ImpTakeContour3D() const;
-
-    virtual void Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
-        const SdrPaintInfoRec& rInfoRec, UINT16 nDrawFlags=0);
-
-protected:
-    void DrawAllShadows(Base3D *pBase3D, XOutputDevice& rXOut,
-        const Rectangle& rBound, const Volume3D& rVolume,
-        const SdrPaintInfoRec& rInfoRec);
-
-    BOOL LocalPaint3D(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec);
-
-    void DrawPolySceneClip(XOutputDevice& rOut, const E3dObject *p3DObj,
-        Base3D *pBase3D, const SdrPaintInfoRec& rInfoRec);
-
-    void DrawWireframe(Base3D *pBase3D, XOutputDevice& rXOut);
 };
 
 #endif          // _E3D_POLYSC3D_HXX
