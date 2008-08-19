@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectanimator.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,50 +34,19 @@
 #include <tools/debug.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
 
-// for SOLARIS compiler include of algorithm part of _STL is necesary to
-// get access to basic algos like ::std::find
-#include <algorithm>
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
     namespace animation
     {
-        ObjectAnimator::ObjectAnimator()
+        primitiveAnimator::primitiveAnimator()
+        :   Scheduler()
         {
         }
 
-        ObjectAnimator::~ObjectAnimator()
+        primitiveAnimator::~primitiveAnimator()
         {
-        }
-
-        // get the list count
-        sal_uInt32 ObjectAnimator::Count() const
-        {
-            return maAnimationStates.size();
-        }
-
-        // Remove AnimationState member
-        void ObjectAnimator::RemoveAnimationState(AnimationState& rAnimationState)
-        {
-            const AnimationStateVector::iterator aFindResult = ::std::find(
-                maAnimationStates.begin(), maAnimationStates.end(), &rAnimationState);
-
-            if(aFindResult != maAnimationStates.end())
-            {
-                // #114376# remember content for next call
-                AnimationState* pErasedState = *aFindResult;
-                maAnimationStates.erase(aFindResult);
-                RemoveEvent(pErasedState);
-            }
-        }
-
-        // Add AnimationState member
-        void ObjectAnimator::AddAnimationState(AnimationState& rAnimationState)
-        {
-            maAnimationStates.push_back(&rAnimationState);
-            InsertEvent(&rAnimationState);
         }
     } // end of namespace animation
 } // end of namespace sdr
