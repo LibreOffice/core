@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column2.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,6 @@
 #include <svtools/broadcast.hxx>
 #include <svtools/listeneriter.hxx>
 #include <vcl/outdev.hxx>
-#include <math.h>
 
 #include "column.hxx"
 #include "cell.hxx"
@@ -71,6 +70,8 @@
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
 #include "postit.hxx"
+
+#include <math.h>
 
 // -----------------------------------------------------------------------
 
