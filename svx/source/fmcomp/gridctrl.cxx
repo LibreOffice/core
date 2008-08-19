@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridctrl.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -907,7 +907,7 @@ DbGridControl::DbGridControl(
             ,m_pDataSourcePropListener(NULL)
             ,m_pFieldListeners(NULL)
             ,m_pCursorDisposeListener(NULL)
-            ,m_pSelectionListener(NULL)
+            ,m_pGridListener(NULL)
             ,m_pDataCursor(NULL)
             ,m_pSeekCursor(NULL)
             ,m_nSeekPos(-1)
@@ -918,6 +918,8 @@ DbGridControl::DbGridControl(
             ,m_nDeleteEvent(0)
             ,m_nOptions(OPT_READONLY)
             ,m_nOptionMask(OPT_INSERT | OPT_UPDATE | OPT_DELETE)
+            ,m_nLastColId((USHORT)-1)
+            ,m_nLastRowId(-1)
             ,m_bDesignMode(sal_False)
             ,m_bRecordCountFinal(sal_False)
             ,m_bMultiSelection(sal_True)
@@ -1052,8 +1054,8 @@ void DbGridControl::Select()
     // as the selected rows may have changed, udate the according display in our navigation bar
     m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
 
-    if (m_pSelectionListener)
-        m_pSelectionListener->selectionChanged();
+    if (m_pGridListener)
+        m_pGridListener->selectionChanged();
 }
 
 //------------------------------------------------------------------------------
@@ -2138,6 +2140,27 @@ void DbGridControl::CursorMoved()
     {
         SelectColumnId( GetCurColumnId() );
     }
+
+    if ( m_nLastColId != GetCurColumnId() )
+        onColumnChange();
+    m_nLastColId = GetCurColumnId();
+
+    if ( m_nLastRowId != GetCurRow() )
+        onRowChange();
+    m_nLastRowId = GetCurRow();
+}
+
+//------------------------------------------------------------------------------
+void DbGridControl::onRowChange()
+{
+    // not interested in
+}
+
+//------------------------------------------------------------------------------
+void DbGridControl::onColumnChange()
+{
+    if ( m_pGridListener )
+        m_pGridListener->columnChanged();
 }
 
 //------------------------------------------------------------------------------
