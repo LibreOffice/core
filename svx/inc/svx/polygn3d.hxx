@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polygn3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,9 @@
 class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
 {
 private:
+    // #110094# DrawContact section
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
     // Parameter
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;
