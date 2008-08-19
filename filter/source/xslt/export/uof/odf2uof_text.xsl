@@ -147,9 +147,9 @@
 		</xsl:element>
 	</xsl:template>
 	<xsl:template name="GetAnnotations">
-		<xsl:if test="//office:body/office:text//office:annotation ">
+		<xsl:if test="/*/office:body/office:text//office:annotation ">
 			<字:批注集 uof:locID="t0014">
-				<xsl:for-each select="//office:body/office:text//office:annotation">
+				<xsl:for-each select="/*/office:body/office:text//office:annotation">
 					<字:批注 uof:locID="t0015" uof:attrList="区域引用 作者 日期 作者缩写">
 						<xsl:attribute name="字:作者"><xsl:value-of select="generate-id()"/></xsl:attribute>
 						<xsl:attribute name="字:日期"><xsl:value-of select="dc:date"/></xsl:attribute>
@@ -174,18 +174,18 @@
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="GetTrackChanges">
-		<xsl:if test="//office:body/office:text/text:tracked-changes">
+		<xsl:if test="/*/office:body/office:text/text:tracked-changes">
 			<字:修订信息集 uof:locID="t0012">
-				<xsl:for-each select="//office:body/office:text/text:tracked-changes/text:changed-region">
+				<xsl:for-each select="/*/office:body/office:text/text:tracked-changes/text:changed-region">
 					<字:修订信息 字:标识符="{@text:id}" 字:作者="{generate-id()}" 字:日期="{node()//office:change-info/dc:date}" uof:locID="t0013" uof:attrList="标识符 作者 日期"/>
 				</xsl:for-each>
 			</字:修订信息集>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="GetUsers">
-		<xsl:if test="//office:body/office:text/text:tracked-changes//office:change-info/dc:creator or //office:annotation/@office:author or //office:annotation/dc:creator">
+		<xsl:if test="/*/office:body/office:text/text:tracked-changes//office:change-info/dc:creator or //office:annotation/@office:author or //office:annotation/dc:creator">
 			<字:用户集 uof:locID="t0010">
-				<xsl:for-each select="//office:body/office:text/text:tracked-changes/text:changed-region">
+				<xsl:for-each select="/*/office:body/office:text/text:tracked-changes/text:changed-region">
 					<字:用户 字:标识符="{generate-id()}" 字:姓名="{node()//office:change-info/dc:creator}" uof:locID="t0011" uof:attrList="标识符 姓名"/>
 				</xsl:for-each>
 				<xsl:for-each select="//office:annotation">
@@ -950,8 +950,8 @@
 								</xsl:if>
 								<xsl:if test="@text:bullet-char">
 									<xsl:element name="字:项目符号">
+										<xsl:attribute name="uof:locID">t0171</xsl:attribute>                                        
 										<xsl:value-of select="@text:bullet-char"/>
-										<xsl:attribute name="uof:locID">t0171</xsl:attribute>
 									</xsl:element>
 								</xsl:if>
 								<xsl:if test="@text:style-name">
@@ -1598,7 +1598,7 @@
 						<xsl:otherwise>hori-l2r</xsl:otherwise>
 					</xsl:choose>
 				</字:文字排列方向>
-				<xsl:if test="style:page-layout-properties/@fo:border or style:page-layout-properties/@fo:border-top or style:page-layout-properties/@fo:border-bottom or style:page-layout-properties/@fo:border-left or style:page-layout-properties/@fo:border-right or style:page-layout-properties/@style:shadow[not='none']">
+				<xsl:if test="style:page-layout-properties/@fo:border or style:page-layout-properties/@fo:border-top or style:page-layout-properties/@fo:border-bottom or style:page-layout-properties/@fo:border-left or style:page-layout-properties/@fo:border-right or style:page-layout-properties/@style:shadow[.!='none']">
 					<xsl:element name="字:边框">
 						<xsl:attribute name="uof:locID">t0047</xsl:attribute>
 						<xsl:for-each select="style:page-layout-properties">
@@ -2027,7 +2027,7 @@
 			<xsl:attribute name="uof:locID">t0195</xsl:attribute>
 			<xsl:attribute name="uof:attrList">值</xsl:attribute>
 		</xsl:element>
-		<xsl:if test="style:paragraph-properties/@fo:border or style:paragraph-properties/@fo:border-top or style:paragraph-properties/@fo:border-bottom or style:paragraph-properties/@fo:border-left or style:paragraph-properties/@fo:border-right or style:paragraph-properties/@style:shadow[not='none']">
+		<xsl:if test="style:paragraph-properties/@fo:border or style:paragraph-properties/@fo:border-top or style:paragraph-properties/@fo:border-bottom or style:paragraph-properties/@fo:border-left or style:paragraph-properties/@fo:border-right or style:paragraph-properties/@style:shadow[.!='none']">
 			<xsl:element name="字:边框">
 				<xsl:attribute name="uof:locID">t0065</xsl:attribute>
 				<xsl:for-each select="style:paragraph-properties">
@@ -2087,7 +2087,6 @@
 						</xsl:if>
 					</xsl:element>
 				</xsl:for-each>
-				<xsl:attribute name="uof:locID">t0067</xsl:attribute>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
