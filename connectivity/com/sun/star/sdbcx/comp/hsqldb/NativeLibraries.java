@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NativeLibraries.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +40,9 @@ final class NativeLibraries {
             loadLibrary("msvcr71");
             loadLibrary("uwinapi");
             loadLibrary("sal3");
-            loadLibrary("dbtools680mi");
+            loadLibrary("dbtoolsmi");
         }
-        loadLibrary("hsqldb2");
+        loadLibrary("hsqldb");
     }
 
     private static void loadLibrary(String libname) {
@@ -68,7 +68,7 @@ final class NativeLibraries {
                              newInstance(
                                  new Object[] {
                                      URL.class.getMethod("toURI", new Class[0]).
-                                     invoke(url, null) })).
+                                     invoke(url, (java.lang.Object[])null) })).
                             getAbsolutePath());
                     } catch (Throwable t) {
                         throw new UnsatisfiedLinkError(
