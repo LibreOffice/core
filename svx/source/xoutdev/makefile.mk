@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,13 +45,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/xcpoly.obj 		\
-        $(SLO)$/xout.obj   		\
-        $(SLO)$/xout1.obj  		\
         $(SLO)$/xattr.obj  		\
         $(SLO)$/xattr2.obj  	\
         $(SLO)$/xattrbmp.obj	\
-        $(SLO)$/xline.obj   	\
         $(SLO)$/xpool.obj  		\
         $(SLO)$/xtable.obj 		\
         $(SLO)$/xtabcolr.obj	\
@@ -62,8 +58,6 @@ SLOFILES= \
         $(SLO)$/xtabbtmp.obj	\
         $(SLO)$/xexch.obj		\
         $(SLO)$/_xpoly.obj  	\
-        $(SLO)$/_ximp.obj   	\
-        $(SLO)$/_xoutbmp.obj	\
-        $(SLO)$/_xfont.obj
+        $(SLO)$/_xoutbmp.obj
 
 .INCLUDE :  target.mk
