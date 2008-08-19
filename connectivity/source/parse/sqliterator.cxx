@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqliterator.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +43,7 @@
 #ifdef SQL_TEST_PARSETREEITERATOR
 #include <iostream>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
-#endif
 #include "connectivity/dbtools.hxx"
 #include <tools/diagnose_ex.h>
 #include "TConnection.hxx"
@@ -66,8 +64,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
-
-static ::rtl::OUString aEmptyString;
 
 namespace connectivity
 {
@@ -857,6 +853,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
             /*&&  traverseSelectColumnNames( pSelectNode->getChild( 3 ) )*/;
     }
 
+    static ::rtl::OUString aEmptyString;
     // nyi: mehr Pruefung auf korrekte Struktur!
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
@@ -914,7 +911,6 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                     ::rtl::OUString sTableRange;
                     // check if the column is also a parameter
                     traverseORCriteria(pColumnRef); // num_value_exp
-                    traverseParameter( pColumnRef, NULL, sColumnName, sTableRange, aColumnAlias );
 
                     // gehoeren alle beteiligten Spalten der Funktion zu einer Tabelle
                     if (m_pImpl->m_pTables->size() == 1)
@@ -1062,6 +1058,58 @@ bool OSQLParseTreeIterator::traverseGroupByColumnNames(const OSQLParseNode* pSel
 {
     traverseByColumnNames( pSelectNode, sal_False );
     return !hasErrors();
+}
+// -----------------------------------------------------------------------------
+void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
+{
+    if ( _pNode == NULL )
+        return;
+
+    ::rtl::OUString sColumnName, sTableRange, aColumnAlias;
+    const OSQLParseNode* pParent = _pNode->getParent();
+    if ( pParent != NULL )
+    {
+        if ( SQL_ISRULE(pParent,comparison_predicate) ) // x = X
+        {
+            sal_uInt32 nPos = 0;
+            if ( pParent->getChild(nPos) == _pNode )
+                nPos = 2;
+            pParent->getChild(nPos)->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        } // if ( SQL_ISRULE(pParent,comparison_predicate) ) // x = X
+        else if ( SQL_ISRULE(pParent,like_predicate) )
+        {
+            pParent->getChild(0)->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        }
+        else if ( SQL_ISRULE(pParent,between_predicate) )
+        {
+            sal_Int32 nPos = 2;
+            if ( pParent->getChild(3) == _pNode )
+                nPos = 1;
+            pParent->getChild(0)->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+            sColumnName += ::rtl::OUString::valueOf(nPos);
+        }
+        else if ( pParent->getNodeType() == SQL_NODE_COMMALISTRULE )
+        {
+            const sal_Int32 nParamCount = (sal_Int32)pParent->count();
+            for (sal_Int32 i = 0; i < nParamCount; ++i)
+            {
+                if ( pParent->getChild(i) == _pNode )
+                {
+                    static const ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM("param"));
+                    sColumnName = s_sParam;
+                    sColumnName += ::rtl::OUString::valueOf(i+1);
+                    break;
+                }
+            }
+        }
+    }
+    traverseParameter( _pNode, pParent, sColumnName, sTableRange, aColumnAlias );
+    const sal_uInt32 nCount = _pNode->count();
+    for (sal_uInt32 i = 0; i < nCount; ++i)
+    {
+        const OSQLParseNode* pChild  = _pNode->getChild(i);
+        traverseParameters( pChild );
+    }
 }
 //-----------------------------------------------------------------------------
 bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSelectNode)
@@ -1296,8 +1344,8 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     // Fehler einfach weiterreichen.
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::traverseParameter(OSQLParseNode* _pParseNode
-                                              ,OSQLParseNode* _pColumnRef
+void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
+                                              ,const OSQLParseNode* _pColumnRef
                                               ,const ::rtl::OUString& _aColumnName
                                               ,const ::rtl::OUString& _aTableRange
                                               ,const ::rtl::OUString& _rColumnAlias)
@@ -1421,9 +1469,9 @@ void OSQLParseTreeIterator::traverseOnePredicate(
 
     ::rtl::OUString aName;
 
-    if (SQL_ISRULE(pParseNode,parameter))
+    /*if (SQL_ISRULE(pParseNode,parameter))
         traverseParameter( pParseNode, pColumnRef, aColumnName, aTableRange, sColumnAlias );
-    else if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):
+    else */if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):
         getColumnRange(pParseNode,aName,rValue);
     else
     {
@@ -1458,6 +1506,7 @@ void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
     case SQL_STATEMENT_SELECT:
     {
         const OSQLParseNode* pSelectNode = m_pParseTree;
+        traverseParameters( pSelectNode );
         if  (   !traverseSelectColumnNames( pSelectNode )
             ||  !traverseOrderByColumnNames( pSelectNode )
             ||  !traverseGroupByColumnNames( pSelectNode )
