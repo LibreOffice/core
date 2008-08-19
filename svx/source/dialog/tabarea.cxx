@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabarea.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,33 +134,65 @@ SvxAreaTabDialog::~SvxAreaTabDialog()
 
 void SvxAreaTabDialog::SavePalettes()
 {
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    /*uno::Reference< frame::XDispatchProvider > xDispatchProvider;
+    if ( !pShell )
+    {
+        uno::Reference< frame::XModel> xModel = mpDrawModel->getUnoModel();
+        if ( xModel.is() )
+            xDispatchProvider.set(xModel->getCurrentController(),uno::UNO_QUERY);
+    }*/
     if( mpNewColorTab != mpDrawModel->GetColorTable() )
     {
         if(mbDeleteColorTable)
             delete mpDrawModel->GetColorTable();
         mpDrawModel->SetColorTable( mpNewColorTab );
-        SfxObjectShell::Current()->PutItem( SvxColorTableItem( mpNewColorTab, SID_COLOR_TABLE ) );
+        SvxColorTableItem aColorTableItem( mpNewColorTab, SID_COLOR_TABLE );
+        if ( pShell )
+            pShell->PutItem( aColorTableItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aColorTableItem,SID_COLOR_TABLE);
+        }
         mpColorTab = mpDrawModel->GetColorTable();
     }
     if( mpNewGradientList != mpDrawModel->GetGradientList() )
     {
         delete mpDrawModel->GetGradientList();
         mpDrawModel->SetGradientList( mpNewGradientList );
-        SfxObjectShell::Current()->PutItem( SvxGradientListItem( mpNewGradientList, SID_GRADIENT_LIST ) );
+        SvxGradientListItem aItem( mpNewGradientList, SID_GRADIENT_LIST );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem,SID_GRADIENT_LIST);
+        }
         mpGradientList = mpDrawModel->GetGradientList();
     }
     if( mpNewHatchingList != mpDrawModel->GetHatchList() )
     {
         delete mpDrawModel->GetHatchList();
         mpDrawModel->SetHatchList( mpNewHatchingList );
-        SfxObjectShell::Current()->PutItem( SvxHatchListItem( mpNewHatchingList, SID_HATCH_LIST ) );
+        SvxHatchListItem aItem( mpNewHatchingList, SID_HATCH_LIST );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem,SID_HATCH_LIST);
+        }
         mpHatchingList = mpDrawModel->GetHatchList();
     }
     if( mpNewBitmapList != mpDrawModel->GetBitmapList() )
     {
         delete mpDrawModel->GetBitmapList();
         mpDrawModel->SetBitmapList( mpNewBitmapList );
-        SfxObjectShell::Current()->PutItem( SvxBitmapListItem( mpNewBitmapList, SID_BITMAP_LIST ) );
+        SvxBitmapListItem aItem( mpNewBitmapList, SID_BITMAP_LIST );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem,SID_BITMAP_LIST);
+        }
         mpBitmapList = mpDrawModel->GetBitmapList();
     }
 
@@ -173,8 +205,14 @@ void SvxAreaTabDialog::SavePalettes()
         mpHatchingList->SetPath( aPath );
         mpHatchingList->Save();
 
+        SvxHatchListItem aItem( mpHatchingList, SID_HATCH_LIST );
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxHatchListItem( mpHatchingList, SID_HATCH_LIST ) );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem);
+        }
     }
 
     if( mnBitmapListState & CT_MODIFIED )
@@ -182,16 +220,29 @@ void SvxAreaTabDialog::SavePalettes()
         mpBitmapList->SetPath( aPath );
         mpBitmapList->Save();
 
+        SvxBitmapListItem aItem( mpBitmapList, SID_BITMAP_LIST );
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxBitmapListItem( mpBitmapList, SID_BITMAP_LIST ) );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem);
+        }
     }
 
     if( mnGradientListState & CT_MODIFIED )
     {
         mpGradientList->SetPath( aPath );
         mpGradientList->Save();
+
+        SvxGradientListItem aItem( mpGradientList, SID_GRADIENT_LIST );
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxGradientListItem( mpGradientList, SID_GRADIENT_LIST ) );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem);
+        }
     }
 
     if( mnColorTableState & CT_MODIFIED )
@@ -199,8 +250,14 @@ void SvxAreaTabDialog::SavePalettes()
         mpColorTab->SetPath( aPath );
         mpColorTab->Save();
 
+        SvxColorTableItem aItem( mpColorTab, SID_COLOR_TABLE );
         // ToolBoxControls werden benachrichtigt:
-        SfxObjectShell::Current()->PutItem( SvxColorTableItem( mpColorTab, SID_COLOR_TABLE ) );
+        if ( pShell )
+            pShell->PutItem( aItem );
+        else
+        {
+            mpDrawModel->GetItemPool().Put(aItem);
+        }
     }
 }
 // -----------------------------------------------------------------------
