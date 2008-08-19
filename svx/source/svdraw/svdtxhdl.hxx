@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdtxhdl.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,7 @@
 #ifndef _SVDTXHDL_HXX
 #define _SVDTXHDL_HXX
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 #include <tools/poly.hxx>
 #include <tools/link.hxx>
 
@@ -46,7 +44,6 @@ class DrawPortionInfo;
 class SdrTextObj;
 class SdrObjGroup;
 class SdrModel;
-class XOutputDevice;
 
 //************************************************************
 //   ImpTextPortionHandler
@@ -55,49 +52,19 @@ class XOutputDevice;
 class ImpTextPortionHandler
 {
     VirtualDevice               aVDev;
-    Rectangle                   aFormTextBoundRect;
     SdrOutliner&                rOutliner;
     const SdrTextObj&           rTextObj;
-    XOutputDevice*          pXOut;
 
     // Variablen fuer ConvertToPathObj
     SdrObjGroup*                pGroup;
-    SdrModel*                   pModel;
     FASTBOOL                    bToPoly;
-
-    // Variablen fuer DrawFitText
-    Point                       aPos;
-    Fraction                    aXFact;
-    Fraction                    aYFact;
-
-    // Variablen fuer DrawTextToPath
-    ULONG                       nParagraph;
-    BOOL                        bToLastPoint;
-    bool                        bDraw;
-    void*                       mpRecordPortions;
-
-private:
-    // #101498#
-    void SortedAddFormTextRecordPortion(DrawPortionInfo* pInfo);
-    void DrawFormTextRecordPortions(Polygon aPoly);
-    void ClearFormTextRecordPortions();
-    sal_uInt32 GetFormTextPortionsLength(OutputDevice* pOut);
+    Rectangle                   maTextRect;
 
 public:
     ImpTextPortionHandler(SdrOutliner& rOutln, const SdrTextObj& rTxtObj);
-
     void ConvertToPathObj(SdrObjGroup& rGroup, FASTBOOL bToPoly);
-    void DrawFitText(XOutputDevice& rXOut, const Point& rPos, const Fraction& rXFact);
-    void DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawEffect=TRUE);
-
-    // wird von DrawTextToPath() gesetzt:
-    const Rectangle& GetFormTextBoundRect() { return aFormTextBoundRect; }
 
     DECL_LINK(ConvertHdl,DrawPortionInfo*);
-    DECL_LINK(FitTextDrawHdl,DrawPortionInfo*);
-
-    // #101498#
-    DECL_LINK(FormTextRecordPortionHdl, DrawPortionInfo*);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
