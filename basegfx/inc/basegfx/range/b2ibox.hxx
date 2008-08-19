@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2ibox.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicbox.hxx>
-
 #include <vector>
 
 
