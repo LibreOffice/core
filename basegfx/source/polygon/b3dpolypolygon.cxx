@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygon.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,8 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <rtl/instance.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-
 #include <functional>
 #include <vector>
 #include <algorithm>
@@ -159,6 +159,46 @@ public:
         }
     }
 
+    void clearBColors()
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].clearBColors();
+        }
+    }
+
+    void transformNormals(const ::basegfx::B3DHomMatrix& rMatrix)
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].transformNormals(rMatrix);
+        }
+    }
+
+    void clearNormals()
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].clearNormals();
+        }
+    }
+
+    void transformTextureCoordiantes(const ::basegfx::B2DHomMatrix& rMatrix)
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].transformTextureCoordiantes(rMatrix);
+        }
+    }
+
+    void clearTextureCoordinates()
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].clearTextureCoordinates();
+        }
+    }
+
     void makeUnique()
     {
         std::for_each( maPolygons.begin(),
@@ -236,6 +276,75 @@ namespace basegfx
 
         if(getB3DPolygon(nIndex) != rPolygon)
             mpPolyPolygon->setB3DPolygon(nIndex, rPolygon);
+    }
+
+    bool B3DPolyPolygon::areBColorsUsed() const
+    {
+        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        {
+            if((mpPolyPolygon->getB3DPolygon(a)).areBColorsUsed())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void B3DPolyPolygon::clearBColors()
+    {
+        if(areBColorsUsed())
+            mpPolyPolygon->clearBColors();
+    }
+
+    void B3DPolyPolygon::transformNormals(const B3DHomMatrix& rMatrix)
+    {
+        if(!rMatrix.isIdentity())
+            mpPolyPolygon->transformNormals(rMatrix);
+    }
+
+    bool B3DPolyPolygon::areNormalsUsed() const
+    {
+        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        {
+            if((mpPolyPolygon->getB3DPolygon(a)).areNormalsUsed())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void B3DPolyPolygon::clearNormals()
+    {
+        if(areNormalsUsed())
+            mpPolyPolygon->clearNormals();
+    }
+
+    void B3DPolyPolygon::transformTextureCoordiantes(const B2DHomMatrix& rMatrix)
+    {
+        if(!rMatrix.isIdentity())
+            mpPolyPolygon->transformTextureCoordiantes(rMatrix);
+    }
+
+    bool B3DPolyPolygon::areTextureCoordinatesUsed() const
+    {
+        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        {
+            if((mpPolyPolygon->getB3DPolygon(a)).areTextureCoordinatesUsed())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void B3DPolyPolygon::clearTextureCoordinates()
+    {
+        if(areTextureCoordinatesUsed())
+            mpPolyPolygon->clearTextureCoordinates();
     }
 
     void B3DPolyPolygon::insert(sal_uInt32 nIndex, const B3DPolygon& rPolygon, sal_uInt32 nCount)
@@ -328,7 +437,7 @@ namespace basegfx
             mpPolyPolygon->removeDoublePoints();
     }
 
-    void B3DPolyPolygon::transform(const ::basegfx::B3DHomMatrix& rMatrix)
+    void B3DPolyPolygon::transform(const B3DHomMatrix& rMatrix)
     {
         if(mpPolyPolygon->count() && !rMatrix.isIdentity())
         {
