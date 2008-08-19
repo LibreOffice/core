@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formoperations.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,9 @@ namespace frm
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::beans::NamedValue;
+
     using ::com::sun::star::util::XRefreshable;
+    using ::com::sun::star::awt::XControlModel;
     /** === end UNO using === **/
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
@@ -311,6 +313,13 @@ namespace frm
             }
             break;
 
+            case FormFeature::RefreshCurrentControl:
+            {
+                Reference< XRefreshable > xControlModelRefresh( impl_getCurrentControlModel_throw(), UNO_QUERY );
+                aState.Enabled = xControlModelRefresh.is();
+            }
+            break;
+
             case FormFeature::SaveRecordChanges:
             case FormFeature::UndoRecordChanges:
                 aState.Enabled = impl_isModifiedRow_throw() || m_bActiveControlModified;
@@ -495,7 +504,6 @@ namespace frm
             switch ( _nFeature )
             {
             case FormFeature::MoveToFirst:
-                // move
                 m_xCursor->first();
                 break;
 
@@ -549,6 +557,15 @@ namespace frm
                     }
                 }
                 break;
+
+            case FormFeature::RefreshCurrentControl:
+            {
+                Reference< XRefreshable > xControlModelRefresh( impl_getCurrentControlModel_throw(), UNO_QUERY );
+                OSL_ENSURE( xControlModelRefresh.is(), "FormOperations::execute: how did you reach this?" );
+                if ( xControlModelRefresh.is() )
+                    xControlModelRefresh->refresh();
+            }
+            break;
 
             case FormFeature::DeleteRecord:
             {
@@ -1282,6 +1299,31 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
+    Reference< XControlModel > FormOperations::impl_getCurrentControlModel_throw() const
+    {
+        Reference< XControl > xControl( m_xController->getCurrentControl() );
+
+        // special handling for grid controls
+        Reference< XGrid > xGrid( xControl, UNO_QUERY );
+        Reference< XControlModel > xControlModel;
+
+        if ( xGrid.is() )
+        {
+            Reference< XIndexAccess > xColumns( xControl->getModel(), UNO_QUERY_THROW );
+            sal_Int16 nCurrentPos = xGrid->getCurrentColumnPosition();
+            nCurrentPos = impl_gridView2ModelPos_nothrow( xColumns, nCurrentPos );
+
+            if ( nCurrentPos != (sal_Int16)-1 )
+                xColumns->getByIndex( nCurrentPos ) >>= xControlModel;
+        }
+        else if ( xControl.is() )
+        {
+            xControlModel = xControl->getModel();
+        }
+        return xControlModel;
+    }
+
+    //------------------------------------------------------------------------------
     Reference< XPropertySet > FormOperations::impl_getCurrentBoundField_nothrow( ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_getCurrentBoundField_nothrow: no controller -> no control!" );
@@ -1291,25 +1333,7 @@ namespace frm
         Reference< XPropertySet > xField;
         try
         {
-            Reference< XControl > xControl( m_xController->getCurrentControl() );
-
-            // special handling for grid controls
-            Reference< XGrid > xGrid( xControl, UNO_QUERY );
-            Reference< XPropertySet > xControlModel;
-
-            if ( xGrid.is() )
-            {
-                Reference< XIndexAccess > xColumns( xControl->getModel(), UNO_QUERY_THROW );
-                sal_Int16 nCurrentPos = xGrid->getCurrentColumnPosition();
-                nCurrentPos = impl_gridView2ModelPos_nothrow( xColumns, nCurrentPos );
-
-                if ( nCurrentPos != (sal_Int16)-1 )
-                    xColumns->getByIndex( nCurrentPos ) >>= xControlModel;
-            }
-            else if ( xControl.is() )
-            {
-                xControlModel = xControlModel.query( xControl->getModel() );
-            }
+            Reference< XPropertySet > xControlModel( impl_getCurrentControlModel_throw(), UNO_QUERY );
 
             if ( xControlModel.is() && ::comphelper::hasProperty( PROPERTY_BOUNDFIELD, xControlModel ) )
                 xControlModel->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= xField;
