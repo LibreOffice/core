@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tool.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include <svtools/zforlist.hxx>
 #include <tools/solar.h>
 
-#include <math.h>
 #include "cell.hxx"
 #include "rangenam.hxx"
 #include "compiler.hxx"
@@ -51,6 +50,8 @@
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 #include "ftools.hxx"
+
+#include <math.h>
 
 #ifdef _MSC_VER
 #pragma optimize("",off)
