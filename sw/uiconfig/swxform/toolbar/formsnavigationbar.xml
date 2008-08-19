@@ -18,6 +18,7 @@
  <toolbar:toolbaritem xlink:href=".uno:DeleteRecord" toolbar:helpid="10621"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:helpid="10724"/>
+ <toolbar:toolbaritem xlink:href=".uno:RefreshFormControl"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:helpid="10714"/>
  <toolbar:toolbaritem xlink:href=".uno:Sortup" toolbar:helpid="10712"/>
