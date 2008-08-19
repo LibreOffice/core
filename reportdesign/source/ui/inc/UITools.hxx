@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/report/XReportControlFormat.hpp>
+#include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -92,15 +93,15 @@ namespace rptui
     */
     bool    openCharDialog(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xReportControlFormat,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
-            );
-
-    /** opens the common character font dialog
-    */
-    bool    openCharDialog(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xReportControlFormat,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_rNewValues
+            );
+
+    /** opens the area dialog for shapes
+    */
+    bool openAreaDialog(
+             const ::com::sun::star::uno::Reference< ::com::sun::star::report::XShape >& _xShape
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
             );
 
     /** applies the character settings previously obtained via openCharDialog
@@ -155,7 +156,7 @@ namespace rptui
     * \param _pReportSection    the section
     * \param _bInsert           TRUE whe the control should be inserted, otherwise not.
     */
-    void correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert = true);
+    void correctOverlapping(SdrObject* pControl,OReportSection& _aReportSection,bool _bInsert = true);
 
     /** returns a Rectangle of a given SdrObject
      *
@@ -163,6 +164,12 @@ namespace rptui
      */
 
     Rectangle getRectangleFromControl(SdrObject* pControl);
+
+    /** sets the map mode at the window
+        @param  _nZoom      in percentage
+        @param  _rWindow    where to set the map mode
+    */
+    void setZoomFactor(const sal_Int16 _nZoom,Window& _rWindow);
 }
 #endif //RPTUI_UITOOLS_HXX
 
