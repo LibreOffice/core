@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrpage.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +34,20 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/viewobjectcontactofsdrpage.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sdr/contact/viewcontactpainthelper.hxx>
 #include <vcl/svapp.hxx>
-
-// #i71130#
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/attribute/sdrattribute.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -52,25 +59,494 @@ namespace sdr
 {
     namespace contact
     {
-        // method to recalculate the PaintRectangle if the validity flag shows that
-        // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-        // only needs to refresh maPaintRectangle itself.
-        void ViewContactOfSdrPage::CalcPaintRectangle()
+        ViewContactOfPageSubObject::ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   mrParentViewContactOfSdrPage(rParentViewContactOfSdrPage)
         {
-            // Take own painting area
-            maPaintRectangle = Rectangle(
-                0L,
-                0L,
-                GetSdrPage().GetWdt() + PAPER_SHADOW(GetSdrPage().GetWdt()),
-                GetSdrPage().GetHgt() + PAPER_SHADOW(GetSdrPage().GetHgt()));
+        }
 
-            // Combine with all contained object's rectangles
-            maPaintRectangle.Union(GetSdrPage().GetAllObjBoundRect());
+        ViewContactOfPageSubObject::~ViewContactOfPageSubObject()
+        {
+        }
+
+        ViewContact* ViewContactOfPageSubObject::GetParentContact() const
+        {
+            return &mrParentViewContactOfSdrPage;
+        }
+
+        const SdrPage& ViewContactOfPageSubObject::getPage() const
+        {
+            return mrParentViewContactOfSdrPage.GetSdrPage();
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfPageBackground::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfPageBackground(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageBackground::createViewIndependentPrimitive2DSequence() const
+        {
+            // We have only the page information, not the view information. Use the
+            // svtools::DOCCOLOR color for initialisation
+            const svtools::ColorConfig aColorConfig;
+            const Color aInitColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+            const basegfx::BColor aRGBColor(aInitColor.getBColor());
+            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        ViewContactOfPageBackground::ViewContactOfPageBackground(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfPageBackground::~ViewContactOfPageBackground()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfPageShadow::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfPageShadow(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence() const
+        {
+            const SdrPage& rPage = getPage();
+            basegfx::B2DHomMatrix aPageMatrix;
+            aPageMatrix.set(0, 0, (double)rPage.GetWdt());
+            aPageMatrix.set(1, 1, (double)rPage.GetHgt());
+
+            // create page shadow polygon
+            const double fPageBorderFactor(1.0 / 256.0);
+            basegfx::B2DPolygon aPageShadowPolygon;
+            aPageShadowPolygon.append(basegfx::B2DPoint(1.0, fPageBorderFactor));
+            aPageShadowPolygon.append(basegfx::B2DPoint(1.0 + fPageBorderFactor, fPageBorderFactor));
+            aPageShadowPolygon.append(basegfx::B2DPoint(1.0 + fPageBorderFactor, 1.0 + fPageBorderFactor));
+            aPageShadowPolygon.append(basegfx::B2DPoint(fPageBorderFactor, 1.0 + fPageBorderFactor));
+            aPageShadowPolygon.append(basegfx::B2DPoint(fPageBorderFactor, 1.0));
+            aPageShadowPolygon.append(basegfx::B2DPoint(1.0, 1.0));
+            aPageShadowPolygon.setClosed(true);
+            aPageShadowPolygon.transform(aPageMatrix);
+
+            // We have only the page information, not the view information. Use the
+            // svtools::FONTCOLOR color for initialisation
+            const svtools::ColorConfig aColorConfig;
+            const Color aShadowColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+            const basegfx::BColor aRGBShadowColor(aShadowColor.getBColor());
+            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageShadowPolygon), aRGBShadowColor));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        ViewContactOfPageShadow::ViewContactOfPageShadow(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfPageShadow::~ViewContactOfPageShadow()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfMasterPage::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfMasterPage(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence() const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            // this class is used when the page is a MasterPage and is responsible to
+            // create a visualisation for the MPBGO, if exists. This needs to be suppressed
+            // when a SdrPage which uses a MasterPage creates it's output. Suppression
+            // is done in the corresponding VOC since DisplayInfo data is needed
+            const SdrPage& rPage = getPage();
+
+            if(rPage.IsMasterPage())
+            {
+                OSL_ENSURE(0 != rPage.GetObjCount(), "MasterPage without MPBGO detected (!)");
+
+                if(rPage.GetObjCount())
+                {
+                    SdrObject* pObject = rPage.GetObj(0);
+                    OSL_ENSURE(pObject && pObject->IsMasterPageBackgroundObject(), "MasterPage with wrong MPBGO detected (!)");
+
+                    if(pObject && pObject->IsMasterPageBackgroundObject())
+                    {
+                        // build primitive from pObject's attributes
+                        const SfxItemSet& rFillProperties = pObject->GetMergedItemSet();
+                        drawinglayer::attribute::SdrFillAttribute* pFill = drawinglayer::primitive2d::createNewSdrFillAttribute(rFillProperties);
+
+                        if(pFill)
+                        {
+                            if(pFill->isVisible())
+                            {
+                                // direct model data is the page size, get and use it
+                                const basegfx::B2DRange aInnerRange(
+                                    rPage.GetLftBorder(), rPage.GetUppBorder(),
+                                    rPage.GetWdt() - rPage.GetRgtBorder(), rPage.GetHgt() - rPage.GetLwrBorder());
+                                const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
+                                const basegfx::B2DHomMatrix aEmptyTransform;
+                                const drawinglayer::primitive2d::Primitive2DReference xReference(drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                                    basegfx::B2DPolyPolygon(aInnerPolgon), aEmptyTransform, *pFill));
+
+                                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                            }
+
+                            delete pFill;
+                        }
+                    }
+                }
+            }
+
+            return xRetval;
+        }
+
+        ViewContactOfMasterPage::ViewContactOfMasterPage(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfMasterPage::~ViewContactOfMasterPage()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfPageFill::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfPageFill(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageFill::createViewIndependentPrimitive2DSequence() const
+        {
+            const SdrPage& rPage = getPage();
+            const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+            const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
+
+            // We have only the page information, not the view information. Use the
+            // svtools::DOCCOLOR color for initialisation
+            const svtools::ColorConfig aColorConfig;
+            const Color aPageFillColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+
+            // create and add primitive
+            const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
+            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        ViewContactOfPageFill::ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfPageFill::~ViewContactOfPageFill()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfOuterPageBorder::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfOuterPageBorder(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence() const
+        {
+            const SdrPage& rPage = getPage();
+            const basegfx::B2DRange aPageBorderRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+            const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
+
+            // We have only the page information, not the view information. Use the
+            // svtools::FONTCOLOR color for initialisation
+            const svtools::ColorConfig aColorConfig;
+            const Color aBorderColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+            const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
+            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        ViewContactOfOuterPageBorder::ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfOuterPageBorder::~ViewContactOfOuterPageBorder()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfInnerPageBorder::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfInnerPageBorder(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence() const
+        {
+            const SdrPage& rPage = getPage();
+            const basegfx::B2DRange aPageBorderRange(
+                (double)rPage.GetLftBorder(), (double)rPage.GetUppBorder(),
+                (double)(rPage.GetWdt() - rPage.GetRgtBorder()), (double)(rPage.GetHgt() - rPage.GetLwrBorder()));
+            const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
+
+            // We have only the page information, not the view information. Use the
+            // svtools::FONTCOLOR or svtools::DOCBOUNDARIES color for initialisation
+            const svtools::ColorConfig aColorConfig;
+            Color aBorderColor;
+
+            if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+            {
+                aBorderColor = aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor;
+            }
+            else
+            {
+                aBorderColor = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor;
+            }
+
+            // create page outer border primitive
+            const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
+            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        ViewContactOfInnerPageBorder::ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfInnerPageBorder::~ViewContactOfInnerPageBorder()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfPageHierarchy::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfPageHierarchy(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageHierarchy::createViewIndependentPrimitive2DSequence() const
+        {
+            // collect sub-hierarchy
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const sal_uInt32 nObjectCount(GetObjectCount());
+
+            // collect all sub-primitives
+            for(sal_uInt32 a(0); a < nObjectCount; a++)
+            {
+                const ViewContact& rCandidate(GetViewContact(a));
+                const drawinglayer::primitive2d::Primitive2DSequence aCandSeq(rCandidate.getViewIndependentPrimitive2DSequence());
+
+                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, aCandSeq);
+            }
+
+            return xRetval;
+        }
+
+        ViewContactOfPageHierarchy::ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage)
+        {
+        }
+
+        ViewContactOfPageHierarchy::~ViewContactOfPageHierarchy()
+        {
+        }
+
+        sal_uInt32 ViewContactOfPageHierarchy::GetObjectCount() const
+        {
+            sal_uInt32 nSubObjectCount(getPage().GetObjCount());
+
+            if(nSubObjectCount && getPage().GetObj(0L)->IsMasterPageBackgroundObject())
+            {
+                nSubObjectCount--;
+            }
+
+            return nSubObjectCount;
+        }
+
+        ViewContact& ViewContactOfPageHierarchy::GetViewContact(sal_uInt32 nIndex) const
+        {
+            if(getPage().GetObjCount() && getPage().GetObj(0L)->IsMasterPageBackgroundObject())
+            {
+                nIndex++;
+            }
+
+            SdrObject* pObj = getPage().GetObj(nIndex);
+            DBG_ASSERT(pObj, "ViewContactOfPageHierarchy::GetViewContact: Corrupt SdrObjList (!)");
+            return pObj->GetViewContact();
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfGrid::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfPageGrid(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGrid::createViewIndependentPrimitive2DSequence() const
+        {
+            // We have only the page information, not the view information and thus no grid settings. Create empty
+            // default. For the view-dependent implementation, see ViewObjectContactOfPageGrid::createPrimitive2DSequence
+            return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        ViewContactOfGrid::ViewContactOfGrid(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage),
+            mbFront(bFront)
+        {
+        }
+
+        ViewContactOfGrid::~ViewContactOfGrid()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        ViewObjectContact& ViewContactOfHelplines::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfPageHelplines(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfHelplines::createViewIndependentPrimitive2DSequence() const
+        {
+            // We have only the page information, not the view information and thus no helplines. Create empty
+            // default. For the view-dependent implementation, see ViewObjectContactOfPageHelplines::createPrimitive2DSequence
+            return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        ViewContactOfHelplines::ViewContactOfHelplines(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront)
+        :   ViewContactOfPageSubObject(rParentViewContactOfSdrPage),
+            mbFront(bFront)
+        {
+        }
+
+        ViewContactOfHelplines::~ViewContactOfHelplines()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        // Create a Object-Specific ViewObjectContact, set ViewContact and
+        // ObjectContact. Always needs to return something.
+        ViewObjectContact& ViewContactOfSdrPage::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+        {
+            ViewObjectContact* pRetval = new ViewObjectContactOfSdrPage(rObjectContact, *this);
+            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
+
+            return *pRetval;
         }
 
         ViewContactOfSdrPage::ViewContactOfSdrPage(SdrPage& rPage)
         :   ViewContact(),
-            mrPage(rPage)
+            mrPage(rPage),
+            maViewContactOfPageBackground(*this),
+            maViewContactOfPageShadow(*this),
+            maViewContactOfPageFill(*this),
+            maViewContactOfMasterPage(*this),
+            maViewContactOfOuterPageBorder(*this),
+            maViewContactOfInnerPageBorder(*this),
+            maViewContactOfGridBack(*this, false),
+            maViewContactOfHelplinesBack(*this, false),
+            maViewContactOfPageHierarchy(*this),
+            maViewContactOfGridFront(*this, true),
+            maViewContactOfHelplinesFront(*this, true)
         {
         }
 
@@ -78,489 +554,123 @@ namespace sdr
         {
         }
 
-        // When ShouldPaintObject() returns sal_True, the object itself is painted and
-        // PaintObject() is called.
-        sal_Bool ViewContactOfSdrPage::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // #116481# Test page painting. Suppress output when control layer is painting.
-            if(rDisplayInfo.GetControlLayerPainting())
-            {
-                return sal_False;
-            }
-
-            // #i29089#
-            // Instead of simply returning sal_True, look for the state
-            // of PagePainting which is per default disabled for the applications
-            // which do not need let the page be painted (but do it themselves).
-            if(!rDisplayInfo.GetPagePainting())
-            {
-                return sal_False;
-            }
-
-            return sal_True;
-        }
-
-        // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-        // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContactOfSdrPage::PaintObject(DisplayInfo& /*rDisplayInfo*/, Rectangle& rPaintRectangle, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // #115593#
-            // set paint flags and rectangle
-            rPaintRectangle = GetPaintRectangle();
-
-            return sal_True;
-        }
-
-        // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewContactOfSdrPage::PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
-        {
-            // test for page painting
-            if(!rDisplayInfo.GetMasterPagePainting()
-                && !rDisplayInfo.GetControlLayerPainting()
-                && rDisplayInfo.GetPagePainting())
-            {
-                // Make processed page accessible from SdrPageView via DisplayInfo
-                rDisplayInfo.SetProcessedPage(&GetSdrPage());
-
-                // Test for printer output
-                if(!rDisplayInfo.OutputToPrinter())
-                {
-                    if(rDisplayInfo.DoContinuePaint())
-                    {
-                        const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-                        if(pPageView)
-                        {
-                            // #i31599# do not paint page context itself ghosted.
-                            const sal_Bool bGhostedWasActive(rDisplayInfo.IsGhostedDrawModeActive());
-                            if(bGhostedWasActive)
-                            {
-                                rDisplayInfo.ClearGhostedDrawMode();
-                            }
-
-                            // #i34947#
-                            // Initialize background. Dependent of IsPageVisible, use
-                            // ApplicationBackgroundColor or ApplicationDocumentColor. Most
-                            // old renderers for export (html, pdf, gallery, ...) set the
-                            // page to not visible (SetPageVisible(false)). They expect the
-                            // given OutputDevice to be initialized with the
-                            // ApplicationDocumentColor then.
-                            const SdrView& rView = pPageView->GetView();
-                            Color aInitColor;
-
-                            if(rView.IsPageVisible())
-                            {
-                                // #i48367# also react on autocolor here
-                                aInitColor = pPageView->GetApplicationBackgroundColor();
-
-                                if(Color(COL_AUTO) == aInitColor)
-                                {
-                                    aInitColor = Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor);
-                                }
-                            }
-                            else
-                            {
-                                aInitColor = pPageView->GetApplicationDocumentColor();
-
-                                if(Color(COL_AUTO) == aInitColor)
-                                {
-                                    aInitColor = Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
-                                }
-                            }
-
-                            // init background with InitColor
-                            OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-                            pOut->SetBackground(Wallpaper(aInitColor));
-                            pOut->SetLineColor();
-                            pOut->Erase();
-
-                            if(rView.IsPageVisible())
-                            {
-                                DrawPaper(rDisplayInfo, rAssociatedVOC);
-
-                                if(rView.IsPageBorderVisible())
-                                {
-                                    DrawPaperBorder(rDisplayInfo, GetSdrPage());
-                                }
-                            }
-
-                            if(rView.IsBordVisible())
-                            {
-                                DrawBorder(rView.IsBordVisibleOnlyLeftRight(),rDisplayInfo, GetSdrPage());
-                            }
-
-                            // #i71130# find out if OC is preview renderer
-                            const bool bPreviewRenderer(rAssociatedVOC.GetObjectContact().IsPreviewRenderer());
-
-                            // #i71130# no grid and no helplines for page previews
-                            if(!bPreviewRenderer)
-                            {
-                                if(!bPreviewRenderer && rView.IsGridVisible() && !rView.IsGridFront())
-                                {
-                                    DrawGrid(rDisplayInfo);
-                                }
-
-                                if(!bPreviewRenderer && rView.IsHlplVisible() && !rView.IsHlplFront())
-                                {
-                                    DrawHelplines(rDisplayInfo);
-                                }
-                            }
-
-                            // #i31599# restore remembered ghosted setting
-                            if(bGhostedWasActive)
-                            {
-                                rDisplayInfo.SetGhostedDrawMode();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
-        {
-            // test for page painting
-            if(!rDisplayInfo.GetMasterPagePainting()
-                && !rDisplayInfo.GetControlLayerPainting()
-                && rDisplayInfo.GetPagePainting())
-            {
-                // Test for printer output
-                if(!rDisplayInfo.OutputToPrinter())
-                {
-                    if(rDisplayInfo.DoContinuePaint())
-                    {
-                        const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-                        if(pPageView)
-                        {
-                            // #i31599# do not paint page context itself ghosted.
-                            const sal_Bool bGhostedWasActive(rDisplayInfo.IsGhostedDrawModeActive());
-                            if(bGhostedWasActive)
-                            {
-                                rDisplayInfo.ClearGhostedDrawMode();
-                            }
-
-                            const SdrView& rView = pPageView->GetView();
-
-                            // #i71130# find out if OC is preview renderer
-                            const bool bPreviewRenderer(rAssociatedVOC.GetObjectContact().IsPreviewRenderer());
-
-                            // #i71130# no grid and no helplines for page previews
-                            if(!bPreviewRenderer)
-                            {
-                                if(rView.IsGridVisible() && rView.IsGridFront())
-                                {
-                                    DrawGrid(rDisplayInfo);
-                                }
-
-                                if(rView.IsHlplVisible() && rView.IsHlplFront())
-                                {
-                                    DrawHelplines(rDisplayInfo);
-                                }
-                            }
-
-                            // #i31599# restore remembered ghosted setting
-                            if(bGhostedWasActive)
-                            {
-                                rDisplayInfo.SetGhostedDrawMode();
-                            }
-                        }
-                    }
-                }
-
-                // Reset processed page at DisplayInfo and DisplayInfo at SdrPageView
-                rDisplayInfo.SetProcessedPage(0L);
-            }
-        }
-
-        void ViewContactOfSdrPage::DrawPaper(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
-        {
-            const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-            if(pPageView)
-            {
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-                // No line drawing
-                pOut->SetLineColor();
-
-                // prepare rectangle
-                const Rectangle aPaperRectLogic(
-                    0L,
-                    0L,
-                    GetSdrPage().GetWdt(),
-                    GetSdrPage().GetHgt());
-
-                // prepare ShadowRectangle
-                Rectangle aShadowRectLogic(aPaperRectLogic);
-                aShadowRectLogic.Move(PAPER_SHADOW(GetSdrPage().GetWdt()), PAPER_SHADOW(GetSdrPage().GetHgt()));
-
-                // get some flags
-                const sal_Bool bOutputToMetaFile(rDisplayInfo.OutputToRecordingMetaFile());
-                const sal_Bool bWasEnabled(pOut->IsMapModeEnabled());
-
-                // #i34682#
-                // look if the MasterPageBackgroundObject needs to be painted, else
-                // paint page as normal
-                sal_Bool bPaintMasterObject(sal_False);
-                sal_Bool bPaintPageBackground(sal_True);
-                SdrObject* pMasterPageObjectCandidate = 0L;
-
-                if(GetSdrPage().IsMasterPage())
-                {
-                    pMasterPageObjectCandidate = GetSdrPage().GetObj(0L);
-
-                    if(pMasterPageObjectCandidate
-                        && pMasterPageObjectCandidate->IsMasterPageBackgroundObject()
-                        && pMasterPageObjectCandidate->HasFillStyle())
-                    {
-                        bPaintMasterObject = sal_True;
-                    }
-
-                    if(bPaintMasterObject)
-                    {
-                        // #i51798# when the fill mode guarantees that the full page will
-                        // be painted with PaintMasterObject, bPaintPageBackground may be
-                        // set to false. This is the case for XFILL_SOLID and XFILL_GRADIENT
-                        const SfxItemSet& rSet = pMasterPageObjectCandidate->GetMergedItemSet();
-                        const XFillStyle eFillStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-
-                        if(XFILL_SOLID == eFillStyle || XFILL_GRADIENT == eFillStyle)
-                        {
-                            bPaintPageBackground = sal_False;
-                        }
-                    }
-                }
-
-                if(bPaintPageBackground)
-                {
-                    // Set page color for Paper painting
-                    if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
-                    {
-                        pOut->SetFillColor(pPageView->GetApplicationDocumentColor());
-                    }
-                    else
-                    {
-                        pOut->SetFillColor(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
-                    }
-
-                    if(bOutputToMetaFile)
-                    {
-                        // draw page rectangle
-                        pOut->DrawRect(aPaperRectLogic);
-                    }
-                    else
-                    {
-                        // draw page rectangle in pixel
-                        const Rectangle aPaperRectPixel(pOut->LogicToPixel(aPaperRectLogic));
-                        pOut->EnableMapMode(sal_False);
-                        pOut->DrawRect(aPaperRectPixel);
-                        pOut->EnableMapMode(bWasEnabled);
-                    }
-                }
-
-                if(bPaintMasterObject)
-                {
-                    // draw a MasterPage background for a MasterPage in MasterPage View
-                    Rectangle aRectangle;
-                    PaintBackgroundObject(*this, *pMasterPageObjectCandidate, rDisplayInfo, aRectangle, rAssociatedVOC);
-                }
-
-                // set page shadow color
-                const Color aShadowColor(rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor);
-                pOut->SetFillColor(aShadowColor);
-
-                if(bOutputToMetaFile)
-                {
-                    // draw shadow rectangles
-                    pOut->DrawRect(Rectangle(
-                        aPaperRectLogic.Right(),
-                        aShadowRectLogic.Top(),
-                        aShadowRectLogic.Right(),
-                        aShadowRectLogic.Bottom()));
-
-                    pOut->DrawRect(Rectangle(
-                        aShadowRectLogic.Left(),
-                        aPaperRectLogic.Bottom(),
-                        aPaperRectLogic.Right(),
-                        aShadowRectLogic.Bottom()));
-                }
-                else
-                {
-                    // draw shadow rectangles in pixels
-                    const Rectangle aShadowRectPixel(pOut->LogicToPixel(aShadowRectLogic));
-                    const Rectangle aPaperRectPixel(pOut->LogicToPixel(aPaperRectLogic));
-                    pOut->EnableMapMode(sal_False);
-
-                    pOut->DrawRect(Rectangle(
-                        aPaperRectPixel.Right() + 1L,
-                        aShadowRectPixel.Top(),
-                        aShadowRectPixel.Right(),
-                        aShadowRectPixel.Bottom()));
-
-                    pOut->DrawRect(Rectangle(
-                        aShadowRectPixel.Left(),
-                        aPaperRectPixel.Bottom() + 1L,
-                        aPaperRectPixel.Right(),
-                        aShadowRectPixel.Bottom()));
-
-                    // restore MapMode
-                    pOut->EnableMapMode(bWasEnabled);
-                }
-            }
-        }
-
-        // #i37869#
-        void ViewContactOfSdrPage::DrawPaperBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage)
-        {
-            // #i42714#
-            if(!rDisplayInfo.OutputToPrinter())
-            {
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
-                pOut->SetLineColor(Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor));
-                pOut->SetFillColor();
-                pOut->DrawRect(Rectangle(
-                    0L, 0L,
-                    rPage.GetWdt(), rPage.GetHgt()));
-            }
-        }
-
-        // #i37869#
-        void ViewContactOfSdrPage::DrawBorder(BOOL _bDrawOnlyLeftRightBorder,DisplayInfo& rDisplayInfo, const SdrPage& rPage)
-        {
-            // #i42714#
-            if(!rDisplayInfo.OutputToPrinter())
-            {
-                if(rPage.GetLftBorder() || rPage.GetUppBorder() || rPage.GetRgtBorder() || rPage.GetLwrBorder())
-                {
-                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-                    Color aBorderColor;
-
-                    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-                    {
-                        aBorderColor = rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-                    }
-                    else
-                    {
-                        aBorderColor = rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor;
-                    }
-
-                    pOut->SetLineColor(aBorderColor);
-                    pOut->SetFillColor();
-
-                    Rectangle aRect(Rectangle(
-                        0L, 0L,
-                        rPage.GetWdt(), rPage.GetHgt()));
-
-                    aRect.Left() += rPage.GetLftBorder();
-                    aRect.Top() += rPage.GetUppBorder();
-                    aRect.Right() -= rPage.GetRgtBorder();
-                    aRect.Bottom() -= rPage.GetLwrBorder();
-
-                    if ( _bDrawOnlyLeftRightBorder )
-                    {
-                        // oj: draw only left right border for the Sun Report Builder
-                        pOut->DrawLine(aRect.TopLeft(),aRect.BottomLeft());
-                        pOut->DrawLine(aRect.TopRight(),aRect.BottomRight());
-                    }
-                    else
-                        pOut->DrawRect(aRect);
-                }
-            }
-        }
-
-        void ViewContactOfSdrPage::DrawHelplines(DisplayInfo& rDisplayInfo)
-        {
-            // #i42714#
-            if(!rDisplayInfo.OutputToPrinter())
-            {
-                const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-                if(pPageView)
-                {
-                    const SdrHelpLineList& rHelpLineList = pPageView->GetHelpLines();
-                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
-                    rHelpLineList.DrawAll(*pOut, Point());
-                }
-            }
-        }
-
-        void ViewContactOfSdrPage::DrawGrid(DisplayInfo& rDisplayInfo)
-        {
-            // #i42714#
-            if(!rDisplayInfo.OutputToPrinter())
-            {
-                const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-                if(pPageView)
-                {
-                    const SdrView& rView = pPageView->GetView();
-                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
-                    ((SdrPageView*)pPageView)->DrawPageViewGrid(
-                        *pOut,
-                        rDisplayInfo.GetPaintInfoRec()->aCheckRect,
-                        rView.GetGridColor());
-                }
-            }
-        }
-
         // Access to possible sub-hierarchy
         sal_uInt32 ViewContactOfSdrPage::GetObjectCount() const
         {
-            sal_uInt32 nRetval(0L);
-            const sal_uInt32 nMasterPageCount((GetSdrPage().TRG_HasMasterPage()) ? 1L : 0L);
-            sal_uInt32 nSubObjectCount(GetSdrPage().GetObjCount());
-
-            // correct nSubObjectCount from MasterPageBackgroundObject
-            if(nSubObjectCount && GetSdrPage().GetObj(0L)->IsMasterPageBackgroundObject())
-            {
-                nSubObjectCount--;
-            }
-
-            // add MasterPageDescriptor if used
-            nRetval += nMasterPageCount;
-
-            // add page sub-objects
-            nRetval += nSubObjectCount;
-
-            return nRetval;
+            // Fixed count of content. It contains PageBackground (Wiese), PageShadow, PageFill,
+            // then - depending on if the page has a MasterPage - either MasterPage Hierarchy
+            // or MPBGO. Also OuterPageBorder, InnerPageBorder and two pairs of Grid and Helplines
+            // (for front and back) which internally are visible or not depending on the current
+            // front/back setting for those.
+            return 11;
         }
 
         ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
         {
-            // this is only called if GetObjectCount() returned != 0L, so there is a
-            // MasterPageDescriptor. Get it!
-            const sal_uInt32 nMasterPageCount((GetSdrPage().TRG_HasMasterPage()) ? 1L : 0L);
-
-            if(nIndex < nMasterPageCount)
+            switch(nIndex)
             {
-                return GetSdrPage().TRG_GetMasterPageDescriptorViewContact();
-            }
-            else
-            {
-                // return the (nIndex - nMasterPageCount)'th object
-                sal_uInt32 nObjectIndex(nIndex - nMasterPageCount);
-
-                // correct if first object is MasterPageBackgroundObject
-                if(GetSdrPage().GetObjCount() && GetSdrPage().GetObj(0L)->IsMasterPageBackgroundObject())
+                case 0: return (ViewContact&)maViewContactOfPageBackground;
+                case 1: return (ViewContact&)maViewContactOfPageShadow;
+                case 2: return (ViewContact&)maViewContactOfPageFill;
+                case 3:
                 {
-                    nObjectIndex++;
+                    const SdrPage& rPage = GetSdrPage();
+
+                    if(rPage.TRG_HasMasterPage())
+                    {
+                        return rPage.TRG_GetMasterPageDescriptorViewContact();
+                    }
+                    else
+                    {
+                        return (ViewContact&)maViewContactOfMasterPage;
+                    }
                 }
-
-                SdrObject* pObj = GetSdrPage().GetObj(nObjectIndex);
-                DBG_ASSERT(pObj, "ViewContactOfMasterPage::GetViewContact: Corrupt SdrObjList (!)");
-
-                return pObj->GetViewContact();
+                case 4: return (ViewContact&)maViewContactOfOuterPageBorder;
+                case 5: return (ViewContact&)maViewContactOfInnerPageBorder;
+                case 6: return (ViewContact&)maViewContactOfGridBack;
+                case 7: return (ViewContact&)maViewContactOfHelplinesBack;
+                case 8: return (ViewContact&)maViewContactOfPageHierarchy;
+                case 9: return (ViewContact&)maViewContactOfGridFront;
+                default: return (ViewContact&)maViewContactOfHelplinesFront;
             }
+        }
+
+        // React on changes of the object of this ViewContact
+        void ViewContactOfSdrPage::ActionChanged()
+        {
+            // call parent
+            ViewContact::ActionChanged();
+
+            // apply to local viewContacts, they all rely on page information. Exception
+            // is the sub hierarchy; this will not be influenced by the change
+            maViewContactOfPageBackground.ActionChanged();
+            maViewContactOfPageShadow.ActionChanged();
+            maViewContactOfPageFill.ActionChanged();
+
+            const SdrPage& rPage = GetSdrPage();
+
+            if(rPage.TRG_HasMasterPage())
+            {
+                rPage.TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+            }
+            else if(rPage.IsMasterPage())
+            {
+                maViewContactOfMasterPage.ActionChanged();
+            }
+
+            maViewContactOfOuterPageBorder.ActionChanged();
+            maViewContactOfInnerPageBorder.ActionChanged();
+            maViewContactOfGridBack.ActionChanged();
+            maViewContactOfHelplinesBack.ActionChanged();
+            maViewContactOfGridFront.ActionChanged();
+            maViewContactOfHelplinesFront.ActionChanged();
         }
 
         // overload for acessing the SdrPage
         SdrPage* ViewContactOfSdrPage::TryToGetSdrPage() const
         {
             return &GetSdrPage();
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrPage::createViewIndependentPrimitive2DSequence() const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            // collect all sub-sequences including sub hierarchy.
+            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfPageBackground.getViewIndependentPrimitive2DSequence());
+            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfPageShadow.getViewIndependentPrimitive2DSequence());
+            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfPageFill.getViewIndependentPrimitive2DSequence());
+
+            const SdrPage& rPage = GetSdrPage();
+
+            if(rPage.TRG_HasMasterPage())
+            {
+                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
+                    rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DSequence());
+            }
+            else if(rPage.IsMasterPage())
+            {
+                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
+                    maViewContactOfMasterPage.getViewIndependentPrimitive2DSequence());
+            }
+
+            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DSequence());
+            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DSequence());
+            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfPageHierarchy.getViewIndependentPrimitive2DSequence());
+
+            // Only add front versions of grid and helplines since no visibility test is done,
+            // so adding the back incarnations is not necessary. This makes the Front
+            // visualisation the default when no visibility tests are done.
+            //
+            // Since we have no view here, no grid and helpline definitions are available currently. The used
+            // methods at ViewContactOfHelplines and ViewContactOfGrid return only empty sequences and
+            // do not need to be called ATM. This may change later if grid or helpline info gets
+            // model data (it should not). Keeping the lines commented to hold this hint.
+            //
+            // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfGridFront.getViewIndependentPrimitive2DSequence());
+            // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfHelplinesFront.getViewIndependentPrimitive2DSequence());
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr
