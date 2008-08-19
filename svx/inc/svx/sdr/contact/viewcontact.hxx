@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontact.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,9 @@
 #define _SDR_CONTACT_VIEWCONTACT_HXX
 
 #include <sal/types.h>
-#include <svx/sdr/contact/viewobjectcontactlist.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -47,14 +47,9 @@ namespace sdr
 {
     namespace contact
     {
-        class DisplayInfo;
-        class ViewContact;
-        class ViewObjectContactRedirector;
+        class ObjectContact;
+        class ViewObjectContact;
     } // end of namespace contact
-    namespace animation
-    {
-        class AnimationInfo;
-    } // end of namespace animation
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,48 +60,50 @@ namespace sdr
     {
         class SVX_DLLPUBLIC ViewContact
         {
-        protected:
+        private:
+            // make ViewObjectContact a friend to exclusively allow it to use
+            // AddViewObjectContact/RemoveViewObjectContact
+            friend class ViewObjectContact;
+
             // List of ViewObjectContacts. This contains all VOCs which were constructed
             // with this VC. Since the VOCs remember a reference to this VC, this list needs
-            // to be kept and is used e.g. at PrepareDelete() to destroy all VOCs.
+            // to be kept and is used e.g. at destructor to destroy all VOCs.
             // Registering and de-registering is done in the VOC constructors/destructors.
-            ViewObjectContactList                           maVOCList;
+            std::vector< ViewObjectContact* >               maViewObjectContactVector;
 
-            // PaintRectangle of the object in logic coordinates. This is the bounding
-            // rectangle of all parts which are necessary for object display.
-            Rectangle                                       maPaintRectangle;
+            // Primitive2DSequence of the ViewContact. This contains all necessary information
+            // for the graphical visualisation and needs to be supported by all VCs which
+            // can be visualized.
+            drawinglayer::primitive2d::Primitive2DSequence  mxViewIndependentPrimitive2DSequence;
 
-            // AnimationInfo. If SupportsAnimation() returns sal_True, CreateAnimationInfo
-            // needs to be overloaded and needs to give a result together with
-            // GetAnimationInfo
-            sdr::animation::AnimationInfo*                  mpAnimationInfo;
+            // A new ViewObjectContact was created and shall be remembered.
+            void AddViewObjectContact(ViewObjectContact& rVOContact);
 
-            // The redirector. If set it is used to pipe all supported calls
-            // to the redirector.
-            ViewObjectContactRedirector*                    mpViewObjectContactRedirector;
+            // A ViewObjectContact was deleted and shall be forgotten.
+            void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
-            // bitfield
-            // Flag for the validity of the PaintRectangle.
-            unsigned                                        mbPaintRectangleValid : 1;
+        protected:
+            // Interface to allow derivates to travel over the registered VOC's
+            sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
+            ViewObjectContact* getViewObjectContact(sal_uInt32 a) const { return maViewObjectContactVector[a]; }
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something. Default is to create
             // a standard ViewObjectContact containing the given ObjectContact and *this
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
 
+            // This method is responsible for creating the graphical visualisation data derived ONLY from
+            // the model data. It will be stored/buffered in mxViewIndependentPrimitive2DSequence. The default implementation
+            // creates a yellow replacement rectangle (1000, 1000, 5000, 3000) to visualize missing
+            // implementations. All implementations have to provide basic geometry here, this is the central
+            // visualisation method and will also be used for BoundRect computations in the long run.
+            // This means it's always an error when the default implementation is called and thus gets
+            // asserted there
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
             // basic constructor. Since this is a base class only, it shall
-            // never be called.
+            // never be called directly
             ViewContact();
-
-            // method to recalculate the PaintRectangle if the validity flag shows that
-            // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-            // only needs to refresh maPaintRectangle itself.
-            virtual void CalcPaintRectangle() = 0;
-
-            // method to create a AnimationInfo. Needs to give a result if
-            // SupportsAnimation() is overloaded and returns sal_True. Default is to
-            // pop up an assert since it's always an error if this gets called
-            virtual sdr::animation::AnimationInfo* CreateAnimationInfo();
 
             // Methods to react on start getting viewed or stop getting
             // viewed. This info is derived from the count of members of
@@ -115,66 +112,20 @@ namespace sdr
             virtual void StopGettingViewed();
 
         public:
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
+            // basic destructor with needed cleanups
             virtual ~ViewContact();
-
-            // Prepare deletion of this object. Tghis needs to be called always
-            // before really deleting this objects. This is necessary since in a c++
-            // destructor no virtual function calls are allowed. To avoid this problem,
-            // it is required to first call PrepareDelete().
-            virtual void PrepareDelete();
 
             // get a Object-specific ViewObjectContact for a specific
             // ObjectContact (->View). Always needs to return something.
             ViewObjectContact& GetViewObjectContact(ObjectContact& rObjectContact);
 
-            // A new ViewObjectContact was created and shall be remembered.
-            void AddViewObjectContact(ViewObjectContact& rVOContact);
-
-            // A ViewObjectContact was deleted and shall be forgotten.
-            void RemoveViewObjectContact(ViewObjectContact& rVOContact);
-
-            // Test if ViewObjectContact is registered here
-            sal_Bool ContainsViewObjectContact(ViewObjectContact& rVOContact);
-
             // Test if this ViewContact has ViewObjectContacts at all. This can
             // be used to test if this ViewContact is visualized ATM or not
-            sal_Bool HasViewObjectContacts(bool bExcludePreviews = false) const;
+            bool HasViewObjectContacts(bool bExcludePreviews = false) const;
 
-            // Test if this ViewContact is visualized by the Preview Renderere only
-            sal_Bool IsPreviewRendererOnly() const;
-
-            // method to get the PaintRectangle. Tests internally for validity and calls
-            // CalcPaintRectangle() on demand.
-            const Rectangle& GetPaintRectangle() const;
-
-            // method to invalidate the PaintRectangle. Needs to be called when object changes.
-            void InvalidatePaintRectangle();
-
-            // These methods decide which parts of the objects will be painted:
-            // When ShouldPaintObject() returns sal_True, the object itself is painted because
-            // PaintObject() gets called.
-            virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
-            // These methods decide which parts of the objects will be painted:
-            // When ShouldPaintDrawHierarchy() returns sal_True, the DrawHierarchy of the object is painted.
-            // Else, the flags and rectangles of the VOCs of the sub-hierarchy are set to the values of the
-            // object's VOC.
-            virtual sal_Bool ShouldPaintDrawHierarchy(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
-            // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
-
-            // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-            virtual void PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-            virtual void PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
-            // Paint this objects GluePoints. This is after PaitObject() was called.
-            // This is temporarily as long as GluePoints are no handles yet. The default does nothing.
-            virtual void PaintGluePoints(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
+            // Check if this primitive is animated in any OC (View) which means it has
+            // generated a PrimitiveAnimation in it's VOC
+            bool isAnimatedInAnyViewObjectContact() const;
 
             // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
             // and GetViewContact default pops up an assert since it's an error if
@@ -183,14 +134,6 @@ namespace sdr
             virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
             virtual ViewContact* GetParentContact() const;
 
-            // React on removal of the object of this ViewContact,
-            // DrawHierarchy needs to be changed
-            virtual void ActionRemoved();
-
-            // React on insertion of the object of this ViewContact,
-            // DrawHierarchy needs to be changed
-            virtual void ActionInserted();
-
             // React on insertion of a child into DRawHierarchy starting
             // from this object
             void ActionChildInserted(ViewContact& rChild);
@@ -198,34 +141,17 @@ namespace sdr
             // React on changes of the object of this ViewContact
             virtual void ActionChanged();
 
-            // check for animation features. This may start or stop animations. Should
-            // be called if animation may have changed in any way (parameters, started,
-            // stopped, ...). It will create, delete or let untouched an AnimationInfo
-            // which is associated with this object.
-            void CheckAnimationFeatures();
-
-            // Does this ViewContact support animation? Default is sal_False.
-            virtual sal_Bool SupportsAnimation() const;
-
-            // method to get the AnimationInfo. Needs to give a result if
-            // SupportsAnimation() is overloaded and returns sal_True. It will
-            // return a existing one or create a new one using CreateAnimationInfo().
-            sdr::animation::AnimationInfo* GetAnimationInfo() const;
-
-            // take care for clean shutdown of an existing AnimationInfo
-            void DeleteAnimationInfo();
-
-            // test for existing AnimationInfo
-            sal_Bool HasAnimationInfo() const;
-
-            // access to ViewObjectContactRedirector
-            ViewObjectContactRedirector* GetViewObjectContactRedirector() const;
-            void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
-
             // access to SdrObject and/or SdrPage. May return 0L like the default
             // implementations do. Needs to be overloaded as needed.
             virtual SdrObject* TryToGetSdrObject() const;
             virtual SdrPage* TryToGetSdrPage() const;
+
+            // access to the local primitive. This will ensure that the primitive is
+            // current in comparing the local one with a fresh created incarnation
+            drawinglayer::primitive2d::Primitive2DSequence getViewIndependentPrimitive2DSequence() const;
+
+            // add Gluepoints (if available)
+            virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
