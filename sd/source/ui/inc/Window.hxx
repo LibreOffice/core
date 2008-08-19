@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Window.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,6 +188,7 @@ protected:
     bool mbUseDropScroll;
 
     virtual void Resize();
+    virtual void PrePaint();
     virtual void Paint(const Rectangle& rRect);
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void MouseMove(const MouseEvent& rMEvt);
