@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,8 @@ struct KerningPair
 #define TEXT_DRAW_MULTILINE             ((USHORT)0x1000)
 #define TEXT_DRAW_WORDBREAK             ((USHORT)0x2000)
 #define TEXT_DRAW_NEWSELLIPSIS          ((USHORT)0x4000)
+
+#define TEXT_DRAW_WORDBREAK_HYPHENATION (((USHORT)0x8000) | TEXT_DRAW_WORDBREAK)
 
 // Flags for CopyArea()
 #define COPYAREA_WINDOWINVALIDATE       ((USHORT)0x0001)
