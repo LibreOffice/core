@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeEngine.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xoutx.hxx>
 #include "svditer.hxx"
 #include "unopolyhelper.hxx"
 #include <uno/mapping.hxx>
