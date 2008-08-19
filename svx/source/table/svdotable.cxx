@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotable.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@
 #include "svx/svdoutl.hxx"
 #include "svx/svddrag.hxx"
 #include "svx/svdpagv.hxx"
-#include "svx/xoutx.hxx"
 #include "tablemodel.hxx"
 #include "cell.hxx"
 #include "svx/xflclit.hxx"
@@ -1337,6 +1336,15 @@ SdrOutliner* SdrTableObj::GetCellTextEditOutliner( const Cell& rCell ) const
         return 0;
 }
 
+
+// --------------------------------------------------------------------
+
+const TableLayouter& SdrTableObj::getTableLayouter() const
+{
+    OSL_ENSURE(mpImpl && mpImpl->mpLayouter, "getTableLayouter() error: no mpImpl or mpLayouter (!)");
+    return *(mpImpl->mpLayouter);
+}
+
 // --------------------------------------------------------------------
 
 void SdrTableObj::FitFrameToTextSize()
@@ -1844,45 +1852,6 @@ struct ImplTableShadowPaintInfo
 
 // --------------------------------------------------------------------
 
-sal_Bool SdrTableObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rPaintInfo ) const
-{
-    if( !mpImpl->mxTable.is() )
-        return sal_False;
-
-    // draw cells
-    const sal_Int32 nRowCount = mpImpl->getRowCount();
-    const sal_Int32 nColCount = mpImpl->getColumnCount();
-
-    CellPos aPos;
-
-    const SfxItemSet& rSet = GetObjectItemSet();
-    if( ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue() )
-    {
-        ImplTableShadowPaintInfo aShadowInfo( rSet );
-
-        // draw cell backgrounds and borders
-        for( aPos.mnRow = 0; aPos.mnRow < nRowCount; ++aPos.mnRow )
-            for(  aPos.mnCol = 0; aPos.mnCol < nColCount; ++aPos.mnCol )
-                ImpDoPaintTableCell( aPos, rXOut, &aShadowInfo );
-
-        // TODO: ImplDoPaintBorders( rXOut, &aShadowInfo );
-    }
-
-    // draw cell backgrounds and borders
-    for( aPos.mnRow = 0; aPos.mnRow < nRowCount; ++aPos.mnRow )
-        for(  aPos.mnCol = 0; aPos.mnCol < nColCount; ++aPos.mnCol )
-            ImpDoPaintTableCell( aPos, rXOut );
-
-    ImplDoPaintBorders( rXOut );
-
-    // draw cell text, if there is any
-    for( aPos.mnRow = 0; aPos.mnRow < nRowCount; ++aPos.mnRow )
-        for(  aPos.mnCol = 0; aPos.mnCol < nColCount; ++aPos.mnCol )
-            ImpDoPaintCellText( aPos, rXOut, rPaintInfo );
-
-    return sal_True;
-}
-
 void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
         const Color& rColor, long nXOffs, long nWidth,
         const svx::frame::Style& rTopLine, const svx::frame::Style& rBottomLine )
@@ -1957,273 +1926,6 @@ void lcl_VertLine( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
             lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColor(),
                 nXOffs + aScaled.Prim() + aScaled.Dist(), aScaled.Secn(), rTopLine, rBottomLine );
     }
-}
-
-void SdrTableObj::ImplDoPaintBorders( XOutputDevice& rXOut, const ImplTableShadowPaintInfo* /*pShadowInfo*/ ) const
-{
-    if( !mpImpl || !mpImpl->mpLayouter )
-        return;
-
-    TableLayouter& rLayouter = *mpImpl->mpLayouter;
-
-    OutputDevice* pDev = rXOut.GetOutDev();
-    Color* pForceColor = 0;
-
-    int nPPTX = 1; // nPixelPerTwipsX
-    int nPPTY = 1; // nPixelPerTwipsY
-
-    const sal_Int32 nRowCount = mpImpl->getRowCount();
-    const sal_Int32 nColCount = mpImpl->getColumnCount();
-
-    const bool bRTL = GetWritingMode() == WritingMode_RL_TB;
-
-    Point aTopStart( aRect.TopLeft() );
-    Point aTopEnd(aTopStart), aBottomLeft(aTopStart);
-
-    sal_Int32 nCol = 0;
-    for( sal_Int32 nRow = 0; nRow <= nRowCount; ++nRow )
-    {
-        const sal_Int32 nRowHeight = (nRow == nRowCount) ? 0 : rLayouter.getRowHeight(nRow);
-
-        aBottomLeft.Y() = aTopStart.Y() + nRowHeight;
-
-        RangeIterator<sal_Int32> aColIter( 0, nColCount+1, !bRTL );
-        while( aColIter.next( nCol ) )
-        {
-            const sal_Int32 nColWidth = bRTL ?
-                ((nCol == 0) ? 0 : rLayouter.getColumnWidth(nCol-1)) :
-                ((nCol == nColCount) ? 0 : rLayouter.getColumnWidth(nCol));
-
-            aTopEnd.X() = aTopStart.X() + nColWidth;
-
-            svx::frame::Style aTopLine, aBottomLine, aLeftLine;
-
-            const SvxBorderLine* pLeftLine = (nRow < nRowCount) ? rLayouter.getBorderLine( nCol, nRow, false ) : 0;
-
-            if( bRTL )
-                nCol--;
-            const SvxBorderLine* pTopLine = ((nCol >= 0) && (nCol < nColCount)) ? rLayouter.getBorderLine( nCol, nRow, true ) : 0;
-            const SvxBorderLine* pBottomLine = (((nCol >= 0) && (nCol < nColCount)) && (nRow < nRowCount)) ? rLayouter.getBorderLine( nCol, nRow+1, true ) : 0;
-            if( bRTL )
-                nCol++;
-
-            aTopLine.Set( pTopLine, nPPTY );
-            if( pTopLine )
-                svx::frame::DrawHorFrameBorder( *pDev, aTopStart, aTopEnd, aTopLine, pForceColor );
-
-            if( pLeftLine )
-            {
-                aBottomLine.Set( pBottomLine, nPPTY );
-                aLeftLine.Set( pLeftLine, nPPTX );
-                lcl_VertLine( *pDev, aTopStart, aBottomLeft, aLeftLine, aTopLine, aBottomLine, pForceColor );
-            }
-
-            aTopStart.X() += nColWidth;
-            aBottomLeft.X() = aTopStart.X();
-        }
-
-        aTopStart.X() = aBottomLeft.X() = aRect.TopLeft().X();
-        aTopStart.Y() = aTopEnd.Y() = aBottomLeft.Y();
-    }
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::ImpDoPaintCellText( const CellPos& rPos, XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec ) const
-{
-    const bool bPrinter=rXOut.GetOutDev()->GetOutDevType()==OUTDEV_PRINTER;
-    const bool bPrintPreView=rXOut.GetOutDev()->GetOutDevViewType()==OUTDEV_VIEWTYPE_PRINTPREVIEW;
-
-    if (!bPrinter && pEdtOutl!=NULL && rInfoRec.pPV!=NULL && rInfoRec.pPV->GetView().GetTextEditObject()==(SdrObject*)this)
-    {
-        if( mpImpl->maEditPos == rPos )
-            return; // cell is currently edited in this view
-    }
-
-    CellRef xCell( mpImpl->getCell( rPos ) );
-    if( xCell.is() && !xCell->isMerged() )
-    {
-        OutlinerParaObject* pOutlinerParaObject = xCell->GetOutlinerParaObject();
-
-        if (pOutlinerParaObject!=NULL || (pEdtOutl!=NULL && HasEditText()))
-        {
-            SdrOutliner& rOutliner=ImpGetDrawOutliner();
-
-            Color aBackground;
-            if( GetDraftFillColor(xCell->GetItemSet(), aBackground ) )
-                rOutliner.SetBackgroundColor( aBackground );
-
-            {
-                SvtAccessibilityOptions aOptions;
-                bool bForceAutoColor = aOptions.GetIsAutomaticFontColor();
-                //#106611# don't use automatic colors in WYSIWYG Print Previews
-                if(bPrintPreView&& !aOptions.GetIsForPagePreviews())
-                    bForceAutoColor = false;
-                rOutliner.ForceAutoColor( bForceAutoColor );
-            }
-
-            rOutliner.SetPaintInfoRec( &rInfoRec );
-
-            Rectangle aTextRect;
-            Rectangle aAnchorRect;
-            Fraction aFitXKorreg(1,1);
-            TakeTextRect( rPos, rOutliner, aTextRect, FALSE, &aAnchorRect );
-            Rectangle aPaintRect( aTextRect );
-
-            OutputDevice* pOutDev = rXOut.GetOutDev();
-
-            if(IsVerticalWriting())
-            {
-                if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
-                {
-                    aPaintRect.nLeft = aPaintRect.nRight - aAnchorRect.GetWidth();
-                }
-
-            }
-            else
-            {
-                if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
-                {
-                    aPaintRect.nBottom = aPaintRect.nTop + aAnchorRect.GetHeight();
-                }
-            }
-
-            rOutliner.Draw(pOutDev, aPaintRect);
-            rOutliner.Clear();
-            rOutliner.ClearPaintInfoRec();
-        }
-    }
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::ImpDoPaintTableCell(const CellPos& rPos, XOutputDevice& rXOut, const ImplTableShadowPaintInfo* pShadowInfo ) const
-{
-    CellRef xCell( mpImpl->getCell( rPos ) );
-    if( xCell.is() && !xCell->isMerged() )
-    {
-        const SfxItemSet& rSet = xCell->GetItemSet();
-        SfxItemSet aEmptySet(*rSet.GetPool());
-        aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-        rXOut.SetLineAttr(aEmptySet);
-
-        if( pShadowInfo )
-        {
-            SfxItemSet aShadowSet( rSet );
-
-            XFillStyle eStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-
-            if(eStyle==XFILL_HATCH)
-            {
-                XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue();
-                aHatch.SetColor(pShadowInfo->maShadowColor);
-                aShadowSet.Put(XFillHatchItem(String(), aHatch));
-            }
-            else
-            {
-                if(eStyle != XFILL_NONE && eStyle != XFILL_SOLID)
-                    aShadowSet.Put(XFillStyleItem(XFILL_SOLID));
-
-                aShadowSet.Put(XFillColorItem(String(),pShadowInfo->maShadowColor));
-
-                if(pShadowInfo->mnShadowTransparence)
-                {
-                    const XFillFloatTransparenceItem& rFillFloatTransparence =
-                        (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE);
-                    if(!rFillFloatTransparence.IsEnabled())
-                        aShadowSet.Put(XFillTransparenceItem(pShadowInfo->mnShadowTransparence));
-                }
-            }
-            rXOut.SetFillAttr( aShadowSet );
-        }
-        else
-        {
-            rXOut.SetFillAttr( rSet );
-        }
-
-        basegfx::B2IRectangle aArea;
-        if( mpImpl->mpLayouter->getCellArea( rPos, aArea ) )
-        {
-            Rectangle aCellRect( aArea.getMinX(),  aArea.getMinY(), aArea.getMaxX(), aArea.getMaxY() );
-            const Point aPos( aRect.TopLeft() );
-            aCellRect.Move( aPos.X(), aPos.Y() );
-            if( pShadowInfo )
-                aCellRect.Move( pShadowInfo->mnXDistance, pShadowInfo->mnYDistance );
-
-            rXOut.DrawRect(aCellRect);
-        }
-    }
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::RecalcBoundRect()
-{
-    if( mpImpl )
-        mpImpl->LayoutTable( aRect, false, false );
-    aOutRect=GetSnapRect();
-
-    ImpAddBorderLinesToBoundRect();
-    ImpAddShadowToBoundRect();
-}
-
-// --------------------------------------------------------------------
-
-void SdrTableObj::ImpAddBorderLinesToBoundRect()
-{
-    TableLayouter& rLayouter = *mpImpl->mpLayouter;
-    const sal_Int32 nRowCount = mpImpl->getRowCount();
-    const sal_Int32 nColCount = mpImpl->getColumnCount();
-
-    long nUpper = 0, nLower = 0, nLeft = 0, nRight = 0;
-
-    // upper&lower border
-    for( sal_Int32 nCol = 0; nCol <= nColCount; ++nCol )
-    {
-        SvxBorderLine* pLine = rLayouter.getBorderLine( nCol, 0, true );
-
-        if( pLine )
-        {
-            const long nSize = pLine->GetOutWidth() + pLine->GetDistance() + pLine->GetInWidth();
-            if( nSize > nUpper )
-                nUpper = nSize;
-        }
-
-        pLine = rLayouter.getBorderLine( nCol, nRowCount, true );
-        if( pLine )
-        {
-            const long nSize = pLine->GetOutWidth() + pLine->GetDistance() + pLine->GetInWidth();
-            if( nSize > nLower )
-                nLower = nSize;
-        }
-    }
-
-    // left&right border
-    for( sal_Int32 nRow = 0; nRow <= nRowCount; ++nRow )
-    {
-        SvxBorderLine* pLine = rLayouter.getBorderLine( 0, nRow, false );
-
-        if( pLine )
-        {
-            const long nSize = pLine->GetOutWidth() + pLine->GetDistance() + pLine->GetInWidth();
-            if( nSize > nLeft )
-                nLeft = nSize;
-        }
-
-        pLine = rLayouter.getBorderLine( nColCount, nRow, false );
-        if( pLine )
-        {
-            const long nSize = pLine->GetOutWidth() + pLine->GetDistance() + pLine->GetInWidth();
-            if( nSize > nRight )
-                nRight = nSize;
-        }
-    }
-
-    aOutRect.Left  () -= nLeft;
-    aOutRect.Top   () -= nUpper;
-    aOutRect.Right () += nRight;
-    aOutRect.Bottom() += nLower;
 }
 
 // --------------------------------------------------------------------
@@ -3017,7 +2719,7 @@ FASTBOOL SdrTableObj::MovCreate(SdrDragStat& rStat)
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // fuer ObjName
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     return TRUE;
 }
