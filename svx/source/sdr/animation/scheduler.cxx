@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scheduler.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,30 +186,47 @@ namespace sdr
 
         void Scheduler::Timeout()
         {
-            mnTime += mnDeltaTime;
+            // stop timer and add time
             Stop();
+            mnTime += mnDeltaTime;
+
+            // execute events
+            triggerEvents();
+
+            // re-start or stop timer according to event list
+            checkTimeout();
+        }
+
+        void Scheduler::triggerEvents()
+        {
             Event* pNextEvent = maList.GetFirst();
 
-            // copy events which need to be executed to a vector
-            ::std::vector< Event* > EventPointerVector;
-
-            while(pNextEvent && pNextEvent->GetTime() <= mnTime)
+            if(pNextEvent)
             {
-                maList.Remove(pNextEvent);
-                EventPointerVector.push_back(pNextEvent);
-                pNextEvent = maList.GetFirst();
+                // copy events which need to be executed to a vector. Remove them from
+                // the scheduler
+                ::std::vector< Event* > EventPointerVector;
+
+                while(pNextEvent && pNextEvent->GetTime() <= mnTime)
+                {
+                    maList.Remove(pNextEvent);
+                    EventPointerVector.push_back(pNextEvent);
+                    pNextEvent = maList.GetFirst();
+                }
+
+                // execute events from the vector
+                for(::std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
+                    aCandidate != EventPointerVector.end(); aCandidate++)
+                {
+                    // trigger event. This may re-insert the event to the scheduler again
+                    (*aCandidate)->Trigger(mnTime);
+                }
             }
+        }
 
-            // execute events from the vector
-            ::std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
-
-            for(;aCandidate != EventPointerVector.end(); aCandidate++)
-            {
-                // trigger event. This may re-insert the event to the queue (maList)
-                (*aCandidate)->Trigger(mnTime);
-            }
-
-            // re-start timer for next event to be scheduled (if any)
+        void Scheduler::checkTimeout()
+        {
+            // re-start or stop timer according to event list
             if(!IsPaused() && maList.GetFirst())
             {
                 mnDeltaTime = maList.GetFirst()->GetTime() - mnTime;
@@ -219,6 +236,10 @@ namespace sdr
                     SetTimeout(mnDeltaTime);
                     Start();
                 }
+            }
+            else
+            {
+                Stop();
             }
         }
 
@@ -230,17 +251,31 @@ namespace sdr
         // #i38135#
         void Scheduler::SetTime(sal_uInt32 nTime)
         {
+            // reset time
             Stop();
             mnTime = nTime;
 
+            // get event pointer
             Event* pEvent = maList.GetFirst();
-            while(pEvent)
-            {
-                pEvent->SetTime(nTime);
-                pEvent = pEvent->GetNext();
-            }
 
-            Execute();
+            if(pEvent)
+            {
+                // retet event time points
+                while(pEvent)
+                {
+                    pEvent->SetTime(nTime);
+                    pEvent = pEvent->GetNext();
+                }
+
+                if(!IsPaused())
+                {
+                    // without delta time, init events by triggering them. This will invalidate
+                    // painted objects and add them to the scheduler again
+                    mnDeltaTime = 0L;
+                    triggerEvents();
+                    checkTimeout();
+                }
+            }
         }
 
         void Scheduler::Reset(sal_uInt32 nTime)
@@ -250,20 +285,12 @@ namespace sdr
             maList.Clear();
         }
 
-        void Scheduler::Execute()
-        {
-            if(!IsPaused() && !IsActive() && maList.GetFirst())
-            {
-                mnDeltaTime = 0L;
-                Timeout();
-            }
-        }
-
         void Scheduler::InsertEvent(Event* pNew)
         {
             if(pNew)
             {
                 maList.Insert(pNew);
+                checkTimeout();
             }
         }
 
@@ -272,6 +299,7 @@ namespace sdr
             if(pOld && maList.GetFirst())
             {
                 maList.Remove(pOld);
+                checkTimeout();
             }
         }
 
@@ -280,15 +308,7 @@ namespace sdr
             if(bNew != mbIsPaused)
             {
                 mbIsPaused = bNew;
-
-                if(mbIsPaused)
-                {
-                    Timeout();
-                }
-                else
-                {
-                    Execute();
-                }
+                checkTimeout();
             }
         }
     } // end of namespace animation
