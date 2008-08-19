@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,14 +41,6 @@ class SfxItemSet;
 class Bitmap;
 class MapMode;
 
-namespace sdr
-{
-    namespace contact
-    {
-        class OwnMasterPagePainter;
-    } // end of namespace contact
-} // end of namespace sdr
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -62,18 +54,11 @@ namespace sdr
             // to be changed in any way.
             sdr::MasterPageDescriptor&                      mrMasterPageDescriptor;
 
-            // the painter for the MasterPage content
-            ::sdr::contact::OwnMasterPagePainter*           mpMasterPagePainter;
-
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something. Default is to create
-            // a standard ViewObjectContact containing the given ObjectContact and *this
+            // Create a Object-Specific ViewObjectContact
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
 
-            // method to recalculate the PaintRectangle if the validity flag shows that
-            // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-            // only needs to refresh maPaintRectangle itself.
-            virtual void CalcPaintRectangle();
+            // This method is responsible for creating the graphical visualisation data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
             // basic constructor
@@ -88,29 +73,10 @@ namespace sdr
                 return mrMasterPageDescriptor;
             }
 
-            // When ShouldPaintObject() returns sal_True, the object itself is painted and
-            // PaintObject() is called.
-            virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
-            // #115593# Paint this object. This is before evtl. SubObjects get painted. It needs to return
-            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
+            // Access to possible sub-hierarchy and parent
+            virtual sal_uInt32 GetObjectCount() const;
+            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
             virtual ViewContact* GetParentContact() const;
-
-            // React on changes of the object of this ViewContact
-            virtual void ActionChanged();
-
-            // Interface method for receiving buffered MasterPage render data from
-            // VOCOfMasterPageDescriptor. Called from instances of VOCOfMasterPageDescriptor.
-            void OfferBufferedData(const Bitmap& rBitmap, const MapMode& rMapMode);
-
-            // Interface method for VOCOfMasterPageDescriptor to ask for buffered data. If
-            // the page is the sane and the MapMode is the same, return the Bitmap.
-            Bitmap RequestBufferedData(const MapMode& rMapMode);
-
-            // #i37869# Support method to paint borders and grids which are overpainted from
-            // this MasterPage content to let the MasterPage appear as page background
-            void PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
         };
     } // end of namespace contact
 } // end of namespace sdr
