@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdilayout.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -295,7 +295,14 @@ void    SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, cons
         mirror( nX, nWidth, pOutDev );
     drawRect( nX, nY, nWidth, nHeight );
 }
-void    SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
+bool SalGraphics::drawPolyLine(
+    const basegfx::B2DPolygon& /*rPolyPolygon*/,
+    const basegfx::B2DVector& /*rLineWidths*/,
+    basegfx::B2DLineJoin /*eLineJoin*/)
+{
+    return false;
+}
+void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
@@ -347,16 +354,7 @@ bool SalGraphics::DrawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon
     DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygon - no mirroring implemented");
     return drawPolyPolygon( rPolyPolygon, fTransparency );
 }
-bool SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double )
-{
-    return false;
-}
-bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& rPolyLine, const ::basegfx::B2DVector& rLineWidths, const OutputDevice* )
-{
-    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyLine - no mirroring implemented");
-    return drawPolyLine( rPolyLine, rLineWidths );
-}
-bool SalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& )
+bool SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/)
 {
     return false;
 }
@@ -376,6 +374,15 @@ sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32*
     DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygonBezier - no mirroring implemented");
     return drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
+
+bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& rPolygon,
+    const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
+    const OutputDevice* )
+{
+    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolygon for B2D - no mirroring implemented");
+    return drawPolyLine( rPolygon, rLineWidth, eLineJoin );
+}
+
 void    SalGraphics::CopyArea( long nDestX, long nDestY,
                                long nSrcX, long nSrcY,
                                long nSrcWidth, long nSrcHeight,
