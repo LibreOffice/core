@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontact.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +37,131 @@
 #include <vcl/region.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
-#include <svx/sdr/animation/animationinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    // animated extractor
+
+    // Necessary to filter a sequence of animated primitives from
+    // a sequence of primitives to find out if animated or not. The decision for
+    // what to decompose is hard-coded and only done for knowingly animated primitives
+    // to not decompose too deeply and unnecessarily. This implies that the list
+    // which is view-specific needs to be expanded by hand when new animated objects
+    // are added. This may eventually be changed to a dynamically configurable approach
+    // if necessary.
+    class AnimatedExtractingProcessor2D : public drawinglayer::processor2d::BaseProcessor2D
+    {
+    protected:
+        // the found animated primitives
+        drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
+
+        // bitfield
+        // text animation allowed?
+        unsigned                                        mbTextAnimationAllowed : 1;
+
+        // graphic animation allowed?
+        unsigned                                        mbGraphicAnimationAllowed : 1;
+
+        // as tooling, the process() implementation takes over API handling and calls this
+        // virtual render method when the primitive implementation is BasePrimitive2D-based.
+        virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate);
+
+    public:
+        AnimatedExtractingProcessor2D(
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+            bool bTextAnimationAllowed,
+            bool bGraphicAnimationAllowed);
+        virtual ~AnimatedExtractingProcessor2D();
+
+        // data access
+        const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+        bool isTextAnimationAllowed() const { return mbTextAnimationAllowed; }
+        bool isGraphicAnimationAllowed() const { return mbGraphicAnimationAllowed; }
+    };
+
+    AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+        bool bTextAnimationAllowed,
+        bool bGraphicAnimationAllowed)
+    :   drawinglayer::processor2d::BaseProcessor2D(rViewInformation),
+        maPrimitive2DSequence(),
+        mbTextAnimationAllowed(bTextAnimationAllowed),
+        mbGraphicAnimationAllowed(bGraphicAnimationAllowed)
+    {
+    }
+
+    AnimatedExtractingProcessor2D::~AnimatedExtractingProcessor2D()
+    {
+    }
+
+    void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
+    {
+        // known implementation, access directly
+        switch(rCandidate.getPrimitiveID())
+        {
+            // add and accept animated primitives directly, no need to decompose
+            case PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D :
+            case PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D :
+            case PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D :
+            {
+                const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D& rSwitchPrimitive = static_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D& >(rCandidate);
+
+                if((rSwitchPrimitive.isTextAnimation() && isTextAnimationAllowed())
+                    || (rSwitchPrimitive.isGraphicAnimation() && isGraphicAnimationAllowed()))
+                {
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(const_cast< drawinglayer::primitive2d::BasePrimitive2D* >(&rCandidate));
+                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xReference);
+                }
+                break;
+            }
+
+            // decompose animated gifs where SdrGrafPrimitive2D produces a GraphicPrimitive2D
+            // which then produces the animation infos (all when used/needed)
+            case PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D :
+            case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D :
+
+            // decompose SdrObjects with evtl. animated text
+            case PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRCONNECTORPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRCUSTOMSHAPEPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRELLIPSEPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRELLIPSESEGMENTPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRPATHPRIMITIVE2D :
+            case PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D :
+
+            // decompose evtl. animated text contained in MaskPrimitive2D
+            // or group rimitives
+            case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
+            case PRIMITIVE2D_ID_GROUPPRIMITIVE2D :
+            {
+                process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                break;
+            }
+
+            default :
+            {
+                // nothing to do for the rest
+                break;
+            }
+        }
+    }
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,32 +169,13 @@ namespace sdr
 {
     namespace contact
     {
-        // method to get the AnimationState. Needs to give a result. It will
-        // return a existing one or create a new one using CreateAnimationState()
-        // at the AnimationInfo.
-        sdr::animation::AnimationState* ViewObjectContact::GetAnimationState(sdr::animation::AnimationInfo& rInfo) const
-        {
-            if(!HasAnimationState())
-            {
-                ((ViewObjectContact*)this)->mpAnimationState = rInfo.CreateAnimationState(*((ViewObjectContact*)this));
-                DBG_ASSERT(mpAnimationState,
-                    "ViewObjectContact::GetAnimationState(): Got no AnimationState (!)");
-
-                // add this AnimationState to the ObjectAnimator at the ObjectContact
-                sdr::animation::ObjectAnimator& rAnimator = GetObjectContact().GetObjectAnimator();
-                rAnimator.AddAnimationState(*mpAnimationState);
-            }
-
-            return mpAnimationState;
-        }
-
         ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   mrObjectContact(rObjectContact),
             mrViewContact(rViewContact),
-            mpParent(0L),
-            mpAnimationState(0L),
-            mbIsPainted(sal_False),
-            mbdrawHierarchyValid(sal_False)
+            maObjectRange(),
+            mxPrimitive2DSequence(),
+            mpPrimitiveAnimation(0),
+            mbLazyInvalidate(false)
         {
             // make the ViewContact remember me
             mrViewContact.AddViewObjectContact(*this);
@@ -82,421 +186,253 @@ namespace sdr
 
         ViewObjectContact::~ViewObjectContact()
         {
-#ifdef DBG_UTIL
-            // test if all other objects have forgotten this object. This
-            // always needs to be done before a ViewObjectContact is
-            // deleted. This is not done here in the destructor since
-            // virtual methods may not be called form here (destructor). But at least
-            // this can be checked from here in debug code.
-
-            // check for AnimationState
-            DBG_ASSERT(0L == mpAnimationState,
-                "ViewObjectContact destructor: The object still has a AnimationState, call PrepareDelete() before deleting (!)");
-
-            // check for parent ViewObjectContact
-            DBG_ASSERT(0L == mpParent,
-                "ViewObjectContact destructor: The object still has a parent, call PrepareDelete() before deleting (!)");
-
-            // check for ViewContact
-            DBG_ASSERT(sal_False == mrViewContact.ContainsViewObjectContact(*this),
-                "ViewObjectContact destructor: The associated ViewContact still knows me, call PrepareDelete() before deleting (!)");
-
-            // check for ObjectContact
-            DBG_ASSERT(sal_False == mrObjectContact.ContainsViewObjectContact(*this),
-                "ViewObjectContact destructor: The associated ObjectContact still knows me, call PrepareDelete() before deleting (!)");
-
-            // check for own sub-list
-            DBG_ASSERT(0L == maVOCList.Count(),
-                "ViewObjectContact destructor: SubList is not empty, call PrepareDelete() before deleting (!)");
-#endif // DBG_UTIL
-        }
-
-        // Prepare deletion of this object. This needs to be called always
-        // before really deleting this objects. This is necessary since in a c++
-        // destructor no virtual function calls are allowed. To avoid this problem,
-        // it is required to first call PrepareDelete().
-        void ViewObjectContact::PrepareDelete()
-        {
-            // CallActionChanged() to evtl. invalidate display if object is still painted
-            ActionChanged();
-
-            // delete AnimationState
-            DeleteAnimationState();
-
-            // take care of parent pointer
-            if(GetParent())
+            // invalidate in view
+            if(!maObjectRange.isEmpty())
             {
-                // Set Parent's DrawHierarchy to invalid
-                GetParent()->InvalidateDrawHierarchy();
-
-                // remove myself from parent
-                GetParent()->RemoveViewObjectContact(*this);
-                SetParent(0L);
+                GetObjectContact().InvalidatePartOfView(maObjectRange);
             }
 
-            // #i85539# changed order of removing this from VC and OC since
-            // VC removal may trigger StopGettingViewed() and that again may
-            // destroy this VOC, too, so it needs to be removed from the OC
-            // (which may be a helper-OC for page rendering like in this case)
+            // delete PrimitiveAnimation
+            if(mpPrimitiveAnimation)
+            {
+                delete mpPrimitiveAnimation;
+                mpPrimitiveAnimation = 0;
+            }
 
-            // take care of ObjectContact, evtl. #114735# It will be removed from
-            // base vector of current draw hierarchy there, too.
+            // take care of remebered ObjectContact. Remove from
+            // OC first. The VC removal (below) CAN trigger a StopGettingViewed()
+            // which (depending of it's implementation) may destroy other OCs. This
+            // can trigger the deletion of the helper OC of a page visualising object
+            // which IS the OC of this object. Eventually StopGettingViewed() needs
+            // to get asynchron later
             GetObjectContact().RemoveViewObjectContact(*this);
 
-            // take care of ViewContact
+            // take care of remebered ViewContact
             GetViewContact().RemoveViewObjectContact(*this);
-
-            // invalidate DrawHierarchy of ObjectContact to force rebuild
-            GetObjectContact().MarkDrawHierarchyInvalid();
-
-            // take care of own SubList
-            while(maVOCList.Count())
-            {
-                ViewObjectContact* pCandidate = maVOCList.GetLastObjectAndRemove();
-                DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
-
-                // ViewObjectContacts only make sense with View and Object contacts.
-                // When the contact to the SdrPageView is deleted like in this case,
-                // all ViewObjectContacts can be deleted, too.
-                pCandidate->PrepareDelete();
-                delete pCandidate;
-            }
         }
 
-        // A ViewObjectContact was deleted and shall be forgotten.
-        void ViewObjectContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
+        const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
-            if(maVOCList.Count())
+            if(maObjectRange.isEmpty())
             {
-                maVOCList.Remove(&rVOContact);
-            }
-        }
+                // if range is not computed (new or LazyInvalidate objects), force it
+                const DisplayInfo aDisplayInfo;
+                const drawinglayer::primitive2d::Primitive2DSequence xSequence(getPrimitive2DSequence(aDisplayInfo));
 
-        // This method recursively rebuilds the draw hierarchy structure in parallel
-        // to the SdrObject structure.
-        void ViewObjectContact::BuildDrawHierarchy(ObjectContact& rObjectContact, ViewContact& rSourceNode)
-        {
-            // build new DrawHierarchy
-            maVOCList.BuildDrawHierarchy(rObjectContact, rSourceNode, this);
-
-            // set local hierarchy valid
-            mbdrawHierarchyValid = sal_True;
-        }
-
-        // This method recursively checks the draw hierarchy structure in parallel
-        // to the SdrObject structure and rebuilds the invalid parts.
-        void ViewObjectContact::CheckDrawHierarchy(ObjectContact& rObjectContact)
-        {
-            if(IsDrawHierarchyValid())
-            {
-                // check next level
-                maVOCList.CheckDrawHierarchy(rObjectContact);
-            }
-            else
-            {
-                // clear old draw hierarchy
-                ClearDrawHierarchy();
-
-                // rebuild draw hierarchy, use known ViewContact
-                BuildDrawHierarchy(rObjectContact, GetViewContact());
-            }
-        }
-
-        // This method only recursively clears the draw hierarchy structure between the
-        // DrawObjectContacts, it does not delete any to make them reusable.
-        void ViewObjectContact::ClearDrawHierarchy()
-        {
-            if(maVOCList.Count())
-            {
-                maVOCList.ClearDrawHierarchy();
-            }
-        }
-
-        // Paint this object. This is before evtl. SubObjects get painted. This method
-        // needs to set the flag mbIsPainted and to set the
-        // maPaintedRectangle member. This information is later used for invalidates
-        // and repaints.
-        void ViewObjectContact::PaintObject(DisplayInfo& rDisplayInfo)
-        {
-            Rectangle aPaintRectangle;
-            sal_Bool bWasPainted(sal_False);
-
-            if(HasAnimationState())
-            {
-                // object needs to be painted in a defined animation state.
-                // get AnimationInfo and ObjectAnimator
-                sdr::animation::AnimationInfo* pAnimInfo = GetViewContact().GetAnimationInfo();
-                sdr::animation::ObjectAnimator& rObjectAnimator = GetObjectContact().GetObjectAnimator();
-                DBG_ASSERT(pAnimInfo,
-                    "ViewObjectContact::PaintObject: no animation info, but AnimationState (!)");
-
-                // get current time for the view from ObjectAnimator
-                sal_uInt32 nTime = rObjectAnimator.GetTime();
-
-                // paint in that state
-                bWasPainted = pAnimInfo->PaintObjectAtTime(nTime, rDisplayInfo, aPaintRectangle, *this);
-            }
-            else
-            {
-                // paint normal
-                bWasPainted = GetViewContact().PaintObject(rDisplayInfo, aPaintRectangle, *this);
-            }
-
-            if(bWasPainted)
-            {
-                // Set state flags
-                mbIsPainted = sal_True;
-
-                // set painted rectangle
-                maPaintedRectangle = aPaintRectangle;
-            }
-
-            // ATM use a PaintGluePoints() method at ViewContact for GluePoint
-            // painting. GluePoints will get Handles later.
-            if(bWasPainted
-                && !rDisplayInfo.OutputToPrinter()
-                && GetObjectContact().AreGluePointsVisible())
-            {
-                GetViewContact().PaintGluePoints(rDisplayInfo, *this);
-            }
-        }
-
-        // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewObjectContact::PrePaintObject(DisplayInfo& rDisplayInfo)
-        {
-            GetViewContact().PrePaintObject(rDisplayInfo, *this);
-        }
-
-        void ViewObjectContact::PostPaintObject(DisplayInfo& rDisplayInfo)
-        {
-            GetViewContact().PostPaintObject(rDisplayInfo, *this);
-        }
-
-        // Paint this objects DrawHierarchy
-        void ViewObjectContact::PaintDrawHierarchy(DisplayInfo& rDisplayInfo)
-        {
-            const sal_uInt32 nSubHierarchyCount(maVOCList.Count());
-
-            if(nSubHierarchyCount)
-            {
-                if(GetViewContact().ShouldPaintDrawHierarchy(rDisplayInfo, *this))
+                if(xSequence.hasElements())
                 {
-                    for(sal_uInt32 a(0L); a < nSubHierarchyCount && rDisplayInfo.DoContinuePaint(); a++)
-                    {
-                        ViewObjectContact* pCandidate = maVOCList.GetObject(a);
-                        DBG_ASSERT(pCandidate, "Corrupt ViewObjectContactList (!)");
-
-                        // recursively paint the draw hierarchy.
-                        pCandidate->PaintObjectHierarchy(rDisplayInfo);
-                    }
-                }
-                else
-                {
-                    // If sub-hierarchy is handled from object itself, set the
-                    // sub-hierarchy to the same paint flags and rectangles like the
-                    // painted object.
-                    maVOCList.CopyPaintFlagsFromParent(*this);
-                }
-            }
-        }
-
-        // This method recursively paints the draw hierarchy. It is also the
-        // start point for the mechanism seen from the ObjectContact.
-        void ViewObjectContact::PaintObjectHierarchy(DisplayInfo& rDisplayInfo)
-        {
-            // test for ghosted displaying, see old SdrObjList::Paint
-            // #i29129# No ghosted display for printing.
-            const sal_Bool bDoGhostedDisplaying(
-                IsActiveGroup()
-                && GetObjectContact().DoVisualizeEnteredGroup()
-                && !rDisplayInfo.OutputToPrinter());
-
-            // get the correct redirector
-            ViewObjectContactRedirector* pRedirector = GetRedirector();
-
-            if(bDoGhostedDisplaying)
-            {
-                // display contents normal
-                rDisplayInfo.ClearGhostedDrawMode();
-            }
-
-            // handle pre-paint of ViewObjectContact
-            PrePaintObject(rDisplayInfo);
-
-            // handle paint of ViewObjectContact
-            if(GetViewContact().ShouldPaintObject(rDisplayInfo, *this) && rDisplayInfo.DoContinuePaint())
-            {
-                if(pRedirector)
-                {
-                    pRedirector->PaintObject(*this, rDisplayInfo);
-                }
-                else
-                {
-                    PaintObject(rDisplayInfo);
+                    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+                    const_cast< ViewObjectContact* >(this)->maObjectRange =
+                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSequence, rViewInformation2D);
                 }
             }
 
-            // handle paint of sub-hierarchy
-            PaintDrawHierarchy(rDisplayInfo);
-
-            // handle post-paint of ViewObjectContact
-            PostPaintObject(rDisplayInfo);
-
-            // if activated, reset here again
-            if(bDoGhostedDisplaying)
-            {
-                // display ghosted again
-                rDisplayInfo.SetGhostedDrawMode();
-            }
+            return maObjectRange;
         }
 
-        // Get info if this is the active group of the view
-        sal_Bool ViewObjectContact::IsActiveGroup() const
-        {
-            const ViewContact* pActiveGroupViewContact = GetObjectContact().GetActiveGroupContact();
-
-            if(pActiveGroupViewContact)
-            {
-                return (pActiveGroupViewContact == &GetViewContact());
-            }
-
-            return sal_False;
-        }
-
-        // React on changes of the object of this ViewContact
         void ViewObjectContact::ActionChanged()
         {
-            if(IsPainted() && GetObjectContact().IsAreaVisible(GetPaintedRectangle()))
+            if(!mbLazyInvalidate)
             {
-                // use last paint rectangle to invalidate last paint area
-                GetObjectContact().InvalidatePartOfView(GetPaintedRectangle());
+                // set local flag
+                mbLazyInvalidate = true;
 
-                // change state to not painted
-                mbIsPainted = sal_False;
-            }
+                // force ObjectRange
+                getObjectRange();
 
-            // always: use new potential paint rectangle
-            const Rectangle& rNewObjectRectangle = GetViewContact().GetPaintRectangle();
+                if(!maObjectRange.isEmpty())
+                {
+                    // invalidate current valid range
+                    GetObjectContact().InvalidatePartOfView(maObjectRange);
 
-            if(GetObjectContact().IsAreaVisible(rNewObjectRectangle))
-            {
-                // invalidate new paint area
-                GetObjectContact().InvalidatePartOfView(rNewObjectRectangle);
+                    // reset ObjectRange, it needs to be recalculated
+                    maObjectRange.reset();
+                }
+
+                // register at OC for lazy invalidate
+                GetObjectContact().setLazyInvalidate(*this);
             }
         }
 
-        // Get info if it's painted
-        sal_Bool ViewObjectContact::IsPainted() const
+        void ViewObjectContact::triggerLazyInvalidate()
         {
-            return mbIsPainted;
-        }
+            if(mbLazyInvalidate)
+            {
+                // reset flag
+                mbLazyInvalidate = false;
 
-        // Get info about the painted rectangle
-        const Rectangle& ViewObjectContact::GetPaintedRectangle() const
-        {
-            return maPaintedRectangle;
+                // force ObjectRange
+                getObjectRange();
+
+                if(!maObjectRange.isEmpty())
+                {
+                    // invalidate current valid range
+                    GetObjectContact().InvalidatePartOfView(maObjectRange);
+                }
+            }
         }
 
         // Take some action when new objects are inserted
-        void ViewObjectContact::ActionChildInserted(const Rectangle& rInitialRectangle)
+        void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
         {
+            // force creation of the new VOC and trigger it's refresh, so it
+            // will take part in LazyInvalidate immediately
+            rChild.GetViewObjectContact(GetObjectContact()).ActionChanged();
+
             // forward action to ObjectContact
-            GetObjectContact().ActionChildInserted(rInitialRectangle);
-
-            // set local DrawHierarchy to invalid
-            InvalidateDrawHierarchy();
+            // const ViewObjectContact& rChildVOC = rChild.GetViewObjectContact(GetObjectContact());
+            // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
         }
 
-        // Get info about validity of DrawHierarchy
-        sal_Bool ViewObjectContact::IsDrawHierarchyValid() const
+        void ViewObjectContact::checkForPrimitive2DAnimations()
         {
-            return mbdrawHierarchyValid;
-        }
-
-        // set the invalidate flag for the sub-hierarchy
-        void ViewObjectContact::InvalidateDrawHierarchy()
-        {
-            if(mbdrawHierarchyValid)
+            // remove old one
+            if(mpPrimitiveAnimation)
             {
-                mbdrawHierarchyValid = sal_False;
+                delete mpPrimitiveAnimation;
+                mpPrimitiveAnimation = 0;
+            }
+
+            // check for animated primitives
+            if(mxPrimitive2DSequence.hasElements())
+            {
+                const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
+                const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
+
+                if(bTextAnimationAllowed || bGraphicAnimationAllowed)
+                {
+                    AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
+                        bTextAnimationAllowed, bGraphicAnimationAllowed);
+                    aAnimatedExtractor.process(mxPrimitive2DSequence);
+
+                    if(aAnimatedExtractor.getPrimitive2DSequence().hasElements())
+                    {
+                        // dervied primitiveList is animated, setup new PrimitiveAnimation
+                        mpPrimitiveAnimation =  new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence());
+                    }
+                }
             }
         }
 
-        // If DrawHierarchy is handled by a object itself, the sub-objects are set
-        // to be equally painted to that object
-        void ViewObjectContact::CopyPaintFlagsFromParent(const ViewObjectContact& rParent)
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
-            // Copy state flags
-            mbIsPainted = rParent.IsPainted();
+            // get the view-independent Primitive from the viewContact
+            drawinglayer::primitive2d::Primitive2DSequence xRetval(GetViewContact().getViewIndependentPrimitive2DSequence());
 
-            // Copy painted rectangle
-            maPaintedRectangle = rParent.GetPaintedRectangle();
-        }
-
-        // take care for clean shutdown of an existing AnimationState
-        void ViewObjectContact::DeleteAnimationState()
-        {
-            if(HasAnimationState())
+            if(xRetval.hasElements())
             {
-                // remove this AnimationState from the ObjectAnimator at the ObjectContact
-                sdr::animation::ObjectAnimator& rAnimator = GetObjectContact().GetObjectAnimator();
-                rAnimator.RemoveAnimationState(*mpAnimationState);
+                // handle GluePoint
+                if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
+                {
+                    const drawinglayer::primitive2d::Primitive2DSequence xGlue(GetViewContact().createGluePointPrimitive2DSequence());
 
-                // delete it, then.
-                delete mpAnimationState;
-                mpAnimationState = 0L;
-            }
-        }
+                    if(xGlue.hasElements())
+                    {
+                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xGlue);
+                    }
+                }
 
-        // Check for given AnimationInfo. Take necessary actions to evtl. create
-        // an AnimationState and register at the ObjectContact's animator.
-        void ViewObjectContact::CheckForAnimationFeatures(sdr::animation::AnimationInfo& rInfo)
-        {
-            // decide for each ViewObjectContact if it shall be animated.
-            sal_Bool bDoAnimate(sal_True);
-
-            // check AnimationInfo's point of view
-            if(!rInfo.IsAnimationAllowed(*this))
-            {
-                bDoAnimate = sal_False;
+                // handle ghosted
+                if(isPrimitiveGhosted(rDisplayInfo))
+                {
+                    const ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
+                    const ::basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, ::basegfx::BCOLORMODIFYMODE_INTERPOLATE);
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                }
             }
 
-            if(bDoAnimate)
+            return xRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xNewPrimitiveSequence;
+
+            // take care of redirectors and create new list
+            ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
+
+            if(pRedirector)
             {
-                // If Yes, create the AnimationState and init it. Creation on demand.
-                // #i63345# OOps, animation disabled ?!? The parameter does not need to be
-                // created, the call to GetAnimationState() already adds the AnimationState
-                // using GetObjectContact().GetObjectAnimator().AddAnimationState(...).
-                //sdr::animation::AnimationState* pState = GetAnimationState(rInfo);
-                GetAnimationState(rInfo);
+                xNewPrimitiveSequence = pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo);
             }
             else
             {
-                // If no, get rid of an evtl. existing one
-                DeleteAnimationState();
+                xNewPrimitiveSequence = createPrimitive2DSequence(rDisplayInfo);
             }
-        }
 
-        // Test if this VOC has an animation state and thus is animated
-        sal_Bool ViewObjectContact::HasAnimationState() const
-        {
-            return (0L != mpAnimationState);
-        }
-
-        // get the correct redirector
-        ViewObjectContactRedirector* ViewObjectContact::GetRedirector() const
-        {
-            // Test for redirectors. First the global one (from ObjectContact), then at the to be displayed object.
-            ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
-            ViewObjectContactRedirector* pObjectRedirector = GetViewContact().GetViewObjectContactRedirector();
-
-            // object rediretor wins
-            if(pObjectRedirector)
+            // local up-to-date checks. New list different from local one?
+            if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxPrimitive2DSequence, xNewPrimitiveSequence))
             {
-                pRedirector = pObjectRedirector;
+                // has changed, copy content
+                const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = xNewPrimitiveSequence;
+
+                // check for animated stuff
+                const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
+
+                // always update object range when PrimitiveSequence changes
+                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+                const_cast< ViewObjectContact* >(this)->maObjectRange =
+                    drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(mxPrimitive2DSequence, rViewInformation2D);
             }
 
-            return pRedirector;
+            // return current Primitive2DSequence
+            return mxPrimitive2DSequence;
+        }
+
+        bool ViewObjectContact::isPrimitiveVisible(const DisplayInfo& /*rDisplayInfo*/) const
+        {
+            // default: always visible
+            return true;
+        }
+
+        bool ViewObjectContact::isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const
+        {
+            // default: standard check
+            return (GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            // check model-view visibility
+            if(isPrimitiveVisible(rDisplayInfo))
+            {
+                xRetval = getPrimitive2DSequence(rDisplayInfo);
+
+                if(xRetval.hasElements())
+                {
+                    // get ranges
+                    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+                    const ::basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
+                    const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+
+                    // check geometrical visibility
+                    if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
+                    {
+                        // not visible, release
+                        xRetval.realloc(0);
+                    }
+                }
+            }
+
+            return xRetval;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const
+        {
+            const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
+            drawinglayer::primitive2d::Primitive2DSequence xSeqRetval;
+
+            for(sal_uInt32 a(0); a < nSubHierarchyCount; a++)
+            {
+                const ViewObjectContact& rCandidate(GetViewContact().GetViewContact(a).GetViewObjectContact(GetObjectContact()));
+
+                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xSeqRetval, rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+            }
+
+            return xSeqRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr
