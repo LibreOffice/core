@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table4.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
-#include <math.h>
 
 #include "attrib.hxx"
 #include "patattr.hxx"
@@ -82,6 +81,8 @@
 #include "rangenam.hxx"
 #include "docpool.hxx"
 #include "progress.hxx"
+
+#include <math.h>
 
 // STATIC DATA -----------------------------------------------------------
 
