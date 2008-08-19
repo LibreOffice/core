@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MServices.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include "bootstrap/MMozillaBootstrap.hxx"
+#include <tools/solar.h>
 
 using namespace connectivity::mozab;
 using ::rtl::OUString;
@@ -162,7 +163,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
+        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
 
         // load the dbtools library
         oslModule s_hModule = osl_loadModuleRelative(
