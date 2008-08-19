@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsPageObjectViewContact.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,31 +74,17 @@ public:
 
     Rectangle GetPageObjectBoundingBox (void) const;
 
-    /** Return the original bounding box of the page objects, not the
-        enlarged rectangle that encloses the frames, indicators, and the
-        title (as returned by GetPaintRectangle()).
-    */
-    virtual Rectangle GetPageRectangle (void);
-
     virtual void ActionChanged (void);
 
 protected:
-    /** Enlarge the paint rectangle of the base class by the space that is
-        used to paint the focus and selection indicators, the fade effect
-        indicator, and the slide name.
-    */
-    virtual void CalcPaintRectangle (void);
-
-    virtual void PrepareDelete (void);
+    // create graphical visualisation data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
 private:
-    // The bounding box that is calculated by the base class implementation
-    // of the CalcPaintRectangle() method.
-    Rectangle maPageObjectBoundingBox;
-
-    /** This flag is set as long as PrepareDelete() has not been called.
+    /** This flag is set to <TRUE/> when the destructor is called to
+        indicate that further calls made to it must not call outside.
     */
-    bool mbIsValid;
+    bool mbInDestructor;
 
     model::SharedPageDescriptor mpDescriptor;
 };
