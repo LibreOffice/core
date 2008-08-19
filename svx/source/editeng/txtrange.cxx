@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtrange.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/xoutx.hxx>
 
 #include "txtrange.hxx"
 #include <math.h>
@@ -80,7 +79,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 
     for(sal_uInt32 i(0L); i < nCount; i++)
     {
-        const basegfx::B2DPolygon aCandidate(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon.getB2DPolygon(i)));
+        const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(i).getDefaultAdaptiveSubdivision());
         nPointCount += aCandidate.count();
         mpPolyPolygon->Insert( Polygon(aCandidate), (sal_uInt16)i );
     }
@@ -92,7 +91,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 
         for(sal_uInt32 i(0L); i < nCount; i++)
         {
-            const basegfx::B2DPolygon aCandidate(basegfx::tools::adaptiveSubdivideByAngle(pLinePolyPolygon->getB2DPolygon(i)));
+            const basegfx::B2DPolygon aCandidate(pLinePolyPolygon->getB2DPolygon(i).getDefaultAdaptiveSubdivision());
             nPointCount += aCandidate.count();
             mpLinePolyPolygon->Insert( Polygon(aCandidate), (sal_uInt16)i );
         }
