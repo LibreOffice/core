@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpline.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,6 @@
 #include "xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xoutx.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabline.hxx"
@@ -139,7 +138,7 @@ SvxLineTabPage::SvxLineTabPage
     aTsbCenterEnd       ( this, SVX_RES( TSB_CENTER_END ) ),
     aCbxSynchronize     ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
     aFlLineEnds         ( this, SVX_RES( FL_LINE_ENDS ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
     aFLSeparator        ( this, SVX_RES( FL_SEPARATOR ) ),
 
     // #116827#
@@ -169,7 +168,6 @@ SvxLineTabPage::SvxLineTabPage
     bObjSelected( sal_False ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
     aXLStyle            ( XLINE_DASH ),
     aXWidth             ( 1 ),
     aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
@@ -918,8 +916,6 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
     UINT16 nVal = (UINT16)aMtrTransparent.GetValue();
     rXLSet.Put( XLineTransparenceItem( nVal ) );
 
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
-
     // #116827#
     aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
 
@@ -1552,7 +1548,6 @@ IMPL_LINK( SvxLineTabPage, ChangeTransparentHdl_Impl, void *, EMPTYARG )
     XLineTransparenceItem aItem( nVal );
 
     rXLSet.Put( XLineTransparenceItem( aItem ) );
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // #116827#
     FillXLSet_Impl();
