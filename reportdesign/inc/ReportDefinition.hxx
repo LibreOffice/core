@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,7 +169,7 @@ namespace reportdesign
         */
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
 
-        static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
+        static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
     private:
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
