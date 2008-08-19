@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr1.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,11 +46,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <vector>
-
 #include "interpre.hxx"
 #include "patattr.hxx"
 #include "global.hxx"
@@ -62,6 +57,11 @@
 #include "globstr.hrc"
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
+
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <vector>
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
