@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Tools.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,7 @@ namespace reportdesign
     public:
         template<typename T> static void setSize(const ::com::sun::star::awt::Size& aSize,T* _pShape)
         {
-            OSL_ENSURE(aSize.Width > 0 && aSize.Height > 0,"Illegal with or height!");
+            OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal with or height!");
 
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
@@ -112,7 +112,7 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 ::com::sun::star::awt::Size aSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
-                OSL_ENSURE(aSize.Width > 0 && aSize.Height > 0,"Illegal with or height!");
+                OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal with or height!");
                 return aSize;
             }
             return ::com::sun::star::awt::Size(_pShape->m_aProps.aComponent.m_nWidth,_pShape->m_aProps.aComponent.m_nHeight);

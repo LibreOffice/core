@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptModel.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 #include "RptPage.hxx"
 #include <dbaccess/singledoccontroller.hxx>
 #include <tools/debug.hxx>
+#include <svtools/pathoptions.hxx>
+
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"
 #include "ReportUndoFactory.hxx"
@@ -57,7 +59,7 @@ TYPEINIT1(OReportModel,SdrModel);
 //----------------------------------------------------------------------------
 
 OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition) :
-    SdrModel(NULL,_pReportDefinition)
+    SdrModel(SvtPathOptions().GetPalettePath(),NULL,_pReportDefinition)
     ,m_pController(NULL)
     ,m_pReportDefinition(_pReportDefinition)
 {
