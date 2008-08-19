@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpshadow.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@
 
 
 #include <svx/svdattr.hxx>
-#include <svx/xoutx.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
@@ -94,13 +93,11 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aLbShadowColor      ( this, SVX_RES( LB_SHADOW_COLOR ) ),
     aFtTransparent      ( this, SVX_RES( FT_TRANSPARENT ) ),
     aMtrTransparent      ( this, SVX_RES( MTR_SHADOW_TRANSPARENT ) ),
-    aCtlXRectPreview    ( this, SVX_RES( CTL_COLOR_PREVIEW ), &XOut,
-                                    (XOutdevItemPool*) rInAttrs.GetPool() ),
+    aCtlXRectPreview    ( this, SVX_RES( CTL_COLOR_PREVIEW ) ),
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
     bDisable            ( FALSE ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlXRectPreview ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
@@ -182,13 +179,8 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
         rXFSet.Put( XFillColorItem( String(), COL_LIGHTRED ) );
     }
     rXFSet.Put( XFillStyleItem( eXFS ) );
-    aCtlXRectPreview.SetRectAttr( &aXFillAttr );
-    //XOut.SetFillAttr( aXFillAttr );
-
-    // Set line at the OutputDevice
-    XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+    aCtlXRectPreview.SetRectangleAttributes(aXFillAttr.GetItemSet());
+    //aCtlXRectPreview.SetFillAttr( aXFillAttr );
 
     aTsbShowShadow.SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
     Link aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
@@ -581,10 +573,11 @@ IMPL_LINK( SvxShadowTabPage, ModifyShadowHdl_Impl, void *, EMPTYARG )
         case RP_RB: nX = nY = nXY;       break;
         case RP_MM: break;
     }
-    aCtlXRectPreview.SetShadowPos( Point( nX, nY ) );
 
-    aCtlXRectPreview.SetShadowAttr( &aXFillAttr );
-    //XOut.SetFillAttr( aXFillAttr );
+    aCtlXRectPreview.SetShadowPosition(Point(nX, nY));
+
+    aCtlXRectPreview.SetShadowAttributes(aXFillAttr.GetItemSet());
+    //aCtlXRectPreview.SetFillAttr( aXFillAttr );
     aCtlXRectPreview.Invalidate();
 
     return( 0L );
