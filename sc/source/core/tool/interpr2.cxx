@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr2.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,6 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/zforlist.hxx>
-#include <string.h>
-#include <math.h>
 
 #include "interpre.hxx"
 #include "attrib.hxx"
@@ -56,6 +54,9 @@
 #include "hints.hxx"
 #include "dpobject.hxx"
 #include "postit.hxx"
+
+#include <string.h>
+#include <math.h>
 
 // STATIC DATA -----------------------------------------------------------
 
