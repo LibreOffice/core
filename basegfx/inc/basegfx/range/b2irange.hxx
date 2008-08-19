@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2irange.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicrange.hxx>
-
 #include <vector>
 
 
@@ -106,10 +105,11 @@ namespace basegfx
                 || maRangeY != rRange.maRangeY);
         }
 
-        void operator=(const B2IRange& rRange)
+        B2IRange& operator=(const B2IRange& rRange)
         {
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
+            return *this;
         }
 
         sal_Int32 getMinX() const
