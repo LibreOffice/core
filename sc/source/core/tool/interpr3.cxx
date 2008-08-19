@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr3.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/solar.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <vector>
-#include <algorithm>
 
 #include "interpre.hxx"
 #include "global.hxx"
@@ -50,6 +45,10 @@
 #include "dociter.hxx"
 #include "scmatrix.hxx"
 #include "globstr.hrc"
+
+#include <math.h>
+#include <vector>
+#include <algorithm>
 
 using ::std::vector;
 
