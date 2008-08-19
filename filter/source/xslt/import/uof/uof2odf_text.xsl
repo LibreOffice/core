@@ -172,8 +172,11 @@
 						<xsl:attribute name="style:display-name"><xsl:value-of select="@字:别名"/></xsl:attribute>
 					</xsl:if>
 					<xsl:element name="style:paragraph-properties">
-						<xsl:call-template name="XDParagraphAttr"/>
+                        <xsl:call-template name="XDParagraphAttr"/>
 						<xsl:apply-templates select="*[not(name()='字:大纲级别')]"/>
+                        <xsl:if test="字:制表位设置">
+                            <xsl:call-template name="ootab"/>
+                        </xsl:if>
 					</xsl:element>
 					<xsl:element name="style:text-properties">
 						<xsl:apply-templates select="字:句属性/*"/>
@@ -1103,7 +1106,7 @@
 		<text:sequence-decl text:display-outline-level="0" text:name="AutoNr">
 			</text:sequence-decl>
 	</xsl:template>
-	<xsl:template name="段落" match="字:段落[not((preceding-sibling::字:段落/字:域开始) and (not(preceding-sibling::字:段落/字:域结束)))]">
+	<xsl:template name="段落" match="字:段落[not((preceding-sibling::字:段落/字:域开始) and (not(preceding-sibling::字:段落/字:域结束)))][not(字:段落属性[字:自动编号信息])]">
 		<xsl:if test="字:域开始/@字:类型='caption'">
 			<xsl:apply-templates select="字:域代码"/>
 		</xsl:if>
@@ -1173,6 +1176,9 @@
 				<xsl:element name="style:style">
 					<xsl:attribute name="style:name"><xsl:value-of select="@图:标识符"/></xsl:attribute>
 					<xsl:attribute name="style:family">graphic</xsl:attribute>
+					<xsl:if test="图:文本内容/@图:自动换行='true' or 图:文本内容/@图:自动换行='1'">
+						<xsl:attribute name="draw:fit-to-contour">true</xsl:attribute>
+					</xsl:if>                    
 					<xsl:element name="style:graphic-properties">
 						<xsl:call-template name="process-graphics">
 							<xsl:with-param name="draw-name" select="$draw-name"/>
@@ -1187,9 +1193,6 @@
 								<style:paragraph-properties style:writing-mode="tb-rl"/>
 							</xsl:when>
 						</xsl:choose>
-					</xsl:if>
-					<xsl:if test="图:文本内容/@图:自动换行='true' or 图:文本内容/@图:自动换行='1'">
-						<xsl:attribute name="draw:fit-to-contour">true</xsl:attribute>
 					</xsl:if>
 				</xsl:element>
 			</xsl:when>
@@ -2978,7 +2981,10 @@
 														<xsl:attribute name="style:justify-single-word">false</xsl:attribute>
 													</xsl:if>
 												</xsl:if>
-												<xsl:call-template name="ParagraphAttr"/>
+												<xsl:call-template name="ParagraphAttr"/>                                                                                        
+                                                <xsl:if test="字:段落属性/字:制表位设置">
+                                                    <xsl:call-template name="ootab"/>
+                                                </xsl:if>
 											</xsl:element>
 											<xsl:if test="字:句属性">
 												<xsl:variable name="bsh">
@@ -3025,7 +3031,10 @@
 					</xsl:for-each>
 				</xsl:if>
 				<xsl:apply-templates select="字:句/字:句属性/字:浮雕 | 字:句/字:句属性/字:边框 | 字:句/字:句属性/字:缩放 | 字:句/字:句属性/字:阴影 | 字:句/字:句属性/字:删除线 | 字:句/字:句属性/字:下划线 |  字:句/字:填充"/>
-				<xsl:call-template name="ParagraphAttr"/>
+				<xsl:call-template name="ParagraphAttr"/>                                                        
+                <xsl:if test="字:段落属性/字:制表位设置">
+                    <xsl:call-template name="ootab"/>
+                </xsl:if>                
 				<xsl:for-each select="/uof:UOF/uof:式样集/uof:句式样[@字:标识符=$stylename]">
 					<xsl:apply-templates select="./*"/>
 				</xsl:for-each>
@@ -3037,7 +3046,10 @@
 				<xsl:if test="字:句/字:分页符">
 					<xsl:attribute name="fo:break-before">page</xsl:attribute>
 				</xsl:if>
-				<xsl:call-template name="ParagraphAttr"/>
+				<xsl:call-template name="ParagraphAttr"/>                                                                        
+                <xsl:if test="字:段落属性/字:制表位设置">
+                    <xsl:call-template name="ootab"/>
+                </xsl:if>
 			</style:paragraph-properties>
 		</xsl:element>
 	</xsl:template>
@@ -3165,9 +3177,6 @@
 		<xsl:if test="字:段落属性/字:自动调整中英文字符间距 or 字:段落属性/字:自动调整中文与数字间距">
 			<xsl:attribute name="style:text-autospace"><xsl:choose><xsl:when test="字:段落属性/字:自动调整中英文字符间距/@字:值='1' or 字:段落属性/字:自动调整中文与数字间距/@字:值='1'or 字:段落属性/字:自动调整中英文字符间距/@字:值='true' or 字:段落属性/字:自动调整中文与数字间距/@字:值='true'">ideograph-alpha</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
 		</xsl:if>
-		<xsl:if test="字:段落属性/字:制表位设置">
-			<xsl:call-template name="ootab"/>
-		</xsl:if>
 		<xsl:if test="字:段落属性/字:首字下沉">
 			<xsl:element name="style:drop-cap">
 				<xsl:if test="字:段落属性/字:首字下沉/@字:行数">
@@ -3281,9 +3290,6 @@
 		</xsl:if>
 		<xsl:if test="字:自动调整中英文字符间距 or 字:自动调整中文与数字间距">
 			<xsl:attribute name="style:text-autospace"><xsl:choose><xsl:when test="字:自动调整中英文字符间距/@字:值='1' or 字:自动调整中文与数字间距/@字:值='1'or 字:自动调整中英文字符间距/@字:值='true' or 字:自动调整中文与数字间距/@字:值='true'">ideograph-alpha</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
-		</xsl:if>
-		<xsl:if test="字:制表位设置">
-			<xsl:call-template name="ootab"/>
 		</xsl:if>
 		<xsl:if test="字:首字下沉">
 			<xsl:element name="style:drop-cap">
