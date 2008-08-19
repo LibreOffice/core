@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basicrange.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,7 @@
 #define _BGFX_RANGE_BASICRANGE_HXX
 
 #include <sal/types.h>
-
-#ifndef _INC_FLOAT
 #include <float.h>
-#endif
 #include <basegfx/numeric/ftools.hxx>
 
 
@@ -155,10 +152,11 @@ namespace basegfx
             return (mnMinimum != rRange.mnMinimum || mnMaximum != rRange.mnMaximum);
         }
 
-        void operator=(const BasicRange& rRange)
+        BasicRange& operator=(const BasicRange& rRange)
         {
             mnMinimum = rRange.mnMinimum;
             mnMaximum = rRange.mnMaximum;
+            return *this;
         }
 
         bool equal(const BasicRange& rRange) const
