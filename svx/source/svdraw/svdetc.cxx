@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdetc.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,7 +172,7 @@ BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
         // The quesion is what will happen whe i make it work now suddenly? I
         // will try it for 2.4.
         const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
-        const bool bVisible(rViewContact.HasViewObjectContacts() && !rViewContact.IsPreviewRendererOnly());
+        const bool bVisible(rViewContact.HasViewObjectContacts(true));
 
         if(!bVisible)
         {
