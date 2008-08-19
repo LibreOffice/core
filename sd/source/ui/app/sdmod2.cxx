@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdmod2.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,54 +129,30 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
     }
     else
     {
-        // if not, get the current drawn page from the page view
-
-        // draw mode, slide mode and preview
-        const SdrPageView* pPV = NULL;
-
-        // first, we try to geht the current page view from the SdrPaintInfoRec
-        if( pOutliner && pOutliner->GetPaintInfoRec() )
+        // draw mode, slide mode and preview. Get the processed page from the outliner
+        if(pOutliner)
         {
-            const SdrPaintInfoRec* pRec = pOutliner->GetPaintInfoRec();
-
-            if( pOutliner->GetTextObj() )
-            {
-                SdrPage* pEditPage = pOutliner->GetTextObj()->GetPage();
-                bMasterView = ((pEditPage == NULL) || pEditPage->IsMasterPage()) && ((pRec->nPaintMode & SDRPAINTMODE_MASTERPAGE) == 0);
-            }
-
-            pPV = pRec->pPV;
+            pPage = dynamic_cast< SdPage* >(const_cast< SdrPage* >(pOutliner->getVisualizedPage()));
         }
 
-        // if this failed, we use the viewshell
-        if( (pPV == 0) && pViewSh && (pViewSh->GetDoc()) )
-            pPV = pViewSh->GetDoc()->GetPaintingPageView();
+        // The path using GetPaintingPageView() and GetCurrentPaintingDisplayInfo()
+        // is no longer needed. I debugged and checked all usages of PageNumber decompositions
+        // which all use the new possibility of setting the visualized page at the SdrOutliner.
 
-        if(pPV)
+        // if all else failed, geht the current page from the object that is
+        // currently formated from the document
+        if(!pPage)
         {
-            const SdrPage* pSdrPage = NULL;
-            // get the current page from the current painting display info
-            if( pPV->GetCurrentPaintingDisplayInfo() )
-            {
-                pSdrPage = pPV->GetCurrentPaintingDisplayInfo()->GetProcessedPage();
-            }
-            else
-            {
-                // if this is not available, get the current page from the page view
-                pSdrPage = pPV->GetPage();
-            }
-            pPage = dynamic_cast< SdPage * >( const_cast< SdrPage* >( pSdrPage ) );
+            const SdrTextObj* pTextObj = (pViewSh && pViewSh->GetDoc()) ? pViewSh->GetDoc()->GetFormattingTextObj() : NULL;
 
-            // if all else failed, geht the current page from the object that is
-            // currently formated from the document
-            if( pPage == 0 )
+            if( pTextObj )
             {
-                const SdrTextObj* pTextObj = (pViewSh && pViewSh->GetDoc()) ? pViewSh->GetDoc()->GetFormattingTextObj() : NULL;
-
-                if( pTextObj )
-                    pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
+                pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
             }
+        }
 
+        if(pPage)
+        {
             bMasterView = pPage && pPage->IsMasterPage();
         }
     }
