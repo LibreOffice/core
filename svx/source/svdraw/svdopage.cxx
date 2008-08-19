@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdopage.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include "svdstr.hrc"   // Objektname
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
-#include "svdxout.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
