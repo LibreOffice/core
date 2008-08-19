@@ -9,7 +9,7 @@
  
   $RCSfile: opendoc2xhtml.xsl,v $
  
-  $Revision: 1.2 $
+  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -58,7 +58,7 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink"
+	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi xforms xsd xsi"
 	xmlns="http://www.w3.org/1999/xhtml">
 
 
@@ -81,9 +81,11 @@
 				encoding             = "UTF-8"
 				media-type           = "application/xhtml+xml"
 				indent               = "no"
-				doctype-public       = "-//W3C//DTD XHTML 1.0 Strict//EN"
-				doctype-system       = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-				omit-xml-declaration = "no" />
+				omit-xml-declaration = "no"
+				doctype-public       = "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+				doctype-system       = "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd" />
+
+
 
 	<xsl:variable name="namespace" select="'http://www.w3.org/1999/xhtml'" />
 
@@ -156,7 +158,7 @@
 		<xsl:param name="globalData" />
 
 		<xsl:element name="html">
-			<xsl:comment> This file was converted to xhtml by odt2xhtml ver. 2.4.0a See http://xml.openoffice.org/odf2xhtml for more info. </xsl:comment>
+			<xsl:comment>This file was converted to xhtml by OpenOffice.org - see http://xml.openoffice.org/odf2xhtml for more info.</xsl:comment>
 			<xsl:call-template name='create-header'>
 				<xsl:with-param name="globalData" select="$globalData" />
 			</xsl:call-template>
