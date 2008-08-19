@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviews2.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -687,7 +687,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->ConvertMarkedToPolyObj(TRUE);
+                mpDrawView->ConvertMarkedToPathObj(TRUE);
 
                 Invalidate(SID_CONVERT_TO_CONTOUR);
             }
