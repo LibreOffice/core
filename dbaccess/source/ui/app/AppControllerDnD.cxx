@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppControllerDnD.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,6 +286,7 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                                 }
                             }
                         }
+                        impl_deActivateSubFrame_throw(sTableName,E_TABLE);
                     }
                     catch(SQLContext& e) { aErrorInfo = e; }
                     catch(SQLWarning& e) { aErrorInfo = e; }
@@ -324,14 +325,9 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
 // -----------------------------------------------------------------------------
 void OApplicationController::deleteObjects( ElementType _eType, const ::std::vector< ::rtl::OUString>& _rList, bool _bConfirm )
 {
-    deleteObjects( Reference< XNameContainer >( getElements( _eType ), UNO_QUERY ), _rList, _bConfirm );
-}
-
-// -----------------------------------------------------------------------------
-void OApplicationController::deleteObjects( const Reference< XNameContainer>& _rxNames, const ::std::vector< ::rtl::OUString>& _rList, bool _bConfirm )
-{
-    Reference< XHierarchicalNameContainer > xHierarchyName( _rxNames, UNO_QUERY );
-    if ( _rxNames.is() )
+    Reference< XNameContainer > xNames( getElements( _eType ), UNO_QUERY );
+    Reference< XHierarchicalNameContainer > xHierarchyName( xNames, UNO_QUERY );
+    if ( xNames.is() )
     {
         ByteString sDialogPosition;
         svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
@@ -382,7 +378,10 @@ void OApplicationController::deleteObjects( const Reference< XNameContainer>& _r
                     if ( xHierarchyName.is() )
                         xHierarchyName->removeByHierarchicalName( *aThisRound );
                     else
-                        _rxNames->removeByName( *aThisRound );
+                        xNames->removeByName( *aThisRound );
+
+                    if ( _eType == E_QUERY )
+                        impl_deActivateSubFrame_throw(*aThisRound,_eType);
 
                     bSuccess = true;
 
@@ -902,8 +901,7 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
             if ( nIndex != -1 )
             {
                 aList.push_back(sName.copy(sErase.getLength() + 1));
-                Reference<XNameContainer> xNames(getElements(m_aAsyncDrop.nType), UNO_QUERY);
-                deleteObjects( xNames, aList, false );
+                deleteObjects( m_aAsyncDrop.nType, aList, false );
             }
         }
     }
