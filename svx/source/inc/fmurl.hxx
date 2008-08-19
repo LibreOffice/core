@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmurl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@ namespace svxform
     DECLARE_CONSTASCII_USTRING(FMURL_RECORD_SAVE);
     DECLARE_CONSTASCII_USTRING(FMURL_RECORD_DELETE);
     DECLARE_CONSTASCII_USTRING(FMURL_FORM_REFRESH);
+    DECLARE_CONSTASCII_USTRING(FMURL_FORM_REFRESH_CURRENT_CONTROL);
 
     DECLARE_CONSTASCII_USTRING(FMURL_FORM_SORT_UP);
     DECLARE_CONSTASCII_USTRING(FMURL_FORM_SORT_DOWN);
