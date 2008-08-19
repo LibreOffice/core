@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabarea.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-#include <svx/xoutx.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xsetit.hxx>
 #include <svx/xfillit0.hxx>

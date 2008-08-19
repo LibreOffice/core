@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabline.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,6 @@
 #include <svx/xlineit.hxx>
 #include <svx/xsetit.hxx>
 #include <svx/dlgctrl.hxx>
-#include <svx/xoutx.hxx>
 #include <vcl/menubtn.hxx>
 class SvxBrushItem;
 // define ----------------------------------------------------------------
