@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NResultSetMetaData.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@ namespace connectivity
           inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
           { return this; }
 
-          void checkColumnIndex(sal_Int32 column)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
           virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
           virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
           virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
