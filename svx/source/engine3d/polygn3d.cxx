@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polygn3d.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,19 @@
 #include <svx/svdpage.hxx>
 #include "globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
+#include <svx/sdr/contact/viewcontactofe3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 
 TYPEINIT1(E3dPolygonObj, E3dCompoundObject);
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfE3dPolygon(*this);
+}
 
 /*************************************************************************
 |*
@@ -120,7 +129,8 @@ E3dPolygonObj::E3dPolygonObj(
 \************************************************************************/
 
 E3dPolygonObj::E3dPolygonObj()
-:   E3dCompoundObject()
+:   E3dCompoundObject(),
+    bLineOnly(false) // added missing initialisation
 {
     // Keine Geometrie erzeugen
 }
