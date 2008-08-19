@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.43 $
+# $Revision: 1.44 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -156,3 +156,4 @@ $(SLO)$/detailpages.obj : $(LOCALIZE_ME_DEST)
 
 $(SLO)$/tablespage.obj : $(LOCALIZE_ME_DEST)
 
+$(SLO)$/ConnectionPage.obj : $(LOCALIZE_ME_DEST)
