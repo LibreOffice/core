@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrcaptionprimitive2d.cxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/sdr/primitive2d/sdrcaptionprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DSequence SdrCaptionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        {
+            Primitive2DSequence aRetval;
+
+            // create unit outline polygon
+            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromRect(::basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), getCornerRadiusX(), getCornerRadiusY()));
+
+            // add fill
+            if(getSdrLFSTAttribute().getFill())
+            {
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
+            }
+
+            // add line
+            if(getSdrLFSTAttribute().getLine())
+            {
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(getTail(), getTransform(), *getSdrLFSTAttribute().getLine(), getSdrLFSTAttribute().getLineStartEnd()));
+            }
+
+            // add text
+            if(getSdrLFSTAttribute().getText())
+            {
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false));
+            }
+
+            // add shadow
+            if(getSdrLFSTAttribute().getShadow())
+            {
+                // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
+                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow()));
+
+                if(xShadow.is())
+                {
+                    Primitive2DSequence aContentWithShadow(2L);
+                    aContentWithShadow[0L] = xShadow;
+                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
+                    aRetval = aContentWithShadow;
+                }
+            }
+
+            return aRetval;
+        }
+
+        SdrCaptionPrimitive2D::SdrCaptionPrimitive2D(
+            const ::basegfx::B2DHomMatrix& rTransform,
+            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
+            const ::basegfx::B2DPolygon& rTail,
+            double fCornerRadiusX,
+            double fCornerRadiusY)
+        :   BasePrimitive2D(),
+            maTransform(rTransform),
+            maSdrLFSTAttribute(rSdrLFSTAttribute),
+            maTail(rTail),
+            mfCornerRadiusX(fCornerRadiusX),
+            mfCornerRadiusY(fCornerRadiusY)
+        {
+            // transform maTail to unit polygon
+            if(getTail().count())
+            {
+                ::basegfx::B2DHomMatrix aInverse(getTransform());
+                aInverse.invert();
+                maTail.transform(aInverse);
+            }
+        }
+
+        bool SdrCaptionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const SdrCaptionPrimitive2D& rCompare = (SdrCaptionPrimitive2D&)rPrimitive;
+
+                return (getCornerRadiusX() == rCompare.getCornerRadiusX()
+                    && getCornerRadiusY() == rCompare.getCornerRadiusY()
+                    && getTail() == rCompare.getTail()
+                    && getTransform() == rCompare.getTransform()
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
+            }
+
+            return false;
+        }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(SdrCaptionPrimitive2D, PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D)
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// eof
