@@ -9,7 +9,7 @@
  
   $RCSfile: table.xsl,v $
  
-  $Revision: 1.2 $
+  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -58,7 +58,7 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink">
+	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi">
 
 
 	<!-- table row handling -->
