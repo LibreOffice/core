@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NDatabaseMetaData.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,9 +265,6 @@ OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(OEvoabConnection* _pCon)
     ,m_pConnection(_pCon)
 {
     OSL_ENSURE(m_pConnection,"OEvoabDatabaseMetaData::OEvoabDatabaseMetaData: No connection set!");
-}
-void OEvoabDatabaseMetaData::construct()
-{
 }
 OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 {
