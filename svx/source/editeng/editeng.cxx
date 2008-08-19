@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.117 $
+ * $Revision: 1.118 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2433,22 +2433,13 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
     return pImpEditEngine->CreateTransferable( aSel );
 }
 
-void EditEngine::EnableVerboseTextComments( BOOL bEnable )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->EnableVerboseTextComments( bEnable );
-}
-
-BOOL EditEngine::IsVerboseTextComments() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->IsVerboseTextComments();
-}
-
 // =====================================================================
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
-void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT, const sal_Int32*, const SvxFont&, sal_uInt16, sal_uInt16, BYTE )
+void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT,
+    const sal_Int32*, const SvxFont&, sal_uInt16, sal_uInt16, BYTE,
+    const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
+    const ::com::sun::star::lang::Locale*, const Color&)
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
