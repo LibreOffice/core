@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshap4.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,26 +361,17 @@ bool SvxOle2Shape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::
         if( pObj )
         {
             uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
-            if ( xObj.is() && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
+            if ( xObj.is()
+              && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
             {
-                const SdrPageView* pPageView = mpModel->GetPaintingPageView();
-                sal_Bool bSuccess = sal_False;
-
-                if ( pPageView )
-                {
-                    SdrView* pView = (SdrView*)&(pPageView->GetView());
-                    if ( pView->ISA( SdrPaintView ) )
-                    {
-                        SdrPaintView* pPaintView = (SdrPaintView*)pView;
-                        pPaintView->DoConnect( pObj );
-                        bSuccess = sal_True;
-                    }
-                }
-
-                if ( !bSuccess )
-                    bSuccess = pObj->AddOwnLightClient();
-
+                // Discussed with CL fue to the before GetPaintingPageView
+                // usage. Removed it, former fallback is used now
+#ifdef DBG_UTIL
+                const sal_Bool bSuccess(pObj->AddOwnLightClient());
                 OSL_ENSURE( bSuccess, "An object without client is provided!" );
+#else
+                pObj->AddOwnLightClient();
+#endif
 
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL )
                     rValue <<= pObj->GetObjRef()->getComponent();
@@ -388,7 +379,6 @@ bool SvxOle2Shape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::
                     rValue <<= xObj;
             }
         }
-
         break;
     }
 
