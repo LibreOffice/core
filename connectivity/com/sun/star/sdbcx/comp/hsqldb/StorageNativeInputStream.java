@@ -5,7 +5,7 @@
  */
 
 package com.sun.star.sdbcx.comp.hsqldb;
-import com.sun.star.embed.ElementModes;
+
 /**
  *
  * @author  Ocke
@@ -15,7 +15,7 @@ public class StorageNativeInputStream {
 
     /** Creates a new instance of StorageNativeInputStream */
     public StorageNativeInputStream(String key,String _file) {
-        openStream(key,_file, ElementModes.READ);
+        openStream(key,_file, NativeStorageAccess.READ);
     }
     public native void openStream(String key,String name, int mode);
     public native int read(String key,String name) throws java.io.IOException;
