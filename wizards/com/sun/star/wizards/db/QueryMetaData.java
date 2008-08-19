@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryMetaData.java,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,17 +132,23 @@ public class QueryMetaData extends CommandMetaData {
                     }
 
 
-    public void removeFieldColumn(String _sFieldName, String _sCommandName){
+    public void removeFieldColumn(String _sFieldName, String _sCommandName)
+        {
             FieldColumn oFieldColumn = getFieldColumn(_sFieldName, _sCommandName);
             int a = 0;
-            if (oFieldColumn != null){
+            if (oFieldColumn != null)
+            {
                 FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length -1];
-                for (int i = 0; i < FieldColumns.length;i++){
+                for (int i = 0; i < FieldColumns.length;i++)
+                {
                     if (!FieldColumns[i].FieldName.equals(_sFieldName))
-                        if (!FieldColumns[i].CommandName.equals(_sCommandName)){
-                                LocFieldColumns[a] = FieldColumns[i];
-                                a++;
+                    {
+                        if (!FieldColumns[i].CommandName.equals(_sCommandName))
+                        {
+                            LocFieldColumns[a] = FieldColumns[i];
+                            a++;
                         }
+                    }
                 }
                 FieldColumns = LocFieldColumns;
             }
@@ -153,11 +159,14 @@ public class QueryMetaData extends CommandMetaData {
         FieldColumn CurQueryField;
         CommandNamesV = new Vector(1);
         String CurCommandName;
-        for (int i = 0; i < FieldColumns.length; i++) {
+        for (int i = 0; i < FieldColumns.length; i++)
+        {
             CurQueryField = FieldColumns[i];
             CurCommandName = CurQueryField.getCommandName();
             if (!CommandNamesV.contains(CurCommandName))
+            {
                 CommandNamesV.addElement(CurCommandName);
+            }
         }
         String[] sIncludedCommandNames = new String[CommandNamesV.size()];
         CommandNamesV.toArray(sIncludedCommandNames);
@@ -170,11 +179,16 @@ public class QueryMetaData extends CommandMetaData {
         for (int i = 0; i < _FieldNames.length; i++) {
             String CurCommandName = "";
             String[] MetaList = JavaTools.ArrayoutofString(_FieldNames[i], ".");
-            if (MetaList.length > 1) {
+            if (MetaList.length > 1)
+            {
                 for (int a = 0; a < MetaList.length - 1; a++)
+                {
                     CurCommandName += MetaList[a];
+                }
                 if (!CommandNames.contains(CurCommandName))
+                {
                     CommandNames.addElement(CurCommandName);
+                }
             }
         }
         String[] sIncludedCommandNames = new String[CommandNames.size()];
@@ -192,18 +206,26 @@ public class QueryMetaData extends CommandMetaData {
         try {
             this.getIncludedCommandNames(); // fills the var CommandNamesV indirectly :-(
             if (FieldTitleSet == null)
+            {
                 FieldTitleSet = new HashMap();
-            for (int i = 0; i < CommandNamesV.size(); i++) {
+            }
+            for (int i = 0; i < CommandNamesV.size(); i++)
+            {
                 CommandObject oTable = getTableByName((String) CommandNamesV.elementAt(i));
                 String sTableName = oTable.Name;
                 String[] LocFieldNames = oTable.xColumns.getElementNames();
-                for (int a = 0; a < LocFieldNames.length; a++) {
+                for (int a = 0; a < LocFieldNames.length; a++)
+                {
                     String sDisplayFieldName = FieldColumn.composeDisplayFieldName(LocFieldNames[a], sTableName);
                     if (!FieldTitleSet.containsKey(sDisplayFieldName))
+                    {
                         FieldTitleSet.put(sDisplayFieldName, LocFieldNames[a]);
+                    }
                 }
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
@@ -213,7 +235,9 @@ public class QueryMetaData extends CommandMetaData {
         Vector UniqueAggregateFieldVector = new Vector(0);
         for (int i = 0; i < AggregateFieldNames.length; i++) {
             if (!UniqueAggregateFieldVector.contains(AggregateFieldNames[i][0]))
+            {
                 UniqueAggregateFieldVector.add(AggregateFieldNames[i][0]);
+            }
         }
         UniqueAggregateFieldNames = new String[UniqueAggregateFieldVector.size()];
         UniqueAggregateFieldVector.toArray(UniqueAggregateFieldNames);
@@ -221,10 +245,14 @@ public class QueryMetaData extends CommandMetaData {
     }
 
 
-    public boolean hasNumericalFields() {
-        for (int i = 0; i < FieldColumns.length; i++) {
+    public boolean hasNumericalFields()
+    {
+        for (int i = 0; i < FieldColumns.length; i++)
+        {
             if (FieldColumns[i].bIsNumberFormat)
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -234,7 +262,9 @@ public class QueryMetaData extends CommandMetaData {
     public int getAggregateIndex(String _DisplayFieldName){
         int iAggregate = -1;
         if (Type == QueryType.SOSUMMARYQUERY)
+        {
             iAggregate = JavaTools.FieldInTable(AggregateFieldNames, _DisplayFieldName);
+        }
         return iAggregate;
     }
 
