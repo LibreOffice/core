@@ -8,7 +8,7 @@
  *
  * $RCSfile: unopolypolygon.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +34,10 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
-
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
