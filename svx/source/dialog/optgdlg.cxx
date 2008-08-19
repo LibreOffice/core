@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +53,8 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/startoptions.hxx>
 #include <svtools/languageoptions.hxx>
-#ifndef INCLUDED_SVTOOLS_MISCPOPT_HXX
 #include <svtools/miscopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 #include <svtools/printwarningoptions.hxx>
-#endif
 #include <svtools/syslocaleoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/accessibilityoptions.hxx>
