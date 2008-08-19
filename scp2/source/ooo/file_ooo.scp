@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.263 $
+ * $Revision: 1.264 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -575,15 +575,8 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-#ifndef SYSTEM_XALAN
-STD_JAR_FILE( gid_File_Jar_Xalan, xalan )
-STD_JAR_FILE( gid_File_Jar_Serializer, serializer )
-#endif
-#ifndef SYSTEM_XERCES
-STD_JAR_FILE( gid_File_Jar_XercesImpl, xercesImpl )
-#endif
-#ifndef SYSTEM_XML_APIS
-STD_JAR_FILE( gid_File_Jar_Xml_Apis, xml-apis )
+#ifndef SYSTEM_SAXON
+STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
 #endif
 #endif
 
