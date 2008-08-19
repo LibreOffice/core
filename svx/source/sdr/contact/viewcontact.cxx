@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontact.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,11 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/sdr/animation/animationinfo.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -47,27 +51,13 @@ namespace sdr
         // a standard ViewObjectContact containing the given ObjectContact and *this
         ViewObjectContact& ViewContact::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
-            ViewObjectContact* pRetval = new ViewObjectContact(rObjectContact, *this);
-            DBG_ASSERT(pRetval, "ViewContact::CreateObjectSpecificViewObjectContact() failed (!)");
-
-            return *pRetval;
+            return *(new ViewObjectContact(rObjectContact, *this));
         }
 
         ViewContact::ViewContact()
-        :   mpAnimationInfo(0L),
-            mpViewObjectContactRedirector(0L),
-            mbPaintRectangleValid(sal_False)
+        :   maViewObjectContactVector(),
+            mxViewIndependentPrimitive2DSequence()
         {
-        }
-
-        // method to create a AnimationInfo. Needs to give a result if
-        // SupportsAnimation() is overloaded and returns sal_True. Default is to
-        // pop up an assert since it's always an error if this gets called
-        sdr::animation::AnimationInfo* ViewContact::CreateAnimationInfo()
-        {
-            // This call can only be an error ATM.
-            DBG_ERROR("ViewContact::CreateAnimationInfo(): If SupportsAnimation() can give sal_True, this needs to be implemented (!)");
-            return 0L;
         }
 
         // Methods to react on start getting viewed or stop getting
@@ -81,40 +71,29 @@ namespace sdr
         {
         }
 
-        // The destructor. When PrepareDelete() was not called before (see there)
-        // warnings will be generated in debug version if there are still contacts
-        // existing.
         ViewContact::~ViewContact()
         {
-#ifdef DBG_UTIL
-            DBG_ASSERT(0L == maVOCList.Count(),
-                "ViewContact destructor: ViewObjectContactList is not empty, call PrepareDelete() before deleting (!)");
-            DBG_ASSERT(!HasAnimationInfo(),
-                "ViewContact destructor: AnimationInfo not deleted, call PrepareDelete() before deleting (!)");
-#endif
-        }
-
-        // Prepare deletion of this object. Tghis needs to be called always
-        // before really deleting this objects. This is necessary since in a c++
-        // destructor no virtual function calls are allowed. To avoid this problem,
-        // it is required to first call PrepareDelete().
-        void ViewContact::PrepareDelete()
-        {
             // get rid of all contacts
-            while(maVOCList.Count())
+            // #i84257# To avoid that each 'delete pCandidate' again uses
+            // the local RemoveViewObjectContact with a search and removal in the
+            // vector, simply copy and clear local vector.
+            std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContactVector);
+            maViewObjectContactVector.clear();
+
+            while(aLocalVOCList.size())
             {
-                ViewObjectContact* pCandidate = maVOCList.GetLastObjectAndRemove();
-                DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
+                ViewObjectContact* pCandidate = aLocalVOCList.back();
+                aLocalVOCList.pop_back();
+                DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList in VC (!)");
 
                 // ViewObjectContacts only make sense with View and Object contacts.
                 // When the contact to the SdrObject is deleted like in this case,
                 // all ViewObjectContacts can be deleted, too.
-                pCandidate->PrepareDelete();
                 delete pCandidate;
             }
 
-            // Take care for clean shutdown
-            DeleteAnimationInfo();
+            // assert when there were new entries added during deletion
+            DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
         }
 
         // get a Object-specific ViewObjectContact for a specific
@@ -122,11 +101,13 @@ namespace sdr
         ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectContact)
         {
             ViewObjectContact* pRetval = 0L;
+            const sal_uInt32 nCount(maViewObjectContactVector.size());
 
-            for(sal_uInt32 a(0L); !pRetval && a < maVOCList.Count(); a++)
+            // first search if there exists a VOC for the given OC
+            for(sal_uInt32 a(0); !pRetval && a < nCount; a++)
             {
-                ViewObjectContact* pCandidate = maVOCList.GetObject(a);
-                DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
+                ViewObjectContact* pCandidate = maViewObjectContactVector[a];
+                DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
 
                 if(&(pCandidate->GetObjectContact()) == &rObjectContact)
                 {
@@ -141,29 +122,15 @@ namespace sdr
                 pRetval = &CreateObjectSpecificViewObjectContact(rObjectContact);
             }
 
-            // Check for animation features and evtl. prepare them for
-            // inserted objects.
-            if(SupportsAnimation())
-            {
-                sdr::animation::AnimationInfo* pAnimInfo = GetAnimationInfo();
-                DBG_ASSERT(pAnimInfo,
-                    "ViewContact::GetViewObjectContact(): Got no AnimationInfo (!)");
-
-                // let the ViewObjectContact check for the AnimationInfo. This
-                // evtl. creates a AnimationState at the VOC and adds that to the
-                // animator at the ObjectContact.
-                pRetval->CheckForAnimationFeatures(*pAnimInfo);
-            }
-
             return *pRetval;
         }
 
         // A new ViewObjectContact was created and shall be remembered.
         void ViewContact::AddViewObjectContact(ViewObjectContact& rVOContact)
         {
-            maVOCList.Append(&rVOContact);
+            maViewObjectContactVector.push_back(&rVOContact);
 
-            if(1L == maVOCList.Count())
+            if(1L == maViewObjectContactVector.size())
             {
                 StartGettingViewed();
             }
@@ -172,32 +139,32 @@ namespace sdr
         // A ViewObjectContact was deleted and shall be forgotten.
         void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
         {
-            if(maVOCList.Count())
-            {
-                maVOCList.Remove(&rVOContact);
+            std::vector< ViewObjectContact* >::iterator aFindResult = std::find(maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
 
-                if(!maVOCList.Count())
+            if(aFindResult != maViewObjectContactVector.end())
+            {
+                maViewObjectContactVector.erase(aFindResult);
+
+                if(0 == maViewObjectContactVector.size())
                 {
+                    // This may need to get asynchron later since it eventually triggers
+                    // deletes of OCs where the VOC is still added.
                     StopGettingViewed();
                 }
             }
         }
 
-        // Test if ViewObjectContact is registered here
-        sal_Bool ViewContact::ContainsViewObjectContact(ViewObjectContact& rVOContact)
-        {
-            return maVOCList.Contains(&rVOContact);
-        }
-
         // Test if this ViewContact has ViewObjectContacts at all. This can
         // be used to test if this ViewContact is visualized ATM or not
-        sal_Bool ViewContact::HasViewObjectContacts(bool bExcludePreviews) const
+        bool ViewContact::HasViewObjectContacts(bool bExcludePreviews) const
         {
+            const sal_uInt32 nCount(maViewObjectContactVector.size());
+
             if(bExcludePreviews)
             {
-                for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+                for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    if( !maVOCList.GetObject(a)->GetObjectContact().IsPreviewRenderer() )
+                    if(!maViewObjectContactVector[a]->GetObjectContact().IsPreviewRenderer())
                     {
                         return true;
                     }
@@ -207,86 +174,25 @@ namespace sdr
             }
             else
             {
-                return (0L != maVOCList.Count());
+                return (0L != nCount);
             }
         }
 
-        // Test if this ViewContact is visualized by the Preview Renderer only
-        sal_Bool ViewContact::IsPreviewRendererOnly() const
+        // Test if this ViewContact has ViewObjectContacts at all. This can
+        // be used to test if this ViewContact is visualized ATM or not
+        bool ViewContact::isAnimatedInAnyViewObjectContact() const
         {
-            sal_uInt32 a;
-            for ( a = 0; a < maVOCList.Count(); a++ )
+            const sal_uInt32 nCount(maViewObjectContactVector.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                if ( !maVOCList.GetObject( a )->GetObjectContact().IsPreviewRenderer() )
-                    return sal_False;
-            }
-            return sal_True;
-        }
-
-        // method to get the PaintRectangle. Tests internally for validity and calls
-        // CalcPaintRectangle() on demand.
-        const Rectangle& ViewContact::GetPaintRectangle() const
-        {
-            if(!mbPaintRectangleValid)
-            {
-                ((ViewContact*)this)->CalcPaintRectangle();
-                ((ViewContact*)this)->mbPaintRectangleValid = sal_True;
+                if(maViewObjectContactVector[a]->isAnimated())
+                {
+                    return true;
+                }
             }
 
-            return maPaintRectangle;
-        }
-
-        // method to invalidate the PaintRectangle. Needs to be called when object changes.
-        void ViewContact::InvalidatePaintRectangle()
-        {
-            if(mbPaintRectangleValid)
-            {
-                mbPaintRectangleValid = sal_False;
-            }
-        }
-
-        // When ShouldPaintObject() returns sal_True, the object itself is painted and
-        // PaintObject() is called.
-        sal_Bool ViewContact::ShouldPaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // default implementation always paints the object
-            return sal_True;
-        }
-
-        // These methods decide which parts of the objects will be painted:
-        // When ShouldPaintDrawHierarchy() returns sal_True, the DrawHierarchy of the object is painted.
-        // Else, the flags and rectangles of the VOCs of the sub-hierarchy are set to the values of the
-        // object's VOC.
-        sal_Bool ViewContact::ShouldPaintDrawHierarchy(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // default is to draw the DRawHierarchy
-            return sal_True;
-        }
-
-        // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-        // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-        sal_Bool ViewContact::PaintObject(DisplayInfo& /*rDisplayInfo*/, Rectangle& /*rPaintRectangle*/, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // Default implementation has nothing to paint and has to return sal_False
-            return sal_False;
-        }
-
-        // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewContact::PrePaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // Default implementation has nothing to paint
-        }
-
-        void ViewContact::PostPaintObject(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // Default implementation has nothing to paint
-        }
-
-        // Paint this objects GluePoints. This is after PaitObject() was called.
-        // This is temporarily as long as GluePoints are no handles yet.
-        void ViewContact::PaintGluePoints(DisplayInfo& /*rDisplayInfo*/, const ViewObjectContact& /*rAssociatedVOC*/)
-        {
-            // Default implementation has nothing to paint
+            return false;
         }
 
         // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
@@ -295,12 +201,12 @@ namespace sdr
         sal_uInt32 ViewContact::GetObjectCount() const
         {
             // no sub-objects
-            return 0L;
+            return 0;
         }
 
         ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
         {
-            // call would be an error
+            // This is the default implementation; call would be an error
             DBG_ERROR("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
             return (ViewContact&)(*this);
         }
@@ -308,217 +214,39 @@ namespace sdr
         ViewContact* ViewContact::GetParentContact() const
         {
             // default has no parent
-            return 0L;
+            return 0;
         }
 
-        // React on removal of the object of this ViewContact,
-        // DrawHierarchy needs to be changed
-        void ViewContact::ActionRemoved()
-        {
-            // get rid of all contacts
-            while(maVOCList.Count())
-            {
-                ViewObjectContact* pCandidate = maVOCList.GetLastObjectAndRemove();
-                DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
-
-                // Delete candidate. This uses PrepareDelete(), invalidates
-                // the DrawHierarchy and cleans up all connections.
-                pCandidate->PrepareDelete();
-                delete pCandidate;
-            }
-
-            // #116168# get rid of animation info, too
-            if(HasAnimationInfo())
-            {
-                DeleteAnimationInfo();
-            }
-
-            // #116168# Do not call ActionChanged(), this would again initialize e.g.
-            // the AnimationInfo. Just do what ActionChanged() does.
-            // Invalidate the PaintRectangle, this has changed now, too.
-            InvalidatePaintRectangle();
-        }
-
-        // React on insertion of the object of this ViewContact,
-        // DrawHierarchy has changed
-        void ViewContact::ActionInserted()
-        {
-            ViewContact* pParentContact = GetParentContact();
-
-            if(pParentContact)
-            {
-                // If it has a parent in DrawHierarchy,
-                // tell parent about the DrawHierarchy change.
-                pParentContact->ActionChildInserted(*this);
-            }
-        }
-
-        // React on insertion of a child into DRawHierarchy starting
-        // from this object
         void ViewContact::ActionChildInserted(ViewContact& rChild)
         {
-            if(maVOCList.Count())
+            // propagate change to all exsisting visualisations which
+            // will force a VOC for the new child and invalidate it's range
+            const sal_uInt32 nCount(maViewObjectContactVector.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                Rectangle aInvalidateRect = rChild.GetPaintRectangle();
+                ViewObjectContact* pCandidate = maViewObjectContactVector[a];
+                DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
 
-                for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
-                {
-                    ViewObjectContact* pCandidate = maVOCList.GetObject(a);
-                    DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
-
-                    // take action at all VOCs. At the VOCs ObjectContact the
-                    // DrawHierarchy will be marked as invalid and also the initial
-                    // rectangle will be invalidated at the associated OutputDevice.
-                    pCandidate->ActionChildInserted(aInvalidateRect);
-                }
+                // take action at all VOCs. At the VOCs ObjectContact the initial
+                // rectangle will be invalidated at the associated OutputDevice.
+                pCandidate->ActionChildInserted(rChild);
             }
-
-            // Use ActionChanged here since this had changed this object, too
-            ActionChanged();
         }
 
         // React on changes of the object of this ViewContact
         void ViewContact::ActionChanged()
         {
-            // #i42815#
-            // Invalidate paint rectangle first, else new potential one will be used
-            InvalidatePaintRectangle();
-
-            // check existing animation. This may create or delete an AnimationInfo.
-            CheckAnimationFeatures();
-
-            // check if Support for animation. If Yes, tell about changes.
-            if(HasAnimationInfo())
-            {
-                sdr::animation::AnimationInfo* pAnimInfo = GetAnimationInfo();
-                DBG_ASSERT(pAnimInfo,
-                    "ViewContact::ActionChanged(): Got no AnimationInfo (!)");
-
-                // react on changes
-                pAnimInfo->ActionChanged();
-            }
-
             // propagate change to all existing VOCs. This will invalidate
-            // drawn objects, but only once.
-            for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+            // all drawn visualisations in all known views
+            const sal_uInt32 nCount(maViewObjectContactVector.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                ViewObjectContact* pCandidate = maVOCList.GetObject(a);
+                ViewObjectContact* pCandidate = maViewObjectContactVector[a];
                 DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
 
                 pCandidate->ActionChanged();
-            }
-        }
-
-        // Does this ViewContact support animation? Default is sal_False
-        sal_Bool ViewContact::SupportsAnimation() const
-        {
-            // No.
-            return sal_False;
-        }
-
-        // check for animation features. This may start or stop animations. Should
-        // be called if animation may have changed in any way (parameters, started,
-        // stopped, ...). It will create, delete or let untouched an AnimationInfo
-        // which is associated with this object.
-        void ViewContact::CheckAnimationFeatures()
-        {
-            // look for AnimationInfo pointer
-            sdr::animation::AnimationInfo* pAnimInfo = 0L;
-
-            // check if Support for animation has changed and react on it
-            if(HasAnimationInfo())
-            {
-                if(SupportsAnimation())
-                {
-                    pAnimInfo = GetAnimationInfo();
-                    DBG_ASSERT(pAnimInfo,
-                        "ViewContact::ActionChanged(): Got no AnimationInfo (!)");
-                }
-                else
-                {
-                    // Take care for clean animation shutdown
-                    DeleteAnimationInfo();
-                }
-            }
-            else
-            {
-                if(SupportsAnimation())
-                {
-                    // get the AnimationInfo. This has to work when SupportsAnimation
-                    // was sal_True.
-                    pAnimInfo = GetAnimationInfo();
-                    DBG_ASSERT(pAnimInfo,
-                        "ViewContact::ActionChanged(): Got no AnimationInfo (!)");
-                }
-            }
-
-            if(pAnimInfo)
-            {
-                // propagate to all existing VOCs.
-                for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
-                {
-                    ViewObjectContact* pCandidate = maVOCList.GetObject(a);
-                    DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
-
-                    // let the ViewObjectContact check for the AnimationInfo. This
-                    // evtl. creates a AnimationState at the VOC and adds that to the
-                    // animator at the ObjectContact.
-                    pCandidate->CheckForAnimationFeatures(*pAnimInfo);
-                }
-            }
-        }
-
-        // method to get the AnimationInfo. Needs to give a result if
-        // SupportsAnimation() is overloaded and returns sal_True. It will
-        // return a existing one or create a new one using CreateAnimationInfo().
-        sdr::animation::AnimationInfo* ViewContact::GetAnimationInfo() const
-        {
-            if(!HasAnimationInfo())
-            {
-                ((ViewContact*)this)->mpAnimationInfo = ((ViewContact*)this)->CreateAnimationInfo();
-                DBG_ASSERT(mpAnimationInfo,
-                    "ViewContact::GetAnimationInfo(): Got no AnimationInfo (!)");
-            }
-
-            return mpAnimationInfo;
-        }
-
-        // take care for clean shutdown of an existing AnimationInfo
-        void ViewContact::DeleteAnimationInfo()
-        {
-            if(HasAnimationInfo())
-            {
-                // shutdown existing AnimationStates
-                for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
-                {
-                    ViewObjectContact* pCandidate = maVOCList.GetObject(a);
-                    DBG_ASSERT(pCandidate, "ViewContact::DeleteAnimationInfo() invalid ViewObjectContactList (!)");
-                    pCandidate->DeleteAnimationState();
-                }
-
-                // delete own AnimationInfo
-                delete mpAnimationInfo;
-                mpAnimationInfo = 0L;
-            }
-        }
-
-        // test for existing AnimationInfo
-        sal_Bool ViewContact::HasAnimationInfo() const
-        {
-            return (0L != mpAnimationInfo);
-        }
-
-        // access to ViewObjectContactRedirector
-        ViewObjectContactRedirector* ViewContact::GetViewObjectContactRedirector() const
-        {
-            return mpViewObjectContactRedirector;
-        }
-
-        void ViewContact::SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew)
-        {
-            if(mpViewObjectContactRedirector != pNew)
-            {
-                mpViewObjectContactRedirector = pNew;
             }
         }
 
@@ -532,6 +260,46 @@ namespace sdr
         SdrPage* ViewContact::TryToGetSdrPage() const
         {
             return 0L;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // primitive stuff
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContact::createViewIndependentPrimitive2DSequence() const
+        {
+            // This is the default impelemtation and should never be called (see header). If this is called,
+            // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
+            // providing a seqence of primitives -> which cannot be correct.
+            // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
+            // hairline polygon with a default size of (1000, 1000, 5000, 3000)
+            DBG_ERROR("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");
+            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
+            const basegfx::BColor aYellow(1.0, 1.0, 0.0);
+            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContact::getViewIndependentPrimitive2DSequence() const
+        {
+            // local up-to-date checks. Create new list and compare.
+            const drawinglayer::primitive2d::Primitive2DSequence xNew(createViewIndependentPrimitive2DSequence());
+
+            if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxViewIndependentPrimitive2DSequence, xNew))
+            {
+                // has changed, copy content
+                const_cast< ViewContact* >(this)->mxViewIndependentPrimitive2DSequence = xNew;
+            }
+
+            // return current Primitive2DSequence
+            return mxViewIndependentPrimitive2DSequence;
+        }
+
+        // add Gluepoints (if available)
+        drawinglayer::primitive2d::Primitive2DSequence ViewContact::createGluePointPrimitive2DSequence() const
+        {
+            // default returns empty reference
+            return drawinglayer::primitive2d::Primitive2DSequence();
         }
     } // end of namespace contact
 } // end of namespace sdr
