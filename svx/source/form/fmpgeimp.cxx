@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmpgeimp.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,7 @@ DBG_NAME(FmFormPageImpl)
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
                :pPage(_pPage)
                ,m_bFirstActivation( sal_True )
-               ,m_bAttemptedFormCreation( sal_False )
+               ,m_bAttemptedFormCreation( false )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
 }
@@ -90,7 +90,7 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
                :pPage(_pPage)
                ,m_bFirstActivation( sal_True )
-               ,m_bAttemptedFormCreation( sal_False )
+               ,m_bAttemptedFormCreation( false )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
 
@@ -141,7 +141,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
 
     if ( !m_bAttemptedFormCreation )
     {
-        m_bAttemptedFormCreation = sal_True;
+        m_bAttemptedFormCreation = true;
 
         const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
         m_xForms = Reference< XNameContainer > (
