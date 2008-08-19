@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RecordParser.java,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,25 +213,36 @@ public class RecordParser extends QueryMetaData {
 
 
 
-    public boolean getFields(String[] _sFieldNames, boolean binitializeDBColumns){
-    try{
-        if (binitializeDBColumns == true){
+    public boolean getFields(String[] _sFieldNames, boolean binitializeDBColumns)
+    {
+    try
+    {
+        if (binitializeDBColumns == true)
+        {
             initializeFieldColumns(_sFieldNames, xColumns);
         }
         String[] AllQueryFieldNames = xColumns.getElementNames();
         String[] sFieldNames = getFieldNames();
-        for (int i = 0; i < FieldColumns.length; i++) {
-            FieldColumns[i].ColIndex = JavaTools.FieldInList(AllQueryFieldNames, FieldColumns[i].FieldName) + 1;
-            if (FieldColumns[i].ColIndex == -1)
+        for (int i = 0; i < FieldColumns.length; i++)
+        {
+            String sFieldName = FieldColumns[i].FieldName;
+            int nColIndex = JavaTools.FieldInList(AllQueryFieldNames, sFieldName) + 1;
+            FieldColumns[i].ColIndex = nColIndex;
+            if (nColIndex == -1)
+            {
                 throw new InvalidQueryException(xMSF, Command);
+            }
         }
         GroupFieldColumns = getFieldColumnList(GroupFieldNames);
         RecordFieldColumns = getFieldColumnList(getRecordFieldNames());
         return true;
-    } catch (InvalidQueryException queryexception) {
+    }
+    catch (InvalidQueryException queryexception)
+    {
         queryexception.printStackTrace(System.out);
         return false;
-    }}
+    }
+    }
 
 
     private FieldColumn[] getFieldColumnList(String[] _FieldNames) {
