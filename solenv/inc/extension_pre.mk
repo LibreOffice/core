@@ -8,7 +8,7 @@
 #
 # $RCSfile: extension_pre.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,6 +33,7 @@ EXTENSIONDIR*:=$(MISC)$/$(EXTENSIONNAME)
 
 COMPONENT_CONFIGDIR*:=.
 COMPONENT_CONFIGDEST*:=registry$/data
+COMPONENT_CONFIGDESTSCHEMA*:=registry$/schema
 
 .IF "$(COMPONENT_COPYONLY)"==""
 DESCRIPTION:=$(EXTENSIONDIR)$/description.xml
