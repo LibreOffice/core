@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_ext.mk,v $
 #
-# $Revision: 1.90 $
+# $Revision: 1.91 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -147,6 +147,16 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
     @-$(RM) $@
     noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(BACK_PATH)download$/$(TARFILE_NAME).zip)
+    @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @$(RENAME) $@.$(INPATH) $@
+
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.jar
+    @-$(RM) $@
+.IF "$(OS)"=="SOLARIS"
+    noop $(assign UNPACKCMD := jar xf $(BACK_PATH)download$/$(TARFILE_NAME).jar)
+.ELSE			# "$(OS)"=="SOLARIS"
+    noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(BACK_PATH)download$/$(TARFILE_NAME).jar)
+.ENDIF			# "$(OS)"=="SOLARIS"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
