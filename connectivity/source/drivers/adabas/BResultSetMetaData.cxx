@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BResultSetMetaData.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,11 +46,6 @@ using namespace connectivity;
 OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt,const ::vos::ORef<OSQLColumns>& _rSelectColumns )
 : OAdabasResultSetMetaData_BASE(_pConnection,_pStmt)
 ,m_aSelectColumns(_rSelectColumns)
-{
-}
-// -----------------------------------------------------------------------------
-OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
-: OAdabasResultSetMetaData_BASE(_pConnection,_pStmt,_vMapping)
 {
 }
 // -------------------------------------------------------------------------
