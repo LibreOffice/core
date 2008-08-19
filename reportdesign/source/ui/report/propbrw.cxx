@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propbrw.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -551,14 +551,14 @@ void PropBrw::Update( OSectionView* pNewView )
             m_pView = pNewView;
 
         uno::Sequence< Reference<uno::XInterface> > aMarkedObjects;
-        OViewsWindow* pViews = m_pView->getSectionWindow()->getViewsWindow();
+        OViewsWindow* pViews = m_pView->getReportSection()->getSectionWindow()->getViewsWindow();
         const USHORT nSectionCount = pViews->getSectionCount();
         for (USHORT i = 0; i < nSectionCount; ++i)
         {
-            ::boost::shared_ptr<OReportSection> pReportSection = pViews->getSection(i);
-            if ( pReportSection )
+            ::boost::shared_ptr<OSectionWindow> pSectionWindow = pViews->getSectionWindow(i);
+            if ( pSectionWindow )
             {
-                const SdrMarkList& rMarkList = pReportSection->getView()->GetMarkedObjectList();
+                const SdrMarkList& rMarkList = pSectionWindow->getReportSection().getSectionView().GetMarkedObjectList();
                 aMarkedObjects = ::comphelper::concatSequences(aMarkedObjects,CreateCompPropSet( rMarkList ));
             }
         }
@@ -568,9 +568,9 @@ void PropBrw::Update( OSectionView* pNewView )
             m_xLastSection.clear();
             implSetNewObject( aMarkedObjects );
         }
-        else if ( m_xLastSection != m_pView->getSectionWindow()->getSection() )
+        else if ( m_xLastSection != m_pView->getReportSection()->getSection() )
         {
-            uno::Reference< uno::XInterface> xTemp(m_pView->getSectionWindow()->getSection());
+            uno::Reference< uno::XInterface> xTemp(m_pView->getReportSection()->getSection());
             m_xLastSection = xTemp;
             uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(::getCppuType(static_cast<Reference<XInterface> * >(NULL)));
             xNameCont->insertByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReportComponent")),uno::makeAny(xTemp));
