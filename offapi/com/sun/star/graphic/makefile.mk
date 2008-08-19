@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,6 +50,9 @@ IDLFILES= \
     GraphicRendererVCL.idl \
     GraphicType.idl \
     MediaProperties.idl \
+    XPrimitive2D.idl \
+    XPrimitive3D.idl \
+    XPrimitiveFactory2D.idl \
     XGraphic.idl \
     XGraphicProvider.idl \
     XGraphicRenderer.idl \
