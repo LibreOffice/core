@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notemark.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/xoutx.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
@@ -142,11 +141,7 @@ void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
                             DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
     }
 
-    XOutputDevice* pXOut = new XOutputDevice( pWindow );
-    pXOut->SetOutDev( pWindow );
-    SdrPaintInfoRec aInfoRec;
-    pObject->SingleObjectPainter( *pXOut, aInfoRec ); // #110094#-17
-    delete pXOut;
+    pObject->SingleObjectPainter( *pWindow ); // #110094#-17
 
     pWindow->SetDrawMode( nOldDrawMode );
     pWindow->SetMapMode( aOld );
