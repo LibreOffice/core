@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1434,9 +1434,12 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /
 
 // -----------------------------------------------------------------------
 
-bool WinSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+bool WinSalGraphics::drawPolyLine(
+    const basegfx::B2DPolygon& /*rPolygon*/,
+    const basegfx::B2DVector& /*rLineWidths*/,
+    basegfx::B2DLineJoin /*eLineJoin*/)
 {
-    // TODO: implement and advertise OutDevSupport_B2DDraw support
+    // TODO: implement
     return false;
 }
 
