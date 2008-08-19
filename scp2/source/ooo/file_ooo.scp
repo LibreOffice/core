@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.261 $
+ * $Revision: 1.262 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1405,12 +1405,6 @@ File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
 End
 
-File gid_File_Oo_Office_Extendedcolorscheme_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/ExtendedColorScheme.xcu";
-End
 
 File gid_File_Oo_Office_Paths_Xcs
     TXT_FILE_BODY;
