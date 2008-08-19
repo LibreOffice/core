@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BUser.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,6 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             OUserExtend(OAdabasConnection* _pConnection);
-            OUserExtend(OAdabasConnection* _pConnection,const ::rtl::OUString& _Name);
 
             virtual void construct();
         };
