@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impop.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,12 +51,6 @@
 #include <sfx2/objsh.hxx>
 #include "docuno.hxx"
 
-#if defined( WNT ) || defined( WIN )
-#include <math.h>
-#else
-#include <stdlib.h>
-#endif
-
 #include "cell.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
@@ -93,6 +87,12 @@
 
 #include "excimp8.hxx"
 #include "excform.hxx"
+
+#if defined( WNT ) || defined( WIN )
+#include <math.h>
+#else
+#include <stdlib.h>
+#endif
 
 using namespace ::com::sun::star;
 
