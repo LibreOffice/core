@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextFieldHandler.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,43 +64,56 @@ public class TextFieldHandler {
     private XMultiServiceFactory xMSFDoc;
 
 
-    /** Creates a new instance of TextFieldHandler */
+    /**
+     * Creates a new instance of TextFieldHandler
+     * @param xMSF
+     * @param xTextDocument
+     */
     public TextFieldHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
         this.xMSFDoc = xMSF;
         xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument);
     }
 
 
-    public void refreshTextFields(){
+    public void refreshTextFields()
+    {
         XRefreshable xUp = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, xTextFieldsSupplier.getTextFields());
         xUp.refresh();
     }
 
 
     public String getUserFieldContent(XTextCursor xTextCursor) {
-        try {
+        try
+        {
             XTextRange xTextRange = xTextCursor.getEnd();
             Object oTextField = Helper.getUnoPropertyValue(xTextRange, "TextField");
             if (com.sun.star.uno.AnyConverter.isVoid(oTextField))
+            {
                 return "";
-            else {
+            }
+            else
+            {
                 XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                 XPropertySet xMaster = xDependent.getTextFieldMaster();
                 String UserFieldContent = (String) xMaster.getPropertyValue("Content");
                 return UserFieldContent;
             }
-        } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.out);
-            return "";
         }
+        catch (com.sun.star.uno.Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+        return "";
     }
 
     public void insertUserField(XTextCursor xTextCursor, String FieldName, String FieldTitle) {
-        try {
+        try
+        {
             XInterface xField = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextField.User");
             XDependentTextField xDepField = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, xField);
             XTextContent xFieldContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xField);
-            if (xTextFieldsSupplier.getTextFieldMasters().hasByName("com.sun.star.text.FieldMaster.User." + FieldName)) {
+            if (xTextFieldsSupplier.getTextFieldMasters().hasByName("com.sun.star.text.FieldMaster.User." + FieldName))
+            {
                 Object oMaster = xTextFieldsSupplier.getTextFieldMasters().getByName("com.sun.star.text.FieldMaster.User." + FieldName);
                 XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oMaster);
                 xComponent.dispose();
@@ -108,59 +121,93 @@ public class TextFieldHandler {
             XPropertySet xPSet = createUserField(FieldName, FieldTitle);
             xDepField.attachTextFieldMaster(xPSet);
             xTextCursor.getText().insertTextContent(xTextCursor, xFieldContent, false);
-        } catch (com.sun.star.uno.Exception exception) {
+
+//            try
+//            {
+//                XPropertySet xTestProp = xDepField.getTextFieldMaster();
+//                String UserFieldName = (String) xTestProp.getPropertyValue("Name");
+//                // UserFieldName == FieldName?
+//                int dummy = 0;
+//            }
+//            catch (com.sun.star.uno.Exception e)
+//            {
+//                int dummy2 = 0;
+//            }
+
+        }
+        catch (com.sun.star.uno.Exception exception) {
             exception.printStackTrace(System.out);
         }
     }
 
 
-    public XPropertySet createUserField(String FieldName, String FieldTitle) throws com.sun.star.uno.Exception{
+    public XPropertySet createUserField(String FieldName, String FieldTitle) throws com.sun.star.uno.Exception
+    {
         Object oMaster = xMSFDoc.createInstance("com.sun.star.text.FieldMaster.User");
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oMaster);
         xPSet.setPropertyValue("Name", FieldName);
         xPSet.setPropertyValue("Content", FieldTitle);
+
+        // DEBUG
+        // String sFieldName = (String)xPSet.getPropertyValue("Name");
+
         return xPSet;
     }
 
 
 
-    private XDependentTextField[] getTextFieldsByProperty(String _PropertyName, Object _aPropertyValue, String _TypeName) throws Exception{
-    try {
+    private XDependentTextField[] getTextFieldsByProperty(String _PropertyName, Object _aPropertyValue, String _TypeName) throws Exception
+    {
+        try
+        {
         XDependentTextField[] xDependentFields;
         Vector xDependentVector = new Vector();
-        if (xTextFieldsSupplier.getTextFields().hasElements()) {
+            if (xTextFieldsSupplier.getTextFields().hasElements())
+            {
             XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
-            while (xEnum.hasMoreElements()) {
+                while (xEnum.hasMoreElements())
+                {
                 Object oTextField = xEnum.nextElement();
                 XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                 XPropertySet xPropertySet = xDependent.getTextFieldMaster();
-                if (xPropertySet.getPropertySetInfo().hasPropertyByName(_PropertyName)){
+                    if (xPropertySet.getPropertySetInfo().hasPropertyByName(_PropertyName))
+                    {
                     Object oValue = xPropertySet.getPropertyValue(_PropertyName);
                     // TODO replace the following comparison via com.sun.star.uno.Any.Type
-                    if(AnyConverter.isString(oValue)){
-                        if (_TypeName.equals("String")){
+                        if(AnyConverter.isString(oValue))
+                        {
+                            if (_TypeName.equals("String"))
+                            {
                             String sValue = AnyConverter.toString(oValue);
                             if (sValue.equals(_aPropertyValue))
+                                {
                                 xDependentVector.addElement(xDependent);
                         }
                     }
-                    else if (AnyConverter.isShort(oValue)){
-                        if (_TypeName.equals("Short")){
+                        }
+                        else if (AnyConverter.isShort(oValue))
+                        {
+                            if (_TypeName.equals("Short"))
+                            {
                             short iShortParam = ((Short) _aPropertyValue).shortValue();
                             short ishortValue = AnyConverter.toShort(oValue);
                             if (ishortValue == iShortParam)
+                                {
                                 xDependentVector.addElement(xDependent);
                         }
                     }
                 }
             }
         }
-        if (xDependentVector.size() > 0){
+            }
+            if (xDependentVector.size() > 0)
+            {
             xDependentFields = new XDependentTextField[xDependentVector.size()];
             xDependentVector.toArray(xDependentFields);
             return xDependentFields;
         }
-    } catch (Exception e) {
+        }
+        catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace(System.out);
     }
@@ -169,16 +216,22 @@ public class TextFieldHandler {
 
 
 
-    public void changeUserFieldContent(String _FieldName, String _FieldContent){
-        try {
+    public void changeUserFieldContent(String _FieldName, String _FieldContent)
+    {
+        try
+        {
             XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Name", _FieldName, "String");
-            if (xDependentTextFields != null){
-                for (int i = 0; i < xDependentTextFields.length; i++){
+            if (xDependentTextFields != null)
+            {
+                for (int i = 0; i < xDependentTextFields.length; i++)
+                {
                     xDependentTextFields[i].getTextFieldMaster().setPropertyValue("Content", _FieldContent);
                 }
                 refreshTextFields();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
     }
@@ -247,23 +300,36 @@ public class TextFieldHandler {
     }}
 
 
-    public void removeUserFieldByContent(String _FieldContent) {
-    try {
+    public void removeUserFieldByContent(String _FieldContent)
+    {
+        try
+        {
         XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Content", _FieldContent, "String");
         if (xDependentTextFields != null)
+            {
             for (int i = 0; i < xDependentTextFields.length; i++)
+                {
                 xDependentTextFields[i].dispose();
-    } catch (Exception e) {
+                }
+            }
+        }
+        catch (Exception e)
+        {
         e.printStackTrace(System.out);
-    }}
+        }
+    }
 
 
 
-    public void changeExtendedUserFieldContent(short UserDataPart, String _FieldContent) {
-        try {
+    public void changeExtendedUserFieldContent(short UserDataPart, String _FieldContent)
+    {
+        try
+        {
             XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("UserDataType", new Short(UserDataPart), "Short");
-            if (xDependentTextFields != null){
-                for (int i = 0; i < xDependentTextFields.length; i++){
+            if (xDependentTextFields != null)
+            {
+                for (int i = 0; i < xDependentTextFields.length; i++)
+                {
                     xDependentTextFields[i].getTextFieldMaster().setPropertyValue("Content", _FieldContent);
                 }
             }
