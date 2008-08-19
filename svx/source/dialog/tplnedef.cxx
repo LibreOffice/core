@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tplnedef.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@
 
 #include "xattr.hxx"
 #include <svx/xpool.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xtable.hxx>
 
 #include "drawitem.hxx"
@@ -107,12 +106,11 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aBtnDelete      ( this, SVX_RES( BTN_DELETE ) ),
     aBtnLoad        ( this, SVX_RES( BTN_LOAD ) ),
     aBtnSave        ( this, SVX_RES( BTN_SAVE ) ),
-    aCtlPreview     ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aCtlPreview     ( this, SVX_RES( CTL_PREVIEW ) ),
 
     rOutAttrs       ( rInAttrs ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
     aXLStyle            ( XLINE_DASH ),
     aXWidth             ( XOUT_WIDTH ),
     aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
@@ -152,7 +150,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
     rXLSet.Put( aXWidth );
     rXLSet.Put( aXDash );
     rXLSet.Put( aXColor );
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // #i34740#
     aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -408,7 +405,6 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
         FillDialog_Impl();
 
         rXLSet.Put( XLineDashItem( String(), aDash ) );
-        XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
         // #i34740#
         aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -977,7 +973,6 @@ void SvxLineDefTabPage::FillDash_Impl()
     aDash.SetDistance( GetCoreValue( aMtrDistance, ePoolUnit ) );
 
     rXLSet.Put( XLineDashItem( String(), aDash ) );
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // #i34740#
     aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
