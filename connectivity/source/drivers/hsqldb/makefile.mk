@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -91,8 +91,8 @@ SLOFILES=\
 SHL1VERSIONMAP=$(HSQLDB_TARGET).map
 
 # --- Library -----------------------------------
-
-SHL1TARGET=	$(HSQLDB_TARGET)$(HSQLDB_MAJOR)
+# NO $(DLLPOSTFIX) otherwise we have to find on which plattform we are for the java files
+SHL1TARGET=	$(HSQLDB_TARGET)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
