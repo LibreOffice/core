@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include "svdxout.hxx"
 #include <svx/svddrag.hxx>
 #include <svx/svddrgv.hxx>
 #include "svddrgm1.hxx"
@@ -55,6 +54,7 @@
 #include <svx/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/connectorproperties.hxx>
+#include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -158,10 +158,19 @@ long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
 
 sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::ConnectorProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrEdgeObj(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -402,110 +411,9 @@ void SdrEdgeObj::RecalcSnapRect()
     maSnapRect=pEdgeTrack->GetBoundRect();
 }
 
-void SdrEdgeObj::RecalcBoundRect()
-{
-    aOutRect=GetSnapRect();
-    long nLineWdt=ImpGetLineWdt();
-    // Linienenden beruecksichtigen
-    long nLEndWdt=ImpGetLineEndAdd();
-    if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
-
-    if(ImpAddLineGeomteryForMiteredLines())
-    {
-        nLineWdt = 0;
-    }
-
-    if (nLineWdt!=0) {
-        aOutRect.Left  ()-=nLineWdt;
-        aOutRect.Top   ()-=nLineWdt;
-        aOutRect.Right ()+=nLineWdt;
-        aOutRect.Bottom()+=nLineWdt;
-    }
-    ImpAddShadowToBoundRect();
-    ImpAddTextToBoundRect();
-}
-
 void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
     rRect=GetSnapRect();
-}
-
-sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    bool bHideContour(IsHideContour());
-
-    // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetObjectItemSet();
-
-    // perepare ItemSet to avoid old XOut line drawing
-    SfxItemSet aEmptySet(*rSet.GetPool());
-    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-
-    // #b4899532# if not filled but fill draft, avoid object being invisible in using
-    // a hair linestyle and COL_LIGHTGRAY
-    SfxItemSet aItemSet(rSet);
-
-    // #103692# prepare ItemSet for shadow fill attributes
-    SfxItemSet aShadowSet(aItemSet);
-
-    // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
-
-    // Shadows
-    if(!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
-    {
-        rXOut.SetFillAttr(aEmptySet);
-
-        UINT32 nXDist=((SdrShadowXDistItem&)(aItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(aItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-        XPolygon aXP(*pEdgeTrack);
-        aXP.Move(nXDist,nYDist);
-
-        // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aEmptySet);
-
-        rXOut.DrawPolyLine(aXP.getB2DPolygon());
-
-        // new shadow line drawing
-        if( pLineGeometry.get() )
-        {
-            // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
-        }
-    }
-
-    // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aEmptySet);
-
-    if(bHideContour)
-    {
-        rXOut.SetFillAttr(aItemSet);
-    }
-
-    if (!bHideContour) {
-        FASTBOOL bDraw=TRUE;
-        if (bDraw) rXOut.DrawPolyLine(pEdgeTrack->getB2DPolygon());
-    }
-
-    // Own line drawing
-    if(!bHideContour && pLineGeometry.get() )
-    {
-        // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
-    }
-
-    sal_Bool bOk(sal_True);
-    if (HasText()) {
-        bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
-    }
-
-    // #110094#-13
-    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-    //  bOk=PaintGluePoints(rXOut,rInfoRec);
-    //}
-
-    return bOk;
 }
 
 SdrObject* SdrEdgeObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
@@ -526,7 +434,7 @@ SdrObject* SdrEdgeObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
     sal_Bool bHit(sal_False);
 
-    const Polygon aPoly(basegfx::tools::adaptiveSubdivideByAngle(pEdgeTrack->getB2DPolygon()));
+    const Polygon aPoly(pEdgeTrack->getB2DPolygon().getDefaultAdaptiveSubdivision());
     bHit = IsRectTouchesLine(aPoly,aR);
     if (!bHit && HasText()) bHit = SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
     return bHit ? (SdrObject*)this : NULL;
@@ -2086,7 +1994,7 @@ FASTBOOL SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
         ImpFindConnector(rDragStat.GetNow(),*rDragStat.GetPageView(),aCon2,this);
         rDragStat.GetView()->SetConnectMarker(aCon2,*rDragStat.GetPageView());
     }
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     ConnectToNode(FALSE,aCon2.pObj);
     *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
@@ -2518,4 +2426,23 @@ void SdrEdgeObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     SdrObject::TRSetBaseGeometry(rMatrix, rPolyPolygon);
 }
 
+// for geometry access
+::basegfx::B2DPolygon SdrEdgeObj::getEdgeTrack() const
+{
+    if(bEdgeTrackDirty)
+    {
+        const_cast< SdrEdgeObj* >(this)->ImpRecalcEdgeTrack();
+    }
+
+    if(pEdgeTrack)
+    {
+        return pEdgeTrack->getB2DPolygon();
+    }
+    else
+    {
+        return ::basegfx::B2DPolygon();
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // eof
