@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include <svx/xoutx.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 
@@ -55,6 +54,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdorect.hxx>
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
@@ -1905,9 +1905,8 @@ void LineEndLB::Modify( XLineEndEntry* pEntry, USHORT nPos, Bitmap* pBmp,
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputDevice* pXOut )
+SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId )
 :   Control( pParent, rResId ),
-    mpXOutDev( pXOut ),
     mpLineObjA( 0L ),
     mpLineObjB( 0L ),
     mpLineObjC( 0L ),
@@ -2046,19 +2045,11 @@ void SvxXLinePreview::Paint( const Rectangle& )
     aObjectVector.push_back(mpLineObjB);
     aObjectVector.push_back(mpLineObjC);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
-    SdrPaintInfoRec aInfoRec;
-
-    aDisplayInfo.SetExtendedOutputDevice((XOutputDevice*)mpXOutDev);
-    aDisplayInfo.SetPaintInfoRec(&aInfoRec);
-    aDisplayInfo.SetOutputDevice(mpXOutDev->GetOutDev());
 
     // do processing
     aPainter.ProcessDisplay(aDisplayInfo);
-
-    // prepare delete
-    aPainter.PrepareDelete();
 
     if ( mbWithSymbol && mpGraphic )
     {
@@ -2099,22 +2090,7 @@ void SvxXLinePreview::DataChanged( const DataChangedEvent& rDCEvt )
 |*
 *************************************************************************/
 
-SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId, XOutputDevice* pXOut ) :
-
-    Control ( pParent, rResId ),
-
-    pXOutDev( pXOut )
-
-{
-    SetBorderStyle( WINDOW_BORDER_MONO );
-    SetMapMode( MAP_100TH_MM );
-    aRect = Rectangle( Point(), GetOutputSize() );
-    InitSettings( TRUE, TRUE );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxXRectPreview::InitSettings( BOOL bForeground, BOOL bBackground )
+void SvxXRectPreview::InitSettings(bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -2138,32 +2114,65 @@ void SvxXRectPreview::InitSettings( BOOL bForeground, BOOL bBackground )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId )
+:   Control( pParent, rResId ),
+    mpRectangleObject(0),
+    mpModel(0)
+{
+    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetMapMode(MAP_100TH_MM);
+    InitSettings(true, true);
+
+    // create model
+    mpModel = new SdrModel();
+    mpModel->GetItemPool().FreezeIdRanges();
+
+    // create RectangleObject
+    const Rectangle aObjectSize(Point(), GetOutputSize());
+    mpRectangleObject = new SdrRectObj(aObjectSize);
+    mpRectangleObject->SetModel(mpModel);
+
+    //  Draw the control's border as a flat thin black line.
+    SetBorderStyle (WINDOW_BORDER_MONO);
+    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+}
+
+SvxXRectPreview::~SvxXRectPreview()
+{
+    SdrObject::Free(mpRectangleObject);
+    delete mpModel;
+}
+
+void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
+{
+    mpRectangleObject->SetMergedItemSet(rItemSet, true);
+    mpRectangleObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+}
 
 void SvxXRectPreview::Paint( const Rectangle& )
 {
-    pXOutDev->SetLineColor( Color( COL_TRANSPARENT ) );
-    pXOutDev->DrawRect( aRect );
-}
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(mpRectangleObject);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
+    sdr::contact::DisplayInfo aDisplayInfo;
 
-// -----------------------------------------------------------------------
+    aPainter.ProcessDisplay(aDisplayInfo);
+}
 
 void SvxXRectPreview::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
-        InitSettings( TRUE, FALSE );
+        InitSettings(true, false);
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-        InitSettings( FALSE, TRUE );
+        InitSettings(false, true);
 
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
-
 void SvxXRectPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitSettings( TRUE, TRUE );
+        InitSettings(true, true);
     else
         Control::DataChanged( rDCEvt );
 }
@@ -2174,39 +2183,7 @@ void SvxXRectPreview::DataChanged( const DataChangedEvent& rDCEvt )
 |*
 *************************************************************************/
 
-SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId,
-                                      XOutputDevice* pXOut, XOutdevItemPool* pXInPool ) :
-
-    Control     ( pParent, rResId ),
-
-    pXOutDev    ( pXOut ),
-    pXPool      ( pXInPool ),
-    pRectItem   ( NULL ),
-    pShadowItem ( NULL )
-
-{
-    SetMapMode( MAP_100TH_MM );
-    Size aSize = GetOutputSize();
-    aSize.Width() = aSize.Width() / 3;
-    aSize.Height() = aSize.Height() / 3;
-    aRect = Rectangle( Point( aSize.Width(), aSize.Height() ), aSize );
-    aShadow = Rectangle( Point( aSize.Width(), aSize.Height() ), aSize );
-    InitSettings( TRUE, TRUE );
-
-    //  Draw the control's border as a flat thin black line.
-    SetBorderStyle (WINDOW_BORDER_MONO);
-}
-
-// -----------------------------------------------------------------------
-
-SvxXShadowPreview::~SvxXShadowPreview()
-{
-    delete pRectItem;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxXShadowPreview::InitSettings( BOOL bForeground, BOOL bBackground )
+void SvxXShadowPreview::InitSettings(bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -2230,36 +2207,76 @@ void SvxXShadowPreview::InitSettings( BOOL bForeground, BOOL bBackground )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId )
+:   Control( pParent, rResId ),
+    mpRectangleObject(0),
+    mpRectangleShadow(0),
+    mpModel(0)
+{
+    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetMapMode(MAP_100TH_MM);
+    InitSettings(true, true);
+
+    // create model
+    mpModel = new SdrModel();
+    mpModel->GetItemPool().FreezeIdRanges();
+
+    // prepare size
+    Size aSize = GetOutputSize();
+    aSize.Width() = aSize.Width() / 3;
+    aSize.Height() = aSize.Height() / 3;
+
+    // create RectangleObject
+    const Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
+    mpRectangleObject = new SdrRectObj(aObjectSize);
+    mpRectangleObject->SetModel(mpModel);
+
+    // create ShadowObject
+    const Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
+    mpRectangleShadow = new SdrRectObj(aShadowSize);
+    mpRectangleShadow->SetModel(mpModel);
+
+    //  Draw the control's border as a flat thin black line.
+    SetBorderStyle (WINDOW_BORDER_MONO);
+    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+}
+
+SvxXShadowPreview::~SvxXShadowPreview()
+{
+    SdrObject::Free(mpRectangleObject);
+    SdrObject::Free(mpRectangleShadow);
+    delete mpModel;
+}
+
+void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)
+{
+    mpRectangleObject->SetMergedItemSet(rItemSet, true);
+    mpRectangleObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+}
+
+void SvxXShadowPreview::SetShadowAttributes(const SfxItemSet& rItemSet)
+{
+    mpRectangleShadow->SetMergedItemSet(rItemSet, true);
+    mpRectangleShadow->SetMergedItem(XLineStyleItem(XLINE_NONE));
+}
+
+void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
+{
+    Rectangle aObjectPosition(mpRectangleObject->GetSnapRect());
+    aObjectPosition.Move(rPos.X(), rPos.Y());
+    mpRectangleShadow->SetSnapRect(aObjectPosition);
+}
 
 void SvxXShadowPreview::Paint( const Rectangle& )
 {
-    aShadow.SetPos( aShadowPos + Point( aRect.GetWidth(), aRect.GetHeight() ) );
-    if ( pShadowItem )
-        pXOutDev->SetFillAttr( pShadowItem->GetItemSet() );
-    pXOutDev->DrawRect( aShadow );
-    if ( pRectItem )
-        pXOutDev->SetFillAttr( pRectItem->GetItemSet() );
-    pXOutDev->DrawRect( aRect );
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(mpRectangleShadow);
+    aObjectVector.push_back(mpRectangleObject);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    aPainter.ProcessDisplay(aDisplayInfo);
 }
-
-// -----------------------------------------------------------------------
-
-void SvxXShadowPreview::SetRectAttr( XFillAttrSetItem* pSetItem )
-{
-    if( pRectItem )
-        delete pRectItem;
-    pRectItem = (XFillAttrSetItem*) pSetItem->Clone( pXPool );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxXShadowPreview::SetShadowAttr( XFillAttrSetItem* pSetItem )
-{
-    pShadowItem = pSetItem;
-}
-
-// -----------------------------------------------------------------------
 
 void SvxXShadowPreview::StateChanged( StateChangedType nType )
 {
@@ -2271,8 +2288,6 @@ void SvxXShadowPreview::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
-
 void SvxXShadowPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
@@ -2281,4 +2296,5 @@ void SvxXShadowPreview::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-
+// -----------------------------------------------------------------------
+// eof
