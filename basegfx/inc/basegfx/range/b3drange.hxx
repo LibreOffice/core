@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3drange.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@ namespace basegfx
 {
     // predeclarations
     class B3IRange;
+    class B3DHomMatrix;
 
     class B3DRange
     {
@@ -124,11 +125,12 @@ namespace basegfx
                 || maRangeZ != rRange.maRangeZ);
         }
 
-        void operator=(const B3DRange& rRange)
+        B3DRange& operator=(const B3DRange& rRange)
         {
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
             maRangeZ = rRange.maRangeZ;
+            return *this;
         }
 
         bool equal(const B3DRange& rRange) const
@@ -288,6 +290,8 @@ namespace basegfx
             maRangeY.grow(fValue);
             maRangeZ.grow(fValue);
         }
+
+        void transform(const B3DHomMatrix& rMatrix);
     };
 
     /** Round double to nearest integer for 3D range
