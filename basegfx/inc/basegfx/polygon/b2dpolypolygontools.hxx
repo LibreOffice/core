@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygontools.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-
 #include <vector>
 
 namespace rtl
@@ -60,16 +59,10 @@ namespace basegfx
         // holes
         B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate);
 
-        // Remove all intersections, the self intersections and the in-between
-        // polygon intersections. After this operation there are no more intersections
-        // in the given PolyPolygon. Only closed polygons are handled. The non-closed
-        // polygons or the ones with less than 3 points are preserved, but not
-        // computed.
-        // bForceOrientation: If true, the orientations of all contained polygons
-        // is changed to ORIENTATION_POSITIVE before computing.
-        B2DPolyPolygon removeIntersections(const B2DPolyPolygon& rCandidate);
-        B2DPolyPolygon removeAllIntersections(const B2DPolyPolygon& rCandidate);
-        B2DPolyPolygon removeNeutralPolygons(const B2DPolyPolygon& rCandidate, bool bUseOr);
+        // make sure polygon with index 0L is not a hole. This may evtl. change the
+        // sequence of polygons, but allows to use polygon with index 0L to
+        // get the correct normal for the whole polyPolygon
+        B2DPolyPolygon correctOutmostPolygon(const B2DPolyPolygon& rCandidate);
 
         // Subdivide all contained curves. Use distanceBound value if given.
         B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
@@ -86,22 +79,42 @@ namespace basegfx
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
 
-        // get size of PolyPolygon. Control vectors are included in that ranges.
+        /** get range of PolyPolygon. Control points are included.
+
+            For detailed description look at getRangeWithControlPoints(const B2DPolygon&).
+            This method just expands by the range of every sub-Polygon.
+
+            @param rCandidate
+            The B2DPolyPolygon eventually containing bezier segments
+
+            @return
+            The outer range including control points
+        */
+        B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate);
+
+        /** Get the range of a polyPolygon
+
+            For detailed description look at getRange(const B2DPolygon&).
+            This method just expands by the range of every sub-Polygon.
+
+            @param rCandidate
+            The B2DPolyPolygon eventually containing bezier segments
+
+            @return
+            The outer range of the polygon
+        */
         B2DRange getRange(const B2DPolyPolygon& rCandidate);
 
-        // Apply Line Dashing. This cuts every contained PolyPolygon into line pieces
-        // which are inserted as single polygons into the result.
-        // If fFullDashDotLen is not given it will be calculated from the given
-        // raDashDotArray.
-        B2DPolyPolygon applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
+        /** Apply given LineDashing to given polyPolygon
 
-        // Merge contained Polygons to longer ones if the end point of one Polygon equals
-        // the start point of the next one. Only direct successors are checked.
-        // This method is mainly for joining line snippets which reach over an original
-        // polygon edge after using applyLineDashing. This is necessary if the dashed line
-        // parts shall be used for creating thick line geometry to be able to do correct
-        // line joints.
-        B2DPolyPolygon mergeDashedLines(const B2DPolyPolygon& rCandidate);
+            For a description see applyLineDashing in b2dpolygontoos.hxx
+        */
+        void applyLineDashing(
+            const B2DPolyPolygon& rCandidate,
+            const ::std::vector<double>& rDotDashArray,
+            B2DPolyPolygon* pLineTarget,
+            B2DPolyPolygon* pGapTarget = 0,
+            double fFullDashDotLen = 0.0);
 
         // test if point is inside epsilon-range around the given PolyPolygon. Can be used
         // for HitTesting. The epsilon-range is defined to be the tube around the PolyPolygon
@@ -142,6 +155,23 @@ namespace basegfx
         bool importFromSvgPoints( B2DPolygon&            o_rPoly,
                                   const ::rtl::OUString& rSvgPointsAttribute );
 
+
+        // grow for polyPolygon. Move all geometry in each point in the direction of the normal in that point
+        // with the given amount. Value may be negative.
+        B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue);
+
+        // This method will correct a pair of polyPolygons where the goal is to keep same point count
+        // to allow direct point association and also to remove self-intersections produced by shrinks.
+        // This method will eventually change both polyPolygons to reach that goal because there are cases
+        // where it is necessary to add new cut points to the original
+        void correctGrowShrinkPolygonPair(B2DPolyPolygon& rOriginal, B2DPolyPolygon& rGrown);
+
+        // force all sub-polygons to a point count of nSegments
+        B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments);
+
+        // create polygon state at t from 0.0 to 1.0 between the two polygons. Both polygons must have the same
+        // organisation, e.g. same amount of polygons
+        B2DPolyPolygon interpolate(const B2DPolyPolygon& rOld1, const B2DPolyPolygon& rOld2, double t);
 
         // create 3d PolyPolygon from given 2d PolyPolygon. The given fZCoordinate is used to expand the
         // third coordinate.
@@ -212,6 +242,20 @@ namespace basegfx
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
+
+        /** split each edge of a polyPolygon in exactly nSubEdges equidistant edges
+
+            @param rCandidate
+            The source polyPolygon. If too small (no edges), nSubEdges too small (<2)
+            or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
+            Else for each edge nSubEdges will be created. Closed state is preserved.
+
+            @param nSubEdges
+            @param bHandleCurvedEdges
+            @param bHandleStraightEdges
+            Please take a look at reSegmentPolygonEdges description, these are the same.
+        */
+        B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D PolyPolygons
