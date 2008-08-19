@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.285 $
+ * $Revision: 1.286 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2311,6 +2311,10 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
 
 void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
 {
+    // call PrePaint. PrePaint may add to the invalidate region as well as
+    // other parameters used below.
+    PrePaint();
+
     mpWindowImpl->mbPaintFrame = FALSE;
 
     if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
@@ -4791,6 +4795,12 @@ void Window::KeyUp( const KeyEvent& rKEvt )
     NotifyEvent aNEvt( EVENT_KEYUP, this, &rKEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbKeyUp = TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void Window::PrePaint()
+{
 }
 
 // -----------------------------------------------------------------------
