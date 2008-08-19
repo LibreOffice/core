@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaypolypolygon.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,9 +52,6 @@ namespace sdr
             // Create the BaseRange. This method needs to calculate maBaseRange.
             virtual void createBaseRange(OutputDevice& rOutputDevice);
 
-            // eventually remove curves from polygon data (maPolyPolygon)
-            virtual void preparePolygonData();
-
         public:
             OverlayPolyPolygonStriped(const basegfx::B2DPolyPolygon& rPolyPolygon);
             virtual ~OverlayPolyPolygonStriped();
@@ -84,9 +81,6 @@ namespace sdr
         protected:
             // Draw geometry
             virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // eventually remove curves from polygon data (maPolyPolygon)
-            virtual void preparePolygonData();
 
         public:
             OverlayPolyPolygon(
