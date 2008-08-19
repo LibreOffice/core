@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -507,6 +507,16 @@ aktuelle Zeichenvorlage anzeigen?
 
     if( bWeiter )
         Window::RequestHelp( rEvt );
+}
+
+void SwEditWin::PrePaint()
+{
+    SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
+
+    if(pWrtShell)
+    {
+        pWrtShell->PrePaint();
+    }
 }
 
 void  SwEditWin::Paint(const Rectangle& rRect)
