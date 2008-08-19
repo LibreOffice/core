@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addresstemplate.src,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     PushButton PB_ADMINISTATE_DATASOURCES
     {
-        Text [ en-US ] = "~Administrate...";
+        Text [ en-US ] = "~Configure...";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 204, 13 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
