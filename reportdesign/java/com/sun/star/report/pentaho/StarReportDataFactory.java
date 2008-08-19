@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StarReportDataFactory.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,11 +75,17 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
     }
     catch(DataSourceException dse)
     {
-      throw new ReportDataFactoryException("Failed to create report data wrapper");
+        String message = dse.getMessage();
+        if ( message.length() == 0 )
+            message = "Failed to create report data wrapper";
+      throw new ReportDataFactoryException(message,dse);
     }
     catch (org.jfree.report.DataSourceException e)
     {
-      throw new ReportDataFactoryException("Failed to query data");
+        String message = e.getMessage();
+        if ( message.length() == 0 )
+            message = "Failed to query data";
+      throw new ReportDataFactoryException(message);
     }
   }
 
