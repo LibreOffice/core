@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: connctrl.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +38,10 @@
 #include "svx/svxdllapi.h"
 
 class SfxItemSet;
-
-class XOutputDevice;
 class SdrEdgeObj;
 class SdrView;
 class SdrObjList;
+
 /*************************************************************************
 |*
 |* SvxXConnectionPreview
@@ -54,7 +53,6 @@ class SVX_DLLPUBLIC SvxXConnectionPreview : public Control
 
 private:
     const SfxItemSet&   rAttrs;
-    XOutputDevice*  pExtOutDev;
     SdrEdgeObj*         pEdgeObj;
     SdrObjList*         pObjList;
     const SdrView*      pView;

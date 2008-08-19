@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdshort.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@
 #define SdrPage                      SdrPg
 #define SdrObjEditView               SdrOV
 #define SdrModel                     SdrMD
-#define XOutputDevice              SdrXO
 #define SdrEditView                  SdrEV
 #define SdrPaintView                 SdrNV
 #define SdrPolyObj                   SdrPO

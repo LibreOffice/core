@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: measctrl.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +39,6 @@
 
 
 class SfxItemSet;
-
-class XOutputDevice;
 class SdrMeasureObj;
 class SdrModel;
 
@@ -55,7 +53,6 @@ class SVX_DLLPUBLIC SvxXMeasurePreview : public Control
 
 private:
     const SfxItemSet&   rAttrs;
-    XOutputDevice*  pExtOutDev;
     SdrMeasureObj*      pMeasureObj;
     SdrModel*           pModel;
 
