@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsPageObjectViewContact.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #include <svx/svdopage.hxx>
 #include <tools/debug.hxx>
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+
 using namespace ::sdr::contact;
 
 namespace sd { namespace slidesorter { namespace view {
@@ -47,18 +50,16 @@ PageObjectViewContact::PageObjectViewContact (
     SdrPageObj& rPageObj,
     const model::SharedPageDescriptor& rpDescriptor)
     : ViewContactOfPageObj (rPageObj),
-      mbIsValid(true),
+      mbInDestructor(false),
       mpDescriptor(rpDescriptor)
 {
 }
 
-
-
-
 PageObjectViewContact::~PageObjectViewContact (void)
 {
+    // remember that this instance is in destruction
+    mbInDestructor = true;
 }
-
 
 
 
@@ -77,76 +78,66 @@ ViewObjectContact&
     return *pResult;
 }
 
-
-
-
 const SdrPage* PageObjectViewContact::GetPage (void) const
 {
-    if (mbIsValid)
+    // when this instance itself is in destruction, do no longer
+    // provide the referenced page to VOC childs of this OC. This
+    // happens e.g. in destructor which destroys all child-VOCs which
+    // may in their implementation still reference their VC from
+    // their own destructor
+    if (!mbInDestructor)
         return GetReferencedPage();
     else
         return NULL;
 }
-
-
-
-
-void PageObjectViewContact::CalcPaintRectangle (void)
-{
-    ViewContactOfPageObj::CalcPaintRectangle();
-    if (mbIsValid)
-    {
-        OSL_ASSERT(mpDescriptor.get()!=NULL);
-
-        maPageObjectBoundingBox = maPaintRectangle;
-        SvBorder aBorder (mpDescriptor->GetModelBorder());
-        maPaintRectangle.Left() -= aBorder.Left();
-        maPaintRectangle.Right() += aBorder.Right();
-        maPaintRectangle.Top() -= aBorder.Top();
-        maPaintRectangle.Bottom() += aBorder.Bottom();
-    }
-}
-
-
-
-
-Rectangle PageObjectViewContact::GetPageRectangle (void)
-{
-    return GetPageObj().GetCurrentBoundRect();
-}
-
-
-
 
 void PageObjectViewContact::ActionChanged (void)
 {
     ViewContactOfPageObj::ActionChanged();
 }
 
-
-
-
 Rectangle PageObjectViewContact::GetPageObjectBoundingBox (void) const
 {
-    return maPageObjectBoundingBox;
+    // use model data directly here
+    OSL_ASSERT(mpDescriptor.get()!=NULL);
+    Rectangle aRetval(GetPageObject().GetLastBoundRect());
+    const SvBorder aPageDescriptorBorder(mpDescriptor->GetModelBorder());
+
+    aRetval.Left() -= aPageDescriptorBorder.Left();
+    aRetval.Top() -= aPageDescriptorBorder.Top();
+    aRetval.Right() += aPageDescriptorBorder.Right();
+    aRetval.Bottom() += aPageDescriptorBorder.Bottom();
+
+    return aRetval;
 }
-
-
-
 
 SdrPageObj& PageObjectViewContact::GetPageObject (void) const
 {
     return ViewContactOfPageObj::GetPageObj();
 }
 
-
-
-
-void PageObjectViewContact::PrepareDelete (void)
+drawinglayer::primitive2d::Primitive2DSequence PageObjectViewContact::createViewIndependentPrimitive2DSequence() const
 {
-    mbIsValid = false;
+    // ceate graphical visualisation data. Since this is the view-independent version which should not be used,
+    // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
+    // which is aOutRect for SdrPageObj.
+    OSL_ASSERT(mpDescriptor.get()!=NULL);
+    Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());
+    const SvBorder aBorder(mpDescriptor->GetModelBorder());
+
+    aModelRectangle.Left() -= aBorder.Left();
+    aModelRectangle.Right() += aBorder.Right();
+    aModelRectangle.Top() -= aBorder.Top();
+    aModelRectangle.Bottom() += aBorder.Bottom();
+
+    const basegfx::B2DRange aModelRange(aModelRectangle.Left(), aModelRectangle.Top(), aModelRectangle.Right(), aModelRectangle.Bottom());
+    const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aModelRange));
+    const basegfx::BColor aYellow(1.0, 1.0, 0.0);
+    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
+
+    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
 }
 
-
-
 } } } // end of namespace ::sd::slidesorter::view
+
+// eof
