@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrobjcustomshape.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,19 +46,22 @@ namespace sdr
     {
         class ViewContactOfSdrObjCustomShape : public ViewContactOfTextObj
         {
+        protected:
+            // internal access to SdrObjCustomShape
+            SdrObjCustomShape& GetCustomShapeObj() const
+            {
+                return (SdrObjCustomShape&)GetSdrObject();
+            }
 
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfSdrObjCustomShape(SdrObjCustomShape& rCustomShape);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewContactOfSdrObjCustomShape();
 
-            // Paint this object. This is before evtl. SubObjects get painted. It needs to return
-            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
