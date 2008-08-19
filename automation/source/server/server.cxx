@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: server.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -757,8 +757,6 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
     StatementList::bReadingCommands = TRUE;
 
-
-    SCmdStream *pCmdStream = new SCmdStream(pIn);
 #if OSL_DEBUG_LEVEL > 1
     if (!m_pDbgWin->bQuiet)
         m_pDbgWin->Show();
@@ -772,6 +770,8 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
         DBG_ERROR1( "Ungültiger Request :%i", (int)nServiceId );
         return FALSE;
     }
+
+    SCmdStream *pCmdStream = new SCmdStream(pIn);
 
     pCmdStream->Read( nId );
     while( !pIn->IsEof() )
