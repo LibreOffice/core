@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectanimator.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +32,10 @@
 #define _SDR_ANIMATION_OBJECTANIMATOR_HXX
 
 #include <sal/types.h>
-
 #include <vector>
 #include <vcl/timer.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// predeclarations
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,27 +43,12 @@ namespace sdr
 {
     namespace animation
     {
-        class ObjectAnimator : public Scheduler
+        class primitiveAnimator : public Scheduler
         {
-        protected:
-            // list of registered AnimationStates
-            AnimationStateVector                    maAnimationStates;
-
         public:
-            // basic constructor.
-            ObjectAnimator();
-
-            // destructor
-            virtual ~ObjectAnimator();
-
-            // get the list count
-            sal_uInt32 Count() const;
-
-            // Remove AnimationState member
-            void RemoveAnimationState(AnimationState& rAnimationState);
-
-            // Add AnimationState member
-            void AddAnimationState(AnimationState& rAnimationState);
+            // basic constructor and destructor
+            primitiveAnimator();
+            virtual ~primitiveAnimator();
         };
     } // end of namespace animation
 } // end of namespace sdr
