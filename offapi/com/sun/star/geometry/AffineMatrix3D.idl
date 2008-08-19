@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: AffineMatrix3D.idl,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_geometry_AffineMatrix3D_idl__
+#define __com_sun_star_geometry_AffineMatrix3D_idl__
+
+module com {  module sun {  module star {  module geometry {
+
+/** This structure defines a 3 by 4 affine matrix.<p>
+
+    The matrix defined by this structure constitutes an affine mapping
+    of a point in 3D to another point in 3D. The last line of a
+    complete 4 by 4 matrix is omitted, since it is implicitely assumed
+    to be [0,0,0,1].<p>
+
+    An affine mapping, as performed by this matrix, can be written out
+    as follows, where <code>xs, ys</code> and <code>zs</code> are the source, and
+    <code>xd, yd</code> and <code>zd</code> the corresponding result coordinates:
+
+    <code>
+        xd = m00*xs + m01*ys + m02*zs + m03;
+        yd = m10*xs + m11*ys + m12*zs + m13;
+        zd = m20*xs + m21*ys + m22*zs + m23;
+    </code><p>
+
+    Thus, in common matrix language, with M being the
+    <type>AffineMatrix3D</type> and vs=[xs,ys,zs]^T, vd=[xd,yd,zd]^T two 3D
+    vectors, the affine transformation is written as
+    vd=M*vs. Concatenation of transformations amounts to
+    multiplication of matrices, i.e. a translation, given by T,
+    followed by a rotation, given by R, is expressed as vd=R*(T*vs) in
+    the above notation. Since matrix multiplication is associative,
+    this can be shortened to vd=(R*T)*vs=M'*vs. Therefore, a set of
+    consecutive transformations can be accumulated into a single
+    AffineMatrix3D, by multiplying the current transformation with the
+    additional transformation from the left.<p>
+
+    Due to this transformational approach, all geometry data types are
+    points in abstract integer or real coordinate spaces, without any
+    physical dimensions attached to them. This physical measurement
+    units are typically only added when using these data types to
+    render something onto a physical output device. For 3D coordinates
+    there is also a projection from 3D to 2D device coordiantes needed.
+    Only then the total transformation matrix (oncluding projection to 2D)
+    and the device resolution determine the actual measurement unit in 3D.<p>
+
+    @since OOo 2.0.0
+ */
+struct AffineMatrix3D
+{
+    /// The top, left matrix entry.
+    double m00;
+
+    /// The top, left middle matrix entry.
+    double m01;
+
+    /// The top, right middle matrix entry.
+    double m02;
+
+    /// The top, right matrix entry.
+    double m03;
+
+    /// The middle, left matrix entry.
+    double m10;
+
+    /// The middle, middle left matrix entry.
+    double m11;
+
+    /// The middle, middle right matrix entry.
+    double m12;
+
+    /// The middle, right matrix entry.
+    double m13;
+
+    /// The bottom, left matrix entry.
+    double m20;
+
+    /// The bottom, middle left matrix entry.
+    double m21;
+
+    /// The bottom, middle right matrix entry.
+    double m22;
+
+    /// The bottom, right matrix entry.
+    double m23;
+};
+
+}; }; }; };
+
+#endif
