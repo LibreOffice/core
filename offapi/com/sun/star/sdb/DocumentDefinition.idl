@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentDefinition.idl,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,8 @@
 #endif
 
 module com { module sun { module star { module sdb {
+
+    interface XSubDocument;
 
 /** specifies a sub document of a <type>OfficeDatabaseDocument</type>.
 
@@ -76,7 +78,9 @@ service DocumentDefinition
     */
     service DefinitionContent;
 
-    interface com::sun::star::beans::XPropertySet;
+    interface ::com::sun::star::beans::XPropertySet;
+
+    interface ::com::sun::star::sdb::XSubDocument;
 
     /** is the name of the document. If the document is part of the container,
         it is not possible to alter the name.*/
