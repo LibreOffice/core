@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygon.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,7 +243,7 @@ namespace basegfx
     {
         for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
         {
-            const basegfx::B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
+            const B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
 
             if(rPolygon.areControlPointsUsed())
             {
@@ -266,6 +266,30 @@ namespace basegfx
     {
         if(nCount)
             mpPolyPolygon->insert(mpPolyPolygon->count(), rPolygon, nCount);
+    }
+
+    B2DPolyPolygon B2DPolyPolygon::getDefaultAdaptiveSubdivision() const
+    {
+        B2DPolyPolygon aRetval;
+
+        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        {
+            aRetval.append(mpPolyPolygon->getB2DPolygon(a).getDefaultAdaptiveSubdivision());
+        }
+
+        return aRetval;
+    }
+
+    B2DRange B2DPolyPolygon::getB2DRange() const
+    {
+        B2DRange aRetval;
+
+        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        {
+            aRetval.expand(mpPolyPolygon->getB2DPolygon(a).getB2DRange());
+        }
+
+        return aRetval;
     }
 
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon)
@@ -320,7 +344,10 @@ namespace basegfx
 
     void B2DPolyPolygon::flip()
     {
-        mpPolyPolygon->flip();
+        if(mpPolyPolygon->count())
+        {
+            mpPolyPolygon->flip();
+        }
     }
 
     bool B2DPolyPolygon::hasDoublePoints() const
@@ -344,7 +371,7 @@ namespace basegfx
             mpPolyPolygon->removeDoublePoints();
     }
 
-    void B2DPolyPolygon::transform(const basegfx::B2DHomMatrix& rMatrix)
+    void B2DPolyPolygon::transform(const B2DHomMatrix& rMatrix)
     {
         if(mpPolyPolygon->count() && !rMatrix.isIdentity())
         {
