@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sphere3d.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,14 +38,21 @@
 #include "globl3d.hxx"
 #include <svx/sphere3d.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svx3ditems.hxx>
 #include <svx/sdr/properties/e3dsphereproperties.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b3dpoint.hxx>
+#include <svx/sdr/contact/viewcontactofe3dsphere.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* E3dSphereObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfE3dSphere(*this);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
