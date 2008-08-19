@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XDatabaseDocumentUI.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,7 +234,7 @@ interface XDatabaseDocumentUI
             or an <type scope="com::sun::star::frame">XController</type> if the component does is model-less.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <param>ObjectType</param> denotes an invalid object type
+            if <arg>ObjectType</arg> denotes an invalid object type
 
         @throws ::com::sun::star::container::NoSuchElementException
             if an object with the given name and of the given type does not exist
