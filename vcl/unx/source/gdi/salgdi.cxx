@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "Xproto.h"
 
 #include <salunx.h>
@@ -50,6 +47,20 @@
 #include <psprint/printergfx.hxx>
 #include <psprint/jobdata.hxx>
 #endif
+
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+
+#include "xrender_peer.hxx"
+#include <vector>
+#include <queue>
+#include <set>
 
 // -=-= SalPolyLine =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,7 +271,7 @@ GC X11SalGraphics::SelectPen()
 
     if( !bPenGC_ )
     {
-        if( nPenColor_ != 0xFFFFFFFF )
+        if( nPenColor_ != SALCOLOR_NONE )
             XSetForeground( pDisplay, pPenGC_, nPenPixel_ );
         XSetFunction  ( pDisplay, pPenGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pPenGC_ );
@@ -275,7 +286,7 @@ GC X11SalGraphics::SelectBrush()
 {
     Display *pDisplay = GetXDisplay();
 
-    DBG_ASSERT( nBrushColor_ != 0xFFFFFFFF, "Brush Transparent" );
+    DBG_ASSERT( nBrushColor_ != SALCOLOR_NONE, "Brush Transparent" );
 
     if( !pBrushGC_ )
     {
@@ -530,6 +541,17 @@ long X11SalGraphics::GetGraphicsWidth() const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+long X11SalGraphics::GetGraphicsHeight() const
+{
+    if( m_pFrame )
+        return m_pFrame->maGeometry.nHeight;
+    else if( m_pVDev )
+        return m_pVDev->GetHeight();
+    else
+        return 0;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::ResetClipRegion()
 {
     if( pClipRegion_ )
@@ -604,9 +626,9 @@ void X11SalGraphics::EndSetClipRegion()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetLineColor()
 {
-    if( nPenColor_ != 0xFFFFFFFF )
+    if( nPenColor_ != SALCOLOR_NONE )
     {
-        nPenColor_      = 0xFFFFFFFF;
+        nPenColor_      = SALCOLOR_NONE;
         bPenGC_         = FALSE;
     }
 }
@@ -625,10 +647,10 @@ void X11SalGraphics::SetLineColor( SalColor nSalColor )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetFillColor()
 {
-    if( nBrushColor_ != 0xFFFFFFFF )
+    if( nBrushColor_ != SALCOLOR_NONE )
     {
         bDitherBrush_   = FALSE;
-        nBrushColor_    = 0xFFFFFFFF;
+        nBrushColor_    = SALCOLOR_NONE;
         bBrushGC_       = FALSE;
     }
 }
@@ -723,21 +745,21 @@ void X11SalGraphics::SetXORMode( BOOL bSet )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPixel( long nX, long nY )
 {
-    if( nPenColor_ !=  0xFFFFFFFF )
+    if( nPenColor_ !=  SALCOLOR_NONE )
         XDrawPoint( GetXDisplay(), GetDrawable(), SelectPen(), nX, nY );
 }
 
 void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    if( nSalColor != 0xFFFFFFFF )
+    if( nSalColor != SALCOLOR_NONE )
     {
         Display *pDisplay = GetXDisplay();
 
-        if( nPenColor_ == 0xFFFFFFFF && !bPenGC_ )
+        if( (nPenColor_ == SALCOLOR_NONE) && !bPenGC_ )
         {
             SetLineColor( nSalColor );
             XDrawPoint( pDisplay, GetDrawable(), SelectPen(), nX, nY );
-            nPenColor_ = 0xFFFFFFFF;
+            nPenColor_ = SALCOLOR_NONE;
             bPenGC_ = False;
         }
         else
@@ -758,7 +780,7 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    if( nPenColor_ != 0xFFFFFFFF )
+    if( nPenColor_ != SALCOLOR_NONE )
     {
         if ( GetDisplay()->GetProperties() & PROPERTY_BUG_DrawLine )
         {
@@ -776,7 +798,7 @@ void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 {
-    if( nBrushColor_ != 0xFFFFFFFF )
+    if( nBrushColor_ != SALCOLOR_NONE )
     {
         XFillRectangle( GetXDisplay(),
                         GetDrawable(),
@@ -784,7 +806,7 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
                         nX, nY, nDX, nDY );
     }
     // Beschreibung DrawRect verkehrt, deshalb -1
-    if( nPenColor_ != 0xFFFFFFFF )
+    if( nPenColor_ != SALCOLOR_NONE )
         XDrawRectangle( GetXDisplay(),
                         GetDrawable(),
                         SelectPen(),
@@ -864,7 +886,7 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
         }
     }
 
-    if( nBrushColor_ != 0xFFFFFFFF )
+    if( nBrushColor_ != SALCOLOR_NONE )
         XFillPolygon( GetXDisplay(),
                       GetDrawable(),
                       SelectBrush(),
@@ -880,7 +902,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                                    const sal_uInt32    *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
-    if( nBrushColor_ != 0xFFFFFFFF )
+    if( nBrushColor_ != SALCOLOR_NONE )
     {
         ULONG       i, n;
         XLIB_Region pXRegA  = NULL;
@@ -918,25 +940,9 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
         }
    }
 
-   if( nPenColor_ != 0xFFFFFFFF )
+   if( nPenColor_ != SALCOLOR_NONE )
        for( ULONG i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
-{
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
-        return false;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-bool X11SalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
-{
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
-        return false;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1010,6 +1016,456 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.aColormap = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
     aRes.pRenderFormat = pRenderFormat_;
     return aRes;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// B2DPolygon support methods
+
+namespace { // anonymous namespace to prevent export
+// the methods and structures here are used by the
+// B2DPolyPolygon->RenderTrapezoid conversion algorithm
+
+// compare two line segments
+// assumption: both segments point downward
+// assumption: they must have at least some y-overlap
+// assumption: rA.p1.y <= rB.p1.y
+bool IsLeftOf( const XLineFixed& rA, const XLineFixed& rB )
+{
+    bool bAbove = (rA.p1.y <= rB.p1.y);
+    const XLineFixed& rU = bAbove ? rA : rB;
+    const XLineFixed& rL = bAbove ? rB : rA;
+
+    const XFixed aXDiff = rU.p2.x - rU.p1.x;
+    const XFixed aYDiff = rU.p2.y - rU.p1.y;
+
+    if( (rU.p1.y != rL.p1.y) || (rU.p1.x != rL.p1.x) )
+    {
+        const sal_Int64 n1 = (sal_Int64)aXDiff * (rL.p1.y - rU.p1.y);
+        const sal_Int64 n2 = (sal_Int64)aYDiff * (rL.p1.x - rU.p1.x);
+        if( n1 != n2 )
+            return ((n1 < n2) == bAbove);
+    }
+
+    if( (rU.p2.y != rL.p2.y) || (rU.p2.x != rL.p2.x) )
+    {
+        const sal_Int64 n3 = (sal_Int64)aXDiff * (rL.p2.y - rU.p1.y);
+        const sal_Int64 n4 = (sal_Int64)aYDiff * (rL.p2.x - rU.p1.x);
+        if( n3 != n4 )
+            return ((n3 < n4) == bAbove);
+    }
+
+    // both segments overlap
+    return false;
+}
+
+struct HalfTrapezoid
+{
+    // assumptions:
+    //    maLine.p1.y <= mnY < maLine.p2.y
+    XLineFixed  maLine;
+    XFixed      mnY;
+};
+
+struct HalfTrapCompare
+{
+    bool operator()( const HalfTrapezoid& rA, const HalfTrapezoid& rB ) const
+    {
+        bool bIsTopLeft = false;
+        if( rA.mnY != rB.mnY )  // sort top-first if possible
+            bIsTopLeft = (rA.mnY < rB.mnY);
+        else                    // else sort left-first
+            bIsTopLeft = IsLeftOf( rA.maLine, rB.maLine );
+        // adjust to priority_queue sorting convention
+        return !bIsTopLeft;
+    }
+};
+
+typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueue;
+
+typedef std::vector<XTrapezoid> TrapezoidVector;
+
+class TrapezoidXCompare
+{
+    const TrapezoidVector& mrVector;
+public:
+    TrapezoidXCompare( const TrapezoidVector& rVector )
+        : mrVector( rVector ) {}
+    bool operator()( int nA, int nB ) const
+        { return IsLeftOf( mrVector[nA].left, mrVector[nB].left ); }
+};
+
+typedef std::multiset< int, TrapezoidXCompare > ActiveTrapSet;
+
+class TrapezoidYCompare
+{
+    const TrapezoidVector& mrVector;
+public:
+    TrapezoidYCompare( const TrapezoidVector& rVector )
+        : mrVector( rVector ) {}
+    bool operator()( int nA, int nB ) const
+        { return (mrVector[nA].bottom < mrVector[nB].bottom); }
+};
+
+typedef std::multiset< int, TrapezoidYCompare > VerticalTrapSet;
+} // end of anonymous namespace
+
+// draw a poly-polygon
+bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+{
+    // nothing to do for empty polypolygons
+    const int nPolygonCount = rPolyPoly.count();
+    if( nPolygonCount <= 0 )
+        return TRUE;
+
+    // nothing to do if everything is transparent
+    if( (nBrushColor_ == SALCOLOR_NONE)
+    &&  (nPenColor_ == SALCOLOR_NONE) )
+        return TRUE;
+
+    // cannot handle pencolor!=brushcolor yet
+    if( (nPenColor_ != SALCOLOR_NONE)
+    &&  (nPenColor_ != nBrushColor_) )
+        return FALSE;
+
+    // TODO: remove the env-variable when no longer needed
+    static const char* pRenderEnv = getenv( "SAL_DISABLE_RENDER_POLY" );
+    if( pRenderEnv )
+        return FALSE;
+
+    // check xrender support for trapezoids
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+    if( !rRenderPeer.AreTrapezoidsSupported() )
+        return FALSE;
+
+    // check xrender support for matching visual
+    Visual* pVisual = GetVisual().GetVisual();
+    XRenderPictFormat* pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
+    if( !pVisualFormat )
+        return FALSE;
+
+    // don't bother with polygons outside of visible area
+    const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
+    basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
+    aPolyRange.intersect( aViewRange );
+    if( aPolyRange.isEmpty() )
+        return true;
+
+    // convert the polypolygon to trapezoids
+
+    // first convert the B2DPolyPolygon to HalfTrapezoids
+    HTQueue aHTQueue;
+    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
+    {
+        ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
+
+        // get rid of bezier segments
+        if( aOuterPolygon.areControlPointsUsed() )
+            aOuterPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aOuterPolygon, 0.125 );
+
+        // clip polygon against view
+        // (the call below for removing self intersections can be made much cheaper by this)
+        // TODO: move clipping before subdivision when clipPolyonRange learns to handle curves
+        const basegfx::B2DPolyPolygon aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
+        if( !aClippedPolygon.count() )
+                return true;
+
+        // test and remove self intersections
+        // TODO: make code intersection save, then remove this test
+        basegfx::B2DPolyPolygon aInnerPolyPoly(basegfx::tools::solveCrossovers( aClippedPolygon));
+        const int nInnerPolyCount = aInnerPolyPoly.count();
+        for( int nInnerPolyIdx = 0; nInnerPolyIdx < nInnerPolyCount; ++nInnerPolyIdx )
+        {
+            ::basegfx::B2DPolygon aInnerPolygon = aInnerPolyPoly.getB2DPolygon( nInnerPolyIdx );
+            const int nPointCount = aInnerPolygon.count();
+            if( !nPointCount )
+                continue;
+
+            // convert polygon point pairs to HalfTrapezoids
+            // connect the polygon point with the first one if needed
+            XPointFixed aOldXPF = { 0, 0 };
+            XPointFixed aNewXPF;
+            for( int nPointIdx = 0; nPointIdx <= nPointCount; ++nPointIdx, aOldXPF = aNewXPF )
+            {
+                const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
+                const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
+                // convert the B2DPoint into XRENDER units
+                aNewXPF.x = XDoubleToFixed( aPoint.getX() );
+                aNewXPF.y = XDoubleToFixed( aPoint.getY() );
+
+                // check if enough data is available for a new HalfTrapezoid
+                if( nPointIdx == 0 )
+                    continue;
+                // ignore vertical segments
+                if( aNewXPF.y == aOldXPF.y )
+                    continue;
+
+                // construct HalfTrapezoid as topdown segment
+                HalfTrapezoid aHT;
+                if( aNewXPF.y < aOldXPF.y )
+                {
+                    aHT.maLine.p1 = aNewXPF;
+                    aHT.maLine.p2 = aOldXPF;
+                }
+                else
+                {
+                    aHT.maLine.p2 = aNewXPF;
+                    aHT.maLine.p1 = aOldXPF;
+                }
+
+                aHT.mnY = aHT.maLine.p1.y;
+
+#if 0 // ignore clipped HalfTrapezoids
+            if( aHT.mnY < 0 )
+                aHT.mnY = 0;
+            else if( aHT.mnY > 10000 )
+                continue;
+#endif
+
+                // queue up the HalfTrapezoid
+                aHTQueue.push( aHT );
+            }
+        }
+    }
+
+    if( aHTQueue.empty() )
+        return TRUE;
+
+    // then convert the HalfTrapezoids into full Trapezoids
+    TrapezoidVector aTrapVector;
+    aTrapVector.reserve( aHTQueue.size() * 2 ); // just a guess
+
+    TrapezoidXCompare aTrapXCompare( aTrapVector );
+    ActiveTrapSet aActiveTraps( aTrapXCompare );
+
+    TrapezoidYCompare aTrapYCompare( aTrapVector );
+    VerticalTrapSet aVerticalTraps( aTrapYCompare );
+
+    while( !aHTQueue.empty() )
+    {
+        XTrapezoid aTrapezoid;
+
+        // convert a HalfTrapezoid pair
+        const HalfTrapezoid& rLeft = aHTQueue.top();
+        aTrapezoid.top = rLeft.mnY;
+        aTrapezoid.bottom = rLeft.maLine.p2.y;
+        aTrapezoid.left = rLeft.maLine;
+
+#if 0
+        // ignore empty trapezoids
+        if( aTrapezoid.bottom <= aTrapezoid.top )
+            continue;
+#endif
+
+        aHTQueue.pop();
+        if( aHTQueue.empty() ) // TODO: assert
+            break;
+        const HalfTrapezoid& rRight = aHTQueue.top();
+        aTrapezoid.right = rRight.maLine;
+        aHTQueue.pop();
+
+        aTrapezoid.bottom = aTrapezoid.left.p2.y;
+        if( aTrapezoid.bottom > aTrapezoid.right.p2.y )
+            aTrapezoid.bottom = aTrapezoid.right.p2.y;
+
+        // keep the full Trapezoid candidate
+        aTrapVector.push_back( aTrapezoid );
+
+        // unless it splits an older trapezoid
+        bool bSplit = false;
+        for(;;)
+        {
+            // check if the new trapezoid overlaps with an old trapezoid
+            ActiveTrapSet::iterator aActiveTrapsIt
+                = aActiveTraps.upper_bound( aTrapVector.size()-1 );
+            if( aActiveTrapsIt == aActiveTraps.begin() )
+                break;
+            --aActiveTrapsIt;
+
+            XTrapezoid& rLeftTrap = aTrapVector[ *aActiveTrapsIt ];
+
+            // in the ActiveTrapSet there are still trapezoids where
+            // a vertical overlap with new trapezoids is no longer possible
+            // they could have been removed in the verticaltraps loop below
+            // but this would have been expensive and is not needed as we can
+            // simply ignore them now and remove them from the ActiveTrapSet
+            // so they won't bother us in the future
+            if( rLeftTrap.bottom <= aTrapezoid.top )
+            {
+                aActiveTraps.erase( aActiveTrapsIt );
+                continue;
+            }
+
+            // check if there is horizontal overlap
+            // aTrapezoid.left==rLeftTrap.right is allowed though
+            if( !IsLeftOf( aTrapezoid.left, rLeftTrap.right ) )
+                break;
+
+            // split the old trapezoid and keep its upper part
+            // find the old trapezoids entry in the VerticalTrapSet and remove it
+            typedef std::pair<VerticalTrapSet::iterator, VerticalTrapSet::iterator> VTSPair;
+            VTSPair aVTSPair = aVerticalTraps.equal_range( *aActiveTrapsIt );
+            VerticalTrapSet::iterator aVTSit = aVTSPair.first;
+            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit );
+            if( aVTSit != aVTSPair.second )
+                aVerticalTraps.erase( aVTSit );
+            // then update the old trapezoid's bottom
+            rLeftTrap.bottom = aTrapezoid.top;
+            // enter the updated old trapzoid in VerticalTrapSet
+            aVerticalTraps.insert( aVerticalTraps.begin(), *aActiveTrapsIt );
+            // the old trapezoid is no longer active
+            aActiveTraps.erase( aActiveTrapsIt );
+
+            // the trapezoid causing the split has become obsolete
+            // so its both sides have to be re-queued
+            HalfTrapezoid aHT;
+            aHT.mnY = aTrapezoid.top;
+            aHT.maLine = aTrapezoid.left;
+            aHTQueue.push( aHT );
+            aHT.maLine = aTrapezoid.right;
+            aHTQueue.push( aHT );
+
+            bSplit = true;
+            break;
+        }
+
+        // keep or forget the resulting full Trapezoid
+        if( bSplit )
+            aTrapVector.pop_back();
+        else
+        {
+            aActiveTraps.insert( aTrapVector.size()-1 );
+            aVerticalTraps.insert( aTrapVector.size()-1 );
+        }
+
+        // mark trapezoids that can no longer be split as inactive
+        // and recycle their sides which were not fully resolved
+        static const XFixed nMaxTop = +0x7FFFFFFF;
+        XFixed nNewTop = aHTQueue.empty() ? nMaxTop : aHTQueue.top().mnY;
+        while( !aVerticalTraps.empty() )
+        {
+            const XTrapezoid& rOldTrap = aTrapVector[ *aVerticalTraps.begin() ];
+            if( nNewTop < rOldTrap.bottom )
+                break;
+            // the reference Trapezoid can no longer be split
+            aVerticalTraps.erase( aVerticalTraps.begin() );
+
+            // recycle its sides that were not fully resolved
+            HalfTrapezoid aHT;
+            aHT.mnY = rOldTrap.bottom;
+            if( rOldTrap.left.p2.y > rOldTrap.bottom )
+            {
+                aHT.maLine = rOldTrap.left;
+                aHTQueue.push( aHT );
+            }
+            if( rOldTrap.right.p2.y > rOldTrap.bottom )
+            {
+                aHT.maLine = rOldTrap.right;
+                aHTQueue.push( aHT );
+            }
+        }
+    }
+
+    // create xrender Picture for polygon foreground
+    Display* pXDisplay = GetXDisplay();
+    int nVisualDepth = pVisualFormat->depth;
+    SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ nVisualDepth ];
+    if( !rEntry.m_aPicture )
+    {
+#ifdef DBG_UTIL
+        int iDummy;
+        unsigned uDummy;
+        XLIB_Window wDummy;
+        unsigned int nDrawDepth;
+        ::XGetGeometry( pXDisplay, hDrawable_, &wDummy, &iDummy, &iDummy,
+                      &uDummy, &uDummy, &uDummy, &nDrawDepth );
+        DBG_ASSERT( static_cast<unsigned>(nVisualDepth) == nDrawDepth, "depth messed up for XRender" );
+#endif // DBG_UTIL
+
+        rEntry.m_aPixmap = ::XCreatePixmap( pXDisplay, hDrawable_, 1, 1, nVisualDepth );
+        XRenderPictureAttributes aAttr;
+        aAttr.repeat = true;
+
+        XRenderPictFormat* pXRPF = rRenderPeer.FindStandardFormat(PictStandardARGB32);
+        rEntry.m_aPicture = rRenderPeer.CreatePicture ( rEntry.m_aPixmap, pXRPF, CPRepeat, aAttr );
+    }
+
+    // set polygon foreground color and opacity
+    XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency);
+    rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
+
+    // notify xrender of target drawable
+    XRenderPictureAttributes aAttr;
+    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, aAttr );
+
+    // set clipping
+    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+        rRenderPeer.SetPictureClipRegion( aDst, pClipRegion_ );
+
+    // render the trapezoids
+    const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
+    rRenderPeer.CompositeTrapezoids( PictOpOver,
+        rEntry.m_aPicture, aDst, pMaskFormat, 0, 0, &aTrapVector[0], aTrapVector.size() );
+
+    return TRUE;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin)
+{
+    const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+    if( !rRenderPeer.AreTrapezoidsSupported() )
+        return false;
+
+    // get the area polygon for the line polygon
+    basegfx::B2DPolygon aPolygon = rPolygon;
+    if( (rLineWidth.getX() != rLineWidth.getY())
+    && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
+    {
+        // prepare for createAreaGeometry() with anisotropic linewidth
+        basegfx::B2DHomMatrix aAnisoMatrix;
+        aAnisoMatrix.scale( 1.0, rLineWidth.getX() / rLineWidth.getY() );
+        aPolygon.transform( aAnisoMatrix );
+    }
+
+    // AW: reSegment no longer needed; new createAreaGeometry will remove exteme positions
+    // and create bezier polygons
+    //if( aPolygon.areControlPointsUsed() )
+    //    aPolygon = basegfx::tools::reSegmentPolygonEdges( aPolygon, 8, true, false );
+    //const basegfx::B2DPolyPolygon aAreaPolyPoly = basegfx::tools::createAreaGeometryForSimplePolygon(
+    //    aPolygon, 0.5*rLineWidth.getX(), eLineJoin );
+    const basegfx::B2DPolyPolygon aAreaPolyPoly(basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin));
+
+    if( (rLineWidth.getX() != rLineWidth.getY())
+    && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
+    {
+        // postprocess createAreaGeometry() for anisotropic linewidth
+        basegfx::B2DHomMatrix aAnisoMatrix;
+        aAnisoMatrix.scale( 1.0, rLineWidth.getY() / rLineWidth.getX() );
+        aPolygon.transform( aAnisoMatrix );
+    }
+
+    // temporarily adjust brush color to pen color
+    // since the line is drawn as an area-polygon
+    const SalColor aKeepBrushColor = nBrushColor_;
+    nBrushColor_ = nPenColor_;
+
+    // draw each area polypolygon component individually
+    // to emulate the polypolygon winding rule "non-zero"
+    bool bDrawOk = true;
+    const int nPolyCount = aAreaPolyPoly.count();
+    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+    {
+        const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
+        bDrawOk = drawPolyPolygon( aOnePoly, 0.0);
+        if( !bDrawOk )
+            break;
+    }
+
+    // restore the original brush GC
+    nBrushColor_ = aKeepBrushColor;
+    return bDrawOk;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
