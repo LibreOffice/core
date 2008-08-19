@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scene3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,11 @@
 #define _E3D_SCENE3D_HXX
 
 #include <svx/camera3d.hxx>
-#include <svx/label3d.hxx>
 #include <goodies/base3d.hxx>
 #include <goodies/b3dtrans.hxx>
 #include <tools/time.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <svx/obj3d.hxx>
 
 namespace sdr
 {
@@ -57,7 +57,6 @@ class E3DSceneGeoData : public E3DObjGeoData
 {
 public:
     Camera3D                    aCamera;
-    E3dLabelList                aLabelList;
 
     E3DSceneGeoData() {}
 };
@@ -91,7 +90,6 @@ protected:
     B3dLightGroup               aLightGroup;
 
     Camera3D                    aCamera;
-    E3dLabelList                aLabelList;
 
     // Zeit, die der letzte Paint() benoetigte
     Time                        aPaintTime;
@@ -126,8 +124,6 @@ protected:
                             const TypeId   &rBCType,
                             const SfxHint  &rHint,
                             const TypeId   &rHintType);
-
-    BOOL AreThereTransparentParts() const;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -259,9 +255,6 @@ public:
     virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
                                                  const Fraction& rYFact);
     virtual void    RecalcSnapRect();
-
-    // Paint MUSS ueberladen werden
-    virtual sal_Bool DoPaintObject(XOutputDevice&, const SdrPaintInfoRec&) const = 0;
 
     virtual E3dScene* GetScene() const;
 
