@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdogrp.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,8 @@
 #include "precompiled_svx.hxx"
 #include <linkmgr.hxx>
 
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
 #include <unotools/datetime.hxx>
 
 #include <svx/svdogrp.hxx>
@@ -54,7 +50,6 @@
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 
-#include "svdxout.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include "svditer.hxx"
@@ -66,9 +61,7 @@
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svtools/whiter.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/sdr/properties/groupproperties.hxx>
