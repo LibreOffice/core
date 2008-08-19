@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoattr.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include "svditext.hxx"
 #include "svdtouch.hxx"
 #include <svx/svdmodel.hxx>
-#include "svdxout.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdattrx.hxx>
@@ -172,91 +171,6 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
     return nRetval;
 }
 
-INT32 SdrAttrObj::ImpGetLineEndAdd() const
-{
-    const SfxItemSet& rSet = GetMergedItemSet();
-    BOOL bStartSet(TRUE);
-    BOOL bEndSet(TRUE);
-
-    if(SFX_ITEM_DONTCARE != rSet.GetItemState(XATTR_LINESTART))
-    {
-        String aStr(((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetName());
-        if(!aStr.Len())
-            bStartSet = FALSE;
-    }
-
-    if(rSet.GetItemState(XATTR_LINEEND) != SFX_ITEM_DONTCARE)
-    {
-        String aStr(((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetName());
-        if(!aStr.Len())
-            bEndSet = FALSE;
-    }
-
-    BOOL bLineEndSet = bStartSet || bEndSet;
-    XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
-
-    if(XLINE_NONE == eLine)
-        return 0; // Garkeine Linie da.
-
-    // Strichstaerke
-    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-    sal_Int32 nSttWdt = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
-
-    if(nSttWdt < 0)
-        nSttWdt = -nLineWdt * nSttWdt / 100;
-
-    if(!bLineEndSet)
-        nSttWdt = 0;
-
-    BOOL bSttCenter = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
-    sal_Int32 nSttHgt = 0;
-
-    if(bSttCenter)
-    {
-        // Linienende steht um die Haelfe ueber
-        basegfx::B2DPolyPolygon aSttPoly(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
-        nSttHgt = XOutputDevice::getLineStartEndDistance(aSttPoly, nSttWdt, bSttCenter);
-        // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
-    }
-
-    nSttWdt++;
-    nSttWdt /= 2;
-
-    // Lieber etwas mehr, dafuer keine Wurzel ziehen
-    sal_Int32 nSttAdd = Max(nSttWdt, nSttHgt);
-    nSttAdd *= 3;
-    nSttAdd /= 2;
-
-    sal_Int32 nEndWdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
-
-    if(nEndWdt < 0)
-        nEndWdt = -nLineWdt * nEndWdt / 100; // <0 = relativ
-
-    if(!bLineEndSet)
-        nEndWdt = 0;
-
-    BOOL bEndCenter = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
-    sal_Int32 nEndHgt = 0;
-
-    if(bEndCenter)
-    {
-        // Linienende steht um die Haelfe ueber
-        basegfx::B2DPolyPolygon aEndPoly(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
-        nEndHgt = XOutputDevice::getLineStartEndDistance(aEndPoly, nEndWdt, bEndCenter);
-        // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
-    }
-
-    nEndWdt++;
-    nEndWdt /= 2;
-
-    // Lieber etwas mehr, dafuer keine Wurzel ziehen
-    sal_Int32 nEndAdd = Max(nEndWdt, nEndHgt);
-    nEndAdd *= 3;
-    nEndAdd /= 2;
-
-    return Max(nSttAdd, nEndAdd);
-}
-
 //////////////////////////////////////////////////////////////////////////////
 
 FASTBOOL SdrAttrObj::ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) const
@@ -271,71 +185,6 @@ FASTBOOL SdrAttrObj::ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) cons
     {
         nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
         nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-void SdrAttrObj::ImpAddShadowToBoundRect()
-{
-    sal_Int32 nXDist;
-    sal_Int32 nYDist;
-
-    if(ImpGetShadowDist(nXDist, nYDist))
-    {
-        if(nXDist > 0)
-            aOutRect.Right() += nXDist;
-        else
-            aOutRect.Left() += nXDist;
-
-        if(nYDist > 0)
-            aOutRect.Bottom() += nYDist;
-        else
-            aOutRect.Top() += nYDist;
-    }
-}
-
-FASTBOOL SdrAttrObj::ImpSetShadowAttributes( const SfxItemSet& rSet, SfxItemSet& rShadowSet ) const
-{
-    BOOL bShadOn=((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
-
-    if(bShadOn)
-    {
-        const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-        Color aShadCol(rShadColItem.GetColorValue());
-        sal_uInt16 nTransp = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-        XFillStyle eStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-        BOOL bFillBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
-
-        if(eStyle==XFILL_HATCH && !bFillBackground)
-        {
-            // #41666#
-            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue();
-            aHatch.SetColor(aShadCol);
-            rShadowSet.Put(XFillHatchItem(String(), aHatch));
-        }
-        else
-        {
-            if(eStyle != XFILL_NONE && eStyle != XFILL_SOLID)
-            {
-                // also fuer Gradient und Bitmap
-                rShadowSet.Put(XFillStyleItem(XFILL_SOLID));
-            }
-
-            rShadowSet.Put(XFillColorItem(String(),aShadCol));
-
-            // #92183# set XFillTransparenceItem only when no FloatTransparence is used,
-            // else the OutDev will use the wrong method
-            if(nTransp)
-            {
-                const XFillFloatTransparenceItem& rFillFloatTransparence =
-                    (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE);
-                if(!rFillFloatTransparence.IsEnabled())
-                    rShadowSet.Put(XFillTransparenceItem(nTransp));
-            }
-        }
-
         return TRUE;
     }
 
