@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,20 +29,24 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#include <svx/charscaleitem.hxx>
-#include <svx/algitem.hxx>
-#include <svx/svdpagv.hxx>
+
 #include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "SectionView.hxx"
 #include "UITools.hxx"
-#include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/pathoptions.hxx>
+
 #include <tools/diagnose_ex.h>
-#include <svtools/ctrltool.hxx>
+#include <tools/string.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+#include <svx/charscaleitem.hxx>
+#include <svx/algitem.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/xtable.hxx>       // XColorTable
 #include <svx/brshitem.hxx>
 #include <svx/fontitem.hxx>
@@ -69,17 +73,23 @@
 #include <svx/charreliefitem.hxx>
 #include <svx/charrotateitem.hxx>
 #include <svx/charhiddenitem.hxx>
+#include <svx/xgrscit.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xtable.hxx>
-#include "RptObject.hxx"
+#include <svx/dialogs.hrc>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/unoprov.hxx>
+
+#include <svtools/pathoptions.hxx>
+#include <svtools/ctrltool.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
-#include "rptui_slotid.hrc"
-#include "uistrings.hrc"
+
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
@@ -88,10 +98,15 @@
 #include <i18npool/mslangid.hxx>
 #include "dlgpage.hxx"
 #include <vcl/msgbox.hxx>
+#include "rptui_slotid.hrc"
+#include "uistrings.hrc"
+#include "RptObject.hxx"
 #include "ModuleHelper.hxx"
 #include "RptDef.hxx"
 #include "RptResId.hrc"
-#include <tools/string.hxx>
+#include "ReportDefinition.hxx"
+#include "RptModel.hxx"
+
 #define ITEMID_FONT                     10
 #define ITEMID_FONTHEIGHT               11
 #define ITEMID_LANGUAGE                 12
@@ -335,6 +350,60 @@ namespace
         _rItemSet.Put(SvxPostureItem(aFont.GetItalic(),_nPosture));
         _rItemSet.Put(SvxWeightItem(aFont.GetWeight(),_nWeight));
         return aFont;
+    }
+
+    void lcl_fillShapeToItems( const uno::Reference<report::XShape >& _xShape,SfxItemSet& _rItemSet )
+    {
+        uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
+        SvxUnoPropertyMapProvider aMap;
+        SfxItemPropertyMap* pPropertyMap = aMap.GetMap(SVXMAP_CUSTOMSHAPE);
+        while ( pPropertyMap->pName )
+        {
+            const ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii(pPropertyMap->pName);
+            if ( xInfo->hasPropertyByName(sPropertyName) )
+            {
+                const SfxPoolItem* pItem = _rItemSet.GetItem(pPropertyMap->nWID);
+                if ( pItem )
+                {
+                    ::std::auto_ptr<SfxPoolItem> pClone(pItem->Clone());
+                    pClone->PutValue(_xShape->getPropertyValue(sPropertyName),pPropertyMap->nMemberId);
+                    _rItemSet.Put(*pClone,pPropertyMap->nWID);
+                }
+            } // if ( xInfo->hasPropertyByName(sPropertyName) )
+            ++pPropertyMap;
+        }
+    }
+
+    void lcl_fillItemsToShape( const uno::Reference<report::XShape >& _xShape,const SfxItemSet& _rItemSet )
+    {
+        const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
+        SvxUnoPropertyMapProvider aMap;
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetMap(SVXMAP_CUSTOMSHAPE);
+        while ( pPropertyMap->pName )
+        {
+            const ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii(pPropertyMap->pName);
+            if ( SFX_ITEM_SET == _rItemSet.GetItemState(pPropertyMap->nWID) && xInfo->hasPropertyByName(sPropertyName) )
+            {
+                const beans::Property aProp = xInfo->getPropertyByName( sPropertyName );
+                if ( ( aProp.Attributes & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
+                {
+                    const SfxPoolItem* pItem = _rItemSet.GetItem(pPropertyMap->nWID);
+                    if ( pItem )
+                    {
+                        uno::Any aValue;
+                        pItem->QueryValue(aValue,pPropertyMap->nMemberId);
+                        try
+                        {
+                            _xShape->setPropertyValue(sPropertyName,aValue);
+                        }
+                        catch(uno::Exception&)
+                        { // shapes have a bug so we ignore this one.
+                        }
+                    } // if ( pItem )
+                }
+            }
+            ++pPropertyMap;
+        } // while ( pPropertyMap->pName )
     }
     // -------------------------------------------------------------------------
     void lcl_CharPropertiesToItems( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
@@ -750,6 +819,53 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     return bSuccess;
 }
+// -----------------------------------------------------------------------------
+bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::Reference< awt::XWindow>& _rxParentWindow )
+{
+    OSL_PRECOND( _xShape.is() && _rxParentWindow.is(), "openCharDialog: invalid parameters!" );
+    if ( !_xShape.is() || !_rxParentWindow.is() )
+        return false;
+
+    ::boost::shared_ptr<rptui::OReportModel> pModel  = ::reportdesign::OReportDefinition::getSdrModel(_xShape->getSection()->getReportDefinition());
+
+    Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+
+    //static USHORT pRanges[] =
+    //{
+    //  XATTR_START,XATTR_END,
+ //       0
+    //};
+
+    bool bSuccess = false;
+    try
+    {
+        SfxItemPool& rItemPool = pModel->GetItemPool();
+        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() ) );
+
+        lcl_fillShapeToItems(_xShape,*pDescriptor);
+
+        {   // want the dialog to be destroyed before our set
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get(),RID_SVXDLG_AREA ));
+            // #i74099# by default, the dialog deletes the current color table if a different one is loaded
+            // (see SwDrawShell::ExecDrawDlg)
+            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
+            if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+                pDialog->DontDeleteColorTable();
+            bSuccess = ( RET_OK == pDialog->Execute() );
+            if ( bSuccess )
+            {
+                lcl_fillItemsToShape(_xShape,*pDialog->GetOutputItemSet());
+            }
+        }
+    }
+    catch(uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return bSuccess;
+}
 
 // -----------------------------------------------------------------------------
 void applyCharacterSettings( const uno::Reference< report::XReportControlFormat >& _rxReportControlFormat, const uno::Sequence< beans::NamedValue >& _rSettings )
@@ -808,17 +924,6 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-}
-
-// -----------------------------------------------------------------------------
-bool openCharDialog(const uno::Reference<report::XReportControlFormat>& _rxReportControlFormat,
-                    const uno::Reference< awt::XWindow>& _xWindow)
-{
-    uno::Sequence< beans::NamedValue > aSettings;
-    if ( !openCharDialog( _rxReportControlFormat, _xWindow, aSettings ) )
-        return false;
-    applyCharacterSettings( _rxReportControlFormat, aSettings );
-    return true;
 }
 
 // -----------------------------------------------------------------------------
@@ -951,9 +1056,9 @@ Rectangle getRectangleFromControl(SdrObject* _pControl)
 }
 // -----------------------------------------------------------------------------
 // check overlapping
-void correctOverlapping(SdrObject* _pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert)
+void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,bool _bInsert)
 {
-    OSectionView* pSectionView = _pReportSection->getView();
+    OSectionView& rSectionView = _aReportSection.getSectionView();
     uno::Reference< report::XReportComponent> xComponent(_pControl->getUnoShape(),uno::UNO_QUERY);
     // Rectangle aRet(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
     // aRet.setHeight(aRet.getHeight() + 1);
@@ -963,7 +1068,7 @@ void correctOverlapping(SdrObject* _pControl,::boost::shared_ptr<OReportSection>
     bool bOverlapping = true;
     while ( bOverlapping )
     {
-        SdrObject* pOverlappedObj = isOver(aRect,*_pReportSection->getPage(),*pSectionView,true, _pControl);
+        SdrObject* pOverlappedObj = isOver(aRect,*_aReportSection.getPage(),rSectionView,true, _pControl);
         bOverlapping = pOverlappedObj != NULL;
         if ( bOverlapping )
         {
@@ -973,7 +1078,17 @@ void correctOverlapping(SdrObject* _pControl,::boost::shared_ptr<OReportSection>
         }
     }
     if ( !bOverlapping && _bInsert ) // now insert objects
-        pSectionView->InsertObjectAtView(_pControl,*pSectionView->GetSdrPageView(),SDRINSERT_ADDMARK);
+        rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(),SDRINSERT_ADDMARK);
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void setZoomFactor(const sal_Int16 _nZoom,Window& _rWindow)
+{
+    Fraction aZoom(_nZoom,100);
+    MapMode aMapMode( _rWindow.GetMapMode() );
+    aMapMode.SetScaleX(aZoom);
+    aMapMode.SetScaleY(aZoom);
+    _rWindow.SetMapMode(aMapMode);
 }
 // -----------------------------------------------------------------------------
 } // namespace rptui
