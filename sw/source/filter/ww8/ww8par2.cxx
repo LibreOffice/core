@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.145 $
+ * $Revision: 1.146 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,7 +265,7 @@ public:
     SwPosition *GetPos() { return pTmpPos; }
 
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
-    const short GetAktCol() const { return nAktCol; }
+    short GetAktCol() const { return nAktCol; }
     // find name of numrule valid for current WW-COL
     const String& GetNumRuleName() const;
     void SetNumRuleName( const String& rName );
@@ -401,7 +401,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         bFtnEdn = true;
 
         // read content of Ft-/End-Note
-        Read_HdFtFtnText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, static_cast< short >(rDesc.meType));
+        Read_HdFtFtnText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
         bFtEdOk = true;
         bFtnEdn = bOld;
 
@@ -464,6 +464,7 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
     }
 
     FtnDescriptor aDesc;
+    aDesc.mbAutoNum = true;
     if (eEDN == pRes->nSprmId)
     {
         aDesc.meType = MAN_EDN;
@@ -3586,7 +3587,7 @@ bool SwWW8ImplReader::IsInvalidOrToBeMergedTabCell() const
                 );
 }
 
-const USHORT SwWW8ImplReader::StyleUsingLFO( USHORT nLFOIndex ) const
+USHORT SwWW8ImplReader::StyleUsingLFO( USHORT nLFOIndex ) const
 {
     USHORT nRes = USHRT_MAX;
     if( pCollA )
