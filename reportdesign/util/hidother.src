@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hidother.src,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,4 +144,5 @@ hidspecial UID_RPT_PROP_DLG_LINKFIELDS { HelpId = UID_RPT_PROP_DLG_LINKFIELDS; }
 hidspecial HID_RPT_PROP_MASTERFIELDS { HelpId = HID_RPT_PROP_MASTERFIELDS; };
 hidspecial HID_RPT_PROP_DETAILFIELDS { HelpId = HID_RPT_PROP_DETAILFIELDS; };
 hidspecial HID_RPT_PROP_PREVIEW_COUNT { HelpId = HID_RPT_PROP_PREVIEW_COUNT; };
-
+hidspecial HID_RPT_PROP_AREA { HelpId = HID_RPT_PROP_AREA; };
+hidspecial UID_RPT_RPT_PROP_DLG_AREA { HelpId = UID_RPT_RPT_PROP_DLG_AREA; };
