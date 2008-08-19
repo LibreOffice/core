@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excdoc.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,6 @@
 
 
 //------------------------------------------------------------------------
-
-// #include <math.h>
 
 #include "scitems.hxx"
 
@@ -86,6 +84,7 @@
 #include "xepivot.hxx"
 #include "XclExpChangeTrack.hxx"
 
+#include <math.h>
 
 static String lcl_GetVbaTabName( SCTAB n )
 {
