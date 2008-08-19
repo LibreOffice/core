@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmctrler.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,73 +30,78 @@
 #ifndef _SVX_FMCTRLER_HXX
 #define _SVX_FMCTRLER_HXX
 
-#include <comphelper/stl_types.hxx>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-#include <com/sun/star/sdb/XSQLErrorListener.hpp>
-#include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdb/XRowSetApproveListener.hpp>
-#include <com/sun/star/sdbc/XRowSetListener.hpp>
-#include <com/sun/star/form/XResetListener.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/ContainerEvent.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
+#include "fmtools.hxx"
+#include "formcontrolling.hxx"
+#include "sqlparserclient.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
+#include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/form/XConfirmDeleteBroadcaster.hpp>
-#include <com/sun/star/form/DatabaseParameterEvent.hpp>
+#include <com/sun/star/awt/XTabController.hpp>
+#include <com/sun/star/awt/XTabControllerModel.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XTextListener.hpp>
+#include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/ContainerEvent.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/DatabaseDeleteEvent.hpp>
-#include <com/sun/star/form/XDatabaseParameterListener.hpp>
-#include <com/sun/star/form/XLoadListener.hpp>
-#include <com/sun/star/form/XConfirmDeleteListener.hpp>
+#include <com/sun/star/form/DatabaseParameterEvent.hpp>
 #include <com/sun/star/form/ErrorEvent.hpp>
+#include <com/sun/star/form/validation/XFormComponentValidityListener.hpp>
+#include <com/sun/star/form/XConfirmDeleteBroadcaster.hpp>
+#include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XDatabaseParameterBroadcaster2.hpp>
+#include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/form/XFormController.hpp>
 #include <com/sun/star/form/XFormControllerListener.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#include <com/sun/star/form/XGridControlListener.hpp>
+#include <com/sun/star/form/XLoadListener.hpp>
+#include <com/sun/star/form/XResetListener.hpp>
+#include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
-#include <com/sun/star/util/XModeSelector.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/awt/XTextListener.hpp>
-#include <com/sun/star/awt/XItemListener.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XTabController.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/form/validation/XFormComponentValidityListener.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <vcl/timer.hxx>
-#include "fmtools.hxx"
-#include "sqlparserclient.hxx"
-#include <cppuhelper/implbase6.hxx>
-#include <cppuhelper/implbase12.hxx>
-#include <cppuhelper/compbase12.hxx>
-#include <cppuhelper/propshlp.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <tools/debug.hxx>
-#include <connectivity/sqlparse.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
+#include <com/sun/star/sdb/XRowSetApproveListener.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
+#include <com/sun/star/sdb/XSQLErrorListener.hpp>
+#include <com/sun/star/sdbc/XRowSetListener.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/util/XModeSelector.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+/** === end UNO includes === **/
+
 #include <comphelper/broadcasthelper.hxx>
-#include "formcontrolling.hxx"
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/stl_types.hxx>
+#include <connectivity/sqlparse.hxx>
+#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/implbase12.hxx>
+#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/propshlp.hxx>
+#include <tools/debug.hxx>
+#include <vcl/timer.hxx>
 
 struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , sal_Bool>
 {
@@ -148,12 +153,13 @@ typedef ::cppu::ImplHelper12<   ::com::sun::star::util::XModeSelector
                             ,   ::com::sun::star::form::XResetListener
                             >   FmXFormController_BASE2;
 
-typedef ::cppu::ImplHelper6<    ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::ImplHelper7<    ::com::sun::star::lang::XUnoTunnel
                            ,    ::com::sun::star::frame::XDispatch
                            ,    ::com::sun::star::awt::XMouseListener
                            ,    ::com::sun::star::form::validation::XFormComponentValidityListener
                            ,    ::com::sun::star::task::XInteractionHandler
                            ,    ::com::sun::star::lang::XInitialization
+                           ,    ::com::sun::star::form::XGridControlListener
                            >    FmXFormController_BASE3;
 
 //==================================================================
@@ -348,6 +354,9 @@ public:
 // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
+// XGridControlListener
+    virtual void SAL_CALL columnChanged( const ::com::sun::star::lang::EventObject& _event ) throw (::com::sun::star::uno::RuntimeException);
+
 // ::com::sun::star::beans::XPropertyChangeListener -> aenderung der stati
     virtual void SAL_CALL propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -533,6 +542,14 @@ protected:
     void implControlInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rxControl, bool _bAddToEventAttacher );
     /// called when a control is not to be handled by the controller anymore
     void implControlRemoved( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rxControl, bool _bRemoveFromEventAttacher );
+
+    /** sets m_xCurrentControl, plus does administrative tasks depending on it
+    */
+    void    implSetCurrentControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+
+    /** invalidates the FormFeatures which depend on the current control
+    */
+    void    implInvalidateCurrentControlDependentFeatures();
 
     void onModify( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
     void onActivate();
