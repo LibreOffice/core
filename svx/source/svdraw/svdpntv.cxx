@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpntv.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <sdrpaintwindow.hxx>
 #include <goodies/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xoutx.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -48,7 +47,6 @@
 #include <svx/svdpntv.hxx>
 #include <svx/editdata.hxx>
 #include <svx/svdmrkv.hxx>
-#include "svdxout.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -224,7 +222,6 @@ DBG_NAME(SdrPaintView);
 
 void SdrPaintView::ImpClearVars()
 {
-    pXOut=NULL;
 #ifdef DBG_UTIL
     pItemBrowser=NULL;
 #endif
@@ -276,7 +273,10 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     aDefaultAttr(pModel1->GetItemPool()),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
-    mbPagePaintingAllowed(sal_True)
+    mbPagePaintingAllowed(true),
+    mbHideOle(false),
+    mbHideChart(false),
+    mbHideDraw(false)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
@@ -286,8 +286,6 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     {
         AddWindowToPaintView(pOut);
     }
-
-    pXOut = new XOutputDevice(pOut);
 
     // Flag zur Visualisierung von Gruppen
     bVisualizeEnteredGroup = TRUE;
@@ -301,11 +299,6 @@ SdrPaintView::~SdrPaintView()
     DBG_DTOR(SdrPaintView,NULL);
     EndListening( maColorConfig );
     ClearPageView();
-
-    if(pXOut)
-    {
-        delete pXOut;
-    }
 
 #ifdef DBG_UTIL
     if(pItemBrowser)
@@ -724,10 +717,18 @@ void SdrPaintView::SetAllLayersPrintable(BOOL bPrn)
     }
 }
 
+void SdrPaintView::PrePaint()
+{
+    if(mpPageView)
+    {
+        mpPageView->PrePaint();
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #define SVX_REPAINT_TIMER_TEST
 
-void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMod, ::sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
 #ifdef SVX_REPAINT_TIMER_TEST
 #define REMEMBERED_TIMES_COUNT  (10)
@@ -789,7 +790,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
     OSL_ENSURE(pPaintWindow, "SdrPaintView::CompleteRedraw: No OutDev (!)");
 
-    DoCompleteRedraw(*pPaintWindow, aOptimizedRepaintRegion, nPaintMod, pRedirector);
+    DoCompleteRedraw(*pPaintWindow, aOptimizedRepaintRegion, pRedirector);
     EndCompleteRedraw(*pPaintWindow);
 
 #ifdef SVX_REPAINT_TIMER_TEST
@@ -870,13 +871,13 @@ SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
     return pPaintWindow;
 }
 
-void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, USHORT nPaintMod, ::sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     // redraw all PageViews with the target. This may expand the RedrawRegion
     // at the PaintWindow, plus taking care of FormLayer expansion
     if(mpPageView)
     {
-        mpPageView->CompleteRedraw(rPaintWindow, rReg, nPaintMod, pRedirector);
+        mpPageView->CompleteRedraw(rPaintWindow, rReg, pRedirector);
     }
 }
 
@@ -890,15 +891,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
     else
     {
         // draw postprocessing, only for known devices
-
-        // #i74769# it is necessary to always paint FormLayer:
-        //
-        // - AreFormControlsUsed() is not very reliable since ATM ShouldPaintObject may create the
-        //   objects, so XControlContainer may be empty
-        // - In life mode (and thus always since we have controls which even exist as a child window
-        //   when not in life mode) the child windows always need to be positioned and scaled, even
-        //   when not visible (to not stay at their last visible position, but move outside reliably)
-        // - last but not least: There may be other objects on the form layer (an error, but happened)
+        // it is necessary to always paint FormLayer
         ImpFormLayerDrawing(rPaintWindow);
 
         // look for active TextEdit. As long as this cannot be painted to a VDev,
@@ -1074,12 +1067,10 @@ void SdrPaintView::GlueInvalidate() const
         if(pPaintWindow->OutputToWindow())
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-            pXOut->SetOutDev(&rOutDev);
 
             if(mpPageView)
             {
                 const SdrObjList* pOL=mpPageView->GetObjList();
-                pXOut->SetOffset(Point()); // pPV->GetOffset());
                 ULONG nObjAnz=pOL->GetObjCount();
                 for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
@@ -1090,8 +1081,6 @@ void SdrPaintView::GlueInvalidate() const
                 }
             }
         }
-
-        //pXOut->SetOffset(Point(0,0));
     }
 }
 
@@ -1392,15 +1381,11 @@ void SdrPaintView::SetAnimationPause( bool bSet )
             {
                 const SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
                 sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
+                sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
 
-                if(rObjectContact.HasObjectAnimator())
+                if(rAnimator.IsPaused() != bSet)
                 {
-                    sdr::animation::ObjectAnimator& rAnimator = rObjectContact.GetObjectAnimator();
-
-                    if(rAnimator.IsPaused() != bSet)
-                    {
-                        rAnimator.SetPaused(bSet);
-                    }
+                    rAnimator.SetPaused(bSet);
                 }
             }
         }
@@ -1654,12 +1639,8 @@ void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
         {
             const SdrPageWindow& rPageWindow = *mpPageView->GetPageWindow(a);
             sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
-
-            if(rObjectContact.HasObjectAnimator())
-            {
-                sdr::animation::ObjectAnimator& rAnimator = rObjectContact.GetObjectAnimator();
-                rAnimator.SetTime(nTime);
-            }
+            sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
+            rAnimator.SetTime(nTime);
         }
     }
 }
