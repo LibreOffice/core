@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frm_strings.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,6 +340,8 @@ namespace frm
     FORMS_CONSTASCII_STRING( URL_RECORD_NEW,        ".uno:FormController/moveToNew"     );
     FORMS_CONSTASCII_STRING( URL_RECORD_DELETE,     ".uno:FormController/deleteRecord"  );
     FORMS_CONSTASCII_STRING( URL_FORM_REFRESH,      ".uno:FormController/refreshForm"   );
+    FORMS_CONSTASCII_STRING( URL_FORM_REFRESH_CURRENT_CONTROL,
+                                                    ".uno:FormController/refreshCurrentControl"   );
 
     FORMS_CONSTASCII_STRING( URL_FORM_SORT_UP,      ".uno:FormController/sortUp"   );
     FORMS_CONSTASCII_STRING( URL_FORM_SORT_DOWN,    ".uno:FormController/sortDown"   );
