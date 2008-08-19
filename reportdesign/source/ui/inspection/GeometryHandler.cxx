@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GeometryHandler.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,14 +29,16 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "GeometryHandler.hxx"
-#include <com/sun/star/report/Function.hpp>
+
 #include <comphelper/sequence.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
-#include "uistrings.hrc"
-#endif
-#include <unotools/textsearch.hxx>
-#include "reportformula.hxx"
 #include <comphelper/types.hxx>
+#include <comphelper/property.hxx>
+
+#include "uistrings.hrc"
+#include "reportformula.hxx"
+
+#include <unotools/textsearch.hxx>
+
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
@@ -45,39 +47,42 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XStringListControl.hpp>
+#include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XShape.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <vcl/waitobj.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
+#include <com/sun/star/report/XFixedLine.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+
+#include <vcl/msgbox.hxx>
+#include <vcl/waitobj.hxx>
 #include <vcl/fldunit.hxx>
+#include <vcl/stdtext.hxx>
+
 #include "ModuleHelper.hxx"
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
 #include "RptDef.hxx"
 #include "UITools.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/report/XFixedLine.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <connectivity/dbtools.hxx>
-#include <vcl/stdtext.hxx>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <comphelper/property.hxx>
+
+
 #include <boost/bind.hpp>
 #include <tools/string.hxx>
 #include "metadata.hxx"
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
-#include <vcl/msgbox.hxx>
+
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
@@ -96,10 +101,7 @@
 #include <svx/xlnedcit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
-
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_DASH_LIST        SID_DASH_LIST
@@ -108,9 +110,7 @@
 #define ITEMID_BRUSH            SID_ATTR_BRUSH
 #include <svx/brshitem.hxx>
 #include "dlgpage.hxx"
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
 #include <toolkit/helper/convert.hxx>
 
 #define DATA_OR_FORMULA     0
@@ -796,6 +796,11 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
             break;
+        case PROPERTY_ID_AREA:
+            aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_AREA;
+            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
+            aOut.HasPrimaryButton = sal_True;
+            break;
         default:
             {
             aOut = m_xFormComponentHandler->describePropertyLine(PropertyName, _xControlFactory);
@@ -1020,6 +1025,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
             return m_xFormComponentHandler->convertToPropertyValue(PROPERTY_FONTNAME, _rControlValue);
         case PROPERTY_ID_SCOPE:
         case PROPERTY_ID_FORMULALIST:
+        case PROPERTY_ID_AREA:
             aPropertyValue = _rControlValue;
             break;
         case PROPERTY_ID_TYPE:
@@ -1057,6 +1063,8 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
     const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
     switch(nId)
     {
+        case PROPERTY_ID_AREA:
+            break;
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
             aControlValue = getConstantValue(sal_True,RID_STR_FORCENEWPAGE_CONST,aPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ForceNewPage")),PropertyName);
@@ -1241,7 +1249,16 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
             }
             aNewProps.push_back(*pFind);
         }
-    }
+    } // for (size_t i = 0; i < sizeof(pIncludeProperties)/sizeof(pIncludeProperties[0]) ;++i )
+
+    // special property for shapes
+//    if ( uno::Reference< report::XShape>(m_xReportComponent,uno::UNO_QUERY).is() )
+//    {
+//        beans::Property aValue;
+//        aValue.Name = PROPERTY_AREA;
+//        aNewProps.push_back(aValue);
+//    }
+    // re-enable when the remaining issues of #i88727# are fixed
 
     return uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
 }
@@ -1316,6 +1333,27 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
+    else if ( PropertyName.equalsAscii(PROPERTY_AREA) )
+    {
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+        inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
+        const uno::Reference< report::XShape> xShape(m_xReportComponent,uno::UNO_QUERY);
+        aGuard.clear();
+
+        if ( rptui::openAreaDialog( xShape, xInspectorWindow) )
+        {
+            eResult = inspection::InteractiveSelectionResult_ObtainedValue;
+            beans::PropertyChangeEvent aScopeEvent;
+            aScopeEvent.PropertyName = PROPERTY_FILLCOLOR;
+            // aScopeEvent.OldValue <<= _nOldDataFieldType;
+            aScopeEvent.NewValue <<= xShape->getPropertyValue(PROPERTY_FILLCOLOR);
+            m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
+        }
+        return eResult;
+    }
+
 
     return m_xFormComponentHandler->onInteractivePropertySelection(PropertyName, Primary, _rData, _rxInspectorUI);
 }
