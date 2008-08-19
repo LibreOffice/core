@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view3d.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,18 +42,13 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xoutx.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/colritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/dialmgr.hxx>
 #include "globl3d.hxx"
 #include <svx/obj3d.hxx>
@@ -185,7 +180,7 @@ E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
 |*
 \************************************************************************/
 
-void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
+void E3dView::DrawMarkedObj(OutputDevice& rOut) const
 {
     // Existieren 3D-Objekte, deren Szenen nicht selektiert sind?
     BOOL bSpecialHandling = FALSE;
@@ -248,21 +243,10 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
         {
             // code from parent
             SortMarkedObjects();
-            pXOut->SetOutDev(&rOut);
-            SdrPaintInfoRec aInfoRec;
-            aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
-
-            Point aOfs(-rOfs.X(), -rOfs.Y());
-//          aOfs += pM->GetPageView()->GetOffset();
-
-            if(aOfs != pXOut->GetOffset())
-                pXOut->SetOffset(aOfs);
 
             pScene->SetDrawOnlySelected(TRUE);
-            pScene->SingleObjectPainter(*pXOut,aInfoRec); // #110094#-17
+            pScene->SingleObjectPainter(rOut); // #110094#-17
             pScene->SetDrawOnlySelected(FALSE);
-
-            pXOut->SetOffset(Point(0,0));
         }
 
         // SelectionFlag zuruecksetzen
@@ -281,7 +265,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
     else
     {
         // call parent
-        SdrExchangeView::DrawMarkedObj(rOut, rOfs);
+        SdrExchangeView::DrawMarkedObj(rOut);
     }
 }
 
@@ -1886,11 +1870,6 @@ void E3dView::MergeScenes ()
 
                         switch (pSubObj->GetObjIdentifier())
                         {
-                            case E3D_OBJECT_ID:
-                                pNewObj = new E3dObject;
-                                *(E3dObject*)pNewObj = *(E3dObject*)pSubObj;
-                                break;
-
                             case E3D_CUBEOBJ_ID :
                                 pNewObj = new E3dCubeObj;
                                 *(E3dCubeObj*)pNewObj = *(E3dCubeObj*)pSubObj;
@@ -1901,11 +1880,6 @@ void E3dView::MergeScenes ()
                                 *(E3dSphereObj*)pNewObj = *(E3dSphereObj*)pSubObj;
                                 break;
 
-                            case E3D_POINTOBJ_ID:
-                                pNewObj = new E3dPointObj;
-                                *(E3dPointObj*)pNewObj = *(E3dPointObj*)pSubObj;
-                                break;
-
                             case E3D_EXTRUDEOBJ_ID:
                                 pNewObj = new E3dExtrudeObj;
                                 *(E3dExtrudeObj*)pNewObj = *(E3dExtrudeObj*)pSubObj;
@@ -1914,11 +1888,6 @@ void E3dView::MergeScenes ()
                             case E3D_LATHEOBJ_ID:
                                 pNewObj = new E3dLatheObj;
                                 *(E3dLatheObj*)pNewObj = *(E3dLatheObj*)pSubObj;
-                                break;
-
-                            case E3D_LABELOBJ_ID:
-                                pNewObj = new E3dLabelObj;
-                                *(E3dLabelObj*)pNewObj = *(E3dLabelObj*)pSubObj;
                                 break;
 
                             case E3D_COMPOUNDOBJ_ID:
