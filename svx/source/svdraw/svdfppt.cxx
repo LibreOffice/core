@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.cxx,v $
- * $Revision: 1.163 $
+ * $Revision: 1.164 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,7 @@
 #include "precompiled_svx.hxx"
 #include <osl/endian.h>
 #include <vcl/svapp.hxx>
-#ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
 #include <math.h>
 #include <svx/eeitem.hxx>
 #include <sot/storage.hxx>
@@ -92,9 +90,7 @@
 #include <svx/charreliefitem.hxx>
 #include <fontitem.hxx>
 #include <svx/svdoutl.hxx>
-#ifndef _EDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
 #include <svx/lspcitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -112,9 +108,7 @@
 #include <svx/langitem.hxx>
 #include <svx/svdoole2.hxx>
 #include <unoapi.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/unohlp.hxx>
-#endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
