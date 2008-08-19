@@ -35,6 +35,7 @@
 #include <X11/extensions/Xrender.h>
 #include <postx.h>
 
+#include <vcl/salgtype.hxx>
 #include <osl/module.h>
 
 class XRenderPeer
@@ -51,19 +52,24 @@ protected:
     void                InitRenderLib();
 
     Display*            mpDisplay;
-    XRenderPictFormat*  mpGlyphFormat;
+    XRenderPictFormat*  mpStandardFormatA8;
     int                 mnRenderVersion;
     oslModule           mpRenderLib;
 
 public:
+    XRenderPictFormat* GetStandardFormatA8() const;
+    XRenderPictFormat* FindStandardFormat(int nFormat) const;
+
+    // the methods below are thin wrappers for the XRENDER API
     XRenderPictFormat* FindVisualFormat( Visual* ) const;
     XRenderPictFormat* FindPictureFormat( unsigned long nMask,
         const XRenderPictFormat& ) const;
-    Picture     CreatePicture( Drawable, XRenderPictFormat*,
-                    unsigned long, const XRenderPictureAttributes& ) const;
+    Picture     CreatePicture( Drawable, const XRenderPictFormat*,
+                    unsigned long nDrawable, const XRenderPictureAttributes& ) const;
     void        SetPictureClipRegion( Picture, XLIB_Region ) const;
-    void        CompositePicture( int,Picture,Picture,Picture,
-                    int,int,int,int,int,int,unsigned int,unsigned int) const;
+    void        CompositePicture( int nOp, Picture aSrc, Picture aMask, Picture aDst,
+                    int nXSrc, int nYSrc, int nXMask, int nYMask,
+                    int nXDst, int nYDst, unsigned nWidth, unsigned nHeight ) const;
     void        FreePicture( Picture ) const;
 
     GlyphSet    CreateGlyphSet() const;
@@ -73,32 +79,48 @@ public:
     void        FreeGlyph( GlyphSet, Glyph nGlyphId ) const;
     void        CompositeString32( Picture aSrc, Picture aDst, GlyphSet,
                     int nDstX, int nDstY, const unsigned* pText, int nTextLen ) const;
-    void        FillRectangle( int, Picture, const XRenderColor*,
-                               int, int, unsigned int, unsigned int);
+    void        FillRectangle( int nOp, Picture aDst, const XRenderColor*,
+                               int nX, int nY, unsigned nW, unsigned nH ) const;
+    void        CompositeTrapezoids( int nOp, Picture aSrc, Picture aDst,
+                    const XRenderPictFormat*, int nXSrc, int nYSrc,
+                    const XTrapezoid*, int nCount ) const;
+    bool        AddTraps( Picture aDst, int nXOfs, int nYOfs,
+                    const XTrap*, int nCount ) const;
+
+    bool        AreTrapezoidsSupported() const
+#ifdef XRENDER_LINK
+                    { return true; }
+#else
+                    { return mpXRenderCompositeTrapezoids!=NULL; }
 
 private:
     XRenderPictFormat* (*mpXRenderFindFormat)(Display*,unsigned long,
         const XRenderPictFormat*,int);
     XRenderPictFormat* (*mpXRenderFindVisualFormat)(Display*,Visual*);
+    XRenderPictFormat* (*mpXRenderFindStandardFormat)(Display*,int);
     Bool        (*mpXRenderQueryExtension)(Display*,int*,int*);
     void        (*mpXRenderQueryVersion)(Display*,int*,int*);
 
-    Picture     (*mpXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,
+    Picture     (*mpXRenderCreatePicture)(Display*,Drawable, const XRenderPictFormat*,
                     unsigned long,const XRenderPictureAttributes*);
     void        (*mpXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
     void        (*mpXRenderFreePicture)(Display*,Picture);
     void        (*mpXRenderComposite)(Display*,int,Picture,Picture,Picture,
                     int,int,int,int,int,int,unsigned,unsigned);
 
-    GlyphSet    (*mpXRenderCreateGlyphSet)(Display*,XRenderPictFormat*);
+    GlyphSet    (*mpXRenderCreateGlyphSet)(Display*, const XRenderPictFormat*);
     void        (*mpXRenderFreeGlyphSet)(Display*,GlyphSet);
     void        (*mpXRenderAddGlyphs)(Display*,GlyphSet,Glyph*,
                     const XGlyphInfo*,int,const char*,int);
     void        (*mpXRenderFreeGlyphs)(Display*,GlyphSet,Glyph*,int);
     void        (*mpXRenderCompositeString32)(Display*,int,Picture,Picture,
-                    XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int);
+                    const XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int);
     void        (*mpXRenderFillRectangle)(Display*,int,Picture,
                     const XRenderColor*,int,int,unsigned int,unsigned int);
+    void        (*mpXRenderCompositeTrapezoids)(Display*,int,Picture,Picture,
+                    const XRenderPictFormat*,int,int,const XTrapezoid*,int);
+    void        (*mpXRenderAddTraps)(Display*,Picture,int,int,const XTrap*,int);
+#endif // XRENDER_LINK
 };
 
 //=====================================================================
@@ -126,6 +148,20 @@ inline int XRenderPeer::GetVersion() const
     return mnRenderVersion;
 }
 
+inline XRenderPictFormat* XRenderPeer::GetStandardFormatA8() const
+{
+    return mpStandardFormatA8;
+}
+
+inline XRenderPictFormat* XRenderPeer::FindStandardFormat(int nFormat) const
+{
+#ifdef XRENDER_LINK
+    return XRenderFindStandardFormat(mpDisplay, nFormat);
+#else
+    return (*mpXRenderFindStandardFormat)(mpDisplay, nFormat);
+#endif
+}
+
 inline XRenderPictFormat* XRenderPeer::FindVisualFormat( Visual* pVisual ) const
 {
 #ifdef XRENDER_LINK
@@ -146,7 +182,7 @@ inline XRenderPictFormat* XRenderPeer::FindPictureFormat( unsigned long nFormatM
 }
 
 inline Picture XRenderPeer::CreatePicture( Drawable aDrawable,
-    XRenderPictFormat* pVisFormat, unsigned long nValueMask,
+    const XRenderPictFormat* pVisFormat, unsigned long nValueMask,
     const XRenderPictureAttributes& rRenderAttr ) const
 {
 #ifdef XRENDER_LINK
@@ -194,9 +230,9 @@ inline void XRenderPeer::FreePicture( Picture aPicture ) const
 inline GlyphSet XRenderPeer::CreateGlyphSet() const
 {
 #ifdef XRENDER_LINK
-    return XRenderCreateGlyphSet( mpDisplay, mpGlyphFormat );
+    return XRenderCreateGlyphSet( mpDisplay, mpStandardFormatA8 );
 #else
-    return (*mpXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
+    return (*mpXRenderCreateGlyphSet)( mpDisplay, mpStandardFormatA8 );
 #endif
 }
 
@@ -255,13 +291,40 @@ inline void XRenderPeer::CompositeString32( Picture aSrc, Picture aDst,
 }
 
 inline void XRenderPeer::FillRectangle( int a, Picture b, const XRenderColor* c,
-                                        int d, int e, unsigned int f, unsigned int g)
+    int d, int e, unsigned int f, unsigned int g) const
 {
 #ifdef XRENDER_LINK
     XRenderFillRectangle( mpDisplay, a, b, c, d, e, f, g );
 #else
     (*mpXRenderFillRectangle)( mpDisplay, a, b, c, d, e, f, g );
 #endif
+}
+
+
+inline void XRenderPeer::CompositeTrapezoids( int nOp,
+    Picture aSrc, Picture aDst, const XRenderPictFormat* pXRPF,
+    int nXSrc, int nYSrc, const XTrapezoid* pXT, int nCount ) const
+{
+#ifdef XRENDER_LINK
+    XRenderCompositeTrapezoids( mpDisplay, nOp, aSrc, aDst, pXRPF,
+        nXSrc, nYSrc, pXT, nCount );
+#else
+    (*mpXRenderCompositeTrapezoids)( mpDisplay, nOp, aSrc, aDst, pXRPF,
+        nXSrc, nYSrc, pXT, nCount );
+#endif
+}
+
+inline bool XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
+    const XTrap* pTraps, int nCount ) const
+{
+#ifdef XRENDER_LINK
+    XRenderAddTraps( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );
+#else
+    if( !mpXRenderAddTraps )
+        return false;
+    (*mpXRenderAddTraps)( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );
+#endif
+    return true;
 }
 
 //=====================================================================
@@ -280,6 +343,18 @@ inline ScopedPic::~ScopedPic()
 inline Picture& ScopedPic::Get()
 {
     return maPicture;
+}
+
+//=====================================================================
+
+inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTransparency = 0.0 )
+{
+    XRenderColor aRetVal;
+    aRetVal.red   = SALCOLOR_RED(   rSalColor ); aRetVal.red   |= (aRetVal.red   << 8);
+    aRetVal.green = SALCOLOR_GREEN( rSalColor ); aRetVal.green |= (aRetVal.green << 8);
+    aRetVal.blue  = SALCOLOR_BLUE(  rSalColor ); aRetVal.blue  |= (aRetVal.blue  << 8);
+    aRetVal.alpha = static_cast< unsigned short >((1.0 - fTransparency) * double(0xffff));
+    return aRetVal;
 }
 
 //=====================================================================
