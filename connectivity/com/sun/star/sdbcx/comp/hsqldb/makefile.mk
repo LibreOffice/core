@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +41,6 @@ SECONDARY_PACKAGE = org$/hsqldb$/lib
 # --- Files --------------------------------------------------------  
 
 
-JARFILES = unoil.jar
 .IF "$(SYSTEM_HSQLDB)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(HSQLDB_JAR)
 .ELSE
