@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShape3d.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include "EnhancedCustomShape3d.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xoutx.hxx>
 #ifndef _SV_POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -410,7 +409,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             if( aPolyPoly.count() )
             {
-                const basegfx::B2DRange aTempRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly)));
+                const basegfx::B2DRange aTempRange(basegfx::tools::getRange(aPolyPoly));
                 const Rectangle aBoundRect(FRound(aTempRange.getMinX()), FRound(aTempRange.getMinY()), FRound(aTempRange.getMaxX()), FRound(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 
