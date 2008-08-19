@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterView.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,11 +167,7 @@ public:
     void HandleDrawModeChange (void);
 
     virtual void Resize (void);
-    virtual void CompleteRedraw (
-        OutputDevice* pDevice,
-        const Region& rPaintArea,
-        USHORT nPaintMode,
-        ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    virtual void CompleteRedraw (OutputDevice* pDevice, const Region& rPaintArea, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
     virtual void InvalidateOneWin (
         ::Window& rWindow);
     virtual void InvalidateOneWin (
@@ -245,7 +241,8 @@ protected:
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
-    /// This model is used for the maPage object.
+    /// This model is used for the maPage object and for the page visualizers
+    /// (SdrPageObj)
     SdrModel maPageModel;
     /** This page acts as container for the page objects that represent the
         pages of the document that is represented by the SlideSorterModel.
