@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navbarcontrol.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -531,6 +531,7 @@ namespace frm
         _rFeatureIds.push_back( SID_FM_RECORD_NEW );
         _rFeatureIds.push_back( SID_FM_RECORD_DELETE );
         _rFeatureIds.push_back( SID_FM_REFRESH );
+        _rFeatureIds.push_back( SID_FM_REFRESH_FORM_CONTROL );
         _rFeatureIds.push_back( SID_FM_SORTUP );
         _rFeatureIds.push_back( SID_FM_SORTDOWN );
         _rFeatureIds.push_back( SID_FM_ORDERCRIT );
