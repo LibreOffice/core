@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdograf.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@
 #include <vcl/svapp.hxx>
 
 #include "linkmgr.hxx"
-#include "svdxout.hxx"
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
@@ -371,11 +370,6 @@ sal_Bool SdrGrafObj::IsAnimated() const
     return pGraphic->IsAnimated();
 }
 
-//sal_Bool SdrGrafObj::IsTransparent() const
-//{
-//  return pGraphic->IsTransparent();
-//}
-
 sal_Bool SdrGrafObj::IsEPS() const
 {
     return pGraphic->IsEPS();
@@ -394,12 +388,6 @@ const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
 const Size& SdrGrafObj::GetGrafPrefSize() const
 {
     return pGraphic->GetPrefSize();
-}
-
-sal_Bool SdrGrafObj::DrawGraphic(OutputDevice* pOut, const Point& rPt, const Size& rSz,
-    const GraphicAttr* pAttr, sal_uInt32 nFlags) const
-{
-    return pGraphic->Draw(pOut, rPt, rSz, pAttr, nFlags);
 }
 
 // -----------------------------------------------------------------------------
@@ -538,7 +526,6 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    //FASTBOOL bTrans = pGraphic->IsTransparent();
     FASTBOOL bAnim = pGraphic->IsAnimated();
     FASTBOOL bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
@@ -586,275 +573,6 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
     }
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-//////////////////////////////////////////////////////////////////////////////
-// #i25616#
-
-void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut) const
-{
-    const sal_Bool bShadOn(((SdrShadowItem&)(GetObjectItem(SDRATTR_SHADOW))).GetValue());
-
-    if(bShadOn)
-    {
-        const sal_Bool bDoPaintFilling(IsObjectTransparent());
-        const sal_Bool bDoPaintLine(0L != ImpGetLineWdt());
-
-        if(bDoPaintFilling || bDoPaintLine)
-        {
-            ((SdrGrafObj*)this)->mbInsidePaint = sal_True;
-            SdrRectObj::ImpDoPaintRectObjShadow(rOut, bDoPaintFilling, bDoPaintLine);
-            ((SdrGrafObj*)this)->mbInsidePaint = sal_False;
-        }
-
-        OutputDevice* pOutDev = rOut.GetOutDev();
-        const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
-        const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
-        const Color aShadowColor(((SdrShadowColorItem&)GetObjectItem(SDRATTR_SHADOWCOLOR)).GetColorValue());
-        const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)GetObjectItem(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
-
-        if(IsObjectTransparent())
-        {
-            // object which casts the shadow is somehow transparent, create a transparent
-            // shadow
-            Rectangle aSnapRect(GetSnapRect());
-            aSnapRect.Move(nXDist, nYDist);
-            const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
-
-            // get BitmapEx
-            Graphic aTempGraphic = GetTransformedGraphic();
-            Size aPixelSize(aSnapRectPixel.GetSize());
-
-            // #i48495#
-            // When this is done on a very fine resolution OutputDevice (e.g. PDF export) it may lead
-            // to problems since huge pixel bitmaps may be created. Sizes need to be cropped here. Later
-            // it may be nice to have the quadratic pixel size configurable somewhere.
-            const sal_uInt32 nMaxBitmapPixels(800L * 800L);
-            const sal_uInt32 nAllPixels(aPixelSize.getWidth() * aPixelSize.getHeight());
-
-            if(nAllPixels > nMaxBitmapPixels)
-            {
-                const double fScale(sqrt((double)nMaxBitmapPixels) / sqrt((double)nAllPixels));
-                aPixelSize.setWidth(FRound(aPixelSize.getWidth() * fScale));
-                aPixelSize.setHeight(FRound(aPixelSize.getHeight() * fScale));
-            }
-
-            BitmapEx aTempBitmapEx = aTempGraphic.GetBitmapEx(&aPixelSize);
-
-            // paint
-            if(aTempBitmapEx.IsTransparent())
-            {
-                if(aTempBitmapEx.IsAlpha())
-                {
-                    BitmapPalette aTempBitmapPalette(2);
-                    aTempBitmapPalette[0] = aShadowColor;
-                    aTempBitmapPalette[1] = Color(COL_BLACK);
-                    Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
-                    AlphaMask aTempAlphaMask(aTempBitmapEx.GetAlpha());
-                    BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
-                    pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
-                }
-                else
-                {
-                    if(0 != nShadowTransparence && 100 > nShadowTransparence)
-                    {
-                        Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
-                        aTempBitmapMask.Invert();
-                        BYTE bEraseValue(0xff);
-                        AlphaMask aTempAlphaMask(aPixelSize, &bEraseValue);
-                        BYTE aReplaceTransparency(sal::static_int_cast< BYTE >((nShadowTransparence * 0x00ff) / 100));
-                        aTempAlphaMask.Replace(aTempBitmapMask, aReplaceTransparency);
-
-                        BitmapPalette aTempBitmapPalette(2);
-                        aTempBitmapPalette[0] = aShadowColor;
-                        aTempBitmapPalette[1] = Color(COL_BLACK);
-                        Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
-
-                        BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
-                        pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
-                    }
-                    else
-                    {
-                        Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
-                        pOutDev->DrawMask(aSnapRect.TopLeft(), aTempBitmapMask, aShadowColor);
-                    }
-                }
-            }
-        }
-        else
-        {
-            // shadow for the whole rectangle
-            pOutDev->SetFillColor(aShadowColor);
-            pOutDev->SetLineColor();
-            Polygon aOutputPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
-            aOutputPoly.Move(nXDist, nYDist);
-
-            if(0 != nShadowTransparence && 100 > nShadowTransparence)
-            {
-                PolyPolygon aPolyPoly(aOutputPoly);
-                pOutDev->DrawTransparent(aPolyPoly, nShadowTransparence);
-            }
-            else
-            {
-                pOutDev->DrawPolygon(aOutputPoly);
-            }
-        }
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// #i25616#
-
-void SdrGrafObj::ImpDoPaintGrafObj(XOutputDevice& rOut) const
-{
-    const sal_Bool bDoPaintFilling(IsObjectTransparent());
-    const sal_Bool bDoPaintLine(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue());
-
-    if(bDoPaintFilling || bDoPaintLine)
-    {
-        ((SdrGrafObj*)this)->mbInsidePaint = sal_True;
-        SdrRectObj::ImpDoPaintRectObj(rOut, bDoPaintFilling, bDoPaintLine);
-        ((SdrGrafObj*)this)->mbInsidePaint = sal_False;
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-sal_Bool SdrGrafObj::DoPaintObject( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    if( IsEmptyPresObj()
-        || pGraphic->IsSwappedOut()
-        || GRAPHIC_NONE == pGraphic->GetType()
-        || GRAPHIC_DEFAULT == pGraphic->GetType())
-    {
-        // This should not happen. If it happens, someone is using DoPaintObject
-        // directly. This would require a draft paint. All this cases are handled
-        // from the DrawContact object.
-    }
-    else if(SDRPAINTMODE_CONTOUR & rInfoRec.nPaintMode)
-    {
-        //#i80528# to not run i a recursion in TakeContour, do not setup an outliner but just
-        // use a polygon paint; the paint is executed to get a contour of the object anyways
-        OutputDevice* pOutDev = rOut.GetOutDev();
-        pOutDev->SetFillColor();
-        pOutDev->SetLineColor(COL_BLACK);
-        Polygon aOutputPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
-
-        // draw content replacement
-        pOutDev->DrawPolygon(aOutputPoly);
-
-        const sal_Bool bShadOn(((SdrShadowItem&)(GetObjectItem(SDRATTR_SHADOW))).GetValue());
-
-        if(bShadOn)
-        {
-            // draw shadow replacement
-            const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
-            const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
-            aOutputPoly.Move(nXDist, nYDist);
-            pOutDev->DrawPolygon(aOutputPoly);
-        }
-    }
-    else
-    {
-        OutputDevice* pOutDev = rOut.GetOutDev();
-        Point aLogPos(aRect.TopLeft());
-
-        // #116639# Simply take the logic size, forward/backward conversion is no longer necessary
-        // and may make the pixel size one too big.
-        Size aLogSize(aRect.GetSize());
-
-        GraphicAttr aAttr(aGrafInfo);
-        const SdrView* pView = (rInfoRec.pPV ? &rInfoRec.pPV->GetView() : 0L);
-        const sal_uInt32 nGraphicManagerDrawMode(pView ? pView->GetGraphicManagerDrawMode() : GRFMGR_DRAW_STANDARD);
-
-        sal_Int32 nDrehWink(aGeo.nDrehWink);
-        //sal_Int32 nShearWink(aGeo.nShearWink);
-        sal_Bool bRotate(nDrehWink != 0 && nDrehWink != 18000);
-        //sal_Bool bShear(nShearWink != 0);
-        sal_Bool bRota180(nDrehWink == 18000);
-        sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
-        sal_Bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
-        sal_Bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
-
-        // #i25616#
-        ImpDoPaintGrafObjShadow(rOut);
-
-        // #i25616#
-        ImpDoPaintGrafObj(rOut);
-
-        aAttr.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
-
-        if(bRota180)
-        {
-            aLogPos.X() -= (aLogSize.Width() - 1L);
-            aLogPos.Y() -= (aLogSize.Height() - 1L);
-        }
-
-        if(GRAPHIC_BITMAP == pGraphic->GetType())
-        {
-            // #111096#
-            // paint animated graphic?
-            if(rInfoRec.mbUseBitmapEx)
-            {
-                if ( pOutDev->GetConnectMetaFile() )    // SJ: #i52183#
-                    pOutDev->DrawBitmapEx( aLogPos, aLogSize, rInfoRec.maBitmapEx );
-                else
-                {
-                    Point aDestPos = pOutDev->LogicToPixel(aLogPos);
-                    Size aDestSize = pOutDev->LogicToPixel(aLogSize);
-                    sal_Bool bMapModeWasEnabled(pOutDev->IsMapModeEnabled());
-
-                    pOutDev->EnableMapMode(sal_False);
-                    pOutDev->DrawBitmapEx(aDestPos, aDestSize, rInfoRec.maBitmapEx);
-                    pOutDev->EnableMapMode(bMapModeWasEnabled);
-                }
-            }
-            else
-            {
-                if(bRotate && !bRota180)
-                {
-                    aAttr.SetRotation((sal_uInt16)(nDrehWink / 10));
-                }
-
-                DrawGraphic(pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode);
-            }
-        }
-        else
-        {
-            // MetaFiles
-            const sal_uInt32 nOldDrawMode(pOutDev->GetDrawMode());
-
-            // For mode GRAYBITMAP, we want to show metafiles gray, too.
-            if(nOldDrawMode & DRAWMODE_GRAYBITMAP)
-            {
-                sal_uInt32 nNewDrawMode(nOldDrawMode);
-                nNewDrawMode &= ~(DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_NOFILL);
-                nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL;
-                pOutDev->SetDrawMode(nNewDrawMode);
-            }
-
-            if(bRotate && !bRota180)
-            {
-                aAttr.SetRotation((sal_uInt16)(nDrehWink / 10));
-            }
-
-            DrawGraphic(pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode);
-            pOutDev->SetDrawMode(nOldDrawMode);
-        }
-
-        bRetval = sal_True;
-    }
-
-    if(HasText())
-    {
-        bRetval |= SdrTextObj::DoPaintObject(rOut, rInfoRec);
-    }
-
-    return bRetval;
 }
 
 // -----------------------------------------------------------------------------
@@ -1405,7 +1123,8 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     Graphic aGraphic;
 
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL;
-                    if( mbInsidePaint && GetViewContact().IsPreviewRendererOnly() )
+
+                    if(mbInsidePaint && !GetViewContact().HasViewObjectContacts(true))
                     {
 //                          Rectangle aSnapRect(GetSnapRect());
 //                          const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
