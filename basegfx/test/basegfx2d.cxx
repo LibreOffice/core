@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basegfx2d.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -609,6 +609,18 @@ public:
                        "straight line 3" );
         aPlotter.plot( aCrossing,
                        "crossing" );
+
+        // break up a complex bezier (loopy, spiky or self intersecting)
+        // into simple segments (left to right)
+        B2DCubicBezier aSegment = aCrossing;
+        double fExtremePos(0.0);
+
+        aPlotter.plot( aSegment, "segment" );
+        while(aSegment.getMinimumExtremumPosition(fExtremePos))
+        {
+            aSegment.split(fExtremePos, 0, &aSegment);
+            aPlotter.plot( aSegment, "segment" );
+        }
     }
 
     void tearDown()
