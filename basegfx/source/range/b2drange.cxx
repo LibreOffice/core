@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2drange.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
+
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -71,7 +72,6 @@ namespace basegfx
             B2IRange(fround(rRange.getMinimum()),
                      fround(rRange.getMaximum()));
     }
-
 } // end of namespace basegfx
 
 // eof
