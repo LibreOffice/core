@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocapt.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +33,11 @@
 #include <tools/bigint.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svtools/style.hxx>
-
 #include <svx/svdocapt.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdattrx.hxx>
 #include <svx/svdpool.hxx>
-#include "svdxout.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
 #include "svdtouch.hxx"
@@ -56,9 +54,8 @@
 #include <svx/xfltrit.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/sdr/properties/captionproperties.hxx>
-
-// #i32599#
 #include <vcl/salbtype.hxx>     // FRound
+#include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -185,10 +182,19 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
 
 sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::CaptionProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrCaptionObj(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -224,64 +230,6 @@ SdrCaptionObj::~SdrCaptionObj()
 {
 }
 
-sal_Bool SdrCaptionObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    // special shadow paint for calc
-    if(mbSpecialTextBoxShadow)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-        sal_uInt32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        sal_uInt32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-        const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-        Color aShadCol(rShadColItem.GetColorValue());
-        sal_uInt16 nTransp = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-        XFillStyle eStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-
-        SfxItemSet aSet(rSet);
-        // #99001# Hide lines for special calc shadow
-        aSet.Put(XLineStyleItem(XLINE_NONE));
-
-        if(eStyle == XFILL_HATCH) // #41666#
-        {
-            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue();
-            aHatch.SetColor(aShadCol);
-            aSet.Put(XFillHatchItem(String(),aHatch));
-        }
-        else
-        {
-            if(eStyle != XFILL_NONE && eStyle != XFILL_SOLID)
-            {
-                // also fuer Gradient und Bitmap
-                aSet.Put(XFillStyleItem(XFILL_SOLID));
-            }
-
-            aSet.Put(XFillColorItem(String(),aShadCol));
-            aSet.Put(XFillTransparenceItem(nTransp));
-        }
-
-        rOut.SetFillAttr(aSet);
-        // #99001# Hide lines for special calc shadow
-        rOut.SetLineAttr(aSet);
-
-        sal_Int32 nEckRad(GetEckenradius());
-        if(PaintNeedsXPoly(nEckRad))
-        {
-            XPolygon aX(GetXPoly());
-            aX.Move(nXDist,nYDist);
-            rOut.DrawPolygon(aX.getB2DPolygon());
-        }
-        else
-        {
-            Rectangle aR(aRect);
-            aR.Move(nXDist,nYDist);
-            rOut.DrawRect(aR,USHORT(2*nEckRad),USHORT(2*nEckRad));
-        }
-    }
-
-    // call parent for normal paint
-    return SdrRectObj::DoPaintObject(rOut, rInfoRec);
-}
-
 void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bRotateFreeAllowed=FALSE;
@@ -303,28 +251,6 @@ void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 UINT16 SdrCaptionObj::GetObjIdentifier() const
 {
     return UINT16(OBJ_CAPTION);
-}
-
-void SdrCaptionObj::RecalcBoundRect()
-{
-    aOutRect=GetSnapRect();
-
-    // #i32599#
-    // Add BoundRect of TailPlygon here, not in RecalcSnapRect()
-    aOutRect.Union(aTailPoly.GetBoundRect());
-
-    long nLineWdt=ImpGetLineWdt();
-    nLineWdt++; nLineWdt/=2;
-    long nLEndWdt=ImpGetLineEndAdd();
-    if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
-    if (nLineWdt!=0) {
-        aOutRect.Left  ()-=nLineWdt;
-        aOutRect.Top   ()-=nLineWdt;
-        aOutRect.Right ()+=nLineWdt;
-        aOutRect.Bottom()+=nLineWdt;
-    }
-    ImpAddShadowToBoundRect();
-    ImpAddTextToBoundRect();
 }
 
 SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
@@ -713,7 +639,7 @@ FASTBOOL SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     aRect.SetPos(rStat.GetNow());
     ImpCalcTail(aPara,aTailPoly,aRect);
     rStat.SetActionRect(aRect);
-    bBoundRectDirty=TRUE;
+    SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     return TRUE;
 }
@@ -796,7 +722,6 @@ void SdrCaptionObj::RecalcSnapRect()
 {
     SdrRectObj::RecalcSnapRect();
     // #i32599#
-    // Add BoundRect of TailPlygon in RecalcBoundRect(), not here
     // maSnapRect.Union(aTailPoly.GetBoundRect());
     // !!!!! fehlende Impl.
 }
@@ -977,6 +902,12 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     SetSnapRect(aBaseRect);
     SetTailPos(aTailPoint);
     ImpRecalcTail();
+}
+
+// geometry access
+::basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
+{
+    return aTailPoly.getB2DPolygon();
 }
 
 // eof
