@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaypolypolygon.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,21 +59,11 @@ namespace sdr
             maBaseRange = basegfx::tools::getRange(maPolyPolygon);
         }
 
-        void OverlayPolyPolygonStriped::preparePolygonData()
-        {
-            if(maPolyPolygon.areControlPointsUsed())
-            {
-                maPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(maPolyPolygon);
-            }
-        }
-
         OverlayPolyPolygonStriped::OverlayPolyPolygonStriped(
             const basegfx::B2DPolyPolygon& rPolyPolygon)
         :   OverlayObject(Color(COL_BLACK)),
             maPolyPolygon(rPolyPolygon)
         {
-            // evtl. do preparations with given polygon data
-            preparePolygonData();
         }
 
         OverlayPolyPolygonStriped::~OverlayPolyPolygonStriped()
@@ -86,9 +76,6 @@ namespace sdr
             {
                 // remember new value
                 maPolyPolygon = rNew;
-
-                // evtl. do preparations with given polygon data
-                preparePolygonData();
 
                 // register change (after change)
                 objectChange();
@@ -140,11 +127,6 @@ namespace sdr
                     rOutputDevice.DrawPolyLine(aPaintPoly);
                 }
             }
-        }
-
-        void OverlayPolyPolygon::preparePolygonData()
-        {
-            // do not call parent here, keep curved data
         }
 
         OverlayPolyPolygon::OverlayPolyPolygon(
