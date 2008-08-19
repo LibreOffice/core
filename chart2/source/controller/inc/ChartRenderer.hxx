@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartRenderer.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,7 @@
 #ifndef CHART_RENDERER_HXX
 #define CHART_RENDERER_HXX
 
-#include <svx/chartprettypainter.hxx>
+#include <svtools/chartprettypainter.hxx>
 #include "ServiceMacros.hxx"
 
 #include <cppuhelper/implbase2.hxx>
