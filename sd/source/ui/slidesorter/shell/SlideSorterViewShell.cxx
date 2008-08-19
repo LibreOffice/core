@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterViewShell.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -498,6 +498,16 @@ void SlideSorterViewShell::ExecStatusBar (SfxRequest& rRequest)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().ExecStatusBar(rRequest);
+}
+
+
+
+
+void SlideSorterViewShell::PrePaint()
+{
+    OSL_ASSERT(mpSlideSorter.get()!=NULL);
+    if (mpSlideSorter.get() != NULL)
+        mpSlideSorter->GetController().PrePaint();
 }
 
 
