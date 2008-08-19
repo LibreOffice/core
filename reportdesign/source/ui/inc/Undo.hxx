@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Undo.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,19 +128,6 @@ namespace rptui
                             ,USHORT nCommentID);
 
         virtual String      GetComment() const;
-    };
-
-    /** \class OToggleSlotUndo
-     * \brief calls the slot every time an undo or redo action is performed.
-    */
-    class OToggleSlotUndo : public OCommentUndoAction
-    {
-        sal_uInt16 m_nSlot;
-    public:
-        TYPEINFO();
-        OToggleSlotUndo(OReportModel& rMod,sal_uInt16 _nSlot,USHORT nCommentID);
-        virtual void        Undo();
-        virtual void        Redo();
     };
 
     /** /class OGroupUndo
