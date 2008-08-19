@@ -2558,7 +2558,6 @@
 							<xsl:attribute name="字:名称">Bookmark</xsl:attribute>
 							<xsl:attribute name="字:类型">bookmark</xsl:attribute>
 						</字:区域开始>
-						<xsl:call-template name="字:锚点"/>
 						<字:区域结束 uof:locID="t0122" uof:attrList="标识符引用">
 							<xsl:attribute name="字:标识符引用"><xsl:value-of select="$link-name"/></xsl:attribute>
 						</字:区域结束>
@@ -2689,8 +2688,8 @@
 		</xsl:for-each>
 		<xsl:if test="@style:name='Heading'">
 			<xsl:element name="字:大纲级别">
+				<xsl:attribute name="uof:locID">t0054</xsl:attribute>            
 				<xsl:value-of select="substring-after(@style:name,'Heading')"/>
-				<xsl:attribute name="uof:locID">t0054</xsl:attribute>
 			</xsl:element>
 		</xsl:if>
 		<xsl:if test=".//@fo:text-align or .//@style:vertical-align">
@@ -2849,16 +2848,14 @@
 			<xsl:attribute name="uof:locID">t0195</xsl:attribute>
 			<xsl:attribute name="uof:attrList">值</xsl:attribute>
 		</xsl:element>
-		<xsl:if test=".//@fo:border or .//@fo:border-top or .//@fo:border-bottom or .//@fo:border-left or .//@fo:border-right or .//@style:shadow[not='none']">
+		<xsl:if test=".//@fo:border or .//@fo:border-top or .//@fo:border-bottom or .//@fo:border-left or .//@fo:border-right or .//@style:shadow[.!='none']">
 			<xsl:element name="字:边框">
 				<xsl:attribute name="uof:locID">t0065</xsl:attribute>
-				<xsl:call-template name="uof:边框"/>
 			</xsl:element>
 		</xsl:if>
 		<xsl:if test=".//@fo:background-color">
 			<xsl:element name="字:填充">
 				<xsl:attribute name="uof:locID">t0066</xsl:attribute>
-				<xsl:call-template name="图:填充"/>
 			</xsl:element>
 		</xsl:if>
 		<xsl:if test=".//@fo:margin-top or .//@fo:margin-bottom">
@@ -2881,6 +2878,7 @@
 		</xsl:if>
 		<xsl:if test=".//style:tab-stops">
 			<xsl:element name="字:制表位设置">
+				<xsl:attribute name="uof:locID">t0067</xsl:attribute>            
 				<xsl:for-each select=".//style:tab-stops/style:tab-stop">
 					<xsl:element name="字:制表位">
 						<xsl:attribute name="uof:locID">t0068</xsl:attribute>
@@ -2906,7 +2904,6 @@
 						</xsl:if>
 					</xsl:element>
 				</xsl:for-each>
-				<xsl:attribute name="uof:locID">t0067</xsl:attribute>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -3038,7 +3035,7 @@
 			<xsl:attribute name="uof:attrList">西文字体引用 中文字体引用 特殊字体引用 西文绘制 字号 相对字号 颜色</xsl:attribute>
 			<xsl:if test=".//@fo:font-size or .//@style:font-size-asian or  .//@style:font-size-complex">
 				<xsl:choose>
-					<xsl:when test="contains(/./@fo:font-size,'%') or contains(.//@style:font-size-asian,'%')">
+					<xsl:when test="contains(.//@fo:font-size,'%') or contains(.//@style:font-size-asian,'%')">
 						<xsl:attribute name="字:相对字号"><xsl:choose><xsl:when test=".//@fo:font-size"><xsl:value-of select="substring-before(.//@fo:font-size,'%')"/></xsl:when><xsl:when test=".//@style:font-size-asian"><xsl:value-of select="substring-before(.//@style:font-size-asian,'%')"/></xsl:when></xsl:choose></xsl:attribute>
 					</xsl:when>
 					<xsl:otherwise>
