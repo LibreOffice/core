@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdview.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1601,5 +1601,4 @@ void SdrView::SetMasterPagePaintCaching(sal_Bool bOn)
         }
     }
 }
-
 // eof
