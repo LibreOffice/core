@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpage.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,6 @@
 #include <svx/pageitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/bulitem.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/outlobj.hxx>
@@ -86,6 +85,8 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/unoapi.hxx>
 
 #include <set>
 
@@ -2778,8 +2779,8 @@ void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettin
 }
 
 bool SdPage::checkVisibility(
-    ::sdr::contact::ViewObjectContact& rOriginal,
-    ::sdr::contact::DisplayInfo& rDisplayInfo,
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo,
     bool bEdit )
 {
     if( !FmFormPage::checkVisibility( rOriginal, rDisplayInfo, bEdit ) )
@@ -2789,9 +2790,10 @@ bool SdPage::checkVisibility(
     if( pObj == NULL )
         return false;
 
-    const bool bIsPrinting(rDisplayInfo.OutputToPrinter());
-    const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-    const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != rDisplayInfo.GetProcessedPage());
+    const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
+    const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
+    const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
+    const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
 
     // empty presentation objects only visible during edit mode
     if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
@@ -2802,23 +2804,25 @@ bool SdPage::checkVisibility(
 
     if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
     {
-        SdPage* pCheckPage = (SdPage*)pObj->GetPage();
+           const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->GetPage());
+
         if( pCheckPage )
         {
             PresObjKind eKind = pCheckPage->GetPresObjKind(pObj);
 
             if((eKind == PRESOBJ_FOOTER) || (eKind == PRESOBJ_HEADER) || (eKind == PRESOBJ_DATETIME) || (eKind == PRESOBJ_SLIDENUMBER) )
             {
-                const bool bMasterObj(rDisplayInfo.GetMasterPagePainting());
-                if( bMasterObj || ( pCheckPage->GetPageKind() == PK_HANDOUT && bIsPrinting ) )
-                {
-                    // get the page that is currently painted
-                    SdPage* pPaintPage = (SdPage*)rDisplayInfo.GetProcessedPage();
+                const bool bSubContentProcessing(rDisplayInfo.GetSubContentActive());
 
-                    if( pPaintPage )
+                if( bSubContentProcessing || ( pCheckPage->GetPageKind() == PK_HANDOUT && bIsPrinting ) )
+                {
+                    // use the page that is currently processed
+                    const SdPage* pVisualizedSdPage = dynamic_cast< const SdPage* >(pVisualizedPage);
+
+                    if( pVisualizedSdPage )
                     {
                         // if we are not on a masterpage, see if we have to draw this header&footer object at all
-                        const sd::HeaderFooterSettings& rSettings = pPaintPage->getHeaderFooterSettings();
+                        const sd::HeaderFooterSettings& rSettings = pVisualizedSdPage->getHeaderFooterSettings();
 
                         switch( eKind )
                         {
@@ -2839,7 +2843,7 @@ bool SdPage::checkVisibility(
         }
     }
 
-    // i63977, do not print sdr page obj from master pages
+    // i63977, do not print SdrpageObjs from master pages
     if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
     {
         if( pObj->GetPage() && pObj->GetPage()->IsMasterPage() )
