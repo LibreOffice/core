@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imap.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <string.h>
-#include <math.h>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
@@ -45,6 +43,8 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imappoly.hxx>
 
+#include <string.h>
+#include <math.h>
 
 DBG_NAME( ImageMap )
 
