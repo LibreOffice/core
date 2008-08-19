@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hommatrixtemplate.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
-
 #include <math.h>
 #include <string.h>
 
