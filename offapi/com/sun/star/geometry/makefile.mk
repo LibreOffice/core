@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,6 +43,7 @@ PACKAGE=com$/sun$/star$/geometry
 
 IDLFILES=\
     AffineMatrix2D.idl			\
+    AffineMatrix3D.idl			\
     EllipticalArc.idl			\
     Matrix2D.idl				\
     XMapping2D.idl				\
@@ -50,6 +51,7 @@ IDLFILES=\
     RealBezierSegment2D.idl 	\
     RealPoint2D.idl				\
     RealRectangle2D.idl			\
+    RealRectangle3D.idl			\
     RealSize2D.idl				\
     IntegerPoint2D.idl			\
     IntegerRectangle2D.idl		\
