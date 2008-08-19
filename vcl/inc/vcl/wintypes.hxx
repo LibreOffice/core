@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wintypes.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,6 +184,7 @@ typedef sal_Int64 WinBits;
 #define WB_AUTOHSCROLL          ((WinBits)SAL_CONST_INT64(0x10000000))
 #define WB_DOCKABLE             ((WinBits)SAL_CONST_INT64(0x20000000))
 #define WB_AUTOVSCROLL          ((WinBits)SAL_CONST_INT64(0x40000000))
+#define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x80000000)) | WB_WORDBREAK)
 
 // system floating window
 #define WB_SYSTEMFLOATWIN       ((WinBits)SAL_CONST_INT64(0x100000000))
