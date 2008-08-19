@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdwindow.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,6 +285,18 @@ void Window::Resize()
 {
     ::Window::Resize();
     CalcMinZoom();
+}
+
+/*************************************************************************
+|*
+|* PrePaint event
+|*
+\************************************************************************/
+
+void Window::PrePaint()
+{
+    if ( mpViewShell )
+        mpViewShell->PrePaint();
 }
 
 /*************************************************************************
