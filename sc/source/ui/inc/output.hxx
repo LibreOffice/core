@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,16 +237,11 @@ public:
     // #i72502# printer only command set
     Point PrePrintDrawingLayer(long nLogStX, long nLogStY );
     void PostPrintDrawingLayer(const Point& rMMOffset); // #i74768# need offset for FormLayer
-    void PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, const Point& rMMOffset);
+    void PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset);
 
     // nur Bildschirm:
-    // #109985#
-    //void  DrawingSingle( USHORT nLayer, USHORT nObjectFlags, USHORT nDummyFlags );
-    void    DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode);
-
-    // #109985#
-    //void  DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect, USHORT nObjectFlags, USHORT nDummyFlags = 0 );
-    void    DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode);
+    void    DrawingSingle(const sal_uInt16 nLayer);
+    void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
     BOOL    SetChangedClip();       // FALSE = nix
     PolyPolygon GetChangedArea();
