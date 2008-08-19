@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ParseContext.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +114,16 @@ OSystemParseContext::~OSystemParseContext()
         case KEY_MAX:       nIndex = 11; break;
         case KEY_MIN:       nIndex = 12; break;
         case KEY_SUM:       nIndex = 13; break;
+        case KEY_EVERY:     nIndex = 14; break;
+        case KEY_ANY:       nIndex = 15; break;
+        case KEY_SOME:      nIndex = 16; break;
+        case KEY_STDDEV_POP: nIndex = 17; break;
+        case KEY_STDDEV_SAMP: nIndex = 18; break;
+        case KEY_VAR_SAMP:  nIndex = 19; break;
+        case KEY_VAR_POP:   nIndex = 20; break;
+        case KEY_COLLECT:   nIndex = 21; break;
+        case KEY_FUSION:    nIndex = 22; break;
+        case KEY_INTERSECTION: nIndex = 23; break;
         case KEY_NONE:
             DBG_ERROR( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
             break;
@@ -157,7 +167,10 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const ::
         KEY_LIKE, KEY_NOT, KEY_NULL, KEY_TRUE,
         KEY_FALSE, KEY_IS, KEY_BETWEEN, KEY_OR,
         KEY_AND, KEY_AVG, KEY_COUNT, KEY_MAX,
-        KEY_MIN, KEY_SUM
+        KEY_MIN, KEY_SUM, KEY_EVERY,
+        KEY_ANY, KEY_SOME, KEY_STDDEV_POP,
+        KEY_STDDEV_SAMP, KEY_VAR_SAMP, KEY_VAR_POP,
+        KEY_COLLECT, KEY_FUSION, KEY_INTERSECTION
     };
 
     sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
