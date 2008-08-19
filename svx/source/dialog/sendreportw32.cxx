@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sendreportw32.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,15 @@
 #include <tchar.h>
 #include <stdio.h>
 #include <systools/win32/uwinapi.h>
+
+// need to undef min and max macros from MS headers here to make
+// the std::min and std::max from stl visible again
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 
 #include "docrecovery.hxx"
 
