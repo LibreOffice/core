@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvashelper.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -855,10 +855,6 @@ namespace cairocanvas
     cairo_get_matrix( pCairo, &aOrigMatrix );
     cairo_matrix_init_identity( &aIdentityMatrix );
     cairo_set_matrix( pCairo, &aIdentityMatrix );
-
-    cairo_set_fill_rule( pCairo,
-                         eFillrule == rendering::FillRule_EVEN_ODD ?
-                         CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING );
 
     for( sal_uInt32 nPolygonIndex = 0; nPolygonIndex < aPolyPolygon.count(); nPolygonIndex++ ) {
         ::basegfx::B2DPolygon aPolygon( aPolyPolygon.getB2DPolygon( nPolygonIndex ) );
