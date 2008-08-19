@@ -8,7 +8,7 @@
 #
 # $RCSfile: version.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,61 +33,21 @@
 # target
 ADO_TARGET=ado
 
-# the major 
-ADO_MAJOR=2
-# the minor 
-ADO_MINOR=0
-# the micro 
-ADO_MICRO=0
-
-
 # ----------------------------ODBC BASE settings-----------------------------------#
 # target
 ODBC2_TARGET=odbcbase
-
-# the major 
-ODBC2_MAJOR=2
-# the minor 
-ODBC2_MINOR=0
-# the micro 
-ODBC2_MICRO=0
-
 
 # ----------------------------ODBC settings-----------------------------------#
 # target
 ODBC_TARGET=odbc
 
-# the major 
-ODBC_MAJOR=2
-# the minor 
-ODBC_MINOR=0
-# the micro 
-ODBC_MICRO=0
-
-
 # ----------------------------JDBC settings-----------------------------------#
 # target
 JDBC_TARGET=jdbc
 
-# the major 
-JDBC_MAJOR=2
-# the minor 
-JDBC_MINOR=0
-# the micro 
-JDBC_MICRO=0
-
-
 # ----------------------------dbtools settings-----------------------------------#
 # target
 DBTOOLS_TARGET=dbtools
-
-# the major 
-DBTOOLS_MAJOR=2
-# the minor 
-DBTOOLS_MINOR=0
-# the micro 
-DBTOOLS_MICRO=0
-
 
 # -----------------------DRIVER MANAGER settings--------------------------------#
 # target
@@ -117,16 +77,6 @@ DBPOOL_MICRO=0
 # target
 DBASE_TARGET=dbase
 
-# the major 
-DBASE_MAJOR=2
-# the minor 
-DBASE_MINOR=0
-# the micro 
-DBASE_MICRO=0
-
-
-
-
 # ----------------------------MOZAB settings-----------------------------------#
 # the major 
 MOZAB_MAJOR=2
@@ -135,31 +85,14 @@ MOZAB_MINOR=0
 # the micro 
 MOZAB_MICRO=0
 
-
-
 # ----------------------------MySQL settings-----------------------------------#
 # target
 MYSQL_TARGET=mysql
-
-# the major 
-MYSQL_MAJOR=2
-# the minor 
-MYSQL_MINOR=0
-# the micro 
-MYSQL_MICRO=0
 
 
 # ----------------------------Evoab settings-----------------------------------#
 # target
 EVOAB_TARGET=evoab
-
-# the major 
-EVOAB_MAJOR=1
-# the minor 
-EVOAB_MINOR=0
-# the micro 
-EVOAB_MICRO=0
-
 
 # ----------------------------Kab settings-------------------------------------#
 # target
@@ -184,15 +117,7 @@ MACAB_MINOR=0
 # the micro 
 MACAB_MICRO=0
 
-
 # ----------------------------HSQLDB settings-----------------------------------#
 # target
 HSQLDB_TARGET=hsqldb
-
-# the major 
-HSQLDB_MAJOR=2
-# the minor 
-HSQLDB_MINOR=0
-# the micro 
-HSQLDB_MICRO=0
 
