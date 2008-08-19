@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv1.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -831,9 +831,12 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             }
 
             // #i38495#
-            if(!bResetAnimationTimer && pObj->GetViewContact().SupportsAnimation())
+            if(!bResetAnimationTimer)
             {
-                bResetAnimationTimer = true;
+                if(pObj->GetViewContact().isAnimatedInAnyViewObjectContact())
+                {
+                    bResetAnimationTimer = true;
+                }
             }
         }
 
