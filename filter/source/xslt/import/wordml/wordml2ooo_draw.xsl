@@ -9,7 +9,7 @@
  
   $RCSfile: wordml2ooo_draw.xsl,v $
  
-  $Revision: 1.9 $
+  $Revision: 1.10 $
  
   This file is part of OpenOffice.org.
  
@@ -29,9 +29,13 @@
   for a copy of the LGPLv3 License.
  
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xalan="http://xml.apache.org/xalan" xmlns:oleextracter="MyOleExtracter" exclude-result-prefixes="w wx aml o dt  v xalan oleextracter" extension-element-prefixes="oleextracter">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xalan="http://xml.apache.org/xalan" xmlns:oleextracter="MyOleExtracter" xmlns:ole="java:XSLTFilterOLEExtracter" xmlns:java="http://saxon.sf.net/java-type" exclude-result-prefixes="w wx aml o dt v xalan ole oleextracter java" extension-element-prefixes="oleextracter">
     <xsl:include href="wordml2ooo_custom_draw.xsl"/>
     <xsl:include href="wordml2ooo_path.xsl"/>
+    <xsl:param name="oleExtractor" as="java:XSLTFilterOLEExtracter" select="ole:new()"/>      
+    <xsl:param name="XMultiServiceFactory" as="java:com.sun.star.lang.XMultiServiceFactory" select="ole:init($oleExtractor,  'uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager')"/>
+
+    
     <xsl:key name="imagedata" match="w:binData" use="@w:name"/>
     <xsl:key name="shapetype" match="v:shapetype" use="concat('#', @id)"/>
     <xsl:template match="v:fill" mode="get-xsl-number">
@@ -535,7 +539,7 @@
         <xsl:variable name="right-name" select="not(name($vchild) = 'v:formulas') and not(name($vchild) = 'v:f') and not(name($vchild) = 'v:shapetype')"/>
         <xsl:variable name="def" select="string-length($style) &gt; 0 or $vchild/@stroke or $vchild/@stroked or $vchild/@strokecolor or $vchild/v:stroke or $vchild/@strokeweight or $vchild/@wrapcoords or $vchild/@fillcolor"/>
         <xsl:choose>
-            <xsl:when test="$right-name and ($def or $z-index &lt; 0)">
+            <xsl:when test="$right-name and ($def or (number($z-index) &lt; 0))">
                 <xsl:element name="style:style">
                     <xsl:attribute name="style:name">Tgr<xsl:number from="/w:wordDocument/w:body" level="any" count="v:*" format="1"/>
                     </xsl:attribute>
@@ -558,7 +562,7 @@
                     <xsl:element name="style:graphic-properties">
                         <xsl:variable name="style-str" select="concat(@style,';')"/>
                         <xsl:choose>
-                            <xsl:when test="$z-index &lt; 0 or (name($vchild) = 'v:group' and $vchild/@editas ='canvas' )">
+                            <xsl:when test="number($z-index) &lt; 0 or (name($vchild) = 'v:group' and $vchild/@editas ='canvas' )">
                                 <xsl:attribute name="style:wrap">run-through</xsl:attribute>
                                 <xsl:attribute name="style:run-through">background</xsl:attribute>
                                 <xsl:attribute name="style:flow-with-text">false</xsl:attribute>
@@ -750,14 +754,14 @@
                 <xsl:attribute name="draw:shadow-offset-x">
                     <xsl:call-template name="ConvertMeasure">
                         <xsl:with-param name="value" select="substring-before(@offset,',')"/>
-                        <xsl:with-param name="TargertMeasure" select=" 'cm' "/>
+                        <xsl:with-param name="TargetMeasure" select=" 'cm' "/>
                     </xsl:call-template>
                     <xsl:value-of select="'cm'"/>
                 </xsl:attribute>
                 <xsl:attribute name="draw:shadow-offset-y">
                     <xsl:call-template name="ConvertMeasure">
                         <xsl:with-param name="value" select="substring-after(@offset,',')"/>
-                        <xsl:with-param name="TargertMeasure" select=" 'cm' "/>
+                        <xsl:with-param name="TargetMeasure" select=" 'cm' "/>
                     </xsl:call-template>
                     <xsl:value-of select="'cm'"/>
                 </xsl:attribute>
@@ -766,7 +770,7 @@
                 <xsl:attribute name="draw:shadow-offset-x">
                     <xsl:call-template name="ConvertMeasure">
                         <xsl:with-param name="value" select="@offset"/>
-                        <xsl:with-param name="TargertMeasure" select=" 'cm' "/>
+                        <xsl:with-param name="TargetMeasure" select=" 'cm' "/>
                     </xsl:call-template>
                     <xsl:value-of select="'cm'"/>
                 </xsl:attribute>
@@ -1154,12 +1158,12 @@
                 <!--This need to be checkout and built!-->
             </xsl:attribute>
             <xsl:if test="string-length($z-index) &gt; 0">
-                <xsl:if test="$z-index &lt; 0">
+                <xsl:if test="number($z-index) &lt; 0">
                     <xsl:attribute name="draw:z-index">
                         <xsl:value-of select="'0'"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="not($z-index &lt; 0)">
+                <xsl:if test="not(number($z-index) &lt; 0)">
                     <xsl:attribute name="draw:z-index">
                         <xsl:value-of select="$z-index"/>
                     </xsl:attribute>
@@ -1406,7 +1410,7 @@
                         <!-- add a space to the end of input_points -->
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:if test="string-length($oopoints &gt; 0 )">
+                <xsl:if test="string-length($oopoints) &gt; 0">
                     <xsl:attribute name="draw:points">
                         <xsl:value-of select="$oopoints"/>
                     </xsl:attribute>
@@ -1642,20 +1646,43 @@
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:docOleData" mode="init">
-        <oleextracter:init UNOURL="uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"/>
+        <xsl:choose>
+            <xsl:when test="element-available('oleextracter:init')">
+                <oleextracter:init UNOURL="uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="ole:init($oleExtractor, 'uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager')"/>                    
+            </xsl:otherwise>                
+        </xsl:choose>
         <xsl:apply-templates select="w:binData[@w:name='oledata.mso']" mode="oledata.mso"/>
     </xsl:template>
     <xsl:template match="w:docOleData" mode="exit">
         <oleextracter:exit/>
     </xsl:template>
     <xsl:template match="w:binData" mode="oledata.mso">
-        <xsl:variable name="tmp" select="oleextracter:insertByName('oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>
+       <!--  <xsl:choose>
+            <xsl:when test="element-available('oleextracter:getByName')">
+                <xsl:variable name="tmp" select="oleextracter:insertByName('oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>
+            </xsl:when>
+            <xsl:otherwise>-->
+                <xsl:variable name="tmp" select="ole:insertByName($oleExtractor,'oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>                
+       <!--      </xsl:otherwise>                
+        </xsl:choose>      -->  
     </xsl:template>
     <xsl:template match="o:OLEObject " mode="output">
         <!-- depends on i43230,we can uncomment this code or find another way after i43230 got fixed -->
         <draw:object-ole>
             <xsl:element name="office:binary-data">
-                <xsl:value-of select="translate(oleextracter:getByName(@ObjectID),'&#13;','')"/>
+            <!-- 
+                <xsl:choose>
+                    <xsl:when test="element-available('oleextracter:getByName')">
+                      <xsl:value-of select="translate(oleextracter:getByName(@ObjectID),'&#13;','')"/>
+                    </xsl:when>
+                    <xsl:otherwise> -->
+                       <xsl:value-of select="translate(ole:getByName($oleExtractor,@ObjectID),'&#13;','')"/>            
+                    <!-- 
+                    </xsl:otherwise>                
+                </xsl:choose> -->                         
             </xsl:element>
         </draw:object-ole>
     </xsl:template>
@@ -2185,6 +2212,6 @@
         </xsl:choose>
     </xsl:template>
     <xalan:component prefix="oleextracter" elements="init exit" functions="getByName insertByName">
-        <xalan:script lang="javaclass" src="xalan://XSLTXalanOLEExtracter"/>
+        <xalan:script lang="javaclass" src="xalan://XSLTFilterOLEExtracter"/>
     </xalan:component>
 </xsl:stylesheet>
