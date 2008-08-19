@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,26 +44,24 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES= \
         $(SLO)$/obj3d.obj 		\
-        $(SLO)$/pntobj3d.obj     \
-        $(SLO)$/label3d.obj		\
         $(SLO)$/scene3d.obj		\
-        $(SLO)$/polysc3d.obj		\
+        $(SLO)$/polysc3d.obj	\
         $(SLO)$/cube3d.obj		\
-        $(SLO)$/sphere3d.obj		\
-        $(SLO)$/extrud3d.obj     \
+        $(SLO)$/sphere3d.obj	\
+        $(SLO)$/extrud3d.obj    \
         $(SLO)$/lathe3d.obj		\
-        $(SLO)$/polygn3d.obj 		\
+        $(SLO)$/polygn3d.obj 	\
         $(SLO)$/svx3ditems.obj	\
         $(SLO)$/deflt3d.obj		\
-        $(SLO)$/e3dundo.obj      \
-        $(SLO)$/volume3d.obj		\
-        $(SLO)$/viewpt3d.obj		\
-        $(SLO)$/viewpt3d2.obj		\
-        $(SLO)$/camera3d.obj		\
+        $(SLO)$/e3dundo.obj     \
+        $(SLO)$/volume3d.obj	\
+        $(SLO)$/viewpt3d.obj	\
+        $(SLO)$/viewpt3d2.obj	\
+        $(SLO)$/camera3d.obj	\
         $(SLO)$/objfac3d.obj 	\
-        $(SLO)$/dragmt3d.obj		\
+        $(SLO)$/dragmt3d.obj	\
         $(SLO)$/view3d.obj		\
-        $(SLO)$/view3d1.obj       \
+        $(SLO)$/view3d1.obj     \
         $(SLO)$/float3d.obj
 
 #disable optimizer for MSCompiler and ICC
