@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StartMarker.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,20 +38,19 @@
 
 namespace rptui
 {
-    class OSectionsWindow;
+    class OSectionWindow;
     class OStartMarker : public OColorListener
     {
 
         Ruler                       m_aVRuler;
         FixedText                   m_aText;
         FixedImage                  m_aImage;
-        OSectionsWindow*            m_pParent;
+        OSectionWindow*             m_pParent;
         static Image*               s_pDefCollapsed;
         static Image*               s_pDefExpanded;
         static Image*               s_pDefCollapsedHC;
         static Image*               s_pDefExpandedHC;
         static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
-        sal_Int32                   m_nCornerSize;
 
         sal_Bool                    m_bShowRuler;
 
@@ -61,7 +60,7 @@ namespace rptui
         OStartMarker(OStartMarker&);
         void operator =(OStartMarker&);
     public:
-        OStartMarker(OSectionsWindow* _pParent,const ::rtl::OUString& _sColorEntry);
+        OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sColorEntry);
         virtual ~OStartMarker();
 
         // SfxListener
@@ -85,6 +84,10 @@ namespace rptui
         void            showRuler(sal_Bool _bShow);
 
         virtual void    setCollapsed(sal_Bool _bCollapsed);
+
+        /** zoom the ruler and view windows
+        */
+        void            zoom(const sal_Int16 _nZoom);
     };
 }
 #endif // RPTUI_STARTMARKER_HXX
