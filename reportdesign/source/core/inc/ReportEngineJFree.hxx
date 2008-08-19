@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportEngineJFree.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,11 +79,6 @@ namespace reportdesign
         */
         ::rtl::OUString getNewOutputName();
 
-        /** generates the order statement defined by the groups of the report
-        *
-        * \return the ORDER BY part
-        */
-        ::rtl::OUString getOrderStatement() const;
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
         //
