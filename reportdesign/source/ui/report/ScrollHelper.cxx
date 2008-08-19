@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScrollHelper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,7 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,m_aVScroll( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
     ,m_aCornerWin( this )
     ,m_pParent(_pDesignView)
-    ,m_pChild(NULL)
+    ,m_aReportWindow(this,m_pParent)
     ,m_pReportDefintionMultiPlexer(NULL)
 {
     DBG_CTOR( rpt_OScrollWindowHelper,NULL);
@@ -73,9 +73,8 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     impl_initScrollBar( m_aHScroll );
     impl_initScrollBar( m_aVScroll );
 
-    m_pChild = new OReportWindow(this,m_pParent);
-    m_pChild->SetMapMode( MapMode( MAP_100TH_MM ) );
-    m_pChild->Show();
+    m_aReportWindow.SetMapMode( MapMode( MAP_100TH_MM ) );
+    m_aReportWindow.Show();
 
     // normally we should be SCROLL_PANE
     SetAccessibleRole(accessibility::AccessibleRole::SCROLL_PANE);
@@ -88,10 +87,6 @@ OScrollWindowHelper::~OScrollWindowHelper()
     DBG_DTOR( rpt_OScrollWindowHelper,NULL);
     if ( m_pReportDefintionMultiPlexer.is() )
         m_pReportDefintionMultiPlexer->dispose();
-    {
-        ::std::auto_ptr<OReportWindow> aTemp2(m_pChild);
-        m_pChild = NULL;
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -112,8 +107,8 @@ void OScrollWindowHelper::initialize()
 {
     uno::Reference<report::XReportDefinition> xReportDefinition = m_pParent->getController().getReportDefinition();
     m_pReportDefintionMultiPlexer = addStyleListener(xReportDefinition,this);
-    if ( m_pChild )
-        m_pChild->initialize();
+
+    m_aReportWindow.initialize();
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
@@ -187,15 +182,19 @@ Size OScrollWindowHelper::ResizeScrollBars()
     const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
     // resize scrollbars and set their ranges
     {
+        Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
+        const Fraction aZoom(m_pParent->getController().getZoomValue(),100);
+        aStartWith *= aZoom;
+
         const sal_Int32 nOldThumbPos = m_aHScroll.GetThumbPos();
         const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X();
-        lcl_setScrollBar(nNewWidth,m_aPixOffset.X(),Point( REPORT_STARTMARKER_WIDTH, aOutPixSz.Height() ),Size( aOutPixSz.Width() - REPORT_STARTMARKER_WIDTH, nScrSize ),m_aHScroll);
+        lcl_setScrollBar(nNewWidth,m_aPixOffset.X(),Point( (long)aStartWith + aOffset.X(), aOutPixSz.Height() ),Size( aOutPixSz.Width() - long(aStartWith), nScrSize ),m_aHScroll);
         m_aPixOffset.X() += nOldThumbPos - m_aHScroll.GetThumbPos();
     }
     {
         const sal_Int32 nOldThumbPos = m_aVScroll.GetThumbPos();
-        const sal_Int32 nNewHeight = aOutPixSz.Height() - m_pChild->getRulerHeight();
-        lcl_setScrollBar(nNewHeight,m_aPixOffset.Y(),Point( aOutPixSz.Width(), m_pChild->getRulerHeight() ),Size( nScrSize,nNewHeight),m_aVScroll);
+        const sal_Int32 nNewHeight = aOutPixSz.Height() - m_aReportWindow.getRulerHeight();
+        lcl_setScrollBar(nNewHeight,m_aPixOffset.Y(),Point( aOutPixSz.Width(), m_aReportWindow.getRulerHeight() ),Size( nScrSize,nNewHeight),m_aVScroll);
         m_aPixOffset.Y() += nOldThumbPos - m_aVScroll.GetThumbPos();
     }
 
@@ -211,8 +210,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::impl_scrollContent( long nDeltaX, long nDeltaY )
 {
-    if ( m_pChild )
-        m_pChild->ScrollChildren(nDeltaX,nDeltaY);
+    m_aReportWindow.ScrollChildren(nDeltaX,nDeltaY);
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::Resize()
@@ -238,9 +236,7 @@ void OScrollWindowHelper::Resize()
  //   }
     const Size aTotalOutputSize = ResizeScrollBars();
 
-    OSL_ENSURE(m_pChild,"ReportWindow is NULL");
-    if ( m_pChild )
-        m_pChild->SetPosSizePixel(Point( 0, 0 ),Size( aTotalOutputSize.Width(), aTotalOutputSize.Height()));
+    m_aReportWindow.SetPosSizePixel(Point( 0, 0 ),Size( aTotalOutputSize.Width(), aTotalOutputSize.Height()));
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
@@ -253,131 +249,122 @@ void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _
                                    ,const ::rtl::OUString& _sColorEntry
                                    ,USHORT _nPosition)
 {
-    m_pChild->addSection(_xSection,_sColorEntry,_nPosition);
+    m_aReportWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::removeSection(USHORT _nPosition)
 {
-    m_pChild->removeSection(_nPosition);
+    m_aReportWindow.removeSection(_nPosition);
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::toggleGrid(sal_Bool _bVisible)
 {
-    m_pChild->toggleGrid(_bVisible);
+    m_aReportWindow.toggleGrid(_bVisible);
 }
 //------------------------------------------------------------------------------
 USHORT OScrollWindowHelper::getSectionCount() const
 {
-    return m_pChild->getSectionCount();
+    return m_aReportWindow.getSectionCount();
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
 {
-    m_pChild->SetInsertObj(eObj,_sShapeType);
+    m_aReportWindow.SetInsertObj(eObj,_sShapeType);
 }
 //----------------------------------------------------------------------------
 rtl::OUString OScrollWindowHelper::GetInsertObjString() const
 {
-    return m_pChild->GetInsertObjString();
+    return m_aReportWindow.GetInsertObjString();
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
 {
-    m_pChild->SetMode(_eNewMode);
+    m_aReportWindow.SetMode(_eNewMode);
 }
 //------------------------------------------------------------------------------
 BOOL OScrollWindowHelper::HasSelection()
 {
-    return m_pChild && m_pChild->HasSelection();
+    return m_aReportWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 void OScrollWindowHelper::Delete()
 {
-    if ( m_pChild )
-        m_pChild->Delete();
+    m_aReportWindow.Delete();
 }
 //----------------------------------------------------------------------------
 void OScrollWindowHelper::Copy()
 {
-    if ( m_pChild )
-        m_pChild->Copy();
+    m_aReportWindow.Copy();
 }
 //----------------------------------------------------------------------------
 void OScrollWindowHelper::Paste()
 {
-    if ( m_pChild )
-        m_pChild->Paste();
+    m_aReportWindow.Paste();
 }
 //----------------------------------------------------------------------------
 BOOL OScrollWindowHelper::IsPasteAllowed()
 {
-    return m_pChild && m_pChild->IsPasteAllowed();
+    return m_aReportWindow.IsPasteAllowed();
 }
 //-----------------------------------------------------------------------------
-void OScrollWindowHelper::SelectAll()
+void OScrollWindowHelper::SelectAll(const sal_uInt16 _nObjectType)
 {
-    m_pChild->SelectAll();
+    m_aReportWindow.SelectAll(_nObjectType);
 }
 //----------------------------------------------------------------------------
 void OScrollWindowHelper::unmarkAllObjects(OSectionView* _pSectionView)
 {
-    m_pChild->unmarkAllObjects(_pSectionView);
+    m_aReportWindow.unmarkAllObjects(_pSectionView);
 }
 //------------------------------------------------------------------------------
 sal_Int32 OScrollWindowHelper::getMaxMarkerWidth(sal_Bool _bWithEnd) const
 {
-    return m_pChild->getMaxMarkerWidth(_bWithEnd);
+    return m_aReportWindow.getMaxMarkerWidth(_bWithEnd);
 }
 //----------------------------------------------------------------------------
 void OScrollWindowHelper::showRuler(sal_Bool _bShow)
 {
-    m_pChild->showRuler(_bShow);
+    m_aReportWindow.showRuler(_bShow);
 }
 //------------------------------------------------------------------------------
 sal_Bool OScrollWindowHelper::handleKeyEvent(const KeyEvent& _rEvent)
 {
-    return m_pChild ? m_pChild->handleKeyEvent(_rEvent) : sal_False;
+    return m_aReportWindow.handleKeyEvent(_rEvent);
 }
 //------------------------------------------------------------------------
 void OScrollWindowHelper::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
 {
-    if ( m_pChild )
-        m_pChild->setMarked(_pSectionView,_bMark);
+    m_aReportWindow.setMarked(_pSectionView,_bMark);
 }
 //------------------------------------------------------------------------
 void OScrollWindowHelper::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
 {
-    if ( m_pChild )
-        m_pChild->setMarked(_xSection,_bMark);
+    m_aReportWindow.setMarked(_xSection,_bMark);
 }
 //------------------------------------------------------------------------
 void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
 {
-    if ( m_pChild )
-        m_pChild->setMarked(_xShape,_bMark);
+    m_aReportWindow.setMarked(_xShape,_bMark);
 }
 // -------------------------------------------------------------------------
-::boost::shared_ptr<OReportSection> OScrollWindowHelper::getMarkedSection(NearSectionAccess nsa) const
+::boost::shared_ptr<OSectionWindow> OScrollWindowHelper::getMarkedSection(NearSectionAccess nsa) const
 {
-    return m_pChild ? m_pChild->getMarkedSection(nsa) : ::boost::shared_ptr<OReportSection>();
+    return m_aReportWindow.getMarkedSection(nsa);
 }
 // -------------------------------------------------------------------------
 void OScrollWindowHelper::markSection(const sal_uInt16 _nPos)
 {
-    if ( m_pChild )
-        m_pChild->markSection(_nPos);
+    m_aReportWindow.markSection(_nPos);
 }
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
-    if ( m_pChild )
-        m_pChild->fillCollapsedSections(_rCollapsedPositions);
+    m_aReportWindow.fillCollapsedSections(_rCollapsedPositions);
 }
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::collapseSections(const uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections)
 {
-    if ( m_pChild )
-        m_pChild->collapseSections(_aCollpasedSections);
+    m_aReportWindow.collapseSections(_aCollpasedSections);
 }
 //------------------------------------------------------------------------------
 long OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
@@ -404,21 +391,15 @@ long OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
 {
-    if ( m_pChild )
-        m_pChild->alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
+    m_aReportWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::ImplInitSettings()
 {
-//#if OSL_DEBUG_LEVEL > 0
-//    SetBackground( Wallpaper( COL_BLUE ));
-//#else
-    //SetBackground( );
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-//#endif
+    // SetBackground( Wallpaper( COL_LIGHTRED ));
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
-//#endif
 }
 //-----------------------------------------------------------------------------
 void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
@@ -435,36 +416,38 @@ void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_rEvent*/) throw( uno::RuntimeException)
 {
-    if ( m_pChild )
-        m_pChild->notifyHeightChanged();
+    m_aReportWindow.notifyHeightChanged();
 }
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::setGridSnap(BOOL bOn)
 {
-    if ( m_pChild )
-        m_pChild->setGridSnap(bOn);
+    m_aReportWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::setDragStripes(BOOL bOn)
 {
-    if ( m_pChild )
-        m_pChild->setDragStripes(bOn);
+    m_aReportWindow.setDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
 BOOL OScrollWindowHelper::isDragStripes() const
 {
-    return m_pChild ? m_pChild->isDragStripes() : FALSE;
+    return m_aReportWindow.isDragStripes();
 }
 // -----------------------------------------------------------------------------
 sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const
 {
-    return m_pChild ? m_pChild->getMarkedObjectCount() : 0;
+    return m_aReportWindow.getMarkedObjectCount();
+}
+// -----------------------------------------------------------------------------
+void OScrollWindowHelper::zoom(const sal_Int16 _nZoom)
+{
+    m_aReportWindow.zoom(_nZoom);
+    Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
 }
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
-    if ( m_pChild )
-        m_pChild->fillControlModelSelection(_rSelection);
+    m_aReportWindow.fillControlModelSelection(_rSelection);
 }
 
 //==============================================================================
