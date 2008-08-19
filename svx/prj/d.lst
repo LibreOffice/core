@@ -383,10 +383,10 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\xhatch.hxx %_DEST%\inc%_EXT%\svx\xhatch.hxx
 ..\inc\svx\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
 ..\inc\svx\xlineit.hxx %_DEST%\inc%_EXT%\svx\xlineit.hxx
-..\inc\svx\xlineit.hxx %_DEST%\inc%_EXT%\xlineit.hxx
+..\inc\svx\xlineit.hxx %_DEST%\inc%_EXT%\svx\xlineit.hxx
 ..\inc\svx\xlineit0.hxx %_DEST%\inc%_EXT%\svx\xlineit0.hxx
-..\inc\svx\xlineit0.hxx %_DEST%\inc%_EXT%\xlineit0.hxx
-..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\xlinjoit.hxx
+..\inc\svx\xlineit0.hxx %_DEST%\inc%_EXT%\svx\xlineit0.hxx
+..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\svx\xlinjoit.hxx
 ..\inc\svx\xlnasit.hxx %_DEST%\inc%_EXT%\svx\xlnasit.hxx
 ..\inc\svx\xlnclit.hxx %_DEST%\inc%_EXT%\svx\xlnclit.hxx
 ..\inc\svx\xlndsit.hxx %_DEST%\inc%_EXT%\svx\xlndsit.hxx
