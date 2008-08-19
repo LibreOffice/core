@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "dbcolect.hxx"
