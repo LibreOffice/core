@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolboxcontroller.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +46,7 @@
 #include <svtools/moduleoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <vos/mutex.hxx>
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
 #define ITEMID_COLOR        1
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
