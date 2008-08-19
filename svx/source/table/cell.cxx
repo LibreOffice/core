@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,7 +277,7 @@ namespace sdr { namespace table {
 // -----------------------------------------------------------------------------
 
 Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw()
-: SdrText( &rTableObj, pOutlinerParaObject )
+: SdrText( rTableObj, pOutlinerParaObject )
 , SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
 , maPropSet( ImplGetSvxCellPropertyMap() )
 , mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
@@ -334,9 +334,9 @@ void Cell::SetModel(SdrModel* pNewModel)
         {
             pTextEditSource->ChangeModel( pNewModel );
         }
-        else if( GetObject() )
+        else
         {
-            SetEditSource( new SvxTextEditSource( GetObject(), this, static_cast< XWeak * >( this ) ) );
+            SetEditSource( new SvxTextEditSource( &GetObject(), this, static_cast< XWeak * >( this ) ) );
         }
 
         SetStyleSheet( 0, sal_True );
@@ -362,13 +362,11 @@ void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 
 void Cell::mergeContent( const CellRef& xSourceCell )
 {
-    SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( GetObject() );
-    if( !pTableObj )
-        return;
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
 
     if( xSourceCell->hasText() )
     {
-        SdrOutliner& rOutliner=pTableObj->ImpGetDrawOutliner();
+        SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetUpdateMode(TRUE);
 
         if( hasText() )
@@ -413,10 +411,10 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
         SetOutlinerParaObject( xSourceCell->GetOutlinerParaObject()->Clone() );
 
-        SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( GetObject() );
-        SdrTableObj* pSourceTableObj = dynamic_cast< SdrTableObj* >( xSourceCell->GetObject() );
+        SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+        SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
-        if( pTableObj && pSourceTableObj && (pSourceTableObj->GetModel() != pTableObj->GetModel()) )
+        if(rSourceTableObj.GetModel() != rTableObj.GetModel())
         {
             SetStyleSheet( 0, sal_True );
         }
@@ -448,9 +446,9 @@ void Cell::notifyModified()
 
 bool Cell::IsTextEditActive()
 {
-    SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( GetObject() );
-    if( pTableObj && pTableObj->getActiveCell().get() == this )
-        return pTableObj->GetEditOutlinerParaObject() != 0;
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    if(rTableObj.getActiveCell().get() == this )
+        return rTableObj.GetEditOutlinerParaObject() != 0;
     return false;
 }
 
@@ -480,9 +478,9 @@ bool Cell::hasText() const
 
 OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
 {
-    SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( GetObject() );
-    if( pTableObj && pTableObj->getActiveCell().get() == this )
-        return pTableObj->GetEditOutlinerParaObject();
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    if( rTableObj.getActiveCell().get() == this )
+        return rTableObj.GetEditOutlinerParaObject();
     return 0;
 }
 
@@ -599,10 +597,7 @@ sal_Int32 Cell::getMinimumHeight()
     if( !mpProperties )
         return 0;
 
-    SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( GetObject() );
-    if( !pTableObj )
-        return 0;
-
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     sal_Int32 nMinimumHeight = 0;
 
     Rectangle aTextRect;
@@ -610,7 +605,7 @@ sal_Int32 Cell::getMinimumHeight()
     Size aSize( aTextRect.GetSize() );
     aSize.Height()=0x0FFFFFFF;
 
-    SdrOutliner* pEditOutliner = pTableObj->GetCellTextEditOutliner( *this );
+    SdrOutliner* pEditOutliner = rTableObj.GetCellTextEditOutliner( *this );
     if(pEditOutliner)
     {
         pEditOutliner->SetMaxAutoPaperSize(aSize);
@@ -618,7 +613,7 @@ sal_Int32 Cell::getMinimumHeight()
     }
     else
     {
-        Outliner& rOutliner=pTableObj->ImpGetDrawOutliner();
+        Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
         rOutliner.SetUpdateMode(TRUE);
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
@@ -688,11 +683,11 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 
 void Cell::AddUndo()
 {
-    SdrObject* pObj = GetObject();
-    if( pObj && pObj->IsInserted() && GetModel() )
+    SdrObject& rObj = GetObject();
+    if( rObj.IsInserted() && GetModel() )
     {
         CellRef xCell( this );
-        GetModel()->AddUndo( new CellUndo( pObj, xCell ) );
+        GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );
     }
 }
 
@@ -1526,30 +1521,27 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
 
 void SAL_CALL Cell::setAllPropertiesToDefault(  ) throw (RuntimeException)
 {
-    if( GetObject() )
+    if( mpProperties )
+        delete mpProperties;
+    mpProperties = new sdr::properties::CellProperties( static_cast< SdrTableObj& >( GetObject() ), this );
+
+    SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();
+
+    OutlinerParaObject* pParaObj = GetOutlinerParaObject();
+    if( pParaObj )
     {
-        if( mpProperties )
-            delete mpProperties;
-        mpProperties = new sdr::properties::CellProperties( *static_cast< SdrTableObj* >( GetObject() ), this );
+        rOutliner.SetText(*pParaObj);
+        sal_uInt32 nParaCount(rOutliner.GetParagraphCount());
 
-        SdrOutliner& rOutliner = GetObject()->ImpGetDrawOutliner();
-
-        OutlinerParaObject* pParaObj = GetOutlinerParaObject();
-        if( pParaObj )
+        if(nParaCount)
         {
-            rOutliner.SetText(*pParaObj);
-            sal_uInt32 nParaCount(rOutliner.GetParagraphCount());
+            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
+            rOutliner.RemoveAttribs(aSelection, sal_True, 0);
 
-            if(nParaCount)
-            {
-                ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
-                rOutliner.RemoveAttribs(aSelection, sal_True, 0);
+            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
+            rOutliner.Clear();
 
-                OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
-                rOutliner.Clear();
-
-                SetOutlinerParaObject(pTemp);
-            }
+            SetOutlinerParaObject(pTemp);
         }
     }
 }
