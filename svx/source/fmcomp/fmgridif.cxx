@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmgridif.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -319,6 +319,43 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( Ru
 }
 
 //==================================================================
+//= FmXGridControlMultiplexer
+//==================================================================
+//------------------------------------------------------------------
+FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
+    :OWeakSubObject( rSource )
+    ,OInterfaceContainerHelper( _rMutex )
+{
+}
+
+//------------------------------------------------------------------
+Any SAL_CALL FmXGridControlMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+{
+    Any aReturn;
+    aReturn = ::cppu::queryInterface( _rType,
+        static_cast< XGridControlListener*>(this)
+    );
+
+    if (!aReturn.hasValue())
+        aReturn = OWeakSubObject::queryInterface( _rType );
+
+    return aReturn;
+}
+
+//------------------------------------------------------------------
+void FmXGridControlMultiplexer::disposing( const EventObject& ) throw( RuntimeException )
+{
+}
+
+//------------------------------------------------------------------
+void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _event ) throw (RuntimeException)
+{
+    EventObject aForwardedEvent( _event );
+    aForwardedEvent.Source = &m_rParent;
+    notifyEach( &XGridControlListener::columnChanged, aForwardedEvent );
+}
+
+//==================================================================
 //= FmXGridControl
 //==================================================================
 
@@ -334,6 +371,7 @@ FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFacto
                ,m_aUpdateListeners(*this, GetMutex())
                ,m_aContainerListeners(*this, GetMutex())
                ,m_aSelectionListeners(*this, GetMutex())
+               ,m_aGridControlListeners(*this, GetMutex())
                ,m_nPeerCreationLevel(0)
                ,m_bInDraw(sal_False)
                ,m_xServiceFactory(_rxFactory)
@@ -865,16 +903,45 @@ void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference
 }
 
 //------------------------------------------------------------------------------
+void SAL_CALL FmXGridControl::addGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+
+    m_aGridControlListeners.addInterface( _listener );
+    if ( getPeer().is() && 1 == m_aGridControlListeners.getLength() )
+    {
+        Reference< XGridControl > xPeerGrid( getPeer(), UNO_QUERY );
+        if ( xPeerGrid.is() )
+            xPeerGrid->addGridControlListener( &m_aGridControlListeners );
+    }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridControl::removeGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+
+    if( getPeer().is() && 1 == m_aGridControlListeners.getLength() )
+    {
+        Reference< XGridControl > xPeerGrid( getPeer(), UNO_QUERY );
+        if ( xPeerGrid.is() )
+            xPeerGrid->removeGridControlListener( &m_aGridControlListeners );
+    }
+
+    m_aGridControlListeners.removeInterface( _listener );
+}
+
+//------------------------------------------------------------------------------
 sal_Int16 SAL_CALL FmXGridControl::getCurrentColumnPosition() throw( RuntimeException )
 {
-    Reference< XGrid >  xGrid(getPeer(), UNO_QUERY);
+    Reference< XGridControl > xGrid( getPeer(), UNO_QUERY );
     return xGrid.is() ? xGrid->getCurrentColumnPosition() : -1;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeException )
 {
-    Reference< XGrid >  xGrid( getPeer(), UNO_QUERY );
+    Reference< XGridControl > xGrid( getPeer(), UNO_QUERY );
     if ( xGrid.is() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -960,30 +1027,37 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
 //==============================================================================
 //= FmXGridPeer
 //==============================================================================
-// helper class which prevents that in the peer's header the FmGridSelectionListener must be known
-class FmXGridPeer::SelectionListenerImpl : public FmGridSelectionListener
+// helper class which prevents that in the peer's header the FmGridListener must be known
+class FmXGridPeer::GridListenerDelegator : public FmGridListener
 {
 protected:
     FmXGridPeer*        m_pPeer;
 
 public:
-    SelectionListenerImpl(FmXGridPeer* _pPeer);
+    GridListenerDelegator( FmXGridPeer* _pPeer );
 
 protected:
     virtual void selectionChanged();
+    virtual void columnChanged();
 };
 
 //------------------------------------------------------------------
-FmXGridPeer::SelectionListenerImpl::SelectionListenerImpl(FmXGridPeer* _pPeer)
+FmXGridPeer::GridListenerDelegator::GridListenerDelegator(FmXGridPeer* _pPeer)
     :m_pPeer(_pPeer)
 {
-    DBG_ASSERT(m_pPeer, "SelectionListenerImpl::SelectionListenerImpl");
+    DBG_ASSERT(m_pPeer, "GridListenerDelegator::GridListenerDelegator");
 }
 
 //------------------------------------------------------------------
-void FmXGridPeer::SelectionListenerImpl::selectionChanged()
+void FmXGridPeer::GridListenerDelegator::selectionChanged()
 {
     m_pPeer->selectionChanged();
+}
+
+//------------------------------------------------------------------
+void FmXGridPeer::GridListenerDelegator::columnChanged()
+{
+    m_pPeer->columnChanged();
 }
 
 //==============================================================================
@@ -998,7 +1072,7 @@ Reference< XInterface >  FmXGridPeer_CreateInstance(const Reference< XMultiServi
 //------------------------------------------------------------------
 Sequence< Type> SAL_CALL FmXGridPeer::getTypes(  ) throw(RuntimeException)
 {
-    return comphelper::concatSequences(VCLXWindow::getTypes(),FmXGridPeer_BASE1::getTypes(),FmXGridPeer_BASE2::getTypes());
+    return comphelper::concatSequences( VCLXWindow::getTypes(), FmXGridPeer_BASE::getTypes() );
 }
 
 //------------------------------------------------------------------
@@ -1020,10 +1094,7 @@ Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(RuntimeEx
 //------------------------------------------------------------------
 Any SAL_CALL FmXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = FmXGridPeer_BASE1::queryInterface(_rType);
-
-    if (!aReturn.hasValue())
-        aReturn = FmXGridPeer_BASE2::queryInterface(_rType);
+    Any aReturn = FmXGridPeer_BASE::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = VCLXWindow::queryInterface( _rType );
@@ -1037,6 +1108,13 @@ void FmXGridPeer::selectionChanged()
     EventObject aSource;
     aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
     m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aSource);
+}
+
+//------------------------------------------------------------------
+void FmXGridPeer::columnChanged()
+{
+    EventObject aEvent( *this );
+    m_aGridControlListeners.notifyEach( &XGridControlListener::columnChanged, aEvent );
 }
 
 //------------------------------------------------------------------
@@ -1056,16 +1134,17 @@ FmXGridPeer::FmXGridPeer(const Reference< XMultiServiceFactory >& _rxFactory)
             ,m_aUpdateListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
             ,m_aSelectionListeners(m_aMutex)
+            ,m_aGridControlListeners(m_aMutex)
             ,m_aMode( getDataModeIdentifier() )
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(sal_False)
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
-            ,m_pSelectionListener(NULL)
+            ,m_pGridListener(NULL)
             ,m_xServiceFactory(_rxFactory)
 {
     // nach diesem Constructor muss Create gerufen werden !
-    m_pSelectionListener = new SelectionListenerImpl(this);
+    m_pGridListener = new GridListenerDelegator( this );
 }
 
 //------------------------------------------------------------------------------
@@ -1084,7 +1163,7 @@ void FmXGridPeer::Create(Window* pParent, WinBits nStyle)
     pWin->SetSlotExecutor(LINK(this, FmXGridPeer, OnExecuteGridSlot));
 
     // want to hear about row selections
-    pWin->setSelectionListener(m_pSelectionListener);
+    pWin->setGridListener( m_pGridListener );
 
     // Init muß immer aufgerufen werden
     pWin->Init();
@@ -1099,7 +1178,7 @@ FmXGridPeer::~FmXGridPeer()
     setRowSet(Reference< XRowSet > ());
     setColumns(Reference< XIndexContainer > ());
 
-    delete m_pSelectionListener;
+    delete m_pGridListener;
 }
 
 //------------------------------------------------------------------------------
@@ -2237,6 +2316,18 @@ void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor) throw(
             xLoadable->addLoadListener(this);
         }
     }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridPeer::addGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
+{
+    m_aGridControlListeners.addInterface( _listener );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXGridPeer::removeGridControlListener( const Reference< XGridControlListener >& _listener ) throw( RuntimeException )
+{
+    m_aGridControlListeners.removeInterface( _listener );
 }
 
 //------------------------------------------------------------------------------
