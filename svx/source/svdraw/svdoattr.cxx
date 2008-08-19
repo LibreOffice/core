@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoattr.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <xlinjoit.hxx>
+#include "xlinjoit.hxx"
 #include <svdoimp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
