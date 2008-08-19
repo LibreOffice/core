@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BViews.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,17 +195,3 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
         pTables->appendNew(sName);
     }
 }
-// -----------------------------------------------------------------------------
-void OViews::appendNew(const ::rtl::OUString& _rsNewTable)
-{
-    insertElement(_rsNewTable,NULL);
-    // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
-    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-    while (aListenerLoop.hasMoreElements())
-        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
-}
-// -----------------------------------------------------------------------------
-
-
-
