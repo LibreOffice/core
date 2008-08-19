@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: image.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 
 #include "image.hxx"
 
@@ -270,33 +272,9 @@ namespace canvas { namespace
         // clip contour against renderclip
         if( pRenderClip )
         {
-            // TODO(F2): review subdivision algo, maybe use hybrid
-            // approach from mcseem also in basegfx
-            if(aPolyPolygon.areControlPointsUsed())
-                aPolyPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPolygon);
-
-            if( bIsFilledPolyPolygon )
-            {
-                ::basegfx::B2DPolyPolygon clip(*pRenderClip);
-                aPolyPolygon = ::basegfx::tools::removeAllIntersections(aPolyPolygon);
-                aPolyPolygon = ::basegfx::tools::removeNeutralPolygons(aPolyPolygon,
-                                                                       sal_True);
-                clip = ::basegfx::tools::removeAllIntersections(clip);
-                clip = ::basegfx::tools::removeNeutralPolygons(clip,
-                                                               sal_True);
-                aPolyPolygon.append(clip);
-                aPolyPolygon = ::basegfx::tools::removeAllIntersections(aPolyPolygon);
-                aPolyPolygon = ::basegfx::tools::removeNeutralPolygons(aPolyPolygon,
-                                                                       sal_False);
-            }
-            else
-            {
-                // TODO(F3): add AW's addition to clipPolyPolygonOnPolyPolygon
-                // regarding open/close state
-                aPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aPolyPolygon,
-                                                                            *pRenderClip,
-                                                                            true);
-            }
+            // AW: Simplified
+            aPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                aPolyPolygon, *pRenderClip, true, !bIsFilledPolyPolygon);
         }
 
         if( !aPolyPolygon.count() )
@@ -308,33 +286,9 @@ namespace canvas { namespace
         // clip contour against viewclip
         if( pViewClip )
         {
-            // TODO(F2): review subdivision algo, maybe use hybrid
-            // approach from mcseem also in basegfx
-            if(aPolyPolygon.areControlPointsUsed())
-                aPolyPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPolygon);
-
-            if( bIsFilledPolyPolygon )
-            {
-                ::basegfx::B2DPolyPolygon clip(*pViewClip);
-                aPolyPolygon = ::basegfx::tools::removeAllIntersections(aPolyPolygon);
-                aPolyPolygon = ::basegfx::tools::removeNeutralPolygons(aPolyPolygon,
-                                                                       sal_True);
-                clip = ::basegfx::tools::removeAllIntersections(clip);
-                clip = ::basegfx::tools::removeNeutralPolygons(clip,
-                                                               sal_True);
-                aPolyPolygon.append(clip);
-                aPolyPolygon = ::basegfx::tools::removeAllIntersections(aPolyPolygon);
-                aPolyPolygon = ::basegfx::tools::removeNeutralPolygons(aPolyPolygon,
-                                                                       sal_False);
-            }
-            else
-            {
-                // TODO(F3): add AW's addition to clipPolyPolygonOnPolyPolygon
-                // regarding open/close state
-                aPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aPolyPolygon,
-                                                                            *pViewClip,
-                                                                            true);
-            }
+            // AW: Simplified
+            aPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                aPolyPolygon, *pViewClip, true, !bIsFilledPolyPolygon);
         }
 
         if(!(aPolyPolygon.count()))
