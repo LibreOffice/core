@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofvirtobj.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <vcl/outdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -62,11 +64,42 @@ namespace sdr
             // sub-hierarchy, even when they are group objects. This is necessary
             // to avoid that the same VOCs will be added to the draw hierarchy
             // twice which leads to problems.
+            //
             // This solution is only a first solution to get things running. Later
             // this needs to be replaced with creating real VOCs for the objects
             // referenced by virtual objects to avoid the 'trick' of setting the
             // offset for painting at the destination OutputDevive.
+            //
+            // As can be seen, with primitives, the problem will be solved using
+            // a transformPrimitive, so this solution can stay with primitives.
             return 0L;
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            // use method from referenced object to get the Primitive2DSequence
+            const drawinglayer::primitive2d::Primitive2DSequence xSequenceVirtual(GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DSequence());
+
+            if(xSequenceVirtual.hasElements())
+            {
+                // create displacement transformation if we have content
+                ::basegfx::B2DHomMatrix aObjectMatrix;
+                Point aAnchor(GetVirtObj().GetAnchorPos());
+
+                if(aAnchor.X() || aAnchor.Y())
+                {
+                    aObjectMatrix.set(0, 2, aAnchor.X());
+                    aObjectMatrix.set(1, 2, aAnchor.Y());
+                }
+
+                // create transform primitive
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::TransformPrimitive2D(aObjectMatrix, xSequenceVirtual));
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr
