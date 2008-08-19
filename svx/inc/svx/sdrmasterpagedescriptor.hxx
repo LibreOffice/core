@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdrmasterpagedescriptor.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,8 @@ namespace sdr
         virtual ~MasterPageDescriptor();
 
         // ViewContact part
-        virtual sdr::contact::ViewContact& GetViewContact() const;
+        sdr::contact::ViewContact& GetViewContact() const;
+        void FlushViewContact() const;
 
         // this method is called form the destructor of the referenced page.
         // do all necessary action to forget the page. It is not necessary to call
