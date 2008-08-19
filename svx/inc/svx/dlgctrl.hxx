@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgctrl.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@ class XFillAttrSetItem;
 #endif
 
 class XOBitmap;
-class XOutputDevice;
 class XOutdevItemPool;
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -443,7 +442,6 @@ class SdrModel;
 class SVX_DLLPUBLIC SvxXLinePreview : public Control
 {
 private:
-    XOutputDevice*                                  mpXOutDev;
     SdrObject*                                      mpLineObjA;
     SdrObject*                                      mpLineObjB;
     SdrObject*                                      mpLineObjC;
@@ -457,7 +455,7 @@ private:
     SVX_DLLPRIVATE void InitSettings( BOOL bForeground, BOOL bBackground );
 
 public:
-    SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputDevice* pXOut );
+    SvxXLinePreview( Window* pParent, const ResId& rResId );
     ~SvxXLinePreview();
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
@@ -476,16 +474,20 @@ public:
 |* SvxXRectPreview
 |*
 \************************************************************************/
+
 class SVX_DLLPUBLIC SvxXRectPreview : public Control
 {
 private:
-    Rectangle       aRect;
-    XOutputDevice*  pXOutDev;
+    SdrObject*                                      mpRectangleObject;
+    SdrModel*                                       mpModel;
 
-    SVX_DLLPRIVATE void         InitSettings( BOOL bForeground, BOOL bBackground );
+    SVX_DLLPRIVATE void InitSettings(bool bForeground, bool bBackground);
 
 public:
-    SvxXRectPreview( Window* pParent, const ResId& rResId, XOutputDevice* pXOut );
+    SvxXRectPreview( Window* pParent, const ResId& rResId );
+    ~SvxXRectPreview();
+
+    void SetAttributes(const SfxItemSet& rItemSet);
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    StateChanged( StateChangedType nStateChange );
@@ -497,29 +499,23 @@ public:
 |* SvxXShadowPreview
 |*
 \************************************************************************/
+
 class SVX_DLLPUBLIC SvxXShadowPreview : public Control
 {
 private:
-    XOutputDevice*      pXOutDev;
-    XOutdevItemPool*    pXPool;
-    Rectangle           aRect;
-    Rectangle           aShadow;
-    XFillAttrSetItem*   pRectItem;
-    XFillAttrSetItem*   pShadowItem;
-    Point               aShadowPos;
+    SdrObject*                                      mpRectangleObject;
+    SdrObject*                                      mpRectangleShadow;
+    SdrModel*                                       mpModel;
 
-    SVX_DLLPRIVATE void             InitSettings( BOOL bForeground, BOOL bBackground );
+    SVX_DLLPRIVATE void InitSettings(bool bForeground, bool bBackground);
 
 public:
-    SvxXShadowPreview( Window* pParent, const ResId& rResId,
-                       XOutputDevice* pXOut, XOutdevItemPool* pXInPool );
+    SvxXShadowPreview( Window* pParent, const ResId& rResId );
     ~SvxXShadowPreview();
 
-    void            SetRect( const Rectangle& rRect ) { aRect = rRect; }
-    void            SetRectAttr( XFillAttrSetItem* pSetItem );
-    void            SetShadow( const Rectangle& rShadow ) { aShadow = rShadow; }
-    void            SetShadowAttr( XFillAttrSetItem* pSetItem );
-    void            SetShadowPos( Point aPos ) { aShadowPos = aPos; }
+    void SetRectangleAttributes(const SfxItemSet& rItemSet);
+    void SetShadowAttributes(const SfxItemSet& rItemSet);
+    void SetShadowPosition(const Point& rPos);
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    StateChanged( StateChangedType nStateChange );
