@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lcolitem.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,16 +33,15 @@
 // include ---------------------------------------------------------------
 
 #include <svx/colritem.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
+#include "svx/svxdllapi.h"
 
 /*
  * dummy-Item fuer ToolBox-Controller:
  *
  */
 
-class SvxLineColorItem : public SvxColorItem
+class SVX_DLLPUBLIC SvxLineColorItem : public SvxColorItem
 {
 public:
     TYPEINFO();
