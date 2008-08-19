@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: headerfooterdlg.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@
 #include <tools/color.hxx>
 #endif
 #include <i18npool/mslangid.hxx>
-#include <svx/xoutx.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
@@ -81,6 +80,10 @@
 #include "undoheaderfooter.hxx"
 #include "sdundogr.hxx"
 #include "ViewShell.hxx"
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 namespace sd
 {
@@ -92,11 +95,9 @@ private:
     HeaderFooterSettings maSettings;
     Size maPageSize;
     Rectangle maOutRect;
-    double mdScaleX;
-    double mdScaleY;
 
 private:
-    void Paint( XOutputDevice& aXOut, SdrTextObj* pObj, bool bVisible, bool bDottet = false );
+    void Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted = false );
 
 public:
     PresLayoutPreview( ::Window* pParent, const ResId& rResId, SdPage* pMaster );
@@ -843,51 +844,49 @@ void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
 
 // -----------------------------------------------------------------------
 
-void PresLayoutPreview::Paint( XOutputDevice& aXOut, SdrTextObj* pObj, bool bVisible, bool bDottet /* = false*/ )
+void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
 {
-    Rectangle aRect( pObj->GetGeoRect() );
+    // get object transformation
+    basegfx::B2DHomMatrix aObjectTransform;
+    basegfx::B2DPolyPolygon aObjectPolyPolygon;
+    pObj->TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon);
 
-    aRect.nLeft     = long( aRect.nLeft * mdScaleX );
-    aRect.nTop      = long( aRect.nTop * mdScaleY );
-    aRect.nRight    = long( aRect.nRight * mdScaleX );
-    aRect.nBottom   = long( aRect.nBottom * mdScaleY );
+    // build complete transformation by adding view transformation from
+    // logic page coordinates to local pixel coordinates
+    const double fScaleX((double)maOutRect.getWidth() / (double)maPageSize.Width());
+    const double fScaleY((double)maOutRect.getHeight() / (double)maPageSize.Height());
+    aObjectTransform.scale(fScaleX, fScaleY);
+    aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
-    aRect += maOutRect.TopLeft();
+    // create geometry using unit range and object transform
+    const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+    basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createPolygonFromRect(aUnitRange));
+    aGeometry.transform(aObjectTransform);
 
+    // apply line pattern if wanted
+    if(bDotted)
+    {
+        ::std::vector<double> aPattern;
+        static double fFactor(1.0);
+        aPattern.push_back(3.0 * fFactor);
+        aPattern.push_back(1.0 * fFactor);
+
+        basegfx::B2DPolyPolygon aDashed;
+        basegfx::tools::applyLineDashing(aGeometry, aPattern, &aDashed);
+        aGeometry = aDashed;
+    }
+
+    // determine line color
     svtools::ColorConfig aColorConfig;
     svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( bVisible ? svtools::FONTCOLOR : svtools::OBJECTBOUNDARIES ) );
 
-    SfxItemSet aSet( pObj->GetModel()->GetItemPool() );
-    String aEmpty;
+    // paint at OutDev
+    aOut.SetLineColor(Color(aColor.nColor));
+    aOut.SetFillColor();
 
-    if( bDottet )
+    for(sal_uInt32 a(0); a < aGeometry.count(); a++)
     {
-        XDash aDash( XDASH_RECT, 1, 2, 1, 2, 2);
-        aSet.Put( XLineDashItem( aEmpty, aDash ) );
-    }
-
-    aSet.Put( XLineStyleItem( bDottet ? XLINE_DASH : XLINE_SOLID ) );
-    aSet.Put( XFillStyleItem( XFILL_NONE ) );
-    aSet.Put( XLineColorItem(aEmpty,Color( aColor.nColor)) );
-    aXOut.SetLineAttr(aSet);
-    aXOut.SetFillAttr(aSet);
-
-    const GeoStat& aGeo = pObj->GetGeoStat();
-
-    if( aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 )
-    {
-        Polygon aPoly(aRect);
-        if(aGeo.nShearWink!=0)
-            ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
-
-        if(aGeo.nDrehWink!=0)
-            RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-
-        aXOut.DrawPolyLine(aPoly);
-    }
-    else
-    {
-        aXOut.DrawRect(aRect);
+        aOut.DrawPolyLine(aGeometry.getB2DPolygon(a));
     }
 }
 
@@ -924,9 +923,6 @@ void PresLayoutPreview::Paint( const Rectangle& )
     DecorationView aDecoView( this );
     maOutRect = aDecoView.DrawFrame( maOutRect, FRAME_HIGHLIGHT_IN );
 
-    mdScaleX = (double)maOutRect.GetWidth() / (double)maPageSize.Width();
-    mdScaleY = (double)maOutRect.GetHeight() / (double)maPageSize.Height();
-
     // draw page background
     SetFillColor( Color(COL_WHITE) );
     DrawRect( maOutRect );
@@ -939,20 +935,18 @@ void PresLayoutPreview::Paint( const Rectangle& )
     SdrTextObj* pDate   = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_DATETIME );
     SdrTextObj* pNumber = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_SLIDENUMBER );
 
-    XOutputDevice aXOut( this );
-
     if( pMasterTitle )
-        Paint( aXOut, pMasterTitle, true, true );
+        Paint( *this, pMasterTitle, true, true );
     if( pMasterOutline )
-        Paint( aXOut, pMasterOutline, true, true );
+        Paint( *this, pMasterOutline, true, true );
     if( pHeader )
-        Paint( aXOut, pHeader, maSettings.mbHeaderVisible );
+        Paint( *this, pHeader, maSettings.mbHeaderVisible );
     if( pFooter )
-        Paint( aXOut, pFooter, maSettings.mbFooterVisible );
+        Paint( *this, pFooter, maSettings.mbFooterVisible );
     if( pDate )
-        Paint( aXOut, pDate, maSettings.mbDateTimeVisible );
+        Paint( *this, pDate, maSettings.mbDateTimeVisible );
     if( pNumber )
-        Paint( aXOut, pNumber, maSettings.mbSlideNumberVisible );
+        Paint( *this, pNumber, maSettings.mbSlideNumberVisible );
 
     Pop();
 }
