@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpgradnt.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +97,7 @@ SvxGradientTabPage::SvxGradientTabPage
     aLbColorTo          ( this, SVX_RES( LB_COLOR_TO ) ),
     aMtrColorTo         ( this, SVX_RES( MTR_COLOR_TO ) ),
     aLbGradients        ( this, SVX_RES( LB_GRADIENTS ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
     aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
     aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
     aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
@@ -110,8 +110,6 @@ SvxGradientTabPage::SvxGradientTabPage
     pGradientList( NULL ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    //XOut              ( &aCtlPreview, pXPool ),
-    XOut                ( &aCtlPreview ),
     aXFStyleItem        ( XFILL_GRADIENT ),
     aXGradientItem      ( String(), XGradient( COL_BLACK, COL_WHITE ) ),
     aXFillAttr          ( pXPool ),
@@ -135,13 +133,7 @@ SvxGradientTabPage::SvxGradientTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXGradientItem );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
-
-    // Set line at the OutputDevice
-    XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
     // Handler ueberladen
     aLbGradients.SetSelectHdl(
@@ -440,7 +432,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 
     // Anzeigen im XOutDev
     rXFSet.Put( XFillGradientItem( String(), aXGradient ) );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
     aCtlPreview.Invalidate();
 
@@ -897,9 +889,9 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
         // Controls Disablen/Enablen
         SetControlState_Impl( eXGS );
 
-        // ItemSet fuellen und an XOut weiterleiten
+        // ItemSet fuellen und an aCtlPreview weiterleiten
         rXFSet.Put( XFillGradientItem( String(), *pGradient ) );
-        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+        aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
         aCtlPreview.Invalidate();
         delete pGradient;
