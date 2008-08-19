@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,16 +172,20 @@ FmXPageViewWinRec::FmXPageViewWinRec(const Reference< XMultiServiceFactory >& _r
     DBG_ASSERT( pFormPage, "FmXPageViewWinRec::FmXPageViewWinRec: no FmFormPage found!" );
     if ( pFormPage )
     {
-        Reference< XIndexAccess > xForms( pFormPage->GetForms(), UNO_QUERY );
-        if( xForms.is() )
+        try
         {
-            const sal_Int32 nLength = xForms->getCount();
-            for (sal_Int32 i = 0; i < nLength; i++)
+            Reference< XIndexAccess > xForms( pFormPage->GetForms(), UNO_QUERY_THROW );
+            sal_uInt32 nLength = xForms->getCount();
+            for (sal_uInt32 i = 0; i < nLength; i++)
             {
                 Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
-                if( xForm.is() )
+                if ( xForm.is() )
                     setController( xForm );
             }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -324,7 +328,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
         if ( xInitController.is() )
         {
             Sequence< Any > aInitArgs( 1 );
-            aInitArgs[ 0 ] <<= xHandler;
+            aInitArgs[ 0 ] <<= NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ), makeAny( xHandler ) );
             xInitController->initialize( aInitArgs );
         }
     }
