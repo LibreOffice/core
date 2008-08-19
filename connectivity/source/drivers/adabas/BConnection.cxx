@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BConnection.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,12 +206,6 @@ Reference< XDatabaseMetaData > SAL_CALL OAdabasConnection::getMetaData(  ) throw
     }
 
     return xMetaData;
-}
-//------------------------------------------------------------------------------
-sal_Bool OAdabasConnection::isStarted()
-{
-    return sal_True;
-
 }
 // --------------------------------------------------------------------------------
 Reference< XStatement > SAL_CALL OAdabasConnection::createStatement(  ) throw(SQLException, RuntimeException)
