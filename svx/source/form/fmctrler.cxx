@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmctrler.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,70 +31,69 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmctrler.hxx"
-#include "fmtools.hxx"
-#include "fmprop.hrc"
-#include "svx/fmshell.hxx"
 #include "confirmdelete.hxx"
 #include "fmcontrolbordermanager.hxx"
-#include "fmdocumentclassification.hxx"
 #include "fmcontrollayout.hxx"
-#include "fmurl.hxx"
+#include "fmctrler.hxx"
 #include "fmdispatch.hxx"
-#include "trace.hxx"
-#include "fmshimp.hxx"
-#include "svx/fmview.hxx"
-#include "svx/svdpagv.hxx"
+#include "fmdocumentclassification.hxx"
+#include "fmprop.hrc"
 #include "fmresids.hrc"
-#include "svx/dialmgr.hxx"
 #include "fmservs.hxx"
+#include "fmshimp.hxx"
+#include "fmtools.hxx"
+#include "fmurl.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/fmshell.hxx"
+#include "svx/fmview.hxx"
 #include "svx/sdrpagewindow.hxx"
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/sdb/RowChangeAction.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/awt/XComboBox.hpp>
-#include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/XListBox.hpp>
+#include "svx/svdpagv.hxx"
+#include "trace.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/FocusChangeReason.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
-#include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/form/TabulatorCycle.hpp>
-#include <com/sun/star/form/XBoundControl.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/awt/XComboBox.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/form/XBoundComponent.hpp>
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#include <com/sun/star/sdb/ParametersRequest.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIdentifierReplace.hpp>
+#include <com/sun/star/form/TabulatorCycle.hpp>
+#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
+#include <com/sun/star/form/XBoundComponent.hpp>
+#include <com/sun/star/form/XBoundControl.hpp>
+#include <com/sun/star/form/XGridControl.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#include <com/sun/star/sdb/RowChangeAction.hpp>
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+/** === end UNO includes === **/
 
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
-
-#include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/controls/unocontrol.hxx>
-
-#include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
-
-#include <tools/shl.hxx>
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <comphelper/property.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/propagg.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/interaction.hxx>
 #include <comphelper/extract.hxx>
-
+#include <comphelper/interaction.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/propagg.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/uno3.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/typeprovider.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <toolkit/controls/unocontrol.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/shl.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -781,7 +780,8 @@ void FmXFormController::disposing(void)
     m_aFilters.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_xActiveControl  = m_xCurrentControl = NULL;
+    m_xActiveControl = NULL;
+    implSetCurrentControl( NULL );
 
     // clean up our children
     for (FmFormControllers::const_iterator i = m_aChilds.begin();
@@ -937,10 +937,13 @@ bool FmXFormController::replaceControl( const Reference< XControl >& _rxExistent
 
                 if ( bReplacedWasActive )
                 {
-                    m_xActiveControl = m_xCurrentControl = NULL;
+                    m_xActiveControl = NULL;
+                    implSetCurrentControl( NULL );
                 }
                 else if ( bReplacedWasCurrent )
-                    m_xCurrentControl = _rxNewControl;
+                {
+                    implSetCurrentControl( _rxNewControl );
+                }
 
                 // carry over the model
                 _rxNewControl->setModel( _rxExistentControl->getModel() );
@@ -1256,7 +1259,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
     sal_Bool bActivated = !m_xActiveControl.is() && xControl.is();
 
     m_xActiveControl  = xControl;
-    m_xCurrentControl = xControl;
+    implSetCurrentControl( xControl );
 
     DBG_ASSERT(m_xCurrentControl.is(), "Kein CurrentControl selektiert");
 
@@ -1265,15 +1268,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
 
     // invalidate all features which depend on the currently focused control
     if ( m_bDBConnection && !m_bFiltering && m_pView )
-    {
-        ::std::vector< sal_Int32 > aFocusDependentFeatures;
-        aFocusDependentFeatures.push_back( SID_FM_SORTUP );
-        aFocusDependentFeatures.push_back( SID_FM_SORTDOWN );
-        aFocusDependentFeatures.push_back( SID_FM_AUTOFILTER );
-        if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
-            m_pView->GetFormShell()->GetImpl()->invalidateFeatures( aFocusDependentFeatures );
-        invalidateFeatures( aFocusDependentFeatures );
-    }
+        implInvalidateCurrentControlDependentFeatures();
 
     if (m_xCurrentControl.is())
     {
@@ -2002,6 +1997,23 @@ void FmXFormController::implControlRemoved( const Reference< XControl>& _rxContr
         if ( xValidatable.is() )
             xValidatable->removeFormComponentValidityListener( this );
     }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormController::implSetCurrentControl( const Reference< XControl >& _rxControl )
+{
+    if ( m_xCurrentControl.get() == _rxControl.get() )
+        return;
+
+    Reference< XGridControl > xGridControl( m_xCurrentControl, UNO_QUERY );
+    if ( xGridControl.is() )
+        xGridControl->removeGridControlListener( this );
+
+    m_xCurrentControl = _rxControl;
+
+    xGridControl.set( m_xCurrentControl, UNO_QUERY );
+    if ( xGridControl.is() )
+        xGridControl->addGridControlListener( this );
 }
 
 //------------------------------------------------------------------------------
@@ -3643,30 +3655,27 @@ void SAL_CALL FmXFormController::initialize( const Sequence< Any >& aArguments )
     DBG_ASSERT( !m_xInteractionHandler.is(), "FmXFormController::initialize: already initialized!" );
         // currently, we only initialize our interaction handler here, so it's sufficient to assert this
 
-    NamedValue aNamed;
-    PropertyValue aProperty;
+    ::comphelper::NamedValueCollection aArgs( aArguments );
+    m_xInteractionHandler = aArgs.getOrDefault( "InteractionHandler", m_xInteractionHandler );
+}
 
-    const Any* pArg = aArguments.getConstArray();
-    const Any* pArgEnd = aArguments.getConstArray() + aArguments.getLength();
-    while ( pArg != pArgEnd )
-    {
-        if ( ( *pArg >>= aNamed ) && aNamed.Name.equalsAscii( "InteractionHandler" ) )
-        {
-            OSL_VERIFY( aNamed.Value >>= m_xInteractionHandler );
-            break;
-        }
+//--------------------------------------------------------------------
+void FmXFormController::implInvalidateCurrentControlDependentFeatures()
+{
+    ::std::vector< sal_Int32 > aCurrentControlDependentFeatures;
 
-        if ( ( *pArg >>= aProperty ) && aProperty.Name.equalsAscii( "InteractionHandler" ) )
-        {
-            OSL_VERIFY( aProperty.Value >>= m_xInteractionHandler );
-            break;
-        }
+    aCurrentControlDependentFeatures.push_back( SID_FM_SORTUP );
+    aCurrentControlDependentFeatures.push_back( SID_FM_SORTDOWN );
+    aCurrentControlDependentFeatures.push_back( SID_FM_AUTOFILTER );
+    aCurrentControlDependentFeatures.push_back( SID_FM_REFRESH_FORM_CONTROL );
 
-        if ( *pArg >>= m_xInteractionHandler )
-        {
-            break;
-        }
+    if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
+        m_pView->GetFormShell()->GetImpl()->invalidateFeatures( aCurrentControlDependentFeatures );
+    invalidateFeatures( aCurrentControlDependentFeatures );
+}
 
-        ++pArg;
-    }
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::columnChanged( const EventObject& /*_event*/ ) throw (RuntimeException)
+{
+    implInvalidateCurrentControlDependentFeatures();
 }
