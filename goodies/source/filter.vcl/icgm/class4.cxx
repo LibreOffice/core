@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: class4.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_goodies.hxx"
 
-#include <math.h>
 #include <main.hxx>
 #include <chart.hxx>
 #include <outact.hxx>
+#include <math.h>
 
 using namespace ::com::sun::star;
 
