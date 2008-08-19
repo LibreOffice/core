@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ETable.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,11 +301,6 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         m_aScales.push_back(nScale);
     }
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-}
-// -------------------------------------------------------------------------
-OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection) : OFlatTable_BASE(_pTables,_pConnection)
-{
-
 }
 // -------------------------------------------------------------------------
 OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
