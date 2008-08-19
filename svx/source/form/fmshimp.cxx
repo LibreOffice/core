@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.cxx,v $
- * $Revision: 1.92 $
+ * $Revision: 1.93 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,6 +136,7 @@ sal_uInt16 DatabaseSlotMap[] =
     SID_FM_AUTOFILTER,
     SID_FM_FORM_FILTERED,
     SID_FM_REFRESH,
+    SID_FM_REFRESH_FORM_CONTROL,
     SID_FM_SEARCH,
     SID_FM_FILTER_START,
     SID_FM_VIEW_AS_GRID,
@@ -272,6 +273,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::form::binding;
+using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
@@ -1626,30 +1628,49 @@ Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm)
     return _xForm;
 }
 
-//------------------------------------------------------------------------------
-void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot,
-        const Reference< XForm >& _rxForm, const Reference< XFormController >& _rxController )
+//------------------------------------------------------------------------
+namespace
 {
-    DBG_ASSERT( _rxForm.is(), "FmXFormShell::ExecuteFormSlot: invalid form!" );
-    if ( !_rxForm.is() )
-        return;
+    static bool lcl_isNavigationRelevant( sal_Int32 _nWhich )
+    {
+        return  ( _nWhich == SID_FM_RECORD_FIRST )
+            ||  ( _nWhich == SID_FM_RECORD_PREV )
+            ||  ( _nWhich == SID_FM_RECORD_NEXT )
+            ||  ( _nWhich == SID_FM_RECORD_LAST )
+            ||  ( _nWhich == SID_FM_RECORD_NEW );
+    }
+}
 
-    DBG_ASSERT( !_rxController.is() || ( _rxController->getModel() == _rxForm ),
-        "FmXFormShell::ExecuteFormSlot: inconsistent arguments!" );
+//------------------------------------------------------------------------------
+bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pCompleteState )
+{
+    const ::svx::ControllerFeatures& rController =
+            lcl_isNavigationRelevant( _nSlot )
+        ?   getNavControllerFeatures()
+        :   getActiveControllerFeatures();
 
-    // delegate the functionality to a FormControllerHelper
-    ControllerFeatures aHelper( ::comphelper::getProcessServiceFactory(), this );
-    if ( _rxController.is() )
-        aHelper.assign( _rxController );
-    else
-        aHelper.assign( _rxForm );
+    if ( !_pCompleteState )
+        return rController->isEnabled( _nSlot );
 
-    aHelper->execute( _nSlot );
+    rController->getState( _nSlot, *_pCompleteState );
+    return _pCompleteState->Enabled;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
+{
+    const ::svx::ControllerFeatures& rController =
+            lcl_isNavigationRelevant( _nSlot )
+        ?   getNavControllerFeatures()
+        :   getActiveControllerFeatures();
+
+    rController->execute( _nSlot );
+
     if ( _nSlot == SID_FM_RECORD_UNDO )
     {
         // if we're doing an UNDO, *and* if the affected form is the form which we also display
         // as external view, then we need to reset the controls of the external form, too
-        if ( getInternalForm( _rxForm ) == m_xExternalDisplayedForm )
+        if ( getInternalForm( getActiveForm() ) == m_xExternalDisplayedForm )
         {
             Reference< XIndexAccess > xContainer( m_xExternalDisplayedForm, UNO_QUERY );
             if ( xContainer.is() )
