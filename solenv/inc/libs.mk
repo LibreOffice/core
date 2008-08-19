@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.140 $
+# $Revision: 1.141 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.140 $$"
+LIBSMKREV!:="$$Revision: 1.141 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -132,12 +132,15 @@ LDAPSDKLIB=-lldap
 LDAPSDKLIB=-lldap50
 .ENDIF
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+
 ICOLIB=-lico$(DLLPOSTFIX)
 VCLLIB=-lvcl$(DLLPOSTFIX)
 BASEGFXLIB=-lbasegfx$(DLLPOSTFIX)
+DRAWINGLAYERLIB=-ldrawinglayer$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(DLLPOSTFIX)
+
 .IF "$(SYSTEM_AGG)" == "YES"
 AGGLIB=-lagg
 .ELSE
@@ -462,6 +465,7 @@ ISCLIB=sci.lib
 ISDLIB=sdi.lib
 VCLLIB=ivcl.lib
 BASEGFXLIB=ibasegfx.lib
+DRAWINGLAYERLIB=idrawinglayer.lib
 BASEBMPLIB=ibasebmp.lib
 CANVASTOOLSLIB=icanvastools.lib
 CPPCANVASLIB=icppcanvas.lib
