@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviews5.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -435,6 +435,17 @@ void DrawViewShell::WriteFrameViewData()
 }
 
 
+
+/*************************************************************************
+|*
+|* PrePaint-Method
+|*
+\************************************************************************/
+
+void DrawViewShell::PrePaint()
+{
+    mpDrawView->PrePaint();
+}
 
 /*************************************************************************
 |*
