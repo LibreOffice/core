@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printfun.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,11 +197,6 @@ private:
     BOOL                bMultiArea;
     long                nTabPages;
     long                nTotalPages;
-
-    // #109985#
-    // see new defines in svx containing SDRPAINTMODE_SC_
-    sal_uInt16          mnPaintMode;
-    //USHORT                nObjectFlags;
 
     Rectangle           aPageRect;          //  Dokument-Twips
 
