@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit3.cxx,v $
- * $Revision: 1.124 $
+ * $Revision: 1.125 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2886,11 +2886,16 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                 if ( ( !IsVertical() && ( aStartPos.Y() > aClipRec.Top() ) )
                     || ( IsVertical() && aStartPos.X() < aClipRec.Right() ) )
                 {
-                    if ( ( nLine == 0 ) && !bStripOnly )    // erste Zeile
+                    // Why not just also call when stripping portions? This will give the correct values
+                    // and needs no position corrections in OutlinerEditEng::DrawingText which tries to call
+                    // PaintBullet correctly; exactly what GetEditEnginePtr()->PaintingFirstLine
+                    // does, too. No change for not-layouting (painting).
+                    if(0 == nLine) // && !bStripOnly)
                     {
                         // VERT???
                         GetEditEnginePtr()->PaintingFirstLine( n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
                     }
+
                     // --------------------------------------------------
                     // Ueber die Portions der Zeile...
                     // --------------------------------------------------
@@ -3147,8 +3152,88 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 //L2R                                }
                                 if ( bStripOnly )
                                 {
-                                    // VERT???
-                                    GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray, aTmpFont, n, nIndex, pTextPortion->GetRightToLeft() );
+                                    EEngineData::WrongSpellVector aWrongSpellVector;
+
+                                    if(GetStatus().DoOnlineSpelling() && GetStatus().DoDrawRedLines() && pTextPortion->GetLen())
+                                    {
+                                        WrongList* pWrongs = pPortion->GetNode()->GetWrongList();
+
+                                        if(pWrongs && pWrongs->HasWrongs())
+                                        {
+                                            sal_uInt16 nStart(nIndex);
+                                            sal_uInt16 nEnd(0);
+                                            sal_Bool bWrong(pWrongs->NextWrong(nStart, nEnd));
+                                            const sal_uInt16 nMaxEnd(nIndex + pTextPortion->GetLen());
+
+                                            while(bWrong)
+                                            {
+                                                if(nStart >= nMaxEnd)
+                                                {
+                                                    break;
+                                                }
+
+                                                if(nStart < nIndex)
+                                                {
+                                                    nStart = nIndex;
+                                                }
+
+                                                if(nEnd > nMaxEnd)
+                                                {
+                                                    nEnd = nMaxEnd;
+                                                }
+
+                                                // add to vector
+                                                aWrongSpellVector.push_back(EEngineData::WrongSpellClass(nStart, nEnd));
+
+                                                // goto next index
+                                                nStart = nEnd + 1;
+
+                                                if(nEnd < nMaxEnd)
+                                                {
+                                                    bWrong = pWrongs->NextWrong(nStart, nEnd);
+                                                }
+                                                else
+                                                {
+                                                    bWrong = sal_False;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    const SvxFieldData* pFieldData = 0;
+
+                                    if(PORTIONKIND_FIELD == pTextPortion->GetKind())
+                                    {
+                                        EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
+                                        SvxFieldItem* pFieldItem = PTR_CAST(SvxFieldItem, pAttr->GetItem());
+
+                                        if(pFieldItem)
+                                        {
+                                            pFieldData = pFieldItem->GetField();
+                                        }
+                                    }
+
+                                    // support for EOC, EOW, EOS TEXT comments. To support that,
+                                    // the locale is needed. With the locale and a XBreakIterator it is
+                                    // possible to re-create the text marking info on primitive level
+                                    const lang::Locale aLocale(GetLocale(EditPaM(pPortion->GetNode(), nIndex + 1)));
+
+                                    // create EOL and EOP bools
+                                    const bool bEndOfLine(y == pLine->GetEndPortion());
+                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+
+                                    // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
+                                    // consequence, but also already set at pOutDev)
+                                    const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                                    // StripPortions() data callback
+                                    GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
+                                        aTmpFont, n, nIndex, pTextPortion->GetRightToLeft(),
+                                        aWrongSpellVector.size() ? &aWrongSpellVector : 0,
+                                        pFieldData,
+                                        bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
+                                        &aLocale,
+                                        aTextLineColor);
                                 }
                                 else
                                 {
@@ -3231,34 +3316,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
 
-                                        if( bMetafileValid &&
-                                            bVerboseTextComments )
-                                        {
-                                            // mimicking the behaviour
-                                            // of other places:
-                                            // arbitrarily select next
-                                            // character's locale as
-                                            // this portion's.
-                                            const lang::Locale aLocale( GetLocale( EditPaM( pPortion->GetNode(), nIndex+1 ) ) );
+                                        // --> FME 2005-06-17 #i37132# RTL portions with
+                                        // compressed blank should not paint this blank:
+                                        if ( pTextPortion->IsRightToLeft() && nTextLen >= 2 &&
+                                             pDXArray[ nTextLen - 1 ] ==
+                                             pDXArray[ nTextLen - 2 ] &&
+                                             ' ' == aText.GetChar( nTextStart + nTextLen - 1 ) )
+                                            --nTextLen;
+                                        // <--
 
-                                            // #110496# Output character, word and sentence comments
-                                            ImplDrawWithComments( aTmpFont, aLocale, *pOutDev, *pMtf,
-                                                                  aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
-                                        }
-                                        else
-                                        {
-                                            // --> FME 2005-06-17 #i37132# RTL portions with
-                                            // compressed blank should not paint this blank:
-                                            if ( pTextPortion->IsRightToLeft() && nTextLen >= 2 &&
-                                                 pDXArray[ nTextLen - 1 ] ==
-                                                 pDXArray[ nTextLen - 2 ] &&
-                                                 ' ' == aText.GetChar( nTextStart + nTextLen - 1 ) )
-                                                --nTextLen;
-                                            // <--
-
-                                            // output directly
-                                            aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
-                                        }
+                                        // output directly
+                                        aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
 
                                         if ( bDrawFrame )
                                         {
@@ -3410,14 +3478,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     break;
                 else if ( IsVertical() && ( aStartPos.X() <= aClipRec.Left() ) )
                     break;
-
-                // #110496# Add End-of-line comment
-                if( bMetafileValid &&
-                    bVerboseTextComments &&
-                    nLine+1 < nLines )
-                {
-                    pMtf->AddAction( new MetaCommentAction( "XTEXT_EOL" ) );
-                }
             }
 
             if ( !aStatus.IsOutliner() )
@@ -3446,14 +3506,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             break;
         if ( IsVertical() && ( aStartPos.X() < aClipRec.Left() ) )
             break;
-
-        // #110496# Add End-of-paragraph comment
-        if( bMetafileValid &&
-            bVerboseTextComments &&
-            n+1 < GetParaPortions().Count() )
-        {
-            pMtf->AddAction( new MetaCommentAction( "XTEXT_EOP" ) );
-        }
     }
     if ( aStatus.DoRestoreFont() )
         pOutDev->SetFont( aOldFont );
@@ -4466,66 +4518,43 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
     aCompressedPortions.Remove( 0, aCompressedPortions.Count() );
 }
 
-
-void ImpEditEngine::ImplDrawWithComments( SvxFont&              rFont,
-                                          const lang::Locale&   rLocale,
-                                          OutputDevice&         rOutDev,
-                                          GDIMetaFile&          rMtf,
-                                          const Point&          rPos,
-                                          const String&         rTxt,
-                                          const USHORT          nIdx,
-                                          const USHORT          nLen,
-                                          const sal_Int32*      pDXArray ) const
+// redesigned to work with TextMarkingVector
+void ImpEditEngine::ImplFillTextMarkingVector(const lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const USHORT nIdx, const USHORT nLen) const
 {
-    // #116716# output text normally (the obvious solution, to split
-    // the text up into single characters, does not work at all for
-    // BiDi text)
-    rFont.QuickDrawText( &rOutDev, rPos, rTxt, nIdx, nLen, pDXArray );
-
     // determine relevant logical text elements for the just-rendered
     // string of characters.
-    Reference< i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
+    Reference< i18n::XBreakIterator > _xBI(ImplGetBreakIterator());
 
-    if( _xBI.is() )
+    if(_xBI.is())
     {
         sal_Int32 nDone;
-        sal_Int32 nNextCellBreak( _xBI->nextCharacters(rTxt,
-                                                      nIdx,
-                                                      rLocale,
-                                                      i18n::CharacterIteratorMode::SKIPCELL,
-                                                      0,
-                                                      nDone) );
-        i18n::Boundary nNextWordBoundary( _xBI->getWordBoundary(rTxt,
-                                                               nIdx,
-                                                               rLocale,
-                                                               i18n::WordType::ANY_WORD,
-                                                               sal_True) );
-        sal_Int32 nNextSentenceBreak( _xBI->endOfSentence(rTxt,
-                                                         nIdx,
-                                                         rLocale) );
+        sal_Int32 nNextCellBreak(_xBI->nextCharacters(rTxt, nIdx, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+        i18n::Boundary nNextWordBoundary(_xBI->getWordBoundary(rTxt, nIdx, rLocale, i18n::WordType::ANY_WORD, sal_True));
+        sal_Int32 nNextSentenceBreak(_xBI->endOfSentence(rTxt, nIdx, rLocale));
 
-        const sal_Int32 nEndPos( nIdx + nLen );
+        const sal_Int32 nEndPos(nIdx + nLen);
         sal_Int32 i;
-        for( i=nIdx; i<nEndPos; ++i )
+
+        for(i = nIdx; i < nEndPos; i++)
         {
-            // issue the comments for the respective break positions
-            if( i == nNextCellBreak )
+            // create the entries for the respective break positions
+            if(i == nNextCellBreak)
             {
-                rMtf.AddAction( new MetaCommentAction( "XTEXT_EOC", i-nIdx ) );
-                nNextCellBreak = _xBI->nextCharacters(rTxt, i, rLocale,
-                                                     i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                rTextMarkingVector.push_back(EEngineData::TextMarkingClass(EEngineData::EndOfCaracter, i - nIdx));
+                nNextCellBreak = _xBI->nextCharacters(rTxt, i, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
             }
-            if( i == nNextWordBoundary.endPos )
+            if(i == nNextWordBoundary.endPos)
             {
-                rMtf.AddAction( new MetaCommentAction( "XTEXT_EOW", i-nIdx ) );
-                nNextWordBoundary = _xBI->getWordBoundary(rTxt, i+1, rLocale,
-                                                         i18n::WordType::ANY_WORD, sal_True);
+                rTextMarkingVector.push_back(EEngineData::TextMarkingClass(EEngineData::EndOfWord, i - nIdx));
+                nNextWordBoundary = _xBI->getWordBoundary(rTxt, i + 1, rLocale, i18n::WordType::ANY_WORD, sal_True);
             }
-            if( i == nNextSentenceBreak )
+            if(i == nNextSentenceBreak)
             {
-                rMtf.AddAction( new MetaCommentAction( "XTEXT_EOS", i-nIdx ) );
-                nNextSentenceBreak = _xBI->endOfSentence(rTxt, i+1, rLocale);
+                rTextMarkingVector.push_back(EEngineData::TextMarkingClass(EEngineData::EndOfSentence, i - nIdx));
+                nNextSentenceBreak = _xBI->endOfSentence(rTxt, i + 1, rLocale);
             }
         }
     }
 }
+
+// eof
