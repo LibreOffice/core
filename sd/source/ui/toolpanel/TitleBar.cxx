@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TitleBar.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,6 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/bitmapex.hxx>
 #include <tools/color.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xdash.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/xlndsit.hxx>
