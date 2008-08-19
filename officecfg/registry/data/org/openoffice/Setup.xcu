@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Setup.xcu,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -526,27 +526,7 @@
                     <value xml:lang="en-US">Base: View Design</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="report">
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value >ReportCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value >dbreport</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value >DbReportWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value >14</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value >GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value xml:lang="en-US">Base: Sun Report Builder</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace" install:module="base">
+      <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
                 <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
                 <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
