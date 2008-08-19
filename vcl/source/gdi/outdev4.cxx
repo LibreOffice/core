@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev4.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <math.h>
-
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salgdi.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svdata.hxx>
