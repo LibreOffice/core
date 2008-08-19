@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NDatabaseMetaData.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +103,6 @@ namespace connectivity
             virtual ~OEvoabDatabaseMetaData();
         public:
             inline OEvoabConnection* getOwnConnection() const { return m_pConnection; }
-            void construct();
 
             OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
 
