@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,10 +60,13 @@ private:
     SVX_DLLPRIVATE void RemoveListeners_Impl();
     SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::datatransfer::XTransferable > GetTransferable_Impl() const;
     SVX_DLLPRIVATE void GetObjRef_Impl();
-    SVX_DLLPRIVATE void PaintGraphic_Impl(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec, sal_Bool bActive = sal_False ) const;
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
-//protected:
+    // DrawContact section
+private:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
+protected:
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     String                      aProgName;
@@ -91,6 +94,9 @@ public:
     SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, FASTBOOL bFrame_=FALSE);
     SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=FALSE);
     virtual ~SdrOle2Obj();
+
+    // access to svt::EmbeddedObjectRef
+    const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const { return xObjRef; }
 
     sal_Int64 GetAspect() const { return xObjRef.GetViewAspect(); }
     void SetAspect( sal_Int64 nAspect );
@@ -134,7 +140,6 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -173,6 +178,16 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     sal_Bool AddOwnLightClient();
+
+    // helper for ViewObjectContactOfSdrOle2Obj. As long as the OLE stuff is not
+    // reworked, the things the old Do_PaintObject did at this object need to be
+    // emulated. Isolated those things here. Return value tells if the object
+    // is active
+    bool executeOldDoPaintPreparations(SdrPageView* pPageVew) const;
+
+    // handy to get the empty replacement bitmap without accessing all the old stuff
+    Bitmap GetEmtyOLEReplacementBitmap() const;
+
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
 };
 
