@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtww8.hxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -551,6 +551,7 @@ public:
     void OutWW8FlyFrm(const sw::Frame& rFmt, const Point& rNdTopLeft);
     void OutFlyFrm(const sw::Frame& rFmt);
     void AppendFlyInFlys(const sw::Frame& rFrmFmt, const Point& rNdTopLeft);
+    void WriteOutliner(const OutlinerParaObject& rOutliner, BYTE nTyp);
     void WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp);
 
     UINT32 GetSdrOrdNum( const SwFrmFmt& rFmt ) const;
