@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GeometryHandler.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,6 @@
 #include <svx/xdef.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnclit.hxx>
