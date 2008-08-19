@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optionsdrawinglayer.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,11 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_MAXIMUMPAPERTOPMARGIN       9999
 #define DEFAULT_MAXIMUMPAPERBOTTOMMARGIN    9999
 
+// primitives
+#define DEFAULT_ANTIALIASING                        sal_False
+#define DEFAULT_QUADRATIC3DRENDERLIMIT              1000000
+#define DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT     45000
+
 #define PROPERTYNAME_OVERLAYBUFFER      OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"    ))
 #define PROPERTYNAME_PAINTBUFFER        OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"      ))
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"     ))
@@ -104,6 +109,11 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperRightMargin"))
 #define PROPERTYNAME_MAXIMUMPAPERTOPMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperTopMargin"))
 #define PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperBottomMargin"))
+
+// primitives
+#define PROPERTYNAME_ANTIALIASING OUString(RTL_CONSTASCII_USTRINGPARAM("AntiAliasing"))
+#define PROPERTYNAME_QUADRATIC3DRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("Quadratic3DRenderLimit"))
+#define PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("QuadraticFormControlRenderLimit"))
 
 #define PROPERTYHANDLE_OVERLAYBUFFER                0
 #define PROPERTYHANDLE_PAINTBUFFER                  1
@@ -129,7 +139,12 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        15
 #define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     16
 
-#define PROPERTYCOUNT                               17
+// primitives
+#define PROPERTYHANDLE_ANTIALIASING                     17
+#define PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT           18
+#define PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT  19
+
+#define PROPERTYCOUNT                               20
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -199,6 +214,15 @@ public:
     void SetMaximumPaperTopMargin(sal_uInt32 nNew);
     void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
 
+    // primitives
+    sal_Bool    IsAntiAliasing() const;
+    sal_uInt32  GetQuadratic3DRenderLimit() const;
+    sal_uInt32  GetQuadraticFormControlRenderLimit() const;
+
+    void        SetAntiAliasing( sal_Bool bState );
+    void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
+    void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
+
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
 //-------------------------------------------------------------------------------------------------------------
@@ -236,6 +260,11 @@ private:
         sal_uInt32  m_nMaximumPaperRightMargin;
         sal_uInt32  m_nMaximumPaperTopMargin;
         sal_uInt32  m_nMaximumPaperBottomMargin;
+
+        // primitives
+        sal_Bool    m_bAntiAliasing;
+        sal_uInt32  m_nQuadratic3DRenderLimit;
+        sal_uInt32  m_nQuadraticFormControlRenderLimit;
 };
 
 //_________________________________________________________________________________________________________________
@@ -269,7 +298,12 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_nMaximumPaperLeftMargin(DEFAULT_MAXIMUMPAPERLEFTMARGIN),
     m_nMaximumPaperRightMargin(DEFAULT_MAXIMUMPAPERRIGHTMARGIN),
     m_nMaximumPaperTopMargin(DEFAULT_MAXIMUMPAPERTOPMARGIN),
-    m_nMaximumPaperBottomMargin(DEFAULT_MAXIMUMPAPERBOTTOMMARGIN)
+    m_nMaximumPaperBottomMargin(DEFAULT_MAXIMUMPAPERBOTTOMMARGIN),
+
+    // primitives
+    m_bAntiAliasing(DEFAULT_ANTIALIASING),
+    m_nQuadratic3DRenderLimit(DEFAULT_QUADRATIC3DRENDERLIMIT),
+    m_nQuadraticFormControlRenderLimit(DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT)
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
@@ -411,6 +445,28 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 seqValues[nProperty] >>= m_nMaximumPaperBottomMargin;
             }
             break;
+
+            // primitives
+            case PROPERTYHANDLE_ANTIALIASING:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\AntiAliasing\"?" );
+                seqValues[nProperty] >>= m_bAntiAliasing;
+            }
+            break;
+
+            case PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\Quadratic3DRenderLimit\"?" );
+                seqValues[nProperty] >>= m_nQuadratic3DRenderLimit;
+            }
+            break;
+
+            case PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\QuadraticFormControlRenderLimit\"?" );
+                seqValues[nProperty] >>= m_nQuadraticFormControlRenderLimit;
+            }
+            break;
         }
     }
 }
@@ -505,6 +561,19 @@ void SvtOptionsDrawinglayer_Impl::Commit()
 
             case PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN:
                 aSeqValues[nProperty] <<= m_nMaximumPaperBottomMargin;
+            break;
+
+            // primitives
+            case PROPERTYHANDLE_ANTIALIASING:
+                aSeqValues[nProperty] <<= m_bAntiAliasing;
+            break;
+
+            case PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT:
+                aSeqValues[nProperty] <<= m_nQuadratic3DRenderLimit;
+            break;
+
+            case PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT:
+                aSeqValues[nProperty] <<= m_nQuadraticFormControlRenderLimit;
             break;
         }
     }
@@ -786,6 +855,49 @@ void SvtOptionsDrawinglayer_Impl::SetMaximumPaperBottomMargin( sal_uInt32 nNew )
     }
 }
 
+// primitives
+sal_Bool SvtOptionsDrawinglayer_Impl::IsAntiAliasing() const
+{
+    return m_bAntiAliasing;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetQuadratic3DRenderLimit() const
+{
+    return m_nQuadratic3DRenderLimit;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetQuadraticFormControlRenderLimit() const
+{
+    return m_nQuadraticFormControlRenderLimit;
+}
+
+void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( sal_Bool bState )
+{
+    if(m_bAntiAliasing != bState)
+    {
+        m_bAntiAliasing = bState;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetQuadratic3DRenderLimit(sal_uInt32 nNew)
+{
+    if(m_nQuadratic3DRenderLimit != nNew)
+    {
+        m_nQuadratic3DRenderLimit = nNew;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetQuadraticFormControlRenderLimit(sal_uInt32 nNew)
+{
+    if(m_nQuadraticFormControlRenderLimit != nNew)
+    {
+        m_nQuadraticFormControlRenderLimit = nNew;
+        SetModified();
+    }
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -816,7 +928,12 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN,
         PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN,
         PROPERTYNAME_MAXIMUMPAPERTOPMARGIN,
-        PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN
+        PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN,
+
+        // primitives
+        PROPERTYNAME_ANTIALIASING,
+        PROPERTYNAME_QUADRATIC3DRENDERLIMIT,
+        PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT
     };
 
     // Initialize return sequence with these list ...
@@ -1105,6 +1222,43 @@ void SvtOptionsDrawinglayer::SetMaximumPaperBottomMargin( sal_uInt32 nNew )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetMaximumPaperBottomMargin( nNew );
+}
+
+// primitives
+sal_Bool SvtOptionsDrawinglayer::IsAntiAliasing() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsAntiAliasing();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetQuadratic3DRenderLimit();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetQuadraticFormControlRenderLimit() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetQuadraticFormControlRenderLimit();
+}
+
+void SvtOptionsDrawinglayer::SetAntiAliasing( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetAntiAliasing( bState );
+}
+
+void SvtOptionsDrawinglayer::SetQuadratic3DRenderLimit(sal_uInt32 nNew)
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetQuadratic3DRenderLimit( nNew );
+}
+
+void SvtOptionsDrawinglayer::SetQuadraticFormControlRenderLimit(sal_uInt32 nNew)
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetQuadraticFormControlRenderLimit( nNew );
 }
 
 //*****************************************************************************************************************
