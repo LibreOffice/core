@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: borderline.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +125,10 @@ public:
                                     BOOL bMetricStr = FALSE ) const;
 
     bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
+
+    bool isEmpty() const { return (0 == nOutWidth && 0 == nInWidth && 0 == nDistance); }
+    bool isDouble() const { return (0 != nOutWidth && 0 != nInWidth); }
+    sal_uInt16 getWidth() const { return nOutWidth + nInWidth + nDistance; }
 };
 
 // ============================================================================
