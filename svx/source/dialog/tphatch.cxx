@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tphatch.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,6 @@
 #include "xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xoutx.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
@@ -100,7 +99,7 @@ SvxHatchTabPage::SvxHatchTabPage
     aFtLineColor        ( this, SVX_RES( FT_LINE_COLOR ) ),
     aLbLineColor        ( this, SVX_RES( LB_LINE_COLOR ) ),
     aLbHatchings        ( this, SVX_RES( LB_HATCHINGS ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
     aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
     aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
     aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
@@ -112,7 +111,6 @@ SvxHatchTabPage::SvxHatchTabPage
     pHatchingList( NULL ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    XOut                ( &aCtlPreview ),
     aXFStyleItem        ( XFILL_HATCH ),
     aXHatchItem         ( String(), XHatch() ),
     aXFillAttr          ( pXPool ),
@@ -148,13 +146,7 @@ SvxHatchTabPage::SvxHatchTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXHatchItem );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
-
-    // Set line at the OutputDevice
-    XLineAttrSetItem aXLineAttr( pXPool );
-    aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-    aXLineAttr.GetItemSet().Put( XLineWidthItem( 1 ));
-    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
     aLbHatchings.SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
 
@@ -251,7 +243,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
     rXFSet.Put ( ( XFillColorItem& )    rSet.Get(XATTR_FILLCOLOR) );
     rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 }
 
@@ -385,7 +377,7 @@ void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
 
     rXFSet.Put ( ( XFillColorItem& )    rSet.Get(XATTR_FILLCOLOR) );
     rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 }
 
@@ -424,7 +416,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
                     static_cast<long>(aMtrAngle.GetValue() * 10) );
 
     rXFSet.Put( XFillHatchItem( String(), aXHatch ) );
-    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
     aCtlPreview.Invalidate();
 
@@ -502,9 +494,9 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
             }
         }
         */
-        // ItemSet fuellen und an XOut weiterleiten
+        // ItemSet fuellen und an aCtlPreview weiterleiten
         rXFSet.Put( XFillHatchItem( String(), *pHatch ) );
-        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+        aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
         aCtlPreview.Invalidate();
         delete pHatch;
