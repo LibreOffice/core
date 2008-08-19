@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptObject.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,9 +122,16 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
     switch( nType )
     {
         case OBJ_DLG_FIXEDTEXT:
-            pNewObj = new OUnoObject( _xComponent
+            {
+                OUnoObject* pUnoObj = new OUnoObject( _xComponent
                                     ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"))
                                     ,OBJ_DLG_FIXEDTEXT);
+                pNewObj = pUnoObj;
+
+                uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
+                if ( xControlModel.is() )
+                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(sal_True));
+            }
             break;
         case OBJ_DLG_IMAGECONTROL:
             pNewObj = new OUnoObject(_xComponent
@@ -488,7 +495,6 @@ void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
     SetPropsFromRect(rRect);
 }
 //----------------------------------------------------------------------------
-
 FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     FASTBOOL bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
@@ -677,7 +683,9 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                 try
                 {
                     if ( supportsService( SERVICE_FIXEDTEXT ) )
+                    {
                         m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
+                    }
                 }
                 catch(const uno::Exception&)
                 {
@@ -849,14 +857,6 @@ OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType)
           ,m_nType(_nType)
 {
     DBG_CTOR( rpt_OOle2Obj, NULL);
-    m_bIsListening = sal_True;
-}
-// -----------------------------------------------------------------------------
-OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect,UINT16 _nType, FASTBOOL bFrame_)
-          :SdrOle2Obj(rNewObjRef,rNewObjName,rNewRect,bFrame_)
-          ,OObjectBase(_sComponentName)
-          ,m_nType(_nType)
-{
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
