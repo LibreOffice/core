@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_svx.hxx"
 #include "EnhancedCustomShapeFontWork.hxx"
 #include <tools/solar.h>               // UINTXX
-#include <svx/xoutx.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
