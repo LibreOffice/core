@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basic.src,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -668,7 +668,7 @@ Menu RID_TT_EXTRAS {
 };
 Menu RID_WINDOW {
     ITEMLIST = {
-    MenuItem  {
+/*  MenuItem  {
             Identifier = RID_WINCASCADE;
             TEXT[ en-US ] = "~Cascade";
         };
@@ -683,7 +683,7 @@ Menu RID_WINDOW {
     MenuItem  {
             Identifier = RID_WINTILEVERT;
             TEXT[ en-US ] = "~Arrange Vertically";
-        };
+        };*/
     };
 };
 Menu RID_HELP {
@@ -836,6 +836,8 @@ TabPage RID_TP_GENERIC {
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Text[ en-US ] = "Path ...";
+            Disable = TRUE;
+            Hide = TRUE;
     };
     PushButton RID_PB_NEW_VALUE {
             Pos = MAP_APPFONT( 188, 48 );
