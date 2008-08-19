@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoomsliderctrl.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,12 +209,16 @@ void SvxZoomSliderControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, c
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
-        DBG_ASSERT( pState->ISA( SvxZoomSliderItem ), "invalid item type" );
+        OSL_ENSURE( pState->ISA( SvxZoomSliderItem ), "invalid item type: should be a SvxZoomSliderItem" );
         mpImpl->mnCurrentZoom = static_cast<const SvxZoomSliderItem*>( pState )->GetValue();
         mpImpl->mnMinZoom     = static_cast<const SvxZoomSliderItem*>( pState )->GetMinZoom();
         mpImpl->mnMaxZoom     = static_cast<const SvxZoomSliderItem*>( pState )->GetMaxZoom();
         mpImpl->mnSliderCenter= 100;
         mpImpl->mbValuesSet   = true;
+
+        if ( mpImpl->mnSliderCenter == mpImpl->mnMaxZoom )
+            mpImpl->mnSliderCenter = mpImpl->mnMinZoom + (USHORT)((mpImpl->mnMaxZoom - mpImpl->mnMinZoom) * 0.5);
+
 
         DBG_ASSERT( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
                     mpImpl->mnMinZoom <  mpImpl->mnSliderCenter &&
