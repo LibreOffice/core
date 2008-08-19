@@ -9,7 +9,7 @@
  
   $RCSfile: body.xsl,v $
  
-  $Revision: 1.2 $
+  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -32,7 +32,7 @@
 <!--
 	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://xml.apache.org/xslt/java" xmlns:urlencoder="http://www.jclark.com/xt/java/java.net.URLEncoder" exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink java urlencoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://xml.apache.org/xslt/java" xmlns:urlencoder="http://www.jclark.com/xt/java/java.net.URLEncoder" exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi java urlencoder">
 
 
 	<xsl:include href="table_of_content.xsl"/>
@@ -103,7 +103,16 @@
 
 
 	<xsl:template match="text:line-break">
+		<xsl:param name="listIndent"/>
+
 		<xsl:element namespace="{$namespace}" name="br"/>
+
+		<!-- line breaks in lists need an indent similar to the list label -->
+		<xsl:if test="$listIndent">
+			<xsl:element namespace="{$namespace}" name="span">
+				<xsl:attribute name="style">margin-left:<xsl:value-of select="$listIndent"/>cm</xsl:attribute>
+			</xsl:element>
+		</xsl:if>
 	</xsl:template>
 
 
@@ -236,6 +245,9 @@
 
 				<xsl:value-of select="translate($title, '.,;: %()[]/\+', '_____________')"/>
 			</xsl:when>
+			<xsl:when test="self::draw:image[office:binary-data]">
+				<xsl:text>data:image/*;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
 					 <!-- in case of packed open office document -->
@@ -286,10 +298,19 @@
 	<!-- *** Common Rules *** -->
 	<!-- ******************** -->
 
-	<!-- ignore the following elements -->
-	<xsl:template match="office:forms | text:alphabetical-index-mark | text:alphabetical-index-mark-start | text:alphabetical-index-mark-end | text:reference-mark-end | text:sequence-decls | text:user-field-decls | text:table-of-content-source "/>
+	<!-- ignore / neglect the following elements -->
+	<xsl:template match="office:forms | text:alphabetical-index-mark | text:alphabetical-index-mark-end | text:alphabetical-index-mark-start | text:bibliography-source | text:reference-mark-end | text:sequence-decls | text:soft-page-break | text:table-of-content-source | text:tracked-changes | text:user-field-decls"/>
 
-	<!-- deactivating default template -->
+	<!-- default template used by purpose-->
+	<xsl:template match="text:bibliography | text:change-end | text:change-start">
+		<xsl:param name="globalData"/>
+
+		<xsl:apply-templates>
+			<xsl:with-param name="globalData" select="$globalData"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<!-- default template for not recognized elements -->
 	<xsl:template match="*">
 		<xsl:param name="globalData"/>
 		<xsl:message>Using default element rule for ODF element '<xsl:value-of select="name()"/>'.</xsl:message>
