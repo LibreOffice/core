@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbggui.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -609,7 +609,7 @@ DbgWindow::DbgWindow() :
     maLstBox.Show();
     maLstBox.SetPosPixel( Point( 0, 0 ) );
 
-    SetOutputSizePixel( Size( 250, 400 ) );
+    SetOutputSizePixel( Size( 600, 480 ) );
     if ( pData->aDbgWinState )
     {
         ByteString aState( pData->aDbgWinState );
