@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -100,7 +100,7 @@ SLOFILES=\
 # --- MOZAB BASE Library -----------------------------------
 
 SHL1VERSIONMAP= $(TARGET).map
-SHL1TARGET=	$(TARGET)$(MOZAB_MAJOR)
+SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
@@ -112,7 +112,7 @@ SHL1STDLIBS=\
 
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)$(MOZAB_MAJOR)
+SHL1IMPLIB=	i$(TARGET)$(DLLPOSTFIX)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
@@ -163,7 +163,7 @@ DEPOBJFILES=$(SLO2FILES)
 # --- MOZAB BASE Library -----------------------------------
 
 SHL2VERSIONMAP= $(TARGET2).map
-SHL2TARGET=	$(TARGET2)$(MOZAB_MAJOR)
+SHL2TARGET=	$(TARGET2)$(DLLPOSTFIX)
 SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\
     $(CPPULIB)					\
