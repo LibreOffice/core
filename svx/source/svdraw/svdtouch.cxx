@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdtouch.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_svx.hxx"
 
 #include "svdtouch.hxx"
-#include <svx/xoutx.hxx>
 #include <svx/xpoly.hxx>
 #include <tools/bigint.hxx>
 #include <tools/poly.hxx>
