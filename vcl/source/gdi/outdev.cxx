@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -311,6 +311,10 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
 void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPoly )
 {
+    // AW: This crashes on empty PolyPolygons, avoid that
+    if(!nPoly)
+        return;
+
     sal_uInt32          aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
     PCONSTSALPOINT      aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
     BYTE*               aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
@@ -2422,7 +2426,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyLine.transform( aTransform );
         const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
-        if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, this ) )
+        if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_ROUND, this ) )
             return;
     }
 
@@ -2659,6 +2663,148 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     }
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::DrawPolygon( const ::basegfx::B2DPolygon& rB2DPolygon)
+{
+    // AW: Do NOT paint empty polygons
+    if(rB2DPolygon.count())
+    {
+        ::basegfx::B2DPolyPolygon aPP( rB2DPolygon );
+        DrawPolyPolygon( aPP );
+    }
+}
+
+// -----------------------------------------------------------------------
+// Caution: This method is nearly the same as
+// OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
+// so when changes are made here do not forget to make change sthere, too
+
+void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
+{
+    DBG_TRACE( "OutputDevice::DrawPolyPolygon(B2D&)" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+#if 0
+    // MetaB2DPolyPolygonAction is not implemented yet:
+    // according to AW adding it is very dangerous since there is a lot
+    // of code that uses the metafile actions directly and unless every
+    // place that does this knows about the new action we need to fallback
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaB2DPolyPolygonAction( rB2DPolyPoly ) );
+#else
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
+#endif
+
+    // AW: Do NOT paint empty PolyPolygons
+    if(!rB2DPolyPoly.count())
+        return;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+    if( mbInitFillColor )
+        ImplInitFillColor();
+
+    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    {
+#ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
+        aB2DPP.transform( aTransform );
+        if( mpGraphics->DrawPolyPolygon( aB2DPP, 0.0, this ) )
+            return;
+#endif
+    }
+
+    // fallback to old polygon drawing if needed
+    const PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
+    const PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
+    ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::DrawPolyLine(
+    const basegfx::B2DPolygon& rB2DPolygon,
+    double fLineWidth,
+    basegfx::B2DLineJoin eLineJoin)
+{
+    DBG_TRACE( "OutputDevice::DrawPolyLine(B2D&)" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+    (void)eLineJoin; // ATM used in UNX, but not in WNT, access it for warning-free
+
+#if 0 // MetaB2DPolyLineAction is not implemented yet:
+      // according to AW adding it is very dangerous since there is a lot
+      // of code that uses the metafile actions directly and unless every
+      // place that does this knows about the new action we need to fallback
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaB2DPolyLineAction( rB2DPolygon ) );
+#else
+    if( mpMetaFile )
+    {
+        LineInfo aLineInfo;
+        if( fLineWidth != 0.0 )
+            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+        const Polygon aToolsPolygon( rB2DPolygon );
+        mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+    }
+#endif
+
+    // AW: Do NOT paint empty PolyPolygons
+    if(!rB2DPolygon.count())
+        return;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+
+    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    {
+#ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        // transform the line width
+        ::basegfx::B2DVector aB2DLineWidth;
+        if( fLineWidth == 0.0 ) // hairline?
+            aB2DLineWidth = ::basegfx::B2DVector( 1.0, 1.0 );
+        else
+            aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+        // transform the polygon
+        ::basegfx::B2DPolygon aB2DPL = rB2DPolygon;
+        aB2DPL.transform( aTransform );
+        // draw the polyline
+        if( mpGraphics->DrawPolyLine( aB2DPL, aB2DLineWidth, eLineJoin, this ) )
+            return;
+#endif
+    }
+
+    // fallback to old polygon drawing if needed
+    const Polygon aToolsPolygon( rB2DPolygon );
+    LineInfo aLineInfo;
+    if( fLineWidth != 0.0 )
+        aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+    DrawPolyLine( aToolsPolygon, aLineInfo );
 }
 
 // -----------------------------------------------------------------------
