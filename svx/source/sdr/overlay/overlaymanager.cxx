@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaymanager.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,17 +50,35 @@ namespace sdr
         {
             ::sdr::overlay::OverlayObject* pCurrent = mpOverlayObjectStart;
 
-            while(pCurrent)
+            if(pCurrent)
             {
-                if(pCurrent->isVisible())
+                const sal_uInt16 nOriginalAA(rDestinationDevice.GetAntialiasing());
+
+                // react on AntiAliasing settings
+                if(maDrawinglayerOpt.IsAntiAliasing())
                 {
-                    if(rRange.overlaps(pCurrent->getBaseRange()))
-                    {
-                        pCurrent->drawGeometry(rDestinationDevice);
-                    }
+                    rDestinationDevice.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+                }
+                else
+                {
+                    rDestinationDevice.SetAntialiasing(nOriginalAA & ~ANTIALIASING_ENABLE_B2DDRAW);
                 }
 
-                pCurrent = pCurrent->mpNext;
+                while(pCurrent)
+                {
+                    if(pCurrent->isVisible())
+                    {
+                        if(rRange.overlaps(pCurrent->getBaseRange()))
+                        {
+                            pCurrent->drawGeometry(rDestinationDevice);
+                        }
+                    }
+
+                    pCurrent = pCurrent->mpNext;
+                }
+
+                // restore AA settings
+                rDestinationDevice.SetAntialiasing(nOriginalAA);
             }
         }
 
@@ -107,7 +126,8 @@ namespace sdr
             mpOverlayObjectEnd(0L),
             maStripeColorA(Color(COL_BLACK)),
             maStripeColorB(Color(COL_WHITE)),
-            mnStripeLengthPixel(5L)
+            mnStripeLengthPixel(5L),
+            maDrawinglayerOpt()
         {
         }
 
@@ -186,8 +206,11 @@ namespace sdr
             // handle evtl. animation
             if(rOverlayObject.allowsAnimation())
             {
-                InsertEvent(&rOverlayObject);
-                Execute();
+                // Trigger at current time to get alive. This will do the
+                // object-specific next time calculation and hand over adding
+                // again to the scheduler to the animated object, too. This works for
+                // a paused or non-paused animator.
+                rOverlayObject.Trigger(GetTime());
             }
         }
 
@@ -235,14 +258,30 @@ namespace sdr
         {
             if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
             {
-                // #i77674# transform to rectangle. Use floor/ceil to get all covered
-                // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
-                const Rectangle aInvalidateRectangle(
-                    (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
-                    (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
+                if(maDrawinglayerOpt.IsAntiAliasing())
+                {
+                    // assume AA needs one pixel more and invalidate one pixel more
+                    const basegfx::B2DVector aDiscreteInLogic(getOutputDevice().GetViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                    const Rectangle aInvalidateRectangle(
+                        (sal_Int32)floor(rRange.getMinX() - aDiscreteInLogic.getX()),
+                        (sal_Int32)floor(rRange.getMinY() - aDiscreteInLogic.getY()),
+                        (sal_Int32)ceil(rRange.getMaxX() + aDiscreteInLogic.getX()),
+                        (sal_Int32)ceil(rRange.getMaxY() + aDiscreteInLogic.getY()));
 
-                // simply invalidate
-                ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
+                    // simply invalidate
+                    ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
+                }
+                else
+                {
+                    // #i77674# transform to rectangle. Use floor/ceil to get all covered
+                    // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
+                    const Rectangle aInvalidateRectangle(
+                        (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+                        (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
+
+                    // simply invalidate
+                    ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
+                }
             }
         }
 
