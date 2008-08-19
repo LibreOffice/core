@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectcontactofpageview.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,16 @@
 #include <svx/sdr/event/eventhandler.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
+#include <drawinglayer/processor2d/vclprocessor2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <unoapi.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,110 +67,74 @@ namespace sdr
 
         ObjectContactOfPageView::ObjectContactOfPageView(SdrPageWindow& rPageWindow)
         :   ObjectContact(),
-            mrPageWindow(rPageWindow),
-            mpRememberedStartPage(0L)
+            mrPageWindow(rPageWindow)
         {
-            mbIsPreviewRenderer = ((SdrPaintView&)rPageWindow.GetPageView().GetView()).IsPreviewRenderer();
+            // init PreviewRenderer flag
+            setPreviewRenderer(((SdrPaintView&)rPageWindow.GetPageView().GetView()).IsPreviewRenderer());
+
+            // init timer
+            SetTimeout(1);
+            Stop();
         }
 
-        // The destructor. When PrepareDelete() was not called before (see there)
-        // warnings will be generated in debug version if there are still contacts
-        // existing.
         ObjectContactOfPageView::~ObjectContactOfPageView()
         {
+            // execute missing LazyInvalidates and stop timer
+            Timeout();
         }
 
-        // A ViewObjectContact was deleted and shall be forgotten.
-        // #i29181# Overload to clear selection at associated view
-        void ObjectContactOfPageView::RemoveViewObjectContact(ViewObjectContact& rVOContact)
+        // LazyInvalidate request. Take action.
+        void ObjectContactOfPageView::setLazyInvalidate(ViewObjectContact& /*rVOC*/)
         {
-            // call parent
-            ObjectContact::RemoveViewObjectContact(rVOContact);
+            // do NOT call parent, but remember that something is to do by
+            // starting the LazyInvalidateTimer
+            Start();
         }
 
-        // Update Draw Hierarchy data. Take care of everything that is inside
-        // of rDisplayInfo.GetRedrawArea(), that is the necessary part.
-        void ObjectContactOfPageView::EnsureValidDrawHierarchy(DisplayInfo& /*rDisplayInfo*/)
+        // call this to support evtl. preparations for repaint
+        void ObjectContactOfPageView::PrepareProcessDisplay()
         {
-            // get StartNode
-            SdrPage* pStartPage = GetSdrPage();
-
-            // test for start point change
-            if(pStartPage != mpRememberedStartPage)
+            if(IsActive())
             {
-                // Clear whole DrawHierarchy, needs complete rebuild
-                ClearDrawHierarchy();
+                static bool bInvalidateDuringPaint(true);
 
-                // remember new StartPoint
-                mpRememberedStartPage = pStartPage;
-
-                // build hierarchy for local draw page. This will include the
-                // MasterPages as sub-hierarchy of the DrawPage because
-                // ViewContactOfSdrPage::GetObjectCount() and ::GetViewContact()
-                // support that.
-                ViewContact& rViewContact = pStartPage->GetViewContact();
-
-                // Get the ViewObjectContact for this ViewContact and this DrawContact. This creates such an object
-                // on demand and adds it to the ViewObjectContactList of the ViewContact.
-                ViewObjectContact& rViewObjectContact = rViewContact.GetViewObjectContact(*this);
-
-                // set parent at ViewObjectContact. For pages, there is no parent.
-                rViewObjectContact.SetParent(0L);
-
-                // build sub-hierarchy
-                if(rViewContact.GetObjectCount())
+                if(bInvalidateDuringPaint)
                 {
-                    rViewObjectContact.BuildDrawHierarchy(*this, rViewContact);
+                    // there are still non-triggered LazyInvalidate events, trigger these
+                    Timeout();
                 }
-
-                // Add to list
-                maDrawHierarchy.Append(&rViewObjectContact);
-
-                // set DrawHierarchy valid
-                mbDrawHierarchyValid = sal_True;
             }
-            else
+        }
+
+        // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+        void ObjectContactOfPageView::Timeout()
+        {
+            // stop the timer
+            Stop();
+
+            // invalidate all LazyInvalidate VOCs new situations
+            const sal_uInt32 nVOCCount(getViewObjectContactCount());
+
+            for(sal_uInt32 a(0); a < nVOCCount; a++)
             {
-                // no new StartPoint, is the invalid flag set which means
-                // somewhere the sub-hierarchy is invalid?
-                if(!IsDrawHierarchyValid())
-                {
-                    // Yes, check the sub-hierarchies
-                    const sal_uInt32 nCount(maDrawHierarchy.Count());
-
-                    for(sal_uInt32 a(0L); a < nCount; a++)
-                    {
-                        ViewObjectContact& rVOContact = *(maDrawHierarchy.GetObject(a));
-
-                        rVOContact.CheckDrawHierarchy(*this);
-                    }
-
-                    // set DrawHierarchy valid
-                    mbDrawHierarchyValid = sal_True;
-                }
+                ViewObjectContact* pCandidate = getViewObjectContact(a);
+                pCandidate->triggerLazyInvalidate();
             }
         }
 
         // Process the whole displaying
         void ObjectContactOfPageView::ProcessDisplay(DisplayInfo& rDisplayInfo)
         {
-            if(!IsDrawHierarchyValid())
-            {
-                // The default implementation ensures a valid draw hierarchy.
-                EnsureValidDrawHierarchy(rDisplayInfo);
-            }
-
             const SdrPage* pStartPage = GetSdrPage();
 
-            if(IsDrawHierarchyValid()
-                && pStartPage
-                && rDisplayInfo.GetPaintInfoRec()
-                && rDisplayInfo.GetOutputDevice()
-                && maDrawHierarchy.Count()
-                && !rDisplayInfo.GetProcessLayers().IsEmpty())
+            if(pStartPage && !rDisplayInfo.GetProcessLayers().IsEmpty())
             {
-                // paint direct
-                DoProcessDisplay(rDisplayInfo);
+                const ViewContact& rDrawPageVC = pStartPage->GetViewContact();
+
+                if(rDrawPageVC.GetObjectCount())
+                {
+                    DoProcessDisplay(rDisplayInfo);
+                }
             }
 
             // after paint take care of the evtl. scheduled asynchronious commands.
@@ -182,8 +156,8 @@ namespace sdr
         void ObjectContactOfPageView::DoProcessDisplay(DisplayInfo& rDisplayInfo)
         {
             // visualize entered group when that feature is switched on and it's not
-            // a print output
-            sal_Bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !rDisplayInfo.OutputToPrinter());
+            // a print output. #i29129# No ghosted display for printing.
+            sal_Bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !isOutputToPrinter());
 
             // Visualize entered groups: Set to ghosted as default
             // start. Do this only for the DrawPage, not for MasterPages
@@ -193,25 +167,101 @@ namespace sdr
             }
 
             // #114359# save old and set clip region
-            OutputDevice& rOutDev = *rDisplayInfo.GetOutputDevice();
+            OutputDevice* pOutDev = TryToGetOutputDevice();
+            OSL_ENSURE(0 != pOutDev, "ObjectContactOfPageView without OutDev, someone has overloaded TryToGetOutputDevice wrong (!)");
             sal_Bool bClipRegionPushed(sal_False);
             const Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
             if(!rRedrawArea.IsEmpty())
             {
                 bClipRegionPushed = sal_True;
-                rOutDev.Push(PUSH_CLIPREGION);
-                rOutDev.IntersectClipRegion(rRedrawArea);
+                pOutDev->Push(PUSH_CLIPREGION);
+                pOutDev->IntersectClipRegion(rRedrawArea);
             }
 
-            // Draw DrawPage
-            ViewObjectContact& rDrawPageVOContact = *(maDrawHierarchy.GetObject(0L));
-            rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
+            // Get start node and process DrawPage contents
+            const ViewObjectContact& rDrawPageVOContact = GetSdrPage()->GetViewContact().GetViewObjectContact(*this);
+
+            // update current ViewInformation2D at the ObjectContact
+            const double fCurrentTime(getPrimitiveAnimator().GetTime());
+            OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
+            const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
+            const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+            basegfx::B2DRange aViewRange;
+
+            // create ViewRange
+            if(!bOutputToRecordingMetaFile)
+            {
+                // use visible pixels, but transform to world coordinates
+                const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
+                aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+
+                // if a clip region is set, use it
+                if(!rDisplayInfo.GetRedrawArea().IsEmpty())
+                {
+                    // get logic clip range and create discrete one
+                    const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
+                    basegfx::B2DRange aLogicClipRange(
+                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
+                        aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
+                    basegfx::B2DRange aDiscreteClipRange(aLogicClipRange);
+                    aDiscreteClipRange.transform(rTargetOutDev.GetViewTransformation());
+
+                    // align the discrete one to discrete boundaries (pixel bounds). Also
+                    // expand X and Y max by one due to Rectangle definition source
+                    aDiscreteClipRange.expand(basegfx::B2DTuple(
+                        floor(aDiscreteClipRange.getMinX()),
+                        floor(aDiscreteClipRange.getMinY())));
+                    aDiscreteClipRange.expand(basegfx::B2DTuple(
+                        1.0 + ceil(aDiscreteClipRange.getMaxX()),
+                        1.0 + ceil(aDiscreteClipRange.getMaxY())));
+
+                    // intersect current ViewRange with ClipRange
+                    aViewRange.intersect(aDiscreteClipRange);
+                }
+
+                // transform to world coordinates
+                aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
+            }
+
+            // update local ViewInformation2D
+            const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
+                basegfx::B2DHomMatrix(),
+                rTargetOutDev.GetViewTransformation(),
+                aViewRange,
+                GetXDrawPageForSdrPage(GetSdrPage()),
+                fCurrentTime,
+                0);
+            updateViewInformation2D(aNewViewInformation2D);
+
+            // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
+            // and may use the MapMode from the Target OutDev in the DisplayInfo
+            drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence(rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+
+            // if there is something to show, use a vclProcessor to render it
+            if(xPrimitiveSequence.hasElements())
+            {
+                // prepare OutputDevice (historical stuff, maybe soon removed)
+                rDisplayInfo.ClearGhostedDrawMode(); // reset, else the VCL-paint with the processor will not do the right thing
+                pOutDev->SetLayoutMode(0); // reset, default is no BiDi/RTL
+
+                // create renderer
+                static bool bTryTestCanvas(false);
+
+                drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = createBaseProcessor2DFromOutputDevice(
+                    rTargetOutDev, getViewInformation2D(), bTryTestCanvas);
+
+                if(pProcessor2D)
+                {
+                    pProcessor2D->process(xPrimitiveSequence);
+                    delete pProcessor2D;
+                }
+            }
 
             // #114359# restore old ClipReghion
             if(bClipRegionPushed)
             {
-                rOutDev.Pop();
+                pOutDev->Pop();
             }
 
             // Visualize entered groups: Reset to original DrawMode
@@ -219,45 +269,26 @@ namespace sdr
             {
                 rDisplayInfo.ClearGhostedDrawMode();
             }
-
-            // Test if paint was interrupted. If Yes, we need to invalidate the
-            // PageView where the paint region was defined
-            if(!rDisplayInfo.DoContinuePaint())
-            {
-                Rectangle aRect = rDisplayInfo.GetRedrawArea().GetBoundRect();
-                GetPageWindow().Invalidate(aRect);
-            }
-
-            // If a ObjectAnimator exists, execute it. This will only do anything
-            // if the ObjectAnimator's timer is not yet running and if there are
-            // events scheduled.
-            if(HasObjectAnimator())
-            {
-                GetObjectAnimator().Execute();
-            }
         }
 
         // test if visualizing of entered groups is switched on at all
-        sal_Bool ObjectContactOfPageView::DoVisualizeEnteredGroup() const
+        bool ObjectContactOfPageView::DoVisualizeEnteredGroup() const
         {
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.DoVisualizeEnteredGroup();
         }
 
-        // Get the active group (the entered group). To get independent
-        // from the old object/view classes return values use the new
-        // classes.
-        ViewContact* ObjectContactOfPageView::GetActiveGroupContact() const
+        // get active group's (the entered group) ViewContact
+        const ViewContact* ObjectContactOfPageView::getActiveViewContact() const
         {
             SdrObjList* pActiveGroupList = GetPageWindow().GetPageView().GetObjList();
-            ViewContact* pRetval = 0L;
 
             if(pActiveGroupList)
             {
                 if(pActiveGroupList->ISA(SdrPage))
                 {
                     // It's a Page itself
-                    pRetval = &(((SdrPage*)pActiveGroupList)->GetViewContact());
+                    return &(((SdrPage*)pActiveGroupList)->GetViewContact());
                 }
                 else if(pActiveGroupList->GetOwnerObj())
                 {
@@ -265,54 +296,58 @@ namespace sdr
                     return &(pActiveGroupList->GetOwnerObj()->GetViewContact());
                 }
             }
-
-            if(!pRetval)
+            else if(GetSdrPage())
             {
-                if(GetSdrPage())
-                {
-                    // use page of associated SdrPageView
-                    pRetval = &(GetSdrPage()->GetViewContact());
-                }
+                // use page of associated SdrPageView
+                return &(GetSdrPage()->GetViewContact());
             }
 
-            return pRetval;
+            return 0;
         }
 
         // Invalidate given rectangle at the window/output which is represented by
         // this ObjectContact.
-        void ObjectContactOfPageView::InvalidatePartOfView(const Rectangle& rRectangle) const
+        void ObjectContactOfPageView::InvalidatePartOfView(const basegfx::B2DRange& rRange) const
         {
-            // invalidate all associated windows.
-            GetPageWindow().Invalidate(rRectangle);
+            // invalidate at associated PageWindow
+            GetPageWindow().InvalidatePageWindow(rRange);
         }
 
-        // #i42815#
         // Get info if given Rectangle is visible in this view
-        sal_Bool ObjectContactOfPageView::IsAreaVisible(const Rectangle& rRectangle) const
+        bool ObjectContactOfPageView::IsAreaVisible(const basegfx::B2DRange& rRange) const
         {
-            OutputDevice& rOutDev = GetPageWindow().GetPaintWindow().GetOutputDevice();
-            const Point aEmptyPoint;
-            const Rectangle aVisiblePixel(aEmptyPoint, rOutDev.GetOutputSizePixel());
-            const Rectangle aTestPixel(rOutDev.LogicToPixel(rRectangle));
-
             // compare with the visible rectangle
-            if(!aTestPixel.IsOver(aVisiblePixel))
+            if(rRange.isEmpty())
             {
-                return sal_False;
+                // no range -> not visible
+                return false;
+            }
+            else
+            {
+                const OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
+                const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
+                basegfx::B2DRange aLogicViewRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+
+                aLogicViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
+
+                if(!aLogicViewRange.isEmpty() && !aLogicViewRange.overlaps(rRange))
+                {
+                    return false;
+                }
             }
 
             // call parent
-            return ObjectContact::IsAreaVisible(rRectangle);
+            return ObjectContact::IsAreaVisible(rRange);
         }
 
         // Get info about the need to visualize GluePoints
-        sal_Bool ObjectContactOfPageView::AreGluePointsVisible() const
+        bool ObjectContactOfPageView::AreGluePointsVisible() const
         {
             return GetPageWindow().GetPageView().GetView().ImpIsGlueVisible();
         }
 
         // check if text animation is allowed.
-        sal_Bool ObjectContactOfPageView::IsTextAnimationAllowed() const
+        bool ObjectContactOfPageView::IsTextAnimationAllowed() const
         {
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
@@ -320,7 +355,7 @@ namespace sdr
         }
 
         // check if graphic animation is allowed.
-        sal_Bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
+        bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
         {
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
@@ -328,30 +363,101 @@ namespace sdr
         }
 
         // check if asynchronious graphis loading is allowed. Default is sal_False.
-        sal_Bool ObjectContactOfPageView::IsAsynchronGraphicsLoadingAllowed() const
+        bool ObjectContactOfPageView::IsAsynchronGraphicsLoadingAllowed() const
         {
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.IsSwapAsynchron();
         }
 
         // check if buffering of MasterPages is allowed. Default is sal_False.
-        sal_Bool ObjectContactOfPageView::IsMasterPageBufferingAllowed() const
+        bool ObjectContactOfPageView::IsMasterPageBufferingAllowed() const
         {
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.IsMasterPagePaintCaching();
         }
 
+        // print?
+        bool ObjectContactOfPageView::isOutputToPrinter() const
+        {
+            return (OUTDEV_PRINTER == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
+        }
+
+        // window?
+        bool ObjectContactOfPageView::isOutputToWindow() const
+        {
+            return (OUTDEV_WINDOW == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
+        }
+
+        // VirtualDevice?
+        bool ObjectContactOfPageView::isOutputToVirtualDevice() const
+        {
+            return (OUTDEV_VIRDEV == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
+        }
+
+        // recording MetaFile?
+        bool ObjectContactOfPageView::isOutputToRecordingMetaFile() const
+        {
+            GDIMetaFile* pMetaFile = mrPageWindow.GetPaintWindow().GetOutputDevice().GetConnectMetaFile();
+            return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+        }
+
+        // gray display mode
+        bool ObjectContactOfPageView::isDrawModeGray() const
+        {
+            const sal_uInt32 nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
+            return (nDrawMode == (DRAWMODE_GRAYLINE|DRAWMODE_GRAYFILL|DRAWMODE_BLACKTEXT|DRAWMODE_GRAYBITMAP|DRAWMODE_GRAYGRADIENT));
+        }
+
+        // gray display mode
+        bool ObjectContactOfPageView::isDrawModeBlackWhite() const
+        {
+            const sal_uInt32 nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
+            return (nDrawMode == (DRAWMODE_BLACKLINE|DRAWMODE_BLACKTEXT|DRAWMODE_WHITEFILL|DRAWMODE_GRAYBITMAP|DRAWMODE_WHITEGRADIENT));
+        }
+
+        // high contrast display mode
+        bool ObjectContactOfPageView::isDrawModeHighContrast() const
+        {
+            const sal_uInt32 nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
+            return (nDrawMode == (DRAWMODE_SETTINGSLINE|DRAWMODE_SETTINGSFILL|DRAWMODE_SETTINGSTEXT|DRAWMODE_SETTINGSGRADIENT));
+        }
+
+        // access to SdrPageView
+        SdrPageView* ObjectContactOfPageView::TryToGetSdrPageView() const
+        {
+            return &(mrPageWindow.GetPageView());
+        }
+
+
+        // access to OutputDevice
+        OutputDevice* ObjectContactOfPageView::TryToGetOutputDevice() const
+        {
+            SdrPreRenderDevice* pPreRenderDevice = mrPageWindow.GetPaintWindow().GetPreRenderDevice();
+
+            if(pPreRenderDevice)
+            {
+                return &(pPreRenderDevice->GetPreRenderDevice());
+            }
+            else
+            {
+                return &(mrPageWindow.GetPaintWindow().GetOutputDevice());
+            }
+        }
+
         // set all UNO controls displayed in the view to design/alive mode
         void ObjectContactOfPageView::SetUNOControlsDesignMode( bool _bDesignMode ) const
         {
-            sal_uInt32 nVOCCount = maVOCList.Count();
-            for ( sal_uInt32 voc=0; voc<nVOCCount; ++voc )
+            const sal_uInt32 nCount(getViewObjectContactCount());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                const ViewObjectContact* pVOC = maVOCList.GetObject( voc );
-                const ViewObjectContactOfUnoControl* pUnoObjectVOC = dynamic_cast< const ViewObjectContactOfUnoControl* >( pVOC );
-                if ( !pUnoObjectVOC )
-                    continue;
-                pUnoObjectVOC->setControlDesignMode( _bDesignMode );
+                const ViewObjectContact* pVOC = getViewObjectContact(a);
+                const ViewObjectContactOfUnoControl* pUnoObjectVOC = dynamic_cast< const ViewObjectContactOfUnoControl* >(pVOC);
+
+                if(pUnoObjectVOC)
+                {
+                    pUnoObjectVOC->setControlDesignMode(_bDesignMode);
+                }
             }
         }
     } // end of namespace contact
