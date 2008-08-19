@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CTable.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +80,6 @@ namespace connectivity
             virtual void refreshIndexes();
 
         public:
-            OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection);
             OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
