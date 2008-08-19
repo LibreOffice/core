@@ -8,7 +8,7 @@
 #
 # $RCSfile: extension_post.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,14 +30,22 @@
 #*************************************************************************
 
 .SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data $(COMPONENT_CONFIGDIR) .
+.SOURCE.xcs : $(MISC)$/$(EXTNAME)$/registry $(MISC)$/$(EXTNAME)$/registry$/schema .
 
 fixme=$(MISC)$/$(EXTNAME)$/merge$/$(MISC)
 fixme2=$(fixme:n)
+
+fixme3=$(MISC)$/$(EXTNAME)$/$(MISC)
+fixme4=$(fixme:n)
 
 $(EXTENSIONDIR)$/$(COMPONENT_CONFIGDEST)$/%.xcu : %.xcu
 # ugly hacking to workaround prepended first source path
     @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
     $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
+    
+$(EXTENSIONDIR)$/$(COMPONENT_CONFIGDESTSCHEMA)$/%.xcs : %.xcs
+    @@-$(MKDIRHIER) $(subst,$(fixme4),$(MISC) $(@:d))
+    $(GNUCOPY) $< $(subst,$(fixme4),$(MISC) $@)
 
 $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
@@ -147,4 +155,3 @@ $(COMPONENT_MANIFEST) : $(MANIFEST_SRC) $(MANIFEST_DEPS)
 .ENDIF			# "$(COMPONENT_MANIFEST)"!=""
 
 ALLTAR : $(EXTENSION_PACKDEPS)
-
