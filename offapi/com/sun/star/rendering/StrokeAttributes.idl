@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StrokeAttributes.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,11 @@ struct StrokeAttributes
         equivalent to setting
         <member>StrokeAttributes::JoinType</member> to
         <member>PathJoinType::BEVEL</member>.<p>
+
+        Before performing the actual comparison, implementations will
+        multiply the MiterLimit with the current StrokeWidth, such
+        that, with phi being the angle between the two joining
+        segments, MiterLimit=1/sin(phi/2.0).<p>
      */
     double              MiterLimit;
 
