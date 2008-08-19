@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -69,6 +69,7 @@ SLOFILES=	\
         
 EXCEPTIONSFILES=\
         $(SLO)$/xlfd_extd.obj	\
+        $(SLO)$/salgdi.obj		\
         $(SLO)$/salbmp.obj		\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/salcvt.obj
