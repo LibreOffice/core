@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animobjs.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 
 #define _SV_BITMAPEX
 #include <svx/xoutbmp.hxx>
-#include <svx/xoutx.hxx>
 
 #include <time.h>
 #include <svtools/eitem.hxx>
@@ -591,7 +590,6 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
         SdrObject* pObject = (SdrObject*) pPage->GetObj( (ULONG) nListPos );
         if( pObject )
         {
-            SdrPaintInfoRec aPaintInfoRec;
             VirtualDevice   aVD;
             Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
@@ -603,13 +601,11 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             aVD.SetOutputSize( aObjSize );
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
             aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-            //AdjustVDev( &aVD );
-            XOutputDevice aOut( &aVD );
             aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark()
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
-            pObject->SingleObjectPainter( aOut, aPaintInfoRec ); // #110094#-17
+            pObject->SingleObjectPainter( aVD ); // #110094#-17
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 
