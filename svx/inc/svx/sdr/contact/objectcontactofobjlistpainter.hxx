@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectcontactofobjlistpainter.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +33,11 @@
 
 #include <svx/sdr/contact/objectcontact.hxx>
 #include "svx/svxdllapi.h"
+#include <svx/svdpage.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-class XOutputDevice;
 class SdrPage;
 class SdrObject;
 
@@ -50,30 +50,14 @@ namespace sdr
         class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
         {
         protected:
-            // Bitfield
-            // Flag to remember if DrawHierarchy was built or not.
-            // Inited with sal_False.
-            unsigned                                        mbIsInitialized : 1;
-
-            // Flag to allow/forbid buffering. Is set from constructor.
-            unsigned                                        mbBufferingAllowed : 1;
-
             // Hierarchy access methods
             virtual sal_uInt32 GetPaintObjectCount() const = 0;
             virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const = 0;
 
-            // Update Draw Hierarchy data
-            virtual void EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo);
-
         public:
-            // basic constructor
-            ObjectContactPainter(sal_Bool bBufferingAllowed);
-
-            // The destructor.
+            // basic constructor/destructor
+            ObjectContactPainter();
             virtual ~ObjectContactPainter();
-
-            // Process the whole displaying
-            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -85,27 +69,37 @@ namespace sdr
     namespace contact
     {
         // typedef for transferring SdrObject
-        typedef ::std::vector< const SdrObject* > SdrObjectVector;
+        typedef ::std::vector< SdrObject* > SdrObjectVector;
 
         class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
         {
         protected:
+            // Target OutputDevice
+            OutputDevice&                                   mrTargetOutputDevice;
+
             // Set StartPoint for next run, also given in constructor
             SdrObjectVector                                 maStartObjects;
+
+            // the processed page which is the base e.g. for PageNumberFields
+            const SdrPage*                                  mpProcessedPage;
 
             // Hierarchy access methods
             virtual sal_uInt32 GetPaintObjectCount() const;
             virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const;
 
         public:
-            // basic constructor
-            ObjectContactOfObjListPainter(const SdrObjectVector& rObjects,
-                sal_Bool bBufferingAllowed = sal_False);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
+            // basic constructor/destructor
+            ObjectContactOfObjListPainter(
+                OutputDevice& rTargetDevice,
+                const SdrObjectVector& rObjects,
+                const SdrPage* pProcessedPage);
             virtual ~ObjectContactOfObjListPainter();
+
+            // Process the whole displaying
+            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
+
+            // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+            virtual OutputDevice* TryToGetOutputDevice() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -119,8 +113,11 @@ namespace sdr
         class ObjectContactOfPagePainter : public ObjectContactPainter
         {
         protected:
+            // the original ObjectContact this painter is working on
+            ObjectContact&                                  mrOriginalObjectContact;
+
             // Set StartPoint for next run, also given in constructor
-            const SdrPage*                                  mpStartPage;
+            SdrPageWeakRef                                  mxStartPage;
 
             // Hierarchy access methods
             virtual sal_uInt32 GetPaintObjectCount() const;
@@ -128,16 +125,17 @@ namespace sdr
 
         public:
             // basic constructor
-            ObjectContactOfPagePainter(const SdrPage* pPage,
-                sal_Bool bBufferingAllowed = sal_False);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
+            ObjectContactOfPagePainter(
+                const SdrPage* pPage,
+                ObjectContact& rOriginalObjectContact);
             virtual ~ObjectContactOfPagePainter();
 
             // set another page
             void SetStartPage(const SdrPage* pPage);
+            const SdrPage* GetStartPage() const { return mxStartPage.get(); }
+
+            // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+            virtual OutputDevice* TryToGetOutputDevice() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
