@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GenericCommands.xcu,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4745,6 +4745,14 @@
             <node oor:name=".uno:Refresh" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Refresh</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RefreshFormControl" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Refresh Control</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
