@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdopath.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +36,6 @@
 #include <math.h>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
-#include <svx/xoutx.hxx>
-#include "svdxout.hxx"
 #include <svx/svdattr.hxx>
 #include "svdtouch.hxx"
 #include <svx/svdtrans.hxx>
@@ -64,6 +62,7 @@
 #include <svx/xlntrit.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include "svdoimp.hxx"
+#include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 // #104018# replace macros above with type-safe methods
@@ -1657,6 +1656,14 @@ SdrPathObjGeoData::~SdrPathObjGeoData()
 {
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrPathObj(*this);
+}
+
 /*************************************************************************/
 
 TYPEINIT1(SdrPathObj,SdrTextObj);
@@ -1689,7 +1696,7 @@ sal_Bool ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
 Rectangle ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    basegfx::B2DRange aRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon)));
+    basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
 
     return Rectangle(
         FRound(aRange.getMinX()), FRound(aRange.getMinY()),
@@ -1856,124 +1863,6 @@ UINT16 SdrPathObj::GetObjIdentifier() const
     return USHORT(meKind);
 }
 
-void SdrPathObj::RecalcBoundRect()
-{
-    aOutRect=GetSnapRect();
-    long nLineWdt=ImpGetLineWdt();
-    if (!IsClosed()) { // ggf. Linienenden beruecksichtigen
-        long nLEndWdt=ImpGetLineEndAdd();
-        if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
-    }
-
-    if(ImpAddLineGeomteryForMiteredLines())
-    {
-        nLineWdt = 0;
-    }
-
-    if (nLineWdt!=0) {
-        aOutRect.Left  ()-=nLineWdt;
-        aOutRect.Top   ()-=nLineWdt;
-        aOutRect.Right ()+=nLineWdt;
-        aOutRect.Bottom()+=nLineWdt;
-    }
-    ImpAddShadowToBoundRect();
-    ImpAddTextToBoundRect();
-}
-
-sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    const bool bHideContour(IsHideContour());
-
-    // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetObjectItemSet();
-
-    // perepare ItemSet to avoid old XOut line drawing
-    SfxItemSet aEmptySet(*rSet.GetPool());
-    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-
-    // #b4899532# if not filled but fill draft, avoid object being invisible in using
-    // a hair linestyle and COL_LIGHTGRAY
-    SfxItemSet aItemSet(rSet);
-
-    // #103692# prepare ItemSet for shadow fill attributes
-    SfxItemSet aShadowSet(aItemSet);
-
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
-    // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
-    {
-        if( !IsClosed() )
-            rXOut.SetFillAttr(aEmptySet);
-        else
-            rXOut.SetFillAttr(aShadowSet);
-
-        UINT32 nXDist=((SdrShadowXDistItem&)(aItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(aItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-        basegfx::B2DPolyPolygon aShadowPolyPolygon(GetPathPoly());
-        basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(nXDist, nYDist);
-        aShadowPolyPolygon.transform(aMatrix);
-
-        // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aEmptySet);
-
-        if(!IsClosed())
-        {
-            const sal_uInt32 nPolyAnz(aShadowPolyPolygon.count());
-
-            for(sal_uInt32 nPolyNum(0L); nPolyNum < nPolyAnz; nPolyNum++)
-            {
-                rXOut.DrawPolyLine(aShadowPolyPolygon.getB2DPolygon(nPolyNum));
-            }
-        }
-        else
-        {
-            // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
-
-            rXOut.DrawPolyPolygon(aShadowPolyPolygon);
-        }
-
-        // new shadow line drawing
-        if( pLineGeometry.get() )
-        {
-            // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
-        }
-    }
-
-    // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    // avoid line drawing in XOut
-    rXOut.SetLineAttr(aEmptySet);
-    rXOut.SetFillAttr( !IsClosed() ? aEmptySet : aItemSet );
-
-    if( !bHideContour )
-    {
-        if( IsClosed() )
-        {
-            // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, !IsClosed() ? aEmptySet : aItemSet );
-
-            rXOut.DrawPolyPolygon(GetPathPoly());
-        }
-
-        // Own line drawing
-        if( pLineGeometry.get() )
-        {
-            // draw the line geometry
-            ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
-        }
-    }
-
-    sal_Bool bOk(sal_True);
-    if (HasText()) {
-        bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
-    }
-
-    return bOk;
-}
-
 SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
@@ -1986,10 +1875,10 @@ SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
     if(GetPathPoly().isClosed() && (bTextFrame || HasFill()))
     {
-        // hit in filled polygon?
+        // hit in filled polygon? Subdivbide needed for better precision
         if(GetPathPoly().areControlPointsUsed())
         {
-            bHit = basegfx::tools::isInside(basegfx::tools::adaptiveSubdivideByAngle(GetPathPoly()), aHitPoint);
+            bHit = basegfx::tools::isInside(GetPathPoly().getDefaultAdaptiveSubdivision(), aHitPoint);
         }
         else
         {
@@ -2746,7 +2635,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, sa
                     aCandidate.getB2DPoint(nNextIndex));
 
                 // split and insert hit point
-                aBezier.split(fSmallestCut, aBezierA, aBezierB);
+                aBezier.split(fSmallestCut, &aBezierA, &aBezierB);
                 aCandidate.insert(nSmallestEdgeIndex + 1, aTestPoint);
 
                 // since we inserted hit point and not split point, we need to add an offset
@@ -2966,8 +2855,7 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
             // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
             // itself, else this method will no longer return the full polygon information (curve will
             // be lost)
-            const basegfx::B2DPolyPolygon aPolyPolygonNoCurve(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon));
-            const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(aPolyPolygonNoCurve));
+            const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(rPolyPolygon));
             aScale = aPolyRangeNoCurve.getRange();
             aTranslate = aPolyRangeNoCurve.getMinimum();
 
@@ -2999,8 +2887,7 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
                 // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
-                const basegfx::B2DPolyPolygon aPolyPolygonNoCurve(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon));
-                const basegfx::B2DRange aCorrectedRangeNoCurve(basegfx::tools::getRange(aPolyPolygonNoCurve));
+                const basegfx::B2DRange aCorrectedRangeNoCurve(basegfx::tools::getRange(rPolyPolygon));
                 aTranslate = aObjectMatrix * aCorrectedRangeNoCurve.getMinimum();
                 aScale = aCorrectedRangeNoCurve.getRange();
 
@@ -3013,8 +2900,7 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
                 // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
-                const basegfx::B2DPolyPolygon aPolyPolygonNoCurve(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon));
-                const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(aPolyPolygonNoCurve));
+                const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(rPolyPolygon));
                 aScale = aPolyRangeNoCurve.getRange();
                 aTranslate = aPolyRangeNoCurve.getMinimum();
 
@@ -3203,7 +3089,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!aTranslate.equalZero())
     {
         // #i39529# absolute positioning, so get current position (without control points (!))
-        const basegfx::B2DRange aCurrentRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(aNewPolyPolygon)));
+        const basegfx::B2DRange aCurrentRange(basegfx::tools::getRange(aNewPolyPolygon));
         aTransform.translate(aTranslate.getX() - aCurrentRange.getMinX(), aTranslate.getY() - aCurrentRange.getMinY());
     }
 
@@ -3212,4 +3098,5 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     SetPathPoly(aNewPolyPolygon);
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof
