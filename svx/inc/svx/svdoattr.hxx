@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoattr.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,18 +66,8 @@ protected:
     // Strichstaerke ermitteln. Keine Linie -> 0.
     sal_Int32 ImpGetLineWdt() const;
 
-    // Feststellen, wieviel wegen der Linienenden auf's BoundRect draufaddiert werden muss.
-    INT32 ImpGetLineEndAdd() const;
-
     // Schattenabstand ermitteln. FALSE=Kein Schatten.
     FASTBOOL ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) const;
-
-    // ggf. Schattenversatz zum BoundRect draufaddieren
-    void ImpAddShadowToBoundRect();
-
-    // Line und Fill Attribute fuer Schatten setzen.
-    // Return=FALSE: kein Schatten attributiert.
-    FASTBOOL ImpSetShadowAttributes( const SfxItemSet& rSet, SfxItemSet& rShadowSet ) const;
 
     // Zuhoeren, ob sich ein StyleSheet aendert
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
