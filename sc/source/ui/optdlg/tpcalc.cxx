@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpcalc.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +37,6 @@
 
 //------------------------------------------------------------------
 
-#include <math.h>
-
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 
@@ -55,6 +53,8 @@
 #define _TPCALC_CXX
 #include "tpcalc.hxx"
 #undef _TPCALC_CXX
+
+#include <math.h>
 
 // STATIC DATA -----------------------------------------------------------
 
