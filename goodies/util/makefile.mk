@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,7 @@ SHL1TARGET= go$(DLLPOSTFIX)
 SHL1IMPLIB= igo
 
 SHL1STDLIBS=\
+        $(BASEGFXLIB)		\
         $(VCLLIB)			\
         $(SVLLIB)			\
         $(SVTOOLLIB)		\
