@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swrect.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +38,8 @@
 #endif
 #endif
 #include <stdlib.h>
-#include <math.h>
 #include "swrect.hxx"
-
+#include <math.h>
 
 /*************************************************************************
 |*
