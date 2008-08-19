@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implrenderer.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
@@ -1255,17 +1257,9 @@ namespace cppcanvas
                                                      rState.clipRect.Bottom()+1 ) ) );
                 }
 
-                rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
-                aClipPoly = ::basegfx::tools::correctOrientations( aClipPoly );
-
-                // intersect the two poly-polygons
-                rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
-                rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_True);
-                aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
-                aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
-                rState.clip.append(aClipPoly);
-                rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
-                rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_False);
+                // AW: Simplified
+                rState.clip = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                    aClipPoly, rState.clip, true, false);
             }
 
             // by now, our clip resides in the OutDevState::clip
@@ -1343,17 +1337,10 @@ namespace cppcanvas
                                                  rClipRect.Bottom() ) ) );
 
                 rState.clipRect.SetEmpty();
-                rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
-                aClipPoly = ::basegfx::tools::correctOrientations( aClipPoly );
 
-                // intersect the two poly-polygons
-                rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
-                rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_True);
-                aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
-                aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
-                rState.clip.append(aClipPoly);
-                rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
-                rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_False);
+                // AW: Simplified
+                rState.clip = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                    aClipPoly, rState.clip, true, false);
             }
 
             if( rState.clip.count() == 0 )
