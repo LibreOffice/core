@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winmtf.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,6 @@
 #define WIN_MTF_ASSERT
 #endif
 
-#include <vector>
-#include <math.h>
-#include <stdlib.h>
 #include <sot/object.hxx>
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -55,6 +52,10 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/lineinfo.hxx>
 #include <svtools/fltcall.hxx>
+
+#include <vector>
+#include <math.h>
+#include <stdlib.h>
 
 #define ERROR                   0
 #define NULLREGION              1
