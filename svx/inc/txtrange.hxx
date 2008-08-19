@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtrange.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,10 @@
 class PolyPolygon;
 class Range;
 class Rectangle;
+
+namespace basegfx {
+    class B2DPolyPolygon;
+}
 
 typedef SvLongs* SvLongsPtr;
 
@@ -96,7 +100,7 @@ public:
     const PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
     const PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
     const Rectangle& GetBoundRect()
-        { return pBound ? *pBound : _GetBoundRect(); }
+        { return pBound ? static_cast< const Rectangle& >(*pBound) : _GetBoundRect(); }
     void SetUpper( USHORT nNew ){ nUpper = nNew; }
     void SetLower( USHORT nNew ){ nLower = nNew; }
     void SetVertical( BOOL bNew );
