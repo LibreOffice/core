@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontriangulator.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #define _BGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
