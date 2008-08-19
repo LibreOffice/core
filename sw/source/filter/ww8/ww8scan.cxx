@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.139 $
+ * $Revision: 1.140 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,8 @@
 #endif                      // dump
 #include <tools/debug.hxx>
 #include <i18npool/lang.h>
+
+#include <stdio.h>
 
 #define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
     ASSERT(aCon, aError); \
@@ -1683,7 +1685,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     SvStream* pDataSt, const WW8Fib* pWwFib )
     : pWw8Fib(pWwFib), pMainFdoa(0), pHdFtFdoa(0), pMainTxbx(0),
     pMainTxbxBkd(0), pHdFtTxbx(0), pHdFtTxbxBkd(0), pMagicTables(0),
-    pSubdocs(0), pPieceGrpprls(0)
+    pSubdocs(0), pExtendedAtrds(0), pPieceGrpprls(0)
 {
     pPiecePLCF = OpenPieceTable( pTblSt, pWw8Fib );             // Complex
     if( pPiecePLCF )
@@ -1786,6 +1788,16 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
                 pSubdocs = new WW8PLCFspecial( pTblSt,
                     pWwFib->fcPlcfwkb, pWwFib->lcbPlcfwkb, 12);
             }
+        // Extended ATRD
+            if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
+            {
+                pExtendedAtrds = new BYTE[pWwFib->lcbAtrdExtra];
+        long nOldPos = pTblSt->Tell();
+        pTblSt->Seek(pWwFib->fcAtrdExtra);
+        pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
+            pTblSt->Seek(nOldPos);
+            }
+
             break;
         default:
             ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
@@ -1840,6 +1852,7 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pHdFtTxbxBkd;
     delete pMagicTables;
     delete pSubdocs;
+    delete [] pExtendedAtrds;
 }
 
 //-----------------------------------------
@@ -3257,7 +3270,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 character is at the FKP FC minus 1.
                 */
                 WW8_CP nCpStart, nCpEnd;
-                void* pData;
+                void* pData=0;
                 pPieceIter->Get(nCpStart, nCpEnd, pData);
 
                 WW8_FC nLimitFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
@@ -4324,7 +4337,7 @@ USHORT WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
     return nId;
 }
 
-WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
+WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     bool bDoingDrawTextBox)
     : maSprmParser(pBase->pWw8Fib->GetFIBVersion()),
     mbDoingDrawTextBox(bDoingDrawTextBox)
@@ -4390,57 +4403,49 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
 
     pMagicTables = pBase->pMagicTables;
     pSubdocs = pBase->pSubdocs;
+    pExtendedAtrds = pBase->pExtendedAtrds;
 
     switch( nType )                 // Feld-Initialisierung
     {
         case MAN_HDFT:
             pFld->pPLCFx = pBase->pFldHdFtPLCF;
-            nCpO = pWwFib->ccpText + pWwFib->ccpFtn;
             pFdoa = pBase->pHdFtFdoa;
             pTxbx = pBase->pHdFtTxbx;
             pTxbxBkd = pBase->pHdFtTxbxBkd;
             break;
         case MAN_FTN:
             pFld->pPLCFx = pBase->pFldFtnPLCF;
-            nCpO = pWwFib->ccpText;
             pFdoa = pTxbx = pTxbxBkd = 0;
             break;
         case MAN_EDN:
             pFld->pPLCFx = pBase->pFldEdnPLCF;
-            nCpO = pWwFib->ccpText + pWwFib->ccpFtn + pWwFib->ccpHdr +
-                pWwFib->ccpAtn;
             pFdoa = pTxbx = pTxbxBkd = 0;
             break;
         case MAN_AND:
             pFld->pPLCFx = pBase->pFldAndPLCF;
-            nCpO = pWwFib->ccpText + pWwFib->ccpFtn + pWwFib->ccpHdr;
             pFdoa = pTxbx = pTxbxBkd = 0;
             break;
         case MAN_TXBX:
             pFld->pPLCFx = pBase->pFldTxbxPLCF;
-            nCpO = pWwFib->ccpText + pWwFib->ccpFtn + pWwFib->ccpHdr +
-                pWwFib->ccpMcr + pWwFib->ccpAtn + pWwFib->ccpEdn;
             pTxbx = pBase->pMainTxbx;
             pTxbxBkd = pBase->pMainTxbxBkd;
             pFdoa = 0;
             break;
         case MAN_TXBX_HDFT:
             pFld->pPLCFx = pBase->pFldTxbxHdFtPLCF;
-            nCpO = pWwFib->ccpText + pWwFib->ccpFtn + pWwFib->ccpHdr +
-                pWwFib->ccpMcr + pWwFib->ccpAtn + pWwFib->ccpEdn +
-                pWwFib->ccpTxbx;
             pTxbx = pBase->pHdFtTxbx;
             pTxbxBkd = pBase->pHdFtTxbxBkd;
             pFdoa = 0;
             break;
         default:
             pFld->pPLCFx = pBase->pFldPLCF;
-            nCpO = 0;
             pFdoa = pBase->pMainFdoa;
             pTxbx = pBase->pMainTxbx;
             pTxbxBkd = pBase->pMainTxbxBkd;
             break;
     }
+
+    nCpO = pWwFib->GetBaseCp(nType);
 
     if( nStartCp || nCpO )
         SeekPos( nStartCp );    // PLCFe auf Text-StartPos einstellen
@@ -5080,6 +5085,47 @@ namespace
     }
 }
 
+WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
+{
+    WW8_CP nOffset = 0;
+
+    switch( nType )
+    {
+        default:
+        case MAN_MAINTEXT:
+            break;
+        case MAN_FTN:
+            nOffset = ccpText;
+            break;
+        case MAN_HDFT:
+            nOffset = ccpText + ccpFtn;
+            break;
+/*
+ * A subdocument of this kind probably exists in some defunct version
+ * of MSWord, but now ccpMcr is always 0
+ */
+#if 0
+        case MAN_MACRO:
+            nOffset = ccpText + ccpFtn + ccpHdr;
+            break;
+#endif
+        case MAN_AND:
+            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr;
+            break;
+        case MAN_EDN:
+            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn;
+            break;
+        case MAN_TXBX:
+            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn;
+            break;
+        case MAN_TXBX_HDFT:
+            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn +
+                ccpTxbx;
+            break;
+    }
+    return nOffset;
+}
+
 ww::WordVersion WW8Fib::GetFIBVersion() const
 {
     ww::WordVersion eVer = ww::eWW8;
@@ -5460,9 +5506,21 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
             rSt.Seek( 0x372 );          // fcSttbListNames
             rSt >> fcSttbListNames;
             rSt >> lcbSttbListNames;
-            rSt.Seek( 0x382 );          // MagicTables
-            rSt >> fcMagicTable;
-            rSt >> lcbMagicTable;
+
+            if (cfclcb > 93)
+            {
+                rSt.Seek( 0x382 );          // MagicTables
+                rSt >> fcMagicTable;
+                rSt >> lcbMagicTable;
+            }
+
+            if (cfclcb > 113)
+            {
+                rSt.Seek( 0x41A );          // new ATRD
+                rSt >> fcAtrdExtra;
+                rSt >> lcbAtrdExtra;
+            }
+
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
 
@@ -5482,14 +5540,14 @@ WW8Fib::WW8Fib(BYTE nVer)
     nVersion = nVer;
     if (8 == nVer)
     {
-        fcMin = 0x400;
+        fcMin = 0x800;
         wIdent = 0xa5ec;
         nFib = 0xc2;
         nFibBack = 0xbf;
         nProduct = 0x204D;
 
         csw = 0x0e;     // muss das sein ???
-        cfclcb = 0x6c;  //      -""-
+        cfclcb = 0x88;  //      -""-
         clw = 0x16;     //      -""-
         pnFbpChpFirst = pnFbpPapFirst = pnFbpLvcFirst = 0x000fffff;
         fExtChar = true;
@@ -5786,6 +5844,14 @@ bool WW8Fib::Write(SvStream& rStrm)
         pData += 0x3FA - 0x38A;
         Set_UInt16( pData, (UINT16)0x0002);
         Set_UInt16( pData, (UINT16)0x00D9);
+
+        pData += 0x41A - 0x3FE;
+        Set_UInt32( pData, fcAtrdExtra );
+        Set_UInt32( pData, lcbAtrdExtra );
+
+        pData += 0x4DA - 0x422;
+        Set_UInt32( pData, fcHplxsdr );
+        Set_UInt32( pData, 0);
     }
 
     rStrm.Write( pDataPtr, fcMin );
@@ -6353,6 +6419,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
 {
     memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
     fDontUseHTMLAutoSpacing = true; //default
+    fAcetateShowAtn = true; //default
     const sal_uInt32 nMaxDopSize = 0x268;
     BYTE* pDataPtr = new BYTE[ nMaxDopSize ];
     BYTE* pData = pDataPtr;
@@ -6543,9 +6610,28 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
                 // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
                 SetCompatabilityOptions2(a32Bit);
             }
+            if (nRead >= 550)
+            {
+                pData += 32;
+                a16Bit = Get_UShort( pData );
+                fDoNotEmbedSystemFont = ( a16Bit &  0x0001 );
+                fWordCompat = ( a16Bit &  0x0002 ) >> 1;
+                fLiveRecover = ( a16Bit &  0x0004 ) >> 2;
+                fEmbedFactoids = ( a16Bit &  0x0008 ) >> 3;
+                fFactoidXML = ( a16Bit &  0x00010 ) >> 4;
+                fFactoidAllDone = ( a16Bit &  0x0020 ) >> 5;
+                fFolioPrint = ( a16Bit &  0x0040 ) >> 6;
+                fReverseFolio = ( a16Bit &  0x0080 ) >> 7;
+                iTextLineEnding = ( a16Bit &  0x0700 ) >> 8;
+                fHideFcc = ( a16Bit &  0x0800 ) >> 11;
+                fAcetateShowMarkup = ( a16Bit &  0x1000 ) >> 12;
+                fAcetateShowAtn = ( a16Bit &  0x2000 ) >> 13;
+                fAcetateShowInsDel = ( a16Bit &  0x4000 ) >> 14;
+                fAcetateShowProps = ( a16Bit &  0x8000 ) >> 15;
+            }
             if (nRead >= 600)
             {
-                pData += 82;
+                pData += 48;
                 a16Bit = Get_Short(pData);
                 fUseBackGroundInAllmodes = (a16Bit & 0x0080) >> 7;
             }
@@ -6601,6 +6687,8 @@ WW8Dop::WW8Dop() : bUseThaiLineBreakingRules(false)
 
     cDBC = /**!!**/ 0;
     cDBCFtnEdn = /**!!**/ 0;
+
+    fAcetateShowAtn = true;
 }
 
 void WW8Dop::SetCompatabilityOptions(UINT32 a32Bit)
@@ -6759,7 +6847,7 @@ UINT32 WW8Dop::GetCompatabilityOptions2() const
 
 bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 {
-    const int nMaxDopLen = 600;
+    const int nMaxDopLen = 610;
     sal_uInt32 nLen = 8 == rFib.nVersion ? nMaxDopLen : 84;
     rFib.fcDop =  rStrm.Tell();
     rFib.lcbDop = nLen;
@@ -6936,20 +7024,22 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         //500 -> 508, Appear to be repeated here in 2000+
         pData += 8;
         Set_UInt32(pData, GetCompatabilityOptions());
-//        sal_uInt32 a32Bit = 0;
-
-        // i#78591#
-//      if (bUseThaiLineBreakingRules)
-//      {
-//          a32Bit|=0x2000; //#i42909# set thai "line breaking rules" compatibility option
-//      }
-//       if (fDontUseHTMLAutoSpacing)
-//            a32Bit |= 0x0004;
         Set_UInt32(pData, GetCompatabilityOptions2());
+        pData += 32;
 
-//        Set_UInt32(pData, a32Bit);
-        pData += 82;
-        a16Bit = 0x80;
+        a16Bit = 0;
+        if (fAcetateShowMarkup)
+            a16Bit |= 0x1000;
+        //Word XP at least requires fAcetateShowMarkup to honour fAcetateShowAtn
+        if (fAcetateShowAtn)
+        {
+            a16Bit |= 0x1000;
+            a16Bit |= 0x2000;
+        }
+        Set_UInt16(pData, a16Bit);
+
+        pData += 48;
+        a16Bit = 0x0080;
         Set_UInt16(pData, a16Bit);
     }
     rStrm.Write( aData, nLen );
