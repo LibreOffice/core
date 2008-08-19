@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprov.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,7 +99,7 @@ public:
 /***********************************************************************
 * SvxUnoPropertyMapProvider                                            *
 ***********************************************************************/
-class SvxUnoPropertyMapProvider
+class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMap* aMapArr[SVXMAP_END];
     void Sort(USHORT nId);
