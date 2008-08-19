@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imap2.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,12 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
+
+#ifdef WIN
+#include <sysdep.hxx>
+#endif
+#include <string.h>
+#include <math.h>
 
 #define NOTEOL(c) ((c)!='\0')
 
