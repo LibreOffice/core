@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdrpagewindow.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,10 +44,12 @@
 #include <svx/svdpagv.hxx>
 #include <sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vos/mutex.hxx>
 #include <svx/fmview.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -141,13 +143,6 @@ SdrPageWindow::~SdrPageWindow()
     // #110094#, #i26631#
     ResetObjectContact();
 
-    if(mpObjectContact)
-    {
-        mpObjectContact->PrepareDelete();
-        delete mpObjectContact;
-        mpObjectContact = 0L;
-    }
-
     if (mxControlContainer.is())
     {
         SdrView& rView = GetPageView().GetView();
@@ -167,46 +162,6 @@ SdrPageWindow::~SdrPageWindow()
 sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 {
     return new sdr::contact::ObjectContactOfPageView(*this);
-}
-
-SdrPaintInfoRec* SdrPageWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyRect,
-    sal_uInt16 nPaintMode, const SdrLayerID* pId) const
-{
-    SdrPaintInfoRec* pInfoRec = new SdrPaintInfoRec();
-    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
-    Rectangle aCheckRect(rDirtyRect);
-    Size a1PixSiz(GetPaintWindow().GetOutputDevice().PixelToLogic(Size(1, 1)));
-
-    aCheckRect.Left() -= a1PixSiz.Width();
-    aCheckRect.Top() -= a1PixSiz.Height();
-    aCheckRect.Right() += a1PixSiz.Width();
-    aCheckRect.Bottom() += a1PixSiz.Height();
-
-    pInfoRec->pPV = &mrPageView;
-    pInfoRec->bPrinter = bPrinter;
-    pInfoRec->aDirtyRect = rDirtyRect;
-    pInfoRec->aCheckRect = aCheckRect;
-
-    if(pId)
-    {
-        pInfoRec->aPaintLayer.ClearAll();
-        pInfoRec->aPaintLayer.Set(*pId);
-    }
-    else
-    {
-        pInfoRec->aPaintLayer = bPrinter
-            ? mrPageView.GetPrintableLayers()
-            : mrPageView.GetVisibleLayers();
-    }
-
-    pInfoRec->nPaintMode = nPaintMode;
-
-    if(mrPageView.GetObjList() != mrPageView.GetPage())
-    {
-        pInfoRec->pAktList = mrPageView.GetObjList();
-    }
-
-    return pInfoRec;
 }
 
 // OVERLAYMANAGER
@@ -231,44 +186,26 @@ void SdrPageWindow::unpatchPaintWindow()
     }
 }
 
+void SdrPageWindow::PrePaint()
+{
+    // give OC the chance to do ProcessDisplay preparations
+    if(HasObjectContact())
+    {
+        GetObjectContact().PrepareProcessDisplay();
+    }
+}
+
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
 {
-    // get XOutDev
-    const SdrView& rView = mrPageView.GetView();
-    XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
-
-    // get to be processed layers
-    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
-    SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
-
-    // get OutDev and set offset there
-    OutputDevice& rTargetDevice = GetPaintWindow().GetOutputDevice();
-    pXOut->SetOutDev(&rTargetDevice);
-    pXOut->SetOffset(Point());
-
-    // create PaintInfoRec, use Rectangle only temporarily
-    SdrPaintInfoRec* pInfoRec = ImpCreateNewPageInfoRec(rReg.GetBoundRect(), 0, 0L);
-
-    // create processing data
-    sdr::contact::DisplayInfo aDisplayInfo(&mrPageView);
-
-    aDisplayInfo.SetProcessLayers(aProcessLayers);
-    aDisplayInfo.SetExtendedOutputDevice(pXOut);
-    aDisplayInfo.SetPaintInfoRec(pInfoRec);
-    aDisplayInfo.SetOutputDevice(&rTargetDevice);
-
-    // #114359# Set region as redraw area, not a rectangle
-    aDisplayInfo.SetRedrawArea(rReg);
-
-    // no PagePainting for preparations
-    aDisplayInfo.SetPagePainting(rView.IsPagePaintingAllowed()); // #i72889#
+    // evtl. give OC the chance to do ProcessDisplay preparations
+    if(HasObjectContact())
+    {
+        GetObjectContact().PrepareProcessDisplay();
+    }
 
     // remember eventually changed RedrawArea at PaintWindow for usage with
     // overlay and PreRenderDevice stuff
-    GetPaintWindow().SetRedrawRegion(aDisplayInfo.GetRedrawArea());
-
-    // delete PaintInfoRec
-    delete pInfoRec;
+    GetPaintWindow().SetRedrawRegion(rReg);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -361,7 +298,7 @@ namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdrPageWindow::RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     // set Redirector
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
@@ -369,30 +306,16 @@ void SdrPageWindow::RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectC
     // set PaintingPageView
     const SdrView& rView = mrPageView.GetView();
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
-    rModel.SetPaintingPageView(&mrPageView);
-
-    // get XOutDev
-    XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
 
     // get to be processed layers
     const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
-    // get TargetDevice and force output to this one given target
-    SdrPreRenderDevice* pPreRenderDevice = GetPaintWindow().GetPreRenderDevice();
-    OutputDevice& rTargetDevice = (pPreRenderDevice)
-        ? pPreRenderDevice->GetPreRenderDevice() : GetPaintWindow().GetOutputDevice();
-    pXOut->SetOutDev(&rTargetDevice);
-
-    // set Offset at XOutDev
-    pXOut->SetOffset(Point());
-
     // create PaintInfoRec, #114359# use Rectangle only temporarily
     const Region& rRegion = GetPaintWindow().GetRedrawRegion();
-    SdrPaintInfoRec* pInfoRec = ImpCreateNewPageInfoRec(rRegion.GetBoundRect(), nPaintMode, 0L);
 
     // create processing data
-    sdr::contact::DisplayInfo aDisplayInfo(&mrPageView);
+    sdr::contact::DisplayInfo aDisplayInfo;
 
     // Draw all layers. do NOT draw form layer from CompleteRedraw, this is done separate
     // as a single layer paint
@@ -404,22 +327,16 @@ void SdrPageWindow::RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectC
     if(!aProcessLayers.IsEmpty())
     {
         aDisplayInfo.SetProcessLayers(aProcessLayers);
-        aDisplayInfo.SetExtendedOutputDevice(pXOut);
-        aDisplayInfo.SetPaintInfoRec(pInfoRec);
-        aDisplayInfo.SetOutputDevice(&rTargetDevice);
 
         // Set region as redraw area
         aDisplayInfo.SetRedrawArea(rRegion);
 
         // Draw/Impress
-        aDisplayInfo.SetPagePainting(rView.IsPagePaintingAllowed()); // #i72889#
+        aDisplayInfo.SetPageProcessingActive(rView.IsPagePaintingAllowed()); // #i72889#
 
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
     }
-
-    // delete PaintInfoRec
-    delete pInfoRec;
 
     // reset redirector
     GetObjectContact().SetViewObjectContactRedirector(0L);
@@ -433,9 +350,7 @@ void SdrPageWindow::RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectC
 #endif // CLIPPER_TEST
 }
 
-void SdrPageWindow::RedrawLayer(
-    sal_uInt16 nPaintMode, const SdrLayerID* pId,
-    ::sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     // set redirector
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
@@ -443,10 +358,6 @@ void SdrPageWindow::RedrawLayer(
     // set PaintingPageView
     const SdrView& rView = mrPageView.GetView();
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
-    rModel.SetPaintingPageView(&mrPageView);
-
-    // get XOutDev
-    XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
 
     // get the layers to process
     const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
@@ -458,48 +369,32 @@ void SdrPageWindow::RedrawLayer(
         // find out if we are painting the ControlLayer
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
-        const sal_Bool bControlLayerPainting(pId && nControlLayerId == *pId);
-
-        // Get PreRenderDevice and force output to this one given target
-        SdrPreRenderDevice* pPreRenderDevice = GetPaintWindow().GetPreRenderDevice();
-        OutputDevice& rTargetDevice =
-            (pPreRenderDevice && !bControlLayerPainting)
-            ? pPreRenderDevice->GetPreRenderDevice() : GetPaintWindow().GetOutputDevice();
-        pXOut->SetOutDev(&rTargetDevice);
-
-        // set offset at XOutDev
-        pXOut->SetOffset(Point());
+        const sal_Bool bControlLayerProcessingActive(pId && nControlLayerId == *pId);
 
         // create PaintInfoRec, use Rectangle only temporarily
         const Region& rRegion = GetPaintWindow().GetRedrawRegion();
-        SdrPaintInfoRec* pInfoRec = ImpCreateNewPageInfoRec(rRegion.GetBoundRect(), nPaintMode, pId);
 
         // create processing data
-        sdr::contact::DisplayInfo aDisplayInfo(&mrPageView);
+        sdr::contact::DisplayInfo aDisplayInfo;
 
         // is it the control layer? If Yes, set flag
-        aDisplayInfo.SetControlLayerPainting(bControlLayerPainting);
+        aDisplayInfo.SetControlLayerProcessingActive(bControlLayerProcessingActive);
 
         // Draw just the one given layer
         aProcessLayers.ClearAll();
         aProcessLayers.Set(*pId);
 
         aDisplayInfo.SetProcessLayers(aProcessLayers);
-        aDisplayInfo.SetExtendedOutputDevice(pXOut);
-        aDisplayInfo.SetPaintInfoRec(pInfoRec);
-        aDisplayInfo.SetOutputDevice(&rTargetDevice);
 
         // Set region as redraw area
         aDisplayInfo.SetRedrawArea(rRegion);
 
         // Writer or calc, coming from original RedrawOneLayer.
-        aDisplayInfo.SetPagePainting(sal_False); // #i72889# no page painting for layer painting
+        // #i72889# no page painting for layer painting
+        aDisplayInfo.SetPageProcessingActive(false);
 
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
-
-        // delete PaintInfoRec
-        delete pInfoRec;
     }
 
     // reset redirector
@@ -507,11 +402,30 @@ void SdrPageWindow::RedrawLayer(
 }
 
 // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
-void SdrPageWindow::Invalidate(const Rectangle& rRectangle)
+void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 {
     if(GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
-        ((Window&)GetPaintWindow().GetOutputDevice()).Invalidate(rRectangle, INVALIDATE_NOERASE);
+        const SvtOptionsDrawinglayer aDrawinglayerOpt;
+        Window& rWindow(static_cast< Window& >(GetPaintWindow().GetOutputDevice()));
+        basegfx::B2DRange aDiscreteRange(rRange);
+        aDiscreteRange.transform(rWindow.GetViewTransformation());
+
+        if(aDrawinglayerOpt.IsAntiAliasing())
+        {
+            // invalidate one discrete unit more under the assumption that AA
+            // needs one pixel more
+            aDiscreteRange.grow(1.0);
+        }
+
+        const Rectangle aVCLDiscreteRectangle(
+                (sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()),
+                (sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+        const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
+
+        rWindow.EnableMapMode(false);
+        rWindow.Invalidate(aVCLDiscreteRectangle, INVALIDATE_NOERASE);
+        rWindow.EnableMapMode(bWasMapModeEnabled);
     }
 }
 
@@ -536,7 +450,6 @@ void SdrPageWindow::ResetObjectContact()
 {
     if(mpObjectContact)
     {
-        mpObjectContact->PrepareDelete();
         delete mpObjectContact;
         mpObjectContact = 0L;
     }
