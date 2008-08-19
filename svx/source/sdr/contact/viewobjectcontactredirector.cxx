@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactredirector.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,9 +50,11 @@ namespace sdr
         {
         }
 
-        void ViewObjectContactRedirector::PaintObject(ViewObjectContact& rOriginal, DisplayInfo& rDisplayInfo)
+        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+            const sdr::contact::ViewObjectContact& rOriginal,
+            const sdr::contact::DisplayInfo& rDisplayInfo)
         {
-            rOriginal.PaintObject(rDisplayInfo);
+            return rOriginal.createPrimitive2DSequence(rDisplayInfo);
         }
     } // end of namespace contact
 } // end of namespace sdr
