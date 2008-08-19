@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PrintManager.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1430,7 +1430,6 @@ void PrintManager::PrintStdOrNotes (
         else
         {
             rInfo.mrViewShell.WriteFrameViewData();
-
             Point aPtZero;
 
             while ( nPage < rInfo.mnPageMax )
@@ -1510,7 +1509,7 @@ void PrintManager::PrintStdOrNotes (
                             Point aPrintOrigin;
 
                             rInfo.mrPrinter.StartPage();
-                            pPrintView->ShowSdrPage( pPage ); // , aPtZero );
+                            pPrintView->ShowSdrPage( pPage );
 
                             SdrPageView* pPageView = pPrintView->GetSdrPageView(); // pPage);
                             pPageView->SetVisibleLayers(rInfo.mrViewShell.GetFrameView()->GetVisibleLayers() );
@@ -1545,11 +1544,10 @@ void PrintManager::PrintStdOrNotes (
 
                                     if (rInfo.mrViewShell.ISA(DrawViewShell) && bPrintMarkedOnly )
                                     {
-                                        rInfo.mrViewShell.GetView()->DrawAllMarked( rInfo.mrPrinter, aPtZero );
+                                        rInfo.mrViewShell.GetView()->DrawMarkedObj(rInfo.mrPrinter);
                                     }
                                     else
-                                        pPrintView->CompleteRedraw( &rInfo.mrPrinter, Rectangle( aPtZero,
-                                                                aPageSize ) );
+                                        pPrintView->CompleteRedraw( &rInfo.mrPrinter, Rectangle( aPtZero, aPageSize ) );
                                 }
                                 if( bWidth )
                                 {
@@ -1674,13 +1672,9 @@ void PrintManager::PrintPagePart (
     pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
     if (rInfo.mrViewShell.ISA(DrawViewShell) && bPrintMarkedOnly)
-        rInfo.mrViewShell.GetView()->DrawAllMarked( rInfo.mrPrinter, Point(0,0));
+        rInfo.mrViewShell.GetView()->DrawMarkedObj(rInfo.mrPrinter);
     else
-        rPrintView.CompleteRedraw(
-            &rInfo.mrPrinter,
-            Rectangle(
-                Point(0,0),
-                pPage->GetSize()));
+        rPrintView.CompleteRedraw(&rInfo.mrPrinter, Rectangle(Point(0,0), pPage->GetSize()));
     rInfo.mrPrinter.SetMapMode(aOriginalMapMode);
 
     if (rsPageString.Len())
@@ -1712,11 +1706,9 @@ void PrintManager::PrintPage (
     pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
     if (rInfo.mrViewShell.ISA(DrawViewShell) && bPrintMarkedOnly)
-        rInfo.mrViewShell.GetView()->DrawAllMarked(rInfo.mrPrinter, Point(0,0));
+        rInfo.mrViewShell.GetView()->DrawMarkedObj(rInfo.mrPrinter);
     else
-        pPrintView->CompleteRedraw(
-            &rInfo.mrPrinter,
-            Rectangle(Point(0,0), pPage->GetSize()), 0);
+        pPrintView->CompleteRedraw(&rInfo.mrPrinter, Rectangle(Point(0,0), pPage->GetSize()));
 
     pPrintView->HideSdrPage(); //  pPrintView->GetPageView( pPage ) );
 }
