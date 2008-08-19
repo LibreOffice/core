@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoapi.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <sal/types.h>
 #include <goodies/grfmgr.hxx>
 #include <svtools/poolitem.hxx>
@@ -40,6 +41,7 @@
 
 class SvxShape;
 class SdrObject;
+class SdrPage;
 class SvxNumBulletItem;
 class SfxItemPool;
 class String;
@@ -54,6 +56,12 @@ SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShap
 
 /** returns the SdrObject from the given StarOffice API wrapper */
 SVX_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) throw() ;
+
+/** returns a StarOffice API wrapper for the given SdrPage */
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ();
+
+/** returns the SdrPage from the given StarOffice API wrapper */
+SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage ) throw() ;
 
 /** returns a GraphicObject for this URL */
 SVX_DLLPUBLIC GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() ;
