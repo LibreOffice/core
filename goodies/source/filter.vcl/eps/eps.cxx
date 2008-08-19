@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eps.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_goodies.hxx"
 
-#include <math.h>
 #include <vcl/sv.h>
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
@@ -54,6 +53,8 @@
 #include "strings.hrc"
 #include "dlgeps.hrc"
 #include "dlgeps.hxx"
+
+#include <math.h>
 
 #define POSTSCRIPT_BOUNDINGSEARCH   0x1000  // we only try to get the BoundingBox
                                             // in the first 4096 bytes
