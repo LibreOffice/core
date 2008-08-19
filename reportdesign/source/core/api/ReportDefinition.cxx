@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1395,6 +1395,19 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
+     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    uno::Reference< document::XGraphicObjectResolver >      xGrfResolver;
+    SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(_xStorageToSaveTo,GRAPHICHELPER_MODE_WRITE);
+    xGrfResolver = pGraphicHelper;
+    pGraphicHelper->release();
+    SvXMLEmbeddedObjectHelper* pEmbeddedObjectHelper = SvXMLEmbeddedObjectHelper::Create( _xStorageToSaveTo,*this, EMBEDDEDOBJECTHELPER_MODE_WRITE );
+    xObjectResolver = pEmbeddedObjectHelper;
+    pEmbeddedObjectHelper->release();
+
+    aDelegatorArguments.realloc(nArgsLen+2);
+    aDelegatorArguments[nArgsLen++] <<= xGrfResolver;
+    aDelegatorArguments[nArgsLen++] <<= xObjectResolver;
+
     uno::Reference<XComponent> xCom(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
     if( !bErr )
     {
@@ -2023,7 +2036,7 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
     return m_pImpl->m_pReportModel;
 }
 // -----------------------------------------------------------------------------
-::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(uno::Reference< report::XReportDefinition >& _xReportDefinition)
+::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
 {
     ::boost::shared_ptr<rptui::OReportModel> pReportModel;
     uno::Reference< lang::XUnoTunnel > xUT( _xReportDefinition, uno::UNO_QUERY );
@@ -2197,9 +2210,19 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver")) == 0 )
         return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver")) == 0 )
-        return static_cast< ::cppu::OWeakObject* >(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
+    {
+        SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,GRAPHICHELPER_MODE_WRITE);
+        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(pGraphicHelper));
+        pGraphicHelper->release();
+        return xRet;
+    }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver")) == 0 )
-        return static_cast< ::cppu::OWeakObject* >(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
+    {
+        SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,GRAPHICHELPER_MODE_WRITE);
+        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(pGraphicHelper));
+        pGraphicHelper->release();
+        return xRet;
+    }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider")) == 0 )
     {
         uno::Reference<chart2::data::XDatabaseDataProvider> xDataProvider(chart2::data::DatabaseDataProvider::createWithConnection( m_aProps->m_xContext, m_pImpl->m_xActiveConnection ));
