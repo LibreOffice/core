@@ -8,7 +8,7 @@
  *
  * $RCSfile: SlsCurrentSlideManager.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
-#include "view/SlsHighlightObject.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
@@ -124,9 +123,6 @@ void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
         if (mpCurrentSlide.get() != NULL)
         {
             mpCurrentSlide->SetIsCurrentPage(true);
-            view::HighlightObject* pObject = mrSlideSorter.GetController().GetHighlightObject();
-            if (pObject != NULL)
-                pObject->SetSlide(mpCurrentSlide);
             mrSlideSorter.GetView().RequestRepaint(mpCurrentSlide);
         }
     }
