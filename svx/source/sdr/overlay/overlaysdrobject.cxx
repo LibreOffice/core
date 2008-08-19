@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaysdrobject.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/overlay/overlaysdrobject.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/svdobj.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -42,9 +41,7 @@ namespace sdr
     {
         void OverlaySdrObject::drawGeometry(OutputDevice& rOutputDevice)
         {
-            XOutputDevice aExtOut(&rOutputDevice);
-            SdrPaintInfoRec aInfoRec;
-            mrSdrObject.SingleObjectPainter(aExtOut, aInfoRec);
+            mrSdrObject.SingleObjectPainter(rOutputDevice);
         }
 
         void OverlaySdrObject::createBaseRange(OutputDevice& /*rOutputDevice*/)
