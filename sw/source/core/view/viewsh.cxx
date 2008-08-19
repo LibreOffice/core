@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +121,15 @@ using namespace ::com::sun::star;
 // buffered into VDevs to avoid flicker. Tis is in general problematic and should be
 // solved once using the BufferedOutput functionality of the DrawView.
 
+void ViewShell::PrePaint()
+{
+    // forward PrePaint event from VCL Window to DrawingLayer
+    if(HasDrawView())
+    {
+        Imp()->GetDrawView()->PrePaint();
+    }
+}
+
 void ViewShell::DLPrePaint2(const Region& rRegion)
 {
     if(0L == mnPrePostPaintCount)
@@ -142,6 +151,9 @@ void ViewShell::DLPrePaint2(const Region& rRegion)
             mpBufferedOut = pOut;
             pOut = &(mpTargetPaintWindow->GetTargetOutputDevice());
         }
+
+        // remember original paint MapMode for wrapped FlyFrame paints
+        maPrePostMapMode = pOut->GetMapMode();
     }
 
     mnPrePostPaintCount++;
