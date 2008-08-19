@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdouno.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@
 #include <comphelper/types.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <svx/svdouno.hxx>
-#include "svdxout.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
 #include "svdglob.hxx"  // Stringcache
@@ -57,11 +56,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
 #include "svdviter.hxx"
-#ifndef SVX_SOURCE_FORM_FORMPDFEXPORT_HXX
-#include "formpdfexport.hxx"
-#endif
 #include <rtl/ref.hxx>
-
 #include <set>
 #include <memory>
 #include <svx/sdrpagewindow.hxx>
@@ -283,13 +278,6 @@ namespace
                 m_rXView->setGraphics( m_rXGraphics );
             }
     };
-}
-
-// ----------------------------------------------------------------------------
-sal_Bool SdrUnoObj::DoPaintObject(XOutputDevice& /*rXOut*/, const SdrPaintInfoRec& /*rInfoRec*/) const
-{
-    DBG_ERROR( "SdrUnoObj::DoPaintObject: dead code!" );
-    return sal_False;
 }
 
 SdrObject* SdrUnoObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
@@ -570,7 +558,11 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
     // invalidate all ViewObject contacts
     ViewContactOfUnoControl* pVC = NULL;
     if ( impl_getViewContact( pVC ) )
-        pVC->invalidateAllContacts( ViewContactOfUnoControl::SdrUnoObjAccessControl() );
+    {
+        // FlushViewContact() removes all existing VOCs. This is always allowed
+        // since they will be re-created on demand (and with the changed model)
+        FlushViewContact();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -620,3 +612,6 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
 {
   return new ::sdr::contact::ViewContactOfUnoControl( *this );
 }
+
+// -----------------------------------------------------------------------------
+// eof
