@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dbeziertools.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,36 @@
 #ifndef _BGFX_CURVE_B2DBEZIERTOOLS_HXX
 #define _BGFX_CURVE_B2DBEZIERTOOLS_HXX
 
+#include <sal/types.h>
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
-// necessary stuff moved to B2DCubicBezier
+// predefines
+
+namespace basegfx
+{
+    class B2DCubicBezier;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    class B2DCubicBezierHelper
+    {
+    private:
+        ::std::vector< double >         maLengthArray;
+        sal_uInt32                      mnEdgeCount;
+
+    public:
+        B2DCubicBezierHelper(const B2DCubicBezier& rBase, sal_uInt32 nDivisions = 9);
+
+        double getLength() const { if(maLengthArray.size()) return maLengthArray[maLengthArray.size() - 1]; else return 0.0; }
+        double distanceToRelative(double fDistance) const;
+        double relativeToDistance(double fRelative) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif /* _BGFX_CURVE_B2DBEZIERTOOLS_HXX */
