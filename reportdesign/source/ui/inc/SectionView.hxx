@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SectionView.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ public:
     virtual void MarkListHasChanged();
     virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
 
-    inline OReportSection*  getSectionWindow() const { return m_pSectionWindow; }
+    inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
 };
 }
 #endif //_REPORT_SECTIONVIEW_HXX

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MarkedSection.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,7 @@
 
 namespace rptui
 {
-    class OReportSection; // forward declaration
+    class OSectionWindow; // forward declaration
 
     enum NearSectionAccess
     {
@@ -49,7 +49,7 @@ namespace rptui
     public:
         /** returns the section which is currently marked.
         */
-        virtual ::boost::shared_ptr<OReportSection> getMarkedSection(NearSectionAccess nsa) const =0;
+        virtual ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa) const =0;
 
         /** mark the section on the given position .
         *
