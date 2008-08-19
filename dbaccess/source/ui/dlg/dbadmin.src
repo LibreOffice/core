@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbadmin.src,v $
- * $Revision: 1.160 $
+ * $Revision: 1.161 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -733,3 +733,7 @@ TabPage PAGE_USERDRIVER
     AUTO_CHARSET( 4*UNRELATED_CONTROLS+ 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS, PAGE_X)
 };
 
+String STR_ERR_USE_CONNECT_TO
+{
+    Text [ en-US ] = "Please choose 'Connect to an existing database' to connect to an existing database instead.";
+};
