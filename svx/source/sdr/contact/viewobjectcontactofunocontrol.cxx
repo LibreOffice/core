@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofunocontrol.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,10 +57,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include "sdrpaintwindow.hxx"
-#include <svx/xoutx.hxx>
-#ifndef SVX_SOURCE_FORM_FORMPDFEXPORT_HXX
-#include "formpdfexport.hxx"
-#endif
+#include <toolkit/helper/formpdfexport.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
@@ -69,6 +66,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <boost/shared_ptr.hpp>
 
 //........................................................................
@@ -528,10 +527,6 @@ namespace sdr { namespace contact {
         /// is the control currently in design mode?
         mutable ViewControlMode         m_eControlDesignMode;
 
-        /** recursion level indicating how much PaintObject calls are currently on the stack
-        */
-        sal_uInt16                      m_nPaintLevel;
-
     public:
         ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl );
 
@@ -553,15 +548,6 @@ namespace sdr { namespace contact {
                 We're not disposed.
         */
         bool    getUnoObject( SdrUnoObj*& _out_rpObject ) const;
-
-        /** does initializations for a paint-related method
-
-            @param _rDisplayInfo
-                display info as passed to the paint-related method
-            @param _out_rpObject
-                out-parameter taking our SdrUnoObj upon successfull return
-        */
-        bool initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject );
 
         /** ensures that we have an XControl which can be painted onto the given display
         */
@@ -603,32 +589,12 @@ namespace sdr { namespace contact {
         */
         void    positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const;
 
-        /** prepares drawing the control for print or print preview
-
-            @param _rDevice
-                the device onto which the control is going to be painted
-            @return <TRUE/>
-                if and only if drawing should continue
-        */
-        bool    preparePrintOrPrintPreview( OutputDevice& _rDevice ) const;
-
         /** determines whether or not our control is printable
 
             Effectively, this method returns the value of the "Printable" property
             of the control's model. If we have no control, <FALSE/> is returned.
         */
         bool    isPrintableControl() const;
-
-        /** prepares painting the control onto the given device.
-
-            Basically, this method obtains an XGraphics object for the device,
-            and forwards it to the control.
-        */
-        bool    preparePaintOnDevice( OutputDevice& _rDevice ) const;
-
-        /** paints the control
-        */
-        void    paintControl( const DisplayInfo& _rDisplayInfo ) const;
 
         /** sets the design mode on the control, or at least remembers the flag for the
             time the control is created
@@ -656,20 +622,6 @@ namespace sdr { namespace contact {
                     const SdrUnoObj& _rUnoObject,
                     ControlHolder& _out_rControl
                 );
-
-        /// access control for locking the paint level
-        struct PaintLockAccessControl { friend class PaintLock; private: PaintLockAccessControl() { } };
-        /// indicates begin of a paint
-        inline void enterPaint( const PaintLockAccessControl& )
-        {
-            ++m_nPaintLevel;
-        }
-        /// indicates end of a paint
-        inline void leavePaint( const PaintLockAccessControl& )
-        {
-            DBG_ASSERT( m_nPaintLevel, "ViewObjectContactOfUnoControl_Impl::leavePaint: not locked!" );
-            --m_nPaintLevel;
-        }
 
         struct GuardAccess { friend class VOCGuard; private: GuardAccess() { } };
         ::osl::Mutex&   getMutex( GuardAccess ) const { return m_aMutex; }
@@ -882,7 +834,6 @@ namespace sdr { namespace contact {
         ,m_bControlIsVisible( false )
         ,m_bIsDesignModeListening( false )
         ,m_eControlDesignMode( eUnknown )
-        ,m_nPaintLevel( 0 )
     {
         DBG_CTOR( ViewObjectContactOfUnoControl_Impl, NULL );
         DBG_ASSERT( m_pAntiImpl, "ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl: invalid AntiImpl!" );
@@ -947,17 +898,6 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject )
-    {
-        _out_rpObject = NULL;
-        if ( !getUnoObject( _out_rpObject ) )
-            return false;
-
-        return ensureControl( _rDisplayInfo );
-    }
-
-
-    //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionControlForPaint( const DisplayInfo& /* #i74769# _rDisplayInfo*/ ) const
     {
         if ( !m_aControl.is() )
@@ -987,7 +927,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const DisplayInfo& _rDisplayInfo )
+    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const DisplayInfo& /*_rDisplayInfo*/ )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
         if ( impl_isDisposed_nofail() )
@@ -1003,14 +943,14 @@ namespace sdr { namespace contact {
         if ( pPageViewContact )
             pDeviceForControl = &imp_getPageViewDevice_nothrow( *pPageViewContact );
 
-        if ( !pDeviceForControl )
-            pDeviceForControl = _rDisplayInfo.GetOutputDevice();
+        if ( !pDeviceForControl && pPageViewContact)
+            pDeviceForControl = pPageViewContact->TryToGetOutputDevice();
 
         DBG_ASSERT( pDeviceForControl, "ViewObjectContactOfUnoControl_Impl::ensureControl: no output device!" );
         if ( !pDeviceForControl )
             return false;
 
-        SdrPageView* pPageView = pPageViewContact ? &pPageViewContact->GetPageWindow().GetPageView() : _rDisplayInfo.GetPageView();
+        SdrPageView* pPageView = m_pAntiImpl->GetObjectContact().TryToGetSdrPageView();
 
         ::std::auto_ptr< IPageViewAccess > pPVAccess;
         pPVAccess.reset( pPageView ? (IPageViewAccess*)new SdrPageViewAccess( *pPageView ) : (IPageViewAccess*)new DummyPageViewAccess() );
@@ -1338,53 +1278,6 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview( OutputDevice& _rDevice ) const
-    {
-        try
-        {
-            if ( isPrintableControl() )
-                return preparePaintOnDevice( _rDevice );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return false;
-    }
-
-    //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::preparePaintOnDevice( OutputDevice& _rDevice ) const
-    {
-        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::preparePaintOnDevice: no control!" );
-        try
-        {
-            Reference< XGraphics > xGraphics( _rDevice.CreateUnoGraphics() );
-            m_aControl.setGraphics( xGraphics );
-            return true;
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return false;
-    }
-
-    //--------------------------------------------------------------------
-    void ViewObjectContactOfUnoControl_Impl::paintControl( const DisplayInfo& _rDisplayInfo ) const
-    {
-        OSL_PRECOND( _rDisplayInfo.GetOutputDevice() && m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::paintControl: no output device or no control!" );
-        if ( !_rDisplayInfo.GetOutputDevice() || !m_aControl.is() )
-            return;
-
-        SdrUnoObj* pUnoObject( NULL );
-        if ( !getUnoObject( pUnoObject ) )
-            return;
-
-        const Rectangle& rPaintRect( pUnoObject->GetLogicRect() );
-        UnoControlContactHelper::drawControl( m_aControl, rPaintRect.TopLeft(), _rDisplayInfo.GetOutputDevice() );
-    }
-
-    //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -1454,7 +1347,7 @@ namespace sdr { namespace contact {
 
         // a generic property changed. If we're in design mode, we need to repaint the control
         if ( impl_isControlDesignMode_nothrow() )
-            m_pAntiImpl->GetObjectContact().InvalidatePartOfView( m_pAntiImpl->GetViewContact().GetPaintRectangle() );
+            m_pAntiImpl->GetObjectContact().InvalidatePartOfView( m_pAntiImpl->getObjectRange() );
     }
 
     //--------------------------------------------------------------------
@@ -1579,26 +1472,6 @@ namespace sdr { namespace contact {
     }
 
     //====================================================================
-    //= PaintLock
-    //====================================================================
-    class SVX_DLLPRIVATE PaintLock
-    {
-    private:
-        ViewObjectContactOfUnoControl_Impl&  m_rVOC;
-
-    public:
-        inline PaintLock( ViewObjectContactOfUnoControl_Impl& _rVOC )
-            :m_rVOC( _rVOC )
-        {
-            m_rVOC.enterPaint( ViewObjectContactOfUnoControl_Impl::PaintLockAccessControl( ) );
-        }
-        inline ~PaintLock( )
-        {
-            m_rVOC.leavePaint( ViewObjectContactOfUnoControl_Impl::PaintLockAccessControl( ) );
-        }
-    };
-
-    //====================================================================
     //= ViewObjectContactOfUnoControl
     //====================================================================
     DBG_NAME( ViewObjectContactOfUnoControl )
@@ -1647,36 +1520,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    namespace
-    {
-        /** helper class to restore graphics at <awt::XView> object after painting
-
-            OD 08.05.2003 #109432#
-            Restoration of graphics necessary to assure that paint on a window
-
-            @author OD
-        */
-        class RestoreViewGraphics
-        {
-        private:
-            const ControlHolder&            m_rControl;
-            const Reference< XGraphics >    m_xOrigGraphics;
-
-        public:
-            RestoreViewGraphics( const ControlHolder& _rControl )
-                :m_rControl( _rControl )
-                ,m_xOrigGraphics( _rControl.getGraphics() )
-            {
-            }
-            ~RestoreViewGraphics()
-            {
-                m_rControl.setGraphics( m_xOrigGraphics );
-            }
-        };
-    }
-
-    //--------------------------------------------------------------------
-    void ViewObjectContactOfUnoControl::positionControlForPaint( DisplayInfo& _rDisplayInfo ) const
+    void ViewObjectContactOfUnoControl::positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const
     {
         VOCGuard aGuard( *m_pImpl );
 
@@ -1687,33 +1531,6 @@ namespace sdr { namespace contact {
 
         // position the control
         m_pImpl->positionControlForPaint( _rDisplayInfo );
-    }
-
-    //--------------------------------------------------------------------
-    void ViewObjectContactOfUnoControl::PaintObject( DisplayInfo& _rDisplayInfo )
-    {
-        VOCGuard aGuard( *m_pImpl );
-
-        SdrUnoObj* pObject( NULL );
-        if ( !m_pImpl->initPaint( _rDisplayInfo, pObject ) )
-            return;
-
-        const ControlHolder& rControl( m_pImpl->getExistentControl() );
-        OSL_ENSURE( rControl.is(), "ViewObjectContactOfUnoControl::PaintObject: we did an initPaint - didn't we?" );
-
-        try
-        {
-            RestoreViewGraphics aRestoreGraphics( rControl );
-            PaintLock aPaintLock( *m_pImpl );
-            doPaintObject( _rDisplayInfo, pObject );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        mbIsPainted = sal_True;
-        maPaintedRectangle = pObject->GetLogicRect();
     }
 
     //--------------------------------------------------------------------
@@ -1761,6 +1578,78 @@ namespace sdr { namespace contact {
         return m_pImpl->belongsToDevice( _pDevice );
     }
 
+    //--------------------------------------------------------------------
+    drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+    {
+        // current vsiualisation call. This is necessary to actually incarnate, position and size
+        // a control which is represented as VCL-ChildWindow. This mechanism is placed here ATM for
+        // convenience but may be placed to the View completely later:
+        //
+        // Let the OC (ObjectContact) aka View have a Pre-Run through the draw hierarchy and handle
+        // necessary changes at xShapes which ARE controls. This needs to be done in Preparation of a
+        // Paint.
+        //
+        // There is also the possibility to create a ControlPrimitiveRenderer which may be used as
+        // paint-pre-run and records/handles all ControlPrimitives he finds.
+        //
+        // To test the possibility that the renderer does the positioning and sizing i added a
+        // static flag here which will force a xControl to exist as a VCL Child window and it will
+        // be added to the Primitive. There is an analog flag in the VCL pixel renderer in drawinglayer
+        // to position and size he control there (look for bDoSizeAndPositionControlsA)
+        static bool bDoSizeAndPositionControlsA(true);
+
+        if(bDoSizeAndPositionControlsA)
+        {
+            if(rDisplayInfo.GetControlLayerProcessingActive())
+            {
+                positionControlForPaint(rDisplayInfo);
+            }
+        }
+        else
+        {
+            // force control here to make it a VCL ChildWindow. Will be fetched
+            // and used below by getExistentControl()
+            m_pImpl->ensureControl();
+        }
+
+        // get needed data
+        const ViewContactOfUnoControl& rViewContactOfUnoControl(static_cast< const ViewContactOfUnoControl& >(GetViewContact()));
+        Reference< XControlModel > xControlModel(rViewContactOfUnoControl.GetSdrUnoObj().GetUnoControlModel());
+        const ControlHolder& rControl(m_pImpl->getExistentControl());
+
+        // check if we already have a XControl.
+        if(xControlModel.is() && rControl.is())
+        {
+            // create a primitive and hand over the existing xControl. This will
+            // allow the primitive to not need to create another one on demand.
+            // Do use model data directly to create the correct geometry. Do NOT
+            // use getBoundRect()/getSnapRect() here; tese will use the sequence of
+            // primitives themselves in the long run.
+            const Rectangle aUnoControlModelData(rViewContactOfUnoControl.GetSdrUnoObj().GetGeoRect());
+            const basegfx::B2DRange aRange(aUnoControlModelData.Left(), aUnoControlModelData.Top(), aUnoControlModelData.Right(), aUnoControlModelData.Bottom());
+
+            // create object transform
+            basegfx::B2DHomMatrix aTransform;
+            aTransform.set(0, 0, aRange.getWidth());
+            aTransform.set(1, 1, aRange.getHeight());
+            aTransform.set(0, 2, aRange.getMinX());
+            aTransform.set(1, 2, aRange.getMinY());
+
+            // create control primitive with existing XControl
+            const drawinglayer::primitive2d::Primitive2DReference xRetval(new drawinglayer::primitive2d::ControlPrimitive2D(
+                aTransform, xControlModel, rControl.getControl()));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+        }
+        else
+        {
+            // use the default mechanism. This will create a ControlPrimitive2D without
+            // handing over a XControl. If not even a XControlModel exists, it will
+            // create the SdrObject fallback visualisation
+            return rViewContactOfUnoControl.getViewIndependentPrimitive2DSequence();
+        }
+    }
+
     //====================================================================
     //= UnoControlDefaultContact
     //====================================================================
@@ -1776,18 +1665,6 @@ namespace sdr { namespace contact {
     UnoControlDefaultContact::~UnoControlDefaultContact()
     {
         DBG_DTOR( UnoControlDefaultContact, NULL );
-    }
-
-    //--------------------------------------------------------------------
-    void UnoControlDefaultContact::doPaintObject( const DisplayInfo& _rDisplayInfo, const SdrUnoObj* /*_pUnoObject*/ ) const
-    {
-        DBG_ASSERT( _rDisplayInfo.GetOutputDevice(), "UnoControlDefaultContact::doPaintObject: no output device!" );
-        if ( !_rDisplayInfo.GetOutputDevice() )
-            throw RuntimeException();
-
-        // set the graphics at the control
-        if ( m_pImpl->preparePaintOnDevice( *_rDisplayInfo.GetOutputDevice() ) )
-            m_pImpl->paintControl( _rDisplayInfo );
     }
 
     //====================================================================
@@ -1807,60 +1684,6 @@ namespace sdr { namespace contact {
         DBG_DTOR( UnoControlWindowContact, NULL );
     }
 
-    //--------------------------------------------------------------------
-    void UnoControlWindowContact::doPaintObject( const DisplayInfo& _rDisplayInfo, const SdrUnoObj* /*_pUnoObject*/ ) const
-    {
-        const ControlHolder& rControl( m_pImpl->getExistentControl() );
-        OSL_PRECOND( rControl.is(),
-            "UnoControlWindowContact::doPaintObject: the control was said to be non-NULL here!" );
-
-        // don't paint if there's a "visible control" which paints itself
-        bool bVisibleControl = rControl.isVisible();
-
-        // we need to paint if the control is not visible
-        bool bNeedPaint = !bVisibleControl;
-
-        // or if our control is visible, but the paint request is for a device other than the
-        // control's parent window
-        if ( !bNeedPaint )
-        {
-            try
-            {
-                Window* pControlWindow = VCLUnoHelper::GetWindow( rControl.getPeer() );
-                Window* pControlParentWindow = pControlWindow ? pControlWindow->GetParent() : NULL;
-                bNeedPaint = pControlParentWindow != _rDisplayInfo.GetOutputDevice();
-            }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-        }
-
-        if ( bNeedPaint )
-        {
-            OSL_ENSURE( _rDisplayInfo.GetOutputDevice(), "UnoControlWindowContact::doPaintObject: invalid output device!" );
-            if ( !_rDisplayInfo.GetOutputDevice() )
-                throw RuntimeException();
-
-            if ( m_pImpl->preparePaintOnDevice( *_rDisplayInfo.GetOutputDevice() ) )
-                m_pImpl->paintControl( _rDisplayInfo );
-        }
-
-        if ( bVisibleControl )
-        {
-            try
-            {
-                if ( rControl.isTransparent() )
-                {
-                    // TODO: isn't there a better way to do this? At the moment, it seems to be
-                    // used to force the background of transparent controls to be repainted - it
-                    // must be possible to do this more clever, using the drawing layer mechanisms.
-                    Reference< XWindowPeer > xControlPeer( rControl.getPeer() );
-                    if ( xControlPeer.is() )
-                        xControlPeer->invalidate( INVALIDATE_NOTRANSPARENT | INVALIDATE_CHILDREN );
-                }
-            }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-        }
-    }
-
     //====================================================================
     //= UnoControlPrintOrPreviewContact
     //====================================================================
@@ -1878,15 +1701,6 @@ namespace sdr { namespace contact {
         DBG_DTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
-    //--------------------------------------------------------------------
-    void UnoControlPrintOrPreviewContact::doPaintObject( const DisplayInfo& _rDisplayInfo, const SdrUnoObj* /*_pUnoObject*/ ) const
-    {
-        OutputDevice* pDevice = _rDisplayInfo.GetOutputDevice();
-        OSL_ENSURE( pDevice, "UnoControlPrintOrPreviewContact::doPaintObject: invalid device!" );
-        if ( pDevice && m_pImpl->preparePrintOrPrintPreview( *pDevice ) )
-            m_pImpl->paintControl( _rDisplayInfo );
-    }
-
     //====================================================================
     //= UnoControlPDFExportContact
     //====================================================================
@@ -1902,45 +1716,6 @@ namespace sdr { namespace contact {
     UnoControlPDFExportContact::~UnoControlPDFExportContact()
     {
         DBG_DTOR( UnoControlPDFExportContact, NULL );
-    }
-
-    //--------------------------------------------------------------------
-    void UnoControlPDFExportContact::doPaintObject( const DisplayInfo& _rDisplayInfo, const SdrUnoObj* _pUnoObject ) const
-    {
-        OutputDevice* pDevice = _rDisplayInfo.GetOutputDevice();
-        vcl::PDFExtOutDevData* pPDFExport = pDevice ? PTR_CAST( vcl::PDFExtOutDevData, pDevice->GetExtOutDevData() ) : NULL;
-        DBG_ASSERT( pPDFExport, "UnoControlPDFExportContact::doPaintObject: this is no PDF export output device!" );
-        if ( !pPDFExport )
-            return;
-
-        if ( !m_pImpl->isPrintableControl() )
-            // controls declared as "do not print" are not exported at all - neither as
-            // native PDF control, nor as normal drawing
-            // 2006-11-22 / #i71370# / frank.schoenheit@sun.com
-            return;
-
-        if( pPDFExport->GetIsExportFormFields() )
-        {
-            ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-            ::svxform::describePDFControl( m_pImpl->getExistentControl().getControl(), pPDFControl );
-            if ( pPDFControl.get() != NULL )
-            {
-                // still need to fill in the location
-                pPDFControl->Location = _pUnoObject->GetLogicRect();
-
-                Size aFontSize( pPDFControl->TextFont.GetSize() );
-                aFontSize = pDevice->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pDevice->GetMapMode() );
-                pPDFControl->TextFont.SetSize( aFontSize );
-
-                pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
-                pPDFExport->CreateControl( *pPDFControl.get() );
-                pPDFExport->EndStructureElement();
-                return;
-            }
-        }
-
-        if ( m_pImpl->preparePaintOnDevice( *pDevice ) )
-            m_pImpl->paintControl( _rDisplayInfo );
     }
 
 //........................................................................
