@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fixed.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,7 +228,11 @@ USHORT FixedText::ImplGetTextStyle( WinBits nWinStyle )
     else
         nTextStyle |= TEXT_DRAW_TOP;
     if ( nWinStyle & WB_WORDBREAK )
+    {
         nTextStyle |= TEXT_DRAW_WORDBREAK;
+        if ( nWinStyle & WB_HYPHENATION )
+            nTextStyle |= TEXT_DRAW_WORDBREAK_HYPHENATION;
+    }
     if ( nWinStyle & WB_NOLABEL )
         nTextStyle &= ~TEXT_DRAW_MNEMONIC;
 
