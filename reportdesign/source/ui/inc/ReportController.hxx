@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include <dbaccess/singledoccontroller.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -51,12 +50,16 @@
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase4.hxx>
-#include <comphelper/uno3.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
 #include <svx/svdedtv.hxx>
 #include "ModuleHelper.hxx"
+
+#include <comphelper/uno3.hxx>
 #include <comphelper/implementationreference.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertystatecontainer.hxx>
+
 #include "RptDef.hxx"
 #include <functional>
 #include <boost/shared_ptr.hpp>
@@ -84,6 +87,8 @@ namespace rptui
     class OReportController :    public OReportController_BASE
                                 ,public OReportController_Listener
                                 ,public SfxListener
+                                ,public ::comphelper::OPropertyStateContainer
+                                ,public ::comphelper::OPropertyArrayUsageHelper < OReportController_BASE >
     {
     private:
         OModuleClient           m_aModuleClient;
@@ -112,6 +117,7 @@ namespace rptui
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         //sal_Int32               m_nExecuteReportEvent;
+        sal_Int16               m_nZoomValue;
         sal_Bool                m_bShowRuler;
         sal_Bool                m_bGridVisible;
         sal_Bool                m_bGridUse;
@@ -251,6 +257,10 @@ namespace rptui
         */
         void checkChartEnabled();
 
+        /** set the zoom factor at the design view
+        */
+        void impl_zoom_nothrow();
+
         OReportController(OReportController const&);
         OReportController& operator =(OReportController const&);
 
@@ -289,9 +299,12 @@ namespace rptui
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual dbaui::FeatureState GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual void losingConnection( );
+
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
 
         virtual ~OReportController();
     public:
@@ -395,12 +408,6 @@ namespace rptui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > getRowSet();
 
-        /** hides or display all design floaters
-        *
-        * \param _bShow If <TRUE/> show floaters otherwise hide them.
-        */
-        void displayDesignFloater(sal_Bool _bShow);
-
         /** returns the number formatter
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getReportNumberFormatter() const;
@@ -412,6 +419,18 @@ namespace rptui
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel();
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
+        inline sal_Int16 getZoomValue() const { return m_nZoomValue; }
+
+        // com::sun::star::beans::XPropertySet
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+        {
+            return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+        }
+        // comphelper::OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+    // cppu::OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     private:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
