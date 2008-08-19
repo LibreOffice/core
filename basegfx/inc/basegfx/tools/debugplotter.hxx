@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: debugplotter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +37,9 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/string.hxx>
-
 #include <boost/utility.hpp> // for noncopyable
 #include <vector>
 #include <utility>
-
 #include <iostream>
 
 
