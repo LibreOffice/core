@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabres.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +37,6 @@
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <math.h>
-#include <float.h>          //! Test !!!
-
-#include <algorithm>
 
 #include "dptabdat.hxx"
 #include "dptabres.hxx"
@@ -51,6 +47,10 @@
 #include "datauno.hxx"      // ScDataUnoConversion
 
 #include "document.hxx"     // for DumpState only!
+
+#include <math.h>
+#include <float.h>          //! Test !!!
+#include <algorithm>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
