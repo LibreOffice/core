@@ -1,28 +1,22 @@
 all_fragments+=database
 
 # -----------------------------------------------
-# count = 3
+# count = 1
 T4_DATABASE = \
-    StarBase \
-    StarBase_Report \
-    StarBaseReportChart
+    StarBase
 
 # -----------------------------------------------
-# count = 3
+# count = 1
 F4_DATABASE = \
-    StarOffice_XML__Base_ \
-    StarOffice_XML__Report_ \
-    StarOffice_XML__DB_Report_Chart_
+    StarOffice_XML__Base_
     
 # -----------------------------------------------
-# count = 3
+# count = 1
 F4_UI_DATABASE = \
-    StarOffice_XML__Base__ui \
-    StarOffice_XML__Report__ui \
-    StarOffice_XML__DB_Report_Chart__ui
+    StarOffice_XML__Base__ui
 
 # -----------------------------------------------
-# count = 3
+# count = 1
 L4_DATABASE = \
     org_openoffice_comp_dbflt_DBContentLoader2
 
