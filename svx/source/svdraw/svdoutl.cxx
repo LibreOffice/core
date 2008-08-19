@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoutl.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,8 @@ DBG_NAME(SdrOutliner)
 \************************************************************************/
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
 :   Outliner( pItemPool, nMode ),
-    mpPaintInfoRec( NULL )
+    //mpPaintInfoRec( NULL )
+    mpVisualizedPage(0)
 {
     DBG_CTOR(SdrOutliner,NULL);
 }
