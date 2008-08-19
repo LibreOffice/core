@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdhlpln.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,7 @@
 #include <svx/svdhlpln.hxx>
 #include <tools/color.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
@@ -50,63 +48,6 @@ Pointer SdrHelpLine::GetPointer() const
         case SDRHELPLINE_HORIZONTAL: return Pointer(POINTER_SSIZE);
         default                    : return Pointer(POINTER_MOVE);
     } // switch
-}
-
-// #i27493#
-// Helper method to draw a hor or ver two-colored dashed line
-void SdrHelpLine::ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos,
-    sal_Int32 nStepWidth, Color aColA, Color aColB, sal_Bool bHorizontal) const
-{
-    for(sal_Int32 a(nStart), b(0L); a < nEnd; a += nStepWidth, b++)
-    {
-        rOut.SetLineColor((b % 2) ? aColA : aColB);
-        sal_Int32 nNextPos(a + nStepWidth - 1L);
-        if(nNextPos > nEnd)
-            nNextPos = nEnd;
-        if(bHorizontal)
-            rOut.DrawLine(Point(a, nFixPos), Point(nNextPos, nFixPos));
-        else
-            rOut.DrawLine(Point(nFixPos, a), Point(nFixPos, nNextPos));
-    }
-}
-
-void SdrHelpLine::Draw(OutputDevice& rOut, const Point& rOfs) const
-{
-    // #i27493# New implementation for 8. Will be replaced later when we have overlays.
-    Point aPnt(rOut.LogicToPixel(aPos + rOfs));
-    const sal_Int32 xPos(aPnt.X());
-    const sal_Int32 yPos(aPnt.Y());
-    const sal_Bool bOldMapModeWasEnabled(rOut.IsMapModeEnabled());
-    const Size aOutSizePixel(rOut.GetOutputSizePixel());
-    rOut.EnableMapMode(sal_False);
-
-    switch(eKind)
-    {
-        case SDRHELPLINE_VERTICAL :
-        {
-            ImpDrawDashedTwoColorLine(rOut, 0L, aOutSizePixel.Height(),
-                xPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_False);
-            break;
-        }
-
-        case SDRHELPLINE_HORIZONTAL :
-        {
-            ImpDrawDashedTwoColorLine(rOut, 0L, aOutSizePixel.Width(),
-                yPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_True);
-            break;
-        }
-
-        case SDRHELPLINE_POINT :
-        {
-            ImpDrawDashedTwoColorLine(rOut, xPos - SDRHELPLINE_POINT_PIXELSIZE, xPos + SDRHELPLINE_POINT_PIXELSIZE,
-                yPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_True);
-            ImpDrawDashedTwoColorLine(rOut, yPos - SDRHELPLINE_POINT_PIXELSIZE, yPos + SDRHELPLINE_POINT_PIXELSIZE,
-                xPos, 4L , Color(COL_BLACK), Color(COL_WHITE), sal_False);
-            break;
-        }
-    }
-
-    rOut.EnableMapMode(bOldMapModeWasEnabled);
 }
 
 FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
@@ -196,36 +137,6 @@ bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
         }
     }
     return bEqual;
-}
-
-void SdrHelpLineList::DrawAll(OutputDevice& rOut, const Point& rOfs) const
-{
-
-    sal_uInt16 nAnz = GetCount();
-    sal_uInt16 i,j;
-    SdrHelpLine *pHL, *pHL2;
-
-    for(i=0; i<nAnz; i++)
-    {
-        pHL = GetObject(i);
-
-        // check if we already drawn a help line like this one
-        if( pHL )
-        {
-            for(j=0;j<i;j++)
-            {
-                pHL2 = GetObject(j);
-                if( pHL2 && pHL->IsVisibleEqual( *pHL2, rOut) )
-                {
-                    pHL = NULL;
-                    break;
-                }
-            }
-        }
-
-        if( pHL )
-            pHL->Draw(rOut,rOfs);
-    }
 }
 
 USHORT SdrHelpLineList::HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
