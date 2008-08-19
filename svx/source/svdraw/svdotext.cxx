@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotext.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <svx/svdpagv.hxx>  // fuer Abfrage im Paint, ob das
 #include <svx/svdview.hxx>  // Objekt gerade editiert wird
 #include <svx/svdpage.hxx>  // und fuer AnimationHandler (Laufschrift)
-#include "svdxout.hxx"
 #include "svdtouch.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
@@ -44,7 +43,6 @@
 #include <svx/svdmodel.hxx>  // OutlinerDefaults
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
-#include "svdtxhdl.hxx"  // DrawTextToPath
 #include <svx/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svtools/colorcfg.hxx>
@@ -75,7 +73,14 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/virdev.hxx>
 
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
@@ -443,10 +448,14 @@ FASTBOOL SdrTextObj::IsAutoGrowWidth() const
 
 SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
 {
+    return GetTextHorizontalAdjust(GetObjectItemSet());
+}
+
+SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust(const SfxItemSet& rSet) const
+{
     if(IsContourTextFrame())
         return SDRTEXTHORZADJUST_BLOCK;
 
-    const SfxItemSet& rSet = GetObjectItemSet();
     SdrTextHorzAdjust eRet = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
 
     // #101684#
@@ -472,11 +481,15 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
 
 SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
 {
+    return GetTextVerticalAdjust(GetObjectItemSet());
+}
+
+SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) const
+{
     if(IsContourTextFrame())
         return SDRTEXTVERTADJUST_TOP;
 
     // #103516# Take care for vertical text animation here
-    const SfxItemSet& rSet = GetObjectItemSet();
     SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
     BOOL bInEditMode = IsInEditMode();
 
@@ -1099,248 +1112,6 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
     }
 }
 
-sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    sal_Bool bOk(sal_True);
-    FASTBOOL bPrinter=rXOut.GetOutDev()->GetOutDevType()==OUTDEV_PRINTER;
-    FASTBOOL bPrintPreView=rXOut.GetOutDev()->GetOutDevViewType()==OUTDEV_VIEWTYPE_PRINTPREVIEW;
-
-    // #111096#
-    // allow to hide text
-    if(GetTextHidden())
-    {
-        return bOk;
-    }
-
-    // #111096#
-    if(rInfoRec.mbUseBitmapEx)
-    {
-        OutputDevice* pOutDev = rXOut.GetOutDev();
-        Point aDestPos = pOutDev->LogicToPixel(rInfoRec.maPosition);
-        sal_Bool bMapModeWasEnabledDest(pOutDev->IsMapModeEnabled());
-
-        pOutDev->EnableMapMode(sal_False);
-        pOutDev->DrawBitmapEx(aDestPos, rInfoRec.maBitmapEx);
-        pOutDev->EnableMapMode(bMapModeWasEnabledDest);
-
-        return bOk;
-    }
-
-    if (bPrinter && bEmptyPresObj)
-        return bOk; // Leere Praesentationsobjekte nicht drucken!
-
-    if (!bPrinter && pEdtOutl!=NULL && rInfoRec.pPV!=NULL &&
-        rInfoRec.pPV->GetView().GetTextEditObject()==(SdrObject*)this)
-        return bOk; // Textobjekt wird gerade editiert in der auffordernen View
-
-    if(GetOutlinerParaObject()!=NULL || (pEdtOutl!=NULL && HasEditText()))
-    {
-        SdrOutliner& rOutliner=ImpGetDrawOutliner();
-
-        {
-            SvtAccessibilityOptions aOptions;
-            bool bForceAutoColor = aOptions.GetIsAutomaticFontColor();
-            //#106611# don't use automatic colors in WYSIWYG Print Previews
-            if(bPrintPreView&& !aOptions.GetIsForPagePreviews())
-                bForceAutoColor = false;
-            rOutliner.ForceAutoColor( bForceAutoColor );
-        }
-
-        FASTBOOL bContourFrame=IsContourTextFrame();
-        if (IsFontwork() && !bContourFrame)
-        { // FontWork
-            if (pModel!=NULL)
-            {
-                rOutliner.SetUpdateMode(TRUE); // hier kann ggf. noch optimiert werden !!!
-                ImpTextPortionHandler aTPHandler(rOutliner,*this);
-
-                // #78478# to have the outline color in XOutputDevice::ImpDrawFormText(...)
-                // SetLineAttr(...) needs to be called if the outline item is set
-                const SfxItemSet& rSet = GetObjectItemSet();
-                BOOL bFormTextOutline = ((XFormTextOutlineItem&)(rSet.Get(XATTR_FORMTXTOUTLINE))).GetValue();
-
-                if(bFormTextOutline)
-                    rXOut.SetLineAttr(rSet);
-
-                rXOut.SetTextAttr(rSet);
-
-                aTPHandler.DrawTextToPath(rXOut); // drucken bei aktivem Textedit fehlt hier
-                rOutliner.Clear();
-            }
-        }
-        else if(SDRPAINTMODE_CONTOUR & rInfoRec.nPaintMode)
-        {
-            //#i80528# to not run i a recursion in TakeContour, do not setup an outliner but just
-            // use a polygon paint; the paint is executed to get a contour of the object anyways
-            FASTBOOL bFill=HasFill();
-            FASTBOOL bLine=HasLine();
-            FASTBOOL bHide=IsFontwork() && IsHideContour() && pFormTextBoundRect!=NULL;
-
-            if (bHide)
-            {
-                bFill=FALSE;
-                bLine=FALSE;
-            }
-
-            if ((bTextFrame && !bLine && !bFill) || bHide)
-            {
-                OutputDevice* pOut=rXOut.GetOutDev();
-                Polygon aPoly;
-
-                if (bHide)
-                    aPoly=Polygon(*pFormTextBoundRect);
-                else
-                    aPoly=Rect2Poly(aRect,aGeo);
-
-                if (aPoly.GetSize()>=4)
-                {
-                    pOut->SetLineColor(Color(COL_BLACK));
-                    pOut->DrawPolyLine(aPoly);
-                    pOut->DrawLine(aPoly[0],aPoly[2]);
-                    pOut->DrawLine(aPoly[1],aPoly[3]);
-                }
-            }
-        }
-        else
-        {
-            // sonst kein Fontwork
-            // hier findet das richtige Painten des Textes statt
-            Rectangle aTextRect;
-            Rectangle aAnchorRect;
-            Rectangle aPaintRect;
-            Fraction aFitXKorreg(1,1);
-
-            // the outliner needs the paint info so that CalcFieldValueHdl knows the context for
-            // calculating field values
-            rOutliner.SetPaintInfoRec( &rInfoRec );
-
-            // #101029#: Extracted Outliner setup to ImpSetupDrawOutlinerForPaint
-            ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
-            OutputDevice* pOutDev=rXOut.GetOutDev();
-
-            GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
-
-            // #110496# Apply verbose mode to outliner
-            BOOL bOldVerboseState( rOutliner.IsVerboseTextComments() );
-            BOOL bWritePaintEndComment( FALSE );
-            if( rInfoRec.nPaintMode & SDRPAINTMODE_VERBOSE_MTF )
-            {
-                rOutliner.EnableVerboseTextComments(TRUE);
-
-                if( pMtf != NULL )
-                {
-                    // #110496# Added some more optional metafile comments.
-                    pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_BEGIN" ) );
-
-                    bWritePaintEndComment = TRUE;
-                }
-            }
-
-            if (aGeo.nDrehWink!=0)
-            {
-                // #49328# bei AutoGrowHeight()=TRUE nicht mehr clippen
-                FASTBOOL bNeedClip=(bTextFrame && !IsAutoGrowHeight()) || bContourFrame;
-                // ClipRegion setzen. Das macht Malte bei gedrehter Ausgabe naemlich nicht!
-                FASTBOOL bMtf=pOutDev->GetConnectMetaFile()!=NULL;
-                // Clipping merken
-                FASTBOOL bClip0=pOutDev->IsClipRegion();
-                Region   aClip0(pOutDev->GetClipRegion());
-                if (bNeedClip)
-                {
-                    if (bMtf) pOutDev->Push();
-                    // Neues Clipping setzen
-                    Rectangle aClipRect(aPaintRect);
-                    if (bPrinter)
-                    { // #42520#: Bei HP-Druckern fehlt sonst oefter der letzte Buchstabe einer Zeile
-                        Size a1Pix(pOutDev->PixelToLogic(Size(1,1)));
-                        aClipRect.Top()-=a1Pix.Width();
-                        aClipRect.Left()-=a1Pix.Height();
-                        aClipRect.Right()+=a1Pix.Width();
-                        aClipRect.Bottom()+=a1Pix.Height();
-                    }
-                    Polygon aClipPoly(aClipRect);
-                    RotatePoly(aClipPoly,aPaintRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-                    // Intersect geht leider nicht, weil Poly statt Rect
-                    pOutDev->SetClipRegion(aClipPoly);
-                    if (bClip0)
-                    {
-                        // Aber wenn's vorher nur ein Rechteck war, dann
-                        // intersecte ich mein Poly nun mit diesem
-                        pOutDev->IntersectClipRegion(aClip0.GetBoundRect());
-                    }
-                }
-                // Textausgabe
-                rOutliner.Draw(pOutDev,aPaintRect.TopLeft(),(short)(aGeo.nDrehWink/10));
-                if (bNeedClip)
-                {
-                    // Clipping restaurieren
-                    if (bMtf)
-                        pOutDev->Pop();
-                    else
-                    {
-                        if (bClip0)
-                            pOutDev->SetClipRegion(aClip0);
-                        else
-                            pOutDev->SetClipRegion();
-                    }
-                }
-            }
-            else
-            {
-                if(IsVerticalWriting())
-                {
-                    // new try for #82826#
-                    if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
-                    {
-                        aPaintRect = Rectangle(
-                            aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
-                            aPaintRect.Right(), aPaintRect.Bottom());
-                    }
-
-                    // #91744# for vertical writing the original fix #82826#
-                    // needs to be taken out.
-                    rOutliner.Draw(pOutDev, aPaintRect);
-                }
-                else
-                {
-                    // new try for #82826#
-                    if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
-                    {
-                        aPaintRect = Rectangle(
-                            aPaintRect.Left(), aPaintRect.Top(),
-                            aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
-                    }
-
-                    // #91809# for horizontal writing the original fix #82826#
-                    // needs to be taken out, too.
-                    rOutliner.Draw(pOutDev, aPaintRect);
-
-                    // #82826# for correct preview of outliner views
-                    //// rOutliner.Draw(pOutDev,aPaintRect);
-                    //if(aPaintRect.Top() > aAnchorRect.Top())
-                    //  rOutliner.Draw(pOutDev, aPaintRect);
-                    //else
-                    //  rOutliner.Draw(pOutDev, aAnchorRect);
-                }
-            }
-
-            // #110496# Added some more optional metafile comments.
-            if( bWritePaintEndComment )
-                pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_END" ) );
-
-            // #110496# Restore previous value
-            rOutliner.EnableVerboseTextComments( bOldVerboseState );
-
-            rOutliner.Clear();
-            rOutliner.ClearPaintInfoRec();
-        }
-    }
-
-    return bOk;
-}
-
-// Geht z.Zt. nur wenn das Obj schon wenigstens einmal gepaintet wurde
-// Denn dann ist der MtfAnimator initiallisiert
 void SdrTextObj::StartTextAnimation(OutputDevice* /*pOutDev*/, const Point& /*rOffset*/, long /*nExtraData*/)
 {
     // #111096#
@@ -1353,68 +1124,6 @@ void SdrTextObj::StopTextAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*
     // #111096#
     // use new text animation
     SetTextAnimationAllowed(sal_False);
-}
-
-void SdrTextObj::RecalcBoundRect()
-{
-    aOutRect=GetSnapRect();
-}
-
-void SdrTextObj::ImpAddTextToBoundRect()
-{
-    if(GetOutlinerParaObject()!=NULL)
-    {
-        if (IsContourTextFrame())
-            return;
-        if (IsFontwork())
-        {
-            if (pModel!=NULL)
-            {
-                VirtualDevice aVD;
-                XOutputDevice aXOut(&aVD);
-                SdrOutliner& rOutl=ImpGetDrawOutliner();
-                rOutl.SetUpdateMode(TRUE);
-                ImpTextPortionHandler aTPHandler(rOutl,*this);
-
-                aXOut.SetTextAttr(GetObjectItemSet());
-
-                aTPHandler.DrawTextToPath(aXOut,FALSE);
-                if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
-                *pFormTextBoundRect=aTPHandler.GetFormTextBoundRect();
-                aOutRect.Union(*pFormTextBoundRect);
-            }
-        } else { // Ansonsten Text im Zeichenobjekt zentriert
-            if (pFormTextBoundRect!=NULL) {
-                delete pFormTextBoundRect;
-                pFormTextBoundRect=NULL;
-            }
-            FASTBOOL bCheckText=TRUE;
-            if (bTextFrame) {
-                bCheckText=GetTextLeftDistance ()<0 ||
-                           GetTextRightDistance()<0 ||
-                           GetTextUpperDistance()<0 ||
-                           GetTextLowerDistance()<0 ||
-                           (GetEckenradius()>0 && aGeo.nDrehWink!=0);
-            }
-            if (bCheckText) {
-                SdrOutliner& rOutliner=ImpGetDrawOutliner();
-                Rectangle aTextRect;
-                Rectangle aAnchorRect;
-                TakeTextRect(rOutliner,aTextRect,TRUE,&aAnchorRect); // EditText ignorieren!
-                SdrFitToSizeType eFit=GetFitToSize();
-                FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-                if (bFitToSize) aTextRect=aAnchorRect;
-                rOutliner.Clear();
-                if (aGeo.nDrehWink!=0) {
-                    Polygon aPol(aTextRect);
-                    if (aGeo.nDrehWink!=0) RotatePoly(aPol,aTextRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-                    aOutRect.Union(aPol.GetBoundRect());
-                } else {
-                    aOutRect.Union(aTextRect);
-                }
-            }
-        }
-    }
 }
 
 SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
@@ -1878,9 +1587,13 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     if (!IsTextFrame())
     {
         // Das SnapRect behaelt seine Groesse bei
-        bBoundRectDirty=TRUE;
         SetRectsDirty(sal_True);
     }
+
+    // always invalidate BoundRect on change
+    SetBoundRectDirty();
+    ActionChanged();
+
     ImpSetTextStyleSheetListeners();
     ImpCheckMasterCachable();
 }
@@ -1898,7 +1611,7 @@ void SdrTextObj::NbcReformatText()
         else
         {
             // Das SnapRect behaelt seine Groesse bei
-            bBoundRectDirty=TRUE;
+            SetBoundRectDirty();
             SetRectsDirty(sal_True);
         }
         SetTextSizeDirty();
@@ -2389,7 +2102,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 
 // #111096#
 // Access to TextAnimationAllowed flag
-sal_Bool SdrTextObj::IsTextAnimationAllowed() const
+bool SdrTextObj::IsTextAnimationAllowed() const
 {
     return mbTextAnimationAllowed;
 }
@@ -2436,7 +2149,7 @@ SdrText* SdrTextObj::getText( sal_Int32 nIndex ) const
     if( nIndex == 0 )
     {
         if( mpText == 0 )
-            const_cast< SdrTextObj* >(this)->mpText = new SdrText( const_cast< SdrTextObj* >(this) );
+            const_cast< SdrTextObj* >(this)->mpText = new SdrText( *(const_cast< SdrTextObj* >(this)) );
         return mpText;
     }
     else
@@ -2518,7 +2231,6 @@ sal_Int32 SdrTextObj::CheckTextHit(const Point& /*rPnt*/) const
 // Bei Aenderungen zu beachten:
 // - Paint
 // - HitTest
-// - RecalcBoundRect
 // - ConvertToPoly
 // - Edit
 // - Drucken,Speichern, Paint in Nachbarview waerend Edit
