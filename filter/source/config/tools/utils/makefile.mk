@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,18 +47,6 @@ JARFILES        =   \
                     juh.jar         \
                     jut.jar         \
                     java_uno.jar
-
-.IF "$(SYSTEM_XML_APIS)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
-.ELSE
-JARFILES += xml-apis.jar
-.ENDIF
-
-.IF "$(SYSTEM_XERCES)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
-.ELSE
-JARFILES += xercesImpl.jar
-.ENDIF
 
 JAVACLASSFILES  =   \
                     $(CLASSDIR)$/$(PACKAGE)$/AnalyzeStartupLog.class              \
