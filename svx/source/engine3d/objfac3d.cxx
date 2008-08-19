@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objfac3d.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,9 +83,6 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case E3D_POLYSCENE_ID:
                 pObjFactory->pNewObj = new E3dPolyScene();
                 break;
-            case E3D_OBJECT_ID:
-                pObjFactory->pNewObj = new E3dObject();
-                break;
             case E3D_POLYGONOBJ_ID  :
                 pObjFactory->pNewObj = new E3dPolygonObj();
                 break;
@@ -99,17 +96,11 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
                     //     gebraucht worden ist.
                 pObjFactory->pNewObj = new E3dSphereObj(123);
                 break;
-            case E3D_POINTOBJ_ID:
-                pObjFactory->pNewObj = new E3dPointObj();
-                break;
             case E3D_EXTRUDEOBJ_ID:
                 pObjFactory->pNewObj = new E3dExtrudeObj();
                 break;
             case E3D_LATHEOBJ_ID:
                 pObjFactory->pNewObj = new E3dLatheObj();
-                break;
-            case E3D_LABELOBJ_ID:
-                pObjFactory->pNewObj = new E3dLabelObj();
                 break;
             case E3D_COMPOUNDOBJ_ID:
                 pObjFactory->pNewObj = new E3dCompoundObject();
