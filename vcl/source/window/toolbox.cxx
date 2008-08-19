@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.109 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <string.h>
-#include <vector>
-#include <math.h>
+
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -61,6 +59,10 @@
 #include <vcl/gradient.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/window.h>
+
+#include <string.h>
+#include <vector>
+#include <math.h>
 
 // =======================================================================
 
