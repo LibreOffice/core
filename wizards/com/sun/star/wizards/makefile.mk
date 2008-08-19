@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,23 +40,12 @@ PACKAGE = com$/sun$/star$/wizards
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge 
 
-.IF "$(SYSTEM_XALAN)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XALAN_JAR)
+.IF "$(SYSTEM_SAXON)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(SAXON_JAR)
 .ELSE
-JARFILES += xalan.jar
+JARFILES += saxon9.jar
 .ENDIF
 
-.IF "$(SYSTEM_XERCES)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XERCES_JAR)
-.ELSE
-JARFILES += xercesImpl.jar
-.ENDIF
-
-.IF "$(SYSTEM_XML_APIS)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
-.ELSE
-JARFILES += xml-apis.jar
-.ENDIF
 
 JARCLASSDIRS	=                                               \
     com$/sun$/star$/wizards$/common	       	 		\
