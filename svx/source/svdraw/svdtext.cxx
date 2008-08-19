@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdtext.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,12 +40,13 @@
 #include "svx/svdmodel.hxx"
 #include "svx/fhgtitem.hxx"
 
-SdrText::SdrText( SdrTextObj* pObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
+SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
 : mpOutlinerParaObject( pOutlinerParaObject )
-, mpObject( pObject )
-, mpModel( pObject->GetModel() )
+, mrObject( rObject )
+, mpModel( rObject.GetModel() )
 , mbPortionInfoChecked( false )
 {
+    OSL_ENSURE(&mrObject, "SdrText created without SdrTextObj (!)");
 }
 
 SdrText::~SdrText()
@@ -68,6 +69,11 @@ void SdrText::ReformatText()
 {
     mbPortionInfoChecked=FALSE;
     mpOutlinerParaObject->ClearPortionInfo();
+}
+
+const SfxItemSet& SdrText::GetItemSet() const
+{
+    return const_cast< SdrText* >(this)->GetObjectItemSet();
 }
 
 void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
@@ -146,7 +152,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
             SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
         }
         // erst jetzt den Outliner holen, etc. damit obiges SetAttr auch wirkt
-        SdrOutliner& rOutliner=mpObject->ImpGetDrawOutliner();
+        SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
         rOutliner.SetText(*mpOutlinerParaObject);
         delete mpOutlinerParaObject;
         mpOutlinerParaObject=0;
@@ -195,15 +201,15 @@ void SdrText::ForceOutlinerParaObject( USHORT nOutlMode )
 
 const SfxItemSet& SdrText::GetObjectItemSet()
 {
-    return mpObject->GetObjectItemSet();
+    return mrObject.GetObjectItemSet();
 }
 
 void SdrText::SetObjectItem(const SfxPoolItem& rItem)
 {
-    mpObject->SetObjectItem( rItem );
+    mrObject.SetObjectItem( rItem );
 }
 
 SfxStyleSheet* SdrText::GetStyleSheet() const
 {
-    return mpObject->GetStyleSheet();
+    return mrObject.GetStyleSheet();
 }
