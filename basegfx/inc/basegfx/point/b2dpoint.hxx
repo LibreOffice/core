@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpoint.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/point/b2ipoint.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -146,5 +148,7 @@ namespace basegfx
     */
     B2DPoint operator*( const B2DHomMatrix& rMat, const B2DPoint& rPoint );
 } // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif /* _BGFX_POINT_B2DPOINT_HXX */
