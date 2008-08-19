@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdomedia.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,6 @@ public:
 
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
         virtual UINT16              GetObjIdentifier() const;
-        virtual sal_Bool            DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
 
         virtual void                TakeObjNameSingul(String& rName) const;
         virtual void                TakeObjNamePlural(String& rName) const;
