@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,6 +193,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 protected:
 
     virtual void    DataChanged( const DataChangedEvent& );
+    virtual void    PrePaint();
     virtual void    Paint( const Rectangle& rRect );
     virtual void    KeyInput(const KeyEvent &rKEvt);
 
