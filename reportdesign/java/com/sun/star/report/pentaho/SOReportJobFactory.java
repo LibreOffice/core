@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SOReportJobFactory.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +171,7 @@ public class SOReportJobFactory
             catch (java.lang.Exception e)
             {
                 Log.error("ReportProcessing failed", e);
-                throw new com.sun.star.lang.WrappedTargetException("caught a " + e.getClass().getName(), this, new com.sun.star.uno.Exception(e.getLocalizedMessage()));
+                throw new com.sun.star.lang.WrappedTargetException(e.getMessage(), this,null);
             }
             catch (java.lang.IncompatibleClassChangeError e2)
             {
