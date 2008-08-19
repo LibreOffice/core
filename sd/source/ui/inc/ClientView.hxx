@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ClientView.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,8 +53,7 @@ public:
         DrawViewShell* pShell);
     virtual ~ClientView (void);
 
-    virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode=0,
-        ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
     // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
     // man diese beiden folgenden Methoden ueberladen und entsprechend anders
