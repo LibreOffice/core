@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideview.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include <com/sun/star/presentation/XSlideShow.hpp>
 
@@ -138,32 +140,17 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rCl
     // setup canvas clipping
     // =====================
 
-    // our view displays a one-by-one rectangle, modified by rUserSize
-    // (i.e. the view transform alone transforms a one-by-one rect to final
-    // device coordinates). Thus, to display s_aUnitRect correctly under
-    // the new total view transform, we need to scale it up by rUserSize
-    basegfx::B2DPolyPolygon aClipPoly( StaticUnitRectPoly::get() );
+    // AW: Simplified
+    const basegfx::B2DRange aClipRange(0, 0, rUserSize.getX(), rUserSize.getY());
 
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.scale( rUserSize.getX(),
-                   rUserSize.getY() );
-
-    aClipPoly.transform( aMatrix );
-
-    // now clip with user-supplied clip poly (if any)
-    if( rClip.count() )
+    if(rClip.count())
     {
-        // no need to normalize aClipPoly, it's
-        // just created positively oriented,
-        // without any self-intersections
-        aClipPoly.append( rClip );
-        aClipPoly = basegfx::tools::removeAllIntersections(aClipPoly);
-        aClipPoly = basegfx::tools::removeNeutralPolygons(
-            aClipPoly,
-            sal_False );
+        return basegfx::tools::clipPolyPolygonOnRange(rClip, aClipRange, true, false);
     }
-
-    return aClipPoly;
+    else
+    {
+        return basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aClipRange));
+    }
 }
 
 /** Prepare given clip polygon to be stored as the current clip
@@ -178,14 +165,16 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
     basegfx::B2DPolyPolygon aClip( rClip );
 
     // TODO(P2): unnecessary, once XCanvas is correctly handling this
+    // AW: Should be no longer necessary; tools are now bezier-safe
     if( aClip.areControlPointsUsed() )
         aClip = basegfx::tools::adaptiveSubdivideByAngle( aClip );
 
     // normalize polygon, preparation for clipping
     // in updateCanvas()
     aClip = basegfx::tools::correctOrientations(aClip);
-    aClip = basegfx::tools::removeAllIntersections(aClip);
-    aClip = basegfx::tools::removeNeutralPolygons(aClip, sal_True);
+    aClip = basegfx::tools::solveCrossovers(aClip);
+    aClip = basegfx::tools::stripNeutralPolygons(aClip);
+    aClip = basegfx::tools::stripDispensablePolygons(aClip, false);
 
     return aClip;
 }
