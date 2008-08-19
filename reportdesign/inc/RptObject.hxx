@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptObject.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,8 +198,6 @@ public:
     {
         return new OOle2Obj( _xComponent,_nType );
     }
-    OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect,UINT16 _nType, FASTBOOL bFrame_=FALSE);
-
 protected:
     OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType);
     OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType);
