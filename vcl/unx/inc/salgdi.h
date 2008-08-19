@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -229,6 +229,7 @@ public:
     virtual void            GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     virtual USHORT          GetBitCount();
     virtual long            GetGraphicsWidth() const;
+    virtual long            GetGraphicsHeight() const;
 
     virtual void            ResetClipRegion();
     virtual void            BeginSetClipRegion( ULONG nCount );
@@ -289,8 +290,8 @@ public:
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
-    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths );
+    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency );
+    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin);
     virtual sal_Bool        drawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
                                                 const BYTE* pFlgAry );
