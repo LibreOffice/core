@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scrwnd.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,9 @@
 #ifndef _VCL_SCRWND_HXX
 #include <scrwnd.hxx>
 #endif
+
+#include <math.h>
+#include <limits.h>
 
 // -----------
 // - Defines -
