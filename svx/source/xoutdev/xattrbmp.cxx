@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xattrbmp.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 #include <svx/dialogs.hrc>
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unoprnms.hxx>
