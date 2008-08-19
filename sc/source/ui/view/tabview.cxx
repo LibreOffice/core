@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,6 @@
 #define _SDR_NOTRANSFORM        // Transformationen, selten verwendet
 #define _SDR_NOTOUCH            // Hit-Tests, selten verwendet
 
-#define _SDR_NOEXTDEV           // XOutputDevice
 #define _SDR_NOUNDO             // Undo-Objekte
 #define _SDR_NOPAGEOBJ          // SdrPageObj
 #define _SDR_NOVIRTOBJ          // SdrVirtObj
@@ -95,11 +94,6 @@
 #define _SI_HXX                 // VCControls
 
 ////////////////////// Umsetzen der Standard-Defines //////////////////////
-
-#ifdef _SDR_NOEXTDEV
-    #define _SDVXOUT_HXX
-    #undef _SDR_NOEXTDEV
-#endif
 
 //#define _SVDDRAG_HXX      // SdrDragStat
 #define _SVDPAGE_HXX        // SdrPage
