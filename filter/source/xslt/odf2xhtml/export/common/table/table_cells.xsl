@@ -9,7 +9,7 @@
  
   $RCSfile: table_cells.xsl,v $
  
-  $Revision: 1.2 $
+  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -61,7 +61,7 @@
 	xmlns:xt="http://www.jclark.com/xt"
 	xmlns:common="http://exslt.org/common"
 	xmlns:xalan="http://xml.apache.org/xalan"
-	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink xt common xalan">
+	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi xt common xalan">
 
 
 	<!-- *********************************** -->
