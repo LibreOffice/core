@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoctabl.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -245,6 +245,7 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #include "osl/diagnose.h"
 #include "cppuhelper/factory.hxx"
 #include "uno/lbnames.h"
+#include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
 
 extern "C"
 {
@@ -286,6 +287,12 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
 #endif
             writeInfo( pKey, svx::FontHeightToolBoxControl::getImplementationName_Static(), svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
             writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
+
+            // XPrimitiveFactory2D
+            writeInfo( pKey,
+                drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static(),
+                drawinglayer::primitive2d::PrimitiveFactory2D::getSupportedServiceNames_Static() );
+
             writeInfo( pKey, ::svx::SvXMLGraphicImportHelper_getImplementationName(),::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
             writeInfo( pKey, ::svx::SvXMLGraphicExportHelper_getImplementationName(),::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
         }
@@ -356,6 +363,14 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 ::unogallery::GalleryThemeProvider_getImplementationName(),
                 ::unogallery::GalleryThemeProvider_createInstance,
                 ::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
+        }
+        else if( drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            // XPrimitiveFactory2D
+            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static(),
+                drawinglayer::primitive2d::XPrimitiveFactory2DProvider_createInstance,
+                drawinglayer::primitive2d::PrimitiveFactory2D::getSupportedServiceNames_Static() );
         }
         else if( ::svx::SvXMLGraphicImportHelper_getImplementationName().equalsAscii( pImplName ) )
         {
