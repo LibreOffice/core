@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,7 @@ public:
     virtual ~E3dView();
 
     // Alle markierten Objekte auf dem angegebenen OutputDevice ausgeben.
-    virtual void DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const;
+    virtual void DrawMarkedObj(OutputDevice& rOut) const;
 
     // Zugriff auf die Default-Attribute
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
