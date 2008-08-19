@@ -42,6 +42,7 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\helper\listenermultiplexer.hxx %_DEST%\inc%_EXT%\toolkit\helper\listenermultiplexer.hxx
 ..\inc\toolkit\helper\unowrapper.hxx %_DEST%\inc%_EXT%\toolkit\helper\unowrapper.hxx
 ..\inc\toolkit\helper\externallock.hxx %_DEST%\inc%_EXT%\toolkit\helper\externallock.hxx
+..\inc\toolkit\helper\formpdfexport.hxx %_DEST%\inc%_EXT%\toolkit\helper/formpdfexport.hxx
 ..\inc\toolkit\helper\accessiblefactory.hxx %_DEST%\inc%_EXT%\toolkit\helper\accessiblefactory.hxx
 ..\inc\toolkit\helper\fixedhyperbase.hxx %_DEST%\inc%_EXT%\toolkit\helper\fixedhyperbase.hxx
 
