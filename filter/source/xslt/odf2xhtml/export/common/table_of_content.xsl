@@ -9,7 +9,7 @@
  
   $RCSfile: table_of_content.xsl,v $
  
-  $Revision: 1.2 $
+  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -32,7 +32,7 @@
 <!--
 	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://xml.apache.org/xslt/java" xmlns:sxg="http://www.jclark.com/xt/java/org.openoffice.xslt.OOoMasterDocument" xmlns:common="http://exslt.org/common" xmlns:xt="http://www.jclark.com/xt" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink java sxg xt common xalan">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://xml.apache.org/xslt/java" xmlns:sxg="http://www.jclark.com/xt/java/org.openoffice.xslt.OOoMasterDocument" xmlns:common="http://exslt.org/common" xmlns:xt="http://www.jclark.com/xt" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi java sxg xt common xalan">
 
 	<!-- ****************************** -->
 	<!-- ***    Table of Content    *** -->
@@ -78,14 +78,22 @@
 	<xsl:template name="createIndexBodyTable">
 		<xsl:param name="globalData"/>
 		<xsl:variable name="allStyleTabStops-RTF">
-			<style:tab-stops>
+			<xsl:element name="style:tab-stops">
 				<xsl:call-template name="get-tab-stops">
 					<xsl:with-param name="globalData" select="$globalData"/>
 					<xsl:with-param name="styleName" select="current()/@text:style-name"/>
+
+					<!--
+					Currently only the style of text:index-body is recognized, but not of a paragraph child containing the text:tab element!
+					<xsl:with-param name="styleName" select="descendant-or-self::*/@text:style-name"/>
+
+					The column width needs to be tabstop plus fo:margin-left paragraph-properties
+					 -->
 				</xsl:call-template>
-			</style:tab-stops>
+			</xsl:element>
 		</xsl:variable>
 		<xsl:element namespace="{$namespace}" name="table">
+
 			<xsl:attribute name="border">0</xsl:attribute>
 			<xsl:attribute name="cellspacing">0</xsl:attribute>
 			<xsl:attribute name="cellpadding">0</xsl:attribute>
@@ -218,8 +226,10 @@
 		<xsl:param name="styleName"/>
 		<xsl:variable name="tabStyle" select="key('styles', $styleName)"/>
 
-		<xsl:if test="$tabStyle/*/style:tab-stops">
-			<xsl:copy-of select="$tabStyle/*/style:tab-stops/*"/>
+		<xsl:if test="$tabStyle/*/style:tab-stops/style:tab-stop/@style:position">
+			<xsl:for-each select="$tabStyle/*/style:tab-stops/style:tab-stop">
+				<xsl:copy-of select="."/>
+			</xsl:for-each>
 		</xsl:if>
 
 		<xsl:if test="$tabStyle/@style:parent-style-name">
@@ -344,7 +354,7 @@ Scenarios unmatched:
 												<xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
 											</xsl:attribute>
 										</xsl:if>
-										<xsl:call-template name="grap-cell-content-before-tab-stop">
+										<xsl:call-template name="grab-cell-content-before-tab-stop">
 											<xsl:with-param name="globalData" select="$globalData"/>
 											<xsl:with-param name="endingTabStopPosition" select="$position + 1"/>
 											<xsl:with-param name="lastNodePosition" select="$lastNodePosition"/>
@@ -361,7 +371,7 @@ Scenarios unmatched:
 												<xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
 											</xsl:attribute>
 										</xsl:if>
-										<xsl:call-template name="grap-cell-content-before-tab-stop">
+										<xsl:call-template name="grab-cell-content-before-tab-stop">
 											<xsl:with-param name="globalData" select="$globalData"/>
 											<xsl:with-param name="endingTabStopPosition" select="$position"/>
 											<xsl:with-param name="lastNodePosition" select="$lastNodePosition"/>
@@ -386,7 +396,7 @@ Scenarios unmatched:
 										</xsl:attribute>
 									</xsl:if>
 									<xsl:element namespace="{$namespace}" name="td">
-										<xsl:call-template name="grap-cell-content-before-tab-stop">
+										<xsl:call-template name="grab-cell-content-before-tab-stop">
 											<xsl:with-param name="globalData" select="$globalData"/>
 											<xsl:with-param name="endingTabStopPosition" select="$position"/>
 											<xsl:with-param name="lastNodePosition" select="$lastNodePosition"/>
@@ -412,7 +422,7 @@ Scenarios unmatched:
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="grap-cell-content-before-tab-stop">
+	<xsl:template name="grab-cell-content-before-tab-stop">
 		<xsl:param name="globalData"/>
 		<xsl:param name="endingTabStopPosition"/>
 		<xsl:param name="tabNodePositions"/>
@@ -512,10 +522,10 @@ Scenarios unmatched:
 	<!-- *** Common Rules *** -->
 	<!-- ******************** -->
 
-	<!-- deactivating default template -->
 	<xsl:template match="*" mode="content-table">
 		<xsl:param name="globalData"/>
-		<xsl:apply-templates>
+
+		<xsl:apply-templates select=".">
 			<xsl:with-param name="globalData" select="$globalData"/>
 		</xsl:apply-templates>
 	</xsl:template>
