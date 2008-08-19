@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cuitabline.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,7 +162,6 @@ private:
     BOOL                bObjSelected;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
     XLineDashItem       aXDash;
@@ -288,7 +287,6 @@ private:
     BOOL                bObjSelected;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
     XLineDashItem       aXDash;
@@ -379,7 +377,6 @@ private:
     BOOL                bObjSelected;
 
     XOutdevItemPool*    pXPool;
-    XOutputDevice       XOut;
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
     XLineColorItem      aXColor;
