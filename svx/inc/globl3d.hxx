@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: globl3d.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,18 +43,14 @@ const UINT32 E3dInventor = UINT32('E')*0x00000001+
                            UINT32('D')*0x00010000+
                            UINT32('1')*0x01000000;
 
-const UINT16 E3D_SCENE_ID       = 2;
-const UINT16 E3D_POLYSCENE_ID   = 3;
-const UINT16 E3D_OBJECT_ID      = 10;
-const UINT16 E3D_CUBEOBJ_ID     = 12;
-const UINT16 E3D_SPHEREOBJ_ID   = 13;
-const UINT16 E3D_POINTOBJ_ID    = 14;
-const UINT16 E3D_EXTRUDEOBJ_ID  = 15;
-const UINT16 E3D_LATHEOBJ_ID    = 16;
-const UINT16 E3D_LABELOBJ_ID    = 20;
-const UINT16 E3D_COMPOUNDOBJ_ID = 21;
-const UINT16 E3D_POLYGONOBJ_ID  = 22;
-
-
+const UINT16 E3D_SCENE_ID       = 1;
+const UINT16 E3D_POLYSCENE_ID   = 2;
+const UINT16 E3D_OBJECT_ID      = 3; // should not be used, it's only a helper class for E3DScene and E3DCompoundObject
+const UINT16 E3D_CUBEOBJ_ID     = 4;
+const UINT16 E3D_SPHEREOBJ_ID   = 5;
+const UINT16 E3D_EXTRUDEOBJ_ID  = 6;
+const UINT16 E3D_LATHEOBJ_ID    = 7;
+const UINT16 E3D_COMPOUNDOBJ_ID = 8;
+const UINT16 E3D_POLYGONOBJ_ID  = 9;
 
 #endif      // _E3D_GLOBL3D_HXX
