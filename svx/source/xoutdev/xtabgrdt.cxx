@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xtabgrdt.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,9 +52,16 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
+
+#include <svx/svdorect.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xgrscit.hxx>
 
 #define GLOBALOVERFLOW
 
@@ -151,54 +158,105 @@ Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 // class XGradientList
 // --------------------
 
-/*************************************************************************
-|*
-|* XGradientList::XGradientList()
-|*
-*************************************************************************/
-
-XGradientList::XGradientList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
-                XPropertyList   ( rPath, pInPool, nInitSize, nReSize),
-                pVD             ( NULL ),
-                pXOut           ( NULL ),
-                pXFSet          ( NULL )
+class impXGradientList
 {
-    pBmpList = new List( nInitSize, nReSize );
+private:
+    VirtualDevice*          mpVirtualDevice;
+    SdrModel*               mpSdrModel;
+    SdrObject*              mpBackgroundObject;
+
+public:
+    impXGradientList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB)
+    :   mpVirtualDevice(pV),
+        mpSdrModel(pM),
+        mpBackgroundObject(pB)
+    {}
+
+    ~impXGradientList()
+    {
+        delete mpVirtualDevice;
+        SdrObject::Free(mpBackgroundObject);
+        delete mpSdrModel;
+    }
+
+    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
+    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
+};
+
+void XGradientList::impCreate()
+{
+    if(!mpData)
+    {
+        const Point aZero(0, 0);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+        VirtualDevice* pVirDev = new VirtualDevice;
+        OSL_ENSURE(0 != pVirDev, "XGradientList: no VirtualDevice created!" );
+        pVirDev->SetMapMode(MAP_100TH_MM);
+        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH, BITMAP_HEIGHT)));
+        pVirDev->SetOutputSize(aSize);
+        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+
+        SdrModel* pSdrModel = new SdrModel();
+        OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
+        pSdrModel->GetItemPool().FreezeIdRanges();
+
+        const Size aSinglePixel(pVirDev->PixelToLogic(Size(1, 1)));
+        const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
+        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        OSL_ENSURE(0 != pBackgroundObject, "XGradientList: no BackgroundObject created!" );
+        pBackgroundObject->SetModel(pSdrModel);
+        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
+        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+        pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
+        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((BITMAP_WIDTH + BITMAP_HEIGHT) / 3)));
+
+        mpData = new impXGradientList(pVirDev, pSdrModel, pBackgroundObject);
+        OSL_ENSURE(0 != mpData, "XGradientList: data creation went wrong!" );
+    }
 }
 
-/************************************************************************/
+void XGradientList::impDestroy()
+{
+    if(mpData)
+    {
+        delete mpData;
+        mpData = 0;
+    }
+}
+
+XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
+:   XPropertyList(rPath, pInPool, nInitSize, nReSize),
+    mpData(0)
+{
+    pBmpList = new List(nInitSize, nReSize);
+}
 
 XGradientList::~XGradientList()
 {
-    if( pVD )    delete pVD;
-    if( pXOut )  delete pXOut;
-    if( pXFSet ) delete pXFSet;
+    if(mpData)
+    {
+        delete mpData;
+        mpData = 0;
+    }
 }
-
-/************************************************************************/
 
 XGradientEntry* XGradientList::Replace(XGradientEntry* pEntry, long nIndex )
 {
     return( (XGradientEntry*) XPropertyList::Replace( pEntry, nIndex ) );
 }
 
-/************************************************************************/
-
 XGradientEntry* XGradientList::Remove(long nIndex)
 {
     return( (XGradientEntry*) XPropertyList::Remove( nIndex, 0 ) );
 }
 
-/************************************************************************/
-
 XGradientEntry* XGradientList::GetGradient(long nIndex) const
 {
     return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
 }
-
-/************************************************************************/
 
 BOOL XGradientList::Load()
 {
@@ -226,8 +284,6 @@ BOOL XGradientList::Load()
     return( FALSE );
 }
 
-/************************************************************************/
-
 BOOL XGradientList::Save()
 {
     INetURLObject aURL( aPath );
@@ -246,8 +302,6 @@ BOOL XGradientList::Save()
     uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
-
-/************************************************************************/
 
 BOOL XGradientList::Create()
 {
@@ -271,10 +325,10 @@ BOOL XGradientList::Create()
     return( TRUE );
 }
 
-/************************************************************************/
-
 BOOL XGradientList::CreateBitmapsForUI()
 {
+    impCreate();
+
     for( long i = 0; i < Count(); i++)
     {
         Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
@@ -283,51 +337,39 @@ BOOL XGradientList::CreateBitmapsForUI()
         if( pBmp )
             pBmpList->Insert( pBmp, i );
     }
-    // Loeschen, da JOE den Pool vorm Dtor entfernt!
-    if( pVD )   { delete pVD;   pVD = NULL;     }
-    if( pXOut ) { delete pXOut; pXOut = NULL;   }
-    if( pXFSet ){ delete pXFSet; pXFSet = NULL; }
+
+    impDestroy();
 
     return( FALSE );
 }
 
-/************************************************************************/
-
 Bitmap* XGradientList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 {
-    if( !pVD ) // und pXOut und pXFSet
+    impCreate();
+    VirtualDevice* pVD = mpData->getVirtualDevice();
+    SdrObject* pBackgroundObject = mpData->getBackgroundObject();
+
+    const SfxItemSet& rItemSet = pBackgroundObject->GetMergedItemSet();
+    pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
+    pBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
+
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(pBackgroundObject);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    aPainter.ProcessDisplay(aDisplayInfo);
+
+    const Point aZero(0, 0);
+    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
+
+    if(bDelete)
     {
-        pVD = new VirtualDevice;
-        DBG_ASSERT( pVD, "XGradientList: Konnte kein VirtualDevice erzeugen!" );
-        pVD->SetOutputSizePixel( Size( BITMAP_WIDTH, BITMAP_HEIGHT ) );
-
-        pXOut = new XOutputDevice( pVD );
-        DBG_ASSERT( pVD, "XGradientList: Konnte kein XOutDevice erzeugen!" );
-
-        pXFSet = new XFillAttrSetItem( pXPool );
-        DBG_ASSERT( pVD, "XGradientList: Konnte kein XFillAttrSetItem erzeugen!" );
-        pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_GRADIENT ) );
+        impDestroy();
     }
 
-    pXFSet->GetItemSet().Put(
-    XFillGradientItem( pXPool, GetGradient( nIndex )->GetGradient() ) );
-    pXOut->SetFillAttr( pXFSet->GetItemSet() );
-
-    // #73550#
-    pXOut->OverrideLineColor( Color( COL_BLACK ) );
-
-    Size aVDSize = pVD->GetOutputSizePixel();
-    pXOut->DrawRect( Rectangle( Point(), aVDSize ) );
-    Bitmap* pBitmap = new Bitmap( pVD->GetBitmap( Point(), aVDSize ) );
-
-    // Loeschen, da JOE den Pool vorm Dtor entfernt!
-    if( bDelete )
-    {
-        if( pVD )   { delete pVD;   pVD = NULL;     }
-        if( pXOut ) { delete pXOut; pXOut = NULL;   }
-        if( pXFSet ){ delete pXFSet; pXFSet = NULL; }
-    }
-    return( pBitmap );
+    return pBitmap;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

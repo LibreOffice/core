@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xtabdash.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,11 +54,18 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include <svx/xoutx.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/xflclit.hxx>
+
+#include <svx/svdorect.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;
 using namespace rtl;
@@ -154,56 +161,115 @@ Bitmap* XDashTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 // class XDashList
 // ----------------
 
-/*************************************************************************
-|*
-|* XDashList::XDashList()
-|*
-*************************************************************************/
-
-XDashList::XDashList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
-                XPropertyList   ( rPath, pInPool, nInitSize, nReSize),
-                pVD             ( NULL ),
-                pXOut           ( NULL ),
-                pXFSet          ( NULL ),
-                pXLSet          ( NULL )
+class impXDashList
 {
-    pBmpList = new List( nInitSize, nReSize );
+private:
+    VirtualDevice*          mpVirtualDevice;
+    SdrModel*               mpSdrModel;
+    SdrObject*              mpBackgroundObject;
+    SdrObject*              mpLineObject;
+
+public:
+    impXDashList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
+    :   mpVirtualDevice(pV),
+        mpSdrModel(pM),
+        mpBackgroundObject(pB),
+        mpLineObject(pL)
+    {}
+
+    ~impXDashList()
+    {
+        delete mpVirtualDevice;
+        SdrObject::Free(mpBackgroundObject);
+        SdrObject::Free(mpLineObject);
+        delete mpSdrModel;
+    }
+
+    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
+    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
+    SdrObject* getLineObject() const { return mpLineObject; }
+};
+
+void XDashList::impCreate()
+{
+    if(!mpData)
+    {
+        const Point aZero(0, 0);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+        VirtualDevice* pVirDev = new VirtualDevice;
+        OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
+        pVirDev->SetMapMode(MAP_100TH_MM);
+        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH * 2, BITMAP_HEIGHT)));
+        pVirDev->SetOutputSize(aSize);
+        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+
+        SdrModel* pSdrModel = new SdrModel();
+        OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
+        pSdrModel->GetItemPool().FreezeIdRanges();
+
+        const Rectangle aBackgroundSize(aZero, aSize);
+        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        OSL_ENSURE(0 != pBackgroundObject, "XDashList: no BackgroundObject created!" );
+        pBackgroundObject->SetModel(pSdrModel);
+        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
+        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+        pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
+
+        const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
+        const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append(aStart);
+        aPolygon.append(aEnd);
+        SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
+        OSL_ENSURE(0 != pLineObject, "XDashList: no LineObject created!" );
+        pLineObject->SetModel(pSdrModel);
+        pLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
+        pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
+        pLineObject->SetMergedItem(XLineWidthItem(30));
+
+        mpData = new impXDashList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
+        OSL_ENSURE(0 != mpData, "XDashList: data creation went wrong!" );
+    }
 }
 
-/************************************************************************/
+void XDashList::impDestroy()
+{
+    if(mpData)
+    {
+        delete mpData;
+        mpData = 0;
+    }
+}
+
+XDashList::XDashList(const String& rPath, XOutdevItemPool* pInPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
+:   XPropertyList(rPath, pInPool, nInitSize, nReSize),
+    mpData(0)
+{
+    pBmpList = new List(nInitSize, nReSize);
+}
 
 XDashList::~XDashList()
 {
-    if( pVD )    delete pVD;
-    if( pXOut )  delete pXOut;
-    if( pXFSet ) delete pXFSet;
-    if( pXLSet ) delete pXLSet;
+    impDestroy();
 }
-
-/************************************************************************/
 
 XDashEntry* XDashList::Replace(XDashEntry* pEntry, long nIndex )
 {
     return (XDashEntry*) XPropertyList::Replace(pEntry, nIndex);
 }
 
-/************************************************************************/
-
 XDashEntry* XDashList::Remove(long nIndex)
 {
     return (XDashEntry*) XPropertyList::Remove(nIndex, 0);
 }
 
-/************************************************************************/
-
 XDashEntry* XDashList::GetDash(long nIndex) const
 {
     return (XDashEntry*) XPropertyList::Get(nIndex, 0);
 }
-
-/************************************************************************/
 
 BOOL XDashList::Load()
 {
@@ -230,8 +296,6 @@ BOOL XDashList::Load()
     return( FALSE );
 }
 
-/************************************************************************/
-
 BOOL XDashList::Save()
 {
     INetURLObject aURL( aPath );
@@ -251,8 +315,6 @@ BOOL XDashList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-/************************************************************************/
-
 BOOL XDashList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_LINESTYLE ) );
@@ -269,10 +331,10 @@ BOOL XDashList::Create()
     return( TRUE );
 }
 
-/************************************************************************/
-
 BOOL XDashList::CreateBitmapsForUI()
 {
+    impCreate();
+
     for( long i = 0; i < Count(); i++)
     {
         Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
@@ -281,66 +343,39 @@ BOOL XDashList::CreateBitmapsForUI()
         if( pBmp )
             pBmpList->Insert( pBmp, i );
     }
-    // Loeschen, da JOE den Pool vorm Dtor entfernt!
-    if( pVD )   { delete pVD;   pVD = NULL;     }
-    if( pXOut ) { delete pXOut; pXOut = NULL;   }
-    if( pXFSet ){ delete pXFSet; pXFSet = NULL; }
-    if( pXLSet ){ delete pXLSet; pXLSet = NULL; }
+
+    impDestroy();
 
     return( TRUE );
 }
 
-/************************************************************************/
-
 Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 {
-    Point   aZero;
+    impCreate();
+    VirtualDevice* pVD = mpData->getVirtualDevice();
+    SdrObject* pLine = mpData->getLineObject();
 
-    if( !pVD ) // und pXOut und pXFSet und pXLSet
+    pLine->SetMergedItem(XLineStyleItem(XLINE_DASH));
+    pLine->SetMergedItem(XLineDashItem(String(), GetDash(nIndex)->GetDash()));
+
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(mpData->getBackgroundObject());
+    aObjectVector.push_back(pLine);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    aPainter.ProcessDisplay(aDisplayInfo);
+
+    const Point aZero(0, 0);
+    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
+
+    if(bDelete)
     {
-        pVD = new VirtualDevice;
-        DBG_ASSERT( pVD, "XDashList: Konnte kein VirtualDevice erzeugen!" );
-        pVD->SetMapMode( MAP_100TH_MM );
-        pVD->SetOutputSize( pVD->PixelToLogic( Size( BITMAP_WIDTH * 2, BITMAP_HEIGHT ) ) );
-
-        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-        pVD->SetFillColor( rStyles.GetFieldColor() );
-        pVD->SetLineColor( rStyles.GetFieldColor() );
-
-        pXOut = new XOutputDevice( pVD );
-        DBG_ASSERT( pVD, "XDashList: Konnte kein XOutDevice erzeugen!" );
-
-        pXFSet = new XFillAttrSetItem( pXPool );
-        DBG_ASSERT( pVD, "XDashList: Konnte kein XFillAttrSetItem erzeugen!" );
-
-        pXLSet = new XLineAttrSetItem( pXPool );
-        DBG_ASSERT( pVD, "XDashList: Konnte kein XLineAttrSetItem erzeugen!" );
-        pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_DASH ) );
-        pXLSet->GetItemSet().Put( XLineColorItem( String(), RGB_Color( rStyles.GetFieldTextColor().GetColor() ) ) );
-        pXLSet->GetItemSet().Put( XLineWidthItem( 30 ) );
+        impDestroy();
     }
 
-    Size aVDSize = pVD->GetOutputSize();
-    pVD->DrawRect( Rectangle( aZero, aVDSize ) );
-    pXLSet->GetItemSet().Put( XLineDashItem( String(), GetDash( nIndex )->GetDash() ) );
-
-//-/    pXOut->SetLineAttr( *pXLSet );
-    pXOut->SetLineAttr( pXLSet->GetItemSet() );
-
-    pXOut->DrawLine( Point( 0, aVDSize.Height() / 2 ),
-                     Point( aVDSize.Width(), aVDSize.Height() / 2 ) );
-
-    Bitmap* pBitmap = new Bitmap( pVD->GetBitmap( aZero, aVDSize ) );
-
-    // Loeschen, da JOE den Pool vorm Dtor entfernt!
-    if( bDelete )
-    {
-        if( pVD )   { delete pVD;   pVD = NULL;     }
-        if( pXOut ) { delete pXOut; pXOut = NULL;   }
-        if( pXFSet ){ delete pXFSet; pXFSet = NULL; }
-        if( pXLSet ){ delete pXLSet; pXLSet = NULL; }
-    }
-    return( pBitmap );
+    return pBitmap;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof
