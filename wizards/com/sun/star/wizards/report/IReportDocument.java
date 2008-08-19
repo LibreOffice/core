@@ -9,7 +9,7 @@
  *
  * $RCSfile: IReportDocument.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,7 +214,7 @@ public interface IReportDocument
 
     /**
      * The current report is added to the DB View under the given name
-     * @param Name
+     *
      * TODO: add Name to this functionality
      */
     public void addReportToDBView(/* String Name */);
