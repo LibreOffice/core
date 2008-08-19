@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvashelper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,28 +78,28 @@ namespace vclcanvas
 {
     namespace
     {
-        ::basegfx::tools::B2DLineJoin b2DJoineFromJoin( sal_Int8 nJoinType )
+        basegfx::B2DLineJoin b2DJoineFromJoin( sal_Int8 nJoinType )
         {
             switch( nJoinType )
             {
                 case rendering::PathJoinType::NONE:
-                    return ::basegfx::tools::B2DLINEJOIN_NONE;
+                    return basegfx::B2DLINEJOIN_NONE;
 
                 case rendering::PathJoinType::MITER:
-                    return ::basegfx::tools::B2DLINEJOIN_MITER;
+                    return basegfx::B2DLINEJOIN_MITER;
 
                 case rendering::PathJoinType::ROUND:
-                    return ::basegfx::tools::B2DLINEJOIN_ROUND;
+                    return basegfx::B2DLINEJOIN_ROUND;
 
                 case rendering::PathJoinType::BEVEL:
-                    return ::basegfx::tools::B2DLINEJOIN_BEVEL;
+                    return basegfx::B2DLINEJOIN_BEVEL;
 
                 default:
                     ENSURE_OR_THROW( false,
                                       "b2DJoineFromJoin(): Unexpected join type" );
             }
 
-            return ::basegfx::tools::B2DLINEJOIN_NONE;
+            return basegfx::B2DLINEJOIN_NONE;
         }
     }
 
@@ -343,6 +343,7 @@ namespace vclcanvas
 
             if( aPolyPoly.areControlPointsUsed() )
             {
+                // AW: Not needed for ApplyLineDashing anymore; should be removed
                 aPolyPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
             }
 
@@ -356,9 +357,11 @@ namespace vclcanvas
 
                 for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
                 {
-                    aDashedPolyPoly.append(
-                        ::basegfx::tools::applyLineDashing( aPolyPoly.getB2DPolygon(i),
-                                                            aDashArray ) );
+                    // AW: new interface; You may also get gaps in the same run now
+                    basegfx::tools::applyLineDashing(aPolyPoly.getB2DPolygon(i), aDashArray, &aDashedPolyPoly);
+                    //aDashedPolyPoly.append(
+                    //    ::basegfx::tools::applyLineDashing( aPolyPoly.getB2DPolygon(i),
+                    //                                        aDashArray ) );
                 }
 
                 aPolyPoly = aDashedPolyPoly;
@@ -387,10 +390,14 @@ namespace vclcanvas
                     // StrokeAttributes, the
                     // createAreaGeometryForLineStartEnd() method does not
                     // seem to fit very well here
-                    aStrokedPolyPoly.append(
-                        ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
-                                                                        strokeAttributes.StrokeWidth*0.5,
-                                                                        b2DJoineFromJoin(strokeAttributes.JoinType) ) );
+
+                    // AW: New interface, will create bezier polygons now
+                    aStrokedPolyPoly.append(basegfx::tools::createAreaGeometry(
+                        aPolyPoly.getB2DPolygon(i), strokeAttributes.StrokeWidth*0.5, b2DJoineFromJoin(strokeAttributes.JoinType)));
+                    //aStrokedPolyPoly.append(
+                    //    ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
+                    //                                                    strokeAttributes.StrokeWidth*0.5,
+                    //                                                    b2DJoineFromJoin(strokeAttributes.JoinType) ) );
                 }
             }
 
