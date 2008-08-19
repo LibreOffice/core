@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: showview.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@ public:
             BOOL    IsMasterPageCachingAllowed() const
                     { return(bAllowMasterPageCaching); }
 
-    virtual void    CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    virtual void    CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
     virtual void    InvalidateOneWin(::Window& rWin);
     virtual void    InvalidateOneWin(::Window& rWin, const Rectangle& rRect);
 
