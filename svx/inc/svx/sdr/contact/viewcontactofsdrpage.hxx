@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrpage.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,215 @@
 // predeclarations
 class SdrPage;
 
+namespace sdr { namespace contact {
+    class ViewContactOfSdrPage;
+}}
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfPageSubObject : public ViewContact
+        {
+        protected:
+            ViewContactOfSdrPage&                       mrParentViewContactOfSdrPage;
+
+        public:
+            ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfPageSubObject();
+
+            virtual ViewContact* GetParentContact() const;
+            const SdrPage& getPage() const;
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfPageBackground : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfPageBackground(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfPageBackground();
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfPageShadow : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfPageShadow(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfPageShadow();
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfPageFill : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfPageFill();
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfMasterPage : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfMasterPage(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfMasterPage();
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfOuterPageBorder : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfOuterPageBorder();
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfInnerPageBorder : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfInnerPageBorder();
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfPageHierarchy : public ViewContactOfPageSubObject
+        {
+        protected:
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            virtual ~ViewContactOfPageHierarchy();
+
+            virtual sal_uInt32 GetObjectCount() const;
+            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfGrid : public ViewContactOfPageSubObject
+        {
+        protected:
+            // bitfield
+            unsigned                                    mbFront : 1;
+
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfGrid(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront);
+            virtual ~ViewContactOfGrid();
+
+            bool getFront() const { return mbFront; }
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewContactOfHelplines : public ViewContactOfPageSubObject
+        {
+        protected:
+            // bitfield
+            unsigned                                    mbFront : 1;
+
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            ViewContactOfHelplines(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront);
+            virtual ~ViewContactOfHelplines();
+
+            bool getFront() const { return mbFront; }
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -51,55 +260,49 @@ namespace sdr
             // to be changed in any way.
             SdrPage&                                        mrPage;
 
-            // internal access to SdrObject
+            // helper viewContacts to build a clear paint hierarchy
+            ViewContactOfPageBackground                     maViewContactOfPageBackground;
+            ViewContactOfPageShadow                         maViewContactOfPageShadow;
+            ViewContactOfPageFill                           maViewContactOfPageFill;
+            ViewContactOfMasterPage                         maViewContactOfMasterPage;
+            ViewContactOfOuterPageBorder                    maViewContactOfOuterPageBorder;
+            ViewContactOfInnerPageBorder                    maViewContactOfInnerPageBorder;
+            ViewContactOfGrid                               maViewContactOfGridBack;
+            ViewContactOfHelplines                          maViewContactOfHelplinesBack;
+            ViewContactOfPageHierarchy                      maViewContactOfPageHierarchy;
+            ViewContactOfGrid                               maViewContactOfGridFront;
+            ViewContactOfHelplines                          maViewContactOfHelplinesFront;
+
+            // Create a Object-Specific ViewObjectContact, set ViewContact and
+            // ObjectContact. Always needs to return something. Default is to create
+            // a standard ViewObjectContact containing the given ObjectContact and *this
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+
+        public:
+            // access to SdrObject
             SdrPage& GetSdrPage() const
             {
                 return mrPage;
             }
 
-            // method to recalculate the PaintRectangle if the validity flag shows that
-            // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
-            // only needs to refresh maPaintRectangle itself.
-            virtual void CalcPaintRectangle();
-
-        protected:
-            // local paint helper methods
-            void DrawPaper(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
-        public:
-            // #i37869# global paint helper methods
-            static void DrawPaperBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage);
-            static void DrawBorder(BOOL _bDrawOnlyLeftRightBorder,DisplayInfo& rDisplayInfo, const SdrPage& rPage);
-            static void DrawHelplines(DisplayInfo& rDisplayInfo);
-            static void DrawGrid(DisplayInfo& rDisplayInfo);
-
-        public:
             // basic constructor, used from SdrPage.
             ViewContactOfSdrPage(SdrPage& rObj);
-
-            // The destructor. When PrepareDelete() was not called before (see there)
-            // warnings will be generated in debug version if there are still contacts
-            // existing.
             virtual ~ViewContactOfSdrPage();
-
-            // When ShouldPaintObject() returns sal_True, the object itself is painted and
-            // PaintObject() is called.
-            virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-
-            // #115593# Paint this object. This is before evtl. SubObjects get painted. It needs to return
-            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
-            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
-
-            // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-            virtual void PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-            virtual void PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
 
             // Access to possible sub-hierarchy
             virtual sal_uInt32 GetObjectCount() const;
             virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
 
+            // React on changes of the object of this ViewContact
+            virtual void ActionChanged();
+
             // overload for acessing the SdrPage
             virtual SdrPage* TryToGetSdrPage() const;
+
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
