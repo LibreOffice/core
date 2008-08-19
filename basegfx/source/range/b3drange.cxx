@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3drange.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/b3irange.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 
 namespace basegfx
 {
@@ -50,6 +51,23 @@ namespace basegfx
             maRangeX.expand( rRange.getMaxX() );
             maRangeY.expand( rRange.getMaxY() );
             maRangeZ.expand( rRange.getMaxZ() );
+        }
+    }
+
+    void B3DRange::transform(const B3DHomMatrix& rMatrix)
+    {
+        if(!isEmpty() && !rMatrix.isIdentity())
+        {
+            const B3DRange aSource(*this);
+            reset();
+            expand(rMatrix * B3DPoint(aSource.getMinX(), aSource.getMinY(), aSource.getMinZ()));
+            expand(rMatrix * B3DPoint(aSource.getMaxX(), aSource.getMinY(), aSource.getMinZ()));
+            expand(rMatrix * B3DPoint(aSource.getMinX(), aSource.getMaxY(), aSource.getMinZ()));
+            expand(rMatrix * B3DPoint(aSource.getMaxX(), aSource.getMaxY(), aSource.getMinZ()));
+            expand(rMatrix * B3DPoint(aSource.getMinX(), aSource.getMinY(), aSource.getMaxZ()));
+            expand(rMatrix * B3DPoint(aSource.getMaxX(), aSource.getMinY(), aSource.getMaxZ()));
+            expand(rMatrix * B3DPoint(aSource.getMinX(), aSource.getMaxY(), aSource.getMaxZ()));
+            expand(rMatrix * B3DPoint(aSource.getMaxX(), aSource.getMaxY(), aSource.getMaxZ()));
         }
     }
 
