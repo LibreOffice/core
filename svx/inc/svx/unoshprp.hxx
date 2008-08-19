@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshprp.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -271,7 +271,7 @@
     { MAP_CHAR_LEN("FillHatchName"),            XATTR_FILLHATCH         , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLSTYLE),         XATTR_FILLSTYLE         , &::getCppuType((const ::com::sun::star::drawing::FillStyle*)0) ,      0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILL_TRANSPARENCE), XATTR_FILLTRANSPARENCE, &::getCppuType((const sal_Int16*)0) ,           0,     0}, \
-    { MAP_CHAR_LEN("FillTransparenceGradient"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     0}, \
+    { MAP_CHAR_LEN("FillTransparenceGradient"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
     { MAP_CHAR_LEN("FillTransparenceGradientName"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, &::getCppuType((const sal_Int32*)0),          0,     0},
 
