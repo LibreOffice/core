@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: measctrl.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +33,8 @@
 
 // include ---------------------------------------------------------------
 
-#include <svx/xoutx.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdmodel.hxx>
-
-//#include "svdrwobj.hxx" // SdrPaintInfoRec
 
 #include "measctrl.hxx"
 #include <svx/dialmgr.hxx>
@@ -60,8 +57,6 @@ SvxXMeasurePreview::SvxXMeasurePreview
     rAttrs  ( rInAttrs )
 
 {
-    pExtOutDev = new XOutputDevice( this );
-
     SetMapMode( MAP_100TH_MM );
 
     Size aSize = GetOutputSize();
@@ -97,8 +92,6 @@ SvxXMeasurePreview::SvxXMeasurePreview
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
-    delete pExtOutDev;
-
     // #111111#
     // No one is deleting the MeasureObj? This is not only an error but also
     // a memory leak (!). Main problem is that this object is still listening to
@@ -118,9 +111,7 @@ SvxXMeasurePreview::~SvxXMeasurePreview()
 
 void SvxXMeasurePreview::Paint( const Rectangle&  )
 {
-    SdrPaintInfoRec aInfoRec;
-
-    pMeasureObj->SingleObjectPainter( *pExtOutDev, aInfoRec ); // #110094#-17
+    pMeasureObj->SingleObjectPainter(*this); // #110094#-17
 }
 
 /*************************************************************************
