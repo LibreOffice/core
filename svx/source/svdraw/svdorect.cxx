@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdorect.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <stdlib.h>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
-#include "svdxout.hxx"
 #include <svx/svdattr.hxx>
 #include <svx/svdpool.hxx>
 #include "svdtouch.hxx"
@@ -57,14 +56,24 @@
 #include <svx/xlnwtit.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/rectangleproperties.hxx>
+#include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
 
 sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::RectangleProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfSdrRectObj(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -212,31 +221,6 @@ UINT16 SdrRectObj::GetObjIdentifier() const
     else return UINT16(OBJ_RECT);
 }
 
-void SdrRectObj::RecalcBoundRect()
-{
-    aOutRect=GetSnapRect();
-    long nLineWdt=ImpGetLineWdt();
-
-    // #i25616#
-    if(!LineIsOutsideGeometry())
-    {
-        nLineWdt++; nLineWdt/=2;
-    }
-
-    if (nLineWdt!=0) {
-        long a=nLineWdt;
-        if ((aGeo.nDrehWink!=0 || aGeo.nShearWink!=0) && GetEckenradius()==0) {
-            a*=2; // doppelt, wegen evtl. spitzen Ecken
-        }
-        aOutRect.Left  ()-=a;
-        aOutRect.Top   ()-=a;
-        aOutRect.Right ()+=a;
-        aOutRect.Bottom()+=a;
-    }
-    ImpAddShadowToBoundRect();
-    ImpAddTextToBoundRect();
-}
-
 void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
     rRect=aRect;
@@ -253,156 +237,6 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             rRect.Right()-=nDst;
         }
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// #i25616#
-
-void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const
-{
-    const bool bHideContour(IsHideContour());
-    const SfxItemSet& rSet = GetObjectItemSet();
-    SfxItemSet aShadowSet(rSet);
-
-    if(!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
-    {
-        // perepare ItemSet to avoid old XOut line drawing
-        SfxItemSet aEmptySet(*rSet.GetPool());
-        aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-        rXOut.SetFillAttr(aShadowSet);
-
-        sal_uInt32 nXDist(((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
-        sal_uInt32 nYDist(((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
-
-        // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aEmptySet);
-
-        if(bPaintFill)
-        {
-            // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
-            const sal_Int32 nEckRad(GetEckenradius());
-
-            if (PaintNeedsXPoly(nEckRad))
-            {
-                XPolygon aX(GetXPoly());
-                aX.Move(nXDist,nYDist);
-                rXOut.DrawPolygon(aX.getB2DPolygon());
-            }
-            else
-            {
-                Rectangle aR(aRect);
-                aR.Move(nXDist,nYDist);
-                rXOut.DrawRect(aR,USHORT(2*nEckRad),USHORT(2*nEckRad));
-            }
-        }
-
-        if(bPaintLine)
-        {
-            // prepare line geometry
-            // #b4899532# if not filled but fill draft, avoid object being invisible in using
-            // a hair linestyle and COL_LIGHTGRAY
-            SfxItemSet aItemSet(rSet);
-
-            // prepare line geometry
-            ::std::auto_ptr< SdrLineGeometry > pLineGeometry(ImpPrepareLineGeometry(rXOut, aItemSet));
-
-            // new shadow line drawing
-            if( pLineGeometry.get() )
-            {
-                // draw the line geometry
-                ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
-            }
-        }
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// #i25616#
-
-void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const
-{
-    const bool bHideContour(IsHideContour());
-
-    if(!bHideContour)
-    {
-        // prepare ItemSet of this object
-        const SfxItemSet& rSet = GetObjectItemSet();
-
-        // perepare ItemSet to avoid old XOut line drawing
-        SfxItemSet aEmptySet(*rSet.GetPool());
-        aEmptySet.Put(XLineStyleItem(XLINE_NONE));
-        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-
-        // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-        rXOut.SetLineAttr(aEmptySet);
-        rXOut.SetFillAttr( rSet );
-
-        if (!bHideContour && bPaintFill)
-        {
-            // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, rSet );
-            const sal_Int32 nEckRad(GetEckenradius());
-
-            if (PaintNeedsXPoly(nEckRad))
-            {
-                rXOut.DrawPolygon(GetXPoly().getB2DPolygon());
-            }
-            else
-            {
-                DBG_ASSERT(nEckRad==0,"SdrRectObj::DoPaintObject(): XOut.DrawRect() unterstuetz kein Eckenradius!");
-                rXOut.DrawRect(aRect/*,USHORT(2*nEckRad),USHORT(2*nEckRad)*/);
-            }
-        }
-
-        DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::DoPaintObject(): Rect hat Nullgroesse (oder negativ)!");
-
-        // Own line drawing
-        if( !bHideContour && bPaintLine)
-        {
-            // prepare line geometry
-            // #b4899532# if not filled but fill draft, avoid object being invisible in using
-            // a hair linestyle and COL_LIGHTGRAY
-            SfxItemSet aItemSet(rSet);
-
-            // prepare line geometry
-            ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
-
-            if( pLineGeometry.get() )
-            {
-                // draw the line geometry
-                ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
-            }
-        }
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-sal_Bool SdrRectObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    if (bTextFrame && aGeo.nShearWink!=0) {
-        DBG_WARNING("Shearwinkel vom TextFrame innerhalb von SdrRectObj::DoPaintObject() auf 0 gesetzt");
-        ((SdrRectObj*)this)->ImpCheckShear();
-        ((SdrRectObj*)this)->SetRectsDirty();
-    }
-
-    sal_Bool bOk(sal_True);
-
-    // draw shadow
-    ImpDoPaintRectObjShadow(rXOut, sal_True, sal_True);
-
-    // draw geometry
-    ImpDoPaintRectObj(rXOut, sal_True, sal_True);
-
-    // draw text
-    if(HasText() && !LineIsOutsideGeometry())
-    {
-        bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
-    }
-
-    return bOk;
 }
 
 SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bForceFilled, FASTBOOL bForceTol) const
@@ -452,7 +286,7 @@ SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
                     INT32 nRad=nEckRad;
                     if (bFilled) nRad+=nMyTol; // um korrekt zu sein ...
                     XPolygon aXPoly(ImpCalcXPoly(aR,nRad));
-                    aPol = Polygon(basegfx::tools::adaptiveSubdivideByAngle(aXPoly.getB2DPolygon()));
+                    aPol = Polygon(aXPoly.getB2DPolygon().getDefaultAdaptiveSubdivision());
                 } else {
                     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
                     if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -832,6 +666,7 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(BOOL bBezier) const
     }
 
     basegfx::B2DPolyPolygon aPolyPolygon(aXP.getB2DPolygon());
+    aPolyPolygon.removeDoublePoints();
     SdrObject* pRet = 0L;
 
     if(!IsTextFrame() || HasFill() || HasLine())
