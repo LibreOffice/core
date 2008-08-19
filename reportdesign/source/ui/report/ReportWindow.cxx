@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWindow.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,32 +31,30 @@
 #include "ReportWindow.hxx"
 #include "ReportSection.hxx"
 #include "SectionView.hxx"
-#include "SectionsWindow.hxx"
 #include "ViewsWindow.hxx"
 #include "ReportRuler.hxx"
 #include "DesignView.hxx"
+
 #include <tools/debug.hxx>
 #include <svtools/colorcfg.hxx>
-#include <RptDef.hxx>
+#include <svtools/itempool.hxx>
+#include <svtools/syslocale.hxx>
+
+#include "RptDef.hxx"
 #include "dlgedfunc.hxx"
-#include <RptModel.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
+#include "RptModel.hxx"
 #include "uistrings.hrc"
-#endif
 #include "RptPage.hxx"
 #include "ReportController.hxx"
 #include "EndMarker.hxx"
-#include <svtools/itempool.hxx>
 #include "ColorChanger.hxx"
 #include "ScrollHelper.hxx"
-#include <vcl/split.hxx>
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
+
 #include "helpids.hrc"
-#endif
 #include "dlgedfac.hxx"
 #include <boost/bind.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/syslocale.hxx>
+
 
 #define SECTION_OFFSET  3
 namespace rptui
@@ -73,17 +71,14 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 ,m_aHRuler(this)
 ,m_pView(_pView)
 ,m_pParent(_pParent)
+,m_aViewsWindow(this)
+,m_pObjFac( new DlgEdFactory() )
 {
     DBG_CTOR( rpt_OReportWindow,NULL);
     SetHelpId(UID_RPT_REPORTWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
-    m_pSections = new OSectionsWindow(this,this);
-    m_pSections->Show();
-    m_pViews = new OViewsWindow(this,this);
-    m_pViews->Show();
-
-    m_pSections->SetZOrder(m_pViews,WINDOW_ZORDER_BEFOR);
+    m_aViewsWindow.Show();
 
     m_aHRuler.Show();
     m_aHRuler.Activate();
@@ -95,58 +90,40 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aHRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
 
-    m_pObjFac = new DlgEdFactory();
-
     ImplInitSettings();
 }
 //------------------------------------------------------------------------------
 OReportWindow::~OReportWindow()
 {
     DBG_DTOR( rpt_OReportWindow,NULL);
-    {
-        ::std::auto_ptr<Window> aTemp(m_pSections);
-        m_pSections = NULL;
-    }
-    {
-        ::std::auto_ptr<Window> aTemp(m_pViews);
-        m_pViews = NULL;
-    }
-    delete m_pObjFac;
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::initialize()
 {
-    if ( m_pViews )
-        m_pViews->initialize();
+    m_aViewsWindow.initialize();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
 {
-    if ( m_pViews )
-        m_pViews->SetInsertObj( eObj,_sShapeType);
+    m_aViewsWindow.SetInsertObj( eObj,_sShapeType);
 }
 
 //----------------------------------------------------------------------------
 rtl::OUString OReportWindow::GetInsertObjString() const
 {
-    if ( m_pViews )
-        return m_pViews->GetInsertObjString();
-    return rtl::OUString();
+    return m_aViewsWindow.GetInsertObjString();
 }
 //------------------------------------------------------------------------------
 void OReportWindow::SetMode( DlgEdMode eNewMode )
 {
-    if ( m_pViews )
-        m_pViews->SetMode(eNewMode);
+    m_aViewsWindow.SetMode(eNewMode);
 }
 //----------------------------------------------------------------------------
 void OReportWindow::removeSection(USHORT _nPosition)
 {
-    m_pViews->removeSection(_nPosition);
-    m_pSections->removeSection(_nPosition);
+    m_aViewsWindow.removeSection(_nPosition);
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
-    m_pSections->Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
-    m_pViews->Invalidate(INVALIDATE_NOCHILDREN);
+    m_aViewsWindow.Invalidate(INVALIDATE_TRANSPARENT);
     //Resize();
 }
 //----------------------------------------------------------------------------
@@ -155,55 +132,43 @@ void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSecti
     if ( !_xSection.is() )
         return;
 
-    m_pSections->addSection(_xSection,_sColorEntry,_nPosition);
-    m_pViews->addSection(_xSection,_sColorEntry,_nPosition);
+    m_aViewsWindow.addSection(_xSection,_sColorEntry,_nPosition);
 
     Resize();
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OReportWindow, Collapsed, OStartMarker *, _pMarker )
-{
-    if ( _pMarker && m_pSections && m_pViews )
-    {
-        m_pViews->showView(m_pSections->find(_pMarker),!_pMarker->isCollapsed());
-
-        m_pViews->Resize();
-        m_pViews->Invalidate(INVALIDATE_NOCHILDREN);
-        m_pSections->Resize();
-        _pMarker->Invalidate();
-        m_pSections->Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
-    }
-    return 0L;
-}
-//------------------------------------------------------------------------------
 void OReportWindow::toggleGrid(sal_Bool _bVisible)
 {
-    if ( m_pViews )
-        m_pViews->toggleGrid(_bVisible);
+    m_aViewsWindow.toggleGrid(_bVisible);
 }
 //----------------------------------------------------------------------------
 void OReportWindow::showRuler(sal_Bool _bShow)
 {
     m_aHRuler.Show(_bShow);
-    if ( m_pSections )
-        m_pSections->showRuler(_bShow);
+
+    m_aViewsWindow.showRuler(_bShow);
 }
 //------------------------------------------------------------------------------
 sal_Int32 OReportWindow::getMaxMarkerWidth(sal_Bool _bWithEnd) const
 {
-    return REPORT_STARTMARKER_WIDTH + ( _bWithEnd ? REPORT_ENDMARKER_WIDTH : 0 );
+    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
+    aStartWith *= m_aViewsWindow.GetMapMode().GetScaleX();
+    if ( _bWithEnd )
+        aStartWith += Fraction(long(REPORT_ENDMARKER_WIDTH));
+    return sal_Int32((long)aStartWith);
 }
 //------------------------------------------------------------------------------
 sal_Int32 OReportWindow::GetTotalWidth() const
 {
     sal_Int32 nWidth = 0;
-    if ( m_pViews && !m_pViews->empty() )
+    if ( !m_aViewsWindow.empty() )
     {
+        Fraction aStartWith(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH));
+        aStartWith *= m_aViewsWindow.GetMapMode().GetScaleX();
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
-        const Size aPageSize = LogicToPixel(Size(nPaperWidth,0),MAP_100TH_MM);
-        nWidth = aPageSize.Width()
-                + REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH;
+        const Size aPageSize = m_aViewsWindow.LogicToPixel(Size(nPaperWidth,0));
+        nWidth = aPageSize.Width() + long(aStartWith);
     }
     return nWidth;
 }
@@ -211,24 +176,26 @@ sal_Int32 OReportWindow::GetTotalWidth() const
 void OReportWindow::Resize()
 {
     Window::Resize();
-    if ( m_pViews && !m_pViews->empty() && m_pSections )
+    if ( !m_aViewsWindow.empty() )
     {
         const Size aTotalOutputSize = GetOutputSizePixel();
+        Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
+        aStartWith *= m_aViewsWindow.GetMapMode().GetScaleX();
 
-        Point aStartPoint(REPORT_STARTMARKER_WIDTH,0);
+        const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
+        Point aStartPoint((long)aStartWith + aOffset.X(),0);
         uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
         sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
         sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-        Size aPageSize = LogicToPixel(Size(nPaperWidth,0),MAP_100TH_MM);
-        nLeftMargin = LogicToPixel(Size(nLeftMargin,0),MAP_100TH_MM).Width();
-        nRightMargin = LogicToPixel(Size(nRightMargin,0),MAP_100TH_MM).Width();
+        Size aPageSize  = m_aViewsWindow.LogicToPixel(Size(nPaperWidth,0));
+        nLeftMargin     = m_aViewsWindow.LogicToPixel(Size(nLeftMargin,0)).Width();
+        nRightMargin    = m_aViewsWindow.LogicToPixel(Size(nRightMargin,0)).Width();
 
         aPageSize.Height() = m_aHRuler.GetSizePixel().Height();
 
-        const long nTermp(m_pViews->getTotalHeight() + aPageSize.Height());
-        long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.getHeight());
-        m_pSections->SetPosSizePixel(Point(0,aPageSize.Height()),Size(REPORT_STARTMARKER_WIDTH,nSectionsHeight));
+        const long nTermp(m_aViewsWindow.getTotalHeight() + aPageSize.Height());
+        long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
 
         m_aHRuler.SetPosSizePixel(aStartPoint,aPageSize);
         m_aHRuler.SetNullOffset(nLeftMargin);
@@ -238,8 +205,9 @@ void OReportWindow::Resize()
         aStartPoint.Y() += aPageSize.Height();
         nSectionsHeight -= aStartPoint.Y();
 
-        //m_pViews->SetPosSizePixel(aStartPoint,Size(GetTotalWidth() - aStartPoint.X(),nSectionsHeight));
-        m_pViews->SetPosSizePixel(aStartPoint,Size(GetTotalWidth(),nSectionsHeight));
+        aStartPoint.X() = aOffset.X();
+
+        m_aViewsWindow.SetPosSizePixel(aStartPoint,Size(aTotalOutputSize.Width(),nSectionsHeight));
     }
 }
 //------------------------------------------------------------------------------
@@ -250,11 +218,7 @@ Point OReportWindow::getScrollOffset() const
 //------------------------------------------------------------------------------
 void OReportWindow::ImplInitSettings()
 {
-//#if OSL_DEBUG_LEVEL > 0
-//    SetBackground( Wallpaper( COL_YELLOW ));
-//#else
     SetBackground( );
-//#endif
 }
 //-----------------------------------------------------------------------------
 void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -269,235 +233,173 @@ void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 //------------------------------------------------------------------------------
-sal_Int32 OReportWindow::getSplitterHeight() const
-{
-    sal_Int32 nRet = 0;
-    if ( m_pViews )
-        nRet = m_pViews->getSplitterHeight();
-    return nRet;
-}
-//------------------------------------------------------------------------------
 sal_Int32 OReportWindow::GetTotalHeight() const
 {
-    sal_Int32 nHeight = m_aHRuler.GetSizePixel().Height();
-    if ( m_pViews )
-        nHeight += m_pViews->getTotalHeight();
-    return nHeight;
+    return m_aHRuler.GetSizePixel().Height() + m_aViewsWindow.getTotalHeight();
 }
 //------------------------------------------------------------------------------
-namespace
-{
-    class OWindowPositionCorrector
-    {
-        ::std::vector< ::std::pair<Window*,Point> > m_aChildren;
-        long m_nDeltaX;
-        long m_nDeltaY;
-    public:
-        OWindowPositionCorrector(Window* _pWindow,long _nDeltaX, long _nDeltaY) :m_nDeltaX(_nDeltaX), m_nDeltaY(_nDeltaY)
-        {
-            USHORT nCount = _pWindow->GetChildCount();
-            m_aChildren.reserve(nCount);
-            while( nCount )
-            {
-                Window* pChild = _pWindow->GetChild(--nCount);
-                m_aChildren.push_back(::std::pair<Window*,Point>(pChild,pChild->GetPosPixel()));
-            }
-        }
-        ~OWindowPositionCorrector()
-        {
-            ::std::vector< ::std::pair<Window*,Point> >::iterator aIter = m_aChildren.begin();
-            ::std::vector< ::std::pair<Window*,Point> >::iterator aEnd = m_aChildren.end();
-            for (; aIter != aEnd; ++aIter)
-            {
-                const Point aPos = aIter->first->GetPosPixel();
-                if ( aPos == aIter->second )
-                    aIter->first->SetPosPixel(Point(m_nDeltaX,m_nDeltaY) + aPos);
-            }
-        }
-    };
-}
-//----------------------------------------------------------------------------
 void OReportWindow::ScrollChildren(long nDeltaX, long nDeltaY)
 {
-    MapMode aMap = m_aHRuler.GetMapMode();
-    Point aOrg( aMap.GetOrigin() );
-    aMap.SetOrigin( Point(aOrg.X() - nDeltaX, aOrg.Y()));
-    m_aHRuler.SetMapMode( aMap );
-    m_aHRuler.Scroll(-nDeltaX,0);
+    if ( nDeltaX )
+    {
+        MapMode aMap = m_aHRuler.GetMapMode();
+        Point aOrg( aMap.GetOrigin() );
+        aMap.SetOrigin( Point(aOrg.X() - nDeltaX, aOrg.Y()));
+        m_aHRuler.SetMapMode( aMap );
+        m_aHRuler.Scroll(-nDeltaX,0);
+    }
 
-    if ( m_pViews )
-    {
-        aMap = m_pViews->GetMapMode();
-        aOrg = aMap.GetOrigin();
-        aMap.SetOrigin( Point(aOrg.X() - nDeltaX, aOrg.Y() - nDeltaY));
-        m_pViews->SetMapMode( aMap );
-        const Size aDelta( PixelToLogic(Size(nDeltaX,nDeltaY)) );
-        OWindowPositionCorrector aCorrector(m_pViews,-nDeltaX,-nDeltaY);
-        m_pViews->Scroll(-aDelta.Width(),-aDelta.Height(),SCROLL_CHILDREN);
-    } // if ( m_pViews )
-    if ( m_pSections && nDeltaY )
-    {
-        aMap = m_pSections->GetMapMode();
-        aOrg  = aMap.GetOrigin();
-        aMap.SetOrigin( Point(aOrg.X(), aOrg.Y() - nDeltaY));
-        m_pSections->SetMapMode( aMap );
-        const Size aDelta( PixelToLogic(Size(0,nDeltaY)) );
-        OWindowPositionCorrector aCorrector(m_pSections,0,-nDeltaY);
-        m_pSections->Scroll(0,-aDelta.Height(),SCROLL_CHILDREN);
-        m_pSections->Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
-    } // if ( m_pSections )
+
+    m_aViewsWindow.scrollChildren(nDeltaX,nDeltaY);
 }
 //----------------------------------------------------------------------------
 USHORT OReportWindow::getSectionCount() const
 {
-    USHORT nRet = 0;
-    if ( m_pViews )
-        nRet = m_pViews->getSectionCount();
-    return nRet;
-}
-//----------------------------------------------------------------------------
-sal_Int32 OReportWindow::getMinHeight(USHORT _nPos) const
-{
-    return m_pSections ? m_pSections->getMinHeight(_nPos) : sal_Int32(0);
+    return m_aViewsWindow.getSectionCount();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::notifyHeightChanged()
 {
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
-    Resize();
-    Invalidate(INVALIDATE_TRANSPARENT);
+    //Resize();
+    //Invalidate(INVALIDATE_TRANSPARENT);
 }
 //----------------------------------------------------------------------------
 BOOL OReportWindow::HasSelection()
 {
-    return m_pViews && m_pViews->HasSelection();
+    return m_aViewsWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::Delete()
 {
-    if ( m_pViews )
-        m_pViews->Delete();
+
+    m_aViewsWindow.Delete();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::Copy()
 {
-    if ( m_pViews )
-        m_pViews->Copy();
+
+    m_aViewsWindow.Copy();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::Paste()
 {
-    if ( m_pViews )
-        m_pViews->Paste();
+
+    m_aViewsWindow.Paste();
 }
 //----------------------------------------------------------------------------
 BOOL OReportWindow::IsPasteAllowed()
 {
-    return m_pViews && m_pViews->IsPasteAllowed();
+    return m_aViewsWindow.IsPasteAllowed();
 }
 //-----------------------------------------------------------------------------
-void OReportWindow::SelectAll()
+void OReportWindow::SelectAll(const sal_uInt16 _nObjectType)
 {
-    if ( m_pViews )
-        m_pViews->SelectAll();
+
+    m_aViewsWindow.SelectAll(_nObjectType);
 }
 //-----------------------------------------------------------------------------
 void OReportWindow::unmarkAllObjects(OSectionView* _pSectionView)
 {
-    if ( m_pViews )
-        m_pViews->unmarkAllObjects(_pSectionView);
+
+    m_aViewsWindow.unmarkAllObjects(_pSectionView);
 }
 //-----------------------------------------------------------------------------
 void OReportWindow::showProperties(const uno::Reference< report::XSection>& _xReportComponent)
 {
-    ::boost::shared_ptr<OReportSection> pReportSection = m_pViews->getReportSection( _xReportComponent );
-    m_pView->UpdatePropertyBrowserDelayed(pReportSection->getView());
+    ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_aViewsWindow.getReportSection( _xReportComponent );
+    m_pView->UpdatePropertyBrowserDelayed(pSectionWindow->getReportSection().getSectionView());
 }
 //------------------------------------------------------------------------------
 sal_Bool OReportWindow::handleKeyEvent(const KeyEvent& _rEvent)
 {
-    return m_pViews ? m_pViews->handleKeyEvent(_rEvent) : sal_False;
+    return m_aViewsWindow.handleKeyEvent(_rEvent);
 }
 //------------------------------------------------------------------------
 void OReportWindow::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
 {
-    if ( m_pViews && _pSectionView )
-        m_pViews->setMarked(_pSectionView,_bMark);
-    if ( m_pSections )
-    {
-        m_pSections->setMarked(_pSectionView->getSectionWindow()->getSection(),_bMark);
-    }
+    if ( _pSectionView )
+        m_aViewsWindow.setMarked(_pSectionView,_bMark);
 }
 //------------------------------------------------------------------------
 void OReportWindow::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
 {
-    if ( m_pViews )
-        m_pViews->setMarked(_xSection,_bMark);
-    if ( m_pSections )
-        m_pSections->setMarked(_xSection,_bMark);
+
+    m_aViewsWindow.setMarked(_xSection,_bMark);
 }
 //------------------------------------------------------------------------
 void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
 {
-    if ( m_pViews )
-        m_pViews->setMarked(_xShape,_bMark);
+
+    m_aViewsWindow.setMarked(_xShape,_bMark);
 }
 //-----------------------------------------------------------------------------
-::boost::shared_ptr<OReportSection> OReportWindow::getMarkedSection(NearSectionAccess nsa) const
+::boost::shared_ptr<OSectionWindow> OReportWindow::getMarkedSection(NearSectionAccess nsa) const
 {
-    return  m_pViews ? m_pViews->getMarkedSection(nsa) : ::boost::shared_ptr<OReportSection>();
+    return  m_aViewsWindow.getMarkedSection(nsa);
 }
 // -------------------------------------------------------------------------
 void OReportWindow::markSection(const sal_uInt16 _nPos)
 {
-    if ( m_pViews )
-        m_pViews->markSection(_nPos);
+
+    m_aViewsWindow.markSection(_nPos);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
-    if ( m_pSections )
-        m_pSections->fillCollapsedSections(_rCollapsedPositions);
+
+    m_aViewsWindow.fillCollapsedSections(_rCollapsedPositions);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::collapseSections(const uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections)
 {
-    if ( m_pSections )
-        m_pSections->collapseSections(_aCollpasedSections);
+
+    m_aViewsWindow.collapseSections(_aCollpasedSections);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
 {
-    if ( m_pViews )
-        m_pViews->alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
+
+    m_aViewsWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::setGridSnap(BOOL bOn)
 {
-    if ( m_pViews )
-        m_pViews->setGridSnap(bOn);
+
+    m_aViewsWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::setDragStripes(BOOL bOn)
 {
-    if ( m_pViews )
-        m_pViews->setDragStripes(bOn);
+
+    m_aViewsWindow.setDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
 BOOL OReportWindow::isDragStripes() const
 {
-    return m_pViews ? m_pViews->isDragStripes() : FALSE;
+    return m_aViewsWindow.isDragStripes();
 }
 // -----------------------------------------------------------------------------
 sal_uInt32 OReportWindow::getMarkedObjectCount() const
 {
-    return m_pViews ? m_pViews->getMarkedObjectCount() : 0;
+    return m_aViewsWindow.getMarkedObjectCount();
+}
+// -----------------------------------------------------------------------------
+void OReportWindow::zoom(const sal_Int16 _nZoom)
+{
+    m_aHRuler.SetZoom(Fraction(_nZoom,100));
+    m_aHRuler.Invalidate();
+
+    m_aViewsWindow.zoom(_nZoom);
+    notifyHeightChanged();
+    Resize();
+
+    Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
-    if ( m_pViews )
-        m_pViews->fillControlModelSelection(_rSelection);
+    m_aViewsWindow.fillControlModelSelection(_rSelection);
 }
 
 //==================================================================
