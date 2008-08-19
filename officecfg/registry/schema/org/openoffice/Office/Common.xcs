@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.154 $
+ * $Revision: 1.155 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1087,15 +1087,49 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 				<value>9999</value>
 			</prop>
-			<prop oor:name="MaximumPaperBottomMargin" oor:type="xs:int">
-				<info>
-					<author>AW</author>
-					<desc>Specifies the maximum allowed Bottom Margin for the page definitions in 1/100th cm.</desc>
-					<label>Maximum allowed Bottom margin for page definitions</label>
-				</info>
-				<value>9999</value>
-			</prop>
-		</group>
+      <prop oor:name="MaximumPaperBottomMargin" oor:type="xs:int">
+        <info>
+          <author>AW</author>
+          <desc>Specifies the maximum allowed Bottom Margin for the page definitions in 1/100th cm.</desc>
+          <label>Maximum allowed Bottom margin for page definitions</label>
+        </info>
+        <value>9999</value>
+      </prop>
+      <prop oor:name="AntiAliasing" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>This switch allows to switch DrawingLayer based views to be rendered using AntiAliasing or not.
+                Of course this takes only effect when AntiAliasing is supported for the System OOo is running on.
+          </desc>
+          <label>This switch determines if DrawingLayer based views use AntiAliasing.</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Quadratic3DRenderLimit" oor:type="xs:int">
+        <info>
+          <author>AW</author>
+          <desc>
+            This defines a Limitation for the default raster conversion from 3D Scenes to Bitmaps.
+            The number is the maximum number of pixels to use, e.g. 1000x1000 Pixels is allowed as default.
+            When Scenes would need more Pixels than this, the Bitmap will be limited and scaled to the needed pixel size at paint time.
+          </desc>
+          <label>A Pixel limitation for the creation of 3D Scenes with the default renderer.</label>
+        </info>
+        <value>1000000</value>
+      </prop>
+      <prop oor:name="QuadraticFormControlRenderLimit" oor:type="xs:int">
+        <info>
+          <author>AW</author>
+          <desc>This defines a Limitation for the default raster conversion of FormControls in edit mode.
+                These have the ability to be displayed using this fallback to Bitmaps.
+                The number is the maximum number of pixels to use, e.g. 300x150 Pixels is allowed as default.
+                When FormControls would need more Pixels than this, the Bitmap will be limited and scaled to the needed pixel size at paint time.
+          </desc>
+          <label>A Pixel limitation for the creation of FormControl fallback display.</label>
+        </info>
+        <value>45000</value>
+      </prop>
+    </group>
 		<group oor:name="AutoCorrect">
 			<info>
 				<author>OS</author>
