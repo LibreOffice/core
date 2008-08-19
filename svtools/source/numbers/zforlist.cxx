@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zforlist.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,8 @@
 #include <unotools/digitgroupingiterator.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
+
+#include <math.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
