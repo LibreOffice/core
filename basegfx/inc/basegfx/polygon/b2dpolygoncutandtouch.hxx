@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygoncutandtouch.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,16 @@ namespace basegfx
         // look for intersections of rCandidate with all polygons from rMask and add extra points there. Do
         // not change or add points to rMask.
         B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rMask, const B2DPolyPolygon& rCandidate);
+
+        // look for intersections of rCandidate with the edge from rStart to rEnd and add extra points there.
+        // Points are only added in the range of the edge, not on the endless vector.
+        B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd);
+        B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd);
+
+        // look for intersections of rCandidate with the mask Polygon and add extra points there.
+        // The mask polygon is assumed to be closed, even when it's not explicitely.
+        B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
+        B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rMask);
 
     } // end of namespace tools
 } // end of namespace basegfx
