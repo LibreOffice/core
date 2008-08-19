@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectcontact.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,14 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/event/eventhandler.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/event/eventhandler.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -45,186 +51,110 @@ namespace sdr
     namespace contact
     {
         ObjectContact::ObjectContact()
-        :   mpObjectAnimator(0L),
-            mpEventHandler(0L),
-            mpViewObjectContactRedirector(0L),
-            mbDrawHierarchyValid(sal_False),
-            mbIsPreviewRenderer(sal_False)
+        :   maViewObjectContactVector(),
+            maPrimitiveAnimator(),
+            mpEventHandler(0),
+            mpViewObjectContactRedirector(0),
+            maViewInformation2D(uno::Sequence< beans::PropertyValue >()),
+            mbIsPreviewRenderer(false)
         {
         }
 
-        // The destructor. When PrepareDelete() was not called before (see there)
-        // warnings will be generated in debug version if there are still contacts
-        // existing.
         ObjectContact::~ObjectContact()
         {
-#ifdef DBG_UTIL
-            DBG_ASSERT(0L == maVOCList.Count(),
-                "ObjectContact destructor: ViewObjectContactList is not empty, call PrepareDelete() before deleting (!)");
-            DBG_ASSERT(0L == mpObjectAnimator,
-                "ObjectContact destructor: still an ObjectAnimator existing, call PrepareDelete() before deleting (!)");
-            DBG_ASSERT(0L == mpEventHandler,
-                "ObjectContact destructor: still an EventHandler existing, call PrepareDelete() before deleting (!)");
-            DBG_ASSERT(0L == maDrawHierarchy.Count(),
-                "ObjectContact destructor: DrawHierarchyList is not empty, call PrepareDelete() before deleting (!)");
-#endif
-        }
-
-        // Prepare deletion of this object. Tghis needs to be called always
-        // before really deleting this objects. This is necessary since in a c++
-        // destructor no virtual function calls are allowed. To avoid this problem,
-        // it is required to first call PrepareDelete().
-        void ObjectContact::PrepareDelete()
-        {
-            // #114735# clear DrawHierarchy, empty maDrawHierarchy
-            ClearDrawHierarchy();
-
             // get rid of all registered contacts
+            // #i84257# To avoid that each 'delete pCandidate' again uses
+            // the local RemoveViewObjectContact with a search and removal in the
+            // vector, simply copy and clear local vector.
+            std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContactVector);
+            maViewObjectContactVector.clear();
 
-            // #i84257# to not force another ::find in this list when the other ::PrepareDeletes()
-            // do their work, copy the list and empty the local one
-            ViewObjectContactList aTemporaryForDelete;
-            aTemporaryForDelete.FlatCopyFrom( maVOCList );
-            ViewObjectContactList aEmpty;
-            maVOCList.FlatCopyFrom( aEmpty );
-
-            while(aTemporaryForDelete.Count())
+            while(aLocalVOCList.size())
             {
-                ViewObjectContact* pCandidate = aTemporaryForDelete.GetLastObjectAndRemove();
+                ViewObjectContact* pCandidate = aLocalVOCList.back();
+                aLocalVOCList.pop_back();
                 DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
 
                 // ViewObjectContacts only make sense with View and Object contacts.
                 // When the contact to the SdrObject is deleted like in this case,
                 // all ViewObjectContacts can be deleted, too.
-                pCandidate->PrepareDelete();
                 delete pCandidate;
             }
 
-            // delete the ObjectAnimator. Do that after the members are deleted, since the
-            // members will try to deconnect from the local ObjectAnimator.
-            DeleteObjectAnimator();
+            // assert when there were new entries added during deletion
+            DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList (!)");
 
             // delete the EventHandler. This will destroy all still contained events.
             DeleteEventHandler();
         }
 
+        // LazyInvalidate request. Default implementation directly handles
+        // this by calling back triggerLazyInvalidate() at the VOC
+        void ObjectContact::setLazyInvalidate(ViewObjectContact& rVOC)
+        {
+            rVOC.triggerLazyInvalidate();
+        }
+
+        // call this to support evtl. preparations for repaint. Default does nothing
+        void ObjectContact::PrepareProcessDisplay()
+        {
+        }
+
         // A new ViewObjectContact was created and shall be remembered.
         void ObjectContact::AddViewObjectContact(ViewObjectContact& rVOContact)
         {
-            maVOCList.Append(&rVOContact);
+            maViewObjectContactVector.push_back(&rVOContact);
         }
 
         // A ViewObjectContact was deleted and shall be forgotten.
         void ObjectContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
         {
-            if(maVOCList.Count())
-            {
-                maVOCList.Remove(&rVOContact);
-            }
+            std::vector< ViewObjectContact* >::iterator aFindResult = std::find(maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
 
-            // #114735# also remove from base level DrawHierarchy
-            if(maDrawHierarchy.Count())
+            if(aFindResult != maViewObjectContactVector.end())
             {
-                if(maDrawHierarchy.Remove(&rVOContact))
-                {
-                    MarkDrawHierarchyInvalid();
-                }
+                maViewObjectContactVector.erase(aFindResult);
             }
         }
 
-        // Test if ViewObjectContact is registered here
-        sal_Bool ObjectContact::ContainsViewObjectContact(ViewObjectContact& rVOContact)
+        // Process the whole displaying
+        void ObjectContact::ProcessDisplay(DisplayInfo& /*rDisplayInfo*/)
         {
-            return maVOCList.Contains(&rVOContact);
+            // default does nothing
         }
-
-        // Clear Draw Hierarchy data.
-        void ObjectContact::ClearDrawHierarchy()
-        {
-            MarkDrawHierarchyInvalid();
-
-            // throw away old hierarchy info
-            while(maDrawHierarchy.Count())
-            {
-                ViewObjectContact* pCandidate = maDrawHierarchy.GetLastObjectAndRemove();
-                DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
-
-                pCandidate->ClearDrawHierarchy();
-                pCandidate->SetParent(0L);
-            }
-        }
-
 
         // test if visualizing of entered groups is switched on at all
-        sal_Bool ObjectContact::DoVisualizeEnteredGroup() const
+        bool ObjectContact::DoVisualizeEnteredGroup() const
         {
             // Don not do that as default
-            return sal_False;
+            return false;
         }
 
-        // Get the active group (the entered group). To get independent
-        // from the old object/view classes return values use the new
-        // classes.
-        ViewContact* ObjectContact::GetActiveGroupContact() const
+        // get active group's (the entered group) ViewContact
+        const ViewContact* ObjectContact::getActiveViewContact() const
         {
-            // Default has no active group
-            return 0L;
-        }
-
-        // Get info about validity state of DrawHierarchy
-        sal_Bool ObjectContact::IsDrawHierarchyValid() const
-        {
-            return mbDrawHierarchyValid;
-        }
-
-        // Take notice of invalidation of DrawHierarchy from this level. This may
-        // be the removal/deletion or insertion of an object. Take preparations for reacting on that.
-        void ObjectContact::MarkDrawHierarchyInvalid()
-        {
-            if(IsDrawHierarchyValid())
-            {
-                // change flag
-                mbDrawHierarchyValid = sal_False;
-            }
+            // default has no active VC
+            return 0;
         }
 
         // Invalidate given rectangle at the window/output which is represented by
         // this ObjectContact.
-        void ObjectContact::InvalidatePartOfView(const Rectangle& /*rRectangle*/) const
+        void ObjectContact::InvalidatePartOfView(const basegfx::B2DRange& /*rRange*/) const
         {
             // nothing to do here in the default version
         }
 
-        // #i42815#
         // Get info if given Rectangle is visible in this view
-        sal_Bool ObjectContact::IsAreaVisible(const Rectangle& /*rRectangle*/) const
+        bool ObjectContact::IsAreaVisible(const basegfx::B2DRange& /*rRange*/) const
         {
             // always visible in default version
-            return sal_True;
-        }
-
-        // Take some action when new objects are inserted. This is triggered from
-        // the VOCs, originating from VCs.
-        void ObjectContact::ActionChildInserted(const Rectangle& rInitialRectangle)
-        {
-            // invalidate initial object proportions to get the Paint started
-            InvalidatePartOfView(rInitialRectangle);
-
-            // Mark DrawHierarchy invalid
-            MarkDrawHierarchyInvalid();
+            return true;
         }
 
         // Get info about the need to visualize GluePoints
-        sal_Bool ObjectContact::AreGluePointsVisible() const
+        bool ObjectContact::AreGluePointsVisible() const
         {
-            return sal_False;
-        }
-
-        // method to create a ObjectAnimator. Needs to give a result.
-        sdr::animation::ObjectAnimator* ObjectContact::CreateObjectAnimator()
-        {
-            // Create and return a new ObjectAnimator
-            return new sdr::animation::ObjectAnimator();
+            return false;
         }
 
         // method to create a EventHandler. Needs to give a result.
@@ -234,18 +164,10 @@ namespace sdr
             return new sdr::event::TimerEventHandler();
         }
 
-        // method to get the ObjectAnimator. It will
-        // return a existing one or create a new one using CreateObjectAnimator().
-        sdr::animation::ObjectAnimator& ObjectContact::GetObjectAnimator() const
+        // method to get the primitiveAnimator
+        sdr::animation::primitiveAnimator& ObjectContact::getPrimitiveAnimator()
         {
-            if(!HasObjectAnimator())
-            {
-                ((ObjectContact*)this)->mpObjectAnimator = ((ObjectContact*)this)->CreateObjectAnimator();
-                DBG_ASSERT(mpObjectAnimator,
-                    "ObjectContact::GetObjectAnimator(): Got no ObjectAnimator (!)");
-            }
-
-            return *mpObjectAnimator;
+            return maPrimitiveAnimator;
         }
 
         // method to get the EventHandler. It will
@@ -254,25 +176,11 @@ namespace sdr
         {
             if(!HasEventHandler())
             {
-                ((ObjectContact*)this)->mpEventHandler = ((ObjectContact*)this)->CreateEventHandler();
-                DBG_ASSERT(mpEventHandler,
-                    "ObjectContact::GetEventHandler(): Got no EventHandler (!)");
+                const_cast< ObjectContact* >(this)->mpEventHandler = const_cast< ObjectContact* >(this)->CreateEventHandler();
+                DBG_ASSERT(mpEventHandler, "ObjectContact::GetEventHandler(): Got no EventHandler (!)");
             }
 
             return *mpEventHandler;
-        }
-
-        // delete the ObjectAnimator
-        void ObjectContact::DeleteObjectAnimator()
-        {
-            if(mpObjectAnimator)
-            {
-                // If there are still AnimationStates registered, something has went wrong
-                DBG_ASSERT(mpObjectAnimator->Count() == 0,
-                    "ObjectContact::DeleteObjectAnimator: Still AnimationStates registered (!)");
-                delete mpObjectAnimator;
-                mpObjectAnimator = 0L;
-            }
         }
 
         // delete the EventHandler
@@ -286,34 +194,28 @@ namespace sdr
             }
         }
 
-        // test if there is an ObjectAnimator without creating one on demand
-        sal_Bool ObjectContact::HasObjectAnimator() const
-        {
-            return (0L != mpObjectAnimator);
-        }
-
         // test if there is an EventHandler without creating one on demand
-        sal_Bool ObjectContact::HasEventHandler() const
+        bool ObjectContact::HasEventHandler() const
         {
             return (0L != mpEventHandler);
         }
 
         // check if text animation is allowed. Default is sal_true.
-        sal_Bool ObjectContact::IsTextAnimationAllowed() const
+        bool ObjectContact::IsTextAnimationAllowed() const
         {
-            return sal_True;
+            return true;
         }
 
         // check if graphic animation is allowed. Default is sal_true.
-        sal_Bool ObjectContact::IsGraphicAnimationAllowed() const
+        bool ObjectContact::IsGraphicAnimationAllowed() const
         {
-            return sal_True;
+            return true;
         }
 
-        // check if asynchronious graphis loading is allowed. Default is sal_False.
-        sal_Bool ObjectContact::IsAsynchronGraphicsLoadingAllowed() const
+        // check if asynchronious graphis loading is allowed. Default is false.
+        bool ObjectContact::IsAsynchronGraphicsLoadingAllowed() const
         {
-            return sal_False;
+            return false;
         }
 
         // access to ViewObjectContactRedirector
@@ -330,10 +232,64 @@ namespace sdr
             }
         }
 
-        // check if buffering of MasterPages is allowed. Default is sal_False.
-        sal_Bool ObjectContact::IsMasterPageBufferingAllowed() const
+        // check if buffering of MasterPages is allowed. Default is false.
+        bool ObjectContact::IsMasterPageBufferingAllowed() const
         {
-            return sal_False;
+            return false;
+        }
+
+        // print? Default is false
+        bool ObjectContact::isOutputToPrinter() const
+        {
+            return false;
+        }
+
+        // window? Default is true
+        bool ObjectContact::isOutputToWindow() const
+        {
+            return true;
+        }
+
+        // VirtualDevice? Default is false
+        bool ObjectContact::isOutputToVirtualDevice() const
+        {
+            return false;
+        }
+
+        // recording MetaFile? Default is false
+        bool ObjectContact::isOutputToRecordingMetaFile() const
+        {
+            return false;
+        }
+
+        // gray display mode
+        bool ObjectContact::isDrawModeGray() const
+        {
+            return false;
+        }
+
+        // gray display mode
+        bool ObjectContact::isDrawModeBlackWhite() const
+        {
+            return false;
+        }
+
+        // high contrast display mode
+        bool ObjectContact::isDrawModeHighContrast() const
+        {
+            return false;
+        }
+
+        // access to SdrPageView. Default implementation returns NULL
+        SdrPageView* ObjectContact::TryToGetSdrPageView() const
+        {
+            return 0;
+        }
+
+        // access to OutputDevice. Default implementation returns NULL
+        OutputDevice* ObjectContact::TryToGetOutputDevice() const
+        {
+            return 0;
         }
     } // end of namespace contact
 } // end of namespace sdr
