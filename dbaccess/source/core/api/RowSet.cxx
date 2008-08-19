@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSet.cxx,v $
- * $Revision: 1.158 $
+ * $Revision: 1.159 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2392,7 +2392,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                 }
                 else
                 {
-                    String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                    String sMessage( DBACORE_RESSTRING( RID_STR_QUERY_DOES_NOT_EXIST ) );
                     sMessage.SearchAndReplaceAscii( "$table$", m_aCommand );
                     throwGenericSQLException(sMessage,*this);
                 }
