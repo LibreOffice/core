@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdattr.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,18 +47,12 @@
 
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
-
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-
 #include <svx/svdattr.hxx>
 #include <svx/svdattrx.hxx>
 #include <svx/svdpool.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
-#endif
 #include "xmlcnitm.hxx"
 
 #include <svx/svxids.hrc>
