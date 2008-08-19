@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -971,7 +971,7 @@ void BasicFrame::WinMax_Restore()
     BOOL bHasFullscreenWin = FALSE;
     for( p = pList->First(); p && !bHasFullscreenWin ; p = pList->Next() )
         bHasFullscreenWin |= ( p->GetWinState() == TT_WIN_STATE_MAX );
-    GetMenuBar()->ShowButtons( bHasFullscreenWin, bHasFullscreenWin, bHasFullscreenWin );
+    GetMenuBar()->ShowButtons( bHasFullscreenWin, FALSE, FALSE );
     WinShow_Hide();
 }
 
