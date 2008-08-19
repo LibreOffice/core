@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygonclipper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,120 +93,83 @@ namespace basegfx
                 }
                 else
                 {
-                    // prepare loop(s)
-                    OSL_ENSURE(!rCandidate.areControlPointsUsed(), "clipPolygonOnParallelAxis: ATM works not for curves (!)");
-                    B2DPolygon aNewPolygon;
-                    B2DPoint aCurrent(rCandidate.getB2DPoint(0L));
-                    bool bCurrentInside(bParallelToXAxis ?
-                        fTools::moreOrEqual(aCurrent.getY(), fValueOnOtherAxis) == bAboveAxis :
-                        fTools::moreOrEqual(aCurrent.getX(), fValueOnOtherAxis) == bAboveAxis);
-                    const sal_uInt32 nPointCount(rCandidate.count());
-                    const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                    // add cuts with axis to polygon, including bezier segments
+                    // Build edge to cut with. Make it a little big longer than needed for
+                    // numerical stability. We want to cut against the edge seen as endless
+                    // ray here, but addPointsAtCuts() will limit itself to the
+                    // edge's range ]0.0 .. 1.0[.
+                    const double fSmallExtension((aCandidateRange.getWidth() + aCandidateRange.getHeight()) * (0.5 * 0.1));
+                    const B2DPoint aStart(
+                        bParallelToXAxis ? aCandidateRange.getMinX() - fSmallExtension : fValueOnOtherAxis,
+                        bParallelToXAxis ? fValueOnOtherAxis : aCandidateRange.getMinY() - fSmallExtension);
+                    const B2DPoint aEnd(
+                        bParallelToXAxis ? aCandidateRange.getMaxX() + fSmallExtension : fValueOnOtherAxis,
+                        bParallelToXAxis ? fValueOnOtherAxis : aCandidateRange.getMaxY() + fSmallExtension);
+                    const B2DPolygon aCandidate(addPointsAtCuts(rCandidate, aStart, aEnd));
+                    const sal_uInt32 nPointCount(aCandidate.count());
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                    B2DCubicBezier aEdge;
+                    B2DPolygon aRun;
 
-                    if(bCurrentInside)
+                    for(sal_uInt32 a(0L); a < nEdgeCount; a++)
                     {
-                        aNewPolygon.append(aCurrent);
-                    }
+                        aCandidate.getBezierSegment(a, aEdge);
+                        const B2DPoint aTestPoint(aEdge.interpolatePoint(0.5));
+                        const bool bInside(bParallelToXAxis ?
+                            fTools::moreOrEqual(aTestPoint.getY(), fValueOnOtherAxis) == bAboveAxis :
+                            fTools::moreOrEqual(aTestPoint.getX(), fValueOnOtherAxis) == bAboveAxis);
 
-                    if(bStroke)
-                    {
-                        // open polygon, create clipped line snippets.
-                        for(sal_uInt32 a(0L); a < nEdgeCount; a++)
+                        if(bInside)
                         {
-                            // get next point data
-                            const sal_uInt32 nNextIndex((a + 1L == nPointCount) ? 0L : a + 1L);
-                            const B2DPoint aNext(rCandidate.getB2DPoint(nNextIndex));
-                            const bool bNextInside(bParallelToXAxis ?
-                                fTools::moreOrEqual(aNext.getY(), fValueOnOtherAxis) == bAboveAxis :
-                                fTools::moreOrEqual(aNext.getX(), fValueOnOtherAxis) == bAboveAxis);
-
-                            if(bCurrentInside != bNextInside)
+                            if(!aRun.count() || !aRun.getB2DPoint(aRun.count() - 1).equal(aEdge.getStartPoint()))
                             {
-                                // change inside/outside
-                                if(bNextInside)
-                                {
-                                    // entering, finish existing and start new line polygon
-                                    if(aNewPolygon.count() > 1L)
-                                    {
-                                        aRetval.append(aNewPolygon);
-                                    }
-
-                                    aNewPolygon.clear();
-                                }
-
-                                // calculate and add cut point
-                                if(bParallelToXAxis)
-                                {
-                                    const double fNewX(aCurrent.getX() - (((aCurrent.getY() - fValueOnOtherAxis) * (aNext.getX() - aCurrent.getX()) / (aNext.getY() - aCurrent.getY()))));
-                                    aNewPolygon.append(B2DPoint(fNewX, fValueOnOtherAxis));
-                                }
-                                else
-                                {
-                                    const double fNewY(aCurrent.getY() - (((aCurrent.getX() - fValueOnOtherAxis) * (aNext.getY() - aCurrent.getY()) / (aNext.getX() - aCurrent.getX()))));
-                                    aNewPolygon.append(B2DPoint(fValueOnOtherAxis, fNewY));
-                                }
-
-                                // pepare next step
-                                bCurrentInside = bNextInside;
+                                aRun.append(aEdge.getStartPoint());
                             }
 
-                            if(bNextInside)
+                            if(aEdge.isBezier())
                             {
-                                aNewPolygon.append(aNext);
+                                aRun.appendBezierSegment(aEdge.getControlPointA(), aEdge.getControlPointB(), aEdge.getEndPoint());
                             }
-
-                            // pepare next step
-                            aCurrent = aNext;
+                            else
+                            {
+                                aRun.append(aEdge.getEndPoint());
+                            }
                         }
-
-                        if(aNewPolygon.count() > 1L)
+                        else
                         {
-                            aRetval.append(aNewPolygon);
+                            if(bStroke && aRun.count())
+                            {
+                                aRetval.append(aRun);
+                                aRun.clear();
+                            }
                         }
                     }
-                    else
+
+                    if(aRun.count())
                     {
-                        // closed polygon, create single clipped closed polygon
-                        for(sal_uInt32 a(0L); a < nEdgeCount; a++)
+                        if(bStroke)
                         {
-                            // get next point data, use offset
-                            const sal_uInt32 nNextIndex((a + 1L == nPointCount) ? 0L : a + 1L);
-                            const B2DPoint aNext(rCandidate.getB2DPoint(nNextIndex));
-                            const bool bNextInside(bParallelToXAxis ?
-                                fTools::moreOrEqual(aNext.getY(), fValueOnOtherAxis) == bAboveAxis :
-                                fTools::moreOrEqual(aNext.getX(), fValueOnOtherAxis) == bAboveAxis);
-
-                            if(bCurrentInside != bNextInside)
+                            // try to merge this last and first polygon; they may have been
+                            // the former polygon's start/end point
+                            if(aRetval.count())
                             {
-                                // change inside/outside, calculate and add cut point
-                                if(bParallelToXAxis)
-                                {
-                                    const double fNewX(aCurrent.getX() - (((aCurrent.getY() - fValueOnOtherAxis) * (aNext.getX() - aCurrent.getX()) / (aNext.getY() - aCurrent.getY()))));
-                                    aNewPolygon.append(B2DPoint(fNewX, fValueOnOtherAxis));
-                                }
-                                else
-                                {
-                                    const double fNewY(aCurrent.getY() - (((aCurrent.getX() - fValueOnOtherAxis) * (aNext.getY() - aCurrent.getY()) / (aNext.getX() - aCurrent.getX()))));
-                                    aNewPolygon.append(B2DPoint(fValueOnOtherAxis, fNewY));
-                                }
+                                const B2DPolygon aStartPolygon(aRetval.getB2DPolygon(0));
 
-                                // pepare next step
-                                bCurrentInside = bNextInside;
+                                if(aStartPolygon.count() && aStartPolygon.getB2DPoint(0).equal(aRun.getB2DPoint(aRun.count() - 1)))
+                                {
+                                    // append start polygon to aRun, remove from result set
+                                    aRun.append(aStartPolygon); aRun.removeDoublePoints();
+                                    aRetval.remove(0);
+                                }
                             }
 
-                            if(bNextInside && nNextIndex)
-                            {
-                                aNewPolygon.append(aNext);
-                            }
-
-                            // pepare next step
-                            aCurrent = aNext;
+                            aRetval.append(aRun);
                         }
-
-                        if(aNewPolygon.count() > 2L)
+                        else
                         {
-                            aNewPolygon.setClosed(true);
-                            aRetval.append(aNewPolygon);
+                            // set closed flag and correct last point (which is added double now).
+                            closeWithGeometryChange(aRun);
+                            aRetval.append(aRun);
                         }
                     }
                 }
@@ -222,9 +185,12 @@ namespace basegfx
 
             for(sal_uInt32 a(0L); a < nPolygonCount; a++)
             {
-                B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnParallelAxis(rCandidate.getB2DPolygon(a), bParallelToXAxis, bAboveAxis, fValueOnOtherAxis, bStroke));
 
-                aRetval.append(clipPolygonOnParallelAxis(aCandidate, bParallelToXAxis, bAboveAxis, fValueOnOtherAxis, bStroke));
+                if(aClippedPolyPolygon.count())
+                {
+                    aRetval.append(aClippedPolyPolygon);
+                }
             }
 
             return aRetval;
@@ -232,71 +198,100 @@ namespace basegfx
 
         B2DPolyPolygon clipPolygonOnRange(const B2DPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke)
         {
+            const sal_uInt32 nCount(rCandidate.count());
             B2DPolyPolygon aRetval;
+
+            if(!nCount)
+            {
+                // source is empty
+                return aRetval;
+            }
 
             if(rRange.isEmpty())
             {
-                // clipping against an empty range. Nothing is inside an empty range, so the polygon
-                // is outside the range. So only return if not inside is wanted
-                if(!bInside && rCandidate.count())
+                if(bInside)
                 {
-                    aRetval.append(rCandidate);
-                }
-            }
-            if(rCandidate.count())
-            {
-                const B2DRange aCandidateRange(getRange(rCandidate));
-
-                if(rRange.isInside(aCandidateRange))
-                {
-                    // candidate is completely inside given range, nothing to do. Is also true with curves.
-                    if(bInside)
-                    {
-                        aRetval.append(rCandidate);
-                    }
+                    // nothing is inside an empty range
+                    return aRetval;
                 }
                 else
                 {
-                    // clip against the four axes of the range
-                    // against X-Axis, lower value
-                    aRetval = clipPolygonOnParallelAxis(rCandidate, true, bInside, rRange.getMinY(), bStroke);
+                    // everything is outside an empty range
+                    return B2DPolyPolygon(rCandidate);
+                }
+            }
+
+            const B2DRange aCandidateRange(getRange(rCandidate));
+
+            if(rRange.isInside(aCandidateRange))
+            {
+                  // candidate is completely inside given range
+                if(bInside)
+                {
+                    // nothing to do
+                    return B2DPolyPolygon(rCandidate);
+                }
+                else
+                {
+                    // nothing is outside, then
+                    return aRetval;
+                }
+            }
+
+            if(!bInside)
+            {
+                // cutting off the outer parts of filled polygons at parallell
+                // lines to the axes is only possible for the inner part, not for
+                // the outer part which means cutting a hole into the original polygon.
+                // This is because the inner part is a logical AND-operation of
+                // the four implied half-planes, but the outer part is not.
+                // It is possible for strokes, but with creating unnecessary extra
+                // cuts, so using clipPolygonOnPolyPolygon is better there, too.
+                // This needs to be done with the topology knowlegde and is unfurtunately
+                // more expensive, too.
+                const B2DPolygon aClip(createPolygonFromRect(rRange));
+
+                return clipPolygonOnPolyPolygon(rCandidate, B2DPolyPolygon(aClip), bInside, bStroke);
+            }
+
+            // clip against the four axes of the range
+            // against X-Axis, lower value
+            aRetval = clipPolygonOnParallelAxis(rCandidate, true, bInside, rRange.getMinY(), bStroke);
+
+            if(aRetval.count())
+            {
+                // against Y-Axis, lower value
+                if(1L == aRetval.count())
+                {
+                    aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), false, bInside, rRange.getMinX(), bStroke);
+                }
+                else
+                {
+                    aRetval = clipPolyPolygonOnParallelAxis(aRetval, false, bInside, rRange.getMinX(), bStroke);
+                }
+
+                if(aRetval.count())
+                {
+                    // against X-Axis, higher value
+                    if(1L == aRetval.count())
+                    {
+                        aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), true, !bInside, rRange.getMaxY(), bStroke);
+                    }
+                    else
+                    {
+                        aRetval = clipPolyPolygonOnParallelAxis(aRetval, true, !bInside, rRange.getMaxY(), bStroke);
+                    }
 
                     if(aRetval.count())
                     {
-                        // against Y-Axis, lower value
+                        // against Y-Axis, higher value
                         if(1L == aRetval.count())
                         {
-                            aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), false, bInside, rRange.getMinX(), bStroke);
+                            aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), false, !bInside, rRange.getMaxX(), bStroke);
                         }
                         else
                         {
-                            aRetval = clipPolyPolygonOnParallelAxis(aRetval, false, bInside, rRange.getMinX(), bStroke);
-                        }
-
-                        if(aRetval.count())
-                        {
-                            // against X-Axis, higher value
-                            if(1L == aRetval.count())
-                            {
-                                aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), true, !bInside, rRange.getMaxY(), bStroke);
-                            }
-                            else
-                            {
-                                aRetval = clipPolyPolygonOnParallelAxis(aRetval, true, !bInside, rRange.getMaxY(), bStroke);
-                            }
-
-                            if(aRetval.count())
-                            {
-                                // against Y-Axis, higher value
-                                if(1L == aRetval.count())
-                                {
-                                    aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0L), false, !bInside, rRange.getMaxX(), bStroke);
-                                }
-                                else
-                                {
-                                    aRetval = clipPolyPolygonOnParallelAxis(aRetval, false, !bInside, rRange.getMaxX(), bStroke);
-                                }
-                            }
+                            aRetval = clipPolyPolygonOnParallelAxis(aRetval, false, !bInside, rRange.getMaxX(), bStroke);
                         }
                     }
                 }
@@ -310,11 +305,45 @@ namespace basegfx
             const sal_uInt32 nPolygonCount(rCandidate.count());
             B2DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            if(!nPolygonCount)
             {
-                B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                // source is empty
+                return aRetval;
+            }
 
-                aRetval.append(clipPolygonOnRange(aCandidate, rRange, bInside, bStroke));
+            if(rRange.isEmpty())
+            {
+                if(bInside)
+                {
+                    // nothing is inside an empty range
+                    return aRetval;
+                }
+                else
+                {
+                    // everything is outside an empty range
+                    return rCandidate;
+                }
+            }
+
+            if(bInside)
+            {
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                {
+                    const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnRange(rCandidate.getB2DPolygon(a), rRange, bInside, bStroke));
+
+                    if(aClippedPolyPolygon.count())
+                    {
+                        aRetval.append(aClippedPolyPolygon);
+                    }
+                }
+            }
+            else
+            {
+                // for details, see comment in clipPolygonOnRange for the "cutting off
+                // the outer parts of filled polygons at parallell lines" explanations
+                const B2DPolygon aClip(createPolygonFromRect(rRange));
+
+                return clipPolyPolygonOnPolyPolygon(rCandidate, B2DPolyPolygon(aClip), bInside, bStroke);
             }
 
             return aRetval;
@@ -390,7 +419,7 @@ namespace basegfx
 
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bStroke, bool bInvert)
+        B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
             B2DPolyPolygon aRetval;
 
@@ -398,85 +427,67 @@ namespace basegfx
             {
                 if(bStroke)
                 {
-                    // line clipping, create line snippets
-                    for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                    // line clipping, create line snippets by first adding all cut points and
+                    // then marching along the edges and detecting if they are inside or outside
+                    // the clip polygon
+                    for(sal_uInt32 a(0); a < rCandidate.count(); a++)
                     {
-                        // get candidate and add cuts and touches with rClip to aCandidate
-                        const B2DPolygon aCandidate(addPointsAtCutsAndTouches(rClip, rCandidate.getB2DPolygon(a)));
+                        // add cuts with clip to polygon, including bezier segments
+                        const B2DPolygon aCandidate(addPointsAtCuts(rCandidate.getB2DPolygon(a), rClip));
                         const sal_uInt32 nPointCount(aCandidate.count());
+                        const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                        B2DCubicBezier aEdge;
+                        B2DPolygon aRun;
 
-                        if(nPointCount)
+                        for(sal_uInt32 b(0); b < nEdgeCount; b++)
                         {
-                            const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                            aCandidate.getBezierSegment(b, aEdge);
+                            const B2DPoint aTestPoint(aEdge.interpolatePoint(0.5));
+                            const bool bIsInside(tools::isInside(rClip, aTestPoint) == bInside);
 
-                            if(nEdgeCount)
+                            if(bIsInside)
                             {
-                                // prepare partial polygon
-                                B2DPolygon aRun;
-                                B2DPoint aCurrent(aCandidate.getB2DPoint(0L));
-                                B2DPoint aControlPointPrev;
-                                B2DPoint aControlPointNext;
-                                bool bInside(false);
-
-                                for(sal_uInt32 b(0L); b < nEdgeCount; b++)
+                                if(!aRun.count())
                                 {
-                                    const sal_uInt32 nNextIndex((b + 1L) % nPointCount);
-                                    const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
-                                    bool bCurveEdge(false);
-
-                                    if(aCandidate.areControlPointsUsed())
-                                    {
-                                        aControlPointNext = aCandidate.getNextControlPoint(b);
-                                        aControlPointPrev = aCandidate.getPrevControlPoint(nNextIndex);
-                                        bCurveEdge = !aControlPointNext.equal(aCurrent) || !aControlPointPrev.equal(aNext);
-                                    }
-
-                                    if(bCurveEdge)
-                                    {
-                                        const B2DCubicBezier aCubicBezier(aCurrent, aControlPointNext, aControlPointPrev, aNext);
-                                        const B2DPoint aComparePoint(aCubicBezier.interpolatePoint(0.5));
-                                        bInside = (isInside(rClip, aComparePoint) != bInvert);
-                                    }
-                                    else
-                                    {
-                                        const B2DPoint aComparePoint(average(aCurrent, aNext));
-                                        bInside = (isInside(rClip, aComparePoint) != bInvert);
-                                    }
-
-                                    if(bInside)
-                                    {
-                                        if(!aRun.count())
-                                        {
-                                            aRun.append(aCurrent);
-                                        }
-
-                                        if(bCurveEdge)
-                                        {
-                                            aRun.appendBezierSegment(aControlPointNext, aControlPointPrev, aNext);
-                                        }
-                                        else
-                                        {
-                                            aRun.append(aNext);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if(aRun.count())
-                                        {
-                                            aRetval.append(aRun);
-                                            aRun.clear();
-                                        }
-                                    }
-
-                                    // prepare next step
-                                    aCurrent = aNext;
+                                    aRun.append(aEdge.getStartPoint());
                                 }
 
+                                if(aEdge.isBezier())
+                                {
+                                    aRun.appendBezierSegment(aEdge.getControlPointA(), aEdge.getControlPointB(), aEdge.getEndPoint());
+                                }
+                                else
+                                {
+                                    aRun.append(aEdge.getEndPoint());
+                                }
+                            }
+                            else
+                            {
                                 if(aRun.count())
                                 {
                                     aRetval.append(aRun);
+                                    aRun.clear();
                                 }
                             }
+                        }
+
+                        if(aRun.count())
+                        {
+                            // try to merge this last and first polygon; they may have been
+                            // the former polygon's start/end point
+                            if(aRetval.count())
+                            {
+                                const B2DPolygon aStartPolygon(aRetval.getB2DPolygon(0));
+
+                                if(aStartPolygon.count() && aStartPolygon.getB2DPoint(0).equal(aRun.getB2DPoint(aRun.count() - 1)))
+                                {
+                                    // append start polygon to aRun, remove from result set
+                                    aRun.append(aStartPolygon); aRun.removeDoublePoints();
+                                    aRetval.remove(0);
+                                }
+                            }
+
+                            aRetval.append(aRun);
                         }
                     }
                 }
@@ -484,25 +495,46 @@ namespace basegfx
                 {
                     // area clipping
                     B2DPolyPolygon aMergePolyPolygonA(rClip);
-                    aMergePolyPolygonA = SolveCrossovers(aMergePolyPolygonA);
-                    aMergePolyPolygonA = StripNeutralPolygons(aMergePolyPolygonA);
-                    aMergePolyPolygonA = StripDispensablePolygons(aMergePolyPolygonA);
 
-                    if(bInvert)
+                    // First solve all polygon-self and polygon-polygon intersections.
+                    // Also get rid of some not-needed polygons (neutral, no area -> when
+                    // no intersections, these are tubes).
+                    // Now it is possible to correct the orientations in the cut-free
+                    // polygons to values corresponding to painting the PolyPolygon with
+                    // a XOR-WindingRule.
+                    aMergePolyPolygonA = solveCrossovers(aMergePolyPolygonA);
+                    aMergePolyPolygonA = stripNeutralPolygons(aMergePolyPolygonA);
+                    aMergePolyPolygonA = correctOrientations(aMergePolyPolygonA);
+
+                    if(!bInside)
                     {
+                        // if we want to get the outside of the clip polygon, make
+                        // it a 'Hole' in topological sense
                         aMergePolyPolygonA.flip();
                     }
 
                     B2DPolyPolygon aMergePolyPolygonB(rCandidate);
-                    aMergePolyPolygonB = SolveCrossovers(aMergePolyPolygonB);
-                    aMergePolyPolygonB = StripNeutralPolygons(aMergePolyPolygonB);
-                    aMergePolyPolygonB = StripDispensablePolygons(aMergePolyPolygonB);
 
+                    // prepare 2nd source polygon in same way
+                    aMergePolyPolygonB = solveCrossovers(aMergePolyPolygonB);
+                    aMergePolyPolygonB = stripNeutralPolygons(aMergePolyPolygonB);
+                    aMergePolyPolygonB = correctOrientations(aMergePolyPolygonB);
+
+                    // to clip against each other, concatenate and solve all
+                    // polygon-polygon crossovers. polygon-self do not need to
+                    // be solved again, they were solved in the preparation.
                     aRetval.append(aMergePolyPolygonA);
                     aRetval.append(aMergePolyPolygonB);
-                    aRetval = SolveCrossovers(aRetval, false);
-                    aRetval = StripNeutralPolygons(aRetval);
-                    aRetval = StripDispensablePolygons(aRetval, !bInvert);
+                    aRetval = solveCrossovers(aRetval);
+
+                    // now remove neutral polygons (closed, but no area). In a last
+                    // step throw away all polygons which have a depth of less than 1
+                    // which means there was no logical AND at their position. For the
+                    // not-inside solution, the clip was flipped to define it as 'Hole',
+                    // so the removal rule is different here; remove all with a depth
+                    // of less than 0 (aka holes).
+                    aRetval = stripNeutralPolygons(aRetval);
+                    aRetval = stripDispensablePolygons(aRetval, bInside);
                 }
             }
 
@@ -511,13 +543,13 @@ namespace basegfx
 
         //////////////////////////////////////////////////////////////////////////////
 
-        B2DPolyPolygon clipPolygonOnPolyPolygon(const B2DPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bStroke, bool bInvert)
+        B2DPolyPolygon clipPolygonOnPolyPolygon(const B2DPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
             B2DPolyPolygon aRetval;
 
             if(rCandidate.count() && rClip.count())
             {
-                aRetval = clipPolyPolygonOnPolyPolygon(B2DPolyPolygon(rCandidate), rClip, bStroke, bInvert);
+                aRetval = clipPolyPolygonOnPolyPolygon(B2DPolyPolygon(rCandidate), rClip, bInside, bStroke);
             }
 
             return aRetval;
