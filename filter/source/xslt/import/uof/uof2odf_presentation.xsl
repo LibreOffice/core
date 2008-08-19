@@ -1676,7 +1676,7 @@
 						<xsl:when test="contains($fontstyle,' ')">
 							<xsl:value-of select="substring-after($fontstyle,' ')"/>
 						</xsl:when>
-						<xsl:when test="not($fontstyle1=' ')">
+						<xsl:when test="not($fontstyle=' ')">
 							<xsl:value-of select="$fontstyle"/>
 						</xsl:when>
 					</xsl:choose>
@@ -2032,13 +2032,13 @@
 							<xsl:if test="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:路径">
 								<xsl:attribute name="xlink:href"><xsl:value-of select="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:路径"/></xsl:attribute>
 							</xsl:if>
+							<xsl:if test="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:路径">
+								<xsl:attribute name="xlink:href"><xsl:value-of select="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:路径"/></xsl:attribute>
+							</xsl:if>                            
 							<xsl:if test="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:数据">
 								<office:binary-data>
 									<xsl:value-of select="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:数据"/>
 								</office:binary-data>
-							</xsl:if>
-							<xsl:if test="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:路径">
-								<xsl:attribute name="xlink:href"><xsl:value-of select="/uof:UOF/uof:对象集/uof:其他对象[@uof:标识符=$tuxing1]/uof:路径"/></xsl:attribute>
 							</xsl:if>
 						</draw:image>
 					</xsl:element>
