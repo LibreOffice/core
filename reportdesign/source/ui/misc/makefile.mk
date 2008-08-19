@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,8 @@ EXCEPTIONSFILES=	\
         $(SLO)$/ColorListener.obj			\
         $(SLO)$/UITools.obj					\
         $(SLO)$/rptuiservices.obj			\
-        $(SLO)$/toolboxcontroller.obj		
+        $(SLO)$/toolboxcontroller.obj		\
+        $(SLO)$/statusbarcontroller.obj		
 
 
 SLOFILES=	\

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rptuiservices.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include "ReportController.hxx"
 #include "toolboxcontroller.hxx"
+#include "statusbarcontroller.hxx"
 #include "DefaultInspection.hxx"
 #include "ReportComponentHandler.hxx"
 #include "GeometryHandler.hxx"
@@ -55,6 +56,8 @@ cppu::ImplementationEntry entries[] = {
     { &OReportController::create, &OReportController::getImplementationName_Static, &OReportController::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { &OToolboxController::create, &OToolboxController::getImplementationName_Static, &OToolboxController::getSupportedServiceNames_Static,
+        &cppu::createSingleComponentFactory, 0, 0 },
+    { &OStatusbarController::create, &OStatusbarController::getImplementationName_Static, &OStatusbarController::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { &DefaultComponentInspectorModel::create, &DefaultComponentInspectorModel::getImplementationName_Static, &DefaultComponentInspectorModel::getSupportedServiceNames_static,
         &cppu::createSingleComponentFactory, 0, 0 },
