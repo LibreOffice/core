@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CTable.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -526,16 +526,6 @@ void OCalcTable::fillColumns()
     }
 }
 
-// -------------------------------------------------------------------------
-OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection)
-        :OCalcTable_BASE(_pTables,_pConnection)
-        ,m_nStartCol(0)
-        ,m_nStartRow(0)
-        ,m_nDataCols(0)
-        ,m_nDataRows(0)
-        ,m_bHasHeaders(sal_False)
-{
-}
 // -------------------------------------------------------------------------
 OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
                     const ::rtl::OUString& _Name,
