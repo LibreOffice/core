@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +36,12 @@
 #include <svx/svdtrans.hxx> // GeoStat
 #include <tools/datetime.hxx>
 #include <svx/xtextit0.hxx>
-
 #include "svdtext.hxx"
-
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include "svx/svxdllapi.h"
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <svx/svdpagv.hxx>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -56,6 +56,21 @@ class EditStatus;
 
 namespace sdr { namespace properties {
     class TextProperties;
+}}
+
+namespace drawinglayer { namespace primitive2d {
+    class SdrContourTextPrimitive2D;
+    class SdrPathTextPrimitive2D;
+    class SdrBlockTextPrimitive2D;
+    class SdrStretchTextPrimitive2D;
+}}
+
+namespace drawinglayer { namespace animation {
+    class AnimationEntryList;
+}}
+
+namespace drawinglayer { namespace geometry {
+    class ViewInformation2D;
 }}
 
 namespace sdr { namespace table {
@@ -269,7 +284,6 @@ protected:
     SdrObject* ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const;
     void ImpSetTextStyleSheetListeners();
     void ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& rTextRect, const Rectangle& rAnchorRect, Fraction& rFitXKorreg) const;
-    void ImpAddTextToBoundRect();
     void ImpJustifyRect(Rectangle& rRect) const;
     void ImpCheckShear();
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
@@ -394,9 +408,11 @@ public:
     FASTBOOL IsContourTextFrame() const;
 
     // Horizontale Textausrichtung
+    SdrTextHorzAdjust GetTextHorizontalAdjust(const SfxItemSet& rSet) const;
     SdrTextHorzAdjust GetTextHorizontalAdjust() const;
 
     // Vertikale Textausrichtung
+    SdrTextVertAdjust GetTextVerticalAdjust(const SfxItemSet& rSet) const;
     SdrTextVertAdjust GetTextVerticalAdjust() const;
 
     // Textrahmenabstaende
@@ -411,8 +427,6 @@ public:
     virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
-    virtual void RecalcBoundRect();
 
     // Wird zur Bestimmung des Textankerbereichs benoetigt
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
@@ -554,8 +568,34 @@ public:
 
     // #111096#
     // Access to TextAnimationAllowed flag
-    sal_Bool IsTextAnimationAllowed() const;
+    bool IsTextAnimationAllowed() const;
     void SetTextAnimationAllowed(sal_Bool bNew);
+
+public:
+    //////////////////////////////////////////////////////////////////////////////
+    // text primitive decomposition helpers
+    bool impCheckSpellCheckForDecomposeTextPrimitive() const;
+    bool impDecomposeContourTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    bool impDecomposePathTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrPathTextPrimitive2D& rSdrPathTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    bool impDecomposeBlockTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    bool impDecomposeStretchTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+
+    //////////////////////////////////////////////////////////////////////////////
+    // timing generators
+    void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;
+    void impGetScrollTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList, double fFrameLength, double fTextLength) const;
 
     /** returns false if the given pointer is NULL
         or if the given SdrOutliner contains no text.
