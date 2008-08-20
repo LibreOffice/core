@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.133 $
+ * $Revision: 1.134 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1446,10 +1446,15 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( Runti
         throw RuntimeException();
     if(!pxXDrawPage)
     {
-        ((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage > ;
+        // simplified this creation, keeping original below as reference
+        // for the case that it did something by purpose
         ((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
-        Reference< drawing::XShapes >  xTmp = pDrawPage;
-        *pxXDrawPage = Reference< drawing::XDrawPage>(xTmp, UNO_QUERY);
+        ((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage >(pDrawPage);
+
+        //((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage > ;
+        //((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
+        //Reference< drawing::XShapes >  xTmp = pDrawPage;
+        //*pxXDrawPage = Reference< drawing::XDrawPage>(xTmp, UNO_QUERY);
     }
     return *pxXDrawPage;
 }
@@ -1589,7 +1594,7 @@ void    SwXTextDocument::InitNewDoc()
         uno::Reference<lang::XComponent> xComp( *pxXDrawPage, uno::UNO_QUERY );
         xComp->dispose();
         // <--
-        pDrawPage->Invalidate();
+        pDrawPage->InvalidateSwDoc();
         delete pxXDrawPage;
         pxXDrawPage = 0;
     }
