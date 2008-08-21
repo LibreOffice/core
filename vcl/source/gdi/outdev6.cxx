@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -296,7 +296,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                mpGraphics->DrawPolyLine( rPolygon, aLineWidths, this );
+                mpGraphics->DrawPolyLine( rPolygon, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;
