@@ -7,7 +7,8 @@
 
 # Product       List_of_platforms                                                   List_of_languages   Target
 
-OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro,wntmsci12.pro,unxlngx6.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12,unxubti8.pro  en-US   openoffice
+OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro    en-US   openoffice
+OpenOffice      unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12,unxubti8.pro                        en-US   openoffice
 BrOffice                                                                                          pt-BR   broffice
 OpenOffice_wJRE unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,wntmsci12                    en-US   openofficewithjre
 BrOffice_wJRE                                                                                     pt-BR   brofficewithjre
@@ -16,7 +17,7 @@ BrOffice_Dev                                                                    
 OpenOffice_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12  en-US   sdkoo
 URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngi6,unxsoli4,unxsols4,wntmsci12  en-US   ure
 OpenOfficeLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro        de      ooolanguagepack
-OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro     de|es|fr|it|nl|sv|zh-CN|zh-TW|ko|ja|ru|pl|hu|tr|ar   ooodevlanguagepack
+OpenOfficeLanguagepack   unxlngi6,unxsoli4,unxsols4,wntmsci12                                     de      ooolanguagepack
+OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro     de|fr|ja|ar   ooodevlanguagepack
 BrOfficeLanguagepack     unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro        pt-BR   broolanguagepack
-OpenOfficeLanguagepack   unxlngi6,unxsoli4,unxsols4,wntmsci12                                              de      ooolanguagepack
 
