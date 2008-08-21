@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxlngx6.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -139,6 +139,7 @@ CFLAGSWERRCC=-Werror
 # settings.mk):
 
 MODULES_WITH_WARNINGS := \
+    drawinglayer \
     extensions \
     soldep \
     slideshow \

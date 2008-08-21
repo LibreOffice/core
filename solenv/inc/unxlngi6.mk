@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxlngi6.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -135,6 +135,7 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
+    drawinglayer \
     soldep
 
 # switches for dynamic and static linking
