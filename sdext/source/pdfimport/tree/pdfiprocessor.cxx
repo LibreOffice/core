@@ -8,7 +8,7 @@
  *
  * $RCSfile: pdfiprocessor.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -668,7 +668,7 @@ void PDFIProcessor::intersectClip(const uno::Reference< rendering::XPolyPolygon2
     basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
     if( aCurClip.count() )
-        aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, false );
+        aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, false, false );
 
     getCurrentContext().Clip = aNewClip;
 }
@@ -681,7 +681,7 @@ void PDFIProcessor::intersectEoClip(const uno::Reference< rendering::XPolyPolygo
     basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
     if( aCurClip.count() )
-        aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, false );
+        aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, false, false );
 
     getCurrentContext().Clip = aNewClip;
 }
