@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SectionWindow.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-DBG_NAME( rpt_OSectionWindow );
+DBG_NAME( rpt_OSectionWindow )
 OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry)
 : Window( _pParent,WB_DIALOGCONTROL)
 ,OPropertyChangeListener(m_aMutex)
