@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,7 +97,11 @@ SHL2STDLIBS +=			\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
-    $(XMLOFFLIB)
+    $(XMLOFFLIB)        
+
+.IF "$(OS)"=="SOLARIS"
+SHL2STDLIBS +=-ldl
+.ENDIF
 
 .IF "$(SYSTEM_MOZILLA)" == "YES"
 .IF "$(NSPR_LIB)" != ""
