@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svtmsg.src,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,7 +214,7 @@ String S_TEAROFF_FAILED
 // Has to stay in for old res files
 String S_NO_SELECTED_ENTRY_DEPRECATED
 {
-    Text[ en-US ] = "No entry is selected in TreeListB”x at ($Arg1)";
+    Text[ en-US ] = "No entry is selected in TreeListBox at ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
