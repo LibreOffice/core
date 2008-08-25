@@ -70,6 +70,18 @@
      			wlst[nh].word = mystrdup(st);
      			wlst[nh].allow = (1 == 0);
      			wlst[nh].orig = mystrdup(newword);
+--- misc/hunspell-1.1.12/src/hunspell/affixmgr.hxx	Fri Aug 31 18:00:04 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/affixmgr.hxx	Fri Aug 22 15:28:42 2008
+@@ -2,9 +2,6 @@
+ #define _AFFIXMGR_HXX_
+ 
+ #ifdef MOZILLA_CLIENT
+-#ifdef __SUNPRO_CC // for SunONE Studio compiler
+-using namespace std;
+-#endif
+ #include <stdio.h>
+ #else
+ #include <cstdio>
 --- misc/hunspell-1.1.12/src/hunspell/atypes.hxx	Sat Sep  1 08:57:35 2007
 +++ misc/build/hunspell-1.1.12/src/hunspell/atypes.hxx	Mon Jun 16 15:50:27 2008
 @@ -1,6 +1,8 @@
@@ -100,8 +112,8 @@
 -
 -
 --- misc/hunspell-1.1.12/src/hunspell/csutil.cxx	Thu Aug 23 09:27:39 2007
-+++ misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	Tue Jun 17 12:51:33 2008
-@@ -18,13 +18,13 @@
++++ misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	Fri Aug 22 15:28:20 2008
+@@ -18,12 +18,12 @@
  #include "langnum.hxx"
  
  #ifdef OPENOFFICEORG
@@ -115,11 +127,10 @@
 +#ifndef MOZILLA_CLIENT
 +#include "utf_info.cxx"
 +#define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
- #endif
 +#endif
+ #endif
  
  #ifdef MOZILLA_CLIENT
- #include "nsCOMPtr.h"
 @@ -125,7 +125,7 @@
          case 0x90:
          case 0xa0:
@@ -177,17 +188,33 @@
      unsigned char h;
  } w_char;
 --- misc/hunspell-1.1.12/src/hunspell/hashmgr.hxx	Sun Aug 26 03:45:12 2007
-+++ misc/build/hunspell-1.1.12/src/hunspell/hashmgr.hxx	Mon Jun 16 15:50:40 2008
-@@ -3,6 +3,7 @@
++++ misc/build/hunspell-1.1.12/src/hunspell/hashmgr.hxx	Fri Aug 22 15:28:50 2008
+@@ -3,6 +3,9 @@
  
  #ifndef MOZILLA_CLIENT
  #include <cstdio>
++#ifndef __SUNPRO_CC // for SunONE Studio compiler
 +using namespace std;
++#endif
  #else
  #include <stdio.h>
  #endif
---- misc/hunspell-1.1.12/src/hunspell/hunspell.cxx	2007-08-28 15:17:30.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/hunspell.cxx	2008-04-23 22:59:31.000000000 +0200
+@@ -61,11 +64,11 @@
+   int add_word(const char * word, int wbl, int wcl, unsigned short * ap,
+     int al, const char * desc, bool onlyupcase);
+   int load_config(const char * affpath);
+-  int parse_aliasf(char * line, FILE * af);
++  int parse_aliasf(char * line, std::FILE * af);
+   int add_hidden_capitalized_word(char * word, int wbl, int wcl,
+     unsigned short * flags, int al, char * dp, int captype);
+ #ifdef HUNSPELL_EXPERIMENTAL
+-  int parse_aliasm(char * line, FILE * af);
++  int parse_aliasm(char * line, std::FILE * af);
+ #endif
+ 
+ };
+--- misc/hunspell-1.1.12/src/hunspell/hunspell.cxx	Tue Aug 28 15:17:30 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/hunspell.cxx	Fri Aug 22 15:29:06 2008
 @@ -1,3 +1,7 @@
 +#ifdef _MSC_VER
 +#pragma setlocale("C")
@@ -196,9 +223,14 @@
  #include "license.hunspell"
  #include "license.myspell"
  
-@@ -12,7 +16,11 @@
+@@ -11,8 +15,16 @@
+ #include <stdio.h> 
  #endif
  
++#ifdef __SUNPRO_CC
++#include <cstdlib>
++#endif
++
  #include "hunspell.hxx"
 -#include "hunspell.h"
 +#ifndef OPENOFFICEORG
@@ -209,7 +241,7 @@
  
  #ifndef MOZILLA_CLIENT
  #ifndef W32
-@@ -1727,29 +1735,3 @@
+@@ -1727,29 +1739,3 @@
  }
  
  #endif // END OF HUNSPELL_EXPERIMENTAL CODE
@@ -316,9 +348,22 @@
  //    pass in address of array of char * pointers
  // onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
  
---- misc/hunspell-1.1.12/src/tools/hunspell.cxx	2007-07-24 20:47:52.000000000 +0900
-+++ misc/build/hunspell-1.1.12/src/tools/hunspell.cxx	2008-06-20 20:06:35.469625000 +0900
-@@ -85,8 +85,10 @@
+--- misc/hunspell-1.1.12/src/tools/hunspell.cxx	Tue Jul 24 13:47:52 2007
++++ misc/build/hunspell-1.1.12/src/tools/hunspell.cxx	Fri Aug 22 15:29:12 2008
+@@ -8,6 +8,12 @@
+ #include <cstdlib>
+ #include <cstdio>
+ 
++#ifdef __SUNPRO_CC
++using namespace std;
++#include <string.h>
++#include <malloc.h>
++#endif
++
+ #include "config.h"
+ #include "hunspell.hxx"
+ 
+@@ -85,8 +91,10 @@
  #if ENABLE_NLS
  #ifdef HAVE_LOCALE_H
  #include <locale.h>
@@ -329,18 +374,16 @@
  
  #ifdef HAVE_LIBINTL_H
  #include <libintl.h>
-@@ -1227,9 +1229,11 @@
+@@ -1227,7 +1235,9 @@
  #ifdef HAVE_LOCALE_H
  	ui_lang = setlocale(LC_ALL, "");
  	textdomain("hunspell");
 +#ifdef HAVE_LANGINFO_CODESET
          ui_enc = nl_langinfo(CODESET);
- #endif
- #endif
 +#endif
+ #endif
+ #endif
  
- #ifdef HAVE_READLINE
- 	rl_set_key("", rl_escape, rl_get_keymap());
 --- misc/hunspell-1.1.12/tests/Makefile.am	Tue Sep  4 01:25:35 2007
 +++ misc/build/hunspell-1.1.12/tests/Makefile.am	Wed Jun 18 11:53:11 2008
 @@ -6,29 +6,18 @@
