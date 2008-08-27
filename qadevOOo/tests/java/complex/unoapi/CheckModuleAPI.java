@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CheckModuleAPI.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,15 +66,7 @@ import util.utils;
  *
  * Also you have to fill the following parameter:
  * <ul>
- *  <li><b>OOO_ENVSET</b>: this parameter must ponit to the script to create a build environment like
- *                  <b>$SRC_ROOT/SolarisX86Env.Set.sh</b> or <b>%SRC_ROOT\winenv.set.sh</b>
- *                  In case you are able to use <b>setsolar</b> or <b>setcws</b> just type <b>setsolar</b> as value.
- *                  </li><p>
- *
- *  <li><b>COMP_ENV</b>:   In case you use <b>setsolar</b> you need to fill parameter <b>COMP_ENV</b> with accordant
- *                  value like 'unxsols4' or 'wntmsci10'</li><p>
- *
- *  <li><b>SHELL</b>:      fill this parameter with a shell which can start <CODE>OOO_ENVSET</CODE></li>
+ *  <li><b>SHELL</b>:      fill this parameter with a shell</li>
  * </ul>
  *
  */
