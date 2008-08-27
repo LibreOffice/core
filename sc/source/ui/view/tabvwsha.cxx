@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsha.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -504,35 +504,40 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 bool ScTabViewShell::IsRefInputMode() const
 {
     ScModule* pScMod = SC_MOD();
-    if ( pScMod && pScMod->IsFormulaMode() )
+    if ( pScMod )
     {
-        ScInputHandler* pHdl = pScMod->GetInputHdl();
-        if ( pHdl )
+        if( pScMod->IsRefDialogOpen() )
+            return pScMod->IsFormulaMode();
+        if( pScMod->IsFormulaMode() )
         {
-            String aString = pHdl->GetEditString();
-            if ( !pHdl->GetSelIsRef() && aString.Len() > 1 &&
-                 ( aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
+            ScInputHandler* pHdl = pScMod->GetInputHdl();
+            if ( pHdl )
             {
-                const ScViewData* pViewData = GetViewData();
-                if ( pViewData )
+                String aString = pHdl->GetEditString();
+                if ( !pHdl->GetSelIsRef() && aString.Len() > 1 &&
+                     ( aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
                 {
-                    ScDocument* pDoc = pViewData->GetDocument();
-                    if ( pDoc )
+                    const ScViewData* pViewData = GetViewData();
+                    if ( pViewData )
                     {
-                        const ScAddress aPos( pViewData->GetCurPos() );
-                        ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
-                        aComp.SetCloseBrackets( false );
-                        ScTokenArray* pArr = aComp.CompileString( aString );
-                        if ( pArr && pArr->MayReferenceFollow() )
+                        ScDocument* pDoc = pViewData->GetDocument();
+                        if ( pDoc )
                         {
-                            return true;
+                            const ScAddress aPos( pViewData->GetCurPos() );
+                            ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
+                            aComp.SetCloseBrackets( false );
+                            ScTokenArray* pArr = aComp.CompileString( aString );
+                            if ( pArr && pArr->MayReferenceFollow() )
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                return true;
+                else
+                {
+                    return true;
+                }
             }
         }
     }
