@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doctemplates.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -430,7 +430,13 @@ void SfxDocTplService_Impl::init_Impl()
     if ( bIsInitialized )
     {
         OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
-        mxInfo = uno::Reference< XStandaloneDocumentInfo > ( mxFactory->createInstance( aService ), UNO_QUERY );
+        try {
+            mxInfo = uno::Reference< XStandaloneDocumentInfo > (
+                mxFactory->createInstance( aService ), UNO_QUERY );
+        } catch (uno::RuntimeException &) {
+            OSL_ENSURE(false, "SfxDocTplService_Impl::init_Impl: "
+                "cannot create DocumentProperties service");
+        }
 
         aService = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_TYPEDETECTION ) );
         mxType = uno::Reference< XTypeDetection > ( mxFactory->createInstance( aService ), UNO_QUERY );
