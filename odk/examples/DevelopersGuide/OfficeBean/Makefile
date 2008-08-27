@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:10:37 $
+#  last change: $Author: rt $ $Date: 2008-08-27 15:21:48 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -58,11 +58,10 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(URE_CLASSES_DIR)/jurt.jar\
+		$(PATH_SEPARATOR)$(URE_CLASSES_DIR)/ridl.jar\
+		$(PATH_SEPARATOR)$(URE_CLASSES_DIR)/juh.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/officebean.jar\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
