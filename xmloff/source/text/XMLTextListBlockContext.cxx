@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,6 +232,24 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     // --> OD 2008-04-23 #refactorlists#
     if ( mnLevel == 0 ) // root <list> element
     {
+        // --> OD 2008-08-15 #i92811#
+        ::rtl::OUString sListStyleDefaultListId;
+        {
+            uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
+            if ( xNumRuleProps.is() )
+            {
+                uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
+                                            xNumRuleProps->getPropertySetInfo());
+                if ( xNumRulePropSetInfo.is() &&
+                     xNumRulePropSetInfo->hasPropertyByName( mrTxtImport.sPropNameDefaultListId) )
+                {
+                    xNumRuleProps->getPropertyValue( mrTxtImport.sPropNameDefaultListId ) >>= sListStyleDefaultListId;
+                    DBG_ASSERT( sListStyleDefaultListId.getLength() != 0,
+                                "no default list id found at numbering rules instance. Serious defect -> please inform OD." );
+                }
+            }
+        }
+        // <--
         if ( msListId.getLength() == 0 )  // no text:id property found
         {
             sal_Int32 nUPD( 0 );
@@ -242,25 +260,18 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             {
                 // handling former documents written by OpenOffice.org:
                 // use default list id of numbering rules instance, if existing
-                uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
-                if ( xNumRuleProps.is() )
+                // --> OD 2008-08-15 #i92811#
+                if ( sListStyleDefaultListId.getLength() != 0 )
                 {
-                    uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
-                                                xNumRuleProps->getPropertySetInfo());
-                    if ( xNumRulePropSetInfo.is() &&
-                         xNumRulePropSetInfo->hasPropertyByName( mrTxtImport.sPropNameDefaultListId) )
+                    msListId = sListStyleDefaultListId;
+                    if ( !bIsContinueNumberingAttributePresent &&
+                         !mbRestartNumbering &&
+                         mrTxtImport.IsListProcessed( msListId ) )
                     {
-                        xNumRuleProps->getPropertyValue( mrTxtImport.sPropNameDefaultListId ) >>= msListId;
-                        DBG_ASSERT( msListId.getLength() != 0,
-                                    "no default list id found at numbering rules instance. Serious defect -> please inform OD." );
-                        if ( !bIsContinueNumberingAttributePresent &&
-                             !mbRestartNumbering &&
-                             mrTxtImport.IsListProcessed( msListId ) )
-                        {
-                            mbRestartNumbering = sal_True;
-                        }
+                        mbRestartNumbering = sal_True;
                     }
                 }
+                // <--
             }
             if ( msListId.getLength() == 0 )
             {
@@ -303,7 +314,11 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 
         if ( !mrTxtImport.IsListProcessed( msListId ) )
         {
-            mrTxtImport.KeepListAsProcessed( msListId, msListStyleName, msContinueListId );
+            // --> OD 2008-08-15 #i92811#
+            mrTxtImport.KeepListAsProcessed( msListId, msListStyleName,
+                                             msContinueListId,
+                                             sListStyleDefaultListId );
+            // <--
         }
     }
     // <--
