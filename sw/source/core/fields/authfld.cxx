@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: authfld.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -615,9 +615,10 @@ void SwAuthorityFieldType::SetSortKeys(USHORT nKeyCount, SwTOXSortKey aKeys[])
  --------------------------------------------------*/
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
                                     const String& rFieldContents )
-    : SwField(pInitType)
+    : SwField(pInitType),
+    m_nTempSequencePos( -1 )
 {
-    nHandle = pInitType->AddField( rFieldContents );
+    m_nHandle = pInitType->AddField( rFieldContents );
 }
 /* -----------------17.09.99 14:24-------------------
 
@@ -625,16 +626,17 @@ SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
                                                 long nSetHandle )
     : SwField( pInitType ),
-    nHandle( nSetHandle )
+    m_nHandle( nSetHandle ),
+    m_nTempSequencePos( -1 )
 {
-    pInitType->AddField( nHandle );
+    pInitType->AddField( m_nHandle );
 }
 /* -----------------15.09.99 15:00-------------------
 
  --------------------------------------------------*/
 SwAuthorityField::~SwAuthorityField()
 {
-    ((SwAuthorityFieldType* )GetTyp())->RemoveField(nHandle);
+    ((SwAuthorityFieldType* )GetTyp())->RemoveField(m_nHandle);
 }
 /*-- 14.09.99 16:20:59---------------------------------------------------
 
@@ -648,11 +650,14 @@ String  SwAuthorityField::Expand() const
 
     if( pAuthType->IsSequence() )
     {
-        sRet += String::CreateFromInt32( pAuthType->GetSequencePos( nHandle ));
+       if(!pAuthType->GetDoc()->IsExpFldsLocked())
+           m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
+       if( m_nTempSequencePos >= 0 )
+           sRet += String::CreateFromInt32( m_nTempSequencePos );
     }
     else
     {
-        const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(nHandle);
+        const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
         //TODO: Expand to: identifier, number sequence, ...
         if(pEntry)
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
@@ -667,7 +672,7 @@ String  SwAuthorityField::Expand() const
 SwField* SwAuthorityField::Copy() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
-    return new SwAuthorityField(pAuthType, nHandle);
+    return new SwAuthorityField(pAuthType, m_nHandle);
 }
 /* -----------------21.09.99 12:55-------------------
 
@@ -675,7 +680,7 @@ SwField* SwAuthorityField::Copy() const
 const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
-    const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle( nHandle );
+    const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle( m_nHandle );
     return pEntry->GetAuthorField( eField );
 }
 /* -----------------21.09.99 14:57-------------------
@@ -684,8 +689,8 @@ const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 void    SwAuthorityField::SetPar1(const String& rStr)
 {
     SwAuthorityFieldType* pInitType = (SwAuthorityFieldType* )GetTyp();
-    pInitType->RemoveField(nHandle);
-    nHandle = pInitType->AddField(rStr);
+    pInitType->RemoveField(m_nHandle);
+    m_nHandle = pInitType->AddField(rStr);
 }
 /* -----------------11.10.99 09:43-------------------
 
@@ -741,7 +746,7 @@ BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
 {
     if(!GetTyp())
         return FALSE;
-    const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle);
+    const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle);
     if(!pAuthEntry)
         return FALSE;
     Sequence <PropertyValue> aRet(AUTH_FIELD_END);
@@ -771,7 +776,7 @@ sal_Int16 lcl_Find(const OUString& rFieldName)
 //----------------------------------------------------------------------------
 BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
 {
-    if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle))
+    if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle))
         return FALSE;
 
     Sequence <PropertyValue> aParam;
@@ -799,8 +804,8 @@ BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
         }
     }
 
-    ((SwAuthorityFieldType*)GetTyp())->RemoveField(nHandle);
-    nHandle = ((SwAuthorityFieldType*)GetTyp())->AddField(sToSet);
+    ((SwAuthorityFieldType*)GetTyp())->RemoveField(m_nHandle);
+    m_nHandle = ((SwAuthorityFieldType*)GetTyp())->AddField(sToSet);
 
     return FALSE;
 }
@@ -814,11 +819,11 @@ SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
     if( pSrcTyp != pDstTyp )
     {
 
-        const SwAuthEntry* pEntry = pSrcTyp->GetEntryByHandle( nHandle );
+        const SwAuthEntry* pEntry = pSrcTyp->GetEntryByHandle( m_nHandle );
         USHORT nHdlPos = pDstTyp->AppendField( *pEntry );
-        pSrcTyp->RemoveField( nHandle );
-        nHandle = pDstTyp->GetHandle( nHdlPos );
-        pDstTyp->AddField( nHandle );
+        pSrcTyp->RemoveField( m_nHandle );
+        m_nHandle = pDstTyp->GetHandle( nHdlPos );
+        pDstTyp->AddField( m_nHandle );
         SwField::ChgTyp( pFldTyp );
     }
     return pSrcTyp;
