@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.199 $
-# Date:        $Date: 2008-08-19 12:03:39 $
+# Version:     $Revision: 1.200 $
+# Date:        $Date: 2008-08-27 13:56:09 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1733,6 +1733,7 @@ ToFile( "COMMONS_LOGGING_JAR","@COMMONS_LOGGING_JAR@","e" );
 ToFile( "SYSTEM_SERVLETAPI", "@SYSTEM_SERVLETAPI@", "e" );
 ToFile( "SERVLETAPI_JAR",    "@SERVLETAPI_JAR@",   "e" );
 ToFile( "ENABLE_DBUS",       "@ENABLE_DBUS@",      "e" );
+ToFile( "ENABLE_GCONF",      "@ENABLE_GCONF@",     "e" );
 ToFile( "ENABLE_GNOMEVFS",   "@ENABLE_GNOMEVFS@",  "e" );
 ToFile( "ENABLE_GIO",        "@ENABLE_GIO@",       "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
