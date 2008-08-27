@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewShellBase.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1730,7 +1730,6 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
             pWindow->GrabFocus();
             // Forward the key press as well.
             pWindow->KeyInput(rKEvt);
-            ::Window::KeyInput(rKEvt);
         }
     }
 }
