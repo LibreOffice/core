@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.118 $
+# $Revision: 1.119 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -464,7 +464,7 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 
 if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isxpdplatform ))
 {
-    $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Scpactions($scpactionsinproductarrayref);
+    $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($scpactionsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1a.log", $scpactionsinproductarrayref); }
 }
 
@@ -548,6 +548,12 @@ if (!($installer::globals::is_copy_only_project))
 
     $modulesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Module");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules1.log", $modulesinproductarrayref); }
+
+    if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isxpdplatform ))
+    {
+        $modulesinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($modulesinproductarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules1a.log", $modulesinproductarrayref); }
+    }
 
     installer::scriptitems::resolve_assigned_modules($modulesinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules1b.log", $modulesinproductarrayref); }
@@ -1658,7 +1664,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Adding child projects to installation dynamically
-            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref, $modulesinproductarrayref); }
+            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref, $modulesinproductarrayref, $includepatharrayref); }
 
             # Adding license file into setup
             if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }
