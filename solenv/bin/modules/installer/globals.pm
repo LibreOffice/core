@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.105 $
+# $Revision: 1.106 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -208,6 +208,7 @@ BEGIN
     $productcode = "";
     $upgradecode = "";
     $msiproductversion = "";
+    $msimajorproductversion = "";
     $created_new_component_guid = 0;
     @allddffiles = ();
     $infodirectory = "";
