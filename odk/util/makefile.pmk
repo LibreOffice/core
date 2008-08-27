@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.pmk,v $
 #
-# $Revision: 1.57 $
+# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -131,6 +131,12 @@ DLLOUT=$(SOLARLIBDIR)
 # SOLARIS SPARC
 ##############
 DESTPLATFROM=solsparc
+
+.ELIF "$(OS)$(CPU)"=="SOLARISU"
+##############
+# SOLARIS SPARC 64
+##############
+DESTPLATFROM=solsparc64
 
 .ELIF "$(OS)$(CPU)"=="SOLARISI"
 ##########
