@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bc.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1048,7 +1048,7 @@ BaseContent::open(
                                   outputStream );
             }
 
-            sal_Bool bLock = ( aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE );
+            sal_Bool bLock = ( aCommandArgument.Mode != OpenMode::DOCUMENT_SHARE_DENY_NONE );
 
             Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,UNO_QUERY );
             if( activeDataSink.is() )
