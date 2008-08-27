@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyName.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,11 +108,6 @@ public interface PropertyName {
      */
     final public static String KEEP_DOCUMENT = "KeepDocument";
     /**
-     * parameter name: "OOO_EnvSet"<p>
-     * path to the configuration file to create an build environment
-     */
-    final public static String OOO_ENVSET = "OOO_EnvSet";
-    /**
      * parameter name: "SRC_ROOT"<p>
      * path to the source root of OpenOffice.org
      */
@@ -122,11 +117,6 @@ public interface PropertyName {
      * the name of the version to test
      */
     final public static String VERSION = "Version";
-    /**
-     * parameter name: "COMP_ENV"<p>
-     * like unxsols4, unxsoli4, unxlngi5, wntmsci10
-     */
-    final public static String COMP_ENV = "COMP_ENV";
 
     /**
      * parameter name "Shell"<p>
