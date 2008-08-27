@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.52 $
+# $Revision: 1.53 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1694,11 +1694,11 @@ sub change_keys_of_scpactions
 # the style XPD_ONLY), except an xpd installation set is created
 ############################################################################
 
-sub remove_Xpdonly_Scpactions
+sub remove_Xpdonly_Items
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Xpdonly_Scpactions : $#{$itemsarrayref}"); }
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Xpdonly_Items : $#{$itemsarrayref}"); }
 
     my $infoline;
 
@@ -1712,7 +1712,7 @@ sub remove_Xpdonly_Scpactions
 
         if ( $styles =~ /\bXPD_ONLY\b/ )
         {
-            $infoline = "Removing \"xpd only\" scp action $oneitem->{'gid'} from the installation set.\n";
+            $infoline = "Removing \"xpd only\" item $oneitem->{'gid'} from the installation set.\n";
             push( @installer::globals::globallogfileinfo, $infoline);
 
             next;
