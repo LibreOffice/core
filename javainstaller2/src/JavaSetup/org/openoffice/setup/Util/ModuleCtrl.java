@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModuleCtrl.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -765,6 +765,40 @@ public class ModuleCtrl {
         }
     }
 
+    static public void setRequiredNewCoreModules(PackageDescription packageData, InstallData installData) {
+        // Special handling for core modules, which are required, but not installed.
+        boolean isRequiredCoreModule = checkRequiredCoreModule(packageData);
+        if ( isRequiredCoreModule ) {
+            if ( packageData.getSelectionState() != PackageDescription.INSTALL ) {
+                packageData.setSelectionState(PackageDescription.INSTALL);
+                LogManager.addLogfileComment("<b>Adding required package:</b> " + packageData.getPackageName() + "</br>");
+            }
+            // This package has to exist!
+            if ( ! packageExists(packageData, installData) ) {
+
+                String packagePath = installData.getPackagePath();
+                if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+                    File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+                    packagePath = completePackageFile.getPath();
+                }
+                String packageName = packageData.getPackageName();
+                File packageFile = new File(packagePath, packageName);
+
+                String log = "<b>Error: Missing required package " + packageFile.getPath() + "</b><br>";
+                System.err.println(log);
+                String message = ResourceManager.getString("String_File_Not_Found") + ": " + packageFile.getPath();
+                String title = ResourceManager.getString("String_Error");
+                Informer.showErrorMessage(message, title);
+                System.exit(1);
+            }
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            setRequiredNewCoreModules(child, installData);
+        }
+    }
+
     static public void defaultDatabaseAnalysis(InstallData data) {
 
         PackageDescription packageData = SetupDataProvider.getPackageDescription();
@@ -795,6 +829,13 @@ public class ModuleCtrl {
 
             if ( data.logModuleStates() ) {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After setUpdateOlderProductSettings");
+            }
+
+            // Setting required root module packages (that are new in the update product).
+            ModuleCtrl.setRequiredNewCoreModules(packageData, data);
+
+            if ( data.logModuleStates() ) {
+                Dumper.logModuleStates(packageData, "ChooseDirectory: After setRequiredNewCoreModules");
             }
 
             // Checking, if all packages are available
