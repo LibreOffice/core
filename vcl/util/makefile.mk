@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.112 $
+# $Revision: 1.113 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,11 @@ SNDFILELIB=$(SNDFILE_LIBS)
 .INCLUDE :  makefile2.pmk
 
 .IF "$(OS)" == "SOLARIS"
+.IF "$(CPUNAME)" == "SPARC" && "$(CPU)" == "U"
+LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib/64 $(LINKFLAGSRUNPATH_OOO)
+.ELSE
 LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
 .ENDIF
 
 # --- Allgemein ----------------------------------------------------------
