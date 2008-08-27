@@ -8,7 +8,7 @@
 #
 # $RCSfile: msiglobal.pm,v $
 #
-# $Revision: 1.50 $
+# $Revision: 1.51 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1981,6 +1981,14 @@ sub set_msiproductversion
     }
 
     $installer::globals::msiproductversion = $productversion;
+
+    # Setting $installer::globals::msimajorproductversion, to differ between old version in upgrade table
+
+    if ( $installer::globals::msiproductversion =~ /^\s*(\d+)\./ )
+    {
+        my $major = $1;
+        $installer::globals::msimajorproductversion = $major . "\.0\.0";
+    }
 }
 
 #################################################################################
@@ -2007,6 +2015,57 @@ sub put_msiproductversion_into_bootstrapfile
             installer::files::save_file($onefile->{'sourcepath'}, $file);
 
             last;
+        }
+    }
+}
+
+####################################################################################
+# Updating the file Property.idt dynamically
+# Content:
+# Property Value
+####################################################################################
+
+sub update_reglocat_table
+{
+    my ($basedir, $allvariables) = @_;
+
+    my $reglocatfilename = $basedir . $installer::globals::separator . "RegLocat.idt";
+
+    # Only do something, if this file exists
+
+    if ( -f $reglocatfilename )
+    {
+        my $reglocatfile = installer::files::read_file($reglocatfilename);
+
+        my $layername = "";
+        if ( $allvariables->{'REGISTRYLAYERNAME'} )
+        {
+            $layername = $allvariables->{'REGISTRYLAYERNAME'};
+        }
+        else
+        {
+            for ( my $i = 0; $i <= $#{$reglocatfile}; $i++ )
+            {
+                if ( ${$reglocatfile}[$i] =~ /\bLAYERNAMETEMPLATE\b/ )
+                {
+                    installer::exiter::exit_program("ERROR: Variable \"REGISTRYLAYERNAME\" has to be defined", "update_reglocat_table");
+                }
+            }
+        }
+
+        if ( $layername ne "" )
+        {
+            # Updating the layername in
+
+            for ( my $i = 0; $i <= $#{$reglocatfile}; $i++ )
+            {
+                ${$reglocatfile}[$i] =~ s/\bLAYERNAMETEMPLATE\b/$layername/;
+            }
+
+            # Saving the file
+            installer::files::save_file($reglocatfilename ,$reglocatfile);
+            my $infoline = "Updated idt file: $reglocatfilename\n";
+            push(@installer::globals::logfileinfo, $infoline);
         }
     }
 }
