@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unochart.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1669,9 +1669,14 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         if (!bDisposed)
             pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
 
-        const Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
-        Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
-        Set_DataSequenceRef_t::iterator aEndIt( rSet.end() );
+        //! make a copy of the STL container!
+        //! This is necessary since calling 'dispose' will implicitly remove an element
+        //! of the original container, and thus any iterator in the original container
+        //! would become invalid.
+        const Set_DataSequenceRef_t aSet( aDataSequences[ pTable ] );
+
+        Set_DataSequenceRef_t::iterator aIt( aSet.begin() );
+        Set_DataSequenceRef_t::iterator aEndIt( aSet.end() );
         while (aIt != aEndIt)
         {
 //            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
