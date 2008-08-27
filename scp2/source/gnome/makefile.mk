@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,7 +43,11 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
-.IF "$(ENABLE_GNOMEVFS)" != "" || "$(ENABLE_GIO)" != ""
+.IF "$(ENABLE_GCONF)"!="" || "$(ENABLE_GNOMEVFS)"!="" || "$(ENABLE_GIO)"!=""
+
+.IF "$(ENABLE_GCONF)" != ""
+SCPDEFS+=-DENABLE_GCONF
+.ENDIF
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
 SCPDEFS+=-DENABLE_GNOMEVFS
