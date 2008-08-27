@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterWindowManager.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <boost/bind.hpp>
 #include <boost/bind/protect.hpp>
-#include <cmath>
+#include <math.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

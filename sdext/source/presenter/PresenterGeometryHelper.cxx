@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterGeometryHelper.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 
 #include "PresenterGeometryHelper.hxx"
 
-#include <cmath>
+#include <math.h>
 #include <algorithm>
 
 using namespace ::com::sun::star;
