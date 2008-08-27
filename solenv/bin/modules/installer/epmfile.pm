@@ -8,7 +8,7 @@
 #
 # $RCSfile: epmfile.pm,v $
 #
-# $Revision: 1.85 $
+# $Revision: 1.86 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2631,14 +2631,24 @@ sub unpack_tar_gz_file
 
 sub copy_childproject_files
 {
-    my ($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, $subdir) = @_;
+    my ($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, $subdir, $includepatharrayref, $use_sopackpath) = @_;
 
     for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
     {
         my $onemodule = ${$allmodules}[$i];
         my $packagename = $onemodule->{'PackageName'};
-        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . $subdir . $installer::globals::separator . $packagename;
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile !", "copy_childproject_files"); }
+        my $sourcefile = "";
+        if ( $use_sopackpath )
+        {
+            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . $subdir . $installer::globals::separator . $packagename;
+        }
+        else
+        {
+            my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packagename, $includepatharrayref, 1);
+            $sourcefile = $$sourcepathref;
+        }
+
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile ($packagename) !", "copy_childproject_files"); }
         installer::systemactions::copy_one_file($sourcefile, $destdir);
         # Solaris: unpacking tar.gz files and setting new packagename
         if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $destdir); }
@@ -2670,7 +2680,7 @@ sub copy_and_unpack_tar_gz_files
 
 sub put_childprojects_into_installset
 {
-    my ($newdir, $allvariables, $modulesarrayref) = @_;
+    my ($newdir, $allvariables, $modulesarrayref, $includepatharrayref) = @_;
 
     my $infoline = "";
 
@@ -2695,7 +2705,7 @@ sub put_childprojects_into_installset
         # Collect all modules with flag "JAVAMODULE"
         my $allmodules = collect_modules_with_style("JAVAMODULE", $modulesarrayref);
         $allmodules = remove_modules_without_package($allmodules);
-        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "jre");
+        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "jre", $includepatharrayref, 1);
     }
 
     # Adding additional required packages (freetype).
@@ -2706,8 +2716,13 @@ sub put_childprojects_into_installset
         # Collect all modules with flag "REQUIREDPACKAGEMODULE"
         my $allmodules = collect_modules_with_style("REQUIREDPACKAGEMODULE", $modulesarrayref);
         $allmodules = remove_modules_without_package($allmodules);
-        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "requiredpackages");
+        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "requiredpackages", $includepatharrayref, 1);
     }
+
+    # Collect all modules with flag "USERLANDMODULE"
+    my $alluserlandmodules = collect_modules_with_style("USERLANDMODULE", $modulesarrayref);
+    $alluserlandmodules = remove_modules_without_package($alluserlandmodules);
+    copy_childproject_files($alluserlandmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "", $includepatharrayref, 0);
 
 }
 
