@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.244 $
+ * $Revision: 1.245 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2784,7 +2784,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const ImplFontSelectData& rA, const I
     // check font face attributes
     if( (rA.meWeight       != rB.meWeight)
     ||  (rA.meItalic       != rB.meItalic)
-    ||  (rA.meFamily       != rB.meFamily)
+//    ||  (rA.meFamily       != rB.meFamily) // TODO: remove this mostly obsolete member
     ||  (rA.mePitch        != rB.mePitch) )
         return false;
 
