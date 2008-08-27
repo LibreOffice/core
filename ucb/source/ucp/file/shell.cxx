@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shell.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1810,7 +1810,7 @@ shell::write( sal_Int32 CommandId,
     }
     else
     {
-        err = aFile.open( OpenFlag_Write );
+        err = aFile.open( OpenFlag_Read | OpenFlag_NoLock );
         if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
         {
             installError( CommandId,
@@ -1821,10 +1821,13 @@ shell::write( sal_Int32 CommandId,
             return sal_False;
         }
 
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create );
+        // as a temporary solution the creation does not lock the file at all
+        // in future it should be possible to create the file without lock explicitly
+        err = aFile.open( OpenFlag_Write | OpenFlag_Create | OpenFlag_NoLock );
 
         if( err != osl::FileBase::E_None )
         {
+            aFile.close();
             installError( CommandId,
                           TASKHANDLING_NO_OPEN_FILE_FOR_WRITE,
                           err );
