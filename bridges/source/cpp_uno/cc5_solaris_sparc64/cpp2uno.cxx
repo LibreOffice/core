@@ -8,7 +8,7 @@
  *
  * $RCSfile: cpp2uno.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -347,11 +347,48 @@ void call(
     if (directReturn) {
         if (rtd != NULL) {
             switch (rtd->eTypeClass) {
+            case typelib_TypeClass_VOID:
+                break;
+            case typelib_TypeClass_BOOLEAN:
+                callStack[0] = *reinterpret_cast< sal_Bool * >(retbuf);
+                break;
+            case typelib_TypeClass_BYTE:
+                callStack[0] = *reinterpret_cast< sal_Int8 * >(retbuf);
+                break;
+            case typelib_TypeClass_SHORT:
+                callStack[0] = *reinterpret_cast< sal_Int16 * >(retbuf);
+                break;
+            case typelib_TypeClass_UNSIGNED_SHORT:
+                callStack[0] = *reinterpret_cast< sal_uInt16 * >(retbuf);
+                break;
+            case typelib_TypeClass_LONG:
+            case typelib_TypeClass_ENUM:
+                callStack[0] = *reinterpret_cast< sal_Int32 * >(retbuf);
+                break;
+            case typelib_TypeClass_UNSIGNED_LONG:
+                callStack[0] = *reinterpret_cast< sal_uInt32 * >(retbuf);
+                break;
+            case typelib_TypeClass_HYPER:
+                callStack[0] = *reinterpret_cast< sal_Int64 * >(retbuf);
+                break;
+            case typelib_TypeClass_UNSIGNED_HYPER:
+                callStack[0] = *reinterpret_cast< sal_uInt64 * >(retbuf);
+                break;
             case typelib_TypeClass_FLOAT:
                 fp_loadf0(reinterpret_cast< float * >(retbuf));
                 break;
             case typelib_TypeClass_DOUBLE:
                 fp_loadd0(reinterpret_cast< double * >(retbuf));
+                break;
+            case typelib_TypeClass_CHAR:
+                callStack[0] = *reinterpret_cast< sal_Unicode * >(retbuf);
+                break;
+            case typelib_TypeClass_STRING:
+            case typelib_TypeClass_TYPE:
+            case typelib_TypeClass_SEQUENCE:
+            case typelib_TypeClass_INTERFACE:
+                callStack[0] = reinterpret_cast< unsigned long >(
+                    *reinterpret_cast< void ** >(retbuf));
                 break;
             case typelib_TypeClass_STRUCT:
                 loadFpRegsFromStruct(rtd, retbuf);
@@ -360,10 +397,7 @@ void call(
                 std::memcpy(callStack, retbuf, rtd->nSize);
                 break;
             default:
-                OSL_ASSERT(rtd->nSize <= 8);
-                std::memcpy(
-                    reinterpret_cast< char * >(callStack) + (8 - rtd->nSize),
-                    retbuf, rtd->nSize);
+                OSL_ASSERT(false);
                 break;
             }
         }
