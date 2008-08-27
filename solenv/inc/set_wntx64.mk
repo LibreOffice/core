@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: set_wntx64.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,8 +39,12 @@
 
 .IF "$(BUILD_X64)"!=""
 # ----------------- settings for x64 --------------------
-CC_X64*:=$(WRAPCMD) $(COMPROOT)$/PlatformSDK$/vc$/bin$/x86_x64$/cl.exe
-CXX_X64*:=$(WRAPCMD) $(COMPROOT)$/PlatformSDK$/vc$/bin$/x86_x64$/cl.exe
+CC_X64*:=$(WRAPCMD) $(CXX_X64_BINARY)
+CXX_X64*:=$(WRAPCMD) $(CXX_X64_BINARY)
+LINK_X64*:=$(WRAPCMD) $(LINK_X64_BINARY) $(NOLOGO) -MACHINE:X64
+LIBMGR_X64=$(WRAPCMD) $(LIBMGR_X64_BINARY) $(NOLOGO)
+IMPLIB_X64=$(WRAPCMD) $(LIBMGR_X64_BINARY)
+
 USE_CFLAGS_X64=-c -nologo -Gs $(NOLOGO) -Zm500 -Zc:forScope,wchar_t- -GR
 USE_CFLAGS_X64+=$(CFLAGS_X64)
 USE_CDEFS_X64+= -DWIN32 -D_AMD64_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
@@ -69,7 +73,6 @@ CDEFSSLOMT_X64+=-D_MT
 CDEFSOBJMT_X64+=-D_MT
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
-LINK_X64=$(WRAPCMD) $(COMPROOT)$/PlatformSDK$/vc$/bin$/x86_x64$/link.exe $(NOLOGO) -MACHINE:X64
 .IF "$(PRODUCT)"!="full"
 .ELSE
 LINKFLAGS_X64=/MAP /OPT:NOREF
@@ -92,8 +95,6 @@ STDSLOGUI_X64=
 STDOBJCUI_X64=
 STDSLOCUI_X64=
 
-LIBMGR_X64=$(WRAPCMD) $(COMPROOT)$/PlatformSDK$/vc$/bin$/x86_x64$/lib.exe $(NOLOGO)
-IMPLIB_X64=$(WRAPCMD) $(COMPROOT)$/PlatformSDK$/vc$/bin$/x86_x64$/lib.exe
 IMPLIBFLAGS_X64=-machine:X64
 
 LIBPATH_X64=$(PSDK)$/lib$/x64
@@ -182,3 +183,7 @@ DEF1TARGETN_X64=$(MISC_X64)$/$(DEF1NAME_X64).def
 DEF2TARGETN_X64=$(MISC_X64)$/$(DEF2NAME_X64).def
 .ENDIF
 .ENDIF # "$(BUILD_X64)"!=""
+
+
+
+
