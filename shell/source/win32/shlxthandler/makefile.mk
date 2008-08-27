@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +42,9 @@ USE_DEFFILE_X64=TRUE
 
 .INCLUDE :  settings.mk
 
+UWINAPILIB =
+UWINAPILIB_X64 =
+
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS+=-D_WIN32_IE=0x501
@@ -68,7 +71,7 @@ SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
     $(SOLARLIBDIR)$/expat_xmltok.lib
 .ENDIF
-SHL1STDLIBS+=$(UWINAPILIB)\
+SHL1STDLIBS+=\
     $(OLEAUT32LIB)\
     $(ADVAPI32LIB)\
     $(OLE32LIB)\
@@ -112,7 +115,7 @@ SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/zlib.lib\
     $(SOLARLIBDIR_X64)$/expat_xmlparse.lib\
     $(SOLARLIBDIR_X64)$/expat_xmltok.lib
 
-SHL1STDLIBS_X64+=$(UWINAPILIB_X64)\
+SHL1STDLIBS_X64+=\
     $(OLEAUT32LIB_X64)\
     $(ADVAPI32LIB_X64)\
     $(OLE32LIB_X64)\
