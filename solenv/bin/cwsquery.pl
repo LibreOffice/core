@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: cwsquery.pl,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,7 +58,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.13 $ ';
+my $id_str = ' $Revision: 1.14 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -72,7 +72,7 @@ my $opt_child  = '';        # option: child workspace
 my $opt_milestone  = '';    # option: milestone
 
 # list of available query modes
-my @query_modes = qw(modules incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
+my @query_modes = qw(modules incompatible newmodules taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
 my %query_modes_hash = ();
 foreach (@query_modes) {
     $query_modes_hash{$_}++;
@@ -99,7 +99,7 @@ sub query_cws
                     . "Please initialize environment with setsolar ...", 1);
     }
 
-    if ( ($query_mode eq 'modules' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state'
+    if ( ($query_mode eq 'modules' || $query_mode eq 'incompatible' || $query_mode eq 'newmodules' || $query_mode eq 'taskids' || $query_mode eq 'state'
          || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
         print_error("Can't determine child workspace environment.\n"
                     . "Please initialize environment with setsolar ...", 1);
@@ -150,6 +150,28 @@ sub query_incompatible
     return;
 }
 
+sub query_newmodules
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my @modules = $cws->new_modules();
+        print_message("New Modules:");
+        foreach (@modules) {
+            if ( defined($_) ) {
+                print "$_\n";
+            }
+        }
+        @modules = $cws->new_modules_priv();
+        foreach (@modules) {
+            if ( defined($_) ) {
+                print "$_\n";
+            }
+        }
+    }
+    return;
+}
+
 sub query_taskids
 {
     my $cws = shift;
@@ -191,12 +213,13 @@ sub query_vcs
     if ( is_valid_cws($cws) ) {
         my $issvn = $cws->get_subversion_flag();
         if ( !defined($issvn) ) {
-            print_error("Internal error: can't get isSubVersion flag.", 3);
+            print_error("Internal error: can't get Version Control System.", 3);
         } else {
+            print_message("Child workspace Version Control System:");
             if ( $issvn==1 ) {
-                print_message("Child workspace uses SubVersion");
+                print "SubVersion\n";
             } else {
-                print_message("Child workspace uses CVS");
+                print "CVS\n";
             }
         }
     }
@@ -221,20 +244,14 @@ sub query_ispublic
         if ( !defined($ispublic) ) {
             print_error("Internal error: can't get isPublic flag.", 3);
         } else {
+                print_message("Child workspace isPublic flag:");
             if ( $ispublic==1 ) {
-                print_message("Child workspace is public");
+                print "true\n";
             } else {
-                print_message("Child workspace is internal");
+                print "false\n";
             }
         }
     }
-
-    # check if we got a valid child workspace
-    my $id = $cws->eis_id();
-    if ( !$id ) {
-        print_error("Child workspace '$childws' for master workspace '$masterws' not found in EIS database.", 2);
-    }
-
     return;
 }
 
@@ -329,13 +346,10 @@ sub query_masters
     my $list="";
 
     if ( @mws ) {
+        print_message("Master workspaces available:");
         foreach (@mws) {
-            if ( $list ne "" ) {
-                $list .= ", ";
-            }
-            $list .= $_;
+            print "$_\n";
         }
-        print_message("Master workspaces available: $list");
     }
     else {
         print_error("Can't determine masterworkspaces.", 3);
@@ -353,14 +367,11 @@ sub query_milestones
     my $list="";
 
     if ( @milestones ) {
-        foreach (@milestones) {
-            if ( $list ne "" ) {
-                $list .= ", ";
-            }
-            $list .= $_;
-        }
         print_message("Master workspace '$masterws':");
         print_message("Milestones known on Master: $list");
+        foreach (@milestones) {
+            print "$_\n";
+        }
     }
     else {
         print_error("Can't determine milestones of '$masterws'.", 3);
@@ -382,10 +393,11 @@ sub query_ispublicmaster
         if ( !defined($ispublic) ) {
             print_error("Internal error: can't get isPublicMaster flag.", 3);
         } else {
+            print_message("Master workspace public flag:");
             if ( $ispublic==1 ) {
-                print_message("Master workspace is public");
+                print "true\n";
             } else {
-                print_message("Master workspace is internal");
+                print "false\n";
             }
         }
     }
@@ -521,12 +533,12 @@ sub query_new
 
     my $masterws = $cws->master();
 
-    my @ready_cws = $cws->get_cws_with_state($masterws, 'new');
+    my @new_cws = $cws->get_cws_with_state($masterws, 'new');
 
-    if ( @ready_cws ) {
+    if ( @new_cws ) {
         print_message("Master workspace '$masterws':");
         print_message("CWSs with state 'new':");
-        foreach (@ready_cws) {
+        foreach (@new_cws) {
             print "$_\n";
         }
     }
@@ -540,12 +552,12 @@ sub query_planned
 
     my $masterws = $cws->master();
 
-    my @ready_cws = $cws->get_cws_with_state($masterws, 'planned');
+    my @planned_cws = $cws->get_cws_with_state($masterws, 'planned');
 
-    if ( @ready_cws ) {
+    if ( @planned_cws ) {
         print_message("Master workspace '$masterws':");
         print_message("CWSs with state 'planned':");
-        foreach (@ready_cws) {
+        foreach (@planned_cws) {
             print "$_\n";
         }
     }
@@ -699,7 +711,7 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|incompatible|owner|qarep|status|taskids>\n";
+    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|incompatible|newmodules|owner|qarep|status|taskids>\n";
     print STDERR "       cwsquery [-h] [-m master] [-c child] <release|due|due_qa|help|ui|ispublic|vcs|build>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest|milestones|ispublicmaster>\n";
     print STDERR "       cwsquery [-h] <masters>\n";
@@ -710,6 +722,7 @@ sub usage
     print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
     print STDERR "\tmodules\t\tquery modules added to the CWS\n";
     print STDERR "\tincompatible\tquery modules which should be build incompatible\n";
+    print STDERR "\tnewmodules\tquery modules which are new on the CWS\n";
     print STDERR "\towner\t\tquery CWS owner\n";
     print STDERR "\tqarep\t\tquery CWS QA Representative\n";
     print STDERR "\tstatus\t\tquery approval status of CWS\n";
