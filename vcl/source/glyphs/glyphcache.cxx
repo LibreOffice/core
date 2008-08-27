@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: glyphcache.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,9 @@ bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const Imp
 
     if( (rA.meItalic != rB.meItalic)
     ||  (rA.meWeight != rB.meWeight) )
-    return false;
+        return false;
+
+    // NOTE: ignoring meFamily deliberately
 
     // compare with the requested width, allow default width
     if( (rA.mnWidth != rB.mnWidth)
