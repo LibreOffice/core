@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,7 +406,7 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
         else
             [mpWindow makeKeyAndOrderFront: NSApp];
 
-        if( mpParent )
+        if( mpParent && mpParent->mbShown )
             [mpParent->mpWindow addChildWindow: mpWindow ordered: NSWindowAbove];
 
         if( mbPresentation )
@@ -427,7 +427,7 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
             [mpParent->mpWindow makeKeyAndOrderFront: NSApp];
 
         [SalFrameView unsetMouseFrame: this];
-        if( mpParent )
+        if( mpParent && [mpWindow parentWindow] == mpParent->mpWindow )
             [mpParent->mpWindow removeChildWindow: mpWindow];
 
         [mpWindow orderOut: NSApp];
