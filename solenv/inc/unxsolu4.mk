@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxsolu4.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,6 +83,9 @@ CFLAGSOUTOBJ=-o
 # Warnings switched off for CXX:
 # - doubunder: we have many identifiers containing double underscores, some of
 #   them in the stable UDK API we cannot change
+# - identexpected: Identifier expected instead of "}"
+#   if an enum ends with a comma before the '}'
+#   this warning does not seem to heed #pragma disable_warn, and is not helpful
 # - inllargeuse: "function is too large and will not be expanded inline" is
 #   merely a hint
 # - inllargeint: "function is too large to generate inline, consider writing
@@ -103,7 +106,7 @@ CFLAGSOUTOBJ=-o
 # - hidef:  "d::foo() hides the function b::foo()." We got still some cases of mixed
 #   sal_uInt32 and ULONG usages which needs to be fixed. We can then remove this one
 CFLAGSWARNCC=
-CFLAGSWARNCXX=+w2 -erroff=doubunder,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,hidef,anonnotype,unassigned,badargtype2w
+CFLAGSWARNCXX=+w2 -erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,hidef,anonnotype,unassigned,badargtype2w
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-errwarn=%all
