@@ -8,7 +8,7 @@
 #
 # $RCSfile: cwscheckapi,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -143,7 +143,11 @@ PARAM=""
 if [ -n "$JAVAI" ]; then
         JAVABIN=$JAVAI
 elif [ -n "$JAVA_HOME" ]; then
+    if [ "$OS$CPUNAME$CPU" = SOLARISSPARCU ]; then
+        JAVABIN=$JAVA_HOME/bin/sparcv9/java
+    else
         JAVABIN=$JAVA_HOME/bin/java
+    fi
 else
         echo "please set environment variable JAVA_HOME"
         exit 1
