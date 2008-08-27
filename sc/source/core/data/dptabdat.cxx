@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabdat.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <cstdio>
+#include <stdio.h>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
