@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: tg_wntx64.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -503,8 +503,7 @@ $(SLO_X64)$/%.obj : %.cxx
     @echo Making: $@
     @@-$(RM) $@ >& $(NULLDEV)
     -$(MKDIR) $(@:d)
-    @$(TYPE) $(mktmp $(CXX_X64) $(ACT_PCH_SWITCHES) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx ) $(CAPTURE_OUTPUT)
-     $(CXX_X64) @$(mktmp $(ACT_PCH_SWITCHES) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
+    $(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx $(CAPTURE_OUTPUT)
 
 $(SLO_X64)$/%.obj : $(MISC)$/%.c
     @echo ------------------------------
@@ -523,3 +522,7 @@ $(SLO_X64)$/%.obj : %.c
     $(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $*.c )
 
 .ENDIF			# "$(BUILD_X64)"!=""
+
+
+
+
