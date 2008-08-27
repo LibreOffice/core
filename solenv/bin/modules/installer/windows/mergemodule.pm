@@ -8,7 +8,7 @@
 #
 # $RCSfile: mergemodule.pm,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1146,8 +1146,8 @@ sub change_file_table
 
         my $systemcall = "";
         if ( $^O =~ /cygwin/i ) {
-            my $localunpackdir = $unpackdir;
-            $localunpackdir =~ s/\//\\\\/g;
+            my $localunpackdir = qx{cygpath -w "$unpackdir"};
+            $localunpackdir =~ s/\\/\\\\/g;
             $systemcall = $expandfile . " " . $cabfilename . " -F:\\\* " . $localunpackdir;
         }
         else
