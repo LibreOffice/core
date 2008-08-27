@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtlists.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,10 @@
 #include <map>
 #include <vector>
 
+// --> OD 2008-08-15 #i92811#
+class XMLTextListBlockContext;
+// <--
+
 class XMLTextListsHelper
 {
     public:
@@ -43,9 +47,13 @@ class XMLTextListsHelper
         ~XMLTextListsHelper();
 
         // keeping track of processed lists for import and export
+        // --> OD 2008-08-15 #i92811#
+        // - add optional parameter <sListStyleDefaultListId>
         void KeepListAsProcessed( ::rtl::OUString sListId,
                                   ::rtl::OUString sListStyleName,
-                                  ::rtl::OUString sContinueListId );
+                                  ::rtl::OUString sContinueListId,
+                                  ::rtl::OUString sListStyleDefaultListId = ::rtl::OUString() );
+        // <--
 
         sal_Bool IsListProcessed( const ::rtl::OUString sListId ) const;
         ::rtl::OUString GetListStyleOfProcessedList(
@@ -56,6 +64,11 @@ class XMLTextListsHelper
         const ::rtl::OUString& GetListStyleOfLastProcessedList() const;
 
         ::rtl::OUString GenerateNewListId() const;
+
+        // --> OD 2008-08-15 #i92811#
+        // provide list id for a certain list block for import
+        ::rtl::OUString GetListIdForListBlock( XMLTextListBlockContext& rListBlock );
+        // <--
 
 
         // keep track of continue list chain for export
@@ -80,6 +93,13 @@ class XMLTextListsHelper
         tMapForLists* mpProcessedLists;
         ::rtl::OUString msLastProcessedListId;
         ::rtl::OUString msListStyleOfLastProcessedList;
+
+        // --> OD 2008-08-15 #i92811#
+        // additional container for processed lists.
+        // map with <ListStyleName> as key and pair( <ListId, ListStyleDefaultListId> )
+        // as value.
+        tMapForLists* mpMapListIdToListStyleDefaultListId;
+        // <--
 
         // container type to build up continue list chain:
         // map with <ListId> of master list as key and <ListId> of last list
