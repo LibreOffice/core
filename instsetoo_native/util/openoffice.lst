@@ -28,6 +28,7 @@ Globals
 			PROGRESSSIZE 412,7
 			PROGRESSPOSITION 14,230
 			PROGRESSFRAMECOLOR 58,159,232
+			REGISTRYLAYERNAME Layers
 		}
 	}
 }
@@ -181,6 +182,7 @@ OpenOffice_Dev
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
+			REGISTRYLAYERNAME LayerDev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
@@ -468,6 +470,7 @@ BrOffice_Dev
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
+			REGISTRYLAYERNAME LayerDevBroffice
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
