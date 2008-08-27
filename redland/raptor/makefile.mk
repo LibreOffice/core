@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -80,6 +80,11 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec 
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
+
+.IF "$(COM)"=="C52" && "$(CPU)"=="U"
+CFLAGS=-m64
+.EXPORT: CFLAGS
+.ENDIF
 
 # NB: SOLARDIR before SYSBASE, because linux SYSBASE contains obsolete libcrypto
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external
