@@ -8,7 +8,7 @@
 #
 # $RCSfile: pkg_config.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,12 +33,20 @@
 
 .IF "$(PKGCONFIG_ROOT)"!=""
 PKG_CONFIG=$(PKGCONFIG_ROOT)$/bin$/pkg-config
+.IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/64$/pkgconfig
+.ELSE
 PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
+.ENDIF
 .EXPORT : PKG_CONFIG_PATH
 PKGCONFIG_PREFIX=--define-variable=prefix=$(PKGCONFIG_ROOT)
-.ELSE           # "$(OS)"=="SOLARIS"
+.ELSE
 PKG_CONFIG*=pkg-config
-.ENDIF          # "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
+PKG_CONFIG_PATH=/usr/lib/64/pkgconfig
+.EXPORT : PKG_CONFIG_PATH
+.ENDIF
+.ENDIF
 
 PKGCONFIG_CFLAGS:=$(shell @$(PKG_CONFIG) $(PKGCONFIG_PREFIX) --cflags $(PKGCONFIG_MODULES))
 PKGCONFIG_LIBS:=$(shell @$(PKG_CONFIG) $(PKGCONFIG_PREFIX) --libs $(PKGCONFIG_MODULES))
