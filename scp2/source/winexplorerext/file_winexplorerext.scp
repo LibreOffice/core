@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_winexplorerext.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,12 +30,40 @@
 
 #include "macros.inc"
 
+Directory gid_Dir_Shlxthdl
+    ParentID = gid_Dir_Program;
+    DosName = "shlxthdl";
+End
+
 File gid_File_Lib_Shlxthdl
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Shlxthdl;
     Name = "shlxthdl.dll";
 End
+
+#if !defined USE_SYSTEM_STL
+File gid_File_Lib_Shlxthdl_Stlport
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Shlxthdl;
+#if defined _gcc3 /* && defined WNT */
+#if defined _STLP_DEBUG
+    Name = SCP2_URE_DL_NORMAL("libstlport_gcc_stldebug");
+#else
+    Name = SCP2_URE_DL_NORMAL("libstlport_gcc");
+#endif
+#elif (defined(M1310) || defined(M1400) || defined(M1500)) /* && defined WNT */
+#if defined _STLP_DEBUG
+    Name = SCP2_URE_DL_NORMAL("stlport_vc71_stldebug45");
+#else
+    Name = SCP2_URE_DL_NORMAL("stlport_vc7145");
+#endif
+#else
+#error "stlport dynamic library: unsupported platform"
+#endif
+    Styles = (PACKED);
+End
+#endif
 
 File gid_File_Lib_Shlxtmsi
     TXT_FILE_BODY;
