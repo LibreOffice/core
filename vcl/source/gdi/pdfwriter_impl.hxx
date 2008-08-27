@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.hxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,15 +292,13 @@ public:
         sal_Int32   m_nFontID;
         sal_uInt8   m_nSubsetGlyphID;
     };
-    typedef std::map< long, Glyph > FontMapping;
-
+    typedef std::map< sal_GlyphId, Glyph > FontMapping;
     struct FontSubset
     {
         FontEmitList        m_aSubsets;
         FontMapping         m_aMapping;
     };
     typedef std::map< const ImplFontData*, FontSubset > FontSubsetData;
-
     struct EmbedCode
     {
         sal_Ucs             m_aUnicode;
