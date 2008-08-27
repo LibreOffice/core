@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: cwsanalyze.pl,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -65,7 +65,7 @@ my $config = CwsConfig->get_config();
 my $sointernal = $config->sointernal();
 
 my $script_rev;
-my $id_str = ' $Revision: 1.19 $ ';
+my $id_str = ' $Revision: 1.20 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -230,6 +230,29 @@ sub verify_modules
     return @modules;
 }
 
+# Check whether there are new modules registred with this CWS
+sub have_new_modules
+{
+    my $cws     = shift;
+    my ( $newmods_ref, $newmodspriv_ref );
+
+    $newmods_ref = eval {
+        $cws->new_modules();
+    } || [];
+    if ( $@ ) {
+        # Method 'new_modules()' for package 'Cws' is not available on all workspaces.
+        # In case it's not there give an error message, but do not fail
+        print_error( $@ );
+    }
+    $newmodspriv_ref = eval {
+        $cws->new_modules_priv();
+    } || [];
+    if ( $@ ) {
+        print_error ($@ );
+    }
+    return ( $newmods_ref, $newmodspriv_ref );
+}
+
 # Analyze changes in child work space
 sub analyze
 {
@@ -264,6 +287,11 @@ sub analyze
     $stats .=   "$ntotal_removed removed";
     $stats .= $opt_fast ? '' : ", $ntotal_conflicts conflict(s), $ntotal_alerts alert(s)";
     print_message($stats);
+
+    my ( $new_modules_ref, $new_private_modules_ref ) = have_new_modules( $cws );
+    print_message( "New public modules: " . join ' ', @$new_modules_ref ) if @$new_modules_ref;
+    print_message( "New internal modules: " . join ' ', @$new_private_modules_ref ) if @$new_private_modules_ref;
+
     return ($ntotal_conflicts,$ntotal_alerts) if $opt_auto_int;
 }
 
@@ -322,6 +350,10 @@ sub integrate
     }
 
     print "All modules: $ntotal_new new, $ntotal_removed removed, $ntotal_merged merge(s), $ntotal_conflicts conflicts(s). $ntotal_alerts alert(s)\n";
+
+    my ( $new_modules_ref, $new_private_modules_ref ) = have_new_modules( $cws );
+    print_message( "New public modules: " . join ' ', @$new_modules_ref ) if @$new_modules_ref;
+    print_message( "New internal modules: " . join ' ', @$new_private_modules_ref ) if @$new_private_modules_ref;
 
     if ( @repeated_regfailures ) {
         prompt_manual_registration( $child, $master, @repeated_regfailures );
