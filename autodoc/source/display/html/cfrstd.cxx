@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfrstd.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ctime>
+#include <time.h>
 
 
 /*                      CSS Styles
@@ -332,10 +332,10 @@ String
 MakeCopyRight()
 {
     StreamStr cr(700);
-    std::time_t
+    time_t
         gt;
     time(&gt);
-    std::tm *
+    tm *
         plt = localtime(&gt);
     int year = 1900 + plt->tm_year;
 
