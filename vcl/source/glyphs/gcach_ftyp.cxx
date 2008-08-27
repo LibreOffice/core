@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gcach_ftyp.cxx,v $
- * $Revision: 1.150 $
+ * $Revision: 1.151 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1174,9 +1174,11 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
             // check if symbol aliasing helps
             if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
                 nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
+#if 0 // disabled for now because it introduced ae bad side-effect (#i88376#)
             // Finally try the postscript name table
             if (!nGlyphIndex)
                 nGlyphIndex = psp::PrintFontManager::get().FreeTypeCharIndex( maFaceFT, aChar );
+#endif
         }
         mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
