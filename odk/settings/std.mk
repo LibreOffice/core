@@ -18,6 +18,7 @@ OUT_CLASS=$(OUT)/class
 IDL_DIR=$(PRJ)/idl
 BIN_DIR=$(PRJ)/bin
 CLASSES_DIR=$(PRJ)/classes
+URE_CLASSES_DIR=$(subst \,/,$(OO_SDK_URE_JAVA_DIR))
 OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_BASE_PROGRAM_PATH))/classes
 COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 
