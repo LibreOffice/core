@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtlists.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +36,17 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
+// --> OD 2008-08-15 #i92811#
+#include "XMLTextListBlockContext.hxx"
+// <--
+
 XMLTextListsHelper::XMLTextListsHelper()
     : mpProcessedLists( 0 ),
       msLastProcessedListId(),
       msListStyleOfLastProcessedList(),
+      // --> OD 2008-08-15 #i92811#
+      mpMapListIdToListStyleDefaultListId( 0 ),
+      // <--
       mpContinuingLists( 0 ),
       mpListStack( 0 )
 {
@@ -52,6 +59,13 @@ XMLTextListsHelper::~XMLTextListsHelper()
         mpProcessedLists->clear();
         delete mpProcessedLists;
     }
+    // --> OD 2008-08-15 #i92811#
+    if ( mpMapListIdToListStyleDefaultListId )
+    {
+        mpMapListIdToListStyleDefaultListId->clear();
+        delete mpMapListIdToListStyleDefaultListId;
+    }
+    // <--
     if ( mpContinuingLists )
     {
         mpContinuingLists->clear();
@@ -64,14 +78,16 @@ XMLTextListsHelper::~XMLTextListsHelper()
     }
 }
 
+// --> OD 2008-08-15 #i92811# - handling for parameter <sListStyleDefaultListId>
 void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
                                               ::rtl::OUString sListStyleName,
-                                              ::rtl::OUString sContinueListId )
+                                              ::rtl::OUString sContinueListId,
+                                              ::rtl::OUString sListStyleDefaultListId )
 {
     if ( IsListProcessed( sListId ) )
     {
         DBG_ASSERT( false,
-                    "<XMLTextListsHelper::AddList(..)> - list id already added" );
+                    "<XMLTextListsHelper::KeepListAsProcessed(..)> - list id already added" );
         return;
     }
 
@@ -86,6 +102,25 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
 
     msLastProcessedListId = sListId;
     msListStyleOfLastProcessedList = sListStyleName;
+
+    // --> OD 2008-08-15 #i92811#
+    if ( sListStyleDefaultListId.getLength() != 0 )
+    {
+        if ( mpMapListIdToListStyleDefaultListId == 0 )
+        {
+            mpMapListIdToListStyleDefaultListId = new tMapForLists();
+        }
+
+        if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
+                                mpMapListIdToListStyleDefaultListId->end() )
+        {
+            ::std::pair< ::rtl::OUString, ::rtl::OUString >
+                                aListIdMapData( sListId, sListStyleDefaultListId );
+            (*mpMapListIdToListStyleDefaultListId)[ sListStyleName ] =
+                                                                aListIdMapData;
+        }
+    }
+    // <--
 }
 
 sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) const
@@ -164,6 +199,39 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 
     return sNewListId;
 }
+
+// --> OD 2008-08-15 #i92811#
+// provide list id for a certain list block for import
+::rtl::OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
+{
+    ::rtl::OUString sListBlockListId( rListBlock.GetContinueListId() );
+    if ( sListBlockListId.getLength() == 0 )
+    {
+        sListBlockListId = rListBlock.GetListId();
+    }
+
+    if ( mpMapListIdToListStyleDefaultListId != 0 )
+    {
+        if ( sListBlockListId.getLength() != 0 )
+        {
+            const ::rtl::OUString sListStyleName =
+                                GetListStyleOfProcessedList( sListBlockListId );
+
+            tMapForLists::const_iterator aIter =
+                    mpMapListIdToListStyleDefaultListId->find( sListStyleName );
+            if ( aIter != mpMapListIdToListStyleDefaultListId->end() )
+            {
+                if ( (*aIter).second.first == sListBlockListId )
+                {
+                    sListBlockListId = (*aIter).second.second;
+                }
+            }
+        }
+    }
+
+    return sListBlockListId;
+}
+// <--
 
 void XMLTextListsHelper::StoreLastContinuingList( ::rtl::OUString sListId,
                                                   ::rtl::OUString sContinuingListId )
