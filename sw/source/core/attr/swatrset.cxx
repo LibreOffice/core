@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swatrset.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,6 +248,10 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
     {
         if( Count() )
         {
+            // --> OD 2008-08-15 #i92811#
+            SfxStringItem* pNewListIdItem( 0 );
+            // <--
+
             const SfxPoolItem* pItem;
             const SwDoc *pSrcDoc = GetDoc();
             SwDoc *pDstDoc = pCNd ? pCNd->GetDoc() : pFmt->GetDoc();
@@ -284,18 +288,38 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     // copy list style, if needed
                     const String sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
-                    if ( !pDstDoc->FindNumRulePtr( sDefaultListStyleName ) )
+                    // --> OD 2008-08-15 #i92811#
+                    const SwNumRule* pDstDocNumRule =
+                                pDstDoc->FindNumRulePtr( sDefaultListStyleName );
+                    if ( !pDstDocNumRule )
                     {
                         pDstDoc->MakeNumRule( sDefaultListStyleName,
                                               pSrcDoc->FindNumRulePtr( sDefaultListStyleName ) );
                     }
+                    else
+                    {
+                        const SwNumRule* pSrcDocNumRule =
+                                pSrcDoc->FindNumRulePtr( sDefaultListStyleName );
+                        // If list id of text node equals the list style's
+                        // default list id in the source document, the same
+                        // should be hold in the destination document.
+                        // Thus, create new list id item.
+                        if ( sListId == pSrcDocNumRule->GetDefaultListId() )
+                        {
+                            pNewListIdItem = new SfxStringItem (
+                                            RES_PARATR_LIST_ID,
+                                            pDstDocNumRule->GetDefaultListId() );
+                        }
+                    }
                     // check again, if list exist, because <SwDoc::MakeNumRule(..)>
                     // could have also created it.
-                    if ( !pDstDoc->getListByName( sListId ) )
+                    if ( pNewListIdItem == 0 &&
+                         !pDstDoc->getListByName( sListId ) )
                     {
                         // copy list
                         pDstDoc->createList( sListId, sDefaultListStyleName );
                     }
+                    // <--
                 }
             }
             // <--
@@ -323,14 +347,40 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 aTmpSet.Put( aDesc );
 
                 if( pCNd )
+                {
+                    // --> OD 2008-08-15 #i92811#
+                    if ( pNewListIdItem != 0 )
+                    {
+                        aTmpSet.Put( *pNewListIdItem );
+                    }
+                    // <--
                     pCNd->SetAttr( aTmpSet );
+                }
                 else
                     pFmt->SetFmtAttr( aTmpSet );
             }
             else if( pCNd )
-                pCNd->SetAttr( *this );
+            {
+                // --> OD 2008-08-15 #i92811#
+                if ( pNewListIdItem != 0 )
+                {
+                    SfxItemSet aTmpSet( *this );
+                    aTmpSet.Put( *pNewListIdItem );
+                    pCNd->SetAttr( aTmpSet );
+                }
+                else
+                {
+                    pCNd->SetAttr( *this );
+                }
+                // <--
+            }
             else
                 pFmt->SetFmtAttr( *this );
+
+            // --> OD 2008-08-15 #i92811#
+            delete pNewListIdItem;
+            pNewListIdItem = 0;
+            // <--
         }
     }
 #ifndef PRODUCT
