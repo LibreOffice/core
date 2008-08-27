@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ooxmldocpropimport.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,11 +194,17 @@ void SAL_CALL OOXMLDocPropImportImpl::importProperties(const uno::Reference< emb
         xParser->registerNamespace( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties" ) ), NMSP_CUSTPR );
         xParser->registerNamespace( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes" ) ), NMSP_VT );
 
-        if ( aCoreStreams.getLength() )
+        // #158414# XFastParser::parseStream() throws on invalid XML
+        if ( aCoreStreams.getLength() ) try
         {
-            xParser->parseStream( aCoreStreams[0] );
             if ( aCoreStreams[0].aInputStream.is() )
+            {
+                xParser->parseStream( aCoreStreams[0] );
                 aCoreStreams[0].aInputStream->closeInput();
+            }
+        }
+        catch( uno::Exception& )
+        {
         }
 
         sal_Int32 nInd = 0;
