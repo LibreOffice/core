@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.122 $
+ * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 Module gid_Module_Root_Files_2
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
-    InstallOrder = "30";
+    InstallOrder = "50";
 	Name = "gid_Module_Root_Files_2";
 	Description = "gid_Module_Root_Files_2";
 	Sortkey = "1200";
@@ -86,7 +86,7 @@ End
 Module gid_Module_Root_Files_3
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
-    InstallOrder = "40";
+    InstallOrder = "60";
 	Name = "gid_Module_Root_Files_3";
 	Description = "gid_Module_Root_Files_3";
 	Sortkey = "1300";
@@ -136,7 +136,7 @@ End
 Module gid_Module_Root_Files_4
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
-    InstallOrder = "50";
+    InstallOrder = "30";
 	Name = "gid_Module_Root_Files_4";
 	Description = "gid_Module_Root_Files_4";
 	Sortkey = "1400";
@@ -259,7 +259,7 @@ Module gid_Module_Root_Files_5
     PackageInfo = "packinfo_office.txt";
     TabPackageInfo = "packinfo_office_tab.txt";
 	ParentID = gid_Module_Root;
-    InstallOrder = "60";
+    InstallOrder = "40";
 	Name = "gid_Module_Root_Files_5";
 	Description = "gid_Module_Root_Files_5";
 	Sortkey = "1500";
