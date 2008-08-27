@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -657,11 +657,19 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
 #endif
             }
 
+            sal_Bool bNeedsLock = ( ( uFlags & osl_File_OpenFlag_NoLock ) == 0 );
+            if ( !bNeedsLock )
+            {
+#ifdef MACOSX
+                flags &= ~O_EXLOCK;
+                flags &= ~O_SHLOCK;
+#endif
+            }
+
             /* open the file */
             fd = open( buffer, flags, mode );
             if ( fd >= 0 )
             {
-                sal_Bool bNeedsLock = ( ( uFlags & osl_File_OpenFlag_NoLock ) == 0 );
                 sal_Bool bLocked = sal_False;
                 if( bNeedsLock )
                 {
