@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ TARGET=soldep
 .INCLUDE :  settings.mk
 
 # fixme, code is not yet 64 bit clean
-.IF "$(OS)$(CPU)"=="LINUXX"
+.IF "$(OS)$(CPU)"=="LINUXX" || ("$(COM)"=="C52" && "$(CPU)"=="U")
 all:
     @echo nothing to do
 .ENDIF
