@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScrollBar.cxx,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/weak_ptr.hpp>
-#include <cmath>
+#include <math.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
