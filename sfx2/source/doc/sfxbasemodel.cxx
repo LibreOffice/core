@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.144 $
+ * $Revision: 1.145 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3583,8 +3583,13 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
         return ::rtl::OUString();
 
     ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
-    if ( m_pData->m_pObjectShell && m_pData->m_pObjectShell->IsDocShared() )
-        aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
+    if ( m_pData->m_pObjectShell )
+    {
+        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly() )
+            aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
+        else if ( m_pData->m_pObjectShell->IsDocShared() )
+            aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
+    }
 
     return aResult;
 }
