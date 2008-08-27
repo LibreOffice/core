@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opostponedtruncationstream.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,8 @@ public:
         const ::rtl::OUString& aURL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess,
-        sal_Bool bDeleteNewIfNotWritten );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream,
+        sal_Bool bDelete );
 
     ~OPostponedTruncationFileStream();
 
