@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_sdkoo.txt,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,7 +32,7 @@
 Start
 module = "gid_Module_Root"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-sdk"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
 packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-sdk"
 freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
 requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
