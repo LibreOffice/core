@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerlinks.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +145,31 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
     if (IsValidHandle(h1file))
     {
         DWORD dummy;
-        WriteFile( h1file, sBasisInstallPath.c_str(), sBasisInstallPath.size() ,&dummy, 0 );
+
+        // Converting string into UTF-8 encoding and writing into file "basis-link"
+
+        int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sBasisInstallPath.c_str(), -1, NULL, 0 );
+        if ( nCharsRequired )
+        {
+            LPWSTR  lpPathW = new WCHAR[nCharsRequired];
+            if ( MultiByteToWideChar( CP_ACP, 0, sBasisInstallPath.c_str(), -1, lpPathW, nCharsRequired ) )
+            {
+                nCharsRequired = WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, NULL, 0, NULL, NULL );
+                if ( nCharsRequired )
+                {
+                    LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
+                    WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
+
+                    // WriteFile( h1file, sBasisInstallPath.c_str(), sBasisInstallPath.size() ,&dummy, 0 );
+                    WriteFile( h1file, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
+
+                    delete lpPathUTF8;
+                }
+            }
+
+            delete lpPathW;
+        }
+
         CloseHandle(h1file);
     }
 
@@ -163,7 +187,31 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
     if (IsValidHandle(h2file))
     {
         DWORD dummy;
-        WriteFile( h2file, sUreInstallPath.c_str(), sUreInstallPath.size() ,&dummy, 0 );
+
+        // Converting string into UTF-8 encoding and writing into file "basis-link"
+
+        int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sUreInstallPath.c_str(), -1, NULL, 0 );
+        if ( nCharsRequired )
+        {
+            LPWSTR  lpPathW = new WCHAR[nCharsRequired];
+            if ( MultiByteToWideChar( CP_ACP, 0, sUreInstallPath.c_str(), -1, lpPathW, nCharsRequired ) )
+            {
+                nCharsRequired = WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, NULL, 0, NULL, NULL );
+                if ( nCharsRequired )
+                {
+                    LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
+                    WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
+
+                    // WriteFile( h2file, sUreInstallPath.c_str(), sUreInstallPath.size() ,&dummy, 0 );
+                    WriteFile( h2file, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
+
+                    delete lpPathUTF8;
+                }
+            }
+
+            delete lpPathW;
+        }
+
         CloseHandle(h2file);
     }
 
