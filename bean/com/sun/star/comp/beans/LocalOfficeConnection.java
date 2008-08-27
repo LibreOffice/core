@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LocalOfficeConnection.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,9 +142,6 @@ public class LocalOfficeConnection
         }
 
         // load shared library for JNI code
-//      String aSharedLibName = getProgramPath() + java.io.File.separator +
-//          System.mapLibraryName(OFFICE_LIB_NAME);
-//      System.load( aSharedLibName );
         NativeLibraryLoader.loadLibrary( LocalOfficeConnection.class.getClassLoader(), "officebean" );
     }
 
@@ -770,7 +767,14 @@ public class LocalOfficeConnection
             }
            // create call with arguments
             String[] cmdArray = new String[nSizeCmdArray];
-            cmdArray[0] = (new File(getProgramPath(), OFFICE_APP_NAME)).getPath();
+
+            // read UNO_PATH environment variable to get path to soffice binary
+            String unoPath = System.getenv("UNO_PATH");
+            if (unoPath == null)
+                throw new java.io.IOException( "UNO_PATH environment variable is not set (required system path to the office program directory)" );
+
+//          cmdArray[0] = (new File(getProgramPath(), OFFICE_APP_NAME)).getPath();
+            cmdArray[0] = (new File(unoPath, OFFICE_APP_NAME)).getPath();
             cmdArray[1] = "-nologo";
             cmdArray[2] = "-nodefault";
             if ( mConnType.equals( "pipe" ) )
