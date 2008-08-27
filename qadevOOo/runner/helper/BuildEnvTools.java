@@ -8,7 +8,7 @@
  *
  * $RCSfile: BuildEnvTools.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,29 +46,18 @@ public class BuildEnvTools {
     private final TestParameters param;
     private final LogWriter log;
     private final boolean mDebug;
-    private final String mEnvSet;
     private final String mPlatform;
     private final String mShell;
-    private final String mVersion;
 
     /**
      * This constructor creates an instance of BuildEncTools. It is verifying for all neccesarry
      * parameters in <CODE>TestParameters</CODE> This must be:
      * <ul>
-     * <li>OOO_EnvSet: This parameter must ponit to the script to create a build environment like
-     *     '$SRC_ROOT/SolarisX86Env.Set.sh' or '%SRC_ROOT\\winenv.set.sh'.
-            * In case you are able to use \'setsolar\' or \'setcws\' just type \'setsolar\' value.
-     * </li>
      * <li>OperatingSystem: Fill this parameter with an operating system like unxsols, unxsoli, unxlngi or wntmsci.
      * </li>
-     * <li> Shell: Fill this parameter with a shell which can start 'OOO_ENVSET' f.e '/bin/tcsh'
+     * <li> Shell: Fill this parameter with a shell f.e '/bin/tcsh'
      *      or 'c:\\myShell\\myShell.exe'
      * </li>
-     * <li>Version: You have to fill this parameter with information of the version
-     *              to test like 'src680_m243' or 'cws_unoapi
-     * </li>
-     * <li>COMP_ENV: You have to fill this parameter with information of the version of the compiler like
-     *               unxsols4, unxsoli4, unxlngi6 oder wintmsci12
      * @param param
      * @param log
      * @throws helper.ParameterNotFoundException
@@ -81,14 +70,6 @@ public class BuildEnvTools {
         boolean error = false;
 
         String msg = "\nERROR: the following parameter must be set before executing the test:\n\n";
-
-        mEnvSet = (String) param.get(PropertyName.OOO_ENVSET);
-        if (mEnvSet == null) {
-            msg += PropertyName.OOO_ENVSET + "\nThis parameter must ponit to the script to create a build " +
-                "environment like '$SRC_ROOT/SolarisX86Env.Set.sh' or '%SRC_ROOT\\winenv.set.sh'\n" +
-                "In case you are able to use \'setsolar\' or \'setcws\' just type \'setsolar\' value.\n\n ";
-            error = true;
-        }
 
         mPlatform = (String) param.get(PropertyName.OPERATING_SYSTEM);
         if (mDebug) {
@@ -105,25 +86,10 @@ public class BuildEnvTools {
 
         mShell = (String) param.get(PropertyName.SHELL);
         if (mShell == null) {
-            msg += PropertyName.SHELL + "\nFill this parameter with a shell which can start 'OOO_ENVSET'" +
+            msg += PropertyName.SHELL + "\nFill this parameter with a shell" +
                 "\n\t/bin/tcsh c:\\myShell\\myShell.exe\n\n";
             error = true;
         }
-
-        mVersion = (String) param.get(PropertyName.VERSION);
-        if (mVersion == null) {
-            msg += PropertyName.VERSION + "\nYou have to fill this parameter with information of the version" +
-                "to test like 'src680_m243' or 'cws_unoapi'";
-            error = true;
-        }
-
-        final String mCompiler = (String) param.get(PropertyName.COMP_ENV);
-        if (mCompiler == null) {
-            msg += PropertyName.COMP_ENV + "\nYou have to fill this parameter with information of the version" +
-                "of the compiler like unxsols4, unxsoli4, unxlngi6 oder wintmsci12";
-            error = true;
-        }
-
 
         if (error) {
             throw new ParameterNotFoundException(msg);
@@ -146,51 +112,17 @@ public class BuildEnvTools {
         return pHdl;
     }
 
-    private String getSetSolarCmd() {
-        String cmd = null;
-
-        if (mVersion.startsWith("cws_")) {
-            cmd = "setcws " + mVersion.substring(4, mVersion.length());
-        } else {
-            final String mCompiler = (String) param.get(PropertyName.COMP_ENV);
-
-            // mVersion looks like src680_m243
-            final String[] versions = mVersion.split("_");
-
-            cmd = "setsolar -" + versions[0] + " -ver " + versions[1] + " -jdk14  -pro " + mCompiler;
-        }
-        return cmd;
-    }
-
-    public String getEnvCmd() {
-
-        String cmd = null;
-
-        log.println("prepare command for platform " + mPlatform);
-
-        if (mEnvSet.equals("setsolar")) {
-            cmd = getSetSolarCmd();
-//            if (mPlatform.equals(PropertyName.WNTMSCI)) {
-//            //cmd = "call " + cmd;
-//            }
-        } else {
-            cmd = "source " + mEnvSet;
-        }
-        return cmd;
-    }
-
     public String getSrcRoot() {
 
         String sSrcRoot = (String) param.get(PropertyName.SRC_ROOT);
 
         if (sSrcRoot == null) {
-            final String cmd = getEnvCmd();
             String[] cmdLines = null;
 
             if (mPlatform.equals(PropertyName.WNTMSCI)) {
-                cmdLines = new String[]{mShell, "/C", "" + cmd + " ^ echo SRC_ROOT=%SRC_ROOT"};
+                cmdLines = new String[]{mShell, "/C", "echo SRC_ROOT=%SRC_ROOT"};
             } else {
-                cmdLines = new String[]{mShell, "-c ", cmd + " ; echo \"SRC_ROOT=$SRC_ROOT\""};
+                cmdLines = new String[]{mShell, "-c ", "echo \"SRC_ROOT=$SRC_ROOT\""};
             }
 
             final ProcessHandler procHdl = new ProcessHandler(cmdLines, (PrintWriter) log, null, true, param);
@@ -218,8 +150,6 @@ public class BuildEnvTools {
     }
 
     private String[] getCmdLinesWithCommand(String[] commands) {
-
-        final String envcmd = getEnvCmd();
         String[] cmdLines = null;
         log.println("prepare command for platform " + mPlatform);
 
@@ -232,13 +162,16 @@ public class BuildEnvTools {
 
         String command = "";
         for (int i = 0; i < commands.length; i++) {
-            command += seperator + commands[i];
+            if (i != 0) {
+                command += seperator;
+            }
+            command += commands[i];
         }
 
         if (mPlatform.equals(PropertyName.WNTMSCI)) {
-            cmdLines = new String[]{mShell, "/C", "\"" + envcmd + command + "\""};
+            cmdLines = new String[]{mShell, "/C", "\"" + command + "\""};
         } else {
-            cmdLines = new String[]{mShell, "-c ", envcmd + command};
+            cmdLines = new String[]{mShell, "-c ", command};
         }
         return cmdLines;
     }
