@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,7 @@ UCDSRCEXT = txt
 CFLAGS+=-DENABLE_LOCKDOWN
 .ENDIF
 
-.IF "$(ENABLE_GNOMEVFS)"!="" || "$(ENABLE_GIO)"!=""
+.IF "$(ENABLE_GCONF)"!=""
 COMPILER_WARN_ALL=TRUE
 PKGCONFIG_MODULES=gconf-2.0 gobject-2.0 ORBit-2.0 glib-2.0
 .INCLUDE: pkg_config.mk
@@ -90,7 +90,7 @@ SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
-.ENDIF          # "$(ENABLE_GNOMEVFS)"!="" || "$(ENABLE_GIO)"!=""
+.ENDIF          # "$(ENABLE_GCONF)"!=""
 
 # --- Targets ---
 
