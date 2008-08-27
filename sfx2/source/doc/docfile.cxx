@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.cxx,v $
- * $Revision: 1.203 $
+ * $Revision: 1.204 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -903,52 +903,90 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
         if ( GetError() )
             return uno::Reference< embed::XStorage >();
 
+        ::rtl::OUString aOutputURL = GetOutputStorageURL_Impl();
+
+        SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
+        SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
+        sal_Bool bRename = pRename ? pRename->GetValue() : FALSE;
+        sal_Bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
+
         // the target file must be truncated before a storage based on it is created
-        try {
-               uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-                  uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
                     xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
                     uno::UNO_QUERY_THROW );
 
-            SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
-               SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
-            sal_Bool bRename = pRename ? pRename->GetValue() : FALSE;
-            sal_Bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
-
-            ::rtl::OUString aOutputURL = GetOutputStorageURL_Impl();
-
-            // TODO/LATER: nonatomar operation
-            sal_Bool bExists = xSimpleFileAccess->exists( aOutputURL );
-            if ( !bOverWrite && bExists )
-                throw ::com::sun::star::ucb::NameClashException();
+            uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+            ::ucbhelper::Content aContent = ::ucbhelper::Content( aOutputURL, xDummyEnv );
 
             uno::Reference< io::XStream > xStream;
+            sal_Bool bDeleteOnFailure = sal_False;
 
-            if ( BasedOnOriginalFile_Impl() )
+            try
             {
-                // the storage will be based on original file, the wrapper should be used
-                xStream = new OPostponedTruncationFileStream( aOutputURL, xFactory, xSimpleFileAccess, sal_True );
+                xStream = aContent.openWriteableStreamNoLock();
+
+                if ( !bOverWrite )
+                {
+                    // the stream should not exist, it should not be possible to open it
+                    if ( xStream->getOutputStream().is() )
+                        xStream->getOutputStream()->closeOutput();
+                    if ( xStream->getInputStream().is() )
+                        xStream->getInputStream()->closeInput();
+
+                    xStream = uno::Reference< io::XStream >();
+                    SetError( ERRCODE_IO_GENERAL );
+                }
             }
-            else
+            catch ( ucb::InteractiveIOException const & e )
             {
-                // the storage will be based on the temporary file, the stream can be truncated directly
-                xStream = xSimpleFileAccess->openFileReadWrite( aOutputURL );
-                uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
-                uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY );
-                if ( !xTruncate.is() )
-                    throw uno::RuntimeException();
+                if ( e.Code == ucb::IOErrorCode_NOT_EXISTING )
+                {
+                    // Create file...
+                    SvMemoryStream aStream(0,0);
+                    uno::Reference< io::XInputStream > xInput( new ::utl::OInputStreamWrapper( aStream ) );
+                    ucb::InsertCommandArgument aInsertArg;
+                    aInsertArg.Data = xInput;
+                    aInsertArg.ReplaceExisting = sal_False;
+                    aContent.executeCommand( rtl::OUString::createFromAscii( "insert" ), uno::makeAny( aInsertArg ) );
 
-                xTruncate->truncate();
-                xOutStream->flush();
+                    // Try to open one more time
+                    xStream = aContent.openWriteableStreamNoLock();
+                    bDeleteOnFailure = sal_True;
+                }
+                else
+                    throw;
             }
 
-            pImp->xStream = xStream;
-               GetItemSet()->Put( SfxUsrAnyItem( SID_STREAM, makeAny( xStream ) ) );
+            if ( xStream.is() )
+            {
+                if ( BasedOnOriginalFile_Impl() )
+                {
+                    // the storage will be based on original file, the wrapper should be used
+                    xStream = new OPostponedTruncationFileStream( aOutputURL, xFactory, xSimpleFileAccess, xStream, bDeleteOnFailure );
+                }
+                else
+                {
+                    // the storage will be based on the temporary file, the stream can be truncated directly
+                    uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
+                    uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY );
+                    if ( !xTruncate.is() )
+                        throw uno::RuntimeException();
+
+                    xTruncate->truncate();
+                    xOutStream->flush();
+                }
+
+                pImp->xStream = xStream;
+                GetItemSet()->Put( SfxUsrAnyItem( SID_STREAM, makeAny( xStream ) ) );
+            }
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "Can't truncate target stream!\n" );
-               SetError( ERRCODE_IO_GENERAL );
+            // TODO/LATER: try to use the temporary file in case the target content can not be opened, it might happen in case of some FS, the copy functionality might work in this case
+            SetError( ERRCODE_IO_GENERAL );
         }
     }
 
@@ -1561,8 +1599,6 @@ sal_Bool SfxMedium::StorageCommit_Impl()
 
     if ( pImp->xStorage.is() )
     {
-        StorageBackup_Impl();
-
         if ( !GetError() )
         {
             uno::Reference < embed::XTransactedObject > xTrans( pImp->xStorage, uno::UNO_QUERY );
@@ -1620,7 +1656,6 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     sal_Bool bResult = sal_False;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     Reference< XOutputStream > aDestStream;
-    Reference< XSimpleFileAccess > aSimpleAccess;
     ::ucbhelper::Content aOriginalContent;
 
 //  actualy it should work even for contents different from file content
