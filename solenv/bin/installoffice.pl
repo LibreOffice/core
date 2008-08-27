@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: installoffice.pl,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -344,10 +344,8 @@ sub patchXCU(){
     print_error("could not find $bootstrapini", "1") if ( !-e $bootstraprc );
     print "bootstraprc: '$bootstraprc'\n" if $debug;
 
-#    my $pb = $PS."program".$PS.$bootstrapini;
-    my $pb = "/program/$bootstrapini";
-
-    $bootstraprc =~ /(.*)($pb)/;
+    $bootstraprc =~ /(.*)\/(program|MacOS)\/$bootstrapini/
+        or print_error("could not determine basedir", 1);
 
     my $basedir = $1;
 
