@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conditn.c,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,16 +101,35 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     else
         timeout = INFINITE;
 
-    switch ( WaitForSingleObject( (HANDLE)Condition, timeout )  )
+    /* It's necessary to process SendMessage calls to the current thread to give other threads
+        access to COM objects instatiated in this thread */
+
+    while ( 1 )
     {
-        case WAIT_OBJECT_0:
-            return (osl_cond_result_ok);
+        /* Only wake up if a SendMessage call to the threads message loop is detected */
 
-        case WAIT_TIMEOUT:
-            return (osl_cond_result_timeout);
+        switch( MsgWaitForMultipleObjects( 1, &(HANDLE)Condition, FALSE, timeout, QS_SENDMESSAGE ) )
+        {
+            case WAIT_OBJECT_0 + 1:
+                {
+                MSG msg;
 
-        default:
-            return (osl_cond_result_error);
+                /* We Must not dispatch the message. PM_NOREMOVE leaves the message queue untouched
+                 but dispatches SendMessage calls automatically */
+
+                PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE );
+                }
+                break;
+
+            case WAIT_OBJECT_0:
+                return (osl_cond_result_ok);
+
+            case WAIT_TIMEOUT:
+                return (osl_cond_result_timeout);
+
+            default:
+                return (osl_cond_result_error);
+        }
     }
 }
 
