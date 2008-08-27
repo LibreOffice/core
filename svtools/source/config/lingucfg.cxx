@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lingucfg.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1011,42 +1011,6 @@ BOOL SvtLinguConfig::IsReadOnly( INT32 nPropertyHandle ) const
     return GetConfigItem().IsReadOnly( nPropertyHandle );
 }
 
-uno::Reference< util::XChangesBatch > SvtLinguConfig::GetUpdateAccess() const
-{
-    if (!m_xUpdateAccess.is())
-    {
-        try
-        {
-            // get configuration provider
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
-            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-            if (xMgr.is())
-            {
-                xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider" ) ) ),
-                        uno::UNO_QUERY_THROW ) ;
-            }
-
-            // get configuration update access
-            beans::PropertyValue aValue;
-            aValue.Name  = A2OU( "nodepath" );
-            aValue.Value = uno::makeAny( A2OU("org.openoffice.Office.Linguistic/ServiceManager") );
-            uno::Sequence< uno::Any > aProps(1);
-            aProps[0] <<= aValue;
-            m_xUpdateAccess = uno::Reference< util::XChangesBatch >(
-                    xConfigurationProvider->createInstanceWithArguments(
-                        A2OU( "com.sun.star.configuration.ConfigurationUpdateAccess" ), aProps ),
-                        uno::UNO_QUERY_THROW );
-        }
-        catch (uno::Exception &)
-        {
-        }
-    }
-
-    return m_xUpdateAccess;
-}
-
 BOOL SvtLinguConfig::GetElementNamesFor(
      const rtl::OUString &rNodeName,
      uno::Sequence< rtl::OUString > &rElementNames ) const
@@ -1054,7 +1018,8 @@ BOOL SvtLinguConfig::GetElementNamesFor(
     bool bSuccess = false;
     try
     {
-        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
         rElementNames = xNA->getElementNames();
         bSuccess = true;
@@ -1097,7 +1062,8 @@ BOOL SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     bool bSuccess = false;
     try
     {
-        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
         if (xNA->getByName( aG_SupportedDictionaryFormats ) >>= rFormatList)
@@ -1121,8 +1087,9 @@ void SvtLinguConfig::SetOrCreateSupportedDictionaryFormatsFor(
     {
         DBG_ASSERT( rFormatList.getLength(), "applying empty format list. Really??" );
 
-        uno::Reference< util::XChangesBatch > xUpdateAccess( GetUpdateAccess() );
+        uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
         uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA = GetOrCreateSetEntry_Impl( xNA, rSetEntry );
 
@@ -1174,7 +1141,8 @@ BOOL SvtLinguConfig::GetDictionaryEntry(
     bool bSuccess = false;
     try
     {
-        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
@@ -1246,8 +1214,9 @@ void SvtLinguConfig::SetOrCreateDictionaryEntry(
         return;
     try
     {
-        uno::Reference< util::XChangesBatch > xUpdateAccess( GetUpdateAccess() );
+        uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
         uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
         xNA = GetOrCreateSetEntry_Impl( xNA, rNodeName );
 
@@ -1272,7 +1241,8 @@ uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
     uno::Sequence< rtl::OUString > aResult;
     try
     {
-        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         xNA->getByName( aG_DisabledDictionaries ) >>= aResult;
     }
     catch (uno::Exception &)
@@ -1286,8 +1256,9 @@ void SvtLinguConfig::SetDisabledDictionaries(
 {
     try
     {
-        uno::Reference< util::XChangesBatch > xUpdateAccess( GetUpdateAccess() );
+        uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
         uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
         if (xNA->hasByName( aG_DisabledDictionaries ))
         {
             uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
@@ -1504,7 +1475,8 @@ bool SvtLinguConfig::HasGrammarChecker() const
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
             xNA.set( xNA->getByName( A2OU("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
 
             uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
