@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -94,7 +94,7 @@ OUT2INC += include/openssl/*
         .ENDIF
     .ELSE
     # Solaris SPARC
-        .IF "$(USE_64)" == "1"
+        .IF "$(CPU)" == "U"
            CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
         .ENDIF
 .ENDIF
