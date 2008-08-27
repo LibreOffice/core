@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OTools.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #include "odbc/OConnection.hxx"
 #include "diagnose_ex.h"
 
-#include <cstring>
+#include <string.h>
 #include <string>
 #include <algorithm>
 
