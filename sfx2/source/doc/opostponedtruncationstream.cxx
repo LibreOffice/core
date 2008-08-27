@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opostponedtruncationstream.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,14 +93,13 @@ OPostponedTruncationFileStream::OPostponedTruncationFileStream(
         const ::rtl::OUString& aURL,
         const uno::Reference< lang::XMultiServiceFactory >& /*xFactory*/,
         const uno::Reference< ucb::XSimpleFileAccess >& xFileAccess,
-        sal_Bool bDeleteIfNotCommited )
+        const uno::Reference< io::XStream >& xOrigStream,
+        sal_Bool bDelete )
 : m_pStreamData( NULL )
 {
-    sal_Bool bDelete = sal_False;
-    if ( bDeleteIfNotCommited )
-        bDelete = !xFileAccess->exists( aURL );
+    if ( !xFileAccess.is() || !xOrigStream.is() )
+        throw uno::RuntimeException();
 
-    uno::Reference< io::XStream > xOrigStream = xFileAccess->openFileReadWrite( aURL );
     uno::Reference< io::XTruncate > xOrigTruncate( xOrigStream, uno::UNO_QUERY_THROW );
     uno::Reference< io::XSeekable > xOrigSeekable( xOrigStream, uno::UNO_QUERY_THROW );
     uno::Reference< io::XInputStream > xOrigInStream = xOrigStream->getInputStream();
