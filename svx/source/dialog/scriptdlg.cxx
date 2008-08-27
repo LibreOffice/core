@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptdlg.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -777,7 +777,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                 node = userData->GetNode();
                 xModel = userData->GetModel();
 
-                if ( !node.is() || !xModel.is() )
+                if ( !node.is() )
                 {
                     return 0;
                 }
@@ -787,17 +787,26 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     ::rtl::OUString tmpString;
                     Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
                     Reference< provider::XScriptProvider > mspNode;
-                    Reference< XEmbeddedScripts >  xEmbeddedScripts( xModel, UNO_QUERY);
-                    if( !xProp.is() || !xEmbeddedScripts.is() )
+                    if( !xProp.is() )
                     {
                         return 0;
                     }
 
-                    if (!xEmbeddedScripts->getAllowMacroExecution())
+                    if ( xModel.is() )
                     {
-                        // Please FIXME: Show a message box if AllowMacroExecution is false
-                        return 0;
+                        Reference< XEmbeddedScripts >  xEmbeddedScripts( xModel, UNO_QUERY);
+                        if( !xEmbeddedScripts.is() )
+                        {
+                            return 0;
+                        }
+
+                        if (!xEmbeddedScripts->getAllowMacroExecution())
+                        {
+                            // Please FIXME: Show a message box if AllowMacroExecution is false
+                            return 0;
+                        }
                     }
+
 
                     SvLBoxEntry* pParent = aScriptsBox.GetParent( pEntry );
                     while ( pParent && !mspNode.is() )
