@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModuleCtrl.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -409,6 +409,26 @@ public class ModuleCtrl {
         }
     }
 
+    static public void setShowInUserInstallOnlyFlags(PackageDescription packageData) {
+
+        // This function is not needed during deinstallation, because a
+        // module that could not be selected during installation, is always
+        // not installed during deinstallation and therefore gets "IGNORE"
+        // in function setDatabaseSettings
+
+        if ( ! packageData.showInUserInstallOnly() ) {
+            packageData.setSelectionState(PackageDescription.IGNORE);
+            // too late to hide the module
+            // packageData.setIsHidden(true);
+            // packageData.setAllChildrenHidden(true);
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            setShowInUserInstallOnlyFlags(child);
+        }
+    }
+
     static public void setIgnoreNonRelocatablePackages(PackageDescription packageData) {
         if ( ! packageData.isRelocatable() ) {
             packageData.setSelectionState(PackageDescription.IGNORE);
@@ -792,6 +812,13 @@ public class ModuleCtrl {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallFlags");
                 }
             }
+            else { // disable packages, that are not valid in root installation
+                ModuleCtrl.setShowInUserInstallOnlyFlags(packageData);
+
+                if ( data.logModuleStates() ) {
+                    Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallOnlyFlags");
+                }
+            }
 
             // Collecting packages to install
             // This has to be done here, because "ChooseInstallationType" and "ChooseComponents"
@@ -831,6 +858,12 @@ public class ModuleCtrl {
 
                 if ( data.logModuleStates() ) {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallFlags");
+                }
+            } else { // disable packages, that are not valid in root installation
+                ModuleCtrl.setShowInUserInstallOnlyFlags(packageData);
+
+                if ( data.logModuleStates() ) {
+                    Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallOnlyFlags");
                 }
             }
 
