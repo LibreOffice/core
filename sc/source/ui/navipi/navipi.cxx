@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navipi.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 
 //------------------------------------------------------------------
 
-#include <cmath>
+#include <math.h>
 #include <rangelst.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
