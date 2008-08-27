@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2962,6 +2962,11 @@ static rtl::OUString aDialogLibMediaType( rtl::OUString::createFromAscii( "appli
 
 ScriptExtensionIterator::ScriptExtensionIterator( void )
     : m_eState( USER_EXTENSIONS )
+    , m_bUserPackagesLoaded( false )
+    , m_bSharedPackagesLoaded( false )
+    , m_iUserPackage( 0 )
+    , m_iSharedPackage( 0 )
+    , m_pScriptSubPackageIterator( NULL )
 {
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
@@ -2978,11 +2983,6 @@ ScriptExtensionIterator::ScriptExtensionIterator( void )
             ::rtl::OUString::createFromAscii( "ScriptExtensionIterator::init(), no XComponentContext" ),
             Reference< XInterface >() );
     }
-
-    m_bUserPackagesLoaded = false;
-    m_bSharedPackagesLoaded = false;
-    m_iUserPackage = 0;
-    m_iSharedPackage = 0;
 }
 
 rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDialogLib )
@@ -2995,9 +2995,8 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
         {
             case USER_EXTENSIONS:
             {
-                Reference< deployment::XPackage > xParentPackageBundle;
                 Reference< deployment::XPackage > xScriptPackage =
-                    implGetNextUserScriptPackage( xParentPackageBundle, rbPureDialogLib );
+                    implGetNextUserScriptPackage( rbPureDialogLib );
                 if( !xScriptPackage.is() )
                     break;
 
@@ -3007,9 +3006,8 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
 
             case SHARED_EXTENSIONS:
             {
-                Reference< deployment::XPackage > xParentPackageBundle;
                 Reference< deployment::XPackage > xScriptPackage =
-                    implGetNextSharedScriptPackage( xParentPackageBundle, rbPureDialogLib );
+                    implGetNextSharedScriptPackage( rbPureDialogLib );
                 if( !xScriptPackage.is() )
                     break;
 
@@ -3025,12 +3023,98 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
     return aRetLib;
 }
 
-Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageFromPackage
-    ( Reference< deployment::XPackage > xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle,
-      bool& rbPureDialogLib )
+ScriptSubPackageIterator::ScriptSubPackageIterator( Reference< deployment::XPackage > xMainPackage )
+    : m_xMainPackage( xMainPackage )
+    , m_bIsValid( false )
+    , m_bIsBundle( false )
+    , m_nSubPkgCount( 0 )
+    , m_iNextSubPkg( 0 )
+{
+    Reference< deployment::XPackage > xScriptPackage;
+    if( !m_xMainPackage.is() )
+        return;
+
+    // Check if parent package is registered
+    beans::Optional< beans::Ambiguous<sal_Bool> > option( m_xMainPackage->isRegistered
+        ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
+    bool bRegistered = false;
+    if( option.IsPresent )
+    {
+        beans::Ambiguous<sal_Bool> const & reg = option.Value;
+        if( !reg.IsAmbiguous && reg.Value )
+            bRegistered = true;
+    }
+    if( bRegistered )
+    {
+        m_bIsValid = true;
+        if( m_xMainPackage->isBundle() )
+        {
+            m_bIsBundle = true;
+            m_aSubPkgSeq = m_xMainPackage->getBundle
+                ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
+            m_nSubPkgCount = m_aSubPkgSeq.getLength();
+        }
+    }
+}
+
+Reference< deployment::XPackage > ScriptSubPackageIterator::getNextScriptSubPackage
+    ( bool& rbPureDialogLib )
 {
     rbPureDialogLib = false;
-    o_xParentPackageBundle.clear();
+
+    Reference< deployment::XPackage > xScriptPackage;
+    if( !m_bIsValid )
+        return xScriptPackage;
+
+    if( m_bIsBundle )
+    {
+        const Reference< deployment::XPackage >* pSeq = m_aSubPkgSeq.getConstArray();
+        sal_Int32 iPkg;
+        for( iPkg = m_iNextSubPkg ; iPkg < m_nSubPkgCount ; ++iPkg )
+        {
+            const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
+            xScriptPackage = implDetectScriptPackage( xSubPkg, rbPureDialogLib );
+            if( xScriptPackage.is() )
+                break;
+        }
+        m_iNextSubPkg = iPkg + 1;
+    }
+    else
+    {
+        xScriptPackage = implDetectScriptPackage( m_xMainPackage, rbPureDialogLib );
+        m_bIsValid = false;     // No more script packages
+    }
+
+    return xScriptPackage;
+}
+
+Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPackage
+    ( const Reference< deployment::XPackage > xPackage, bool& rbPureDialogLib )
+{
+    Reference< deployment::XPackage > xScriptPackage;
+
+    if( xPackage.is() )
+    {
+        const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
+        rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
+        if( aMediaType.equals( aBasicLibMediaType ) )
+        {
+            xScriptPackage = xPackage;
+        }
+        else if( aMediaType.equals( aDialogLibMediaType ) )
+        {
+            rbPureDialogLib = true;
+            xScriptPackage = xPackage;
+        }
+    }
+
+    return xScriptPackage;
+}
+
+Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageFromPackage
+    ( const Reference< deployment::XPackage > xPackage, bool& rbPureDialogLib )
+{
+    rbPureDialogLib = false;
 
     Reference< deployment::XPackage > xScriptPackage;
     if( !xPackage.is() )
@@ -3062,14 +3146,12 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageF
                 if( aMediaType.equals( aBasicLibMediaType ) )
                 {
                     xScriptPackage = xSubPkg;
-                    o_xParentPackageBundle = xPackage;
                     break;
                 }
                 else if( aMediaType.equals( aDialogLibMediaType ) )
                 {
                     rbPureDialogLib = true;
                     xScriptPackage = xSubPkg;
-                    o_xParentPackageBundle = xPackage;
                     break;
                 }
             }
@@ -3094,7 +3176,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageF
 }
 
 Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScriptPackage
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle, bool& rbPureDialogLib )
+    ( bool& rbPureDialogLib )
 {
     Reference< deployment::XPackage > xScriptPackage;
 
@@ -3114,17 +3196,31 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
     }
     else
     {
-        const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
-        Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
-        xScriptPackage = implGetScriptPackageFromPackage( xPackage, o_xParentPackageBundle, rbPureDialogLib );
+        if( m_pScriptSubPackageIterator == NULL )
+        {
+            const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
+            Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage ];
+            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
+            m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
+        }
+
+        if( m_pScriptSubPackageIterator != NULL )
+        {
+            xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
+            if( !xScriptPackage.is() )
+            {
+                delete m_pScriptSubPackageIterator;
+                m_pScriptSubPackageIterator = NULL;
+                m_iUserPackage++;
+            }
+        }
     }
 
     return xScriptPackage;
 }
 
 Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScriptPackage
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle, bool& rbPureDialogLib )
+    ( bool& rbPureDialogLib )
 {
     Reference< deployment::XPackage > xScriptPackage;
 
@@ -3144,10 +3240,24 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
     }
     else
     {
-        const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
-        Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
-        xScriptPackage = implGetScriptPackageFromPackage( xPackage, o_xParentPackageBundle, rbPureDialogLib );
+        if( m_pScriptSubPackageIterator == NULL )
+        {
+            const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
+            Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage ];
+            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
+            m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
+        }
+
+        if( m_pScriptSubPackageIterator != NULL )
+        {
+            xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
+            if( !xScriptPackage.is() )
+            {
+                delete m_pScriptSubPackageIterator;
+                m_pScriptSubPackageIterator = NULL;
+                m_iSharedPackage++;
+            }
+        }
     }
 
     return xScriptPackage;
