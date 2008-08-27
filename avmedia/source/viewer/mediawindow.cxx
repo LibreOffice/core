@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediawindow.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <cstdio>
+#include <stdio.h>
 
 #include <avmedia/mediawindow.hxx>
 #include "mediawindow_impl.hxx"

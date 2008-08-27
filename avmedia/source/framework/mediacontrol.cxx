@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediacontrol.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <cmath>
+#include <math.h>
 #include <algorithm>
 
 #define AVMEDIA_TIMEOUT             100
