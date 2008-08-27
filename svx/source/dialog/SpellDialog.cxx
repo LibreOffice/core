@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1743,7 +1743,16 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
     DBG_ASSERT(static_cast<const SpellErrorAttrib*>(
             GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?")
 
-    SpellErrorDescription aDesc( false, xAlt->getWord(), xAlt->getLocale(), xAlt->getAlternatives());
+    ::rtl::OUString aWord;
+    lang::Locale    aLocale;
+    uno::Sequence< ::rtl::OUString >    aAlts;
+    if (xAlt.is())
+    {
+        aWord   = xAlt->getWord();
+        aLocale = xAlt->getLocale();
+        aAlts   = xAlt->getAlternatives();
+    }
+    SpellErrorDescription aDesc( false, aWord, aLocale, aAlts, 0);
     GetTextEngine()->SetAttrib( SpellErrorAttrib(aDesc), 0, m_nErrorStart, m_nErrorEnd );
 }
 
