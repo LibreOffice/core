@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objcont.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1266,26 +1266,26 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             // load document info of template
             BOOL bOK = FALSE;
             util::DateTime aTemplDate;
-            Reference < document::XStandaloneDocumentInfo > xDocInfo (
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.StandaloneDocumentInfo") ) ), UNO_QUERY );
-            Reference < beans::XFastPropertySet > xSet( xDocInfo, UNO_QUERY );
-            if ( xDocInfo.is() && xSet.is() )
+            try
             {
-                try
+                Reference < document::XStandaloneDocumentInfo > xDocInfo (
+                    ::comphelper::getProcessServiceFactory()->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.document.StandaloneDocumentInfo") ) ),
+                    UNO_QUERY_THROW );
+                Reference < beans::XFastPropertySet > xSet( xDocInfo,
+                    UNO_QUERY_THROW );
+                xDocInfo->loadFromURL( aTemplURL );
+                Any aAny = xSet->getFastPropertyValue( WID_DATE_MODIFIED );
+                ::com::sun::star::util::DateTime aTmp;
+                if ( aAny >>= aTemplDate )
                 {
-                    xDocInfo->loadFromURL( aTemplURL );
-                    Any aAny = xSet->getFastPropertyValue( WID_DATE_MODIFIED );
-                    ::com::sun::star::util::DateTime aTmp;
-                    if ( aAny >>= aTemplDate )
-                    {
-                        // get modify date from document info
-                        bOK = TRUE;
-                    }
+                    // get modify date from document info
+                    bOK = TRUE;
                 }
-                catch ( Exception& )
-                {
-                }
+            }
+            catch ( Exception& )
+            {
             }
 
             // if modify date was read successfully
