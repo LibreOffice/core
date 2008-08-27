@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_gnome.scp,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@ End
 #endif
 
 #ifdef ENABLE_GNOMEVFS
-
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -50,9 +49,9 @@ File gid_File_Lib_Gnomevfs
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "ucpgvfs-ucd.txt";
 End
-
 #endif
 
+#ifdef ENABLE_GCONF
 File gid_File_Lib_Gconfbe
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -61,3 +60,4 @@ File gid_File_Lib_Gconfbe
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "gconfbe1-ucd.txt";
 End
+#endif
