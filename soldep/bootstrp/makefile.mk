@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +42,7 @@ ENABLE_EXCEPTIONS=true
 .INCLUDE :  settings.mk
 
 # fixme, code is not yet 64 bit clean
-.IF "$(OS)$(CPU)"=="LINUXX"
+.IF "$(OS)$(CPU)"=="LINUXX" || ("$(COM)"=="C52" && "$(CPU)"=="U")
 all:
     @echo nothing to do
 .ENDIF
