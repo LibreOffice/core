@@ -8,7 +8,7 @@
 #
 # $RCSfile: epmfile.pm,v $
 #
-# $Revision: 1.86 $
+# $Revision: 1.87 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1770,9 +1770,9 @@ sub get_solaris_language_for_langpack
     elsif ( $sollanguage eq "it" ) { $sollanguage = "it"; }
     elsif ( $sollanguage eq "sv" ) { $sollanguage = "sv"; }
     elsif ( $sollanguage eq "pt_BR" ) { $sollanguage = "pt_BR"; }
-    elsif ( $sollanguage eq "ja" ) { $sollanguage = "ja,ja_JP.PCK,ja_JP.UTF-8"; }
+    elsif ( $sollanguage eq "ja" ) { $sollanguage = "ja,ja_JP,ja_JP.PCK,ja_JP.UTF-8"; }
     elsif ( $sollanguage eq "ko" ) { $sollanguage = "ko,ko.UTF-8"; }
-    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh.GBK,zh_CN.GB18030,zh.UTF-8"; }
+    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh.GBK,zh_CN,zh_CN.GB18030,zh.UTF-8"; }
     elsif ( $sollanguage eq "zh_TW" ) { $sollanguage = "zh_TW,zh_TW.BIG5,zh_TW.UTF-8,zh_HK.BIG5HK,zh_HK.UTF-8"; }
 
     return $sollanguage;
