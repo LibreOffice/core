@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.119 $
+# $Revision: 1.120 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2021,6 +2021,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # the language specific properties can now be set in the Property.idt
 
             installer::windows::property::update_property_table($languageidtdir, $onelanguage, $allvariableshashref, $languagestringref);
+
+            # replacing variables in RegLocat.idt
+
+            installer::windows::msiglobal::update_reglocat_table($languageidtdir, $allvariableshashref);
 
             # adding language specific properties for multilingual installation sets
 
