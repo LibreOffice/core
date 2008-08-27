@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -135,8 +135,21 @@ BUILD_ACTION:=make
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
 CXXFLAGS:=-features=tmplife
+.IF "$(CPU)"=="U"
+CXXFLAGS+=-m64
+.ENDIF
 .EXPORT : CXXFLAGS 
 .ENDIF          # "$(COMNAME)"=="sunpro5"
+.ENDIF
+
+.IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
+PKG_CONFIG_PATH=/usr/lib/64/pkgconfig
+.EXPORT: PKG_CONFIG_PATH
+.ENDIF
+.IF "$(COM)"=="C52" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
+CFLAGS=-m64
+ASFLAGS=-m64
+.EXPORT: CFLAGS ASFLAGS
 .ENDIF
 
 MOZDIR=$(MISC)$/build$/mozilla
