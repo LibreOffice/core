@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: authfld.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ public:
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
-
+    SwDoc*          GetDoc(){ return m_pDoc; }
     void                RemoveField(long nHandle);
     long                AddField(const String& rFieldContents);
     BOOL                AddField(long nHandle);
@@ -167,8 +167,8 @@ public:
  --------------------------------------------------*/
 class SwAuthorityField : public SwField
 {
-    long    nHandle;
-
+    long            m_nHandle;
+    mutable long    m_nTempSequencePos;
 public:
     SwAuthorityField(SwAuthorityFieldType* pType, const String& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, long nHandle);
@@ -184,7 +184,7 @@ public:
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
-    long                GetHandle() const       { return nHandle; }
+    long                GetHandle() const       { return m_nHandle; }
 
     virtual String GetDescription() const;
 };
