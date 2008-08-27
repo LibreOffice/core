@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,6 +98,10 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="UNX"
+
+.IF "$(COM)"=="C52" && "$(CPU)"=="U"
+xmlsec_CFLAGS+=-m64
+.ENDIF
 
 .IF "$(SYSBASE)"!=""
 xmlsec_CFLAGS+=-I$(SYSBASE)$/usr$/include 
