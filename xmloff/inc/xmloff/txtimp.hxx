@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -861,9 +861,13 @@ public:
     SvXMLImport& GetXMLImport() { return rSvXMLImport;}
 
     // --> OD 2008-04-25 #refactorlists#
+    // --> OD 2008-08-15 #i92811#
+    // - add optional parameter <sListStyleDefaultListId>
     void KeepListAsProcessed( ::rtl::OUString sListId,
                               ::rtl::OUString sListStyleName,
-                              ::rtl::OUString sContinueListId );
+                              ::rtl::OUString sContinueListId,
+                              ::rtl::OUString sListStyleDefaultListId = ::rtl::OUString() );
+    // <--
 
     sal_Bool IsListProcessed( const ::rtl::OUString sListId ) const;
 
