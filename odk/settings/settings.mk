@@ -129,7 +129,7 @@ endif
 ifneq (,$(findstring solaris,$(PLATFORM)))
 # Settings for Solaris using Sun Workshop compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OO_SDK_URE_HOME)/lib/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
@@ -137,10 +137,17 @@ PACKAGE_LIB_DIR=solaris_sparc.plt
 UNOPKG_PLATFORM=Solaris_SPARC
 JAVA_PROC_TYPE=sparc
 else
+ifeq "$(PROCTYPE)" "sparc64"
+PLATFORM=solsparc
+PACKAGE_LIB_DIR=solaris_sparc64.plt
+UNOPKG_PLATFORM=Solaris_SPARC64
+JAVA_PROC_TYPE=sparcv9
+else
 PLATFORM=solintel
 PACKAGE_LIB_DIR=solaris_x86.plt
 UNOPKG_PLATFORM=Solaris_x86
 JAVA_PROC_TYPE=i386
+endif
 endif
 
 OS=SOLARIS
@@ -178,7 +185,11 @@ CPPUHELPERLIB=-luno_cppuhelperC52
 SALHELPERLIB=-luno_salhelperC52
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(PROCTYPE)" "sparc64"
+STLPORTLIB=-library=stlport4
+else
 STLPORTLIB=-lstlport_sunpro$(STLDEBUG)
+endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -207,6 +218,12 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs
 LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
+
+ifeq "$(PROCTYPE)" "sparc64"
+CC_FLAGS+=-m64
+LIBRARY_LINK_FLAGS+=-m64
+EXE_LINK_FLAGS+=-m64
+endif
 
 ifneq "$(OO_SDK_URE_HOME)" ""
 URE_MISC=$(OO_SDK_URE_HOME)/share/misc
