@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ure_standalone.scp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ End
 
 RegistryItem gid_Regitem_Ure_Software_OpenOfficeorg_Ooobaseversion_Install
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\Layer\URE\%URELAYERVERSION";
+	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
@@ -137,7 +137,7 @@ End
 
 RegistryItem gid_Regitem_Ure_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\Layer\URE\%URELAYERVERSION";
+	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
