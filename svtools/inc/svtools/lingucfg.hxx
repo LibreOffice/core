@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lingucfg.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,13 +174,9 @@ class SVL_DLLPUBLIC SvtLinguConfig: public svt::detail::Options
 
     SvtLinguConfigItem &   GetConfigItem() const    { return const_cast< SvtLinguConfig * >( this )->GetConfigItem(); }
 
-    // configuration update access for the 'Linguistic/ServiceManager' node
-    mutable com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > m_xUpdateAccess;
-
     // configuration update access for the 'Linguistic' main node
     mutable com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > m_xMainUpdateAccess;
 
-    com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetUpdateAccess() const;
     com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetMainUpdateAccess() const;
 
     com::sun::star::uno::Sequence< rtl::OUString > GetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName ) const;
