@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PackageDescription.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +79,7 @@ public class PackageDescription implements TreeNode {
     private boolean isDefault   = true;
     private boolean isHidden    = false;
     private boolean showInUserInstall = true;
+    private boolean showInUserInstallOnly = false;
     private boolean isOptional  = true;
     private boolean dontUninstall = false;
     private boolean allChildrenHidden = false;
@@ -184,6 +185,10 @@ public class PackageDescription implements TreeNode {
 
     public boolean showInUserInstall() {
         return showInUserInstall;
+    }
+
+    public boolean showInUserInstallOnly() {
+        return showInUserInstallOnly;
     }
 
     public boolean dontUninstall() {
@@ -411,6 +416,12 @@ public class PackageDescription implements TreeNode {
                 String showInUserInstallValue = subSection.getValue();
                 showInUserInstall = Parser.parseBoolean(showInUserInstallValue);
                 // showInUserInstall = Boolean.parseBoolean(showInUserInstallValue);
+            }
+
+            subSection = section.getElement("showinuserinstallonly");
+            if (subSection != null) {
+                String showInUserInstallValueOnly = subSection.getValue();
+                showInUserInstallOnly = Parser.parseBoolean(showInUserInstallValueOnly);
             }
 
             subSection = section.getElement("dontuninstall");
