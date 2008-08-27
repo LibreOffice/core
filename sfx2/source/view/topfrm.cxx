@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: topfrm.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1237,7 +1237,7 @@ SfxTopViewFrame::SfxTopViewFrame
     {
         UnlockAdjustPosSizePixel();
     }
-    else if ( GetViewShell()->UseObjectSize() )
+    else if ( GetViewShell() && GetViewShell()->UseObjectSize() )
     {
         // initiale Gr"o\se festlegen
         // Zuerst die logischen Koordinaten von IP-Objekt und EditWindow
