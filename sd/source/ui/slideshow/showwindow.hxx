@@ -8,7 +8,7 @@
  *
  * $RCSfile: showwindow.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 #define SD_SHOW_WINDOW_HXX
 
 #include <rtl/ref.hxx>
-#include <limits.h>
+#include <sal/types.h>
 #include <vcl/timer.hxx>
 #include <vcl/graph.hxx>
 
@@ -58,7 +58,7 @@ class ViewShell;
 // - Defines -
 // -----------
 
-#define SLIDE_NO_TIMEOUT LONG_MAX
+#define SLIDE_NO_TIMEOUT SAL_MAX_INT32
 
 // ---------
 // - Enums -
