@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -656,6 +656,28 @@ protected:
 };
 
 //===================================================================
+class ScriptSubPackageIterator
+{
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >      m_xMainPackage;
+
+    bool                                                                        m_bIsValid;
+    bool                                                                        m_bIsBundle;
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >                              m_aSubPkgSeq;
+    sal_Int32                                                                   m_nSubPkgCount;
+    sal_Int32                                                                   m_iNextSubPkg;
+
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+        implDetectScriptPackage( const com::sun::star::uno::Reference
+            < com::sun::star::deployment::XPackage > xPackage, bool& rbPureDialogLib );
+
+public:
+    ScriptSubPackageIterator( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xMainPackage );
+
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
+};
+
 enum IteratorState
 {
     USER_EXTENSIONS,
@@ -672,16 +694,13 @@ public:
 private:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetScriptPackageFromPackage
         ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-          com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
           bool& rbPureDialogLib );
 
 protected:
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextUserScriptPackage
-        ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
-          bool& rbPureDialogLib );
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedScriptPackage
-        ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
-          bool& rbPureDialogLib );
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+        implGetNextUserScriptPackage( bool& rbPureDialogLib );
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+        implGetNextSharedScriptPackage( bool& rbPureDialogLib );
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
 
@@ -697,6 +716,8 @@ protected:
 
     int                                                                         m_iUserPackage;
     int                                                                         m_iSharedPackage;
+
+    ScriptSubPackageIterator*                                                   m_pScriptSubPackageIterator;
 
 }; // end class ScriptExtensionIterator
 
