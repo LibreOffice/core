@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: line.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #include <tools/debug.hxx>
 
 #include <cstdlib>
-#include <cmath>
+#include <math.h>
 
 inline long FRound( double fVal )
 {
