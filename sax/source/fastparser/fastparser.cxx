@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fastparser.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,8 +192,11 @@ public:
 private:
     void parse();
 
+    sal_Int32 GetToken( const OString& rToken );
     sal_Int32 GetToken( const sal_Char* pToken, sal_Int32 nTokenLen = 0 );
+    sal_Int32 GetTokenWithPrefix( const OString& rPrefix, const OString& rName ) throw (SAXException);
     sal_Int32 GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (SAXException);
+    OUString  GetNamespaceURL( const OString& rPrefix ) throw (SAXException);
     OUString  GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw (SAXException);
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithNamespaceURL( const OUString& rNamespaceURL, const sal_Char* pName, int nNameLen );
@@ -380,6 +383,13 @@ void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNa
 
 // --------------------------------------------------------------------
 
+sal_Int32 FastSaxParser::GetToken( const OString& rToken )
+{
+    Sequence< sal_Int8 > aSeq( (sal_Int8*)rToken.getStr(), rToken.getLength() );
+
+    return mxTokenHandler->getTokenFromUTF8( aSeq );
+}
+
 sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
 {
     if( !nLen )
@@ -391,6 +401,33 @@ sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0
 }
 
 // --------------------------------------------------------------------
+
+sal_Int32 FastSaxParser::GetTokenWithPrefix( const OString& rPrefix, const OString& rName ) throw (SAXException)
+{
+    sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
+
+    sal_uInt32 nNamespace = maContextStack.top()->mnNamespaceCount;
+    while( nNamespace-- )
+    {
+        if( maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
+        {
+            nNamespaceToken = maNamespaceDefines[nNamespace]->mnToken;
+            break;
+        }
+
+        if( !nNamespace )
+            throw SAXException(); // prefix that has no defined namespace url
+    }
+
+    if( nNamespaceToken != FastToken::DONTKNOW )
+    {
+        sal_Int32 nNameToken = GetToken( rName.getStr(), rName.getLength() );
+        if( nNameToken != FastToken::DONTKNOW )
+            return nNamespaceToken | nNameToken;
+    }
+
+    return FastToken::DONTKNOW;
+}
 
 sal_Int32 FastSaxParser::GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (SAXException)
 {
@@ -433,6 +470,19 @@ sal_Int32 FastSaxParser::GetNamespaceToken( const OUString& rNamespaceURL )
 }
 
 // --------------------------------------------------------------------
+
+OUString FastSaxParser::GetNamespaceURL( const OString& rPrefix ) throw (SAXException)
+{
+    if( !maContextStack.empty() )
+    {
+        sal_uInt32 nNamespace = maContextStack.top()->mnNamespaceCount;
+        while( nNamespace-- )
+            if( maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
+                return maNamespaceDefines[nNamespace]->maNamespaceURL;
+    }
+
+    throw SAXException(); // prefix that has no defined namespace url
+}
 
 OUString FastSaxParser::GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw(SAXException)
 {
@@ -800,6 +850,18 @@ void FastSaxParser::parse( )
 // The C-Callbacks
 //
 //-----------------------------------------
+
+namespace {
+
+struct AttributeData
+{
+    OString             maPrefix;
+    OString             maName;
+    OString             maValue;
+};
+
+} // namespace
+
 void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, const XML_Char **awAttributes )
 {
      FastSaxParser *pThis = (FastSaxParser*)pvThis;
@@ -825,6 +887,14 @@ void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, 
     sal_Int32 nNameLen, nPrefixLen;
     const XML_Char *pName;
     const XML_Char *pPrefix;
+
+    /*  #158414# Each element may define new namespaces, also for attribues.
+        First, process all namespace attributes and cache other attributes in a
+        vector. Second, process the attributes after namespaces have been
+        initialized. */
+    ::std::vector< AttributeData > aAttribs;
+
+    // #158414# first: get namespaces
     for( ; awAttributes[i]; i += 2 )
     {
         OSL_ASSERT( awAttributes[i+1] );
@@ -838,15 +908,10 @@ void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, 
             }
             else
             {
-                const sal_Int32 nAttributeToken = pThis->GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
-                if( nAttributeToken != FastToken::DONTKNOW )
-                {
-                    pThis->mxAttributes->add( nAttributeToken, OString( awAttributes[i+1] ) );
-                }
-                else
-                {
-                    pThis->mxAttributes->addUnknown( pThis->GetNamespaceURL( pPrefix, nPrefixLen ), OString( pName, nNameLen ), OString( awAttributes[i+1] ) );
-                }
+                aAttribs.resize( aAttribs.size() + 1 );
+                aAttribs.back().maPrefix = OString( pPrefix, nPrefixLen );
+                aAttribs.back().maName = OString( pName, nNameLen );
+                aAttribs.back().maValue = OString( awAttributes[i+1] );
             }
         }
         else
@@ -858,16 +923,31 @@ void FastSaxParser::callbackStartElement( void *pvThis, const XML_Char *pwName, 
             }
             else
             {
-                const sal_Int32 nAttributeToken = pThis->GetToken( pName, nNameLen );
-                if( nAttributeToken != FastToken::DONTKNOW )
-                {
-                    pThis->mxAttributes->add( nAttributeToken, OString( awAttributes[i+1] ) );
-                }
-                else
-                {
-                    pThis->mxAttributes->addUnknown( OString( pName, nNameLen ), OString( awAttributes[i+1] ) );
-                }
+                aAttribs.resize( aAttribs.size() + 1 );
+                aAttribs.back().maName = OString( pName, nNameLen );
+                aAttribs.back().maValue = OString( awAttributes[i+1] );
             }
+        }
+    }
+
+    // #158414# second: fill attribute list with other attributes
+    for( ::std::vector< AttributeData >::const_iterator aIt = aAttribs.begin(), aEnd = aAttribs.end(); aIt != aEnd; ++aIt )
+    {
+        if( aIt->maPrefix.getLength() )
+        {
+            const sal_Int32 nAttributeToken = pThis->GetTokenWithPrefix( aIt->maPrefix, aIt->maName );
+            if( nAttributeToken != FastToken::DONTKNOW )
+                pThis->mxAttributes->add( nAttributeToken, aIt->maValue );
+            else
+                pThis->mxAttributes->addUnknown( pThis->GetNamespaceURL( aIt->maPrefix ), aIt->maName, aIt->maValue );
+        }
+        else
+        {
+            const sal_Int32 nAttributeToken = pThis->GetToken( aIt->maName );
+            if( nAttributeToken != FastToken::DONTKNOW )
+                pThis->mxAttributes->add( nAttributeToken, aIt->maValue );
+            else
+                pThis->mxAttributes->addUnknown( aIt->maName, aIt->maValue );
         }
     }
 
