@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideSorter.cxx,v $
  *
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
-#include <cmath>
+#include <math.h>
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
