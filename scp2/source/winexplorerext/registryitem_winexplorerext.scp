@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_winexplorerext.scp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
-    Value = "\"<progpath>\program\shlxthdl.dll\"";
+    Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll\"";
 End
 
 RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_ThreadingModel
@@ -56,7 +56,7 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
-    Value = "\"<progpath>\program\shlxthdl.dll\"";
+    Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll\"";
 End
 
 RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_ThreadingModel
@@ -82,7 +82,7 @@ RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
-    Value = "\"<progpath>\program\shlxthdl.dll\"";
+    Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll\"";
 End
     
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_ThreadingModel
@@ -101,7 +101,7 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
-    Value = "\"<progpath>\program\shlxthdl.dll\"";
+    Value = "\"[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll\"";
 End
 
 RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_ThreadingModel
