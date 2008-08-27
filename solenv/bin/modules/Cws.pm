@@ -8,7 +8,7 @@
 #
 # $RCSfile: Cws.pm,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -75,6 +75,8 @@ sub new
     $self->{MILESTONE}    = undef;    # master milestone to which child is related
     $self->{MODULES}      = undef;    # list of modules belonging to child
     $self->{INCOMPATIBLE_MODULES}      = undef;    # list of modules belonging to child
+    $self->{NEW_MODULES}      = undef; # list of public new modules belonging to child
+    $self->{NEW_MODULES_PRIV}      = undef; # list of private new modules belonging to child
     $self->{TASKIDS}      = undef;    # list of tasks registered with child
     $self->{_CACHED_TAGS} = undef;    # list of cached tags (tags are looked up frequently)
     bless($self, $class);
@@ -133,7 +135,7 @@ for my $datum (qw(master milestone)) {
 
 # Accessor methods for instance data consisting of item lists
 # like modules and taskids
-for my $datum (qw(files patch_files modules incompatible_modules taskids)) {
+for my $datum (qw(files patch_files modules incompatible_modules new_modules new_modules_priv taskids)) {
     no strict "refs";
     *$datum = sub {
         # get current item list
@@ -981,6 +983,12 @@ sub fetch_items_from_eis
     }
     elsif ( $type eq 'incompatible_modules' ) {
         eval { $result = $eis->getIncompatibleModules($id) };
+    }
+    elsif ( $type eq 'new_modules' ) {
+        eval { $result = $eis->getNewModules($id) };
+    }
+    elsif ( $type eq 'new_modules_priv' ) {
+        eval { $result = $eis->getNewModulesPriv($id) };
     }
     elsif ( $type eq 'taskids' ) {
         eval { $result = $eis->getTaskIds($id) };
