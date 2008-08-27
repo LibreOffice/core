@@ -6,6 +6,7 @@ mkdir: %_DEST%\bin%_EXT%\osl
 mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\install %_DEST%\bin%_EXT%\userscripts\install
 ..\%__SRC%\bin\uninstall %_DEST%\bin%_EXT%\userscripts\uninstall
+..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin%_EXT%\openoffice.org-userland-1.0-0.noarch.rpm
 
 ..\%__SRC%\bin\ulfconv %_DEST%\bin%_EXT%\ulfconv
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin%_EXT%\langpackscript.sh
@@ -30,6 +31,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\packinfo\solariscopyrightfile %_DEST%\bin%_EXT%\solariscopyrightfile
 ..\source\packinfo\*.txt %_DEST%\bin%_EXT%\*.txt
+..\scripts\*.txt %_DEST%\bin%_EXT%\*.txt
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
 
