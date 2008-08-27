@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_platform.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,7 @@
 
 
 #define PLATFORM_SOLARIS_SPARC      "solaris_sparc"
-//#define PLATFORM_SOLARIS_SPARC64    "solaris_sparc64"
+#define PLATFORM_SOLARIS_SPARC64    "solaris_sparc64"
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
@@ -152,6 +152,8 @@ namespace
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC)))
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC"));
+        else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC64)))
+            ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC64"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_X86)))
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86)))
