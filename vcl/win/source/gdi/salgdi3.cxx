@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,6 +240,72 @@ void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevF
     {
         aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
         bModified = TRUE;
+    }
+}
+
+// =======================================================================
+
+// raw font data with a scoped lifetime
+class RawFontData
+{
+public:
+    explicit    RawFontData( HDC, DWORD nTableTag=0 );
+                ~RawFontData() { delete[] mpRawBytes; }
+    const unsigned char*    get() const { return mpRawBytes; }
+    const unsigned char*    steal() { unsigned char* p = mpRawBytes; mpRawBytes = NULL; return p; }
+    const int               size() const { return mnByteCount; }
+
+private:
+    unsigned char*  mpRawBytes;
+    int             mnByteCount;
+};
+
+RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
+:   mpRawBytes( NULL )
+,   mnByteCount( 0 )
+{
+    // get required size in bytes
+    mnByteCount = ::GetFontData( hDC, nTableTag, 0, NULL, 0 );
+    if( mnByteCount == GDI_ERROR )
+        return;
+    else if( !mnByteCount )
+        return;
+
+    // allocate the array
+    mpRawBytes = new unsigned char[ mnByteCount ];
+
+    // get raw data in chunks small enough for GetFontData()
+    int nRawDataOfs = 0;
+    DWORD nMaxChunkSize = 0x100000;
+    for(;;)
+    {
+        // calculate remaining raw data to get
+        DWORD nFDGet = mnByteCount - nRawDataOfs;
+        if( nFDGet <= 0 )
+            break;
+        // #i56745# limit GetFontData requests
+        if( nFDGet > nMaxChunkSize )
+            nFDGet = nMaxChunkSize;
+        const DWORD nFDGot = ::GetFontData( hDC, nTableTag, nRawDataOfs,
+            (void*)(mpRawBytes + nRawDataOfs), nFDGet );
+        if( !nFDGot )
+            break;
+        else if( nFDGot != GDI_ERROR )
+            nRawDataOfs += nFDGot;
+        else
+        {
+            // was the chunk too big? reduce it
+            nMaxChunkSize /= 2;
+            if( nMaxChunkSize < 0x10000 )
+                break;
+        }
+    }
+
+    // cleanup if the raw data is incomplete
+    if( nRawDataOfs != mnByteCount )
+    {
+        delete[] mpRawBytes;
+        mpRawBytes = NULL;
     }
 }
 
@@ -885,25 +951,21 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
     if( (nRC == GDI_ERROR) || !nRC )
         return;
 
-    // TODO: directly read the GSUB table instead of going through sft
+    // parse the GSUB table through sft
+    // TODO: parse it directly
 
-    // get raw font file data
-    DWORD nFontSize = ::GetFontData( hDC, 0, 0, NULL, 0 );
-    if( nFontSize == GDI_ERROR )
-        return;
-    std::vector<char> aRawFont( nFontSize+1 );
-    aRawFont[ nFontSize ] = 0;
-    DWORD nFontSize2 = ::GetFontData( hDC, 0, 0, (void*)&aRawFont[0], nFontSize );
-    if( nFontSize != nFontSize2 )
+    // sft needs the full font file data => get it
+    const RawFontData aRawFontData( hDC );
+    if( !aRawFontData.get() )
         return;
 
     // open font file
     sal_uInt32 nFaceNum = 0;
-    if( !aRawFont[0] )  // TTC candidate
+    if( !*aRawFontData.get() )  // TTC candidate
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     TrueTypeFont* pTTFont = NULL;
-    ::OpenTTFontBuffer( &aRawFont[0], nFontSize, nFaceNum, &pTTFont );
+    ::OpenTTFontBuffer( (void*)aRawFontData.get(), aRawFontData.size(), nFaceNum, &pTTFont );
     if( !pTTFont )
         return;
 
@@ -936,19 +998,11 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
     aResult.mbRecoded     = true;
 
     // get the CMAP table from the font which is selected into the DC
-    const DWORD CmapTag = CalcTag( "cmap" );
-    DWORD nRC = ::GetFontData( hDC, CmapTag, 0, NULL, 0 );
-    // read the CMAP table if available
-    if( nRC != GDI_ERROR )
-    {
-        const unsigned int nLength = nRC;
-        std::vector<unsigned char> aCmap( nLength );
-        unsigned char* pCmap = &aCmap[0];
-        nRC = ::GetFontData( hDC, CmapTag, 0, pCmap, nLength );
-        // parse the CMAP table
-        if( nRC == nLength )
-            ParseCMAP( pCmap, nLength, aResult );
-    }
+    const DWORD nCmapTag = CalcTag( "cmap" );
+    const RawFontData aRawFontData( hDC, nCmapTag );
+    // parse the CMAP table if available
+    if( aRawFontData.get() )
+        ParseCMAP( aRawFontData.get(), aRawFontData.size(), aResult );
 
     mbDisableGlyphApi |= aResult.mbRecoded;
 
@@ -2426,20 +2480,6 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
 
 // -----------------------------------------------------------------------
 
-// TODO:  Replace this class with boost::scoped_array
-class ScopedCharArray
-{
-public:
-    inline explicit ScopedCharArray(char * pArray): m_pArray(pArray) {}
-
-    inline ~ScopedCharArray() { delete[] m_pArray; }
-
-    inline char * get() const { return m_pArray; }
-
-private:
-    char * m_pArray;
-};
-
 class ScopedFont
 {
 public:
@@ -2524,26 +2564,9 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 #endif
 
     // get raw font file data
-    DWORD nFontSize = ::GetFontData( mhDC, 0, 0, NULL, 0 );
-    if( nFontSize == GDI_ERROR )
+    const RawFontData xRawFontData( mhDC );
+    if( !xRawFontData.get() )
         return FALSE;
-    ScopedCharArray xRawFontData(new char[ nFontSize ]);
-    for( DWORD nRawDataOfs = 0;;)
-    {
-        // calculate remaining raw data to get
-        DWORD nFDGet = nFontSize - nRawDataOfs;
-        if( nFDGet <= 0 )
-            break;
-        // #i56745# limit GetFontData requests
-        static const DWORD FDLIMIT = 0x100000;
-        if( nFDGet > FDLIMIT )
-            nFDGet = FDLIMIT;
-        const DWORD nFDGot = ::GetFontData( mhDC, 0, nRawDataOfs,
-            (void*)(xRawFontData.get() + nRawDataOfs), nFDGet );
-        if( (nFDGot == GDI_ERROR) || !nFDGot )
-            return FALSE;
-        nRawDataOfs += nFDGot;
-    }
 
     // open font file
     sal_uInt32 nFaceNum = 0;
@@ -2551,7 +2574,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    int nRC = aSftTTF.open( xRawFontData.get(), nFontSize, nFaceNum );
+    int nRC = aSftTTF.open( (void*)xRawFontData.get(), xRawFontData.size(), nFaceNum );
     if( nRC != SF_OK )
         return FALSE;
 
@@ -2578,14 +2601,14 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
         if( pGlyphIDs[i] & GF_ISCHAR )
         {
-            bool bVertical = (pGlyphIDs[i] & GF_ROTMASK) != 0;
-            nGlyphIdx = ::MapChar( aSftTTF.get(), sal::static_int_cast<sal_uInt16>(nGlyphIdx), bVertical );
-            if( nGlyphIdx == 0 && pFont->IsSymbolFont() )
+            sal_Unicode cChar = static_cast<sal_Unicode>(nGlyphIdx); // TODO: sal_UCS4
+            const bool bVertical = ((pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0);
+            nGlyphIdx = ::MapChar( aSftTTF.get(), cChar, bVertical );
+            if( (nGlyphIdx == 0) && pFont->IsSymbolFont() )
             {
                 // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
-                nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-                nGlyphIdx = (nGlyphIdx & 0xF000) ? (nGlyphIdx & 0x00FF) : (nGlyphIdx | 0xF000 );
-                nGlyphIdx = ::MapChar( aSftTTF.get(), sal::static_int_cast<sal_uInt16>(nGlyphIdx), bVertical );
+                cChar = (cChar & 0xF000) ? (cChar & 0x00FF) : (cChar | 0xF000);
+                nGlyphIdx = ::MapChar( aSftTTF.get(), cChar, bVertical );
             }
         }
         aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
@@ -2628,7 +2651,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.GetBuffer(), aShortIDs,
             aTempEncs, nGlyphCount, 0, NULL, 0 );
-    return nRC == SF_OK;
+    return (nRC == SF_OK);
 }
 
 //--------------------------------------------------------------------------
@@ -2646,14 +2669,10 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
     SetFont( &aIFSD, 0 );
 
     // get the raw font file data
-    DWORD nFontSize1 = ::GetFontData( mhDC, 0, 0, NULL, 0 );
-    if( nFontSize1 == GDI_ERROR || nFontSize1 <= 0 )
+    RawFontData aRawFontData( mhDC );
+    *pDataLen = aRawFontData.size();
+    if( !aRawFontData.get() )
         return NULL;
-    *pDataLen = nFontSize1;
-    void* pData = reinterpret_cast<void*>(new char[ nFontSize1 ]);
-    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, pData, nFontSize1 );
-    if( nFontSize1 != nFontSize2 )
-        *pDataLen = 0;
 
     // get important font properties
     TEXTMETRICA aTm;
@@ -2685,12 +2704,10 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
     }
 
     if( !*pDataLen )
-    {
-        FreeEmbedFontData( pData, nFontSize1 );
-        pData = NULL;
-    }
+        return NULL;
 
-    return pData;
+    const unsigned char* pData = aRawFontData.steal();
+    return (void*)pData;
 }
 
 //--------------------------------------------------------------------------
@@ -2755,12 +2772,8 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
     if( pFont->IsSubsettable() )
     {
         // get raw font file data
-        DWORD nFontSize1 = ::GetFontData( mhDC, 0, 0, NULL, 0 );
-        if( nFontSize1 == GDI_ERROR )
-            return;
-        ScopedCharArray xRawFontData(new char[ nFontSize1 ]);
-        DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize1 );
-        if( nFontSize1 != nFontSize2 )
+        const RawFontData xRawFontData( mhDC );
+        if( !xRawFontData.get() )
             return;
 
         // open font file
@@ -2769,7 +2782,7 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
             nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
         ScopedTrueTypeFont aSftTTF;
-        int nRC = aSftTTF.open( xRawFontData.get(), nFontSize1, nFaceNum );
+        int nRC = aSftTTF.open( (void*)xRawFontData.get(), xRawFontData.size(), nFaceNum );
         if( nRC != SF_OK )
             return;
 
