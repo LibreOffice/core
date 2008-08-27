@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.55 $
+# $Revision: 1.56 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -423,6 +423,12 @@ sub setglobalvariables
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::globaltempdirname;
         installer::systemactions::create_directory_with_privileges($installer::globals::temppath, "777");
         my $dirsave = $installer::globals::temppath;
+
+        if ( $installer::globals::compiler =~ /^unxmac/ )
+        {
+            my $localcall = "chmod 777 $installer::globals::temppath \>\/dev\/null 2\>\&1";
+            system($localcall);
+        }
 
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";
         $installer::globals::temppath = installer::systemactions::create_pid_directory($installer::globals::temppath);
