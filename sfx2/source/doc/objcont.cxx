@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objcont.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,30 +94,31 @@ using namespace ::com::sun::star::uno;
 
 //====================================================================
 
-/*
-static
-bool operator< (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
-{
-    return i_rLeft.Year             < i_rRight.Year
-        || i_rLeft.Month            < i_rRight.Month
-        || i_rLeft.Day              < i_rRight.Day
-        || i_rLeft.Hours            < i_rRight.Hours
-        || i_rLeft.Minutes          < i_rRight.Minutes
-        || i_rLeft.Seconds          < i_rRight.Seconds
-        || i_rLeft.HundredthSeconds < i_rRight.HundredthSeconds;
-}
-*/
-
 static
 bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 {
-    return i_rLeft.Year             > i_rRight.Year
-        || i_rLeft.Month            > i_rRight.Month
-        || i_rLeft.Day              > i_rRight.Day
-        || i_rLeft.Hours            > i_rRight.Hours
-        || i_rLeft.Minutes          > i_rRight.Minutes
-        || i_rLeft.Seconds          > i_rRight.Seconds
-        || i_rLeft.HundredthSeconds > i_rRight.HundredthSeconds;
+    if ( i_rLeft.Year != i_rRight.Year )
+        return i_rLeft.Year > i_rRight.Year;
+
+    if ( i_rLeft.Month != i_rRight.Month )
+        return i_rLeft.Month > i_rRight.Month;
+
+    if ( i_rLeft.Day != i_rRight.Day )
+        return i_rLeft.Day > i_rRight.Day;
+
+    if ( i_rLeft.Hours != i_rRight.Hours )
+        return i_rLeft.Hours > i_rRight.Hours;
+
+    if ( i_rLeft.Minutes != i_rRight.Minutes )
+        return i_rLeft.Minutes > i_rRight.Minutes;
+
+    if ( i_rLeft.Seconds != i_rRight.Seconds )
+        return i_rLeft.Seconds > i_rRight.Seconds;
+
+    if ( i_rLeft.HundredthSeconds != i_rRight.HundredthSeconds )
+        return i_rLeft.HundredthSeconds > i_rRight.HundredthSeconds;
+
+    return sal_False;
 }
 
 
