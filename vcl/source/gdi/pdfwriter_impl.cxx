@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.133 $
+ * $Revision: 1.134 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6272,6 +6272,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
     {
         if( ! pGlyphs[i] )
             continue;
+        const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
 
         const ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
@@ -6289,24 +6290,20 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             }
 
             pGlyphWidths[ i ] = 0;
-            pMappedGlyphs[ i ] = sal::static_int_cast<sal_Int8>( pGlyphs[i] );
+            pMappedGlyphs[ i ] = sal::static_int_cast<sal_Int8>( nFontGlyphId );
             pMappedFontObjects[ i ] = nFontID;
             const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pCurrentFont );
             if( pFD )
             {
                 const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
-                pGlyphWidths[i] = pBuiltinFont->m_aWidths[ pGlyphs[i] & 0x00ff ];
+                pGlyphWidths[i] = pBuiltinFont->m_aWidths[ nFontGlyphId & 0x00ff ];
             }
         }
         else if( pCurrentFont->mbSubsettable )
         {
-            #ifndef WNT
-            DBG_ASSERT( (pGlyphs[i] & GF_ISCHAR) == 0, "hdu promised this would only happen on Windows" );
-            #endif
-
             FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
-            // search for glyphID
-            FontMapping::iterator it = rSubset.m_aMapping.find( pGlyphs[i] );
+            // search for font specific glyphID
+            FontMapping::iterator it = rSubset.m_aMapping.find( nFontGlyphId );
             if( it != rSubset.m_aMapping.end() )
             {
                 pMappedFontObjects[i] = it->second.m_nFontID;
@@ -6315,8 +6312,8 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             else
             {
                 // create new subset if necessary
-                if( rSubset.m_aSubsets.begin() == rSubset.m_aSubsets.end() ||
-                    rSubset.m_aSubsets.back().m_aMapping.size() > 254 )
+                if( rSubset.m_aSubsets.empty()
+                || (rSubset.m_aSubsets.back().m_aMapping.size() > 254) )
                 {
                     rSubset.m_aSubsets.push_back( FontEmit( m_nNextFID++ ) );
                 }
@@ -6328,19 +6325,20 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                 pMappedGlyphs[i] = nNewId;
 
                 // add new glyph to emitted font subset
-                GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ pGlyphs[i] ];
+                GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
                 rNewGlyphEmit.m_nSubsetGlyphID = nNewId;
                 rNewGlyphEmit.m_aUnicode = (pUnicodes ? pUnicodes[i] : 0);
 
                 // add new glyph to font mapping
-                Glyph& rNewGlyph = rSubset.m_aMapping[ pGlyphs[i] ];
+                Glyph& rNewGlyph = rSubset.m_aMapping[ nFontGlyphId ];
                 rNewGlyph.m_nFontID = pMappedFontObjects[i];
                 rNewGlyph.m_nSubsetGlyphID = nNewId;
             }
             getReferenceDevice()->ImplGetGraphics();
+            const bool bVertical = ((pGlyphs[i] & GF_ROTMASK) != 0);
             pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
-                                                          pGlyphs[i],
-                                                          (pGlyphs[i] & GF_ROTMASK) != 0,
+                                                          nFontGlyphId,
+                                                          bVertical,
                                                           m_pReferenceDevice->mpGraphics );
         }
         else if( pCurrentFont->IsEmbeddable() )
@@ -6554,7 +6552,6 @@ void PDFWriterImpl::drawVerticalGlyphs(
             nXOffset += rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
         if( ! rGlyphs[i].m_nGlyphId )
             continue;
-
 
         aDeltaPos = rRotScale.transform( aDeltaPos );
 
@@ -6853,12 +6850,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             // in multiple glyphs. The current SalLayout
             // implementations set -1 then to indicate that no direct
             // mapping is possible
-
-        // convert from sal_GlyphId to fontspecific glyphid
-        pGlyphs[i] &= GF_IDXMASK | GF_ISCHAR;
         }
+
         registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, pUnicodes, pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
-        for( int i = 0; i < nGlyphs; i++)
+
+        for( int i = 0; i < nGlyphs; i++ )
         {
             aGlyphs.push_back( PDFGlyph( aGNGlyphPos,
                                          pGlyphWidths[i],
