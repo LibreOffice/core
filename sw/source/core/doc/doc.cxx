@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1648,6 +1648,7 @@ BOOL SwDoc::RemoveInvisibleContent()
 BOOL SwDoc::ConvertFieldsToText()
 {
     BOOL bRet = FALSE;
+    LockExpFlds();
     StartUndo( UNDO_UI_REPLACE, NULL );
 
     const SwFldTypes* pMyFldTypes = GetFldTypes();
@@ -1716,6 +1717,7 @@ BOOL SwDoc::ConvertFieldsToText()
     if( bRet )
         SetModified();
     EndUndo( UNDO_UI_REPLACE, NULL );
+    UnlockExpFlds();
     return bRet;
 
 }
