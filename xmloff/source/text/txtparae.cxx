@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.151 $
+ * $Revision: 1.152 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -706,6 +706,10 @@ void XMLTextParagraphExport::exportListChange(
                                                                     sNewListId );
                         if ( sListStyleName ==
                                 mpTextListsHelper->GetListStyleOfLastProcessedList() &&
+                             // --> OD 2008-08-15 #i92811#
+                             sContinueListId ==
+                                mpTextListsHelper->GetLastProcessedListId() &&
+                             // <--
                              !rNextInfo.IsRestart() )
                         {
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
