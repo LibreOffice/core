@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winlayout.cxx,v $
- * $Revision: 1.114 $
+ * $Revision: 1.115 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -585,21 +585,19 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     while( nCount < nLen )
     {
         // update return values {nGlyphIndex,nCharPos,nGlyphAdvance}
-        long nGlyphIndex = mpOutGlyphs[ nStart ];
+        sal_GlyphId nGlyphIndex = mpOutGlyphs[ nStart ];
         if( mbDisableGlyphs )
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
             {
-#ifdef GNG_VERT_HACK
-                sal_UCS4 cChar = (sal_UCS4)(nGlyphIndex & GF_IDXMASK);
+                const sal_UCS4 cChar = static_cast<sal_UCS4>(nGlyphIndex & GF_IDXMASK);
                 if( mrWinFontData.HasGSUBstitutions( mhDC )
                 &&  mrWinFontData.IsGSUBstituted( cChar ) )
-                    nGlyphIndex |= GF_ROTL | GF_GSUB;
+                    nGlyphIndex |= GF_GSUB | GF_ROTL;
                 else
-#endif // GNG_VERT_HACK
                 {
                     nGlyphIndex |= GetVerticalFlags( cChar );
-                    if( !(nGlyphIndex & GF_ROTMASK) )
+                    if( (nGlyphIndex & GF_ROTMASK) == 0 )
                         nGlyphIndex |= GF_VERT;
                 }
             }
