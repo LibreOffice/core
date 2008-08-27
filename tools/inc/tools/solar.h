@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: solar.h,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -347,6 +347,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "ap.so"
 #elif defined HPUX
   #define __DLLEXTENSION "hr.sl"
+#elif defined SOLARIS && defined SPARC && defined IS_LP64
+  #define __DLLEXTENSION "su.so"
 #elif defined SOLARIS && defined SPARC && !defined __GNUC__
   #define __DLLEXTENSION "ss.so"
 #elif defined SOLARIS && defined SPARC && defined __GNUC__
