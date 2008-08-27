@@ -8,7 +8,11 @@ myCLASSPATH=$myCLASSPATH:$SOLVER_LIB:/net/unoapi/export/unoapi/bin/mysql.jar
 if [ -n "$JAVAI" ]; then
 	JAVABIN=$JAVAI
 elif [ -n "$JAVA_HOME" ]; then
-	JAVABIN=$JAVA_HOME/bin/java
+    if [ "$OS$CPUNAME$CPU" = SOLARISSPARCU ]; then
+        JAVABIN=$JAVA_HOME/bin/sparcv9/java
+    else
+        JAVABIN=$JAVA_HOME/bin/java
+    fi
 else
 	echo "please set environment variable JAVA_HOME"
 	exit 1
