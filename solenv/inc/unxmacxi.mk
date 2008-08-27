@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacxi.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,5 +46,11 @@ CXXCPP*:=g++ -E $(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(SYSBASE)"!=""
 
+# flags to enable build with symbols; required by crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g
+.ENDIF
 # Include generic Mac OS X makefile
 .INCLUDE : unxmacx.mk
