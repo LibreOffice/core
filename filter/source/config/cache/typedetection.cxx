@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typedetection.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <framework/interaction.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/localfilehelper.hxx>
 
 //_______________________________________________
 // namespace
@@ -1120,7 +1121,18 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
 void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
-    if (!rDescriptor.addInputStream())
+    // the current approach for local file system case is to lock
+    // a local file only in case it is OOo format
+    // so until the type detection is done the file stays unlocked
+
+    sal_Bool bSuccess = sal_False;
+    ::rtl::OUString sURL = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString() );
+    if ( sURL.getLength() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
+        bSuccess = rDescriptor.addInputStreamNoLock();
+    else
+        bSuccess = rDescriptor.addInputStream();
+
+    if ( !bSuccess )
         throw css::uno::Exception(_FILTER_CONFIG_FROM_ASCII_("Could not open stream."), static_cast< css::document::XTypeDetection* >(this));
 }
 
