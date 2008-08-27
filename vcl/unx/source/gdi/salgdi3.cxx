@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.157 $
+ * $Revision: 1.158 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -788,7 +788,7 @@ CairoWrapper::CairoWrapper()
 :   mpCairoLib( NULL )
 {
     static const char* pDisableCairoText = getenv( "SAL_DISABLE_CAIROTEXT" );
-    if( pDisableCairoText && (pDisableCairoText[0] == '1') )
+    if( pDisableCairoText && (pDisableCairoText[0] != '0') )
         return;
 
     int nDummy;
@@ -1549,7 +1549,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     // allow disabling of native X11 fonts
     static const char* pEnableX11FontStr = getenv( "SAL_ENABLE_NATIVE_XFONTS" );
-    if( pEnableX11FontStr && (pEnableX11FontStr[0] == '1') )
+    if( !pEnableX11FontStr || (pEnableX11FontStr[0] != '0') )
     {
         // announce X11 fonts
         XlfdStorage* pX11FontList = GetDisplay()->GetXlfdList();
