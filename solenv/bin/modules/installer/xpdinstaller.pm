@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -267,6 +267,24 @@ sub get_showinuserinstall_value
     my $styles = "";
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bDONTSHOWINUSERINSTALL\b/ ) { $value = "false"; }
+
+    return $value;
+}
+
+###################################################
+# Asking module for showinuserinstall entry
+# scp style: USERINSTALLONLY
+###################################################
+
+sub get_userinstallonly_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bUSERINSTALLONLY\b/ ) { $value = "true"; }
 
     return $value;
 }
@@ -1086,6 +1104,10 @@ sub get_file_content
 
     $value = get_showinuserinstall_value($module);
     $line = get_tag_line($doubleindent, "showinuserinstall", $value);
+    push(@xpdfile, $line);
+
+    $value = get_userinstallonly_value($module);
+    $line = get_tag_line($doubleindent, "showinuserinstallonly", $value);
     push(@xpdfile, $line);
 
     $value = get_dontuninstall_value($module);
