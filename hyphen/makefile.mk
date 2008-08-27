@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,11 +54,20 @@ CONFIGURE_DIR=$(BUILD_DIR)
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
 
+.IF "$(COM)"=="C52" && "$(CPU)"=="U"
+LCL_CONFIGURE_CFLAGS+=-m64
+.ENDIF
+
 .IF "$(SYSBASE)"!=""
 .IF "$(EXTRA_CFLAGS)"!=""
-CONFIGURE_FLAGS+= CFLAGS="$(EXTRA_CFLAGS)" CXXFLAGS="$(EXTRA_CFLAGS)"
+LCL_CONFIGURE_CFLAGS+=$(EXTRA_CFLAGS)
+CONFIGURE_FLAGS+=CXXFLAGS="$(EXTRA_CFLAGS)"
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(SYSBASE)"!=""
+
+.IF "$(LCL_CONFIGURE_CFLAGS)"!=""
+CONFIGURE_FLAGS+=CFLAGS='$(LCL_CONFIGURE_CFLAGS)'
+.ENDIF
 
 .IF "$(SYSTEM_HYPH)" == "YES" && "$(WITH_MYSPELL_DICTS)" == "YES"
 BUILD_ACTION=make hyph_en_US.dic
