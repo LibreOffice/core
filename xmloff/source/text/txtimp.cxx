@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.144 $
+ * $Revision: 1.145 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1080,21 +1080,15 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             // --> OD 2008-04-23 #refactorlists#
             if ( xPropSetInfo->hasPropertyByName( sPropNameListId ) )
             {
-                const ::rtl::OUString sContinueListId( pListBlock->GetContinueListId() );
-                if ( sContinueListId.getLength() != 0 )
+                // --> OD 2008-08-15 #i92811#
+                const ::rtl::OUString sListBlockListId(
+                    mpTextListsHelper->GetListIdForListBlock( *pListBlock ) );
+                if ( sListBlockListId.getLength() != 0 )
                 {
                     xPropSet->setPropertyValue( sPropNameListId,
-                                                makeAny( sContinueListId ) );
+                                                makeAny( sListBlockListId ) );
                 }
-                else
-                {
-                    const ::rtl::OUString sListBlockListId( pListBlock->GetListId() );
-                    if ( sListBlockListId.getLength() != 0 )
-                    {
-                        xPropSet->setPropertyValue( sPropNameListId,
-                                                    makeAny( sListBlockListId ) );
-                    }
-                }
+                // <--
             }
             // <--
             SetListItem( (XMLTextListItemContext *)0 );
@@ -2348,12 +2342,17 @@ void XMLTextImportHelper::ResetOpenRedlineId()
 }
 
 // --> OD 2008-04-25 #refactorlists#
+// --> OD 2008-08-15 #i92811#
 void XMLTextImportHelper::KeepListAsProcessed( ::rtl::OUString sListId,
                                                ::rtl::OUString sListStyleName,
-                                               ::rtl::OUString sContinueListId )
+                                               ::rtl::OUString sContinueListId,
+                                               ::rtl::OUString sListStyleDefaultListId )
 {
-    mpTextListsHelper->KeepListAsProcessed( sListId, sListStyleName, sContinueListId );
+    mpTextListsHelper->KeepListAsProcessed( sListId, sListStyleName,
+                                            sContinueListId,
+                                            sListStyleDefaultListId );
 }
+// <--
 
 sal_Bool XMLTextImportHelper::IsListProcessed( const ::rtl::OUString sListId ) const
 {
