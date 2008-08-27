@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SystemManager.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -469,6 +469,11 @@ public class SystemManager {
 
                 if ( returnArray.length > 3 ) {
                     String sizeString = returnArray[position];
+
+                    // Special handling for very large hard discs that cannot be converted to int
+                    if ( sizeString.length() >= Integer.toString(Integer.MAX_VALUE).length() ) {
+                        sizeString = Integer.toString(Integer.MAX_VALUE);
+                    }
 
                     // Converting from String to int
                     size = Integer.parseInt(sizeString);
