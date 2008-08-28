@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_filetools.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:06:34 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:41:15 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -206,10 +206,10 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
 
                 ' ok to create a new document
                 try
-                    active.ok()
+                    active.cancel()
                     iActives = iActives + 1
                     printlog( CFN & "MSG (" & iActives & "): " & cMessage )
-                    printlog( CFN & "MSG (" & iActives & "): closed with OK" )
+                    printlog( CFN & "MSG (" & iActives & "): closed with Cancel" )
                     bSkip = true
                 catch
                     printlog( CFN & "Missed - this dialog has no OK button (create new document)" )
@@ -399,52 +399,6 @@ function hWaitWhileLoading() as boolean
     endif
     '///</ul>
 
-end function
-
-'*******************************************************************************
-
-function hCancelFilterDialog() as boolean
-
-    '///<h3>Handle filter selection dialog</h3>
-    '///<i>This dialog might come up if the documenttype could not be determined.
-    '///+ This is most likely a bug since we should handle any type of document
-    '///+ correctly</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus</li>
-    '///<ul>
-    '///+<li>TRUE: If the dialog was found and closed</li>
-    '///+<li>FALSE: If no filterdialog exists</li>
-    '///</ul>
-    '///+<li>Variable</li>
-    '///<ul>
-    '///+<li>Variable description</li>
-    '///+<li>Variable description</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-                              
-    const CFN = "hCancelFilterDialog::"
-    
-    '///+<li>Check whether the filter dialog is open or not, close it</li>
-    kontext "FilterAuswahl"
-    if ( FilterAuswahl.exists() ) then
-        warnlog( CFN & "Found. Closing with CANCEL" )
-        hCancelFilterDialog() = true
-        FilterAuswahl.cancel()
-    else
-        printlog( CFN & "No FilterDialog." )
-        hCancelFilterDialog() = false
-    endif
-    
-    '///</ul>
-    
 end function
 
 '*******************************************************************************
