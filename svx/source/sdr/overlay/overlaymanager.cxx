@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaymanager.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,6 +313,18 @@ namespace sdr
                 mnStripeLengthPixel = nNew;
                 ImpStripeDefinitionChanged();
             }
+        }
+
+        ::boost::shared_ptr<OverlayObjectVector> OverlayManager::GetOverlayObjects (void) const
+        {
+            ::boost::shared_ptr<OverlayObjectVector> pObjectList (new OverlayObjectVector());
+            sdr::overlay::OverlayObject* pObject = mpOverlayObjectStart;
+            while (pObject != NULL)
+            {
+                pObjectList->push_back(pObject);
+                pObject = pObject->mpNext;
+            }
+            return pObjectList;
         }
     } // end of namespace overlay
 } // end of namespace sdr
