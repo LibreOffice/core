@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_001_.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:40:29 $
+'* last change: $Author: rt $ $Date: 2008-08-28 13:11:34 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -649,8 +649,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileSaveAsExport
+
     Dim xExport as string
-    Dim xExportFilter as string
+    Dim xExportFile as string
     Dim CountDocu as integer
     PrintLog "- File / Save As / Export with MS-filter"
 
@@ -665,10 +666,10 @@ testcase tFileSaveAsExport
 
     PrintLog "Open document '..\writer\required\input\st1_1.sxw"
     Call hFileOpen(xExport)
-    Sleep 1
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
-    Call hFileSaveAsWithFilterKill (Convertpath(gOfficepath + "user\work\ecksport.doc"), "MS Word 2003 XML")
+    xExportFile = gOfficePath + "user\work\ecksport.doc"
+    Call hFileSaveAsWithFilterKill ( xExportFile, "MS Word 97" )
 
     CountDocu = 0
     Do Until GetDocumentCount = 1
