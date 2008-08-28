@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_line.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:42:35 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -321,8 +321,8 @@ testcase tiFormatLine
 endcase 'tiFormatLine
 
 '-------------------------------------------------------------------------------'
-
 testcase tLineConnect
+
     Dim value1 as integer
     Dim value2 as integer
     Dim value3 as integer
@@ -407,8 +407,9 @@ testcase tLineConnect
     
     '/// Connect the two objects selected ///'
     hOpenContextMenu
-    hMenuSelectNr(13) 'connect
-    
+    sleep 1
+    hMenuSelectNr(13)
+    sleep 1
     '/// Check the amount of objects ///'
     gMouseClick (10, 10)
     sleep 1
@@ -437,9 +438,10 @@ testcase tLineConnect
     EditSelectAll
     sleep 1
     '/// Break them from eachother ///'
-    hOpenContextMenu  '(when the object is marked)
-    hMenuSelectNr(11) 'Choose "Break"
-    
+    hOpenContextMenu
+    sleep 1
+    hMenuSelectNr(11)
+    sleep 1
     '/// unmark the objects, thereafter mark them again ///'
     gMouseClick (10, 10)
     sleep 1
