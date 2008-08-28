@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -970,97 +970,92 @@ sal_Bool SfxLibraryContainer::init_Impl(
         aPrevUserBasicInetObj_1.Append( strPrevFolderName_1 );
         aPrevUserBasicInetObj_2.Append( strPrevFolderName_2 );
 
-        INetURLObject aPrevUserBasicInetObj = aPrevUserBasicInetObj_1;
-        String aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
-        bool bSecondTime = false;
-        if( mxSFI->isFolder( aPrevFolder ) )
+        // #i93163
+        bool bCleanUp = false;
+        try
         {
-            // #110101 Check if Standard folder exists and is complete
-            INetURLObject aUserBasicStandardInetObj( aUserBasicInetObj );
-            aUserBasicStandardInetObj.insertName( aStandardStr, sal_True, INetURLObject::LAST_SEGMENT,
-                                                  sal_True, INetURLObject::ENCODE_ALL );
-            INetURLObject aPrevUserBasicStandardInetObj( aPrevUserBasicInetObj );
-            aPrevUserBasicStandardInetObj.insertName( aStandardStr, sal_True, INetURLObject::LAST_SEGMENT,
-                                                    sal_True, INetURLObject::ENCODE_ALL );
-            OUString aPrevStandardFolder = aPrevUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
-            if( mxSFI->isFolder( aPrevStandardFolder ) )
+            INetURLObject aPrevUserBasicInetObj = aPrevUserBasicInetObj_1;
+            String aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
+            bool bSecondTime = false;
+            if( mxSFI->isFolder( aPrevFolder ) )
             {
-                OUString aXlbExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xlb") ) );
-                OUString aCheckFileName;
+                // #110101 Check if Standard folder exists and is complete
+                INetURLObject aUserBasicStandardInetObj( aUserBasicInetObj );
+                aUserBasicStandardInetObj.insertName( aStandardStr, sal_True, INetURLObject::LAST_SEGMENT,
+                                                      sal_True, INetURLObject::ENCODE_ALL );
+                INetURLObject aPrevUserBasicStandardInetObj( aPrevUserBasicInetObj );
+                aPrevUserBasicStandardInetObj.insertName( aStandardStr, sal_True, INetURLObject::LAST_SEGMENT,
+                                                        sal_True, INetURLObject::ENCODE_ALL );
+                OUString aPrevStandardFolder = aPrevUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                if( mxSFI->isFolder( aPrevStandardFolder ) )
+                {
+                    OUString aXlbExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xlb") ) );
+                    OUString aCheckFileName;
 
-                // Check if script.xlb exists
-                aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("script") );
-                checkAndCopyFileImpl( aUserBasicStandardInetObj,
-                                      aPrevUserBasicStandardInetObj,
-                                      aCheckFileName, aXlbExtension, mxSFI );
+                    // Check if script.xlb exists
+                    aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("script") );
+                    checkAndCopyFileImpl( aUserBasicStandardInetObj,
+                                          aPrevUserBasicStandardInetObj,
+                                          aCheckFileName, aXlbExtension, mxSFI );
 
-                // Check if dialog.xlb exists
-                aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("dialog") );
-                checkAndCopyFileImpl( aUserBasicStandardInetObj,
-                                      aPrevUserBasicStandardInetObj,
-                                      aCheckFileName, aXlbExtension, mxSFI );
+                    // Check if dialog.xlb exists
+                    aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("dialog") );
+                    checkAndCopyFileImpl( aUserBasicStandardInetObj,
+                                          aPrevUserBasicStandardInetObj,
+                                          aCheckFileName, aXlbExtension, mxSFI );
 
-                // Check if module1.xba exists
-                OUString aXbaExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xba") ) );
-                aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("Module1") );
-                checkAndCopyFileImpl( aUserBasicStandardInetObj,
-                                      aPrevUserBasicStandardInetObj,
-                                      aCheckFileName, aXbaExtension, mxSFI );
+                    // Check if module1.xba exists
+                    OUString aXbaExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("xba") ) );
+                    aCheckFileName = OUString( RTL_CONSTASCII_USTRINGPARAM("Module1") );
+                    checkAndCopyFileImpl( aUserBasicStandardInetObj,
+                                          aPrevUserBasicStandardInetObj,
+                                          aCheckFileName, aXbaExtension, mxSFI );
+                }
+                else
+                {
+                    String aStandardFolder = aUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                    mxSFI->copy( aStandardFolder, aPrevStandardFolder );
+                }
+
+                String aPrevCopyToFolder = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
+                mxSFI->copy( aPrevFolder, aPrevCopyToFolder );
             }
             else
             {
-                String aStandardFolder = aUserBasicStandardInetObj.GetMainURL( INetURLObject::NO_DECODE );
-                mxSFI->copy( aStandardFolder, aPrevStandardFolder );
+                bSecondTime = true;
+                aPrevUserBasicInetObj = aPrevUserBasicInetObj_2;
+                aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
             }
-
-            String aPrevCopyToFolder = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
-            mxSFI->copy( aPrevFolder, aPrevCopyToFolder );
-        }
-        else
-        {
-            bSecondTime = true;
-            aPrevUserBasicInetObj = aPrevUserBasicInetObj_2;
-            aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
-        }
-        if( mxSFI->isFolder( aPrevFolder ) )
-        {
-            SfxLibraryContainer* pPrevCont = createInstanceImpl();
-            Reference< XInterface > xRef = static_cast< XInterface* >( static_cast< OWeakObject* >(pPrevCont) );
-
-            // Rename previous basic folder to make storage URLs correct during initialisation
-            String aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
-            INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
-            aUserBasicTmpInetObj.removeSegment();
-            aUserBasicTmpInetObj.Append( "__basic_tmp" );
-            String aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
-
-            bool bMoveOk = true;
-            try
-                { mxSFI->move( aFolderUserBasic, aFolderTmp ); }
-            catch( CommandAbortedException& )
-                { bMoveOk = false; }
-            catch( Exception& )
-                { bMoveOk = false; }
-            if( bMoveOk )
+            if( mxSFI->isFolder( aPrevFolder ) )
             {
+                SfxLibraryContainer* pPrevCont = createInstanceImpl();
+                Reference< XInterface > xRef = static_cast< XInterface* >( static_cast< OWeakObject* >(pPrevCont) );
+
+                // Rename previous basic folder to make storage URLs correct during initialisation
+                String aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
+                aUserBasicTmpInetObj.removeSegment();
+                aUserBasicTmpInetObj.Append( "__basic_tmp" );
+                String aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
+
+                mxSFI->move( aFolderUserBasic, aFolderTmp );
                 try
-                    { mxSFI->move( aPrevFolder, aFolderUserBasic ); }
-                catch( CommandAbortedException& )
-                    { bMoveOk = false; }
+                {
+                    mxSFI->move( aPrevFolder, aFolderUserBasic );
+                }
                 catch( Exception& )
-                    { bMoveOk = false; }
-                if( !bMoveOk )
                 {
                     // Move back user/basic folder
                     try
-                        { mxSFI->move( aFolderTmp, aFolderUserBasic ); }
-                    catch( CommandAbortedException& ) {}
-                    catch( Exception& ) {}
+                    {
+                           mxSFI->kill( aFolderUserBasic );
+                    }
+                    catch( Exception& )
+                    {}
+                    mxSFI->move( aFolderTmp, aFolderUserBasic );
+                    throw;
                 }
-            }
 
-            if( bMoveOk )
-            {
                 INetURLObject aPrevUserBasicLibInfoInetObj( aUserBasicInetObj );
                 aPrevUserBasicLibInfoInetObj.insertName( maInfoFileName, sal_True, INetURLObject::LAST_SEGMENT,
                                                     sal_True, INetURLObject::ENCODE_ALL );
@@ -1148,8 +1143,47 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         implImportLibDescriptor( pNewLib, aLibDesc );
                     }
                 }
-                   mxSFI->kill( aPrevFolder );
-            }   // if( bMoveOk )
+                mxSFI->kill( aPrevFolder );
+            }
+        }
+        catch( Exception& )
+        {
+            bCleanUp = true;
+        }
+
+        // #i93163
+        if( bCleanUp )
+        {
+            DBG_ERROR( "Upgrade of Basic installation failed somehow" )
+
+            static char strErrorSavFolderName[] = "__basic_80_err";
+            INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
+            aPrevUserBasicInetObj_Err.removeSegment();
+            aPrevUserBasicInetObj_Err.Append( strErrorSavFolderName );
+            String aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
+
+            bool bSaved = false;
+            try
+            {
+                String aPrevFolder_1 = aPrevUserBasicInetObj_1.GetMainURL( INetURLObject::NO_DECODE );
+                if( mxSFI->isFolder( aPrevFolder_1 ) )
+                {
+                    mxSFI->move( aPrevFolder_1, aPrevFolder_Err );
+                    bSaved = true;
+                }
+            }
+            catch( Exception& )
+            {}
+            try
+            {
+                String aPrevFolder_2 = aPrevUserBasicInetObj_2.GetMainURL( INetURLObject::NO_DECODE );
+                if( !bSaved && mxSFI->isFolder( aPrevFolder_2 ) )
+                    mxSFI->move( aPrevFolder_2, aPrevFolder_Err );
+                else
+                    mxSFI->kill( aPrevFolder_2 );
+            }
+            catch( Exception& )
+            {}
         }
     }
 
