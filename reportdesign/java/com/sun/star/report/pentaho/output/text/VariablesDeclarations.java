@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VariablesDeclarations.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,12 @@ public class VariablesDeclarations
         {
             // create the default mapping as well..
             holder.put(null, name);
+            holder.put("time", name);
+            holder.put("date", name);
+            holder.put("datetime", name);
+            holder.put("float", name);
+            holder.put("string", name);
+            holder.put("boolean", name);
         }
         holder.put(type, name);
         return result;
