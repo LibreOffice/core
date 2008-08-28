@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,7 +303,7 @@ public:
                 didPrepareClose( sal_Bool _bDid ) { m_bPreparedClose = _bDid; }
 
 public:
-    FmXFormShell(FmFormShell* _pShell, SfxViewFrame* _pViewFrame);
+    FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE);
@@ -342,8 +342,8 @@ public:
     sal_Bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
 
     // activation handling
-            void        viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction = sal_False );
-            void        viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeactivateController = sal_True );
+            void        viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction = sal_False );
+            void        viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController = sal_True );
 
     // IControllerFeatureInvalidation
     virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures );
@@ -390,6 +390,11 @@ protected:
         const ::rtl::OUString& _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
         ::std::vector< String >& _out_rNames );
+
+    /** checks whether the instance is already disposed, if so, this is reported as assertion error (debug
+        builds only) and <TRUE/> is returned.
+    */
+    bool    impl_checkDisposed() const;
 
 public:
     // methode fuer nicht designmode (alive mode)
