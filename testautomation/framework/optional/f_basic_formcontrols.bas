@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_basic_formcontrols.bas,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:01 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:39:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -41,7 +41,7 @@ sub main
 
     use "framework\optional\includes\basic_formcontrols.inc"
 
-    call hStatusIn( "framework" , "basic_formcontrols.bas" )
+    call hStatusIn( "framework" , "f_basic_formcontrols.bas" )
     
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     
