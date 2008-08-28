@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -863,7 +863,7 @@ bool SlideshowImpl::startPreview(
     return bRet;
 }
 
-bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
+bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 {
     const rtl::Reference<SlideshowImpl> this_(this);
 
@@ -879,7 +879,10 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
     try
     {
         if( pPresSettings )
+        {
             maPresSettings = *pPresSettings;
+            mbRehearseTimings = pPresSettings->mbRehearseTimings;
+        }
 
         // ---
 
