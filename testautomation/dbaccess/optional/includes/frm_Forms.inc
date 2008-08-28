@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: frm_Forms.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:42 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:39:23 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -69,9 +69,6 @@ end sub
 '--------------------------------------------------------------------------------------
 testcase tDatabaseFormsMain
 
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
     call fOpenDatabase(gOfficePath + "user/work/TT_hsqldb.odb")
     
     call fOpenNewFormDesign
@@ -128,10 +125,7 @@ endcase
 '--------------------------------------------------------------------------------------
 testcase tCreateForm
     
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-          
-	'/// open a new text document
+    '/// open a new text document
     printlog "open a new text document"
 	call hNewDocument
 	sleep(1)
@@ -214,9 +208,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tNavigate
     
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
     hFileOpen ( gOfficePath + ConvertPath("user/work/TT_Forms.odt"))
     
     FM_Next_Record
@@ -233,9 +224,6 @@ testcase tNavigate
 endcase
 '-------------------------------------------------------------------------
 testcase tKeyboardNavigate
-    
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
     
     '/// open the database <OfficePath>/user/work/TT_hsqldb.odb
     printlog "open the database " + gOfficePath + "user/work/TT_hsqldb.odb"
@@ -308,11 +296,8 @@ endcase
 '-------------------------------------------------------------------------
 testcase tSearch
     
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
     hFileOpen ( gOfficePath + ConvertPath("user/work/TT_Forms.odt"))
-    
+    sleep(1)
     FM_Search
     sleep(1)
     Kontext "RecordSearch"
@@ -341,9 +326,6 @@ testcase tSearch
 endcase
 '-------------------------------------------------------------------------
 testcase tSort
-    
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
     
     hFileOpen ( gOfficePath + ConvertPath("user/work/TT_Forms.odt"))
     
@@ -440,9 +422,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tViewAsGrid
     
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
     '///open the document TT_Forms.odt
     printlog "pen the document TT_Forms.odt"
     hFileOpen ( gOfficePath + ConvertPath("user/work/TT_Forms.odt"))
@@ -483,9 +462,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tNewSaveDelete
     
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
     hFileOpen ( gOfficePath + ConvertPath("user/work/TT_Forms.odt"))
     
     Kontext "DocumentWriter"
@@ -516,9 +492,6 @@ testcase tNewSaveDelete
 endcase
 '-------------------------------------------------------------------------
 testcase tCreateSubForms
-    
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
     
     '/// open a new text document
     printlog "open a new text document"
@@ -691,41 +664,35 @@ endcase
 '-------------------------------------------------------------------------
 testcase tCheckSubForm
    
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
-   '/// open the file TTSubForm.sxw
-   printlog "open the file TTSubForm.sxw"
-   hFileOpen ( gOfficePath + ConvertPath("user/work/TT_SubForm.odt"))
+    '/// open the file TTSubForm.sxw
+    printlog "open the file TTSubForm.sxw"
+    hFileOpen ( gOfficePath + ConvertPath("user/work/TT_SubForm.odt"))
    
-   '/// set cursor into the first control
-   printlog "set cursor into the first control"   
-   Kontext "DocumentWriter"
-      DocumentWriter.TypeKeys "<MOD1 F5>" , true
-      sleep(1)
+    '/// set cursor into the first control
+    printlog "set cursor into the first control"   
+    Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "<MOD1 F5>" , true
+        sleep(1)
            
-   FM_Next_Record
-   sleep(1)
+    FM_Next_Record
+    sleep(1)
     
-   Kontext "DocumentWriter"
-      DocumentWriter.TypeKeys "<TAB>" , true
-      sleep(1)
-      DocumentWriter.TypeKeys "<SHIFT END>" , true
-      sleep(1)
-      DocumentWriter.TypeKeys "<MOD1 C>" , true
-      sleep(1)        
-      if getClipboard <> "2" then
-         warnlog "wrong record is displayed in subform. It is " + getClipboard + " but it have to 2" 
-      endif
-   sleep(1)
-   call hCloseDocument
+    Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "<TAB>" , true
+        sleep(1)
+        DocumentWriter.TypeKeys "<SHIFT END>" , true
+        sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 C>" , true
+        sleep(1)        
+        if getClipboard <> "2" then
+            warnlog "wrong record is displayed in subform. It is " + getClipboard + " but it have to 2" 
+        endif
+    sleep(1)
+    call hCloseDocument
    
 endcase
 '-------------------------------------------------------------------------
 testcase tCreateSubFormsNewMethod
-    
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
     
     '/// open a new text document
     printlog "open a new text document"
@@ -906,9 +873,6 @@ endcase
 '--------------------------------------------------------------------------------------
 testcase tNewFolder
 
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-        
     '/// test the folder feature inside the form container
     
     '/// open the database <OfficePath>/user/work/TT_hsqldb.odb
@@ -961,9 +925,6 @@ endcase
 '--------------------------------------------------------------------------------------
 testcase tRenameFolder
 
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-    
     '/// test the folder feature inside the form container
     '/// test for issue 75723
     
@@ -1051,9 +1012,6 @@ testcase tRenameFolder
 endcase
 '-------------------------------------------------------------------------
 testcase tViewAsGridEmbeddedForm
-    
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
     
     '/// open the database <OfficePath>/user/work/TT_hsqldb.odb
     printlog "open the database " + gOfficePath + "user/work/TT_hsqldb.odb"
