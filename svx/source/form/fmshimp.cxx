@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.cxx,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -487,13 +487,13 @@ void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
 //========================================================================
 DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
-FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
+FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
         ,FmXFormShell_CFGBASE(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( 0 )
         ,m_nActivationEvent( 0 )
-        ,m_pShell( _pShell )
+        ,m_pShell( &_rShell )
         ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
         ,m_aActiveControllerFeatures( ::comphelper::getProcessServiceFactory(), this )
         ,m_aNavControllerFeatures( ::comphelper::getProcessServiceFactory(), this )
@@ -540,6 +540,7 @@ FmXFormShell::~FmXFormShell()
     DBG_DTOR(FmXFormShell,NULL);
 }
 
+//------------------------------------------------------------------
 Reference< XModel > FmXFormShell::getContextDocument() const
 {
     Reference< XModel > xModel;
@@ -560,10 +561,21 @@ Reference< XModel > FmXFormShell::getContextDocument() const
     return xModel;
 }
 
-bool
-FmXFormShell::isEnhancedForm() const
+//------------------------------------------------------------------
+bool FmXFormShell::isEnhancedForm() const
 {
     return getDocumentType() == eEnhancedForm;
+}
+
+//------------------------------------------------------------------
+bool FmXFormShell::impl_checkDisposed() const
+{
+    if ( !m_pShell )
+    {
+        OSL_ENSURE( false, "FmXFormShell::impl_checkDisposed: already disposed!" );
+        return true;
+    }
+    return false;
 }
 
 //------------------------------------------------------------------
@@ -589,6 +601,9 @@ FmXFormShell::isEnhancedForm() const
 //------------------------------------------------------------------
 bool FmXFormShell::IsReadonlyDoc() const
 {
+    if ( impl_checkDisposed() )
+        return true;
+
     FmFormModel* pModel = m_pShell->GetFormModel();
     if ( pModel && pModel->GetObjectShell() )
         return pModel->GetObjectShell()->IsReadOnly() || pModel->GetObjectShell()->IsReadOnlyUI();
@@ -624,6 +639,8 @@ Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeE
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException )
 {
+    impl_checkDisposed();
+
     if (m_xActiveController == e.Source)
     {
         // wird der Controller freigeben dann alles loslassen
@@ -635,7 +652,8 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
         m_aActiveControllerFeatures.dispose();
         m_aNavControllerFeatures.dispose();
 
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+        if ( m_pShell )
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
 
     if (e.Source == m_xExternalViewController)
@@ -659,8 +677,7 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed && m_pShell, "FmXFormShell: instance is already disposed!" );
-    if ( !m_pShell )
+    if ( impl_checkDisposed() )
         return;
 
     if (evt.PropertyName == FM_PROP_ROWCOUNT)
@@ -696,9 +713,12 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
 //------------------------------------------------------------------------------
 void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures )
 {
+    if ( impl_checkDisposed() )
+        return;
+
     OSL_ENSURE( _rFeatures.size() > 0, "FmXFormShell::invalidateFeatures: invalid arguments!" );
 
-    if ( m_pShell && m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
+    if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
     {
         // unfortunately, SFX requires sal_uInt16
         ::std::vector< sal_uInt16 > aSlotIds;
@@ -722,7 +742,8 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
 
     Reference< XFormController > xController( rEvent.Source, UNO_QUERY );
     OSL_ENSURE( xController.is(), "FmXFormShell::formActivated: invalid event source!" );
@@ -734,7 +755,8 @@ void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( Runt
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
 
     Reference< XFormController > xController( rEvent.Source, UNO_QUERY );
     OSL_ENSURE( xController.is(), "FmXFormShell::formDeactivated: invalid event source!" );
@@ -745,6 +767,9 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
 //------------------------------------------------------------------------------
 void FmXFormShell::disposing()
 {
+    OSL_TRACE( "--- FmXFormShell::disposing      : %p, ........, ........\n", this );
+    impl_checkDisposed();
+
     FmXFormShell_BASE::disposing();
 
     if ( m_pShell && !m_pShell->IsDesignMode() )
@@ -827,7 +852,9 @@ void FmXFormShell::disposing()
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
 
     if ( m_nLockSlotInvalidation )
@@ -846,9 +873,8 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 //------------------------------------------------------------------------------
 void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    if ( FmXFormShell_BASE::rBHelper.bDisposed )
-        return /*throw DisposedException()*/ ;
+    if ( impl_checkDisposed() )
+        return;
 
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
@@ -867,7 +893,9 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 //------------------------------------------------------------------------------
 void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     DBG_ASSERT(bLock || m_nLockSlotInvalidation>0, "FmXFormShell::LockSlotInvalidation : invalid call !");
 
@@ -884,7 +912,9 @@ void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0L;
+
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
@@ -909,7 +939,9 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     if (IsSelectionUpdatePending())
     {
         m_aMarkTimer.Stop();
@@ -966,6 +998,9 @@ bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 //------------------------------------------------------------------------------
 bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent >& _rxObject, sal_uInt16 _nSlotId )
 {
+    if ( impl_checkDisposed() )
+        return false;
+
     OSL_ENSURE( _rxObject.is(), "FmXFormShell::executeControlConversionSlot: invalid object!" );
     if ( !_rxObject.is() )
         return false;
@@ -973,7 +1008,6 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
     OSL_ENSURE( isSolelySelected( _rxObject ),
         "FmXFormShell::executeControlConversionSlot: hmm ... shouldn't this parameter be redundant?" );
 
-    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed, "FmXFormShell::executeControlConversionSlot: Object already disposed!" );
     for ( size_t lookupSlot = 0; lookupSlot < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++lookupSlot )
     {
         if (nConvertSlots[lookupSlot] == _nSlotId)
@@ -1209,7 +1243,9 @@ void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
 //------------------------------------------------------------------------------
 void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XIndexContainer> xControlModels(m_xActiveForm, UNO_QUERY);
     if (xControlModels.is())
     {
@@ -1276,6 +1312,9 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 //------------------------------------------------------------------------------
 Reference< XControlContainer > FmXFormShell::getControlContainerForView()
 {
+    if ( impl_checkDisposed() )
+        return NULL;
+
     SdrPageView* pPageView = NULL;
     if ( m_pShell && m_pShell->GetFormView() )
         pPageView = m_pShell->GetFormView()->GetSdrPageView();
@@ -1290,6 +1329,9 @@ Reference< XControlContainer > FmXFormShell::getControlContainerForView()
 //------------------------------------------------------------------------------
 void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >& _rxForForm )
 {
+    if ( impl_checkDisposed() )
+        return;
+
     OSL_PRECOND( _rxForForm.is(), "FmXFormShell::ExecuteTabOrderDialog: invalid tabbing model!" );
     if ( !_rxForForm.is() )
         return;
@@ -1307,7 +1349,7 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
         );
 
         Reference< XWindow > xParentWindow;
-        if ( m_pShell && m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
+        if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
             xParentWindow = VCLUnoHelper::GetInterface ( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow() );
         aDialogArgs[2] <<= NamedValue(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
@@ -1335,7 +1377,8 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
 //------------------------------------------------------------------------------
 void FmXFormShell::ExecuteSearch()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
 
     // eine Sammlung aller (logischen) Formulare
     FmFormArray aEmpty;
@@ -1477,7 +1520,9 @@ void FmXFormShell::ExecuteSearch()
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return sal_False;
+
     if (m_pShell->IsDesignMode())
         // im Design-Modus (ohne aktive Controls) soll sich das Haupt-Dokument darum kuemmern
         return sal_False;
@@ -1514,7 +1559,9 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 //------------------------------------------------------------------------------
 void FmXFormShell::SetY2KState(sal_uInt16 n)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XForm > xActiveForm( getActiveForm());
     Reference< XRowSet > xActiveRowSet( xActiveForm, UNO_QUERY );
     if ( xActiveRowSet.is() )
@@ -1586,7 +1633,9 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
 //------------------------------------------------------------------------------
 void FmXFormShell::CloseExternalFormViewer()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     if (!m_xExternalViewController.is())
         return;
 
@@ -1605,7 +1654,9 @@ void FmXFormShell::CloseExternalFormViewer()
 //------------------------------------------------------------------------------
 Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet>& _xForm) const
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return NULL;
+
     Reference< XFormController> xExternalCtrlr(m_xExternalViewController, UNO_QUERY);
     if (xExternalCtrlr.is() && (_xForm == xExternalCtrlr->getModel()))
     {
@@ -1618,7 +1669,9 @@ Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet
 //------------------------------------------------------------------------------
 Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm) const
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return NULL;
+
     Reference< XFormController> xExternalCtrlr(m_xExternalViewController, UNO_QUERY);
     if (xExternalCtrlr.is() && (_xForm == xExternalCtrlr->getModel()))
     {
@@ -1694,7 +1747,9 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
 //------------------------------------------------------------------------------
 void FmXFormShell::setActiveController( const Reference< XFormController>& xController, sal_Bool _bNoSaveOldContent )
 {
-    DBG_ASSERT(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     if (m_bChangingDesignMode)
         return;
     DBG_ASSERT(!m_pShell->IsDesignMode(), "nur im alive mode verwenden");
@@ -1834,7 +1889,9 @@ bool FmXFormShell::selectLastMarkedControls()
 //------------------------------------------------------------------------------
 bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 {
-    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed, "FmXFormShell::setCurrentSelection: object already disposed!" );
+    if ( impl_checkDisposed() )
+        return false;
+
     DBG_ASSERT( m_pShell->IsDesignMode(), "FmXFormShell::setCurrentSelection: only to be used in design mode!" );
 
     if ( _rSelection.empty() && m_aCurrentSelection.empty() )
@@ -1932,6 +1989,9 @@ void FmXFormShell::forgetCurrentForm()
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurForm )
 {
+    if ( impl_checkDisposed() )
+        return;
+
     m_xCurrentForm = _rxNewCurForm;
 
     // propagate to the FormPage(Impl)
@@ -1947,7 +2007,9 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
 //------------------------------------------------------------------------------
 void FmXFormShell::startListening()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XRowSet> xDatabaseForm(m_xActiveForm, UNO_QUERY);
     if (xDatabaseForm.is() && getRowSetConnection(xDatabaseForm).is())
     {
@@ -2024,7 +2086,9 @@ void FmXFormShell::startListening()
 //------------------------------------------------------------------------------
 void FmXFormShell::stopListening()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XRowSet> xDatabaseForm(m_xActiveForm, UNO_QUERY);
     if ( xDatabaseForm.is() )
     {
@@ -2045,7 +2109,8 @@ void FmXFormShell::stopListening()
 //------------------------------------------------------------------------------
 void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
 {
-    OSL_ENSURE( !FmXFormShell_BASE::rBHelper.bDisposed, "FmXFormShell::ShowSelectionProperties: Object already disposed!" );
+    if ( impl_checkDisposed() )
+        return;
 
     // if the window is already visible, only update the state
     sal_Bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_PROPERTIES );
@@ -2063,7 +2128,9 @@ void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0;
+
     DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_aSearchForms.size()),
         "FmXFormShell::OnFoundData : ungueltiger Kontext !");
     Reference< XForm> xForm( m_aSearchForms.at(pfriWhere->nContext));
@@ -2141,7 +2208,9 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0;
+
     DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_aSearchForms.size()),
         "FmXFormShell::OnCanceledNotFound : ungueltiger Kontext !");
     Reference< XForm> xForm( m_aSearchForms.at(pfriWhere->nContext));
@@ -2169,7 +2238,9 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextInfo)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0;
+
     DBG_ASSERT(pfmscContextInfo->nContext < (sal_Int16)m_aSearchForms.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
     Reference< XForm> xForm( m_aSearchForms.at(pfmscContextInfo->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnSearchContextRequest : unexpected : invalid context !");
@@ -2388,7 +2459,9 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 //------------------------------------------------------------------------------
 void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     // neues Object zum lauschen
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
@@ -2399,7 +2472,9 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
 //------------------------------------------------------------------------------
 void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XInterface> xTemp;
     evt.ReplacedElement >>= xTemp;
     RemoveElement(xTemp);
@@ -2410,22 +2485,24 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::
 //------------------------------------------------------------------------------
 void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     RemoveElement(xTemp);
-    if ( m_pShell )
-        m_pShell->DetermineForms(sal_True);
+    m_pShell->DetermineForms(sal_True);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
 
     Reference< XIndexAccess > xForms;
 
-    FmFormPage* pPage = m_pShell ? m_pShell->GetCurPage() : NULL;
+    FmFormPage* pPage = m_pShell->GetCurPage();
     if ( pPage )
     {
         if ( m_pShell->m_bDesignMode )
@@ -2438,14 +2515,16 @@ void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
         m_xForms = xForms;
         AddElement( m_xForms );
     }
-    if ( m_pShell )
-        m_pShell->DetermineForms( _bInvalidate );
+
+    m_pShell->DetermineForms( _bInvalidate );
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::AddElement(const Reference< XInterface>& Element)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     // am Container horchen
     Reference< XIndexContainer> xContainer(Element, UNO_QUERY);
     if (xContainer.is())
@@ -2471,7 +2550,9 @@ void FmXFormShell::AddElement(const Reference< XInterface>& Element)
 //------------------------------------------------------------------------------
 void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< ::com::sun::star::view::XSelectionSupplier> xSelSupplier(Element, UNO_QUERY);
     if (xSelSupplier.is())
         xSelSupplier->removeSelectionChangeListener(this);
@@ -2497,7 +2578,8 @@ void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 //------------------------------------------------------------------------------
 void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
 
     Reference< XSelectionSupplier > xSupplier( rEvent.Source, UNO_QUERY );
     Reference< XInterface > xSelObj( xSupplier->getSelection(), UNO_QUERY );
@@ -2525,7 +2607,9 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0;
+
     if (m_pShell->IsDesignMode() && m_pShell->GetFormView())
         SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
 
@@ -2535,6 +2619,9 @@ IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
 //------------------------------------------------------------------------
 void FmXFormShell::SetSelectionDelayed()
 {
+    if ( impl_checkDisposed() )
+        return;
+
     if (m_pShell->IsDesignMode() && IsTrackPropertiesEnabled() && !m_aMarkTimer.IsActive())
         m_aMarkTimer.Start();
 }
@@ -2542,7 +2629,9 @@ void FmXFormShell::SetSelectionDelayed()
 //------------------------------------------------------------------------
 void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     DetermineSelection(rMarkList);
     m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
 }
@@ -2557,7 +2646,9 @@ void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::IsPropBrwOpen() const
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return sal_False;
+
     return( ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() ) ?
             m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES) : sal_False );
 }
@@ -2566,17 +2657,17 @@ sal_Bool FmXFormShell::IsPropBrwOpen() const
 class FmXFormShell::SuspendPropertyTracking
 {
 private:
-    FmXFormShell*   m_pShell;
+    FmXFormShell&   m_rShell;
     sal_Bool        m_bEnabled;
 
 public:
-    SuspendPropertyTracking( FmXFormShell* _pShell )
-        :m_pShell( _pShell )
+    SuspendPropertyTracking( FmXFormShell& _rShell )
+        :m_rShell( _rShell )
         ,m_bEnabled( sal_False )
     {
-        if ( m_pShell && m_pShell->IsTrackPropertiesEnabled() )
+        if ( m_rShell.IsTrackPropertiesEnabled() )
         {
-            m_pShell->EnableTrackProperties( sal_False );
+            m_rShell.EnableTrackProperties( sal_False );
             m_bEnabled = sal_True;
         }
     }
@@ -2584,18 +2675,17 @@ public:
     ~SuspendPropertyTracking( )
     {
         if ( m_bEnabled )   // note that ( sal_False != m_bEnabled ) implies ( NULL != m_pShell )
-            m_pShell->EnableTrackProperties( sal_True );
+            m_rShell.EnableTrackProperties( sal_True );
     }
 };
 
 //------------------------------------------------------------------------------
 void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    if ( FmXFormShell_BASE::rBHelper.bDisposed )
+    if ( impl_checkDisposed() )
         return;
 
-    DBG_ASSERT(m_pShell && m_pShell->GetFormView(), "FmXFormShell::SetDesignMode : invalid call (have no shell or no view) !");
+    DBG_ASSERT(m_pShell->GetFormView(), "FmXFormShell::SetDesignMode : invalid call (have no shell or no view) !");
     m_bChangingDesignMode = sal_True;
 
     // 67506 - 15.07.99 - FS
@@ -2622,7 +2712,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     {
         m_aMarkTimer.Stop();
 
-        SuspendPropertyTracking aSuspend( this );
+        SuspendPropertyTracking aSuspend( *this );
         pFormView->GetImpl()->saveMarkList( sal_True );
     }
 
@@ -2645,7 +2735,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
         SdrMarkList aList;
         {
             // during changing the mark list, don't track the selected objects in the property browser
-            SuspendPropertyTracking aSuspend( this );
+            SuspendPropertyTracking aSuspend( *this );
             // restore the marks
             pFormView->GetImpl()->restoreMarkList( aList );
         }
@@ -2678,7 +2768,9 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 //------------------------------------------------------------------------------
 Reference< XControl> FmXFormShell::GetControlFromModel(const Reference< XControlModel>& xModel)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return NULL;
+
     Reference< XControlContainer> xControlContainer( getControlContainerForView() );
 
     Sequence< Reference< XControl> > seqControls( xControlContainer->getControls() );
@@ -2751,7 +2843,9 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
 //------------------------------------------------------------------------------
 void FmXFormShell::startFiltering()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     // setting all forms in filter mode
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
 
@@ -2815,7 +2909,9 @@ void saveFilter(const Reference< XFormController>& _rxController)
 //------------------------------------------------------------------------------
 void FmXFormShell::stopFiltering(sal_Bool bSave)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     m_bFilterMode = sal_False;
 
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
@@ -2951,7 +3047,9 @@ void clearFilter(const Reference< XFormController>& _rxController)
 //------------------------------------------------------------------------------
 void FmXFormShell::clearFilter()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
 
     // if the active controller is our external one we have to use the trigger controller
@@ -2979,7 +3077,9 @@ void FmXFormShell::clearFilter()
 //------------------------------------------------------------------------------
 void FmXFormShell::setControlLocks()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XTabController> xCtrler(getActiveController(), UNO_QUERY);
     if (!xCtrler.is())
         return;
@@ -3024,7 +3124,9 @@ void FmXFormShell::setControlLocks()
 //------------------------------------------------------------------------------
 void FmXFormShell::restoreControlLocks()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     Reference< XTabController> xCtrler(getActiveController(), UNO_QUERY);
     if (!xCtrler.is())
         return;
@@ -3075,7 +3177,9 @@ void FmXFormShell::restoreControlLocks()
 //------------------------------------------------------------------------------
 void FmXFormShell::DoAsyncCursorAction(const Reference< XFormController>& _xController, CURSOR_ACTION _eWhat)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     DBG_ASSERT(_xController.is(), "FmXFormShell::DoAsyncCursorAction : invalid argument !");
     DoAsyncCursorAction(Reference< XResultSet>(_xController->getModel(), UNO_QUERY), _eWhat);
 }
@@ -3083,7 +3187,9 @@ void FmXFormShell::DoAsyncCursorAction(const Reference< XFormController>& _xCont
 //------------------------------------------------------------------------------
 void FmXFormShell::DoAsyncCursorAction(const Reference< XResultSet>& _xForm, CURSOR_ACTION _eWhat)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
     DBG_ASSERT(_xForm.is(), "FmXFormShell::DoAsyncCursorAction : invalid argument !");
 
@@ -3128,7 +3234,9 @@ void FmXFormShell::DoAsyncCursorAction(const Reference< XResultSet>& _xForm, CUR
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< XResultSet>& _xForm) const
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return sal_False;
+
     if (!_xForm.is())
         return sal_False;
 
@@ -3142,7 +3250,9 @@ sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< XResultSet>& _xFo
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< XFormController>& xController) const
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return sal_False;
+
     if (!xController.is())
         return sal_False;
 
@@ -3165,7 +3275,9 @@ sal_Bool FmXFormShell::HasAnyPendingCursorAction() const
 //------------------------------------------------------------------------------
 void FmXFormShell::CancelAnyPendingCursorAction()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     ::osl::ResettableMutexGuard aGuard( m_aAsyncSafety );
 
     CursorActions::iterator aIter;
@@ -3196,7 +3308,9 @@ void FmXFormShell::CancelAnyPendingCursorAction()
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnCursorActionDone, FmCursorActionThread*, pThread)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0L;
+
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
 
     // search the pos of the thread within m_aCursorActions
@@ -3220,7 +3334,9 @@ IMPL_LINK(FmXFormShell, OnCursorActionDone, FmCursorActionThread*, pThread)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnCursorActionDoneMainThread, FmCursorActionThread*, pThread)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return 0L;
+
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
 
     // search the pos of the thread within m_aCursorActions
@@ -3259,7 +3375,9 @@ IMPL_LINK(FmXFormShell, OnCursorActionDoneMainThread, FmCursorActionThread*, pTh
 //------------------------------------------------------------------------------
 void FmXFormShell::CreateExternalView()
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    if ( impl_checkDisposed() )
+        return;
+
     DBG_ASSERT(m_xAttachedFrame.is(), "FmXFormShell::CreateExternalView : no frame !");
 
     // the frame the external view is displayed in
@@ -3701,9 +3819,8 @@ void FmXFormShell::implAdjustConfigCache()
 //------------------------------------------------------------------------
 void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    if ( FmXFormShell_BASE::rBHelper.bDisposed )
-        return /*throw DisposedException()*/ ;
+    if ( impl_checkDisposed() )
+        return;
 
     const ::rtl::OUString* pSearch = _rPropertyNames.getConstArray();
     const ::rtl::OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
@@ -3728,58 +3845,57 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 }
 
 //------------------------------------------------------------------------
-void FmXFormShell::viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
+void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
 {
-    // deactivate our view if we are deactivated ourself
-    // FS - 30.06.99 - 67308
-    if ( _pCurrentView )
+    OSL_TRACE( "--- FmXFormShell::viewDeactivated: %p, %p, ........\n", this, &_rCurrentView );
+
+    if ( _rCurrentView.GetImpl() && !_rCurrentView.IsDesignMode() )
     {
-        // deactivate the controls on this page
-        if ( _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
-        {
-            _pCurrentView->GetImpl()->Deactivate( _bDeactivateController );
-        }
-
-        // if we have an async load operation pending for the 0-th page for this view,
-        // we need to cancel this
-        // 103727 - 2002-09-26 - fs@openoffice.org
-        const SdrPageView* pCurPageView = _pCurrentView->GetSdrPageView();
-        const FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
-        if ( pPage )
-        {
-            // move all events from our queue to a new one, omit the events for the deactivated
-            // page
-            ::std::queue< FmLoadAction > aNewEvents;
-            while ( m_aLoadingPages.size() )
-            {
-                FmLoadAction aAction = m_aLoadingPages.front();
-                m_aLoadingPages.pop();
-                if ( pPage != aAction.pPage )
-                {
-                    aNewEvents.push( aAction );
-                }
-                else
-                {
-                    Application::RemoveUserEvent( aAction.nEventId );
-                }
-            }
-            m_aLoadingPages = aNewEvents;
-        }
-
-        // remove callbacks at the page
-        if ( pPage && pPage->GetImpl() )
-        {
-            pPage->GetImpl()->SetFormsCreationHdl( Link() );
-        }
-        UpdateForms( sal_True );
+        _rCurrentView.GetImpl()->Deactivate( _bDeactivateController );
     }
+
+    // if we have an async load operation pending for the 0-th page for this view,
+    // we need to cancel this
+    // 103727 - 2002-09-26 - fs@openoffice.org
+    FmFormPage* pPage = _rCurrentView.GetCurPage();
+    if ( pPage )
+    {
+        // move all events from our queue to a new one, omit the events for the deactivated
+        // page
+        ::std::queue< FmLoadAction > aNewEvents;
+        while ( m_aLoadingPages.size() )
+        {
+            FmLoadAction aAction = m_aLoadingPages.front();
+            m_aLoadingPages.pop();
+            if ( pPage != aAction.pPage )
+            {
+                aNewEvents.push( aAction );
+            }
+            else
+            {
+                Application::RemoveUserEvent( aAction.nEventId );
+            }
+        }
+        m_aLoadingPages = aNewEvents;
+    }
+
+    // remove callbacks at the page
+    if ( pPage && pPage->GetImpl() )
+    {
+        OSL_TRACE( "--- FmXFormShell::resetHandler   : %p, ........, %p\n", this, pPage );
+        pPage->GetImpl()->SetFormsCreationHdl( Link() );
+    }
+    UpdateForms( sal_True );
 }
 
 //------------------------------------------------------------------------
 IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
 {
+    if ( impl_checkDisposed() )
+        return 0L;
+
     m_nActivationEvent = 0;
-    SfxObjectShell* pDocument = m_pShell ? m_pShell->GetObjectShell() : NULL;
+    SfxObjectShell* pDocument = m_pShell->GetObjectShell();
 
     if  ( pDocument && !pDocument->HasName() )
     {
@@ -3802,14 +3918,15 @@ IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
 }
 
 //------------------------------------------------------------------------
-void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
+void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
-    SdrPageView* pCurPageView = _pCurrentView ? _pCurrentView->GetSdrPageView() : NULL;
-    FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
+    OSL_TRACE( "--- FmXFormShell::viewActivated  : %p, %p, ........\n", this, &_rCurrentView );
+
+    FmFormPage* pPage = _rCurrentView.GetCurPage();
 
     // activate our view if we are activated ourself
     // FS - 30.06.99 - 67308
-    if ( _pCurrentView && _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
+    if ( _rCurrentView.GetImpl() && !_rCurrentView.IsDesignMode() )
     {
         // load forms for the page the current view belongs to
         if ( pPage )
@@ -3820,21 +3937,23 @@ void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncActi
         }
 
         // first-time initializations for the views
-        if ( !_pCurrentView->GetImpl()->hasEverBeenActivated( ) )
+        if ( !_rCurrentView.GetImpl()->hasEverBeenActivated( ) )
         {
-            _pCurrentView->GetImpl()->onFirstViewActivation( PTR_CAST( FmFormModel, _pCurrentView->GetModel() ) );
-            _pCurrentView->GetImpl()->setHasBeenActivated( );
+            _rCurrentView.GetImpl()->onFirstViewActivation( PTR_CAST( FmFormModel, _rCurrentView.GetModel() ) );
+            _rCurrentView.GetImpl()->setHasBeenActivated( );
         }
 
         // activate the current view
-        _pCurrentView->GetImpl()->Activate( _bSyncAction );
+        _rCurrentView.GetImpl()->Activate( _bSyncAction );
     }
 
     // set callbacks at the page
     if ( pPage && pPage->GetImpl() )
     {
+        OSL_TRACE( "--- FmXFormShell::setHandler     : %p, ........, %p\n", this, pPage );
         pPage->GetImpl()->SetFormsCreationHdl( LINK( this, FmXFormShell, OnFormsCreated ) );
     }
+
     UpdateForms( sal_True );
 
     if ( !hasEverBeenActivated() )
@@ -3851,19 +3970,20 @@ void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncActi
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_defaultCurrentForm_nothrow()
 {
+    if ( impl_checkDisposed() )
+        return;
+
     if ( m_xCurrentForm.is() )
         // no action required
         return;
 
     FmFormView* pFormView = m_pShell->GetFormView();
-    SdrPageView* pCurPageView = pFormView ? pFormView->GetSdrPageView() : NULL;
-    FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
+    FmFormPage* pPage = pFormView ? pFormView->GetCurPage() : NULL;
+    if ( !pPage )
+        return;
 
     try
     {
-        if ( !pPage )
-            return;
-
         Reference< XIndexAccess > xForms( pPage->GetForms( false ), UNO_QUERY );
         if ( !xForms.is() || !xForms->hasElements() )
             return;
