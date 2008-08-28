@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_spellcheck.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:43:10 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -191,7 +191,18 @@ testcase tiToolsSpellcheckError
 
     '/// create 1 textbox with 1 spelling error (test replace always) ///'
     hTextrahmenErstellen (FehlerText$,30,30,90,40)
+    
+    printlog "Setting Text to english"
     sleep 1
+    EditSelectAll
+    FormatCharacter
+    sleep 1
+    Kontext
+    Messagebox.SetPage TabFont
+    Kontext "TabFont"
+    Language.Select 41
+    TabFont.OK
+    
     hTypeKeys "<HOME>"
     '/// call 'Tools->Spellcheck->Check' ///'
     ToolsSpellcheck
@@ -259,6 +270,18 @@ testcase tiToolsSpellcheckError
     Printlog "  check function Ignore"
     hTextrahmenErstellen (FehlerText$,30,30,80,40)
     '/// call 'Tools->Spellcheck->Check' ///'
+    
+    printlog "Setting Text to english"
+    sleep 1
+    EditSelectAll
+    FormatCharacter
+    sleep 1
+    Kontext
+    Messagebox.SetPage TabFont
+    Kontext "TabFont"
+    Language.Select 41
+    TabFont.OK
+    
     ToolsSpellcheck
     Kontext "Spellcheck"
     '/// press button 'Ignore' ///'
@@ -306,6 +329,18 @@ testcase tiToolsSpellcheckError
 
     '/// create same textbox again (test ALWAYS IGNORE function) ///'
     hTextrahmenErstellen (FehlerText$,30,30,60,40)
+    
+    printlog "Setting Text to english"
+    sleep 1
+    EditSelectAll
+    FormatCharacter
+    sleep 1
+    Kontext
+    Messagebox.SetPage TabFont
+    Kontext "TabFont"
+    Language.Select 41
+    TabFont.OK
+    
     '/// call 'Tools->Spellcheck->Check' ///'
     ToolsSpellcheck
     Kontext "Spellcheck"
@@ -342,8 +377,6 @@ endcase 'tiToolsSpellcheckError
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck
-warnlog "#i89379, Spellcheck: Ignore All does not work via dialog and dict is read-only"
-goto endsub
 
     Dim Datei$
     Dim sWord(2) as string
@@ -365,7 +398,7 @@ goto endsub
         case "IMPRESS"      : sExt = ".odp"
     end select
 
-    printlog "Load prepared document containing 4 errors : graphics\\required\\input\\recht_" & (iSprache+sExt)
+    printlog "Load prepared document containing 4 errors : graphics\\required\\input\\recht_" & iSprache & sExt
     if (not bAsianLan) then
         printlog "Check if the document is writable."
         Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
