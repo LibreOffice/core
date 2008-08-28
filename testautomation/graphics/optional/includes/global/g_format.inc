@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_format.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:42:20 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -772,22 +772,23 @@ testcase tiFormat3D_Effekte
     In_3D_Umwandeln.Click                        '/// convert to 3d in 3d flyer ///'
     WaitSlot (2000)
     gMouseClick 40,40
-    hOpenContextmenu
-    y = hMenuItemGetCount
-    MenuSelect (0)
-    gMouseClick 90,90
-    select case lcase(gApplication)
-        case "draw" :  if y = 13 then
-	                                Printlog "- 3D object created" 
-                                else 
-                                    Warnlog " Context-menu-entry-number was wrong. Expected 13, but was " + y + "."
-                                end if
-        case else   :   if y = 15 then 
-	                                Printlog "- 3D object created" 
-	                           else 
-			                       Warnlog " Context-menu-entry-number was wrong. Expected 15, but was " + y + "."
-			                   end if
-    end select
+    qaerrorlog "#i92910: automation: crash when executing tiFormat3D_Effekte in test g_format"
+    'hOpenContextmenu
+    'y = hMenuItemGetCount
+    'MenuSelect (0)
+    'gMouseClick 90,90
+    'select case lcase(gApplication)
+    '    case "draw" :  if y = 13 then
+	'                                Printlog "- 3D object created" 
+    '                            else 
+    '                                Warnlog " Context-menu-entry-number was wrong. Expected 13, but was " + y + "."
+    '                            end if
+    '    case else   :   if y = 15 then 
+	'                                Printlog "- 3D object created" 
+	'                           else 
+    '			                       Warnlog " Context-menu-entry-number was wrong. Expected 15, but was " + y + "."
+	'		                   end if
+    'end select
     
     EditSelectAll
     hTypeKeys "<DELETE>"                        '/// delete object ///'
