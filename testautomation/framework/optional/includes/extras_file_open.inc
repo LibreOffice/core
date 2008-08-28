@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extras_file_open.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:05:57 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:39:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -144,33 +144,42 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         brc = hHandleActivesOnLoad( 0 , 2 )
         
         '///+<li>Cancel the filterdialog if present -> bug</li>
-        brc = hCancelFilterDialog()
+        Kontext "FilterAuswahl"        
+        if ( FilterAuswahl.exists( 1 ) ) then
+            warnlog( "Loading failed, ASCII filter dialog present" )
+            FilterAuswahl.cancel()
+            while( getDocumentCount > 0 ) 
+                hDestroyDocument()
+            wend
+        else
         
-        '///+<li>Close the navigator if present</li>
-        brc = hCloseNavigator()
-
-        ' Build the filename
-        sFileOut = cCategory & "_" & iCurrentTemplate
-        sFileOut = convertpath( sPathOut & sFileOut ) 
-      
-        '///+<li>Save the file, use autoextension</li> 
-        brc = hFileSaveAsKill( sFileOut )
-
-        '///+<li>Close possible dialogs like "Update links" etc.</li>
-        ' note: this is delayed, because the dialogs take time to pop up
-        '       even while the dialog is visible, we can work with the doc.
-        brc = hHandleInitialDialogs()
+            '///+<li>Close the navigator if present</li>
+            brc = hCloseNavigator()
+    
+            ' Build the filename
+            sFileOut = cCategory & "_" & iCurrentTemplate
+            sFileOut = convertpath( sPathOut & sFileOut ) 
+          
+            '///+<li>Save the file, use autoextension</li> 
+            brc = hFileSaveAsKill( sFileOut )
+    
+            '///+<li>Close possible dialogs like "Update links" etc.</li>
+            ' note: this is delayed, because the dialogs take time to pop up
+            '       even while the dialog is visible, we can work with the doc.
+            brc = hHandleInitialDialogs()
+            
+            '///+<li>Close the document</li>
+            brc = hDestroyDocument()
+          
+            '///+<li>Load the file, close the navigator if present</li>
+            brc = hFileOpen( sFileOut )
+            brc = hHandleActivesOnLoad( 0 , 2 )
+            brc = hCloseNavigator()
+    
+            '///+<li>Close the file</li>
+            brc = hDestroyDocument()
         
-        '///+<li>Close the document</li>
-        brc = hDestroyDocument()
-      
-        '///+<li>Load the file, close the navigator if present</li>
-        brc = hFileOpen( sFileOut )
-        brc = hHandleActivesOnLoad( 0 , 2 )
-        brc = hCloseNavigator()
-
-        '///+<li>Close the file</li>
-        brc = hDestroyDocument()
+        endif
   
         '///+<li>Delete the file</li>
         brc = hDeleteFile( sFileOut )
