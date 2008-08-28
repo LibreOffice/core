@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: i_pengine1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:41 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:43:41 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -205,7 +205,7 @@ SlideShowCustomAnimation
                 try
                     Speed.Select (e)
                 catch
-                    warnlog "#i89498, Custom animation speed field is greyed out"
+                    qaerrorlog "#i89498, Custom animation speed field is greyed out"
                 endcatch
           endif
           Printlog "Test of Entrance-list ended."
