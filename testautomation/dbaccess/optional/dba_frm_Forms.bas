@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: dba_frm_Forms.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: msc $ $Date: 2008-06-20 12:58:25 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:39:10 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -49,6 +49,7 @@ sub main
     app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/dbase_datasource/TT_Query1.dbf"),gOfficePath + ConvertPath("user/work/TT_Query1.dbf")
     app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/dbase_datasource/TT_Query1.dbt"),gOfficePath + ConvertPath("user/work/TT_Query1.dbt")
     
+    call fCreateDbaseDatasource(gOfficePath + ConvertPath("user/work/tt_dbase-01.odb"),gOfficePath + ConvertPath("user/work"),"TT_Forms")
     call frm_Forms("TT_Forms")
 
     call hStatusOut
