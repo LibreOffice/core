@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: id_006.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:41 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:43:25 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -299,7 +299,7 @@ endcase
 
 testcase tChineseTranslation
 
-    warnlog( "#i89634# - Chinese Translation dialog does not close" )
+    qaerrorlog( "#i89634# - Chinese Translation dialog does not close" )
     goto endsub
     
     dim sFileName   as string
