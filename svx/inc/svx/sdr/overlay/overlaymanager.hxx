@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: overlaymanager.hxx,v $
- * $Revision: 1.5 $
+ *
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +33,12 @@
 #define _SDR_OVERLAY_OVERLAYMANAGER_HXX
 
 #include <svx/sdr/animation/scheduler.hxx>
+#include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"
 #include <svtools/optionsdrawinglayer.hxx>
+#include <boost/shared_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -127,6 +130,17 @@ namespace sdr
             // stripe support StripeLengthPixel
             sal_uInt32 getStripeLengthPixel() const { return mnStripeLengthPixel; }
             void setStripeLengthPixel(sal_uInt32 nNew = 5L);
+
+            /** Return a list of all OverlayObjects that currently belong to
+                the called OverlayManager.  Subsequent calls to add() or
+                remove() will not alter the content of the returned list.
+                Modifying the list will not change the list of
+                OverlayObjects that belong to the called OverlayManager.
+                @return
+                    The returned pointer is never empty but the pointed-to
+                    vector may be.
+            */
+            ::boost::shared_ptr<OverlayObjectVector> GetOverlayObjects (void) const;
         };
     } // end of namespace overlay
 } // end of namespace sdr
