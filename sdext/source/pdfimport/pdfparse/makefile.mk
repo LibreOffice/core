@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,5 +51,10 @@ SLOFILES=\
     $(SLO)$/pdfentries.obj
 
 # --- Targets ------------------------------------------------------
+
+.IF "$(ENABLE_PDFIMPORT)" == "NO"
+@all:
+        @echo "PDF Import extension disabled."
+.ENDIF
 
 .INCLUDE :	target.mk
