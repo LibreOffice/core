@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvs2.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,12 +217,18 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         break;
 
         case SID_PRESENTATION:
+        case SID_REHEARSE_TIMINGS:
         {
             pOlView->PrepareClose();
 
             Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
             if( xPresentation.is() )
-                xPresentation->start();
+            {
+                if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+                    xPresentation->start();
+                else
+                    xPresentation->rehearseTimings();
+            }
             rReq.Done();
         }
         break;
