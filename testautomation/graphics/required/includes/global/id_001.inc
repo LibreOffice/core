@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: id_001.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:43:00 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:45:01 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -67,6 +67,9 @@ testcase tiFileSaveAs
     dim Exlist(100) as string ' files to be deleted
     dim sFile as string ' filename to export
     dim sPath as string ' filename to export
+    dim sFilterName as string
+    dim sFileNameLoaded as string 'gets name of fiel from Dateiname that will be loaded
+
 
     if (lCase(gApplication) = "impress") then 
         ExtensionString = "odp"
@@ -97,94 +100,63 @@ testcase tiFileSaveAs
         end if
     end if
 
-    '///  load a sample presentation file  ///'
+    printlog "load a sample presentation file"
     Call hFileOpen ( ConvertPath(gTesttoolPath + sFileName) )
     WaitSlot (3000)
-
-'/// start loop 5 times for: ///'
-'///    - StarImpress 5.0 ///
-'///    - StarOffice 6.0 Presentation ///
-'///    - StarOffice 6.0 Presentation Template ///
-'///    - Microsoft PowerPoint 97/2000/XP Template ///
-'///    - StarOffice 6.0 Drawing (StarOffice Impress) ///
-'/// to be language independant, select first, second last,... and last filter from list -> but trie to check the names :-) ///'
-
-' to use the helper fileSaveAs functions i get alll available filters...
-   FileSaveAs
-    WaitSlot (2000)
-   Kontext "SpeichernDlg"
-   for i = 0 to 5 'run it 5 times
-      if i=0 then x = Dateityp.GetItemCount
-      printlog "Number of filetypes: " + x
-      if (i) then  ' set border, when start from beginning/end
-         y = i     ' set filter from beginning
-      else
-         y = x-3     ' set filter from end
-      end if
-      ListAppend(sFilter(), Dateityp.GetItemText (y))
-      printlog Dateityp.GetItemText (y)
-   next i
-   SpeichernDlg.Cancel
-   y = ListCount(sFilter())
-
-   if gtSYSName = "Linux" then y=y-1
-   '#i45961# - last part of filter-list deactivated due to BUG - FHA
-   'TODO: JSI->FHA please verify if this special handling needed after the issue has been fixed.
-
-   for i = 1 to y
-      sFileName = sPath + sFile + (i)
-      hFileSaveAsWithFilter (sFileName, sFilter(i), TRUE )
-   '/// file save with filter as: "graphics\required\output\\math\\fsas_[0,1,2,...]" ///'
-      kontext
-      if messagebox.exists then
-         messagebox.Yes ' to go on ....
-      end if
-      printlog " saved with filter ("+i+"/"+y+"): "+ sFilter(i)
-   next i
-' TODO TBO: small check, if correct filter was used!
-   WaitSlot (3000)
-   fileclose
-   WaitSlot (3000)
-   kontext "Messagebox"
-   if Messagebox.exists then
-      printlog "Messagebox about informationloss... :-) that's OK: 'Text in the messagebox: "+Messagebox.GetText+"'"
-      Messagebox.YES
-   end if
-
-'-----------------------------------------------------------------
-'/// Load all saved files ///'
-   hNewDocument
-
-'/// a small loop, to load all files previous saved ///'
-
-   sFilter (0) = 0
-'///load documents from  "graphics\required\output\\impress\\fsas_*" ///
-   sFileName = sPath
-   GetFileList ( sFileName, sFile + "*", sFilter() )
-
-'   call hNewDocument
-   x = ListCount ( sFilter() )
-   for i = 1 to x
-     printlog "("+i+"/"+x+"): "+sFilter(i)
-      hFileOpen ( sFilter(i) )
-      WaitSlot (3000)
-      If hIsNamedDocLoaded (sFilter(i), true) Then
-         printlog "  used filter: " + hGetUsedFilter()
-      else
-         sTemp = left(right(sFilter(i),2),1)
-         if ( (sTemp = "t") OR (sTemp = "o") ) then
-            printlog "document is --- TEMPLATE?! --- "
-         else
-            qaErrorlog "#116563# document didn't get loaded "
-         end if
-      end if
-      hCloseDocument
+    
+    printlog "running 5 times save as with different Filters"
+    for i = 1 to 6 'run it 5 times
+        printlog "calling Save as Dialog"
+        FileSaveAs
+        WaitSlot (2000)
+        Kontext "SpeichernDlg"
+        printlog "Selecting filter according to number of run"
+        Dateityp.Select i
+        sFilterName = Dateityp.GetSelText
+        sFileName = sPath + sFile + (i)
+        printlog "Filename is " & sFileName
+        printlog "Filtername for this file is " & sFilterName
+        Dateiname.SetText (sFileName)
+        Speichern.Click
+        kontext "AlienWarning"
+        if AlienWarning.exists(5) then
+            AlienWarning.OK
+        end if
+    next i
+    printlog "closing the sample file"
+    fileclose
+    WaitSlot (3000)
+    kontext "Messagebox"
+    if Messagebox.exists then
+        printlog "Messagebox about informationloss... :-) that's OK: 'Text in the messagebox: "+Messagebox.GetText+"'"
+        Messagebox.YES
+    end if
+     
+    printlog "Loading the former saved files:"
+    for i = 1 to 6 'run it 5 times
+    
+        FileOpen
+        Kontext "OeffnenDlg"
+        WaitSlot (2000)
+        DateiAuswahl.TypeKeys "<END>"
+        DateiAuswahl.TypeKeys "<HOME>"
+        if i <> 1 then
+            DateiAuswahl.TypeKeys "<DOWN>", (i-1)
+        endif
+        sFileNameLoaded = Dateiname.GetSelText
+        printlog "File will be loaded: " & sFileNameLoaded
+        Oeffnen.Click
+        WaitSlot (3000)
+        hCloseDocument
+        printlog "Closing doc " & sFileNameLoaded
       WaitSlot (2000)
-   next i
-'   Call hCloseDocument
-endcase
+        
+    next i
 
+endcase 'tiFileSaveAs
+'-------------------------------------------------------------------------------
 testcase tiFileReload
+
   Dim DokumentPfad$
   Dim Datei$
 
@@ -236,9 +208,11 @@ testcase tiFileReload
    Call hCloseDocument
 '/// delete document ///'
    if Dir (Datei$) <> "" AND gSamePC = TRUE then kill Datei$
-endcase
-
+   
+endcase 'tiFileReload
+'-------------------------------------------------------------------------------
 testcase tiFileVersion
+
   Dim DokumentPfad$
   Dim Datei$
 
@@ -289,9 +263,11 @@ testcase tiFileVersion
 '/// close document ///'
    Call hCloseDocument
 '   if Dir (Datei$) <> "" AND gSamePC = TRUE then kill Datei$
-endcase
 
+endcase 'tiFileVersion
+'-------------------------------------------------------------------------------
 testcase tiFilePassword
+
     goto endsub
    Dim DokumentPfad$
    Dim Datei$
