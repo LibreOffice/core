@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmview.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,14 @@ FmFormView::~FmFormView()
 }
 
 //------------------------------------------------------------------------
+FmFormPage* FmFormView::GetCurPage()
+{
+    SdrPageView* pPageView = GetSdrPageView();
+    FmFormPage*  pCurPage = pPageView ? PTR_CAST( FmFormPage, pPageView->GetPage() ) : NULL;
+    return pCurPage;
+}
+
+//------------------------------------------------------------------------
 void FmFormView::MarkListHasChanged()
 {
     E3dView::MarkListHasChanged();
@@ -262,49 +270,41 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         pModel->GetUndoEnv().Lock();
     }
 
-    // Reihenfolge beim umsetzen !Designmode
-    // a.) Datenbankforms laden
-    // b.) Designmode an die ::com::sun::star::sdbcx::View weitergeben
-    // c.) Controls aktivieren
+    // --- 1. deactivate all controls if we are switching to design mode
+    if ( bDesign )
+        DeactivateControls( GetSdrPageView() );
 
-    SdrPageView* pCurPageView = GetSdrPageView();
-    FmFormPage*  pCurPage = pCurPageView ? PTR_CAST(FmFormPage,pCurPageView->GetPage()) : NULL;
+    // --- 2. simulate a deactivation (the shell will handle some things there ...?)
+    if ( pFormShell && pFormShell->GetImpl() )
+        pFormShell->GetImpl()->viewDeactivated( *this, sal_True );
+    else
+        pImpl->Deactivate( sal_True );
 
-    if (pCurPage && bDesign)
+    // --- 3. activate all controls, if we're switching to alive mode
+    if ( !bDesign )
+        ActivateControls( GetSdrPageView() );
+
+    // --- 4. load resp. unload the forms
+    FmFormPage*  pCurPage = GetCurPage();
+    if ( pCurPage )
     {
-        DeactivateControls(pCurPageView);
-        DBG_ASSERT( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: no valid shell!" );
-            // Since fixing 101864, 96009, et.al., we route the deactivation through the FormShell. I _suppose_
-            // the shell is always existent here, but I am not sure if there is a valid scenario where it isn't.
-            // Thus this assertion.
-
         if ( pFormShell && pFormShell->GetImpl() )
-            pFormShell->GetImpl()->viewDeactivated( this );
-        else
-            pImpl->Deactivate( sal_True );
+            pFormShell->GetImpl()->loadForms( pCurPage, ( bDesign ? FORMS_UNLOAD : FORMS_LOAD ) );
     }
 
-    // über all angemeldeten Pages iterieren
-    // nur die aktive wird umgeschaltet
-    if(GetSdrPageView())
-    {
-        FmFormPage* pPage = PTR_CAST(FmFormPage,GetSdrPageView()->GetPage());
-        if (pPage)
-        {
-            // during load the environment covers the error handling
-            if (!bDesign)
-                ActivateControls(pCurPageView);
+    // --- 5. base class functionality
+    SetDesignMode( bDesign );
 
-            DBG_ASSERT( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: no valid shell!" );
-            if ( pFormShell && pFormShell->GetImpl() )
-                pFormShell->GetImpl()->loadForms( pPage, ( bDesign ? FORMS_UNLOAD : FORMS_LOAD ) );
-        }
-    }
+    // --- 6. simulate a activation (the shell will handle some things there ...?)
+    OSL_PRECOND( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
+    if ( pFormShell && pFormShell->GetImpl() )
+        pFormShell->GetImpl()->viewActivated( *this );
+    else
+        pImpl->Activate();
 
-    SetDesignMode(bDesign);
-    if (pCurPage)
+    if ( pCurPage )
     {
-        if (bDesign)
+        if ( bDesign )
         {
             if ( GetActualOutDev() && GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW )
             {
@@ -313,7 +313,7 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
             }
 
             // redraw UNO objects
-            if (pCurPageView)
+            if ( GetSdrPageView() )
             {
                 SdrObjListIter aIter(*pCurPage);
                 while( aIter.IsMore() )
@@ -330,12 +330,6 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         }
         else
         {
-            // notify our shell that we have been activated
-            if ( pFormShell && pFormShell->GetImpl() )
-                pFormShell->GetImpl()->viewActivated( this );
-            else
-                pImpl->Activate();
-
             // set the auto focus to the first control (if indicated by the model to do so)
             sal_Bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
             if (bForceControlFocus)
@@ -358,6 +352,8 @@ void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
 //------------------------------------------------------------------------
 SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
 {
+    OSL_TRACE( "--- FmFormView::ShowSdrPage      : ........, %p, %p\n", this, pPage );
+
     SdrPageView* pPV = E3dView::ShowSdrPage(pPage);
 
     if (pPage)
@@ -369,14 +365,8 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
 
             // Alles deselektieren
             UnmarkAll();
-
-            // notify our shell that we have been activated
-            if ( pFormShell && pFormShell->GetImpl() )
-                pFormShell->GetImpl()->viewActivated( this );
-            else
-                pImpl->Activate( );
-        }   // nur wenn die Shell bereits im DesignMode ist
-        else if (pFormShell && pFormShell->IsDesignMode())
+        }
+        else if ( pFormShell && pFormShell->IsDesignMode() )
         {
             FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
             pFormShellImpl->UpdateForms( sal_True );
@@ -387,22 +377,32 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             pFormShellImpl->SetSelection(GetMarkedObjectList());
         }
     }
+
+    // notify our shell that we have been activated
+    if ( pFormShell && pFormShell->GetImpl() )
+        pFormShell->GetImpl()->viewActivated( *this );
+    else
+        pImpl->Activate();
+
     return pPV;
 }
 
 //------------------------------------------------------------------------
 void FmFormView::HideSdrPage()
 {
-    if (!IsDesignMode())
-    {
-        // Controls wieder deaktivieren
-        DeactivateControls(GetSdrPageView());
-        if ( pFormShell && pFormShell->GetImpl() )
-            pFormShell->GetImpl()->viewDeactivated( this );
-        else
-            pImpl->Deactivate( sal_True );
-    }
+    OSL_TRACE( "--- FmFormView::HideSdrPage      : ........, %p, %p\n", this, GetCurPage() );
 
+    // --- 1. deactivate controls
+    if ( !IsDesignMode() )
+        DeactivateControls(GetSdrPageView());
+
+    // --- 2. tell the shell the view is (going to be) deactivated
+    if ( pFormShell && pFormShell->GetImpl() )
+        pFormShell->GetImpl()->viewDeactivated( *this, sal_True );
+    else
+        pImpl->Deactivate( sal_True );
+
+    // --- 3. base class behavior
     E3dView::HideSdrPage();
 }
 
@@ -421,7 +421,8 @@ sal_Bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* 
 //------------------------------------------------------------------------
 void FmFormView::ActivateControls(SdrPageView* pPageView)
 {
-    if (!pPageView) return;
+    if (!pPageView)
+        return;
 
     for (sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); ++i)
     {
@@ -433,7 +434,8 @@ void FmFormView::ActivateControls(SdrPageView* pPageView)
 //------------------------------------------------------------------------
 void FmFormView::DeactivateControls(SdrPageView* pPageView)
 {
-    if( !pPageView ) return;
+    if( !pPageView )
+        return;
 
     for (sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); ++i)
     {
