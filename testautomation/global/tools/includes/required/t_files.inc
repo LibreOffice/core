@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_files.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:06:46 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:59:04 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -905,13 +905,6 @@ function hFileWait() as integer
             exit do
         end if
         
-        ' LOAD: StarOffice Calendar (Triggered by template)
-        kontext "StarOfficeCalendar1"
-        if ( StarOfficeCalendar1.Exists() ) then
-            iWait = -8
-            exit do
-        end if
-        
         ' SAVE: Password dialog
         kontext "PasswordDlg"
         if ( PasswordDlg.exists() ) then
@@ -938,14 +931,15 @@ function hFileWait() as integer
     
     if ( C_INFO ) then
         select case iWait
-        case -1   : printlog( CFN & "Timeout reached, exiting" )
-        case -2   : printlog( CFN & "Macro security warning displayed, exiting" )
-        case -3   : printlog( CFN & "Dialog boxes are in the way, exiting" )
-        case -4   : printlog( CFN & "Password dialog (load) displayed, exiting" )
-        case -5   : printlog( CFN & "Password dialog (save) displayed, exiting" )
-        case -6   : printlog( CFN & "Filter Selection dialog displayed, exiting" )
-        case -7   : printlog( CFN & "ASCII filter options dialog displayed, exiting" )
-        case -8   : printlog( CFN & "StarOffice Calendar (Template) displayed, exiting" )
+        case -1   : printlog( CFN & "Timeout reached, rc = " & iWait )
+        case -2   : printlog( CFN & "Macro security warning displayed, rc = " & iWait )
+        case -3   : printlog( CFN & "Password dialog (load) displayed, rc = " & iWait )
+        case -4   : printlog( CFN & "Password dialog (save) displayed, rc = " & iWait )
+        case -5   : printlog( CFN & "Filter Selection dialog displayed, rc = " & iWait )
+        case -6   : printlog( CFN & "ASCII filter options dialog displayed, rc = " & iWait )
+        case -7   : printlog( CFN & "A dialog box is in the way (1 button), rc = " & iWait )
+        case -8   : printlog( CFN & "A dialog box is in the way (2 buttons), rc = " & iWait )
+        case -9   : printlog( CFN & "A dialog box is in the way (3 buttons), rc = " & iWait )
         case else : printlog( CFN & "File I/O completed in " & iWait & " seconds" )
         end select
     endif
