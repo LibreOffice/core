@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc3.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1251,41 +1251,38 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
             const String aPicturePath( rStreamInfo.maUserData.GetToken( 1, ':' ) );
 
             // graphic from picture stream in picture storage in XML package
-            if( aPicturePath.GetTokenCount( '/' ) == 2 )
+            if( aPicturePath.GetTokenCount( '/' ) == 2 ) try
             {
                 const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
                 const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
                 if( xStor->isStorageElement( aPictureStorageName )  )
                 {
+                    uno::Reference < embed::XStorage > xPictureStorage =
+                            xStor->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
                     try
                     {
-                        uno::Reference < embed::XStorage > xPictureStorage =
-                                xStor->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
-                        try
+                        if( xPictureStorage.is() && xPictureStorage->isStreamElement( aPictureStreamName ) )
                         {
-                            if( xPictureStorage.is() && xPictureStorage->isStreamElement( aPictureStreamName ) )
-                            {
-                                uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
-                                if( xStream.is() )
-                                    pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
-                            }
-                        }
-                        catch( container::NoSuchElementException& )
-                        {
+                            uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
+                            if( xStream.is() )
+                                pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
                         }
                     }
-                    catch( uno::Exception& e )
+                    catch( container::NoSuchElementException& )
                     {
-                        (void)e;
-                        DBG_ERROR(
-                            (rtl::OString("sd::SdDrawDocument::GetDocumentStream(), "
-                                    "exception caught: ") +
-                            rtl::OUStringToOString(
-                                comphelper::anyToString( cppu::getCaughtException() ),
-                                RTL_TEXTENCODING_UTF8 ) +
-                                rtl::OString("\r\nATTENTION: Graphics may get lost now, please inform CL or KA!") ).getStr() );
                     }
                 }
+            }
+            catch( uno::Exception& e )
+            {
+                (void)e;
+                DBG_ERROR(
+                    (rtl::OString("sd::SdDrawDocument::GetDocumentStream(), "
+                            "exception caught: ") +
+                    rtl::OUStringToOString(
+                        comphelper::anyToString( cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 ) +
+                        rtl::OString("\r\nATTENTION: Graphics may get lost now, please inform CL or KA!") ).getStr() );
             }
 
             rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
