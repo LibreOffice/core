@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdrpaintwindow.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,9 +94,25 @@ private:
     // #i72889# flag if this is only a temporary target for repaint, default is false
     unsigned                                            mbTemporaryTarget : 1;
 
+    /** Remember whether the mpOverlayManager supports buffering.  Using
+        this flags expensive dynamic_casts on mpOverlayManager in order to
+        detect this.
+    */
+    bool mbUseBuffer;
+
     // helpers
-    // create mpOverlayManager member on demand
-    void impCreateOverlayManager();
+    /** Create mpOverlayManager member on demand.
+        @param bUseBuffer
+            Specifies whether to use the buffered (OverlayManagerBuffered)
+            or the unbuffered (OverlayManager) version of the overlay
+            manager.  When this values is different from that of the
+            previous call then the overlay manager is replaced by the
+            specified one.
+
+            The bUseBuffer flag will typically change its value when text
+            editing is started or stopped.
+    */
+    void impCreateOverlayManager(const bool bUseBuffer);
 
 public:
     SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut);
