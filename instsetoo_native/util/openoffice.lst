@@ -83,7 +83,7 @@ OpenOffice
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
 		}
