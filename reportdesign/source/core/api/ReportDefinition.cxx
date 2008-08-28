@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1487,8 +1487,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             OSL_ENSURE(0,"Exception Caught: Could not commit report storage!");
             throw io::IOException();
         }
-// LLA: resynced?
-        setModified(sal_False);
+        if ( xStatusIndicator.is() )
+            setModified(sal_False);
 
     }
     if ( xStatusIndicator.is() )
