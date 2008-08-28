@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: i_stylist.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:42 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:44:45 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -112,7 +112,7 @@ testcase tFormatStylistBackground
      sleep 1
       printlog "Going to save: '"+sFileName+"isty_"+(i)+"'..."
      sleep 1
-      hFileSaveAsWithFilterKill (sFileName+"isty_"+(i), sFilter(i), True )
+      hFileSaveAsWithFilterKill (sFileName+"isty_"+(i), "impress8" )
       printlog " saved with filter ("+i+"/3): "+ sFilter(i)
     next i
 
