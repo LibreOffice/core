@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: i_slidecopy.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:42 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:43:55 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -512,6 +512,10 @@ endcase 'tiSlidecopyDuplicate
 '-----------------------------------------------------------------------
 
 testcase tiSlideCopyPasteSpecial
+
+    warnlog "#i92864: Crash when copying slide in slide sorter"
+    goto endsub
+    
     Dim value1 as string
     Dim value2 as string
     Dim value3 as string
@@ -608,8 +612,11 @@ testcase tiSlideCopyPasteSpecial
 endcase 'tiSlideCopyPasteSpecial
 
 '-----------------------------------------------------------------------
-
 testcase tiSlideCopyInSlideSorter
+
+    warnlog "#i92864: Crash when copying slide in slide sorter"
+    goto endsub
+    
     Dim value1 as string
     Dim value2 as string
     Dim value3 as string
