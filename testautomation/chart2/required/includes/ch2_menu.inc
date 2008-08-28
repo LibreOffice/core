@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_menu.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-07-11 07:25:53 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:38:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -76,20 +76,14 @@ testcase tMainMenu
         end if        
         call hMenuClose() ' close the FILE menu
                 
-        printlog "check if there are 8 (StarOffice)/9 (openOffice.org) items in the FILE/AUTOPILOT menu."        
+        printlog "check if there are 8 items in the FILE/AUTOPILOT menu."        
         DocumentCalc.UseMenu        
         hMenuSelectNr(1) ' FILE
         hMenuSelectNr(4) ' AUTOPILOT        
         iCount = hMenuItemGetCount()
-        if (gOOO) then   
-            if (iCount <> 9) then
-                warnlog "There should 9 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
-            end if
-        else
-            if (iCount <> 8) then
-                warnlog "There should 8 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
-            end if
-        endif
+        if (iCount <> 8) then
+            warnlog "There should 8 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
+        end if
         call hMenuClose()
                 
         printlog "check if there are 5 items in the EDIT menu."
