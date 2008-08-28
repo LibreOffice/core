@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: i_slidelayer.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:42 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:44:12 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -48,9 +48,7 @@
 
 '-------------------------------------------------------------------------------
 testcase tiInsertExpandSlide
-    warnlog "#i89229, Crash when clicking on first slide in normal view "
-    goto endsub
-
+    
    dim i,x as integer
    dim sTemp as string
    dim b116350 as boolean
@@ -203,8 +201,6 @@ endcase 'tiInsertExpandSlide
 
 '-------------------------------------------------------------------------------
 testcase tiInsertSummarySlide
-    warnlog "#i89229, Crash when clicking on first slide in normal view "
-    goto endsub
 
     dim i as integer
     dim sTemp as string
