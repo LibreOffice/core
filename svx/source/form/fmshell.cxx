@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -343,7 +343,7 @@ TYPEINIT1(FmFormShell,SfxShell)
 //------------------------------------------------------------------------
 FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)
-            ,m_pImpl(new FmXFormShell(this, _pParent->GetViewFrame()))
+            ,m_pImpl(new FmXFormShell(*this, _pParent->GetViewFrame()))
             ,m_pFormView( pView )
             ,m_pFormModel( NULL )
             ,m_pParentShell(_pParent)
@@ -1324,7 +1324,7 @@ void FmFormShell::SetView( FmFormView* _pView )
     if ( m_pFormView )
     {
         if ( IsActive() )
-            GetImpl()->viewDeactivated( m_pFormView );
+            GetImpl()->viewDeactivated( *m_pFormView );
 
         m_pFormView->SetFormShell( NULL );
         m_pFormView = NULL;
@@ -1345,7 +1345,7 @@ void FmFormShell::SetView( FmFormView* _pView )
     // to the former.
     // FS - 30.06.99 - 67308
     if ( IsActive() )
-        GetImpl()->viewActivated( m_pFormView );
+        GetImpl()->viewActivated( *m_pFormView );
 }
 
 //------------------------------------------------------------------------
@@ -1379,7 +1379,7 @@ void FmFormShell::Activate(sal_Bool bMDI)
     SfxShell::Activate(bMDI);
 
     if ( m_pFormView )
-        GetImpl()->viewActivated( m_pFormView, sal_True );
+        GetImpl()->viewActivated( *m_pFormView, sal_True );
 }
 
 //------------------------------------------------------------------------
@@ -1388,7 +1388,7 @@ void FmFormShell::Deactivate(sal_Bool bMDI)
     SfxShell::Deactivate(bMDI);
 
     if ( m_pFormView )
-        GetImpl()->viewDeactivated( m_pFormView, sal_False );
+        GetImpl()->viewDeactivated( *m_pFormView, sal_False );
 }
 
 //------------------------------------------------------------------------
