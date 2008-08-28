@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optlingu.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1115,7 +1115,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
     aMoreDictsLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/taxonomy/term/88" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
     aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
 
     xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
@@ -2006,7 +2006,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aPrioDownPB.Enable( FALSE );
 
     aMoreDictsLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/taxonomy/term/88" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
     aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
 
     //
