@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_export_html.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:42:05 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -41,8 +41,7 @@
 '\********************************************************************
 
 testcase tHtmlExport
-    warnlog "#i89678, HTML export Filter has changed position in impress"
-    goto endsub
+    
     Dim Autor1 as string
     Dim Adresse1 as string
     Dim Liste(50) as string
@@ -349,8 +348,6 @@ endcase 'tHtmlExport
 
 '-------------------------------------------------------------------------------
 testcase tHtmlExport_Webcast
-    warnlog "#i89678, HTML export Filter has changed position in impress"
-    goto endsub
 
     Dim iWaitIndex as integer
     Dim i as integer
@@ -601,8 +598,8 @@ testcase tHtmlExport_Webcast
    sFile = ConvertPath (gOfficePath + "user\work\webcast")
    if (Dir (sFile + ".odp") <> "") then app.kill (sFile + ".odp")
    WaitSlot (2000)
-   hFileSaveAsWithFilterKill ( sFile , gImpressFilter, FALSE )
-   Printlog "saved presentation: '" + sFile + "'"
+   hFileSaveAsWithFilterKill ((sFile + ".odp") , "impress8" )
+   Printlog "saved presentation: '" + sFile + ".odp"
 '----------------------------------- Exportieren als ASP Web-Cast
    Printlog "'///<b> export as webcast ASP </b>///'"
    '/// File->SaveAs ///'
