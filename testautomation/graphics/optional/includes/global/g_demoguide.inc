@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_demoguide.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:39 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:41:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -156,9 +156,6 @@ testcase t_Introduction
     '///Add a background
     Printlog "Add background"
     
-    warnlog "#i89113, Testtool: View.OpenMenu does not work on TaskPane Menu anymore."
-    goto endsub
-    
     Kontext "Tasks"
     printlog "Deselect all tabs from view menu in task pane except the needed."
     View.OpenMenu
@@ -210,9 +207,6 @@ testcase t_Interoperability
         printlog "    Background = " & sTemplatename     'Debugcode
     
     printlog "Choose a masterpage from right pane"
-    
-    warnlog "#i89113, Testtool: View.OpenMenu does not work on TaskPane Menu anymore."
-    goto endsub
     
     Kontext "Tasks"
     printlog "Deselect all tabs accept the Master Pages"
