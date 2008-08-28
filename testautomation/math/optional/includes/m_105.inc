@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: m_105.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 11:51:22 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:45:32 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -49,8 +49,7 @@ sub m_105
    Call tToolsOptions
    Call tToolsConfigure
 '   tToolsCatalog get's called in m_101_.inc to get it also printed there!
-   qaerrorlog "#i64504# Symbol set name is not saved on exiting OOo"
-   'Call tToolsCatalogNew
+   Call tToolsCatalogNew
 end sub
 
 testcase tToolsOptions
@@ -494,6 +493,8 @@ testcase tToolsCatalog
 endcase
 
 testcase tToolsCatalogNew
+   qaerrorlog "#i64504# Symbol set name is not saved on exiting OOo"
+goto endsub
     dim i, j as integer
     dim sTemp as string
     dim iStartingSymbolSetCount as integer
