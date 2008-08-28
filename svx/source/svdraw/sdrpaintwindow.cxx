@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdrpaintwindow.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,8 +111,19 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintWindow::impCreateOverlayManager()
+void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
 {
+    // When the buffer usage has changed then we have to create a new
+    // overlay manager.  Save the current one so that later we can move its
+    // overlay objects to the new one.
+    ::sdr::overlay::OverlayManager* pOldOverlayManager = NULL;
+    if (mbUseBuffer != bUseBuffer)
+    {
+        mbUseBuffer = bUseBuffer;
+        pOldOverlayManager = mpOverlayManager;
+        mpOverlayManager = NULL;
+    }
+
     // not yet one created?
     if(!mpOverlayManager)
     {
@@ -120,7 +131,7 @@ void SdrPaintWindow::impCreateOverlayManager()
         if(OUTDEV_WINDOW == GetOutputDevice().GetOutDevType())
         {
             // decide which OverlayManager to use
-            if(GetPaintView().IsBufferedOverlayAllowed())
+            if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer)
             {
                 // buffered OverlayManager, buffers it's background and refreshes from there
                 // for pure overlay changes (no system redraw). The 2nd parameter specifies
@@ -136,6 +147,13 @@ void SdrPaintWindow::impCreateOverlayManager()
 
             OSL_ENSURE(mpOverlayManager, "SdrPaintWindow::SdrPaintWindow: Could not allocate an overlayManager (!)");
 
+            // Request a repaint so that the buffered overlay manager fills
+            // its buffer properly.  This is a workaround for missing buffer
+            // updates.
+            Window* pWindow = dynamic_cast<Window*>(&GetOutputDevice());
+            if (pWindow != NULL)
+                pWindow->Invalidate();
+
             Color aColA(GetPaintView().getOptionsDrawinglayer().GetStripeColorA());
             Color aColB(GetPaintView().getOptionsDrawinglayer().GetStripeColorB());
 
@@ -150,6 +168,37 @@ void SdrPaintWindow::impCreateOverlayManager()
             mpOverlayManager->setStripeLengthPixel(GetPaintView().getOptionsDrawinglayer().GetStripeLength());
         }
     }
+
+    // Because we can not notify the creators of the overlay objects that
+    // belong to the old overlay manager we have to move these objects from
+    // the old to the new overlay manager and hope for the best (ie that the
+    // owner of the overlay objects did not store a pointer to the overlay
+    // manager but asks the view for the current one.)
+    if (pOldOverlayManager != NULL)
+    {
+        if (mpOverlayManager != NULL)
+        {
+            // Get a list of all overlay objects added to the old overlay
+            // manager.  This list is not modified when overlay objects are
+            // moved from one overlay manager to the other so its save to
+            // iterate over it.
+            ::boost::shared_ptr<sdr::overlay::OverlayObjectVector> pOverlayObjects (
+                pOldOverlayManager->GetOverlayObjects());
+            // Iterate over the list of overlay objects and move, not copy,
+            // them from the old to the new overlay manager.
+            sdr::overlay::OverlayObjectVector::iterator iOverlay;
+            for (iOverlay=pOverlayObjects->begin(); iOverlay!=pOverlayObjects->end(); ++iOverlay)
+            {
+                if (*iOverlay != NULL)
+                {
+                    pOldOverlayManager->remove(**iOverlay);
+                    mpOverlayManager->add(**iOverlay);
+                }
+            }
+        }
+        // The old overlay manager is not used anymore and can be (has to be) deleted.
+        delete pOldOverlayManager;
+    }
 }
 
 SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
@@ -157,7 +206,8 @@ SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
     mrPaintView(rNewPaintView),
     mpOverlayManager(0L),
     mpPreRenderDevice(0L),
-    mbTemporaryTarget(false) // #i72889#
+    mbTemporaryTarget(false), // #i72889#
+    mbUseBuffer(true)
 {
 }
 
@@ -176,7 +226,8 @@ SdrPaintWindow::~SdrPaintWindow()
 {
     if(!mpOverlayManager)
     {
-        const_cast< SdrPaintWindow* >(this)->impCreateOverlayManager();
+        // Create buffered overlay manager by default.
+        const_cast< SdrPaintWindow* >(this)->impCreateOverlayManager(true);
     }
 
     return mpOverlayManager;
@@ -242,7 +293,7 @@ void SdrPaintWindow::DrawOverlay(const Region& rRegion, bool bUseBuffer)
 {
     // ## force creation of OverlayManager since the first repaint needs to
     // save the background to get a controlled start into overlay mechanism
-    impCreateOverlayManager();
+    impCreateOverlayManager(bUseBuffer);
 
     if(mpOverlayManager && !OutputToPrinter())
     {
