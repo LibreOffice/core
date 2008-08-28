@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: id_006.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:43:00 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:45:15 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -112,23 +112,26 @@ endcase
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tiToolsThesaurus
+    qaerrorlog "#i93133#: Thesaurus not active in loaded bugdoc"
+    goto endsub
     if not gOOO then ' Thesaurus doesn't work in OOo builds.
 
-        dim sFileName as String
+    dim sFileName as String
     
-        '/// call subroutine 'hSetSpellHypLanguage' for setting the default language in the options, to enable it for languages, which don't provide a dictionary (usually asian ones) ///'
-        call hSetSpellHypLanguage
-        '/// open application-specific document which contains an American-formatted textframe with text. And select the text ///'
-        if (lCase(gApplication) = "impress") then
-            sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odp"))
-        else
-            sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
-        end if
-        if hFileExists ( sFileName ) = FALSE then
-            warnlog "The language-file was not found or accessible! The test ends."
-            goto endsub
-        end if
-        Call hFileOpen (sFileName)
+    '/// call subroutine 'hSetSpellHypLanguage' for setting the default language in the options, to enable it for languages, which don't provide a dictionary (usually asian ones) ///'
+    call hSetSpellHypLanguage
+    '/// open application-specific document which contains an American-formatted textframe with text. And select the text ///'
+    if (lCase(gApplication) = "impress") then
+        sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odp"))
+    else
+        sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
+    end if
+    if hFileExists ( sFileName ) = FALSE then
+        warnlog "The language-file was not found or accessible! The test ends."
+        goto endsub
+    end if
+    Call hFileOpen (sFileName)
+        
         sleep (2)
     
         hTypeKeys "<TAB><RETURN>"
@@ -299,7 +302,7 @@ endcase
 
 testcase tChineseTranslation
 
-    warnlog( "#i89634# - Chinese Translation dialog does not close" )
+    qaerrorlog( "#i89634# - Chinese Translation dialog does not close" )
     goto endsub
     
     dim sFileName   as string
