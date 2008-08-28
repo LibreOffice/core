@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmview.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +140,9 @@ public:
 
     // SdrView
     BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
+
+    /// shortcut to "GetSdrPageView() ? PTR_CAST( FmFormPage, GetSdrPageView() ) : NULL"
+    FmFormPage* GetCurPage();
 
 protected:
     void ActivateControls(SdrPageView*);
