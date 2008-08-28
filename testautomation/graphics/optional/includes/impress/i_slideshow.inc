@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: i_slideshow.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:42 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:44:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -1049,8 +1049,8 @@ testcase tSlideShowSlideTransition
    next i
    '/// save file as presentation with name '"user\\work\\diashow")' ///'
 
-   hFileSaveAsWithFilterKill ( sFile , gImpressFilter, FALSE )
-
+    hFileSaveAsWithFilterKill ((sFile + ".odp") , "impress8" )
+    
    Printlog "   saved presentation: '" + sFile + "'"  '." + gImpressFilter + "
    '/// close application///'
    hCloseDocument ()
