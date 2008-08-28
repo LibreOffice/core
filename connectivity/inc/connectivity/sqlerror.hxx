@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqlerror.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,7 @@ namespace connectivity
             ParamValue( ::rtl::OUString const& val ) : base_type( val ) { }
             ParamValue( ParamValue const& rhs ) : base_type( (base_type const&)rhs ) { }
 
-            bool    is() const { return base_type::get() != NULL; }
+            bool    is() const { return !base_type::operator!(); }
         };
 
 
