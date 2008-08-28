@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsSlotManager.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -860,11 +860,16 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
 }
 
-void SlotManager::ShowSlideShow( SfxRequest& /*rRequest*/)
+void SlotManager::ShowSlideShow( SfxRequest& rReq)
 {
     Reference< XPresentation2 > xPresentation( mrSlideSorter.GetModel().GetDocument()->getPresentation() );
     if( xPresentation.is() )
-        xPresentation->start();
+    {
+        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+            xPresentation->start();
+        else
+            xPresentation->rehearseTimings();
+    }
 }
 
 void SlotManager::RenameSlide (void)
