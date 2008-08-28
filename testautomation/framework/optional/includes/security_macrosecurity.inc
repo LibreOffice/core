@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: security_macrosecurity.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:40:28 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -89,13 +89,12 @@ testcase tMacroSecurityLevels( cFileFormat )
         '///+<li>Set the macro security level</li>
         printlog( "" )
         hSetMacroSecurityAPI( iSecLevel )
-
+        FileOpen( "URL", cWorkFile, "FrameName", "_default" )
         '///+<li>Load a file from ..\framework\optional\input\BasicDocs\</li>
         '///<ul>
         select case iSecLevel
         '///+<li>For security level &eq; 0: Macro should be executed</li>
-        case 0 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
-                 brc = hIdentifyExecutedMacro()
+        case 0 : brc = hIdentifyExecutedMacro()
                  if ( not brc ) then
                      if ( gApplication = "MATH" ) then
                          qaerrorlog( "#i68291# Math document forgets eventbinding" )
@@ -105,8 +104,7 @@ testcase tMacroSecurityLevels( cFileFormat )
                  endif   
                  
         '///+<li>For security level &eq; 1: Macro should be executed after security warning</li>                               
-        case 1 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
-                 brc = hAllowMacroExecution()
+        case 1 : brc = hAllowMacroExecution()
                  if ( not brc ) then
                      warnlog( "Macro execution warning missing, chek the file/security settings" )
                  endif
@@ -121,8 +119,7 @@ testcase tMacroSecurityLevels( cFileFormat )
                  endif
                  
         '///+<li>For security level &eq; 2: Macro should *not* be executed (it is not in trusted path)</li>                 
-        case 2 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
-                 brc = hHandleActivesOnLoad( 1 , 1 )
+        case 2 : brc = hHandleActivesOnLoad( 1 , 1 )
                  if ( not brc ) then
                      qaerrorlog( "#i53710# unexpected second messagebox" )
                  endif
@@ -132,8 +129,7 @@ testcase tMacroSecurityLevels( cFileFormat )
                  endif                 
                  
         '///+<li>For security level &eq; 3: Macro should *never* be executed</li>                 
-        case 3 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
-                 brc = hHandleActivesOnLoad( 1 , 0 )
+        case 3 : brc = hHandleActivesOnLoad( 1 , 0 )
                  brc = hIdentifyExecutedMacro()
                  if ( brc ) then
                      warnlog( "Macro was executed" )
@@ -163,6 +159,8 @@ function hIdentifyExecutedMacro() as boolean
 
     dim cMessage as string
     const CFN = "hIdentifyExecutedMacro::"
+
+    sleep( 1 )
 
     kontext "active"
     if ( active.exists( 3 ) ) then
