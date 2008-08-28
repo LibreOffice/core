@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: security_trusted_path.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:40:42 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -47,13 +47,15 @@ testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
     '///+ executed at the &quot;On document load&quot; event.<br>
     '///<ul>
 
-    dim brc as boolean
+    dim irc as integer
     dim cMsg as string
 
     '///+<li>Click &quot;FileOpen&quot; or go to the dialog via menu</li>
     '///+<li>Enter the path to a file with macros within the trusted path</li>
     '///+<li>Open the file</li>
-    hFileOpen( cWorkFile )
+    cWorkFile = convertToUrl( convertpath( cWorkFile ) )
+    FileOpen( "URL", cWorkFile, "FrameName", "_default"
+    irc = hFileWait( false )
     
     ' We have quite a bunch of possible combinations here. Some trigger a security warning
     ' others do not. Files within a trusted path should never prompt.
@@ -70,15 +72,18 @@ testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
        
 
     '///+<li>Test for security-warning, warn if it pops up</li>
-    brc = hAllowMacroExecution()
-    if ( brc ) then
-        warnlog( "Macro Security Warning was not expected at this point" )
+    if ( irc = -2 ) then
+        kontext "SecurityWarning"
+        if ( SecurityWarning.exists() ) then
+            warnlog( "Macro Security Warning was not expected at this point" )
+            SecurityWarning.ok()
+        endif
     endif
 
     '///+<li>Verify that the macro is executed</li>
     printlog( "Verify that the macro is executed" )
     kontext "Active"
-    if ( active.exists() ) then
+    if ( active.exists( 2 ) ) then
         cMsg = active.getText()
         cMsg = hRemoveLineBreaks( cMsg )
         if ( cMsg = "TTMacro3" ) then
