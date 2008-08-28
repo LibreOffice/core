@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_customize.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-17 13:05:18 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:41:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -42,8 +42,6 @@
 '\***********************************************************************
 
 testcase tToolsCustomize
-WarnLog "#i90134# - tToolsCustomize outcommented due to bug."
-goto endsub
 
     Dim iCountMsgBox as integer
     '/// open application ///'
@@ -112,7 +110,7 @@ goto endsub
         '/// Click button 'Command' ///'
         Command.click
         printlog "opened second one"
-        sleep 1
+        WaitSlot()
         '/// Select the first entry 'Add Submenu' ///'
         hMenuSelectNr(1)
         '/// Dialog 'Name' comes up ///'
@@ -122,12 +120,12 @@ goto endsub
         '/// Cancel Dialog 'Name' ///'
         CustomizeMenuName.cancel
 
-        sleep 1
+        WaitSlot()
         Kontext "TabCustomizeMenu"
         '/// Click button 'Command' ///'
         Command.click
         printlog "opened third one"
-        sleep 1
+        WaitSlot()
         '/// Select the third entry 'Rename' ///'
         hMenuSelectNr(3)
         '/// Dialog 'Name' comes up ///'
@@ -170,7 +168,7 @@ goto endsub
         SaveIn.typeKeys("<down>")
         '/// click button 'new' ///'
         BtnNew.Click
-        sleep 1
+        waitslot
         '/// Dialog 'Name' comes up ///'
         Kontext "NewToolbar"
         Call DialogTest ( NewToolbar )
@@ -178,7 +176,7 @@ goto endsub
         SaveIn.typeKeys("<down>")
         '/// Cancel dialog 'Name' ///'
         NewToolbar.cancel
-        sleep 1
+        waitslot
 
         Kontext "TabCustomizeToolbars"
         '/// Click Button 'Add Commands...' ///'
@@ -192,7 +190,7 @@ goto endsub
         '/// Close Dialog 'Add Commands' ///'
         ScriptSelector.cancel
         
-        sleep 1
+        waitslot
         Kontext "TabCustomizeToolbars"
         '/// Click button 'Command' ///'
         Command.click
@@ -203,17 +201,20 @@ goto endsub
         if NOT CustomizeToolbarsReName.exists(2) then
         Kontext "TabCustomizeToolbars"
         ToolbarContents.typeKeys("<down>")
-	endif
-        Kontext "CustomizeToolbarsReName"
+        else
+        CustomizeToolbarsReName.cancel()
+        endif        
+
+        Kontext "TabCustomizeToolbars"
         Command.click
         hMenuSelectNr(1)
         Kontext "CustomizeToolbarsReName"
         call DialogTest (CustomizeToolbarsReName)
         Eingabefeld.typeKeys ("A")
         '/// Cancel Dialog 'Name' ///'
-        CustomizeToolbarsReName.cancel
+        CustomizeToolbarsReName.close
         
-        sleep 1
+        waitslot
         Kontext "TabCustomizeToolbars"
         '/// Click button 'Command' ///'
         Command.click
@@ -248,11 +249,11 @@ goto endsub
             endif
         endif
 
-        sleep 1
+        WaitSlot()
         Kontext "TabCustomizeToolbars"
         '/// On Tab Page 'Customize Menus' click on Button 'Toolbar' ///'
         MenuBtn.openMenu
-        sleep 1
+        WaitSlot()
         hMenuSelectNr(1)
         kontext
         sleep 3
@@ -276,10 +277,10 @@ goto endsub
         Call DialogTest ( TabCustomizeEvents )
         SaveIn.typeKeys("<down>")
         EventListbox.typeKeys("<down>")
-        sleep 1
+        WaitSlot()
         '/// click button 'Assign Macro' ///'
         AssignMacro.Click
-        sleep 1
+        WaitSlot()
         ' If Java is not [correctly] installed a messagebox will be shown
         Kontext "Messagebox"
         if Messagebox.Exists(2) then            
@@ -313,7 +314,7 @@ goto endsub
         '/// click button 'Remove Macro' ///'
         Kontext "TabCustomizeEvents"
         RemoveMacro.Click
-        sleep 1
+        WaitSlot()
         '/// Press Button 'Reset' ///'
         ResetBtn.click
         '/// cancel dialog 'Customize' ///'
