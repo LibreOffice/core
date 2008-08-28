@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -263,7 +263,7 @@ private:
     virtual void SAL_CALL disposing();
 
     // internal
-    bool startShow( PresentationSettings* pPresSettings );
+    bool startShow( PresentationSettingsEx* pPresSettings );
     bool startPreview(
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
