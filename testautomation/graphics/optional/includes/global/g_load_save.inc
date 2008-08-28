@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_load_save.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:42:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -182,7 +182,7 @@ endcase
 '********************************************************************************************
 
 testcase tFileProperties
-    warnlog "#i88163#, File/properties/user defined fields get mixed up."
+    qaerrorlog "#i88163#, File/properties/user defined fields get mixed up."
     goto endsub
    Call hNewDocument
    Call hTextrahmenErstellen ("This is a document to test the Menupoint in File/Properties",30,30,60,40)
