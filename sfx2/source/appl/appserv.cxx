@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appserv.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -841,7 +841,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
                     uno::UNO_QUERY_THROW );
                 if ( xSystemShell.is() )
-                    xSystemShell->execute( DEFINE_CONST_UNICODE("http://extensions.services.openoffice.org/taxonomy/term/88"), ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+                    xSystemShell->execute( DEFINE_CONST_UNICODE("http://extensions.services.openoffice.org/dictionary?cid=926385"), ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
