@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extras_modify_objects.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:06:09 $
+'* last change: $Author: rt $ $Date: 2008-08-28 11:40:12 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -67,6 +67,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
         sPath = hGetWorkPath()  
     dim brc as boolean
     dim crc as string
+    dim irc as integer
     
     dim iReset as integer : iReset = 0
 
@@ -179,7 +180,14 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
             endif
             
             '///+<li>Cancel the filterdialog if present -> bug</li>
-            brc = hCancelFilterDialog()
+            irc = hFileWait( false )
+            
+            if ( irc = -6 ) then 
+                warnlog( "Load failure: ASCII filter dialog displayed" )
+                kontext "FilterAuswahl"
+                FilterAuswahl.cancel()
+            endif
+            
             if ( brc ) then
                 printlog( CFN & "Skipping document" )
             else
@@ -199,19 +207,12 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
                 '///+<li>Load the file again</li>
                 brc = hFileOpen( sFile )
                 brc = hHandleActivesOnLoad( 1 , 2 )
-                'brc = hHandleInitialDialogs()
-                
-                '///+<li>Cancel the filterdialog if present -> bug</li>
-                brc = hCancelFilterDialog()
-                if ( not brc ) then
-                
-                    '///+<li>Close the navigator if present</li>
-                    brc = hCloseNavigator()
-                
-                    '///+<li>Close the document</li>
-                    brc = hDestroyDocument()
-                    
-                endif
+               
+                '///+<li>Close the navigator if present</li>
+                brc = hCloseNavigator()
+            
+                '///+<li>Close the document</li>
+                brc = hDestroyDocument()
 
                 '///+<li>Delete the file after completion</li>
                 brc = hDeleteFile( sFile )
