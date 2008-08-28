@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templwin.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1732,7 +1732,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     pImpl->aTitle = GetText();
 
     aMoreTemplatesLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/taxonomy/term/36" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/templates?cid=923508" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
 
     aManageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OrganizerHdl_Impl ) );
