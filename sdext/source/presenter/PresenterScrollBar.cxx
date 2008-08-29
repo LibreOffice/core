@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScrollBar.cxx,v $
  *
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sdext.hxx"
 
 #include "PresenterScrollBar.hxx"
 #include "PresenterBitmapContainer.hxx"

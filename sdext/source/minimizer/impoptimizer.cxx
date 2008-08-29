@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impoptimizer.cxx,v $
- * $Revision: 1.12 $
+ *
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +28,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sdext.hxx"
 
 #include "impoptimizer.hxx"
 #include "pppoptimizer.hxx"

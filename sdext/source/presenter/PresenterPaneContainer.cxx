@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneContainer.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,8 @@
  *
  ************************************************************************/
 
-//#include "precompiled_sdext.hxx"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sdext.hxx"
 
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneBase.hxx"
