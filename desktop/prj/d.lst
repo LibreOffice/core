@@ -12,6 +12,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\soffice.bin %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\officeloader.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
+..\%__SRC%\bin\officeloader %_DEST%\bin%_EXT%\soffice
 ..\%__SRC%\bin\so\soffice.bin %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\so\officeloader.exe %_DEST%\bin%_EXT%\so\soffice.exe
 ..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
