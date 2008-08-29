@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +42,6 @@ TARGET=scripts
 
 UNIXTEXT= \
     $(MISC)$/sbase.sh \
-    $(MISC)$/soffice.sh \
     $(MISC)$/scalc.sh \
     $(MISC)$/sdraw.sh \
     $(MISC)$/simpress.sh \
@@ -53,5 +52,9 @@ UNIXTEXT= \
     $(MISC)$/mozwrapper.sh \
     $(MISC)$/unoinfo.sh \
     $(MISC)$/unopkg.sh
+
+.IF "$(OS)" != "MACOSX"
+UNIXTEXT+= $(MISC)$/soffice.sh
+.ENDIF
 
 .INCLUDE :  target.mk
