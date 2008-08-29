@@ -1,11 +1,11 @@
 dx	sdext	:	offuh comphelper unotools readlicense_oo slideshow svtools goodies xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas LIBXSLT:libxslt NULL
 dx	sdext									usr1	-	all	sdext_mkout NULL
 dx	sdext\prj								get		-	all	sdext_prj NULL
-dx	sdext\source\minimizer					nmake	-	all sdext_minimizer sdext_minimizer_rdoooe sdext_minimizer_rdooo sdext_minimizer_rdooou NULL
+dx	sdext\source\minimizer					nmake	-	all sdext_minimizer sdext_minimizer_rdoooe sdext_minimizer_rdooo sdext_minimizer_rdooou sdext_inc NULL
 dx	sdext\source\minimizer\registry\data\org\openoffice\Office\extension	nmake	-	all sdext_minimizer_rdoooe NULL
 dx	sdext\source\minimizer\registry\data\org\openoffice\Office\UI			nmake	-	all sdext_minimizer_rdooou NULL
 dx	sdext\source\minimizer\registry\data\org\openoffice\Office 		nmake	-	all sdext_minimizer_rdooo NULL
-dx	sdext\source\presenter					nmake	-	all sdext_presenter NULL
+dx	sdext\source\presenter					nmake	-	all sdext_presenter sdext_inc NULL
 dx	sdext\inc								nmake	-	all	sdext_inc				NULL
 dx	sdext\source\pdfimport\wrapper		nmake	-	all	sdext_pdfwrap	sdext_inc		NULL
 dx	sdext\source\pdfimport\misc		nmake	-	all	sdext_misc	sdext_inc		NULL
