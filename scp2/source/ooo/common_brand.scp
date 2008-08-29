@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -381,15 +381,6 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
     TXT_FILE_BODY;
 End
 
-#if defined MACOSX
-Unixlink gid_Brand_Unixlink_Soffice
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(soffice);
-    Target = "soffice.bin";
-    Styles = ();
-End
-#else
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -400,7 +391,6 @@ File gid_Brand_File_Bin_Soffice
     Styles = (PACKED);
   #endif
 End
-#endif
 
 #if defined(UNX) && !defined(QUARTZ)
 File gid_Brand_File_Bin_Spadmin
