@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.82 $
+# $Revision: 1.83 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -162,6 +162,14 @@ APP7OBJS = \
     $(OBJ)$/officeloader.obj \
     $(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIB7=$(ADVAPI32LIB) $(SHELL32LIB) $(SHLWAPILIB)
+.ELIF "$(OS)" == "MACOSX"
+APP6TARGET=officeloader
+APP6NOSAL=TRUE
+APP6RPATH=BRAND
+APP6OBJS=$(OBJ)$/copyright_ascii_ooo.obj $(OBJ)$/officeloader.obj
+APP6STDLIBS = $(SALLIB)
+APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
+APP5DEF=    $(MISCX)$/$(TARGET).def
 .ENDIF # WNT
 
 # --- Targets -------------------------------------------------------------
