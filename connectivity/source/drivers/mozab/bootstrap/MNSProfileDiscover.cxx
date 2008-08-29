@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MNSProfileDiscover.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -482,6 +482,8 @@ namespace connectivity
         ::sal_Bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
 #ifdef MINIMAL_PROFILEDISCOVER
+            (void)product; /* avoid warning about unused parameter */
+            (void)profileName; /* avoid warning about unused parameter */
             return sal_True;
 #else
             ::rtl::OUString path = getProfilePath(product,profileName);
