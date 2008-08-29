@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,7 +30,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=presenter
+PRJNAME=sdext
 TARGET=PresenterScreen
 GEN_HID=FALSE
 EXTNAME=presenter
