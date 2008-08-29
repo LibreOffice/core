@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MMozillaBootstrap.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,8 @@ void MozillaBootstrap::Init()
     MNS_Init(aProfileExists);
 
     m_ProfileManager = new ProfileManager();
+#else
+    (void)aProfileExists; /* avoid warning about unused parameter */
 #endif
     m_ProfileAccess = new ProfileAccess();
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,rtl::OUString());
@@ -165,6 +167,8 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
 #ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->bootupProfile(product,profileName);
 #else
+    (void)product; /* avoid warning about unused parameter */
+    (void)profileName; /* avoid warning about unused parameter */
         return -1;
 #endif
 }
@@ -205,6 +209,8 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
 #ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->setCurrentProfile(product,profileName);
 #else
+    (void)product; /* avoid warning about unused parameter */
+    (void)profileName; /* avoid warning about unused parameter */
     return ::rtl::OUString();
 #endif
 }
@@ -225,6 +231,7 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
 
     return xRunnable.StartProxy(aCode);;
 #else
+    (void)aCode; /* avoid warning about unused parameter */
     return -1;
 #endif
 }
