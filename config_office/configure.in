@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-09-01 09:50:13 $
+dnl * Date: $Date: 2008-09-01 10:02:38 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.287 $ )
+AC_REVISION( $Revision: 1.288 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -5488,7 +5488,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -z "$enable_reportdesign" -o "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_REPORTDESIGN=YES
   AC_MSG_CHECKING([which jfreereport libs to use])
