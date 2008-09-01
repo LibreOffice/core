@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-08-27 13:55:44 $
+dnl * Date: $Date: 2008-09-01 09:50:13 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.286 $ )
+AC_REVISION( $Revision: 1.287 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -5413,7 +5413,7 @@ if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES"; then
 fi
 
 AC_MSG_CHECKING([whether to build the PDF Import extension])
-if test -z "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
+if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   AC_MSG_RESULT([yes])
   BUILD_TYPE="$BUILD_TYPE XPDF"
   ENABLE_PDFIMPORT=YES
@@ -5424,7 +5424,7 @@ fi
 AC_SUBST(ENABLE_PDFIMPORT)
 
 AC_MSG_CHECKING([whether to build the MediaWiki Editor extension])
-if test -z "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_MEDIAWIKI=YES
   AC_MSG_CHECKING([which Apache commons-* libs to use])
