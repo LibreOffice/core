@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpage.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1291,12 +1291,28 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
     // copy things from source
+    // Warning: this leads to slicing (see issue 93186) and has to be
+    // removed as soon as possible.
     *this = rSrcPage;
 
     // be careful and correct eListKind, a member of SdrObjList which
     // will be changed by the SdrOIbjList::operator= before...
     eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+
+    // The previous assignment to *this may have resulted in a call to
+    // createUnoPage at a partially initialized (sliced) SdrPage object.
+    // Due to the vtable being not yet fully set-up at this stage,
+    // createUnoPage() may have been called at the wrong class.
+    // To force a call to the right createUnoPage() at a later time when the
+    // new object is full constructed mxUnoPage is disposed now.
+    uno::Reference<lang::XComponent> xComponent (mxUnoPage, uno::UNO_QUERY);
+    if (xComponent.is())
+    {
+        mxUnoPage = NULL;
+        xComponent->dispose();
+    }
 }
+
 SdrPage::~SdrPage()
 {
     if( mxUnoPage.is() ) try
@@ -1586,7 +1602,6 @@ void SdrPage::SetModel(SdrModel* pNewModel)
                 pPage2->ChangeModel( pNewModel );
         }
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
