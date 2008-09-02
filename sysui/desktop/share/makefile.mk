@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.28 $
+# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -85,10 +85,14 @@ MIMELIST = \
     oasis-database \
     oasis-web-template \
     ms-excel-sheet-12 \
+    ms-excel-sheet \
     ms-excel-template-12 \
     ms-powerpoint-presentation-12 \
+    ms-powerpoint-presentation \
     ms-powerpoint-template-12 \
     ms-word-document-12 \
+    ms-word-document \
+    ms-word-document2 \
     ms-word-template-12 \
     openxmlformats-officedocument-presentationml-presentation \
     openxmlformats-officedocument-presentationml-template \
