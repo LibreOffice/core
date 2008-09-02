@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModuleCtrl.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -416,7 +416,7 @@ public class ModuleCtrl {
         // not installed during deinstallation and therefore gets "IGNORE"
         // in function setDatabaseSettings
 
-        if ( ! packageData.showInUserInstallOnly() ) {
+        if ( packageData.showInUserInstallOnly() ) {
             packageData.setSelectionState(PackageDescription.IGNORE);
             // too late to hide the module
             // packageData.setIsHidden(true);
