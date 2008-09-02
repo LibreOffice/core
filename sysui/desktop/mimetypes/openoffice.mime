@@ -69,3 +69,15 @@ application/vnd.openxmlformats-officedocument.presentationml.template
     
 application/vnd.ms-powerpoint.template.macroenabled.12
     ext: potm
+
+application/vnd.ms-excel.sheet.binary.macroenabled.12
+    ext: xlsb
+
+application/vnd.ms-word
+    ext: doc
+
+application/vnd.ms-excel
+    ext: xls
+
+application/vnd.ms-powerpoint
+    ext: ppt
