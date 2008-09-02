@@ -40,7 +40,9 @@ rm -rf $RPM_BUILD_ROOT/*
 
 %triggerin -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ -x /opt/gnome/bin/update-desktop-database ]; then
+  echo Update Desktop Database
   /opt/gnome/bin/update-desktop-database -q /usr/share/applications
+  /opt/gnome/bin/update-desktop-database 
 fi 
 
 %triggerun -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
@@ -51,8 +53,10 @@ fi
 if [ "$2" = "0" ] ; then  
   # the triggering package gets removed
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    echo Update Desktop Database
     /opt/gnome/bin/update-desktop-database -q /usr/share/applications
-  fi 
+    /opt/gnome/bin/update-desktop-database 
+fi 
 fi
 
 %post
@@ -61,6 +65,12 @@ fi
 if [ -x /usr/bin/update-mime-database ]; then
   update-mime-database /usr/share/mime
 fi
+
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
+  echo Update Desktop Database
+  /opt/gnome/bin/update-desktop-database -q /usr/share/applications
+  /opt/gnome/bin/update-desktop-database 
+fi 
 
 # run only on first install, since postun is run when updating
 # post would be run before the old files are removed 
