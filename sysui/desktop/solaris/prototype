@@ -1,31 +1,37 @@
 i pkginfo=pkginfo
 i copyright=./copyright
 i depend=depend
+i postinstall=postinstall
+i postremove=postremove
 d none etc 0755 root sys
 d none usr 0755 root sys
 d none usr/bin 0755 root bin
-s none usr/bin/soffice=../../etc/%PREFIX/program/soffice
+s none usr/bin/soffice=../../opt/%PREFIX/program/soffice
 f none usr/bin/%PREFIX=%SOURCE/openoffice.sh 0755 root bin
 f none usr/bin/%PREFIX-printeradmin=%SOURCE/printeradmin.sh 0755 root bin
 d none usr/share 0755 root sys
 d none usr/share/applications 0755 root other
-d none usr/share/gnome 0755 root other
-d none usr/share/gnome/application-registry 0755 root other
-d none usr/share/gnome/mime-info 0755 root other
+d none usr/share/mime 0755 root root
+d none usr/share/mime/packages 0755 root root
+d none usr/share/application-registry 0755 root other
+d none usr/share/mime-info 0755 root other
 d none usr/share/pixmaps 0755 root other
+d none share/mime 0755 root other
+d none share/mime/packages 0755 root other
 !default 0644 root bin
 e build etc/mime.types=./mime.types
 e build etc/mailcap=mailcap
-f none usr/share/gnome/application-registry/%PREFIX.applications=%SOURCE/openoffice.applications
-s none usr/share/applications/%PREFIX-writer.desktop=/etc/%PREFIX/share/xdg/writer.desktop
-s none usr/share/applications/%PREFIX-calc.desktop=/etc/%PREFIX/share/xdg/calc.desktop
-s none usr/share/applications/%PREFIX-draw.desktop=/etc/%PREFIX/share/xdg/draw.desktop
-s none usr/share/applications/%PREFIX-impress.desktop=/etc/%PREFIX/share/xdg/impress.desktop
-s none usr/share/applications/%PREFIX-math.desktop=/etc/%PREFIX/share/xdg/math.desktop
-s none usr/share/applications/%PREFIX-base.desktop=/etc/%PREFIX/share/xdg/base.desktop
-s none usr/share/applications/%PREFIX-printeradmin.desktop=/etc/%PREFIX/share/xdg/printeradmin.desktop
-f none usr/share/gnome/mime-info/%PREFIX.keys=%SOURCE/openoffice.keys
-f none usr/share/gnome/mime-info/%PREFIX.mime=%SOURCE/openoffice.mime
+f none usr/share/mime/packages/%PREFIX.xml=%SOURCE/openoffice.org.xml
+f none usr/share/application-registry/%PREFIX.applications=%SOURCE/openoffice.applications
+s none usr/share/applications/%PREFIX-writer.desktop=../../../opt/%PREFIX/share/xdg/writer.desktop
+s none usr/share/applications/%PREFIX-calc.desktop=../../../opt/%PREFIX/share/xdg/calc.desktop
+s none usr/share/applications/%PREFIX-draw.desktop=../../../opt/%PREFIX/share/xdg/draw.desktop
+s none usr/share/applications/%PREFIX-impress.desktop=../../../opt/%PREFIX/share/xdg/impress.desktop
+s none usr/share/applications/%PREFIX-math.desktop=../../../opt/%PREFIX/share/xdg/math.desktop
+s none usr/share/applications/%PREFIX-base.desktop=../../../opt/%PREFIX/share/xdg/base.desktop
+s none usr/share/applications/%PREFIX-printeradmin.desktop=/opt/%PREFIX/share/xdg/printeradmin.desktop
+f none usr/share/mime-info/%PREFIX.keys=%SOURCE/openoffice.keys
+f none usr/share/mime-info/%PREFIX.mime=%SOURCE/openoffice.mime
 f none usr/share/pixmaps/%ICONPREFIX-writer.png=../icons/hicolor/48x48/apps/writer.png
 f none usr/share/pixmaps/%ICONPREFIX-calc.png=../icons/hicolor/48x48/apps/calc.png
 f none usr/share/pixmaps/%ICONPREFIX-draw.png=../icons/hicolor/48x48/apps/draw.png
@@ -57,3 +63,4 @@ f none usr/share/pixmaps/%ICONPREFIX-oasis-master-document.png=../icons/hicolor/
 f none usr/share/pixmaps/%ICONPREFIX-oasis-formula.png=../icons/hicolor/48x48/mimetypes/oasis-formula.png
 f none usr/share/pixmaps/%ICONPREFIX-oasis-database.png=../icons/hicolor/48x48/mimetypes/oasis-database.png
 f none usr/share/pixmaps/%ICONPREFIX-oasis-web-template.png=../icons/hicolor/48x48/mimetypes/oasis-web-template.png
+
