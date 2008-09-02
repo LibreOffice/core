@@ -8,7 +8,7 @@
 #
 # $RCSfile: productversion.mk,v $
 #
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,29 +51,32 @@ PRODUCTLIST = openoffice.org broffice.org
 
 # default values to minimize maintainance effort 
 PRODUCTVERSION = 3.0
+PRODUCTVERSIONSHORT = 3
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
 # without extension. Since it also does not know how to handle "2-writer"
 # type icons :-), we are stripping all '.' for now.
 # ToDo: maybe we use a product major later ??
-ICONVERSION = $(PRODUCTVERSION:s/.//g)
+ICONVERSION = $(PRODUCTVERSIONSHORT:s/.//g)
 # UNIXWRAPPERNAME variable is used to generate the common desktop files below share/xdg;
 # the default values get replaced by make_installer.pl at (core0x) packaging time;
 # another wrapper name can be forced by --with-unix-wrapper configure option
 # which is need by other distributors, see http://www.openoffice.org/issues/show_bug.cgi?id=75366
-UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{PRODUCTVERSION}}'
+UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
 
 PRODUCTNAME.openoffice.org = OpenOffice.org
 PRODUCTVERSION.openoffice.org = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.openoffice.org = $(PRODUCTVERSIONSHORT)
 PKGVERSION.openoffice.org = $(PKGVERSION)
-UNIXFILENAME.openoffice.org = $(PRODUCTNAME.openoffice.org:l)$(PRODUCTVERSION.openoffice.org)
+UNIXFILENAME.openoffice.org = $(PRODUCTNAME.openoffice.org:l)$(PRODUCTVERSIONSHORT.openoffice.org)
 ICONPREFIX.openoffice.org = $(UNIXFILENAME.openoffice.org:s/.//g)
 
 PRODUCTNAME.broffice.org = BrOffice.org
 PRODUCTVERSION.broffice.org = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.broffice.org = $(PRODUCTVERSIONSHORT)
 PKGVERSION.broffice.org = $(PKGVERSION)
-UNIXFILENAME.broffice.org = $(PRODUCTNAME.broffice.org:l)$(PRODUCTVERSION.broffice.org)
+UNIXFILENAME.broffice.org = $(PRODUCTNAME.broffice.org:l)$(PRODUCTVERSIONSHORT.broffice.org)
 ICONPREFIX.broffice.org = $(UNIXFILENAME.broffice.org:s/.//g)
 
 
