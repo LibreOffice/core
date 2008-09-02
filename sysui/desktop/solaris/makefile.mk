@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,6 +84,31 @@ $(MISC)/{$(PRODUCTLIST)}/copyright : $$(@:f)
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" > $@
 
+# --- postinstall--------------------------------
+
+
+# Copy the postinstall file to $(MISC) 
+$(MISC)/{$(PRODUCTLIST)}/postinstall : $$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @cat $(@:f) | tr -d "\015" > $@
+
+# --- postremove--------------------------------
+
+# Copy the postremove file to $(MISC) 
+$(MISC)/{$(PRODUCTLIST)}/postremove : $$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @cat $(@:f) | tr -d "\015" > $@
+
+# --- openoffice.xml---------------------------
+
+# Copy the openoffice.org.xml file to $(MISC) 
+#$(MISC)/$(foreach,i,$(PRODUCTLIST) $i/$i.xml) :  $(COMMONMISC)/$$(@:b)/openoffice.org.xml
+$(MISC)/$(foreach,i,$(PRODUCTLIST) $(MISC)/$i/openoffice.org.xml) :  $(COMMONMISC)/$$(@:b)/openoffice.org.xml
+    $(MKDIRHIER) $(@:d)
+    echo hier hier $@
+    cat $< | tr -d "\015" > $@
+
+
 # --- prototype ---------------------------------------------------
 
 # Copy the prototype file to $(MISC)
@@ -93,11 +118,12 @@ $(MISC)/{$(PRODUCTLIST)}$/prototype : $$(@:f) ../productversion.mk makefile.mk
 
 # --- packaging ---------------------------------------------------
 
-$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap} makefile.mk
+#$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap postinstall postremove} makefile.mk $(MISC)/$$(@:b:b:s/-desktop-integration//)/$$(@:b:b:s/-desktop-integration//).xml
+$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap postinstall postremove} makefile.mk $(MISC)/$$(@:b:b:s/-desktop-integration//)/openoffice.org.xml
 $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
     @-$(RM) $(BIN)$/$(@:f)
     @$(MKDIRHIER) $(@:d)
-    pkgmk -r . -f $(MISC)$/$(@:b:b:s/-/ /:1)$/prototype -o -d $(PKGDIR) ARCH=$(PKGARCH) VERSION=$(PKGVERSION.$(@:b:s/-/ /:1)),REV=$(PKGREV).$(PKGDATESTRING)
+    pkgmk -r . -f $(MISC)$/$(@:b:b:s/-/ /:1)$/prototype -o -d $(PKGDIR) ARCH=$(PKGARCH) VERSION=$(PKGVERSION.$(@:b:s/-/ /:1)),REV=$(PKGREV).$(PKGDATESTRING) 
     $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)30-desktop-int
     @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)30-desktop-int | gzip > $@
     @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)-desktop-int30
