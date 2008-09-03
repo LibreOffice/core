@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: findsofficepath.c,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,6 +112,7 @@ static char* platformSpecific()
 #else
 
 #include <unistd.h>
+#include <limits.h>
 
 /*
  * Gets the installation path from the PATH environment variable.
@@ -137,7 +138,7 @@ static char* platformSpecific()
     char* resolved = NULL;
     char* sep = NULL;
 
-    char buffer[1024];
+    char buffer[PATH_MAX];
     int pos;
 
     /* get the value of the PATH environment variable */
