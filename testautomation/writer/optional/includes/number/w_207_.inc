@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_207_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:32:04 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:19:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -45,6 +45,9 @@ sub w_207_
 end sub
 
 testcase tToolsNumbering12
+   QaErrorLog "Testcase outcommented due to incompability with new Filtername-behaviour."
+   goto endsub
+
     printlog "Import / Export Regression Test"
     '/// Import / Export Regression-Test    
     Dim DocFileList( 30 ) as String, sCurrentFilter as string
@@ -69,16 +72,16 @@ testcase tToolsNumbering12
             printlog " - (" & i & "/" & x & "): " & DocFileList(i)
 			For k = 1 to 3
 				Select Case k
-					Case 3
-						sCurrentFilter = "StarWriter 5.0 (.sdw)"
-						sCurrentFilterExt = "sdw"
-					Case 2
-						sCurrentFilter = hGetUIFiltername("StarOffice XML (Writer)") & " (.sxw)"
-						sCurrentFilterExt = "sxw"
 					Case 1
-						sCurrentFilterExt = WriterFilterExtension(0)    
-						sCurrentFilter = gWriterFilter
-				end select
+						sCurrentFilter = "writer8" 'gWriterFilter
+                        sCurrentFilterExt = "odt" 'WriterFilterExtension(0)
+					Case 2
+						sCurrentFilter = "StarOffice XML (Writer)" 'hGetUIFiltername("StarOffice XML (Writer)") & " (.sxw)"
+						sCurrentFilterExt = "sxw"
+                    Case 3
+						sCurrentFilter = "StarWriter 5.0/GlobalDocument" 'StarWriter 5.0 (.sdw)
+						sCurrentFilterExt = "sdw"
+                end select
 
 				'/// Open a new writer document
 				Call hNewDocument
@@ -91,7 +94,7 @@ testcase tToolsNumbering12
 					Warnlog "  - Filter Selection dialog is up !"
 					Filterauswahl.Cancel
 					Call hCloseDocument
-				end if
+				endif
 				Sleep 5
 				Kontext "AsciiFilterOptionen"
 				if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
@@ -100,7 +103,7 @@ testcase tToolsNumbering12
 				Kontext "SecurityWarning"
 				if SecurityWarning.Exists then
 					SecurityWarning.Cancel
-				end if
+				endif
 	
 				'/// check if loaded
 				if GetDocumentCount >= 1 then
@@ -117,7 +120,7 @@ testcase tToolsNumbering12
 				else
                 	Warnlog "  - Doc probably didn't get loaded !!!"
 				end if
-			next k				
+			next k
             Sleep 2
         next i
     next j
@@ -134,7 +137,7 @@ testcase tToolsNumbering13
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
     '/// Document has Heading1-Heading3 formatted, be sure it is
-    Call wTypeKeys ("<Mod1 Home>")
+    Call wDokSchreiben ("<Mod1 Home>")
     '/// Point cursor to top of document with <STRG HOME>
     Select Case iSprache
 		case 01 : iCounter = 2
@@ -157,14 +160,14 @@ testcase tToolsNumbering13
 		case else : iCounter = 2
 	end select
 	For i = 1 to 3
-        Call wTypeKeys ("<Shift End>")
+        Call wDokSchreiben ("<Shift End>")
         '/// Select first to third entry and check it i formatted with 'Heading1','Heading2','Heading3'
         Kontext "Textobjectbar"
         if Vorlage.GetSelIndex <> ( i + iCounter ) then
             Warnlog "Heading " & i & " not " & ( i + iCounter ) & " but " & Vorlage.GetSelIndex
-        end if
-        Call wTypeKeys ( "<Home>" )
-        Call wTypeKeys ( "<Down>" )
+        endif
+        Call wDokSchreiben ( "<Home>" )
+        Call wDokSchreiben ( "<Down>" )
     next i
     
     Call hCloseDocument
