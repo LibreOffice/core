@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: export_graphic_2.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:41:38 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:17:40 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -629,36 +629,53 @@ testcase tSVG
    '/// open the document
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
 
-   '/// save it ///'
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-         if (iSprache <> 82) then
-             hCloseDocument ()
-             sleep 5
-             '/// load file in writer as text ///'
-             sTextFilter = "Text"
-             
-             hFileOpenWithFilter (OutputGrafikTBO+sExt, sTextFiltername, FALSE)
-             sTemp = gApplication
-             gApplication = "writer"
-             sleep 5 ' wait for document to be loaded
-             bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC "+chr(34)+ "-//W3C//DTD SVG 1.1//EN"+chr(34)+" "+chr(34)+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"+chr(34)+">",true)
-             if (bTemp = TRUE) then
-                Printlog "OK"
-             else
-                warnlog "DOCTYPE not found in svg file :-("
-             endif
-             gApplication = sTemp
-         else
-             qaerrorlog "disabled for 82: #111017#"
-         endif
-      else
-         warnlog "File didn't get saved :-("
-      endif
-   endif
+    '/// save it ///'
+    '------------------------\
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        '------------------------\
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
+            '------------------------\
+            if (iSprache <> 82) then
+                hCloseDocument ()
+                sleep 5
+                '/// load file in writer as text ///'
+                sTextFilter = "Text"
+                
+                hFileOpenWithFilter (OutputGrafikTBO+sExt, sTextFiltername, FALSE)
+                printlog "if dialog 'AsciiFilterOptionen' comes up, say OK"
+                Kontext "AsciiFilterOptionen"
+                '-------------------------------\
+                If AsciiFilterOptionen.Exists(3) then
+                    AsciiFilterOptionen.OK
+                else
+                    warnlog "No ASCII filter Options Dialog?"
+                endif
+                '-------------------------------/
+                sTemp = gApplication
+                gApplication = "writer"
+                sleep 5 ' wait for document to be loaded
+                bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC "+chr(34)+ "-//W3C//DTD SVG 1.1//EN"+chr(34)+" "+chr(34)+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"+chr(34)+">",true)
+                '-------------------------------\
+                if (bTemp = TRUE) then
+                    Printlog "OK"
+                else
+                    warnlog "DOCTYPE not found in svg file :-("
+                endif
+                '-------------------------------/
+                gApplication = sTemp
+            else
+                qaerrorlog "disabled for 82: #111017#"
+            endif
+            '--------------------------/
+            else
+            warnlog "File didn't get saved :-("
+        endif
+        '------------------------/
+    endif
+    '------------------------/
 
-   call hCloseDocument
+    call hCloseDocument
 
 endcase
 '-------------------------------------------------------------------------------
