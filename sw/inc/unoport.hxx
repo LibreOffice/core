@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoport.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,10 @@ enum SwTextPortionType
     PORTION_REDLINE_END,
     PORTION_RUBY_START,
     PORTION_RUBY_END,
-    PORTION_SOFT_PAGEBREAK
+    PORTION_SOFT_PAGEBREAK,
+    PORTION_FIELD_START,
+    PORTION_FIELD_END,
+    PORTION_FIELD_START_END
 };
 
 class SwXRubyPortion;
