@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.hxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -471,7 +471,9 @@ public:
     void DrawBackground( const SwLinePortion &rPor ) const;
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
     inline void DrawBackBrush( const SwLinePortion &rPor ) const
-        { if( pFnt->GetBackColor() ) _DrawBackBrush( rPor ); }
+    { /* if( pFnt->GetBackColor() ) */ _DrawBackBrush( rPor ); }
+
+        void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
 
     inline void NotifyURL( const SwLinePortion &rPor ) const
         { if( URLNotify() ) _NotifyURL( rPor ); }
