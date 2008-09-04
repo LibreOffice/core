@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.158 $
+ * $Revision: 1.159 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,7 +248,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand=LONG_MAX);
+    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand=LONG_MAX, BOOL consumedByField=FALSE);
 
     void SetToggleAttr(BYTE nId, bool bOn)
     {
@@ -366,6 +366,32 @@ public:
     void Swap(FieldEntry &rOther) throw();
 };
 
+class WW8NewFieldCtx
+{
+private:
+    SwNodeIndex maPtNode;
+    xub_StrLen mnPtCntnt;
+    ::rtl::OUString sBookmarkName;
+    ::rtl::OUString sBookmarkType;
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> Param_t;
+    typedef ::std::vector< Param_t > Params_t;
+    Params_t maParams;
+  SwPaM * mpPaM;
+
+public:
+    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sBookmarkType);
+    ~WW8NewFieldCtx();
+
+    SwNodeIndex GetPtNode() { return maPtNode; };
+    xub_StrLen GetPtCntnt() { return mnPtCntnt; };
+    ::rtl::OUString GetBookmarkName();
+    ::rtl::OUString GetBookmarkType();
+    void AddParam(::rtl::OUString name, ::rtl::OUString value);
+    void SetCurrentFieldParamsTo(SwFieldBookmark &rFieldBookmark);
+
+};
+
+
 //-----------------------------------------
 //    Mini-Merker fuer einige Flags
 //-----------------------------------------
@@ -398,6 +424,7 @@ private:
     bool mbWasParaEnd;
     bool mbHasBorder;
     bool mbFirstPara;
+    std::deque<WW8NewFieldCtx *> maFieldCtxStack;
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
@@ -851,6 +878,9 @@ private:
     */
     std::deque<FieldEntry> maFieldStack;
     typedef std::deque<FieldEntry>::const_iterator mycFieldIter;
+
+    typedef std::deque<WW8NewFieldCtx *> WW8NewFieldCtxStack_t;
+    WW8NewFieldCtxStack_t maNewFieldCtxStack;
 
     /*
     A stack of open footnotes. Should only be one in it at any time.
