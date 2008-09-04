@@ -8,7 +8,7 @@
  *
  * $RCSfile: unoobj.hxx,v $
  *
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,8 @@
 #include <com/sun/star/text/XRedline.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
+
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <cppuhelper/implbase5.hxx> // helper for implementations
@@ -84,9 +86,12 @@
 #include "TextCursorHelper.hxx"
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <com/sun/star/text/XFormField.hpp>
 
 #include <unomid.h>
 #include <tools/link.hxx>
+
+#include <IDocumentBookmarkAccess.hxx>
 
 class SwUnoCrsr;
 class SwCursor;
@@ -579,6 +584,7 @@ SwRefBookmarkBaseClass;
 class SwXBookmark : public SwRefBookmarkBaseClass,
     public SwClient
 {
+protected:
     SwEventListenerContainer    aLstnrCntnr;
     SwDoc*                      pDoc;
     String                      m_aName;
@@ -622,13 +628,36 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    void attachToRangeEx(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange, IDocumentBookmarkAccess::BookmarkType eMark)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    virtual void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
     //SwClient
     virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     SwBookmark*     GetBookmark() const { return (SwBookmark*)GetRegisteredIn(); }
     SwDoc*          GetDoc(){return pDoc;}
+};
+
+typedef cppu::ImplInheritanceHelper1< SwXBookmark, ::com::sun::star::text::XFormField > SwXFieldmark_BASE;
+
+class SwXFieldmark : public SwXFieldmark_BASE
+{
+private:
+    bool isReplacementObject;
+public:
+    SwXFieldmark(bool isReplacementObject, SwBookmark* pBkm = 0, SwDoc* pDoc = 0);
+
+    virtual void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getDescription(void)  throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::sal_Int16 SAL_CALL getType(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getRes(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setType( ::sal_Int16 fieldType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRes( ::sal_Int16 res ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDescription( const ::rtl::OUString& description ) throw (::com::sun::star::uno::RuntimeException);
+
+//    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException);
+
 };
 
 /*-----------------23.02.98 10:45-------------------
