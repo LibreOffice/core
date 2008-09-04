@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IDocumentBookmarkAccess.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,12 @@
 #include <sal/types.h>
 
 class SwBookmark;
+class SwFieldBookmark;
 class SwBookmarks;
 class SwPaM;
 class KeyCode;
 class String;
+struct SwPosition;
 class SwTxtNode;
 
 /** Provides access to the bookmarks of a document.
@@ -52,8 +54,11 @@ public:
         DDE_BOOKMARK,
         UNO_BOOKMARK,
         // --> OD 2007-10-11 #i81002# - bookmark type for cross-references
-        CROSSREF_BOOKMARK
+        CROSSREF_BOOKMARK,
         // <--
+ //     FIELDMARK, // for future use...
+         FORM_FIELDMARK_TEXT,
+         FORM_FIELDMARK_NO_TEXT
     };
 
     // --> OD 2007-11-16 #i83479#
@@ -207,6 +212,11 @@ public:
     virtual String makeCrossRefBookmark(
                 /*[in]*/const SwTxtNode& rTxtNode,
                 /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType ) = 0;
+
+    virtual SwBookmark* getFieldBookmarkFor(const SwPosition &pos) const = 0;
+    virtual SwFieldBookmark* getFormFieldBookmarkFor(const SwPosition &pos) const = 0;
+    virtual SwBookmark* getNextFieldBookmarkFor(const SwPosition &pos) const = 0;
+    virtual SwBookmark* getPrevFieldBookmarkFor(const SwPosition &pos) const = 0;
 
 protected:
     virtual ~IDocumentBookmarkAccess() {};
