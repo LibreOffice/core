@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extras_file_open.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:39:53 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:15:59 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -64,8 +64,7 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     dim sExtension as String      ' filter: determines whether to test the file
     
     dim iCurrentTemplate as Integer ' increment: current template from lsFile()
-    dim iCounterToBreak as Integer  ' increment: after 10 files: restart
-    const RESETCOUNTER = 30
+    dim iTemplateCount as integer
     
     dim bSkipFile as boolean      ' turns true if file is to be skipped
     dim brc as boolean            ' some multi purpose boolan returncode
@@ -106,6 +105,17 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     printlog( "Using path..: " & sRootPath )
     printlog( "Using filter: " & sFilter   )
     GetAllFileList ( sRootPath, sFilter, lsFile() )
+    hListDelete( lsFile(), 1 )
+    iTemplateCount = listCount( lsFile() )
+    for iCurrentTemplate = 1 to iTemplateCount
+        if ( instr( lsFile( iCurrentTemplate ), "~lock." ) > 0 ) then
+            qaerrorlog( "There are lock-files in the shared layer. They will be removed" )
+            kill( lsFile( iCurrentTemplate ) )
+            hListDelete( lsFile(), iCurrentTemplate )
+        endif
+    next iCurrentTemplate
+    
+    
     hListPrint ( lsFile() , "" , "" )
     if ( listcount( lsfile() ) = 1 ) then
         if ( gProductName = "OpenOffice.org" ) then
@@ -117,29 +127,18 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     	endif
     endif
 
-    ' unfortunately we coannot load all samples/templates in a row, the office
-    ' freeezes at some point. So we do a restart every n files.
-    printlog( "Office will be restarted every " & RESETCOUNTER & " files." )
-    iCounterToBreak = 0
-   
     '///+<li>Go through the list of samples/templates and do things</li>
     '///<ul>
-    for iCurrentTemplate = 2 to ListCount ( lsFile() )
+    iTemplateCount = listCount( lsFile() )
+    for iCurrentTemplate = 1 to iTemplateCount
    
-        iCounterToBreak = iCounterToBreak + 1
-      
-        '///+<li>Restart the office after every 10 templates/samples loaded</li>
-        if ( iCounterToBreak = RESETCOUNTER ) then
-            printlog( CFN & "Exit and restart StarOffice" )
-            iCounterToBreak = 0
-            call ExitRestartTheOffice()
-        end if
+        printlog( "" )
+        printlog( "Loading file " & iCurrentTemplate & " of " & iTemplateCount )
       
         ' sFileIn holds the file we currently work with
         sFileIn = lsFile( iCurrentTemplate )
         
         '///+<li>Load the file</li>
-        printlog( "" )
         brc = hFileOpen( sFileIn ) 
         brc = hHandleActivesOnLoad( 0 , 2 )
         
@@ -183,8 +182,8 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
   
         '///+<li>Delete the file</li>
         brc = hDeleteFile( sFileOut )
-        '///</ul> 
-      
+        '///</ul>
+        
     next iCurrentTemplate
     '///</ul>
    
