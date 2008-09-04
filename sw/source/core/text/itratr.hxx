@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itratr.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,18 +75,19 @@ private:
     inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
     const void* aMagicNo[ SW_SCRIPTS ];
     MSHORT aFntIdx[ SW_SCRIPTS ];
+    const SwTxtNode* m_pTxtNode;
 
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
-    inline SwAttrIter()
-        : pShell(0), pFnt(0), pLastOut(0),  nChgCnt(0), pRedln(0), nPropFont(0) {}
+    inline SwAttrIter(SwTxtNode* pTxtNode)
+        : pShell(0), pFnt(0), pLastOut(0),  nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode) {}
 
 public:
     // Konstruktor, Destruktor
     inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
-        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0)
+        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode)
         { CtorInitAttrIter( rTxtNode, rScrInf ); }
 
     virtual ~SwAttrIter();
