@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.163 $
+ * $Revision: 1.164 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,6 +148,9 @@
 #include "formatclipboard.hxx"
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+
+#include <bookmrk.hxx>
+#include <doc.hxx>
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
@@ -1471,7 +1474,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_Fly_Change, KS_Draw_Change,
                        KS_SpecialInsert,
                        KS_EnterCharCell,
+                       KS_GotoNextFieldBookmark,
+                       KS_GotoPrevFieldBookmark,
                        KS_Ende };
+
+
 
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
@@ -1885,10 +1892,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                 case KEY_TAB:
                 {
+
 #ifdef SW_CRSR_TIMER
                     BOOL bOld = rSh.ChgCrsrTimerFlag( FALSE );
 #endif
-                    if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
+                    if (rSh.IsFormProtected() || rSh.IsInFieldBookmark()!=NULL || rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
+                        eKeyState=KS_GotoNextFieldBookmark;
+                    }
+                    else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
                     {
                         // --> OD 2007-10-02 #b660435#
@@ -1937,8 +1948,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
 #ifdef SW_CRSR_TIMER
                     BOOL bOld = rSh.ChgCrsrTimerFlag( FALSE );
 #endif
-                    if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
-                        !rSh.HasReadonlySel() )
+                    if (rSh.IsFormProtected() || rSh.IsInFieldBookmark()!=NULL || rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
+                        eKeyState=KS_GotoPrevFieldBookmark;
+                    }
+                    else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
+                         !rSh.HasReadonlySel() )
                     {
                         // --> OD 2007-10-02 #b660435#
 //                        if (rSh.IsFirstOfNumRule()) // #i23725#
@@ -2202,7 +2216,29 @@ KEYINPUT_CHECKTABLE_INSDEL:
             aCh = '\t';
             // kein break!
         case KS_InsChar:
-        if( !rSh.HasReadonlySel() )
+        if (rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
+            SwFieldBookmark *fieldBM=rSh.IsInFormFieldBookmark(); //$flr refactor!!!
+               ASSERT(fieldBM!=NULL, "Where is my FieldBookmark??");
+            if (fieldBM!=NULL) {
+            fieldBM->SetChecked(!fieldBM->IsChecked());
+            SwDocShell* pDocSh = rView.GetDocShell();
+            SwDoc *pDoc=pDocSh->GetDoc();
+            ASSERT(fieldBM->GetOtherBookmarkPos()!=NULL, "where is the otherpos?");
+            if (fieldBM->GetOtherBookmarkPos()!=NULL) {
+                SwPaM aPaM(fieldBM->GetBookmarkPos(), *fieldBM->GetOtherBookmarkPos());
+                if (0) {
+                rSh.StartAllAction();  //$flr TODO: understand why this not works
+                pDoc->SetModified(aPaM);
+                rSh.EndAllAction();
+                } else {
+                rSh.CalcLayout(); // workaround
+                }
+            }
+
+            }
+//          rSh.Overwrite(String('X'));
+            eKeyState = KS_Ende;
+        } else if( !rSh.HasReadonlySel() )
         {
             BOOL bIsNormalChar = GetAppCharClass().isLetterNumeric(
                                                         String( aCh ), 0 );
@@ -2312,6 +2348,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 // <--
                 nKS_NUMINDENTINC_Count = 2;
                 break;
+
+        case KS_GotoNextFieldBookmark:
+        {
+        SwBookmark *pBM=rSh.GetNextFieldBookmark();
+        if (pBM!=NULL) {
+            rSh.GotoFieldBookmark(pBM);
+        }
+        }
+            break;
+
+        case KS_GotoPrevFieldBookmark:
+        {
+        SwBookmark *pBM=rSh.GetPrevFieldBookmark();
+        if (pBM!=NULL) {
+            rSh.GotoFieldBookmark(pBM);
+        }
+        }
+            break;
 
             case KS_NumIndentDec:
                 // --> OD 2008-06-16 #i90078#
