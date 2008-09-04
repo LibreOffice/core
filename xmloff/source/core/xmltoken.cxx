@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.131 $
+ * $Revision: 1.132 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3037,6 +3037,13 @@ namespace xmloff { namespace token {
         TOKEN( "leave-gap",             XML_LEAVE_GAP ),
         TOKEN( "use-zero",              XML_USE_ZERO ),
         TOKEN( "ignore",                XML_IGNORE ),
+
+        // enhanced fields
+        TOKEN( "fieldmark",             XML_FIELDMARK ),
+        TOKEN( "fieldmark-start",       XML_FIELDMARK_START ),
+        TOKEN( "fieldmark-end",         XML_FIELDMARK_END ),
+        TOKEN( "urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0",   XML_N_FIELD ),
+        TOKEN( "field",         XML_NP_FIELD ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
