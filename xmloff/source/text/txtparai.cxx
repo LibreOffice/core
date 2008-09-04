@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparai.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1473,6 +1473,14 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_BOOKMARK:
     case XML_TOK_TEXT_BOOKMARK_START:
     case XML_TOK_TEXT_BOOKMARK_END:
+        pContext = new XMLTextMarkImportContext( rImport,
+                                                 *rImport.GetTextImport().get(),
+                                                 nPrefix, rLocalName );
+        break;
+
+    case XML_TOK_TEXT_FIELDMARK:
+    case XML_TOK_TEXT_FIELDMARK_START:
+    case XML_TOK_TEXT_FIELDMARK_END:
         pContext = new XMLTextMarkImportContext( rImport,
                                                  *rImport.GetTextImport().get(),
                                                  nPrefix, rLocalName );
