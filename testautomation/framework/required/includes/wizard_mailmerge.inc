@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_mailmerge.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:17:13 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -1175,7 +1175,7 @@ function hPrintMailMergeDocument() as boolean
     endif
     
     if ( lcase( gPlatform ) = "osx" ) then
-        warnlog( "#i81545# No printer settings on MacOS X" )
+        qaerrorlog( "#i81545# No printer settings on MacOS X" )
         hPrintMailMergeDocument() = true
         exit function
     endif
