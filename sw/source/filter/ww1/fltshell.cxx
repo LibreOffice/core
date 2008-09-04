@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltshell.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,7 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt )
     bOld    = FALSE;    // used for marking Attributes *before* skipping field results
     bLocked = TRUE;     // locke das Attribut --> darf erst
     bCopied = FALSE;    // gesetzt werden, wenn es wieder geunlocked ist
+    bConsumedByField = FALSE;
 }
 
 SwFltStackEntry::SwFltStackEntry(const SwFltStackEntry& rEntry) :
@@ -116,6 +117,7 @@ SwFltStackEntry::SwFltStackEntry(const SwFltStackEntry& rEntry) :
     nMkCntnt= rEntry.nMkCntnt;
     bOld    = rEntry.bOld;
     bLocked = bCopied = TRUE; // when rEntry were NOT bLocked we would never have been called
+    bConsumedByField = rEntry.bConsumedByField;
 }
 
 
@@ -302,7 +304,7 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& pPos)
 // Returned, ob das gesuchte Attribut / die gesuchten Attribute
 // ueberhaupt auf dem Stack standen
 void SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
-                                BOOL bTstEnde, long nHand )
+                                BOOL bTstEnde, long nHand, BOOL consumedByField )
 {
     ASSERT(!nAttrId ||
         (POOLATTR_BEGIN <= nAttrId && POOLATTR_END > nAttrId) ||
@@ -330,8 +332,10 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
                     bF = true;
                 }
             }
-            if (bF)
+            if (bF) {
+                pEntry->bConsumedByField = consumedByField;
                 pEntry->SetEndPos(rPos);
+            }
             continue;
         }
 
@@ -503,7 +507,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 }
             }
             if( !pB->IsOnlyRef() &&
-                ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) )
+                ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) && !pEntry->bConsumedByField)
             {
                 MakeBookRegionOrPoint(pEntry, pDoc, aRegion, TRUE);
                 pDoc->makeBookmark( aRegion, aEmptyKeyCode, rName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
