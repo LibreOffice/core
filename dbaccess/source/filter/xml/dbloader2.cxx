@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,16 +143,19 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
     try
     {
         ::comphelper::NamedValueCollection aMedia( Descriptor );
+        sal_Bool bStreamFromDescr = sal_False;
+        ::rtl::OUString sURL = aMedia.getOrDefault( "URL", ::rtl::OUString() );
+
         Reference< XInputStream > xInStream( aMedia.getOrDefault( "InputStream",  Reference< XInputStream >() ) );
         Reference< XPropertySet > xStorageProperties;
         if ( xInStream.is() )
         {
+            bStreamFromDescr = sal_True;
             xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
                 xInStream, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
         }
         else
         {
-            ::rtl::OUString sURL = aMedia.getOrDefault( "URL", ::rtl::OUString() );
             ::rtl::OUString sSalvagedURL( aMedia.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
 
             ::rtl::OUString sFileLocation( sSalvagedURL.getLength() ? sSalvagedURL : sURL );
@@ -168,7 +171,21 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
             ::rtl::OUString sMediaType;
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
             if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) || sMediaType.equalsAscii(MIMETYPE_VND_SUN_XML_BASE_ASCII) )
+            {
+                if ( bStreamFromDescr && sURL.compareTo( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ), 14 ) != COMPARE_EQUAL );
+                {
+                    // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
+                    // for now the file should be reopened to have read/write access
+                    aMedia.remove( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) ) );
+                    aMedia >>= Descriptor;
+                    try {
+                        if ( xInStream.is() )
+                            xInStream->closeInput();
+                    } catch( Exception& ) {}
+                }
+
                 return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
+            }
             ::comphelper::disposeComponent(xStorageProperties);
         }
     } catch(Exception&){}
