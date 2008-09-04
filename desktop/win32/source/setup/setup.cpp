@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setup.cpp,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,8 @@
 
 //--------------------------------------------------------------------------
 
-#define MAX_STR_LENGTH      1024
+#define MAX_STR_LENGTH     32000
+#define MAX_TEXT_LENGTH     1024
 #define MAX_LANGUAGE_LEN      80
 #define MAX_STR_CAPTION      256
 #define VERSION_SIZE          80
@@ -68,6 +69,7 @@
 #define PARAM_ADMIN         TEXT( "/A " )
 #define PARAM_TRANSFORM     TEXT( " TRANSFORMS=" )
 #define PARAM_REBOOT        TEXT( " REBOOT=Force" )
+#define PARAM_PATCH         TEXT( " /update " )
 #define PARAM_REG_ALL_MSO_TYPES TEXT( "REGISTER_ALL_MSO_TYPES=1 " )
 #define PARAM_REG_NO_MSO_TYPES  TEXT( "REGISTER_NO_MSO_TYPES=1 " )
 
@@ -128,9 +130,10 @@ SetupAppX::SetupAppX()
     m_pTmpName      = NULL;
     m_pLogFile      = NULL;
     m_pModuleFile   = NULL;
+    m_pPatchFiles   = NULL;
     m_pMSIErrorCode = NULL;
 
-    m_pErrorText    = new TCHAR[ MAX_STR_LENGTH ];
+    m_pErrorText    = new TCHAR[ MAX_TEXT_LENGTH ];
     m_pErrorText[0] = '\0';
 
     m_nLanguageID     = 0;
@@ -138,7 +141,6 @@ SetupAppX::SetupAppX()
     m_ppLanguageList  = NULL;
 
     m_bQuiet          = false;
-    m_bAdministrative = false;
     m_bRegNoMsoTypes  = false;
     m_bRegAllMsoTypes = false;
 
@@ -183,6 +185,7 @@ SetupAppX::~SetupAppX()
     if ( m_pLogFile )     delete [] m_pLogFile;
     if ( m_pErrorText )   delete [] m_pErrorText;
     if ( m_pModuleFile )  delete [] m_pModuleFile;
+    if ( m_pPatchFiles )  delete [] m_pPatchFiles;
 }
 
 //--------------------------------------------------------------------------
@@ -424,6 +427,58 @@ boolean SetupAppX::ReadProfile()
 }
 
 //--------------------------------------------------------------------------
+boolean SetupAppX::GetPatches()
+{
+    boolean bRet = true;
+
+    int nPatternLen = lstrlen( m_pModuleFile ) + 7; // 1 for null terminator, 1 for back slash, 5 for extensions
+    TCHAR* pPattern = new TCHAR[ nPatternLen ];
+    TCHAR* pBaseDir = new TCHAR[ nPatternLen ];
+
+    // find 'setup.exe' in the path so we can remove it
+    TCHAR *pFilePart = 0;
+    if ( 0 == GetFullPathName( m_pModuleFile, nPatternLen, pPattern, &pFilePart ) )
+    {
+        SetError( WIN::GetLastError() );
+        bRet = false;
+    }
+    else
+    {
+        if ( pFilePart )
+            *pFilePart = '\0';
+        StringCchCopy( pBaseDir, nPatternLen, pPattern );
+        StringCchCat( pPattern, nPatternLen, TEXT("*.msp") );
+
+        WIN32_FIND_DATA aFindFileData;
+
+        HANDLE hFindPatches = FindFirstFile( pPattern, &aFindFileData );
+
+        if ( hFindPatches != INVALID_HANDLE_VALUE )
+        {
+            bool fNextFile = false;
+            m_pPatchFiles = new TCHAR[ MAX_STR_LENGTH ];
+            StringCchCopy( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pBaseDir );
+            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, aFindFileData.cFileName );
+
+            while ( FindNextFile( hFindPatches, &aFindFileData ) )
+            {
+                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT(";") );
+                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pBaseDir );
+                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, aFindFileData.cFileName );
+            }
+            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+            FindClose( hFindPatches );
+        }
+    }
+
+    delete [] pPattern;
+    delete [] pBaseDir;
+
+    return bRet;
+}
+
+//--------------------------------------------------------------------------
 boolean SetupAppX::GetPathToFile( TCHAR* pFileName, TCHAR** pPath )
 {
     // generate the path to the file =  szModuleFile + FileName
@@ -478,7 +533,7 @@ boolean SetupAppX::GetPathToFile( TCHAR* pFileName, TCHAR** pPath )
 
         if (0xFFFFFFFF == dwFileAttrib)
         {
-            StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pFileName );
+            StringCchCopy( m_pErrorText, MAX_TEXT_LENGTH, pFileName );
             SetError( ERROR_FILE_NOT_FOUND );
             bRet = false;
         }
@@ -754,6 +809,9 @@ boolean SetupAppX::LaunchInstaller( LPCTSTR pParam )
     Log( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
     Log( TEXT( "   Prameters are: %s\r\n" ), pParam );
 
+    OutputDebugStringFormat( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
+    OutputDebugStringFormat( TEXT( "   Prameters are: %s\r\n" ), pParam );
+
     ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
     ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );
 
@@ -866,6 +924,12 @@ boolean SetupAppX::Install( long nLanguage )
     if ( NeedReboot() )
         nParLen += lstrlen( PARAM_REBOOT );
 
+    if ( m_pPatchFiles )
+    {
+        nParLen += lstrlen( PARAM_PATCH );
+        nParLen += lstrlen( m_pPatchFiles );
+    }
+
     if ( pTransform )
     {
         nParLen += lstrlen( PARAM_TRANSFORM );
@@ -886,7 +950,7 @@ boolean SetupAppX::Install( long nLanguage )
 
     if ( m_pAdvertise )
         StringCchCat( pParams, nParLen, m_pAdvertise );
-    else if ( m_bAdministrative )
+    else if ( IsAdminInstall() )
         StringCchCat( pParams, nParLen, PARAM_ADMIN );
     else
         StringCchCat( pParams, nParLen, PARAM_PACKAGE );
@@ -897,6 +961,12 @@ boolean SetupAppX::Install( long nLanguage )
 
     if ( NeedReboot() )
         StringCchCat( pParams, nParLen, PARAM_REBOOT );
+
+    if ( m_pPatchFiles )
+    {
+        StringCchCat( pParams, nParLen, PARAM_PATCH );
+        StringCchCat( pParams, nParLen, m_pPatchFiles );
+    }
 
     if ( pTransform )
     {
@@ -934,8 +1004,8 @@ UINT SetupAppX::GetError() const
 //--------------------------------------------------------------------------
 void SetupAppX::DisplayError( UINT nErr ) const
 {
-    TCHAR sError[ MAX_STR_LENGTH ] = {0};
-    TCHAR sTmp[ MAX_STR_LENGTH ] = {0};
+    TCHAR sError[ MAX_TEXT_LENGTH ] = {0};
+    TCHAR sTmp[ MAX_TEXT_LENGTH ] = {0};
 
     UINT  nMsgType = MB_OK | MB_ICONERROR;
 
@@ -944,39 +1014,39 @@ void SetupAppX::DisplayError( UINT nErr ) const
         case ERROR_SUCCESS:     break;  // 0
 
         case ERROR_FILE_NOT_FOUND:  // 2
-                                WIN::LoadString( m_hInst, IDS_FILE_NOT_FOUND, sTmp, MAX_STR_LENGTH );
-                                StringCchPrintf( sError, MAX_STR_LENGTH, sTmp, m_pErrorText );
+                                WIN::LoadString( m_hInst, IDS_FILE_NOT_FOUND, sTmp, MAX_TEXT_LENGTH );
+                                StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pErrorText );
                                 break;
         case ERROR_INVALID_DATA:    // 13
-                                WIN::LoadString( m_hInst, IDS_INVALID_PROFILE, sError, MAX_STR_LENGTH );
+                                WIN::LoadString( m_hInst, IDS_INVALID_PROFILE, sError, MAX_TEXT_LENGTH );
                                 break;
-        case ERROR_OUTOFMEMORY: WIN::LoadString( m_hInst, IDS_OUTOFMEM, sError, MAX_STR_LENGTH );
+        case ERROR_OUTOFMEMORY: WIN::LoadString( m_hInst, IDS_OUTOFMEM, sError, MAX_TEXT_LENGTH );
                                 break;
         case ERROR_INSTALL_USEREXIT:
-                                WIN::LoadString( m_hInst, IDS_USER_CANCELLED, sError, MAX_STR_LENGTH );
+                                WIN::LoadString( m_hInst, IDS_USER_CANCELLED, sError, MAX_TEXT_LENGTH );
                                 break;
         case ERROR_INSTALL_ALREADY_RUNNING: // 1618
-                                WIN::LoadString( m_hInst, IDS_ALREADY_RUNNING, sError, MAX_STR_LENGTH );
+                                WIN::LoadString( m_hInst, IDS_ALREADY_RUNNING, sError, MAX_TEXT_LENGTH );
                                 break;
         case ERROR_INSTALL_SOURCE_ABSENT:
-                                WIN::LoadString( m_hInst, IDS_NOMSI, sError, MAX_STR_LENGTH );
+                                WIN::LoadString( m_hInst, IDS_NOMSI, sError, MAX_TEXT_LENGTH );
                                 break;
         case ERROR_DS_INSUFF_ACCESS_RIGHTS: // 8344
-                                WIN::LoadString( m_hInst, IDS_REQUIRES_ADMIN_PRIV, sError, MAX_STR_LENGTH );
+                                WIN::LoadString( m_hInst, IDS_REQUIRES_ADMIN_PRIV, sError, MAX_TEXT_LENGTH );
                                 break;
-        case E_ABORT:           WIN::LoadString( m_hInst, IDS_UNKNOWN_ERROR, sError, MAX_STR_LENGTH );
+        case E_ABORT:           WIN::LoadString( m_hInst, IDS_UNKNOWN_ERROR, sError, MAX_TEXT_LENGTH );
                                 break;
         case ERROR_INVALID_PARAMETER:   // 87
-                                WIN::LoadString( m_hInst, IDS_INVALID_PARAM, sTmp, MAX_STR_LENGTH );
-                                StringCchPrintf( sError, MAX_STR_LENGTH, sTmp, m_pErrorText );
+                                WIN::LoadString( m_hInst, IDS_INVALID_PARAM, sTmp, MAX_TEXT_LENGTH );
+                                StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pErrorText );
                                 break;
 
         case ERROR_SHOW_USAGE:      // - 2
                                 nMsgType = MB_OK | MB_ICONINFORMATION;
-                                WIN::LoadString( m_hInst, IDS_USAGE, sError, MAX_STR_LENGTH );
+                                WIN::LoadString( m_hInst, IDS_USAGE, sError, MAX_TEXT_LENGTH );
                                 break;
 
-        default:                WIN::LoadString( m_hInst, IDS_UNKNOWN_ERROR, sError, MAX_STR_LENGTH );
+        default:                WIN::LoadString( m_hInst, IDS_UNKNOWN_ERROR, sError, MAX_TEXT_LENGTH );
                                 break;
     }
 
@@ -1122,8 +1192,8 @@ boolean SetupAppX::InstallMsi( LPCTSTR pInstaller )
 
     if ( ! m_bQuiet )
     {
-        TCHAR sUserPrompt[ MAX_STR_LENGTH ] = {0};
-        WIN::LoadString( m_hInst, IDS_ALLOW_MSI_UPDATE, sUserPrompt, MAX_STR_LENGTH );
+        TCHAR sUserPrompt[ MAX_TEXT_LENGTH ] = {0};
+        WIN::LoadString( m_hInst, IDS_ALLOW_MSI_UPDATE, sUserPrompt, MAX_TEXT_LENGTH );
         ConvertNewline( sUserPrompt );
 
         if ( IDYES != WIN::MessageBox( NULL, sUserPrompt, m_pAppTitle, MB_YESNO | MB_ICONQUESTION ) )
@@ -1445,7 +1515,7 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
                     LPTSTR pLastChar;
                     if ( GetNextArgument( pNext, &pLanguage, &pNext, true ) != ERROR_SUCCESS )
                     {
-                        StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pStart );
+                        StringCchCopy( m_pErrorText, MAX_TEXT_LENGTH, pStart );
                         nRet = ERROR_INVALID_PARAMETER;
                         break;
                     }
@@ -1470,7 +1540,7 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
 
                     if ( GetNextArgument( pNext, &pFileName, &pNext, true ) != ERROR_SUCCESS )
                     {
-                        StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pStart );
+                        StringCchCopy( m_pErrorText, MAX_TEXT_LENGTH, pStart );
                         nRet = ERROR_INVALID_PARAMETER;
                         break;
                     }
@@ -1531,13 +1601,13 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
                       (*pSub) == 'p' || (*pSub) == 'P' || (*pSub) == 'x' || (*pSub) == 'X' ||
                       (*pSub) == 'y' || (*pSub) == 'Y' || (*pSub) == 'z' || (*pSub) == 'Z' )
             {
-                StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pStart );
+                StringCchCopy( m_pErrorText, MAX_TEXT_LENGTH, pStart );
                 nRet = ERROR_INVALID_PARAMETER;
                 break;
             }
             else if ( (*pSub) == 'a' || (*pSub) == 'A' )
             {   // --- Handle Adminstrative Installation ---
-                m_bAdministrative = true;
+                SetAdminInstall( true );
             }
             else if ( (*pSub) == 'j' || (*pSub) == 'J' )
             {   // --- Handle Adminstrative Installation ---
