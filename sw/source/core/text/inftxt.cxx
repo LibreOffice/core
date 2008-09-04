@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.122 $
+ * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,9 @@
 #include <porrst.hxx>       // SwHangingPortion
 #include <itratr.hxx>
 #include <accessibilityoptions.hxx>
+#include <wrong.hxx>
+#include <doc.hxx>
+#include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
@@ -1137,6 +1140,34 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, sal_Bool bScript ) const
     }
 }
 
+
+void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const
+{
+    SwRect aIntersect;
+    CalcRect( rPor, &aIntersect, 0 );
+    if ( aIntersect.HasArea() ) {
+    if (OnWin()) {
+        OutputDevice* pOutDev = (OutputDevice*)GetOut();
+        pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pOutDev->SetLineColor( Color(220, 233, 245));
+        pOutDev->SetFillColor( Color(220, 233, 245));
+        pOutDev->DrawRect( aIntersect.SVRect() );
+        pOutDev->Pop();
+    }
+    const int delta=10;
+    Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+    pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    pOut->SetLineColor( Color(0, 0, 0));
+    pOut->SetFillColor();
+    pOut->DrawRect( r );
+    if (checked) {
+        pOut->DrawLine(r.TopLeft(), r.BottomRight());
+        pOut->DrawLine(r.TopRight(), r.BottomLeft());
+        pOut->Pop();
+    }
+    }
+}
+
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawBackGround()
  *************************************************************************/
@@ -1170,6 +1201,37 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 
 void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
 {
+    {
+        SwRect aIntersect;
+        CalcRect( rPor, &aIntersect, 0 );
+        SwTxtNode *pNd = pFrm->GetTxtNode();
+        SwBookmark *pBM=NULL;
+        if ( aIntersect.HasArea() )
+        {
+            if (pNd)
+            {
+                const SwDoc *doc=pNd->GetDoc();
+                if (doc!=NULL)
+                {
+                    SwIndex aIndex( pNd, GetIdx() );
+                    SwPosition aPosition(*pNd, aIndex);
+                    pBM=doc->getFieldBookmarkFor(aPosition);
+                }
+            }
+            bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
+            if (OnWin() && (pBM!=NULL || bIsStartMark))
+            {
+                OutputDevice* pOutDev = (OutputDevice*)GetOut();
+                pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+                pOutDev->SetLineColor( Color(220, 233, 245));
+                pOutDev->SetFillColor( Color(220, 233, 245));
+                pOutDev->DrawRect( aIntersect.SVRect() );
+                pOutDev->Pop();
+            }
+        }
+    }
+    if( !pFnt->GetBackColor() ) return;
+
     ASSERT( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
