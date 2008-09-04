@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_002_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:40:51 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:21:21 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -645,17 +645,24 @@ testcase tEditAutotext
     Dim CurrentEntryNr as integer
     Dim unxAutotextCategorie as integer
 
-    Call hNewDocument
     PrintLog "Open new document"
-    EditAutotext
+    Call hNewDocument
+
     PrintLog "Edit / Autotext"
+    EditAutotext
     Kontext "AutoText"
     DialogTest ( AutoText )
 
     Kontext "AutoText"
+
     PrintLog "Click Categories"
     Bereiche.Click
     Sleep 1
+
+    Printlog "If it exists: Delete DummyAutotext."
+    if wDeleteAutotext("DummyAutotext") = true then
+        qaerrorlog "DummyAutotext from previous testrun found, now deleted."
+    end if
 
     Kontext "BereicheBearbeitenAutoText"
     if BereicheBearbeitenAutoText.Exists then
@@ -854,8 +861,8 @@ testcase tEditAutotext
         Sleep 1
         PrintLog "Enter some text in document and close it"
         Call wTypeKeys("Hallo")
-        if GetDocumentCount = 2 then
-            QAErrorlog "#116138#The autotext has been edited in current document!"
+        if GetDocumentCount = 1 then
+            Warnlog "The autotext has been edited in current document!"
         else
             FileClose
             WaitSlot (1000)
@@ -872,7 +879,6 @@ testcase tEditAutotext
         end if
         Kontext "Autotext"
         if Autotext.Exists then Autotext.Close
-        Call hCloseDocument
     catch
         Warnlog "Menu Autotext->'Edit' disabled !"
         Kontext "Active"
@@ -1337,3 +1343,6 @@ testcase tEditObjectEdit
     Call hCloseDocument
     PrintLog "Close active document"
 endcase
+
+'----------------------------------------------------------------
+
