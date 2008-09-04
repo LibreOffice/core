@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,7 +357,7 @@ WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
 	Source = "patchmsi.dll";
 	Target = "GetUserInstallMode";
 	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
+	Assignment1 = ("ControlEvent", "InstallWelcome", "Next", "DoAction", "SetUserInstallMode", "1", "1");
 	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
 	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
 	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or PATCHISOLDER Or ISWRONGPRODUCT");
@@ -378,7 +378,7 @@ WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode
 	Source = "lngpckinsthlp.dll";
 	Target = "GetUserInstallMode";
 	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
+	Assignment1 = ("ControlEvent", "InstallWelcome", "Next", "DoAction", "SetUserInstallMode", "1", "1");
 	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
 	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
 	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or ISWRONGPRODUCT");
