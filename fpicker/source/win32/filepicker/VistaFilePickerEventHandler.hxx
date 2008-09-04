@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerEventHandler.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 
 #include "comptr.hxx"
 #include "vistatypes.h"
+#include "IVistaFilePickerInternalNotify.hxx"
 
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -78,7 +79,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         // ctor/dtor
         //------------------------------------------------------------------------------------
 
-                 VistaFilePickerEventHandler();
+                 VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify);
         virtual ~VistaFilePickerEventHandler();
 
         //------------------------------------------------------------------------------------
@@ -199,6 +200,9 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         //------------------------------------------------------------------------------------
         /// cached file dialog instance (there we listen for events)
         TFileDialog m_pDialog;
+
+        //---------------------------------------------------------------------
+        IVistaFilePickerInternalNotify* m_pInternalNotify;
 
         //---------------------------------------------------------------------
         /** used to inform file picker listener asynchronously.

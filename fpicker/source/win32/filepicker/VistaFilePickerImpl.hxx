@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerImpl.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include "vistatypes.h"
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
+#include "IVistaFilePickerInternalNotify.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -113,6 +114,7 @@ static const ::rtl::OUString PROP_CONTROL_ENABLE      = ::rtl::OUString::createF
 //-----------------------------------------------------------------------------
 class VistaFilePickerImpl : private ::cppu::BaseMutex
                           , public  RequestHandler
+                          , public  IVistaFilePickerInternalNotify
 {
     public:
 
@@ -157,6 +159,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         virtual void before();
         virtual void doRequest(const RequestRef& rRequest);
         virtual void after();
+
+        //---------------------------------------------------------------------
+        virtual void onAutoExtensionChanged (bool bChecked);
 
     private:
 
