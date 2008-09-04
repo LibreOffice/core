@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unocoll.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,8 +192,10 @@ class SwUnoCollection
 #define SW_SERVICE_IMAP_POLYGON                         104
 #define SW_SERVICE_TYPE_TEXT_GRAPHIC                    105
 #define SW_SERVICE_CHART2_DATA_PROVIDER                 106
+#define SW_SERVICE_TYPE_FIELDMARK                       107
+#define SW_SERVICE_TYPE_FORMFIELDMARK                   108
 
-#define SW_SERVICE_LAST                 SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM
+#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_FORMFIELDMARK
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
@@ -468,7 +470,6 @@ public:
 
     static SwXBookmark*     GetObject( SwBookmark& rBkm, SwDoc* pDoc );
 };
-
 
 class SwXNumberingRulesCollection : public cppu::WeakImplHelper1
 <
