@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IDocumentSettingAccess.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          UNIX_FORCE_ZERO_EXT_LEADING,
          USE_OLD_PRINTER_METRICS,
          TABS_RELATIVE_TO_INDENT,
+         PROTECT_FORM,
          // --> OD 2008-06-05 #i89181#
          TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
          // <--
