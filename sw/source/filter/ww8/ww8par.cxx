@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.197 $
+ * $Revision: 1.198 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1445,7 +1445,7 @@ void SwWW8ImplReader::ImportDop()
     // <--
 
     // --> FME 2005-06-08 #i49277#
-    rDoc.set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, false);
+    rDoc.set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !pWDop->fExpShRtn); // #i56856#
     // --> FME 2005-08-11 #i53199#
     rDoc.set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);
 
