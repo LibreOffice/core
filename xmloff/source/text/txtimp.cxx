@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.145 $
+ * $Revision: 1.146 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,6 +331,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, XML_TOK_DRAW_DATE_TIME },
     { XML_NAMESPACE_TEXT, XML_PAGE_CONTINUATION, XML_TOK_TEXT_PAGE_CONTINUATION },
 
+    { XML_NAMESPACE_FIELD, XML_FIELDMARK, XML_TOK_TEXT_FIELDMARK },
+    { XML_NAMESPACE_FIELD, XML_FIELDMARK_START, XML_TOK_TEXT_FIELDMARK_START },
+    { XML_NAMESPACE_FIELD, XML_FIELDMARK_END, XML_TOK_TEXT_FIELDMARK_END },
+
+
     XML_TOKEN_MAP_END
 };
 
@@ -643,6 +648,8 @@ XMLTextImportHelper::~XMLTextImportHelper()
     // --> OD 2006-10-12 #i69629#
     delete [] mpOutlineStylesCandidates;
     // <--
+
+    aBookmarkVector.clear();
 
     _FinitBackpatcher();
 }
@@ -2117,6 +2124,7 @@ void XMLTextImportHelper::InsertBookmarkStartRange(
     const OUString& i_rXmlId)
 {
     aBookmarkStartRanges[sName] = std::make_pair(rRange, i_rXmlId);
+    aBookmarkVector.push_back(sName);
 }
 
 sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
@@ -2129,11 +2137,88 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
         o_rRange.set(aBookmarkStartRanges[sName].first);
         o_rXmlId = aBookmarkStartRanges[sName].second;
         aBookmarkStartRanges.erase(sName);
+        BookmarkVector_t::iterator it=aBookmarkVector.begin();
+        while(it!=aBookmarkVector.end() && it->compareTo(sName)!=0) {
+            it++;
+        }
+        if (it!=aBookmarkVector.end()) {
+            aBookmarkVector.erase(it);
+        }
         return sal_True;
     }
     else
     {
         return sal_False;
+    }
+}
+
+::rtl::OUString XMLTextImportHelper::FindActiveBookmarkName()
+{
+    if (aBookmarkVector.size()>0) {
+        return aBookmarkVector.back();
+    } else return ::rtl::OUString(); // return the empty string on error...
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > XMLTextImportHelper::GetRangeFor(::rtl::OUString &sName)
+{
+    return aBookmarkStartRanges[sName].first;
+}
+
+
+void XMLTextImportHelper::pushFieldCtx( ::rtl::OUString name, ::rtl::OUString type )
+{
+    aFieldStack.push(field_stack_item_t(field_name_type_t(name, type), field_params_t()));
+}
+
+void XMLTextImportHelper::popFieldCtx()
+{
+    aFieldStack.pop();
+}
+
+void XMLTextImportHelper::addFieldParam( ::rtl::OUString name, ::rtl::OUString value )
+{
+    DBG_ASSERT(!aFieldStack.empty(), "stack is empty: not good! Do a pushFieldCtx before...");
+    if (!aFieldStack.empty()) {
+        field_stack_item_t &aFieldStackItem=aFieldStack.top();
+        aFieldStackItem.second.push_back(field_param_t( name, value ));
+    }
+}
+::rtl::OUString XMLTextImportHelper::getCurrentFieldName()
+{
+    DBG_ASSERT(!aFieldStack.empty(), "stack is empty: not good! Do a pushFieldCtx before...");
+    if (!aFieldStack.empty()) {
+        return aFieldStack.top().first.first;
+    } else  return ::rtl::OUString();
+}
+
+::rtl::OUString XMLTextImportHelper::getCurrentFieldType()
+{
+    DBG_ASSERT(!aFieldStack.empty(), "stack is empty: not good! Do a pushFieldCtx before...");
+    if (!aFieldStack.empty()) {
+        return aFieldStack.top().first.second;
+    } else  return ::rtl::OUString();
+}
+
+bool XMLTextImportHelper::hasCurrentFieldCtx()
+{
+    return !aFieldStack.empty();
+}
+
+void XMLTextImportHelper::setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField)
+{
+    DBG_ASSERT(!aFieldStack.empty(), "stack is empty: not good! Do a pushFieldCtx before...");
+    if (!aFieldStack.empty() && xFormField.is()) {
+        field_params_t &params=aFieldStack.top().second;
+        for (field_params_t::iterator i=params.begin();i!=params.end();i++) {
+            rtl::OUString name=i->first;
+            rtl::OUString value=i->second;
+            if (name.compareToAscii("Description")==0){
+                xFormField->setDescription(value);
+            } else if (name.compareToAscii("Result")==0){
+                xFormField->setRes((sal_Int16)value.toInt32());
+            }
+
+        }
     }
 }
 
