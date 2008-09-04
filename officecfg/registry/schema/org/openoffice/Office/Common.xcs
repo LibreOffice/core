@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.155 $
+ * $Revision: 1.156 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4099,6 +4099,12 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 							<desc>Specifies if convertible PowerPoint OLE objects are converted into Impress objects.</desc>
 						</info>
 						<value>false</value>
+					</prop>
+					<prop oor:name="ImportWWFieldsAsEnhancedFields" oor:type="xs:boolean">
+						<info>
+							<desc>Flag to control use of enhanced fields.</desc>
+						</info>
+						<value>true</value>
 					</prop>
 				</group>
 				<group oor:name="Export">
