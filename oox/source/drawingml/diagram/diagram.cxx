@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: diagram.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,14 +240,18 @@ void Diagram::build(  )
     }
     // check bounds
     OSL_ENSURE( aRoots.size() == 1, "more than one root" );
-    mpRoot = aRoots.begin()->second;
-    OSL_TRACE( "root is %s", OUSTRING_TO_CSTR( mpRoot->getPoint()->getModelId() ) );
-    for( PointsTreeMap::iterator iter = aTreeMap.begin();
-         iter != aTreeMap.end(); iter++ )
+    // #i92239# roots may be empty
+    if( !aRoots.empty() )
     {
-        if(! iter->second->getParent() )
+        mpRoot = aRoots.begin()->second;
+        OSL_TRACE( "root is %s", OUSTRING_TO_CSTR( mpRoot->getPoint()->getModelId() ) );
+        for( PointsTreeMap::iterator iter = aTreeMap.begin();
+             iter != aTreeMap.end(); iter++ )
         {
-            OSL_TRACE("node without parent %s", OUSTRING_TO_CSTR( iter->first ) );
+            if(! iter->second->getParent() )
+            {
+                OSL_TRACE("node without parent %s", OUSTRING_TO_CSTR( iter->first ) );
+            }
         }
     }
 }
@@ -258,7 +262,8 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     dgm::Points & aPoints( mpData->getPoints( ) );
     dgm::Points::iterator aPointsIter;
     build( );
-    mpLayout->layout( mpRoot, awt::Point( 0, 0 ) );
+    if( mpRoot.get() )
+        mpLayout->layout( mpRoot, awt::Point( 0, 0 ) );
 
     for( aPointsIter = aPoints.begin(); aPointsIter != aPoints.end(); ++aPointsIter )
     {
