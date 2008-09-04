@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -857,7 +857,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::impl_closeControllerFrames( sal_Bool _bDeliverOwnership )
+void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( sal_Bool _bDeliverOwnership )
 {
     Controllers aCopy = m_aControllers;
 
@@ -911,20 +911,12 @@ void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, RuntimeException)
 {
-    ModelMethodGuard aGuard( *this );
-
     document::EventObject aEvent( *this, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnUnload" ) ) );
 
-    {
-        aGuard.clear();
-        m_aCloseListener.forEach< XCloseListener >(
-            boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
-        aGuard.reset();
-    }
+    m_aCloseListener.forEach< XCloseListener >(
+        boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
 
-    impl_closeControllerFrames( _bDeliverOwnership );
-
-    aGuard.clear();
+    impl_closeControllerFrames_nolck_throw( _bDeliverOwnership );
 
     m_aCloseListener.notifyEach( &XCloseListener::notifyClosing, (const lang::EventObject&)aEvent );
 
