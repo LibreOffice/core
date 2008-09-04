@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.141 $
+ * $Revision: 1.142 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3965,7 +3965,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
 }
 
 WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
-    : WW8PLCFx(rFib.GetFIBVersion(), false), pStatus(0), nIsEnd(0)
+    : WW8PLCFx(rFib.GetFIBVersion(), false), pStatus(0), nIsEnd(0), nBookmarkId(1)
 {
     if( !rFib.fcPlcfbkf || !rFib.lcbPlcfbkf || !rFib.fcPlcfbkl ||
         !rFib.lcbPlcfbkl || !rFib.fcSttbfbkmk || !rFib.lcbSttbfbkmk )
@@ -4174,6 +4174,27 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, USHORT &nIndex)
         while (i < pBook[0]->GetIMax());
     }
     return bFound ? aBookNames[i] : aEmptyStr;
+}
+
+String WW8PLCFx_Book::GetUniqueBookmarkName(String &suggestedName)
+{
+    String aRet=(suggestedName.Len()==0?String::CreateFromAscii("Unnamed"):suggestedName);
+    unsigned int i=0;
+    while(i<aBookNames.size()) {
+        String &s=aBookNames[i];
+        if (aRet.CompareTo(s)==0) {
+            int len=aRet.Len();
+            int p=len-1;
+            while(p>0 && aRet.GetChar(static_cast<USHORT>(p))>='0' && aRet.GetChar(static_cast<USHORT>(p))<='9')
+                p--;
+            aRet=String(aRet, 0, static_cast<USHORT>(p+1));
+            aRet += String::CreateFromInt32( nBookmarkId++ );
+            i=0; // start search from beginning
+        } else {
+            i++;
+        }
+    }
+    return aRet;
 }
 
 bool WW8PLCFx_Book::MapName(String& rName)
