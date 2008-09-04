@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.113 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +114,7 @@ sal_Char __READONLY_DATA sXML_np__db[] = "_db";
 sal_Char __READONLY_DATA sXML_np__xforms[] = "_xforms";
 sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
 sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
+sal_Char __READONLY_DATA sXML_np__field[] = "_field";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
@@ -294,6 +295,7 @@ void SvXMLImport::_InitCtor()
                             XML_NAMESPACE_XFORMS );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooow ) ), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__oooc ) ), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__field ) ), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__of ) ),
                             GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
     }
