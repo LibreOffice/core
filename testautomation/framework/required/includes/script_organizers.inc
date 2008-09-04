@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: script_organizers.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: obo $ $Date: 2008-07-22 12:35:37 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:16:12 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -43,9 +43,9 @@ testcase tUpdtScriptCount
     dim aScriptCount( SCRIPTING_DIALOGS )
         aScriptCount( 1 ) = 10
         aScriptCount( 2 ) = 14
-        aScriptCount( 3 ) = 10
+        aScriptCount( 3 ) = 10  : if ( gtSysName = "Mac OS X" ) then aScriptCount( 3 ) = 3
         aScriptCount( 4 ) = 585
-        aScriptCount( 5 ) = 601
+        aScriptCount( 5 ) = 601 : if ( gtSysName = "Mac OS X" ) then aScriptCount( 5 ) = 598
                 
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
