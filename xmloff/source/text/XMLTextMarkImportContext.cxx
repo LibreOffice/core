@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextMarkImportContext.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,7 @@
 #include "XMLTextMarkImportContext.hxx"
 
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -50,6 +48,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include <com/sun/star/text/XFormField.hpp>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -61,6 +61,49 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+
+
+XMLFieldParamImportContext::XMLFieldParamImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName ) :
+        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        rHelper(rHlp)
+{
+}
+
+
+void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> & xAttrList)
+{
+    SvXMLImport& rImport = GetImport();
+    ::rtl::OUString sName;
+    ::rtl::OUString sValue;
+
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                              &sLocalName );
+
+        if ( (XML_NAMESPACE_FIELD == nPrefix) &&
+             IsXMLToken(sLocalName, XML_NAME)   )
+        {
+            sName = xAttrList->getValueByIndex(nAttr);
+        }
+        if ( (XML_NAMESPACE_FIELD == nPrefix) &&
+             IsXMLToken(sLocalName, XML_VALUE)   )
+        {
+            sValue = xAttrList->getValueByIndex(nAttr);
+        }
+    }
+    if (rHelper.hasCurrentFieldCtx() && sName.getLength()>0) {
+        rHelper.addFieldParam(sName, sValue);
+    }
+}
+
 
 TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 
@@ -75,7 +118,9 @@ XMLTextMarkImportContext::XMLTextMarkImportContext(
 }
 
 enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
-                    TypeBookmark, TypeBookmarkStart, TypeBookmarkEnd };
+                    TypeBookmark, TypeBookmarkStart, TypeBookmarkEnd,
+                    TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
+                  };
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
 {
@@ -85,22 +130,44 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
     { XML_BOOKMARK,                 TypeBookmark },
     { XML_BOOKMARK_START,           TypeBookmarkStart },
     { XML_BOOKMARK_END,             TypeBookmarkEnd },
+    { XML_FIELDMARK,                TypeFieldmark },
+    { XML_FIELDMARK_START,          TypeFieldmarkStart },
+    { XML_FIELDMARK_END,            TypeFieldmarkEnd },
     { XML_TOKEN_INVALID,            0 },
 };
 
 void XMLTextMarkImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
+    if (!FindName(GetImport(), xAttrList, sBookmarkName, m_XmlId, &sFieldName))
+        sBookmarkName=OUString();
+
+    if (IsXMLToken(GetLocalName(), XML_FIELDMARK_END))
+        sBookmarkName=rHelper.FindActiveBookmarkName();
+
+    if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
+    {
+        if (sBookmarkName.getLength()==0)
+            sBookmarkName=::rtl::OUString::createFromAscii("Unknown");
+        rHelper.pushFieldCtx( sBookmarkName, sFieldName );
+    }
+
+}
+
+void XMLTextMarkImportContext::EndElement()
+{
+    SvXMLImportContext::EndElement();
+
     const OUString sAPI_reference_mark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ReferenceMark"));
     const OUString sAPI_bookmark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
+    const OUString sAPI_fieldmark(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Fieldmark"));
+    const OUString sAPI_formfieldmark(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FormFieldmark"));
 
-
-    OUString sName;
-    OUString sXmlId;
-
-    if (FindName(GetImport(), xAttrList, sName, sXmlId))
+    if (sBookmarkName.getLength()>0)
     {
         sal_uInt16 nTmp;
         if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
@@ -112,32 +179,52 @@ void XMLTextMarkImportContext::StartElement(
                     // export point reference mark
                     CreateAndInsertMark(GetImport(),
                                         sAPI_reference_mark,
-                                        sName,
+                                        sBookmarkName,
                                        rHelper.GetCursorAsRange()->getStart(),
                                        ::rtl::OUString());
                     break;
 
+                case TypeFieldmark:
                 case TypeBookmark:
-                    // export point bookmark
-                    CreateAndInsertMark(GetImport(),
-                                        sAPI_bookmark,
-                                        sName,
+                    {
+                        bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && sFieldName.compareToAscii("msoffice.field.FORMCHECKBOX")==0); // for now only import FORMCHECKBOX boxes
+                        // export point bookmark
+                        Reference<XInterface> xIfc=CreateAndInsertMark(GetImport(),
+                                        (bImportAsField?sAPI_formfieldmark:sAPI_bookmark),
+                                        sBookmarkName,
                                        rHelper.GetCursorAsRange()->getStart(),
-                                       sXmlId);
+                                       m_XmlId);
+                        if ((lcl_MarkType)nTmp==TypeFieldmark) {
+                            if (xIfc.is() && bImportAsField) {
+                                // setup fieldmark...
+                                Reference< ::com::sun::star::text::XFormField> xFormField(xIfc, UNO_QUERY);
+                                xFormField->setType(1); // Checkbox...
+                                if (xFormField.is() && rHelper.hasCurrentFieldCtx()) {
+//                                  xFormField->setDescription(::rtl::OUString::createFromAscii("HELLO CHECKBOX"));
+//                                  xFormField->setRes(1);
+                                    rHelper.setCurrentFieldParamsTo(xFormField);
+                                }
+                            }
+                            rHelper.popFieldCtx();
+                        }
+                    }
                     break;
 
+                case TypeFieldmarkStart:
                 case TypeBookmarkStart:
                     // save XTextRange for later construction of bookmark
                     rHelper.InsertBookmarkStartRange(
-                        sName, rHelper.GetCursorAsRange()->getStart(), sXmlId);
+                        sBookmarkName, rHelper.GetCursorAsRange()->getStart(),
+                        m_XmlId);
                     break;
 
+                case TypeFieldmarkEnd:
                 case TypeBookmarkEnd:
                 {
                     // get old range, and construct
                     Reference<XTextRange> xStartRange;
-                    if (rHelper.FindAndRemoveBookmarkStartRange(sName,
-                            xStartRange, sXmlId))
+                    if (rHelper.FindAndRemoveBookmarkStartRange(sBookmarkName,
+                            xStartRange, m_XmlId))
                     {
                         Reference<XTextRange> xEndRange(
                             rHelper.GetCursorAsRange()->getStart());
@@ -160,12 +247,31 @@ void XMLTextMarkImportContext::StartElement(
                             Reference<XTextRange> xInsertionRange(
                                 xInsertionCursor, UNO_QUERY);
 
+                            bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmarkEnd && rHelper.hasCurrentFieldCtx());
+                            if (bImportAsField) {
+                                ::rtl::OUString currentFieldType=rHelper.getCurrentFieldType();
+                                bImportAsField=currentFieldType.compareToAscii("msoffice.field.FORMTEXT")==0; // for now only import FORMTEXT boxes
+                            }
+
                             // insert reference
-                            CreateAndInsertMark(GetImport(),
-                                                sAPI_bookmark,
-                                                sName,
+                            Reference<XInterface> xIfc=CreateAndInsertMark(GetImport(),
+                                                (bImportAsField?sAPI_fieldmark:sAPI_bookmark),
+                                                sBookmarkName,
                                                 xInsertionRange,
-                                                sXmlId);
+                                                m_XmlId);
+
+                            if ((lcl_MarkType)nTmp==TypeFieldmarkEnd) {
+                                if (xIfc.is() && bImportAsField) {
+                                    // setup fieldmark...
+                                    Reference< ::com::sun::star::text::XFormField> xFormField(xIfc, UNO_QUERY);
+                                    xFormField->setType(0); // Text
+                                    if (xFormField.is() && rHelper.hasCurrentFieldCtx()) {
+                                        rHelper.setCurrentFieldParamsTo(xFormField);
+//                                  xFormField->setDescription(::rtl::OUString::createFromAscii("HELLO"));
+                                    }
+                                }
+                                rHelper.popFieldCtx();
+                            }
                         }
                         // else: beginning/end in different XText -> ignore!
                     }
@@ -186,8 +292,15 @@ void XMLTextMarkImportContext::StartElement(
     }
 }
 
+SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( USHORT nPrefix,
+                                        const ::rtl::OUString& rLocalName,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >&  )
+{
+    return new XMLFieldParamImportContext(GetImport(), rHelper, nPrefix, rLocalName);
+}
 
-void XMLTextMarkImportContext::CreateAndInsertMark(
+
+Reference<XInterface> XMLTextMarkImportContext::CreateAndInsertMark(
     SvXMLImport& rImport,
     const OUString& sServiceName,
     const OUString& sMarkName,
@@ -226,14 +339,16 @@ void XMLTextMarkImportContext::CreateAndInsertMark(
                 }
             }
         }
-    }
+        return xIfc;
+    } else return NULL;
 }
 
 sal_Bool XMLTextMarkImportContext::FindName(
     SvXMLImport& rImport,
     const Reference<XAttributeList> & xAttrList,
     OUString& sName,
-    OUString& o_rXmlId)
+    OUString& o_rXmlId,
+    ::rtl::OUString *pFieldName)
 {
     sal_Bool bNameOK = sal_False;
 
@@ -258,7 +373,14 @@ sal_Bool XMLTextMarkImportContext::FindName(
             o_rXmlId = xAttrList->getValueByIndex(nAttr);
         }
 //FIXME: RDFa (text:bookmark-start)
+        else if ( pFieldName!=NULL &&
+            (XML_NAMESPACE_FIELD == nPrefix) &&
+             IsXMLToken(sLocalName, XML_TYPE)   )
+        {
+            *pFieldName = xAttrList->getValueByIndex(nAttr);
+        }
     }
 
     return bNameOK;
 }
+
