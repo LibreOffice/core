@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bookmrk.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,8 @@ public:
     // falls man wirklich auf gleiche Position abfragen will.
     BOOL IsEqualPos( const SwBookmark &rBM ) const;
 
-    BOOL IsBookMark() const    { return IDocumentBookmarkAccess::BOOKMARK == eMarkType; }
+    BOOL IsFormFieldMark() const    { return IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT == eMarkType || IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT == eMarkType; }
+    BOOL IsBookMark() const     { return IDocumentBookmarkAccess::BOOKMARK == eMarkType || IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT == eMarkType || IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT == eMarkType; }
 //    // --> OD 2007-10-17 #TESTING#
 //    BOOL IsBookMark() const
 //    {
@@ -148,6 +149,59 @@ public:
     SwMark( const SwPosition& aPos,
             const KeyCode& rCode,
             const String& rName, const String& rShortName);
+};
+
+class SwFieldBookmark : public SwBookmark
+{
+private:
+    int fftype; // Type: 0 = Text, 1 = Check Box, 2 = List
+    int ffres;
+    bool ffprot;
+    bool ffsize; // 0 = Auto, 1=Exact (see ffhps)
+    int fftypetxt; // Type of text field: 0 = Regular text, 1 = Number, 2 = Date, 3 = Current date, 4 = Current time, 5 = Calculation
+    bool ffrecalc;
+    int ffmaxlen; // Number of characters for text field. Zero means unlimited.
+    int ffhps; // Check box size (half-point sizes).
+
+    String ffname;
+    String ffhelptext;
+
+public:
+    SwFieldBookmark(const SwPosition& aPos,
+           const KeyCode& rCode,
+           const String& rName, const String& rShortName,
+           IDocumentBookmarkAccess::BookmarkType eMark);
+
+    void SetFieldType(int fftype);
+    int GetFieldType();
+
+    void SetChecked(bool checked);
+    bool IsChecked();
+
+    void SetFFName(String aNewName) {
+        this->ffname=aNewName;
+    }
+
+    String GetFFName()
+    {
+        return ffname;
+    }
+
+    int GetFFRes() {
+        return ffres;
+    }
+
+    void SetFFRes(int nNew) {
+        this->ffres=nNew;
+    }
+
+    void SetFFHelpText(String newffhelptext) {
+        this->ffhelptext=newffhelptext;
+    }
+
+    String GetFFHelpText() {
+        return ffhelptext;
+    }
 };
 
 class SwUNOMark: public SwBookmark
