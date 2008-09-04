@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_004_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:41:03 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:21:45 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -1328,11 +1328,6 @@ endcase
 testcase tInsertObjectChart
     PrintLog "- Insert / Object / Chart"
 
-    if  (lcase(gPlatform) = "osx") then
-         warnlog "#i88307#  -  crash on MacOS X, we therefore abort the test."
-         goto endsub
-    end if
-
     printlog " Open new document"
     Call hNewDocument
     ' Chart-Wizard will be invoked if data ranges exist
@@ -1396,3 +1391,6 @@ testcase tInsertFile
     printlog " Close active document"
     Call hCloseDocument
 endcase
+
+'-----------------------------------------------------------
+
