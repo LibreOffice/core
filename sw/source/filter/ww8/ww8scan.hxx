@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.hxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1003,6 +1003,19 @@ public:
          des Winword-FIB)
     */
     UINT16 wIdent;      // 0x0 int magic number
+    /*
+        File Information Block (FIB) values:
+        WinWord 1.0 = 33
+        WinWord 2.0 = 45
+        WinWord 6.0c for 16bit = 101
+        Word 6/32 bit = 104
+        Word 95 = 104
+        Word 97 = 193
+        Word 2000 = 217
+        Word 2002 = 257
+        Word 2003 = 268
+        Word 2007 = 274
+    */
     UINT16 nFib;        // 0x2 FIB version written
     UINT16 nProduct;    // 0x4 product version written by
     INT16 lid;          // 0x6 language stamp---localized version;
@@ -1023,6 +1036,7 @@ public:
                                                     // to decide which table stream is valid.
 
     UINT16 fExtChar :1; // 1000 =1, when using extended character set in file
+    UINT16 fFarEast :1; // 4000 =1, probably, when far-East language vaiants of Word is used to create a file #i90932#
 
 
     UINT16 nFibBack;    // 0xc
@@ -1407,6 +1421,11 @@ public:
     INT32 cpnBteChp;
     INT32 cpnBtePap;
     /*
+        The actual nFib, moved here because some readers assumed
+        they couldn't read any format with nFib > some constant
+    */
+    UINT16 nFib_actual; // 0x05bc #i56856#
+    /*
         nun wird lediglich noch ein Ctor benoetigt
     */
     WW8Fib( SvStream& rStrm, BYTE nWantedVersion,UINT32 nOffset=0 );
@@ -1536,6 +1555,7 @@ public:
     UINT16 copts_fTransparentMetafiles : 1; //    when 1, don�t blank area between metafile pictures
     UINT16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
     UINT16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
+    UINT16 copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
 
     INT16  dxaTab;              // 720 twips    default tab width
     UINT16 wSpare;              //
@@ -1596,7 +1616,7 @@ public:
     UINT32 fShowBreaksInFrames              :1; // see above
     UINT32 fSwapBordersFacingPgs            :1; // see above
     UINT32 fCompatabilityOptions_Unknown1_13    :1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_14    :1; // #i78591#
+    UINT32 fExpShRtn                :1; // #i78591# and #i56856#
     UINT32 fCompatabilityOptions_Unknown1_15    :1; // #i78591#
     UINT32 fCompatabilityOptions_Unknown1_16    :1; // #i78591#
     UINT32 fSuppressTopSpacingMac5      :1; // Suppress extra line spacing at top
