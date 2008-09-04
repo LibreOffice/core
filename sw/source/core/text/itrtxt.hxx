@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrtxt.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,10 +68,10 @@ protected:
     // Zuruecksetzen in die erste Zeile.
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    inline SwTxtIter() { }
+    inline SwTxtIter(SwTxtNode* pTxtNode) : SwAttrIter(pTxtNode) { }
 
 public:
-    inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf )
+    inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
     inline const SwLineLayout *GetCurr() const { return pCurr; } // niemals 0!
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
@@ -157,9 +157,9 @@ protected:
     inline void SetDropLeft( const KSHORT nNew ) { nDropLeft = nNew; }
 
     void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    inline SwTxtMargin() { }
+    inline SwTxtMargin(SwTxtNode* pTxtNode) : SwTxtIter(pTxtNode) { }
 public:
-    inline SwTxtMargin( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+    inline SwTxtMargin( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
@@ -227,13 +227,13 @@ class SwTxtAdjuster : public SwTxtMargin
                                   const SwRect &rCurrRect );
 
 protected:
-    inline SwTxtAdjuster() { }
+    inline SwTxtAdjuster(SwTxtNode* pTxtNode) : SwTxtMargin(pTxtNode) { }
     // spannt beim Blocksatz die Glues auf.
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0 );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
-    inline SwTxtAdjuster( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+    inline SwTxtAdjuster( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtMargin(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
 
     // wird von SwTxtFormatter wegen UpdatePos ueberladen
@@ -266,9 +266,9 @@ class SwTxtCursor : public SwTxtAdjuster
     void _GetCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* );
 protected:
     void CtorInitTxtCursor( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    inline SwTxtCursor() { }
+    inline SwTxtCursor(SwTxtNode* pTxtNode) : SwTxtAdjuster(pTxtNode) { }
 public:
-    inline SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+    inline SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtAdjuster(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtCursor( pTxtFrm, pTxtSizeInf ); }
     sal_Bool GetCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* = 0,
         const long nMax = 0 );
