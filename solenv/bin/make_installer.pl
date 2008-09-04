@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.120 $
+# $Revision: 1.121 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1935,16 +1935,19 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::idtglobal::prepare_language_idt_directory($languageidtdir, $newidtdir, $onelanguage, $filesinproductlanguageresolvedarrayref, \@iconfilecollector, $binarytablefiles, $allvariableshashref);
 
-            # For multilingual installation sets, the dialog for the language selection can now be prepared, with
-            # a checkbox for each available language. This has to happen before the following translation.
-            # The new controls have to be added into the Control.idt
+            if ( ! $installer::globals::languagepack )
+            {
+                # For multilingual installation sets, the dialog for the language selection can now be prepared, with
+                # a checkbox for each available language. This has to happen before the following translation.
+                # The new controls have to be added into the Control.idt
 
-            my $controlidttablename = $languageidtdir . $installer::globals::separator . "Control.idt";
-            my $controlidttable = installer::files::read_file($controlidttablename);
-            installer::windows::idtglobal::add_language_checkboxes_to_database($controlidttable, $languagesarrayref);
-            installer::files::save_file($controlidttablename, $controlidttable);
-            $infoline = "Added checkboxes for language selection dialog into table $controlidttablename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+                my $controlidttablename = $languageidtdir . $installer::globals::separator . "Control.idt";
+                my $controlidttable = installer::files::read_file($controlidttablename);
+                installer::windows::idtglobal::add_language_checkboxes_to_database($controlidttable, $languagesarrayref);
+                installer::files::save_file($controlidttablename, $controlidttable);
+                $infoline = "Added checkboxes for language selection dialog into table $controlidttablename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
 
             # Now all files are copied into a language specific directory
             # The template idt files can be translated
