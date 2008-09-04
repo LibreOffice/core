@@ -8,7 +8,7 @@
 #
 # $RCSfile: registry.pm,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -93,6 +93,7 @@ sub get_registry_component_name
 
     $componentname = $componentname . $addon;
 
+    if (( $styles =~ /\bLANGUAGEPACK\b/ ) && ( $installer::globals::languagepack )) { $componentname = $componentname . "_lang"; }
     if ( $styles =~ /\bALWAYS_REQUIRED\b/ ) { $componentname = $componentname . "_forced"; }
 
     return $componentname;
