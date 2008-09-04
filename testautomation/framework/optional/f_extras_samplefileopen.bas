@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_extras_samplefileopen.bas,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:01 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:15:34 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -61,6 +61,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_security_tools.inc"
     use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\t_listfuncs.inc"
 
     use "framework\tools\includes\apicalls.inc"
     use "framework\tools\includes\template_tools.inc"
