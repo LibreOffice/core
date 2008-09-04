@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.152 $
+ * $Revision: 1.153 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,10 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
+
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XFormField.hpp>
+
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -985,6 +989,9 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
     sWidth(RTL_CONSTASCII_USTRINGPARAM("Width")),
     sWidthType( RTL_CONSTASCII_USTRINGPARAM( "WidthType" ) ),
+    sTextFieldStart( RTL_CONSTASCII_USTRINGPARAM( "TextFieldStart" ) ),
+    sTextFieldEnd( RTL_CONSTASCII_USTRINGPARAM( "TextFieldEnd" ) ),
+    sTextFieldStartEnd( RTL_CONSTASCII_USTRINGPARAM( "TextFieldStartEnd" ) ),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
@@ -2211,6 +2218,62 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sRuby))
             {
                 exportRuby(xPropSet, bAutoStyles);
+            }
+            else if (sType.equals(sTextFieldStart))
+            {
+                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xBookmark.is()) {
+                    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                }
+                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xFormField.is()) {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, ::rtl::OUString::createFromAscii("msoffice.field.FORMTEXT"));
+                }
+                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+                if (xFormField.is()) {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Description"));
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getDescription());
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                }
+                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+            }
+            else if (sType.equals(sTextFieldEnd))
+            {
+                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+            }
+            else if (sType.equals(sTextFieldStartEnd))
+            {
+                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xBookmark.is()) {
+                    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                }
+                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xFormField.is()) {
+                    sal_Int16 fftype=xFormField->getType();
+                    switch (fftype) {
+                        case 1:
+                            GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, ::rtl::OUString::createFromAscii("msoffice.field.FORMCHECKBOX"));
+                        break;
+                        default:
+                            DBG_ASSERT(false, "hey ---- add your export stuff here!!");
+                        break;
+                    }
+                }
+                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
+                if (xFormField.is()) {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Description"));
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getDescription());
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Result"));
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, ::rtl::OUString::valueOf((sal_Int32 )xFormField->getRes()));
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                }
+                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
             }
             else if (sType.equals(sSoftPageBreak))
             {
