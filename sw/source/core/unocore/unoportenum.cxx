@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoportenum.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -653,6 +653,20 @@ void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_I
         for( sal_uInt16 n = 0; n < nArrLen; ++n )
         {
             SwBookmark* pMark = rMarks.GetObject( n );
+            /*
+            if (pMark!=NULL && pMark->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0) {
+                continue;
+            }
+
+            if (pMark!=NULL && pMark->GetName().CompareToAscii(FIELD_FORM_BOOKMARK_PREFIX, strlen(FIELD_FORM_BOOKMARK_PREFIX))==0) {
+                continue;
+            }
+            */
+            if (pMark!=NULL && pMark->IsFormFieldMark())
+            {
+                continue;
+            }
+
             // --> OD 2007-10-23 #i81002#
             if ( !pMark->IsBookMark() &&
                  !dynamic_cast<SwCrossRefBookmark*>(pMark) )
@@ -981,8 +995,81 @@ void SwXTextPortionEnumeration::CreatePortions()
                             }
                         }
                     }
-                    if(!xRef.is() && pUnoCrsr->HasMark() )
-                        xRef = new SwXTextPortion(pUnoCrsr, xParent, ePortionType);
+                    if(!xRef.is() && pUnoCrsr->HasMark() ) {
+                        //flr: maybe its a good idea to add a special hint to the hints array and rely on the hint segmentation....
+                        xub_StrLen start=pUnoCrsr->GetMark()->nContent.GetIndex();
+                        xub_StrLen end=pUnoCrsr->GetPoint()->nContent.GetIndex();
+                        ASSERT(start<=end, "hmm --- why is this different");
+                        xub_StrLen startMarkerPos=pTxtNode->GetTxt().Search(CH_TXT_ATR_FIELDSTART, start);
+                        xub_StrLen endMarkerPos=pTxtNode->GetTxt().Search(CH_TXT_ATR_FIELDEND, start);
+                        xub_StrLen formMarkerPos=pTxtNode->GetTxt().Search(CH_TXT_ATR_FORMELEMENT, start);
+                        xub_StrLen markerPos=STRING_LEN;
+                        if (startMarkerPos>=start && startMarkerPos<end)
+                        {
+                            markerPos=startMarkerPos;
+                        }
+                        if (endMarkerPos>=start && endMarkerPos<end)
+                        {
+                            if (endMarkerPos<markerPos)
+                                markerPos=endMarkerPos;
+                        }
+                        if (formMarkerPos>=start && formMarkerPos<end)
+                        {
+                            if (formMarkerPos<markerPos)
+                                markerPos=formMarkerPos;
+                        }
+                        if (markerPos<end)
+                        {
+                            if (start==markerPos)
+                                end = markerPos+1;
+                            else
+                                end = markerPos;
+                            bAtEnd = sal_False;
+                            pUnoCrsr->GetPoint()->nContent = end;
+                        }
+                        if (start+1==end && pTxtNode->GetTxt().GetChar(start)==CH_TXT_ATR_FIELDSTART)
+                        {
+                            SwBookmark* pFieldmark=NULL;
+                            if (pDoc && pUnoCrsr->GetPoint())
+                                pFieldmark=pDoc->getFieldBookmarkFor(*pUnoCrsr->GetPoint());
+                            SwXTextPortion* pPortion=NULL;
+                            xRef = (pPortion=new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_START));
+                            if (pPortion && pFieldmark && pDoc)
+                                pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+                        }
+                        else if (start+1==end && pTxtNode->GetTxt().GetChar(start)==CH_TXT_ATR_FIELDEND)
+                        {
+                            SwBookmark* pFieldmark=NULL;
+                            if (pDoc && pUnoCrsr->GetPoint())
+                            {
+                                SwPosition aPos(*pUnoCrsr->GetPoint());
+                                aPos.nContent=markerPos;
+                                pFieldmark=pDoc->getFieldBookmarkFor(aPos);
+                            }
+                            SwXTextPortion* pPortion=NULL;
+                            xRef = (pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_END));
+                            if (pPortion && pFieldmark && pDoc)
+                                pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+                        }
+                        else if (start+1==end && pTxtNode->GetTxt().GetChar(start)==CH_TXT_ATR_FORMELEMENT)
+                        {
+                            SwFieldBookmark* pFieldmark=NULL;
+                            if (pDoc && pUnoCrsr->GetPoint())
+                            {
+                                SwPosition aPos(*pUnoCrsr->GetPoint());
+                                aPos.nContent=markerPos;
+                                pFieldmark=pDoc->getFormFieldBookmarkFor(aPos);
+                            }
+                            SwXTextPortion* pPortion=NULL;
+                            xRef = (pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_START_END));
+                            if (pPortion && pFieldmark && pDoc)
+                                pPortion->SetBookmark(new SwXFieldmark(true, pFieldmark, pDoc));
+                        }
+                        else
+                        {
+                            xRef = new SwXTextPortion(pUnoCrsr, xParent, ePortionType);
+                        }
+                    }
                     if(xRef.is())
                         aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
                 }
