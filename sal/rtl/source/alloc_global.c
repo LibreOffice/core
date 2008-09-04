@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alloc_global.c,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,7 +149,18 @@ rtl_memory_init (void)
 
 /* ================================================================= */
 
-#if defined(__GNUC__)
+/*
+  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
+
+  Mac OS X does not seem to support "__cxa__atexit", thus leading
+  to the situation that "__attribute__((destructor))__" functions
+  (in particular "rtl_memory_fini") become called _before_ global
+  C++ object d'tors.
+
+  Delegated the call to "rtl_memory_fini" into a dummy C++ object,
+  see memory_fini.cxx .
+*/
+#if defined(__GNUC__) && !defined(MACOSX)
 static void rtl_memory_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_memory_fini)
