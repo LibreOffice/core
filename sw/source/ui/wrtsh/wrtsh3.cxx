@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh3.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,24 @@ BOOL SwWrtShell::GotoField( const SwFmtFld& rFld )
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     }
 
+    return bRet;
+}
+
+bool SwWrtShell::GotoFieldBookmark(SwBookmark *pBkmk)
+{
+   (this->*fnKillSel)( 0, sal_False );
+
+    bool bRet = SwCrsrShell::GotoFieldBookmark(pBkmk);
+    if( bRet && IsSelFrmMode() )
+    {
+        UnSelectFrm();
+        LeaveSelFrmMode();
+    }
+    if( IsSelection() )
+    {
+        fnKillSel = &SwWrtShell::ResetSelect;
+        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+    }
     return bRet;
 }
 
