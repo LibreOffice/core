@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,9 @@
 // --> OD 2008-04-25 #refactorlists#
 class XMLTextListsHelper;
 // <--
+
+#include <com/sun/star/text/XFormField.hpp>
+
 
 class SvXMLImport;
 class SvXMLStylesContext;
@@ -238,6 +241,10 @@ enum XMLTextPElemTokens
     XML_TOK_DRAW_DATE_TIME,
     XML_TOK_TEXT_PAGE_CONTINUATION,
 
+    XML_TOK_TEXT_FIELDMARK,
+    XML_TOK_TEXT_FIELDMARK_START,
+    XML_TOK_TEXT_FIELDMARK_END,
+
     XML_TOK_TEXT_P_ELEM_END=XML_TOK_UNKNOWN
 };
 
@@ -405,6 +412,9 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
                     ::rtl::OUString>,
                 ::comphelper::UStringLess> aBookmarkStartRanges;
 
+    typedef ::std::vector< ::rtl::OUString> BookmarkVector_t;
+    BookmarkVector_t aBookmarkVector;
+
     /// backpatcher for references to footnotes and endnotes
     XMLPropertyBackpatcher<sal_Int16> * pFootnoteBackpatcher;
 
@@ -467,6 +477,14 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
     // clean up backpatchers; to be called only by destructor
     // Code is implemented in XMLPropertyBackpatcher.cxx
     SAL_DLLPRIVATE void _FinitBackpatcher();
+
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> field_name_type_t;
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > field_param_t;
+    typedef ::std::vector< field_param_t > field_params_t;
+    typedef ::std::pair< field_name_type_t, field_params_t > field_stack_item_t;
+    typedef ::std::stack< field_stack_item_t > field_stack_t;
+
+    field_stack_t aFieldStack;
 
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
@@ -743,6 +761,18 @@ public:
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & o_rRange,
         ::rtl::OUString& o_rXmlId);
+
+    ::rtl::OUString FindActiveBookmarkName();
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetRangeFor(::rtl::OUString &sName);
+
+    void pushFieldCtx( ::rtl::OUString name, ::rtl::OUString type );
+    void popFieldCtx();
+    void addFieldParam( ::rtl::OUString name, ::rtl::OUString value );
+    void setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField);
+    ::rtl::OUString getCurrentFieldName();
+    ::rtl::OUString getCurrentFieldType();
+    bool hasCurrentFieldCtx();
+
 
     /// insert new footnote ID.
     /// Also fixup open references from the backpatch list to this ID.
