@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwXDocumentSettings.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +126,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES,
     HANDLE_UNIX_FORCE_ZERO_EXT_LEADING,
     HANDLE_USE_OLD_PRINTER_METRICS,
+    HANDLE_PROTECT_FORM,
     HANDLE_TABS_RELATIVE_TO_INDENT,
     // --> OD 2008-06-05 #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST
@@ -180,6 +181,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading"), HANDLE_UNIX_FORCE_ZERO_EXT_LEADING, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics"), HANDLE_USE_OLD_PRINTER_METRICS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("TabsRelativeToIndent"), HANDLE_TABS_RELATIVE_TO_INDENT, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("ProtectForm"), HANDLE_PROTECT_FORM, CPPUTYPE_BOOLEAN, 0, 0},
         // --> OD 2008-06-05 #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
 
@@ -662,6 +664,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bTmp);
         }
         break;
+        case HANDLE_PROTECT_FORM:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::PROTECT_FORM, bTmp);
+        }
+        break;
         // --> OD 2008-06-05 #i89181#
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
@@ -980,6 +988,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_TABS_RELATIVE_TO_INDENT:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_PROTECT_FORM:
+        {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::PROTECT_FORM);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
