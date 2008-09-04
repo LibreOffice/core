@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,7 +366,7 @@ private:
     @raises ::com::sun::star::util::CloseVetoException
         if the closing was vetoed by any instance
     */
-    void    impl_closeControllerFrames( sal_Bool _bDeliverOwnership );
+    void    impl_closeControllerFrames_nolck_throw( sal_Bool _bDeliverOwnership );
 
     /** disposes the frames of all controllers which are still left in m_aControllers.
     */
