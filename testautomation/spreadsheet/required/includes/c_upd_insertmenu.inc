@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_upd_insertmenu.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-07-31 19:05:23 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:18:30 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -1196,7 +1196,7 @@ testcase tInsertObjectFormular
             Kontext "SelectionMath"
             call DialogTest (SelectionMath)
         catch
-            warnlog "Math Selection Dialog is not available"
+            qaerrorlog "#i93427# Math Selection Dialog is not available"
         endcatch
     end if
     '/// Close Formular with 'Esc'
