@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.hxx,v $
- * $Revision: 1.156 $
+ * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -607,7 +607,8 @@ private:
     bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // OD 2006-04-13 #b6402800#
     bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
     bool mbOldPrinterMetrics                        : 1;   // FME 2007-05-14 #147385#
-    bool mbTabRelativeToIndent;                            // #i24363# tab stops relative to indent
+    bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
+    bool mbProtectForm                              : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // OD 2008-06-05 #i89181# - see above
 
     // #i78591#
@@ -752,6 +753,10 @@ public:
     virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode );
     virtual SwCharCompressType getCharacterCompressionType() const;
     virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType );
+    SwBookmark* getFieldBookmarkFor(const SwPosition &pos) const;
+    SwBookmark* getNextFieldBookmarkFor(const SwPosition &pos) const;
+    SwBookmark* getPrevFieldBookmarkFor(const SwPosition &pos) const;
+    SwFieldBookmark* getFormFieldBookmarkFor(const SwPosition &pos) const;
 
     /** IDocumentDeviceAccess
     */
@@ -935,6 +940,7 @@ public:
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart);
     virtual bool AppendTxtNode(SwPosition& rPos);
+        virtual void SetModified(SwPaM &rPaM);
     virtual bool Replace(SwPaM& rPam, const String& rNewStr, bool bRegExpRplc);
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos );
 
