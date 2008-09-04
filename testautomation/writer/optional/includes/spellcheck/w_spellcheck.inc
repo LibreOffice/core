@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_spellcheck.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:36:16 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:20:07 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -159,7 +159,7 @@ testcase tToolsSpellcheckCorrect
     printlog " Insert some faulty text"
     Sleep 1
     '/// Call Spellcheck in empty document ///
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Sleep 2
     Kontext "Active"
     if NOT Active.Exists(1) then
@@ -190,7 +190,7 @@ testcase tToolsSpellcheckCorrect
 
     Call wTypeKeys FFText
     wait 500
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Sleep 2
     Kontext "Active"
     try
@@ -291,7 +291,7 @@ testcase tToolsSpellcheck1Mistake
     Call wTypeKeys sErrorSampleText
     Call wTypeKeys "<Return><Up>"
 	wait 500
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
@@ -407,7 +407,7 @@ testcase tToolsSpellcheckForward
     end select
 
     wait 500
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Sleep 2
     Kontext "Spellcheck"
     Printlog "   - Replace all (" + NotInDictionary.Gettext + ") ...."
@@ -484,7 +484,7 @@ testcase tToolsSpellcheckForward
     Printlog "   - recheck: One mistake has to be found 3 times"
     wait 500
     '/// Recheck: One mistake has to be found 3 times ///
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Sleep 2
     Kontext "Active"
     if Active.Exists then
@@ -611,7 +611,7 @@ testcase tToolsSpellcheckOnlyOneWord
     Kontext "FindAndReplace"
     if FindAndReplace.Exists then FindAndReplace.Close
 
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then 
@@ -681,7 +681,7 @@ testcase tToolsSpellcheckOnlyOneWord
 
     '/// Execute spellcheck again ///
     wait 500
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
@@ -983,7 +983,7 @@ testcase tToolsSpellcheckChangeLanguageAttribute
 
     '/// Execute spellcheck: change language Attributes
     wait 500
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     Sleep 2
     Kontext "Spellcheck"
     if Not Spellcheck.Exists then
@@ -995,7 +995,7 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                 Active.ok
             end if
         end if
-        ToolsSpellcheck
+        ToolsSpellcheckWriter
         Kontext "Spellcheck"
     end if
 	'/// Replace found word with suggestion from list
@@ -1128,7 +1128,7 @@ testcase tToolsSpellcheckButtonChange
     Call wTypeKeys "<Mod1 Home>"
 
     '/// invoke the spellchecker
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     '/// Check if button change if disabled if
     '/// 1. No suggestion has been given from spellchecker
     '/// 2. The button 'change' should be enabled if found mistake has been changed!"
@@ -1194,7 +1194,7 @@ testcase tToolsSpellcheckButtonChangeAll
     Call wTypeKeys "<Mod1 Home>"
 
     '/// invoke the spellchecker
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     '/// Check if button 'change all' disabled if found mistake has been changed!"
     Kontext "Active"
     if Active.Exists then
