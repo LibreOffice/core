@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmundo.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -560,10 +560,14 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             if ( bAddUndoAction )
             {
                 Reference< XBindableValue > xBindable( evt.Source, UNO_QUERY );
+                Reference< XValueBinding > xBinding;
+                if ( xBindable.is() )
+                    xBinding = xBindable->getValueBinding();
+
                 Reference< XPropertySet > xBindingProps;
                 Reference< XPropertySetInfo > xBindingPropsPSI;
                 if ( xBindable.is() )
-                    xBindingProps.set( xBindable->getValueBinding(), UNO_QUERY );
+                    xBindingProps.set( xBinding, UNO_QUERY );
                 if ( xBindingProps.is() )
                     xBindingPropsPSI = xBindingProps->getPropertySetInfo();
                 // TODO: we should cache all those things, else this might be too expensive.
@@ -576,6 +580,8 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     OSL_VERIFY( xBindingProps->getPropertyValue( s_sExternalData ) >>= bExternalData );
                     bAddUndoAction = !bExternalData;
                 }
+                else
+                    bAddUndoAction = !xBinding.is();
             }
         }
 
