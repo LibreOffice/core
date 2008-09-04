@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docedt.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -823,6 +823,11 @@ bool SwDoc::Insert( const SwPaM &rRg, sal_Unicode c )
     return sal_True;
 }
 
+void SwDoc::SetModified(SwPaM &rPaM)
+{
+    SwDataChanged aTmp( rPaM, 0 );
+    SetModified();
+}
 
 /*************************************************************************
 |*                SwDoc::Overwrite(char)
