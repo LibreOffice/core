@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.57 $
+# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -184,10 +184,6 @@ SCP1FILES += \
              file_onlineupdate.par
 .ENDIF
 
-.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="aqua"
-SCP1FILES += aqua_ooo.par
-.ENDIF
-
 # ------------------------------------------------------------------------
 # OpenOffice.org with JRE
 
@@ -328,10 +324,6 @@ SCP2FILES += layout.par
 SCP2FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par
-.ENDIF
-
-.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="aqua"
-SCP2FILES += aqua_ooo.par
 .ENDIF
 
 # ------------------------------------------------------------------------
