@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: standard_toolbar_1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:16:28 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -46,6 +46,11 @@ testcase tStandardBar_1
     '///<h1>Update test for the Standard Bar in all applications</h1>
 
     '///<ul>
+    gApplication = "WRITER"
+    hNewDocument()
+    kontext "DocumentWriter"
+    DocumentWriter.maximize()
+    hCloseDocument()
 
     '///+<li>Open a writer-doc and check if the Standardbar does exist</li>
     Printlog " - WRITER: check if Standardbar exists"
