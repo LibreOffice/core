@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,7 +66,8 @@ EXCEPTIONSFILES = \
         $(SLO)$/ww8par6.obj \
         $(SLO)$/writerhelper.obj \
         $(SLO)$/writerwordglue.obj \
-        $(SLO)$/ww8scan.obj
+        $(SLO)$/ww8scan.obj \
+        $(SLO)$/WW8FFData.obj
 
 
 SLOFILES =	\
@@ -91,7 +92,8 @@ SLOFILES =	\
         $(SLO)$/styles.obj \
         $(SLO)$/ww8scan.obj \
         $(SLO)$/writerhelper.obj \
-        $(SLO)$/writerwordglue.obj
+        $(SLO)$/writerwordglue.obj \
+        $(SLO)$/WW8FFData.obj
 
 
 # --- Tagets -------------------------------------------------------
