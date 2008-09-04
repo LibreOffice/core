@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_undo_history_1.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:39:04 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:20:19 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -47,10 +47,7 @@ sub w_undo_history_1
 	Call tUndoHistory4		' Sort
 	Call tUndoHistory5		' Text convert to table
 
-
 end sub
-
-
 
 testcase tUndoHistory1
 
@@ -59,10 +56,11 @@ testcase tUndoHistory1
 	'/// <U><B>CHECK: Typing</B></U>
 	printlog "- TYPING"
 	'/// write a < 20 characters long string: If20CharactersThere
-	Call wTypeKeys ( "If20CharactersThere" )
+	Call wTypeKeys "If20CharactersThere"
 	'/// string in Undo list has to be: Typing: If20CharactersThere
 	Call CheckUndoStringInUndoList ( 1, "'If20Char...rsThere'" )
-
+    Call wTypeKeys "<ESCAPE>"
+    
 	'/// <U><B>CHECK: Overwrite</B></U>
 	printlog "- OVERWRITE"
 	'/// press 'Home' key
@@ -70,14 +68,14 @@ testcase tUndoHistory1
 	'/// press 'Ins' key
 	Call wTypeKeys "<Insert>"
 	'/// write a < 20 characters long string: IsThatDifferent4You
-	Call wTypeKeys ( "IsThatDifferent4You" )
+	Call wTypeKeys "IsThatDifferent4You"
 	'/// string in Undo list has to be: Overwrite: IsThatDifferent4You
 	Call CheckUndoStringInUndoList ( 2, "'IsThatDifferent4You'" )	
 
-	'/// CloseDocument	
+	'/// CloseDocument
 	Call hCloseDocument
-	
-endcase	
+
+endcase
 
 
 testcase tUndoHistory2
@@ -87,9 +85,9 @@ testcase tUndoHistory2
 	printlog "- REPLACE"
 	Call hNewDocument
 	'/// write a < 20 characters long string: If20CharactersThere
-	Call wTypeKeys ( "If20CharactersThere" )
+	Call wTypeKeys "If20CharactersThere"
 	'/// Select text
-	Call wTypeKeys ( "<Shift Home>" )
+	Call wTypeKeys "<Shift Home>"
 	'/// Edit / Find and Replace 	
 	EditSearchAndReplace
 	Kontext "FindAndReplace"
@@ -113,7 +111,7 @@ testcase tUndoHistory2
 	Kontext "DocumentWriter"
 	'/// string in Undo list has to be: Replace: 'IsThatDifferent4You' -> 'ThisReplacementText'
 	Call CheckUndoStringInUndoList ( 3, "'If20CharactersThere' -> 'ThisReplacementText'" )
-		
+
 	'/// Close document
 	Call hCloseDocument
 	
@@ -129,7 +127,7 @@ testcase tUndoHistory3
 	Call hNewDocument
 	'/// Insert the dummy text and point cursor at the top of the document
 	Call wBlindtextEinfuegen
-	Call wTypeKeys ( "<Mod1 Home>" )
+	Call wTypeKeys "<Mod1 Home>"
 	'/// Edit / Find and Replace 	
 	EditSearchAndReplace
 	Kontext "FindAndReplace"
@@ -150,18 +148,17 @@ testcase tUndoHistory3
 	Kontext "DocumentWriter"
 	'/// string in Undo list has to be: Replace: '14 occurences of and'
 	Call CheckUndoStringInUndoList ( 5, "14 occurences of 'and'" )
-		
-	'/// <U><B>CHECK: Delete</B></U>	
+    Call wTypeKeys "<ESCAPE>"
+
+	'/// <U><B>CHECK: Delete</B></U>
 	'///  Backspace 4 times to delete characters
 	Call wTypeKeys "<Backspace>", 4
 	'/// string in Undo list has to be: Delete: '###'
 	printlog "- DELETE"
-	Call CheckUndoStringInUndoList ( 4, "' ###'" )	 	
+	Call CheckUndoStringInUndoList ( 4, "' ###'" )
 
-	
 	'/// Close document
 	Call hCloseDocument
-	
 
 endcase
 
@@ -173,14 +170,14 @@ testcase tUndoHistory4
 	'/// CHECK: Text sort
 	printlog "- TEXT SORT"
 	'/// Enter some text like "This<Return>is a<Return>test<Return>"
-	Call wTypeKeys ( "This" ) 
-	Call wTypeKeys ( "<Return>" ) 
-	Call wTypeKeys ( "is a" ) 
-	Call wTypeKeys ( "<Return>" )
-	Call wTypeKeys ( "test" )
-	Call wTypeKeys ( "<Return>" )
+	Call wTypeKeys "This"
+	Call wTypeKeys "<Return>"
+	Call wTypeKeys "is a"
+	Call wTypeKeys "<Return>"
+	Call wTypeKeys "test"
+	Call wTypeKeys "<Return>"
 	'/// Select all and Tools -> Sort
-	Call wTypeKeys ( "<Mod1 A>" )
+	Call wTypeKeys "<Mod1 A>"
 	ToolsSort
     Kontext "Sortieren"
     Sortieren.Ok
@@ -189,7 +186,7 @@ testcase tUndoHistory4
 	Call CheckUndoStringInUndoList ( 6, "Sort text" )
 	
 	'/// Close document
-	Call hCloseDocument	
+	Call hCloseDocument
 
 endcase
 
@@ -201,14 +198,14 @@ testcase tUndoHistory5
 	'/// CHECK: Text convert to table
 	printlog "TEXT CONVERT TO TABLE"
 	'/// Enter some text like "This<Return>is a<Return>test<Return>"
-	Call wTypeKeys ( "This" ) 
-	Call wTypeKeys ( "<Return>" ) 
-	Call wTypeKeys ( "is a" ) 
-	Call wTypeKeys ( "<Return>" )
-	Call wTypeKeys ( "test" )
-	Call wTypeKeys ( "<Return>" )
+	Call wTypeKeys "This"
+	Call wTypeKeys "<Return>"
+	Call wTypeKeys "is a"
+	Call wTypeKeys "<Return>"
+	Call wTypeKeys "test"
+	Call wTypeKeys "<Return>"
 	'/// Select all and Tools - Text <> Table
-	Call wTypeKeys ( "<Mod1 A>" )
+	Call wTypeKeys "<Mod1 A>"
 	ToolsTextInTable
 	Kontext "TextInTabelleUmwandeln"
 	Absatz.Check

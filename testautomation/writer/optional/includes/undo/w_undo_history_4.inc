@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_undo_history_4.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:39:38 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:20:57 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -73,6 +73,7 @@ testcase tUndoHistory34
     wait 500
 	'///  string in Undo-list has to be: "Insert object") 
 	Call CheckUndoStringInUndoList ( 10, "InsertObject" )
+    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- delete object"	
 	'/// Select object with <Shift F4>
@@ -87,7 +88,6 @@ testcase tUndoHistory34
 	
 	'/// close Document
 	Call hCloseDocument
-
 endcase
 
 
@@ -106,6 +106,7 @@ testcase tUndoHistory35
 	Sleep 2
 	'///  string in Undo-list has to be: "Insert floating frame") 
 	Call CheckUndoStringInUndoList ( 10, "InsertFloatingFrame" )
+    Call wTypeKeys "<ESCAPE>"
 
 	'/// Delete floating frame
 	printlog "- delete floating frame"
@@ -115,7 +116,6 @@ testcase tUndoHistory35
 	
 	'/// close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -145,7 +145,6 @@ testcase tUndoHistory36
 	
 	'/// close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -179,8 +178,7 @@ testcase tUndoHistory37
 	Call CheckUndoStringInUndoList ( 10, "APGS" )
 
 	'/// close document
-	Call hCloseDocument	
-
+	Call hCloseDocument
 endcase
 
 
@@ -196,7 +194,9 @@ testcase tUndoHistory38
 	Call wTypeKeys ( "www.sun.com " )
 	'///  string in Undo-list has to be: "AutoCorrect") 
 	Call CheckUndoStringInUndoList ( 10, "AutoCorrect" )	
-	'/// insert a line break
+    Call wTypeKeys "<ESCAPE>"
+
+    '/// insert a line break
 	Call wTypeKeys ( "<Return>" )
 	'/// <B>Autoformat</B>
 	printlog "- Autoformat"
@@ -206,13 +206,11 @@ testcase tUndoHistory38
 	Call CheckUndoStringInUndoList ( 10, "AutoFormat" )	
 	
 	'/// close document
-	Call hCloseDocument	
-
+	Call hCloseDocument
 endcase
 
 
 testcase tUndoHistory39
-
 	'/// <B>Draw object</B>
 	printlog "- Draw object"
 	'/// new document
@@ -228,7 +226,7 @@ testcase tUndoHistory39
     Kontext "Drawbar"
     printlog "  - Draw Freeform"
     Freihand.Click
-    Call gMouseMove ( 23, 20, 35, 31 )
+    Call gMouseMove ( 33, 40, 55, 51 )
     Call gMouseMove ( 35, 31, 40, 90 )
     Call gMouseMove ( 41, 91, 55 , 70 )
     Call gMouseClick( 55, 70 )
@@ -239,7 +237,6 @@ testcase tUndoHistory39
 
 	'/// close document
 	Call hCloseDocument	
-
 endcase
 
 
@@ -255,17 +252,18 @@ testcase tUndoHistory40
     Massstab.OK
     Sleep 1
     '/// Insert 2 drawing objects (rectangle) ///
-    Call wZeichenobjektEinfuegen ( "Rechteck", 20, 20, 30, 30 )
-    Call wZeichenobjektEinfuegen ( "Rechteck", 20, 35, 30, 45 )
+    Call wZeichenobjektEinfuegen ( "Rechteck", 40, 50, 50, 50 )
+    Call wZeichenobjektEinfuegen ( "Rechteck", 40, 55, 50, 65 )
     '/// Select both objects ///
-    Call wObjektSelektieren ( 15, 15, 50, 50 )
+    Call wObjektSelektieren ( 35, 35, 70, 70 )
     '/// Select Format / Group / Group ///
     try
         printlog "- group objects"
 		FormatGroupGroup
         Sleep 1
 		'///  string in Undo-list has to be: "Group draw objects") 
-		Call CheckUndoStringInUndoList ( 10, "DrawGroup" )		
+		Call CheckUndoStringInUndoList ( 10, "DrawGroup" )
+
 		'/// Format / Name object
 		printlog "- name objects"
 		FormatNameObject
@@ -273,25 +271,26 @@ testcase tUndoHistory40
 		NameField.Settext "MyGroup"
 		NameDlgObject.OK
 		'///  string in Undo-list has to be: "Rename 2 Rectangles")
-		Call CheckUndoStringInUndoList ( 10, "RenameGroup" )		
+		Call CheckUndoStringInUndoList ( 10, "RenameGroup" )
+
 		'/// Select Format / Group / Ungroup ///
 		printlog "- ungroup objects"
 		FormatUngroupDraw
 		'///  string in Undo-list has to be: "Ungroup group object 'MyGroup'") 
-		Call CheckUndoStringInUndoList ( 10, "DrawUnGroup" )		
+		Call CheckUndoStringInUndoList ( 10, "DrawUnGroup" )
+
 		'/// Select 1 object and delete it
 		Call gMouseClick ( 25, 25 )
 		printlog "- delete object"
 		Call wTypeKeys "<Delete>"
 		'///  string in Undo-list has to be: "Delete 2 Rectangles") 
-		Call CheckUndoStringInUndoList ( 10, "DeleteGroup" )				
+		Call CheckUndoStringInUndoList ( 10, "DeleteGroup" )
 	catch
         Warnlog "Unable to execute 'Format / Group / Group' -> disabled!"
     endcatch
 
 	'/// close document
 	Call hCloseDocument	
-
 endcase
 
 
@@ -307,7 +306,7 @@ testcase tUndoHistory41
 	'/// Select word' testp'
 	Call wTypeKeys ( "<Mod1 Shift Left>" )
 	'/// Tools / Spellcheck
-	ToolsSpellcheck
+	ToolsSpellcheckWriter
 	Kontext "Spellcheck"
 	Suggestions.Select 1
 	sReplace = Suggestions.GetSelText
@@ -323,16 +322,17 @@ testcase tUndoHistory41
 	Kontext "Spellcheck"
 	if Spellcheck.Exists then Spellcheck.Close
 	'///  string in Undo-list has to be: "Replace: 'Testp' -> 'Test'") 
-	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )		
-    Sleep 1
+	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )
+    Call wTypeKeys "<ESCAPE>"
+
     '/// Uncheck 'Autospellcheck' in Toolbar ///
     'ToolsSpellcheckAutoSpellcheck
-	
+
 	printlog "- Spellcheck"
 	Call wTypeKeys ( "<End><Return>", 2 )
 	'/// retype 'testp'
 	Call wTypeKeys ( "testp<Shift Home>" )
-	ToolsSpellcheck
+	ToolsSpellcheckWriter
 	Kontext "Spellcheck"
 	' Workaround: For some reasons sometimes dialog is disabled here
 	' Only reproducable by testtool
@@ -340,7 +340,7 @@ testcase tUndoHistory41
 		Suggestions.Select 1
 	catch
 		Spellcheck.Close
-		ToolsSpellcheck
+		ToolsSpellcheckWriter
 		Kontext "Spellcheck"
 		Suggestions.Select 1
 	endcatch		
@@ -363,7 +363,6 @@ testcase tUndoHistory41
 
 	'/// close document
     Call hCloseDocument
-
 endcase
 
 
@@ -384,15 +383,16 @@ testcase tUndoHistory42
     DocumentWriter.MouseUp   ( 20, 25 )
     Sleep 1
 
-	
 	'///  string in Undo-list has to be: "Insert control") 
 	Call CheckUndoStringInUndoList ( 10, "ControlInsert" )
+    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Form control (move)"
 	'/// Press '<Up>' to move control
 	Call wTypeKeys ( "<Up>" )
 	'///  string in Undo-list has to be: "Move control")
 	Call CheckUndoStringInUndoList ( 10, "ControlMove" )
+    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Form control (resize)"
 	'/// Press '<Ctrl+Tab>' to enter handle selection mode
@@ -401,14 +401,16 @@ testcase tUndoHistory42
 	Call wTypeKeys ( "<Up>" )
 	'///  string in Undo-list has to be: "Resize control")
 	Call CheckUndoStringInUndoList ( 10, "ControlResize" )
-		
+    Call wTypeKeys "<ESCAPE>"
+
 	printlog "- Form control (replace)"
-	'/// Select 'Format->Replace with-> Text box'			
+	'/// Select 'Format->Replace with-> Text box'
 	FormatReplaceWithTextBox
 	wait 500
 	'///  string in Undo-list has to be: "Replace control")
 	Call CheckUndoStringInUndoList ( 10, "ControlReplace" )
-		
+    Call wTypeKeys "<ESCAPE>"
+
 	printlog "- Form control (change property)"	
 	'/// Select 'Format->Control' and change name of control
 	FormatControl	
@@ -420,7 +422,8 @@ testcase tUndoHistory42
     ControlPropertiesDialog.Close 
 	'///  string in Undo-list has to be: "Set property 'Name'")
 	Call CheckUndoStringInUndoList ( 10, "ControlChange" )
-	
+    Call wTypeKeys "<ESCAPE>"
+
 	printlog "- Form control (delete)"
 	'/// Press '<Delete>' to delete control
 	Call wTypeKeys ( "<Delete>" )
@@ -428,8 +431,7 @@ testcase tUndoHistory42
 	Call CheckUndoStringInUndoList ( 10, "ControlDelete" )
 	
 	'/// close document
-	Call hCloseDocument 	
-	
+    Call hCloseDocument
 endcase
 
 
@@ -451,7 +453,8 @@ testcase tUndoHistory43
      Sleep 2
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
-	
+    Call wTypeKeys "<ESCAPE>"
+
 	'///  Delete header
 	printlog "- Delete header"
     Kontext "DocumentWriter"
@@ -470,6 +473,7 @@ testcase tUndoHistory43
 	end if
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
+    Call wTypeKeys "<ESCAPE>"
 
 	'/// Insert footer
 	printlog "- Insert footer"
@@ -484,7 +488,8 @@ testcase tUndoHistory43
      Sleep 2
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
-	
+    Call wTypeKeys "<ESCAPE>"
+
 	'///  Delete footer
 	printlog "- Delete footer"
     Kontext "DocumentWriter"
@@ -506,5 +511,4 @@ testcase tUndoHistory43
 
 	 '/// close document
 	 Call hCloseDocument
-	 
 endcase
