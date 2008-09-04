@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unobkm.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ SwXBookmark::~SwXBookmark()
 /*-- 10.12.98 10:14:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
+void SwXBookmark::attachToRangeEx(const uno::Reference< text::XTextRange > & xTextRange, IDocumentBookmarkAccess::BookmarkType eMark)
                                         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     if(!bIsDescriptor)
@@ -134,15 +134,14 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
                  m_aName =  C2S("Bookmark");
             // --> OD 2007-10-23 #i81002#
             // determine bookmark type due to its proposed name
-            IDocumentBookmarkAccess::BookmarkType eBkmkType =
-                                    pDoc->isCrossRefBookmarkName( m_aName )
-                                    ? IDocumentBookmarkAccess::CROSSREF_BOOKMARK
-                                    : IDocumentBookmarkAccess::BOOKMARK;
+            if( eMark == IDocumentBookmarkAccess::BOOKMARK &&
+                pDoc->isCrossRefBookmarkName( m_aName ) )
+                eMark = IDocumentBookmarkAccess::CROSSREF_BOOKMARK;
             // <--
             if( USHRT_MAX != pDoc->findBookmark(m_aName) )
                 pDoc->makeUniqueBookmarkName( m_aName );
             KeyCode aCode;
-            pBkm = pDoc->makeBookmark( aPam, aCode, m_aName, aEmptyStr, eBkmkType);
+            pBkm = pDoc->makeBookmark( aPam, aCode, m_aName, aEmptyStr, eMark);
             // --> OD 2007-10-23 #i81002#
             // Check, if bookmark has been created.
             // E.g., the creation of a cross-reference bookmark is suppress,
@@ -163,6 +162,115 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
     else
         throw lang::IllegalArgumentException();
 }
+
+void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
+    throw( lang::IllegalArgumentException, uno::RuntimeException )
+{
+    attachToRangeEx(xTextRange, IDocumentBookmarkAccess::BOOKMARK);
+}
+
+SwXFieldmark::SwXFieldmark(bool _isReplacementObject, SwBookmark* pBkm, SwDoc* pDc)
+    : SwXFieldmark_BASE(pBkm, pDc)
+    , isReplacementObject(_isReplacementObject)
+{ }
+
+
+void SwXFieldmark::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
+    throw( lang::IllegalArgumentException, uno::RuntimeException )
+{
+    attachToRangeEx(xTextRange, (isReplacementObject?IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT:IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT));
+}
+
+::rtl::OUString SwXFieldmark::getDescription(void) throw( ::com::sun::star::uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFieldBookmark* pBkm = (SwFieldBookmark*)GetBookmark();
+    OUString sRet;
+    if(pBkm)
+        sRet = pBkm->GetFFHelpText();
+    /* //@TODO implement...
+    else if(bIsDescriptor)
+        sRet = m_aName;
+        */
+    else
+        throw uno::RuntimeException();
+    return sRet;
+}
+
+::sal_Int16 SAL_CALL SwXFieldmark::getType(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFieldBookmark* pBkm = (SwFieldBookmark*)GetBookmark();
+    ::sal_Int16 sRet;
+    if(pBkm)
+        sRet = static_cast<sal_Int16>(pBkm->GetFieldType());
+    /* //@TODO implement...
+    else if(bIsDescriptor)
+        sRet = m_aName;
+        */
+    else
+        throw uno::RuntimeException();
+    return sRet;
+}
+
+::sal_Int16 SAL_CALL SwXFieldmark::getRes(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFieldBookmark* pBkm = (SwFieldBookmark*)GetBookmark();
+    ::sal_Int16 sRet;
+    if(pBkm)
+        sRet = static_cast<sal_Int16>(pBkm->GetFFRes());
+    /* //@TODO implement...
+    else if(bIsDescriptor)
+        sRet = m_aName;
+        */
+    else
+        throw uno::RuntimeException();
+    return sRet;
+}
+
+
+void SAL_CALL SwXFieldmark::setType( ::sal_Int16 fieldType ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFieldBookmark* pBkm = (SwFieldBookmark*)GetBookmark();
+    if (pBkm)
+        pBkm->SetFieldType(fieldType);
+    else
+        throw uno::RuntimeException();
+}
+
+void SAL_CALL SwXFieldmark::setRes( ::sal_Int16 res ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFieldBookmark* pBkm = (SwFieldBookmark*)GetBookmark();
+    if (pBkm)
+        pBkm->SetFFRes(res);
+    else
+        throw uno::RuntimeException();
+}
+
+void SAL_CALL SwXFieldmark::setDescription( const ::rtl::OUString& description ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFieldBookmark* pBkm = (SwFieldBookmark*)GetBookmark();
+    if (pBkm)
+        pBkm->SetFFHelpText(description);
+    else
+        throw uno::RuntimeException();
+}
+
+
+
+/*
+
+::com::sun::star::uno::Any SAL_CALL SwXFieldmark::queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+{
+        return SwXBookmark::queryInterface(rType);
+}
+*/
+
+
 /* -----------------18.02.99 13:31-------------------
  *
  * --------------------------------------------------*/
