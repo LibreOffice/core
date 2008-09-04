@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerImpl.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,7 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_hLastResult  ()
     , m_lFilters     ()
     , m_lLastFiles   ()
-    , m_iEventHandler(new VistaFilePickerEventHandler())
+    , m_iEventHandler(new VistaFilePickerEventHandler(this))
     , m_bInExecute   (sal_False)
 {
 }
@@ -890,6 +890,33 @@ void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
         eState |= CDCS_INACTIVE;
 
     iCustom->SetControlState(nId, eState);
+}
+
+//-------------------------------------------------------------------------------
+void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
+{
+    // SYNCHRONIZED->
+    ::osl::ResettableMutexGuard aLock(m_aMutex);
+
+    const ::rtl::OUString sFilter = m_lFilters.getCurrentFilter ();
+          ::rtl::OUString sExt    ;
+    if ( !m_lFilters.getFilter (sFilter, sExt))
+        return;
+
+    TFileDialog iDialog = impl_getBaseDialogInterface();
+
+    aLock.clear();
+    // <- SYNCHRONIZED
+
+    LPCWSTR pExt = 0;
+    if ( bChecked )
+    {
+        pExt = reinterpret_cast<LPCTSTR>(sExt.getStr());
+        pExt = wcschr( pExt, '.' );
+        if ( pExt )
+            pExt++;
+    }
+    iDialog->SetDefaultExtension( pExt );
 }
 
 } // namespace vista

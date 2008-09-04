@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerEventHandler.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,11 +66,12 @@ namespace vista{
 //------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-VistaFilePickerEventHandler::VistaFilePickerEventHandler()
+VistaFilePickerEventHandler::VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify)
     : m_nRefCount           (0       )
     , m_nListenerHandle     (0       )
     , m_pDialog             (        )
     , m_lListener           (m_aMutex)
+    , m_pInternalNotify     (pInternalNotify)
 {
 }
 
@@ -120,7 +121,7 @@ ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnFileOk(IFileDialog* pDialog)
+STDMETHODIMP VistaFilePickerEventHandler::OnFileOk(IFileDialog* /*pDialog*/)
 {
     return E_NOTIMPL;
 }
@@ -326,6 +327,31 @@ STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustom
                                                                DWORD                 nIDCtl    ,
                                                                BOOL                  bChecked  )
 {
+    /*
+    if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
+    {
+        LPCWSTR lpFilterExt = 0;
+        if ( bChecked )
+        {
+            UINT nIndex;
+            if (m_pDialog)
+            {
+                m_pDialog->GetFileTypeIndex( &nIndex );
+                lpFilterExt = lFilters[nIndex].pszSpec;
+                lpFilterExt = wcschr( lpFilterExt, '.' );
+                if ( lpFilterExt )
+                    lpFilterExt++;
+            }
+        }
+
+        if (m_pDialog)
+            m_pDialog->SetDefaultExtension( lpFilterExt );
+    }
+    */
+
+    if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
+        m_pInternalNotify->onAutoExtensionChanged(bChecked);
+
     impl_sendEvent(E_CONTROL_STATE_CHANGED, nIDCtl);
     return S_OK;
 }
