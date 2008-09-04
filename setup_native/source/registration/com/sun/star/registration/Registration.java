@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Registration.java,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,8 +284,15 @@ public class Registration {
 
                     // Store the service tag in local registry, which might have been installed later
                     if( Registry.isSupported() ) {
-                        if( Registry.getSystemRegistry().getServiceTag(tag.getInstanceURN()) == null ) {
-                            Registry.getSystemRegistry().addServiceTag(tag);
+                        // ignore communication failures with local service tag client
+                        try {
+                            if( Registry.getSystemRegistry().getServiceTag(tag.getInstanceURN()) == null ) {
+                                Registry.getSystemRegistry().addServiceTag(tag);
+                            }
+                        } catch( java.io.IOException e) {
+                            e.printStackTrace();
+                        } catch (java.lang.RuntimeException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
