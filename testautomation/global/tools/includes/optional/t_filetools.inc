@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_filetools.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:41:15 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:17:26 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -153,7 +153,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
     '///+<li>Errorcondition (boolean)</li>
     '///<ul>
     '///+<li>TRUE: The expected number of dialogs were closed</li>
-    '///+<li>FASLE: On any other condition</li>
+    '///+<li>FALSE: On any other condition</li>
     '///</ul>
      '///</ol>
     '///<u>Description</u>:
@@ -182,12 +182,14 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
     
     for iTry = 1 to iTries + iAdd
 
-        ' handle two possible dialogs:
+        ' handle three possible dialogs:
         ' 1. The warning that the user should create a new document based
-        '    on this Sample/Template (the document is writeprotected)
+        '    on this Sample/Template (the document is write protected)
         ' 2. The question to update links to the internet. Note: If you
         '    use proxies, they must be set correctly otherwise the result
         '    is undefined.
+        ' 3. Some weird usage information dialog which is an active with just
+        '    one OK button.
 
         ' Although this works quite well, there is a flaw that we will not
         ' get information about an "active" dialog that cannot be closed by
@@ -196,31 +198,38 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
         try
             if ( active.exists( 1 ) ) then
                
-                cMessage = active.getText()
-                cMessage = hRemoveLineBreaks( cMessage )
-                printlog( "Ressource type is: " & Active.getRT() )
+                iActives = iActives + 1
+                cMessage = hRemoveLineBreaks( active.getText() )
+                printlog( CFN & "MSG (" & iActives & "): " & cMessage )
+                printlog( CFN & "Ressource type is: " & Active.getRT() )
+                printlog( CFN & "Buttoncount is: " & Active.getButtonCount() ) 
                 bSkip = false
-
-                wait( 100 )
-                
 
                 ' ok to create a new document
                 try
                     active.cancel()
-                    iActives = iActives + 1
-                    printlog( CFN & "MSG (" & iActives & "): " & cMessage )
                     printlog( CFN & "MSG (" & iActives & "): closed with Cancel" )
                     bSkip = true
                 catch
-                    printlog( CFN & "Missed - this dialog has no OK button (create new document)" )
+                    printlog( CFN & "Missed - this dialog has no Cancel button (create new document)" )
                 endcatch
+
+                if ( not bSkip ) then                
+                    if ( Active.getRT() = 304 ) then
+                        if ( Active.getButtonCount() = 1 ) then
+                            active.ok()
+                            printlog( CFN & "MSG (" & iActives & "): closed with OK" )
+                            bSkip = true
+                        else
+                        endif
+                    else
+                    endif
+                endif                    
 
                 if ( not bSkip ) then
                     ' no to update links
                     try
                         active.no()
-                        iActives = iActives + 1
-                        printlog( CFN & "MSG (" & iActives & "): " & cMessage )
                         printlog( CFN & "MSG (" & iActives & "): closed with NO" )
                     catch
                         printlog( CFN & "Missed - this dialog has no NO button (update links)" )
