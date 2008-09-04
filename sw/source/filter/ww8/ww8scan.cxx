@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.140 $
+ * $Revision: 1.141 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@
 #endif                      // dump
 #include <tools/debug.hxx>
 #include <i18npool/lang.h>
+#include <vcl/svapp.hxx>    // Application  #i90932#
 
 #include <stdio.h>
 
@@ -5458,7 +5459,9 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
         fWhichTblStm= ( aBits2 & 0x02 ) >> 1;
         // dummy    = ( aBits2 & 0x0e ) >> 1;
         fExtChar    = ( aBits2 & 0x10 ) >> 4;
-        // dummy    = ( aBits2 & 0xe0 ) >> 5;
+        // dummy    = ( aBits2 & 0x20 ) >> 5;
+        fFarEast    = ( aBits2 & 0x40 ) >> 6; // #i90932#
+        // dummy    = ( aBits2 & 0x80 ) >> 7;
 
         /*
             ggfs. Ziel-Varaiblen, aus xxx_Ver67 fuellen
@@ -5524,6 +5527,9 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
 
+            rSt.Seek( 0x5bc );          // Actual nFib introduced in Word 2003
+            rSt >> nFib_actual;
+
             rSt.Seek( nOldPos );
         }
     }
@@ -5571,7 +5577,30 @@ WW8Fib::WW8Fib(BYTE nVer)
         nProduct = 0xc02d;
     }
 
-    lid = lidFE = 0x409;
+    // --> #i90932#
+    lid = 0x409; // LANGUAGE_ENGLISH_US
+
+    LanguageType nLang = Application::GetSettings().GetLanguage();
+    switch( nLang )
+    {
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+        case LANGUAGE_JAPANESE:
+            lidFE = nLang;
+            fFarEast = true;
+            break;
+        default:
+            lidFE = lid;
+            fFarEast = false;
+            break;
+    };
+    // <-- #i90932#
 }
 
 bool WW8Fib::Write(SvStream& rStrm)
@@ -5601,6 +5630,7 @@ bool WW8Fib::Write(SvStream& rStrm)
     if( fEncrypted )    nBits16 |= 0x0100;
     if( fWhichTblStm )  nBits16 |= 0x0200;
     if( fExtChar )      nBits16 |= 0x1000;
+    if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
@@ -6438,7 +6468,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         UINT16 a16Bit;
         BYTE   a8Bit;
 
-        a16Bit = Get_UShort( pData );
+        a16Bit = Get_UShort( pData );        // 0 0x00
         fFacingPages        = 0 != ( a16Bit  &  0x0001 )     ;
         fWidowControl       = 0 != ( a16Bit  &  0x0002 )     ;
         fPMHMainDoc         = 0 != ( a16Bit  &  0x0004 )     ;
@@ -6446,14 +6476,14 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         fpc                 =      ( a16Bit  &  0x0060 ) >> 5;
         grpfIhdt            =      ( a16Bit  &  0xff00 ) >> 8;
 
-        a16Bit = Get_UShort( pData );
+        a16Bit = Get_UShort( pData );        // 2 0x02
         rncFtn              =   a16Bit  &  0x0003        ;
         nFtn                = ( a16Bit  & ~0x0003 ) >> 2 ;
 
-        a8Bit = Get_Byte( pData );
+        a8Bit = Get_Byte( pData );           // 4 0x04
         fOutlineDirtySave      = 0 != ( a8Bit  &  0x01   );
 
-        a8Bit = Get_Byte( pData );
+        a8Bit = Get_Byte( pData );           // 5 0x05
         fOnlyMacPics           = 0 != ( a8Bit  &  0x01   );
         fOnlyWinPics           = 0 != ( a8Bit  &  0x02   );
         fLabelDoc              = 0 != ( a8Bit  &  0x04   );
@@ -6463,7 +6493,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         fLinkStyles            = 0 != ( a8Bit  &  0x40   );
         fRevMarking            = 0 != ( a8Bit  &  0x80   );
 
-        a8Bit = Get_Byte( pData );
+        a8Bit = Get_Byte( pData );           // 6 0x06
         fBackup                = 0 != ( a8Bit  &  0x01   );
         fExactCWords           = 0 != ( a8Bit  &  0x02   );
         fPagHidden             = 0 != ( a8Bit  &  0x04   );
@@ -6473,7 +6503,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         fReadOnlyRecommended   = 0 != ( a8Bit  &  0x40   );
         fDfltTrueType          = 0 != ( a8Bit  &  0x80   );
 
-        a8Bit = Get_Byte( pData );
+        a8Bit = Get_Byte( pData );           // 7 0x07
         fPagSuppressTopSpacing = 0 != ( a8Bit  &  0x01   );
         fProtEnabled           = 0 != ( a8Bit  &  0x02   );
         fDispFormFldSel        = 0 != ( a8Bit  &  0x04   );
@@ -6484,7 +6514,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         fEmbedFonts            = 0 != ( a8Bit  &  0x80   );
 
 
-        a8Bit = Get_Byte( pData );
+        a8Bit = Get_Byte( pData );           // 8 0x08
         copts_fNoTabForInd           = 0 != ( a8Bit  &  0x01   );
         copts_fNoSpaceRaiseLower     = 0 != ( a8Bit  &  0x02   );
         copts_fSupressSpbfAfterPgBrk = 0 != ( a8Bit  &  0x04   );
@@ -6494,32 +6524,33 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         copts_fConvMailMergeEsc      = 0 != ( a8Bit  &  0x40   );
         copts_fSupressTopSpacing     = 0 != ( a8Bit  &  0x80   );
 
-        a8Bit = Get_Byte( pData );
+        a8Bit = Get_Byte( pData );           // 9 0x09
         copts_fOrigWordTableRules    = 0 != ( a8Bit  &  0x01   );
         copts_fTransparentMetafiles  = 0 != ( a8Bit  &  0x02   );
         copts_fShowBreaksInFrames    = 0 != ( a8Bit  &  0x04   );
         copts_fSwapBordersFacingPgs  = 0 != ( a8Bit  &  0x08   );
+        copts_fExpShRtn              = 0 != ( a8Bit  &  0x20   );  // #i56856#
 
-        dxaTab = Get_Short( pData );
-        wSpare = Get_UShort( pData );
-        dxaHotZ = Get_UShort( pData );
-        cConsecHypLim = Get_UShort( pData );
-        wSpare2 = Get_UShort( pData );
-        dttmCreated = Get_Long( pData );
-        dttmRevised = Get_Long( pData );
-        dttmLastPrint = Get_Long( pData );
-        nRevision = Get_Short( pData );
-        tmEdited = Get_Long( pData );
-        cWords = Get_Long( pData );
-        cCh = Get_Long( pData );
-        cPg = Get_Short( pData );
-        cParas = Get_Long( pData );
+        dxaTab = Get_Short( pData );         // 10 0x0a
+        wSpare = Get_UShort( pData );        // 12 0x0c
+        dxaHotZ = Get_UShort( pData );       // 14 0x0e
+        cConsecHypLim = Get_UShort( pData ); // 16 0x10
+        wSpare2 = Get_UShort( pData );       // 18 0x12
+        dttmCreated = Get_Long( pData );     // 20 0x14
+        dttmRevised = Get_Long( pData );     // 24 0x18
+        dttmLastPrint = Get_Long( pData );   // 28 0x1c
+        nRevision = Get_Short( pData );      // 32 0x20
+        tmEdited = Get_Long( pData );        // 34 0x22
+        cWords = Get_Long( pData );          // 38 0x26
+        cCh = Get_Long( pData );             // 42 0x2a
+        cPg = Get_Short( pData );            // 46 0x2e
+        cParas = Get_Long( pData );          // 48 0x30
 
-        a16Bit = Get_UShort( pData );
+        a16Bit = Get_UShort( pData );        // 52 0x34
         rncEdn =   a16Bit &  0x0003       ;
         nEdn   = ( a16Bit & ~0x0003 ) >> 2;
 
-        a16Bit = Get_UShort( pData );
+        a16Bit = Get_UShort( pData );        // 54 0x36
         epc            =   a16Bit &  0x0003       ;
         nfcFtnRef      = ( a16Bit &  0x003c ) >> 2;
         nfcEdnRef      = ( a16Bit &  0x03c0 ) >> 6;
@@ -6528,15 +6559,15 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         fShadeFormData = 0 != ( a16Bit &  0x1000 );
         fWCFtnEdn      = 0 != ( a16Bit &  0x8000 );
 
-        cLines = Get_Long( pData );
-        cWordsFtnEnd = Get_Long( pData );
-        cChFtnEdn = Get_Long( pData );
-        cPgFtnEdn = Get_Short( pData );
-        cParasFtnEdn = Get_Long( pData );
-        cLinesFtnEdn = Get_Long( pData );
-        lKeyProtDoc = Get_Long( pData );
+        cLines = Get_Long( pData );          // 56 0x38
+        cWordsFtnEnd = Get_Long( pData );    // 60 0x3c
+        cChFtnEdn = Get_Long( pData );       // 64 0x40
+        cPgFtnEdn = Get_Short( pData );      // 68 0x44
+        cParasFtnEdn = Get_Long( pData );    // 70 0x46
+        cLinesFtnEdn = Get_Long( pData );    // 74 0x4a
+        lKeyProtDoc = Get_Long( pData );     // 78 0x4e
 
-        a16Bit = Get_UShort( pData );
+        a16Bit = Get_UShort( pData );        // 82 0x52
         wvkSaved    =   a16Bit & 0x0007        ;
         wScaleSaved = ( a16Bit & 0x0ff8 ) >> 3 ;
         zkSaved     = ( a16Bit & 0x3000 ) >> 12;
@@ -6545,29 +6576,29 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
         /*
             bei nFib >= 103 gehts weiter:
         */
-        if (nFib >= 103)
+        if (nFib >= 103) // Word 6/32bit, 95, 97, 2000, 2002, 2003, 2007
         {
-            a32Bit = Get_ULong( pData );
+            a32Bit = Get_ULong( pData );     // 84 0x54
             SetCompatabilityOptions(a32Bit);
         }
 
         //#i22436#, for all WW7- documents
-        if (nFib <= 104)
+        if (nFib <= 104) // Word 95
             fUsePrinterMetrics = 1;
 
         /*
             bei nFib > 105 gehts weiter:
         */
-        if (nFib > 105)
+        if (nFib > 105) // Word 97, 2000, 2002, 2003, 2007
         {
-            adt = Get_Short( pData );
+            adt = Get_Short( pData );            // 88 0x58
 
-            doptypography.ReadFromMem(pData);
+            doptypography.ReadFromMem(pData);    // 90 0x5a
 
-            memcpy( &dogrid, pData, sizeof( WW8_DOGRID ));
+            memcpy( &dogrid, pData, sizeof( WW8_DOGRID )); // 400 0x190
             pData += sizeof( WW8_DOGRID );
 
-            a16Bit = Get_UShort( pData );
+            a16Bit = Get_UShort( pData );        // 410 0x19a
             // die untersten 9 Bit sind uninteressant
             fHtmlDoc                = ( a16Bit &  0x0200 ) >>  9 ;
             fSnapBorder             = ( a16Bit &  0x0800 ) >> 11 ;
@@ -6576,35 +6607,35 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
             fForcePageSizePag       = ( a16Bit &  0x4000 ) >> 14 ;
             fMinFontSizePag         = ( a16Bit &  0x8000 ) >> 15 ;
 
-            a16Bit = Get_UShort( pData );
+            a16Bit = Get_UShort( pData );        // 412 0x19c
             fHaveVersions   = 0 != ( a16Bit  &  0x0001 );
             fAutoVersion    = 0 != ( a16Bit  &  0x0002 );
 
-            pData += 12;
+            pData += 12;                         // 414 0x19e
 
-            cChWS = Get_Long( pData );
-            cChWSFtnEdn = Get_Long( pData );
-            grfDocEvents = Get_Long( pData );
+            cChWS = Get_Long( pData );           // 426 0x1aa
+            cChWSFtnEdn = Get_Long( pData );     // 430 0x1ae
+            grfDocEvents = Get_Long( pData );    // 434 0x1b2
 
-            pData += 4+30+8;
+            pData += 4+30+8;  // 438 0x1b6; 442 0x1ba; 472 0x1d8; 476 0x1dc
 
-            cDBC = Get_Long( pData );
-            cDBCFtnEdn = Get_Long( pData );
+            cDBC = Get_Long( pData );            // 480 0x1e0
+            cDBCFtnEdn = Get_Long( pData );      // 484 0x1e4
 
-            pData += 1 * sizeof( INT32);
+            pData += 1 * sizeof( INT32);         // 488 0x1e8
 
-            nfcFtnRef = Get_Short( pData );
-            nfcEdnRef = Get_Short( pData );
-            hpsZoonFontPag = Get_Short( pData );
-            dywDispPag = Get_Short( pData );
+            nfcFtnRef = Get_Short( pData );      // 492 0x1ec
+            nfcEdnRef = Get_Short( pData );      // 494 0x1ee
+            hpsZoonFontPag = Get_Short( pData ); // 496 0x1f0
+            dywDispPag = Get_Short( pData );     // 498 0x1f2
 
             if (nRead >= 516)
             {
                 //500 -> 508, Appear to be repeated here in 2000+
-                pData += 8;
-                a32Bit = Get_Long( pData );
+                pData += 8;                      // 500 0x1f4
+                a32Bit = Get_Long( pData );      // 508 0x1fc
                 SetCompatabilityOptions(a32Bit);
-                a32Bit = Get_Long( pData );
+                a32Bit = Get_Long( pData );      // 512 0x200
 
                 // i#78591#
                 // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
@@ -6706,7 +6737,7 @@ void WW8Dop::SetCompatabilityOptions(UINT32 a32Bit)
     fShowBreaksInFrames         = ( a32Bit &  0x00000400 ) >> 10 ;
     fSwapBordersFacingPgs       = ( a32Bit &  0x00000800 ) >> 11 ;
     fCompatabilityOptions_Unknown1_13       = ( a32Bit &  0x00001000 ) >> 12 ;
-    fCompatabilityOptions_Unknown1_14       = ( a32Bit &  0x00002000 ) >> 13 ;
+    fExpShRtn                   = ( a32Bit &  0x00002000 ) >> 13 ; // #i56856#
     fCompatabilityOptions_Unknown1_15       = ( a32Bit &  0x00004000 ) >> 14 ;
     fCompatabilityOptions_Unknown1_16       = ( a32Bit &  0x00008000 ) >> 15 ;
     fSuppressTopSpacingMac5     = ( a32Bit &  0x00010000 ) >> 16 ;
@@ -6744,7 +6775,7 @@ UINT32 WW8Dop::GetCompatabilityOptions() const
     if (fShowBreaksInFrames)            a32Bit |= 0x00000400;
     if (fSwapBordersFacingPgs)          a32Bit |= 0x00000800;
     if (fCompatabilityOptions_Unknown1_13)          a32Bit |= 0x00001000;
-    if (fCompatabilityOptions_Unknown1_14)          a32Bit |= 0x00002000;
+    if (fExpShRtn)                      a32Bit |= 0x00002000; // #i56856#
     if (fCompatabilityOptions_Unknown1_15)          a32Bit |= 0x00004000;
     if (fCompatabilityOptions_Unknown1_16)          a32Bit |= 0x00008000;
     if (fSuppressTopSpacingMac5)        a32Bit |= 0x00010000;
@@ -6860,7 +6891,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     UINT16 a16Bit;
     BYTE   a8Bit;
 
-    a16Bit = 0;
+    a16Bit = 0;                         // 0 0x00
     if (fFacingPages)
         a16Bit |= 0x0001;
     if (fWidowControl)
@@ -6872,16 +6903,16 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     a16Bit |= ( 0xff00 & (grpfIhdt << 8));
     Set_UInt16( pData, a16Bit );
 
-    a16Bit = 0;
+    a16Bit = 0;                         // 2 0x02
     a16Bit |= ( 0x0003 & rncFtn );
     a16Bit |= ( ~0x0003 & (nFtn << 2));
     Set_UInt16( pData, a16Bit );
 
-    a8Bit = 0;
+    a8Bit = 0;                          // 4 0x04
     if( fOutlineDirtySave ) a8Bit |= 0x01;
     Set_UInt8( pData, a8Bit );
 
-    a8Bit = 0;
+    a8Bit = 0;                          // 5 0x05
     if( fOnlyMacPics )  a8Bit |= 0x01;
     if( fOnlyWinPics )  a8Bit |= 0x02;
     if( fLabelDoc )     a8Bit |= 0x04;
@@ -6892,7 +6923,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     if( fRevMarking )   a8Bit |= 0x80;
     Set_UInt8( pData, a8Bit );
 
-    a8Bit = 0;
+    a8Bit = 0;                          // 6 0x06
     if( fBackup )               a8Bit |= 0x01;
     if( fExactCWords )          a8Bit |= 0x02;
     if( fPagHidden )            a8Bit |= 0x04;
@@ -6903,7 +6934,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     if( fDfltTrueType )         a8Bit |= 0x80;
     Set_UInt8( pData, a8Bit );
 
-    a8Bit = 0;
+    a8Bit = 0;                          // 7 0x07
     if( fPagSuppressTopSpacing )    a8Bit |= 0x01;
     if( fProtEnabled )              a8Bit |= 0x02;
     if( fDispFormFldSel )           a8Bit |= 0x04;
@@ -6915,7 +6946,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     Set_UInt8( pData, a8Bit );
 
 
-    a8Bit = 0;
+    a8Bit = 0;                          // 8 0x08
     if( copts_fNoTabForInd )            a8Bit |= 0x01;
     if( copts_fNoSpaceRaiseLower )      a8Bit |= 0x02;
     if( copts_fSupressSpbfAfterPgBrk )  a8Bit |= 0x04;
@@ -6926,34 +6957,35 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     if( copts_fSupressTopSpacing )      a8Bit |= 0x80;
     Set_UInt8( pData, a8Bit );
 
-    a8Bit = 0;
+    a8Bit = 0;                          // 9 0x09
     if( copts_fOrigWordTableRules )     a8Bit |= 0x01;
     if( copts_fTransparentMetafiles )   a8Bit |= 0x02;
     if( copts_fShowBreaksInFrames )     a8Bit |= 0x04;
     if( copts_fSwapBordersFacingPgs )   a8Bit |= 0x08;
+    if( copts_fExpShRtn )               a8Bit |= 0x20;  // #i56856#
     Set_UInt8( pData, a8Bit );
 
-    Set_UInt16( pData, dxaTab );
-    Set_UInt16( pData, wSpare );
-    Set_UInt16( pData, dxaHotZ );
-    Set_UInt16( pData, cConsecHypLim );
-    Set_UInt16( pData, wSpare2 );
-    Set_UInt32( pData, dttmCreated );
-    Set_UInt32( pData, dttmRevised );
-    Set_UInt32( pData, dttmLastPrint );
-    Set_UInt16( pData, nRevision );
-    Set_UInt32( pData, tmEdited );
-    Set_UInt32( pData, cWords );
-    Set_UInt32( pData, cCh );
-    Set_UInt16( pData, cPg );
-    Set_UInt32( pData, cParas );
+    Set_UInt16( pData, dxaTab );        // 10 0x0a
+    Set_UInt16( pData, wSpare );        // 12 0x0c
+    Set_UInt16( pData, dxaHotZ );       // 14 0x0e
+    Set_UInt16( pData, cConsecHypLim ); // 16 0x10
+    Set_UInt16( pData, wSpare2 );       // 18 0x12
+    Set_UInt32( pData, dttmCreated );   // 20 0x14
+    Set_UInt32( pData, dttmRevised );   // 24 0x18
+    Set_UInt32( pData, dttmLastPrint ); // 28 0x1c
+    Set_UInt16( pData, nRevision );     // 32 0x20
+    Set_UInt32( pData, tmEdited );      // 34 0x22
+    Set_UInt32( pData, cWords );        // 38 0x26
+    Set_UInt32( pData, cCh );           // 42 0x2a
+    Set_UInt16( pData, cPg );           // 46 0x2e
+    Set_UInt32( pData, cParas );        // 48 0x30
 
-    a16Bit = 0;
+    a16Bit = 0;                         // 52 0x34
     a16Bit |= ( 0x0003 & rncEdn );
     a16Bit |= (~0x0003 & ( nEdn << 2));
     Set_UInt16( pData, a16Bit );
 
-    a16Bit = 0;
+    a16Bit = 0;                         // 54 0x36
     a16Bit |= (0x0003 & epc );
     a16Bit |= (0x003c & (nfcFtnRef << 2));
     a16Bit |= (0x03c0 & (nfcEdnRef << 6));
@@ -6963,15 +6995,15 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     if( fWCFtnEdn )         a16Bit |= 0x8000;
     Set_UInt16( pData, a16Bit );
 
-    Set_UInt32( pData, cLines );
-    Set_UInt32( pData, cWordsFtnEnd );
-    Set_UInt32( pData, cChFtnEdn );
-    Set_UInt16( pData, cPgFtnEdn );
-    Set_UInt32( pData, cParasFtnEdn );
-    Set_UInt32( pData, cLinesFtnEdn );
-    Set_UInt32( pData, lKeyProtDoc );
+    Set_UInt32( pData, cLines );        // 56 0x38
+    Set_UInt32( pData, cWordsFtnEnd );  // 60 0x3c
+    Set_UInt32( pData, cChFtnEdn );     // 64 0x40
+    Set_UInt16( pData, cPgFtnEdn );     // 68 0x44
+    Set_UInt32( pData, cParasFtnEdn );  // 70 0x46
+    Set_UInt32( pData, cLinesFtnEdn );  // 74 0x4a
+    Set_UInt32( pData, lKeyProtDoc );   // 78 0x4e
 
-    a16Bit = 0;
+    a16Bit = 0;                         // 82 0x52
     if (wvkSaved)
         a16Bit |= 0x0007;
     a16Bit |= (0x0ff8 & (wScaleSaved << 3));
@@ -6980,16 +7012,16 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 
     if( 8 == rFib.nVersion )
     {
-        Set_UInt32(pData, GetCompatabilityOptions());
+        Set_UInt32(pData, GetCompatabilityOptions());  // 84 0x54
 
-        Set_UInt16( pData, adt );
+        Set_UInt16( pData, adt );                      // 88 0x58
 
-        doptypography.WriteToMem(pData);
+        doptypography.WriteToMem(pData);               // 400 0x190
 
         memcpy( pData, &dogrid, sizeof( WW8_DOGRID ));
         pData += sizeof( WW8_DOGRID );
 
-        a16Bit = 0x12;      // lvl auf 9 setzen
+        a16Bit = 0x12;      // lvl auf 9 setzen        // 410 0x19a
         if( fHtmlDoc )          a16Bit |= 0x0200;
         if( fSnapBorder )       a16Bit |= 0x0800;
         if( fIncludeHeader )    a16Bit |= 0x1000;
@@ -6998,28 +7030,28 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         if( fMinFontSizePag )   a16Bit |= 0x8000;
         Set_UInt16( pData, a16Bit );
 
-        a16Bit = 0;
+        a16Bit = 0;                                    // 412 0x19c
         if( fHaveVersions ) a16Bit |= 0x0001;
         if( fAutoVersion )  a16Bit |= 0x0002;
         Set_UInt16( pData, a16Bit );
 
-        pData += 12;
+        pData += 12;                                   // 414 0x19e
 
-        Set_UInt32( pData, cChWS );
-        Set_UInt32( pData, cChWSFtnEdn );
-        Set_UInt32( pData, grfDocEvents );
+        Set_UInt32( pData, cChWS );                    // 426 0x1aa
+        Set_UInt32( pData, cChWSFtnEdn );              // 430 0x1ae
+        Set_UInt32( pData, grfDocEvents );             // 434 0x1b2
 
-        pData += 4+30+8;
+        pData += 4+30+8;  // 438 0x1b6; 442 0x1ba; 472 0x1d8; 476 0x1dc
 
-        Set_UInt32( pData, cDBC );
-        Set_UInt32( pData, cDBCFtnEdn );
+        Set_UInt32( pData, cDBC );                     // 480 0x1e0
+        Set_UInt32( pData, cDBCFtnEdn );               // 484 0x1e4
 
-        pData += 1 * sizeof( INT32);
+        pData += 1 * sizeof( INT32);                   // 488 0x1e8
 
-        Set_UInt16( pData, nfcFtnRef );
-        Set_UInt16( pData, nfcEdnRef );
-        Set_UInt16( pData, hpsZoonFontPag );
-        Set_UInt16( pData, dywDispPag );
+        Set_UInt16( pData, nfcFtnRef );                // 492 0x1ec
+        Set_UInt16( pData, nfcEdnRef );                // 494 0x1ee
+        Set_UInt16( pData, hpsZoonFontPag );           // 496 0x1f0
+        Set_UInt16( pData, dywDispPag );               // 498 0x1f2
 
         //500 -> 508, Appear to be repeated here in 2000+
         pData += 8;
