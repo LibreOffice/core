@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pam.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,8 @@
 #include <sectfrm.hxx>
 // <--
 #include <ndtxt.hxx> // #111827#
+
+#include <bookmrk.hxx>
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
@@ -764,6 +766,16 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
 #endif
             }
         }
+    }
+    if( !bRet )
+    {
+        const SwDoc *pDoc=GetDoc();
+        SwBookmark *pA = ( pDoc && pPoint ? pDoc->getFieldBookmarkFor( *pPoint ) : NULL );
+        SwBookmark *pB = ( pDoc && pMark ? pDoc->getFieldBookmarkFor( *pMark ) : pA );
+        bRet = ( pA != pB );
+        bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+        if( bProtectForm )
+            bRet |= ( pA==NULL || pB==NULL );
     }
     return bRet;
 }
