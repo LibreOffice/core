@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hintids.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,16 @@
 #define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
 #define CH_TXTATR_TAB           ((sal_Unicode)'\t')
 #define CH_TXTATR_NEWLINE       ((sal_Unicode)'\n')
-
+#define CH_TXT_ATR_FIELDSTART ((sal_Unicode)0x04)
+#define CH_TXT_ATR_FIELDEND ((sal_Unicode)0x05)
+#define CH_TXT_ATR_SUBST_FIELDSTART ("[")
+#define CH_TXT_ATR_SUBST_FIELDEND ("]")
+//#define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)'#')
+#define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
+/*
+#define FIELD_BOOKMARK_PREFIX "__"
+#define FIELD_FORM_BOOKMARK_PREFIX "__FORM"
+*/
 /*
  * Hier kommen erst mal die enums fuer die Hints
  */
