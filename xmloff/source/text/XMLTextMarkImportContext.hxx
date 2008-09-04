@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextMarkImportContext.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,21 @@ namespace rtl {
 }
 class XMLTextImportHelper;
 
+class XMLFieldParamImportContext : public SvXMLImportContext
+{
+    XMLTextImportHelper& rHelper;
+public:
+    XMLFieldParamImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLocalName );
+
+    virtual void StartElement(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+};
+
 
 /**
  * import bookmarks and reference marks
@@ -61,6 +76,9 @@ class XMLTextMarkImportContext : public SvXMLImportContext
 {
 
     XMLTextImportHelper& rHelper;
+    ::rtl::OUString m_XmlId;
+    ::rtl::OUString sBookmarkName;
+    ::rtl::OUString sFieldName;
 
 public:
 
@@ -72,14 +90,20 @@ public:
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
+
 protected:
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+    virtual void EndElement();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                                    const ::rtl::OUString& rLocalName,
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
-    static void CreateAndInsertMark(
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > CreateAndInsertMark(
         SvXMLImport& rImport,
         const ::rtl::OUString& sServiceName,
         const ::rtl::OUString& sMarkName,
@@ -92,7 +116,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         ::rtl::OUString& sName,
-        ::rtl::OUString& o_rXmlId);
+        ::rtl::OUString& o_rXmlId,
+        ::rtl::OUString *pFieldName=NULL);
 };
 
 #endif
