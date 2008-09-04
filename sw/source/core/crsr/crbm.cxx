@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crbm.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "callnk.hxx"
 #include "swcrsr.hxx"
 #include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 /*
  * Methoden der SwCrsrShell fuer Bookmark
@@ -166,6 +167,70 @@ BOOL SwCrsrShell::GoNextBookmark()
 }
 
 
+bool SwCrsrShell::IsFormProtected()
+{
+    return getIDocumentSettingAccess()->get(IDocumentSettingAccess::PROTECT_FORM);
+}
+
+SwBookmark* SwCrsrShell::IsInFieldBookmark()
+{
+    // TODO: Refactor
+    SwPosition pos(*GetCrsr()->GetPoint());
+    return getIDocumentBookmarkAccess()->getFieldBookmarkFor(pos);
+}
+
+SwFieldBookmark* SwCrsrShell::IsInFormFieldBookmark()
+{
+    // TODO: Refactor
+    SwPosition pos(*GetCrsr()->GetPoint());
+    return (SwFieldBookmark*)getIDocumentBookmarkAccess()->getFormFieldBookmarkFor(pos);
+}
+
+SwBookmark* SwCrsrShell::GetNextFieldBookmark()
+{
+    SwPosition pos(*GetCrsr()->GetPoint());
+    return getIDocumentBookmarkAccess()->getNextFieldBookmarkFor(pos);
+}
+
+SwBookmark* SwCrsrShell::GetPrevFieldBookmark()
+{
+    SwPosition pos(*GetCrsr()->GetPoint());
+    return getIDocumentBookmarkAccess()->getPrevFieldBookmarkFor(pos);
+}
+
+bool SwCrsrShell::GotoFieldBookmark(SwBookmark *pBkmk)
+{
+    if(pBkmk==NULL) return false;
+    // Crsr-Moves ueberwachen, evt. Link callen
+    bool bRet = true;
+    SwCallLink aLk( *this );
+    SwCursor* pCrsr = GetSwCrsr();
+    SwCrsrSaveState aSaveState( *pCrsr );
+
+    *pCrsr->GetPoint() = pBkmk->GetBookmarkPos();
+    if( pBkmk->GetOtherBookmarkPos() )
+    {
+        pCrsr->SetMark();
+        *pCrsr->GetMark() = *pBkmk->GetOtherBookmarkPos();
+        if( *pCrsr->GetMark() > *pCrsr->GetPoint() )
+            pCrsr->Exchange();
+    }
+    pCrsr->GetPoint()->nContent--;
+    pCrsr->GetMark()->nContent++;
+
+
+    if( pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
+    {
+        pCrsr->DeleteMark();
+        pCrsr->RestoreSavePos();
+        bRet = false;
+    }
+    else
+        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+
+    return bRet;
+}
+
 BOOL SwCrsrShell::GoPrevBookmark()
 {
     const SwBookmarks& rBkmks = getIDocumentBookmarkAccess()->getBookmarks();
@@ -179,7 +244,8 @@ BOOL SwCrsrShell::GoPrevBookmark()
 
     const SwBookmark* pBkmk;
     // alle die Inhaltlich auf der gleichen Position stehen, ueberspringen
-    do {
+    do
+    {
         if ( nPos == 0 )
             return FALSE;
     } while( aBM < *(pBkmk = rBkmks[--nPos]) || aBM.IsEqualPos( *pBkmk ));
@@ -188,7 +254,8 @@ BOOL SwCrsrShell::GoPrevBookmark()
     SwCrsrSaveState aSaveState( *pCrsr );
 
     BOOL bRet = FALSE;
-    do {
+    do
+    {
         pBkmk = rBkmks[ nPos ];
 
         // --> OD 2007-09-27 #i81002# - refactoring
@@ -258,12 +325,9 @@ USHORT SwCrsrShell::FindBookmark( const String& rName )
 }
 
 
-        // erzeugt einen eindeutigen Namen. Der Name selbst muss vorgegeben
-        // werden, es wird dann bei gleichen Namen nur durchnumeriert.
+// erzeugt einen eindeutigen Namen. Der Name selbst muss vorgegeben
+// werden, es wird dann bei gleichen Namen nur durchnumeriert.
 void SwCrsrShell::MakeUniqueBookmarkName( String& rName )
 {
     getIDocumentBookmarkAccess()->makeUniqueBookmarkName( rName );
 }
-
-
-
