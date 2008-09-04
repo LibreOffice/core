@@ -8,7 +8,7 @@
  *
  * $RCSfile: docbm.cxx,v $
  *
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,8 @@
 #include <viscrs.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include "swundo.hxx"
+#include "hintids.hxx"
 // --> OD 2007-10-23 #i81002#
 #include <ndtxt.hxx>
 // <--
@@ -99,7 +101,25 @@ SwBookmark* SwDoc::makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCod
                                  /*[in]*/IDocumentBookmarkAccess::BookmarkType eMark )
 {
     SwBookmark *pBM( 0 );
-    if( MARK == eMark )
+    if (FORM_FIELDMARK_TEXT == eMark || FORM_FIELDMARK_NO_TEXT == eMark /* rName.CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0 */)
+    {
+        pBM = new SwFieldBookmark(*rPaM.GetPoint(), rCode, rName, rShortName, eMark);
+        if( rPaM.HasMark() )
+            pBM->SetOtherBookmarkPos( rPaM.GetMark() );
+        else
+            pBM->SetOtherBookmarkPos( &pBM->GetBookmarkPos() );
+
+        // TODO: lcl_FixPosition( *pBM->pPos1 );
+        // TODO: lcl_FixPosition( *pBM->pPos2 );
+        if( *pBM->GetOtherBookmarkPos() < pBM->GetBookmarkPos() )
+        {
+            SwPosition _pos( pBM->GetBookmarkPos() );
+            pBM->SetBookmarkPos( pBM->GetOtherBookmarkPos() );
+            pBM->SetOtherBookmarkPos( &_pos );
+        }
+        //ASSERT(*pBM->pPos1<=*pBM->pPos2, "");
+    }
+    else if( MARK == eMark )
     {
         pBM = new SwMark( *rPaM.GetPoint(), rCode, rName, rShortName );
     }
@@ -156,7 +176,6 @@ SwBookmark* SwDoc::makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCod
                     "<SwDoc::makeBookmark(..)> - creation of cross-reference bookmark with invalid PaM" );
         }
     }
-    // <--
     else
     {
         // --> OD 2007-09-26 #i81002#
@@ -167,6 +186,43 @@ SwBookmark* SwDoc::makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCod
     // --> OD 2007-10-18 #i81002#
     if ( pBM )
     {
+        if (FORM_FIELDMARK_TEXT == eMark || FORM_FIELDMARK_NO_TEXT == eMark /* pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0 */)
+        {
+            StartUndo(UNDO_UI_REPLACE, NULL);
+            //ASSERT(*PBM->pPos1<=*pBM->pPos2, "Bookmark positions not normalized!!!!");
+            const SwTxtNode* pStartTxtNode=this->GetNodes()[pBM->GetBookmarkPos().nNode]->GetTxtNode();
+            const SwTxtNode* pEndTxtNode=this->GetNodes()[pBM->GetOtherBookmarkPos()->nNode]->GetTxtNode();
+            sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(pBM->GetBookmarkPos().nContent.GetIndex());
+            sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(pBM->GetOtherBookmarkPos()->nContent.GetIndex()-1);
+            bool form=(IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT==eMark);  /*(pBM->GetName().CompareToAscii(FIELD_FORM_BOOKMARK_PREFIX, strlen(FIELD_FORM_BOOKMARK_PREFIX))==0);*/
+            if (form)
+            {
+                if (ch_start!=CH_TXT_ATR_FORMELEMENT)
+                {
+                    const SwPaM rRg(pBM->GetBookmarkPos());
+                    Insert(rRg, CH_TXT_ATR_FORMELEMENT);
+                    SwPosition aTmp( pBM->GetBookmarkPos() );
+                    aTmp.nContent--;
+                    pBM->SetBookmarkPos( &aTmp );
+                }
+            }
+            else
+            {
+                if (ch_start!=CH_TXT_ATR_FIELDSTART)
+                {
+                    const SwPaM rRg(pBM->GetBookmarkPos());
+                    Insert(rRg, CH_TXT_ATR_FIELDSTART);
+                    SwPosition aTmp( pBM->GetBookmarkPos() );
+                    aTmp.nContent--;
+                    pBM->SetBookmarkPos( &aTmp );
+                }
+                if (ch_end!=CH_TXT_ATR_FIELDEND)
+                {
+                    const SwPaM rRg(*pBM->GetOtherBookmarkPos());
+                    Insert(rRg, CH_TXT_ATR_FIELDEND);
+                }
+            }
+        }
         if ( !pBookmarkTbl->Insert( pBM ) )
             delete pBM, pBM = 0;
         else
@@ -185,8 +241,119 @@ SwBookmark* SwDoc::makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCod
                     SetModified();
             }
         }
+        if (FORM_FIELDMARK_TEXT == eMark || FORM_FIELDMARK_NO_TEXT == eMark /*pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0*/)
+            EndUndo(UNDO_UI_REPLACE, NULL);
     }
     return pBM;
+}
+
+SwBookmark* SwDoc::getFieldBookmarkFor(const SwPosition &pos) const
+{
+    //@TODO make impl recursive
+    int nCount=pBookmarkTbl->Count();
+    while(--nCount>=0)
+    {
+        SwBookmark *pBM=(*pBookmarkTbl)[static_cast<USHORT>(nCount)];
+        if (pBM->GetOtherBookmarkPos()!=NULL
+            && FORM_FIELDMARK_TEXT==pBM->GetType() /* pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0 */
+            && pBM->GetBookmarkPos()<pos
+            && pos < *(pBM->GetOtherBookmarkPos()))
+            return pBM;
+    }
+    return NULL;
+}
+
+SwFieldBookmark* SwDoc::getFormFieldBookmarkFor(const SwPosition &pos) const
+{
+    //@TODO make impl recursive
+    int nCount=pBookmarkTbl->Count();
+    while(--nCount>=0)
+    {
+        SwBookmark *pBM=(*pBookmarkTbl)[static_cast<USHORT>(nCount)];
+        if (pBM->GetOtherBookmarkPos()!=NULL
+            && FORM_FIELDMARK_NO_TEXT==pBM->GetType() /* pBM->GetName().CompareToAscii(FIELD_FORM_BOOKMARK_PREFIX, strlen(FIELD_FORM_BOOKMARK_PREFIX))==0 */
+            && pBM->GetBookmarkPos()<=pos
+            && pos <= *(pBM->GetOtherBookmarkPos()))
+            return (SwFieldBookmark*)pBM;
+    }
+    return NULL;
+}
+
+SwBookmark* SwDoc::getNextFieldBookmarkFor(const SwPosition &pos) const
+{
+    USHORT i=0;
+    USHORT nCount=pBookmarkTbl->Count();
+    SwBookmark *pBM=NULL;
+    while(i<nCount
+        && ((pBM=(*pBookmarkTbl)[i])==NULL
+        || !pBM->IsFormFieldMark() /* pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))!=0 */
+        || pos >= pBM->GetBookmarkPos() ))
+        i++;
+
+    if (i<nCount)
+        return pBM;
+    else
+    {
+        i=0;
+        while(i<nCount
+            && ((pBM=(*pBookmarkTbl)[i])==NULL || !pBM->IsFormFieldMark() /*pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))!=0*/ ))
+            i++;
+        return (i<nCount?pBM:NULL);
+    }
+}
+
+SwBookmark* SwDoc::getPrevFieldBookmarkFor(const SwPosition &pos) const
+{
+    int nCount=pBookmarkTbl->Count();
+    int i=nCount-1;
+    SwBookmark *pBM=NULL;
+    while(i>=0
+        && ((pBM=(*pBookmarkTbl)[static_cast<USHORT>(i)])==NULL
+        || !pBM->IsFormFieldMark() /*pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))!=0*/
+        || pBM->GetOtherBookmarkPos()==NULL
+        || pos <= *pBM->GetOtherBookmarkPos()))
+        i--;
+
+    if (i>=0)
+        return pBM;
+    else
+    {
+        i=nCount-1;
+        while(i>=0
+            && ((pBM=(*pBookmarkTbl)[static_cast<USHORT>(i)])==NULL ||  !pBM->IsFormFieldMark() /*pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))!=0*/ ))
+            i--;
+        return (i>=0?pBM:NULL);
+    }
+}
+
+/*
+bool SwDoc::isValidSelectionWrtFieldBookmarks(const SwPosition &posA, const SwPostion &posB) {
+//@TODO optimize this
+    SwBookmark *pA=getFieldBookmarkFor(posA);
+    SwBookmark *pB=getFieldBookmarkFor(posB);
+    return pA==pB;
+}
+*/
+
+// TODO not finished yet, still neet to add this check
+bool _checkFieldBookmarkSanity(const SwDoc *pDoc)
+{
+    int nCount=pDoc->getBookmarks().Count();
+    while(--nCount>=0)
+    {
+        SwBookmark *pBM=pDoc->getBookmarks()[static_cast<USHORT>(nCount)];
+        if (pBM->IsFormFieldMark() /* pBM->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0 */)
+        {
+            rtl::OUString s(pBM->GetName());
+            rtl::OString aOString = ::rtl::OUStringToOString (s, RTL_TEXTENCODING_UTF8);
+            const SwTxtNode* pStartTxtNode=pDoc->GetNodes()[pBM->GetBookmarkPos().nNode]->GetTxtNode();
+            const SwTxtNode* pEndTxtNode=pDoc->GetNodes()[pBM->GetOtherBookmarkPos()->nNode]->GetTxtNode();
+            sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(pBM->GetBookmarkPos().nContent.GetIndex());
+            sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(pBM->GetOtherBookmarkPos()->nContent.GetIndex()-1);
+            printf("CHECK(%s %p[%i/'%c'] %p[%i/'%c']);\n", aOString.getStr(), pStartTxtNode, ch_start, ch_start, pEndTxtNode, ch_end, ch_end);
+        }
+    }
+    return true;
 }
 
 void SwDoc::deleteBookmark( /*[in]*/sal_uInt16 nPos )
@@ -1130,6 +1297,45 @@ void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
             pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
         }
     }
+}
+
+SwFieldBookmark::SwFieldBookmark(const SwPosition& aPos,
+        const KeyCode& rCode,
+        const String& rName, const String& rShortName,
+        IDocumentBookmarkAccess::BookmarkType eMark)
+    : SwBookmark(aPos, rCode, rName, rShortName),
+        fftype(0), // Type: 0 = Text, 1 = Check Box, 2 = List
+        ffres(0),
+        ffprot(0),
+        ffsize(0), // 0 = Auto, 1=Exact (see ffhps)
+        fftypetxt(0), // Type of text field: 0 = Regular text, 1 = Number, 2 = Date, 3 = Current date, 4 = Current time, 5 = Calculation
+        ffrecalc(0),
+        ffmaxlen(0), // Number of characters for text field. Zero means unlimited.
+        ffhps(24) // Check box size (half-point sizes).
+{
+    eMarkType = eMark;
+}
+
+void SwFieldBookmark::SetChecked(bool checked)
+{
+    ASSERT(fftype==1, "This method is for checkboxes only...");
+    ffres=(checked?1:0);
+}
+
+bool SwFieldBookmark::IsChecked()
+{
+    ASSERT(fftype==1, "This method is for checkboxes only...");
+    return ffres!=0;
+}
+
+void SwFieldBookmark::SetFieldType(int newfftype)
+{
+    this->fftype=newfftype;
+}
+
+int SwFieldBookmark::GetFieldType()
+{
+    return fftype;
 }
 
 void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
