@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_001_.inc,v $
 '*
-'* $Revision: 1.4 $
+'* $Revision: 1.5 $
 '*
-'* last change: $Author: rt $ $Date: 2008-08-28 13:11:34 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:26:17 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -649,6 +649,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileSaveAsExport
+QaErrorLog "#i93340# - Testcase outcommented due to bug with filter."
+goto endsub
 
     Dim xExport as string
     Dim xExportFile as string
@@ -667,9 +669,11 @@ testcase tFileSaveAsExport
     PrintLog "Open document '..\writer\required\input\st1_1.sxw"
     Call hFileOpen(xExport)
 
+    Sleep 1
+
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
-    xExportFile = gOfficePath + "user\work\ecksport.doc"
-    Call hFileSaveAsWithFilterKill ( xExportFile, "MS Word 97" )
+    xExportFile = gOfficepath + "user\work\ecksport.doc"
+    Call hFileSaveAsWithFilterKill (xExportFile, "MS Word 2003 XML")
 
     CountDocu = 0
     Do Until GetDocumentCount = 1
@@ -1032,9 +1036,6 @@ endcase
 
 testcase tFileSendOutlineToPresentation
 
-    QAErrorlog "#i76253#crash while FILE / SEND / OUTLINE TO PRESENTATION"
-    goto endsub
-
     Dim sFile$
     PrintLog "- File / Send / Outline to Presentation"
     Select Case gApplication
@@ -1191,9 +1192,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileSendAutoabstractToPresentation
-        
-    QAErrorlog "#i76253#crash while FILE / SEND / OUTLINE TO PRESENTATION"
-    goto endsub
 
     Dim sFile$
     PrintLog "- File / Send / Autoabstract to Presentation"
