@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_autotext.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:23:42 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:18:43 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,7 +35,6 @@
 '* short description : Test of autotext in writer
 '*
 '\***********************************************************************
-
 
 sub w_autotext
 
@@ -380,7 +379,7 @@ testcase tEditAutotext_2
     end if
 
     if wSelectAutotextCategory("AANewCategory") = false then
-        Warnlog "Created autotext category not found!"    
+        Warnlog "Created autotext category not found!"
     else
         Liste.TypeKeys "+"
     
@@ -443,10 +442,6 @@ endcase
 
 testcase tEditAutotext_3
 
-QaErrorLog "#i# - tEditAutotext_3 outcommented due to crash."
-
-
-
     Dim i as Integer
     Dim j as Integer
     Dim AlterWert as String
@@ -498,10 +493,8 @@ QaErrorLog "#i# - tEditAutotext_3 outcommented due to crash."
     if Autotext.Exists then Autotext.Close
     
     Call hCloseDocument
-    
-    
-endcase   
-    
+endcase
+
 '---------------------------------------------------
 
 testcase tEditAutotext_4
@@ -520,12 +513,12 @@ testcase tEditAutotext_4
 
     printlog " Close dialog and check if categorie has been created"
     Kontext "Autotext"
-    if Autotext.Exists then Autotext.Close    
+    if Autotext.Exists then Autotext.Close
     if wSelectAutotextCategory("AAAAAA") = false then
         Warnlog "New categorie has been deleted ( after closing and reopening dialog )"
         Kontext "Autotext"
         if Autotext.Exists then Autotext.Close
-        Call hCloseDocument        
+        Call hCloseDocument
         goto endsub
     end if
 
@@ -545,7 +538,7 @@ testcase tEditAutotext_4
                 QAErrorlog Active.Gettext
                 Active.Ok
             end if
-        end if            
+        end if
     else
         Warnlog "Categorie couldn't be renamed (Button is disabled), no further test!"
         Kontext "BereicheBearbeitenAutotext"
@@ -553,7 +546,7 @@ testcase tEditAutotext_4
         if wDeleteAutotextCategory("AAAAAA") = false then Warnlog "Unable to delete category"
         Kontext "Autotext"
         AutoText.Close
-        Call hCloseDocument                        
+        Call hCloseDocument
         goto endsub
     end if
 
@@ -561,14 +554,14 @@ testcase tEditAutotext_4
     if BereicheBearbeitenAutotext.Exists then BereicheBearbeitenAutotext.Ok 
     printlog " Close dialog and check if Categorie has been renamed"
     Kontext "Autotext"
-    if Autotext.Exists then Autotext.Close    
+    if Autotext.Exists then Autotext.Close
     Sleep 1
     if wSelectAutotextCategory("AAAAAArrghh") = false then
         Warnlog "Categorie hasn't been correctly renamed"
         AlterWert=Liste.Gettext
     end if
 
-    printlog " Delete new categorie"    
+    printlog " Delete new categorie"
     printlog "  - Delete new categorie"
     printlog " Select 'Categories'"
     Bereiche.Click
@@ -578,7 +571,7 @@ testcase tEditAutotext_4
             QAErrorlog Active.Gettext
             Active.Ok
         end if
-    end if        
+    end if
     Kontext "BereicheBearbeitenAutoText"
     Bereich.SetText "AAAAAArrghh"
     printlog " Select 'Delete', close document and check if categorie has been deleted"
@@ -600,19 +593,19 @@ testcase tEditAutotext_4
                 QAErrorlog Active.Gettext
                 Active.Ok
             end if
-        end if    
+        end if
         if wSelectAutotextCategory("AAAAAArrghh") = false then
             Warnlog "After denying the 'Deletemessage' the categorie has been deleted!"
         else
             Kontext "Autotext"
-            Bereiche.Click            
+            Bereiche.Click
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
                     QAErrorlog Active.Gettext
                     Active.Ok
                 end if
-            end if                
+            end if
             Kontext "BereicheBearbeitenAutoText"
             Bereich.SetText "AAAAAArrghh"
             if Loeschen.IsEnabled then
@@ -626,7 +619,7 @@ testcase tEditAutotext_4
                         QAErrorlog Active.Gettext
                         Active.Ok
                     end if
-                end if                    
+                end if
                 Sleep 2
                 if wSelectAutotextCategory("AAAAAArrghh") = true then
                     Warnlog "Though the categorie has been deleted it is always there!"
