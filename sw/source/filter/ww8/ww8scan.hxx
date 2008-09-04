@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.hxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -707,7 +707,7 @@ public:
     bool GetPara(long nIdx, WW8FieldDesc& rF);
 };
 
-enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1 };
+enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_FIELD = 0x2 };
 
 // Iterator for Booknotes
 class WW8PLCFx_Book : public WW8PLCFx
@@ -718,6 +718,7 @@ private:
     eBookStatus* pStatus;
     long nIMax;                         // Number of Booknotes
     USHORT nIsEnd;
+    int nBookmarkId; // counter incremented by GetUniqueBookmarkName.
 
     //No copying
     WW8PLCFx_Book(const WW8PLCFx_Book&);
@@ -744,6 +745,7 @@ public:
     bool MapName(String& rName);
     String GetBookmark(long nStart,long nEnd, USHORT &nIndex);
     eBookStatus GetStatus() const;
+    String GetUniqueBookmarkName(String &suggestedName);
 };
 
 /*
