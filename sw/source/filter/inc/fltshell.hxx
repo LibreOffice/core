@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltshell.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,7 @@ public:
     BOOL bOld;          // to mark Attributes *before* skipping field results
     BOOL bLocked;
     BOOL bCopied;
+    BOOL bConsumedByField;
 
     SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
     SwFltStackEntry(const SwFltStackEntry& rEntry);
@@ -128,7 +129,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
-    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand = LONG_MAX);
+    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand = LONG_MAX, BOOL consumedByField=FALSE);
 
     void StealAttr(const SwPosition* pPos, USHORT nAttrId = 0);
     void MarkAllAttrsOld();
