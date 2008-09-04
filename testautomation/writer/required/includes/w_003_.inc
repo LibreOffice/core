@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_003_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:28 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:21:34 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -335,8 +335,6 @@ testcase tViewToolbars
 
     printlog " Close active document"
     Call hCloseDocument
-    printlog " Open a new default document"
-    Call hNewDocument
 endcase
 
 '-----------------------------------------------------------
