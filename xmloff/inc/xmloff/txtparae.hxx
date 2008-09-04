@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,7 +214,9 @@ protected:
     const ::rtl::OUString sVisitedCharStyleName;
     const ::rtl::OUString sWidth;
     const ::rtl::OUString sWidthType;
-
+    const ::rtl::OUString sTextFieldStart;
+    const ::rtl::OUString sTextFieldEnd;
+    const ::rtl::OUString sTextFieldStartEnd;
 
     SinglePropertySetInfoCache aCharStyleNamesPropInfoCache;
 
