@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_upd_datamenu.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:06:05 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:18:19 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -767,7 +767,9 @@ endcase
 
 testcase tDataDataPilot
 '///<u><b>Data – DataPilot</b></u>
-
+    
+    printlog " Close and restart the Office"
+    ExitRestartTheOffice
     '/// Open new Spreadsheet document
     printlog " Open new Spreadsheet document"
     Call hNewDocument
