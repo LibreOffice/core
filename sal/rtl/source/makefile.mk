@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.36 $
+# $Revision: 1.37 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -99,6 +99,11 @@ SLOFILES=   \
             $(SLO)$/debugprint.obj        \
             $(SLO)$/math.obj
 
+.IF "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/memory_fini.obj
+.ENDIF
+
+
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   \
     $(OBJ)$/alloc_global.obj     \
@@ -126,6 +131,11 @@ OBJFILES=   \
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tres.obj        \
             $(OBJ)$/math.obj
+
+.IF "$(OS)"=="MACOSX"
+OBJFILES+=$(OBJ)$/memory_fini.obj
+.ENDIF
+
 
 APP1TARGET=gen_makefile
 APP1OBJS=$(SLO)$/gen_makefile.obj
