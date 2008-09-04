@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_205a_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:31:42 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:19:26 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -145,15 +145,15 @@ testcase tToolsOutlineNumbering1
     TabKapitelnumerierung.Ok
 
     printlog "- format document"
-    Call wTypeKeys "<Up>", 25
+    Call wDokSchreiben "<Up>", 25
 
     for Zaehler = 1 to 10
-        Call wTypeKeys "<Shift End>"
+        Call wDokSchreiben "<Shift End>"
         if wStyleSet ( VorlagenLst(Zaehler) ) = false then
             Warnlog "- Style '" & VorlagenLst(Zaehler) & "' could not be set!"
         end if
-        Call wTypeKeys "<Down>", 8
-        Call wTypeKeys "<Home>"
+        Call wDokSchreiben "<Down>", 8
+        Call wDokSchreiben "<Home>"
         wait 500
     next Zaehler
 
@@ -249,14 +249,14 @@ testcase tToolsOutlineNumbering1
                 printlog "- Load odt and check formattings"
                 Call hFileOpen ( gOfficePath + "user\work\tToolsOutlineNumbering1.odt" )
         end select
-        Call wTypeKeys "<PageUp>", 8
-        Call wTypeKeys "<Up>", 10
+        Call wDokSchreiben "<PageUp>", 8
+        Call wDokSchreiben "<Up>", 10
     
         for Zaehler = 1 to 10
-            Call wTypeKeys "<Shift End>"
+            Call wDokSchreiben "<Shift End>"
             if wStyleGet(VorlagenLst(Zaehler)) = false then Warnlog "Wrong Style for Outline Numbering " + Zaehler
-            Call wTypeKeys "<Down>", 8
-            Call wTypeKeys "<Home>"
+            Call wDokSchreiben "<Down>", 8
+            Call wDokSchreiben "<Home>"
         next Zaehler
     
         printlog "   - check saved properties"
@@ -363,68 +363,68 @@ testcase tToolsOutlineNumbering2
     Active.SetPage TabPositionKapitelnumerierung
     Kontext "TabPositionKapitelnumerierung"
 
-    Ebene.Select 1
-    Ausrichtung.Select 2
+    Level.Select 1
+    NumberAlignment.Select 2
     if relativ.IsEnabled then Warnlog "'Relative' is enabled when selecting 'Level 1' -> Bug"
-    AbstandTextRand.More 5
-    V1 = AbstandTextRand.GetText
-    Einrueckung.More 1
-    V2 = Einrueckung.GetText
+    IndentAt.More 5
+    V1 = IndentAt.GetText
+    AlignedAt.More 1
+    V2 = AlignedAt.GetText
 
-    Ebene.Select 3
-    Ausrichtung.Select 3
+    Level.Select 3
+    NumberAlignment.Select 3
     Relativ.Check
-    AbstandTextRand.Less 5
-    V3 = AbstandTextRand.GetText
+    IndentAt.Less 5
+    V3 = IndentAt.GetText
     AbstandTextNumerierung.More 2
     V4 = AbstandTextNumerierung.GetText
 
-    Ebene.Select 4
-    Ausrichtung.Select 1
+    Level.Select 4
+    NumberAlignment.Select 1
     Relativ.Check
-    V5 = AbstandTextRand.GetText
+    V5 = IndentAt.GetText
     V6 = AbstandTextNumerierung.GetText
-    V7 = Einrueckung.GetText
+    V7 = AlignedAt.GetText
 
-    Ebene.Select 6
-    Ausrichtung.Select 3
+    Level.Select 6
+    NumberAlignment.Select 3
     Relativ.Check
-    AbstandTextRand.More 4
-    V8 = AbstandTextRand.GetText
+    IndentAt.More 4
+    V8 = IndentAt.GetText
     AbstandTextNumerierung.Less 3
     V9 = AbstandTextNumerierung.GetText
-    Einrueckung.Less 3
-    V10 = Einrueckung.GetText
+    AlignedAt.Less 3
+    V10 = AlignedAt.GetText
 
-    Ebene.Select 9
-    Ausrichtung.Select 1
+    Level.Select 9
+    NumberAlignment.Select 1
     Relativ.Check
-    AbstandTextRand.Less 2
-    V11 = AbstandTextRand.GetText
+    IndentAt.Less 2
+    V11 = IndentAt.GetText
     AbstandTextNumerierung.More 2
     V12 = AbstandTextNumerierung.GetText
-    Einrueckung.More 3
-    V13 = Einrueckung.GetText
+    AlignedAt.More 3
+    V13 = AlignedAt.GetText
 
-    Ebene.Select 10
-    Ausrichtung.Select 3
+    Level.Select 10
+    NumberAlignment.Select 3
     Relativ.Check
-    AbstandTextRand.More 4
-    V14 = AbstandTextRand.GetText
+    IndentAt.More 4
+    V14 = IndentAt.GetText
     AbstandTextNumerierung.Less 3
     V15 = AbstandTextNumerierung.GetText
-    Einrueckung.Less 3
-    V16 = Einrueckung.GetText
+    AlignedAt.Less 3
+    V16 = AlignedAt.GetText
     TabPositionKapitelnumerierung.OK
 
     printlog "  - create Numbering"
     for i = 1 to 10
-        Call wTypeKeys "<Shift End>"
+        Call wDokSchreiben "<Shift End>"
         if wStyleSet ( VorlagenLst(i) ) = false then
             Warnlog "- Style '" & VorlagenLst(i) & "' could not be set!"
         end if
-        Call wTypeKeys "<Down>", 8
-        Call wTypeKeys "<Home>"
+        Call wDokSchreiben "<Down>", 8
+        Call wDokSchreiben "<Home>"
     next i
 
     printlog "  - check Numbering-Position"
@@ -432,34 +432,34 @@ testcase tToolsOutlineNumbering2
     Kontext
     Active.SetPage TabPositionKapitelnumerierung
     Kontext "TabPositionKapitelnumerierung"
-    Ebene.Select 1
-    if Ausrichtung.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ Ausrichtung.GetSelIndex
-    if V1 <> AbstandTextRand.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ AbstandTextRand.GetText
-    if V2 <> Einrueckung.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 3
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V3 <> AbstandTextRand.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ AbstandTextRand.GetText
+    Level.Select 1
+    if NumberAlignment.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ NumberAlignment.GetSelIndex
+    if V1 <> IndentAt.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ IndentAt.GetText
+    if V2 <> AlignedAt.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ AlignedAt.GetText
+    Level.Select 3
+    if NumberAlignment.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ NumberAlignment.GetSelIndex
+    if V3 <> IndentAt.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ IndentAt.GetText
     if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Minimum Space numbering <> Text  Not = "+ V4+ "  But = "+ AbstandTextNumerierung.GetText
-    Ebene.Select 4
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "Level 4: Wrong Numbering Alignment:  Not = 1   But = "+ Ausrichtung.GetSelIndex
-    if V5 <> AbstandTextRand.GetText then Warnlog "Level 4: Wrong Indent:  Not = "+ V5+ "  But = "+ AbstandTextRand.GetText
+    Level.Select 4
+    if NumberAlignment.GetSelIndex <> 1 then Warnlog "Level 4: Wrong Numbering Alignment:  Not = 1   But = "+ NumberAlignment.GetSelIndex
+    if V5 <> IndentAt.GetText then Warnlog "Level 4: Wrong Indent:  Not = "+ V5+ "  But = "+ IndentAt.GetText
     if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Minimum Space numbering <> Text  Not = "+ V6+ "  But = "+ AbstandTextNumerierung.GetText  
-    if V7 <> Einrueckung.GetText then Warnlog "Level 4: Space to Text  Not = "+ V7+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 6
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 6: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V8 <> AbstandTextRand.GetText then Warnlog "Level 6: Wrong Indent:  Not = "+ V8+ "  But = "+ AbstandTextRand.GetText
+    if V7 <> AlignedAt.GetText then Warnlog "Level 4: Space to Text  Not = "+ V7+ "  But = "+ AlignedAt.GetText
+    Level.Select 6
+    if NumberAlignment.GetSelIndex <> 3 then Warnlog "Level 6: Wrong Numbering Alignment:  Not = 3   But = "+ NumberAlignment.GetSelIndex
+    if V8 <> IndentAt.GetText then Warnlog "Level 6: Wrong Indent:  Not = "+ V8+ "  But = "+ IndentAt.GetText
     if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Minimum Space numbering <> Text  Not = "+ V9+ "  But = "+ AbstandTextNumerierung.GetText
-    if V10 <> Einrueckung.GetText then Warnlog "Level 6: Space to Text  Not = "+ V10+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 9
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "Level 9: Wrong Numbering Alignment:  Not = 1   But = "+ Ausrichtung.GetSelIndex
-    if V11 <> AbstandTextRand.GetText then Warnlog "Level 9: Wrong Indent:  Not = "+ V11+ "  But = "+ AbstandTextRand.GetText
+    if V10 <> AlignedAt.GetText then Warnlog "Level 6: Space to Text  Not = "+ V10+ "  But = "+ AlignedAt.GetText
+    Level.Select 9
+    if NumberAlignment.GetSelIndex <> 1 then Warnlog "Level 9: Wrong Numbering Alignment:  Not = 1   But = "+ NumberAlignment.GetSelIndex
+    if V11 <> IndentAt.GetText then Warnlog "Level 9: Wrong Indent:  Not = "+ V11+ "  But = "+ IndentAt.GetText
     if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Minimum Space numbering <> Text  Not = "+ V12+ "  But = "+ AbstandTextNumerierung.GetText
-    if V13 <> Einrueckung.GetText then Warnlog "Level 9: Space to Text  Not = "+ V13+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 10
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 10: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V14 <> AbstandTextRand.GetText then Warnlog "Level 10: Wrong Indent:  Not = "+ V14+ "  But = "+ AbstandTextRand.GetText
+    if V13 <> AlignedAt.GetText then Warnlog "Level 9: Space to Text  Not = "+ V13+ "  But = "+ AlignedAt.GetText
+    Level.Select 10
+    if NumberAlignment.GetSelIndex <> 3 then Warnlog "Level 10: Wrong Numbering Alignment:  Not = 3   But = "+ NumberAlignment.GetSelIndex
+    if V14 <> IndentAt.GetText then Warnlog "Level 10: Wrong Indent:  Not = "+ V14+ "  But = "+ IndentAt.GetText
     if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Minimum Space numbering <> Text  Not = "+ V15+ "  But = "+ AbstandTextNumerierung.GetText
-    if V16 <> Einrueckung.GetText then Warnlog "Level 10: Space to Text  Not = "+ V16+ "  But = "+ Einrueckung.GetText
+    if V16 <> AlignedAt.GetText then Warnlog "Level 10: Space to Text  Not = "+ V16+ "  But = "+ AlignedAt.GetText
     TabPositionKapitelnumerierung.Cancel
 
     printlog "  - check saved Numbering"
@@ -471,34 +471,34 @@ testcase tToolsOutlineNumbering2
     Kontext
     Active.SetPage TabPositionKapitelnumerierung
     Kontext "TabPositionKapitelnumerierung"
-    Ebene.Select 1
-    if Ausrichtung.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ Ausrichtung.GetSelIndex
-    if V1 <> AbstandTextRand.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ AbstandTextRand.GetText
-    if V2 <> Einrueckung.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 3
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V3 <> AbstandTextRand.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ AbstandTextRand.GetText
+    Level.Select 1
+    if NumberAlignment.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ NumberAlignment.GetSelIndex
+    if V1 <> IndentAt.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ IndentAt.GetText
+    if V2 <> AlignedAt.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ AlignedAt.GetText
+    Level.Select 3
+    if NumberAlignment.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ NumberAlignment.GetSelIndex
+    if V3 <> IndentAt.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ IndentAt.GetText
     if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Minimum Space numbering <> Text  Not = "+ V4+ "  But = "+ AbstandTextNumerierung.GetText
-    Ebene.Select 4
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "Level 4: Wrong Numbering Alignment:  Not = 1   But = "+ Ausrichtung.GetSelIndex
-    if V5 <> AbstandTextRand.GetText then Warnlog "Level 4: Wrong Indent:  Not = "+ V5+ "  But = "+ AbstandTextRand.GetText
+    Level.Select 4
+    if NumberAlignment.GetSelIndex <> 1 then Warnlog "Level 4: Wrong Numbering Alignment:  Not = 1   But = "+ NumberAlignment.GetSelIndex
+    if V5 <> IndentAt.GetText then Warnlog "Level 4: Wrong Indent:  Not = "+ V5+ "  But = "+ IndentAt.GetText
     if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Minimum Space numbering <> Text  Not = "+ V6+ "  But = "+ AbstandTextNumerierung.GetText
-    if V7 <> Einrueckung.GetText then Warnlog "Level 4: Space to Text  Not = "+ V7+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 6
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 6: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V8 <> AbstandTextRand.GetText then Warnlog "Level 6: Wrong Indent:  Not = "+ V8+ "  But = "+ AbstandTextRand.GetText
+    if V7 <> AlignedAt.GetText then Warnlog "Level 4: Space to Text  Not = "+ V7+ "  But = "+ AlignedAt.GetText
+    Level.Select 6
+    if NumberAlignment.GetSelIndex <> 3 then Warnlog "Level 6: Wrong Numbering Alignment:  Not = 3   But = "+ NumberAlignment.GetSelIndex
+    if V8 <> IndentAt.GetText then Warnlog "Level 6: Wrong Indent:  Not = "+ V8+ "  But = "+ IndentAt.GetText
     if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Minimum Space numbering <> Text  Not = "+ V9+ "  But = "+ AbstandTextNumerierung.GetText
-    if V10 <> Einrueckung.GetText then Warnlog "Level 6: Space to Text  Not = "+ V10+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 9
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "Level 9: Wrong Numbering Alignment:  Not = 1   But = "+ Ausrichtung.GetSelIndex
-    if V11 <> AbstandTextRand.GetText then Warnlog "Level 9: Wrong Indent:  Not = "+ V11+ "  But = "+ AbstandTextRand.GetText
+    if V10 <> AlignedAt.GetText then Warnlog "Level 6: Space to Text  Not = "+ V10+ "  But = "+ AlignedAt.GetText
+    Level.Select 9
+    if NumberAlignment.GetSelIndex <> 1 then Warnlog "Level 9: Wrong Numbering Alignment:  Not = 1   But = "+ NumberAlignment.GetSelIndex
+    if V11 <> IndentAt.GetText then Warnlog "Level 9: Wrong Indent:  Not = "+ V11+ "  But = "+ IndentAt.GetText
     if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Minimum Space numbering <> Text  Not = "+ V12+ "  But = "+ AbstandTextNumerierung.GetText
-    if V13 <> Einrueckung.GetText then Warnlog "Level 9: Space to Text  Not = "+ V13+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 10
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 10: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V14 <> AbstandTextRand.GetText then Warnlog "Level 10: Wrong Indent:  Not = "+ V14+ "  But = "+ AbstandTextRand.GetText
+    if V13 <> AlignedAt.GetText then Warnlog "Level 9: Space to Text  Not = "+ V13+ "  But = "+ AlignedAt.GetText
+    Level.Select 10
+    if NumberAlignment.GetSelIndex <> 3 then Warnlog "Level 10: Wrong Numbering Alignment:  Not = 3   But = "+ NumberAlignment.GetSelIndex
+    if V14 <> IndentAt.GetText then Warnlog "Level 10: Wrong Indent:  Not = "+ V14+ "  But = "+ IndentAt.GetText
     if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Minimum Space numbering <> Text  Not = "+ V15+ "  But = "+ AbstandTextNumerierung.GetText
-    if V16 <> Einrueckung.GetText then Warnlog "Level 10: Space to Text  Not = "+ V16+ "  But = "+ Einrueckung.GetText
+    if V16 <> AlignedAt.GetText then Warnlog "Level 10: Space to Text  Not = "+ V16+ "  But = "+ AlignedAt.GetText
     TabPositionKapitelnumerierung.Cancel
 
     Call hCloseDocument
@@ -541,37 +541,37 @@ testcase tToolsOutlineNumbering3
     Active.SetPage TabPositionKapitelnumerierung
     Kontext "TabPositionKapitelnumerierung"
 
-    Ebene.Select 1
-    Ausrichtung.Select 2
+    Level.Select 1
+    NumberingAlignment.Select 2
     if relativ.IsEnabled then Warnlog "Relative is enabled when selecting Level 1 -> Bug!"
-    AbstandTextRand.More 5
-    V1 = AbstandTextRand.GetText
-    Einrueckung.More 1
-    V2 = Einrueckung.GetText
+    AlignedAt2.More 5
+    V1 = AlignedAt2.GetText
+    IndentAt2.More 1
+    V2 = IndentAt2.GetText
 
-    Ebene.Select 3
-    Ausrichtung.Select 3
-    AbstandTextRand.More 5
-    V3 = AbstandTextRand.GetText
-    AbstandTextNumerierung.More 2
-    V4 = AbstandTextNumerierung.GetText
+    Level.Select 3
+    NumberingAlignment.Select 3
+    AlignedAt2.More 5
+    V3 = AlignedAt2.GetText
+    AbstandTextNumerierung2.More 2
+    V4 = AbstandTextNumerierung2.GetText
 
-    Ebene.Select 7
-    Ausrichtung.Select 1
-    Einrueckung.More 4
+    Level.Select 7
+    NumberingAlignment.Select 1
+    IndentAt2.More 4
     Sleep 1
-    V5 = AbstandTextRand.GetText
-    V6 = AbstandTextNumerierung.GetText
-    V7 = Einrueckung.GetText
+    V5 = AlignedAt2.GetText
+    V6 = AbstandTextNumerierung2.GetText
+    V7 = IndentAt2.GetText
 
-    Ebene.Select 8
-    Ausrichtung.Select 3
-    AbstandTextRand.More 1
-    AbstandTextNumerierung.Less 4
-    Einrueckung.More 4
-    V8 = AbstandTextRand.GetText
-    V9 = AbstandTextNumerierung.GetText
-    V10 = Einrueckung.GetText
+    Level.Select 8
+    NumberingAlignment.Select 3
+    AlignedAt2.More 1
+    AbstandTextNumerierung2.Less 4
+    IndentAt2.More 4
+    V8 = AlignedAt2.GetText
+    V9 = AbstandTextNumerierung2.GetText
+    V10 = IndentAt2.GetText
 
     TabPositionKapitelnumerierung.OK
     Sleep 1
@@ -616,24 +616,24 @@ testcase tToolsOutlineNumbering3
     Active.SetPage TabPositionKapitelnumerierung
     Kontext "TabPositionKapitelnumerierung"
     printlog "        - Tabpage Position"
-    Ebene.Select 1
-    if Ausrichtung.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ Ausrichtung.GetSelIndex
-    if V1 <> AbstandTextRand.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ AbstandTextRand.GetText
-    if V2 <> Einrueckung.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 3
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V3 <> AbstandTextRand.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ AbstandTextRand.GetText
-    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Space to Text  Not = "+ V4+ "  But = "+ AbstandTextNumerierung.GetText
-    Ebene.Select 7
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "Level 7: Wrong Numbering Alignment:  Not = 1   But = "+ Ausrichtung.GetSelIndex
-    if V5 <> AbstandTextRand.GetText then Warnlog "Level 7: Wrong Indent:  Not = "+ V5+ "  But = "+ AbstandTextRand.GetText
-    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 7: Space to Text  Not = "+ V6+ "  But = "+ AbstandTextNumerierung.GetText
-    if V7 <> Einrueckung.GetText then Warnlog "Level 7: Space to Text  Not = "+ V7+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 8
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 8: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V8 <> AbstandTextRand.GetText then Warnlog "Level 8: Wrong Indent:  Not = "+ V8+ "  But = "+ AbstandTextRand.GetText
-    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 8: Space to Text  Not = "+ V9+ "  But = "+ AbstandTextNumerierung.GetText
-    if V10 <> Einrueckung.GetText then Warnlog "Level 8: Space to Text  Not = "+ V10+ "  But = "+ Einrueckung.GetText
+    Level.Select 1
+    if NumberingAlignment.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ NumberingAlignment.GetSelIndex
+    if V1 <> AlignedAt2.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ AlignedAt2.GetText
+    if V2 <> IndentAt2.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ IndentAt2.GetText
+    Level.Select 3
+    if NumberingAlignment.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ NumberingAlignment.GetSelIndex
+    if V3 <> AlignedAt2.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ AlignedAt2.GetText
+    if V4 <> AbstandTextNumerierung2.GetText then Warnlog "Level 3: Space to Text  Not = "+ V4+ "  But = "+ AbstandTextNumerierung2.GetText
+    Level.Select 7
+    if NumberingAlignment.GetSelIndex <> 1 then Warnlog "Level 7: Wrong Numbering Alignment:  Not = 1   But = "+ NumberingAlignment.GetSelIndex
+    if V5 <> AlignedAt2.GetText then Warnlog "Level 7: Wrong Indent:  Not = "+ V5+ "  But = "+ AlignedAt2.GetText
+    if V6 <> AbstandTextNumerierung2.GetText then Warnlog "Level 7: Space to Text  Not = "+ V6+ "  But = "+ AbstandTextNumerierung2.GetText
+    if V7 <> IndentAt2.GetText then Warnlog "Level 7: Space to Text  Not = "+ V7+ "  But = "+ IndentAt2.GetText
+    Level.Select 8
+    if NumberingAlignment.GetSelIndex <> 3 then Warnlog "Level 8: Wrong Numbering Alignment:  Not = 3   But = "+ NumberingAlignment.GetSelIndex
+    if V8 <> AlignedAt2.GetText then Warnlog "Level 8: Wrong Indent:  Not = "+ V8+ "  But = "+ AlignedAt2.GetText
+    if V9 <> AbstandTextNumerierung2.GetText then Warnlog "Level 8: Space to Text  Not = "+ V9+ "  But = "+ AbstandTextNumerierung2.GetText
+    if V10 <> IndentAt2.GetText then Warnlog "Level 8: Space to Text  Not = "+ V10+ "  But = "+ IndentAt2.GetText
 
     TabPositionKapitelnumerierung.Cancel
 
@@ -680,24 +680,24 @@ testcase tToolsOutlineNumbering3
     Active.SetPage TabPositionKapitelnumerierung
     Kontext "TabPositionKapitelnumerierung"
     printlog "        - Tabpage Position"
-    Ebene.Select 1
-    if Ausrichtung.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ Ausrichtung.GetSelIndex
-    if V1 <> AbstandTextRand.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ AbstandTextRand.GetText
-    if V2 <> Einrueckung.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 3
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V3 <> AbstandTextRand.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ AbstandTextRand.GetText
-    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Space to Text  Not = "+ V4+ "  But = "+ AbstandTextNumerierung.GetText
-    Ebene.Select 7
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "Level 7: Wrong Numbering Alignment:  Not = 1   But = "+ Ausrichtung.GetSelIndex
-    if V5 <> AbstandTextRand.GetText then Warnlog "Level 7: Wrong Indent:  Not = "+ V5+ "  But = "+ AbstandTextRand.GetText
-    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 7: Space to Text  Not = "+ V6+ "  But = "+ AbstandTextNumerierung.GetText
-    if V7 <> Einrueckung.GetText then Warnlog "Level 7: Space to Text  Not = "+ V7+ "  But = "+ Einrueckung.GetText
-    Ebene.Select 8
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "Level 8: Wrong Numbering Alignment:  Not = 3   But = "+ Ausrichtung.GetSelIndex
-    if V8 <> AbstandTextRand.GetText then Warnlog "Level 8: Wrong Indent:  Not = "+ V8+ "  But = "+ AbstandTextRand.GetText
-    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 8: Space to Text  Not = "+ V9+ "  But = "+ AbstandTextNumerierung.GetText
-    if V10 <> Einrueckung.GetText then Warnlog "Level 8: Space to Text  Not = "+ V10+ "  But = "+ Einrueckung.GetText
+    Level.Select 1
+    if NumberingAlignment.GetSelIndex <> 2 then Warnlog "Level 1: Wrong Numbering Alignment:  Not = 2   But = "+ NumberingAlignment.GetSelIndex
+    if V1 <> AlignedAt2.GetText then Warnlog "Level 1: Wrong Indent:  Not = "+ V1+ "  But = "+ AlignedAt2.GetText
+    if V2 <> IndentAt2.GetText then Warnlog "Level 1: Space to Text  Not = "+ V2+ "  But = "+ IndentAt2.GetText
+    Level.Select 3
+    if NumberingAlignment.GetSelIndex <> 3 then Warnlog "Level 3: Wrong Numbering Alignment:  Not = 3   But = "+ NumberingAlignment.GetSelIndex
+    if V3 <> AlignedAt2.GetText then Warnlog "Level 3: Wrong Indent:  Not = "+ V3+ "  But = "+ AlignedAt2.GetText
+    if V4 <> AbstandTextNumerierung2.GetText then Warnlog "Level 3: Space to Text  Not = "+ V4+ "  But = "+ AbstandTextNumerierung2.GetText
+    Level.Select 7
+    if NumberingAlignment.GetSelIndex <> 1 then Warnlog "Level 7: Wrong Numbering Alignment:  Not = 1   But = "+ NumberingAlignment.GetSelIndex
+    if V5 <> AlignedAt2.GetText then Warnlog "Level 7: Wrong Indent:  Not = "+ V5+ "  But = "+ AlignedAt2.GetText
+    if V6 <> AbstandTextNumerierung2.GetText then Warnlog "Level 7: Space to Text  Not = "+ V6+ "  But = "+ AbstandTextNumerierung2.GetText
+    if V7 <> IndentAt2.GetText then Warnlog "Level 7: Space to Text  Not = "+ V7+ "  But = "+ IndentAt2.GetText
+    Level.Select 8
+    if NumberingAlignment.GetSelIndex <> 3 then Warnlog "Level 8: Wrong Numbering Alignment:  Not = 3   But = "+ NumberingAlignment.GetSelIndex
+    if V8 <> AlignedAt2.GetText then Warnlog "Level 8: Wrong Indent:  Not = "+ V8+ "  But = "+ AlignedAt2.GetText
+    if V9 <> AbstandTextNumerierung2.GetText then Warnlog "Level 8: Space to Text  Not = "+ V9+ "  But = "+ AbstandTextNumerierung2.GetText
+    if V10 <> IndentAt2.GetText then Warnlog "Level 8: Space to Text  Not = "+ V10+ "  But = "+ IndentAt2.GetText
 
     TabPositionKapitelnumerierung.Cancel
 
@@ -745,33 +745,33 @@ testcase tToolsFootnoteEndnote
     ZeichenvorlageEndnotenbereich.Select 5
     TabEndnoten.OK
 
-    Call wTypeKeys "Footnote bound to this text"
+    Call wDokSchreiben "Footnote bound to this text"
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Fussnote.Check
     FussnoteEinfuegen.OK
 
-    Call wTypeKeys "Wassup<PageUp><Return>Followed by an endnote."
+    Call wDokSchreiben "Wassup<PageUp><Return>Followed by an endnote."
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Endnote.Check
     FussnoteEinfuegen.OK
 
-    Call wTypeKeys "Wassup<PageUp><Return>And again a footnote"
+    Call wDokSchreiben "Wassup<PageUp><Return>And again a footnote"
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Fussnote.Check
     FussnoteEinfuegen.OK
     InsertFieldsPageNumbers
-    Call wTypeKeys "+0"
-    Call wTypeKeys "<Shift Home>"
+    Call wDokSchreiben "+0"
+    Call wDokschreiben "<Shift Home>"
     Sleep 1
     try
         ToolsCalculate
     catch
         ' Workaround for bug.
-        Call wTypeKeys "<End>"
-        Call wTypeKeys "<Shift Home>"
+        Call wDokSchreiben "<End>"
+        Call wDokschreiben "<Shift Home>"
         try
             ToolsCalculate
             Warnlog "Selecting text in footnote with <Shift Home> works only at the second time (bug#101047)"
@@ -781,21 +781,21 @@ testcase tToolsFootnoteEndnote
     endcatch
     if GetClipboardText <> "1" then Warnlog "2. Footnote has not been inserted on 1. Page."
 
-    Call wTypeKeys "<PageUp><Return>Again followed by an endnote"
+    Call wDokSchreiben "<PageUp><Return>Again followed by an endnote"
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Endnote.Check
     FussnoteEinfuegen.OK
     InsertFieldsPageNumbers
-    Call wTypeKeys "+0"
-    Call wTypeKeys "<Shift Home>"
+    Call wDokSchreiben "+0"
+    Call wDokschreiben "<Shift Home>"
     Sleep 1
     try
         ToolsCalculate
     catch
         ' Workaround for bug.
-        Call wTypeKeys "<End>"
-        Call wTypeKeys "<Shift Home>"
+        Call wDokSchreiben "<End>"
+        Call wDokschreiben "<Shift Home>"
         try
             ToolsCalculate
         catch
@@ -806,7 +806,7 @@ testcase tToolsFootnoteEndnote
     ToolsCalculate
     if GetClipboardText <> "2" then Warnlog "2. Footnote has not been inserted on 2. page"
 
-    Call wTypeKeys "<PageUp><Return>That's it!"
+    Call wDokSchreiben "<PageUp><Return>That's it!"
 
     printlog "    - check properties"
     ToolsFootnote
