@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfont.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -793,6 +793,31 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
             aTxtSize.Height() =
                 (long)CalcEscHeight( (USHORT)aTxtSize.Height(), nAscent);
         }
+    }
+
+    if (1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText().GetChar(rInf.GetIdx()))
+    {
+        xub_StrLen nOldIdx(rInf.GetIdx());
+        xub_StrLen nOldLen(rInf.GetLen());
+        String aNewText=String::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDSTART);
+        rInf.SetText( aNewText );
+        rInf.SetIdx( 0 );
+        rInf.SetLen( aNewText.Len() );
+        aTxtSize = pLastFont->GetTextSize( rInf );
+        rInf.SetIdx( nOldIdx );
+        rInf.SetLen( nOldLen );
+    }
+    else if (1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetText().GetChar(rInf.GetIdx()))
+    {
+        xub_StrLen nOldIdx(rInf.GetIdx());
+        xub_StrLen nOldLen(rInf.GetLen());
+        String aNewText=String::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDEND);
+        rInf.SetText( aNewText );
+        rInf.SetIdx( 0 );
+        rInf.SetLen( aNewText.Len() );
+        aTxtSize = pLastFont->GetTextSize( rInf );
+        rInf.SetIdx( nOldIdx );
+        rInf.SetLen( nOldLen );
     }
 
     return aTxtSize;
