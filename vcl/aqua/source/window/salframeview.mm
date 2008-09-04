@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -726,6 +726,7 @@ static const struct ExceptionalKey
                 aCharCode < 0x80 &&
                 aCharCode > 0x1f &&
                 ( nKeyCode = ImplMapCharCode( aCharCode ) ) != 0
+            && ! [self hasMarkedText ]
                 )
             {
                 [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode];
