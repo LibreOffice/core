@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unocoll.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +200,8 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",              SW_SERVICE_IMAP_CIRCLE },
     { "com.sun.star.image.ImageMapPolygonObject",             SW_SERVICE_IMAP_POLYGON },
     { "com.sun.star.text.TextGraphicObject",                  SW_SERVICE_TYPE_TEXT_GRAPHIC },
+    { "com.sun.star.text.Fieldmark",                          SW_SERVICE_TYPE_FIELDMARK },
+    { "com.sun.star.text.FormFieldmark",                      SW_SERVICE_TYPE_FORMFIELDMARK },
     { "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER },
 
     // case-correct versions of the service names (see #i67811)
@@ -367,6 +369,18 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         {
             SwXBookmark* pBookmark = new SwXBookmark;
             xRet =  (cppu::OWeakObject*)pBookmark;
+        }
+        break;
+        case  SW_SERVICE_TYPE_FIELDMARK :
+        {
+            SwXFieldmark* pFieldmark = new SwXFieldmark(false);
+            xRet =  (cppu::OWeakObject*)pFieldmark;
+        }
+        break;
+        case  SW_SERVICE_TYPE_FORMFIELDMARK :
+        {
+            SwXFieldmark* pFieldmark = new SwXFieldmark(true);
+            xRet =  (cppu::OWeakObject*)pFieldmark;
         }
         break;
         case  SW_SERVICE_TYPE_FOOTNOTE :
@@ -1570,7 +1584,14 @@ SwXBookmark*    SwXBookmarks::GetObject( SwBookmark& rBkm, SwDoc* pDoc )
     SwXBookmark* pBkm = (SwXBookmark*)SwClientIter( rBkm ).
                                     First( TYPE( SwXBookmark ));
     if( !pBkm )
-        pBkm = new SwXBookmark(&rBkm, pDoc);
+    {
+        if (IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT==rBkm.GetType())
+            pBkm = new SwXFieldmark(false, &rBkm, pDoc);
+        else if (IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT==rBkm.GetType())
+            pBkm = new SwXFieldmark(true, &rBkm, pDoc);
+        else
+            pBkm = new SwXBookmark(&rBkm, pDoc);
+    }
     return pBkm;
 }
 /******************************************************************
