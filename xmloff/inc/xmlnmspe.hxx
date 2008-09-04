@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlnmspe.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,5 +92,9 @@ XML_OLD_NAMESPACE( STYLE,   3U )
 XML_OLD_NAMESPACE( TEXT,    4U )
 XML_OLD_NAMESPACE( TABLE,   5U )
 XML_OLD_NAMESPACE( META,    6U )
+
+// experimental namespaces
+XML_NAMESPACE( FIELD,           100U )
+
 
 #endif  //  _XMLOFF_XMLNMSPE_HXX
