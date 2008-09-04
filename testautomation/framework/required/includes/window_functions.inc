@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: window_functions.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:16:41 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -38,6 +38,11 @@
 '\******************************************************************************
 
 testcase tWindowFunctions
+
+    if ( gtSysName = "Mac OS X" ) then
+        printlog( "No testing for Mac as some Window attributes do not exist" )
+        goto endsub
+    endif
 
     '///<h1>Update test for window functionality</h1>
     '///<ul>
@@ -404,7 +409,9 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
     end select
 
     '///+<li>Close the document</li>
-    brc = hDestroyDocument()
+    while( getDocumentCount > 0 ) 
+        hDestroyDocument()
+    wend
     '///</ul>
     
 endcase
