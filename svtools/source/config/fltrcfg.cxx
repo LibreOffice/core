@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -526,7 +526,7 @@ void SvtFilterOptions::SetWriter2WinWord( BOOL bFlag )
 BOOL SvtFilterOptions::IsUseEnhancedFields() const
 {
     return false; // disable for now;
-    return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
+//  return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
 }
 
 void SvtFilterOptions::SetUseEnhancedFields( BOOL bFlag )
