@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.79 $
+# $Revision: 1.80 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -285,10 +285,6 @@ PARFILES +=                        \
         registryitem_ooo.par       \
         mergemodules_ooo.par       \
         windowscustomaction_ooo.par
-.ENDIF
-
-.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="aqua"
-PARFILES += aqua_ooo.par
 .ENDIF
 
 ULFFILES=                          \
