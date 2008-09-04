@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Writer);
     Unixlinks = (gid_Brand_Unixlink_BasisLink,
                  gid_Brand_Unixlink_Program,
-                 gid_Brand_Unixlink_Soffice,
                  gid_Brand_Unixlink_Unopkg,
                  gid_Brand_Unixlink_Urelibs);
 End
