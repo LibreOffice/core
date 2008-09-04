@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrpaint.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +47,10 @@ class SwTxtPainter : public SwTxtCursor
                                 long nAdjustBaseLine = 0 );
 protected:
     void CtorInitTxtPainter( SwTxtFrm *pFrm, SwTxtPaintInfo *pInf );
-    inline SwTxtPainter() { }
+    inline SwTxtPainter(SwTxtNode* pTxtNode) : SwTxtCursor(pTxtNode) { }
+
 public:
-    inline SwTxtPainter( SwTxtFrm *pTxtFrm, SwTxtPaintInfo *pTxtPaintInf )
+    inline SwTxtPainter( SwTxtFrm *pTxtFrm, SwTxtPaintInfo *pTxtPaintInf ) : SwTxtCursor(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtPainter( pTxtFrm, pTxtPaintInf ); }
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const sal_Bool bUnderSz );
