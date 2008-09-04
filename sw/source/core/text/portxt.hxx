@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: portxt.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,8 +95,26 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwHolePortion)
 };
 
+class SwFieldMarkPortion : public SwTxtPortion
+{
+    public:
+        inline SwFieldMarkPortion() : SwTxtPortion()
+            { }
+        virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+        virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+};
+
+class SwFieldFormPortion : public SwTxtPortion
+{
+    public:
+        inline SwFieldFormPortion() : SwTxtPortion()
+            { }
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+};
+
+
 CLASSIO( SwTxtPortion )
 CLASSIO( SwHolePortion )
-
 
 #endif
