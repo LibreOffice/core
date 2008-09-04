@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_205_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:31:32 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:19:08 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -57,7 +57,7 @@ testcase tNumberingBullets_1
     Call wBlindTextEinfuegen()
     Call wBlindTextEinfuegen()
     '/// Select all inserted text 
-    Call wTypeKeys "<shift mod1 home>"
+    Call wDokSchreiben "<shift mod1 home>"
 
     '/// Choose 'Numbering' on 'Objectbar'
     Kontext "TextObjectbar"
@@ -140,7 +140,7 @@ testcase tFormatNumberingBullets
 		Kontext "TabBullet"
 		Auswahl.TypeKeys "<Right>", i
 		TabBullet.OK
-		Call wTypeKeys "Bullet <Return><Return>"
+		Call wDokSchreiben "Bullet <Return><Return>"
 	next i
 	
 	printlog "  - All Numbering entries"
@@ -152,7 +152,7 @@ testcase tFormatNumberingBullets
 		Kontext "TabNumerierungsart"
 		Auswahl.TypeKeys "<Right>", i
 		TabNumerierungsart.OK
-		Call wTypeKeys "Nummerierungsart <Return><Return>"
+		Call wDokSchreiben "Nummerierungsart <Return><Return>"
 		Sleep 1
 	next i
 	
@@ -165,7 +165,7 @@ testcase tFormatNumberingBullets
 		Kontext "TabGliederung"
 		Auswahl.TypeKeys "<Right>", i
 		TabGliederung.OK
-		Call wTypeKeys "Gliederung <Return><Return>"
+		Call wDokSchreiben "Gliederung <Return><Return>"
 		Sleep 1
 	next i
 	
@@ -179,7 +179,7 @@ testcase tFormatNumberingBullets
 		wait 500
 		Auswahl.TypeKeys "<Right>", i
 		TabGrafiken.OK
-		Call wTypeKeys "Grafik <Return><Return>"
+		Call wDokSchreiben "Grafik <Return><Return>"
 		Sleep 1
 	next i
 	
@@ -208,70 +208,70 @@ testcase tFormatNumberingPosition
     Kontext
     Active.SetPage TabPositionNumerierung
     Kontext "TabPositionNumerierung"
-    Ebene.Select 1
-    Ausrichtung.Select 2         ' Zentriert
-    if Relativ.IsEnabled then Warnlog "Relativ is enabled with the Optional-tests!"
-    AbstandTextRand.More 5
-    V1 = AbstandTextRand.GetText
-    Einrueckung.More 1
-    V2 = Einrueckung.GetText
-    Ebene.Select 3
-    Ausrichtung.Select 3         ' Rechts
-    Relativ.Check
-    AbstandTextRand.Less 5
-    V3 = AbstandTextRand.GetText
-    AbstandTextNumerierung.More 2
-    V4 = AbstandTextNumerierung.GetText
-    Ebene.Select 4
-    Ausrichtung.Select 1         ' Links
-    Relativ.Check
-    V5 = AbstandTextRand.GetText
-    V6 = AbstandTextNumerierung.GetText
-    V7 = Einrueckung.GetText
-    Ebene.Select 6
-    Ausrichtung.Select 3         ' Rechts
-    Relativ.Check
-    AbstandTextRand.More 4
-    V8 = AbstandTextRand.GetText
-    AbstandTextNumerierung.Less 3
-    V9 = AbstandTextNumerierung.GetText
-    Einrueckung.Less 3
-    V10 = Einrueckung.GetText
-    Ebene.Select 9
-    Ausrichtung.Select 1
-    Relativ.Check
-    AbstandTextRand.Less 2
-    V11 = AbstandTextRand.GetText
-    AbstandTextNumerierung.More 2
-    V12 = AbstandTextNumerierung.GetText
-    Einrueckung.More 3
-    V13 = Einrueckung.GetText
-    Ebene.Select 10
-    Ausrichtung.Select 3
-    Relativ.Check
-    AbstandTextRand.More 4
-    V14 = AbstandTextRand.GetText
-    AbstandTextNumerierung.Less 3
-    V15 = AbstandTextNumerierung.GetText
-    Einrueckung.Less 3
-    V16 = Einrueckung.GetText
+    Level.Select 1
+    Alignment.Select 2         ' Zentriert
+'    if Relativ.IsEnabled then Warnlog "Relativ is enabled with level1!"
+    AlignedAt.More 5
+    V1 = AlignedAt.GetText
+    IndentAt.More 1
+    V2 = IndentAt.GetText
+    Level.Select 3
+    Alignment.Select 3         ' Rechts
+'    Relativ.Check
+    AlignedAt.Less 5
+    V3 = AlignedAt.GetText
+'    AbstandTextNumerierung.More 2
+'    V4 = AbstandTextNumerierung.GetText
+    Level.Select 4
+    Alignment.Select 1         ' Links
+'    Relativ.Check
+    V5 = AlignedAt.GetText
+ '   V6 = AbstandTextNumerierung.GetText
+    V7 = IndentAt.GetText
+    Level.Select 6
+    Alignment.Select 3         ' Rechts
+'    Relativ.Check
+    AlignedAt.More 4
+    V8 = AlignedAt.GetText
+'    AbstandTextNumerierung.Less 3
+'    V9 = AbstandTextNumerierung.GetText
+    IndentAt.Less 3
+    V10 = IndentAt.GetText
+    Level.Select 9
+    Alignment.Select 1
+'    Relativ.Check
+    AlignedAt.Less 2
+    V11 = AlignedAt.GetText
+'    AbstandTextNumerierung.More 2
+'    V12 = AbstandTextNumerierung.GetText
+    IndentAt.More 3
+    V13 = IndentAt.GetText
+    Level.Select 10
+    Alignment.Select 3
+'    Relativ.Check
+    AlignedAt.More 4
+    V14 = AlignedAt.GetText
+'    AbstandTextNumerierung.Less 3
+'    V15 = AbstandTextNumerierung.GetText
+    IndentAt.Less 3
+    V16 = IndentAt.GetText
     TabPositionNumerierung.OK
 
     printlog "  - write down numbering"
     '/// write down the numbering ///
-    Call wTypeKeys "Nummerierung 1. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 2. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 3. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 4. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 5. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 6. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 7. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 8. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung 9. Ebene<Return>"
-    Call wTypeKeys "<Tab>Nummerierung  10. Ebene<Return>"
-    Call wTypeKeys "<Tab>Immer noch 10. Ebene<Return>"
-    Call wTypeKeys "<Return><Return>Ende der Nummerierung"
-    Call wTypeKeys "<Up>", 5
+    Call wDokSchreiben "Nummerierung 1. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 2. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 3. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 4. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 5. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 6. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 7. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 8. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung 9. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Nummerierung  10. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Immer noch 10. Ebene<Return>"
+    Call wDokSchreiben "<Return><Return>Ende der Nummerierung"
+    Call wDokSchreiben "<Up>", 5
 
     printlog "  - check numbering-position"
     '/// reopen Format / NumberingBullets and check settings made ///
@@ -279,39 +279,39 @@ testcase tFormatNumberingPosition
     Kontext
     Active.SetPage TabPositionNumerierung
     Kontext "TabPositionNumerierung"
-    Ebene.Select 1
-    if Ausrichtung.GetSelIndex <> 2 then Warnlog "#i38904#Level 1: Wrong alignment:  Should = 2   Ist = "+ Ausrichtung.GetSelIndex
-    if V1 <> AbstandTextRand.GetText then Warnlog "Level 1: Wrong Text <-> Rand:  Should = "+ V1+ "  Is = "+ AbstandTextRand.GetText
-    if V2 <> Einrueckung.GetText then Warnlog "Level 1: Wrong indent:  Should = "+ V2+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 3
-    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 3!"
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "#i38904#Level 3: Wrong alignment:  Should = 3   Is = "+ Ausrichtung.GetSelIndex
-    if V3 <> AbstandTextRand.GetText then Warnlog "Level 3: Wrong Text <-> Spacing to text:  Should = "+ V3+ "  Is = "+ AbstandTextRand.GetText
-    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Wrong indent:  Should = "+ V4+ "  Is = "+ AbstandTextNumerierung.GetText
-    Ebene.Select 4
-    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 4!"
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "#i38904#Level 4: Wrong alignment:  Should = 1   Is = "+ Ausrichtung.GetSelIndex
-    if V5 <> AbstandTextRand.GetText then Warnlog "Level 4: Wrong Text <-> Spacing to text:  Should = "+ V5+ "  Is = "+ AbstandTextRand.GetText
-    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V6+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V7 <> Einrueckung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V7+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 6
-    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 6!"
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "#i38904#Level 6: Wrong alignment:  Should = 3   Is = "+ Ausrichtung.GetSelIndex
-    if V8 <> AbstandTextRand.GetText then Warnlog "Level 6: Wrong Text <-> Spacing to text:  Should = "+ V8+ "  Is = "+ AbstandTextRand.GetText
-    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V9+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V10 <> Einrueckung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V10+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 9
-    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 9!"
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "#i38904#Level 9: Wrong alignment:  Should = 1   Is = "+ Ausrichtung.GetSelIndex
-    if V11 <> AbstandTextRand.GetText then Warnlog "Level 9: Wrong Text <-> Spacing to text:  Should = "+ V11+ "  Is = "+ AbstandTextRand.GetText
-    if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V12+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V13 <> Einrueckung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V13+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 10
-    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 10!"
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "#i38904#Level 10: Wrong alignment:  Should = 3   Is = "+ Ausrichtung.GetSelIndex
-    if V14 <> AbstandTextRand.GetText then Warnlog "Level 10: Wrong Text <-> Spacing to text:  Should = "+ V14+ "  Is = "+ AbstandTextRand.GetText
-    if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V15+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V16 <> Einrueckung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V16+ "  Is = "+ Einrueckung.GetText
+    Level.Select 1
+'    if Alignment.GetSelIndex <> 2 then Warnlog "#i38904#Level 1: Wrong alignment:  Should = 2   Ist = "+ Alignment.GetSelIndex
+    if V1 <> AlignedAt.GetText then Warnlog "Level 1: Wrong Text <-> Rand:  Should = "+ V1+ "  Is = "+ AlignedAt.GetText
+    if V2 <> IndentAt.GetText then Warnlog "Level 1: Wrong indent:  Should = "+ V2+ "  Is = "+ IndentAt.GetText
+    Level.Select 3
+'    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 3!"
+    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 3: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if V3 <> AlignedAt.GetText then Warnlog "Level 3: Wrong Text <-> Spacing to text:  Should = "+ V3+ "  Is = "+ AlignedAt.GetText
+'    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Wrong indent:  Should = "+ V4+ "  Is = "+ AbstandTextNumerierung.GetText
+    Level.Select 4
+'    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 4!"
+    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 4: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if V5 <> AlignedAt.GetText then Warnlog "Level 4: Wrong Text <-> Spacing to text:  Should = "+ V5+ "  Is = "+ AlignedAt.GetText
+'    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V6+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V7 <> IndentAt.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V7+ "  Is = "+ IndentAt.GetText
+    Level.Select 6
+'    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 6!"
+    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 6: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if V8 <> AlignedAt.GetText then Warnlog "Level 6: Wrong Text <-> Spacing to text:  Should = "+ V8+ "  Is = "+ AlignedAt.GetText
+'    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V9+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V10 <> IndentAt.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V10+ "  Is = "+ IndentAt.GetText
+    Level.Select 9
+'    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 9!"
+    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 9: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if V11 <> AlignedAt.GetText then Warnlog "Level 9: Wrong Text <-> Spacing to text:  Should = "+ V11+ "  Is = "+ AlignedAt.GetText
+'    if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V12+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V13 <> IndentAt.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V13+ "  Is = "+ IndentAt.GetText
+    Level.Select 10
+'    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 10!"
+    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 10: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if V14 <> AlignedAt.GetText then Warnlog "Level 10: Wrong Text <-> Spacing to text:  Should = "+ V14+ "  Is = "+ AlignedAt.GetText
+'    if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V15+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V16 <> IndentAt.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V16+ "  Is = "+ IndentAt.GetText
     TabPositionNumerierung.Ok
 
     printlog "  - check previous saved numbering"
@@ -328,40 +328,40 @@ testcase tFormatNumberingPosition
     Kontext
     Active.SetPage TabPositionNumerierung
     Kontext "TabPositionNumerierung"
-    Ebene.Select 1
+    Level.Select 1
     
-    if Ausrichtung.GetSelIndex <> 2 then Warnlog "#i38904#Level 1: Wrong alignment:  Should = 2   Ist = "+ Ausrichtung.GetSelIndex
-    if V1 <> AbstandTextRand.GetText then Warnlog "Level 1: Wrong Text <-> Rand:  Should = "+ V1+ "  Is = "+ AbstandTextRand.GetText
-    if V2 <> Einrueckung.GetText then Warnlog "Level 1: Wrong indent:  Should = "+ V2+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 3
-    if Not Relativ.IsChecked then Relativ.Check
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "#i38904#Level 3: Wrong alignment:  Should = 3   Is = "+ Ausrichtung.GetSelIndex
-    if V3 <> AbstandTextRand.GetText then Warnlog "Level 3: Wrong Text <-> Spacing to text:  Should = "+ V3+ "  Is = "+ AbstandTextRand.GetText
-    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Wrong indent:  Should = "+ V4+ "  Is = "+ AbstandTextNumerierung.GetText
-    Ebene.Select 4
-    if Not Relativ.IsChecked then Relativ.Check
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "#i38904#Level 4: Wrong alignment:  Should = 1   Is = "+ Ausrichtung.GetSelIndex
-    if V5 <> AbstandTextRand.GetText then Warnlog "Level 4: Wrong Text <-> Spacing to text:  Should = "+ V5+ "  Is = "+ AbstandTextRand.GetText
-    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V6+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V7 <> Einrueckung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V7+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 6
-    if Not Relativ.IsChecked then Relativ.Check
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "#i38904#Level 6: Wrong alignment:  Should = 3   Is = "+ Ausrichtung.GetSelIndex
-    if V8 <> AbstandTextRand.GetText then Warnlog "Level 6: Wrong Text <-> Spacing to text:  Should = "+ V8+ "  Is = "+ AbstandTextRand.GetText
-    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V9+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V10 <> Einrueckung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V10+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 9
-    if Not Relativ.IsChecked then Relativ.Check
-    if Ausrichtung.GetSelIndex <> 1 then Warnlog "#i38904#Level 9: Wrong alignment:  Should = 1   Is = "+ Ausrichtung.GetSelIndex
-    if V11 <> AbstandTextRand.GetText then Warnlog "Level 9: Wrong Text <-> Spacing to text:  Should = "+ V11+ "  Is = "+ AbstandTextRand.GetText
-    if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V12+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V13 <> Einrueckung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V13+ "  Is = "+ Einrueckung.GetText
-    Ebene.Select 10
-    if Not Relativ.IsChecked then Relativ.Check
-    if Ausrichtung.GetSelIndex <> 3 then Warnlog "#i38904#Level 10: Wrong alignment:  Should = 3   Is = "+ Ausrichtung.GetSelIndex
-    if V14 <> AbstandTextRand.GetText then Warnlog "Level 10: Wrong Text <-> Spacing to text:  Should = "+ V14+ "  Is = "+ AbstandTextRand.GetText
-    if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V15+ "  Is = "+ AbstandTextNumerierung.GetText
-    if V16 <> Einrueckung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V16+ "  Is = "+ Einrueckung.GetText
+    if Alignment.GetSelIndex <> 2 then Warnlog "#i38904#Level 1: Wrong alignment:  Should = 2   Ist = "+ Alignment.GetSelIndex
+    if V1 <> AlignedAt.GetText then Warnlog "Level 1: Wrong Text <-> Rand:  Should = "+ V1+ "  Is = "+ AlignedAt.GetText
+    if V2 <> IndentAt.GetText then Warnlog "Level 1: Wrong indent:  Should = "+ V2+ "  Is = "+ IndentAt.GetText
+    Level.Select 3
+'    if Not Relativ.IsChecked then Relativ.Check
+    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 3: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if V3 <> AlignedAt.GetText then Warnlog "Level 3: Wrong Text <-> Spacing to text:  Should = "+ V3+ "  Is = "+ AlignedAt.GetText
+'    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Wrong indent:  Should = "+ V4+ "  Is = "+ AbstandTextNumerierung.GetText
+    Level.Select 4
+'    if Not Relativ.IsChecked then Relativ.Check
+    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 4: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if V5 <> AlignedAt.GetText then Warnlog "Level 4: Wrong Text <-> Spacing to text:  Should = "+ V5+ "  Is = "+ AlignedAt.GetText
+'    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V6+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V7 <> IndentAt.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V7+ "  Is = "+ IndentAt.GetText
+    Level.Select 6
+'    if Not Relativ.IsChecked then Relativ.Check
+    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 6: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if V8 <> AlignedAt.GetText then Warnlog "Level 6: Wrong Text <-> Spacing to text:  Should = "+ V8+ "  Is = "+ AlignedAt.GetText
+'    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V9+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V10 <> IndentAt.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V10+ "  Is = "+ IndentAt.GetText
+    Level.Select 9
+'    if Not Relativ.IsChecked then Relativ.Check
+    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 9: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if V11 <> AlignedAt.GetText then Warnlog "Level 9: Wrong Text <-> Spacing to text:  Should = "+ V11+ "  Is = "+ AlignedAt.GetText
+'    if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V12+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V13 <> IndentAt.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V13+ "  Is = "+ IndentAt.GetText
+    Level.Select 10
+'    if Not Relativ.IsChecked then Relativ.Check
+    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 10: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if V14 <> AlignedAt.GetText then Warnlog "Level 10: Wrong Text <-> Spacing to text:  Should = "+ V14+ "  Is = "+ AlignedAt.GetText
+'    if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V15+ "  Is = "+ AbstandTextNumerierung.GetText
+    if V16 <> IndentAt.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V16+ "  Is = "+ IndentAt.GetText
     TabPositionNumerierung.Cancel
     Sleep 1
     '/// Close document ///
@@ -448,19 +448,19 @@ testcase tFormatNumberingOptions
 
     printlog "  - write down numbering"
     '/// write down numbering ///
-    Call wTypeKeys "Hallo 1. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 2. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 3. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 4. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 5. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 6. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 7. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 8. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 9. Ebene<Return>"
-    Call wTypeKeys "<Tab>Hallo 10. Ebene<Return>"
-    Call wTypeKeys "<Tab>Immer noch 10. Ebene<Return>"
-    Call wTypeKeys "<Return><Return>Ende der Numerierung"
-    Call wTypeKeys "<Up>", 5
+    Call wDokSchreiben "Hallo 1. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 2. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 3. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 4. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 5. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 6. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 7. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 8. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 9. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Hallo 10. Ebene<Return>"
+    Call wDokSchreiben "<Tab>Immer noch 10. Ebene<Return>"
+    Call wDokSchreiben "<Return><Return>Ende der Numerierung"
+    Call wDokSchreiben "<Up>", 5
 
     FormatNumberingBullets
     Kontext
@@ -507,10 +507,10 @@ testcase tFormatNumberingOptions
     Sleep 2
     Call hFileOpen ( gOfficePath + "user\work\format6." & WriterFilterExtension(0) )
     For i = 1 to 15
-        Call wTypeKeys "<Up>"
+        Call wDokSchreiben "<Up>"
         Wait 500
     next i
-    Call wTypeKeys "<Home>"
+    Call wDokSchreiben "<Home>"
 
     '/// check settings in Format / Numbering Bullets ///
     FormatNumberingBullets
@@ -685,19 +685,19 @@ testcase tFormatNumberingAll
 	
 	printlog "  - create numbering and check them"
 	'/// create numbering and check it ///
-	Call wTypeKeys "Hallo 1. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 2. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 3. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 4. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 5. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 6. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 7. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 8. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 9. Ebene<Return>"
-	Call wTypeKeys "<Tab>Hallo 10. Ebene<Return>"
-	Call wTypeKeys "<Tab>Immer noch 10. Ebene<Return>"
-	Call wTypeKeys "<Return><Return>Ende der Numerierung"
-	Call wTypeKeys "<Up>", 5
+	Call wDokSchreiben "Hallo 1. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 2. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 3. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 4. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 5. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 6. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 7. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 8. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 9. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Hallo 10. Ebene<Return>"
+	Call wDokSchreiben "<Tab>Immer noch 10. Ebene<Return>"
+	Call wDokSchreiben "<Return><Return>Ende der Numerierung"
+	Call wDokSchreiben "<Up>", 5
 	
 	FormatNumberingBullets
 	'/// reopen dialog and check settings ///
