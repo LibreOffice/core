@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crsrsh.hxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,12 +46,14 @@
 #include <tblsel.hxx>
 #include <IDocumentBookmarkAccess.hxx>
 
+
 // einige Forward Deklarationen
 
 class KeyCode;
 class SfxItemSet;
 class SfxPoolItem;
 class SwBookmark;
+class SwFieldBookmark;
 class SwCntntFrm;
 class SwCrsrShell;
 class SwCursor;
@@ -586,6 +588,13 @@ public:
         // erzeugt einen eindeutigen Namen. Der Name selbst muss vorgegeben
         // werden, es wird dann bei gleichen Namen nur durchnumeriert.
     void MakeUniqueBookmarkName( String& rNm );
+
+        bool IsFormProtected();
+        SwBookmark* IsInFieldBookmark();
+        SwFieldBookmark* IsInFormFieldBookmark();
+        SwBookmark* GetNextFieldBookmark();
+        SwBookmark* GetPrevFieldBookmark();
+        bool GotoFieldBookmark(SwBookmark *pBkmk);
 
     // aktualisiere den Crsrs, d.H. setze ihn wieder in den Content.
     // Das sollte nur aufgerufen werden, wenn der Cursor z.B. beim
