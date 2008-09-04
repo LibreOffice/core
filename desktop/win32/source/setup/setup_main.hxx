@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setup_main.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@ class SetupApp
     DWORD           m_nMinorVersion;
     boolean         m_bIsWin9x      : 1;
     boolean         m_bNeedReboot   : 1;
+    boolean         m_bAdministrative : 1;
 
 public:
     UINT            m_uiRet;
@@ -48,6 +49,7 @@ public:
     virtual boolean Initialize( HINSTANCE hInst ) = 0;
     virtual boolean AlreadyRunning() const = 0;
     virtual boolean ReadProfile() = 0;
+    virtual boolean GetPatches() = 0;
     virtual boolean ChooseLanguage( long& rLanguage ) = 0;
     virtual boolean CheckVersion() = 0;
     virtual boolean Install( long nLanguage ) = 0;
@@ -59,6 +61,9 @@ public:
     boolean         IsWin9x() const { return m_bIsWin9x; }
     DWORD           GetOSVersion() const { return m_nOSVersion; }
     DWORD           GetMinorVersion() const { return m_nMinorVersion; }
+
+    boolean         IsAdminInstall() { return m_bAdministrative; }
+    void            SetAdminInstall( boolean bValue ) { m_bAdministrative = bValue; }
 
     void            SetRebootNeeded( boolean bNeedReboot ) { m_bNeedReboot = bNeedReboot; }
     boolean         NeedReboot() const { return m_bNeedReboot; }
