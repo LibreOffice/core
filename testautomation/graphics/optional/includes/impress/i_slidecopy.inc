@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: i_slidecopy.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:43:55 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:17:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -512,9 +512,8 @@ endcase 'tiSlidecopyDuplicate
 '-----------------------------------------------------------------------
 
 testcase tiSlideCopyPasteSpecial
-
-    warnlog "#i92864: Crash when copying slide in slide sorter"
-    goto endsub
+qaerrorlog "#i93377#: Paste special dialog does not come up with kontext on slide pane"
+goto endsub
     
     Dim value1 as string
     Dim value2 as string
@@ -613,9 +612,8 @@ endcase 'tiSlideCopyPasteSpecial
 
 '-----------------------------------------------------------------------
 testcase tiSlideCopyInSlideSorter
-
-    warnlog "#i92864: Crash when copying slide in slide sorter"
-    goto endsub
+qaerrorlog "#i58418#: Pasting in slide sorter sets slide to wrong position"
+goto endsub
     
     Dim value1 as string
     Dim value2 as string
