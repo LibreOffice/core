@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,8 +251,14 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
                                        "SHARED_PACKAGES_CACHE/uno_packages");
         that->m_registryCache = OUSTR("vnd.sun.star.expand:$UNO_"
                                       "SHARED_PACKAGES_CACHE/registry");
-        logFile = OUSTR("vnd.sun.star.expand:$UNO_"
-                        "SHARED_PACKAGES_CACHE/log.txt");
+// The current logging implementation does not work for shared, because it requires
+// write access to the logfile. When two users run OOo at the same time on the same machine
+// then the
+// second will fail because it does not get write access. One cannot write into the
+// user's home, because then people may complain that when installing shared extension
+// stuff is written in their home.
+//        logFile = OUSTR("vnd.sun.star.expand:$UNO_"
+//                        "SHARED_PACKAGES_CACHE/log.txt");
         //See description for stampURL for user packages.
         stampURL = OUSTR("vnd.sun.star.expand:$UNO_"
                          "SHARED_PACKAGES_CACHE/stamp.sys");
