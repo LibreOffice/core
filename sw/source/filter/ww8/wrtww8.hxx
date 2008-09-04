@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtww8.hxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -655,6 +655,7 @@ public:
     static void WriteString8(SvStream& rStrm, const String& rStr,
         bool bAddZero, rtl_TextEncoding eCodeSet);
 
+    static void WriteString_xstz(SvStream& rStrm, const String& rStr, bool bAddZero);
 #if 1
     //Prefer ww::bytes to WW8Bytes, migrate away from the other ones.
     static void InsUInt16(ww::bytes &rO, sal_uInt16 n);
@@ -711,6 +712,8 @@ public:
     void AddLinkTarget(const String& rURL);
     void CollectOutlineBookmarks(const SwDoc &rDoc);
     void AddBookmark(String sBkmkName);
+
+    void WriteFormData(SwFieldBookmark &rFieldmark);
 private:
     //No copying
     SwWW8Writer(const SwWW8Writer&);
