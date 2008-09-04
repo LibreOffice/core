@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extensions.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-19 08:56:57 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:15:21 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -660,10 +660,9 @@ testcase tExtensionsFunction
         qaErrorLog "disabling installed extensions failed;"
     endif
     'close window only if we don't leave with backing window
-    b = getDocumentCount
-    if b > 1 then
+    while( getDocumentCount() > 0 ) 
         hCloseDocument()
-    endif
+    wend
 endcase
 
 
