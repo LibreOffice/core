@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setup.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,10 +83,10 @@ class SetupAppX : public SetupApp
     LPTSTR      m_pTmpName;
     LPTSTR      m_pErrorText;
     LPTSTR      m_pModuleFile;
+    LPTSTR      m_pPatchFiles;
     int        *m_pMSIErrorCode;
 
     boolean     m_bQuiet            : 1;
-    boolean     m_bAdministrative   : 1;
     boolean     m_bIgnoreAlreadyRunning : 1;
     boolean     m_bRegNoMsoTypes :1;
     boolean     m_bRegAllMsoTypes :1;
@@ -130,6 +130,7 @@ public:
     virtual boolean Initialize( HINSTANCE hInst );
     virtual boolean AlreadyRunning() const;
     virtual boolean ReadProfile();
+    virtual boolean GetPatches();
     virtual boolean ChooseLanguage( long& rLanguage );
     virtual boolean CheckVersion();
     virtual boolean Install( long nLanguage );
