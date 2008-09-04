@@ -8,7 +8,7 @@
 #
 # $RCSfile: CvsModule.pm,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -549,9 +549,9 @@ sub do_checkout
         if ( /\[.* aborted\]: connect to/ ) {
             croak("ERROR: CvsModule::do_checkout(): connection to server failed");
         }
-        if ( /^cvs (server|checkout): Updating (.*)$/ ) {
+        if ( /^(cvs|repository) (server|checkout): Updating (.*)$/ ) {
             print "." if $verbose;
-            push(@updated_dirs, $2);
+            push(@updated_dirs, $3);
         }
         if ( /^([U|M|P|C]) (.*)$/ ) {
             push(@updated_files, [$2, $1]);
