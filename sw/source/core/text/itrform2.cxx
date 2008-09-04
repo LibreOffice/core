@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrform2.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -836,15 +836,26 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
         {
             // Erst zum Schluss !
             // Wenn pCurr keine Breite hat, kann sie trotzdem schon Inhalt haben,
-            // z.B. bei nicht darstellbaren Zeichen.
-            if( !rInf.X() && !pCurr->GetPortion() && !pCurr->GetLen() &&
-                !GetFnt()->IsURL() )
-                pPor = pCurr;
-            else
+             // z.B. bei nicht darstellbaren Zeichen.
+            if( rInf.GetLen() > 0 )
             {
-                pPor = new SwTxtPortion;
-                if( GetFnt()->IsURL() )
-                    pPor->SetWhichPor( POR_URL );
+                if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FIELDSTART )
+                    pPor = new SwFieldMarkPortion();
+                else if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FIELDEND )
+                    pPor = new SwFieldMarkPortion();
+                else if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FORMELEMENT )
+                    pPor = new SwFieldFormPortion();
+            }
+            if( !pPor )
+            {
+                if( !rInf.X() && !pCurr->GetPortion() && !pCurr->GetLen() && !GetFnt()->IsURL() )
+                    pPor = pCurr;
+                else
+                {
+                    pPor = new SwTxtPortion;
+                    if( GetFnt()->IsURL() )
+                        pPor->SetWhichPor( POR_URL );
+                }
             }
         }
     }
