@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8nds.cxx,v $
- * $Revision: 1.109 $
+ * $Revision: 1.110 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +103,7 @@
 #include <numrule.hxx>
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
+#include <bookmrk.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -286,14 +287,25 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
 {
     xub_StrLen nPos;
     xub_StrLen nMinPos = STRING_MAXLEN;
+    const String aTxt = rNd.GetTxt();
+    xub_StrLen pos = aTxt.Search(CH_TXT_ATR_FIELDSTART, nStartPos);
+    if( pos==STRING_NOTFOUND )
+    {
+        pos = aTxt.Search(CH_TXT_ATR_FIELDEND, nStartPos);
+        if( pos==STRING_NOTFOUND )
+            pos = aTxt.Search(CH_TXT_ATR_FORMELEMENT, nStartPos);
+    }
+    if( pos!=STRING_NOTFOUND )
+        nMinPos=pos;
+
     xub_StrLen i=0;
 
     // first the redline, then the attributes
     if( pCurRedline )
     {
         const SwPosition* pEnd = pCurRedline->End();
-        if (pEnd->nNode == rNd && ((i = pEnd->nContent.GetIndex()) >= nStartPos))
-            nMinPos = i;
+        if (pEnd->nNode == rNd && ((i = pEnd->nContent.GetIndex()) >= nStartPos) && i < nMinPos )
+                nMinPos = i;
     }
 
     if( nCurRedlinePos < rWrt.pDoc->GetRedlineTbl().Count() )
@@ -1503,8 +1515,50 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         xub_StrLen nLen = nNextAttr - nAktPos;
         if (!bTxtAtr && nLen)
         {
-            String aSnippet(aAttrIter.GetSnippet(aStr, nAktPos, nLen));
-            if ((rWW8Wrt.nTxtTyp == TXT_EDN || rWW8Wrt.nTxtTyp == TXT_FTN) && nAktPos ==0)
+            sal_Unicode ch=aStr.GetChar(nAktPos);
+            int ofs=(ch==CH_TXT_ATR_FIELDSTART || ch==CH_TXT_ATR_FIELDEND || ch==CH_TXT_ATR_FORMELEMENT?1:0);
+
+            if (ch==CH_TXT_ATR_FIELDSTART) {
+                SwPosition aPosition( *pNd, SwIndex( (SwTxtNode*)pNd, nAktPos+1 ) );
+                SwFieldBookmark* pFieldmark=(SwFieldBookmark*)rWW8Wrt.pDoc->getFieldBookmarkFor( aPosition );
+                ASSERT(pFieldmark!=NULL, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
+
+                if (pFieldmark!=NULL) {
+                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 1);
+                }
+                rWW8Wrt.OutField(NULL, ww::eFORMTEXT, String::CreateFromAscii(" FORMTEXT "), WRITEFIELD_START | WRITEFIELD_CMD_START);
+                if (pFieldmark!=NULL) {
+                    rWW8Wrt.WriteFormData( *pFieldmark );
+                }
+                rWW8Wrt.OutField(NULL, ww::eFORMTEXT, String(), WRITEFIELD_CMD_END);
+            } else if (ch==CH_TXT_ATR_FIELDEND) {
+                SwPosition aPosition( *pNd, SwIndex( (SwTxtNode*)pNd, nAktPos ) );
+                SwFieldBookmark* pFieldmark=(SwFieldBookmark*)rWW8Wrt.pDoc->getFieldBookmarkFor( aPosition );
+                ASSERT(pFieldmark!=NULL, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
+                rWW8Wrt.OutField(NULL, ww::eFORMTEXT, String(), WRITEFIELD_CLOSE);
+                if (pFieldmark!=NULL) {
+                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 0);
+                }
+            } else if (ch==CH_TXT_ATR_FORMELEMENT) {
+                SwPosition aPosition( *pNd, SwIndex( (SwTxtNode*)pNd, nAktPos ) );
+                SwFieldBookmark* pFieldmark=rWW8Wrt.pDoc->getFormFieldBookmarkFor( aPosition );
+                ASSERT(pFieldmark!=NULL, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
+                if (pFieldmark!=NULL) {
+                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 1);
+                }
+                rWW8Wrt.OutField(NULL, ww::eFORMCHECKBOX, String::CreateFromAscii(" FORMCHECKBOX "), WRITEFIELD_START | WRITEFIELD_CMD_START);
+                if (pFieldmark!=NULL) {
+
+                    rWW8Wrt.WriteFormData( *pFieldmark );
+                }
+                rWW8Wrt.OutField(NULL, ww::eFORMCHECKBOX, String(), WRITEFIELD_CMD_END | WRITEFIELD_CLOSE);
+                if (pFieldmark!=NULL) {
+                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 0);
+                }
+            }
+            nLen-=static_cast<USHORT>(ofs);
+            String aSnippet(aAttrIter.GetSnippet(aStr, nAktPos+static_cast<USHORT>(ofs), nLen));
+            if ((rWW8Wrt.nTxtTyp == TXT_EDN || rWW8Wrt.nTxtTyp == TXT_FTN) && nAktPos ==0 && nLen>0)
             {
                 // Insert tab for aesthetic puposes #i24762#
                 if (aSnippet.GetChar(0) != 0x09)
