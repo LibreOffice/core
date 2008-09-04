@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtww8.cxx,v $
- * $Revision: 1.92 $
+ * $Revision: 1.93 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,10 @@
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 
+#ifndef IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
+#include <IDocumentBookmarkAccess.hxx>
+#endif
+
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -185,7 +189,7 @@ public:
     WW8_WrtBookmarks();
     ~WW8_WrtBookmarks();
 
-    void Append( WW8_CP nStartCp, const String& rNm );
+    void Append( WW8_CP nStartCp, const String& rNm, const SwBookmark* pBkmk=NULL );
     void Write( SwWW8Writer& rWrt );
     void MoveFieldBookmarks(ULONG nFrom,ULONG nTo);
 
@@ -1224,7 +1228,7 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
 {
 }
 
-void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm )
+void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const SwBookmark* )
 {
     USHORT nPos = GetPos( rNm );
     if( USHRT_MAX == nPos )
@@ -1354,6 +1358,11 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
         for( USHORT n = 0; n < aArr.Count(); ++n )
         {
             const SwBookmark& rBkmk = *(SwBookmark*)aArr[ n ];
+
+            if (rBkmk.IsFormFieldMark()) {
+                continue;
+            }
+
             const SwPosition* pPos = &rBkmk.GetBookmarkPos(),
                             * pOPos = rBkmk.GetOtherBookmarkPos();
             if( pOPos && pOPos->nNode == pPos->nNode &&
@@ -1368,14 +1377,14 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
                 nCntnt < nAktEnd ) )
             {
                 ULONG nCp = nSttCP + pPos->nContent.GetIndex() - nAktPos;
-                pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
+                pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()), &rBkmk);
             }
             if( pOPos && nNd == pOPos->nNode.GetIndex() &&
                 ( nCntnt = pOPos->nContent.GetIndex() ) >= nAktPos &&
                 nCntnt < nAktEnd )
             {
                 ULONG nCp = nSttCP + pOPos->nContent.GetIndex() - nAktPos;
-                pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
+                pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()), &rBkmk);
             }
         }
     }
@@ -1566,6 +1575,17 @@ void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,
     if (!aBytes.empty())
         rStrm.Write(&aBytes[0], aBytes.size());
 }
+
+void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const String& rStr, bool bAddZero)
+{
+    ww::bytes aBytes;
+    SwWW8Writer::InsUInt16(aBytes, rStr.Len());
+    SwWW8Writer::InsAsString16(aBytes, rStr);
+    if (bAddZero)
+        SwWW8Writer::InsUInt16(aBytes, 0);
+    rStrm.Write(&aBytes[0], aBytes.size());
+}
+
 
 void SwWW8Writer::WriteString8(SvStream& rStrm, const String& rStr,
     bool bAddZero, rtl_TextEncoding eCodeSet)
@@ -2582,5 +2602,97 @@ void SwWW8Writer::RestoreMacroCmds()
     pFib->lcbCmds = pTableStrm->Tell() - pFib->fcCmds;
 }
 
+void SwWW8Writer::WriteFormData(SwFieldBookmark &rFieldmark)
+{
+    ASSERT(bWrtWW8, "No 95 export yet");
+    if (!bWrtWW8) return;
+
+    int type=rFieldmark.GetFieldType();
+    const String ffname=rFieldmark.GetFFName();
+
+    ULONG nDataStt = pDataStrm->Tell();
+    pChpPlc->AppendFkpEntry( Strm().Tell() );
+
+    WriteChar( 0x01 );
+    static BYTE aArr1[] = {
+        0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
+
+        0x06, 0x08, 0x01,       // sprmCFData
+        0x55, 0x08, 0x01,       // sprmCFSpec
+        0x02, 0x08, 0x01        // sprmCFFldVanish
+    };
+    BYTE* pDataAdr = aArr1 + 2;
+    Set_UInt32( pDataAdr, nDataStt );
+
+    pChpPlc->AppendFkpEntry(Strm().Tell(),
+                sizeof( aArr1 ), aArr1 );
+
+    sal_uInt8 aFldHeader[] =
+    {
+        0xFF, 0xFF, 0xFF, 0xFF, // Unicode Marker...
+        0, 0, 0, 0//, 0, 0, 0, 0
+    };
+
+    aFldHeader[4] |= (type & 0x03);
+    int ffres=rFieldmark.GetFFRes();
+    aFldHeader[4] |= ((ffres<<2) & 0x7C);
+
+    const String ffdeftext;
+    const String ffformat;
+    const String ffhelptext;
+    const String ffstattext;
+    const String ffentrymcr;
+    const String ffexitmcr;
+
+    const sal_uInt8 aFldData[] =
+    {
+        0,0,0,0,        // len of struct
+        0x44,0,         // the start of "next" data
+        0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!  /10
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
+        0,0,0,0,                            // /               /4
+    };
+    int slen=sizeof(aFldData)
+        +sizeof(aFldHeader)
+        +2*ffname.Len()+4
+        +2*ffdeftext.Len()+4
+        +2*ffformat.Len()+4
+        +2*ffhelptext.Len()+4
+        +2*ffstattext.Len()+4
+        +2*ffentrymcr.Len()+4
+        +2*ffexitmcr.Len()+4;
+#ifdef OSL_BIGENDIAN
+    slen=SWAPLONG(slen);
+#endif // OSL_BIGENDIAN
+    *((sal_uInt32 *)aFldData)=slen;
+    int len=sizeof(aFldData) ;
+    assert(len==0x44);
+    pDataStrm->Write( aFldData, len);
+
+    len=sizeof(aFldHeader);
+    assert(len==8);
+    pDataStrm->Write( aFldHeader, len);
+
+    WriteString_xstz( *pDataStrm, ffname, true); // Form field name
+
+    if (type==0) {
+        WriteString_xstz( *pDataStrm, ffdeftext, true);
+    } else {
+        pDataStrm->WriteNumber((sal_uInt16)0);
+    }
+    WriteString_xstz( *pDataStrm, ffformat, true);
+    WriteString_xstz( *pDataStrm, ffhelptext, true);
+    WriteString_xstz( *pDataStrm, ffstattext, true);
+    WriteString_xstz( *pDataStrm, ffentrymcr, true);
+    WriteString_xstz( *pDataStrm, ffexitmcr, true);
+    if (type==2) {
+        // 0xFF, 0xFF
+        // sal_uInt32 number of strings
+        // (sal_uInt16 len; sal_uInt16 unicode char[len])*num of strings
+    }
+
+}
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
