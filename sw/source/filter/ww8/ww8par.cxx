@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.198 $
+ * $Revision: 1.199 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -827,7 +827,7 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 }
 
 void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
-    BOOL bTstEnde, long nHand)
+    BOOL bTstEnde, long nHand, BOOL )
 {
     //Doing a textbox, and using the control stack only as a temporary
     //collection point for properties which will are not to be set into
@@ -1509,6 +1509,11 @@ void SwWW8ImplReader::ImportDop()
             }
         }
     }
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    if (bUseEnhFields) {
+    rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
+    }
 
     maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
@@ -1553,6 +1558,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 
 //-----------------------------------------
 //      Fuss- und Endnoten
+
 //-----------------------------------------
 
 WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
@@ -1616,6 +1622,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maOldApos.push_back(false);
     maOldApos.swap(pRdr->maApos);
     maOldFieldStack.swap(pRdr->maFieldStack);
+    maFieldCtxStack.swap(pRdr->maNewFieldCtxStack);
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
@@ -1662,6 +1669,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
         pRdr->pPlcxMan->RestoreAllPLCFx(maPLCFxSave);
     pRdr->maApos.swap(maOldApos);
     pRdr->maFieldStack.swap(maOldFieldStack);
+    pRdr->maNewFieldCtxStack.swap(maFieldCtxStack);
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
@@ -2653,6 +2661,22 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x15:
             if( !bSpec )        // Juristenparagraph
                 cInsert = '\xa7';
+            else { //0x15 is special --> so it's our field end mark...; hmmm what about field marks not handled by us??, maybe a problem with nested fields; probably an area of bugs... [well release quick and release often....]
+                if (!maNewFieldCtxStack.empty() && pPaM!=NULL && pPaM->GetPoint()!=NULL) {
+                    WW8NewFieldCtx *pFieldCtx=maNewFieldCtxStack.back();
+                    maNewFieldCtxStack.pop_back();
+                    SwPosition aEndPos = *pPaM->GetPoint();
+                    SwPaM aFldPam( pFieldCtx->GetPtNode(), pFieldCtx->GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+                    SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeBookmark(aFldPam, KeyCode(), pFieldCtx->GetBookmarkName(), String(), IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT);
+                    ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+                    if (pFieldmark!=NULL) {
+                        pFieldmark->SetFieldType(0); // 0==Text
+                        // set field data here...
+                        pFieldCtx->SetCurrentFieldParamsTo(*pFieldmark);
+                    }
+                    delete pFieldCtx;
+                }
+            }
             break;
         case 0x9:
             cInsert = '\x9';    // Tab
@@ -3439,6 +3463,8 @@ bool wwSectionManager::IsNewDoc() const
 
 void wwSectionManager::InsertSegments()
 {
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
     mySegIter aEnd = maSegments.end();
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
@@ -3447,8 +3473,7 @@ void wwSectionManager::InsertSegments()
 
         bool bInsertSection = aIter != aStart ? aIter->IsContinous() : false;
         bool bInsertPageDesc = !bInsertSection;
-        bool bProtected = SectionIsProtected(*aIter);
-
+        bool bProtected = !bUseEnhFields && SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
         if (bInsertPageDesc)
         {
             /*
