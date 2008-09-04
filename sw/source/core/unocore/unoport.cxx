@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoport.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -314,6 +314,9 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_RUBY_START:
                 case PORTION_RUBY_END:      pRet = "Ruby";break;
                 case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
+                case PORTION_FIELD_START:pRet = "TextFieldStart";break;
+                case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
+                case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
                 default:
                     pRet = 0;
                 }
@@ -357,6 +360,8 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_REDLINE_END :
                     case PORTION_RUBY_START:
                     case PORTION_RUBY_END:
+                    case PORTION_FIELD_START:
+                    case PORTION_FIELD_END:
                         rVal.setValue(&bIsCollapsed, ::getBooleanCppuType());
                     break;
                     default:
@@ -374,6 +379,7 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_TOXMARK_START:
                     case PORTION_REDLINE_START:
                     case PORTION_RUBY_START:
+                    case PORTION_FIELD_START:
                     break;
 
                     case PORTION_REFMARK_END:
@@ -381,6 +387,7 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_BOOKMARK_END:
                     case PORTION_REDLINE_END:
                     case PORTION_RUBY_END:
+                    case PORTION_FIELD_END:
                         bStart = FALSE;
                     break;
                     default:
