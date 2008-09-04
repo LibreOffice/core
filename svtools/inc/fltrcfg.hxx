@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,9 @@ public:
     void SetWinWord2Writer( sal_Bool bFlag );
     sal_Bool IsWriter2WinWord() const;
     void SetWriter2WinWord( sal_Bool bFlag );
+
+    sal_Bool IsUseEnhancedFields() const;
+    void SetUseEnhancedFields( sal_Bool  bFlag );
 
     sal_Bool IsExcel2Calc() const;
     void SetExcel2Calc( sal_Bool bFlag );
