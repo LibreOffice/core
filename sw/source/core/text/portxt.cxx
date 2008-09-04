@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: portxt.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,10 @@
 #include <viewsh.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <viewopt.hxx>  // SwViewOptions
+
+#include <bookmrk.hxx>
+#include <pam.hxx>
+#include <doc.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
@@ -564,7 +568,19 @@ SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 
 void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    if( GetLen() )
+    if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt().GetChar(rInf.GetIdx()))
+    {
+        rInf.DrawBackBrush( *this );
+        const XubString aTxt = XubString::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDEND);
+        rInf.DrawText( aTxt, *this, 0, aTxt.Len(), false );
+    }
+    else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetTxt().GetChar(rInf.GetIdx()))
+    {
+        rInf.DrawBackBrush( *this );
+        const XubString aTxt = XubString::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDSTART);
+        rInf.DrawText( aTxt, *this, 0, aTxt.Len(), false );
+    }
+    else if( GetLen() )
     {
         rInf.DrawBackBrush( *this );
 
@@ -749,4 +765,50 @@ void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Text( GetLen(), GetWhichPor() );
 }
+
+void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & ) const
+{
+//  SwTxtPortion::Paint(rInf);
+}
+
+sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
+{
+    sal_Bool ret=0;
+    Width(0);
+    return ret;
+}
+
+
+void SwFieldFormPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+//  SwTxtPortion::Paint(rInf);
+    SwTxtNode *pNd=const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
+    const SwDoc *doc=pNd->GetDoc();
+    SwIndex aIndex( pNd, rInf.GetIdx() );
+    SwPosition aPosition(*pNd, aIndex);
+    SwFieldBookmark *pBM=doc->getFormFieldBookmarkFor(aPosition);
+    ASSERT(pBM!=NULL, "Where is my form field bookmark???");
+    bool checked=(pBM!=NULL?pBM->IsChecked():false);
+    rInf.DrawCheckBox( *this , checked);
+//    const XubString aTxt = XubString::CreateFromAscii("[ ]");
+//    rInf.DrawText( aTxt, *this, 0, aTxt.Len(), false );
+}
+
+sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo &rInf )
+{
+    sal_Bool ret=0;
+//  ret=SwTxtPortion::Format(rInf);
+
+    Width(rInf.GetTxtHeight());
+    Height(rInf.GetTxtHeight());
+    SetAscent(rInf.GetAscent());
+    //int h=rInf.GetTxtHeight();
+
+/*
+    Height(100);
+    SetAscent(100);
+*/
+    return ret;
+}
+
 
