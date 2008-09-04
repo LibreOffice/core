@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itratr.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -345,6 +345,17 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
             xub_StrLen nNextEnd = (*pHints->GetEnd(nEndIndex)->GetAnyEnd());
             if ( nNextEnd<nNext ) nNext = nNextEnd; // Wer ist naeher?
         }
+    }
+    if (m_pTxtNode!=NULL) {
+        //TODO maybe use hints like FieldHints for this instead of looking at the text...
+        int l=(nNext<m_pTxtNode->Len()?nNext:m_pTxtNode->Len());
+        USHORT p=nPos;
+        const sal_Unicode *txt=m_pTxtNode->GetTxt().GetBuffer();
+        while(p<l && txt[p]!=CH_TXT_ATR_FIELDSTART && txt[p]!=CH_TXT_ATR_FIELDEND && txt[p]!=CH_TXT_ATR_FORMELEMENT) p++;
+        if ((p<l && p>nPos) || nNext<=p)
+        nNext=p;
+        else
+        nNext=p+1;
     }
     if( pRedln )
         return pRedln->GetNextRedln( nNext );
