@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: id_001.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:45:01 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:18:05 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -122,6 +122,7 @@ testcase tiFileSaveAs
         if AlienWarning.exists(5) then
             AlienWarning.OK
         end if
+        WaitSlot (5000)
     next i
     printlog "closing the sample file"
     fileclose
@@ -146,7 +147,7 @@ testcase tiFileSaveAs
         sFileNameLoaded = Dateiname.GetSelText
         printlog "File will be loaded: " & sFileNameLoaded
         Oeffnen.Click
-        WaitSlot (3000)
+        WaitSlot (5000)
         hCloseDocument
         printlog "Closing doc " & sFileNameLoaded
       WaitSlot (2000)
