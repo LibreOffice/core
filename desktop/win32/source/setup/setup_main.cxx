@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setup_main.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,7 @@ SetupApp::SetupApp()
     m_nMinorVersion = sInfoOS.dwMinorVersion;
     m_bIsWin9x      = ( VER_PLATFORM_WIN32_NT != sInfoOS.dwPlatformId );
     m_bNeedReboot   = false;
+    m_bAdministrative = false;
 }
 
 //--------------------------------------------------------------------------
@@ -109,6 +110,10 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
 
         if ( ! pSetup->ReadProfile() )
             throw pSetup->GetError();
+
+        if ( ! pSetup->IsAdminInstall() )
+            if ( ! pSetup->GetPatches() )
+                throw pSetup->GetError();
 
         if ( ! pSetup->CheckVersion() )
             throw pSetup->GetError();
