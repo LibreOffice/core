@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_216_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:24:40 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:18:55 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -51,6 +51,7 @@ end sub
 
 testcase HTMLToWRITERText
 Warnlog "#i91928# - HTMLToWRITERText outcommented due to bug."
+goto endsub
 
     if lcase(gPlatform) = "x86" and Val(mid$(gMinor, 2, Len(gMinor))) <= 129  then
         QAErrorlog "#125780#Stacktrace ID: 251397"
