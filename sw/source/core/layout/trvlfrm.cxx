@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: trvlfrm.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1628,6 +1628,15 @@ BOOL SwRootFrm::IsDummyPage( USHORT nPageNum ) const
 |*************************************************************************/
 BOOL SwFrm::IsProtected() const
 {
+    if (this->IsCntntFrm() && ((SwCntntFrm*)this)->GetNode())
+    {
+        const SwDoc *pDoc=((SwCntntFrm*)this)->GetNode()->GetDoc();
+        bool isFormProtected=pDoc->get(IDocumentSettingAccess::PROTECT_FORM );
+        if (isFormProtected)
+        {
+            return FALSE; // TODO a hack for now, well deal with it laster, I we return true here we have a "double" locking
+        }
+    }
     //Der Frm kann in Rahmen, Zellen oder Bereichen geschuetzt sein.
     //Geht auch FlyFrms rekursiv hoch. Geht auch von Fussnoten zum Anker.
     const SwFrm *pFrm = this;
