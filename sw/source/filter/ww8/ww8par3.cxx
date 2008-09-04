@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,9 +94,58 @@
 #include "ww8par.hxx"
 #include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
 
+#include <bookmrk.hxx>
+#include <svtools/fltrcfg.hxx>
+
+#include <stdio.h>
+
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
+
+WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString _sBookmarkName, ::rtl::OUString _sBookmarkType)
+: maPtNode(aStartPos.nNode), mnPtCntnt(aStartPos.nContent.GetIndex()),
+  sBookmarkName(_sBookmarkName),
+  sBookmarkType(_sBookmarkType), mpPaM(NULL)
+{
+}
+
+
+WW8NewFieldCtx::~WW8NewFieldCtx()
+{
+    if (mpPaM) delete mpPaM;
+}
+
+::rtl::OUString WW8NewFieldCtx::GetBookmarkName()
+{
+    return sBookmarkName;
+}
+
+::rtl::OUString WW8NewFieldCtx::GetBookmarkType()
+{
+    return sBookmarkType;
+}
+
+void WW8NewFieldCtx::AddParam(::rtl::OUString name, ::rtl::OUString value)
+{
+    maParams.push_back( Param_t(name, value) );
+}
+
+void WW8NewFieldCtx::SetCurrentFieldParamsTo(SwFieldBookmark &rFieldBookmark)
+{
+    for(Params_t::iterator i=maParams.begin();i!=maParams.end();i++) {
+        ::rtl::OUString aName=i->first;
+        ::rtl::OUString aValue=i->second;
+        if (aName.compareToAscii("Description")==0) {
+            rFieldBookmark.SetFFHelpText(aValue);
+        } else if (aName.compareToAscii("Name")==0) {
+            rFieldBookmark.SetFFName(aValue);
+        } else if (aName.compareToAscii("Result")==0) {
+            rFieldBookmark.SetFFRes( aValue.toInt32() );
+        }
+    }
+}
+
 //-----------------------------------------
 //            UNO-Controls
 //-----------------------------------------
@@ -114,8 +163,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
+    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1))) {
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
+    }
 
     /* #80205#
     Here we have a small complication. This formula control contains
@@ -127,23 +177,58 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     the field result into the formula here in place of the default
     text.
     */
+
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+
+    if (!bUseEnhFields) {
     aFormula.sDefault = GetFieldResult(pF);
 
+#if 0 // why not? (flr)
     //substituting Unicode spacing 0x2002 with double space for layout
-#if 0
     aFormula.sDefault.SearchAndReplaceAll(
         String(static_cast< sal_Unicode >(0x2002)),
         CREATE_CONST_ASC("  "));
 #endif
 
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-        aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
+              aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
     aFld.SetHelp(aFormula.sHelp);
     aFld.SetToolTip(aFormula.sToolTip);
 
     rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
-
     return FLD_OK;
+    } else {
+    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+    String aBookmarkName;
+    if (pB!=NULL) {
+        WW8_CP currentCP=pF->nSCode;
+        WW8_CP currentLen=pF->nLen;
+
+        USHORT bkmFindIdx;
+        String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+
+        if (aBookmarkFind.Len()>0) {
+            pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
+            if (aBookmarkFind.Len()>0) {
+                aBookmarkName=aBookmarkFind;
+            }
+        }
+    }
+
+    if (pB!=NULL && aBookmarkName.Len()==0) {
+        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+    }
+
+
+    if (aBookmarkName.Len()>0) {
+        WW8NewFieldCtx *pFieldCtx=new WW8NewFieldCtx(*pPaM->GetPoint(), aBookmarkName, ::rtl::OUString::createFromAscii("ecma.office-open-xml.field.FORMTEXT"));
+        maNewFieldCtxStack.push_back(pFieldCtx);
+        pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+        pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Name"), aFormula.sTitle);
+    }
+    return FLD_TEXT;
+    }
 }
 
 eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
@@ -155,9 +240,47 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
 
     if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
 
+    if (!bUseEnhFields) {
     pFormImpl->InsertFormula(aFormula);
     return FLD_OK;
+    } else {
+    String aBookmarkName;
+    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+    if (pB!=NULL) {
+        WW8_CP currentCP=pF->nSCode;
+        WW8_CP currentLen=pF->nLen;
+
+        USHORT bkmFindIdx;
+        String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+
+        if (aBookmarkFind.Len()>0) {
+            pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
+            if (aBookmarkFind.Len()>0) {
+                aBookmarkName=aBookmarkFind;
+            }
+        }
+    }
+
+    if (pB!=NULL && aBookmarkName.Len()==0) {
+        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+    }
+
+    if (aBookmarkName.Len()>0) {
+        SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeBookmark(*pPaM, KeyCode(), aBookmarkName, String(), IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT);
+        ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+        if (pFieldmark!=NULL) {
+            pFieldmark->SetFieldType(1); // 0==Checkbox
+            pFieldmark->SetFFName(aFormula.sTitle);
+            pFieldmark->SetFFHelpText(aFormula.sToolTip);
+            pFieldmark->SetChecked(aFormula.nChecked!=0);
+            // set field data here...
+        }
+    }
+    return FLD_OK;
+    }
 }
 
 eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
@@ -1967,6 +2090,10 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
 
     if((aPic.lcb > 0x3A) && !pDataStream->GetError() )
     {
+        pDataStream->Seek( nPicLocFc + aPic.cbHeader );
+        int len=aPic.lcb-aPic.cbHeader;
+        char *pBuf=(char*)malloc(len);
+        pDataStream->Read( pBuf, len);
         pDataStream->Seek( nPicLocFc + aPic.cbHeader );
         aFormula.FormulaRead(nWhich,pDataStream);
         bRet = true;
