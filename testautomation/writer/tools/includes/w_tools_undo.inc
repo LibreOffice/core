@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tools_undo.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:44:47 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:21:57 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -84,7 +84,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 		' Delete
 		case 4:
 			Select Case iSprache
-				Case 01: if UndoStringFromUndoList <> "Delete ' ###'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+				Case 01: if UndoStringFromUndoList <> "Delete multiple selection" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case else: QAErrorlog "Please adapt tests for current language! (" & CurrentUndoString(0) & ")"
 			end select
 		' Replace all
@@ -142,7 +142,12 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 
 				Case "Reject"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Reject change: Insert 'This is a test'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+                         Case 01: if UndoStringFromUndoList <> "Reject change: Insert 'This is a test'" then 
+                                  elseif UndoStringFromUndoList = "Reject change: $1" then 
+                                      QaErrorlog "#i# - Bug with "
+                                  else
+                                      Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+                                  end if
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -232,7 +237,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 
 				Case "PromoteOutline"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Promote outline" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Promote/demote outline" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -468,7 +473,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 
 				Case "InsertGraphic"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Insert pictures" then QAErrorlog "#i42852#Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Insert graphics" then QAErrorlog "#i42852#Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -510,7 +515,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 
 				Case "InsertDocument"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Insert Document" then QAErrorlog "#i42852#Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Insert file" then QAErrorlog "#i42852#Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -532,9 +537,14 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
-				Case "FreeForm"
-					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Insert Polyline with 3 corners" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+                 Case "FreeForm"
+				    Select Case iSprache
+                        Case 01: if UndoStringFromUndoList <> "Insert Polyline with 3 corners" then 
+                                        elseif UndoStringFromUndoList = "Insert Polyline with %2 corners" then 
+                                            QaErrorlog "#i# - Bug with "
+                                        else
+                                            Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+                                        end if
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -546,7 +556,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 
 				Case "DrawUnGroup"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Ungroup group object 'MyGroup'" then QAErrorlog "#i42852#Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Ungroup drawing objects" then QAErrorlog "#i42852#Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -643,5 +653,5 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 	wait 500
     Kontext "StandardBar"
     Undo.Click
-    
+    Call wTypeKeys "<ESCAPE>"
 end sub
