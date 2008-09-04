@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_fax.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-09-04 09:16:59 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -116,6 +116,10 @@ testcase tUpdtWizardFax
     '///+<li>Delete the new template</li>
     printlog( "Delete the user-template: " & cTemplatePath )
     hDeleteFile( cTemplatePath )
+    
+    while( getDocumentCount() > 0 ) 
+        hDestroyDocument()
+    wend
     
     '///</ul>
     
