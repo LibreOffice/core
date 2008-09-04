@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -267,9 +267,10 @@ IDLFILES=\
     XTextConvert.idl \
     XTextAppendAndConvert.idl \
     XTextAppend.idl \
-        XFlatParagraph.idl \
-        XFlatParagraphIterator.idl \
-        XFlatParagraphIteratorProvider.idl
+    XFormField.idl \
+    XFlatParagraph.idl \
+    XFlatParagraphIterator.idl \
+    XFlatParagraphIteratorProvider.idl
 
 # ------------------------------------------------------------------
 
