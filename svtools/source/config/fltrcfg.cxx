@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,7 @@ using namespace com::sun::star::uno;
 #define FILTERCFG_ENABLE_PPT_PREVIEW    0x20000
 #define FILTERCFG_ENABLE_EXCEL_PREVIEW  0x40000
 #define FILTERCFG_ENABLE_WORD_PREVIEW   0x80000
+#define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
 
 static SvtFilterOptions* pOptions=0;
 
@@ -195,28 +196,36 @@ void SvtCalcFilterOptions_Impl::Load()
 struct SvtFilterOptions_Impl
 {
     ULONG nFlags;
-    SvtAppFilterOptions_Impl    aWriterCfg;
-    SvtCalcFilterOptions_Impl   aCalcCfg;
-    SvtAppFilterOptions_Impl    aImpressCfg;
+    SvtAppFilterOptions_Impl aWriterCfg;
+    SvtCalcFilterOptions_Impl aCalcCfg;
+    SvtAppFilterOptions_Impl aImpressCfg;
 
     SvtFilterOptions_Impl() :
         aWriterCfg(C2U("Office.Writer/Filter/Import/VBA")),
         aCalcCfg(C2U("Office.Calc/Filter/Import/VBA")),
         aImpressCfg(C2U("Office.Impress/Filter/Import/VBA"))
-        {
-            nFlags = FILTERCFG_WORD_CODE        | FILTERCFG_WORD_STORAGE |
-                    FILTERCFG_EXCEL_CODE    | FILTERCFG_EXCEL_STORAGE |
-                    FILTERCFG_PPOINT_CODE   | FILTERCFG_PPOINT_STORAGE |
-                    FILTERCFG_MATH_LOAD     | FILTERCFG_MATH_SAVE |
-                    FILTERCFG_WRITER_LOAD   | FILTERCFG_WRITER_SAVE |
-                    FILTERCFG_CALC_LOAD     | FILTERCFG_CALC_SAVE   |
-                    FILTERCFG_IMPRESS_LOAD  | FILTERCFG_IMPRESS_SAVE;
-           Load();
-        }
+    {
+        nFlags = FILTERCFG_WORD_CODE |
+            FILTERCFG_WORD_STORAGE |
+            FILTERCFG_EXCEL_CODE |
+            FILTERCFG_EXCEL_STORAGE |
+            FILTERCFG_PPOINT_CODE |
+            FILTERCFG_PPOINT_STORAGE |
+            FILTERCFG_MATH_LOAD |
+            FILTERCFG_MATH_SAVE |
+            FILTERCFG_WRITER_LOAD |
+            FILTERCFG_WRITER_SAVE |
+            FILTERCFG_CALC_LOAD |
+            FILTERCFG_CALC_SAVE |
+            FILTERCFG_IMPRESS_LOAD |
+            FILTERCFG_IMPRESS_SAVE |
+            FILTERCFG_USE_ENHANCED_FIELDS;
+        Load();
+    }
 
     void SetFlag( ULONG nFlag, BOOL bSet );
     BOOL IsFlag( ULONG nFlag ) const;
-    void    Load()
+    void Load()
     {
         aWriterCfg.Load();
         aCalcCfg.Load();
@@ -288,7 +297,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        int nCount = 11;
+        int nCount = 12;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -302,7 +311,8 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
             "Export/CalcToExcel",               //  7
             "Export/EnablePowerPointPreview",   //  8
             "Export/EnableExcelPreview",        //  9
-            "Export/EnableWordPreview"          // 10
+            "Export/EnableWordPreview",         // 10
+            "Import/ImportWWFieldsAsEnhancedFields" // 11
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -327,6 +337,7 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
         case  8: nFlag = FILTERCFG_ENABLE_PPT_PREVIEW; break;
         case  9: nFlag = FILTERCFG_ENABLE_EXCEL_PREVIEW; break;
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
+        case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
 
         default: DBG_ERROR("illegal value");
     }
@@ -512,6 +523,17 @@ void SvtFilterOptions::SetWriter2WinWord( BOOL bFlag )
     SetModified();
 }
 
+BOOL SvtFilterOptions::IsUseEnhancedFields() const
+{
+    return false; // disable for now;
+    return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
+}
+
+void SvtFilterOptions::SetUseEnhancedFields( BOOL bFlag )
+{
+    pImp->SetFlag( FILTERCFG_USE_ENHANCED_FIELDS, bFlag );
+    SetModified();
+}
 
 // -----------------------------------------------------------------------
 BOOL SvtFilterOptions::IsExcel2Calc() const
