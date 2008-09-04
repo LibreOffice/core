@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par5.cxx,v $
- * $Revision: 1.110 $
+ * $Revision: 1.111 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +323,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     if (pB->GetIsEnd())
     {
         pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true,
-            pB->GetHandle());
+            pB->GetHandle(), (eB & BOOK_FIELD)!=0);
         return 0;
     }
 
