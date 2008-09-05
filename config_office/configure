@@ -6453,6 +6453,12 @@ fi
 		  MIDL_PATH="$vstest/Common7/Tools/Bin"
       fi
 	fi
+	if test -z "$MIDL_PATH" ; then
+		psdktest=`./oowintool --psdk-home`
+		if test -x "$psdktest/Bin/midl.exe" ; then
+			MIDL_PATH="$psdktest/Bin"
+		fi
+	fi
 	if test ! -x "$MIDL_PATH/midl.exe"; then
 		{ { echo "$as_me:$LINENO: error: midl.exe not found. Make sure it's in the path or use --with-midl-path" >&5
 echo "$as_me: error: midl.exe not found. Make sure it's in the path or use --with-midl-path" >&2;}
@@ -6538,8 +6544,13 @@ echo $ECHO_N "checking .NET Framework... $ECHO_C" >&6; }
 	    fi
 	    if test -z "$FRAME_HOME" ; then
           frametest=`./oowintool --dotnetsdk-dir`
-          if test -x "$frametest/lib/mscoree.lib"; then
+          if test -f "$frametest/lib/mscoree.lib"; then
              FRAME_HOME="$frametest"
+          else
+             frametest=`./oowintool --psdk-home`
+             if test -f "$frametest/lib/mscoree.lib"; then
+                FRAME_HOME="$frametest"
+             fi
           fi
 	    fi
 	    if test ! -f "$FRAME_HOME/lib/mscoree.lib"; then
@@ -23704,7 +23715,13 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 if test "$_os" = "WINNT"; then
-       ./oowintool --msvc-copy-dlls ../external/msvcp
+       if ./oowintool --msvc-copy-dlls ../external/msvcp ; then
+          :
+       else
+          { { echo "$as_me:$LINENO: error: oowintool failed to copy CRT" >&5
+echo "$as_me: error: oowintool failed to copy CRT" >&2;}
+   { (exit 1); exit 1; }; }
+       fi
 fi
 
 if test "$_os" = "WINNT"; then
@@ -23724,124 +23741,6 @@ You may have to search Microsoft's website. Last time it was seen at:
 <http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>." >&2;}
    { (exit 1); exit 1; }; }
    fi
-fi
-
-if test "$_os" = "WINNT" -a "$COMEX" = "10" ; then
-   { echo "$as_me:$LINENO: checking for msvcp71.dll/msvcr71.dll" >&5
-echo $ECHO_N "checking for msvcp71.dll/msvcr71.dll... $ECHO_C" >&6; }
-   if test -x ../external/msvcp71/msvcp71.dll -a -x ../external/msvcp71/msvcr71.dll; then
-      { echo "$as_me:$LINENO: result: found" >&5
-echo "${ECHO_T}found" >&6; }
-   else
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp71.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr71.dll | head -n 1`
-      if test -n "$MSVCPPATH" -a -n "$MSVCRPATH"; then
-         cp "$MSVCPPATH" ../external/msvcp71/ && chmod +x ../external/msvcp71/msvcp71.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp71/ && chmod +x ../external/msvcp71/msvcr71.dll && MSVCRCOPY="OK"
-      fi
-      if test -z "$MSVCPCOPY" -o -z "$MSVCRCOPY"; then
-         { { echo "$as_me:$LINENO: error: msvcp71.dll and/or msvcr71.dll are/is missing in the default location.
-These dlls are part of the .NET installation and should be found in a directory
-similar to:
-\"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Visual C++ .NET Professional - English\\\"
-As the automatic detection fails please copy the files to external/msvcp71/." >&5
-echo "$as_me: error: msvcp71.dll and/or msvcr71.dll are/is missing in the default location.
-These dlls are part of the .NET installation and should be found in a directory
-similar to:
-\"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Visual C++ .NET Professional - English\\\"
-As the automatic detection fails please copy the files to external/msvcp71/." >&2;}
-   { (exit 1); exit 1; }; }
-      else
-         { echo "$as_me:$LINENO: result: found and copied" >&5
-echo "${ECHO_T}found and copied" >&6; }
-      fi
-   fi
-fi
-
-if test "$_os" = "WINNT" -a "$COMEX" = "11"; then
-   { echo "$as_me:$LINENO: checking for msvcp80.dll/msvcr80.dll" >&5
-echo $ECHO_N "checking for msvcp80.dll/msvcr80.dll... $ECHO_C" >&6; }
-   if test -x ../external/msvcp80/msvcp80.dll -a -x ../external/msvcp80/msvcr80.dll; then
-      { echo "$as_me:$LINENO: result: found" >&5
-echo "${ECHO_T}found" >&6; }
-   else
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp80.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr80.dll | head -n 1`
-      if test -n "$MSVCPPATH" -a -n "$MSVCRPATH"; then
-         cp "$MSVCPPATH" ../external/msvcp80/ && chmod +x ../external/msvcp80/msvcp80.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp80/ && chmod +x ../external/msvcp80/msvcr80.dll && MSVCRCOPY="OK"
-      fi
-      if test -z "$MSVCPCOPY" -o -z "$MSVCRCOPY"; then
-         { { echo "$as_me:$LINENO: error: msvcp80.dll and/or msvcr80.dll are/is missing in the default location.
-These dlls are part of the VS installation and should be found in a directory
-similar to:
-\"c:\\Program Files\\<no-idea>\"
-As the automatic detection fails please copy the files to external/msvcp80/." >&5
-echo "$as_me: error: msvcp80.dll and/or msvcr80.dll are/is missing in the default location.
-These dlls are part of the VS installation and should be found in a directory
-similar to:
-\"c:\\Program Files\\<no-idea>\"
-As the automatic detection fails please copy the files to external/msvcp80/." >&2;}
-   { (exit 1); exit 1; }; }
-      else
-         { echo "$as_me:$LINENO: result: found and copied" >&5
-echo "${ECHO_T}found and copied" >&6; }
-      fi
-   fi
-fi
-
-if test "$_os" = "WINNT"; then
-   if test "$COMEX" = "12"; then
-      { echo "$as_me:$LINENO: checking for Microsoft_VC90_CRT_x86.msm/policy_9_0_Microsoft_VC90_CRT_x86.msm" >&5
-echo $ECHO_N "checking for Microsoft_VC90_CRT_x86.msm/policy_9_0_Microsoft_VC90_CRT_x86.msm... $ECHO_C" >&6; }
-      if test -x ../external/msm90/Microsoft_VC90_CRT_x86.msm -a -x ../external/msm90/policy_9_0_Microsoft_VC90_CRT_x86.msm; then
-        { echo "$as_me:$LINENO: result: found" >&5
-echo "${ECHO_T}found" >&6; }
-   { echo "$as_me:$LINENO: checking for msvcm90.dll/msvcp90.dll/msvcr90.dll/Microsoft.VC90.CRT.manifest" >&5
-echo $ECHO_N "checking for msvcm90.dll/msvcp90.dll/msvcr90.dll/Microsoft.VC90.CRT.manifest... $ECHO_C" >&6; }
-   if test -x ../external/msvcp90/msvcm90.dll -a -x ../external/msvcp90/msvcp90.dll -a -x ../external/msvcp90/msvcr90.dll -a -x ../external/msvcp90/Microsoft.VC90.CRT.manifest; then
-      { echo "$as_me:$LINENO: result: found" >&5
-echo "${ECHO_T}found" >&6; }
-   else
-      MSVCMPATH=`/bin/find "$COMPATH/../.." -iname msvcm90.dll | head -n 1`
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp90.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr90.dll | head -n 1`
-      MSVCMANPATH=`/bin/find "$COMPATH/../.." -iname Microsoft.VC90.CRT.manifest | head -n 1`
-      if test -n "$MSVCMPATH" -a -n "$MSVCPPATH" -a -n "$MSVCRPATH" -a -n "$MSVCMANPATH"; then
-         cp "$MSVCMPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcm90.dll && MSVCMCOPY="OK"
-         cp "$MSVCPPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcp90.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcr90.dll && MSVCRCOPY="OK"
-         cp "$MSVCMANPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/Microsoft.VC90.CRT.manifest && MSVCMANCOPY="OK"
-      fi
-      if test -z "$MSVCMCOPY" -o -z "$MSVCPCOPY" -o -z "$MSVCRCOPY" -o -z "$MSVCMANCOPY"; then
-         { { echo "$as_me:$LINENO: error: Any or all of msvcm90.dll, msvcp90.dll, msvcr90.dll and Microsoft.VC90.CRT.manifest are missing in the default location.
-            These dlls are part of the VS installation and should be found in a directory similar to:
-\"C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\redist\\x86\\Microsoft.VC90.CRT\\\"
-As the automatic detection fails please copy the files to external/msvcp90/." >&5
-echo "$as_me: error: Any or all of msvcm90.dll, msvcp90.dll, msvcr90.dll and Microsoft.VC90.CRT.manifest are missing in the default location.
-            These dlls are part of the VS installation and should be found in a directory similar to:
-\"C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\redist\\x86\\Microsoft.VC90.CRT\\\"
-As the automatic detection fails please copy the files to external/msvcp90/." >&2;}
-   { (exit 1); exit 1; }; }
-      else
-         { echo "$as_me:$LINENO: result: found and copied" >&5
-echo "${ECHO_T}found and copied" >&6; }
-      fi
-   fi
-      else
-        { { echo "$as_me:$LINENO: error: Any or all of Microsoft_VC90_CRT_x86 and policy_9_0_Microsoft_VC90_CRT_x86 are missing in the default location.
-        These dlls are part of the VS installation and should be found in a directory
-        similar to:
-        \"C:\\Program Files\\Common Files\\Merge Modules\\\"
-        As the automatic detection fails please copy the files to external/msm90/." >&5
-echo "$as_me: error: Any or all of Microsoft_VC90_CRT_x86 and policy_9_0_Microsoft_VC90_CRT_x86 are missing in the default location.
-        These dlls are part of the VS installation and should be found in a directory
-        similar to:
-        \"C:\\Program Files\\Common Files\\Merge Modules\\\"
-        As the automatic detection fails please copy the files to external/msm90/." >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-fi
 fi
 
 if test "$_os" = "WINNT"; then
