@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-09-01 10:02:38 $
+dnl * Date: $Date: 2008-09-05 14:13:58 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.288 $ )
+AC_REVISION( $Revision: 1.289 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1771,6 +1771,12 @@ if test "$COMEX" -ge "10"; then
 		  MIDL_PATH="$vstest/Common7/Tools/Bin"
       fi
 	fi
+	if test -z "$MIDL_PATH" ; then
+		psdktest=`./oowintool --psdk-home`
+		if test -x "$psdktest/Bin/midl.exe" ; then
+			MIDL_PATH="$psdktest/Bin"
+		fi
+	fi
 	if test ! -x "$MIDL_PATH/midl.exe"; then
 		AC_MSG_ERROR([midl.exe not found. Make sure it's in the path or use --with-midl-path])
 	fi
@@ -1815,8 +1821,13 @@ if test "$COMEX" -ge "10"; then
 	    fi
 	    if test -z "$FRAME_HOME" ; then
           frametest=`./oowintool --dotnetsdk-dir`
-          if test -x "$frametest/lib/mscoree.lib"; then
+          if test -f "$frametest/lib/mscoree.lib"; then
              FRAME_HOME="$frametest"
+          else
+             frametest=`./oowintool --psdk-home`
+             if test -f "$frametest/lib/mscoree.lib"; then
+                FRAME_HOME="$frametest"
+             fi
           fi
 	    fi
 	    if test ! -f "$FRAME_HOME/lib/mscoree.lib"; then
@@ -5020,10 +5031,14 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 dnl ===================================================================
-dnl Windows builds - attempt to auto-copy required dlls into external/
+dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       ./oowintool --msvc-copy-dlls ../external/msvcp
+       if ./oowintool --msvc-copy-dlls ../external/msvcp ; then
+          :
+       else
+          AC_MSG_ERROR([oowintool failed to copy CRT])
+       fi
 fi
 
 dnl ===================================================================
@@ -5039,99 +5054,6 @@ Get it from the Microsoft site and put it into external/gdiplus.
 You may have to search Microsoft's website. Last time it was seen at:
 <http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>.])
    fi
-fi
-
-dnl ===================================================================
-dnl Windows builds with .NET 2003 needs msvcp71.dll/msvcr71.dll in external/msvcp71
-dnl ===================================================================
-if test "$_os" = "WINNT" -a "$COMEX" = "10" ; then
-   AC_MSG_CHECKING([for msvcp71.dll/msvcr71.dll])
-   if test -x ../external/msvcp71/msvcp71.dll -a -x ../external/msvcp71/msvcr71.dll; then
-      AC_MSG_RESULT([found])
-   else
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp71.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr71.dll | head -n 1`
-      if test -n "$MSVCPPATH" -a -n "$MSVCRPATH"; then
-         cp "$MSVCPPATH" ../external/msvcp71/ && chmod +x ../external/msvcp71/msvcp71.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp71/ && chmod +x ../external/msvcp71/msvcr71.dll && MSVCRCOPY="OK"
-      fi
-      if test -z "$MSVCPCOPY" -o -z "$MSVCRCOPY"; then
-         AC_MSG_ERROR([msvcp71.dll and/or msvcr71.dll are/is missing in the default location.
-These dlls are part of the .NET installation and should be found in a directory
-similar to:
-"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Visual C++ .NET Professional - English\\"
-As the automatic detection fails please copy the files to external/msvcp71/.])
-      else
-         AC_MSG_RESULT([found and copied])
-      fi
-   fi
-fi
-
-dnl ===================================================================
-dnl Windows builds with Visual C++ 2005 needs msvc{p,r}80.dll in external/msvcp80
-dnl ===================================================================
-if test "$_os" = "WINNT" -a "$COMEX" = "11"; then
-   AC_MSG_CHECKING([for msvcp80.dll/msvcr80.dll])
-   if test -x ../external/msvcp80/msvcp80.dll -a -x ../external/msvcp80/msvcr80.dll; then
-      AC_MSG_RESULT([found])
-   else
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp80.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr80.dll | head -n 1`
-      if test -n "$MSVCPPATH" -a -n "$MSVCRPATH"; then
-         cp "$MSVCPPATH" ../external/msvcp80/ && chmod +x ../external/msvcp80/msvcp80.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp80/ && chmod +x ../external/msvcp80/msvcr80.dll && MSVCRCOPY="OK"
-      fi
-      if test -z "$MSVCPCOPY" -o -z "$MSVCRCOPY"; then
-         AC_MSG_ERROR([msvcp80.dll and/or msvcr80.dll are/is missing in the default location.
-These dlls are part of the VS installation and should be found in a directory
-similar to:
-"c:\\Program Files\\<no-idea>"
-As the automatic detection fails please copy the files to external/msvcp80/.])
-      else
-         AC_MSG_RESULT([found and copied])
-      fi
-   fi
-fi
-
-dnl ===================================================================
-dnl Windows builds with Visual Studio 2008 needs msvc{m,p,r}90.dll in external/msvcp90 and merge modules in external/msm90
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-   if test "$COMEX" = "12"; then
-      AC_MSG_CHECKING([for Microsoft_VC90_CRT_x86.msm/policy_9_0_Microsoft_VC90_CRT_x86.msm])
-      if test -x ../external/msm90/Microsoft_VC90_CRT_x86.msm -a -x ../external/msm90/policy_9_0_Microsoft_VC90_CRT_x86.msm; then
-        AC_MSG_RESULT([found])
-   AC_MSG_CHECKING([for msvcm90.dll/msvcp90.dll/msvcr90.dll/Microsoft.VC90.CRT.manifest])
-   if test -x ../external/msvcp90/msvcm90.dll -a -x ../external/msvcp90/msvcp90.dll -a -x ../external/msvcp90/msvcr90.dll -a -x ../external/msvcp90/Microsoft.VC90.CRT.manifest; then
-      AC_MSG_RESULT([found])
-   else
-      MSVCMPATH=`/bin/find "$COMPATH/../.." -iname msvcm90.dll | head -n 1`
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp90.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr90.dll | head -n 1`
-      MSVCMANPATH=`/bin/find "$COMPATH/../.." -iname Microsoft.VC90.CRT.manifest | head -n 1`
-      if test -n "$MSVCMPATH" -a -n "$MSVCPPATH" -a -n "$MSVCRPATH" -a -n "$MSVCMANPATH"; then
-         cp "$MSVCMPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcm90.dll && MSVCMCOPY="OK"
-         cp "$MSVCPPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcp90.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcr90.dll && MSVCRCOPY="OK"
-         cp "$MSVCMANPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/Microsoft.VC90.CRT.manifest && MSVCMANCOPY="OK"
-      fi
-      if test -z "$MSVCMCOPY" -o -z "$MSVCPCOPY" -o -z "$MSVCRCOPY" -o -z "$MSVCMANCOPY"; then
-         AC_MSG_ERROR([Any or all of msvcm90.dll, msvcp90.dll, msvcr90.dll and Microsoft.VC90.CRT.manifest are missing in the default location.
-            These dlls are part of the VS installation and should be found in a directory similar to:
-"C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\redist\\x86\\Microsoft.VC90.CRT\\"
-As the automatic detection fails please copy the files to external/msvcp90/.])
-      else
-         AC_MSG_RESULT([found and copied])
-      fi
-   fi
-      else
-        AC_MSG_ERROR([Any or all of Microsoft_VC90_CRT_x86 and policy_9_0_Microsoft_VC90_CRT_x86 are missing in the default location.
-        These dlls are part of the VS installation and should be found in a directory
-        similar to:
-        "C:\\Program Files\\Common Files\\Merge Modules\\"
-        As the automatic detection fails please copy the files to external/msm90/.])
-      fi
-fi
 fi
 
 dnl ===================================================================
