@@ -8,7 +8,7 @@
 #
 # $RCSfile: mergemodule.pm,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1129,7 +1129,12 @@ sub change_file_table
         # changing directory
         my $from = cwd();
         my $to = $mergemodulehash->{'workdir'};
-        chdir($to);
+         if ( $^O =~ /cygwin/i ) {
+            $to = qx(cygpath -u "$to");
+            chomp $to;
+        }
+
+        chdir($to) || die "Could not chdir to \"$to\"\n";
 
         # Unpack the cab file, so that in can be included into the last office cabinet file.
         # Not using cabarc.exe from cabsdk for unpacking cabinet files, but "expand.exe" that
@@ -1138,7 +1143,13 @@ sub change_file_table
         $infoline = "Unpacking cabinet file: $mergemodulehash->{'cabinetfile'}\n";
         push( @installer::globals::logfileinfo, $infoline);
 
+        # Avoid the Cygwin expand command
         my $expandfile = "expand.exe";  # Has to be in the path
+         if ( $^O =~ /cygwin/i ) {
+            $expandfile = qx(cygpath -u "$ENV{WINDIR}"/System32/expand.exe);
+            chomp $expandfile;
+        }
+
         my $cabfilename = "MergeModule.CABinet";
 
         # exclude cabinet file
@@ -1146,8 +1157,8 @@ sub change_file_table
 
         my $systemcall = "";
         if ( $^O =~ /cygwin/i ) {
-            my $localunpackdir = qx{cygpath -w "$unpackdir"};
-            $localunpackdir =~ s/\\/\\\\/g;
+            my $localunpackdir = qx(cygpath -m "$unpackdir");
+            chomp $localunpackdir;
             $systemcall = $expandfile . " " . $cabfilename . " -F:\\\* " . $localunpackdir;
         }
         else
