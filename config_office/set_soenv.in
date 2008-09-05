@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.200 $
-# Date:        $Date: 2008-08-27 13:56:09 $
+# Version:     $Revision: 1.201 $
+# Date:        $Date: 2008-09-05 14:14:29 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1318,7 +1318,23 @@ elsif ($platform =~ m/cygwin/)
    if (($^O eq "cygwin")) { # Not for ActiveState perl
        my $expandedPATH = $PATH;
        $expandedPATH =~ s/(\$\w+)/$1/eeg;
-       foreach my $pathentry (split($ps,$oldPATH)) {
+
+       # fix situations where PATH may look like /bin:"C:\blah\bleh":/ugh
+       my $fixedPATH = $oldPATH;
+       if ( $oldPATH =~ /"/ ) {
+	   $fixedPATH = "";
+	   foreach my $pathentry ( split( '"',$oldPATH ) ) {
+	       if ( ( $pathentry =~ /^$ps/ ) || ( $pathentry =~ /$ps$/ ) ) {
+		   $fixedPATH .= $pathentry;
+	       } else {
+		   chomp( $pathentry = qx{cygpath -d "$pathentry"} ) ;
+		   chomp( $pathentry = qx{cygpath -u "$pathentry"} ) ;
+		   $fixedPATH .= $pathentry;
+	       }
+	   }
+       }
+
+       foreach my $pathentry (split($ps,$fixedPATH)) {
            if ( ! ( $expandedPATH =~ /(?:$ps|\A)(?:$pathentry)(?:$ps|\Z)/ ) ) {
                $PATH .= $ps.$pathentry;
                $expandedPATH .= $ps.$pathentry;
