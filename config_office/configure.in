@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-09-05 14:13:58 $
+dnl * Date: $Date: 2008-09-08 07:38:40 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.289 $ )
+AC_REVISION( $Revision: 1.290 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3360,10 +3360,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build qadevOOo])
 if test "z$enable_qadevooo" = "z" -o "$enable_qadevooo" != "no"; then
    AC_MSG_RESULT([yes])
+   BUILD_QADEVOOO="YES"
    BUILD_TYPE="$BUILD_TYPE QADEVOOO"
 else
+   BUILD_QADEVOOO="NO"
    AC_MSG_RESULT([no])
 fi
+AC_SUBST(BUILD_QADEVOOO)
 
 dnl ===================================================================
 dnl Check for prelinked libgcc_s.so.1
