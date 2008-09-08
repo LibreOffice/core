@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pam.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -767,16 +767,17 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
             }
         }
     }
-    if( !bRet )
-    {
-        const SwDoc *pDoc=GetDoc();
-        SwBookmark *pA = ( pDoc && pPoint ? pDoc->getFieldBookmarkFor( *pPoint ) : NULL );
-        SwBookmark *pB = ( pDoc && pMark ? pDoc->getFieldBookmarkFor( *pMark ) : pA );
-        bRet = ( pA != pB );
-        bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
-        if( bProtectForm )
-            bRet |= ( pA==NULL || pB==NULL );
-    }
+// TODO: Form Protection when Enhanced Fields are enabled
+//  if( !bRet )
+//    {
+//      const SwDoc *pDoc=GetDoc();
+//      SwBookmark *pA = ( pDoc && pPoint ? pDoc->getFieldBookmarkFor( *pPoint ) : NULL );
+//      SwBookmark *pB = ( pDoc && pMark ? pDoc->getFieldBookmarkFor( *pMark ) : pA );
+//      bRet = ( pA != pB );
+//      bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+//      if( bProtectForm )
+//            bRet |= ( pA==NULL || pB==NULL );
+//  }
     return bRet;
 }
 
