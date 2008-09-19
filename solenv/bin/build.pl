@@ -892,7 +892,13 @@ sub get_stand_dir {
         die "No environment set\n";
     };
     my $StandDir;
-    $StandDir = getcwd();
+#    $StandDir = getcwd();
+    if ( defined $ENV{PWD} ) {
+        $StandDir = $ENV{PWD};
+    } else {
+        $StandDir = $ENV{_cwd};
+    }
+        print "curr dir: $StandDir\n";
     my $previous_dir = '';
     do {
         foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
@@ -907,9 +913,14 @@ sub get_stand_dir {
             };
         };
         $previous_dir = $StandDir;
-        $StandDir = Cwd::realpath($StandDir . '/..');
+#        $StandDir = Cwd::realpath($StandDir . '/..');
+        my @dirlist = split(/\//,Cwd::realpath($StandDir));
+        pop @dirlist; # discard last dirname;
+        $StandDir = join('/', @dirlist);
+        print "next dir: $StandDir\n";
     }
-    while (chdir '..');
+#    while (chdir '..');
+    while (chdir "$StandDir");
 };
 
 #

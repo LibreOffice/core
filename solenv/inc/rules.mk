@@ -638,7 +638,7 @@ $(MISC)$/%.dpz :
 .ELSE			# "$(USE_SHELL)"!="4nt"
     $(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | $(XARGS) dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
 .ENDIF			# "$(USE_SHELL)"!="4nt"
-    $(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" >> $@
+    $(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" | grep -v "\.svn" >> $@
     echo zipdep_langs=$(alllangiso) >> $@
     @@-$(RM) $(ZIPDEPFILES)
 .ENDIF			# "$(nodep)"==""

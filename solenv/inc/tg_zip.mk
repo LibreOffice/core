@@ -35,12 +35,13 @@
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "*CVS*"
+avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ELIF "$(GUI)"=="OS2"
 command_seperator=&&
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*CVS*"
+avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
+ 
 .ENDIF
 
 .IF "$(ZIP$(TNR)TARGET)"!=""
@@ -68,9 +69,9 @@ ZIP$(TNR)FLAGS*=$(ZIPFLAGS)
 zip$(TNR)langdirs*=$(alllangiso)
 .ELSE           # "$(zip$(TNR)generatedlangs)"!=""
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-zip$(TNR)langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
+zip$(TNR)langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name ".svn" ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip$(TNR)langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
+zip$(TNR)langdirs:=$(subst,.svn, $(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d )))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip$(TNR)generatedlangs)"!=""
 .IF "$(ZIP$(TNR)FORCEALLLANG)"!=""
