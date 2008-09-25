@@ -8,7 +8,7 @@
 #
 # $RCSfile: CwsConfig.pm,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.11.44.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,6 +55,8 @@ sub new
     $self->{CWS_SERVER_ROOT}     = undef;    # cvs server
     $self->{CWS_MIRROR_ROOT}     = undef;    # mirror of cvs server
     $self->{CWS_LOCAL_ROOT}      = undef;    # local cvs server
+    $self->{PUBLIC_SVN_SERVER}   = undef;    # public svn server
+    $self->{PRIVATE_SVN_SERVER}  = undef;    # private svn server
     bless ($self, $class);
     return $self;
 }
@@ -310,6 +312,39 @@ sub get_cvs_local_id
     my ($method, $id, $server, $repository) = CwsConfig::split_root($self->cvs_local_root(), 'LOCAL');
     return $id;
 }
+
+#### SVN methods ####
+
+sub get_ooo_svn_server
+{
+    my $self = shift;
+
+    if ( !defined($self->{SVN_SERVER}) ) {
+        my $config_file = $self->get_config_file();
+        my $ooo_svn_server = $config_file->{CWS_CONFIG}->{'SVN_SERVER'};
+        if ( !defined($ooo_svn_server) ) {
+            $ooo_svn_server = "";
+        }
+        $self->{SVN_SERVER} = $ooo_svn_server;
+    }
+    return $self->{SVN_SERVER} ? $self->{SVN_SERVER} : undef;
+}
+
+sub get_so_svn_server
+{
+    my $self = shift;
+
+    if ( !defined($self->{SO_SVN_SERVER}) ) {
+        my $config_file = $self->get_config_file();
+        my $so_svn_server = $config_file->{CWS_CONFIG}->{'SO_SVN_SERVER'};
+        if ( !defined($so_svn_server) ) {
+            $so_svn_server = "";
+        }
+        $self->{SO_SVN_SERVER} = $so_svn_server;
+    }
+    return $self->{SO_SVN_SERVER} ? $self->{SO_SVN_SERVER} : undef;
+}
+
 
 #### class methods #####
 sub get_config
