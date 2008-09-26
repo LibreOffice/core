@@ -63,5 +63,7 @@ OUT2CLASS= saxon-build$/9.0.0.7$/bj$/saxon9.jar
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
+.IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
+.ENDIF
 

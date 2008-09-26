@@ -64,5 +64,7 @@ OUT2CLASS=jsr173_1.0_api.jar
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
+.IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
+.ENDIF
 
