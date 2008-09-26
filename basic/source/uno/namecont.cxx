@@ -1825,14 +1825,18 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
     int iArray = 0;
     pName = aNames.getConstArray();
+    ::xmlscript::LibDescriptor aLibDescriptorForExtensionLibs;
     for( ; pName != pNamesEnd; ++pName )
     {
         SfxLibrary* pImplLib = getImplLib( *pName );
-        if( pImplLib->mbSharedIndexFile || pImplLib->mbExtension )
+        if( pImplLib->mbSharedIndexFile )
             continue;
-        ::xmlscript::LibDescriptor& rLib = pLibArray->mpLibs[iArray];
+        bool bExtensionLib = pImplLib->mbExtension;
+        ::xmlscript::LibDescriptor& rLib = bExtensionLib ?
+            aLibDescriptorForExtensionLibs : pLibArray->mpLibs[iArray];
+        if( !bExtensionLib )
+            iArray++;
         rLib.aName = *pName;
-        iArray++;
 
         rLib.bLink = pImplLib->mbLink;
         if( !bStorage || pImplLib->mbLink )
@@ -2112,10 +2116,14 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 
     OUString aUserSearchStr   = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" );
     OUString aSharedSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" );
-    if( StorageURL.indexOf( aUserSearchStr   ) != -1 ||
-        StorageURL.indexOf( aSharedSearchStr ) != -1 )
+    if( StorageURL.indexOf( aUserSearchStr ) != -1 )
     {
         pNewLib->mbExtension = sal_True;
+    }
+    else if( StorageURL.indexOf( aSharedSearchStr ) != -1 )
+    {
+        pNewLib->mbExtension = sal_True;
+        pNewLib->mbReadOnly = sal_True;
     }
 
     return xRet;
