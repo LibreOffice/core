@@ -2154,8 +2154,9 @@ void PrintFontManager::initialize( void* pInitDisplay )
         {
             OString aToken = aPath.getToken( 0, ';', nIndex );
             normPath( aToken );
-        addFontconfigDir( aToken );
-        m_aFontDirectories.push_back( aToken );
+            if( !addFontconfigDir( aToken ) )
+                continue;
+            m_aFontDirectories.push_back( aToken );
             m_aPrivateFontDirectories.push_back( getDirectoryAtom( aToken, true ) );
         } while( nIndex >= 0 );
     }

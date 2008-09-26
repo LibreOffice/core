@@ -788,10 +788,11 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     if( ! rWrapper.isValid() )
         return false;
 
-    // libfontcconfig's AppFontAddDir was broken in version 2.4.0
+    // workaround for a stability problems in older FC versions
+    // when handling application specifc fonts
     const int nVersion = rWrapper.FcGetVersion();
     if( nVersion <= 20400 )
-    return false;
+        return false;
     const char* pDirName = (const char*)rDirName.getStr();
     bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.getDefConfig(), (FcChar8*)pDirName ) == FcTrue);
 
