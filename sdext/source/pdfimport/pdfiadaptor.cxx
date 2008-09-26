@@ -99,15 +99,18 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         bool bAddPwdProp = false;
         if( ! xSubStream.is() )
         {
+            uno::Reference< io::XInputStream > xInput;
             for( sal_Int32 i = 0; i < nAttribs; i++ )
             {
-                if( pAttribs[i].Name.equalsAscii( "Stream" ) )
-                    pAttribs[i].Value >>= xSubStream;
+                if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
+                {
+                    pAttribs[i].Value >>= xInput;
+                    break;
+                }
             }
-            if( xSubStream.is() )
+            if( xInput.is() )
             {
                 // TODO(P2): extracting hybrid substream twice - once during detection, second time here
-                uno::Reference< io::XInputStream > xInput( xSubStream->getInputStream() );
                 uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
                 if( xSeek.is() )
                     xSeek->seek( 0 );
