@@ -397,6 +397,9 @@ public:
     // The return value is the applied size.
     Size RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
 
+    //The layout has been changed, so the active object has to be moved after that
+    virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
+
     //Der Client fuer das OleObject muss bezueglich der Scalierung auf dem
     //neuesten Stand gehalten werden. Impl in der WrtShell.
     //Wird ein Pointer auf eine Size uebergeben, so ist diese die aktuelle

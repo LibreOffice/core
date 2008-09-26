@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -661,6 +662,29 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         ((SwOleClient*)pCli)->SetInDoVerb( FALSE );
         CalcAndSetScale( xRef );
     }
+}
+
+
+void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset )
+{
+    try
+    {
+        sal_Int32 nState = xObj->getCurrentState();
+        if ( nState == ::com::sun::star::embed::EmbedStates::INPLACE_ACTIVE
+          || nState == ::com::sun::star::embed::EmbedStates::UI_ACTIVE )
+        {
+            SfxInPlaceClient* pCli =
+                GetView().FindIPClient( xObj.GetObject(), &(GetView().GetEditWin()) );
+            if ( pCli )
+            {
+                Rectangle aArea = pCli->GetObjArea();
+                aArea += rOffset;
+                pCli->SetObjArea( aArea );
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {}
 }
 
 

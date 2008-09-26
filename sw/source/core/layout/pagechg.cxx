@@ -31,7 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <ndole.hxx>
 #include <docary.hxx>
 #include <svtools/itemiter.hxx>
 #include <fmtfsize.hxx>
@@ -2017,6 +2018,35 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             SwFlyFrm* pFlyFrm( static_cast<SwFlyFrm*>(pAnchoredObj) );
             lcl_MoveAllLowers( pFlyFrm, rOffset );
             pFlyFrm->NotifyDrawObj();
+            // --> let the active embedded object be moved
+            if ( pFlyFrm->Lower() )
+            {
+                if ( pFlyFrm->Lower()->IsNoTxtFrm() )
+                {
+                    SwCntntFrm* pCntntFrm = static_cast<SwCntntFrm*>(pFlyFrm->Lower());
+                    ViewShell *pSh = pFlyFrm->Lower()->GetShell();
+                    if ( pSh )
+                    {
+                        SwOLENode* pNode = pCntntFrm->GetNode()->GetOLENode();
+                        if ( pNode )
+                        {
+                            svt::EmbeddedObjectRef& xObj = pNode->GetOLEObj().GetObject();
+                            if ( xObj.is() )
+                            {
+                                ViewShell* pTmp = pSh;
+                                do
+                                {
+                                    SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( pTmp );
+                                    if ( pFEShell )
+                                        pFEShell->MoveObjectIfActive( xObj, rOffset );
+                                    pTmp = static_cast<ViewShell*>( pTmp->GetNext() );
+                                } while( pTmp != pSh );
+                            }
+                        }
+                    }
+                }
+            }
+            // <--
         }
         else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
         {
