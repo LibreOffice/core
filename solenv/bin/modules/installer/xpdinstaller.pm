@@ -702,11 +702,13 @@ sub get_pkgversion_value
 
 sub get_subdir_value
 {
-    my ( $packagename, $subdir ) = @_;
+    my ( $packagename, $subdir, $module ) = @_;
 
     my $value = "";
 
     if ( $subdir ) { $value = $subdir; }
+
+    if ( $module->{'Subdir'} ) { $value = $module->{'Subdir'}; }
 
     return $value;
 }
@@ -1182,7 +1184,7 @@ sub get_file_content
         $line = get_tag_line($doubleindent, "pkgversion", $value);
         push(@xpdfile, $line);
 
-        $value = get_subdir_value($packagename, $subdir);
+        $value = get_subdir_value($packagename, $subdir, $module);
         $line = get_tag_line($doubleindent, "subdir", $value);
         push(@xpdfile, $line);
 

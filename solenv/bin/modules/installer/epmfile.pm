@@ -2635,6 +2635,7 @@ sub copy_childproject_files
 
     for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
     {
+        my $localdestdir = $destdir;
         my $onemodule = ${$allmodules}[$i];
         my $packagename = $onemodule->{'PackageName'};
         my $sourcefile = "";
@@ -2649,13 +2650,18 @@ sub copy_childproject_files
         }
 
         if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile ($packagename) !", "copy_childproject_files"); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
+        if ( $onemodule->{'Subdir'} )
+        {
+            $localdestdir = $localdestdir . $installer::globals::separator . $onemodule->{'Subdir'};
+            if ( ! -d $localdestdir ) { installer::systemactions::create_directory($localdestdir); }
+        }
+        installer::systemactions::copy_one_file($sourcefile, $localdestdir);
         # Solaris: unpacking tar.gz files and setting new packagename
-        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $destdir); }
+        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $localdestdir); }
 
         if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
         {
-            installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $destdir, $packagename, $allvariableshashref, $modulesarrayref);
+            installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $localdestdir, $packagename, $allvariableshashref, $modulesarrayref);
         }
     }
 

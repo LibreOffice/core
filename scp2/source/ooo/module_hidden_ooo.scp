@@ -928,6 +928,7 @@ Module gid_Module_Root_Userland
     InstallOrder = "5";
 	Name = "gid_Module_Root_Userland";
 	Description = "gid_Module_Root_Userland";
+	Subdir = "userland";
     Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY);
     PackageName = "${USERLANDPACKAGENAME}";
 End
