@@ -138,7 +138,7 @@ testcase t_updt_spadmin
         if ( irc <> 0 ) then
             warnlog( "We created a Fax printer but it could not be deleted" )
         endif
-         
+        
     endif
     '///</ul>
    
@@ -382,32 +382,36 @@ sub TestFonts( cPrinter as string )
     printlog( " * Open 'Fonts...' dialog" )
     
     Kontext "SpAdmin"
-    PBFonts.click()
-    waitslot
-      
-    printlog( "   * Test the font-dialog" )
-    Kontext "SPFontNameDLG"
-    call dialogtest( SPFontNameDLG )
-      
-    '///+<li>Click to add fonts - import dialog opens</li>
-    printlog( "   * Press 'Add ...'" )
-    PBAdd.click()
-    waitslot
-      
-    '///+<li>Cancel the font-import dialog</li>
-    printlog( "   * Test the import-dialog" )
-    kontext "SPFontImportDLG"
-    call dialogtest( SPFontImportDLG )
-      
-    printlog( "   * close import dialog" )
-    SPFontImportDLG.cancel()
-      
-    '///+<li>Close the Font-dialog with ok</li>
-    Kontext "SPFontNameDLG"
-    printlog( "   * close fonts-dialog" )
-    SPFontNameDLG.ok()
-    waitslot
-    
+    if ( PBFonts.isEnabled() ) then
+        PBFonts.click()
+        waitslot
+          
+        printlog( "   * Test the font-dialog" )
+        Kontext "SPFontNameDLG"
+        call dialogtest( SPFontNameDLG )
+          
+        '///+<li>Click to add fonts - import dialog opens</li>
+        printlog( "   * Press 'Add ...'" )
+        PBAdd.click()
+        waitslot
+          
+        '///+<li>Cancel the font-import dialog</li>
+        printlog( "   * Test the import-dialog" )
+        kontext "SPFontImportDLG"
+        call dialogtest( SPFontImportDLG )
+          
+        printlog( "   * close import dialog" )
+        SPFontImportDLG.cancel()
+          
+        '///+<li>Close the Font-dialog with ok</li>
+        Kontext "SPFontNameDLG"
+        printlog( "   * close fonts-dialog" )
+        SPFontNameDLG.ok()
+        waitslot
+    else
+        printlog( "Fonts... not available, skipping." )
+    endif
+        
     '///</ul>
 
 end sub
