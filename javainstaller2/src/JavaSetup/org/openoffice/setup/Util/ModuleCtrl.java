@@ -500,7 +500,17 @@ public class ModuleCtrl {
             PackageDescription child = (PackageDescription) e.nextElement();
             setDontUninstallFlags(child);
         }
+    }
 
+    static public void setDontUninstallUserInstallOnylFlags(PackageDescription packageData) {
+        if ( packageData.showInUserInstallOnly() ) {
+            packageData.setSelectionState(PackageDescription.IGNORE);
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            setDontUninstallUserInstallOnylFlags(child);
+        }
     }
 
     static public void checkVisibleModulesInstall(PackageDescription packageData, InstallData data) {

@@ -167,6 +167,7 @@ public class UninstallationPrologueCtrl extends PanelController {
                     ModuleCtrl.setDatabaseSettings(packageData, installData, installer);
                     installData.setDatabaseAnalyzed(true);
                     ModuleCtrl.setDontUninstallFlags(packageData);
+                    if ( installData.isRootInstallation() ) { ModuleCtrl.setDontUninstallUserInstallOnylFlags(packageData); }
                     ModuleCtrl.setParentDefaultModuleSettings(packageData);
                     getSetupFrame().setButtonEnabled(true, getSetupFrame().BUTTON_NEXT);
                     getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_NEXT);
