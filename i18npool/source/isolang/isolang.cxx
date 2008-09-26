@@ -76,11 +76,22 @@ struct IsoLangOtherEntry
 
 // Here, in a convertIsoNamesToLanguage() call "en-US" is converted to
 // LANGUAGE_ENGLISH_US and "en" is converted to LANGUAGE_ENGLISH. A call with
-// "en-ZZ" would result in LANGUAGE_ENGLISH because the first entry matching
-// the language and not having a country is returned, regardless of whether
-// being sorted before or after other entries of the same language with some
-// country. To obtain a _locale_ (not language only) in the order given,
-// convertLocaleToLanguageWithFallback() must be called.
+// "en-ZZ" (not in table) would result in LANGUAGE_ENGLISH because the first
+// entry matching the language and not having a country is returned, regardless
+// of whether being sorted before or after other entries of the same language
+// with some country. To obtain a _locale_ (not language only) in the order
+// given, convertLocaleToLanguageWithFallback() must be called.
+
+// If the sequence instead was
+
+// LANGUAGE_ENGLISH_US, "en", "US"
+// LANGUAGE_ENGLISH,    "en", ""
+
+// in a convertIsoNamesToLanguage() call "en-US" is still converted to
+// LANGUAGE_ENGLISH_US, but "en" is _also_ converted to LANGUAGE_ENGLISH_US
+// because no country was passed and it is the first entry to match the
+// language, see code. A call with "en-ZZ" (not in table) would still result in
+// LANGUAGE_ENGLISH.
 
 /* erAck: 2007-07-05T20:01+0200  TODO: The entire suite's "primary language
  * only" usage and locale fall back should be cleaned up and made consistent. I
@@ -136,8 +147,18 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GERMAN_AUSTRIAN,             "de", "AT" },
     { LANGUAGE_ITALIAN_SWISS,               "it", "CH" },
     { LANGUAGE_ALBANIAN,                    "sq", "AL" },
-    { LANGUAGE_ARABIC,                      "ar", ""   },
+    // #i93555# moved entry below { LANGUAGE_ARABIC,                      "ar", ""   },
     { LANGUAGE_ARABIC_EGYPT,                "ar", "EG" },
+    // #i93555# HACK: language-only entry moved here to have a match on locale
+    // present in language list box to not display "Unknown" for an Arabic 'ar'
+    // language pack. This may have some side effect on code dealing with
+    // LANGUAGE_ARABIC if it converts to/from strings. On the other hand, usage
+    // of language-only usually is done wrong anyway..
+    /* FIXME: fix all "primary language only" usage, see also comment above
+     * this table, and then add a few language-only entries to the language
+     * list box if really necessary, but do not make them available for
+     * language attribution and so on, only for UI language selection! */
+    { LANGUAGE_ARABIC,                      "ar", ""   },
     { LANGUAGE_ARABIC_SAUDI_ARABIA,         "ar", "SA" },
     { LANGUAGE_ARABIC_UAE,                  "ar", "AE" },
     { LANGUAGE_ARABIC_IRAQ,                 "ar", "IQ" },
