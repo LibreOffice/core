@@ -2302,8 +2302,27 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
         SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
         if( pTNd )
         {
-            SvxLRSpaceItem aLS( (SvxLRSpaceItem&)pTNd->SwCntntNode::GetAttr(
-                                                        RES_LR_SPACE ) );
+            SvxLRSpaceItem aLS( (SvxLRSpaceItem&)pTNd->SwCntntNode::GetAttr( RES_LR_SPACE ) );
+
+            // --> FME 2008-09-16 #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
+            if ( pTNd->AreListLevelIndentsApplicable() )
+            {
+                const SwNumRule* pRule = pTNd->GetNumRule();
+                if ( pRule )
+                {
+                    const int nListLevel = pTNd->GetActualListLevel();
+                    if ( nListLevel >= 0 )
+                    {
+                        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(nListLevel));
+                        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                        {
+                            aLS.SetTxtLeft( rFmt.GetIndentAt() );
+                            aLS.SetTxtFirstLineOfst( static_cast<short>(rFmt.GetFirstLineIndent()) );
+                        }
+                    }
+                }
+            }
+
             long nNext = aLS.GetTxtLeft();
             if( bModulus )
                 nNext = ( nNext / nDefDist ) * nDefDist;
