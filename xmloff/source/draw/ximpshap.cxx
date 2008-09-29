@@ -3622,12 +3622,13 @@ void SdXMLTableShapeContext::EndElement()
     if( mxTableImportContext.Is() )
         mxTableImportContext->EndElement();
 
+    SdXMLShapeContext::EndElement();
+
     if( mxShape.is() )
     {
         // set pos, size, shear and rotate
         SetTransformation();
     }
-    SdXMLShapeContext::EndElement();
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
