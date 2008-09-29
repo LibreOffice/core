@@ -44,6 +44,7 @@
 #include <vos/mutex.hxx>
 #include <svx/unotext.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdoole2.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/extract.hxx>
 
@@ -3025,6 +3026,53 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
         rValue <<= OUString( aTmp );
         break;
     }
+    case OWN_ATTR_METAFILE:
+    {
+        SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
+        if( pObj )
+        {
+            Graphic* pGraphic = pObj->GetGraphic();
+            if( pGraphic )
+            {
+                BOOL bIsWMF = FALSE;
+                if ( pGraphic->IsLink() )
+                {
+                    GfxLink aLnk = pGraphic->GetLink();
+                    if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
+                    {
+                        bIsWMF = TRUE;
+                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
+                        rValue <<= aSeq;
+                    }
+                }
+                if ( !bIsWMF )
+                {
+                    GDIMetaFile aMtf;
+                    if ( pGraphic->GetType() != GRAPHIC_BITMAP )
+                        aMtf = pObj->GetGraphic()->GetGDIMetaFile();
+                    else
+                    {
+                        VirtualDevice aVirDev;
+                        aMtf.Record( &aVirDev );
+                        pGraphic->Draw( &aVirDev, Point(),  pGraphic->GetPrefSize() );
+                        aMtf.Stop();
+                        aMtf.SetPrefSize( pGraphic->GetPrefSize() );
+                        aMtf.SetPrefMapMode( pGraphic->GetPrefMapMode() );
+                    }
+                    SvMemoryStream aDestStrm( 65535, 65535 );
+                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
+                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                    rValue <<= aSeq;
+                }
+            }
+        }
+        else
+        {
+            rValue = GetBitmap( sal_True );
+        }
+        break;
+    }
+
 
     default:
         return false;
