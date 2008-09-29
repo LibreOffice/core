@@ -323,10 +323,22 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
         rArguments[ 1 ] >>= aRect;
 
         mnParentWnd = static_cast<int>(nWnd);
+
         mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
                                            WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                                            aRect.X, aRect.Y, aRect.Width, aRect.Height,
                                            (HWND) mnParentWnd, NULL, mpWndClass->hInstance, 0 );
+
+        // if the last CreateWindow failed...
+        if( mnFrameWnd == 0 )
+        {
+            // try again and this time assume that mnParent is indeed a dc
+            mnParentWnd = reinterpret_cast<int>(::WindowFromDC( (HDC)mnParentWnd ));
+            mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
+                                           WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+                                           aRect.X, aRect.Y, aRect.Width, aRect.Height,
+                                           (HWND)mnParentWnd , NULL, mpWndClass->hInstance, 0 );
+        }
 
         if( mnFrameWnd )
         {
