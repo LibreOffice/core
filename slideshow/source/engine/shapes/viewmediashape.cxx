@@ -283,14 +283,14 @@ namespace slideshow
                             aDeviceParams[ 0 ] >>= aImplName;
 
                             if( aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                    RTL_CONSTASCII_STRINGPARAM("VCLCanvas") ))
+                                    RTL_CONSTASCII_STRINGPARAM("VCL") ))
                             {
                                 implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams );
                             }
                             else if( aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                         RTL_CONSTASCII_STRINGPARAM("DXCanvas")) ||
+                                         RTL_CONSTASCII_STRINGPARAM("DX")) ||
                                      aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                         RTL_CONSTASCII_STRINGPARAM("DX9Canvas")))
+                                         RTL_CONSTASCII_STRINGPARAM("DX9")))
                             {
                                 implInitializeDXBasedPlayerWindow( rBounds, aDeviceParams );
                             }
