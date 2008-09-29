@@ -816,6 +816,16 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_ESCAPE :
         {
+            // nRecSize has been checked previously to be greater than 3
+            sal_uInt64 nMetaRecSize = static_cast< sal_uInt64 >( nRecSize - 2 ) * 2;
+            sal_uInt64 nMetaRecEndPos = pWMF->Tell() + nMetaRecSize;
+
+            // taking care that nRecSize does not exceed the maximal stream position
+            if ( nMetaRecEndPos > nEndPos )
+            {
+                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                break;
+            }
             if ( nRecSize >= 12 )   // minimal escape lenght
             {
                 sal_uInt16  nMode, nLen, OO;
@@ -838,7 +848,13 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                         sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
 #endif
                         sal_Int8* pData = NULL;
-                        if ( nEscLen )
+
+                        if ( ( static_cast< sal_uInt64 >( nEscLen ) + pWMF->Tell() ) > nMetaRecEndPos )
+                        {
+                            pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                            break;
+                        }
+                        if ( nEscLen > 0 )
                         {
                             pData = new sal_Int8[ nEscLen ];
                             pWMF->Read( pData, nEscLen );
@@ -863,12 +879,14 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                                                       >> aPt.Y()
                                                       >> nStringLen;
 
-                                        if (nStringLen < STRING_MAXLEN)
+                                        if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
                                         {
                                             sal_Unicode* pBuf = aString.AllocBuffer( (xub_StrLen)nStringLen );
                                             for ( i = 0; i < nStringLen; i++ )
                                                 aMemoryStream >> pBuf[ i ];
                                             aMemoryStream >> nDXCount;
+                                            if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
+                                                nDXCount = 0;
                                             if ( nDXCount )
                                                 pDXAry = new sal_Int32[ nDXCount ];
                                             for  ( i = 0; i < nDXCount; i++ )
