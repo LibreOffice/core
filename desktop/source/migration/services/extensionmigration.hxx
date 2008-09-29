@@ -88,6 +88,7 @@ namespace migration
 
         ::osl::FileBase::RC     checkAndCreateDirectory( INetURLObject& rDirURL );
         void                    copyConfig( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir );
+        bool                    isCompatibleBerkleyDb(const ::rtl::OUString& sSourceDir);
         bool                    copy( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir );
         bool                    processExtensions( const ::rtl::OUString& sSourceDir,
                                     const ::rtl::OUString& sTargetDir );
