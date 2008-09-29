@@ -747,6 +747,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             @threadsafe
          */
         AutoRecovery::ETimerType implts_saveDocs(      sal_Bool        bAllowUserIdleLoop,
+                                                       sal_Bool        bRemoveLockFiles,
                                                  const DispatchParams* pParams        = 0);
 
         //---------------------------------------
