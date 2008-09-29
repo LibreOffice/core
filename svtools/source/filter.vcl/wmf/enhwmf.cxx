@@ -336,28 +336,34 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> i;
 
-                // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-                pnPoints = new UINT16[ nPoly ];
-
-                for ( i = 0; i < nPoly; i++ )
+                // taking the amount of points of each polygon, retrieving the total number of points
+                if ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(UINT16) )
                 {
-                    *pWMF >> nPoints;
-                    pnPoints[ i ] = (UINT16)nPoints;
-                }
-
-                // Polygonpunkte holen:
-
-                for ( i = 0; i < nPoly; i++ )
-                {
-                    Polygon aPoly( pnPoints[ i ] );
-                    for( UINT16 k = 0; k < pnPoints[ i ]; k++ )
+                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(UINT16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        *pWMF >> nX32 >> nY32;
-                        aPoly[ k ] = Point( nX32, nY32 );
+                        pnPoints = new UINT16[ nPoly ];
+
+                        for ( i = 0; i < nPoly; i++ )
+                        {
+                            *pWMF >> nPoints;
+                            pnPoints[ i ] = (UINT16)nPoints;
+                        }
+
+                        // Polygonpunkte holen:
+
+                        for ( i = 0; ( i < nPoly ) && !pWMF->IsEof(); i++ )
+                        {
+                            Polygon aPoly( pnPoints[ i ] );
+                            for( UINT16 k = 0; k < pnPoints[ i ]; k++ )
+                            {
+                                *pWMF >> nX32 >> nY32;
+                                aPoly[ k ] = Point( nX32, nY32 );
+                            }
+                            pOut->DrawPolyLine( aPoly, sal_False, bRecordPath );
+                        }
+                        delete[] pnPoints;
                     }
-                    pOut->DrawPolyLine( aPoly, sal_False, bRecordPath );
                 }
-                delete[] pnPoints;
             }
             break;
 
@@ -372,30 +378,35 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
 
-                if (nGesPoints < SAL_MAX_UINT32 / sizeof(Point))
+                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(UINT16) ) )
                 {
-
-                    // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-                    pnPoints = new UINT16[ nPoly ];
-
-                    for ( i = 0; i < nPoly; i++ )
+                    if ( ( nPoly * sizeof(UINT16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        *pWMF >> nPoints;
-                        pnPoints[ i ] = (UINT16)nPoints;
-                    }
-                    // Polygonpunkte holen:
-                    pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+                        pnPoints = new UINT16[ nPoly ];
 
-                    for ( i = 0; i < nGesPoints; i++ )
-                    {
-                        *pWMF >> nX32 >> nY32;
-                        pPtAry[ i ] = Point( nX32, nY32 );
+                        for ( i = 0; i < nPoly; i++ )
+                        {
+                            *pWMF >> nPoints;
+                            pnPoints[ i ] = (UINT16)nPoints;
+                        }
+
+                        if ( ( nGesPoints * sizeof(Point) ) <= ( nEndPos - pWMF->Tell() ) )
+                        {
+                            // Polygonpunkte holen:
+                            pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+
+                            for ( i = 0; i < nGesPoints; i++ )
+                            {
+                                *pWMF >> nX32 >> nY32;
+                                pPtAry[ i ] = Point( nX32, nY32 );
+                            }
+                            // PolyPolygon Actions erzeugen
+                            PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
+                            pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
+                            delete[] (char*) pPtAry;
+                        }
+                        delete[] pnPoints;
                     }
-                    // PolyPolygon Actions erzeugen
-                    PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
-                    pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                    delete[] (char*) pPtAry;
-                    delete[] pnPoints;
                 }
             }
             break;
@@ -832,32 +843,35 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 else
                 {
                     UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                    char* pBuf = new char[ nSize ];
-                    SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                    aTmp.ObjectOwnsMemory( TRUE );
-                    aTmp << (BYTE)'B'
-                         << (BYTE)'M'
-                         << (UINT32)cbBitsSrc
-                         << (UINT16)0
-                         << (UINT16)0
-                         << (UINT32)cbBmiSrc + 14;
-                    pWMF->Seek( nStart + offBmiSrc );
-                    pWMF->Read( pBuf + 14, cbBmiSrc );
-                    pWMF->Seek( nStart + offBitsSrc );
-                    pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
-                    aTmp.Seek( 0 );
-                    aBitmap.Read( aTmp, TRUE );
-
-                    // test if it is sensible to crop
-                    if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                        ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                            ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                    if ( nSize <= ( nEndPos - nStartPos ) )
                     {
-                        Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                        aBitmap.Crop( aCropRect );
+                        char* pBuf = new char[ nSize ];
+                        SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                        aTmp.ObjectOwnsMemory( TRUE );
+                        aTmp << (BYTE)'B'
+                             << (BYTE)'M'
+                             << (UINT32)cbBitsSrc
+                             << (UINT16)0
+                             << (UINT16)0
+                             << (UINT32)cbBmiSrc + 14;
+                        pWMF->Seek( nStart + offBmiSrc );
+                        pWMF->Read( pBuf + 14, cbBmiSrc );
+                        pWMF->Seek( nStart + offBitsSrc );
+                        pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                        aTmp.Seek( 0 );
+                        aBitmap.Read( aTmp, TRUE );
+
+                        // test if it is sensible to crop
+                        if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                            ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                                ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                    ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                        {
+                            Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                            aBitmap.Crop( aCropRect );
+                        }
+                         aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
                     }
-                     aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
                 }
             }
             break;
@@ -883,32 +897,35 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 else
                 {
                     UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                    char* pBuf = new char[ nSize ];
-                    SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                    aTmp.ObjectOwnsMemory( TRUE );
-                    aTmp << (BYTE)'B'
-                        << (BYTE)'M'
-                        << (UINT32)cbBitsSrc
-                        << (UINT16)0
-                        << (UINT16)0
-                        << (UINT32)cbBmiSrc + 14;
-                    pWMF->Seek( nStart + offBmiSrc );
-                    pWMF->Read( pBuf + 14, cbBmiSrc );
-                    pWMF->Seek( nStart + offBitsSrc );
-                    pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
-                    aTmp.Seek( 0 );
-                    aBitmap.Read( aTmp, TRUE );
-
-                    // test if it is sensible to crop
-                    if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                        ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                            ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                    if ( nSize <= ( nEndPos - nStartPos ) )
                     {
-                        Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                        aBitmap.Crop( aCropRect );
+                        char* pBuf = new char[ nSize ];
+                        SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                        aTmp.ObjectOwnsMemory( TRUE );
+                        aTmp << (BYTE)'B'
+                            << (BYTE)'M'
+                            << (UINT32)cbBitsSrc
+                            << (UINT16)0
+                            << (UINT16)0
+                            << (UINT32)cbBmiSrc + 14;
+                        pWMF->Seek( nStart + offBmiSrc );
+                        pWMF->Read( pBuf + 14, cbBmiSrc );
+                        pWMF->Seek( nStart + offBitsSrc );
+                        pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                        aTmp.Seek( 0 );
+                        aBitmap.Read( aTmp, TRUE );
+
+                        // test if it is sensible to crop
+                        if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                            ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                                ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                    ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                        {
+                            Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                            aBitmap.Crop( aCropRect );
+                        }
+                        aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
                     }
-                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
                 }
             }
             break;
@@ -960,55 +977,64 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                 Point aPos( ptlReferenceX, ptlReferenceY );
-                if ( nLen )
+                if ( nLen && ( nLen < SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
                 {
                     if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
                     {
                         pWMF->Seek( nCurPos + offDx );
-                        pDX = new sal_Int32[ nLen ];
-                        sal_uInt32 i;
-                        for ( i = 0; i < nLen; i++ )
-                            *pWMF >> pDX[ i ];
+                        if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
+                        {
+                            pDX = new sal_Int32[ nLen ];
+                            sal_uInt32 i;
+                            for ( i = 0; i < nLen; i++ )
+                                *pWMF >> pDX[ i ];
+                        }
                     }
                     pWMF->Seek( nCurPos + nOffString );
                     String aText;
                     if ( bFlag )
                     {
-                        sal_Char* pBuf = new sal_Char[ nLen ];
-                        pWMF->Read( pBuf, nLen );
-                        aText = String( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
-                        delete[] pBuf;
-
-                        if ( aText.Len() != nLen )
+                        if ( nLen <= ( nEndPos - pWMF->Tell() ) )
                         {
-                            sal_uInt16 i, j, k;
-                            sal_Int32* pOldDx = pDX;
-                            pDX = new sal_Int32[ aText.Len() ];
-                            for ( i = 0, j = 0; i < aText.Len(); i++ )
+                            sal_Char* pBuf = new sal_Char[ nLen ];
+                            pWMF->Read( pBuf, nLen );
+                            aText = String( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
+                            delete[] pBuf;
+
+                            if ( aText.Len() != nLen )
                             {
-                                ByteString aCharacter( aText.GetChar( i ), pOut->GetCharSet() );
-                                pDX[ i ] = 0;
-                                for ( k = 0; ( k < aCharacter.Len() ) && ( j < nLen ) && ( i < aText.Len() ); k++ )
-                                    pDX[ i ] += pOldDx[ j++ ];
+                                sal_uInt16 i, j, k;
+                                sal_Int32* pOldDx = pDX;
+                                pDX = new sal_Int32[ aText.Len() ];
+                                for ( i = 0, j = 0; i < aText.Len(); i++ )
+                                {
+                                    ByteString aCharacter( aText.GetChar( i ), pOut->GetCharSet() );
+                                    pDX[ i ] = 0;
+                                    for ( k = 0; ( k < aCharacter.Len() ) && ( j < nLen ) && ( i < aText.Len() ); k++ )
+                                        pDX[ i ] += pOldDx[ j++ ];
+                                }
+                                delete[] pOldDx;
                             }
-                            delete[] pOldDx;
                         }
                     }
                     else
                     {
-                        sal_Unicode* pBuf = new sal_Unicode[ nLen ];
-                        pWMF->Read( pBuf, nLen << 1 );
-#ifdef OSL_BIGENDIAN
-                        sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
-                        while ( pTmp-- != (sal_Char*)pBuf )
+                        if ( ( nLen * sizeof(sal_Unicode) ) <= ( nEndPos - pWMF->Tell() ) )
                         {
-                            nTmp = *pTmp--;
-                            pTmp[ 1 ] = *pTmp;
-                            *pTmp = nTmp;
-                        }
+                            sal_Unicode* pBuf = new sal_Unicode[ nLen ];
+                            pWMF->Read( pBuf, nLen << 1 );
+#ifdef OSL_BIGENDIAN
+                            sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
+                            while ( pTmp-- != (sal_Char*)pBuf )
+                            {
+                                nTmp = *pTmp--;
+                                pTmp[ 1 ] = *pTmp;
+                                *pTmp = nTmp;
+                            }
 #endif
-                        aText = String( pBuf, (xub_StrLen)nLen );
-                        delete[] pBuf;
+                            aText = String( pBuf, (xub_StrLen)nLen );
+                            delete[] pBuf;
+                        }
                     }
                     pOut->DrawText( aPos, aText, pDX, bRecordPath, nGfxMode );
                 }
@@ -1083,25 +1109,32 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 pWMF->SeekRel( 0x10 );
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
-                // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-                pnPoints = new UINT16[ nPoly ];
-                for ( i = 0; i < nPoly; i++ )
+
+                // taking the amount of points of each polygon, retrieving the total number of points
+                if ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(UINT16) )
                 {
-                    *pWMF >> nPoints;
-                    pnPoints[ i ] = (UINT16)nPoints;
-                }
-                // Polygonpunkte holen:
-                for ( i = 0; i < nPoly; i++ )
-                {
-                    Polygon aPolygon( pnPoints[ i ] );
-                    for ( UINT16 k = 0; k < pnPoints[ i ]; k++ )
+                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(UINT16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        *pWMF >> nX16 >> nY16;
-                        aPolygon[ k ] = Point( nX16, nY16 );
+                        pnPoints = new UINT16[ nPoly ];
+                        for ( i = 0; i < nPoly; i++ )
+                        {
+                            *pWMF >> nPoints;
+                            pnPoints[ i ] = (UINT16)nPoints;
+                        }
+                        // Polygonpunkte holen:
+                        for ( i = 0; ( i < nPoly ) && !pWMF->IsEof(); i++ )
+                        {
+                            Polygon aPolygon( pnPoints[ i ] );
+                            for ( UINT16 k = 0; k < pnPoints[ i ]; k++ )
+                            {
+                                *pWMF >> nX16 >> nY16;
+                                aPolygon[ k ] = Point( nX16, nY16 );
+                            }
+                            pOut->DrawPolyLine( aPolygon, sal_False, bRecordPath );
+                        }
+                        delete[] pnPoints;
                     }
-                    pOut->DrawPolyLine( aPolygon, sal_False, bRecordPath );
                 }
-                delete[] pnPoints;
             }
             break;
 
@@ -1114,28 +1147,33 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 pWMF->SeekRel( 0x10 );
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
-                if (nGesPoints < SAL_MAX_UINT32 / sizeof(Point))
+                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(UINT16) ) )
                 {
-                    // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-                    pnPoints = new UINT16[ nPoly ];
-                    for ( i = 0; i < nPoly; i++ )
+                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof( UINT16 ) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        *pWMF >> nPoints;
-                        pnPoints[ i ] = (UINT16)nPoints;
-                    }
-                    // Polygonpunkte holen:
-                    pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
-                    for ( i = 0; i < nGesPoints; i++ )
-                    {
-                        *pWMF >> nX16 >> nY16;
-                        pPtAry[ i ] = Point( nX16, nY16 );
-                    }
+                        pnPoints = new UINT16[ nPoly ];
+                        for ( i = 0; i < nPoly; i++ )
+                        {
+                            *pWMF >> nPoints;
+                            pnPoints[ i ] = (UINT16)nPoints;
+                        }
+                        if ( ( nGesPoints * sizeof(Point) ) <= ( nEndPos - pWMF->Tell() ) )
+                        {
+                            // Polygonpunkte holen:
+                            pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+                            for ( i = 0; i < nGesPoints; i++ )
+                            {
+                                *pWMF >> nX16 >> nY16;
+                                pPtAry[ i ] = Point( nX16, nY16 );
+                            }
 
-                    // PolyPolygon Actions erzeugen
-                    PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
-                    pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                    delete[] (char*) pPtAry;
-                    delete[] pnPoints;
+                            // PolyPolygon Actions erzeugen
+                            PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
+                            pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
+                            delete[] (char*) pPtAry;
+                        }
+                        delete[] pnPoints;
+                    }
                 }
             }
             break;
@@ -1266,6 +1304,13 @@ BOOL EnhWMFReader::ReadHeader()
     *pWMF >> nUINT32;                                   // nVersion
     *pWMF >> nEndPos;                                   // size of metafile
     nEndPos += nStartPos;
+
+    sal_uInt32 nStrmPos = pWMF->Tell();                 // checking if nEndPos is valid
+    pWMF->Seek( STREAM_SEEK_TO_END );
+    if ( pWMF->Tell() < nEndPos )
+        nEndPos = pWMF->Tell();
+    pWMF->Seek( nStrmPos );
+
     *pWMF >> nRecordCount;
 
     if ( !nRecordCount )
