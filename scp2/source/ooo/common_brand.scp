@@ -79,6 +79,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
+             gid_Brand_File_Bin_Msvcr71,
              gid_Brand_File_Bmp_IntroAbout,
              gid_Brand_File_C05_Zip_Faq,
              gid_Brand_File_C05_Zip_Register,
@@ -481,6 +482,15 @@ File gid_Brand_File_Bin_Unopkg
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
+
+#if defined WNT && defined M1310
+File gid_Brand_File_Bin_Msvcr71
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Styles = (PACKED);
+End
+#endif
 
 #if !defined WITHOUT_MOZILLA && (!defined UNX || defined ENABLE_GTK)
 File gid_Brand_File_Lib_Npsoplugin

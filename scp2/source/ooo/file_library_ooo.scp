@@ -1672,8 +1672,10 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && (defined M1400 || defined M1500) && \
-    !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)
+#if defined WNT && \
+    (defined M1310 || \
+     ((defined M1400 || defined M1500) && \
+      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
 File gid_File_Moz_Msvcp71
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
