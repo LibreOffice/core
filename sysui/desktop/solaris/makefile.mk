@@ -101,13 +101,14 @@ $(MISC)/{$(PRODUCTLIST)}/postremove : $$(@:f)
 
 # --- openoffice.xml---------------------------
 
+.IF "$(common_build)"=="TRUE"
 # Copy the openoffice.org.xml file to $(MISC) 
 #$(MISC)/$(foreach,i,$(PRODUCTLIST) $i/$i.xml) :  $(COMMONMISC)/$$(@:b)/openoffice.org.xml
 $(MISC)/$(foreach,i,$(PRODUCTLIST) $(MISC)/$i/openoffice.org.xml) :  $(COMMONMISC)/$$(@:b)/openoffice.org.xml
     $(MKDIRHIER) $(@:d)
     echo hier hier $@
     cat $< | tr -d "\015" > $@
-
+.ENDIF			# "$(COMMON_BUILD)"==""
 
 # --- prototype ---------------------------------------------------
 
