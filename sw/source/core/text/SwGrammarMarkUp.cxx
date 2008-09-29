@@ -71,15 +71,18 @@ SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( xub_StrLen nSplitPos )
 void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, xub_StrLen nInsertPos )
 {
     JoinList( pNext, nInsertPos );
-    if( !pNext->maSentence.size() )
-        return;
-    std::vector< xub_StrLen >::iterator pIter = pNext->maSentence.begin();
-    while( pIter != pNext->maSentence.end() )
+    if (pNext)
     {
-        *pIter = *pIter + nInsertPos;
-        ++pIter;
+        if( !pNext->maSentence.size() )
+            return;
+        std::vector< xub_StrLen >::iterator pIter = pNext->maSentence.begin();
+        while( pIter != pNext->maSentence.end() )
+        {
+            *pIter = *pIter + nInsertPos;
+            ++pIter;
+        }
+        maSentence.insert( maSentence.end(), pNext->maSentence.begin(), pNext->maSentence.end() );
     }
-    maSentence.insert( maSentence.end(), pNext->maSentence.begin(), pNext->maSentence.end() );
 }
 
 void SwGrammarMarkUp::ClearGrammarList()
