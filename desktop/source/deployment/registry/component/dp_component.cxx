@@ -202,6 +202,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     bool m_unorc_inited;
     bool m_unorc_modified;
+    bool bSwitchedRdbFiles;
 
     typedef ::std::hash_map< OUString, Reference<XInterface>,
                              ::rtl::OUStringHash > t_string2object;
@@ -240,6 +241,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                           Reference<XCommandEnvironment> const & xCmdEnv );
     bool hasInUnoRc( bool jarFile, OUString const & url );
 
+
+
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
@@ -249,6 +252,9 @@ public:
     getSupportedPackageTypes() throw (RuntimeException);
 
     using PackageRegistryBackend::disposing;
+
+    //Will be called from ComponentPackageImpl
+    void initServiceRdbFiles();
 };
 
 //______________________________________________________________________________
@@ -256,6 +262,21 @@ const Reference<registry::XSimpleRegistry>
 BackendImpl::ComponentPackageImpl::getRDB() const
 {
     BackendImpl * that = getMyBackend();
+    //Late "initialization" of the services rdb files
+    //This is to prevent problems when running several
+    //instances of OOo with root rights in parallel. This
+    //would otherwise cause problems when copying the rdbs.
+    //Now this code is only performed if isRegistered or processPackage
+    //is called.
+    {
+        const ::osl::MutexGuard guard( getMutex() );
+        if (!that->bSwitchedRdbFiles)
+        {
+            that->bSwitchedRdbFiles = true;
+            that->initServiceRdbFiles();
+        }
+    }
+
     if (m_loader.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.SharedLibrary") ))
         return that->m_xNativeRDB;
@@ -321,6 +342,78 @@ void BackendImpl::disposing()
     }
 }
 
+void BackendImpl::initServiceRdbFiles()
+{
+    const Reference<XCommandEnvironment> xCmdEnv;
+    if (! m_readOnly) {
+        ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
+        ::ucbhelper::Content oldRDB;
+        // switch common rdb:
+        if (m_commonRDB.getLength() > 0)
+            create_ucb_content(
+            &oldRDB, makeURL( getCachePath(), m_commonRDB ),
+            xCmdEnv, false /* no throw */ );
+        m_commonRDB = m_commonRDB.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("common.rdb") )
+            ? OUSTR("common_.rdb") : OUSTR("common.rdb");
+        if (oldRDB.get().is())
+        {
+
+            if (! cacheDir.transferContent(
+                oldRDB, ::ucbhelper::InsertOperation_COPY,
+                m_commonRDB, NameClash::OVERWRITE ))
+            {
+
+                throw RuntimeException(
+                    OUSTR("UCB transferContent() failed!"), 0 );
+            }
+            oldRDB = ::ucbhelper::Content();
+        }
+        // switch native rdb:
+        if (m_nativeRDB.getLength() > 0)
+            create_ucb_content(
+            &oldRDB, makeURL( getCachePath(), m_nativeRDB ),
+            xCmdEnv, false /* no throw */ );
+        const OUString plt_rdb( getPlatformString() + OUSTR(".rdb") );
+        const OUString plt_rdb_( getPlatformString() + OUSTR("_.rdb") );
+        m_nativeRDB = m_nativeRDB.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
+        if (oldRDB.get().is())
+        {
+            if (! cacheDir.transferContent(
+                oldRDB, ::ucbhelper::InsertOperation_COPY,
+                m_nativeRDB, NameClash::OVERWRITE ))
+                throw RuntimeException(
+                OUSTR("UCB transferContent() failed!"), 0 );
+        }
+
+        // UNO is bootstrapped, flush for next process start:
+        m_unorc_modified = true;
+        unorc_flush( Reference<XCommandEnvironment>() );
+    }
+
+    // common rdb for java, native rdb for shared lib components
+    if (m_commonRDB.getLength() > 0) {
+        m_xCommonRDB.set(
+            m_xComponentContext->getServiceManager()
+            ->createInstanceWithContext(
+            OUSTR("com.sun.star.registry.SimpleRegistry"),
+            m_xComponentContext ), UNO_QUERY_THROW );
+        m_xCommonRDB->open(
+            makeURL( expandUnoRcUrl(getCachePath()), m_commonRDB ),
+            m_readOnly, !m_readOnly );
+    }
+    if (m_nativeRDB.getLength() > 0) {
+        m_xNativeRDB.set(
+            m_xComponentContext->getServiceManager()
+            ->createInstanceWithContext(
+            OUSTR("com.sun.star.registry.SimpleRegistry"),
+            m_xComponentContext ), UNO_QUERY_THROW );
+        m_xNativeRDB->open(
+            makeURL( expandUnoRcUrl(getCachePath()), m_nativeRDB ),
+            m_readOnly, !m_readOnly );
+    }
+}
+
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
@@ -328,6 +421,7 @@ BackendImpl::BackendImpl(
     : PackageRegistryBackend( args, xComponentContext ),
       m_unorc_inited( false ),
       m_unorc_modified( false ),
+      bSwitchedRdbFiles(false),
       m_xDynComponentTypeInfo( new Package::TypeInfo(
                                    OUSTR("application/"
                                          "vnd.sun.star.uno-component;"
@@ -399,70 +493,6 @@ BackendImpl::BackendImpl(
     else
     {
         unorc_verify_init( xCmdEnv );
-
-        if (! m_readOnly) {
-            ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
-            ::ucbhelper::Content oldRDB;
-            // switch common rdb:
-            if (m_commonRDB.getLength() > 0)
-                create_ucb_content(
-                    &oldRDB, makeURL( getCachePath(), m_commonRDB ),
-                    xCmdEnv, false /* no throw */ );
-            m_commonRDB = m_commonRDB.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("common.rdb") )
-                ? OUSTR("common_.rdb") : OUSTR("common.rdb");
-            if (oldRDB.get().is())
-            {
-                if (! cacheDir.transferContent(
-                        oldRDB, ::ucbhelper::InsertOperation_COPY,
-                        m_commonRDB, NameClash::OVERWRITE ))
-                    throw RuntimeException(
-                        OUSTR("UCB transferContent() failed!"), 0 );
-                oldRDB = ::ucbhelper::Content();
-            }
-            // switch native rdb:
-            if (m_nativeRDB.getLength() > 0)
-                create_ucb_content(
-                    &oldRDB, makeURL( getCachePath(), m_nativeRDB ),
-                    xCmdEnv, false /* no throw */ );
-            const OUString plt_rdb( getPlatformString() + OUSTR(".rdb") );
-            const OUString plt_rdb_( getPlatformString() + OUSTR("_.rdb") );
-            m_nativeRDB = m_nativeRDB.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
-            if (oldRDB.get().is())
-            {
-                if (! cacheDir.transferContent(
-                        oldRDB, ::ucbhelper::InsertOperation_COPY,
-                        m_nativeRDB, NameClash::OVERWRITE ))
-                    throw RuntimeException(
-                        OUSTR("UCB transferContent() failed!"), 0 );
-            }
-
-            // UNO is bootstrapped, flush for next process start:
-            m_unorc_modified = true;
-            unorc_flush( Reference<XCommandEnvironment>() );
-        }
-
-        // common rdb for java, native rdb for shared lib components
-        if (m_commonRDB.getLength() > 0) {
-            m_xCommonRDB.set(
-                xComponentContext->getServiceManager()
-                ->createInstanceWithContext(
-                    OUSTR("com.sun.star.registry.SimpleRegistry"),
-                    xComponentContext ), UNO_QUERY_THROW );
-            m_xCommonRDB->open(
-                makeURL( expandUnoRcUrl(getCachePath()), m_commonRDB ),
-                m_readOnly, !m_readOnly );
-        }
-        if (m_nativeRDB.getLength() > 0) {
-            m_xNativeRDB.set(
-                xComponentContext->getServiceManager()
-                ->createInstanceWithContext(
-                    OUSTR("com.sun.star.registry.SimpleRegistry"),
-                    xComponentContext ), UNO_QUERY_THROW );
-            m_xNativeRDB->open(
-                makeURL( expandUnoRcUrl(getCachePath()), m_nativeRDB ),
-                m_readOnly, !m_readOnly );
-        }
     }
 }
 
