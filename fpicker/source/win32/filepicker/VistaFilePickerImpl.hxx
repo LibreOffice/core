@@ -95,6 +95,7 @@ static const ::rtl::OUString PROP_DIALOG_SHOW_RESULT  = ::rtl::OUString::createF
 static const ::rtl::OUString PROP_SELECTED_FILES      = ::rtl::OUString::createFromAscii("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
 static const ::rtl::OUString PROP_MULTISELECTION_MODE = ::rtl::OUString::createFromAscii("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
 static const ::rtl::OUString PROP_TITLE               = ::rtl::OUString::createFromAscii("title"              ); // [OUString]
+static const ::rtl::OUString PROP_FILENAME            = ::rtl::OUString::createFromAscii("filename"              ); // [OUString]
 static const ::rtl::OUString PROP_DIRECTORY           = ::rtl::OUString::createFromAscii("directory"          ); // [OUString]
 static const ::rtl::OUString PROP_FEATURES            = ::rtl::OUString::createFromAscii("features"           ); // [sal_Int32]
 static const ::rtl::OUString PROP_FILTER_TITLE        = ::rtl::OUString::createFromAscii("filter_title"       ); // [OUString]
@@ -134,6 +135,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
             E_CREATE_SAVE_DIALOG,
             E_SET_MULTISELECTION_MODE,
             E_SET_TITLE,
+            E_SET_FILENAME,
             E_SET_DIRECTORY,
             E_GET_SELECTED_FILES,
             E_SHOW_DIALOG_MODAL,
@@ -200,6 +202,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         //---------------------------------------------------------------------
         /// implementation of request E_SET_TITLE
         void impl_sta_SetTitle(const RequestRef& rRequest);
+
+        //---------------------------------------------------------------------
+        /// implementation of request E_SET_FILENAME
+        void impl_sta_SetFileName(const RequestRef& rRequest);
 
         //---------------------------------------------------------------------
         /// implementation of request E_SET_DIRECTORY

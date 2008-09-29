@@ -192,6 +192,10 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
                     impl_sta_SetTitle(rRequest);
                     break;
 
+            case E_SET_FILENAME:
+                impl_sta_SetFileName(rRequest);
+                break;
+
             case E_SET_DIRECTORY :
                     impl_sta_SetDirectory(rRequest);
                     break;
@@ -507,6 +511,20 @@ void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
     // <- SYNCHRONIZED
 
     iDialog->SetTitle(reinterpret_cast<LPCTSTR>(sTitle.getStr()));
+}
+
+//-------------------------------------------------------------------------------
+void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
+{
+    ::rtl::OUString sFileName = rRequest->getArgumentOrDefault(PROP_FILENAME, ::rtl::OUString());
+
+    // SYNCHRONIZED->
+    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    TFileDialog iDialog = impl_getBaseDialogInterface();
+    aLock.clear();
+    // <- SYNCHRONIZED
+
+    iDialog->SetFileName(reinterpret_cast<LPCTSTR>(sFileName.getStr()));
 }
 
 //-------------------------------------------------------------------------------
