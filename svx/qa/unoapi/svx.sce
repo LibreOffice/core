@@ -1,13 +1,13 @@
-#i91828 -o svx.AccessibleControlShape
-#i91828 -o svx.AccessibleEditableTextPara
-#i91828 -o svx.AccessibleGraphicShape
+-o svx.AccessibleControlShape
+-o svx.AccessibleEditableTextPara
+-o svx.AccessibleGraphicShape
 #i46736 -o svx.AccessibleImageBullet
-#i91828 -o svx.AccessibleOLEShape
-#i91828 -o svx.AccessiblePageShape
-#i91828 -o svx.AccessiblePresentationGraphicShape
-#i91828 -o svx.AccessiblePresentationOLEShape
+-o svx.AccessibleOLEShape
+-o svx.AccessiblePageShape
+-o svx.AccessiblePresentationGraphicShape
+-o svx.AccessiblePresentationOLEShape
 #i85539 -o svx.AccessiblePresentationShape
-#i91828 -o svx.AccessibleShape
+-o svx.AccessibleShape
 #i90294 -o svx.GraphicExporter
 -o svx.SvxDrawPage
 #i85501 -o svx.SvxGraphCtrlAccessibleContext
