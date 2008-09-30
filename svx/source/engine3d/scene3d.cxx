@@ -866,13 +866,10 @@ void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
 |*
 \************************************************************************/
 
-void E3dScene::SFX_NOTIFY(SfxBroadcaster &rBC,
-                          const TypeId   &rBCType,
-                          const SfxHint  &rHint,
-                          const TypeId   &rHintType)
+void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
 {
     SetRectsDirty();
-    E3dObject::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    E3dObject::Notify(rBC, rHint);
 }
 
 /*************************************************************************

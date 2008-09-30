@@ -118,7 +118,7 @@ public:
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
     virtual void SetModel(SdrModel* pNewModel);
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;

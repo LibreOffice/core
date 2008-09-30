@@ -154,9 +154,9 @@ void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
     }
 }
 
-void __EXPORT SdrObjEditView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SdrGlueEditView::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrGlueEditView::Notify(rBC,rHint);
     // Printerwechsel waerend des Editierens
     SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
     if (pSdrHint!=NULL && pTextEditOutliner!=NULL) {

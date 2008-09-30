@@ -210,7 +210,7 @@ public:
     sal_Bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter) const;
     void ImpRecalcEdgeTrack();  // Neuberechnung des Verbindungsverlaufs

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdview.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,7 +197,7 @@ class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrVi
 protected:
     SvtAccessibilityOptions maAccessibilityOptions;
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 public:
     TYPEINFO();

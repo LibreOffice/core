@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxruler.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3621,8 +3621,7 @@ void __EXPORT SvxRuler::ExtraDown()
 }
 
 
-void __EXPORT SvxRuler::SFX_NOTIFY(SfxBroadcaster& , const TypeId& rBCType,
-                               const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 /*
 
    [Beschreibung]

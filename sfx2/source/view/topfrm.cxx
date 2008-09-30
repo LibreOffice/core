@@ -1151,7 +1151,7 @@ void SfxTopViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     }
 
-    SfxViewFrame::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    SfxViewFrame::Notify( rBC, rHint );
 }
 
 //--------------------------------------------------------------------

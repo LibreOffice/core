@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colrctrl.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,8 +136,7 @@ public:
                                            const ResId& rResId );
                     ~SvxColorDockingWindow();
 
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            SetSlotIDs( USHORT nLeft, USHORT nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }

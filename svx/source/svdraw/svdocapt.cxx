@@ -792,9 +792,9 @@ void SdrCaptionObj::SetModel(SdrModel* pNewModel)
     ImpRecalcTail();
 }
 
-void SdrCaptionObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void SdrCaptionObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SdrRectObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrRectObj::Notify(rBC,rHint);
     ImpRecalcTail();
 }
 

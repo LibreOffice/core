@@ -146,7 +146,7 @@ public:
 
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };
 
 #endif //_SVDORECT_HXX

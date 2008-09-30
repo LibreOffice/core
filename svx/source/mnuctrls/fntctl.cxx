@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntctl.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,8 +132,7 @@ void SvxFontMenuControl::StateChanged(
     der DocumentShell gef"ullt.
 */
 
-void SvxFontMenuControl::SFX_NOTIFY( SfxBroadcaster&, const TypeId& rBCType,
-                                 const SfxHint& rHint, const TypeId& rHintType )
+void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.Type() != TYPE(SfxSimpleHint) &&
          ( (SfxSimpleHint&)rHint ).GetId() == SFX_HINT_DOCCHANGED )

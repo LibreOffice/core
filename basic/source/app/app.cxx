@@ -826,8 +826,7 @@ void BasicFrame::SetAutoRun( BOOL bAuto )
     bIsAutoRun = bAuto;
 }
 
-void BasicFrame::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
-                            const SfxHint& rHint, const TypeId& )
+void BasicFrame::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( TTExecutionStatusHint ) )
     {

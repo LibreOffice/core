@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appbased.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,8 +108,7 @@ AppBasEd::~AppBasEd()
     pMod->SetName( CUniString("--").Append( pMod->GetName() ) );
 }
 
-void AppBasEd::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
-                            const SfxHint& rHint, const TypeId& )
+void AppBasEd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* p = PTR_CAST(SfxSimpleHint,&rHint);
     if( p )

@@ -98,7 +98,7 @@ private:
     SVX_DLLPRIVATE virtual void RecalcXPoly();
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 public:
     TYPEINFO();

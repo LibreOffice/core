@@ -977,11 +977,10 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType )
+void SdrGrafObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SetXPolyDirty();
-    SdrRectObj::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    SdrRectObj::Notify( rBC, rHint );
     ImpSetAttrToGrafInfo();
 }
 

@@ -120,10 +120,7 @@ protected:
 
     void RebuildLists();
 
-    virtual void SFX_NOTIFY(SfxBroadcaster &rBC,
-                            const TypeId   &rBCType,
-                            const SfxHint  &rHint,
-                            const TypeId   &rHintType);
+    virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint);
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);

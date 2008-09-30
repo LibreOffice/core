@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdmrkv.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -203,7 +203,7 @@ SdrMarkView::~SdrMarkView()
     delete mpSdrViewSelection;
 }
 
-void __EXPORT SdrMarkView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
     if (pSdrHint!=NULL)
@@ -216,7 +216,7 @@ void __EXPORT SdrMarkView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType
             bMarkedPointsRectsDirty=TRUE;
         }
     }
-    SdrSnapView::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrSnapView::Notify(rBC,rHint);
 }
 
 void SdrMarkView::ModelHasChanged()

@@ -679,9 +679,9 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(BOOL bBezier) const
     return pRet;
 }
 
-void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void SdrRectObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SdrTextObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrTextObj::Notify(rBC,rHint);
     SetXPolyDirty(); // wg. Eckenradius
 }
 

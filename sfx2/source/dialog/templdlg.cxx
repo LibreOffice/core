@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templdlg.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.58.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1562,8 +1562,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
 
 
 //-------------------------------------------------------------------------
-void SfxCommonTemplateDialog_Impl::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
-                                          const SfxHint& rHint, const TypeId& rHintType)
+void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     // Aktualisierung anstossen
     if(rHint.Type() == TYPE(SfxSimpleHint))

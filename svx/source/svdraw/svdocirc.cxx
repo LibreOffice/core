@@ -1202,10 +1202,10 @@ Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
     }
 }
 
-void __EXPORT SdrCircObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SetXPolyDirty();
-    SdrRectObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrRectObj::Notify(rBC,rHint);
     ImpSetAttrToCircInfo();
 }
 
