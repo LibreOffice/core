@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: escherex.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,9 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
 #include "svx/svxdllapi.h"
 
@@ -1129,6 +1130,7 @@ class SVX_DLLPUBLIC EscherPropertyContainer
         sal_uInt32  ImplGetColor( const sal_uInt32 rColor, sal_Bool bSwap = sal_True );
         void        ImplCreateGraphicAttributes( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                     sal_uInt32 nBlibId, sal_Bool bCreateCroppingAttributes );
+        sal_Bool    ImplCreateEmbeddedBmp( const ByteString& rUniqueId );
         void        ImplInit();
 
     public :
@@ -1157,9 +1159,12 @@ class SVX_DLLPUBLIC EscherPropertyContainer
 
         sal_Bool    CreateOLEGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject );
 
-        /** Creates a complex ESCHER_Prop_fillBlip, that contains the BLIP directly (for Excel charts). */
+        /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
         sal_Bool    CreateEmbeddedBitmapProperties( const ::rtl::OUString& rBitmapUrl,
                         ::com::sun::star::drawing::BitmapMode eBitmapMode );
+        /** Creates a complex ESCHER_Prop_fillBlip containing a hatch style (for Excel charts). */
+        sal_Bool    CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch,
+                        const Color& rBackColor, bool bFillBackground );
 
                     // the GraphicProperties will only be created if a GraphicProvider and PicOutStrm is known
                     // DR: #99897# if no GraphicProvider is present, a complex ESCHER_Prop_fillBlip
