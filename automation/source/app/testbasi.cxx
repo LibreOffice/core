@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testbasi.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,9 +152,9 @@ void TTBasic::ReportRuntimeError( AppBasEd *pEditWin )
 {
     SbxVariableRef aDummy = new SbxVariable;
     aDummy->SetUserData( 24 );  // ID_MaybeAddErr
-    ((TestToolObj*)pTestObject)->SFX_NOTIFY( pTestObject->GetBroadcaster(), xx, SbxHint( SBX_HINT_DATAWANTED, aDummy ), xx );
+    ((TestToolObj*)pTestObject)->Notify( pTestObject->GetBroadcaster(), SbxHint( SBX_HINT_DATAWANTED, aDummy ) );
     aDummy->SetUserData( 18 );  // ID_ExceptLog
-    ((TestToolObj*)pTestObject)->SFX_NOTIFY( pTestObject->GetBroadcaster(), xx, SbxHint( SBX_HINT_DATAWANTED, aDummy ), xx );
+    ((TestToolObj*)pTestObject)->Notify( pTestObject->GetBroadcaster(), SbxHint( SBX_HINT_DATAWANTED, aDummy ) );
     MyBasic::ReportRuntimeError( pEditWin );
 }
 
