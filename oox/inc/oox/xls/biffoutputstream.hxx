@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffoutputstream.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #define OOX_XLS_BIFFOUTPUTSTREAM_HXX
 
 #include <vector>
+#include "oox/helper/binaryoutputstream.hxx"
 #include "oox/xls/biffhelper.hxx"
 
 namespace oox { class BinaryOutputStream; }
@@ -51,9 +52,8 @@ public:
                             BinaryOutputStream& rOutStrm,
                             sal_uInt16 nMaxRecSize );
 
-    /** Returns the core stream object. */
-    inline const BinaryOutputStream&
-                        getCoreStream() const { return mrOutStrm; }
+    /** Returns the wrapped binary base stream. */
+    inline const BinaryOutputStream& getBaseStream() const { return mrOutStrm; }
 
     /** Starts a new record. */
     void                startRecord( sal_uInt16 nRecId );
@@ -67,9 +67,6 @@ public:
     void                write( const void* pData, sal_uInt16 nBytes );
     /** Writes a sequence of nBytes bytes with the passed value. */
     void                fill( sal_uInt8 nValue, sal_uInt16 nBytes );
-    /** Writes a value. Must NOT overread the buffer. */
-    template< typename Type >
-    inline void         writeValue( Type nValue );
 
 private:
     typedef ::std::vector< sal_uInt8 > DataBuffer;
@@ -80,15 +77,6 @@ private:
     sal_uInt16          mnRecId;                /// Current record identifier.
     bool                mbInRec;                /// True = currently writing inside of a record.
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename Type >
-inline void BiffOutputRecordBuffer::writeValue( Type nValue )
-{
-    ByteOrderConverter::convertLittleEndian( nValue );
-    write( &nValue, static_cast< sal_uInt16 >( sizeof( Type ) ) );
-}
 
 } // namespace prv
 
@@ -113,14 +101,12 @@ inline void BiffOutputRecordBuffer::writeValue( Type nValue )
     To write unicode character arrays, call writeUnicodeBuffer(). It creates
     CONTINUE records and repeats the unicode string flag byte automatically.
 */
-class BiffOutputStream
+class BiffOutputStream : public BinaryOutputStream
 {
 public:
     explicit            BiffOutputStream(
                             BinaryOutputStream& rOutStream,
                             sal_uInt16 nMaxRecSize );
-
-                        ~BiffOutputStream();
 
     // record control ---------------------------------------------------------
 
@@ -133,47 +119,45 @@ public:
     /** Sets size of data portion in bytes. 0 means no portions are used. */
     void                setPortionSize( sal_uInt16 nSize );
 
-    // stream/record state and info -------------------------------------------
+    // BinaryStreamBase interface (seeking) -----------------------------------
 
-    // stream write access ----------------------------------------------------
+    /** Returns the absolute position in the wrapped binary stream. */
+    sal_Int64           tellBase() const;
+    /** Returns the total size of the wrapped binary stream. */
+    sal_Int64           getBaseLength() const;
 
-    /** Writes nBytes bytes from the passed buffer pData. */
-    void                write( const void* pData, sal_uInt32 nBytes );
+    // BinaryOutputStream interface (stream write access) ---------------------
+
+    /** Writes the passed data sequence. */
+    virtual void        writeData( const StreamDataSequence& rData );
+    /** Writes nBytes bytes from the passed buffer pMem. */
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes );
+
     /** Writes a sequence of nBytes bytes with the passed value. */
-    void                fill( sal_uInt8 nValue, sal_uInt32 nBytes );
+    void                fill( sal_uInt8 nValue, sal_Int32 nBytes );
+    /** Writes a block of memory, ensures that it is not split to a CONTINUE record. */
+    void                writeBlock( const void* pMem, sal_uInt16 nBytes );
 
-    /** Writes a value to the stream and converts it to little-endian byte order. */
+    /** Stream operator for integral and floating-point types. */
     template< typename Type >
-    void                writeValue( Type nValue );
+    inline BiffOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 
+    // ------------------------------------------------------------------------
 private:
+    /** Forwards calls of writeValue() template functions to the record buffer. */
+    virtual void        writeAtom( const void* pMem, sal_uInt8 nSize );
+
     /** Checks the remaining size in the current record, creates CONTINUE record if needed. */
     void                ensureRawBlock( sal_uInt16 nSize );
     /** Checks the remaining size in the current record and creates CONTINUE record if needed.
         @return  Maximum size left for writing to current record. */
-    sal_uInt16          prepareRawBlock( sal_uInt32 nTotalSize );
+    sal_uInt16          prepareRawBlock( sal_Int32 nTotalSize );
 
 private:
     prv::BiffOutputRecordBuffer maRecBuffer;    /// Raw record data buffer.
     sal_uInt16          mnPortionSize;          /// Size of data portions.
     sal_uInt16          mnPortionPos;           /// Position in current portion.
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename Type >
-inline void BiffOutputStream::writeValue( Type nValue )
-{
-    ensureRawBlock( static_cast< sal_uInt16 >( sizeof( Type ) ) );
-    maRecBuffer.writeValue( nValue );
-}
-
-template< typename Type >
-inline BiffOutputStream& operator<<( BiffOutputStream& rStrm, Type nValue )
-{
-    rStrm.writeValue( nValue );
-    return rStrm;
-}
 
 // ============================================================================
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylespropertyhelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,20 +83,32 @@ struct ApiFontUsedFlags
 
 // ----------------------------------------------------------------------------
 
+/** Contains API font name, family, and charset for a script type. */
+struct ApiScriptFontName
+{
+    ::rtl::OUString     maName;             /// Font name.
+    sal_Int16           mnFamily;           /// Font family.
+    sal_Int16           mnCharSet;          /// Font character set.
+
+    explicit            ApiScriptFontName();
+};
+
+// ----------------------------------------------------------------------------
+
 /** Contains all API font attributes. */
 struct ApiFontData
 {
     typedef ::com::sun::star::awt::FontDescriptor ApiFontDescriptor;
 
-    ApiFontDescriptor   maDesc;             /// Font descriptor holding most font information (height in twips, weight in %).
+    ApiScriptFontName   maLatinFont;        /// Font name for latin scripts.
+    ApiScriptFontName   maAsianFont;        /// Font name for east-asian scripts.
+    ApiScriptFontName   maCmplxFont;        /// Font name for complex scripts.
+    ApiFontDescriptor   maDesc;             /// Font descriptor (height in twips, weight in %).
     sal_Int32           mnColor;            /// Font color.
     sal_Int16           mnEscapement;       /// Escapement style.
     sal_Int8            mnEscapeHeight;     /// Escapement font height.
     bool                mbOutline;          /// True = outlined characters.
     bool                mbShadow;           /// True = shadowed chgaracters.
-    bool                mbHasWstrn;         /// True = font contains Western script characters.
-    bool                mbHasAsian;         /// True = font contains Asian script characters.
-    bool                mbHasCmplx;         /// True = font contains Complex script characters.
 
     explicit            ApiFontData();
 };
@@ -231,7 +243,7 @@ public:
                             const ApiSolidFillData& rFillData );
 
 private:
-    PropertySequence    maWstrnFontNameProps;
+    PropertySequence    maLatinFontNameProps;
     PropertySequence    maAsianFontNameProps;
     PropertySequence    maCmplxFontNameProps;
     PropertySequence    maFontHeightProps;

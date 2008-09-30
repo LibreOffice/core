@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterbase.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ struct FilterBaseImpl
     OUString            maFileUrl;
     StorageRef          mxStorage;
 
+    Sequence< Any >                     maArguments;
     Reference< XMultiServiceFactory >   mxFactory;
     Reference< XModel >                 mxModel;
     Reference< XInputStream >           mxInStream;
@@ -80,6 +81,7 @@ struct FilterBaseImpl
 FilterBaseImpl::FilterBaseImpl( const Reference< XMultiServiceFactory >& rxFactory ) :
     mxFactory( rxFactory )
 {
+    OSL_ENSURE( mxFactory.is(), "FilterBaseImpl::FilterBaseImpl - missing service factory" );
 }
 
 void FilterBaseImpl::setMediaDescriptor( const Sequence< PropertyValue >& rDescriptor )
@@ -117,7 +119,12 @@ bool FilterBase::isExportFilter() const
 
 // ----------------------------------------------------------------------------
 
-const Reference< XMultiServiceFactory >& FilterBase::getServiceFactory() const
+const Sequence< Any >& FilterBase::getArguments() const
+{
+    return mxImpl->maArguments;
+}
+
+const Reference< XMultiServiceFactory >& FilterBase::getGlobalFactory() const
 {
     return mxImpl->mxFactory;
 }
@@ -250,8 +257,9 @@ Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( Runt
 
 // com.sun.star.lang.XInitialization interface --------------------------------
 
-void SAL_CALL FilterBase::initialize( const Sequence< Any >& /*rArgs*/ ) throw( Exception, RuntimeException )
+void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
 {
+    mxImpl->maArguments = rArgs;
 }
 
 // com.sun.star.document.XImporter interface ----------------------------------
@@ -277,16 +285,19 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
 sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rDescriptor ) throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    mxImpl->setMediaDescriptor( rDescriptor );
-    mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream, mxImpl->mxOutStream );
-    if( mxImpl->mxModel.is() && mxImpl->mxStorage.get() )
+    if( mxImpl->mxFactory.is() && mxImpl->mxModel.is() )
     {
-        mxImpl->mxModel->lockControllers();
-        if( mxImpl->mxInStream.is() )
-            bRet = importDocument();
-        else if( mxImpl->mxOutStream.is() )
-            bRet = exportDocument();
-        mxImpl->mxModel->unlockControllers();
+        mxImpl->setMediaDescriptor( rDescriptor );
+        mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream, mxImpl->mxOutStream );
+        if( mxImpl->mxStorage.get() )
+        {
+            mxImpl->mxModel->lockControllers();
+            if( mxImpl->mxInStream.is() )
+                bRet = importDocument();
+            else if( mxImpl->mxOutStream.is() )
+                bRet = exportDocument();
+            mxImpl->mxModel->unlockControllers();
+        }
     }
     return bRet;
 }

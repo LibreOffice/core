@@ -8,7 +8,7 @@
  *
  * $RCSfile: seriesconverter.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     Reference< XLabeledDataSequence > xLabeledSeq;
     if( xValueSeq.is() || xTitleSeq.is() )
     {
-        xLabeledSeq.set( ConverterRoot::createInstance( CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" ) ), UNO_QUERY );
+        xLabeledSeq.set( rParent.createInstance( CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" ) ), UNO_QUERY );
         if( xLabeledSeq.is() )
         {
             xLabeledSeq->setValues( xValueSeq );
@@ -526,23 +526,27 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     ObjectType eObjType = rTypeGroup.getSeriesObjectType();
     rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, eObjType, mrModel.mnIndex );
 
-    // set the property default value used by the Chart2 templates (true for pie/doughnut charts)
-    aSeriesProp.setProperty( CREATE_OUSTRING( "VaryColorsByPoint" ), rTypeInfo.meTypeCategory == TYPECATEGORY_PIE );
+    // set the (unused) property default value used by the Chart2 templates (true for pie/doughnut charts)
+    bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
+    aSeriesProp.setProperty( CREATE_OUSTRING( "VaryColorsByPoint" ), bIsPie );
+
     // own area formatting for every data point (TODO: varying line color not supported)
-    if( bVaryColorsByPoint && rTypeGroup.isSeriesFrameFormat() && ObjectFormatter::isAutomaticFill( mrModel.mxShapeProp ) )
+    // #i91271# always set area formatting for every point in pie/doughnut charts to override their automatic point formatting
+    if( bIsPie || (bVaryColorsByPoint && rTypeGroup.isSeriesFrameFormat() && ObjectFormatter::isAutomaticFill( mrModel.mxShapeProp )) )
     {
         /*  Set the series point number as color cycle size at the object
             formatter to get correct start-shade/end-tint. TODO: in doughnut
             charts, the sizes of the series may vary, need to use the maximum
             point count of all series. */
         sal_Int32 nOldMax = rFormatter.getMaxSeriesIndex();
-        rFormatter.setMaxSeriesIndex( nDataPointCount - 1 );
+        if( bVaryColorsByPoint )
+            rFormatter.setMaxSeriesIndex( nDataPointCount - 1 );
         for( sal_Int32 nIndex = 0; nIndex < nDataPointCount; ++nIndex )
         {
             try
             {
                 PropertySet aPointProp( xDataSeries->getDataPointByIndex( nIndex ) );
-                rFormatter.convertAutomaticFill( aPointProp, eObjType, nIndex );
+                rFormatter.convertAutomaticFill( aPointProp, eObjType, bVaryColorsByPoint ? nIndex : mrModel.mnIndex );
             }
             catch( Exception& )
             {

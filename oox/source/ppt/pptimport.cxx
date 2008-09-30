@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,7 @@ bool PowerPointImport::importDocument() throw()
 {
     /*  to activate the PPTX dumper, define the environment variable
         OOO_PPTXDUMPER and insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/pptxdumperconfig.dat. */
+        file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
     OUString aFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );

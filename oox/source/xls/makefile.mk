@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.20.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,6 @@ SLOFILES =										\
         $(SLO)$/autofiltercontext.obj			\
         $(SLO)$/biffcodec.obj					\
         $(SLO)$/biffdetector.obj				\
-        $(SLO)$/bifffragmenthandler.obj			\
         $(SLO)$/biffhelper.obj					\
         $(SLO)$/biffinputstream.obj				\
         $(SLO)$/biffoutputstream.obj			\
@@ -87,7 +86,6 @@ SLOFILES =										\
         $(SLO)$/tablefragment.obj				\
         $(SLO)$/themebuffer.obj					\
         $(SLO)$/unitconverter.obj				\
-        $(SLO)$/validationpropertyhelper.obj	\
         $(SLO)$/viewsettings.obj				\
         $(SLO)$/webquerybuffer.obj				\
         $(SLO)$/workbookfragment.obj			\

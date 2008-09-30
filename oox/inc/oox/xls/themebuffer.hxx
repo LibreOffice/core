@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themebuffer.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,17 +41,11 @@ struct OoxFontData;
 
 // ============================================================================
 
-class ThemeBuffer : public WorkbookHelper
+class ThemeBuffer : public ::oox::drawingml::Theme, public WorkbookHelper
 {
 public:
     explicit            ThemeBuffer( const WorkbookHelper& rHelper );
     virtual             ~ThemeBuffer();
-
-    /** Returns the pointer to the core drawingml theme. */
-    inline const ::oox::drawingml::ThemePtr& getCoreThemePtr() const { return mxTheme; }
-
-    /** Returns the core drawingml theme needed by the theme fragment importer. */
-    ::oox::drawingml::Theme& getOrCreateCoreTheme();
 
     /** Returns the theme color with the specified token identifier. */
     sal_Int32           getColorByToken( sal_Int32 nToken ) const;
@@ -63,8 +57,6 @@ public:
 
 private:
     typedef ::std::auto_ptr< OoxFontData > OoxFontDataPtr;
-
-    ::oox::drawingml::ThemePtr mxTheme;
     OoxFontDataPtr      mxDefFontData;
 };
 

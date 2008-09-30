@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sheetdatacontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/richstring.hxx"
-#include "oox/xls/worksheethelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace table { class XCell; }
@@ -123,10 +122,7 @@ private:
 class OoxExternalSheetDataContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            OoxExternalSheetDataContext(
-                            OoxWorkbookFragmentBase& rFragment,
-                            WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+    explicit            OoxExternalSheetDataContext( OoxWorkbookFragmentBase& rFragment, sal_Int32 nSheet );
 
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
@@ -164,52 +160,52 @@ private:
 
 /** This class implements importing row settings and all cells of a sheet.
  */
-class BiffSheetDataContext : public WorksheetHelper
+class BiffSheetDataContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffSheetDataContext( const WorksheetHelper& rHelper );
+    explicit            BiffSheetDataContext( const BiffWorksheetFragmentBase& rParent );
 
     /** Tries to import a sheet data record. */
-    void                importRecord( BiffInputStream& rStrm );
+    virtual void        importRecord();
 
 private:
     /** Sets current cell according to the passed address. */
     void                setCurrCell( const BinAddress& rAddr );
 
     /** Imports an XF identifier and sets the mnXfId member. */
-    void                importXfId( BiffInputStream& rStrm, bool bBiff2 );
+    void                importXfId( bool bBiff2 );
     /** Imports a BIFF cell address and the following XF identifier. */
-    void                importCellHeader( BiffInputStream& rStrm, bool bBiff2 );
+    void                importCellHeader( bool bBiff2 );
 
     /** Imports a BLANK record describing a blank but formatted cell. */
-    void                importBlank( BiffInputStream& rStrm );
+    void                importBlank();
     /** Imports a BOOLERR record describing a boolean or error code cell. */
-    void                importBoolErr( BiffInputStream& rStrm );
+    void                importBoolErr();
     /** Imports a FORMULA record describing a formula cell. */
-    void                importFormula( BiffInputStream& rStrm );
+    void                importFormula();
     /** Imports an INTEGER record describing a BIFF2 integer cell. */
-    void                importInteger( BiffInputStream& rStrm );
+    void                importInteger();
     /** Imports a LABEL record describing an unformatted string cell. */
-    void                importLabel( BiffInputStream& rStrm );
+    void                importLabel();
     /** Imports a LABELSST record describing a string cell using the shared string list. */
-    void                importLabelSst( BiffInputStream& rStrm );
+    void                importLabelSst();
     /** Imports a MULTBLANK record describing a range of blank but formatted cells. */
-    void                importMultBlank( BiffInputStream& rStrm );
+    void                importMultBlank();
     /** Imports a MULTRK record describing a range of numeric cells. */
-    void                importMultRk( BiffInputStream& rStrm );
+    void                importMultRk();
     /** Imports a NUMBER record describing a floating-point cell. */
-    void                importNumber( BiffInputStream& rStrm );
+    void                importNumber();
     /** Imports an RK record describing a numeric cell. */
-    void                importRk( BiffInputStream& rStrm );
+    void                importRk();
 
     /** Imports row settings from a ROW record. */
-    void                importRow( BiffInputStream& rStrm );
+    void                importRow();
     /** Imports an ARRAY record describing an array formula of a cell range. */
-    void                importArray( BiffInputStream& rStrm );
+    void                importArray();
     /** Imports a SHAREDFMLA record describing a shared formula in a cell range. */
-    void                importSharedFmla( BiffInputStream& rStrm );
+    void                importSharedFmla();
     /** Imports table operation from a DATATABLE or DATATABLE2 record. */
-    void                importDataTable( BiffInputStream& rStrm );
+    void                importDataTable();
 
 private:
     OoxCellData         maCurrCell;             /// Position and formatting of current imported cell.
@@ -222,16 +218,13 @@ private:
 
 /** This class implements importing cached cell data of external links.
  */
-class BiffExternalSheetDataContext : public WorksheetHelperRoot
+class BiffExternalSheetDataContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffExternalSheetDataContext(
-                            const WorkbookHelper& rHelper,
-                            WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+    explicit            BiffExternalSheetDataContext( const BiffWorkbookFragmentBase& rParent, sal_Int32 nSheet );
 
     /** Import the CRN record containing cached cell values. */
-    void                importCrn( BiffInputStream& rStrm );
+    virtual void        importRecord();
 };
 
 // ============================================================================

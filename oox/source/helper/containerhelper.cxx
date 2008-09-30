@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: containerhelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <comphelper/processfactory.hxx>
 #include "oox/helper/helper.hxx"
 
 using ::rtl::OUString;
@@ -52,13 +51,12 @@ namespace oox {
 
 // ============================================================================
 
-Reference< XIndexContainer > ContainerHelper::createIndexContainer()
+Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Reference< XMultiServiceFactory >& rxFactory )
 {
     Reference< XIndexContainer > xContainer;
-    try
+    if( rxFactory.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        xContainer.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.IndexedPropertyValues" ) ), UNO_QUERY_THROW );
+        xContainer.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.IndexedPropertyValues" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -85,13 +83,12 @@ bool ContainerHelper::insertByIndex(
     return bRet;
 }
 
-Reference< XNameContainer > ContainerHelper::createNameContainer()
+Reference< XNameContainer > ContainerHelper::createNameContainer( const Reference< XMultiServiceFactory >& rxFactory )
 {
     Reference< XNameContainer > xContainer;
-    try
+    if( rxFactory.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        xContainer.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.NamedPropertyValues" ) ), UNO_QUERY_THROW );
+        xContainer.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.NamedPropertyValues" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {

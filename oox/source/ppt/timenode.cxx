@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timenode.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,6 @@
 
 #include <boost/bind.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -52,6 +50,7 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
 #include "oox/helper/helper.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -216,13 +215,12 @@ namespace oox { namespace ppt {
 
 // END CUT&PASTE
 
-    void TimeNode::addNode( const Reference< XModel > &rxModel,
-                                                    const Reference< XAnimationNode >& rxNode, const SlidePersistPtr & pSlide )
+    void TimeNode::addNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& rxNode, const SlidePersistPtr & pSlide )
     {
         try {
             OUString sServiceName = getServiceName( mnNodeType );
-            Reference< XAnimationNode > xNode = createAndInsert(sServiceName, rxModel, rxNode );
-            setNode( rxModel, xNode, pSlide );
+            Reference< XAnimationNode > xNode = createAndInsert( rFilter, sServiceName, rxNode );
+            setNode( rFilter, xNode, pSlide );
         }
         catch( const Exception& e )
         {
@@ -231,8 +229,7 @@ namespace oox { namespace ppt {
         }
     }
 
-    void TimeNode::setNode( const Reference< XModel > &rxModel,
-                            const Reference< XAnimationNode >& xNode, const SlidePersistPtr & pSlide )
+    void TimeNode::setNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& xNode, const SlidePersistPtr & pSlide )
     {
         OSL_ENSURE( xNode.is(), "null node passed" );
 
@@ -549,7 +546,7 @@ namespace oox { namespace ppt {
             }
 
             std::for_each( maChildren.begin(), maChildren.end(),
-                           boost::bind(&TimeNode::addNode, _1, rxModel, boost::ref(xNode),
+                           boost::bind(&TimeNode::addNode, _1, boost::cref(rFilter), boost::ref(xNode),
                                        boost::ref(pSlide) ) );
 
             switch( mnNodeType )
@@ -583,12 +580,13 @@ namespace oox { namespace ppt {
     }
 
 
-    Reference< XAnimationNode > TimeNode::createAndInsert( const OUString& rServiceName, const Reference< XModel > &/*rxModel*/,
-                                                                                             const Reference< XAnimationNode >& rxNode )
+    Reference< XAnimationNode > TimeNode::createAndInsert(
+            const XmlFilterBase& rFilter,
+            const OUString& rServiceName,
+            const Reference< XAnimationNode >& rxNode )
     {
         try {
-            Reference< XAnimationNode > xNode ( ::comphelper::getProcessServiceFactory()->createInstance(rServiceName ),
-                                                                                    UNO_QUERY_THROW );
+            Reference< XAnimationNode > xNode ( rFilter.getGlobalFactory()->createInstance(rServiceName ), UNO_QUERY_THROW );
             Reference< XTimeContainer > xParentContainer( rxNode, UNO_QUERY_THROW );
 
             xParentContainer->appendChild( xNode );

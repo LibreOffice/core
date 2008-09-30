@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetfragment.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #ifndef OOX_XLS_WORKSHEETFRAGMENT_HXX
 #define OOX_XLS_WORKSHEETFRAGMENT_HXX
 
-#include "oox/xls/bifffragmenthandler.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
@@ -84,6 +83,12 @@ private:
     void                importBrk( const AttributeList& rAttribs );
     /** Imports the the relation identifier for the DrawingML part. */
     void                importDrawing( const AttributeList& rAttribs );
+    /** Imports the the relation identifier for the legacy VML drawing part. */
+    void                importLegacyDrawing( const AttributeList& rAttribs );
+    /** Imports additional data for an OLE object. */
+    void                importOleObject( const AttributeList& rAttribs );
+    /** Imports additional data for an OCX form control. */
+    void                importControl( const AttributeList& rAttribs );
 
     /** Imports the DIMENSION record containing the used area of the sheet. */
     void                importDimension( RecordInputStream& rStrm );
@@ -101,6 +106,12 @@ private:
     void                importBrk( RecordInputStream& rStrm );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
     void                importDrawing( RecordInputStream& rStrm );
+    /** Imports the LEGACYDRAWING record containing the relation identifier for the VML drawing part. */
+    void                importLegacyDrawing( RecordInputStream& rStrm );
+    /** Imports additional data for an OLE object. */
+    void                importOleObject( RecordInputStream& rStrm );
+    /** Imports additional data for an OCX form control. */
+    void                importControl( RecordInputStream& rStrm );
 
 private:
     ::std::auto_ptr< OoxValidationData > mxValData;
@@ -112,41 +123,43 @@ class BiffWorksheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffWorksheetFragment(
-                            const WorkbookHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rParent,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
                             sal_Int32 nSheet );
 
     /** Imports the entire worksheet fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment( BiffInputStream& rStrm );
+    virtual bool        importFragment();
 
 private:
     /** Imports the COLINFO record and sets column properties and formatting. */
-    void                importColInfo( BiffInputStream& rStrm );
+    void                importColInfo();
     /** Imports the BIFF2 COLUMNDEFAULT record and sets column default formatting. */
-    void                importColumnDefault( BiffInputStream& rStrm );
+    void                importColumnDefault();
     /** Imports the BIFF2 COLWIDTH record and sets column width. */
-    void                importColWidth( BiffInputStream& rStrm );
+    void                importColWidth();
     /** Imports the DATAVALIDATION record containing cell ranges with data validation settings. */
-    void                importDataValidation( BiffInputStream& rStrm );
+    void                importDataValidation();
     /** Imports the DATAVALIDATIONS record containing global data validation settings. */
-    void                importDataValidations( BiffInputStream& rStrm );
+    void                importDataValidations();
     /** Imports the DEFCOLWIDTH record and sets default column width. */
-    void                importDefColWidth( BiffInputStream& rStrm );
+    void                importDefColWidth();
     /** Imports the DEFROWHEIGHT record and sets default row height and properties. */
-    void                importDefRowHeight( BiffInputStream& rStrm );
+    void                importDefRowHeight();
     /** Imports the DIMENSION record containing the used area of the sheet. */
-    void                importDimension( BiffInputStream& rStrm );
+    void                importDimension();
+    /** Reads a string as used in the HYPERLINK record. */
+    ::rtl::OUString     readHyperlinkString( rtl_TextEncoding eTextEnc, bool bUnicode );
     /** Imports the HYPERLINK record and sets a cell hyperlink. */
-    void                importHyperlink( BiffInputStream& rStrm );
+    void                importHyperlink();
     /** Imports the LABELRANGES record and sets the imported label ranges. */
-    void                importLabelRanges( BiffInputStream& rStrm );
+    void                importLabelRanges();
     /** Imports the MEREDCELLS record and merges all cells in the document. */
-    void                importMergedCells( BiffInputStream& rStrm );
+    void                importMergedCells();
     /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
-    void                importPageBreaks( BiffInputStream& rStrm, bool bRowBreak );
+    void                importPageBreaks( bool bRowBreak );
     /** Imports the STANDARDWIDTH record and sets standard column width. */
-    void                importStandardWidth( BiffInputStream& rStrm );
+    void                importStandardWidth();
 };
 
 // ============================================================================

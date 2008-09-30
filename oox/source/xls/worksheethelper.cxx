@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheethelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/xls/worksheethelper.hxx"
+#include <algorithm>
 #include <utility>
 #include <list>
 #include <rtl/ustrbuf.hxx>
@@ -37,11 +38,16 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
+#include <com/sun/star/sheet/ValidationType.hpp>
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
+#include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
@@ -59,7 +65,6 @@
 #include "oox/xls/sharedstringsbuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
-#include "oox/xls/validationpropertyhelper.hxx"
 #include "oox/xls/viewsettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 #include "oox/xls/worksheetsettings.hxx"
@@ -71,26 +76,32 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::util::XMergeable;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Size;
+using ::com::sun::star::table::BorderLine;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::BorderLine;
+using ::com::sun::star::table::XCell;
+using ::com::sun::star::table::XCellRange;
 using ::com::sun::star::table::XColumnRowRange;
 using ::com::sun::star::table::XTableColumns;
 using ::com::sun::star::table::XTableRows;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::table::XCellRange;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::sheet::XSheetCellRanges;
-using ::com::sun::star::sheet::XSheetCellRangeContainer;
+using ::com::sun::star::sheet::ConditionOperator;
+using ::com::sun::star::sheet::ValidationType;
+using ::com::sun::star::sheet::ValidationAlertStyle;
 using ::com::sun::star::sheet::XCellAddressable;
 using ::com::sun::star::sheet::XCellRangeAddressable;
 using ::com::sun::star::sheet::XFormulaTokens;
-using ::com::sun::star::sheet::XSheetOutline;
-using ::com::sun::star::sheet::XMultipleOperation;
 using ::com::sun::star::sheet::XLabelRanges;
+using ::com::sun::star::sheet::XMultiFormulaTokens;
+using ::com::sun::star::sheet::XMultipleOperation;
+using ::com::sun::star::sheet::XSheetCellRangeContainer;
+using ::com::sun::star::sheet::XSheetCellRanges;
+using ::com::sun::star::sheet::XSheetCondition;
+using ::com::sun::star::sheet::XSheetOutline;
+using ::com::sun::star::sheet::XSpreadsheet;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextRange;
@@ -110,6 +121,78 @@ void lclUpdateProgressBar( ISegmentProgressBarRef xProgressBar, const CellRangeA
         if( xProgressBar->getPosition() < fPosition )
             xProgressBar->setPosition( fPosition );
     }
+}
+
+// ----------------------------------------------------------------------------
+
+struct ValueRange
+{
+    sal_Int32           mnFirst;
+    sal_Int32           mnLast;
+
+    inline explicit     ValueRange( sal_Int32 nValue ) : mnFirst( nValue ), mnLast( nValue ) {}
+    inline explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
+};
+
+typedef ::std::vector< ValueRange > ValueRangeVector;
+
+// ----------------------------------------------------------------------------
+
+struct ValueRangeComp
+{
+    inline bool         operator()( const ValueRange& rRange, sal_Int32 nValue ) const { return rRange.mnLast < nValue; }
+};
+
+typedef ::std::vector< ValueRange > ValueRangeVector;
+
+// ----------------------------------------------------------------------------
+
+class ValueRangeSet
+{
+public:
+    inline explicit     ValueRangeSet() {}
+
+    void                insert( sal_Int32 nValue );
+    void                intersect( ValueRangeVector& orRanges, sal_Int32 nFirst, sal_Int32 nLast ) const;
+
+private:
+    ValueRangeVector    maData;
+};
+
+void ValueRangeSet::insert( sal_Int32 nValue )
+{
+    // find the first range that contains nValue or that follows nValue
+    ValueRangeVector::iterator aBeg = maData.begin();
+    ValueRangeVector::iterator aEnd = maData.end();
+    ValueRangeVector::iterator aNext = ::std::lower_bound( aBeg, aEnd, nValue, ValueRangeComp() );
+
+    // nothing to do if found range contains nValue
+    if( (aNext == aEnd) || (nValue < aNext->mnFirst) )
+    {
+        ValueRangeVector::iterator aPrev = (aNext == aBeg) ? aEnd : (aNext - 1);
+        bool bJoinPrev = (aPrev != aEnd) && (aPrev->mnLast + 1 == nValue);
+        bool bJoinNext = (aNext != aEnd) && (aNext->mnFirst - 1 == nValue);
+        if( bJoinPrev && bJoinNext )
+        {
+            aPrev->mnLast = aNext->mnLast;
+            maData.erase( aNext );
+        }
+        else if( bJoinPrev )
+            ++aPrev->mnLast;
+        else if( bJoinNext )
+            --aNext->mnFirst;
+        else
+            maData.insert( aNext, ValueRange( nValue ) );
+    }
+}
+
+void ValueRangeSet::intersect( ValueRangeVector& orRanges, sal_Int32 nFirst, sal_Int32 nLast ) const
+{
+    orRanges.clear();
+    // find the range that contains nFirst or the first range that follows nFirst
+    ValueRangeVector::const_iterator aIt = ::std::lower_bound( maData.begin(), maData.end(), nFirst, ValueRangeComp() );
+    for( ValueRangeVector::const_iterator aEnd = maData.end(); (aIt != aEnd) && (aIt->mnFirst <= nLast); ++aIt )
+        orRanges.push_back( ValueRange( ::std::max( aIt->mnFirst, nFirst ), ::std::min( aIt->mnLast, nLast ) ) );
 }
 
 } // namespace
@@ -247,6 +330,23 @@ void OoxValidationData::setBinErrorStyle( sal_uInt8 nErrorStyle )
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
 }
 
+// ----------------------------------------------------------------------------
+
+OoxOleObjectData::OoxOleObjectData() :
+    mnAspect( XML_DVASPECT_CONTENT ),
+    mnUpdateMode( XML_OLEUPDATE_ALWAYS ),
+    mnShapeId( 0 ),
+    mbAutoLoad( false )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+OoxFormControlData::OoxFormControlData() :
+    mnShapeId( 0 )
+{
+}
+
 // ============================================================================
 // ============================================================================
 
@@ -326,6 +426,12 @@ public:
     void                setValidation( const OoxValidationData& rValData );
     /** Sets the path to the DrawingML fragment of this sheet. */
     void                setDrawingPath( const OUString& rDrawingPath );
+    /** Sets the path to the legacy VML drawing fragment of this sheet. */
+    void                setVmlDrawingPath( const OUString& rVmlDrawingPath );
+    /** Sets additional data for an OLE object. */
+    void                setOleObject( const OoxOleObjectData& rOleObjectData );
+    /** Sets additional data for an OCX form control. */
+    void                setFormControl( const OoxFormControlData& rFormControlData );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if base width has not been set with setDefaultColumnWidth(). */
@@ -356,11 +462,13 @@ public:
     void                finalizeWorksheetImport();
 
 private:
-    typedef ::std::vector< sal_Int32 >              OutlineLevelVec;
-    typedef ::std::map< sal_Int32, OoxColumnData >  OoxColumnDataMap;
-    typedef ::std::map< sal_Int32, OoxRowData >     OoxRowDataMap;
-    typedef ::std::list< OoxHyperlinkData >         OoxHyperlinkList;
-    typedef ::std::list< OoxValidationData >        OoxValidationList;
+    typedef ::std::vector< sal_Int32 >                  OutlineLevelVec;
+    typedef ::std::map< sal_Int32, OoxColumnData >      OoxColumnDataMap;
+    typedef ::std::map< sal_Int32, OoxRowData >         OoxRowDataMap;
+    typedef ::std::list< OoxHyperlinkData >             OoxHyperlinkList;
+    typedef ::std::list< OoxValidationData >            OoxValidationList;
+    typedef ::std::map< sal_Int32, OoxOleObjectData >   OoxOleObjectDataMap;
+    typedef ::std::map< sal_Int32, OoxFormControlData > OoxFormControlDataMap;
 
     struct XfIdRange
     {
@@ -403,9 +511,9 @@ private:
     void                finalizeValidationRanges() const;
 
     /** Merges all cached merged ranges and updates right/bottom cell borders. */
-    void                finalizeMergedRanges() const;
+    void                finalizeMergedRanges();
     /** Merges the passed merged range and updates right/bottom cell borders. */
-    void                finalizeMergedRange( const CellRangeAddress& rRange ) const;
+    void                finalizeMergedRange( const CellRangeAddress& rRange );
 
     /** Imports the drawing layer of the sheet. */
     void                finalizeDrawing();
@@ -437,10 +545,12 @@ private:
     const OUString      maPositionProp;     /// Property name for cell position.
     const OUString      maSizeProp;         /// Property name for cell size.
     const OUString      maVisibleProp;      /// Property name for column/row visibility.
+    const OUString      maTextWrapProp;     /// Property name for automatic text wrap in cells.
     const OUString      maPageBreakProp;    /// Property name of a page break.
     const OUString      maUrlTextField;     /// Service name for a URL text field.
     const OUString      maUrlProp;          /// Property name for the URL string in a URL text field.
     const OUString      maReprProp;         /// Property name for the URL representation in a URL text field.
+    const OUString      maValidationProp;   /// Property name for data validation settings.
     const CellAddress&  mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
     CellRangeAddress    maDimension;        /// Dimension (used) area of the sheet.
     OoxColumnData       maDefColData;       /// Default column formatting.
@@ -449,15 +559,19 @@ private:
     OoxRowDataMap       maRowDatas;         /// Row data sorted by row index.
     OoxHyperlinkList    maHyperlinks;       /// Cell ranges containing hyperlinks.
     OoxValidationList   maValidations;      /// Cell ranges containing data validation settings.
+    OoxOleObjectDataMap maOleObjects;       /// OLE object data, mapped to VML shape identifier.
+    OoxFormControlDataMap maFormControls;   /// OCX form control data, mapped to VML shape identifier.
     XfIdRangeMap        maXfIdRanges;       /// Collected XF identifiers for cell ranges.
     MergedRangeList     maMergedRanges;     /// Merged cell ranges.
     MergedRangeList     maCenterFillRanges; /// Merged cell ranges from 'center across' or 'fill' alignment.
+    ValueRangeSet       maManualRowHeights; /// Rows that need manual height independent from own settings.
     WorksheetSettings   maSheetSett;        /// Global settings for this sheet.
     SharedFormulaBuffer maSharedFmlas;      /// Buffer for shared formulas in this sheet.
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formattings.
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
+    OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
     ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
@@ -482,10 +596,12 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maPositionProp( CREATE_OUSTRING( "Position" ) ),
     maSizeProp( CREATE_OUSTRING( "Size" ) ),
     maVisibleProp( CREATE_OUSTRING( "IsVisible" ) ),
+    maTextWrapProp( CREATE_OUSTRING( "IsTextWrapped" ) ),
     maPageBreakProp( CREATE_OUSTRING( "IsStartOfNewPage" ) ),
     maUrlTextField( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ),
     maUrlProp( CREATE_OUSTRING( "URL" ) ),
     maReprProp( CREATE_OUSTRING( "Representation" ) ),
+    maValidationProp( CREATE_OUSTRING( "Validation" ) ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
     maSheetSett( *this ),
     maSharedFmlas( *this ),
@@ -739,6 +855,23 @@ void WorksheetData::setDrawingPath( const OUString& rDrawingPath )
     maDrawingPath = rDrawingPath;
 }
 
+void WorksheetData::setVmlDrawingPath( const OUString& rVmlDrawingPath )
+{
+    maVmlDrawingPath = rVmlDrawingPath;
+}
+
+void WorksheetData::setOleObject( const OoxOleObjectData& rOleObjectData )
+{
+    if( rOleObjectData.mnShapeId > 0 )
+        maOleObjects[ rOleObjectData.mnShapeId ] = rOleObjectData;
+}
+
+void WorksheetData::setFormControl( const OoxFormControlData& rFormControlData )
+{
+    if( rFormControlData.mnShapeId > 0 )
+        maFormControls[ rFormControlData.mnShapeId ] = rFormControlData;
+}
+
 void WorksheetData::setBaseColumnWidth( sal_Int32 nWidth )
 {
     // do not modify width, if setDefaultColumnWidth() has been used
@@ -838,6 +971,8 @@ void WorksheetData::initializeWorksheetImport()
 
 void WorksheetData::finalizeWorksheetImport()
 {
+    if( mxRowProgress.get() )
+        mxRowProgress->setPosition( 1.0 );
     finalizeXfIdRanges();
     finalizeHyperlinkRanges();
     finalizeValidationRanges();
@@ -848,6 +983,8 @@ void WorksheetData::finalizeWorksheetImport()
     convertColumns();
     convertRows();
     finalizeDrawing();
+    if( mxFinalProgress.get() )
+        mxFinalProgress->setPosition( 1.0 );
 
     // reset current sheet index in global data
     setCurrentSheetIndex( -1 );
@@ -1000,47 +1137,137 @@ void WorksheetData::finalizeHyperlinkRanges() const
 
 void WorksheetData::finalizeHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const
 {
-    Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY );
     Reference< XCell > xCell = getCell( rAddress );
-    Reference< XText > xText( xCell, UNO_QUERY );
-    // hyperlinks only supported in text cells
-    if( xFactory.is() && xCell.is() && (xCell->getType() == ::com::sun::star::table::CellContentType_TEXT) && xText.is() )
+    if( xCell.is() ) switch( xCell->getType() )
     {
-        // create a URL field object and set its properties
-        Reference< XTextContent > xUrlField( xFactory->createInstance( maUrlTextField ), UNO_QUERY );
-        OSL_ENSURE( xUrlField.is(), "WorksheetData::finalizeHyperlink - cannot create text field" );
-        if( xUrlField.is() )
+        // #i54261# restrict creation of URL field to text cells
+        case ::com::sun::star::table::CellContentType_TEXT:
         {
-            // properties of the URL field
-            PropertySet aPropSet( xUrlField );
-            aPropSet.setProperty( maUrlProp, rUrl );
-            aPropSet.setProperty( maReprProp, xText->getString() );
-            try
+            Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY );
+            Reference< XText > xText( xCell, UNO_QUERY );
+            if( xFactory.is() && xText.is() )
             {
-                // insert the field into the cell
-                xText->setString( OUString() );
-                Reference< XTextRange > xRange( xText->createTextCursor(), UNO_QUERY_THROW );
-                xText->insertTextContent( xRange, xUrlField, sal_False );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( false, "WorksheetData::finalizeHyperlink - cannot insert text field" );
+                // create a URL field object and set its properties
+                Reference< XTextContent > xUrlField( xFactory->createInstance( maUrlTextField ), UNO_QUERY );
+                OSL_ENSURE( xUrlField.is(), "WorksheetData::finalizeHyperlink - cannot create text field" );
+                if( xUrlField.is() )
+                {
+                    // properties of the URL field
+                    PropertySet aPropSet( xUrlField );
+                    aPropSet.setProperty( maUrlProp, rUrl );
+                    aPropSet.setProperty( maReprProp, xText->getString() );
+                    try
+                    {
+                        // insert the field into the cell
+                        xText->setString( OUString() );
+                        Reference< XTextRange > xRange( xText->createTextCursor(), UNO_QUERY_THROW );
+                        xText->insertTextContent( xRange, xUrlField, sal_False );
+                    }
+                    catch( const Exception& )
+                    {
+                        OSL_ENSURE( false, "WorksheetData::finalizeHyperlink - cannot insert text field" );
+                    }
+                }
             }
         }
+        break;
+
+        // fix for #i31050# disabled, HYPERLINK is not able to return numeric value (#i91351#)
+#if 0
+        // #i31050# replace number with HYPERLINK function
+        case ::com::sun::star::table::CellContentType_VALUE:
+        {
+            Reference< XFormulaTokens > xTokens( xCell, UNO_QUERY );
+            OSL_ENSURE( xTokens.is(), "WorksheetHelper::finalizeHyperlink - missing formula interface" );
+            if( xTokens.is() )
+            {
+                SimpleFormulaContext aContext( xTokens, false, false );
+                getFormulaParser().convertNumberToHyperlink( aContext, rUrl, xCell->getValue() );
+            }
+        }
+        break;
+#endif
+
+        default:;
     }
 }
 
 void WorksheetData::finalizeValidationRanges() const
 {
-    ValidationPropertyHelper& rPropHelper = getValidationPropertyHelper();
     for( OoxValidationList::const_iterator aIt = maValidations.begin(), aEnd = maValidations.end(); aIt != aEnd; ++aIt )
     {
         PropertySet aPropSet( getCellRangeList( aIt->maRanges ) );
-        rPropHelper.writeValidationProperties( aPropSet, *aIt );
+
+        Reference< XPropertySet > xValidation;
+        if( aPropSet.getProperty( xValidation, maValidationProp ) && xValidation.is() )
+        {
+            PropertySet aValProps( xValidation );
+            namespace csss = ::com::sun::star::sheet;
+
+            // convert validation type to API enum
+            ValidationType eType = csss::ValidationType_ANY;
+            switch( aIt->mnType )
+            {
+                case XML_custom:        eType = csss::ValidationType_CUSTOM;    break;
+                case XML_date:          eType = csss::ValidationType_DATE;      break;
+                case XML_decimal:       eType = csss::ValidationType_DECIMAL;   break;
+                case XML_list:          eType = csss::ValidationType_LIST;      break;
+                case XML_none:          eType = csss::ValidationType_ANY;       break;
+                case XML_textLength:    eType = csss::ValidationType_TEXT_LEN;  break;
+                case XML_time:          eType = csss::ValidationType_TIME;      break;
+                case XML_whole:         eType = csss::ValidationType_WHOLE;     break;
+                default:    OSL_ENSURE( false, "WorksheetData::finalizeValidationRanges - unknown validation type" );
+            }
+            aValProps.setProperty( CREATE_OUSTRING( "Type" ), eType );
+
+            // convert error alert style to API enum
+            ValidationAlertStyle eAlertStyle = csss::ValidationAlertStyle_STOP;
+            switch( aIt->mnErrorStyle )
+            {
+                case XML_information:   eAlertStyle = csss::ValidationAlertStyle_INFO;      break;
+                case XML_stop:          eAlertStyle = csss::ValidationAlertStyle_STOP;      break;
+                case XML_warning:       eAlertStyle = csss::ValidationAlertStyle_WARNING;   break;
+                default:    OSL_ENSURE( false, "WorksheetData::finalizeValidationRanges - unknown error style" );
+            }
+            aValProps.setProperty( CREATE_OUSTRING( "ErrorAlertStyle" ), eAlertStyle );
+
+            // convert dropdown style to API visibility constants
+            sal_Int16 nVisibility = aIt->mbNoDropDown ? csss::TableValidationVisibility::INVISIBLE : csss::TableValidationVisibility::UNSORTED;
+            aValProps.setProperty( CREATE_OUSTRING( "ShowList" ), nVisibility );
+
+            // messages
+            aValProps.setProperty( CREATE_OUSTRING( "ShowInputMessage" ), aIt->mbShowInputMsg );
+            aValProps.setProperty( CREATE_OUSTRING( "InputTitle" ), aIt->maInputTitle );
+            aValProps.setProperty( CREATE_OUSTRING( "InputMessage" ), aIt->maInputMessage );
+            aValProps.setProperty( CREATE_OUSTRING( "ShowErrorMessage" ), aIt->mbShowErrorMsg );
+            aValProps.setProperty( CREATE_OUSTRING( "ErrorTitle" ), aIt->maErrorTitle );
+            aValProps.setProperty( CREATE_OUSTRING( "ErrorMessage" ), aIt->maErrorMessage );
+
+            // allow blank cells
+            aValProps.setProperty( CREATE_OUSTRING( "IgnoreBlankCells" ), aIt->mbAllowBlank );
+
+            try
+            {
+                // condition operator
+                Reference< XSheetCondition > xSheetCond( xValidation, UNO_QUERY_THROW );
+                xSheetCond->setOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
+
+                // condition formulas
+                Reference< XMultiFormulaTokens > xTokens( xValidation, UNO_QUERY_THROW );
+                xTokens->setTokens( 0, aIt->maTokens1 );
+                xTokens->setTokens( 1, aIt->maTokens2 );
+            }
+            catch( Exception& )
+            {
+            }
+
+            // write back validation settings to cell range(s)
+            aPropSet.setProperty( maValidationProp, xValidation );
+        }
     }
 }
 
-void WorksheetData::finalizeMergedRanges() const
+void WorksheetData::finalizeMergedRanges()
 {
     MergedRangeList::const_iterator aIt, aEnd;
     for( aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
@@ -1049,7 +1276,7 @@ void WorksheetData::finalizeMergedRanges() const
         finalizeMergedRange( aIt->maRange );
 }
 
-void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange ) const
+void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange )
 {
     bool bMultiCol = rRange.StartColumn < rRange.EndColumn;
     bool bMultiRow = rRange.StartRow < rRange.EndRow;
@@ -1061,24 +1288,41 @@ void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange ) const
         xMerge->merge( sal_True );
 
         // if merging this range worked (no overlapping merged ranges), update cell borders
-        PropertySet aTopLeft( getCell( CellAddress( mnSheet, rRange.StartColumn, rRange.StartRow ) ) );
-
-        // copy right border of top-right cell to right border of top-left cell
-        if( bMultiCol )
+        Reference< XCell > xTopLeft = getCell( CellAddress( mnSheet, rRange.StartColumn, rRange.StartRow ) );
+        if( xTopLeft.is() )
         {
-            PropertySet aTopRight( getCell( CellAddress( mnSheet, rRange.EndColumn, rRange.StartRow ) ) );
-            BorderLine aLine;
-            if( aTopRight.getProperty( aLine, maRightBorderProp ) )
-                aTopLeft.setProperty( maRightBorderProp, aLine );
-        }
+            PropertySet aTopLeftProp( xTopLeft );
 
-        // copy bottom border of bottom-left cell to bottom border of top-left cell
-        if( bMultiRow )
-        {
-            PropertySet aBottomLeft( getCell( CellAddress( mnSheet, rRange.StartColumn, rRange.EndRow ) ) );
-            BorderLine aLine;
-            if( aBottomLeft.getProperty( aLine, maBottomBorderProp ) )
-                aTopLeft.setProperty( maBottomBorderProp, aLine );
+            // copy right border of top-right cell to right border of top-left cell
+            if( bMultiCol )
+            {
+                PropertySet aTopRightProp( getCell( CellAddress( mnSheet, rRange.EndColumn, rRange.StartRow ) ) );
+                BorderLine aLine;
+                if( aTopRightProp.getProperty( aLine, maRightBorderProp ) )
+                    aTopLeftProp.setProperty( maRightBorderProp, aLine );
+            }
+
+            // copy bottom border of bottom-left cell to bottom border of top-left cell
+            if( bMultiRow )
+            {
+                PropertySet aBottomLeftProp( getCell( CellAddress( mnSheet, rRange.StartColumn, rRange.EndRow ) ) );
+                BorderLine aLine;
+                if( aBottomLeftProp.getProperty( aLine, maBottomBorderProp ) )
+                    aTopLeftProp.setProperty( maBottomBorderProp, aLine );
+            }
+
+            // #i93609# merged range in a single row: test if manual row height is needed
+            if( !bMultiRow )
+            {
+                bool bTextWrap = aTopLeftProp.getBoolProperty( maTextWrapProp );
+                if( !bTextWrap && (xTopLeft->getType() == ::com::sun::star::table::CellContentType_TEXT) )
+                {
+                    Reference< XText > xText( xTopLeft, UNO_QUERY );
+                    bTextWrap = xText.is() && (xText->getString().indexOf( '\x0A' ) >= 0);
+                }
+                if( bTextWrap )
+                    maManualRowHeights.insert( rRange.StartRow );
+            }
         }
     }
     catch( Exception& )
@@ -1126,21 +1370,20 @@ void WorksheetData::convertColumns()
 void WorksheetData::convertColumns( OutlineLevelVec& orColLevels,
         sal_Int32 nFirstCol, sal_Int32 nLastCol, const OoxColumnData& rData )
 {
-    Reference< XTableColumns > xColumns = getColumns( nFirstCol, nLastCol );
-    if( xColumns.is() )
-    {
-        PropertySet aPropSet( xColumns );
-        // column width: convert 'number of characters' to column width in 1/100 mm
-        sal_Int32 nWidth = getUnitConverter().scaleToMm100( rData.mfWidth, UNIT_DIGIT );
-        // macro sheets have double width
-        if( meSheetType == SHEETTYPE_MACROSHEET )
-            nWidth *= 2;
-        if( nWidth > 0 )
-            aPropSet.setProperty( maWidthProp, nWidth );
-        // hidden columns: TODO: #108683# hide columns later?
-        if( rData.mbHidden )
-            aPropSet.setProperty( maVisibleProp, false );
-    }
+    PropertySet aPropSet( getColumns( nFirstCol, nLastCol ) );
+
+    // column width: convert 'number of characters' to column width in 1/100 mm
+    sal_Int32 nWidth = getUnitConverter().scaleToMm100( rData.mfWidth, UNIT_DIGIT );
+    // macro sheets have double width
+    if( meSheetType == SHEETTYPE_MACROSHEET )
+        nWidth *= 2;
+    if( nWidth > 0 )
+        aPropSet.setProperty( maWidthProp, nWidth );
+
+    // hidden columns: TODO: #108683# hide columns later?
+    if( rData.mbHidden )
+        aPropSet.setProperty( maVisibleProp, false );
+
     // outline settings for this column range
     convertOutlines( orColLevels, nFirstCol, rData.mnLevel, rData.mbCollapsed, false );
 }
@@ -1177,23 +1420,30 @@ void WorksheetData::convertRows()
 void WorksheetData::convertRows( OutlineLevelVec& orRowLevels,
         sal_Int32 nFirstRow, sal_Int32 nLastRow, const OoxRowData& rData, double fDefHeight )
 {
-    Reference< XTableRows > xRows = getRows( nFirstRow, nLastRow );
-    if( xRows.is() )
+    // row height: convert points to row height in 1/100 mm
+    double fHeight = (rData.mfHeight >= 0.0) ? rData.mfHeight : fDefHeight;
+    sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
+    if( nHeight > 0 )
     {
-        PropertySet aPropSet( xRows );
-        /*  Row height:
-            -   convert points to row height in 1/100 mm
-            -   ignore rData.mbCustomHeight, Excel does not set optimal height
-                correctly, if a merged cell contains multi-line text.
-         */
-        double fHeight = (rData.mfHeight >= 0.0) ? rData.mfHeight : fDefHeight;
-        sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
-        if( nHeight > 0 )
+        ValueRangeVector aManualRows;
+        if( rData.mbCustomHeight )
+            aManualRows.push_back( ValueRange( nFirstRow, nLastRow ) );
+        else
+            maManualRowHeights.intersect( aManualRows, nFirstRow, nLastRow );
+        for( ValueRangeVector::const_iterator aIt = aManualRows.begin(), aEnd = aManualRows.end(); aIt != aEnd; ++aIt )
+        {
+            PropertySet aPropSet( getRows( aIt->mnFirst, aIt->mnLast ) );
             aPropSet.setProperty( maHeightProp, nHeight );
-        // hidden rows: TODO: #108683# hide rows later?
-        if( rData.mbHidden )
-            aPropSet.setProperty( maVisibleProp, false );
+        }
     }
+
+    // hidden rows: TODO: #108683# hide rows later?
+    if( rData.mbHidden )
+    {
+        PropertySet aPropSet( getRows( nFirstRow, nLastRow ) );
+        aPropSet.setProperty( maVisibleProp, false );
+    }
+
     // outline settings for this row range
     convertOutlines( orRowLevels, nFirstRow, rData.mnLevel, rData.mbCollapsed, true );
 }
@@ -1474,7 +1724,7 @@ void WorksheetHelper::setErrorCell( const Reference< XCell >& rxCell, const OUSt
 void WorksheetHelper::setErrorCell( const Reference< XCell >& rxCell, sal_uInt8 nErrorCode ) const
 {
     Reference< XFormulaTokens > xTokens( rxCell, UNO_QUERY );
-    OSL_ENSURE( xTokens.is(), "WorksheetHelper::setErrorCell - missing cell interface" );
+    OSL_ENSURE( xTokens.is(), "WorksheetHelper::setErrorCell - missing formula interface" );
     if( xTokens.is() )
     {
         SimpleFormulaContext aContext( xTokens, false, false );
@@ -1652,6 +1902,21 @@ void WorksheetHelper::setLabelRanges( const ApiCellRangeList& rColRanges, const 
 void WorksheetHelper::setDrawingPath( const OUString& rDrawingPath )
 {
     mrSheetData.setDrawingPath( rDrawingPath );
+}
+
+void WorksheetHelper::setVmlDrawingPath( const OUString& rVmlDrawingPath )
+{
+    mrSheetData.setVmlDrawingPath( rVmlDrawingPath );
+}
+
+void WorksheetHelper::setOleObject( const OoxOleObjectData& rOleObjectData )
+{
+    mrSheetData.setOleObject( rOleObjectData );
+}
+
+void WorksheetHelper::setFormControl( const OoxFormControlData& rFormControlData )
+{
+    mrSheetData.setFormControl( rFormControlData );
 }
 
 void WorksheetHelper::setBaseColumnWidth( sal_Int32 nWidth )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidepersist.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,7 +163,7 @@ void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
             TimeNodePtr pNode(maTimeNodeList.front());
             OSL_ENSURE( pNode, "pNode" );
 
-            pNode->setNode( rFilterBase.getModel(), xNode, pSlidePtr );
+            pNode->setNode( rFilterBase, xNode, pSlidePtr );
         }
     }
 }

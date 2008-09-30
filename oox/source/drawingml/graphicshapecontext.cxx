@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicshapecontext.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,6 @@
 #include "oox/drawingml/chart/chartspacefragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "tokens.hxx"
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -207,9 +206,8 @@ PresentationOle2006Context::~PresentationOle2006Context()
             {
                 try
                 {
-                    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
                     Reference< io::XInputStream > xInputStream( rFilter.openInputStream( aGraphicURL ), UNO_QUERY_THROW );
-                    Reference< graphic::XGraphicProvider > xGraphicProvider( xMSF->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY_THROW );
+                    Reference< graphic::XGraphicProvider > xGraphicProvider( rFilter.getGlobalFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY_THROW );
                     Sequence< PropertyValue > aArgs( 1 );
                     const OUString sInputStream = CREATE_OUSTRING( "InputStream" );
                     aArgs[ 0 ].Name = sInputStream;

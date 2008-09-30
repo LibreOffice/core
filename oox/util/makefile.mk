@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +47,7 @@ LIB1FILES=	\
     $(SLB)$/token.lib\
     $(SLB)$/helper.lib\
     $(SLB)$/core.lib\
+    $(SLB)$/ole.lib\
     $(SLB)$/ppt.lib\
     $(SLB)$/xls.lib\
     $(SLB)$/vml.lib\

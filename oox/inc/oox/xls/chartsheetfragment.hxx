@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartsheetfragment.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #ifndef OOX_XLS_CHARTSHEETFRAGMENT_HXX
 #define OOX_XLS_CHARTSHEETFRAGMENT_HXX
 
-#include "oox/xls/bifffragmenthandler.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
@@ -77,12 +76,12 @@ class BiffChartsheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffChartsheetFragment(
-                            const WorkbookHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rParent,
                             ISegmentProgressBarRef xProgressBar,
                             sal_Int32 nSheet );
 
     /** Imports the entire sheet fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment( BiffInputStream& rStrm );
+    virtual bool        importFragment();
 };
 
 // ============================================================================

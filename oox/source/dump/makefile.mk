@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.4.20.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,12 +44,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =								\
-        $(SLO)$/biffdumper.obj			\
-        $(SLO)$/dffdumper.obj			\
-        $(SLO)$/dumperbase.obj			\
-        $(SLO)$/olestoragedumper.obj	\
-        $(SLO)$/pptxdumper.obj			\
+SLOFILES =							\
+        $(SLO)$/biffdumper.obj		\
+        $(SLO)$/dffdumper.obj		\
+        $(SLO)$/dumperbase.obj		\
+        $(SLO)$/oledumper.obj		\
+        $(SLO)$/pptxdumper.obj		\
         $(SLO)$/xlsbdumper.obj
 
 # --- Targets -------------------------------------------------------

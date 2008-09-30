@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetbuffer.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
-#include <comphelper/processfactory.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -54,8 +52,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::com::sun::star::sheet::XSpreadsheets;
 using ::com::sun::star::sheet::XSpreadsheet;
 using ::com::sun::star::sheet::XExternalSheetName;
@@ -93,8 +89,6 @@ WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maIsVisibleProp( CREATE_OUSTRING( "IsVisible" ) )
 {
-    // character classification service for conversion to valid sheet names
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
 }
 
 void WorksheetBuffer::initializeSingleSheet()

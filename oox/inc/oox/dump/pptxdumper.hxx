@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptxdumper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,17 +41,17 @@ namespace pptx {
 
 // ============================================================================
 
-class RootStorageObject : public RootStorageObjectBase
+class RootStorageObject : public StorageObjectBase
 {
 public:
     explicit            RootStorageObject( const DumperBase& rParent );
 
 protected:
     virtual void        implDumpStream(
-                            BinaryInputStreamRef xStrm,
+                            const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSystemFileName );
+                            const ::rtl::OUString& rSysFileName );
 };
 
 // ============================================================================
@@ -60,6 +60,11 @@ class Dumper : public DumperBase
 {
 public:
     explicit            Dumper( const ::oox::core::FilterBase& rFilter );
+
+    explicit            Dumper(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const ::rtl::OUString& rSysFileName );
 
 protected:
     virtual void        implDump();

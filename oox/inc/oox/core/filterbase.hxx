@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterbase.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,9 +85,13 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Returns the service factory passed in the constructor. */
+    /** Returns the arguments passed through the XInitialisation interface. */
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
+                        getArguments() const;
+
+    /** Returns the global service factory passed in the filter constructor. */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                        getServiceFactory() const;
+                        getGlobalFactory() const;
 
     /** Returns the document model. */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&

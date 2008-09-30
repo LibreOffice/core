@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedformulabuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 
 using ::rtl::OUString;
@@ -184,11 +183,11 @@ Reference< XNamedRange > SharedFormulaBuffer::createDefinedName( const BinAddres
         append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
-    Reference< XNamedRange > xNamedRange = getDefinedNames().createDefinedName( aName );
+    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
     PropertySet aNameProps( xNamedRange );
     aNameProps.setProperty( maIsSharedProp, true );
-    sal_Int32 nTokenIndex = getDefinedNames().getTokenIndex( xNamedRange );
-    if( nTokenIndex >= 0 )
+    sal_Int32 nTokenIndex = -1;
+    if( aNameProps.getProperty( nTokenIndex, CREATE_OUSTRING( "TokenIndex" ) ) && (nTokenIndex >= 0) )
         maIndexMap[ rMapKey ] = nTokenIndex;
     return xNamedRange;
 }

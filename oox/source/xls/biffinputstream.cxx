@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffinputstream.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #include "oox/xls/biffinputstream.hxx"
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
-#include "oox/helper/binaryinputstream.hxx"
 
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
@@ -96,7 +95,7 @@ bool BiffInputRecordBuffer::startRecord( sal_Int64 nHeaderPos )
         mrInStrm >> mnRecId >> mnRecSize;
         mnBodyPos = mrInStrm.tell();
         mnNextHeaderPos = mnBodyPos + mnRecSize;
-        mbValidHeader = mnNextHeaderPos <= mrInStrm.getLength();
+        mbValidHeader = !mrInStrm.isEof() && (mnNextHeaderPos <= mrInStrm.getLength());
     }
     if( !mbValidHeader )
     {
@@ -134,7 +133,7 @@ void BiffInputRecordBuffer::read( void* opData, sal_uInt16 nBytes )
     mnRecPos = mnRecPos + nBytes;
 }
 
-inline void BiffInputRecordBuffer::skip( sal_uInt16 nBytes )
+void BiffInputRecordBuffer::skip( sal_uInt16 nBytes )
 {
     OSL_ENSURE( nBytes > 0, "BiffInputRecordBuffer::skip - nothing to skip" );
     OSL_ENSURE( nBytes <= getRecLeft(), "BiffInputRecordBuffer::skip - buffer overflow" );
@@ -149,7 +148,7 @@ void BiffInputRecordBuffer::updateBuffer()
         mrInStrm.seek( mnBodyPos );
         maOriginalData.resize( mnRecSize );
         if( mnRecSize > 0 )
-            mrInStrm.read( &maOriginalData.front(), static_cast< sal_Int32 >( mnRecSize ) );
+            mrInStrm.readMemory( &maOriginalData.front(), static_cast< sal_Int32 >( mnRecSize ) );
         mnBufferBodyPos = mnBodyPos;
         updateDecoded();
     }
@@ -178,13 +177,9 @@ BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup
     mnComplRecSize( 0 ),
     mbHasComplRec( false ),
     mbCont( bContLookup ),
-    mbNulChars( false ),
-    mbValid( false )
+    mbNulChars( false )
 {
-}
-
-BiffInputStream::~BiffInputStream()
-{
+    mbEof = true;   // EOF will be true if stream is not inside a record
 }
 
 // record control -------------------------------------------------------------
@@ -252,36 +247,13 @@ void BiffInputStream::enableDecoder( bool bEnable )
 
 // stream/record state and info -----------------------------------------------
 
-sal_uInt32 BiffInputStream::getRecPos() const
-{
-    return mbValid ? (mnCurrRecSize - maRecBuffer.getRecLeft()) : BIFF_REC_SEEK_TO_END;
-}
-
-sal_uInt32 BiffInputStream::getRecSize()
-{
-    if( !mbHasComplRec )
-    {
-        sal_uInt32 nCurrPos = getRecPos();      // save current position in record
-        while( jumpToNextContinue() );          // jumpToNextContinue() adds up mnCurrRecSize
-        mnComplRecSize = mnCurrRecSize;
-        mbHasComplRec = true;
-        seek( nCurrPos );                       // restore position, seek() resets old mbValid state
-    }
-    return mnComplRecSize;
-}
-
-sal_uInt32 BiffInputStream::getRecLeft()
-{
-    return mbValid ? (getRecSize() - getRecPos()) : 0;
-}
-
 sal_uInt16 BiffInputStream::getNextRecId()
 {
     sal_uInt16 nRecId = BIFF_ID_UNKNOWN;
     if( isInRecord() )
     {
-        sal_uInt32 nCurrPos = getRecPos();      // save current position in record
-        while( jumpToNextContinue() );          // skip following CONTINUE records
+        sal_Int64 nCurrPos = tell();            // save current position in record
+        while( jumpToNextContinue() ) {}        // skip following CONTINUE records
         if( maRecBuffer.startNextRecord() )     // read header of next record
             nRecId = maRecBuffer.getRecId();
         seek( nCurrPos );                       // restore position, seek() resets old mbValid state
@@ -289,27 +261,73 @@ sal_uInt16 BiffInputStream::getNextRecId()
     return nRecId;
 }
 
-sal_Int64 BiffInputStream::getCoreStreamPos() const
+// BinaryStreamBase interface (seeking) ---------------------------------------
+
+bool BiffInputStream::isSeekable() const
 {
-    return maRecBuffer.getCoreStream().tell();
+    return true;
 }
 
-sal_Int64 BiffInputStream::getCoreStreamSize() const
+sal_Int64 BiffInputStream::tell() const
 {
-    return maRecBuffer.getCoreStream().getLength();
+    return mbEof ? -1 : (mnCurrRecSize - maRecBuffer.getRecLeft());
 }
 
-// stream read access ---------------------------------------------------------
-
-sal_uInt32 BiffInputStream::read( void* opData, sal_uInt32 nBytes )
+sal_Int64 BiffInputStream::getLength() const
 {
-    sal_uInt32 nRet = 0;
-    if( mbValid && opData && (nBytes > 0) )
+    if( !mbHasComplRec )
+        const_cast< BiffInputStream* >( this )->calcRecordLength();
+    return mnComplRecSize;
+}
+
+void BiffInputStream::seek( sal_Int64 nRecPos )
+{
+    if( isInRecord() )
     {
-        sal_uInt8* pnBuffer = reinterpret_cast< sal_uInt8* >( opData );
-        sal_uInt32 nBytesLeft = nBytes;
+        if( mbEof || (nRecPos < tell()) )
+            restartRecord( false );
+        if( !mbEof && (nRecPos > tell()) )
+            skip( static_cast< sal_Int32 >( nRecPos - tell() ) );
+    }
+}
 
-        while( mbValid && (nBytesLeft > 0) )
+sal_Int64 BiffInputStream::tellBase() const
+{
+    return maRecBuffer.getBaseStream().tell();
+}
+
+sal_Int64 BiffInputStream::getBaseLength() const
+{
+    return maRecBuffer.getBaseStream().getLength();
+}
+
+// BinaryInputStream interface (stream read access) ---------------------------
+
+sal_Int32 BiffInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+{
+    sal_Int32 nRet = 0;
+    if( !mbEof )
+    {
+        orData.realloc( ::std::max< sal_Int32 >( nBytes, 0 ) );
+        if( nBytes > 0 )
+        {
+            nRet = readMemory( orData.getArray(), nBytes );
+            if( nRet < nBytes )
+                orData.realloc( nRet );
+        }
+    }
+    return nRet;
+}
+
+sal_Int32 BiffInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+{
+    sal_Int32 nRet = 0;
+    if( !mbEof && opMem && (nBytes > 0) )
+    {
+        sal_uInt8* pnBuffer = reinterpret_cast< sal_uInt8* >( opMem );
+        sal_Int32 nBytesLeft = nBytes;
+
+        while( !mbEof && (nBytesLeft > 0) )
         {
             sal_uInt16 nReadSize = getMaxRawReadSize( nBytesLeft );
             // check nReadSize, stream may already be located at end of a raw record
@@ -322,30 +340,16 @@ sal_uInt32 BiffInputStream::read( void* opData, sal_uInt32 nBytes )
             }
             if( nBytesLeft > 0 )
                 jumpToNextContinue();
-            OSL_ENSURE( mbValid, "BiffInputStream::read - record overread" );
+            OSL_ENSURE( !mbEof, "BiffInputStream::readMemory - record overread" );
         }
     }
     return nRet;
 }
 
-// seeking --------------------------------------------------------------------
-
-BiffInputStream& BiffInputStream::seek( sal_uInt32 nRecPos )
+void BiffInputStream::skip( sal_Int32 nBytes )
 {
-    if( isInRecord() )
-    {
-        if( !mbValid || (nRecPos < getRecPos()) )
-            restartRecord( false );
-        if( mbValid && (nRecPos > getRecPos()) )
-            skip( nRecPos - getRecPos() );
-    }
-    return *this;
-}
-
-BiffInputStream& BiffInputStream::skip( sal_uInt32 nBytes )
-{
-    sal_uInt32 nBytesLeft = nBytes;
-    while( mbValid && (nBytesLeft > 0) )
+    sal_Int32 nBytesLeft = nBytes;
+    while( !mbEof && (nBytesLeft > 0) )
     {
         sal_uInt16 nSkipSize = getMaxRawReadSize( nBytesLeft );
         // check nSkipSize, stream may already be located at end of a raw record
@@ -356,9 +360,8 @@ BiffInputStream& BiffInputStream::skip( sal_uInt32 nBytes )
         }
         if( nBytesLeft > 0 )
             jumpToNextContinue();
-        OSL_ENSURE( mbValid, "BiffInputStream::skip - record overread" );
+        OSL_ENSURE( !mbEof, "BiffInputStream::skip - record overread" );
     }
-    return *this;
 }
 
 // byte strings ---------------------------------------------------------------
@@ -369,10 +372,9 @@ OString BiffInputStream::readCharArray( sal_uInt16 nChars )
         return OString();
 
     ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nChars ) );
-    size_t nCharsRead = static_cast< size_t >( read( &aBuffer.front(), nChars ) );
-    aBuffer.resize( nCharsRead );
+    size_t nCharsRead = static_cast< size_t >( readMemory( &aBuffer.front(), nChars ) );
     if( !mbNulChars )
-        ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
+        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
     return OString( &aBuffer.front(), nCharsRead );
 }
 
@@ -399,6 +401,14 @@ void BiffInputStream::skipByteString( bool b16BitLen )
 
 // Unicode strings ------------------------------------------------------------
 
+OUString BiffInputStream::readNulUnicodeArray()
+{
+    OUStringBuffer aBuffer;
+    for( sal_uInt16 nChar = readuInt16(); !mbEof && (nChar > 0); readValue( nChar ) )
+        aBuffer.append( static_cast< sal_Unicode >( nChar ) );
+    return aBuffer.makeStringAndClear();
+}
+
 OUString BiffInputStream::readUnicodeArray( sal_uInt16 nChars )
 {
     OUStringBuffer aBuffer;
@@ -414,7 +424,7 @@ OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16Bit )
     /*  This function has to react on CONTINUE records to read the repeated
         flags field, so readUnicodeArray() cannot be used here. */
     sal_uInt16 nCharsLeft = nChars;
-    while( mbValid && (nCharsLeft > 0) )
+    while( !mbEof && (nCharsLeft > 0) )
     {
         sal_uInt16 nPortionCount = 0;
         if( b16Bit )
@@ -443,7 +453,7 @@ OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16Bit )
 OUString BiffInputStream::readUniString( sal_uInt16 nChars )
 {
     bool b16Bit;
-    sal_uInt32 nAddSize;
+    sal_Int32 nAddSize;
     readUniStringHeader( b16Bit, nAddSize );
     OUString aString = readUniStringChars( nChars, b16Bit );
     skip( nAddSize );
@@ -458,7 +468,7 @@ OUString BiffInputStream::readUniString()
 void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16Bit )
 {
     sal_uInt16 nCharsLeft = nChars;
-    while( mbValid && (nCharsLeft > 0) )
+    while( !mbEof && (nCharsLeft > 0) )
     {
         sal_uInt16 nPortionCount;
         if( b16Bit )
@@ -484,7 +494,7 @@ void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16Bit )
 void BiffInputStream::skipUniString( sal_uInt16 nChars )
 {
     bool b16Bit;
-    sal_uInt32 nAddSize;
+    sal_Int32 nAddSize;
     readUniStringHeader( b16Bit, nAddSize );
     skipUniStringChars( nChars, b16Bit );
     skip( nAddSize );
@@ -497,6 +507,13 @@ void BiffInputStream::skipUniString()
 
 // private --------------------------------------------------------------------
 
+void BiffInputStream::readAtom( void* opMem, sal_uInt8 nSize )
+{
+    // byte swapping is done in calling BinaryInputStream::readValue() template function
+    if( ensureRawReadSize( nSize ) )
+        maRecBuffer.read( opMem, nSize );
+}
+
 void BiffInputStream::setupRecord()
 {
     // initialize class members
@@ -505,8 +522,8 @@ void BiffInputStream::setupRecord()
     mnAltContId = BIFF_ID_UNKNOWN;
     mnCurrRecSize = mnComplRecSize = maRecBuffer.getRecSize();
     mbHasComplRec = !mbCont;
-    mbValid = isInRecord();
     mbNulChars = false;
+    mbEof = !isInRecord();
     // enable decoder in new record
     enableDecoder( true );
 }
@@ -522,7 +539,7 @@ void BiffInputStream::restartRecord( bool bInvalidateRecSize )
             mnComplRecSize = mnCurrRecSize;
             mbHasComplRec = !mbCont;
         }
-        mbValid = true;
+        mbEof = false;
     }
 }
 
@@ -532,7 +549,7 @@ void BiffInputStream::rewindToRecord( sal_Int64 nRecHandle )
     {
         maRecBuffer.restartAt( nRecHandle );
         mnRecHandle = -1;
-        mbValid = false;
+        mbEof = true;   // as long as the record is not started
     }
 }
 
@@ -543,17 +560,17 @@ bool BiffInputStream::isContinueId( sal_uInt16 nRecId ) const
 
 bool BiffInputStream::jumpToNextContinue()
 {
-    mbValid = mbValid && mbCont && isContinueId( maRecBuffer.getNextRecId() ) && maRecBuffer.startNextRecord();
-    if( mbValid )
+    mbEof = mbEof || !mbCont || !isContinueId( maRecBuffer.getNextRecId() ) || !maRecBuffer.startNextRecord();
+    if( !mbEof )
         mnCurrRecSize += maRecBuffer.getRecSize();
-    return mbValid;
+    return !mbEof;
 }
 
 bool BiffInputStream::jumpToNextStringContinue( bool& rb16Bit )
 {
     OSL_ENSURE( maRecBuffer.getRecLeft() == 0, "BiffInputStream::jumpToNextStringContinue - unexpected garbage" );
 
-    if( mbCont && (getRecLeft() > 0) )
+    if( mbCont && (getRemaining() > 0) )
     {
         jumpToNextContinue();
     }
@@ -562,8 +579,8 @@ bool BiffInputStream::jumpToNextStringContinue( bool& rb16Bit )
         /*  CONTINUE handling is off, but we have started reading in a CONTINUE
             record -> start next CONTINUE for TXO import. We really start a new
             record here - no chance to return to string origin. */
-        mbValid = mbValid && (maRecBuffer.getNextRecId() == BIFF_ID_CONT) && maRecBuffer.startNextRecord();
-        if( mbValid )
+        mbEof = mbEof || (maRecBuffer.getNextRecId() != BIFF_ID_CONT) || !maRecBuffer.startNextRecord();
+        if( !mbEof )
             setupRecord();
     }
 
@@ -571,44 +588,53 @@ bool BiffInputStream::jumpToNextStringContinue( bool& rb16Bit )
     sal_uInt8 nFlags;
     readValue( nFlags );
     rb16Bit = getFlag( nFlags, BIFF_STRF_16BIT );
-    return mbValid;
+    return !mbEof;
+}
+
+void BiffInputStream::calcRecordLength()
+{
+    sal_Int64 nCurrPos = tell();            // save current position in record
+    while( jumpToNextContinue() ) {}        // jumpToNextContinue() adds up mnCurrRecSize
+    mnComplRecSize = mnCurrRecSize;
+    mbHasComplRec = true;
+    seek( nCurrPos );                       // restore position, seek() resets old mbValid state
 }
 
 bool BiffInputStream::ensureRawReadSize( sal_uInt16 nBytes )
 {
-    if( mbValid && (nBytes > 0) )
+    if( !mbEof && (nBytes > 0) )
     {
-        while( mbValid && (maRecBuffer.getRecLeft() == 0) ) jumpToNextContinue();
-        mbValid = mbValid && (nBytes <= maRecBuffer.getRecLeft());
-        OSL_ENSURE( mbValid, "BiffInputStream::ensureRawReadSize - record overread" );
+        while( !mbEof && (maRecBuffer.getRecLeft() == 0) ) jumpToNextContinue();
+        mbEof = mbEof || (nBytes > maRecBuffer.getRecLeft());
+        OSL_ENSURE( !mbEof, "BiffInputStream::ensureRawReadSize - record overread" );
     }
-    return mbValid;
+    return !mbEof;
 }
 
-sal_uInt16 BiffInputStream::getMaxRawReadSize( sal_uInt32 nBytes ) const
+sal_uInt16 BiffInputStream::getMaxRawReadSize( sal_Int32 nBytes ) const
 {
-    return static_cast< sal_uInt16 >( ::std::min< sal_uInt32 >( nBytes, maRecBuffer.getRecLeft() ) );
+    return getLimitedValue< sal_uInt16, sal_Int32 >( nBytes, 0, maRecBuffer.getRecLeft() );
 }
 
 void BiffInputStream::appendUnicodeArray( OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16Bit )
 {
     orBuffer.ensureCapacity( orBuffer.getLength() + nChars );
     sal_uInt16 nChar;
-    for( sal_uInt16 nCharIdx = 0; mbValid && (nCharIdx < nChars); ++nCharIdx )
+    for( sal_uInt16 nCharIdx = 0; !mbEof && (nCharIdx < nChars); ++nCharIdx )
     {
         if( b16Bit ) readValue( nChar ); else nChar = readuInt8();
         orBuffer.append( static_cast< sal_Unicode >( (!mbNulChars && (nChar == 0)) ? '?' : nChar ) );
     }
 }
 
-void BiffInputStream::readUniStringHeader( bool& orb16Bit, sal_uInt32& ornAddSize )
+void BiffInputStream::readUniStringHeader( bool& orb16Bit, sal_Int32& ornAddSize )
 {
     sal_uInt8 nFlags = readuInt8();
     OSL_ENSURE( !getFlag( nFlags, BIFF_STRF_UNKNOWN ), "BiffInputStream::readUniStringHeader - unknown flags" );
     orb16Bit = getFlag( nFlags, BIFF_STRF_16BIT );
     sal_uInt16 nFontCount = getFlag( nFlags, BIFF_STRF_RICH ) ? readuInt16() : 0;
-    sal_uInt32 nPhoneticSize = getFlag( nFlags, BIFF_STRF_PHONETIC ) ? readuInt32() : 0;
-    ornAddSize = 4 * nFontCount + nPhoneticSize;
+    sal_Int32 nPhoneticSize = getFlag( nFlags, BIFF_STRF_PHONETIC ) ? readInt32() : 0;
+    ornAddSize = 4 * nFontCount + ::std::max< sal_Int32 >( 0, nPhoneticSize );
 }
 
 // ============================================================================
@@ -616,7 +642,7 @@ void BiffInputStream::readUniStringHeader( bool& orb16Bit, sal_uInt32& ornAddSiz
 BiffInputStreamPos::BiffInputStreamPos( BiffInputStream& rStrm ) :
     mrStrm( rStrm ),
     mnRecHandle( rStrm.getRecHandle() ),
-    mnRecPos( rStrm.getRecPos() )
+    mnRecPos( rStrm.tell() )
 {
 }
 
@@ -625,17 +651,17 @@ bool BiffInputStreamPos::restorePosition()
     bool bValidRec = mrStrm.startRecordByHandle( mnRecHandle );
     if( bValidRec )
         mrStrm.seek( mnRecPos );
-    return bValidRec && mrStrm.isValid();
+    return bValidRec && !mrStrm.isEof();
 }
 
 // ============================================================================
 
-BiffInputStreamGuard::BiffInputStreamGuard( BiffInputStream& rStrm ) :
+BiffInputStreamPosGuard::BiffInputStreamPosGuard( BiffInputStream& rStrm ) :
     BiffInputStreamPos( rStrm )
 {
 }
 
-BiffInputStreamGuard::~BiffInputStreamGuard()
+BiffInputStreamPosGuard::~BiffInputStreamPosGuard()
 {
     restorePosition();
 }

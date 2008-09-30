@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timenodelistcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 

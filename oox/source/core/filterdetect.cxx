@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterdetect.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -311,6 +310,7 @@ Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< X
 FilterDetect::FilterDetect( const Reference< XMultiServiceFactory >& xFactory ) :
     mxFactory( xFactory )
 {
+    OSL_ENSURE( mxFactory.is(), "FilterDetect::FilterDetect - no service factory" );
 }
 
 FilterDetect::~FilterDetect()
@@ -323,9 +323,9 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
     OUString aFilter;
 
-    try
+    if( mxFactory.is() ) try
     {
-        Reference< XFastParser > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
+        Reference< XFastParser > xParser( mxFactory->createInstance(
             CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
 
         xParser->setFastDocumentHandler( new FilterDetectDocHandler( aFilter ) );

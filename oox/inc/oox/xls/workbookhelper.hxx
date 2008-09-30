@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookhelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSpreadsheetDocument; }
     namespace sheet { class XSpreadsheet; }
     namespace sheet { class XNamedRanges; }
+    namespace sheet { class XNamedRange; }
     namespace sheet { class XDatabaseRanges; }
     namespace style { class XStyle; }
 } } }
@@ -58,6 +59,10 @@ namespace oox { namespace core {
     class FilterBase;
     class FragmentHandler;
     class XmlFilterBase;
+} }
+
+namespace oox { namespace drawingml {
+    class Theme;
 } }
 
 namespace oox {
@@ -109,7 +114,6 @@ class AddressConverter;
 class ExcelChartConverter;
 class StylesPropertyHelper;
 class PageSettingsPropertyHelper;
-class ValidationPropertyHelper;
 
 /** Helper class to provice access to global workbook data.
 
@@ -173,12 +177,19 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
                         getStyleObject( const ::rtl::OUString& rStyleName, bool bPageStyle ) const;
 
+    /** Creates and returns a defined name on-the-fly in the Calc document.
+        The name will not be buffered in this defined names buffer.
+        @param orName  (in/out-parameter) Returns the resulting used name. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
+                        createNamedRangeObject(
+                            ::rtl::OUString& orName,
+                            sal_Int32 nNameFlags = 0 ) const;
     /** Creates a com.sun.star.style.Style object and returns its final name. */
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
                         createStyleObject(
                             ::rtl::OUString& orStyleName,
                             bool bPageStyle,
-                            bool bRenameOldExisting = false );
+                            bool bRenameOldExisting = false ) const;
 
     // buffers ----------------------------------------------------------------
 
@@ -190,6 +201,8 @@ public:
     WorksheetBuffer&    getWorksheets() const;
     /** Returns the office theme object read from the theme substorage. */
     ThemeBuffer&        getTheme() const;
+    /** Returns the office theme object reference read from the theme substorage. */
+    ::boost::shared_ptr< ::oox::drawingml::Theme > getThemeRef() const;
     /** Returns all cell formatting objects read from the styles substream. */
     StylesBuffer&       getStyles() const;
     /** Returns the shared strings read from the shared strings substream. */
@@ -222,8 +235,6 @@ public:
     StylesPropertyHelper& getStylesPropertyHelper() const;
     /** Returns the converter for properties related to page and print settings. */
     PageSettingsPropertyHelper& getPageSettingsPropertyHelper() const;
-    /** Returns the converter for properties related to data validation. */
-    ValidationPropertyHelper& getValidationPropertyHelper() const;
 
     // OOX specific -----------------------------------------------------------
 

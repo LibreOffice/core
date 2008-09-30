@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: containerhelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,7 +151,7 @@ public:
                         }
 
     /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
-    inline mapped_type    get( key_type nKey ) const
+    inline mapped_type  get( key_type nKey ) const
                         {
                             if( const mapped_type* pxRef = getRef( nKey ) ) return *pxRef;
                             return mapped_type();
@@ -214,7 +214,7 @@ public:
     typedef typename container_type::iterator           iterator;
     typedef typename container_type::const_iterator     const_iterator;
 
-    inline explicit     Matrix() : mnWidth( 0 ) {};
+    inline explicit     Matrix() : mnWidth( 0 ) {}
     inline explicit     Matrix( size_type nWidth, size_type nHeight ) { this->resize( nWidth, nHeight ); }
     inline explicit     Matrix( size_type nWidth, size_type nHeight, const_reference rData ) { this->resize( nWidth, nHeight, rData ); }
 
@@ -273,7 +273,7 @@ public:
 
     /** Creates a new index container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
-                        createIndexContainer();
+                        createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
 
     /** Inserts an object into an indexed container.
 
@@ -295,7 +295,7 @@ public:
 
     /** Creates a new name container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        createNameContainer();
+                        createNameContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
 
     /** Returns a name that is not used in the passed name container.
 

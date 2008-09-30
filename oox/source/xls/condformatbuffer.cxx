@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: condformatbuffer.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/stylesbuffer.hxx"
-#include "oox/xls/validationpropertyhelper.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -227,8 +226,8 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
 
     // first formula
     OSL_ENSURE( (nFmla1Size >= 0) || ((nFmla2Size == 0) && (nFmla3Size == 0)), "CondFormatRule::importCfRule - missing first formula" );
-    OSL_ENSURE( (nFmla1Size > 0) == (rStrm.getRecLeft() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
-    if( rStrm.getRecLeft() >= 8 )
+    OSL_ENSURE( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
+    if( rStrm.getRemaining() >= 8 )
     {
         TokensFormulaContext aContext( true, false );
         aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
@@ -237,15 +236,15 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
 
         // second formula
         OSL_ENSURE( (nFmla2Size >= 0) || (nFmla3Size == 0), "CondFormatRule::importCfRule - missing second formula" );
-        OSL_ENSURE( (nFmla2Size > 0) == (rStrm.getRecLeft() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
-        if( rStrm.getRecLeft() >= 8 )
+        OSL_ENSURE( (nFmla2Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
+        if( rStrm.getRemaining() >= 8 )
         {
             getFormulaParser().importFormula( aContext, rStrm );
             maOoxData.maFormulas.push_back( aContext );
 
             // third formula
-            OSL_ENSURE( (nFmla3Size > 0) == (rStrm.getRecLeft() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
-            if( rStrm.getRecLeft() >= 8 )
+            OSL_ENSURE( (nFmla3Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
+            if( rStrm.getRemaining() >= 8 )
             {
                 getFormulaParser().importFormula( aContext, rStrm );
                 maOoxData.maFormulas.push_back( aContext );
@@ -469,7 +468,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
     switch( maOoxData.mnType )
     {
         case XML_cellIs:
-            eOperator = ValidationPropertyHelper::convertToApiOperator( maOoxData.mnOperator );
+            eOperator = CondFormatBuffer::convertToApiOperator( maOoxData.mnOperator );
         break;
         case XML_expression:
             eOperator = ::com::sun::star::sheet::ConditionOperator_FORMULA;
@@ -751,6 +750,23 @@ void CondFormatBuffer::importCfHeader( BiffInputStream& rStrm )
 void CondFormatBuffer::finalizeImport()
 {
     maCondFormats.forEachMem( &CondFormat::finalizeImport );
+}
+
+ConditionOperator CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
+{
+    using namespace ::com::sun::star::sheet;
+    switch( nToken )
+    {
+        case XML_between:               return ConditionOperator_BETWEEN;
+        case XML_equal:                 return ConditionOperator_EQUAL;
+        case XML_greaterThan:           return ConditionOperator_GREATER;
+        case XML_greaterThanOrEqual:    return ConditionOperator_GREATER_EQUAL;
+        case XML_lessThan:              return ConditionOperator_LESS;
+        case XML_lessThanOrEqual:       return ConditionOperator_LESS_EQUAL;
+        case XML_notBetween:            return ConditionOperator_NOT_BETWEEN;
+        case XML_notEqual:              return ConditionOperator_NOT_EQUAL;
+    }
+    return ConditionOperator_NONE;
 }
 
 // private --------------------------------------------------------------------

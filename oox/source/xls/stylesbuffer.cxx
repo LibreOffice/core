@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylesbuffer.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -542,13 +542,12 @@ void ColorPalette::importPalette( BiffInputStream& rStrm )
 {
     sal_uInt16 nCount;
     rStrm >> nCount;
-    OSL_ENSURE( rStrm.getRecLeft() == static_cast< sal_uInt32 >( 4 * nCount ),
-        "ColorPalette::importPalette - wrong palette size" );
+    OSL_ENSURE( rStrm.getRemaining() == 4 * nCount, "ColorPalette::importPalette - wrong palette size" );
 
     // fill palette from BIFF_COLOR_USEROFFSET
     mnAppendIndex = BIFF_COLOR_USEROFFSET;
     Color aColor;
-    for( sal_uInt16 nIndex = 0; rStrm.isValid() && (nIndex < nCount); ++nIndex )
+    for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
     {
         aColor.importColorRgb( rStrm );
         appendColor( aColor.getColor( *this ) );
@@ -591,6 +590,26 @@ void ColorPalette::appendColor( sal_Int32 nRGBValue )
 }
 
 // ============================================================================
+
+namespace {
+
+void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDesc, bool bHasGlyphs )
+{
+    if( bHasGlyphs )
+    {
+        rFontName.maName = rFontDesc.Name;
+        rFontName.mnFamily = rFontDesc.Family;
+        rFontName.mnCharSet = rFontDesc.CharSet;
+    }
+    else
+    {
+        rFontName = ApiScriptFontName();
+    }
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
 
 OoxFontData::OoxFontData() :
     mnScheme( XML_none ),
@@ -906,11 +925,11 @@ void Font::importCfRule( BiffInputStream& rStrm )
     sal_uInt16 nWeight, nEscapement;
     sal_uInt8 nUnderline;
 
-    OSL_ENSURE( rStrm.getRecLeft() >= 118, "Font::importCfRule - missing record data" );
-    sal_uInt32 nRecPos = rStrm.getRecPos();
+    OSL_ENSURE( rStrm.getRemaining() >= 118, "Font::importCfRule - missing record data" );
+    sal_Int64 nRecPos = rStrm.tell();
     maOoxData.maName = rStrm.readUniString( rStrm.readuInt8() );
     maUsedFlags.mbNameUsed = maOoxData.maName.getLength() > 0;
-    OSL_ENSURE( rStrm.isValid() && (rStrm.getRecPos() <= nRecPos + 64), "Font::importCfRule - font name too long" );
+    OSL_ENSURE( !rStrm.isEof() && (rStrm.tell() <= nRecPos + 64), "Font::importCfRule - font name too long" );
     rStrm.seek( nRecPos + 64 );
     rStrm >> nHeight >> nStyle >> nWeight >> nEscapement >> nUnderline;
     rStrm.skip( 3 );
@@ -1020,7 +1039,7 @@ void Font::finalizeImport()
             if( xFont.is() )
             {
                 // #91658# CJK fonts
-                maApiData.mbHasAsian =
+                bool bHasAsian =
                     xFont->hasGlyphs( OUString( sal_Unicode( 0x3041 ) ) ) ||    // 3040-309F: Hiragana
                     xFont->hasGlyphs( OUString( sal_Unicode( 0x30A1 ) ) ) ||    // 30A0-30FF: Katakana
                     xFont->hasGlyphs( OUString( sal_Unicode( 0x3111 ) ) ) ||    // 3100-312F: Bopomofo
@@ -1035,7 +1054,7 @@ void Font::finalizeImport()
                     xFont->hasGlyphs( OUString( sal_Unicode( 0xF901 ) ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
                     xFont->hasGlyphs( OUString( sal_Unicode( 0xFF71 ) ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
                 // #113783# CTL fonts
-                maApiData.mbHasCmplx =
+                bool bHasCmplx =
                     xFont->hasGlyphs( OUString( sal_Unicode( 0x05D1 ) ) ) ||    // 0590-05FF: Hebrew
                     xFont->hasGlyphs( OUString( sal_Unicode( 0x0631 ) ) ) ||    // 0600-06FF: Arabic
                     xFont->hasGlyphs( OUString( sal_Unicode( 0x0721 ) ) ) ||    // 0700-074F: Syriac
@@ -1045,9 +1064,13 @@ void Font::finalizeImport()
                     xFont->hasGlyphs( OUString( sal_Unicode( 0xFB51 ) ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
                     xFont->hasGlyphs( OUString( sal_Unicode( 0xFE71 ) ) );      // FE70-FEFF: Arabic Presentation Forms-B
                 // Western fonts
-                maApiData.mbHasWstrn =
-                    (!maApiData.mbHasAsian && !maApiData.mbHasCmplx) ||
+                bool bHasLatin =
+                    (!bHasAsian && !bHasCmplx) ||
                     xFont->hasGlyphs( OUString( sal_Unicode( 'A' ) ) );
+
+                lclSetFontName( maApiData.maLatinFont, maApiData.maDesc, bHasLatin );
+                lclSetFontName( maApiData.maAsianFont, maApiData.maDesc, bHasAsian );
+                lclSetFontName( maApiData.maCmplxFont, maApiData.maDesc, bHasCmplx );
             }
         }
     }
@@ -1678,7 +1701,7 @@ void OoxGradientFillData::readGradientStop( RecordInputStream& rStrm, bool bDxf 
     {
         rStrm >> aColor >> fPosition;
     }
-    if( rStrm.isValid() && (fPosition >= 0.0) )
+    if( !rStrm.isEof() && (fPosition >= 0.0) )
         maColors[ fPosition ] = aColor;
 }
 
@@ -1784,7 +1807,7 @@ void Fill::importFill( RecordInputStream& rStrm )
         rStrm.skip( 16 );
         mxOoxGradData->readGradient( rStrm );
         rStrm >> nStopCount;
-        for( sal_Int32 nStop = 0; (nStop < nStopCount) && rStrm.isValid(); ++nStop )
+        for( sal_Int32 nStop = 0; (nStop < nStopCount) && !rStrm.isEof(); ++nStop )
             mxOoxGradData->readGradientStop( rStrm, false );
     }
     else
@@ -2323,10 +2346,10 @@ void Dxf::importDxf( RecordInputStream& rStrm )
     sal_uInt16 nRecCount;
     rStrm.skip( 4 );    // flags
     rStrm >> nRecCount;
-    for( sal_uInt16 nRec = 0; rStrm.isValid() && (nRec < nRecCount); ++nRec )
+    for( sal_uInt16 nRec = 0; !rStrm.isEof() && (nRec < nRecCount); ++nRec )
     {
         sal_uInt16 nSubRecId, nSubRecSize;
-        sal_Int32 nRecEnd = rStrm.getRecPos();
+        sal_Int64 nRecEnd = rStrm.tell();
         rStrm >> nSubRecId >> nSubRecSize;
         nRecEnd += nSubRecSize;
         switch( nSubRecId )
@@ -2356,7 +2379,7 @@ void Dxf::importDxf( RecordInputStream& rStrm )
         }
         rStrm.seek( nRecEnd );
     }
-    OSL_ENSURE( rStrm.isValid() && (rStrm.getRecLeft() == 0), "Dxf::importDxf - unexpected remaining data" );
+    OSL_ENSURE( !rStrm.isEof() && (rStrm.getRemaining() == 0), "Dxf::importDxf - unexpected remaining data" );
     mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 

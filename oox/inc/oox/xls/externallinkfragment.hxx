@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externallinkfragment.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #ifndef OOX_XLS_EXTERNALLINKFRAGMENT_HXX
 #define OOX_XLS_EXTERNALLINKFRAGMENT_HXX
 
-#include "oox/xls/bifffragmenthandler.hxx"
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 
@@ -39,7 +38,6 @@ namespace oox {
 namespace xls {
 
 class ExternalLink;
-class OoxExternalSheetDataContext;
 
 // ============================================================================
 
@@ -66,8 +64,7 @@ protected:
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
-    ::rtl::Reference< OoxExternalSheetDataContext >
-                        createSheetDataContext( sal_Int32 nSheetId );
+    ContextWrapper      createSheetDataContext( sal_Int32 nSheetId );
 
 private:
     ExternalLink&       mrExtLink;
@@ -83,28 +80,28 @@ class BiffExternalSheetDataContext;
 class BiffExternalLinkFragment : public BiffWorkbookFragmentBase
 {
 public:
-    explicit            BiffExternalLinkFragment( const WorkbookHelper& rHelper, bool bImportDefNames );
+    explicit            BiffExternalLinkFragment( const BiffWorkbookFragmentBase& rParent, bool bImportDefNames );
     virtual             ~BiffExternalLinkFragment();
 
     /** Imports all records related to external links. */
-    virtual bool        importFragment( BiffInputStream& rStrm );
+    virtual bool        importFragment();
 
     /** Tries to import a record related to external links and defined names. */
-    void                importRecord( BiffInputStream& rStrm );
+    void                importRecord();
 
     /** Finalizes buffers related to external links and defined names. */
     void                finalizeImport();
 
 private:
-    void                importExternSheet( BiffInputStream& rStrm );
-    void                importExternalBook( BiffInputStream& rStrm );
-    void                importExternalName( BiffInputStream& rStrm );
-    void                importXct( BiffInputStream& rStrm );
-    void                importCrn( BiffInputStream& rStrm );
-    void                importDefinedName( BiffInputStream& rStrm );
+    void                importExternSheet();
+    void                importExternalBook();
+    void                importExternalName();
+    void                importXct();
+    void                importCrn();
+    void                importDefinedName();
 
 private:
-    typedef ::boost::shared_ptr< BiffExternalSheetDataContext > SheetContextRef;
+    typedef ::boost::shared_ptr< BiffWorksheetContextBase > SheetContextRef;
 
     SheetContextRef     mxContext;
     ExternalLinkRef     mxExtLink;

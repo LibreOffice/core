@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffoutputstream.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  ************************************************************************/
 
 #include "oox/xls/biffoutputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
 
 namespace oox {
 namespace xls {
@@ -63,7 +62,7 @@ void BiffOutputRecordBuffer::endRecord()
     mrOutStrm.seekToEnd();
     mrOutStrm << mnRecId << nRecSize;
     if( nRecSize > 0 )
-        mrOutStrm.write( &maData.front(), nRecSize );
+        mrOutStrm.writeMemory( &maData.front(), nRecSize );
     mbInRec = false;
 }
 
@@ -95,10 +94,6 @@ BiffOutputStream::BiffOutputStream( BinaryOutputStream& rOutStream, sal_uInt16 n
 {
 }
 
-BiffOutputStream::~BiffOutputStream()
-{
-}
-
 // record control -------------------------------------------------------------
 
 void BiffOutputStream::startRecord( sal_uInt16 nRecId )
@@ -109,25 +104,43 @@ void BiffOutputStream::startRecord( sal_uInt16 nRecId )
 
 void BiffOutputStream::endRecord()
 {
+    setPortionSize( 0 );
     maRecBuffer.endRecord();
 }
 
 void BiffOutputStream::setPortionSize( sal_uInt16 nSize )
 {
+    OSL_ENSURE( mnPortionPos == 0, "BiffOutputStream::setPortionSize - block operation inside portion" );
     mnPortionSize = nSize;
     mnPortionPos = 0;
 }
 
-// stream/record state and info -----------------------------------------------
+// BinaryStreamBase interface (seeking) ---------------------------------------
 
-// stream write access --------------------------------------------------------
-
-void BiffOutputStream::write( const void* pData, sal_uInt32 nBytes )
+sal_Int64 BiffOutputStream::tellBase() const
 {
-    if( pData && (nBytes > 0) )
+    return maRecBuffer.getBaseStream().tell();
+}
+
+sal_Int64 BiffOutputStream::getBaseLength() const
+{
+    return maRecBuffer.getBaseStream().getLength();
+}
+
+// BinaryOutputStream interface (stream write access) -------------------------
+
+void BiffOutputStream::writeData( const StreamDataSequence& rData )
+{
+    if( rData.hasElements() )
+        writeMemory( rData.getConstArray(), rData.getLength() );
+}
+
+void BiffOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
+{
+    if( pMem && (nBytes > 0) )
     {
-        const sal_uInt8* pnBuffer = reinterpret_cast< const sal_uInt8* >( pData );
-        sal_uInt32 nBytesLeft = nBytes;
+        const sal_uInt8* pnBuffer = reinterpret_cast< const sal_uInt8* >( pMem );
+        sal_Int32 nBytesLeft = nBytes;
         while( nBytesLeft > 0 )
         {
             sal_uInt16 nBlockSize = prepareRawBlock( nBytesLeft );
@@ -138,9 +151,9 @@ void BiffOutputStream::write( const void* pData, sal_uInt32 nBytes )
     }
 }
 
-void BiffOutputStream::fill( sal_uInt8 nValue, sal_uInt32 nBytes )
+void BiffOutputStream::fill( sal_uInt8 nValue, sal_Int32 nBytes )
 {
-    sal_uInt32 nBytesLeft = nBytes;
+    sal_Int32 nBytesLeft = nBytes;
     while( nBytesLeft > 0 )
     {
         sal_uInt16 nBlockSize = prepareRawBlock( nBytesLeft );
@@ -149,7 +162,19 @@ void BiffOutputStream::fill( sal_uInt8 nValue, sal_uInt32 nBytes )
     }
 }
 
+void BiffOutputStream::writeBlock( const void* pMem, sal_uInt16 nBytes )
+{
+    ensureRawBlock( nBytes );
+    maRecBuffer.write( pMem, nBytes );
+}
+
 // private --------------------------------------------------------------------
+
+void BiffOutputStream::writeAtom( const void* pMem, sal_uInt8 nSize )
+{
+    // byte swapping is done in calling BinaryOutputStream::writeValue() template function
+    writeBlock( pMem, nSize );
+}
 
 void BiffOutputStream::ensureRawBlock( sal_uInt16 nSize )
 {
@@ -161,12 +186,12 @@ void BiffOutputStream::ensureRawBlock( sal_uInt16 nSize )
     }
     if( mnPortionSize > 0 )
     {
-        OSL_ENSURE( mnPortionPos + nSize <= mnPortionSize, "BiffOutputStreamI::ensureRawBlock - portion overflow" );
+        OSL_ENSURE( mnPortionPos + nSize <= mnPortionSize, "BiffOutputStream::ensureRawBlock - portion overflow" );
         mnPortionPos = (mnPortionPos + nSize) % mnPortionSize;  // prevent compiler warning, do not use operator+=, operator%=
     }
 }
 
-sal_uInt16 BiffOutputStream::prepareRawBlock( sal_uInt32 nTotalSize )
+sal_uInt16 BiffOutputStream::prepareRawBlock( sal_Int32 nTotalSize )
 {
     sal_uInt16 nRecLeft = maRecBuffer.getRecLeft();
     if( mnPortionSize > 0 )
@@ -175,7 +200,7 @@ sal_uInt16 BiffOutputStream::prepareRawBlock( sal_uInt32 nTotalSize )
         OSL_ENSURE( nTotalSize % mnPortionSize == 0, "BiffOutputStream::prepareRawBlock - portion size does not match block size" );
         nRecLeft = (nRecLeft / mnPortionSize) * mnPortionSize;
     }
-    sal_uInt16 nSize = getLimitedValue< sal_uInt16, sal_uInt32 >( nTotalSize, 0, nRecLeft );
+    sal_uInt16 nSize = getLimitedValue< sal_uInt16, sal_Int32 >( nTotalSize, 0, nRecLeft );
     ensureRawBlock( nSize );
     return nSize;
 }

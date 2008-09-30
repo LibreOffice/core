@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookhelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +36,10 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -46,6 +48,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/binaryfilterbase.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
@@ -59,7 +62,6 @@
 #include "oox/xls/tablebuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
-#include "oox/xls/validationpropertyhelper.hxx"
 #include "oox/xls/viewsettings.hxx"
 #include "oox/xls/webquerybuffer.hxx"
 #include "oox/xls/workbooksettings.hxx"
@@ -78,8 +80,10 @@ using ::com::sun::star::container::XNameContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::document::XActionLockable;
+using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::com::sun::star::sheet::XSpreadsheet;
+using ::com::sun::star::sheet::XNamedRange;
 using ::com::sun::star::sheet::XNamedRanges;
 using ::com::sun::star::sheet::XDatabaseRanges;
 using ::com::sun::star::style::XStyle;
@@ -88,6 +92,7 @@ using ::oox::core::BinaryFilterBase;
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
+using ::oox::drawingml::Theme;
 
 // Set this define to 1 to show the load/save time of a document in an assertion.
 #define OOX_SHOW_LOADSAVE_TIME 0
@@ -180,8 +185,10 @@ public:
     Reference< XNameContainer > getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
+    /** Creates and returns a defined name on-the-fly in the Calc document. */
+    Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
     /** Creates a com.sun.star.style.Style object and returns its final name. */
-    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting );
+    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const;
 
     // buffers ----------------------------------------------------------------
 
@@ -193,6 +200,8 @@ public:
     inline WorksheetBuffer& getWorksheets() const { return *mxWorksheets; }
     /** Returns the office theme object read from the theme substorage. */
     inline ThemeBuffer& getTheme() const { return *mxTheme; }
+    /** Returns the office theme object reference read from the theme substorage. */
+    inline ::boost::shared_ptr< Theme > getThemeRef() const { return mxTheme; }
     /** Returns all cell formatting objects read from the styles substream. */
     inline StylesBuffer& getStyles() const { return *mxStyles; }
     /** Returns the shared strings read from the shared strings substream. */
@@ -225,8 +234,6 @@ public:
     inline StylesPropertyHelper& getStylesPropertyHelper() const { return *mxStylesPropHlp; }
     /** Returns the converter for properties related to page/print settings. */
     inline PageSettingsPropertyHelper& getPageSettingsPropertyHelper() const { return *mxPageSettPropHlp; }
-    /** Returns the converter for properties related to data validation. */
-    inline ValidationPropertyHelper& getValidationPropertyHelper() const { return *mxValidationPropHlp; }
 
     // OOX specific -----------------------------------------------------------
 
@@ -265,7 +272,7 @@ private:
     typedef ::std::auto_ptr< WorkbookSettings >             WorkbookSettPtr;
     typedef ::std::auto_ptr< ViewSettings >                 ViewSettingsPtr;
     typedef ::std::auto_ptr< WorksheetBuffer >              WorksheetBfrPtr;
-    typedef ::std::auto_ptr< ThemeBuffer >                  ThemeBfrPtr;
+    typedef ::boost::shared_ptr< ThemeBuffer >              ThemeBfrRef;
     typedef ::std::auto_ptr< StylesBuffer >                 StylesBfrPtr;
     typedef ::std::auto_ptr< SharedStringsBuffer >          SharedStrBfrPtr;
     typedef ::std::auto_ptr< ExternalLinkBuffer >           ExtLinkBfrPtr;
@@ -278,7 +285,6 @@ private:
     typedef ::std::auto_ptr< ExcelChartConverter >          ExcelChartConvPtr;
     typedef ::std::auto_ptr< StylesPropertyHelper >         StylesPropHlpPtr;
     typedef ::std::auto_ptr< PageSettingsPropertyHelper >   PageSettPropHlpPtr;
-    typedef ::std::auto_ptr< ValidationPropertyHelper >     ValidationPropHlpPtr;
     typedef ::std::auto_ptr< FormulaParser >                FormulaParserPtr;
 
     OUString            maRefDeviceProp;        /// Property name for reference device.
@@ -300,7 +306,7 @@ private:
     WorkbookSettPtr     mxWorkbookSettings;     /// Global workbook settings.
     ViewSettingsPtr     mxViewSettings;         /// Workbook and sheet view settings.
     WorksheetBfrPtr     mxWorksheets;           /// Sheet info buffer.
-    ThemeBfrPtr         mxTheme;                /// Formatting theme from theme substream.
+    ThemeBfrRef         mxTheme;                /// Formatting theme from theme substream.
     StylesBfrPtr        mxStyles;               /// All cell style objects from styles substream.
     SharedStrBfrPtr     mxSharedStrings;        /// All strings from shared strings substream.
     ExtLinkBfrPtr       mxExtLinks;             /// All external links.
@@ -318,7 +324,6 @@ private:
     // property helpers
     StylesPropHlpPtr    mxStylesPropHlp;        /// Helper for all styles properties.
     PageSettPropHlpPtr  mxPageSettPropHlp;      /// Helper for page/print properties.
-    ValidationPropHlpPtr mxValidationPropHlp;   /// Helper for data validation properties.
 
     // OOX specific
     XmlFilterBase*      mpOoxFilter;            /// Base OOX filter object.
@@ -422,7 +427,29 @@ Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bo
     return xStyle;
 }
 
-Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting )
+Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
+{
+    // find an unused name
+    Reference< XNamedRanges > xNamedRanges = getNamedRanges();
+    Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY );
+    if( xNameAccess.is() )
+        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+
+    // create the name and insert it into the Calc document
+    Reference< XNamedRange > xNamedRange;
+    if( xNamedRanges.is() && (orName.getLength() > 0) ) try
+    {
+        xNamedRanges->addNewByName( orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
+        xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xNamedRange.is(), "WorkbookData::createNamedRangeObject - cannot create defined name" );
+    return xNamedRange;
+}
+
+Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
 {
     Reference< XStyle > xStyle;
     Reference< XNameContainer > xStylesNC = getStyleFamily( bPageStyle );
@@ -548,7 +575,6 @@ void WorkbookData::initialize( bool bWorkbookFile )
 
     mxStylesPropHlp.reset( new StylesPropertyHelper( *this ) );
     mxPageSettPropHlp.reset( new PageSettingsPropertyHelper( *this ) );
-    mxValidationPropHlp.reset( new ValidationPropertyHelper( *this ) );
 
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
@@ -712,7 +738,12 @@ Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, 
     return mrBookData.getStyleObject( rStyleName, bPageStyle );
 }
 
-Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting )
+Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
+{
+    return mrBookData.createNamedRangeObject( orName, nNameFlags );
+}
+
+Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
 {
     return mrBookData.createStyleObject( orStyleName, bPageStyle, bRenameOldExisting );
 }
@@ -737,6 +768,11 @@ WorksheetBuffer& WorkbookHelper::getWorksheets() const
 ThemeBuffer& WorkbookHelper::getTheme() const
 {
     return mrBookData.getTheme();
+}
+
+::boost::shared_ptr< Theme > WorkbookHelper::getThemeRef() const
+{
+    return mrBookData.getThemeRef();
 }
 
 StylesBuffer& WorkbookHelper::getStyles() const
@@ -806,11 +842,6 @@ StylesPropertyHelper& WorkbookHelper::getStylesPropertyHelper() const
 PageSettingsPropertyHelper& WorkbookHelper::getPageSettingsPropertyHelper() const
 {
     return mrBookData.getPageSettingsPropertyHelper();
-}
-
-ValidationPropertyHelper& WorkbookHelper::getValidationPropertyHelper() const
-{
-    return mrBookData.getValidationPropertyHelper();
 }
 
 // OOX specific ---------------------------------------------------------------

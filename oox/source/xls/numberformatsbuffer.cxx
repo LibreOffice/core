@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numberformatsbuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +39,9 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
 using ::rtl::OString;
@@ -1950,10 +1950,8 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
     // get the current locale
     try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > xConfigProv(
-            xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ),
-            UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xConfigProv( getBaseFilter().getGlobalFactory()->createInstance(
+            CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ), UNO_QUERY_THROW );
 
         // try user-defined locale setting
         Sequence< Any > aArgs( 1 );
@@ -2016,8 +2014,8 @@ void NumberFormatsBuffer::importFormat( BiffInputStream& rStrm )
             aFmtCode = rStrm.readByteString( false, getTextEncoding() );
         break;
         case BIFF4:
-            // in BIFF4 the index field exists, but is undefined
-            aFmtCode = rStrm.skip( 2 ).readByteString( false, getTextEncoding() );
+            rStrm.skip( 2 );    // in BIFF4 the index field exists, but is undefined
+            aFmtCode = rStrm.readByteString( false, getTextEncoding() );
         break;
         case BIFF5:
             mnNextBiffIndex = rStrm.readuInt16();

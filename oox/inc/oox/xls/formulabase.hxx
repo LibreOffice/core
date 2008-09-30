@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulabase.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +36,12 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace sheet { class XFormulaTokens; }
+    namespace sheet { class XFormulaOpCodeMapper; }
 } } }
 
 namespace oox { template< typename Type > class Matrix; }
@@ -216,12 +218,13 @@ const sal_uInt16 OOBIN_FUNC_FALSE               = 35;       /// OOBIN function i
 const sal_uInt16 OOBIN_FUNC_ROWS                = 76;       /// OOBIN function id of the ROWS function.
 const sal_uInt16 OOBIN_FUNC_COLUMNS             = 77;       /// OOBIN function id of the COLUMNS function.
 const sal_uInt16 OOBIN_FUNC_OFFSET              = 78;       /// OOBIN function id of the OFFSET function.
-const sal_uInt16 OOBIN_FUNC_EXTERNCALL          = 255;      /// OOBIN function id of the EXTERN.CALL function.
 const sal_uInt16 OOBIN_FUNC_FLOOR               = 285;      /// OOBIN function id of the FLOOR function.
 const sal_uInt16 OOBIN_FUNC_CEILING             = 288;      /// OOBIN function id of the CEILING function.
+const sal_uInt16 OOBIN_FUNC_HYPERLINK           = 359;      /// OOBIN function id of the HYPERLINK function.
 const sal_uInt16 OOBIN_FUNC_WEEKNUM             = 465;      /// OOBIN function id of the WEEKNUM function.
 
 const sal_uInt16 BIFF_FUNC_SUM                  = 4;        /// BIFF function id of the SUM function.
+const sal_uInt16 BIFF_FUNC_EXTERNCALL           = 255;      /// BIFF function id of the EXTERN.CALL function.
 
 // reference helpers ==========================================================
 
@@ -257,14 +260,61 @@ struct BinComplexRef2d
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
 
+// token vector, sequence =====================================================
+
+typedef ::com::sun::star::sheet::FormulaToken       ApiToken;
+typedef ::com::sun::star::uno::Sequence< ApiToken > ApiTokenSequence;
+
+/** A vector of formula tokens with additional convenience functions. */
+class ApiTokenVector : public ::std::vector< ApiToken >
+{
+public:
+    explicit            ApiTokenVector();
+
+    /** Appends a new token with the passed op-code, returns its data field. */
+    ::com::sun::star::uno::Any&
+                        append( sal_Int32 nOpCode );
+
+    /** Appends a new token with the passed op-code and data. */
+    template< typename Type >
+    inline void         append( sal_Int32 nOpCode, const Type& rData ) { append( nOpCode ) <<= rData; }
+};
+
+// token sequence iterator ====================================================
+
+/** Token sequence iterator that is able to skip space tokens. */
+class ApiTokenIterator
+{
+public:
+    explicit            ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode, bool bSkipSpaces );
+    /** Copy constructor that allows to change the skip spaces mode. */
+    explicit            ApiTokenIterator( const ApiTokenIterator& rIter, bool bSkipSpaces );
+
+    inline bool         is() const { return mpToken != mpTokenEnd; }
+    inline const ApiToken* get() const { return mpToken; }
+    inline const ApiToken* operator->() const { return mpToken; }
+    inline const ApiToken& operator*() const { return *mpToken; }
+
+    ApiTokenIterator&   operator++();
+
+private:
+    void                skipSpaces();
+
+private:
+    const ApiToken*     mpToken;            /// Pointer to current token of the token sequence.
+    const ApiToken*     mpTokenEnd;         /// Pointer behind last token of the token sequence.
+    const sal_Int32     mnSpacesOpCode;     /// Op-code for whitespace tokens.
+    const bool          mbSkipSpaces;       /// true = Skip whitespace tokens.
+};
+
 // list of API op-codes =======================================================
 
 /** Contains all API op-codes needed to build formulas with tokens. */
 struct ApiOpCodes
 {
     // special
-    sal_Int32           OPCODE_EXTERNAL;        /// External function call (e.g. add-ins).
     sal_Int32           OPCODE_UNKNOWN;         /// Internal: function name unknown to mapper.
+    sal_Int32           OPCODE_EXTERNAL;        /// External function call (e.g. add-ins).
     // formula structure
     sal_Int32           OPCODE_PUSH;            /// Op-code for common value operands.
     sal_Int32           OPCODE_MISSING;         /// Placeholder for a missing function parameter.
@@ -274,7 +324,7 @@ struct ApiOpCodes
     sal_Int32           OPCODE_NLR;             /// Natural language reference.
     sal_Int32           OPCODE_DDE;             /// DDE link function.
     sal_Int32           OPCODE_MACRO;           /// Macro function call.
-    sal_Int32           OPCODE_BAD;             /// Bad token (formula error).
+    sal_Int32           OPCODE_BAD;             /// Bad token (unknown name, formula error).
     sal_Int32           OPCODE_NONAME;          /// Function style #NAME? error.
     // separators
     sal_Int32           OPCODE_OPEN;            /// Opening parenthesis.
@@ -331,7 +381,7 @@ struct FunctionInfo
 {
     ::rtl::OUString     maOdfFuncName;      /// ODF function name.
     ::rtl::OUString     maOoxFuncName;      /// OOXML function name.
-    ::rtl::OUString     maExternCallName;   /// Expected name in EXTERN.CALL function.
+    ::rtl::OUString     maBiffMacroName;    /// Expected macro name in EXTERN.CALL function.
     ::rtl::OUString     maExtProgName;      /// Programmatic function name for external functions.
     sal_Int32           mnApiOpCode;        /// API function opcode.
     sal_uInt16          mnOobFuncId;        /// OOBIN function identifier.
@@ -341,6 +391,9 @@ struct FunctionInfo
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
     const sal_uInt8*    mpnParamClass;      /// Expected BIFF token classes of parameters.
     bool                mbVolatile;         /// True = volatile function.
+    bool                mbExternal;         /// True = external function in Calc.
+    bool                mbMacroFunc;        /// True = macro sheet function or command.
+    bool                mbVarParam;         /// True = use a tFuncVar token, also if min/max are equal.
 };
 
 // function info parameter class iterator =====================================
@@ -369,32 +422,21 @@ private:
     const sal_uInt8*    mpnParamClassEnd;
 };
 
-// function provider ==========================================================
-
-typedef ::com::sun::star::sheet::FormulaToken       ApiToken;
-typedef ::com::sun::star::uno::Sequence< ApiToken > ApiTokenSequence;
+// base function provider =====================================================
 
 class FunctionProviderImpl;
+namespace { struct FunctionData; }
 
-/** Provides access to function info structs for all available functions.
+/** Provides access to function info structs for all available sheet functions.
  */
-class FunctionProvider : public ApiOpCodes  // not derived from WorkbookHelper to make it usable in BIFF dumper
+class FunctionProvider  // not derived from WorkbookHelper to make it usable in file dumpers
 {
 public:
-    explicit            FunctionProvider( const WorkbookHelper& rHelper );
+    explicit            FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter );
+    virtual             ~FunctionProvider();
 
-    explicit            FunctionProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& rxDocument,
-                            bool bImportFilter );
-
-    explicit            FunctionProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& rxDocument,
-                            BiffType eBiff, bool bImportFilter );
-
-                        ~FunctionProvider();
-
-    /** Returns the function info for an API token, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
+    /** Returns the function info for an ODF function name, or 0 on error. */
+    const FunctionInfo* getFuncInfoFromOdfFuncName( const ::rtl::OUString& rFuncName ) const;
 
     /** Returns the function info for an OOX function name, or 0 on error. */
     const FunctionInfo* getFuncInfoFromOoxFuncName( const ::rtl::OUString& rFuncName ) const;
@@ -405,43 +447,83 @@ public:
     /** Returns the function info for a BIFF function index, or 0 on error. */
     const FunctionInfo* getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const;
 
-    /** Returns the function info for a specific function expressed by the
+    /** Returns the function info for a macro function referred by the
         EXTERN.CALL function, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromExternCallName( const ::rtl::OUString& rExtCallName ) const;
+    const FunctionInfo* getFuncInfoFromMacroName( const ::rtl::OUString& rFuncName ) const;
+
+protected:
+    typedef RefVector< FunctionInfo >               FuncVector;
+    typedef RefMap< ::rtl::OUString, FunctionInfo > FuncNameMap;
+    typedef RefMap< sal_uInt16, FunctionInfo >      FuncIdMap;
+
+    typedef ::boost::shared_ptr< FuncVector >       FuncVectorRef;
+    typedef ::boost::shared_ptr< FuncNameMap >      FuncNameMapRef;
+    typedef ::boost::shared_ptr< FuncIdMap >        FuncIdMapRef;
+
+    /** Returns the list of all function infos. */
+    inline const FuncVector& getFuncs() const { return *mxFuncs; }
+
+private:
+    /** Creates and inserts a function info struct from the passed function data. */
+    void                initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam );
+
+    /** Initializes the members from the passed function data list. */
+    void                initFuncs(
+                            const FunctionData* pBeg, const FunctionData* pEnd,
+                            sal_uInt8 nMaxParam, bool bImportFilter );
+
+private:
+    FuncVectorRef       mxFuncs;            /// All function infos in one list.
+    FuncNameMapRef      mxOdfFuncs;         /// Maps ODF function names to function data.
+    FuncNameMapRef      mxOoxFuncs;         /// Maps OOXML function names to function data.
+    FuncIdMapRef        mxOobFuncs;         /// Maps OOBIN function indexes to function data.
+    FuncIdMapRef        mxBiffFuncs;        /// Maps BIFF function indexes to function data.
+    FuncNameMapRef      mxMacroFuncs;       /// Maps macro function names to function data.
+};
+
+// op-code and function provider ==============================================
+
+/** Provides access to API op-codes for all available formula tokens and to
+    function info structs for all available sheet functions.
+ */
+class OpCodeProvider : public ApiOpCodes, public FunctionProvider, public WorkbookHelper
+{
+public:
+    explicit            OpCodeProvider( const WorkbookHelper& rHelper );
+    virtual             ~OpCodeProvider();
+
+    /** Returns the function info for an API token, or 0 on error. */
+    const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
 
     /** Returns the op-code map that is used by the OOX formula parser. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >
                         getOoxParserMap() const;
 
 private:
-    ::std::auto_ptr< FunctionProviderImpl > mxImpl;
-};
+    typedef ::std::map< ::rtl::OUString, ApiToken >                                             ApiTokenMap;
+    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >   OpCodeEntrySequence;
+    typedef ::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >                     OpCodeEntryVector;
 
-// token sequence iterator ====================================================
+    static bool         fillEntrySeq( OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
+    static bool         fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
+    bool                fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper ) const;
 
-/** Token sequence iterator that is able to skip space tokens. */
-class ApiTokenIterator
-{
-public:
-    explicit            ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode, bool bSkipSpaces );
-    /** Copy constructor that allows to change the skip spaces mode. */
-    explicit            ApiTokenIterator( const ApiTokenIterator& rIter, bool bSkipSpaces );
+    static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const ::rtl::OUString& rOdfName, const ::rtl::OUString& rOoxName );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName );
 
-    inline bool         is() const { return mpToken != mpTokenEnd; }
-    inline const ApiToken* get() const { return mpToken; }
-    inline const ApiToken* operator->() const { return mpToken; }
-    inline const ApiToken& operator*() const { return *mpToken; }
-
-    ApiTokenIterator&   operator++();
+    bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
+    bool                initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap );
 
 private:
-    void                skipSpaces();
+    typedef RefMap< sal_Int32, FunctionInfo >           OpCodeFuncMap;
+    typedef ::boost::shared_ptr< OpCodeFuncMap >        OpCodeFuncMapRef;
+    typedef ::boost::shared_ptr< OpCodeEntryVector >    OpCodeEntryVectorRef;
 
-private:
-    const ApiToken*     mpToken;            /// Pointer to current token of the token sequence.
-    const ApiToken*     mpTokenEnd;         /// Pointer behind last token of the token sequence.
-    const sal_Int32     mnSpacesOpCode;     /// Op-code for whitespace tokens.
-    const bool          mbSkipSpaces;       /// true = Skip whitespace tokens.
+    OpCodeFuncMapRef    mxOpCodeFuncs;      /// Maps API op-codes to function data.
+    FuncNameMapRef      mxExtProgFuncs;     /// Maps programmatical API function names to function data.
+    OpCodeEntryVectorRef mxParserMap;       /// OOXML token mapping for formula parser service.
 };
 
 // formula contexts ===========================================================
@@ -509,7 +591,7 @@ private:
 // formula parser/formula compiler base class =================================
 
 /** Base class for import formula parsers and export formula compilers. */
-class FormulaProcessorBase : public WorkbookHelper
+class FormulaProcessorBase : public OpCodeProvider
 {
 public:
     explicit            FormulaProcessorBase( const WorkbookHelper& rHelper );
@@ -682,8 +764,7 @@ public:
                             sal_Unicode cStringSep,
                             bool bTrimLeadingSpaces ) const;
 
-protected:
-    FunctionProvider    maFuncProv;         /// Provides info structs for all functions.
+private:
     const ::rtl::OUString maAbsNameProp;    /// Property name for absolute name of cells and ranges.
 };
 

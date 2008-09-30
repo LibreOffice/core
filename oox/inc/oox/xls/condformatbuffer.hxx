@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: condformatbuffer.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #ifndef OOX_XLS_CONDFORMATBUFFER_HXX
 #define OOX_XLS_CONDFORMATBUFFER_HXX
 
+#include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheethelper.hxx"
@@ -175,6 +176,10 @@ public:
 
     /** Creates all conditional formattings in the Calc document. */
     void                finalizeImport();
+
+    /** Converts an OOXML condition operator token to the API constant. */
+    static ::com::sun::star::sheet::ConditionOperator
+                        convertToApiOperator( sal_Int32 nToken );
 
 private:
     CondFormatRef       createCondFormat();

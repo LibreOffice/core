@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timenode.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +70,10 @@ namespace oox { namespace ppt {
         void setId( sal_Int32 nId );
         const ::rtl::OUString & getId() const { return msId; }
 
-        void addNode( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode,
-                                    const SlidePersistPtr & slide);
+        void addNode(
+            const ::oox::core::XmlFilterBase& rFilter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode,
+            const SlidePersistPtr & slide);
         // data setters
         void setTo( const ::com::sun::star::uno::Any & aTo );
         void setFrom( const ::com::sun::star::uno::Any & aFrom );
@@ -80,8 +81,10 @@ namespace oox { namespace ppt {
         void setTransitionFilter( const SlideTransition & aTransition)
             { maTransitionFilter = aTransition; }
 
-        void setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const SlidePersistPtr & pSlide );
+        void setNode(
+            const ::oox::core::XmlFilterBase& rFilter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
+            const SlidePersistPtr & pSlide );
 
         AnimTargetElementPtr getTarget()
             {
@@ -105,9 +108,10 @@ namespace oox { namespace ppt {
         static rtl::OUString getServiceName( sal_Int16 nNodeType );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
-        createAndInsert( const rtl::OUString& rServiceName,
-                                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                                         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode );
+        createAndInsert(
+            const ::oox::core::XmlFilterBase& rFilter,
+            const rtl::OUString& rServiceName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode );
 
     private:
         const sal_Int16 mnNodeType;

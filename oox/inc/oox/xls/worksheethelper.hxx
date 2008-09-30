@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheethelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,8 @@ enum WorksheetType
     SHEETTYPE_CHARTSHEET,           /// Chart sheet.
     SHEETTYPE_MACROSHEET,           /// Macro sheet.
     SHEETTYPE_DIALOGSHEET,          /// Dialog sheet (BIFF5+).
-    SHEETTYPE_MODULESHEET           /// VB module sheet (BIFF5 only).
+    SHEETTYPE_MODULESHEET,          /// VB module sheet (BIFF5 only).
+    SHEETTYPE_EMPTYSHEET            /// Other (unsupported) sheet type.
 };
 
 // ============================================================================
@@ -172,6 +173,7 @@ struct OoxHyperlinkData
     ::rtl::OUString     maTarget;
     ::rtl::OUString     maLocation;
     ::rtl::OUString     maDisplay;
+    ::rtl::OUString     maFrame;
     ::rtl::OUString     maTooltip;
 
     explicit            OoxHyperlinkData();
@@ -205,6 +207,33 @@ struct OoxValidationData
     void                setBinOperator( sal_uInt8 nOperator );
     /** Sets the passed OOBIN or BIFF error style. */
     void                setBinErrorStyle( sal_uInt8 nErrorStyle );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Stores data about embedded objects. */
+struct OoxOleObjectData
+{
+    ::rtl::OUString     maProgId;
+    ::rtl::OUString     maStoragePath;
+    sal_Int32           mnAspect;
+    sal_Int32           mnUpdateMode;
+    sal_Int32           mnShapeId;
+    bool                mbAutoLoad;
+
+    explicit            OoxOleObjectData();
+};
+
+// ----------------------------------------------------------------------------
+
+/** Stores data about embedded form controls. */
+struct OoxFormControlData
+{
+    ::rtl::OUString     maStoragePath;
+    ::rtl::OUString     maName;
+    sal_Int32           mnShapeId;
+
+    explicit            OoxFormControlData();
 };
 
 // ============================================================================
@@ -362,6 +391,12 @@ public:
                             const ApiCellRangeList& rRowRanges );
     /** Sets the path to the DrawingML fragment of this sheet. */
     void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
+    /** Sets the path to the legacy VML drawing fragment of this sheet. */
+    void                setVmlDrawingPath( const ::rtl::OUString& rVmlDrawingPath );
+    /** Sets additional data for an OLE object. */
+    void                setOleObject( const OoxOleObjectData& rOleObjectData );
+    /** Sets additional data for an OCX form control. */
+    void                setFormControl( const OoxFormControlData& rFormControlData );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */

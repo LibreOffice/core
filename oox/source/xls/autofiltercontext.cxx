@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofiltercontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,11 +29,7 @@
  ************************************************************************/
 
 #include "oox/xls/autofiltercontext.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/xls/addressconverter.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -44,6 +40,10 @@
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
+#include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/core/filterbase.hxx"
+#include "oox/xls/addressconverter.hxx"
 
 #define DEBUG_OOX_AUTOFILTER 0
 
@@ -80,7 +80,6 @@ using ::com::sun::star::sheet::XDatabaseRanges;
 using ::com::sun::star::sheet::XSheetFilterDescriptor;
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::com::sun::star::i18n::XLocaleData;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::Locale;
 
 namespace oox {
@@ -704,8 +703,7 @@ void OoxAutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
         case XML_equal:
         case XML_notEqual:
         {
-            Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            Reference< XLocaleData > xLocale( xFactory->createInstance(
+            Reference< XLocaleData > xLocale( getBaseFilter().getGlobalFactory()->createInstance(
                 CREATE_OUSTRING("com.sun.star.i18n.LocaleData") ), UNO_QUERY );
 
             if ( !xLocale.is() )

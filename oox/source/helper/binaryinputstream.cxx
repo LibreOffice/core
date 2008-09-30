@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryinputstream.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,77 +29,149 @@
  ************************************************************************/
 
 #include "oox/helper/binaryinputstream.hxx"
-#include <com/sun/star/io/XInputStream.hpp>
 #include <osl/diagnose.h>
 #include <string.h>
 
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::io::XInputStream;
+using ::com::sun::star::io::XSeekable;
 
 namespace oox {
 
+const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
+
 // ============================================================================
 
-BinaryInputStream::BinaryInputStream( const Reference< XInputStream >& rxInStrm, bool bAutoClose ) :
-    BinaryStreamBase( rxInStrm ),
+void BinaryInputStream::readAtom( void* opMem, sal_uInt8 nSize )
+{
+    readMemory( opMem, nSize );
+}
+
+// ============================================================================
+
+BinaryXInputStream::BinaryXInputStream( const Reference< XInputStream >& rxInStrm, bool bAutoClose ) :
+    BinaryXSeekableStream( Reference< XSeekable >( rxInStrm, UNO_QUERY ) ),
+    maBuffer( INPUTSTREAM_BUFFERSIZE ),
     mxInStrm( rxInStrm ),
     mbAutoClose( bAutoClose )
 {
+    mbEof = !mxInStrm.is();
 }
 
-BinaryInputStream::~BinaryInputStream()
+BinaryXInputStream::~BinaryXInputStream()
 {
     if( mbAutoClose )
         close();
 }
 
-void BinaryInputStream::skip( sal_Int32 nBytes )
+sal_Int32 BinaryXInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
 {
-    try
+    sal_Int32 nRet = 0;
+    if( !mbEof && (nBytes > 0) ) try
     {
-        OSL_ENSURE( mxInStrm.is(), "BinaryInputStream::skip - invalid call" );
+        OSL_ENSURE( mxInStrm.is(), "BinaryXInputStream::readData - invalid call" );
+        nRet = mxInStrm->readBytes( orData, nBytes );
+        mbEof = nRet != nBytes;
+    }
+    catch( Exception& )
+    {
+        mbEof = true;
+    }
+    return nRet;
+}
+
+sal_Int32 BinaryXInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+{
+    sal_Int32 nRet = 0;
+    if( !mbEof && (nBytes > 0) )
+    {
+        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, INPUTSTREAM_BUFFERSIZE );
+        sal_uInt8* opnMem = reinterpret_cast< sal_uInt8* >( opMem );
+        while( !mbEof && (nBytes > 0) )
+        {
+            sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
+            sal_Int32 nBytesRead = readData( maBuffer, nReadSize );
+            if( nBytesRead > 0 )
+                memcpy( opnMem, maBuffer.getConstArray(), static_cast< size_t >( nBytesRead ) );
+            opnMem += nBytesRead;
+            nBytes -= nBytesRead;
+            nRet += nBytesRead;
+        }
+    }
+    return nRet;
+}
+
+void BinaryXInputStream::skip( sal_Int32 nBytes )
+{
+    if( !mbEof ) try
+    {
+        OSL_ENSURE( mxInStrm.is(), "BinaryXInputStream::skip - invalid call" );
         mxInStrm->skipBytes( nBytes );
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryInputStream::skip - exception caught" );
+        mbEof = true;
     }
 }
 
-sal_Int32 BinaryInputStream::read( Sequence< sal_Int8 >& orBuffer, sal_Int32 nBytes )
-{
-    sal_Int32 nRet = 0;
-    try
-    {
-        OSL_ENSURE( mxInStrm.is(), "BinaryInputStream::read - invalid call" );
-        nRet = mxInStrm->readBytes( orBuffer, nBytes );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "BinaryInputStream::read - stream read error" );
-    }
-    return nRet;
-}
-
-sal_Int32 BinaryInputStream::read( void* opBuffer, sal_Int32 nBytes )
-{
-    sal_Int32 nRet = read( maBuffer, nBytes );
-    if( nRet > 0 )
-        memcpy( opBuffer, maBuffer.getConstArray(), static_cast< size_t >( nRet ) );
-    return nRet;
-}
-
-void BinaryInputStream::close()
+void BinaryXInputStream::close()
 {
     if( mxInStrm.is() ) try
     {
         mxInStrm->closeInput();
+        mxInStrm.clear();
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryInputStream::close - closing input stream failed" );
+        OSL_ENSURE( false, "BinaryXInputStream::close - closing input stream failed" );
+    }
+}
+
+// ============================================================================
+
+SequenceInputStream::SequenceInputStream( StreamDataSequence& rData ) :
+    SequenceSeekableStream( rData )
+{
+}
+
+sal_Int32 SequenceInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+{
+    sal_Int32 nReadBytes = 0;
+    if( !mbEof )
+    {
+        nReadBytes = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mrData.getLength() - mnPos );
+        orData.realloc( nReadBytes );
+        if( nReadBytes > 0 )
+            memcpy( orData.getArray(), mrData.getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
+        mnPos += nReadBytes;
+        mbEof = nReadBytes < nBytes;
+    }
+    return nReadBytes;
+}
+
+sal_Int32 SequenceInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+{
+    sal_Int32 nReadBytes = 0;
+    if( !mbEof )
+    {
+        nReadBytes = ::std::min< sal_Int32 >( nBytes, mrData.getLength() - mnPos );
+        if( nReadBytes > 0 )
+            memcpy( opMem, mrData.getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
+        mnPos += nReadBytes;
+        mbEof = nReadBytes < nBytes;
+    }
+    return nReadBytes;
+}
+
+void SequenceInputStream::skip( sal_Int32 nBytes )
+{
+    if( !mbEof )
+    {
+        sal_Int32 nSkipBytes = ::std::min< sal_Int32 >( nBytes, mrData.getLength() - mnPos );
+        mnPos += nSkipBytes;
+        mbEof = nSkipBytes < nBytes;
     }
 }
 

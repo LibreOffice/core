@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlsbdumper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,10 @@
 
 #include "oox/dump/xlsbdumper.hxx"
 #include <com/sun/star/io/XTextInputStream.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include "oox/dump/biffdumper.hxx"
+#include "oox/dump/oledumper.hxx"
+#include "oox/helper/olestorage.hxx"
+#include "oox/helper/zipstorage.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffhelper.hxx"
 #include "oox/xls/formulabase.hxx"
@@ -41,8 +44,8 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::io::XInputStream;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;
@@ -63,62 +66,9 @@ const sal_uInt8 OOBIN_TOK_ARRAY_STRING          = 1;
 const sal_uInt8 OOBIN_TOK_ARRAY_BOOL            = 2;
 const sal_uInt8 OOBIN_TOK_ARRAY_ERROR           = 4;
 
+const sal_uInt16 OOBIN_OLEOBJECT_LINKED         = 0x0001;
+
 } // namespace
-
-// ============================================================================
-
-RecordStreamInput::RecordStreamInput() :
-    mxStrm( new RecordInputStream( RecordDataSequence() ) )
-{
-}
-
-RecordStreamInput::~RecordStreamInput()
-{
-}
-
-bool RecordStreamInput::implIsValid() const
-{
-    return mxStrm.get() && Input::implIsValid();
-}
-
-void RecordStreamInput::createStream( const RecordDataSequence& rData )
-{
-    mxStrm.reset( new RecordInputStream( rData ) );
-}
-
-sal_Int64 RecordStreamInput::getSize() const
-{
-    return mxStrm->getRecSize();
-}
-
-sal_Int64 RecordStreamInput::tell() const
-{
-    return mxStrm->getRecPos();
-}
-
-void RecordStreamInput::seek( sal_Int64 nPos )
-{
-    mxStrm->seek( static_cast< sal_Int32 >( nPos ) );
-}
-
-void RecordStreamInput::skip( sal_Int32 nBytes )
-{
-    mxStrm->skip( nBytes );
-}
-
-sal_Int32 RecordStreamInput::read( void* pBuffer, sal_Int32 nSize )
-{
-    return mxStrm->read( pBuffer, nSize );
-}
-
-RecordStreamInput& RecordStreamInput::operator>>( sal_Int8& rnData )   { *mxStrm >> rnData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( sal_uInt8& rnData )  { *mxStrm >> rnData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( sal_Int16& rnData )  { *mxStrm >> rnData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( sal_uInt16& rnData ) { *mxStrm >> rnData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( sal_Int32& rnData )  { *mxStrm >> rnData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( sal_uInt32& rnData ) { *mxStrm >> rnData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( float& rfData )      { *mxStrm >> rfData; return *this; }
-RecordStreamInput& RecordStreamInput::operator>>( double& rfData )     { *mxStrm >> rfData; return *this; }
 
 // ============================================================================
 
@@ -130,11 +80,12 @@ RecordObjectBase::~RecordObjectBase()
 {
 }
 
-void RecordObjectBase::construct( const OutputObjectBase& rParent )
+void RecordObjectBase::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    mxStrmIn.reset( new RecordStreamInput );
-    InputObjectBase::construct( rParent, mxStrmIn );
-    constructRecObjBase();
+    mxStrm.reset( new RecordInputStream( getRecordDataSequence() ) );
+    SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, mxStrm, "RECORD-NAMES", "SIMPLE-RECORDS" );
+    if( SequenceRecordObjectBase::implIsValid() )
+        mxErrCodes = cfg().getNameList( "ERRORCODES" );
 }
 
 void RecordObjectBase::construct( const RecordObjectBase& rParent )
@@ -142,14 +93,13 @@ void RecordObjectBase::construct( const RecordObjectBase& rParent )
     *this = rParent;
 }
 
-bool RecordObjectBase::implIsValid() const
+bool RecordObjectBase::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
-    return isValid( mxStrmIn ) && InputObjectBase::implIsValid();
-}
-
-void RecordObjectBase::createRecordStream( const RecordDataSequence& rData )
-{
-    mxStrmIn->createStream( rData );
+    sal_Int32 nRecId = 0, nRecSize = 0;
+    bool bValid = readCompressedInt( rBaseStrm, nRecId ) && (nRecId >= 0) && readCompressedInt( rBaseStrm, nRecSize ) && (nRecSize >= 0);
+    ornRecId = nRecId;
+    ornRecSize = nRecSize;
+    return bValid;
 }
 
 OUString RecordObjectBase::getErrorName( sal_uInt8 nErrCode ) const
@@ -176,7 +126,7 @@ void RecordObjectBase::readRangeList( RangeList& orRanges )
     if( nCount >= 0 )
     {
         orRanges.resize( getLimitedValue< size_t, sal_Int32 >( nCount, 0, SAL_MAX_UINT16 ) );
-        for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); in().isValidPos() && (aIt != aEnd); ++aIt )
+        for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); !in().isEof() && (aIt != aEnd); ++aIt )
             readRange( *aIt );
     }
     else
@@ -185,14 +135,14 @@ void RecordObjectBase::readRangeList( RangeList& orRanges )
 
 // ----------------------------------------------------------------------------
 
-void RecordObjectBase::writeBooleanItem( const sal_Char* pcName, sal_uInt8 nBool )
+void RecordObjectBase::writeBooleanItem( const String& rName, sal_uInt8 nBool )
 {
-    writeDecItem( pcName, nBool, "BOOLEAN" );
+    writeDecItem( rName, nBool, "BOOLEAN" );
 }
 
-void RecordObjectBase::writeErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode )
+void RecordObjectBase::writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode )
 {
-    writeHexItem( pcName, nErrCode, mxErrCodes );
+    writeHexItem( rName, nErrCode, mxErrCodes );
 }
 
 void RecordObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
@@ -230,35 +180,35 @@ void RecordObjectBase::writePhoneticPortions( const BinPhoneticPortionList& rPor
 
 // ----------------------------------------------------------------------------
 
-sal_uInt8 RecordObjectBase::dumpBoolean( const sal_Char* pcName )
+sal_uInt8 RecordObjectBase::dumpBoolean( const String& rName )
 {
     sal_uInt8 nBool;
     in() >> nBool;
-    writeBooleanItem( pcName ? pcName : "boolean", nBool );
+    writeBooleanItem( rName( "boolean" ), nBool );
     return nBool;
 }
 
-sal_uInt8 RecordObjectBase::dumpErrorCode( const sal_Char* pcName )
+sal_uInt8 RecordObjectBase::dumpErrorCode( const String& rName )
 {
     sal_uInt8 nErrCode;
     in() >> nErrCode;
-    writeErrorCodeItem( pcName ? pcName : "errorcode", nErrCode );
+    writeErrorCodeItem( rName( "error-code" ), nErrCode );
     return nErrCode;
 }
 
-OUString RecordObjectBase::dumpString( const sal_Char* pcName, bool bRich, bool b32BitLen )
+OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32BitLen )
 {
     sal_uInt8 nFlags = bRich ? dumpHex< sal_uInt8 >( "flags", "STRING-FLAGS" ) : 0;
 
-    OUString aString = getRecordStream().readString( b32BitLen );
-    writeStringItem( pcName ? pcName : "text", aString );
+    OUString aString = mxStrm->readString( b32BitLen );
+    writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---
     if( getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
         IndentGuard aIndGuard( out() );
         BinFontPortionList aPortions;
-        aPortions.importPortions( getRecordStream() );
+        aPortions.importPortions( *mxStrm );
         writeFontPortions( aPortions );
     }
 
@@ -268,7 +218,7 @@ OUString RecordObjectBase::dumpString( const sal_Char* pcName, bool bRich, bool 
         IndentGuard aIndGuard( out() );
         dumpString( "phonetic-text" );
         BinPhoneticPortionList aPortions;
-        aPortions.importPortions( getRecordStream() );
+        aPortions.importPortions( *mxStrm );
         writePhoneticPortions( aPortions );
         dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
         dumpHex< sal_uInt16 >( "flags", "PHONETIC-FLAGS" );
@@ -277,10 +227,10 @@ OUString RecordObjectBase::dumpString( const sal_Char* pcName, bool bRich, bool 
     return aString;
 }
 
-void RecordObjectBase::dumpColor( const sal_Char* pcName )
+void RecordObjectBase::dumpColor( const String& rName )
 {
     MultiItemsGuard aMultiGuard( out() );
-    writeEmptyItem( pcName ? pcName : "color" );
+    writeEmptyItem( rName( "color" ) );
     switch( extractValue< sal_uInt8 >( dumpDec< sal_uInt8 >( "flags", "COLOR-FLAGS" ), 1, 7 ) )
     {
         case 0:     dumpUnused( 1 );                                    break;
@@ -290,78 +240,93 @@ void RecordObjectBase::dumpColor( const sal_Char* pcName )
         default:    dumpUnknown( 1 );
     }
     dumpDec< sal_Int16 >( "tint", "CONV-TINT" );
-    sal_uInt8 nR, nG, nB, nA;
-    in() >> nR >> nG >> nB >> nA;
-    writeColorItem( "rgb", (((((static_cast< sal_Int32 >( nA ) << 8) | nR) << 8) | nG) << 8) | nB );
+    dumpColorABGR();
 }
 
-sal_Int32 RecordObjectBase::dumpColIndex( const sal_Char* pcName )
+sal_Int32 RecordObjectBase::dumpColIndex( const String& rName )
 {
     sal_Int32 nCol;
     in() >> nCol;
-    writeColIndexItem( pcName ? pcName : "col-idx", nCol );
+    writeColIndexItem( rName( "col-idx" ), nCol );
     return nCol;
 }
 
-sal_Int32 RecordObjectBase::dumpRowIndex( const sal_Char* pcName )
+sal_Int32 RecordObjectBase::dumpRowIndex( const String& rName )
 {
     sal_Int32 nRow;
     in() >> nRow;
-    writeRowIndexItem( pcName ? pcName : "row-idx", nRow );
+    writeRowIndexItem( rName( "row-idx" ), nRow );
     return nRow;
 }
 
-sal_Int32 RecordObjectBase::dumpColRange( const sal_Char* pcName )
+sal_Int32 RecordObjectBase::dumpColRange( const String& rName )
 {
     sal_Int32 nCol1, nCol2;
     in() >> nCol1 >> nCol2;
-    writeColRangeItem( pcName ? pcName : "col-range", nCol1, nCol2 );
+    writeColRangeItem( rName( "col-range" ), nCol1, nCol2 );
     return nCol2 - nCol1 + 1;
 }
 
-sal_Int32 RecordObjectBase::dumpRowRange( const sal_Char* pcName )
+sal_Int32 RecordObjectBase::dumpRowRange( const String& rName )
 {
     sal_Int32 nRow1, nRow2;
     in() >> nRow1 >> nRow2;
-    writeRowRangeItem( pcName ? pcName : "row-range", nRow1, nRow2 );
+    writeRowRangeItem( rName( "row-range" ), nRow1, nRow2 );
     return nRow2 - nRow1 + 1;
 }
 
-Address RecordObjectBase::dumpAddress( const sal_Char* pcName )
+Address RecordObjectBase::dumpAddress( const String& rName )
 {
     Address aPos;
     readAddress( aPos );
-    writeAddressItem( pcName ? pcName : "addr", aPos );
+    writeAddressItem( rName( "addr" ), aPos );
     return aPos;
 }
 
-Range RecordObjectBase::dumpRange( const sal_Char* pcName )
+Range RecordObjectBase::dumpRange( const String& rName )
 {
     Range aRange;
     readRange( aRange );
-    writeRangeItem( pcName ? pcName : "range", aRange );
+    writeRangeItem( rName( "range" ), aRange );
     return aRange;
 }
 
-void RecordObjectBase::dumpRangeList( const sal_Char* pcName )
+void RecordObjectBase::dumpRangeList( const String& rName )
 {
     RangeList aRanges;
     readRangeList( aRanges );
-    writeRangeListItem( pcName ? pcName : "range-list", aRanges );
+    writeRangeListItem( rName( "range-list" ), aRanges );
 }
 
-// ----------------------------------------------------------------------------
+// private --------------------------------------------------------------------
 
-void RecordObjectBase::constructRecObjBase()
+bool RecordObjectBase::readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue )
 {
-    if( RecordObjectBase::implIsValid() )
-        mxErrCodes = cfg().getNameList( "ERRORCODES" );
+    ornValue = 0;
+    sal_uInt8 nByte;
+    rStrm >> nByte;
+    ornValue = nByte & 0x7F;
+    if( (nByte & 0x80) != 0 )
+    {
+        rStrm >> nByte;
+        ornValue |= sal_Int32( nByte & 0x7F ) << 7;
+        if( (nByte & 0x80) != 0 )
+        {
+            rStrm >> nByte;
+            ornValue |= sal_Int32( nByte & 0x7F ) << 14;
+            if( (nByte & 0x80) != 0 )
+            {
+                rStrm >> nByte;
+                ornValue |= sal_Int32( nByte & 0x7F ) << 21;
+            }
+        }
+    }
+    return !rStrm.isEof();
 }
 
 // ============================================================================
 
 FormulaObject::FormulaObject( const RecordObjectBase& rParent ) :
-    mpcName( 0 ),
     mnSize( 0 )
 {
     RecordObjectBase::construct( rParent );
@@ -372,28 +337,28 @@ FormulaObject::~FormulaObject()
 {
 }
 
-void FormulaObject::dumpCellFormula( const sal_Char* pcName )
+void FormulaObject::dumpCellFormula( const String& rName )
 {
-    dumpFormula( pcName, false );
+    dumpFormula( rName, false );
 }
 
-void FormulaObject::dumpNameFormula( const sal_Char* pcName )
+void FormulaObject::dumpNameFormula( const String& rName )
 {
-    dumpFormula( pcName, true );
+    dumpFormula( rName, true );
 }
 
 void FormulaObject::implDump()
 {
     {
         MultiItemsGuard aMultiGuard( out() );
-        writeEmptyItem( mpcName );
+        writeEmptyItem( maName );
         writeDecItem( "formula-size", mnSize );
     }
     if( mnSize < 0 ) return;
 
-    Input& rIn = in();
-    sal_Int64 nStartPos = rIn.tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rIn.getSize() );
+    BinaryInputStream& rStrm = in();
+    sal_Int64 nStartPos = rStrm.tell();
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rStrm.getLength() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
@@ -401,11 +366,11 @@ void FormulaObject::implDump()
     IndentGuard aIndGuard( out() );
     {
         TableGuard aTabGuard( out(), 8, 18 );
-        while( bValid && (rIn.tell() < nEndPos) )
+        while( bValid && (rStrm.tell() < nEndPos) )
         {
             MultiItemsGuard aMultiGuard( out() );
-            writeHexItem( 0, static_cast< sal_uInt16 >( rIn.tell() - nStartPos ) );
-            sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( 0, mxTokens );
+            writeHexItem( EMPTY_STRING, static_cast< sal_uInt16 >( rStrm.tell() - nStartPos ) );
+            sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( EMPTY_STRING, mxTokens );
             bValid = mxTokens->hasName( nTokenId );
             if( bValid )
             {
@@ -479,7 +444,7 @@ void FormulaObject::implDump()
         }
     }
 
-    if( nEndPos == rIn.tell() )
+    if( nEndPos == rStrm.tell() )
     {
         dumpAddTokenData();
         if( mnSize > 0 )
@@ -490,18 +455,17 @@ void FormulaObject::implDump()
     }
     else
     {
-        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), static_cast< sal_Int32 >( nEndPos - rIn.tell() ), false );
+        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), static_cast< sal_Int32 >( nEndPos - rStrm.tell() ), false );
         sal_Int32 nAddDataSize = dumpDec< sal_Int32 >( "add-data-size" );
         dumpBinary( "add-data", nAddDataSize, false );
     }
 
-    mpcName = 0;
     mnSize = 0;
 }
 
-void FormulaObject::dumpFormula( const sal_Char* pcName, bool bNameMode )
+void FormulaObject::dumpFormula( const String& rName, bool bNameMode )
 {
-    mpcName = pcName ? pcName : "formula";
+    maName = rName( "formula" );
     in() >> mnSize;
     mbNameMode = bNameMode;
     dump();
@@ -513,8 +477,7 @@ void FormulaObject::constructFmlaObj()
 {
     if( RecordObjectBase::implIsValid() )
     {
-        Reference< XSpreadsheetDocument > xDocument( getFilter().getModel(), UNO_QUERY );
-        mxFuncProv.reset( new FunctionProvider( xDocument, true ) );
+        mxFuncProv.reset( new FunctionProvider( FILTER_OOX, BIFF_UNKNOWN, true ) );
 
         Config& rCfg = cfg();
         mxClasses   = rCfg.getNameList( "TOKENCLASSES" );
@@ -590,7 +553,7 @@ OUString FormulaObject::createPlaceHolder() const
 OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo** oppFuncInfo )
 {
     ItemGuard aItemGuard( out(), "func-id" );
-    writeHexItem( 0, nFuncId, "FUNCID" );
+    writeHexItem( EMPTY_STRING, nFuncId, "FUNCID" );
     OUStringBuffer aBuffer;
     const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromOobFuncId( nFuncId );
     if( pFuncInfo )
@@ -603,23 +566,25 @@ OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo*
     }
     OUString aFuncName = aBuffer.makeStringAndClear();
     aItemGuard.cont();
+    out().writeChar( OOX_DUMP_STRQUOTE );
     out().writeString( aFuncName );
+    out().writeChar( OOX_DUMP_STRQUOTE );
     if( oppFuncInfo ) *oppFuncInfo = pFuncInfo;
     return aFuncName;
 }
 
-sal_Int32 FormulaObject::dumpTokenCol( const sal_Char* pcName, bool& rbRelC, bool& rbRelR )
+sal_Int32 FormulaObject::dumpTokenCol( const String& rName, bool& rbRelC, bool& rbRelR )
 {
-    sal_uInt16 nCol = dumpHex< sal_uInt16 >( pcName, mxRelFlags );
+    sal_uInt16 nCol = dumpHex< sal_uInt16 >( rName, mxRelFlags );
     rbRelC = getFlag( nCol, OOBIN_TOK_REF_COLREL );
     rbRelR = getFlag( nCol, OOBIN_TOK_REF_ROWREL );
     nCol &= OOBIN_TOK_REF_COLMASK;
     return nCol;
 }
 
-sal_Int32 FormulaObject::dumpTokenRow( const sal_Char* pcName )
+sal_Int32 FormulaObject::dumpTokenRow( const String& rName )
 {
-    return dumpDec< sal_Int32 >( pcName );
+    return dumpDec< sal_Int32 >( rName );
 }
 
 TokenAddress FormulaObject::dumpTokenAddress( bool bNameMode )
@@ -772,22 +737,22 @@ void FormulaObject::dumpMemAreaToken( const OUString& rTokClass, bool bAddData )
         maAddData.push_back( ADDDATA_MEMAREA );
 }
 
-void FormulaObject::dumpExpToken( const StringWrapper& rName )
+void FormulaObject::dumpExpToken( const String& rName )
 {
     Address aPos;
     dumpRowIndex( "base-row" );
-    OUStringBuffer aOp( rName.getString() );
+    OUStringBuffer aOp( rName );
     StringHelper::appendIndex( aOp, createPlaceHolder() + out().getLastItemValue() );
     mxStack->pushOperand( aOp.makeStringAndClear() );
     maAddData.push_back( ADDDATA_EXP );
 }
 
-void FormulaObject::dumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp )
+void FormulaObject::dumpUnaryOpToken( const String& rLOp, const String& rROp )
 {
     mxStack->pushUnaryOp( rLOp, rROp );
 }
 
-void FormulaObject::dumpBinaryOpToken( const StringWrapper& rOp )
+void FormulaObject::dumpBinaryOpToken( const String& rOp )
 {
     mxStack->pushBinaryOp( rOp );
 }
@@ -916,10 +881,10 @@ void FormulaObject::dumpAddTokenData()
 {
     Output& rOut = out();
     rOut.resetItemIndex();
-    Input& rIn = in();
-    sal_Int32 nAddDataSize = (in().getSize() - in().tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( rIn.tell() + nAddDataSize, rIn.getSize() );
-    for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); (aIt != aEnd) && rIn.isValidPos() && (rIn.tell() < nEndPos); ++aIt )
+    BinaryInputStream& rStrm = in();
+    sal_Int32 nAddDataSize = (in().getLength() - in().tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( rStrm.tell() + nAddDataSize, rStrm.getLength() );
+    for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); (aIt != aEnd) && !rStrm.isEof() && (rStrm.tell() < nEndPos); ++aIt )
     {
         AddDataType eType = *aIt;
 
@@ -1018,61 +983,21 @@ OUString FormulaObject::dumpaddDataArrayValue()
 
 // ============================================================================
 
-RecordObject::RecordObject( OutputObjectBase& rParent )
+RecordStreamObject::RecordStreamObject( ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    RecordObjectBase::construct( rParent );
+    RecordObjectBase::construct( rParent, rxStrm, rSysFileName );
     if( RecordObjectBase::implIsValid() )
-    {
         mxFmlaObj.reset( new FormulaObject( *this ) );
-        mxSimpleRecs = cfg().getNameList( "SIMPLE-RECORDS" );
-    }
 }
 
-void RecordObject::dumpRecord( const RecordDataSequence& rData, sal_Int32 nRecId )
-{
-    createRecordStream( rData );
-    mnRecId = nRecId;
-    dump();
-}
-
-bool RecordObject::implIsValid() const
+bool RecordStreamObject::implIsValid() const
 {
     return isValid( mxFmlaObj ) && RecordObjectBase::implIsValid();
 }
 
-void RecordObject::implDump()
+void RecordStreamObject::implDumpRecordBody()
 {
-    if( cfg().hasName( mxSimpleRecs, mnRecId ) )
-        dumpSimpleRecord( cfg().getName( mxSimpleRecs, mnRecId ) );
-    else
-        dumpRecordBody();
-
-    // remaining undumped data
-    RecordInputStream& rStrm = getRecordStream();
-    if( rStrm.getRecPos() == 0 )
-        dumpRawBinary( rStrm.getRecSize(), false );
-    else
-        dumpRemaining( rStrm.getRecLeft() );
-    if( !rStrm.isValid() )
-        writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
-}
-
-void RecordObject::dumpCellHeader( bool bWithColumn )
-{
-    if( bWithColumn ) dumpColIndex();
-    dumpHex< sal_uInt32 >( "xf-id", "CELL-XFID" );
-}
-
-void RecordObject::dumpSimpleRecord( const OUString& rRecData )
-{
-    ItemFormat aItemFmt;
-    aItemFmt.parse( rRecData );
-    dumpItem( aItemFmt );
-}
-
-void RecordObject::dumpRecordBody()
-{
-    switch( mnRecId )
+    switch( getRecId() )
     {
         case OOBIN_ID_ARRAY:
             dumpRange( "array-range" );
@@ -1212,11 +1137,11 @@ void RecordObject::dumpRecordBody()
             dumpDec< sal_Int32 >( "formula2-size" );
             dumpDec< sal_Int32 >( "formula3-size" );
             dumpString( "text" );
-            if( in().getSize() - in().tell() >= 8 )
+            if( in().getLength() - in().tell() >= 8 )
                 mxFmlaObj->dumpNameFormula( "formula1" );
-            if( in().getSize() - in().tell() >= 8 )
+            if( in().getLength() - in().tell() >= 8 )
                 mxFmlaObj->dumpNameFormula( "formula2" );
-            if( in().getSize() - in().tell() >= 8 )
+            if( in().getLength() - in().tell() >= 8 )
                 mxFmlaObj->dumpNameFormula( "formula3" );
         }
         break;
@@ -1272,6 +1197,12 @@ void RecordObject::dumpRecordBody()
             dumpRangeList();
         break;
 
+        case OOBIN_ID_CONTROL:
+            dumpDec< sal_Int32 >( "shape-id" );
+            dumpString( "rel-id" );
+            dumpString( "name" );
+        break;
+
         case OOBIN_ID_DATATABLE:
             dumpRange( "table-range" );
             dumpAddress( "ref1" );
@@ -1309,15 +1240,15 @@ void RecordObject::dumpRecordBody()
 
         case OOBIN_ID_DEFINEDNAME:
             dumpHex< sal_uInt32 >( "flags", "DEFINEDNAME-FLAGS" );
-            dumpHex< sal_uInt8 >( "keyboard-shortcut" );
+            dumpChar( "accelerator", RTL_TEXTENCODING_ISO_8859_1 );
             dumpDec< sal_Int32 >( "sheet-id", "DEFINEDNAME-SHEETID" );
             dumpString( "name" );
             mxFmlaObj->dumpNameFormula();
             dumpString( "comment" );
-            if( in().getSize() - in().tell() >= 4 ) dumpString( "menu-text" );
-            if( in().getSize() - in().tell() >= 4 ) dumpString( "description-text" );
-            if( in().getSize() - in().tell() >= 4 ) dumpString( "help-text" );
-            if( in().getSize() - in().tell() >= 4 ) dumpString( "statusbar-text" );
+            if( in().getLength() - in().tell() >= 4 ) dumpString( "menu-text" );
+            if( in().getLength() - in().tell() >= 4 ) dumpString( "description-text" );
+            if( in().getLength() - in().tell() >= 4 ) dumpString( "help-text" );
+            if( in().getLength() - in().tell() >= 4 ) dumpString( "statusbar-text" );
         break;
 
         case OOBIN_ID_DIMENSION:
@@ -1330,7 +1261,7 @@ void RecordObject::dumpRecordBody()
 
         case OOBIN_ID_DXF:
             dumpHex< sal_uInt32 >( "flags", "DXF-FLAGS" );
-            for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); in().isValidPos() && (nIndex < nCount); ++nIndex )
+            for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !in().isEof() && (nIndex < nCount); ++nIndex )
             {
                 out().startMultiItems();
                 sal_Int64 nStartPos = in().tell();
@@ -1445,9 +1376,7 @@ void RecordObject::dumpRecordBody()
                         dumpBoolean( "value" );
                     break;
                 }
-                if( in().tell() < nEndPos )
-                    dumpRemaining( static_cast< sal_Int32 >( nEndPos - in().tell() ) );
-                in().seek( nEndPos );
+                dumpRemainingTo( nEndPos );
             }
         break;
 
@@ -1508,7 +1437,7 @@ void RecordObject::dumpRecordBody()
             sal_Int32 nCount = dumpDec< sal_Int32 >( "ref-count" );
             TableGuard aTabGuard( out(), 13, 17, 24 );
             out().resetItemIndex();
-            for( sal_Int32 nRefId = 0; in().isValidPos() && (nRefId < nCount); ++nRefId )
+            for( sal_Int32 nRefId = 0; !in().isEof() && (nRefId < nCount); ++nRefId )
             {
                 MultiItemsGuard aMultiGuard( out() );
                 writeEmptyItem( "#ref" );
@@ -1530,7 +1459,7 @@ void RecordObject::dumpRecordBody()
 
         case OOBIN_ID_EXTSHEETNAMES:
             out().resetItemIndex();
-            for( sal_Int32 nSheet = 0, nCount = dumpDec< sal_Int32 >( "sheet-count" ); in().isValidPos() && (nSheet < nCount); ++nSheet )
+            for( sal_Int32 nSheet = 0, nCount = dumpDec< sal_Int32 >( "sheet-count" ); !in().isEof() && (nSheet < nCount); ++nSheet )
                 dumpString( "#sheet-name" );
         break;
 
@@ -1545,7 +1474,7 @@ void RecordObject::dumpRecordBody()
             dumpDec< double >( "pos-top" );
             dumpDec< double >( "pos-bottom" );
             out().resetItemIndex();
-            for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && in().isValidPos(); ++nStop )
+            for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !in().isEof(); ++nStop )
             {
                 writeEmptyItem( "#stop" );
                 IndentGuard aIndGuard( out() );
@@ -1626,6 +1555,10 @@ void RecordObject::dumpRecordBody()
             dumpString( "display" );
         break;
 
+        case OOBIN_ID_LEGACYDRAWING:
+            dumpString( "rel-id" );
+        break;
+
         case OOBIN_ID_MERGECELL:
             dumpRange();
         break;
@@ -1672,6 +1605,20 @@ void RecordObject::dumpRecordBody()
         case OOBIN_ID_NUMFMT:
             dumpDec< sal_uInt16 >( "numfmt-id" );
             dumpString( "format" );
+        break;
+
+        case OOBIN_ID_OLEOBJECT:
+        {
+            dumpDec< sal_Int32 >( "aspect", "OLEOBJECT-ASPECT" );
+            dumpDec< sal_Int32 >( "update", "OLEOBJECT-UPDATE" );
+            dumpDec< sal_Int32 >( "shape-id" );
+            sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "OLEOBJECT-FLAGS" );
+            dumpString( "prog-id" );
+            if( getFlag( nFlags, OOBIN_OLEOBJECT_LINKED ) )
+                mxFmlaObj->dumpNameFormula( "link" );
+            else
+                dumpString( "rel-id" );
+        }
         break;
 
         case OOBIN_ID_PAGEMARGINS:
@@ -1721,7 +1668,7 @@ void RecordObject::dumpRecordBody()
             dumpHex< sal_uInt16 >( "flags", "ROW-FLAGS1" );
             dumpHex< sal_uInt8 >( "flags", "ROW-FLAGS2" );
             out().resetItemIndex();
-            for( sal_Int32 nSpan = 0, nSpanCount = dumpDec< sal_Int32 >( "row-spans-count" ); in().isValidPos() && (nSpan < nSpanCount); ++nSpan )
+            for( sal_Int32 nSpan = 0, nSpanCount = dumpDec< sal_Int32 >( "row-spans-count" ); !in().isEof() && (nSpan < nSpanCount); ++nSpan )
                 dumpRowRange( "#row-spans" );
         break;
 
@@ -1881,112 +1828,63 @@ void RecordObject::dumpRecordBody()
     }
 }
 
-// ============================================================================
-
-RecordHeaderObject::RecordHeaderObject( const InputObjectBase& rParent )
+void RecordStreamObject::dumpCellHeader( bool bWithColumn )
 {
-    static const RecordHeaderConfigInfo saHeaderCfgInfo =
-    {
-        "REC",
-        "RECORD-NAMES",
-        "show-record-pos",
-        "show-record-size",
-        "show-record-id",
-        "show-record-name",
-        "show-record-body",
-    };
-    RecordHeaderBase< sal_Int32, sal_Int32 >::construct( rParent, saHeaderCfgInfo );
-}
-
-RecordHeaderObject::~RecordHeaderObject()
-{
-}
-
-bool RecordHeaderObject::implReadHeader( sal_Int64& ornRecPos, sal_Int32& ornRecId, sal_Int32& ornRecSize )
-{
-    bool bValidRec = readCompressedInt( ornRecPos, ornRecId ) && (ornRecId >= 0) && readCompressedInt( ornRecPos, ornRecSize ) && (ornRecSize >= 0);
-    if( bValidRec )
-    {
-        maData.realloc( ornRecSize );
-        bValidRec = (ornRecSize == 0) || (in().read( maData.getArray(), ornRecSize ) == ornRecSize);
-        ornRecPos += ornRecSize;
-    }
-    return bValidRec;
-}
-
-bool RecordHeaderObject::readByte( sal_Int64& ornRecPos, sal_uInt8& ornByte )
-{
-    ++ornRecPos;
-    return in().read( &ornByte, 1 ) == 1;
-}
-
-bool RecordHeaderObject::readCompressedInt( sal_Int64& ornRecPos, sal_Int32& ornValue )
-{
-    ornValue = 0;
-    sal_uInt8 nByte;
-    if( !readByte( ornRecPos, nByte ) ) return false;
-    ornValue = nByte & 0x7F;
-    if( (nByte & 0x80) == 0 ) return true;
-    if( !readByte( ornRecPos, nByte ) ) return false;
-    ornValue |= sal_Int32( nByte & 0x7F ) << 7;
-    if( (nByte & 0x80) == 0 ) return true;
-    if( !readByte( ornRecPos, nByte ) ) return false;
-    ornValue |= sal_Int32( nByte & 0x7F ) << 14;
-    if( (nByte & 0x80) == 0 ) return true;
-    if( !readByte( ornRecPos, nByte ) ) return false;
-    ornValue |= sal_Int32( nByte & 0x7F ) << 21;
-    return true;
-}
-
-// ============================================================================
-
-RecordStreamObject::RecordStreamObject( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm )
-{
-    InputStreamObject::construct( rParent, rOutFileName, xStrm );
-    if( InputStreamObject::implIsValid() )
-    {
-        mxHdrObj.reset( new RecordHeaderObject( *this ) );
-        mxRecObj.reset( new RecordObject( *this ) );
-    }
-}
-
-bool RecordStreamObject::implIsValid() const
-{
-    return isValid( mxHdrObj ) && isValid( mxRecObj ) && InputStreamObject::implIsValid();
-}
-
-void RecordStreamObject::implDump()
-{
-    while( mxHdrObj->startNextRecord() )
-    {
-        if( mxHdrObj->isShowRecBody() )
-        {
-            IndentGuard aIndGuard( out() );
-            mxRecObj->dumpRecord( mxHdrObj->getRecordData(), mxHdrObj->getRecId() );
-        }
-        out().emptyLine();
-    }
+    if( bWithColumn ) dumpColIndex();
+    dumpHex< sal_uInt32 >( "xf-id", "CELL-XFID" );
 }
 
 // ============================================================================
 
 RootStorageObject::RootStorageObject( const DumperBase& rParent )
 {
-    RootStorageObjectBase::construct( rParent );
+    StorageObjectBase::construct( rParent );
 }
 
-void RootStorageObject::implDumpStream( BinaryInputStreamRef xStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSystemFileName )
+void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
-    if( aExt.equalsIgnoreAsciiCaseAscii( "xml" ) ||
+    Reference< XInputStream > xInStrm = InputOutputHelper::getXInputStream( *rxStrm );
+    if(
+        aExt.equalsIgnoreAsciiCaseAscii( "xlsb" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xlsm" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xlsx" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xltm" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xltx" ) )
+    {
+        Dumper( getFactory(), xInStrm, rSysFileName ).dump();
+    }
+    else if(
+        aExt.equalsIgnoreAsciiCaseAscii( "xla" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xlc" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xlm" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xls" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xlt" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "xlw" ) )
+    {
+        ::oox::dump::biff::Dumper( getFactory(), xInStrm, rSysFileName ).dump();
+    }
+    else if(
+        aExt.equalsIgnoreAsciiCaseAscii( "xml" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "vml" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "rels" ) )
     {
-        XmlStreamObject( *this, rSystemFileName, xStrm ).dump();
+        XmlStreamObject( *this, rxStrm, rSysFileName ).dump();
     }
     else if( aExt.equalsIgnoreAsciiCaseAscii( "bin" ) )
     {
-        if( rStrgPath.equalsAscii( "xl" ) ||
+        if( rStrgPath.equalsAscii( "xl" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
+        {
+            StorageRef xStrg( new OleStorage( getFactory(), xInStrm, false ) );
+            VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
+        }
+        else if( rStrgPath.equalsAscii( "xl/embeddings" ) )
+        {
+            StorageRef xStrg( new OleStorage( getFactory(), xInStrm, false ) );
+            OleStorageObject( *this, xStrg, rSysFileName ).dump();
+        }
+        else if(
+            rStrgPath.equalsAscii( "xl" ) ||
             rStrgPath.equalsAscii( "xl/chartsheets" ) ||
             rStrgPath.equalsAscii( "xl/dialogsheets" ) ||
             rStrgPath.equalsAscii( "xl/externalLinks" ) ||
@@ -1994,17 +1892,33 @@ void RootStorageObject::implDumpStream( BinaryInputStreamRef xStrm, const OUStri
             rStrgPath.equalsAscii( "xl/tables" ) ||
             rStrgPath.equalsAscii( "xl/worksheets" ) )
         {
-            RecordStreamObject( *this, rSystemFileName, xStrm ).dump();
+            RecordStreamObject( *this, rxStrm, rSysFileName ).dump();
+        }
+        else
+        {
+            BinaryStreamObject( *this, rxStrm, rSysFileName ).dump();
         }
     }
 }
 
 // ============================================================================
 
+#define DUMP_XLSB_CONFIG_ENVVAR "OOO_XLSBDUMPER"
+
 Dumper::Dumper( const FilterBase& rFilter )
 {
-    ConfigRef xCfg( new Config( "OOO_XLSBDUMPER" ) );
-    DumperBase::construct( rFilter, xCfg );
+    ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rFilter ) );
+    DumperBase::construct( xCfg );
+}
+
+Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+{
+    if( rxFactory.is() && rxInStrm.is() )
+    {
+        StorageRef xStrg( new ZipStorage( rxFactory, rxInStrm ) );
+        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        DumperBase::construct( xCfg );
+    }
 }
 
 void Dumper::implDump()

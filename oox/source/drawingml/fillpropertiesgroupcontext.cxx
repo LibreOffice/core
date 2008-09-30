@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillpropertiesgroupcontext.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,8 +299,7 @@ void BlipFillPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException,
 
             // load the fill bitmap into an XGraphic with the GraphicProvider
             static const OUString sGraphicProvider = CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" );
-            Reference< lang::XMultiServiceFactory > xMSFT( rFilter.getServiceFactory(), UNO_QUERY_THROW );
-            Reference< graphic::XGraphicProvider > xGraphicProvider( xMSFT->createInstance( sGraphicProvider ), UNO_QUERY_THROW );
+            Reference< graphic::XGraphicProvider > xGraphicProvider( rFilter.getGlobalFactory()->createInstance( sGraphicProvider ), UNO_QUERY_THROW );
 
             static const OUString sInputStream = CREATE_OUSTRING( "InputStream" );
             beans::PropertyValues aMediaProperties(1);

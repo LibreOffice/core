@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilterbase.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +141,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
 
             // create the input source and parse the stream
             RecordInputSource aSource;
-            aSource.mxInStream.reset( new BinaryInputStream( xInStrm, true ) );
+            aSource.mxInStream.reset( new BinaryXInputStream( xInStrm, true ) );
             aSource.maSystemId = aFragmentPath;
             aParser.parseStream( aSource );
             return true;
@@ -161,7 +161,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     try
     {
         // create the fast parser
-        Reference< XFastParser > xParser( getServiceFactory()->createInstance(
+        Reference< XFastParser > xParser( getGlobalFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
         xParser->setFastDocumentHandler( xDocHandler );
         xParser->setTokenHandler( mxImpl->mxTokenHandler );
@@ -170,22 +170,23 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         xParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
 
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
 
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_WORD );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_VML_DOC );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_VML_XLS );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_VML_PPT );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/activeX" ), NMSP_AX );
 
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_EXCEL );
 
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_POWERPOINT );
 
         // create the input source and parse the stream
         InputSource aSource;
@@ -277,9 +278,9 @@ StorageRef XmlFilterBase::implCreateStorage(
 {
     StorageRef xStorage;
     if( rxInStream.is() )
-        xStorage.reset( new ZipStorage( getServiceFactory(), rxInStream ) );
+        xStorage.reset( new ZipStorage( getGlobalFactory(), rxInStream ) );
     else if( rxOutStream.is() )
-        xStorage.reset( new ZipStorage( getServiceFactory(), rxOutStream ) );
+        xStorage.reset( new ZipStorage( getGlobalFactory(), rxOutStream ) );
     return xStorage;
 }
 
