@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: style.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -296,8 +296,7 @@ public:
                         SfxStyleSheet( const UniString&, const SfxStyleSheetBasePool&, SfxStyleFamily, USHORT );
                         SfxStyleSheet( const SfxStyleSheet& );
 
-    virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                const SfxHint& rHint, const TypeId& rHintType );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual BOOL        SetParent( const UniString& );
 
 protected:

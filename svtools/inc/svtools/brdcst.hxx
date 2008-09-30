@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brdcst.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +41,6 @@ class SfxHint;
 typedef SvPtrarr SfxListenerArr_Impl;
 #endif
 
-#define SFX_FORWARD( rBC, rBCT, rHint, rHintT ) \
-        Forward( rBC, rHint )
-
 //-------------------------------------------------------------------------
 
 class SVL_DLLPUBLIC SfxBroadcaster
@@ -58,8 +55,7 @@ private:
     const SfxBroadcaster&   operator=(const SfxBroadcaster &); // verboten
 
 protected:
-    void                    SFX_FORWARD(SfxBroadcaster& rBC, const TypeId& rBCType,
-                                        const SfxHint& rHint, const TypeId& rHintType);
+    void                    Forward(SfxBroadcaster& rBC, const SfxHint& rHint);
     virtual void            ListenersGone();
 
 public:
