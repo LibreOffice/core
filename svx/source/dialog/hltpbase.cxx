@@ -289,7 +289,7 @@ long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
                                                    const ResId &rResId,
-                                                   const SfxItemSet& rItemSet)
+                                                   const SfxItemSet& rItemSet )
 :   IconChoicePage          ( pParent, rResId, rItemSet ),
     mpGrpMore               ( NULL ),
     mpFtFrame               ( NULL ),
@@ -589,7 +589,7 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
         if ( bIsInputEnabled )
             GetParent()->EnableInput( FALSE );
         // <--
-        SfxMacroAssignDlg aDlg( this, *pItemSet );
+        SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
         SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();

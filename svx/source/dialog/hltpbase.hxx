@@ -57,6 +57,8 @@
 #include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
 #endif
@@ -130,6 +132,9 @@ private:
 
     sal_Bool            mbIsCloseDisabled;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                        mxDocumentFrame;
+
 protected:
     Window*             mpDialog;
 
@@ -163,8 +168,18 @@ protected:
     inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
 
 public:
-    SvxHyperlinkTabPageBase ( Window *pParent, const ResId &rResId, const SfxItemSet& rItemSet);
+    SvxHyperlinkTabPageBase (
+        Window *pParent,
+        const ResId &rResId,
+        const SfxItemSet& rItemSet
+    );
     virtual ~SvxHyperlinkTabPageBase ();
+
+    void    SetDocumentFrame(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame )
+    {
+        mxDocumentFrame = rxDocumentFrame;
+    }
 
     virtual BOOL AskApply ();
     virtual void DoApply ();

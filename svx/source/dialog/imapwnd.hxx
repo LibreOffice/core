@@ -32,17 +32,16 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/menu.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/frame.hxx>
-
 #include <svx/graphctl.hxx>
+
+#include <com/sun/star/frame/XFrame.hpp>
 
 /*************************************************************************
 |*
@@ -160,6 +159,8 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
     Link                aInfoLink;
     SfxItemPool*        pIMapPool;
     SfxItemInfo*        pItemInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                        mxDocumentFrame;
 
                         DECL_LINK( MenuSelectHdl, Menu* );
                         DECL_LINK( MouseTimerHdl, Timer* );
@@ -193,8 +194,7 @@ protected:
 
 public:
 
-                        IMapWindow( Window* pParent, WinBits nWinBits = 0 );
-                        IMapWindow( Window* pParent, const ResId& rResId );
+                        IMapWindow( Window* pParent, const ResId& rResId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         ~IMapWindow();
 
     BOOL                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );

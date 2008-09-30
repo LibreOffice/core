@@ -102,6 +102,8 @@ public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();
 
+    virtual void            PageCreated( USHORT nId, IconChoicePage& rPage );
+
     USHORT                  SetPage( SvxHyperlinkItem* pItem );
     void                    EnableInetBrowse( sal_Bool bEnable = sal_True );
     void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
