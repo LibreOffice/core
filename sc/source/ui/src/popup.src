@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: popup.src,v $
- * $Revision: 1.58 $
+ * $Revision: 1.58.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,7 +349,7 @@ Menu RID_POPUP_EDIT
                     {
                         Identifier = SID_SET_SUPER_SCRIPT ;
                         HelpID = SID_SET_SUPER_SCRIPT ;
-                        Text [ en-US ] = "S~uperscript" ;
+                        Text [ en-US ] = "Su~perscript" ;
                     };
                     MenuItem
                     {

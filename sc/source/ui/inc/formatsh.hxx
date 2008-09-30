@@ -45,6 +45,7 @@ class ScFormatShell: public SfxShell
 protected:
 
     ScViewData*         GetViewData(){return pViewData;}
+    const ScViewData*   GetViewData() const {return pViewData;}
 
 public:
 

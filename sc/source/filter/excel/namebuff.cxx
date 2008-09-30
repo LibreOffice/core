@@ -180,9 +180,11 @@ ExtSheetBuffer::~ExtSheetBuffer()
 }
 
 
-void ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const BOOL bSWB )
+sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const BOOL bSWB )
 {
     List::Insert( new Cont( rFPAN, rTN, bSWB ), LIST_APPEND );
+    // return 1-based index of EXTERNSHEET
+    return static_cast< sal_Int16 >( List::Count() );
 }
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xiroot.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.88.1 $
  *
  * This file is part of OpenOffice.org.
  *

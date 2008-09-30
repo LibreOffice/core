@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftools.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ inline bool get_flag( Type nBitField, Type nMask )
 { return (nBitField & nMask) != 0; }
 
 /** Returns nSet, if at least one bit of nMask is set in nBitField, otherwise nUnset. */
-template< typename Type, typename ReturnType >
+template< typename ReturnType, typename Type >
 inline ReturnType get_flagvalue( Type nBitField, Type nMask, ReturnType nSet, ReturnType nUnset )
 { return ::get_flag( nBitField, nMask ) ? nSet : nUnset; }
 
@@ -115,9 +115,9 @@ inline ReturnType get_flagvalue( Type nBitField, Type nMask, ReturnType nSet, Re
     @descr  Returns in rnRet the data fragment from nBitField, that starts at bit nStartBit
     (0-based, bit 0 is rightmost) with the width of nBitCount. rnRet will be right-aligned (normalized).
     For instance: extract_value( n, 0x4321, 8, 4 ) stores 3 in n (value in bits 8-11). */
-template< typename Type, typename ReturnType >
-inline void extract_value( ReturnType& rnRet, Type nBitField, sal_uInt8 nStartBit, sal_uInt8 nBitCount )
-{ rnRet = static_cast< ReturnType >( ((1UL << nBitCount) - 1) & (nBitField >> nStartBit) ); }
+template< typename ReturnType, typename Type >
+inline ReturnType extract_value( Type nBitField, sal_uInt8 nStartBit, sal_uInt8 nBitCount )
+{ return static_cast< ReturnType >( ((1UL << nBitCount) - 1) & (nBitField >> nStartBit) ); }
 
 // Write to bitfields ---------------------------------------------------------
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistring.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,8 @@ public:
     inline void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
     /** Reads and appends nRunCount formatting runs from stream. */
     inline void         ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount ) { ReadFormats( rStrm, maFormats, nRunCount ); }
+    /** Reads and appends formatting runs from an OBJ or TXO record. */
+    inline void         ReadObjFormats( XclImpStream& rStrm, sal_uInt16 nFormatSize ) { ReadObjFormats( rStrm, maFormats, nFormatSize ); }
 
     /** Returns true, if the string is empty. */
     inline bool         IsEmpty() const { return maString.Len() == 0; }
@@ -78,6 +80,8 @@ public:
     static void         ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats );
     /** Reads and appends nRunCount formatting runs from stream. */
     static void         ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nRunCount );
+    /** Reads and appends formatting runs from an OBJ or TXO record. */
+    static void         ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nFormatSize );
 
 private:
     String              maString;       /// The text data of the string.

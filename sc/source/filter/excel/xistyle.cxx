@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistyle.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.14.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svx/editobj.hxx>
 #include "scitems.hxx"
 #include <svx/fontitem.hxx>
 #include <svx/fhgtitem.hxx>
@@ -58,18 +59,25 @@
 #include "attrib.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include "cell.hxx"
 #include "globstr.hrc"
 #include "xltracer.hxx"
 #include "xistream.hxx"
 #include "xicontent.hxx"
 
 #include "root.hxx"
+#include "colrowst.hxx"
 
 // PALETTE record - color information =========================================
 
 XclImpPalette::XclImpPalette( const XclImpRoot& rRoot ) :
     XclDefaultPalette( rRoot )
 {
+}
+
+void XclImpPalette::Initialize()
+{
+    maColorTable.clear();
 }
 
 ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
@@ -112,10 +120,21 @@ XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
 }
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData ) :
-    XclImpRoot( rRoot ),
-    maData( rFontData ),
-    mbHasCharSet( false )
+    XclImpRoot( rRoot )
 {
+    SetFontData( rFontData, false );
+}
+
+void XclImpFont::SetAllUsedFlags( bool bUsed )
+{
+    mbFontNameUsed = mbHeightUsed = mbColorUsed = mbWeightUsed = mbEscapemUsed =
+        mbUnderlUsed = mbItalicUsed = mbStrikeUsed = mbOutlineUsed = mbShadowUsed = bUsed;
+}
+
+void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
+{
+    maData = rFontData;
+    mbHasCharSet = bHasCharSet;
     if( maData.maStyle.Len() )
     {
         if( SfxObjectShell* pDocShell = GetDocShell() )
@@ -135,12 +154,6 @@ XclImpFont::XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData ) 
     }
     GuessScriptType();
     SetAllUsedFlags( true );
-}
-
-void XclImpFont::SetAllUsedFlags( bool bUsed )
-{
-    mbFontNameUsed = mbHeightUsed = mbColorUsed = mbWeightUsed = mbEscapemUsed =
-        mbUnderlUsed = mbItalicUsed = mbStrikeUsed = mbOutlineUsed = mbShadowUsed = bUsed;
 }
 
 rtl_TextEncoding XclImpFont::GetFontEncoding() const
@@ -406,30 +419,64 @@ void XclImpFont::GuessScriptType()
 // ----------------------------------------------------------------------------
 
 XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot )
+    XclImpRoot( rRoot ),
+    maFont4( rRoot ),
+    maCtrlFont( rRoot )
 {
-    /*  Application font for column width calculation,
-        later filled with first font from font list. */
-    maAppFont.maName.AssignAscii( "Arial" );
-    maAppFont.mnHeight = 200;
-    SetCharWidth( maAppFont );
+    Initialize();
+
+    // default font for form controls without own font information
+    XclFontData aCtrlFontData;
+    switch( GetBiff() )
+    {
+        case EXC_BIFF2:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
+        case EXC_BIFF5:
+            aCtrlFontData.maName.AssignAscii( "Helv" );
+            aCtrlFontData.mnHeight = 160;
+            aCtrlFontData.mnWeight = EXC_FONTWGHT_BOLD;
+        break;
+        case EXC_BIFF8:
+            aCtrlFontData.maName.AssignAscii( "Tahoma" );
+            aCtrlFontData.mnHeight = 160;
+            aCtrlFontData.mnWeight = EXC_FONTWGHT_NORMAL;
+        break;
+        default:
+            DBG_ERROR_BIFF();
+    }
+    maCtrlFont.SetFontData( aCtrlFontData, false );
+}
+
+void XclImpFontBuffer::Initialize()
+{
+    maFontList.Clear();
+
+    // application font for column width calculation, later filled with first font from font list
+    XclFontData aAppFontData;
+    aAppFontData.maName.AssignAscii( "Arial" );
+    aAppFontData.mnHeight = 200;
+    aAppFontData.mnWeight = EXC_FONTWGHT_NORMAL;
+    UpdateAppFont( aAppFontData, false );
+}
+
+const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
+{
+    /*  Font with index 4 is not stored in an Excel file, but used e.g. by
+        BIFF5 form pushbutton objects. It is the bold default font. */
+    return (nFontIndex == 4) ? &maFont4 :
+        maFontList.GetObject( (nFontIndex < 4) ? nFontIndex : (nFontIndex - 1) );
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
 {
-    // Font with index 4 is not stored in an Excel file -> create a dummy font.
-    if( maFontList.Count() == 4 )
-        maFontList.Append( new XclImpFont( *GetFont( 0 ) ) );
-
     XclImpFont* pFont = new XclImpFont( GetRoot() );
     pFont->ReadFont( rStrm );
     maFontList.Append( pFont );
 
     if( maFontList.Count() == 1 )
     {
-        maAppFont = pFont->GetFontData();
-        // #i3006# Calculate the width of '0' from first font and current printer.
-        SetCharWidth( maAppFont );
+        UpdateAppFont( pFont->GetFontData(), pFont->HasCharSet() );
         // #i71033# set text encoding from application font, if CODEPAGE is missing
         SetAppFontEncoding( pFont->GetFontEncoding() );
     }
@@ -456,6 +503,23 @@ void XclImpFontBuffer::WriteFontProperties( ScfPropertySet& rPropSet,
         pFont->WriteFontProperties( rPropSet, eType, pFontColor );
 }
 
+void XclImpFontBuffer::WriteDefaultCtrlFontProperties( ScfPropertySet& rPropSet ) const
+{
+    maCtrlFont.WriteFontProperties( rPropSet, EXC_FONTPROPSET_CONTROL );
+}
+
+void XclImpFontBuffer::UpdateAppFont( const XclFontData& rFontData, bool bHasCharSet )
+{
+    maAppFont = rFontData;
+    // #i3006# Calculate the width of '0' from first font and current printer.
+    SetCharWidth( maAppFont );
+
+    // font 4 is bold font 0
+    XclFontData aFont4Data( maAppFont );
+    aFont4Data.mnWeight = EXC_FONTWGHT_BOLD;
+    maFont4.SetFontData( aFont4Data, bHasCharSet );
+}
+
 // FORMAT record - number formats =============================================
 
 XclImpNumFmtBuffer::XclImpNumFmtBuffer( const XclImpRoot& rRoot ) :
@@ -463,6 +527,13 @@ XclImpNumFmtBuffer::XclImpNumFmtBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mnNextXclIdx( 0 )
 {
+}
+
+void XclImpNumFmtBuffer::Initialize()
+{
+    maIndexMap.clear();
+    mnNextXclIdx = 0;
+    InitializeImport();     // base class
 }
 
 void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
@@ -575,39 +646,39 @@ void XclImpCellProt::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) c
 
 void XclImpCellAlign::FillFromXF2( sal_uInt8 nFlags )
 {
-    ::extract_value( mnHorAlign, nFlags, 0, 3 );
+    mnHorAlign = ::extract_value< sal_uInt8 >( nFlags, 0, 3 );
 }
 
 void XclImpCellAlign::FillFromXF3( sal_uInt16 nAlign )
 {
-    ::extract_value( mnHorAlign, nAlign, 0, 3 );
+    mnHorAlign = ::extract_value< sal_uInt8 >( nAlign, 0, 3 );
     mbLineBreak = ::get_flag( nAlign, EXC_XF_LINEBREAK );   // new in BIFF3
 }
 
 void XclImpCellAlign::FillFromXF4( sal_uInt16 nAlign )
 {
     FillFromXF3( nAlign );
-    ::extract_value( mnVerAlign, nAlign, 4, 2 );            // new in BIFF4
-    ::extract_value( mnOrient, nAlign, 6, 2 );              // new in BIFF4
+    mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 2 );  // new in BIFF4
+    mnOrient = ::extract_value< sal_uInt8 >( nAlign, 6, 2 );    // new in BIFF4
 }
 
 void XclImpCellAlign::FillFromXF5( sal_uInt16 nAlign )
 {
-    ::extract_value( mnHorAlign, nAlign, 0, 3 );
-    ::extract_value( mnVerAlign, nAlign, 4, 3 );
+    mnHorAlign = ::extract_value< sal_uInt8 >( nAlign, 0, 3 );
+    mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 3 );
     mbLineBreak = ::get_flag( nAlign, EXC_XF_LINEBREAK );
-    ::extract_value( mnOrient, nAlign, 8, 2 );
+    mnOrient = ::extract_value< sal_uInt8 >( nAlign, 8, 2 );
 }
 
 void XclImpCellAlign::FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
 {
-    ::extract_value( mnHorAlign, nAlign, 0, 3 );
-    ::extract_value( mnVerAlign, nAlign, 4, 3 );
+    mnHorAlign = ::extract_value< sal_uInt8 >( nAlign, 0, 3 );
+    mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 3 );
     mbLineBreak = ::get_flag( nAlign, EXC_XF_LINEBREAK );
-    ::extract_value( mnRotation, nAlign, 8, 8 );            // new in BIFF8
-    ::extract_value( mnIndent, nMiscAttrib, 0, 4 );         // new in BIFF8
-    mbShrink = ::get_flag( nMiscAttrib, EXC_XF8_SHRINK );   // new in BIFF8
-    ::extract_value( mnTextDir, nMiscAttrib, 6, 2 );        // new in BIFF8X
+    mnRotation = ::extract_value< sal_uInt8 >( nAlign, 8, 8 );      // new in BIFF8
+    mnIndent = ::extract_value< sal_uInt8 >( nMiscAttrib, 0, 4 );   // new in BIFF8
+    mbShrink = ::get_flag( nMiscAttrib, EXC_XF8_SHRINK );           // new in BIFF8
+    mnTextDir = ::extract_value< sal_uInt8 >( nMiscAttrib, 6, 2 );  // new in BIFF8
 }
 
 void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs ) const
@@ -670,65 +741,65 @@ void XclImpCellBorder::FillFromXF2( sal_uInt8 nFlags )
 
 void XclImpCellBorder::FillFromXF3( sal_uInt32 nBorder )
 {
-    ::extract_value( mnTopLine,     nBorder,  0, 3 );
-    ::extract_value( mnLeftLine,    nBorder,  8, 3 );
-    ::extract_value( mnBottomLine,  nBorder, 16, 3 );
-    ::extract_value( mnRightLine,   nBorder, 24, 3 );
-    ::extract_value( mnTopColor,    nBorder,  3, 5 );
-    ::extract_value( mnLeftColor,   nBorder, 11, 5 );
-    ::extract_value( mnBottomColor, nBorder, 19, 5 );
-    ::extract_value( mnRightColor,  nBorder, 27, 5 );
+    mnTopLine     = ::extract_value< sal_uInt8  >( nBorder,  0, 3 );
+    mnLeftLine    = ::extract_value< sal_uInt8  >( nBorder,  8, 3 );
+    mnBottomLine  = ::extract_value< sal_uInt8  >( nBorder, 16, 3 );
+    mnRightLine   = ::extract_value< sal_uInt8  >( nBorder, 24, 3 );
+    mnTopColor    = ::extract_value< sal_uInt16 >( nBorder,  3, 5 );
+    mnLeftColor   = ::extract_value< sal_uInt16 >( nBorder, 11, 5 );
+    mnBottomColor = ::extract_value< sal_uInt16 >( nBorder, 19, 5 );
+    mnRightColor  = ::extract_value< sal_uInt16 >( nBorder, 27, 5 );
     SetUsedFlags( true, false );
 }
 
 void XclImpCellBorder::FillFromXF5( sal_uInt32 nBorder, sal_uInt32 nArea )
 {
-    ::extract_value( mnTopLine,     nBorder,  0, 3 );
-    ::extract_value( mnLeftLine,    nBorder,  3, 3 );
-    ::extract_value( mnBottomLine,  nArea,   22, 3 );
-    ::extract_value( mnRightLine,   nBorder,  6, 3 );
-    ::extract_value( mnTopColor,    nBorder,  9, 7 );
-    ::extract_value( mnLeftColor,   nBorder, 16, 7 );
-    ::extract_value( mnBottomColor, nArea,   25, 7 );
-    ::extract_value( mnRightColor,  nBorder, 23, 7 );
+    mnTopLine     = ::extract_value< sal_uInt8  >( nBorder,  0, 3 );
+    mnLeftLine    = ::extract_value< sal_uInt8  >( nBorder,  3, 3 );
+    mnBottomLine  = ::extract_value< sal_uInt8  >( nArea,   22, 3 );
+    mnRightLine   = ::extract_value< sal_uInt8  >( nBorder,  6, 3 );
+    mnTopColor    = ::extract_value< sal_uInt16 >( nBorder,  9, 7 );
+    mnLeftColor   = ::extract_value< sal_uInt16 >( nBorder, 16, 7 );
+    mnBottomColor = ::extract_value< sal_uInt16 >( nArea,   25, 7 );
+    mnRightColor  = ::extract_value< sal_uInt16 >( nBorder, 23, 7 );
     SetUsedFlags( true, false );
 }
 
 void XclImpCellBorder::FillFromXF8( sal_uInt32 nBorder1, sal_uInt32 nBorder2 )
 {
-    ::extract_value( mnLeftLine,    nBorder1,  0, 4 );
-    ::extract_value( mnRightLine,   nBorder1,  4, 4 );
-    ::extract_value( mnTopLine,     nBorder1,  8, 4 );
-    ::extract_value( mnBottomLine,  nBorder1, 12, 4 );
-    ::extract_value( mnLeftColor,   nBorder1, 16, 7 );
-    ::extract_value( mnRightColor,  nBorder1, 23, 7 );
-    ::extract_value( mnTopColor,    nBorder2,  0, 7 );
-    ::extract_value( mnBottomColor, nBorder2,  7, 7 );
-    mbDiagTLtoBR = ::get_flag( nBorder1, EXC_XF_DIAGONAL_TL_TO_BR );
-    mbDiagBLtoTR = ::get_flag( nBorder1, EXC_XF_DIAGONAL_BL_TO_TR );
+    mnLeftLine    = ::extract_value< sal_uInt8  >( nBorder1,  0, 4 );
+    mnRightLine   = ::extract_value< sal_uInt8  >( nBorder1,  4, 4 );
+    mnTopLine     = ::extract_value< sal_uInt8  >( nBorder1,  8, 4 );
+    mnBottomLine  = ::extract_value< sal_uInt8  >( nBorder1, 12, 4 );
+    mnLeftColor   = ::extract_value< sal_uInt16 >( nBorder1, 16, 7 );
+    mnRightColor  = ::extract_value< sal_uInt16 >( nBorder1, 23, 7 );
+    mnTopColor    = ::extract_value< sal_uInt16 >( nBorder2,  0, 7 );
+    mnBottomColor = ::extract_value< sal_uInt16 >( nBorder2,  7, 7 );
+    mbDiagTLtoBR  = ::get_flag( nBorder1, EXC_XF_DIAGONAL_TL_TO_BR );
+    mbDiagBLtoTR  = ::get_flag( nBorder1, EXC_XF_DIAGONAL_BL_TO_TR );
     if( mbDiagTLtoBR || mbDiagBLtoTR )
     {
-        ::extract_value( mnDiagLine,  nBorder2, 21, 4 );
-        ::extract_value( mnDiagColor, nBorder2, 14, 7 );
+        mnDiagLine  = ::extract_value< sal_uInt8 >( nBorder2, 21, 4 );
+        mnDiagColor = ::extract_value< sal_uInt16 >( nBorder2, 14, 7 );
     }
     SetUsedFlags( true, true );
 }
 
 void XclImpCellBorder::FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor, sal_uInt32 nFlags )
 {
-    ::extract_value( mnLeftLine,    nLineStyle,  0, 4 );
-    ::extract_value( mnRightLine,   nLineStyle,  4, 4 );
-    ::extract_value( mnTopLine,     nLineStyle,  8, 4 );
-    ::extract_value( mnBottomLine,  nLineStyle, 12, 4 );
-    ::extract_value( mnLeftColor,   nLineColor,  0, 7 );
-    ::extract_value( mnRightColor,  nLineColor,  7, 7 );
-    ::extract_value( mnTopColor,    nLineColor, 16, 7 );
-    ::extract_value( mnBottomColor, nLineColor, 23, 7 );
-    mbLeftUsed   = !::get_flag( nFlags, EXC_CF_BORDER_LEFT );
-    mbRightUsed  = !::get_flag( nFlags, EXC_CF_BORDER_RIGHT );
-    mbTopUsed    = !::get_flag( nFlags, EXC_CF_BORDER_TOP );
-    mbBottomUsed = !::get_flag( nFlags, EXC_CF_BORDER_BOTTOM );
-    mbDiagUsed   = false;
+    mnLeftLine    = ::extract_value< sal_uInt8  >( nLineStyle,  0, 4 );
+    mnRightLine   = ::extract_value< sal_uInt8  >( nLineStyle,  4, 4 );
+    mnTopLine     = ::extract_value< sal_uInt8  >( nLineStyle,  8, 4 );
+    mnBottomLine  = ::extract_value< sal_uInt8  >( nLineStyle, 12, 4 );
+    mnLeftColor   = ::extract_value< sal_uInt16 >( nLineColor,  0, 7 );
+    mnRightColor  = ::extract_value< sal_uInt16 >( nLineColor,  7, 7 );
+    mnTopColor    = ::extract_value< sal_uInt16 >( nLineColor, 16, 7 );
+    mnBottomColor = ::extract_value< sal_uInt16 >( nLineColor, 23, 7 );
+    mbLeftUsed    = !::get_flag( nFlags, EXC_CF_BORDER_LEFT );
+    mbRightUsed   = !::get_flag( nFlags, EXC_CF_BORDER_RIGHT );
+    mbTopUsed     = !::get_flag( nFlags, EXC_CF_BORDER_TOP );
+    mbBottomUsed  = !::get_flag( nFlags, EXC_CF_BORDER_BOTTOM );
+    mbDiagUsed    = false;
 }
 
 namespace {
@@ -824,36 +895,36 @@ void XclImpCellArea::FillFromXF2( sal_uInt8 nFlags )
 
 void XclImpCellArea::FillFromXF3( sal_uInt16 nArea )
 {
-    ::extract_value( mnPattern,   nArea,  0, 6 );
-    ::extract_value( mnForeColor, nArea,  6, 5 );
-    ::extract_value( mnBackColor, nArea, 11, 5 );
+    mnPattern   = ::extract_value< sal_uInt8  >( nArea,  0, 6 );
+    mnForeColor = ::extract_value< sal_uInt16 >( nArea,  6, 5 );
+    mnBackColor = ::extract_value< sal_uInt16 >( nArea, 11, 5 );
     SetUsedFlags( true );
 }
 
 void XclImpCellArea::FillFromXF5( sal_uInt32 nArea )
 {
-    ::extract_value( mnPattern,   nArea, 16, 6 );
-    ::extract_value( mnForeColor, nArea,  0, 7 );
-    ::extract_value( mnBackColor, nArea,  7, 7 );
+    mnPattern   = ::extract_value< sal_uInt8  >( nArea, 16, 6 );
+    mnForeColor = ::extract_value< sal_uInt16 >( nArea,  0, 7 );
+    mnBackColor = ::extract_value< sal_uInt16 >( nArea,  7, 7 );
     SetUsedFlags( true );
 }
 
 void XclImpCellArea::FillFromXF8( sal_uInt32 nBorder2, sal_uInt16 nArea )
 {
-    ::extract_value( mnPattern,   nBorder2, 26, 6 );
-    ::extract_value( mnForeColor, nArea,     0, 7 );
-    ::extract_value( mnBackColor, nArea,     7, 7 );
+    mnPattern   = ::extract_value< sal_uInt8  >( nBorder2, 26, 6 );
+    mnForeColor = ::extract_value< sal_uInt16 >( nArea,     0, 7 );
+    mnBackColor = ::extract_value< sal_uInt16 >( nArea,     7, 7 );
     SetUsedFlags( true );
 }
 
 void XclImpCellArea::FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor, sal_uInt32 nFlags )
 {
-    ::extract_value( mnForeColor, nColor,    0, 7 );
-    ::extract_value( mnBackColor, nColor,    7, 7 );
-    ::extract_value( mnPattern,   nPattern, 10, 6 );
-    mbForeUsed = !::get_flag( nFlags, EXC_CF_AREA_FGCOLOR );
-    mbBackUsed = !::get_flag( nFlags, EXC_CF_AREA_BGCOLOR );
-    mbPattUsed = !::get_flag( nFlags, EXC_CF_AREA_PATTERN );
+    mnForeColor = ::extract_value< sal_uInt16 >( nColor,    0, 7 );
+    mnBackColor = ::extract_value< sal_uInt16 >( nColor,    7, 7 );
+    mnPattern   = ::extract_value< sal_uInt8  >( nPattern, 10, 6 );
+    mbForeUsed  = !::get_flag( nFlags, EXC_CF_AREA_FGCOLOR );
+    mbBackUsed  = !::get_flag( nFlags, EXC_CF_AREA_BGCOLOR );
+    mbPattUsed  = !::get_flag( nFlags, EXC_CF_AREA_PATTERN );
 
     if( mbBackUsed && (!mbPattUsed || (mnPattern == EXC_PATT_SOLID)) )
     {
@@ -933,13 +1004,10 @@ void XclImpXF::ReadXF3( XclImpStream& rStrm )
     sal_uInt8 nReadFont, nReadNumFmt;
     rStrm >> nReadFont >> nReadNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
 
-    // XF type/parent
-    mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );  // new in BIFF3
-    ::extract_value( mnParent, nAlign, 4, 12 );         // new in BIFF3
-    // attribute used flags
-    sal_uInt8 nUsedFlags;
-    ::extract_value( nUsedFlags, nTypeProt, 10, 6 );
-    SetUsedFlags( nUsedFlags );
+    // XF type/parent, attribute used flags
+    mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );          // new in BIFF3
+    mnParent = ::extract_value< sal_uInt16 >( nAlign, 4, 12 );  // new in BIFF3
+    SetUsedFlags( ::extract_value< sal_uInt8 >( nTypeProt, 10, 6 ) );
 
     // attributes
     maProtection.FillFromXF3( nTypeProt );
@@ -957,13 +1025,10 @@ void XclImpXF::ReadXF4( XclImpStream& rStrm )
     sal_uInt8 nReadFont, nReadNumFmt;
     rStrm >> nReadFont >> nReadNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
 
-    // XF type/parent
+    // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
-    ::extract_value( mnParent, nTypeProt, 4, 12 );
-    // attribute used flags
-    sal_uInt8 nUsedFlags;
-    ::extract_value( nUsedFlags, nAlign, 10, 6 );
-    SetUsedFlags( nUsedFlags );
+    mnParent = ::extract_value< sal_uInt16 >( nTypeProt, 4, 12 );
+    SetUsedFlags( ::extract_value< sal_uInt8 >( nAlign, 10, 6 ) );
 
     // attributes
     maProtection.FillFromXF3( nTypeProt );
@@ -980,13 +1045,10 @@ void XclImpXF::ReadXF5( XclImpStream& rStrm )
     sal_uInt16 nTypeProt, nAlign;
     rStrm >> mnXclFont >> mnXclNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
 
-    // XF type/parent
+    // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
-    ::extract_value( mnParent, nTypeProt, 4, 12 );
-    // attribute used flags
-    sal_uInt8 nUsedFlags;
-    ::extract_value( nUsedFlags, nAlign, 10, 6 );
-    SetUsedFlags( nUsedFlags );
+    mnParent = ::extract_value< sal_uInt16 >( nTypeProt, 4, 12 );
+    SetUsedFlags( ::extract_value< sal_uInt8 >( nAlign, 10, 6 ) );
 
     // attributes
     maProtection.FillFromXF3( nTypeProt );
@@ -1001,13 +1063,10 @@ void XclImpXF::ReadXF8( XclImpStream& rStrm )
     sal_uInt16 nTypeProt, nAlign, nMiscAttrib, nArea;
     rStrm >> mnXclFont >> mnXclNumFmt >> nTypeProt >> nAlign >> nMiscAttrib >> nBorder1 >> nBorder2 >> nArea;
 
-    // XF type/parent
+    // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
-    ::extract_value( mnParent, nTypeProt, 4, 12 );
-    // attribute used flags
-    sal_uInt8 nUsedFlags;
-    ::extract_value( nUsedFlags, nMiscAttrib, 10, 6 );
-    SetUsedFlags( nUsedFlags );
+    mnParent = ::extract_value< sal_uInt16 >( nTypeProt, 4, 12 );
+    SetUsedFlags( ::extract_value< sal_uInt8 >( nMiscAttrib, 10, 6 ) );
 
     // attributes
     maProtection.FillFromXF3( nTypeProt );
@@ -1210,6 +1269,11 @@ ScStyleSheet* XclImpXF::CreateStyleSheet()
 XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
+}
+
+void XclImpXFBuffer::Initialize()
+{
+    maXFList.Clear();
 }
 
 void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
@@ -1616,8 +1680,10 @@ void XclImpXFRangeBuffer::Finalize()
     // apply cell merging
     for( const ScRange* pRange = maMergeList.First(); pRange; pRange = maMergeList.Next() )
     {
-        bool bMultiCol = (pRange->aStart.Col() != pRange->aEnd.Col());
-        bool bMultiRow = (pRange->aStart.Row() != pRange->aEnd.Row());
+        const ScAddress& rStart = pRange->aStart;
+        const ScAddress& rEnd = pRange->aEnd;
+        bool bMultiCol = rStart.Col() != rEnd.Col();
+        bool bMultiRow = rStart.Row() != rEnd.Row();
         // set correct right border
         if( bMultiCol )
             SetBorderLine( *pRange, nScTab, BOX_LINE_RIGHT );
@@ -1626,8 +1692,17 @@ void XclImpXFRangeBuffer::Finalize()
             SetBorderLine( *pRange, nScTab, BOX_LINE_BOTTOM );
         // do merge
         if( bMultiCol || bMultiRow )
-            rDoc.DoMerge( nScTab, pRange->aStart.Col(), pRange->aStart.Row(),
-                pRange->aEnd.Col(), pRange->aEnd.Row() );
+            rDoc.DoMerge( nScTab, rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
+        // #i93609# merged range in a single row: test if manual row height is needed
+        if( !bMultiRow )
+        {
+            bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
+            if( !bTextWrap && (rDoc.GetCellType( rStart ) == CELLTYPE_EDIT) )
+                if( const EditTextObject* pEditObj = static_cast< const ScEditCell* >( rDoc.GetCell( rStart ) )->GetData() )
+                    bTextWrap = pEditObj->GetParagraphCount() > 1;
+            if( bTextWrap )
+                GetOldRoot().pColRowBuff->SetManualRowHeight( rStart.Row() );
+        }
     }
 }
 

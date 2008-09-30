@@ -158,6 +158,12 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
     }
 }
 
+void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
+{
+    if( ValidRow( nScRow ) )
+        ::set_flag( maRowFlags[ nScRow ], EXC_COLROW_MAN );
+}
+
 void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex )
 {
     /*  #109555# assign the default column formatting here to ensure that

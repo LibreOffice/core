@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xipage.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.7.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,8 +63,8 @@ public:
     void                ReadPrintHeaders( XclImpStream& rStrm );
     /** Reads a PRINTGRIDLINES record. */
     void                ReadPrintGridLines( XclImpStream& rStrm );
-    /** Reads a BITMAP record and creates the SvxBrushItem. */
-    void                ReadBitmap( XclImpStream& rStrm );
+    /** Reads an IMGDATA record and creates the SvxBrushItem. */
+    void                ReadImgData( XclImpStream& rStrm );
 
     /** Overrides paper size and orientation (used in sheet-charts). */
     void                SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97esc.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.14.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,26 +35,31 @@
 #include <tools/table.hxx>
 #include <tools/stack.hxx>
 #include "xlescher.hxx"
-#include "xlocx.hxx"
+#include "xeroot.hxx"
+
+// 0 = Export TBX form controls, 1 = Export OCX form controls.
+#define EXC_EXP_OCX_CTRL 0
 
 namespace utl { class TempFile; }
 
 // --- class XclEscherEx ---------------------------------------------
 
-struct RootData;
 class SvStream;
 class XclObj;
 class XclEscherHostAppData;
 class XclEscherClientData;
 class XclEscherClientTextbox;
+#if EXC_EXP_OCX_CTRL
+class XclExpOcxControlObj;
+#else
+class XclExpTbxControlObj;
+#endif
 
-class XclEscherEx : public EscherEx
+class XclEscherEx : public EscherEx, protected XclExpRoot
 {
 private:
         List                aOffsetMap;
         Stack               aStack;
-        XclExpOcxConverter  aOcxConverter;      /// Export of form controls.
-        RootData&           rRootData;
         utl::TempFile*      pPicTempFile;
         SvStream*           pPicStrm;
         XclObj*             pCurrXclObj;
@@ -66,8 +71,7 @@ private:
             void                DeleteCurrAppData();
 
 public:
-                                XclEscherEx( SvStream& rStrm, UINT32 nDrawings,
-                                    RootData& rRoot );
+                                XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm, UINT32 nDrawings );
     virtual                     ~XclEscherEx();
 
                                 /// maintains OffsetMap
@@ -90,6 +94,27 @@ public:
 
                                 /// Flush and merge PicStream into EscherStream
             void                EndDocument();
+
+#if EXC_EXP_OCX_CTRL
+    /** Creates an OCX form control OBJ record from the passed form control.
+        @descr  Writes the form control data to the 'Ctls' stream. */
+    XclExpOcxControlObj* CreateCtrlObj( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape > xShape );
+
+private:
+    SotStorageStreamRef  mxCtlsStrm;         /// The 'Ctls' stream.
+#else
+    /** Creates a TBX form control OBJ record from the passed form control. */
+    XclExpTbxControlObj* CreateCtrlObj( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape > xShape );
+
+private:
+    /** Tries to get the name of a Basic macro from a control. */
+    void                ConvertTbxMacro(
+                            XclExpTbxControlObj& rTbxCtrlObj,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XControlModel > xCtrlModel );
+#endif
 };
 
 
@@ -109,7 +134,7 @@ inline ULONG XclEscherEx::GetLastOffsetMapPos() const
 
 struct RootData;
 
-class XclEscher
+class XclEscher : protected XclExpRoot
 {
 private:
         utl::TempFile*      pTempFile;
@@ -117,13 +142,13 @@ private:
         XclEscherEx*        pEx;
 
 public:
-                                XclEscher( UINT32 nDrawings, RootData& rRoot );
+                                XclEscher( const XclExpRoot& rRoot, UINT32 nDrawings );
                                 ~XclEscher();
 
     inline  XclEscherEx*        GetEx() const       { return pEx; }
     inline  SvStream&           GetStrm() const     { return *pStrm; }
 
-    void                        AddSdrPage( const XclExpRoot& rRoot );
+    void                        AddSdrPage();
 };
 
 
@@ -142,20 +167,20 @@ public:
 };
 
 
-// Escher client anchor =======================================================
+// DFF client anchor ==========================================================
 
 class Rectangle;
 class SdrObject;
 class ScAddress;
 
-/** Represents the position (anchor) of an Escher object in a Calc document. */
-class XclExpEscherAnchor : public EscherExClientAnchor_Base, protected XclExpRoot
+/** Represents the position (anchor) of an object in a Calc document. */
+class XclExpDffAnchor : public EscherExClientAnchor_Base, protected XclExpRoot
 {
 public:
-    /** Constructs a dummy Escher client anchor. */
-    explicit                    XclExpEscherAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
-    /** Constructs an Escher client anchor directly from an SdrObject. */
-    explicit                    XclExpEscherAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj );
+    /** Constructs a dummy client anchor. */
+    explicit                    XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
+    /** Constructs a client anchor directly from an SdrObject. */
+    explicit                    XclExpDffAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj );
 
     /** Sets the flags according to the passed SdrObject. */
     void                        SetFlags( const SdrObject& rSdrObj );
@@ -164,31 +189,31 @@ public:
         @param rRect  The object anchor rectangle to be exported (in twips). */
     virtual void                WriteData( EscherEx& rEx, const Rectangle& rRect );
 
-    /** Writes the Escher anchor structure with the current anchor position. */
+    /** Writes the anchor structure with the current anchor position. */
     void                        WriteData( EscherEx& rEx ) const;
 
 protected:  // for access in derived classes
-    XclEscherAnchor             maAnchor;       /// The client anchor data.
-    sal_uInt16                  mnFlags;        /// Flags for Escher stream export.
+    XclObjAnchor                maAnchor;       /// The client anchor data.
+    sal_uInt16                  mnFlags;        /// Flags for DFF stream export.
 };
 
 // ----------------------------------------------------------------------------
 
-/** Represents the position (anchor) of an Escher note object. */
-class XclExpEscherNoteAnchor : public XclExpEscherAnchor
+/** Represents the position (anchor) of a note object. */
+class XclExpDffNoteAnchor : public XclExpDffAnchor
 {
 public:
-    explicit                    XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
+    explicit                    XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
 };
 
 
 // ----------------------------------------------------------------------------
 
-/** Represents the position (anchor) of an Escher cell dropdown object. */
-class XclExpEscherDropDownAnchor : public XclExpEscherAnchor
+/** Represents the position (anchor) of a cell dropdown object. */
+class XclExpDffDropDownAnchor : public XclExpDffAnchor
 {
 public:
-    explicit                    XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
+    explicit                    XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
 };
 
 
@@ -207,18 +232,16 @@ public:
 // --- class XclEscherClientTextbox ----------------------------------
 
 class SdrTextObj;
-struct RootData;
 
-class XclEscherClientTextbox : public EscherExClientRecord_Base
+class XclEscherClientTextbox : public EscherExClientRecord_Base, protected XclExpRoot
 {
 private:
-        RootData&               rRootData;
         const SdrTextObj&       rTextObj;
         XclObj*                 pXclObj;
 
 public:
                                 XclEscherClientTextbox(
-                                    RootData& rRoot,
+                                    const XclExpRoot& rRoot,
                                     const SdrTextObj& rObj,
                                     XclObj* pObj
                                     );

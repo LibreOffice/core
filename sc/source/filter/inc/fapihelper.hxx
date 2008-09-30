@@ -172,6 +172,9 @@ public:
 
     // Get properties ---------------------------------------------------------
 
+    /** Returns true, if the property set contains the specified property. */
+    bool                HasProperty( const ::rtl::OUString& rPropName ) const;
+
     /** Gets the specified property from the property set.
         @return  true, if the Any could be filled with the property value. */
     bool                GetAnyProperty( UnoAny& rValue, const ::rtl::OUString& rPropName ) const;

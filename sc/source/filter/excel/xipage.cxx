@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xipage.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.90.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include "xipage.hxx"
 #include <svtools/itemset.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
 #include "scitems.hxx"
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
@@ -47,6 +46,7 @@
 #include "attrib.hxx"
 #include "xistream.hxx"
 #include "xihelper.hxx"
+#include "xiescher.hxx"
 
 // Page settings ==============================================================
 
@@ -169,49 +169,11 @@ void XclImpPageSettings::ReadPrintGridLines( XclImpStream& rStrm )
     maData.mbPrintGrid = (rStrm.ReaduInt16() != 0);
 }
 
-void XclImpPageSettings::ReadBitmap( XclImpStream& rStrm )
+void XclImpPageSettings::ReadImgData( XclImpStream& rStrm )
 {
-    sal_uInt32 nID;
-    sal_uInt16 nWidth, nHeight, nPlanes, nDepth;
-
-    rStrm >> nID;
-    rStrm.Ignore( 8 );
-    rStrm >> nWidth >> nHeight >> nPlanes >> nDepth;
-
-    DBG_ASSERT( nID == EXC_BITMAP_UNKNOWNID, "XclImpPageSettings::ReadBitmap - wrong ID" );
-    DBG_ASSERT( nDepth == 24, "XclImpPageSettings::ReadBitmap - wrong depth" );
-    DBG_ASSERT( nPlanes == 1, "XclImpPageSettings::ReadBitmap - wrong plane count" );
-    if( rStrm.IsValid() && (nID == EXC_BITMAP_UNKNOWNID) && (nDepth == 24) && (nPlanes == 1) )
-    {
-        sal_Size nPadding = nWidth % 4;
-        if( rStrm.GetRecLeft() == (nWidth * 3 + nPadding) * nHeight )
-        {
-            sal_Int32 nVclWidth = nWidth;
-            sal_Int32 nVclHeight = nHeight;
-            Bitmap aBmp( Size( nVclWidth, nVclHeight ), nDepth );
-            BitmapWriteAccess* pAccess = aBmp.AcquireWriteAccess();
-            if( pAccess )
-            {
-                sal_uInt8 nBlue, nGreen, nRed;
-                for( sal_Int32 nY = nVclHeight - 1; nY >= 0; --nY )
-                {
-                    for( sal_Int32 nX = 0; nX < nVclWidth; ++nX )
-                    {
-                        rStrm >> nBlue >> nGreen >> nRed;
-                        pAccess->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
-                    }
-                    rStrm.Ignore( nPadding );
-                }
-
-                aBmp.ReleaseAccess( pAccess );
-                maData.mxBrushItem.reset( new SvxBrushItem( Graphic( aBmp ), GPOS_TILED, ATTR_BACKGROUND ) );
-            }
-        }
-        else
-        {
-            DBG_ERRORFILE( "XclImpPageSettings::ReadBitmap - record size invalid" );
-        }
-    }
+    Graphic aGraphic = XclImpObjectManager::ReadImgData( rStrm );
+    if( aGraphic.GetType() != GRAPHIC_NONE )
+        maData.mxBrushItem.reset( new SvxBrushItem( aGraphic, GPOS_TILED, ATTR_BACKGROUND ) );
 }
 
 void XclImpPageSettings::SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait )

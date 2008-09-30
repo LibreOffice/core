@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scenwnd.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,19 +48,13 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-//------------------------------------------------------------------------
-
-
 //========================================================================
 // class ScScenarioWindow ------------------------------------------------
 //========================================================================
 
-// -----------------------------------------------------------------------
-
-ScScenarioListBox::ScScenarioListBox( Window* pParent )
-    :   ListBox ( pParent, WB_BORDER ),
-        rParent ( (ScScenarioWindow&)*pParent ),
-        pAccel  ( NULL )
+ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
+    ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
+    mrParent( rParent )
 {
     Font aFont( GetFont() );
     aFont.SetTransparent( TRUE );
@@ -68,150 +62,70 @@ ScScenarioListBox::ScScenarioListBox( Window* pParent )
     SetFont( aFont );
 }
 
-// -----------------------------------------------------------------------
-
-__EXPORT ScScenarioListBox::~ScScenarioListBox()
+ScScenarioListBox::~ScScenarioListBox()
 {
-    ClearEntryList();
-    delete pAccel;
 }
-
-// -----------------------------------------------------------------------
 
 void ScScenarioListBox::UpdateEntries( List* pNewEntryList )
 {
-    ClearEntryList();
     Clear();
+    maEntries.clear();
 
-    if ( pNewEntryList )
+    if( !pNewEntryList )
+        return;
+
+    switch( pNewEntryList->Count() )
     {
-        if ( pNewEntryList->Count() > 1 )
-        {
-            CopyEntryList( *pNewEntryList );
-            SetUpdateMode( FALSE );
+        case 0:
+            // no scenarios in current sheet
+            mrParent.SetComment( EMPTY_STRING );
+        break;
 
-            String* pEntry = (String*)aEntryList.First();
-
-            while ( pEntry )
-            {
-                InsertEntry( *pEntry, LISTBOX_APPEND );
-                aEntryList.Next(); // Skip the comment
-                aEntryList.Next(); // Skip the protection
-                pEntry = (String*)aEntryList.Next();
-            }
-
-            SetUpdateMode( TRUE );
-            SetNoSelection();
-            rParent.SetComment( EMPTY_STRING );
-        }
-        else if ( pNewEntryList->Count() == 1 )
-            // Tabelle ist Scenario-Tabelle: nur Kommentar
-            rParent.SetComment( *((String*)pNewEntryList->First()) );
-        else
-            rParent.SetComment( EMPTY_STRING );     // normale Tabelle ohne Szenarien
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void ScScenarioListBox::ClearEntryList()
-{
-    String* pEntry = (String*)aEntryList.First();
-
-    while ( pEntry )
-    {
-        delete pEntry;
-        pEntry = (String*)aEntryList.Next();
-    }
-    aEntryList.Clear();
-}
-
-// -----------------------------------------------------------------------
-
-void ScScenarioListBox::CopyEntryList( List& rNewList )
-{
-    if ( aEntryList.Count() > 0 )
-        ClearEntryList();
-
-    String* pEntry = (String*)rNewList.First();
-
-    while ( pEntry )
-    {
-        aEntryList.Insert( new String( *pEntry ), LIST_APPEND );
-        pEntry = (String*)rNewList.Next();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void __EXPORT ScScenarioListBox::Select()
-{
-    String* pEntry = (String*)aEntryList.GetObject( (GetSelectEntryPos()*3)+1 );
-
-    if ( pEntry )
-        rParent.SetComment( *pEntry );
-}
-
-// -----------------------------------------------------------------------
-
-void __EXPORT ScScenarioListBox::DoubleClick()
-{
-    SfxStringItem aStringItem( SID_SELECT_SCENARIO, GetSelectEntry() );
-
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm)
-        pViewFrm->GetDispatcher()->Execute( SID_SELECT_SCENARIO,
-                              SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                              &aStringItem, 0L, 0L );
-}
-
-// -----------------------------------------------------------------------
-
-void __EXPORT ScScenarioListBox::GetFocus()
-{
-    pAccel = new Accelerator;
-
-    pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
-    pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
-    pAccel->SetSelectHdl( LINK( this, ScScenarioListBox, AccelSelectHdl ) );
-
-    Application::InsertAccel( pAccel );
-    aCurText = GetText();
-}
-
-// -----------------------------------------------------------------------
-
-void __EXPORT ScScenarioListBox::LoseFocus()
-{
-    Application::RemoveAccel( pAccel );
-    delete pAccel;
-    pAccel = NULL;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( ScScenarioListBox, AccelSelectHdl, Accelerator *, pSelAccel )
-{
-    if ( !pSelAccel ) return 0;
-
-    switch ( pSelAccel->GetCurKeyCode().GetCode() )
-    {
-        case KEY_RETURN:
-            Select();
-            break;
-
-        case KEY_ESCAPE:
-            SelectEntry( aCurText );
-            Select();
-            break;
+        case 1:
+            // sheet is a scenario container, comment only
+            mrParent.SetComment( *static_cast< String* >( pNewEntryList->First() ) );
+        break;
 
         default:
-        break;
+        {
+            // sheet contains scenarios
+            DBG_ASSERT( pNewEntryList->Count() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
+            SetUpdateMode( FALSE );
+            String* pEntry = static_cast< String* >( pNewEntryList->First() );
+            while( pEntry )
+            {
+                ScenarioEntry aEntry;
+
+                // first entry of a triple is the scenario name
+                aEntry.maName = *pEntry;
+                // second entry of a triple is the scenario comment
+                if( (pEntry = static_cast< String* >( pNewEntryList->Next() )) != 0 )
+                    aEntry.maComment = *pEntry;
+                // third entry of a triple is the protection ("0" = not protected, "1" = protected)
+                if( (pEntry = static_cast< String* >( pNewEntryList->Next() )) != 0 )
+                    aEntry.mbProtected = (pEntry->Len() > 0) && (pEntry->GetChar( 0 ) != '0');
+
+                maEntries.push_back( aEntry );
+                InsertEntry( aEntry.maName, LISTBOX_APPEND );
+                pEntry = static_cast< String* >( pNewEntryList->Next() );
+            }
+            SetUpdateMode( TRUE );
+            SetNoSelection();
+            mrParent.SetComment( EMPTY_STRING );
+        }
     }
-    return 0;
 }
 
-//---------------------------------------------------------------
+void ScScenarioListBox::Select()
+{
+    if( const ScenarioEntry* pEntry = GetSelectedEntry() )
+        mrParent.SetComment( pEntry->maComment );
+}
+
+void ScScenarioListBox::DoubleClick()
+{
+    SelectScenario();
+}
 
 long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
 {
@@ -220,10 +134,16 @@ long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyCode aCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        if( KEY_RETURN == aCode.GetCode() )
+        switch( aCode.GetCode() )
         {
-            DoubleClick();
-            bHandled = true;
+            case KEY_RETURN:
+                SelectScenario();
+                bHandled = true;
+            break;
+            case KEY_DELETE:
+                DeleteScenario( true );
+                bHandled = true;
+            break;
         }
     }
     else if ( rNEvt.GetType() == EVENT_COMMAND && GetSelectEntryCount() )
@@ -231,37 +151,23 @@ long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
         {
-            String* pProtect = (String*)aEntryList.GetObject( (GetSelectEntryPos()*3)+2 );
-            if(pProtect && pProtect->GetChar(0) == '0')
+            if( const ScenarioEntry* pEntry = GetSelectedEntry() )
             {
-                ScPopupMenu aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
-                aPopup.Execute( this, pCEvt->GetMousePosPixel() );
-                if (aPopup.WasHit())
+                if( !pEntry->mbProtected )
                 {
-                    String aName = GetSelectEntry();
-                    USHORT nId = aPopup.GetSelected();
-                    if ( nId == RID_NAVIPI_SCENARIO_DELETE )
+                    ScPopupMenu aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
+                    aPopup.Execute( this, pCEvt->GetMousePosPixel() );
+                    if (aPopup.WasHit())
                     {
-                        short nRes = QueryBox( NULL, WinBits( WB_YES_NO | WB_DEF_YES ),
-                                        ScGlobal::GetRscString(STR_QUERY_DELSCENARIO) ).Execute();
-                        if ( nRes == RET_YES )
+                        switch( aPopup.GetSelected() )
                         {
-                            SfxStringItem aStringItem( SID_DELETE_SCENARIO, aName );
-                            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                            if (pViewFrm)
-                                pViewFrm->GetDispatcher()->Execute( SID_DELETE_SCENARIO,
-                                                        SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                                                        &aStringItem, 0L, 0L );
+                            case RID_NAVIPI_SCENARIO_DELETE:
+                                DeleteScenario( true );
+                            break;
+                            case RID_NAVIPI_SCENARIO_EDIT:
+                                EditScenario();
+                            break;
                         }
-                    }
-                    else if ( nId == RID_NAVIPI_SCENARIO_EDIT )
-                    {
-                        SfxStringItem aStringItem( SID_EDIT_SCENARIO, aName );
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if (pViewFrm)
-                            pViewFrm->GetDispatcher()->Execute( SID_EDIT_SCENARIO,
-                                                    SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                                                    &aStringItem, 0L, 0L );
                     }
                 }
             }
@@ -272,6 +178,39 @@ long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
     return bHandled ? 1 : ListBox::Notify( rNEvt );
 }
 
+const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedEntry() const
+{
+    size_t nPos = GetSelectEntryPos();
+    return (nPos < maEntries.size()) ? &maEntries[ nPos ] : 0;
+}
+
+void ScScenarioListBox::ExecuteScenarioSlot( USHORT nSlotId )
+{
+    if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
+    {
+        SfxStringItem aStringItem( nSlotId, GetSelectEntry() );
+        pViewFrm->GetDispatcher()->Execute( nSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aStringItem, 0L, 0L );
+    }
+}
+
+void ScScenarioListBox::SelectScenario()
+{
+    if( GetSelectEntryCount() > 0 )
+        ExecuteScenarioSlot( SID_SELECT_SCENARIO );
+}
+
+void ScScenarioListBox::EditScenario()
+{
+    if( GetSelectEntryCount() > 0 )
+        ExecuteScenarioSlot( SID_EDIT_SCENARIO );
+}
+
+void ScScenarioListBox::DeleteScenario( bool bQueryBox )
+{
+    if( GetSelectEntryCount() > 0 )
+        if( !bQueryBox || (::QueryBox( 0, WinBits( WB_YES_NO | WB_DEF_YES ), ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) ).Execute() == RET_YES) )
+            ExecuteScenarioSlot( SID_DELETE_SCENARIO );
+}
 
 //========================================================================
 // class ScScenarioWindow ------------------------------------------------
@@ -279,10 +218,9 @@ long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
 
 ScScenarioWindow::ScScenarioWindow( Window* pParent,const String& aQH_List,
                                     const String& aQH_Comment)
-    :   Window      ( pParent ),
-        aLbScenario ( this ),
-        aEdComment  ( this,  WB_BORDER | WB_LEFT
-                           | WB_READONLY | WB_VSCROLL )
+    :   Window      ( pParent, WB_TABSTOP | WB_DIALOGCONTROL ),
+        aLbScenario ( *this ),
+        aEdComment  ( this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP )
 {
     Font aFont( GetFont() );
     aFont.SetTransparent( TRUE );
@@ -310,7 +248,7 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent,const String& aQH_List,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScScenarioWindow::~ScScenarioWindow()
+ScScenarioWindow::~ScScenarioWindow()
 {
 }
 

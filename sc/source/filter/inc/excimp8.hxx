@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excimp8.hxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.71.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,6 @@ class ImportExcel8 : public ImportExcel
         void                    Precision( void );              // 0x0E
         void                    Delta( void );                  // 0x10
         void                    Iteration( void );              // 0x11
-        void                    Note( void );                   // 0x1C
         void                    WinProtection(  void );         // 0x19
         void                    Boundsheet( void );             // 0x85
         void                    FilterMode( void );             // 0x9B

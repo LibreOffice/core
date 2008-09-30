@@ -463,6 +463,9 @@ public:
 protected:
     typedef ::std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
 
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                InitializeImport();
+
     /** Returns the current number format map. */
     inline const XclNumFmtMap& GetFormatMap() const { return maFmtMap; }
 

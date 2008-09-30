@@ -32,15 +32,19 @@
 #include "precompiled_sc.hxx"
 
 #include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <tools/globname.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include "scitems.hxx"
 #include <svtools/stritem.hxx>
 #include "filter.hxx"
 #include "document.hxx"
-#include "xldumper.hxx"
 #include "xistream.hxx"
 
 #include "scerrors.hxx"
@@ -56,15 +60,6 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
 
-#if SCF_INCL_DUMPER
-    {
-        ::scf::dump::xls::Dumper aDumper( rMedium, pDocument->GetDocumentShell() );
-        aDumper.Dump();
-        if( !aDumper.IsImportEnabled() )
-            return ERRCODE_ABORT;
-    }
-#endif
-
     /*  Import all BIFF versions regardless on eFormat, needed for import of
         external cells (file type detection returns Excel4.0). */
     if( (eFormat != EIF_AUTO) && (eFormat != EIF_BIFF_LE4) && (eFormat != EIF_BIFF5) && (eFormat != EIF_BIFF8) )
@@ -77,6 +72,49 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     SvStream* pMedStrm = rMedium.GetInStream();
     DBG_ASSERT( pMedStrm, "::ScImportExcel - medium without input stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
+
+#if OSL_DEBUG_LEVEL > 0
+    using namespace ::com::sun::star;
+    using namespace ::comphelper;
+
+    // false = use old sc filter for import (OOX only as file dumper), true = use new OOX filter for import
+    bool bUseOoxFilter = false;
+    if( SfxObjectShell* pDocShell = pDocument->GetDocumentShell() ) try
+    {
+        uno::Reference< lang::XComponent > xComponent( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
+
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[ 0 ] <<= getProcessServiceFactory();
+        aArgs[ 1 ] <<= !bUseOoxFilter;
+        uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
+            CREATE_STRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+        xImporter->setTargetDocument( xComponent );
+
+        MediaDescriptor aDescriptor;
+        if( const SfxItemSet* pItemSet = rMedium.GetItemSet() )
+            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
+                aDescriptor[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
+        aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
+
+        // call the filter
+        uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
+        bool bResult = xFilter->filter( aDescriptor.getAsConstPropertyValueList() );
+
+        // if filter returns false, document is invalid, or dumper has disabled import -> exit here
+        if( !bResult )
+            return ERRCODE_ABORT;
+
+        // if OOX filter has been used, exit with OK code
+        if( bUseOoxFilter )
+            return eERR_OK;
+    }
+    catch( uno::Exception& )
+    {
+        if( bUseOoxFilter )
+            return ERRCODE_ABORT;
+        // else ignore exception and import the document with this filter
+    }
+#endif
 
     SvStream* pBookStrm = 0;            // The "Book"/"Workbook" stream containing main data.
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.

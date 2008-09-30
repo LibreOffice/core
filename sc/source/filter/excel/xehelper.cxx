@@ -475,79 +475,78 @@ XclExpStringRef lclCreateFormattedString(
     {
         ESelection aSel( nPara, 0 );
         String aParaText( rEE.GetText( nPara ) );
-        if( aParaText.Len() )
+
+        SvUShorts aPosList;
+        rEE.GetPortions( nPara, aPosList );
+
+        // process all portions in the paragraph
+        sal_uInt16 nPosCount = aPosList.Count();
+        for( sal_uInt16 nPos = 0; nPos < nPosCount; ++nPos )
         {
-            SvUShorts aPosList;
-            rEE.GetPortions( nPara, aPosList );
+            aSel.nEndPos = static_cast< xub_StrLen >( aPosList.GetObject( nPos ) );
+            String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
-            // process all portions in the paragraph
-            sal_uInt16 nPosCount = aPosList.Count();
-            for( sal_uInt16 nPos = 0; nPos < nPosCount; ++nPos )
+            aItemSet.ClearItem();
+            SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
+            ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
+
+            // get escapement value
+            short nEsc = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT ).GetEsc();
+
+            // process text fields
+            bool bIsHyperlink = false;
+            if( aSel.nStartPos + 1 == aSel.nEndPos )
             {
-                aSel.nEndPos = static_cast< xub_StrLen >( aPosList.GetObject( nPos ) );
-                String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
-
-                aItemSet.ClearItem();
-                SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
-                ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
-
-                // get escapement value
-                short nEsc = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT ).GetEsc();
-
-                // process text fields
-                bool bIsHyperlink = false;
-                if( aSel.nStartPos + 1 == aSel.nEndPos )
+                // test if the character is a text field
+                const SfxPoolItem* pItem;
+                if( aEditSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_SET )
                 {
-                    // test if the character is a text field
-                    const SfxPoolItem* pItem;
-                    if( aEditSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_SET )
+                    const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
+                    if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
                     {
-                        const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
-                        if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
-                        {
-                            // convert URL field to string representation
-                            aXclPortionText = pLinkHelper ?
-                                pLinkHelper->ProcessUrlField( *pUrlField ) :
-                                lclGetUrlRepresentation( *pUrlField );
-                            bIsHyperlink = true;
-                        }
-                        else
-                        {
-                            DBG_ERRORFILE( "lclCreateFormattedString - unknown text field" );
-                            aXclPortionText.Erase();
-                        }
+                        // convert URL field to string representation
+                        aXclPortionText = pLinkHelper ?
+                            pLinkHelper->ProcessUrlField( *pUrlField ) :
+                            lclGetUrlRepresentation( *pUrlField );
+                        bIsHyperlink = true;
+                    }
+                    else
+                    {
+                        DBG_ERRORFILE( "lclCreateFormattedString - unknown text field" );
+                        aXclPortionText.Erase();
                     }
                 }
-
-                // Excel start position of this portion
-                sal_uInt16 nXclPortionStart = xString->Len();
-                // add portion text to Excel string
-                XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
-                if( nXclPortionStart < xString->Len() )
-                {
-                    /*  Construct font from current edit engine text portion. Edit engine
-                        creates different portions for different script types, no need to loop. */
-                    sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
-                    if( nScript == ApiScriptType::WEAK )
-                        nScript = nLastScript;
-                    SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( aItemSet, nScript ) );
-                    nLastScript = nScript;
-
-                    // add escapement
-                    aFont.SetEscapement( nEsc );
-                    // modify automatic font color for hyperlinks
-                    if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
-                        aFont.SetColor( Color( COL_LIGHTBLUE ) );
-
-                    // insert font into buffer
-                    sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
-                    // insert font index into format run vector
-                    xString->AppendFormat( nXclPortionStart, nFontIdx );
-                }
-
-                aSel.nStartPos = aSel.nEndPos;
             }
+
+            // Excel start position of this portion
+            sal_uInt16 nXclPortionStart = xString->Len();
+            // add portion text to Excel string
+            XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
+            if( (nXclPortionStart < xString->Len()) || (aParaText.Len() == 0) )
+            {
+                /*  Construct font from current edit engine text portion. Edit engine
+                    creates different portions for different script types, no need to loop. */
+                sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
+                if( nScript == ApiScriptType::WEAK )
+                    nScript = nLastScript;
+                SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( aItemSet, nScript ) );
+                nLastScript = nScript;
+
+                // add escapement
+                aFont.SetEscapement( nEsc );
+                // modify automatic font color for hyperlinks
+                if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
+                    aFont.SetColor( Color( COL_LIGHTBLUE ) );
+
+                // insert font into buffer
+                sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
+                // insert font index into format run vector
+                xString->AppendFormat( nXclPortionStart, nFontIdx );
+            }
+
+            aSel.nStartPos = aSel.nEndPos;
         }
+
         // add trailing newline (important for correct character index calculation)
         if( nPara + 1 < nParaCount )
             XclExpStringHelper::AppendChar( *xString, rRoot, '\n' );

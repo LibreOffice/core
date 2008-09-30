@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xipivot.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1272,7 +1272,7 @@ void XclImpPivotTable::ReadSxpi( XclImpStream& rStrm )
             maPageFields.push_back( aPageInfo.mnField );
             pField->SetPageFieldInfo( aPageInfo );
         }
-        GetObjectManager().SetInvalidObj( GetCurrScTab(), aPageInfo.mnObjId );
+        GetObjectManager().SetSkipObj( GetCurrScTab(), aPageInfo.mnObjId );
     }
 }
 

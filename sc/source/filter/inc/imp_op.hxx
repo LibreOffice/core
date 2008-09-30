@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imp_op.hxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.43.14.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,6 +109,7 @@ protected:
     typedef ScfDelList< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
     XclImpOutlineListBuffer* pOutlineListBuffer;
 
+    sal_Int16               mnLastRefIdx;
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
@@ -137,7 +138,6 @@ protected:
     void                    Protect( void );                // 0x12 Sheet Protection
     BOOL                    Password( void );               // 0x13
     void                    Externsheet( void );            // 0x17
-    void                    Note( void );                   // 0x1C
     void                    Columndefault( void );          // 0x20
     void                    Array25( void );                // 0x21
     void                    Rec1904( void );                // 0x22
@@ -149,7 +149,6 @@ protected:
     void                    Ixfe( void );                   // 0x44
     void                    DefColWidth( void );            // 0x55
     void                    Builtinfmtcnt( void );          // 0x56
-    void                    Obj( void );                    // 0x5D
     void                    Colinfo( void );                // 0x7D
     void                    Wsbool( void );                 // 0x81
     void                    Boundsheet( void );             // 0x85
@@ -176,11 +175,6 @@ protected:
     void                    Formula4( void );               // 0x0406       -> excform.cxx
     void                    Bof4( void );                   // 0x0409
     void                    Bof5( void );                   // 0x0809
-    // ---------------------------------------------------------------
-    void                    SetLineStyle( SfxItemSet&, sal_uInt16, sal_uInt16, sal_uInt16 );
-    void                    SetFillStyle( SfxItemSet&, sal_uInt16, sal_uInt16, sal_uInt16 );
-    SdrObject*              LineObj( SfxItemSet&, const Point&, const Point& );
-    SdrObject*              RectObj( SfxItemSet&, const Point&, const Point& );
 
     // ---------------------------------------------------------------
     void                    Formula( const XclAddress& rXclPos,

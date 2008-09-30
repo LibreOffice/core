@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xeescher.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.90.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #ifndef SC_XEESCHER_HXX
 #define SC_XEESCHER_HXX
 
+#include <vcl/graph.hxx>
 #include "xlescher.hxx"
 
 #include "xcl97rec.hxx"
@@ -41,12 +42,28 @@ namespace com { namespace sun { namespace star {
 
 // ============================================================================
 
-/** Helper class for form controils to manage spreadsheet links . */
-class XclExpControlObjHelper : protected XclExpRoot
+/** Provides export of bitmap data to an IMGDATA record. */
+class XclExpImgData : public XclExpRecordBase
 {
 public:
-    explicit            XclExpControlObjHelper( const XclExpRoot& rRoot );
-    virtual             ~XclExpControlObjHelper();
+    explicit            XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId );
+
+    /** Writes the BITMAP record. */
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    Graphic             maGraphic;      /// The VCL graphic.
+    sal_uInt16          mnRecId;        /// Record identifier for the IMGDATA record.
+};
+
+// ============================================================================
+
+/** Helper class for form controils to manage spreadsheet links . */
+class XclExpControlHelper : protected XclExpRoot
+{
+public:
+    explicit            XclExpControlHelper( const XclExpRoot& rRoot );
+    virtual             ~XclExpControlHelper();
 
 protected:
     /** Tries to get spreadsheet cell link and source range link from the passed shape. */
@@ -77,7 +94,7 @@ private:
 #if EXC_EXP_OCX_CTRL
 
 /** Represents an OBJ record for an OCX form control. */
-class XclExpOcxControlObj : public XclObj, public XclExpControlObjHelper
+class XclExpOcxControlObj : public XclObj, public XclExpControlHelper
 {
 public:
     explicit            XclExpOcxControlObj(
@@ -98,7 +115,7 @@ private:
 #else
 
 /** Represents an OBJ record for an TBX form control. */
-class XclExpTbxControlObj : public XclObj, public XclExpControlObjHelper
+class XclExpTbxControlObj : public XclObj, public XclExpControlHelper
 {
 public:
     explicit            XclExpTbxControlObj(
@@ -122,15 +139,16 @@ private:
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
     XclTokenArrayRef    mxMacroLink;    /// Token array containing a link to an attached macro.
+    XclTbxEventType     meEventType;    /// Type of supported macro event.
     sal_Int32           mnHeight;       /// Height of the control.
     sal_uInt16          mnState;        /// Checked/unchecked state.
     sal_Int16           mnLineCount;    /// Combobox dropdown line count.
     sal_Int16           mnSelEntry;     /// Selected entry in combobox (1-based).
-    sal_Int16           mnScrollValue;  /// Scrollbar: Current value.
-    sal_Int16           mnScrollMin;    /// Scrollbar: Minimum value.
-    sal_Int16           mnScrollMax;    /// Scrollbar: Maximum value.
-    sal_Int16           mnScrollStep;   /// Scrollbar: Single step.
-    sal_Int16           mnScrollPage;   /// Scrollbar: Page step.
+    sal_uInt16          mnScrollValue;  /// Scrollbar: Current value.
+    sal_uInt16          mnScrollMin;    /// Scrollbar: Minimum value.
+    sal_uInt16          mnScrollMax;    /// Scrollbar: Maximum value.
+    sal_uInt16          mnScrollStep;   /// Scrollbar: Single step.
+    sal_uInt16          mnScrollPage;   /// Scrollbar: Page step.
     bool                mbFlatButton;   /// False = 3D button style; True = Flat button style.
     bool                mbFlatBorder;   /// False = 3D border style; True = Flat border style.
     bool                mbMultiSel;     /// true = Multi selection in listbox.

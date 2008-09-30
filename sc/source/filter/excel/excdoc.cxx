@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excdoc.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.69.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,7 +348,7 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
 
     if( eBiff == EXC_BIFF8 )
     {
-        rR.pEscher->AddSdrPage( GetRoot() );
+        rR.pEscher->AddSdrPage();
         //! close Escher group shape and ESCHER_DgContainer
         //! opened by XclObjList ctor MSODRAWING
         rR.pObjRecs->EndSheet();

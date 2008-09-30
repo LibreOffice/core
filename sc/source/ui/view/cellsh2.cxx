@@ -1058,6 +1058,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         pDocSh->GetUndoManager()->LeaveListAction();
                     }
+                    delete pDlg;
                 }
             }
             break;

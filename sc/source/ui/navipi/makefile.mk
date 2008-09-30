@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.6.90.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,9 +43,14 @@ TARGET=navipi
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = navipi.cxx navcitem.cxx scenwnd.cxx content.cxx
-SLOFILES = $(SLO)$/navipi.obj $(SLO)$/navcitem.obj $(SLO)$/scenwnd.obj \
-           $(SLO)$/content.obj
+SLOFILES =					\
+    $(SLO)$/navipi.obj		\
+    $(SLO)$/navcitem.obj	\
+    $(SLO)$/scenwnd.obj		\
+    $(SLO)$/content.obj
+
+EXCEPTIONSFILES =			\
+    $(SLO)$/scenwnd.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = navipi.src

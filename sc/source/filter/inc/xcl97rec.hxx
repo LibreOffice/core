@@ -169,7 +169,7 @@ public:
 
                                 // set corresponding Excel object type in OBJ/ftCmo
             void                SetEscherShapeType( UINT16 nType );
-    inline  void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJ_CMO_GROUP; }
+    inline  void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJTYPE_GROUP; }
 
     /** If set to true, this object has created its own escher data.
         @descr  This causes the function EscherEx::EndShape() to not post process

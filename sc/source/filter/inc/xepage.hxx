@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xepage.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,23 +90,6 @@ private:
 private:
     const ScfUInt16Vec& mrPageBreaks;       /// Page settings data of current sheet.
     sal_uInt16          mnMaxPos;           /// Maximum row/column for BIFF8 page breaks.
-};
-
-// Background bitmap ----------------------------------------------------------
-
-class Graphic;
-
-/** Provides export of a background bitmap of a sheet (record BITMAP). */
-class XclExpBitmap : public XclExpRecordBase
-{
-public:
-    explicit            XclExpBitmap( const Graphic& rGraphic );
-
-    /** Writes the BITMAP record. */
-    virtual void        Save( XclExpStream& rStrm );
-
-private:
-    const Graphic&      mrGraphic;      /// The VCL graphic.
 };
 
 // Page settings ==============================================================

@@ -35,6 +35,7 @@
 #include <tools/string.hxx>
 #include "compiler.hxx"
 #include "root.hxx"
+#include "xiroot.hxx"
 
 #include "rangenam.hxx"
 #include <hash_map>
@@ -299,7 +300,7 @@ public:
     inline          ExtSheetBuffer( RootData* );
     virtual         ~ExtSheetBuffer();
 
-    void            Add( const String& rFilePathAndName,
+    sal_Int16       Add( const String& rFilePathAndName,
                         const String& rTabName, const BOOL bSameWorkbook = FALSE );
 
     BOOL            GetScTabIndex( UINT16 nExcSheetIndex, UINT16& rIn_LastTab_Out_ScIndex );
@@ -323,7 +324,7 @@ struct ExtName
     UINT32          nStorageId;
     UINT16          nFlags;
 
-    inline          ExtName( const String& r ) : aName( r ), nStorageId( 0 ) {}
+    inline          ExtName( const String& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
 
     BOOL            IsDDE( void ) const;
 };
@@ -331,28 +332,25 @@ struct ExtName
 
 
 
-class ExtNameBuff : private List, protected ExcRoot
+class ExtNameBuff : protected XclImpRoot
 {
-private:
-    static const sal_Char*  pJoostTest;
-protected:
 public:
-    inline          ExtNameBuff( RootData* );
-    virtual         ~ExtNameBuff();
+    explicit        ExtNameBuff( const XclImpRoot& rRoot );
 
-    void            AddDDE( const String& rName );
-    void            AddOLE( const String& rName, UINT32 nStorageId );
-    void            AddName( const String& rName );
+    void            AddDDE( const String& rName, sal_Int16 nRefIdx );
+    void            AddOLE( const String& rName, sal_Int16 nRefIdx, UINT32 nStorageId );
+    void            AddName( const String& rName, sal_Int16 nRefIdx );
 
-    const ExtName*  GetName( const UINT16 nExcelIndex ) const;
+    const ExtName*  GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const;
 
-    void            Reset( void );
+    void            Reset();
+
+private:
+    typedef ::std::vector< ExtName >            ExtNameVec;
+    typedef ::std::map< sal_Int16, ExtNameVec > ExtNameMap;
+
+    ExtNameMap      maExtNames;
 };
-
-
-inline ExtNameBuff::ExtNameBuff( RootData* p ) : ExcRoot( p )
-{
-}
 
 
 #endif

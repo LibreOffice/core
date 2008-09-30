@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,9 @@ private:
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
 
+    bool        IsFullScreen() const;
+    void        SetFullScreen( bool bSet );
+
 public:
 
     TYPEINFO();
@@ -101,7 +104,6 @@ public:
     void        ExecutePageSel( SfxRequest& rReq );
     void        ExecuteMove( SfxRequest& rReq );
     void        GetStateCursor( SfxItemSet& rSet );
-
 };
 
 #endif

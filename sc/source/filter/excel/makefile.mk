@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.42 $
+# $Revision: 1.42.90.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,6 @@ SLOFILES =	\
         $(SLO)$/excform.obj					\
         $(SLO)$/excform8.obj				\
         $(SLO)$/excimp8.obj					\
-        $(SLO)$/excobj.obj					\
         $(SLO)$/excrecds.obj				\
         $(SLO)$/exctools.obj				\
         $(SLO)$/expop2.obj					\
@@ -99,10 +98,8 @@ SLOFILES =	\
         $(SLO)$/xiview.obj					\
         $(SLO)$/xladdress.obj				\
         $(SLO)$/xlchart.obj					\
-        $(SLO)$/xldumper.obj				\
         $(SLO)$/xlescher.obj				\
         $(SLO)$/xlformula.obj				\
-        $(SLO)$/xlocx.obj					\
         $(SLO)$/xlpage.obj					\
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlroot.obj					\
@@ -119,10 +116,10 @@ NOOPTFILES = \
 
 EXCEPTIONSFILES = \
         $(SLO)$/excdoc.obj					\
+        $(SLO)$/excel.obj					\
         $(SLO)$/excform.obj					\
         $(SLO)$/excform8.obj				\
         $(SLO)$/excimp8.obj					\
-        $(SLO)$/excobj.obj					\
         $(SLO)$/excrecds.obj				\
         $(SLO)$/expop2.obj					\
         $(SLO)$/namebuff.obj				\
@@ -152,9 +149,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xladdress.obj				\
         $(SLO)$/xiescher.obj				\
         $(SLO)$/xlchart.obj					\
-        $(SLO)$/xldumper.obj				\
         $(SLO)$/xlformula.obj				\
-        $(SLO)$/xlocx.obj					\
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xlview.obj

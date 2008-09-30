@@ -210,8 +210,11 @@ void XclExpString::Append( const String& rString )
 
 void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc )
 {
-    ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
-    BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+    if( rString.Len() > 0 )
+    {
+        ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
+        BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+    }
 }
 
 void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )

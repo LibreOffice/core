@@ -255,9 +255,7 @@ void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
 
 sal_uInt16 XclPCNumGroupInfo::GetXclDataType() const
 {
-    sal_uInt16 nXclType = 0;
-    ::extract_value( nXclType, mnFlags, 2, 4 );
-    return nXclType;
+    return ::extract_value< sal_uInt16 >( mnFlags, 2, 4 );
 }
 
 void XclPCNumGroupInfo::SetXclDataType( sal_uInt16 nXclType )
@@ -616,9 +614,7 @@ void XclPTFieldExtInfo::SetApiAutoShowMode( sal_Int32 nShowMode )
 
 sal_Int32 XclPTFieldExtInfo::GetApiAutoShowCount() const
 {
-    sal_uInt8 nShowCount;
-    ::extract_value( nShowCount, mnFlags, 24, 8 );
-    return nShowCount;
+    return ::extract_value< sal_Int32 >( mnFlags, 24, 8 );
 }
 
 void XclPTFieldExtInfo::SetApiAutoShowCount( sal_Int32 nShowCount )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xepage.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
+
 #include "xepage.hxx"
 #include <svtools/itemset.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
 #include "scitems.hxx"
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
@@ -47,6 +46,7 @@
 #include "stlsheet.hxx"
 #include "attrib.hxx"
 #include "xehelper.hxx"
+#include "xeescher.hxx"
 
 // Page settings records ======================================================
 
@@ -136,54 +136,6 @@ void XclExpPageBreaks::WriteBody( XclExpStream& rStrm )
         rStrm << *aIt;
         if( bWriteRange )
             rStrm << sal_uInt16( 0 ) << mnMaxPos;
-    }
-}
-
-// Background bitmap ----------------------------------------------------------
-
-XclExpBitmap::XclExpBitmap( const Graphic& rGraphic ) :
-    mrGraphic( rGraphic )
-{
-}
-
-void XclExpBitmap::Save( XclExpStream& rStrm )
-{
-    Bitmap aBmp( mrGraphic.GetBitmap() );
-    if( aBmp.GetBitCount() != 24 )
-        aBmp.Convert( BMP_CONVERSION_24BIT );
-
-    if( BitmapReadAccess* pAccess = aBmp.AcquireReadAccess() )
-    {
-        sal_Int32 nWidth = ::std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
-        sal_Int32 nHeight = ::std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
-        if( (nWidth > 0) && (nHeight > 0) )
-        {
-            sal_uInt8 nPadding = static_cast< sal_uInt8 >( nWidth & 0x03 );
-            sal_uInt32 nTmpSize = static_cast< sal_uInt32 >( (nWidth * 3 + nPadding) * nHeight + 12 );
-
-            rStrm.StartRecord( EXC_ID_BITMAP, nTmpSize + 4 );
-
-            rStrm   << EXC_BITMAP_UNKNOWNID
-                    << nTmpSize                             // size after _this_ field
-                    << sal_uInt32( 12 )                     // unknown
-                    << static_cast< sal_uInt16 >( nWidth )  // width
-                    << static_cast< sal_uInt16 >( nHeight ) // height
-                    << sal_uInt16( 1 )                      // planes
-                    << sal_uInt16( 24 );                    // bits per pixel
-
-            for( sal_Int32 nY = nHeight - 1; nY >= 0; --nY )
-            {
-                for( sal_Int32 nX = 0; nX < nWidth; ++nX )
-                {
-                    const BitmapColor& rBmpColor = pAccess->GetPixel( nY, nX );
-                    rStrm << rBmpColor.GetBlue() << rBmpColor.GetGreen() << rBmpColor.GetRed();
-                }
-                rStrm.WriteZeroBytes( nPadding );
-            }
-
-            rStrm.EndRecord();
-        }
-        aBmp.ReleaseAccess( pAccess );
     }
 }
 
@@ -321,7 +273,7 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
 
     if( (GetBiff() == EXC_BIFF8) && maData.mxBrushItem.get() )
         if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
-            XclExpBitmap( *pGraphic ).Save( rStrm );
+            XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).Save( rStrm );
 }
 
 // ----------------------------------------------------------------------------
