@@ -36,14 +36,15 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/macitem.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
+#include <com/sun/star/frame/XFrame.hpp>
+
 class _SfxMacroTabPage;
 class SvStringsDtor;
 class SvTabListBox;
 class Edit;
 class String;
+class SfxObjectShell;
 
 typedef SvStringsDtor* (*FNGetRangeHdl)( _SfxMacroTabPage*, const String& rLanguage );
 typedef SvStringsDtor* (*FNGetMacrosOfRangeHdl)( _SfxMacroTabPage*, const String& rLanguage, const String& rRange );
@@ -124,8 +125,12 @@ inline void _SfxMacroTabPage::ClearMacroTbl()
 class SFX2_DLLPUBLIC SfxMacroTabPage : public _SfxMacroTabPage
 {
 public:
-    SfxMacroTabPage( Window* pParent, const ResId& rId,
-                    const SfxItemSet& rSet );
+    SfxMacroTabPage(
+        Window* pParent,
+        const ResId& rId,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
+        const SfxItemSet& rSet
+    );
 
     // --------- Erben aus der Basis -------------
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
@@ -134,7 +139,14 @@ public:
 class SFX2_DLLPUBLIC SfxMacroAssignDlg : public SfxSingleTabDialog
 {
 public:
-    SfxMacroAssignDlg( Window* pParent, SfxItemSet& rSet );
+    SfxMacroAssignDlg(
+        Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
+        SfxItemSet& rSet );
+    SfxMacroAssignDlg(
+        Window* pParent,
+        const SfxObjectShell* _pShell,
+        SfxItemSet& rSet );
     virtual ~SfxMacroAssignDlg();
 };
 

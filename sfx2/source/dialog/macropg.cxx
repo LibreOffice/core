@@ -52,10 +52,13 @@
 #include "dialog.hrc"
 #include <sfx2/macrconf.hxx>
 #include <sfx2/sfxdefs.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "helpid.hrc"
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::frame::XFrame;
 
 _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
     pAssignPB( NULL ),
@@ -582,8 +585,7 @@ void _SfxMacroTabPage::FillMacroList()
             mpImpl->pGroupLB->Init(
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory >(),
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XFrame >(),
+                GetFrame(),
                 ::rtl::OUString() );
 
             delete pArr;
@@ -712,7 +714,7 @@ SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl(
 }
 
 
-SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rSet )
+SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
     mpImpl->pStrEvent           = new String(                   SfxResId( STR_EVENT ) );
@@ -731,6 +733,8 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Sf
 
     FreeResource();
 
+    SetFrame( rxDocumentFrame );
+
     InitAndSetHandler();
 
     ScriptChanged( String(                          SfxResId( STR_BASICNAME ) ) );
@@ -738,14 +742,27 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Sf
 
 SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
-    return new SfxMacroTabPage( pParent, SfxResId( RID_SFX_TP_MACROASSIGN), rAttrSet );
+    return new SfxMacroTabPage( pParent, SfxResId( RID_SFX_TP_MACROASSIGN), NULL, rAttrSet );
 }
 
 
-SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, SfxItemSet& rSet )
+SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, const SfxObjectShell* _pShell, SfxItemSet& rSet )
     : SfxSingleTabDialog( pParent, rSet, 0 )
 {
-    SetTabPage( SfxMacroTabPage::Create( this, rSet ) );
+    SfxMacroTabPage* pPage = dynamic_cast< SfxMacroTabPage* >( SfxMacroTabPage::Create( this, rSet ) );
+    if ( _pShell && _pShell->GetFrame() && _pShell->GetFrame()->GetFrame() )
+        pPage->SetFrame( _pShell->GetFrame()->GetFrame()->GetFrameInterface() );
+    else
+        OSL_ENSURE( false, "SfxMacroAssignDlg::SfxMacroAssignDlg: no shell -> no frame -> no document macros!" );
+    SetTabPage( pPage );
+}
+
+SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, const Reference< XFrame >& rxDocumentFrame, SfxItemSet& rSet )
+    : SfxSingleTabDialog( pParent, rSet, 0 )
+{
+    SfxTabPage* pPage = SfxMacroTabPage::Create( this, rSet );
+    pPage->SetFrame( rxDocumentFrame );
+    SetTabPage( pPage );
 }
 
 SfxMacroAssignDlg::~SfxMacroAssignDlg()
