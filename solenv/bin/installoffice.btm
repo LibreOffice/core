@@ -8,7 +8,7 @@ REM * OpenOffice.org - a multi-platform office productivity suite
 REM *
 REM * $RCSfile: installoffice.btm,v $
 REM *
-REM * $Revision: 1.3 $
+REM * $Revision: 1.3.6.1 $
 REM *
 REM * This file is part of OpenOffice.org.
 REM *
@@ -28,7 +28,24 @@ REM * <http://www.openoffice.org/license.html>
 REM * for a copy of the LGPLv3 License.
 REM ************************************************************************/
 
-SET DESTPATH=%tmp%\%USERNAME%
+iff EXIST e:\  then
+    iff EXIST e:\temp then
+        set temppath=e:\temp
+    elseiff EXIST e:\tmp then
+        set temppath=c:\tmp
+    else
+        mkdir e:\temp
+        set tmppath=c:\temp
+    endiff
+elseiff EXIST c:\tmp then
+    set temppath=c:\tmp
+elseiff EXIST c:\temp then
+    set temppath=c:\temp
+else
+    set temppath=%TMP%
+endiff
+
+SET DESTPATH=%temppath%\%USERNAME%
 SET DEBUG=false
 SET OOO=false
 SET PARAM=

@@ -8,7 +8,7 @@
 #
 # $RCSfile: simplepackage.pm,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.19.48.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -408,6 +408,14 @@ sub create_simple_package
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
     register_extensions($subfolderdir);
+
+    # Adding scpactions for mac installations sets, that use not dmg format. Without scpactions the
+    # office does not start.
+
+    if (( $installer::globals::packageformat eq "installed" ) && ( $installer::globals::compiler =~ /^unxmacx/ ))
+    {
+        installer::worker::put_scpactions_into_installset("$installdir/$packagename");
+    }
 
     # Creating archive file
     if (( $installer::globals::packageformat eq "archive" ) || ( $installer::globals::packageformat eq "dmg" ))

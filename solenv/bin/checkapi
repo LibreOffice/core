@@ -18,7 +18,21 @@ else
 	exit 1
 fi
 
-PARAM="-cs pipe,name=$USER"
+if [ x${USER}x = xx ]; then
+    if [ x${LOGNAME}x = xx ]; then
+        echo "ERROR: could not determine username. Please export variable USER" >&2
+        exit $EXIT_FAILURE
+    else 
+        USER=$LOGNAME
+        export USER
+    fi
+fi
+
+PARAM="-cs pipe,name=$USER -SRC_ROOT $SRC_ROOT"
+
+if [ -n "$RUNNERPROPS" ]; then
+    PARAM="$PARAM -ini $RUNNERPROPS"
+fi
 
 COMMAND="$JAVABIN -Xmx120m -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
 echo $COMMAND

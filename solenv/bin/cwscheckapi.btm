@@ -8,7 +8,7 @@ REM * OpenOffice.org - a multi-platform office productivity suite
 REM *
 REM * $RCSfile: cwscheckapi.btm,v $
 REM *
-REM * $Revision: 1.3 $
+REM * $Revision: 1.3.6.4 $
 REM *
 REM * This file is part of OpenOffice.org.
 REM *
@@ -30,16 +30,23 @@ REM ************************************************************************/
 
 echo off
 
+iff "%PROEXT" != ".pro" THEN
+    echo ERROR: cwscheckapi works only on pro-versions >&2
+    quit 1
+endiff
+
 SET DEBIG_I=false
 SET DEBUG_T=false
 SET INSTALL=true
 SET ATTACH=true
 SET MODULES=auto
 SET OOO=false
+SET KEEPOFFICE=false
 
 for %opt in (%&%) DO (
     if "%opt%" == "-d" (SET DEBUG_I=true ^ SET DEBUG_T=true ^ shift)
     if "%opt%" == "-o" (SET OOO=true  ^ shift)
+    if "%opt%" == "-k" (SET KEEPOFFICE=true  ^ shift)
     if "%opt%" == "-i" (SET DEBUG_I=true  ^ shift)
     if "%opt%" == "-m" (SET MODULES=%2  ^ shift ^ shift)
     if "%opt%" == "-t" (SET DEBUG_T=true ^ shift)
@@ -49,15 +56,31 @@ for %opt in (%&%) DO (
     if "%opt%" == "/h" goto usage
 )
 
-SET OFFICEDESTPATH=%tmp%\%USERNAME%\cwscheckapi
-SET LOCALINSTALLDIR=%OFFICEDESTPATH%\office
-SET LOCALUNPACKDIR=%OFFICEDESTPATH%\unpack
+set tmppath=not_set
+for %LW in (e:\,d:\,c:\) DO (
+    iff NOT ISDIR %tmppath% then
+        iff ISDIR %LW  then
+            iff ISDIR %LW%temp then
+                set temppath=%LW%temp
+            elseiff ISDIR %LW%tmp then
+                set temppath=%LW%tmp
+            else
+                mkdir %LW%temp
+                set tmppath=%LW%temp
+            endiff
+        endiff
+    endiff
+)
+
+SET CWSCHECKAPIPATH=%temppath%\%USERNAME%\cwscheckapi
+SET LOCALINSTALLDIR=%CWSCHECKAPIPATH%\office
+SET LOCALUNPACKDIR=%CWSCHECKAPIPATH%\unpack
 
 iff "%INSTALL%" == "true" THEN
     call perl5 %SOLARENV%/bin/installoffice.pl -cwscheckapi true -dest %LOCALINSTALLDIR% -ooo %OOO% -debug %DEBUG_I%
     
     IFF %? NE 0 THEN
-        echo ERROR: coud not install office
+        echo ERROR: coud not install office  >&2
         quit %?
     ENDIFF
 ENDIFF
@@ -75,7 +98,7 @@ DEL /q %ffindtxt
 cdd %CWD
 
 IFF NOT EXIST %OFFICEBIN% THEN
-    echo "could not find 'soffice.exe' in subfolders of %OFFICEBIN%"
+    echo could not find 'soffice.exe' in subfolders of %OFFICEBIN%  >&2
     quit 1
 ENDIFF
 
@@ -87,32 +110,32 @@ IFF "%JAVAI%" != "" THEN
 ELSEIFF "%JAVA_HOME%" != "" THEN
     SET JAVABIN=%JAVA_HOME%\bin\java
 ELSE
-   echo please set environment variable JAVA_HOME
+   echo please set environment variable JAVA_HOME  >&2
    quit 1
 ENDIFF
 
 IFF "%CWS_WORK_STAMP%" != "" THEN
     SET PARAM=-Version cws_%CWS_WORK_STAMP%
 ELSEIFF "%WORK_STAMP%" != "" THEN
-    echo ######
-    echo CAUTION! You\'re working on the MWS
-    echo ######
+    echo ######  >&2
+    echo CAUTION! You\'re working on the MWS  >&2
+    echo ######  >&2
     SET PARAM=-Version %WORK_STAMP%_%UPDMINOR%
 ELSE
-    echo ######
-    echo ERROR: could not determine your CWS or MWS version
-    echo ######
+    echo ######  >&2
+    echo ERROR: could not determine your CWS or MWS version  >&2
+    echo ######  >&2
     quit 1
 ENDIFF
 
-SET KILLCOMMAND="%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.bin"
+SET KILLCOMMAND="%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.bin^%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.exe"
 
 SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\"  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=%USERNAME%;urp;'
 SET PARAM=%PARAM% -cs pipe,name=%USERNAME%
 SET PARAM=%PARAM% -NoOffice true
 SET PARAM=%PARAM% -OOO_EnvSet setsolar
 SET PARAM=%PARAM% -SRC_ROOT %SRC_ROOT%
-SET PARAM=%PARAM% -COMP_ENV %INPATH%
+SET PARAM=%PARAM% -COMP_ENV %OUTPATH%
 SET PARAM=%PARAM% -Shell %COMSPEC%
 SET PARAM=%PARAM% -tb java_complex
 SET PARAM=%PARAM% -o complex.unoapi.CheckModuleAPI::module(%MODULES%)
@@ -124,8 +147,13 @@ IF "%DEBUG_T%" == "true" SET PARAM=%PARAM -debug true -log true
 set COMMANDO=%JAVABIN% -Xmx120m -cp %MYCLASSPATH% org.openoffice.Runner %PARAM% %&
 
 echo %COMMANDO
-SET LOGFILE=%OFFICEDESTPATH%\cwscheckapi.log
+SET LOGFILE=%CWSCHECKAPIPATH%\cwscheckapi.log
 %COMMANDO |& tee %LOGFILE%
+
+IFF %KEEPOFFICE% == "false" THEN
+    echo remove office instrallation in %LOCALINSTALLDIR%...
+    DEL /E/F/Q/K/S/X/Y/Z %LOCALINSTALLDIR%
+fi
 
 echo .
 echo A logfile could be found here: %LOGFILE%
@@ -136,11 +164,13 @@ quit 0
 
 :usage
     echo. 
-    echo Usage: %0% [-m MODULE1[,MODULEn]] [-o] [-h] [-d] [-i] [-t] [-s] [-a] >&2
+    echo Usage: %0% [-m MODULE1[,MODULEn]] [-o] [-k] [-h] [-d] [-i] [-t] [-s] [-a] >&2
     echo. 
     echo [-m] list of modules to test like: '-m "sw,sc,sd"' or '-m all' for all modules >&2
     echo. >&2
     echo [-o] force OpenOffice.org installation instead of StarOffice >&2
+    echo. >&2
+    echo [-k] keep Office installation, otherwise it will be removed after test >&2
     echo. >&2
     echo [-d] debug installation and UnoAPI-Tests >&2
     echo. >&2

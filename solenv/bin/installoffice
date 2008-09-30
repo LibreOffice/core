@@ -50,6 +50,16 @@ usage() {
         exit $EXIT_FAILURE
 }
 
+if [ x${USER}x = xx ]; then
+    if [ x${LOGNAME}x = xx ]; then
+        echo "ERROR: could not determine username. Please export variable USER" >&2
+        exit $EXIT_FAILURE
+    else 
+        USER=$LOGNAME
+        export USER
+    fi
+fi
+     
 DESTPATH=/tmp/$USER
 PARAM=""
 
