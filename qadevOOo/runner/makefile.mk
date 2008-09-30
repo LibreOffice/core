@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.15.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +38,7 @@ TARGET  = $(PRJNAME)
 
 SUBDIRS_TESTS = mod ifc complex
 SUBDIRS_RUNNER = util share stats lib complexlib helper basicrunner \
-            base org$/openoffice convwatch
+            base org$/openoffice convwatch graphical
 
 JARCOMMANDS_TESTS = $(foreach,i,$(SUBDIRS_TESTS) -C $(CLASSDIR) $i)
 JARCOMMANDS_RUNNER = $(foreach,i,$(SUBDIRS_RUNNER) -C $(CLASSDIR) $i)

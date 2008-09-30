@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesktopTools.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,26 +34,21 @@ import com.sun.star.awt.WindowDescriptor;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.awt.XTopWindow;
-import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 // access the implementations via names
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.XChangesBatch;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
 import com.sun.star.view.XViewSettingsSupplier;
@@ -120,6 +115,17 @@ public class DesktopTools {
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
                                     XDesktop.class, createDesktop(xMSF));
         return xDesktop.getCurrentComponent();
+    }
+
+    /**
+     * returns the current component on the desktop
+     * @param xMSF the XMultiServiceFactory
+     * @return XComponent of the current component on the desktop
+     */
+    public static XFrame getCurrentFrame(XMultiServiceFactory xMSF) {
+        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+                                    XDesktop.class, createDesktop(xMSF));
+        return xDesktop.getCurrentFrame();
     }
 
     /**
@@ -239,7 +245,7 @@ public class DesktopTools {
         {
             throw new IllegalArgumentException("Document could not be loaded");
         }
-
+        bringWindowToFront(oDoc);
         return oDoc;
     } //finish openNewDoc
 
@@ -259,7 +265,9 @@ public class DesktopTools {
                                     XCloseable.class, DocumentToClose);
 
         try {
-            modified.setModified(false);
+            if (modified != null){
+                modified.setModified(false);
+            }
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             System.out.println("Couldn't close document");
@@ -399,17 +407,37 @@ public class DesktopTools {
     }
 
     /**
+     * Due to typo deprecated
+     * @param xModel
+     * @deprecated
+     */
+    @Deprecated
+    public static void bringWindowToFromt(XModel xModel){
+        bringWindowToFront(xModel);
+    }
+
+    /**
      * This function brings a document to the front.<P>
      * NOTE: it is not possible to change the window order of your Window-Manager!!
      * Only the order of Office documents are changeable.
      * @param xModel the XModel of the document to bring to top
      */
-    public static void bringWindowToFromt(XModel xModel){
+    public static void bringWindowToFront(XModel xModel){
+        System.out.println("DEBUG: bring to front xModel");
+
         XTopWindow xTopWindow =
                 (XTopWindow) UnoRuntime.queryInterface(
                 XTopWindow.class,
                 xModel.getCurrentController().getFrame().getContainerWindow());
 
         xTopWindow.toFront();
+    }
+
+    public static void bringWindowToFront(XComponent xComponent){
+        System.out.println("DEBUG: bring to front xCompoent");
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
+        if (xModel != null){
+            bringWindowToFront(xModel);
+        }
     }
 }

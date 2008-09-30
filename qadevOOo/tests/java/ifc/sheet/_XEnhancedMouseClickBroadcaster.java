@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _XEnhancedMouseClickBroadcaster.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
     public void before() {
         docModel = (XModel) UnoRuntime.queryInterface(
                 XModel.class,tEnv.getObjRelation("FirstModel"));
-        DesktopTools.bringWindowToFromt(docModel);
+        DesktopTools.bringWindowToFront(docModel);
     }
 
     public void _addEnhancedMouseClickHandler() {

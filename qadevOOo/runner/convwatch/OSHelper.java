@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OSHelper.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,59 +29,59 @@
  ************************************************************************/
 
 package convwatch;
-
-class OSHelper
-{
-    public static boolean isWindows()
-        {
-            String sOSName = System.getProperty("os.name");
-            if (sOSName.toLowerCase().startsWith("windows"))
-            {
-                return true;
-            }
-            return false;
-        }
-    // not need
-    // public static boolean isUnix()
-    public static boolean isSolarisIntel()
-        {
-            if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
-                   System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
-                 System.getProperty("os.arch").equals("x86"))
-            {
-                return true;
-            }
-            return false;
-        }
-    public static boolean isSolarisSparc()
-        {
-            if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
-                   System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
-                 System.getProperty("os.arch").equals("sparc"))
-            {
-                return true;
-            }
-            return false;
-        }
-    public static boolean isLinuxIntel()
-        {
-            if (System.getProperty("os.name").toLowerCase().startsWith("linux") &&
-                System.getProperty("os.arch").equals("i386"))
-            {
-                return true;
-            }
-            return false;
-        }
-
-    public static boolean isUnix()
-        {
-            if (isLinuxIntel() ||
-                isSolarisIntel() ||
-                isSolarisSparc())
-            {
-                return true;
-            }
-            return false;
-        }
-
-}
+//
+// class OSHelper
+// {
+//     public static boolean isWindows()
+//         {
+//             String sOSName = System.getProperty("os.name");
+//             if (sOSName.toLowerCase().startsWith("windows"))
+//             {
+//                 return true;
+//             }
+//             return false;
+//         }
+//     // not need
+//     // public static boolean isUnix()
+//     public static boolean isSolarisIntel()
+//         {
+//             if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
+//                    System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
+//                  System.getProperty("os.arch").equals("x86"))
+//             {
+//                 return true;
+//             }
+//             return false;
+//         }
+//     public static boolean isSolarisSparc()
+//         {
+//             if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
+//                    System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
+//                  System.getProperty("os.arch").equals("sparc"))
+//             {
+//                 return true;
+//             }
+//             return false;
+//         }
+//     public static boolean isLinuxIntel()
+//         {
+//             if (System.getProperty("os.name").toLowerCase().startsWith("linux") &&
+//                 System.getProperty("os.arch").equals("i386"))
+//             {
+//                 return true;
+//             }
+//             return false;
+//         }
+//
+//     public static boolean isUnix()
+//         {
+//             if (isLinuxIntel() ||
+//                 isSolarisIntel() ||
+//                 isSolarisSparc())
+//             {
+//                 return true;
+//             }
+//             return false;
+//         }
+//
+// }

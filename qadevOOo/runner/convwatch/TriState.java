@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TriState.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ public class TriState
 
     /**
        Returns the value of this TriState object as an int
-       @returns the primitive <code>int</code> value of this object.
+     * @return the primitive <code>int</code> value of this object.
     */
     public int intValue()
         {

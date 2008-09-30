@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _XContextMenuInterception.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
         //ensure that the first model is focused
 
         log.println("ensure that the first model is focused");
-        DesktopTools.bringWindowToFromt(docModel);
+        DesktopTools.bringWindowToFront(docModel);
 
         utils.shortWait(3000);
     }

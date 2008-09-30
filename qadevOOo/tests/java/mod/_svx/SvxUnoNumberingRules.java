@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxUnoNumberingRules.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@ import util.DrawTools;
 
 
 public class SvxUnoNumberingRules extends TestCase {
-    XComponent xDrawDoc;
+    static XComponent xDrawDoc;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a drawdoc");

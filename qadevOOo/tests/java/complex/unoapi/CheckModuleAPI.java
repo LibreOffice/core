@@ -72,11 +72,11 @@ import util.utils;
  */
 public class CheckModuleAPI extends ComplexTestCase {
 
-    private String mSRC_ROOT = null;
-    private boolean mIsInitialized = false;
+    private static String mSRC_ROOT = null;
+    private static boolean mIsInitialized = false;
     private final static boolean mContinue = true;
-    private boolean mDebug = false;
-    private BuildEnvTools bet = null;
+    private static boolean mDebug = false;
+    private static BuildEnvTools bet = null;
 
     /**
      * Initialize the test environment.
@@ -103,30 +103,6 @@ public class CheckModuleAPI extends ComplexTestCase {
             mSRC_ROOT = bet.getSrcRoot();
 
             mDebug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
-
-            // this test is desingt to run against a freshly installed office. Maybe this office has currently no
-            // no user installation. The first start of an office creates this installation and this takes some
-            // more time to connect to the office.
-            // Note: This is only usefull with parameter -NoOffice true
-            try {
-                final OfficeProvider officeProvider = new OfficeProvider();
-                log.println("Receiving the ServiceManager of the Office to create User installation...");
-
-                final int timeOut = param.getInt(PropertyName.TIME_OUT);
-                param.put(PropertyName.TIME_OUT, new Integer(4 * timeOut));
-
-                final XMultiServiceFactory msf = (XMultiServiceFactory) officeProvider.getManager(param);
-
-                officeProvider.backupUserLayer(param, msf);
-
-                param.put(PropertyName.TIME_OUT, new Integer(timeOut));
-
-                if (msf == null) {
-                    failed("Could not connect the office");
-                }
-            } catch (Throwable t) {
-                failed("Could not start office " + t.toString());
-            }
 
         }
     }
@@ -232,8 +208,8 @@ public class CheckModuleAPI extends ComplexTestCase {
             cmdLines = new String[]{"cdd " + sUnoapi, "dmake"};
 //            cmdLines = new String[]{shell, "/C ", "\"echo Test ^ " + envcmd + " ^ cdd " + sUnoapi + "^ pwd ^ dmake\""};
         } else {
-            cmdLines = new String[]{"cd " + sUnoapi, "dmake"};
-        }
+                cmdLines = new String[]{"cd " + sUnoapi, "dmake"};
+            }
         return cmdLines;
     }
 

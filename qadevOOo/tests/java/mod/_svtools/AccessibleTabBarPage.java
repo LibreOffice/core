@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleTabBarPage.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,7 @@ import com.sun.star.uno.XInterface;
  */
 public class AccessibleTabBarPage extends TestCase {
 
-    XComponent xDoc;
+    static XComponent xDoc;
 
     /**
      * Disposes the document, if exists, created in
@@ -197,7 +197,7 @@ public class AccessibleTabBarPage extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }

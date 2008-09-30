@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OQueryDesign.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,11 @@ package mod._dbaccess;
 
 //import com.sun.star.awt.XControl;
 //import com.sun.star.awt.XControlModel;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XConnection;
+import com.sun.star.uno.Exception;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -55,18 +60,23 @@ import com.sun.star.util.URL;
 import lib.StatusException;
 import util.SOfficeFactory;
 import com.sun.star.sdb.XDocumentDataSource;
+import com.sun.star.sdbc.XDataSource;
+import com.sun.star.ucb.XSimpleFileAccess;
 
 public class OQueryDesign extends TestCase {
 
-    private XDesktop Desk;
-    private XFrame Frame;
+    private static XDesktop xDesk;
+    private static XFrame xFrame;
     private final String sDataSourceName = "Bibliography";
+    private static XConnection xConn;
+    private static XTextDocument xTextDoc;
+
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        Desk = (XDesktop) UnoRuntime.queryInterface(
+        xDesk = (XDesktop) UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()) );
     }
 
@@ -77,9 +87,50 @@ public class OQueryDesign extends TestCase {
         XInterface oObj = null;
 
         XDispatchProvider aProv = (XDispatchProvider)
-                UnoRuntime.queryInterface(XDispatchProvider.class,Desk);
+                UnoRuntime.queryInterface(XDispatchProvider.class,xDesk);
 
         XDispatch getting = null;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+
+              XNameAccess xNameAccess = null;
+
+            // we use the first datasource
+            XDataSource xDS = null;
+        try {
+            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
+                        XNameAccess.class,
+                        xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        } catch (Exception ex) {
+            ex.printStackTrace( log );
+            throw new StatusException( "Could not get Databasecontext", ex );
+        }
+        try {
+            xDS = (XDataSource) UnoRuntime.queryInterface(
+                    XDataSource.class, xNameAccess.getByName( "Bibliography" ));
+        } catch (NoSuchElementException ex) {
+            ex.printStackTrace( log );
+            throw new StatusException( "Could not get XDataSource", ex );
+        } catch (WrappedTargetException ex) {
+            ex.printStackTrace( log );
+            throw new StatusException( "Could not get XDataSource", ex );
+        }
+        try {
+            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
+                        XNameAccess.class,
+                        xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        } catch (Exception ex) {
+            ex.printStackTrace( log );
+            throw new StatusException( "Could not get DatabaseConext", ex );
+        }
+
+            log.println("check XMultiServiceFactory");
+
+        try {
+            xConn = xDS.getConnection(new String(), new String());
+        } catch (SQLException ex) {
+            ex.printStackTrace( log );
+            throw new StatusException( "Could not get XConnection", ex );
+        }
 
         log.println( "opening QueryDesign" );
         URL the_url = new URL();
@@ -94,15 +145,16 @@ public class OQueryDesign extends TestCase {
         param2.Name = "QueryDesignView";
         param2.Value = new Boolean(false);
         Args[1] = param2;
+        param1.Name = "ActiveConnection";
+        param1.Value = xConn;
+        Args[1] = param2;
         getting.dispatch(the_url,Args);
 
         shortWait();
 
         Object oDBC = null;
-        XMultiServiceFactory xMSF;
 
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
             oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
         }
         catch( com.sun.star.uno.Exception e ) {
@@ -119,13 +171,14 @@ public class OQueryDesign extends TestCase {
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
         }
         XDocumentDataSource xDDS = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
-        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
+//        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
 
-        Frame = xMod.getCurrentController().getFrame();
+//        Frame = xMod.getCurrentController().getFrame();
+
+        xFrame = DesktopTools.getCurrentFrame(xMSF);
 
          // get an instance of Frame
         Object oFrame = null;
-        XTextDocument xTextDoc = null;;
         SOfficeFactory SOF = null;
 
         SOF = SOfficeFactory.getFactory( xMSF );
@@ -156,7 +209,7 @@ public class OQueryDesign extends TestCase {
         params[2] = param3;
 
 
-        oObj = Frame.getController();
+        oObj = xFrame.getController();
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
@@ -182,7 +235,7 @@ public class OQueryDesign extends TestCase {
 
         tEnv.addObjRelation("XInitialization.ExceptionArgs", ExceptionParams);
 
-        tEnv.addObjRelation("Frame", Frame);
+        tEnv.addObjRelation("Frame", xFrame);
 
         tEnv.addObjRelation("XInitialization.xIni", getUnititializedObj(Param));
 
@@ -242,6 +295,21 @@ public class OQueryDesign extends TestCase {
         //xCont.attachFrame(xFrame);
 
         return (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oQueryDesign);
+
+    }
+
+    @Override
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        try {
+            xConn.close() ;
+            DesktopTools.closeDoc(xFrame);
+            DesktopTools.closeDoc(xTextDoc);
+        } catch (com.sun.star.uno.Exception e) {
+            log.println("Can't close the connection") ;
+            e.printStackTrace(log) ;
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("Connection was already closed. It's OK.") ;
+        }
 
     }
 

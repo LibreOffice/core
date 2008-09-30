@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleGraphicShape.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +54,8 @@ import com.sun.star.uno.XInterface;
 
 public class AccessibleGraphicShape extends TestCase {
 
-    XComponent xDrawDoc;
-    XModel aModel;
+    static XComponent xDrawDoc;
+    static XModel aModel;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
@@ -104,8 +104,9 @@ public class AccessibleGraphicShape extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.SHAPE, "GraphicObject");
+//        oObj = at.getAccessibleObjectForRole
+//            (xRoot, AccessibleRole.SHAPE, "GraphicObject");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "GraphicObject");
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

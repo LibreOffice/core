@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: java_fat.java,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -522,7 +522,9 @@ public class java_fat implements TestBase {
         XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
             param);
 
-        param.put("ServiceFactory", msf);
+        if (msf != null){
+            param.put("ServiceFactory", msf);
+        }
 
         return office;
     }

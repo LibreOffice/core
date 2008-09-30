@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawController_NotesView.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,7 +230,7 @@ public class DrawController_NotesView extends TestCase {
         XInterface oObj = aModel.getCurrentController();
 
         log.println("bring first document to front...");
-        DesktopTools.bringWindowToFromt(aModel);
+        DesktopTools.bringWindowToFront(aModel);
 
         XModel aModel2 = (XModel)
             UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);

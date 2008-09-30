@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentConverter.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,9 +176,9 @@ public class DocumentConverter extends EnhancedComplexTestCase
 
                 String sRemovePath = aInputPath.getAbsolutePath();
                 // a whole directory
-                FileFilter aFileFilter = aGTA.getFileFilter();
+                FileFilter aFileFilter = FileHelper.getFileFilter();
 
-                Object[] aList = DirectoryHelper.traverse(m_sInputPath, aGTA.getFileFilter(), aGTA.includeSubDirectories());
+                Object[] aList = DirectoryHelper.traverse(m_sInputPath, aFileFilter, aGTA.includeSubDirectories());
                 for (int i=0;i<aList.length;i++)
                 {
                     String sEntry = (String)aList[i];

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GraphicalComparator.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,7 @@ class GraphicalComparator implements DocComparator
             String sInputPath = m_aArguments.getInputPath();
             if (FileHelper.isDir(sInputPath))
             {
-                Object[] aList = DirectoryHelper.traverse(sInputPath, m_aArguments.getFileFilter(), m_aArguments.includeSubDirectories());
+                Object[] aList = DirectoryHelper.traverse(sInputPath, FileHelper.getFileFilter(), m_aArguments.includeSubDirectories());
                 for (int i=0;i<aList.length;i++)
                 {
                     // get document + path

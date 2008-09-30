@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BuildID.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 package convwatch;
 
 import java.io.File;
-import convwatch.OSHelper;
+import helper.OSHelper;
 import convwatch.IniFile;
 import java.util.Date;
 

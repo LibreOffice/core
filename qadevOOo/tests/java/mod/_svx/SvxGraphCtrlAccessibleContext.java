@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxGraphCtrlAccessibleContext.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,7 @@ import com.sun.star.view.XSelectionSupplier;
  */
 public class SvxGraphCtrlAccessibleContext extends TestCase{
 
-    XComponent xDrawDoc = null;
+    static XComponent xDrawDoc = null;
 
     /**
     * Called to create an instance of <code>TestEnvironment</code>

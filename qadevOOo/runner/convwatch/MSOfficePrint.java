@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MSOfficePrint.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,10 @@ import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import convwatch.GraphicalTestArguments;
 import helper.ProcessHandler;
-import convwatch.StringHelper;
+import helper.StringHelper;
 import convwatch.ConvWatchException;
 import java.util.ArrayList;
+import helper.OSHelper;
 
 /**
  * This object gives all functionallity to print msoffice documents.

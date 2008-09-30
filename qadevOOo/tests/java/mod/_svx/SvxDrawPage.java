@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxDrawPage.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ import util.ShapeDsc;
  * @see ifc.drawing._XShapeCombiner
  */
 public class SvxDrawPage extends TestCase {
-    XSpreadsheetDocument xDoc = null;
+    static XSpreadsheetDocument xDoc = null;
 
     /**
      * Creates a new Draw document.

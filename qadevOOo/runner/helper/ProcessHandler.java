@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ProcessHandler.java,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,7 +410,7 @@ public class ProcessHandler {
             proc.destroy();
 
             try {
-                Thread.sleep(5000 * counter);
+                Thread.sleep(1000 * counter); // 5000
             } catch (java.lang.InterruptedException e) {
             }
             try {
@@ -444,6 +444,8 @@ public class ProcessHandler {
                     log.print(cmdLineArray[i]);
                     log.print(" ");
                 }
+                log.println("");
+
                 proc = runtime.exec(cmdLineArray, envVars);
             } else {
                 if (workDir != null) {

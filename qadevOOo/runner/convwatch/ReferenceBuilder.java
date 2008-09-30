@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReferenceBuilder.java,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,9 +183,9 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
 
                 String sRemovePath = aInputPath.getAbsolutePath();
                 // a whole directory
-                FileFilter aFileFilter = aGTA.getFileFilter();
+                FileFilter aFileFilter = FileHelper.getFileFilter();
 
-                Object[] aList = DirectoryHelper.traverse(m_sInputPath, aGTA.getFileFilter(), aGTA.includeSubDirectories());
+                Object[] aList = DirectoryHelper.traverse(m_sInputPath, aFileFilter, aGTA.includeSubDirectories());
                 // fill into DB
                 // DB.filesRemove(aGTA.getDBInfoString());
                 // for (int j=0;j<aList.length;j++)

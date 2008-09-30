@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GraphicalDifferenceCheck.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +97,7 @@ public class GraphicalDifferenceCheck
                 String sRemovePath = aInputPath.getAbsolutePath();
                 // a whole directory
 
-                Object[] aList = DirectoryHelper.traverse(_sInputPath, _aGTA.getFileFilter(), _aGTA.includeSubDirectories());
+                Object[] aList = DirectoryHelper.traverse(_sInputPath, FileHelper.getFileFilter(), _aGTA.includeSubDirectories());
                 for (int i=0;i<aList.length;i++)
                 {
                     String sEntry = (String)aList[i];
@@ -190,7 +190,7 @@ public class GraphicalDifferenceCheck
             {
                 String fs = System.getProperty("file.separator");
                 // a whole directory
-                Object[] aList = DirectoryHelper.traverse(_sInputPath, _aGTA.getFileFilter(), _aGTA.includeSubDirectories());
+                Object[] aList = DirectoryHelper.traverse(_sInputPath, FileHelper.getFileFilter(), _aGTA.includeSubDirectories());
                 if (aList.length != 0)
                 {
                     for (int i=0;i<aList.length;i++)

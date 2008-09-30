@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FilenameHelper.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@ package convwatch;
 
 import helper.URLHelper;
 import convwatch.FileHelper;
-import convwatch.StringHelper;
+import helper.StringHelper;
 import util.utils;
 
 interface Filenamer

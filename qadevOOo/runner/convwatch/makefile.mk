@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.13.8.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -69,7 +69,6 @@ JAVAFILES = \
  EnhancedComplexTestCase.java \
  MSOfficePrint.java \
  GraphicalTestArguments.java \
- StringHelper.java \
  GraphicalDifferenceCheck.java \
  DocumentConverter.java\
  DBHelper.java\

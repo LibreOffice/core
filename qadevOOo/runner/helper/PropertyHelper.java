@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyHelper.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,18 +52,20 @@ public class PropertyHelper
             }
             else
             {
-                if (_aPropertyList.size() > 0)
-                {
-                    aSaveProperties = new PropertyValue[_aPropertyList.size()];
-                    for (int i = 0;i<_aPropertyList.size(); i++)
-                    {
-                        aSaveProperties[i] = (PropertyValue) _aPropertyList.get(i);
-                    }
-                }
-                else
-                {
-                    aSaveProperties = new PropertyValue[0];
-                }
+                aSaveProperties = (PropertyValue[])_aPropertyList.toArray(new PropertyValue[_aPropertyList.size()]);
+                // old java 1.4
+//                if (_aPropertyList.size() > 0)
+//                {
+//                    aSaveProperties = new PropertyValue[_aPropertyList.size()];
+//                    for (int i = 0;i<_aPropertyList.size(); i++)
+//                    {
+//                        aSaveProperties[i] = (PropertyValue) _aPropertyList.get(i);
+//                    }
+//                }
+//                else
+//                {
+//                    aSaveProperties = new PropertyValue[0];
+//                }
             }
             return aSaveProperties;
         }

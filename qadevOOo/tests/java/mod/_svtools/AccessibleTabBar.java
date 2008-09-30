@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleTabBar.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ import com.sun.star.util.XCloseable;
 
 
 public class AccessibleTabBar extends TestCase {
-    XComponent xDoc;
+    static XComponent xDoc;
 
     /**
      * Disposes the document, if exists, created in
@@ -150,12 +150,12 @@ public class AccessibleTabBar extends TestCase {
     }
 
     /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
+    * Sleeps for 3 sec. to allow StarOffice to react on <code>
     * reset</code> call.
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

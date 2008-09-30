@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HTMLOutputter.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@ package convwatch;
 import java.io.File;
 import java.io.FileWriter;
 import util.utils;
+import helper.OSHelper;
 
 public class HTMLOutputter
 {

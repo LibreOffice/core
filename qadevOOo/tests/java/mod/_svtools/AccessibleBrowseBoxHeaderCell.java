@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleBrowseBoxHeaderCell.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,7 +247,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.sleep(5000); ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }

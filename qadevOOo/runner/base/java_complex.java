@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: java_complex.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,10 +84,11 @@ public class java_complex implements TestBase{
     public boolean executeTest(TestParameters param, DescEntry[] entries) {
         // is there an ini file for the complex tests defined?
         String complexIniFileName = ((String)param.get("ComplexIni"));
-        if (complexIniFileName != null) {
+    if (complexIniFileName != null)
+        {
             CfgParser ini = new CfgParser(complexIniFileName);
             ini.getIniParameters(param);
-        }
+    }
 
         DynamicClassLoader dcl = new DynamicClassLoader();
         ComplexTestCase testClass = null;
