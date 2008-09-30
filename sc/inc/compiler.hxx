@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.36.30.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,13 +178,13 @@ public:
     void SetSingleReference( const SingleRefData& rRef );
     void SetDoubleReference( const ComplRefData& rRef );
     void SetDouble( double fVal );
-    void SetInt( int nVal );
+//UNUSED2008-05  void SetInt( int nVal );
+//UNUSED2008-05  void SetMatrix( ScMatrix* p );
+//UNUSED2008-05  // These methods are ok to use, reference count not cleared.
+//UNUSED2008-05  ComplRefData& GetReference();
+//UNUSED2008-05  void SetReference( ComplRefData& rRef );
     void SetName( USHORT n );
-    void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
-    // These methods are ok to use, reference count not cleared.
-    ComplRefData& GetReference();
-    void SetReference( ComplRefData& rRef );
 
     ScRawToken* Clone() const;      // real copy!
     ScToken* CreateToken() const;   // create typified token
@@ -452,7 +452,6 @@ private:
     BOOL IsColRowName( const String& );
     BOOL IsBoolean( const String& );
     void AutoCorrectParsedSymbol();
-    void AdjustReference( SingleRefData& r );
     void PushTokenArray( ScTokenArray*, BOOL = FALSE );
     void PopTokenArray();
     void SetRelNameReference();

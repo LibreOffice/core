@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistream.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -468,12 +468,12 @@ void XclImpStream::PopPosition()
     }
 }
 
-void XclImpStream::RejectPosition()
-{
-    DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
-    if( !maPosStack.empty() )
-        maPosStack.pop_back();
-}
+//UNUSED2008-05  void XclImpStream::RejectPosition()
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
+//UNUSED2008-05      if( !maPosStack.empty() )
+//UNUSED2008-05          maPosStack.pop_back();
+//UNUSED2008-05  }
 
 void XclImpStream::StoreGlobalPosition()
 {
@@ -770,18 +770,18 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
     return nRet;
 }
 
-sal_Size XclImpStream::CopyRecordToStream( SvStream& rOutStrm )
-{
-    sal_Size nRet = 0;
-    if( mbValidRec )
-    {
-        PushPosition();
-        RestorePosition( maFirstRec );
-        nRet = CopyToStream( rOutStrm, GetRecSize() );
-        PopPosition();
-    }
-    return nRet;
-}
+//UNUSED2008-05  sal_Size XclImpStream::CopyRecordToStream( SvStream& rOutStrm )
+//UNUSED2008-05  {
+//UNUSED2008-05      sal_Size nRet = 0;
+//UNUSED2008-05      if( mbValidRec )
+//UNUSED2008-05      {
+//UNUSED2008-05          PushPosition();
+//UNUSED2008-05          RestorePosition( maFirstRec );
+//UNUSED2008-05          nRet = CopyToStream( rOutStrm, GetRecSize() );
+//UNUSED2008-05          PopPosition();
+//UNUSED2008-05      }
+//UNUSED2008-05      return nRet;
+//UNUSED2008-05  }
 
 void XclImpStream::Seek( sal_Size nPos )
 {
@@ -972,11 +972,6 @@ String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 String XclImpStream::ReadByteString( bool b16BitLen )
 {
     return ReadRawByteString( ReadByteStrLen( b16BitLen ) );
-}
-
-void XclImpStream::IgnoreByteString( bool b16BitLen )
-{
-    Ignore( ReadByteStrLen( b16BitLen ) );
 }
 
 // private --------------------------------------------------------------------

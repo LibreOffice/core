@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editfield.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 class ScDoubleField : public Edit
 {
 public:
-    explicit            ScDoubleField( Window* pParent, WinBits nStyle = WB_BORDER );
     explicit            ScDoubleField( Window* pParent, const ResId& rResId );
 
     bool                GetValue( double& rfValue ) const;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pivot2.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ using ::com::sun::star::sheet::DataPilotFieldReference;
 
 // STATIC DATA -----------------------------------------------------------
 
+#if OLD_PIVOT_IMPLEMENTATION
 //--------------------------------------------------------------------------------------------------
 // Hilfsmethoden von ScPivot
 //--------------------------------------------------------------------------------------------------
@@ -486,6 +487,8 @@ DataObject* ScPivotCollection::Clone() const
 {
     return new ScPivotCollection(*this);
 }
+
+#endif
 
 // ============================================================================
 

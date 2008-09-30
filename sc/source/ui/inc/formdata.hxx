@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formdata.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,6 @@ public:
                         ~ScFormEditData();
 
     void                SaveValues();
-    void                RestoreValues();
     BOOL                HasParent() const   { return pParent != NULL; }
 
     USHORT              GetMode() const     { return nMode; }

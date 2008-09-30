@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conditio.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,11 +106,6 @@ class ScConditionEntry
     BOOL    IsValid( double nArg ) const;
     BOOL    IsValidStr( const String& rArg ) const;
 
-protected:
-            ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                ScDocument* pDocument );
-    void    StoreCondition(SvStream& rStream, ScMultipleWriteHeader& rHdr) const;
-
 public:
             ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
@@ -183,13 +178,9 @@ public:
                                 const String& rStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
-            ScCondFormatEntry( SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                ScDocument* pDocument );
     virtual ~ScCondFormatEntry();
 
     void            SetParent( ScConditionalFormat* pNew )  { pParent = pNew; }
-
-    void            Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const;
 
     int             operator== ( const ScCondFormatEntry& r ) const;
 
@@ -215,14 +206,10 @@ class ScConditionalFormat
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
             ScConditionalFormat(const ScConditionalFormat& r);
-            ScConditionalFormat(SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                ScDocument* pDocument);
             ~ScConditionalFormat();
 
     // echte Kopie der Formeln (fuer Ref-Undo / zwischen Dokumenten)
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
-
-    void            Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const;
 
     void            AddEntry( const ScCondFormatEntry& rNew );
 
@@ -280,9 +267,7 @@ public:
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
 
-    void    Load( SvStream& rStream, ScDocument* pDocument );
-    void    Store( SvStream& rStream ) const;
-    void    ResetUsed();
+//UNUSED2008-05  void   ResetUsed();
 
     void    CompileAll();
     void    CompileXML();

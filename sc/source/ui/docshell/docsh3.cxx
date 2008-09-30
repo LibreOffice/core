@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh3.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.37.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1170,19 +1170,6 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         PostPaintGridAll();         // Reject() paintet nicht selber
 
     UnlockPaint();
-}
-
-void lcl_MergeActionStates( ScChangeTrack* pOwnTrack, ScChangeTrack* pSharedTrack )
-{
-    BOOL bIgnore100Sec = !pOwnTrack->IsTime100thSeconds() || !pSharedTrack->IsTime100thSeconds();
-    ScChangeAction* pOwnAction = pOwnTrack->GetFirst();
-    ScChangeAction* pSharedAction = pSharedTrack->GetFirst();
-    while ( lcl_Equal( pOwnAction, pSharedAction, bIgnore100Sec ) )
-    {
-        pOwnTrack->MergeActionState( pOwnAction, pSharedAction );
-        pOwnAction = pOwnAction->GetNext();
-        pSharedAction = pSharedAction->GetNext();
-    }
 }
 
 bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )

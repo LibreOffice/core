@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.29.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,20 +42,6 @@
 #include <xmloff/xmluconv.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
-
-ScMyCellInfo::ScMyCellInfo()
-    : pCell(NULL),
-    sFormulaAddress(),
-    sFormula(),
-    sInputString(),
-    fValue(0.0),
-    nMatrixCols(0),
-    nMatrixRows(0),
-    eGrammar( ScGrammar::GRAM_STORAGE_DEFAULT),
-    nType(NUMBERFORMAT_ALL),
-    nMatrixFlag(MM_NONE)
-{
-}
 
 ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
             const ScGrammar::Grammar eTempGrammar, const rtl::OUString& rInputString,

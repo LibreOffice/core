@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.29.32.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +99,6 @@ public:
     inline void     ForgetBroadcaster();
     inline void     SwapBroadcaster(ScBaseCell& rOther);    // zum Sortieren
 
-    void            LoadNote( SvStream& rStream, ScDocument* pDoc );
-
                         // String- oder EditCell
     static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
 
@@ -139,13 +137,10 @@ public:
                     ScValueCell();
                     ScValueCell( const double& rValue );
                     ScValueCell( const ScValueCell& rScValueCell, ScDocument* pDoc );
-                    ScValueCell( SvStream& rStream, USHORT nVer );
     ScBaseCell*     Clone(ScDocument* pDoc) const;
 
     void            SetValue( const double& rValue );
     double          GetValue() const;
-
-    void            Save( SvStream& rStream ) const;
 };
 
 
@@ -166,15 +161,10 @@ public:
                     ScStringCell();
                     ScStringCell( const String& rString );
                     ScStringCell( const ScStringCell& rScStringCell, ScDocument* pDoc );
-                    ScStringCell( SvStream& rStream, USHORT nVer );
     ScBaseCell*     Clone(ScDocument* pDoc) const;
 
     void            SetString( const String& rString );
     void            GetString( String& rString ) const;
-
-    void            Save( SvStream& rStream, FontToSubsFontConverter hConv = 0 ) const;
-                    // convert symbol font after loading binary format
-    void            ConvertFont( FontToSubsFontConverter hConv );
 };
 
 
@@ -200,11 +190,9 @@ public:
 
                     ~ScEditCell();              // wegen pData immer!
 
-                    ScEditCell( ScDocument* );
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
                     ScEditCell( const ScEditCell& rEditCell, ScDocument* );
-                    ScEditCell( SvStream& rStream, USHORT nVer, ScDocument* );
                     // fuer Zeilenumbrueche
                     ScEditCell( const String& rString, ScDocument* );
     ScBaseCell*     Clone( ScDocument* ) const;
@@ -215,8 +203,6 @@ public:
     void            GetString( String& rString ) const;
 
     const EditTextObject* GetData() const   { return pData; }
-
-    void            Save( SvStream& rStream ) const;
 };
 
 enum ScMatrixMode {
@@ -324,7 +310,6 @@ public:
 
     BOOL            HasOneReference( ScRange& r ) const;
     BOOL            HasRelNameReference() const;
-    BOOL            HasDBArea() const;
     BOOL            HasColRowName() const;
 
     void            UpdateReference(UpdateRefMode eUpdateRefMode,
@@ -449,10 +434,7 @@ public:
                     ScNoteCell();
                     ScNoteCell( const ScPostIt& rNote );
                     ScNoteCell( const ScNoteCell& rScNoteCell, ScDocument* pDoc );
-                    ScNoteCell( SvStream& rStream, USHORT nVer );
     ScBaseCell*     Clone(ScDocument* pDoc) const;
-
-    void            Save( SvStream& rStream ) const;
 };
 
 

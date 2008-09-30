@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpsave.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,12 +491,6 @@ void ScDPSaveDimension::SetUsedHierarchy(long nNew)
 BOOL ScDPSaveDimension::HasLayoutName() const
 {
     return ( pLayoutName != NULL );
-}
-
-void ScDPSaveDimension::ResetLayoutName()
-{
-    delete pLayoutName;
-    pLayoutName = NULL;
 }
 
 void ScDPSaveDimension::SetLayoutName(const String* pName)
@@ -1194,48 +1188,6 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     {
         DBG_ERROR("exception in WriteToSource");
     }
-}
-
-void ScDPSaveData::Store( SvStream& rStream ) const
-{
-    //! multi-header for individual entries
-
-    long nCount = aDimList.Count();
-    rStream << nCount;
-    for (long i=0; i<nCount; i++)
-    {
-        const ScDPSaveDimension* pDim = (const ScDPSaveDimension*)aDimList.GetObject(i);
-        pDim->Store( rStream );
-    }
-
-    rStream << nColumnGrandMode;
-    rStream << nRowGrandMode;
-    rStream << nIgnoreEmptyMode;
-    rStream << nRepeatEmptyMode;
-
-    rStream << (USHORT) 0;  // nExtra
-}
-
-void ScDPSaveData::Load( SvStream& rStream )
-{
-    //! multi-header for individual entries
-
-    DBG_ASSERT( aDimList.Count()==0, "ScDPSaveData::Load not empty" );
-
-    long nNewCount;
-    rStream >> nNewCount;
-    for (long i=0; i<nNewCount; i++)
-    {
-        ScDPSaveDimension* pNew = new ScDPSaveDimension( rStream );
-        aDimList.Insert( pNew, LIST_APPEND );
-    }
-
-    rStream >> nColumnGrandMode;
-    rStream >> nRowGrandMode;
-    rStream >> nIgnoreEmptyMode;
-    rStream >> nRepeatEmptyMode;
-
-    lcl_SkipExtra( rStream );       // reads at least 1 USHORT
 }
 
 BOOL ScDPSaveData::IsEmpty() const

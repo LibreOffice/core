@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editable.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,8 +79,6 @@ public:
     void    TestRange( ScDocument* pDoc, const ScRange& rRange );
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
     void    TestView( ScViewFunc* pView );
-
-    void    Reset();
 
     BOOL    IsEditable() const          { return bIsEditable; }
     BOOL    IsFormatEditable() const    { return bIsEditable || bOnlyMatrix; }

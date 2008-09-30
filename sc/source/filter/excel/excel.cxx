@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excel.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.26.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,12 +48,6 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 #include "exp_op.hxx"
-
-
-FltError ScImportExcel( SfxMedium& r, ScDocument* p )
-{
-    return ScImportExcel( r, p, EIF_AUTO );
-}
 
 
 FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
@@ -160,16 +154,6 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
         eRet = xFilter.get() ? xFilter->Read() : eERR_INTERN;
     }
 
-    return eRet;
-}
-
-
-
-
-FltError ScExportExcel234( SvStream& /*aStream*/, ScDocument* /*pDoc*/,
-    ExportFormatExcel /*eFormat*/, CharSet /*eNach*/ )
-{
-    FltError                eRet = eERR_NI;
     return eRet;
 }
 

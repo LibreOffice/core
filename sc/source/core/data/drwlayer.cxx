@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwlayer.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.55.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1828,11 +1828,6 @@ void ScDrawLayer::EnsureGraphicNames()
             }
         }
     }
-}
-
-ULONG ScDrawLayer::GetDefTextHeight() const
-{
-    return nDefTextHgt;     // protected in SdrModel
 }
 
 void ScDrawLayer::SetAnchor( SdrObject* pObj, ScAnchorType eType )

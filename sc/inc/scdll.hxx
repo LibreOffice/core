@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scdll.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +70,7 @@ public:
     static void     Init();     // called directly after loading the DLL
     static void     Exit();     // called directly befor unloading the DLL
 
-
-    static void     FillStatusBar(StatusBar &rBar);
-
+//UNUSED2008-05  static void    FillStatusBar(StatusBar &rBar);
     static ULONG    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
                                     SfxFilterFlags nMust, SfxFilterFlags nDont );
 };

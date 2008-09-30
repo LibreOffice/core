@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawvie3.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,26 +61,6 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     pDev( pOut ),
     pDoc( pData->GetDocument() ),
     nTab( pData->GetTabNo() ),
-    pDropMarker( NULL ),
-    pDropMarkObj( NULL ),
-    bInConstruct( TRUE )
-    //HMHbDisableHdl( FALSE )
-{
-    // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
-
-    // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Calc());
-
-    Construct();
-}
-
-ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable ) :
-    FmFormView( pDocument->GetDrawLayer(), pOut ),
-    pViewData( NULL ),
-    pDev( pOut ),
-    pDoc( pDocument ),
-    nTab( nTable ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
     bInConstruct( TRUE )

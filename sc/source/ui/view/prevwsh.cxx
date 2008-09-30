@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prevwsh.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.44.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,27 +141,6 @@ void ScPreviewShell::Construct( Window* pParent )
     pCorner->Show();
     SetHelpId( HID_SCSHELL_PREVWSH );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Preview")));
-}
-
-ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
-                                const ScPreviewShell& rWin ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-    pDocShell( rWin.pDocShell ),
-    aSourceData( rWin.aSourceData ),
-    nSourceDesignMode( rWin.nSourceDesignMode ),
-    pAccessibilityBroadcaster( NULL )
-{
-    Construct( &pViewFrame->GetWindow() );
-}
-
-ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
-                                Window *pParent ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-    pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
-    nSourceDesignMode( SC_FORCEMODE_NONE ),
-    pAccessibilityBroadcaster( NULL )
-{
-    Construct( pParent );
 }
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,

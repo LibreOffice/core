@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navipi.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,8 +281,6 @@ private:
 
     SfxBindings&    GetBindings()
                     { return rBindings; }
-    BOOL    GetDBAtCursor( String& rStrName );
-    BOOL    GetAreaAtCursor( String& rStrName );
 
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const String rName );

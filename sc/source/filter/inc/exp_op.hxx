@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exp_op.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.13.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@ public:
 
 
 
-
+#if ENABLE_LOTUS123_EXPORT
 class ExportWK1 : public ExportTyp
 {
 private:
@@ -101,7 +101,7 @@ public:
 
     FltError            Write();
 };
-
+#endif
 
 
 

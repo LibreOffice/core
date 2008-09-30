@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datauno.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1567,45 +1567,6 @@ void SAL_CALL ScDatabaseRangeObj::setDataArea( const table::CellRangeAddress& aD
     }
 }
 
-void ScDatabaseRangeObj::GetSortParam(ScSortParam& rSortParam) const
-{
-    const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        pData->GetSortParam(rSortParam);
-
-        //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
-        ScRange aDBRange;
-        pData->GetArea(aDBRange);
-        SCCOLROW nFieldStart = rSortParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
-        for (USHORT i=0; i<MAXSORT; i++)
-            if (rSortParam.bDoSort[i] && rSortParam.nField[i] >= nFieldStart)
-                rSortParam.nField[i] -= nFieldStart;
-    }
-}
-
-void ScDatabaseRangeObj::SetSortParam(const ScSortParam& rSortParam)
-{
-    const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
-        ScSortParam aParam(rSortParam);
-        ScRange aDBRange;
-        pData->GetArea(aDBRange);
-        SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
-        for (USHORT i=0; i<MAXSORT; i++)
-            if (aParam.bDoSort[i])
-                aParam.nField[i] += nFieldStart;
-
-        ScDBData aNewData( *pData );
-        aNewData.SetSortParam(aParam);
-        aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetSortParam
-        ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData, TRUE);
-    }
-}
-
 uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescriptor()
                                                     throw(uno::RuntimeException)
 {
@@ -1743,30 +1704,6 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScDatabaseRangeObj::getSubTo
 {
     ScUnoGuard aGuard;
     return new ScRangeSubTotalDescriptor(this);
-}
-
-void ScDatabaseRangeObj::GetImportParam(ScImportParam& rImportParam) const
-{
-    const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        pData->GetImportParam(rImportParam);
-        //  Fields gibt's hier nicht anzupassen
-    }
-}
-
-void ScDatabaseRangeObj::SetImportParam(const ScImportParam& rImportParam)
-{
-    const ScDBData* pData = GetDBData_Impl();
-    if (pData)
-    {
-        //  Fields gibt's hier nicht anzupassen
-
-        ScDBData aNewData( *pData );
-        aNewData.SetImportParam(rImportParam);
-        ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData, TRUE);
-    }
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getImportDescriptor()

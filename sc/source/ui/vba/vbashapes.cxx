@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbashapes.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -382,6 +382,8 @@ ScVbaShapes::createName( rtl::OUString sName )
     return sName;
 }
 
+#if 0
+//TODO helperapi using a writer document
 awt::Point
 calculateTopLeftMargin( uno::Reference< vba::XHelperInterface > xDocument )
 {
@@ -389,3 +391,4 @@ calculateTopLeftMargin( uno::Reference< vba::XHelperInterface > xDocument )
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
     return awt::Point();
 }
+#endif

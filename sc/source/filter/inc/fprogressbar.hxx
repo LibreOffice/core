@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fprogressbar.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,7 +222,7 @@ private:
 class ScfStreamProgressBar
 {
 public:
-    explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText );
+//UNUSED2008-05  explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText );
     explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, USHORT nResId = STR_LOAD_DOC );
 
     /** Sets the progress bar to the current stream position. */

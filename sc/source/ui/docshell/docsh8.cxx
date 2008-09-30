@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh8.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.27.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,44 +192,6 @@ BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------
 
-long lcl_GetRowCount( const uno::Reference<sdbc::XConnection>& xConnection,
-                        const String& rTabName )
-{
-    try
-    {
-        uno::Reference<sdbc::XStatement> xStatement = xConnection->createStatement();
-        DBG_ASSERT( xStatement.is(), "can't get Statement" );
-        if (!xStatement.is()) return SC_ROWCOUNT_ERROR;
-
-        String aQuoteStr;
-        uno::Reference<sdbc::XDatabaseMetaData> xDBMeta = xConnection->getMetaData();
-        if (xDBMeta.is())
-            aQuoteStr = xDBMeta->getIdentifierQuoteString();
-
-        String aSql = String::CreateFromAscii("SELECT COUNT ( * ) FROM ");
-        aSql += aQuoteStr;
-        aSql += rTabName;
-        aSql += aQuoteStr;
-
-        uno::Reference<sdbc::XResultSet> xResSet = xStatement->executeQuery( aSql );
-        uno::Reference<sdbc::XRow> xRow( xResSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRow.is(), "can't get Row" );
-        if (!xRow.is()) return SC_ROWCOUNT_ERROR;
-
-        if ( xResSet->next() )
-            return xRow->getInt( 1 );
-    }
-    catch ( sdbc::SQLException& )
-    {
-    }
-    catch ( uno::Exception& )
-    {
-        DBG_ERROR("Unexpected exception in database");
-    }
-
-    return SC_ROWCOUNT_ERROR;
-}
-
 ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                 BOOL bSimpleColWidth[MAXCOLCOUNT] )
 {
@@ -281,7 +243,6 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         DBG_ASSERT( xConnection.is(), "can't get Connection" );
         if (!xConnection.is()) return SCERR_IMPORT_CONNECT;
 
-//!     long nRowCount = lcl_GetRowCount( xConnection, aTabName );
         long nRowCount = 0;
         if ( nRowCount < 0 )
         {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLConverter.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -359,12 +359,12 @@ void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUS
     SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
 }
 
-void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* /* pUnitConverter */)
-{
-    com::sun::star::util::DateTime aAPIDateTime;
-    SvXMLUnitConverter::convertDateTime(aAPIDateTime, sDate);
-    ConvertAPIToCoreDateTime(aAPIDateTime, aDateTime);
-}
+//UNUSED2008-05  void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* /* pUnitConverter */)
+//UNUSED2008-05  {
+//UNUSED2008-05      com::sun::star::util::DateTime aAPIDateTime;
+//UNUSED2008-05      SvXMLUnitConverter::convertDateTime(aAPIDateTime, sDate);
+//UNUSED2008-05      ConvertAPIToCoreDateTime(aAPIDateTime, aDateTime);
+//UNUSED2008-05  }
 
 void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pvfundlg.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,12 +158,6 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 
 ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, const ResId& rResId ) :
     MultiListBox( pParent, rResId )
-{
-    FillFunctionNames();
-}
-
-ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, WinBits nStyle ) :
-    MultiListBox( pParent, nStyle )
 {
     FillFunctionNames();
 }

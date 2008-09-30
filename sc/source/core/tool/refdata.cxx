@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refdata.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,111 +85,110 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     }
 }
 
-
-void SingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
-{
-    switch ( rBools.bRelCol )
-    {
-        case SR_DELETED :
-            Flags.bColRel = TRUE;           // der war verlorengegangen
-            Flags.bColDeleted = TRUE;
-            break;
-        case SR_ABSOLUTE :
-            Flags.bColRel = FALSE;
-            Flags.bColDeleted = FALSE;
-            break;
-        case SR_RELABS :
-        case SR_RELATIVE :
-        default:
-            Flags.bColRel = TRUE;
-            Flags.bColDeleted = FALSE;
-    }
-    switch ( rBools.bRelRow )
-    {
-        case SR_DELETED :
-            Flags.bRowRel = TRUE;           // der war verlorengegangen
-            Flags.bRowDeleted = TRUE;
-            break;
-        case SR_ABSOLUTE :
-            Flags.bRowRel = FALSE;
-            Flags.bRowDeleted = FALSE;
-            break;
-        case SR_RELABS :
-        case SR_RELATIVE :
-        default:
-            Flags.bRowRel = TRUE;
-            Flags.bRowDeleted = FALSE;
-    }
-    switch ( rBools.bRelTab )
-    {
-        case SR_DELETED :
-            Flags.bTabRel = TRUE;           // der war verlorengegangen
-            Flags.bTabDeleted = TRUE;
-            break;
-        case SR_ABSOLUTE :
-            Flags.bTabRel = FALSE;
-            Flags.bTabDeleted = FALSE;
-            break;
-        case SR_RELABS :
-        case SR_RELATIVE :
-        default:
-            Flags.bTabRel = TRUE;
-            Flags.bTabDeleted = FALSE;
-    }
-    Flags.bFlag3D = (rBools.bOldFlag3D & SRF_3D ? TRUE : FALSE);
-    Flags.bRelName = (rBools.bOldFlag3D & SRF_RELNAME ? TRUE : FALSE);
-    if ( !Flags.bFlag3D )
-        Flags.bTabRel = TRUE;   // ist bei einigen aelteren Dokumenten nicht gesetzt
-}
-
-
-/*
- bis Release 3.1 sah Store so aus
-
-    BYTE n = ( ( r.bOldFlag3D & 0x03 ) << 6 )   // RelName, 3D
-            | ( ( r.bRelTab & 0x03 ) << 4 )     // Relative, RelAbs
-            | ( ( r.bRelRow & 0x03 ) << 2 )
-            |   ( r.bRelCol & 0x03 );
-
- bis Release 3.1 sah Load so aus
-
-    r.bRelCol = ( n & 0x03 );
-    r.bRelRow = ( ( n >> 2 ) & 0x03 );
-    r.bRelTab = ( ( n >> 4 ) & 0x03 );
-    r.bOldFlag3D = ( ( n >> 6 ) & 0x03 );
-
- bRelCol == SR_DELETED war identisch mit bRelCol == (SR_RELATIVE | SR_RELABS)
- leider..
- 3.1 liest Zukunft: Deleted wird nicht unbedingt erkannt, nur wenn auch Relativ.
- Aber immer noch nCol > MAXCOL und gut sollte sein..
- */
-
-BYTE SingleRefData::CreateStoreByteFromFlags() const
-{
-    return (BYTE)(
-          ( (Flags.bRelName     & 0x01) << 7 )
-        | ( (Flags.bFlag3D      & 0x01) << 6 )
-        | ( (Flags.bTabDeleted  & 0x01) << 5 )
-        | ( (Flags.bTabRel      & 0x01) << 4 )
-        | ( (Flags.bRowDeleted  & 0x01) << 3 )
-        | ( (Flags.bRowRel      & 0x01) << 2 )
-        | ( (Flags.bColDeleted  & 0x01) << 1 )
-        |   (Flags.bColRel      & 0x01)
-        );
-}
-
-
-void SingleRefData::CreateFlagsFromLoadByte( BYTE n )
-{
-    Flags.bColRel       = (n & 0x01 );
-    Flags.bColDeleted   = ( (n >> 1) & 0x01 );
-    Flags.bRowRel       = ( (n >> 2) & 0x01 );
-    Flags.bRowDeleted   = ( (n >> 3) & 0x01 );
-    Flags.bTabRel       = ( (n >> 4) & 0x01 );
-    Flags.bTabDeleted   = ( (n >> 5) & 0x01 );
-    Flags.bFlag3D       = ( (n >> 6) & 0x01 );
-    Flags.bRelName      = ( (n >> 7) & 0x01 );
-}
+//UNUSED2008-05  void SingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
+//UNUSED2008-05  {
+//UNUSED2008-05      switch ( rBools.bRelCol )
+//UNUSED2008-05      {
+//UNUSED2008-05          case SR_DELETED :
+//UNUSED2008-05              Flags.bColRel = TRUE;           // der war verlorengegangen
+//UNUSED2008-05              Flags.bColDeleted = TRUE;
+//UNUSED2008-05              break;
+//UNUSED2008-05          case SR_ABSOLUTE :
+//UNUSED2008-05              Flags.bColRel = FALSE;
+//UNUSED2008-05              Flags.bColDeleted = FALSE;
+//UNUSED2008-05              break;
+//UNUSED2008-05          case SR_RELABS :
+//UNUSED2008-05          case SR_RELATIVE :
+//UNUSED2008-05          default:
+//UNUSED2008-05              Flags.bColRel = TRUE;
+//UNUSED2008-05              Flags.bColDeleted = FALSE;
+//UNUSED2008-05      }
+//UNUSED2008-05      switch ( rBools.bRelRow )
+//UNUSED2008-05      {
+//UNUSED2008-05          case SR_DELETED :
+//UNUSED2008-05              Flags.bRowRel = TRUE;           // der war verlorengegangen
+//UNUSED2008-05              Flags.bRowDeleted = TRUE;
+//UNUSED2008-05              break;
+//UNUSED2008-05          case SR_ABSOLUTE :
+//UNUSED2008-05              Flags.bRowRel = FALSE;
+//UNUSED2008-05              Flags.bRowDeleted = FALSE;
+//UNUSED2008-05              break;
+//UNUSED2008-05          case SR_RELABS :
+//UNUSED2008-05          case SR_RELATIVE :
+//UNUSED2008-05          default:
+//UNUSED2008-05              Flags.bRowRel = TRUE;
+//UNUSED2008-05              Flags.bRowDeleted = FALSE;
+//UNUSED2008-05      }
+//UNUSED2008-05      switch ( rBools.bRelTab )
+//UNUSED2008-05      {
+//UNUSED2008-05          case SR_DELETED :
+//UNUSED2008-05              Flags.bTabRel = TRUE;           // der war verlorengegangen
+//UNUSED2008-05              Flags.bTabDeleted = TRUE;
+//UNUSED2008-05              break;
+//UNUSED2008-05          case SR_ABSOLUTE :
+//UNUSED2008-05              Flags.bTabRel = FALSE;
+//UNUSED2008-05              Flags.bTabDeleted = FALSE;
+//UNUSED2008-05              break;
+//UNUSED2008-05          case SR_RELABS :
+//UNUSED2008-05          case SR_RELATIVE :
+//UNUSED2008-05          default:
+//UNUSED2008-05              Flags.bTabRel = TRUE;
+//UNUSED2008-05              Flags.bTabDeleted = FALSE;
+//UNUSED2008-05      }
+//UNUSED2008-05      Flags.bFlag3D = (rBools.bOldFlag3D & SRF_3D ? TRUE : FALSE);
+//UNUSED2008-05      Flags.bRelName = (rBools.bOldFlag3D & SRF_RELNAME ? TRUE : FALSE);
+//UNUSED2008-05      if ( !Flags.bFlag3D )
+//UNUSED2008-05          Flags.bTabRel = TRUE;   // ist bei einigen aelteren Dokumenten nicht gesetzt
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  /*
+//UNUSED2008-05   bis Release 3.1 sah Store so aus
+//UNUSED2008-05
+//UNUSED2008-05      BYTE n = ( ( r.bOldFlag3D & 0x03 ) << 6 )   // RelName, 3D
+//UNUSED2008-05              | ( ( r.bRelTab & 0x03 ) << 4 )     // Relative, RelAbs
+//UNUSED2008-05              | ( ( r.bRelRow & 0x03 ) << 2 )
+//UNUSED2008-05              |   ( r.bRelCol & 0x03 );
+//UNUSED2008-05
+//UNUSED2008-05   bis Release 3.1 sah Load so aus
+//UNUSED2008-05
+//UNUSED2008-05      r.bRelCol = ( n & 0x03 );
+//UNUSED2008-05      r.bRelRow = ( ( n >> 2 ) & 0x03 );
+//UNUSED2008-05      r.bRelTab = ( ( n >> 4 ) & 0x03 );
+//UNUSED2008-05      r.bOldFlag3D = ( ( n >> 6 ) & 0x03 );
+//UNUSED2008-05
+//UNUSED2008-05   bRelCol == SR_DELETED war identisch mit bRelCol == (SR_RELATIVE | SR_RELABS)
+//UNUSED2008-05   leider..
+//UNUSED2008-05   3.1 liest Zukunft: Deleted wird nicht unbedingt erkannt, nur wenn auch Relativ.
+//UNUSED2008-05   Aber immer noch nCol > MAXCOL und gut sollte sein..
+//UNUSED2008-05   */
+//UNUSED2008-05
+//UNUSED2008-05  BYTE SingleRefData::CreateStoreByteFromFlags() const
+//UNUSED2008-05  {
+//UNUSED2008-05      return (BYTE)(
+//UNUSED2008-05            ( (Flags.bRelName     & 0x01) << 7 )
+//UNUSED2008-05          | ( (Flags.bFlag3D      & 0x01) << 6 )
+//UNUSED2008-05          | ( (Flags.bTabDeleted  & 0x01) << 5 )
+//UNUSED2008-05          | ( (Flags.bTabRel      & 0x01) << 4 )
+//UNUSED2008-05          | ( (Flags.bRowDeleted  & 0x01) << 3 )
+//UNUSED2008-05          | ( (Flags.bRowRel      & 0x01) << 2 )
+//UNUSED2008-05          | ( (Flags.bColDeleted  & 0x01) << 1 )
+//UNUSED2008-05          |   (Flags.bColRel      & 0x01)
+//UNUSED2008-05          );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  void SingleRefData::CreateFlagsFromLoadByte( BYTE n )
+//UNUSED2008-05  {
+//UNUSED2008-05      Flags.bColRel       = (n & 0x01 );
+//UNUSED2008-05      Flags.bColDeleted   = ( (n >> 1) & 0x01 );
+//UNUSED2008-05      Flags.bRowRel       = ( (n >> 2) & 0x01 );
+//UNUSED2008-05      Flags.bRowDeleted   = ( (n >> 3) & 0x01 );
+//UNUSED2008-05      Flags.bTabRel       = ( (n >> 4) & 0x01 );
+//UNUSED2008-05      Flags.bTabDeleted   = ( (n >> 5) & 0x01 );
+//UNUSED2008-05      Flags.bFlag3D       = ( (n >> 6) & 0x01 );
+//UNUSED2008-05      Flags.bRelName      = ( (n >> 7) & 0x01 );
+//UNUSED2008-05  }
 
 
 BOOL SingleRefData::operator==( const SingleRefData& r ) const

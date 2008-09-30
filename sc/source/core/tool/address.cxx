@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: address.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.11.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1018,25 +1018,6 @@ void ScRange::Justify()
     }
 }
 
-
-void ScRange::ExtendOne()
-{
-    //  Range fuer Rahmen etc. in X und Y Richtung um 1 erweitern
-
-    SCCOLROW nVal;
-
-    if ((nVal = aStart.Col()) > 0)
-        aStart.SetCol(static_cast<SCCOL>(nVal-1));
-    if ((nVal = aStart.Row()) > 0)
-        aStart.SetRow(nVal-1);
-
-    if ((nVal = aEnd.Col()) < MAXCOL)
-        aEnd.SetCol(static_cast<SCCOL>(nVal+1));
-    if ((nVal = aEnd.Row()) < MAXROW)
-        aEnd.SetRow(nVal+1);
-}
-
-
 void ScRange::ExtendTo( const ScRange& rRange )
 {
     DBG_ASSERT( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
@@ -1654,21 +1635,6 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
     // Einfahces &, damit beides ausgefuehrt wird!!
     return aStart.Move( dx, dy, dz, pDoc ) & aEnd.Move( dx, dy, dz, pDoc );
-}
-
-
-// --- moved from ScTripel -----------------------------------------------
-
-String ScAddress::GetText() const
-{
-    String aString('(');
-    aString += String::CreateFromInt32( nCol );
-    aString += ',';
-    aString += String::CreateFromInt32( nRow );
-    aString += ',';
-    aString += String::CreateFromInt32( nTab );
-    aString += ')';
-    return aString;
 }
 
 

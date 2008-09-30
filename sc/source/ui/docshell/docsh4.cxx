@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.61.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,36 +144,6 @@ using namespace ::com::sun::star;
 #define SC_PREVIEW_SIZE_X   10000
 #define SC_PREVIEW_SIZE_Y   12400
 
-
-//------------------------------------------------------------------
-
-BOOL ScDocShell::GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab )
-{
-    BOOL bOk = TRUE;
-    rTab = 0;                   // zur Sicherheit...
-
-    const SfxPoolItem* pTabItem;
-    if ( pArgs && pArgs->GetItemState( nId, TRUE, &pTabItem ) == SFX_ITEM_SET )
-    {
-        //  Parameter sind 1-based !!!
-        SCTAB nItemTab = ((const SfxUInt16Item*)pTabItem)->GetValue();
-        SCTAB nTabCount = aDocument.GetTableCount();
-        if (nItemTab>0 && nItemTab<=nTabCount)
-            rTab = nItemTab-1;
-        else
-            bOk = FALSE;
-    }
-    else                        // nichts angegeben -> sichtbare
-    {
-        ScTabViewShell* pVisibleSh = GetBestViewShell();
-        if ( pVisibleSh )
-            rTab = pVisibleSh->GetViewData()->GetTabNo();
-        else
-            bOk = FALSE;
-    }
-
-    return bOk;
-}
 
 //------------------------------------------------------------------
 

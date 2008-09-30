@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpobject.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.30.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,8 +57,10 @@ class ScDPSaveData;
 class ScDPOutput;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
+#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
 class ScPivotCollection;
+#endif
 struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
@@ -182,13 +184,11 @@ public:
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
-    BOOL                StoreOld(SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
-    BOOL                StoreNew(SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
-    BOOL                LoadNew(SvStream& rStream, ScMultipleReadHeader& rHdr );
     BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
     BOOL                FillLabelData(ScPivotParam& rParam);
+#if OLD_PIVOT_IMPLEMENTATION
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
-
+#endif
     BOOL                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
     BOOL                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
 
@@ -256,13 +256,9 @@ public:
     virtual DataObject* Clone() const;
 
     ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
-
-    BOOL        StoreOld( SvStream& rStream ) const;
-    BOOL        StoreNew( SvStream& rStream ) const;
-    BOOL        LoadNew( SvStream& rStream );
-
+#if OLD_PIVOT_IMPLEMENTATION
     void        ConvertOldTables( ScPivotCollection& rOldColl );
-
+#endif
     void        DeleteOnTab( SCTAB nTab );
     void        UpdateReference( UpdateRefMode eUpdateRefMode,
                                  const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -271,7 +267,7 @@ public:
     void        WriteRefsTo( ScDPCollection& r ) const;
 
     String      CreateNewName( USHORT nMin = 1 ) const;
-    void        EnsureNames();
+//UNUSED2008-05  void       EnsureNames();
 };
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdata.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.65.24.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,57 +410,57 @@ ScViewData::ScViewData( const ScViewData& rViewData )
     CalcPPT();
 }
 
-void ScViewData::SetDocShell( ScDocShell* pShell )
-{
-    pDocShell = pShell;
-    pDoc = pDocShell->GetDocument();
-    *pOptions = pDoc->GetViewOptions();
-    CalcPPT();
-}
-
 void ScViewData::InitData( ScDocument* pDocument )
 {
     pDoc = pDocument;
     *pOptions = pDoc->GetViewOptions();
 }
 
-void ScViewData::InitFrom( const ScViewData* pRef )
-{
-    if (pRef==NULL)
-    {
-        DBG_ERROR("ScViewData::InitFrom mit NULL");
-        return;
-    }
-
-    aScrSize    = pRef->aScrSize;
-    nTabNo      = pRef->nTabNo;
-    eDefZoomType = pRef->eDefZoomType;
-    aDefZoomX   = pRef->aDefZoomX;
-    aDefZoomY   = pRef->aDefZoomY;
-    aDefPageZoomX = pRef->aDefPageZoomX;
-    aDefPageZoomY = pRef->aDefPageZoomY;
-    bPagebreak  = pRef->bPagebreak;
-    aLogicMode  = pRef->aLogicMode;
-
-    SetGridMode     ( pRef->IsGridMode() );
-    SetSyntaxMode   ( pRef->IsSyntaxMode() );
-    SetHeaderMode   ( pRef->IsHeaderMode() );
-    SetTabMode      ( pRef->IsTabMode() );
-    SetVScrollMode  ( pRef->IsVScrollMode() );
-    SetHScrollMode  ( pRef->IsHScrollMode() );
-    SetOutlineMode  ( pRef->IsOutlineMode() );
-
-    for (SCTAB i=0; i<=MAXTAB; i++)
-    {
-        delete pTabData[i];
-        if (pRef->pTabData[i])
-            pTabData[i] = new ScViewDataTable( *pRef->pTabData[i] );
-        else
-            pTabData[i] = NULL;
-    }
-    pThisTab = pTabData[nTabNo];
-    CalcPPT();
-}
+//UNUSED2008-05  void ScViewData::InitFrom( const ScViewData* pRef )
+//UNUSED2008-05  {
+//UNUSED2008-05      if (pRef==NULL)
+//UNUSED2008-05      {
+//UNUSED2008-05          DBG_ERROR("ScViewData::InitFrom mit NULL");
+//UNUSED2008-05          return;
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      aScrSize    = pRef->aScrSize;
+//UNUSED2008-05      nTabNo      = pRef->nTabNo;
+//UNUSED2008-05      eDefZoomType = pRef->eDefZoomType;
+//UNUSED2008-05      aDefZoomX   = pRef->aDefZoomX;
+//UNUSED2008-05      aDefZoomY   = pRef->aDefZoomY;
+//UNUSED2008-05      aDefPageZoomX = pRef->aDefPageZoomX;
+//UNUSED2008-05      aDefPageZoomY = pRef->aDefPageZoomY;
+//UNUSED2008-05      bPagebreak  = pRef->bPagebreak;
+//UNUSED2008-05      aLogicMode  = pRef->aLogicMode;
+//UNUSED2008-05
+//UNUSED2008-05      SetGridMode     ( pRef->IsGridMode() );
+//UNUSED2008-05      SetSyntaxMode   ( pRef->IsSyntaxMode() );
+//UNUSED2008-05      SetHeaderMode   ( pRef->IsHeaderMode() );
+//UNUSED2008-05      SetTabMode      ( pRef->IsTabMode() );
+//UNUSED2008-05      SetVScrollMode  ( pRef->IsVScrollMode() );
+//UNUSED2008-05      SetHScrollMode  ( pRef->IsHScrollMode() );
+//UNUSED2008-05      SetOutlineMode  ( pRef->IsOutlineMode() );
+//UNUSED2008-05
+//UNUSED2008-05      for (SCTAB i=0; i<=MAXTAB; i++)
+//UNUSED2008-05      {
+//UNUSED2008-05          delete pTabData[i];
+//UNUSED2008-05          if (pRef->pTabData[i])
+//UNUSED2008-05              pTabData[i] = new ScViewDataTable( *pRef->pTabData[i] );
+//UNUSED2008-05          else
+//UNUSED2008-05              pTabData[i] = NULL;
+//UNUSED2008-05      }
+//UNUSED2008-05      pThisTab = pTabData[nTabNo];
+//UNUSED2008-05      CalcPPT();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void ScViewData::SetDocShell( ScDocShell* pShell )
+//UNUSED2008-05  {
+//UNUSED2008-05      pDocShell = pShell;
+//UNUSED2008-05      pDoc = pDocShell->GetDocument();
+//UNUSED2008-05      *pOptions = pDoc->GetViewOptions();
+//UNUSED2008-05      CalcPPT();
+//UNUSED2008-05  }
 
 ScDocument* ScViewData::GetDocument() const
 {
@@ -579,10 +579,10 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     aMarkData.InsertTab( nInsTab );         // ggf. angepasst
 }
 
-void ScViewData::UpdateOle( ScSplitPos /* eWhich */ )
-{
-    GetDocShell()->UpdateOle(this);
-}
+//UNUSED2008-05  void ScViewData::UpdateOle( ScSplitPos /* eWhich */ )
+//UNUSED2008-05  {
+//UNUSED2008-05      GetDocShell()->UpdateOle(this);
+//UNUSED2008-05  }
 
 void ScViewData::SetViewShell( ScTabViewShell* pViewSh )
 {
@@ -1681,15 +1681,15 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
     return CellsAtY( GetPosY( eWhichY ), -1, eWhichY, SC_SIZE_NONE );
 }
 
-SCCOL ScViewData::LastCellsX( ScHSplitPos eWhichX ) const
-{
-    return CellsAtX( MAXCOL+1, -1, eWhichX, SC_SIZE_NONE );
-}
-
-SCROW ScViewData::LastCellsY( ScVSplitPos eWhichY ) const
-{
-    return CellsAtY( MAXROW+1, -1, eWhichY, SC_SIZE_NONE );
-}
+//UNUSED2008-05  SCCOL ScViewData::LastCellsX( ScHSplitPos eWhichX ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return CellsAtX( MAXCOL+1, -1, eWhichX, SC_SIZE_NONE );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  SCROW ScViewData::LastCellsY( ScVSplitPos eWhichY ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return CellsAtY( MAXROW+1, -1, eWhichY, SC_SIZE_NONE );
+//UNUSED2008-05  }
 
 BOOL ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix )
 {

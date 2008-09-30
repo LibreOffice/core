@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xestyle.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1811,30 +1811,48 @@ XclExpDefaultXF::XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF ) :
 {
 }
 
-void XclExpDefaultXF::SetParent( sal_uInt32 nParentXFId )
-{
-    DBG_ASSERT( IsCellXF(), "XclExpDefaultXF::SetParent - not allowed in style XFs" );
-    if( IsCellXF() )
-        mnParentXFId = nParentXFId;
-}
-
-void XclExpDefaultXF::SetUsedFlags(
-        bool bProtUsed, bool bFontUsed, bool bFmtUsed,
-        bool bAlignUsed, bool bBorderUsed, bool bAreaUsed )
-{
-    mbProtUsed    = bProtUsed;
-    mbFontUsed    = bFontUsed;
-    mbFmtUsed     = bFmtUsed;
-    mbAlignUsed   = bAlignUsed;
-    mbBorderUsed  = bBorderUsed;
-    mbAreaUsed    = bAreaUsed;
-}
-
-void XclExpDefaultXF::SetProtection( const XclExpCellProt& rProtection )
-{
-    maProtection = rProtection;
-    mbProtUsed = true;
-}
+//UNUSED2008-05  void XclExpDefaultXF::SetParent( sal_uInt32 nParentXFId )
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( IsCellXF(), "XclExpDefaultXF::SetParent - not allowed in style XFs" );
+//UNUSED2008-05      if( IsCellXF() )
+//UNUSED2008-05          mnParentXFId = nParentXFId;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void XclExpDefaultXF::SetUsedFlags(
+//UNUSED2008-05          bool bProtUsed, bool bFontUsed, bool bFmtUsed,
+//UNUSED2008-05          bool bAlignUsed, bool bBorderUsed, bool bAreaUsed )
+//UNUSED2008-05  {
+//UNUSED2008-05      mbProtUsed    = bProtUsed;
+//UNUSED2008-05      mbFontUsed    = bFontUsed;
+//UNUSED2008-05      mbFmtUsed     = bFmtUsed;
+//UNUSED2008-05      mbAlignUsed   = bAlignUsed;
+//UNUSED2008-05      mbBorderUsed  = bBorderUsed;
+//UNUSED2008-05      mbAreaUsed    = bAreaUsed;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void XclExpDefaultXF::SetProtection( const XclExpCellProt& rProtection )
+//UNUSED2008-05  {
+//UNUSED2008-05      maProtection = rProtection;
+//UNUSED2008-05      mbProtUsed = true;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void XclExpDefaultXF::SetAlignment( const XclExpCellAlign& rAlignment )
+//UNUSED2008-05  {
+//UNUSED2008-05      maAlignment = rAlignment;
+//UNUSED2008-05      mbAlignUsed = true;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void XclExpDefaultXF::SetBorder( const XclExpCellBorder& rBorder )
+//UNUSED2008-05  {
+//UNUSED2008-05      maBorder = rBorder;
+//UNUSED2008-05      mbBorderUsed = true;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void XclExpDefaultXF::SetArea( const XclExpCellArea& rArea )
+//UNUSED2008-05  {
+//UNUSED2008-05      maArea = rArea;
+//UNUSED2008-05      mbAreaUsed = true;
+//UNUSED2008-05  }
 
 void XclExpDefaultXF::SetFont( sal_uInt16 nXclFont )
 {
@@ -1846,24 +1864,6 @@ void XclExpDefaultXF::SetNumFmt( sal_uInt16 nXclNumFmt )
 {
     mnXclNumFmt = nXclNumFmt;
     mbFmtUsed = true;
-}
-
-void XclExpDefaultXF::SetAlignment( const XclExpCellAlign& rAlignment )
-{
-    maAlignment = rAlignment;
-    mbAlignUsed = true;
-}
-
-void XclExpDefaultXF::SetBorder( const XclExpCellBorder& rBorder )
-{
-    maBorder = rBorder;
-    mbBorderUsed = true;
-}
-
-void XclExpDefaultXF::SetArea( const XclExpCellArea& rArea )
-{
-    maArea = rArea;
-    mbAreaUsed = true;
 }
 
 // ----------------------------------------------------------------------------

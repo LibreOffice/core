@@ -330,7 +330,6 @@ ScMatrixRef GetMatrix();
 void ScTableOp();                                       // Mehrfachoperationen
 void ScErrCell();                                       // Sonderbehandlung
                                                         // Fehlerzelle
-void ScDefPar();                                        // DefaultParameter
 //-----------------------------allgemeine Hilfsfunktionen
 void SetMaxIterationCount(USHORT n);
 inline void CurFmtToFuncFmt()
@@ -611,8 +610,6 @@ ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
 void ScMatValue();
 void MEMat(ScMatrix* mM, SCSIZE n);
 void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m, SCSIZE l);
-void MFastSub(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m);
-void MFastTrans(ScMatrix* pA, ScMatrix* pR, SCSIZE n, SCSIZE m);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbcolect.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.32.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,294 +87,6 @@ ScDBData::ScDBData( const String& rName,
     SetQueryParam( aQueryParam );
     SetSubTotalParam( aSubTotalParam );
     SetImportParam( aImportParam );
-}
-
-ScDBData::ScDBData( SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */ ) :
-    bDoSize         (FALSE),
-    bKeepFmt        (FALSE),
-    bStripData      (FALSE),
-    bSortUserDef    (FALSE),
-    nSortUserIndex  (0),
-    bIsAdvanced     (FALSE),
-    nSubUserIndex   (0),
-    bDBSelection    (FALSE),
-    bDBSql          (TRUE),
-    nDBType         (ScDbTable),
-    nIndex          (0),
-    bAutoFilter     (FALSE),
-    bModified       (FALSE)
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rHdr.StartEntry();
-
-    USHORT i;
-    USHORT j;
-    BYTE nDummy;
-    rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-
-    rStream.ReadByteString( aName, eCharSet );
-    rStream >> nTable;
-    rStream >> nStartCol;
-    rStream >> nStartRow;
-    rStream >> nEndCol;
-    rStream >> nEndRow;
-    rStream >> bByRow;
-    rStream >> bHasHeader;
-    rStream >> bSortCaseSens;
-    rStream >> bIncludePattern;
-    rStream >> bSortInplace;
-    rStream >> nSortDestTab;
-    rStream >> nSortDestCol;
-    rStream >> nSortDestRow;
-    rStream >> bQueryInplace;
-    rStream >> bQueryCaseSens;
-    rStream >> bQueryRegExp;
-    rStream >> bQueryDuplicate;
-    rStream >> nQueryDestTab;
-    rStream >> nQueryDestCol;
-    rStream >> nQueryDestRow;
-    rStream >> bSubRemoveOnly;
-    rStream >> bSubReplace;
-    rStream >> bSubPagebreak;
-    rStream >> bSubCaseSens;
-    rStream >> bSubDoSort;
-    rStream >> bSubAscending;
-    rStream >> bSubIncludePattern;
-    rStream >> bSubUserDef;
-    rStream >> bDBImport;
-
-    rStream.ReadByteString( aDBName, eCharSet );
-    rStream.ReadByteString( aDBStatement, eCharSet );
-    rStream >> bDBNative;
-
-    for (i=0; i<MAXSORT; i++)
-    {
-        rStream >> bDoSort[i];
-        USHORT n16;
-        rStream >> n16; nSortField[i] = n16;
-        rStream >> bAscending[i];
-    }
-    for (i=0; i<MAXQUERY; i++)
-    {
-        rStream >> bDoQuery[i];
-        rStream >> nQueryField[i];
-        rStream >> nDummy; eQueryOp[i] = (ScQueryOp) nDummy;
-        rStream >> bQueryByString[i];
-        pQueryStr[i] = new String;
-        rStream.ReadByteString( *pQueryStr[i], eCharSet );
-        rStream >> nQueryVal[i];
-        rStream >> nDummy; eQueryConnect[i] = (ScQueryConnect) nDummy;
-    }
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        rStream >> bDoSubTotal[i];
-        rStream >> nSubField[i];
-
-        USHORT nCount;
-        rStream >> nCount;
-        nSubTotals[i] = nCount;
-
-        pSubTotals[i] = nCount ? new USHORT         [nCount] : NULL;
-        pFunctions[i] = nCount ? new ScSubTotalFunc [nCount] : NULL;
-
-        for (j=0; j<nCount; j++)
-        {
-            rStream >> pSubTotals[i][j];
-            rStream >> nDummy; pFunctions[i][j] = (ScSubTotalFunc)nDummy;
-        }
-    }
-
-    if (rHdr.BytesLeft())
-        rStream >> nIndex;
-
-    if (rHdr.BytesLeft())
-        rStream >> bDBSelection;
-
-    if (rHdr.BytesLeft())
-        rStream >> bDBSql;              // Default = TRUE
-
-    if (rHdr.BytesLeft())
-    {
-        rStream >> nSubUserIndex;
-        rStream >> bSortUserDef;
-        rStream >> nSortUserIndex;
-    }
-
-    if (rHdr.BytesLeft())
-    {
-        rStream >> bDoSize;
-        rStream >> bKeepFmt;
-    }
-
-    if (rHdr.BytesLeft())
-        rStream >> bStripData;
-
-    if (rHdr.BytesLeft())
-        rStream >> nDBType;             // Default = ScDbTable
-
-    if (rHdr.BytesLeft())
-    {
-        rStream >> bIsAdvanced;         // Default = FALSE
-        if (bIsAdvanced)
-            rStream >> aAdvSource;
-    }
-
-    // aSortLocale / aSortAlgorithm are not in binary file format
-
-    rHdr.EndEntry();
-
-    // #43070# rottes Dokument?!?
-    // nEndCol war 258
-    // und auch die CellInfo pPattern in ScOutputData FindRotated waren NULL
-    if ( nStartCol > MAXCOL )
-    {
-        DBG_ERRORFILE( "nStartCol > MAXCOL" );
-        nStartCol = MAXCOL;
-    }
-    if ( nStartRow > MAXROW )
-    {
-        DBG_ERRORFILE( "nStartRow > MAXROW" );
-        nStartRow = MAXROW;
-    }
-    if ( nEndCol > MAXCOL )
-    {
-        DBG_ERRORFILE( "nEndCol > MAXCOL" );
-        nEndCol = MAXCOL;
-    }
-    if ( nEndRow > MAXROW )
-    {
-        DBG_ERRORFILE( "nEndRow > MAXROW" );
-        nEndRow = MAXROW;
-    }
-    if ( nQueryDestCol > MAXCOL )
-    {
-        DBG_ERRORFILE( "nQueryDestCol > MAXCOL" );
-        nQueryDestCol = MAXCOL;
-    }
-    if ( nQueryDestRow > MAXROW )
-    {
-        DBG_ERRORFILE( "nQueryDestRow > MAXROW" );
-        nQueryDestRow = MAXROW;
-    }
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-BOOL ScDBData::Store( SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rHdr.StartEntry();
-
-    USHORT i;
-    USHORT j;
-    rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-
-    rStream.WriteByteString( aName, eCharSet );
-    rStream << nTable;
-    rStream << nStartCol;
-    rStream << nStartRow;
-    rStream << nEndCol;
-    rStream << nEndRow;
-    rStream << bByRow;
-    rStream << bHasHeader;
-    rStream << bSortCaseSens;
-    rStream << bIncludePattern;
-    rStream << bSortInplace;
-    rStream << nSortDestTab;
-    rStream << nSortDestCol;
-    rStream << nSortDestRow;
-    rStream << bQueryInplace;
-    rStream << bQueryCaseSens;
-    rStream << bQueryRegExp;
-    rStream << bQueryDuplicate;
-    rStream << nQueryDestTab;
-    rStream << nQueryDestCol;
-    rStream << nQueryDestRow;
-    rStream << bSubRemoveOnly;
-    rStream << bSubReplace;
-    rStream << bSubPagebreak;
-    rStream << bSubCaseSens;
-    rStream << bSubDoSort;
-    rStream << bSubAscending;
-    rStream << bSubIncludePattern;
-    rStream << bSubUserDef;
-    rStream << bDBImport;
-
-    rStream.WriteByteString( aDBName, eCharSet );
-    rStream.WriteByteString( aDBStatement, eCharSet );
-    rStream << bDBNative;
-
-    for (i=0; i<MAXSORT; i++)
-    {
-        rStream << bDoSort[i];
-        DBG_ASSERT( !SC_ROWLIMIT_MORE_THAN_32K ||
-                (0 <= nSortField[i] && nSortField[i] < SCROWS32K),
-                "rowlimit increased, bad file data");
-        rStream << (USHORT) nSortField[i];
-        rStream << bAscending[i];
-    }
-    for (i=0; i<MAXQUERY; i++)
-    {
-        rStream << bDoQuery[i];
-        rStream << nQueryField[i];
-        rStream << (BYTE) eQueryOp[i];
-        rStream << bQueryByString[i];
-        rStream.WriteByteString( *pQueryStr[i], eCharSet );
-        rStream << nQueryVal[i];
-        rStream << (BYTE) eQueryConnect[i];
-    }
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        rStream << bDoSubTotal[i];
-        rStream << nSubField[i];
-
-        USHORT nCount = nSubTotals[i];
-        rStream << nCount;
-        for (j=0; j<nCount; j++)
-        {
-            rStream << pSubTotals[i][j];
-            rStream << (BYTE)pFunctions[i][j];
-        }
-    }
-    rStream << nIndex;                  // seit 24.10.95
-
-    rStream << bDBSelection;
-
-    rStream << bDBSql;                  // seit 4.2.97
-
-    rStream << nSubUserIndex;           // seit 5.2.97
-    rStream << bSortUserDef;
-    rStream << nSortUserIndex;
-
-    rStream << bDoSize;                 // seit 13.2.97
-    rStream << bKeepFmt;
-
-    rStream << bStripData;              // seit 23.2.97
-
-    if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )
-    {
-        //  folgendes gab's in der 4.0 noch nicht
-
-        //  alte Versionen suchen immer nach Tables und Queries
-        rStream << nDBType;                 // seit 20.11.97
-
-        //  starting from 591, store advanced filter source range
-        //  only if set, to avoid unneccessary warnings
-        if (bIsAdvanced)
-        {
-            rStream << (BOOL) TRUE;
-            rStream << aAdvSource;
-        }
-    }
-
-    // aSortLocale / aSortAlgorithm are not in binary file format
-
-    rHdr.EndEntry();
-    return TRUE;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
@@ -619,12 +331,12 @@ ScDBData::~ScDBData()
     }
 }
 
-BOOL ScDBData::IsBeyond(SCROW nMaxRow) const
-{
-    return ( nStartRow > nMaxRow ||
-             nEndRow > nMaxRow ||
-             nQueryDestRow > nMaxRow );
-}
+//UNUSED2008-05  BOOL ScDBData::IsBeyond(SCROW nMaxRow) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return ( nStartRow > nMaxRow ||
+//UNUSED2008-05               nEndRow > nMaxRow ||
+//UNUSED2008-05               nQueryDestRow > nMaxRow );
+//UNUSED2008-05  }
 
 String ScDBData::GetSourceString() const
 {
@@ -976,14 +688,6 @@ BOOL ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
 }
 
-String ScDBData::GetTargetName(const String& rDocName) const
-{
-    String aTargetName(rDocName);
-    aTargetName += '.';
-    aTargetName += aName;
-    return aTargetName;
-}
-
 DataObject* ScDBData::Clone() const
 {
     return new ScDBData(*this);
@@ -1051,60 +755,6 @@ BOOL ScDBCollection::SearchName( const String& rName, USHORT& rIndex ) const
 {
     ScDBData aDataObj( rName, 0,0,0,0,0 );
     return Search( &aDataObj, rIndex );
-}
-
-BOOL ScDBCollection::Load( SvStream& rStream )
-{
-    BOOL bSuccess = TRUE;
-    USHORT nNewCount;
-
-    while( nCount > 0 )
-        AtFree(0);                  // alles loeschen
-
-    ScMultipleReadHeader aHdr( rStream );
-
-    rStream >> nNewCount;
-    for (USHORT i=0; i<nNewCount && bSuccess; i++)
-    {
-        ScDBData* pData = new ScDBData( rStream, aHdr );
-        Insert( pData );
-    }
-    if (aHdr.BytesLeft())   //  ... Erweiterungen
-        rStream >> nEntryIndex;
-    return bSuccess;
-}
-
-BOOL ScDBCollection::Store( SvStream& rStream ) const
-{
-    ScMultipleWriteHeader aHdr( rStream );
-
-    USHORT i;
-    USHORT nSaveCount = nCount;
-    SCROW nSaveMaxRow = pDoc->GetSrcMaxRow();
-    if ( nSaveMaxRow < MAXROW )
-    {
-        nSaveCount = 0;
-        for (i=0; i<nCount; i++)
-            if ( !((const ScDBData*)At(i))->IsBeyond(nSaveMaxRow) )
-                ++nSaveCount;
-
-        if ( nSaveCount < nCount )
-            pDoc->SetLostData();            // Warnung ausgeben
-    }
-
-    rStream << nSaveCount;
-
-    BOOL bSuccess = TRUE;
-    for (i=0; i<nCount && bSuccess; i++)
-    {
-        const ScDBData* pDBData = (const ScDBData*)At(i);
-        if ( nSaveMaxRow == MAXROW || !pDBData->IsBeyond(nSaveMaxRow) )
-            bSuccess = pDBData->Store( rStream, aHdr );
-    }
-
-    rStream << nEntryIndex;             // seit 24.10.95
-
-    return bSuccess;
 }
 
 void ScDBCollection::DeleteOnTab( SCTAB nTab )

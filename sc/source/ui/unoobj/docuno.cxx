@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docuno.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.67.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -266,29 +266,6 @@ ScDocument* ScModelObj::GetDocument() const
 SfxObjectShell* ScModelObj::GetEmbeddedObject() const
 {
     return pDocShell;
-}
-
-BOOL ScModelObj::IsEmbedded() const
-{
-    if (pDocShell)
-    {
-        return pDocShell->IsOle();
-    }
-    return FALSE;
-}
-
-double ScModelObj::GetOutputFactor() const
-{
-    if (pDocShell)
-        return pDocShell->GetOutputFactor();
-    return 1.0;
-}
-
-BOOL ScModelObj::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
-{
-    if (pDocShell)
-        return pDocShell->AdjustRowHeight( nStartRow, nEndRow, nTab );
-    return FALSE;
 }
 
 void ScModelObj::UpdateAllRowHeights()
@@ -2847,11 +2824,11 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
 //------------------------------------------------------------------------
 
-ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj(ScDocShell* pDocSh) :
-    pDocShell( pDocSh )
-{
-    pDocShell->GetDocument()->AddUnoObject(*this);
-}
+//UNUSED2008-05  ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj(ScDocShell* pDocSh) :
+//UNUSED2008-05  pDocShell( pDocSh )
+//UNUSED2008-05  {
+//UNUSED2008-05      pDocShell->GetDocument()->AddUnoObject(*this);
+//UNUSED2008-05  }
 
 ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 {

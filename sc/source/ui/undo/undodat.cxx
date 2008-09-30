@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undodat.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,7 @@ TYPEINIT1(ScUndoAutoFilter,         SfxUndoAction);
 TYPEINIT1(ScUndoDBData,             SfxUndoAction);
 TYPEINIT1(ScUndoImportData,         SfxUndoAction);
 TYPEINIT1(ScUndoRepeatDB,           SfxUndoAction);
-TYPEINIT1(ScUndoPivot,              SfxUndoAction);
+//UNUSED2008-05  TYPEINIT1(ScUndoPivot,              SfxUndoAction);
 TYPEINIT1(ScUndoDataPilot,          SfxUndoAction);
 TYPEINIT1(ScUndoConsolidate,        SfxUndoAction);
 TYPEINIT1(ScUndoChartData,          SfxUndoAction);
@@ -1629,164 +1629,163 @@ BOOL __EXPORT ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-//
-//      Pivot-Tabellen
-//
-
-ScUndoPivot::ScUndoPivot( ScDocShell* pNewDocShell,
-                            const ScArea& rOld, const ScArea& rNew,
-                            ScDocument* pOldDoc, ScDocument* pNewDoc,
-                            const ScPivot* pOldPivot, const ScPivot* pNewPivot ) :
-    ScSimpleUndo( pNewDocShell ),
-    aOldArea( rOld ),
-    aNewArea( rNew ),
-    pOldUndoDoc( pOldDoc ),
-    pNewUndoDoc( pNewDoc )
-{
-    if (pNewPivot)
-    {
-        pNewPivot->GetParam( aNewParam, aNewQuery, aNewSrc );
-        aNewName = pNewPivot->GetName();
-        aNewTag = pNewPivot->GetTag();
-    }
-    if (pOldPivot)
-    {
-        pOldPivot->GetParam( aOldParam, aOldQuery, aOldSrc );
-        aOldName = pOldPivot->GetName();
-        aOldTag = pOldPivot->GetTag();
-    }
-}
-
-__EXPORT ScUndoPivot::~ScUndoPivot()
-{
-    delete pOldUndoDoc;
-    delete pNewUndoDoc;
-}
-
-String __EXPORT ScUndoPivot::GetComment() const
-{
-    USHORT nIndex;
-    if ( pOldUndoDoc && pNewUndoDoc )
-        nIndex = STR_UNDO_PIVOT_MODIFY;
-    else if ( pNewUndoDoc )
-        nIndex = STR_UNDO_PIVOT_NEW;
-    else
-        nIndex = STR_UNDO_PIVOT_DELETE;
-
-    return ScGlobal::GetRscString( nIndex );
-}
-
-void __EXPORT ScUndoPivot::Undo()
-{
-    BeginUndo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-
-    if (pNewUndoDoc)
-    {
-        pDoc->DeleteAreaTab( aNewArea.nColStart,aNewArea.nRowStart,
-                            aNewArea.nColEnd,aNewArea.nRowEnd, aNewArea.nTab, IDF_ALL );
-        pNewUndoDoc->CopyToDocument( aNewArea.nColStart, aNewArea.nRowStart, aNewArea.nTab,
-                                aNewArea.nColEnd, aNewArea.nRowEnd, aNewArea.nTab,
-                                IDF_ALL, FALSE, pDoc );
-    }
-    if (pOldUndoDoc)
-    {
-        pDoc->DeleteAreaTab( aOldArea.nColStart,aOldArea.nRowStart,
-                            aOldArea.nColEnd,aOldArea.nRowEnd, aOldArea.nTab, IDF_ALL );
-        pOldUndoDoc->CopyToDocument( aOldArea.nColStart, aOldArea.nRowStart, aOldArea.nTab,
-                                aOldArea.nColEnd, aOldArea.nRowEnd, aOldArea.nTab,
-                                IDF_ALL, FALSE, pDoc );
-    }
-
-    ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
-    if ( pNewUndoDoc )
-    {
-        ScPivot* pNewPivot = pPivotCollection->GetPivotAtCursor(
-                                aNewParam.nCol, aNewParam.nRow, aNewParam.nTab );
-        if (pNewPivot)
-            pPivotCollection->Free( pNewPivot );
-    }
-    if ( pOldUndoDoc )
-    {
-        ScPivot* pOldPivot = new ScPivot( pDoc );
-        pOldPivot->SetParam( aOldParam, aOldQuery, aOldSrc );
-        pOldPivot->SetName( aOldName );
-        pOldPivot->SetTag( aOldTag );
-        if (pOldPivot->CreateData())                            // Felder berechnen
-            pOldPivot->ReleaseData();
-        pPivotCollection->Insert( pOldPivot );
-    }
-
-// erack! it's broadcasted
-//  pDoc->SetDirty();
-    if (pNewUndoDoc)
-        pDocShell->PostPaint( aNewArea.nColStart, aNewArea.nRowStart, aNewArea.nTab,
-                                aNewArea.nColEnd, aNewArea.nRowEnd, aNewArea.nTab,
-                                PAINT_GRID, SC_PF_LINES );
-    if (pOldUndoDoc)
-        pDocShell->PostPaint( aOldArea.nColStart, aOldArea.nRowStart, aOldArea.nTab,
-                                aOldArea.nColEnd, aOldArea.nRowEnd, aOldArea.nTab,
-                                PAINT_GRID, SC_PF_LINES );
-    pDocShell->PostDataChanged();
-
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-    {
-        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
-        if ( pOldUndoDoc )
-        {
-            if ( nTab != aOldArea.nTab )
-                pViewShell->SetTabNo( aOldArea.nTab );
-        }
-        else if ( pNewUndoDoc )
-        {
-            if ( nTab != aNewArea.nTab )
-                pViewShell->SetTabNo( aNewArea.nTab );
-        }
-    }
-
-    EndUndo();
-}
-
-void __EXPORT ScUndoPivot::Redo()
-{
-    BeginRedo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
-    ScPivot* pOldPivot = pPivotCollection->GetPivotAtCursor(
-                                            aOldParam.nCol, aOldParam.nRow, aOldParam.nTab );
-
-    ScPivot* pNewPivot = NULL;
-    if (pNewUndoDoc)
-    {
-        pNewPivot = new ScPivot( pDoc );
-        pNewPivot->SetParam( aNewParam, aNewQuery, aNewSrc );
-        pNewPivot->SetName( aNewName );
-        pNewPivot->SetTag( aNewTag );
-    }
-
-    pDocShell->PivotUpdate( pOldPivot, pNewPivot, FALSE );
-
-    EndRedo();
-}
-
-void __EXPORT ScUndoPivot::Repeat(SfxRepeatTarget& rTarget)
-{
-    //  Wiederholen: nur loeschen
-
-    if ( pOldUndoDoc && !pNewUndoDoc && rTarget.ISA(ScTabViewTarget) )
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DeletePivotTable();
-}
-
-BOOL __EXPORT ScUndoPivot::CanRepeat(SfxRepeatTarget& rTarget) const
-{
-    //  Wiederholen: nur loeschen
-
-    return ( pOldUndoDoc && !pNewUndoDoc && rTarget.ISA(ScTabViewTarget) );
-}
-
+//UNUSED2008-05  //
+//UNUSED2008-05  //     Pivot-Tabellen
+//UNUSED2008-05  //
+//UNUSED2008-05
+//UNUSED2008-05  ScUndoPivot::ScUndoPivot( ScDocShell* pNewDocShell,
+//UNUSED2008-05                              const ScArea& rOld, const ScArea& rNew,
+//UNUSED2008-05                              ScDocument* pOldDoc, ScDocument* pNewDoc,
+//UNUSED2008-05                              const ScPivot* pOldPivot, const ScPivot* pNewPivot ) :
+//UNUSED2008-05      ScSimpleUndo( pNewDocShell ),
+//UNUSED2008-05      aOldArea( rOld ),
+//UNUSED2008-05      aNewArea( rNew ),
+//UNUSED2008-05      pOldUndoDoc( pOldDoc ),
+//UNUSED2008-05      pNewUndoDoc( pNewDoc )
+//UNUSED2008-05  {
+//UNUSED2008-05      if (pNewPivot)
+//UNUSED2008-05      {
+//UNUSED2008-05          pNewPivot->GetParam( aNewParam, aNewQuery, aNewSrc );
+//UNUSED2008-05          aNewName = pNewPivot->GetName();
+//UNUSED2008-05          aNewTag = pNewPivot->GetTag();
+//UNUSED2008-05      }
+//UNUSED2008-05      if (pOldPivot)
+//UNUSED2008-05      {
+//UNUSED2008-05          pOldPivot->GetParam( aOldParam, aOldQuery, aOldSrc );
+//UNUSED2008-05          aOldName = pOldPivot->GetName();
+//UNUSED2008-05          aOldTag = pOldPivot->GetTag();
+//UNUSED2008-05      }
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  __EXPORT ScUndoPivot::~ScUndoPivot()
+//UNUSED2008-05  {
+//UNUSED2008-05      delete pOldUndoDoc;
+//UNUSED2008-05      delete pNewUndoDoc;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  String __EXPORT ScUndoPivot::GetComment() const
+//UNUSED2008-05  {
+//UNUSED2008-05      USHORT nIndex;
+//UNUSED2008-05      if ( pOldUndoDoc && pNewUndoDoc )
+//UNUSED2008-05          nIndex = STR_UNDO_PIVOT_MODIFY;
+//UNUSED2008-05      else if ( pNewUndoDoc )
+//UNUSED2008-05          nIndex = STR_UNDO_PIVOT_NEW;
+//UNUSED2008-05      else
+//UNUSED2008-05          nIndex = STR_UNDO_PIVOT_DELETE;
+//UNUSED2008-05
+//UNUSED2008-05      return ScGlobal::GetRscString( nIndex );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void __EXPORT ScUndoPivot::Undo()
+//UNUSED2008-05  {
+//UNUSED2008-05      BeginUndo();
+//UNUSED2008-05
+//UNUSED2008-05      ScDocument* pDoc = pDocShell->GetDocument();
+//UNUSED2008-05
+//UNUSED2008-05      if (pNewUndoDoc)
+//UNUSED2008-05      {
+//UNUSED2008-05          pDoc->DeleteAreaTab( aNewArea.nColStart,aNewArea.nRowStart,
+//UNUSED2008-05                              aNewArea.nColEnd,aNewArea.nRowEnd, aNewArea.nTab, IDF_ALL );
+//UNUSED2008-05          pNewUndoDoc->CopyToDocument( aNewArea.nColStart, aNewArea.nRowStart, aNewArea.nTab,
+//UNUSED2008-05                                  aNewArea.nColEnd, aNewArea.nRowEnd, aNewArea.nTab,
+//UNUSED2008-05                                  IDF_ALL, FALSE, pDoc );
+//UNUSED2008-05      }
+//UNUSED2008-05      if (pOldUndoDoc)
+//UNUSED2008-05      {
+//UNUSED2008-05          pDoc->DeleteAreaTab( aOldArea.nColStart,aOldArea.nRowStart,
+//UNUSED2008-05                              aOldArea.nColEnd,aOldArea.nRowEnd, aOldArea.nTab, IDF_ALL );
+//UNUSED2008-05          pOldUndoDoc->CopyToDocument( aOldArea.nColStart, aOldArea.nRowStart, aOldArea.nTab,
+//UNUSED2008-05                                  aOldArea.nColEnd, aOldArea.nRowEnd, aOldArea.nTab,
+//UNUSED2008-05                                  IDF_ALL, FALSE, pDoc );
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
+//UNUSED2008-05      if ( pNewUndoDoc )
+//UNUSED2008-05      {
+//UNUSED2008-05          ScPivot* pNewPivot = pPivotCollection->GetPivotAtCursor(
+//UNUSED2008-05                                  aNewParam.nCol, aNewParam.nRow, aNewParam.nTab );
+//UNUSED2008-05          if (pNewPivot)
+//UNUSED2008-05              pPivotCollection->Free( pNewPivot );
+//UNUSED2008-05      }
+//UNUSED2008-05      if ( pOldUndoDoc )
+//UNUSED2008-05      {
+//UNUSED2008-05          ScPivot* pOldPivot = new ScPivot( pDoc );
+//UNUSED2008-05          pOldPivot->SetParam( aOldParam, aOldQuery, aOldSrc );
+//UNUSED2008-05          pOldPivot->SetName( aOldName );
+//UNUSED2008-05          pOldPivot->SetTag( aOldTag );
+//UNUSED2008-05          if (pOldPivot->CreateData())                            // Felder berechnen
+//UNUSED2008-05              pOldPivot->ReleaseData();
+//UNUSED2008-05          pPivotCollection->Insert( pOldPivot );
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05  // erack! it's broadcasted
+//UNUSED2008-05  // pDoc->SetDirty();
+//UNUSED2008-05      if (pNewUndoDoc)
+//UNUSED2008-05          pDocShell->PostPaint( aNewArea.nColStart, aNewArea.nRowStart, aNewArea.nTab,
+//UNUSED2008-05                                  aNewArea.nColEnd, aNewArea.nRowEnd, aNewArea.nTab,
+//UNUSED2008-05                                  PAINT_GRID, SC_PF_LINES );
+//UNUSED2008-05      if (pOldUndoDoc)
+//UNUSED2008-05          pDocShell->PostPaint( aOldArea.nColStart, aOldArea.nRowStart, aOldArea.nTab,
+//UNUSED2008-05                                  aOldArea.nColEnd, aOldArea.nRowEnd, aOldArea.nTab,
+//UNUSED2008-05                                  PAINT_GRID, SC_PF_LINES );
+//UNUSED2008-05      pDocShell->PostDataChanged();
+//UNUSED2008-05
+//UNUSED2008-05      ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+//UNUSED2008-05      if (pViewShell)
+//UNUSED2008-05      {
+//UNUSED2008-05          SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+//UNUSED2008-05          if ( pOldUndoDoc )
+//UNUSED2008-05          {
+//UNUSED2008-05              if ( nTab != aOldArea.nTab )
+//UNUSED2008-05                  pViewShell->SetTabNo( aOldArea.nTab );
+//UNUSED2008-05          }
+//UNUSED2008-05          else if ( pNewUndoDoc )
+//UNUSED2008-05          {
+//UNUSED2008-05              if ( nTab != aNewArea.nTab )
+//UNUSED2008-05                  pViewShell->SetTabNo( aNewArea.nTab );
+//UNUSED2008-05          }
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      EndUndo();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void __EXPORT ScUndoPivot::Redo()
+//UNUSED2008-05  {
+//UNUSED2008-05      BeginRedo();
+//UNUSED2008-05
+//UNUSED2008-05      ScDocument* pDoc = pDocShell->GetDocument();
+//UNUSED2008-05      ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
+//UNUSED2008-05      ScPivot* pOldPivot = pPivotCollection->GetPivotAtCursor(
+//UNUSED2008-05                                              aOldParam.nCol, aOldParam.nRow, aOldParam.nTab );
+//UNUSED2008-05
+//UNUSED2008-05      ScPivot* pNewPivot = NULL;
+//UNUSED2008-05      if (pNewUndoDoc)
+//UNUSED2008-05      {
+//UNUSED2008-05          pNewPivot = new ScPivot( pDoc );
+//UNUSED2008-05          pNewPivot->SetParam( aNewParam, aNewQuery, aNewSrc );
+//UNUSED2008-05          pNewPivot->SetName( aNewName );
+//UNUSED2008-05          pNewPivot->SetTag( aNewTag );
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      pDocShell->PivotUpdate( pOldPivot, pNewPivot, FALSE );
+//UNUSED2008-05
+//UNUSED2008-05      EndRedo();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void __EXPORT ScUndoPivot::Repeat(SfxRepeatTarget& rTarget)
+//UNUSED2008-05  {
+//UNUSED2008-05      //  Wiederholen: nur loeschen
+//UNUSED2008-05
+//UNUSED2008-05      if ( pOldUndoDoc && !pNewUndoDoc && rTarget.ISA(ScTabViewTarget) )
+//UNUSED2008-05          ((ScTabViewTarget&)rTarget).GetViewShell()->DeletePivotTable();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  BOOL __EXPORT ScUndoPivot::CanRepeat(SfxRepeatTarget& rTarget) const
+//UNUSED2008-05  {
+//UNUSED2008-05      //  Wiederholen: nur loeschen
+//UNUSED2008-05
+//UNUSED2008-05      return ( pOldUndoDoc && !pNewUndoDoc && rTarget.ISA(ScTabViewTarget) );
+//UNUSED2008-05  }
 
 //
 //      data pilot

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessiblePreviewCell.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,9 +113,6 @@ private:
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     sal_Bool IsOpaque(
-        const com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsSelected(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 

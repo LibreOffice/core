@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview3.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.67.22.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,93 +109,6 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
 } // anonymous namespace
 
 using namespace com::sun::star;
-
-// -----------------------------------------------------------------------
-
-//  helper class for DoChartSelection
-
-#define SC_BGCOLLECT_FIRST      0
-#define SC_BGCOLLECT_FOUND      1
-#define SC_BGCOLLECT_AMBIGUOUS  2
-
-class ScBackgroundCollector
-{
-private:
-    ScDocument* pDoc;
-    BOOL        bTransparent;
-    Color       aBackColor;
-    USHORT      nMode;
-public:
-            ScBackgroundCollector( ScDocument* pD );
-    void    AddRange( const ScRange& rRange );
-    Color   GetHighlightColor() const;
-};
-
-ScBackgroundCollector::ScBackgroundCollector( ScDocument* pD ) :
-    pDoc( pD ),
-    bTransparent( FALSE ),
-    nMode( SC_BGCOLLECT_FIRST )
-{
-}
-
-void ScBackgroundCollector::AddRange( const ScRange& rRange )
-{
-    if ( nMode == SC_BGCOLLECT_AMBIGUOUS )
-        return;                                 // nothing more to do
-
-    ScDocAttrIterator aIter( pDoc, rRange.aStart.Tab(),
-                            rRange.aStart.Col(), rRange.aStart.Row(),
-                            rRange.aEnd.Col(), rRange.aEnd.Row() );
-    SCCOL nCol;
-    SCROW nRow1, nRow2;
-    const ScPatternAttr* pPattern = aIter.GetNext( nCol, nRow1, nRow2 );
-    while ( pPattern )
-    {
-        //! look at conditional formats?
-        const Color& rAttrColor = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
-        BOOL bAttrTransp = ( rAttrColor.GetTransparency() != 0 );
-
-        if ( nMode == SC_BGCOLLECT_FIRST )
-        {
-            //  just copy first background
-            bTransparent = bAttrTransp;
-            aBackColor   = rAttrColor;
-            nMode = SC_BGCOLLECT_FOUND;
-        }
-        else if ( nMode == SC_BGCOLLECT_FOUND )
-        {
-            BOOL bEqual = ( bTransparent == bAttrTransp );
-            if ( bEqual && !bTransparent )
-                bEqual = ( aBackColor == rAttrColor );
-            if ( !bEqual )
-            {
-                nMode = SC_BGCOLLECT_AMBIGUOUS;     // different backgrounds found
-                return;                             // dont need to continue
-            }
-        }
-
-        pPattern = aIter.GetNext( nCol, nRow1, nRow2 );
-    }
-}
-
-Color ScBackgroundCollector::GetHighlightColor() const
-{
-    if ( nMode == SC_BGCOLLECT_FOUND && !bTransparent )
-    {
-        //  everything formatted with a single background color
-        //  -> use contrasting color (blue or yellow)
-
-        Color aBlue( COL_LIGHTBLUE );
-        Color aYellow( COL_YELLOW );
-
-        if ( aBackColor.GetColorError(aBlue) >= aBackColor.GetColorError(aYellow) )
-            return aBlue;
-        else
-            return aYellow;
-    }
-    else
-        return Color( COL_LIGHTBLUE );      // default for transparent or ambiguous background
-}
 
 // -----------------------------------------------------------------------
 
@@ -548,6 +461,7 @@ void ScTabView::CursorPosChanged()
     //  Broadcast, damit andere Views des Dokuments auch umschalten
 
     ScDocument* pDoc = aViewData.GetDocument();
+#if OLD_PIVOT_IMPLEMENTATION
     BOOL bPivot = ( NULL != pDoc->GetPivotAtCursor( aViewData.GetCurX(),
                                                     aViewData.GetCurY(),
                                                     aViewData.GetTabNo() ) ||
@@ -555,6 +469,11 @@ void ScTabView::CursorPosChanged()
                                                     aViewData.GetCurY(),
                                                     aViewData.GetTabNo() ) );
     aViewData.GetViewShell()->SetPivotShell(bPivot);
+#else
+    bool bDP = NULL != pDoc->GetDPAtCursor(
+        aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
+    aViewData.GetViewShell()->SetPivotShell(bDP);
+#endif
 
     //  UpdateInputHandler jetzt in CellContentChanged
 
@@ -2018,20 +1937,6 @@ void ScTabView::UpdateFormulas()
         UpdateEditView();
 }
 
-//  PaintCell - einzelne Zelle neu zeichnen
-
-void ScTabView::PaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    if ( aViewData.GetTabNo() == nTab )
-    {
-        USHORT i;
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                    pGridWin[i]->Draw( nCol, nRow, nCol, nRow );
-    }
-}
-
 //  PaintArea -Block neu zeichnen
 
 void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -2278,19 +2183,43 @@ void ScTabView::DoChartSelection(
 
 //  DrawDragRect - Drag&Drop-Rechteck zeichnen (XOR)
 
-void ScTabView::DrawDragRect( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
-                                ScSplitPos ePos )
-{
-    if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX )
-    {
-        for (USHORT  i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                    pGridWin[i]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
-    }
-    else
-        pGridWin[ePos]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
-}
+//UNUSED2008-05  void ScTabView::DrawDragRect( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
+//UNUSED2008-05                                ScSplitPos ePos )
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX )
+//UNUSED2008-05      {
+//UNUSED2008-05          for (USHORT  i=0; i<4; i++)
+//UNUSED2008-05              if (pGridWin[i])
+//UNUSED2008-05                  if (pGridWin[i]->IsVisible())
+//UNUSED2008-05                      pGridWin[i]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
+//UNUSED2008-05      }
+//UNUSED2008-05      else
+//UNUSED2008-05          pGridWin[ePos]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  // PaintCell - einzelne Zelle neu zeichnen
+//UNUSED2008-05
+//UNUSED2008-05  void ScTabView::PaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( aViewData.GetTabNo() == nTab )
+//UNUSED2008-05      {
+//UNUSED2008-05          USHORT i;
+//UNUSED2008-05          for (i=0; i<4; i++)
+//UNUSED2008-05              if (pGridWin[i])
+//UNUSED2008-05                  if (pGridWin[i]->IsVisible())
+//UNUSED2008-05                      pGridWin[i]->Draw( nCol, nRow, nCol, nRow );
+//UNUSED2008-05      }
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void ScTabView::PaintLeftRow( SCROW nRow )
+//UNUSED2008-05  {
+//UNUSED2008-05      PaintLeftArea( nRow, nRow );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void ScTabView::PaintTopCol( SCCOL nCol )
+//UNUSED2008-05  {
+//UNUSED2008-05      PaintTopArea( nCol, nCol );
+//UNUSED2008-05  }
 
 //  PaintGrid - Datenbereiche neu zeichnen
 
@@ -2331,11 +2260,6 @@ void ScTabView::CreateAnchorHandles(SdrHdlList& rHdl, const ScAddress& rAddress)
             }
         }
     }
-}
-
-void ScTabView::PaintTopCol( SCCOL nCol )
-{
-    PaintTopArea( nCol, nCol );
 }
 
 void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
@@ -2393,11 +2317,6 @@ void ScTabView::PaintLeft()
         if (pRowOutline[i])
             pRowOutline[i]->Invalidate();
     }
-}
-
-void ScTabView::PaintLeftRow( SCROW nRow )
-{
-    PaintLeftArea( nRow, nRow );
 }
 
 void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )

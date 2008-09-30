@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namebuff.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,41 +86,6 @@ void NameBuffer::operator <<( const String &rNewString )
 
     List::Insert( new StringHashEntry( rNewString ), LIST_APPEND );
 }
-
-
-void NameBuffer::Reset()
-{
-    register StringHashEntry*   pDel = ( StringHashEntry* ) List::First();
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( StringHashEntry* ) List::Next();
-    }
-    Clear();
-}
-
-
-BOOL NameBuffer::Find( const sal_Char* pRefName, UINT16& rIndex )
-{
-    StringHashEntry             aRefEntry( String::CreateFromAscii( pRefName ) );
-
-    register StringHashEntry*   pFind = ( StringHashEntry* ) List::First();
-    register UINT16             nCnt = nBase;
-    while( pFind )
-    {
-        if( *pFind == aRefEntry )
-        {
-            rIndex = nCnt;
-            return TRUE;
-        }
-        pFind = ( StringHashEntry* ) List::Next();
-        nCnt++;
-    }
-
-    return FALSE;
-}
-
-
 
 
 #ifdef DBG_UTIL
@@ -306,18 +271,6 @@ BOOL ExtSheetBuffer::GetLink( const UINT16 nExcIndex, String& rAppl, String& rDo
 }
 
 
-BOOL ExtSheetBuffer::IsExternal( UINT16 nExcIndex ) const
-{
-    DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::IsExternal(): Index muss >0 sein!" );
-    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
-
-    if( pRet )
-        return !pRet->bSWB;
-    else
-        return FALSE;
-}
-
-
 void ExtSheetBuffer::Reset( void )
 {
     Cont    *pAkt = ( Cont * ) List::First();
@@ -337,20 +290,6 @@ BOOL ExtName::IsDDE( void ) const
 {
     return ( nFlags & 0x0001 ) != 0;
 }
-
-
-BOOL ExtName::IsOLE( void ) const
-{
-    return ( nFlags & 0x0002 ) != 0;
-}
-
-
-BOOL ExtName::IsName( void ) const
-{
-    return ( nFlags & 0x0004 ) != 0;
-}
-
-
 
 
 const sal_Char* ExtNameBuff::pJoostTest = "Joost ist immer noch doof!";

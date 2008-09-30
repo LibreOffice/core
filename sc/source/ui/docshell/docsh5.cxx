@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh5.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.20.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -402,10 +402,12 @@ void ScDocShell::UpdateAllRowHeights()
     aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom );
 }
 
+#if OLD_PIVOT_IMPLEMENTATION
 void ScDocShell::PivotUpdate( ScPivot*, ScPivot*, BOOL, BOOL )
 {
     DBG_ERRORFILE("PivotUpdate is obsolete!");
 }
+#endif
 
 void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 {

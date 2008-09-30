@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expftext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,28 +35,6 @@
 
 #include "expftext.hxx"
 #include <vcl/help.hxx>
-
-/*************************************************************************
-#*  Member:     ScExpandedFixedText                         Datum:18.09.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScExpandedFixedText
-#*
-#*  Funktion:   Konstruktor der Klasse ScExpandedFixedText
-#*
-#*  Input:      Parent- Window, Fenster-Attribute
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-ScExpandedFixedText::ScExpandedFixedText( Window* pParent,
-                                         WinBits nWinStyle) :
-
-    FixedText( pParent, nWinStyle )
-{
-
-}
 
 /*************************************************************************
 #*  Member:     ScExpandedFixedText                         Datum:18.09.97

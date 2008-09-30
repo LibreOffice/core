@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlpars.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2827,20 +2827,6 @@ ULONG ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
 const ScHTMLTable* ScHTMLQueryParser::GetGlobalTable() const
 {
     return mpGlobTable.get();
-}
-
-
-// ----------------------------------------------------------------------------
-
-ScHTMLTable* ScHTMLQueryParser::GetTable( ScHTMLTableId nTableId ) const
-{
-    if( nTableId == SC_HTML_GLOBAL_TABLE )
-        return mpGlobTable.get();
-    ScHTMLTable* pTable = mpGlobTable->FindNestedTable( nTableId );
-    DBG_ASSERT( pTable, "ScHTMLQueryParser::GetTable - table not found" );
-    if( !pTable )
-        return mpGlobTable.get();
-    return pTable;
 }
 
 void ScHTMLQueryParser::ProcessToken( const ImportInfo& rInfo )

@@ -244,27 +244,6 @@ void ScMatrix::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
     }
 }
 
-void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nC, SCSIZE nR )
-{
-    if (ValidColRow( nC, nR))
-        PutDoubleAndResetString( fVal, CalcOffset( nC, nR) );
-    else
-    {
-        DBG_ERRORFILE("ScMatrix::PutDoubleAndResetString: dimension error");
-    }
-}
-
-void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nIndex )
-{
-    if ( IsString( nIndex ) )
-    {
-        delete pMat[nIndex].pS;
-        mnValType[nIndex] = 0;
-        mnNonValue--;
-    }
-    PutDouble( fVal, nIndex );
-}
-
 void ScMatrix::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
@@ -586,49 +565,6 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
     }
 }
 
-void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
-{
-    if (nColCount < mRes.nColCount || nRowCount < mRes.nRowCount)
-    {
-        DBG_ERRORFILE("ScMatrix::MatCopyUpperLeft: dimension error");
-    }
-    else
-    {
-        if (mnValType)
-        {
-            ScMatValType nType;
-            mRes.ResetIsString();
-            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
-            {
-                SCSIZE nStart = i * nRowCount;
-                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
-                {
-                    if ( IsStringType( (nType = mnValType[nStart+j]) ))
-                        mRes.PutStringEntry( pMat[nStart+j].pS, nType,
-                            i*mRes.nRowCount+j );
-                    else
-                    {
-                        mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
-                        mRes.mnValType[i*mRes.nRowCount+j] = nType;
-                    }
-                }
-            }
-        }
-        else
-        {
-            mRes.DeleteIsString();
-            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
-            {
-                SCSIZE nStart = i * nRowCount;
-                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
-                {
-                    mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
-                }
-            }
-        }
-    }
-}
-
 void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 )
 {
     if (ValidColRow( nC1, nR1) && ValidColRow( nC2, nR2))
@@ -653,24 +589,6 @@ void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSI
     else
     {
         DBG_ERRORFILE("ScMatrix::FillDouble: dimension error");
-    }
-}
-
-void ScMatrix::FillDoubleLowerLeft( double fVal, SCSIZE nC2 )
-{
-    if (ValidColRow( nC2, nC2))
-    {
-        for ( SCSIZE i=1; i<=nC2; i++ )
-        {
-            SCSIZE nOff1 = i * nRowCount;
-            SCSIZE nOff2 = nOff1 + i;
-            for ( SCSIZE j=nOff1; j<nOff2; j++ )
-                pMat[j].fVal = fVal;
-        }
-    }
-    else
-    {
-        DBG_ERRORFILE("ScMatrix::FillDoubleLowerLeft: dimension error");
     }
 }
 

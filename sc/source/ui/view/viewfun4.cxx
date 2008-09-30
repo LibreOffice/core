@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun4.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -338,11 +338,11 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     pDocSh->PostPaintGridAll();
 }
 
-//  Spelling Checker - Undo ok
-void ScViewFunc::DoSpellingChecker( BOOL bRecord )
-{
-    DoSheetConversion( ScConversionParam( SC_CONVERSION_SPELLCHECK ), bRecord );
-}
+//UNUSED2008-05  // Spelling Checker - Undo ok
+//UNUSED2008-05  void ScViewFunc::DoSpellingChecker( BOOL bRecord )
+//UNUSED2008-05  {
+//UNUSED2008-05      DoSheetConversion( ScConversionParam( SC_CONVERSION_SPELLCHECK ), bRecord );
+//UNUSED2008-05  }
 
 void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
 {
@@ -489,16 +489,16 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
 }
 
 
-IMPL_LINK_INLINE_START( ScViewFunc, SpellError, void *, nLang )
-{
-    SvtLanguageTable aLangTab;
-    String aErr = aLangTab.GetString((LanguageType) (ULONG) nLang);
-    ErrorHandler::HandleError(*new StringErrorInfo(
-                                ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr) );
-
-    return 0;
-}
-IMPL_LINK_INLINE_END( ScViewFunc, SpellError, void *, nLang )
+//UNUSED2008-05  IMPL_LINK_INLINE_START( ScViewFunc, SpellError, void *, nLang )
+//UNUSED2008-05  {
+//UNUSED2008-05      SvtLanguageTable aLangTab;
+//UNUSED2008-05      String aErr = aLangTab.GetString((LanguageType) (ULONG) nLang);
+//UNUSED2008-05      ErrorHandler::HandleError(*new StringErrorInfo(
+//UNUSED2008-05                                  ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr) );
+//UNUSED2008-05
+//UNUSED2008-05      return 0;
+//UNUSED2008-05  }
+//UNUSED2008-05  IMPL_LINK_INLINE_END( ScViewFunc, SpellError, void *, nLang )
 
 // Pasten von FORMAT_FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt

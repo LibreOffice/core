@@ -34,7 +34,7 @@
 
 
 // -----------------------------------------------------------------------
-
+#if OLD_PIVOT_IMPLEMENTATION
 #ifdef _MSC_VER
 #pragma optimize("",off)
 #endif
@@ -2024,5 +2024,5 @@ SCROW ScPivot::GetCategoryRow( SCCOL nCol, SCROW nRow )
     return nRow;
 }
 
-
+#endif
 

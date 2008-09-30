@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attarray.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1799,39 +1799,39 @@ BOOL ScAttrArray::IsEmpty() const
 }
 
 
-SCROW ScAttrArray::GetFirstEntryPos() const
-{
-    DBG_ASSERT( nCount, "nCount = 0" );
-
-    if ( pData[0].pPattern != pDocument->GetDefPattern() )
-        return 0;
-    else
-    {
-        if (nCount==1)
-            return 0;                               // leer
-        else
-            return pData[0].nRow + 1;
-    }
-}
-
-
-SCROW ScAttrArray::GetLastEntryPos( BOOL bIncludeBottom ) const
-{
-    DBG_ASSERT( nCount, "nCount == 0" );
-
-    if (bIncludeBottom)
-        bIncludeBottom = ( pData[nCount-1].pPattern != pDocument->GetDefPattern() );
-
-    if (bIncludeBottom)
-        return MAXROW;
-    else
-    {
-        if (nCount<=1)
-            return 0;                               // leer
-        else
-            return pData[nCount-2].nRow;
-    }
-}
+//UNUSED2008-05  SCROW ScAttrArray::GetFirstEntryPos() const
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( nCount, "nCount = 0" );
+//UNUSED2008-05
+//UNUSED2008-05      if ( pData[0].pPattern != pDocument->GetDefPattern() )
+//UNUSED2008-05          return 0;
+//UNUSED2008-05      else
+//UNUSED2008-05      {
+//UNUSED2008-05          if (nCount==1)
+//UNUSED2008-05              return 0;                               // leer
+//UNUSED2008-05          else
+//UNUSED2008-05              return pData[0].nRow + 1;
+//UNUSED2008-05      }
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  SCROW ScAttrArray::GetLastEntryPos( BOOL bIncludeBottom ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( nCount, "nCount == 0" );
+//UNUSED2008-05
+//UNUSED2008-05      if (bIncludeBottom)
+//UNUSED2008-05          bIncludeBottom = ( pData[nCount-1].pPattern != pDocument->GetDefPattern() );
+//UNUSED2008-05
+//UNUSED2008-05      if (bIncludeBottom)
+//UNUSED2008-05          return MAXROW;
+//UNUSED2008-05      else
+//UNUSED2008-05      {
+//UNUSED2008-05          if (nCount<=1)
+//UNUSED2008-05              return 0;                               // leer
+//UNUSED2008-05          else
+//UNUSED2008-05              return pData[nCount-2].nRow;
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 
 BOOL ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
@@ -2463,6 +2463,7 @@ BOOL ScAttrArray::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow,
 //
 
 
+#if 0
 void ScAttrArray::Save( SvStream& /* rStream */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
@@ -2530,7 +2531,7 @@ void ScAttrArray::Load( SvStream& /* rStream */ )
 
         USHORT nWhich = ATTR_PATTERN;
         const ScPatternAttr* pNewPattern = (const ScPatternAttr*)
-                                pDocPool->LoadSurrogate( rStream, nWhich, ATTR_PATTERN );
+                                           pDocPool->LoadSurrogate( rStream, nWhich, ATTR_PATTERN );
         if (!pNewPattern)
         {
             // da is was schiefgelaufen
@@ -2560,42 +2561,43 @@ void ScAttrArray::Load( SvStream& /* rStream */ )
     }
 #endif // SC_ROWLIMIT_STREAM_ACCESS
 }
+#endif
 
 
-void ScAttrArray::ConvertFontsAfterLoad()
-{
-    ScFontToSubsFontConverter_AutoPtr xFontConverter;
-    const ULONG nFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
-    SCSIZE   nIndex = 0;
-    SCROW  nThisRow = 0;
-
-    while ( nThisRow <= MAXROW )
-    {
-        const ScPatternAttr* pOldPattern = pData[nIndex].pPattern;
-        const SfxPoolItem* pItem;
-        if( pOldPattern->GetItemSet().GetItemState( ATTR_FONT, FALSE, &pItem ) == SFX_ITEM_SET )
-        {
-            const SvxFontItem* pFontItem = (const SvxFontItem*) pItem;
-            const String& rOldName = pFontItem->GetFamilyName();
-            xFontConverter = CreateFontToSubsFontConverter( rOldName, nFlags );
-            if ( xFontConverter )
-            {
-                String aNewName( GetFontToSubsFontName( xFontConverter ) );
-                if ( aNewName != rOldName )
-                {
-                    SCROW nAttrRow = pData[nIndex].nRow;
-                    SvxFontItem aNewItem( pFontItem->GetFamily(), aNewName,
-                        pFontItem->GetStyleName(), pFontItem->GetPitch(),
-                        RTL_TEXTENCODING_DONTKNOW, ATTR_FONT );
-                    ScPatternAttr aNewPattern( *pOldPattern );
-                    aNewPattern.GetItemSet().Put( aNewItem );
-                    SetPatternArea( nThisRow, nAttrRow, &aNewPattern, TRUE );
-                    Search( nThisRow, nIndex );     //! data changed
-                }
-            }
-        }
-        ++nIndex;
-        nThisRow = pData[nIndex-1].nRow+1;
-    }
-}
+//UNUSED2008-05  void ScAttrArray::ConvertFontsAfterLoad()
+//UNUSED2008-05  {
+//UNUSED2008-05      ScFontToSubsFontConverter_AutoPtr xFontConverter;
+//UNUSED2008-05      const ULONG nFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+//UNUSED2008-05      SCSIZE   nIndex = 0;
+//UNUSED2008-05      SCROW  nThisRow = 0;
+//UNUSED2008-05
+//UNUSED2008-05      while ( nThisRow <= MAXROW )
+//UNUSED2008-05      {
+//UNUSED2008-05          const ScPatternAttr* pOldPattern = pData[nIndex].pPattern;
+//UNUSED2008-05          const SfxPoolItem* pItem;
+//UNUSED2008-05          if( pOldPattern->GetItemSet().GetItemState( ATTR_FONT, FALSE, &pItem ) == SFX_ITEM_SET )
+//UNUSED2008-05          {
+//UNUSED2008-05              const SvxFontItem* pFontItem = (const SvxFontItem*) pItem;
+//UNUSED2008-05              const String& rOldName = pFontItem->GetFamilyName();
+//UNUSED2008-05              xFontConverter = CreateFontToSubsFontConverter( rOldName, nFlags );
+//UNUSED2008-05              if ( xFontConverter )
+//UNUSED2008-05              {
+//UNUSED2008-05                  String aNewName( GetFontToSubsFontName( xFontConverter ) );
+//UNUSED2008-05                  if ( aNewName != rOldName )
+//UNUSED2008-05                  {
+//UNUSED2008-05                      SCROW nAttrRow = pData[nIndex].nRow;
+//UNUSED2008-05                      SvxFontItem aNewItem( pFontItem->GetFamily(), aNewName,
+//UNUSED2008-05                          pFontItem->GetStyleName(), pFontItem->GetPitch(),
+//UNUSED2008-05                          RTL_TEXTENCODING_DONTKNOW, ATTR_FONT );
+//UNUSED2008-05                      ScPatternAttr aNewPattern( *pOldPattern );
+//UNUSED2008-05                      aNewPattern.GetItemSet().Put( aNewItem );
+//UNUSED2008-05                      SetPatternArea( nThisRow, nAttrRow, &aNewPattern, TRUE );
+//UNUSED2008-05                      Search( nThisRow, nIndex );     //! data changed
+//UNUSED2008-05                  }
+//UNUSED2008-05              }
+//UNUSED2008-05          }
+//UNUSED2008-05          ++nIndex;
+//UNUSED2008-05          nThisRow = pData[nIndex-1].nRow+1;
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 

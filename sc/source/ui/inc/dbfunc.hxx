@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,7 @@ private:
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-                    ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
+//UNUSED2008-05     ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
                     ~ScDBFunc();
 
                     //  nur UISort wiederholt bei Bedarf die Teilergebnisse

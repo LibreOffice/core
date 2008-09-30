@@ -1146,11 +1146,6 @@ size_t lclGetArrayColFromCellInfoX( USHORT nCellInfoX, USHORT nCellInfoFirstX, U
     return static_cast< size_t >( bRTL ? (nCellInfoLastX + 2 - nCellInfoX) : (nCellInfoX - nCellInfoFirstX) );
 }
 
-USHORT lclGetCellInfoXFromArrayCol( size_t nCol, USHORT nCellInfoFirstX, USHORT nCellInfoLastX, bool bRTL )
-{
-    return static_cast< USHORT >( bRTL ? (nCellInfoLastX + 2 - nCol) : (nCol + nCellInfoFirstX) );
-}
-
 void ScOutputData::DrawFrame()
 {
     ULONG nOldDrawMode = pDev->GetDrawMode();
@@ -1689,81 +1684,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 }
 
 //  Drucker
-
-void ScOutputData::DrawPageBorder( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY )
-{
-    PutInOrder( nStartX, nEndX );
-    PutInOrder( nStartY, nEndY );
-
-    if ( nStartX <= nX2 && nEndX >= nX1 &&
-         nStartY <= nY2 && nEndY >= nY1 )
-    {
-        long nMinX = nScrX;
-        long nMinY = nScrY;
-        long nMaxX = nScrX+nScrW-1;
-        long nMaxY = nScrY+nScrH-1;
-        BOOL bTop    = FALSE;
-        BOOL bBottom = FALSE;
-        BOOL bLeft   = FALSE;
-        BOOL bRight  = FALSE;
-
-        long nPosY = nScrY;
-        for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
-        {
-            SCROW nY = pRowInfo[nArrY].nRowNo;
-
-            if ( nY==nStartY )
-            {
-                nMinY = nPosY;
-                bTop = TRUE;
-            }
-
-            if ( nY==nEndY )
-            {
-//              nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
-                nMaxY = nPosY + pRowInfo[nArrY].nHeight;
-                bBottom = TRUE;
-            }
-
-            nPosY += pRowInfo[nArrY].nHeight;
-        }
-
-        long nPosX = nScrX;
-        for (SCCOL nX=nX1; nX<=nX2; nX++)
-        {
-            if ( nX==nStartX )
-            {
-                nMinX = nPosX;
-                bLeft = TRUE;
-            }
-            if ( nX==nEndX )
-            {
-//              nMaxX = nPosX + pRowInfo[0].pCellInfo[nX+1].nWidth - 2;
-                nMaxX = nPosX + pRowInfo[0].pCellInfo[nX+1].nWidth;
-                bRight = TRUE;
-            }
-            nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth;
-        }
-
-        pDev->SetLineColor( COL_BLACK );
-        if (bTop && bBottom && bLeft && bRight)
-        {
-            pDev->SetFillColor();
-            pDev->DrawRect( Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
-        }
-        else
-        {
-            if (bTop)
-                pDev->DrawLine( Point( nMinX,nMinY ), Point( nMaxX,nMinY ) );
-            if (bBottom)
-                pDev->DrawLine( Point( nMinX,nMaxY ), Point( nMaxX,nMaxY ) );
-            if (bLeft)
-                pDev->DrawLine( Point( nMinX,nMinY ), Point( nMinX,nMaxY ) );
-            if (bRight)
-                pDev->DrawLine( Point( nMaxX,nMinY ), Point( nMaxX,nMaxY ) );
-        }
-    }
-}
 
 PolyPolygon ScOutputData::GetChangedArea()
 {
@@ -2399,64 +2319,6 @@ void ScOutputData::AddPDFNotes()
             }
         }
         nPosY += pThisRowInfo->nHeight;
-    }
-}
-
-long lcl_FindInList( const List& rPosList, const ScAddress &rPos )
-{
-    long nCount = rPosList.Count();
-    for (long i=0; i<nCount; i++)
-        if (*(ScAddress*)rPosList.GetObject(i) == rPos)
-            return i+1;
-
-    return 0;
-}
-
-void ScOutputData::PrintNoteMarks( const List& rPosList )
-{
-    Font aFont;
-    ScAutoFontColorMode eColorMode = bUseStyleColor ?
-                                        ( bForceAutoColor ? SC_AUTOCOL_IGNOREFONT : SC_AUTOCOL_DISPLAY ) :
-                                        SC_AUTOCOL_PRINT;
-    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aFont, eColorMode);
-    aFont.SetSize( Size( 0, (long) ( 120 * nPPTY ) ) );         // 6 pt
-    pDev->SetFont( aFont );
-
-    String aStr;
-
-    long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
-    {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        if ( pThisRowInfo->bChanged )
-        {
-            long nPosX = nScrX;
-            for (SCCOL nX=nX1; nX<=nX2; nX++)
-            {
-                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                ScBaseCell* pCell = pInfo->pCell;
-                if ( pCell && pCell->GetNotePtr() )     // auch verdeckte wegen der Numerierung
-                {
-                    aStr = String::CreateFromInt32( lcl_FindInList( rPosList,
-                                ScAddress( nX, pThisRowInfo->nRowNo, nTab)));
-                    long nMarkX = nPosX + pRowInfo[0].pCellInfo[nX+1].nWidth - 2 -
-                                    pDev->GetTextWidth(aStr);
-                    pDev->DrawText( Point( nMarkX,nPosY ), aStr );
-                }
-
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth;
-            }
-        }
-        nPosY += pThisRowInfo->nHeight;
-    }
-}
-
-void ScOutputData::ConnectObject( const uno::Reference < embed::XEmbeddedObject >& rRef, SdrOle2Obj* pOleObj )
-{
-    if (rRef.is())
-    {
-        if ( rRef->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
-            pViewShell->ConnectObject( pOleObj );
     }
 }
 

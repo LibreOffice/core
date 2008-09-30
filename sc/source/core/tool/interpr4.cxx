@@ -2809,13 +2809,6 @@ void ScInterpreter::ScErrCell()
 }
 */
 
-
-void ScInterpreter::ScDefPar()
-{
-    PushInt(0);
-}
-
-
 void ScInterpreter::ScDBArea()
 {
     ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->GetIndex());

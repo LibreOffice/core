@@ -136,7 +136,6 @@ public:
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
     BOOL        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
-    void        ResetText();
     void        SetHashText();
     void        SetAutoText( const String& rAutoText );
 
@@ -165,7 +164,6 @@ public:
     BOOL    HasCondHeight() const   { return pCondSet && SFX_ITEM_SET ==
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT, TRUE ); }
 
-    BOOL    IsRightToLeftAttr() const;
     BOOL    HasEditCharacters() const;
 };
 
@@ -508,14 +506,6 @@ BOOL ScDrawStringsVars::SetText( ScBaseCell* pCell )
     return bChanged;
 }
 
-void ScDrawStringsVars::ResetText()
-{
-    aString.Erase();
-    pLastCell = NULL;
-    aTextSize = Size(0,0);
-    nOriginalWidth = 0;
-}
-
 void ScDrawStringsVars::SetHashText()
 {
     SetAutoText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
@@ -549,14 +539,6 @@ void ScDrawStringsVars::SetAutoText( const String& rAutoText )
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
 
     pLastCell = NULL;       // derselbe Text kann in der naechsten Zelle wieder passen
-}
-
-BOOL ScDrawStringsVars::IsRightToLeftAttr() const
-{
-    SvxFrameDirection eCellDir = (SvxFrameDirection)((const SvxFrameDirectionItem&)
-                                    pPattern->GetItem( ATTR_WRITINGDIR, pCondSet )).GetValue();
-    return ( eCellDir == FRMDIR_HORI_RIGHT_TOP ||
-            ( eCellDir == FRMDIR_ENVIRONMENT && pOutput->nTabTextDirection == EE_HTEXTDIR_R2L ) );
 }
 
 BOOL ScDrawStringsVars::HasEditCharacters() const
@@ -847,31 +829,6 @@ inline void lcl_CreateInterpretProgress( BOOL& bProgress, ScDocument* pDoc,
     }
 }
 
-BOOL lcl_IsValueDataAtPos( BOOL& bProgress, ScDocument* pDoc,
-        SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    ScBaseCell* pCell;
-    pDoc->GetCell( nCol, nRow, nTab, pCell );
-    if ( pCell )
-    {
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-        {   // kein weiteres Interpret anstossen
-            ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-            if ( pFCell->IsRunning() )
-                return TRUE;
-            else
-            {
-                lcl_CreateInterpretProgress( bProgress, pDoc, pFCell );
-                return pFCell->HasValueData();
-            }
-        }
-        else
-            return pCell->HasValueData();
-    }
-    else
-        return FALSE;
-}
-
 inline BYTE GetScriptType( ScDocument* pDoc, ScBaseCell* pCell,
                             const ScPatternAttr* pPattern,
                             const SfxItemSet* pCondSet )
@@ -953,38 +910,6 @@ BOOL ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
 
     return TRUE;
 }
-
-long ScOutputData::GetAvailableWidth( SCCOL nX, SCROW nY, long nNeeded )
-{
-    //  get the pixel width that's available for the cell's text,
-    //  including cells outside of the current screen area
-
-    long nAvailable = (long) ( pDoc->GetColWidth( nX, nTab ) * nPPTX );     // cell itself
-
-    const ScMergeAttr* pMerge = (const ScMergeAttr*)pDoc->GetAttr( nX, nY, nTab, ATTR_MERGE );
-    if ( pMerge->IsMerged() )
-    {
-        //  for merged cells, allow only the merged area
-        SCCOL nCount = pMerge->GetColMerge();
-        for (SCCOL nAdd=1; nAdd<nCount; nAdd++)
-            nAvailable += (long) ( pDoc->GetColWidth( nX + nAdd, nTab ) * nPPTX );
-    }
-    else
-    {
-        //  look for empty cells into which the text can be extended
-        while ( nAvailable < nNeeded && nX < MAXCOL && IsAvailable( nX+1, nY ) )
-        {
-            ++nX;
-            nAvailable += (long) ( pDoc->GetColWidth( nX, nTab ) * nPPTX );
-        }
-    }
-
-    if ( bMarkClipped && nAvailable < nNeeded )
-        nAvailable -= (long)( SC_CLIPMARK_SIZE * nPPTX );
-
-    return nAvailable;
-}
-
 
 // nX, nArrY:       loop variables from DrawStrings / DrawEdit
 // nPosX, nPosY:    corresponding positions for nX, nArrY
@@ -1791,28 +1716,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
 //  -------------------------------------------------------------------------------
 
-Size lcl_GetVertPaperSize( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    const double nPPTY = HMM_PER_TWIPS;
-
-    const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
-    const ScMergeAttr& rMerge = (const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
-
-    long nCellY = (long) ( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
-    if ( rMerge.GetRowMerge() > 1 )
-    {
-        SCROW nCountY = rMerge.GetRowMerge();
-        nCellY += (long) pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
-    }
-
-    //  only top/bottom margin are interesting
-    const SvxMarginItem& rMargin = (const SvxMarginItem&)pPattern->GetItem(ATTR_MARGIN);
-    nCellY -= (long) ( rMargin.GetTopMargin() * nPPTY );
-    nCellY -= (long) ( rMargin.GetBottomMargin() * nPPTY );
-
-    return Size( nCellY - 1, 1000000 );     // cell height as width for PaperSize
-}
-
 void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
     rEngine.SetUpdateMode( FALSE );
@@ -2380,80 +2283,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                             }
                             pEngine->SetDefaultItem( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
-
-                            //  Raender
-
-                            //!     Position und Papersize auf EditUtil umstellen !!!
-
-/*                          Rectangle aPixRect = ScEditUtil( pDoc,
-                                                nX,nY,nTab, Point(nStartX,nStartY),
-                                                pDev, nPPTX, nPPTY, nZoom )
-                                                .GetEditArea( pPattern );
-
-                            pDev->SetFillInBrush(Brush(Color(COL_LIGHTRED)));
-                            pDev->DrawRect(pDev->PixelToLogic(aPixRect));
-*/
-
-#if 0
-                            Size aPaperSize = Size( 1000000, 1000000 );
-                            if ( eOrient==SVX_ORIENTATION_STACKED )
-                                aPaperSize.Width() = nOutWidth;             // zum Zentrieren
-                            else if (bAsianVertical)
-                            {
-                                aPaperSize.Width() = nOutWidth;
-                                if (bBreak)
-                                {
-                                    //  add some extra height (default margin value) for safety
-                                    //  as long as GetEditArea isn't used below
-                                    long nExtraHeight = (long)( 20 * nPPTY );
-                                    aPaperSize.Height() = nOutHeight + nExtraHeight;
-                                }
-                            }
-                            else if (bBreak)
-                            {
-                                if (eOrient == SVX_ORIENTATION_STANDARD)
-                                {
-                                    if (eType==OUTTYPE_WINDOW &&
-                                            eOrient!=SVX_ORIENTATION_STACKED &&
-                                            pInfo && pInfo->bAutoFilter)
-                                    {
-                                        long nSub = Min( pRowInfo[nArrY].nHeight,
-                                                        (USHORT) DROPDOWN_BITMAP_SIZE );
-                                        if ( nOutWidth > nSub )
-                                            nOutWidth -= nSub;
-                                    }
-                                    aPaperSize.Width() = nOutWidth;
-                                }
-                                else
-                                    aPaperSize.Width() = nOutHeight - 1;
-                            }
-                            if (bPixelToLogic)
-                            {
-                                //! also handle bAsianVertical in GetEditArea
-                                if ( bBreak && pFmtDevice != pRefDevice && !bAsianVertical )
-                                {
-                                    //  calculate PaperSize for automatic line breaks from logic size,
-                                    //  not pixel sizes, to get the same breaks at all scales
-
-                                    if ( eOrient == SVX_ORIENTATION_STANDARD )
-                                    {
-                                        Fraction aFract(1,1);
-                                        Rectangle aUtilRect = ScEditUtil( pDoc,nX,nY,nTab,
-                                                                Point(nStartX,nStartY), pDev,
-                                                                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract )
-                                                            .GetEditArea( pPattern, FALSE );
-                                        Size aLogic = aUtilRect.GetSize();
-                                        pEngine->SetPaperSize( aLogic );
-                                    }
-                                    else
-                                        pEngine->SetPaperSize( lcl_GetVertPaperSize(pDoc,nX,nY,nTab) );
-                                }
-                                else
-                                    pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
-                            }
-                            else
-                                pEngine->SetPaperSize(aPaperSize);
-#endif
 
                             //  Read content from cell
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undoblk3.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1580,7 +1580,6 @@ void __EXPORT ScUndoRefreshLink::Undo()
             }
 
             pDoc->DeleteAreaTab( aRange,IDF_ALL );
-//          pDoc->ClearDrawPage(nTab);
             pUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
 //          pDoc->TransferDrawPage( pUndoDoc, nTab, nTab );
             pDoc->SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
@@ -1611,7 +1610,6 @@ void __EXPORT ScUndoRefreshLink::Redo()
             ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
 
             pDoc->DeleteAreaTab( aRange, IDF_ALL );
-//          pDoc->ClearDrawPage(nTab);
             pRedoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
 //          pDoc->TransferDrawPage( pRedoDoc, nTab, nTab );
             pDoc->SetLink( nTab,

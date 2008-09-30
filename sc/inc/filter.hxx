@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filter.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 
 #include <tools/string.hxx>
 #include <rtl/textenc.h>
+
+#define ENABLE_LOTUS123_EXPORT 0
 
 class SfxMedium;
 class SvStream;
@@ -87,8 +89,6 @@ enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5 };
 
 FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW );
 
-FltError ScImportExcel( SfxMedium&, ScDocument* );
-
 FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
         // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
         // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
@@ -109,9 +109,9 @@ FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );
 // Diverse Exportfilter
 // ***********************************************************************
 
+#if ENABLE_LOTUS123_EXPORT
 FltError ScExportLotus123( SvStream&, ScDocument*, ExportFormatLotus, CharSet eDest );
-
-FltError ScExportExcel234( SvStream&, ScDocument*, ExportFormatExcel, CharSet eDest );
+#endif
 
 FltError ScExportExcel5( SfxMedium&, ScDocument*, const BOOL bTuerk, CharSet eDest );
 

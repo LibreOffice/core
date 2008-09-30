@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartarr.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,14 +104,6 @@ ScChartArray::ScChartArray( const ScChartArray& rArr ) :
         aPositioner(rArr.aPositioner),
         bValid(rArr.bValid)
 {
-}
-
-ScChartArray::ScChartArray( ScDocument* pDoc, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
-        pDocument( pDoc ),
-        aPositioner(pDoc),
-        bValid( TRUE )
-{
-    aName = aPositioner.ReadStream(rStream, rHdr);
 }
 
 ScChartArray::~ScChartArray()
@@ -602,23 +594,5 @@ BOOL ScChartCollection::operator==(const ScChartCollection& rCmp) const
             return FALSE;
 
     return TRUE;
-}
-
-BOOL ScChartCollection::Load( ScDocument* pDoc, SvStream& rStream )
-{
-    BOOL bSuccess = TRUE;
-    USHORT nNewCount;
-    FreeAll();
-
-    ScMultipleReadHeader aHdr( rStream );
-
-    rStream >> nNewCount;
-
-    for (USHORT i=0; i<nNewCount && bSuccess; i++)
-    {
-        ScChartArray* pObject = new ScChartArray( pDoc, rStream, aHdr );
-        bSuccess = Insert( pObject );
-    }
-    return bSuccess;
 }
 

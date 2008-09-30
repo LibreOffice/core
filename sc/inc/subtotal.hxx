@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: subtotal.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 
 class SubTotal
 {
+#if OLD_PIVOT_IMPLEMENTATION
 private:
     long    nCount;
     long    nCount2;
@@ -62,6 +63,9 @@ public:
     short   Valid( USHORT nFunction ) const;
                             // return 0 => Fehler, -1 => kein Wert, 1 => ok
     double  Result( USHORT nFunction ) const;
+#endif
+public:
+
     static  BOOL SafePlus( double& fVal1, double fVal2);
     static  BOOL SafeMult( double& fVal1, double fVal2);
     static  BOOL SafeDiv( double& fVal1, double fVal2);

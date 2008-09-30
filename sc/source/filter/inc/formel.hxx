@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formel.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,8 +240,8 @@ protected:
     virtual             ~LotusConverterBase();
 
 public:
-    void                Reset( INT32 nLen );
-    void                Reset( INT32 nLen, const ScAddress& rEingPos );
+//UNUSED2008-05  void                Reset( INT32 nLen );
+//UNUSED2008-05  void                Reset( INT32 nLen, const ScAddress& rEingPos );
     void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,

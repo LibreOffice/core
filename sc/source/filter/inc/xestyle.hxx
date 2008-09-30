@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xestyle.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -529,26 +529,27 @@ class XclExpDefaultXF : public XclExpXF
 public:
     explicit            XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF );
 
-    /** Sets the parent XF ID. Only allowed for cell XFs. */
-    void                SetParent( sal_uInt32 nParentXFId );
+//UNUSED2008-05  /** Sets the parent XF ID. Only allowed for cell XFs. */
+//UNUSED2008-05  void                SetParent( sal_uInt32 nParentXFId );
+//UNUSED2008-05
+//UNUSED2008-05  /** Sets all "attribute used" flags explicitely.
+//UNUSED2008-05      @descr  The following Set***() functions set the appropriate flag too. */
+//UNUSED2008-05  void                SetUsedFlags(
+//UNUSED2008-05                          bool bProtUsed, bool bFontUsed, bool bFmtUsed,
+//UNUSED2008-05                          bool bAlignUsed, bool bBorderUsed, bool bAreaUsed );
+//UNUSED2008-05  /** Sets the cell protection flags. */
+//UNUSED2008-05  void                SetProtection( const XclExpCellProt& rProtection );
+//UNUSED2008-05  /** Sets cell alignment attributes. */
+//UNUSED2008-05  void                SetAlignment( const XclExpCellAlign& rAlignment );
+//UNUSED2008-05  /** Sets a cell border style. */
+//UNUSED2008-05  void                SetBorder( const XclExpCellBorder& rBorder );
+//UNUSED2008-05  /** Sets a cell area style. */
+//UNUSED2008-05  void                SetArea( const XclExpCellArea& rArea );
 
-    /** Sets all "attribute used" flags explicitely.
-        @descr  The following Set***() functions set the appropriate flag too. */
-    void                SetUsedFlags(
-                            bool bProtUsed, bool bFontUsed, bool bFmtUsed,
-                            bool bAlignUsed, bool bBorderUsed, bool bAreaUsed );
-    /** Sets the cell protection flags. */
-    void                SetProtection( const XclExpCellProt& rProtection );
     /** Sets the Excel font index. */
     void                SetFont( sal_uInt16 nXclFont );
     /** Sets the Excel number format index. */
     void                SetNumFmt( sal_uInt16 nXclNumFmt );
-    /** Sets cell alignment attributes. */
-    void                SetAlignment( const XclExpCellAlign& rAlignment );
-    /** Sets a cell border style. */
-    void                SetBorder( const XclExpCellBorder& rBorder );
-    /** Sets a cell area style. */
-    void                SetArea( const XclExpCellArea& rArea );
 };
 
 // ----------------------------------------------------------------------------

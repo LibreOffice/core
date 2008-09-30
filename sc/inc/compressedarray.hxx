@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compressedarray.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,10 +101,6 @@ public:
     /** Get previous value and it's region start row. If nIndex==0, nIndex is
         not decremented and the value of the first entry is returned again. */
     const D&                    GetPrevValue( size_t& nIndex, A& nStart ) const;
-
-    /** Fill an array with consecutive data between nStart and nEnd. Caller
-        must assure that all elements fit into the array. */
-    void                        FillDataArray( A nStart, A nEnd, D * pArray ) const;
 
     /** Return the last row where an entry meets the condition:
         (aValue != rCompare). If no entry meets this condition

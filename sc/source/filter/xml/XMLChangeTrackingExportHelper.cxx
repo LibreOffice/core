@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -786,113 +786,6 @@ void ScChangeTrackingExportHelper::CollectAutoStyles()
             {
                 CollectActionAutoStyles(pAction);
                 pAction = pAction->GetNext();
-            }
-        }
-    }
-}
-
-void ScChangeTrackingExportHelper::WriteChangeViewSettings()
-{
-    ScChangeViewSettings* pViewSettings = rExport.GetDocument() ? rExport.GetDocument()->GetChangeViewSettings() : NULL;
-    if (pViewSettings && pChangeTrack)
-    {
-        if (!pViewSettings->ShowChanges())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_CHANGES, XML_FALSE);
-        if (pViewSettings->IsShowAccepted())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_ACCEPTED_CHANGES, XML_TRUE);
-        if (pViewSettings->IsShowRejected())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_REJECTED_CHANGES, XML_TRUE);
-        SvXMLElementExport aChangeViewSettingsElem(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_VIEW_SETTINGS, sal_True, sal_True);
-        {
-            SvXMLElementExport aChangeViewConditionsElem(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_VIEW_CONDITIONS, sal_True, sal_True);
-            {
-                {
-                    if (pViewSettings->HasDate())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USE_CONDITION, XML_TRUE);
-                    switch (pViewSettings->GetTheDateMode())
-                    {
-                        case SCDM_DATE_BEFORE:
-                        {
-                            rtl::OUStringBuffer sDate;
-                            ScXMLConverter::ConvertDateTimeToString(pViewSettings->GetTheFirstDateTime(), sDate);
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_TIME, sDate.makeStringAndClear());
-                            SvXMLElementExport aDateBeforeElem(rExport, XML_NAMESPACE_TABLE, XML_BEFORE_DATE_TIME, sal_True, sal_True);
-                        }
-                        break;
-                        case SCDM_DATE_SINCE:
-                        {
-                            rtl::OUStringBuffer sDate;
-                            ScXMLConverter::ConvertDateTimeToString(pViewSettings->GetTheFirstDateTime(), sDate);
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_TIME, sDate.makeStringAndClear());
-                            SvXMLElementExport aDateSinceElem(rExport, XML_NAMESPACE_TABLE, XML_SINCE_DATE_TIME, sal_True, sal_True);
-                        }
-                        break;
-                        case SCDM_DATE_EQUAL:
-                        {
-                            rtl::OUStringBuffer sDate;
-                            ScXMLConverter::ConvertDateTimeToString(pViewSettings->GetTheFirstDateTime(), sDate);
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE, sDate.makeStringAndClear());
-                            SvXMLElementExport aDateEqualElem(rExport, XML_NAMESPACE_TABLE, XML_EQUAL_DATE, sal_True, sal_True);
-                        }
-                        break;
-                        case SCDM_DATE_NOTEQUAL:
-                        {
-                            rtl::OUStringBuffer sDate;
-                            ScXMLConverter::ConvertDateTimeToString(pViewSettings->GetTheFirstDateTime(), sDate);
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE, sDate.makeStringAndClear());
-                            SvXMLElementExport aDateNotEqualElem(rExport, XML_NAMESPACE_TABLE, XML_NOT_EQUAL_DATE, sal_True, sal_True);
-                        }
-                        break;
-                        case SCDM_DATE_BETWEEN:
-                        {
-                            rtl::OUStringBuffer sDate;
-                            ScXMLConverter::ConvertDateTimeToString(pViewSettings->GetTheFirstDateTime(), sDate);
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIRST_DATE_TIME, sDate.makeStringAndClear());
-                            ScXMLConverter::ConvertDateTimeToString(pViewSettings->GetTheFirstDateTime(), sDate);
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SECOND_DATE_TIME, sDate.makeStringAndClear());
-                            SvXMLElementExport aDateBetweenElem(rExport, XML_NAMESPACE_TABLE, XML_BETWEEN_DATE_TIMES, sal_True, sal_True);
-                        }
-                        break;
-                        case SCDM_DATE_SAVE:
-                        {
-                            SvXMLElementExport aDateSaveElem(rExport, XML_NAMESPACE_TABLE, XML_SINCE_SAVE, sal_True, sal_True);
-                        }
-                        break;
-                        case SCDM_NO_DATEMODE:
-                        {
-                            DBG_ERROR("wrong date mode");
-                        }
-                        break;
-                    }
-                }
-                rtl::OUString sAuthor (pViewSettings->GetTheAuthorToShow());
-                if (sAuthor.getLength() && !pViewSettings->HasAuthor())
-                {
-                    if (pViewSettings->HasAuthor())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USE_CONDITION, XML_TRUE);
-                    if (sAuthor.getLength())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_AUTHOR, sAuthor);
-                    SvXMLElementExport aEqualAuthorElem(rExport, XML_NAMESPACE_TABLE, XML_EQUAL_AUTHOR, sal_True, sal_True);
-                }
-                rtl::OUString sComment (pViewSettings->GetTheComment());
-                if (sComment.getLength() && !pViewSettings->HasComment())
-                {
-                    if (pViewSettings->HasComment())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USE_CONDITION, XML_TRUE);
-                    if (sComment.getLength())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COMMENT, sComment);
-                    SvXMLElementExport aEqualCommentElem(rExport, XML_NAMESPACE_TABLE, XML_EQUAL_COMMENT, sal_True, sal_True);
-                }
-                rtl::OUString sRangeList;
-                ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), rExport.GetDocument());
-                if (sRangeList.getLength() && !pViewSettings->HasRange())
-                {
-                    if (pViewSettings->HasRange())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USE_CONDITION, XML_TRUE);
-                    if (sRangeList.getLength())
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS_LIST, sRangeList);
-                    SvXMLElementExport aInRangeElem(rExport, XML_NAMESPACE_TABLE, XML_IN_RANGE, sal_True, sal_True);
-                }
             }
         }
     }

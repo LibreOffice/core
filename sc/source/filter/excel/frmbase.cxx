@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmbase.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,19 +262,19 @@ LotusConverterBase::~LotusConverterBase()
 {
 }
 
-void LotusConverterBase::Reset( INT32 nLen, const ScAddress& rEingPos )
-{
-    ConverterBase::Reset();
-    nBytesLeft = nLen;
-    aEingPos = rEingPos;
-}
-
-void LotusConverterBase::Reset( INT32 nLen )
-{
-    ConverterBase::Reset();
-    nBytesLeft = nLen;
-    aEingPos.Set( 0, 0, 0 );
-}
+//UNUSED2008-05  void LotusConverterBase::Reset( INT32 nLen, const ScAddress& rEingPos )
+//UNUSED2008-05  {
+//UNUSED2008-05      ConverterBase::Reset();
+//UNUSED2008-05      nBytesLeft = nLen;
+//UNUSED2008-05      aEingPos = rEingPos;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void LotusConverterBase::Reset( INT32 nLen )
+//UNUSED2008-05  {
+//UNUSED2008-05      ConverterBase::Reset();
+//UNUSED2008-05      nBytesLeft = nLen;
+//UNUSED2008-05      aEingPos.Set( 0, 0, 0 );
+//UNUSED2008-05  }
 
 void LotusConverterBase::Reset( const ScAddress& rEingPos )
 {

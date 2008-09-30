@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hints.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,13 +48,6 @@ TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
 //      ScPaintHint - Angabe, was neu gezeichnet werden muss
 // -----------------------------------------------------------------------
 
-ScPaintHint::ScPaintHint() :
-    aRange( 0,0,0, MAXCOL,MAXROW,MAXTAB ),
-    nParts( PAINT_ALL ),
-    bPrint( TRUE )
-{
-}
-
 ScPaintHint::ScPaintHint( const ScRange& rRng, USHORT nPaint ) :
     aRange( rRng ),
     nParts( nPaint ),
@@ -88,10 +81,10 @@ ScUpdateRefHint::~ScUpdateRefHint()
 //      ScPointerChangedHint - Pointer ist ungueltig geworden
 // -----------------------------------------------------------------------
 
-ScPointerChangedHint::ScPointerChangedHint( USHORT nF ) :
-    nFlags( nF )
-{
-}
+//UNUSED2008-05  ScPointerChangedHint::ScPointerChangedHint( USHORT nF ) :
+//UNUSED2008-05      nFlags( nF )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScPointerChangedHint::~ScPointerChangedHint()
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lbseldlg.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,10 +87,10 @@ String ScSelEntryDlg::GetSelectEntry() const
 
 //------------------------------------------------------------------------
 
-USHORT ScSelEntryDlg::GetSelectEntryPos() const
-{
-    return aLb.GetSelectEntryPos();
-}
+//UNUSED2008-05  USHORT ScSelEntryDlg::GetSelectEntryPos() const
+//UNUSED2008-05  {
+//UNUSED2008-05      return aLb.GetSelectEntryPos();
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 

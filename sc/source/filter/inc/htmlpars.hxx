@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlpars.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -597,9 +597,6 @@ public:
     virtual const ScHTMLTable*  GetGlobalTable() const;
 
 private:
-    /** Returns the specified table (may be maGlobTable, if no real table can be found). */
-    ScHTMLTable*                GetTable( ScHTMLTableId nTableId ) const;
-
     /** Handles all possible tags in the HTML document. */
     void                        ProcessToken( const ImportInfo& rInfo );
     /** Inserts a text portion into current entry. */

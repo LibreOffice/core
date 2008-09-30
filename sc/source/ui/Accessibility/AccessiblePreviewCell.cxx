@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessiblePreviewCell.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,11 +297,6 @@ sal_Bool ScAccessiblePreviewCell::IsOpaque(
             bOpaque = pItem->GetColor() != COL_TRANSPARENT;
     }
     return bOpaque;
-}
-
-sal_Bool ScAccessiblePreviewCell::IsSelected(const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
-{
-    return sal_False;
 }
 
 void ScAccessiblePreviewCell::CreateTextHelper()

@@ -1008,56 +1008,6 @@ void ScNavigatorDlg::CursorPosChanged()
 
 //------------------------------------------------------------------------
 
-BOOL ScNavigatorDlg::GetDBAtCursor( String& rStrName )
-{
-    BOOL bFound = FALSE;
-
-    if ( GetViewData() )
-    {
-        SCCOL nCol = aEdCol.GetCol();
-        SCROW nRow = aEdRow.GetRow();
-
-        if ( nCol > 0 && nRow > 0 )
-        {
-            ScDocument* pDoc  = pViewData->GetDocument();
-            ScDBData*   pData = pDoc->GetDBAtCursor( nCol-1, nRow-1, pViewData->GetTabNo() );
-
-            bFound = ( pData != NULL );
-            if ( bFound )
-                pData->GetName( rStrName );
-        }
-    }
-
-    return bFound;
-}
-
-//------------------------------------------------------------------------
-
-BOOL ScNavigatorDlg::GetAreaAtCursor( String& rStrName )
-{
-    BOOL bFound = FALSE;
-
-    if ( GetViewData() )
-    {
-        SCCOL nCol = aEdCol.GetCol();
-        SCROW nRow = aEdRow.GetRow();
-
-        if ( nCol > 0 && nRow > 0 )
-        {
-            ScDocument*  pDoc  = pViewData->GetDocument();
-            ScRangeData* pData = pDoc->GetRangeAtCursor( nCol-1, nRow-1, pViewData->GetTabNo() );
-
-            bFound = ( pData != NULL );
-            if ( bFound )
-                pData->GetName( rStrName );
-        }
-    }
-
-    return bFound;
-}
-
-//------------------------------------------------------------------------
-
 void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
 {
     if ( (nColNo+1 != nCurCol) || (nRowNo+1 != nCurRow) )

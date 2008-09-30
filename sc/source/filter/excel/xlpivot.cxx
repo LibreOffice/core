@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlpivot.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,11 +214,6 @@ XclPCNumGroupInfo::XclPCNumGroupInfo() :
     SetNumType();
 }
 
-bool XclPCNumGroupInfo::IsNumType() const
-{
-    return GetXclDataType() == EXC_SXNUMGROUP_TYPE_NUM;
-}
-
 void XclPCNumGroupInfo::SetNumType()
 {
     SetXclDataType( EXC_SXNUMGROUP_TYPE_NUM );
@@ -302,10 +297,10 @@ bool XclPCField::IsStandardField() const
     return meFieldType == EXC_PCFIELD_STANDARD;
 }
 
-bool XclPCField::IsCalculatedField() const
-{
-    return meFieldType == EXC_PCFIELD_CALCED;
-}
+//UNUSED2008-05  bool XclPCField::IsCalculatedField() const
+//UNUSED2008-05  {
+//UNUSED2008-05      return meFieldType == EXC_PCFIELD_CALCED;
+//UNUSED2008-05  }
 
 bool XclPCField::IsStdGroupField() const
 {

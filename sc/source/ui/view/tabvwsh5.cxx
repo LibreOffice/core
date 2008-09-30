@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh5.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,10 +194,6 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         {
             SCCOL nCol = pHint->GetCol();
             SCROW nRow = pHint->GetRow();
-#if 0
-// Abfrage ist ueberfluessig, passiert bereits in ScInputHandler StartTable
-//          if (pDoc->IsSelectionOrBlockEditable( nTab, nCol,nRow, nCol,nRow ))
-#endif
             {
                 HideNoteMarker();
 
@@ -217,11 +213,6 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
                     SetEditShell(pView ,TRUE);
                 }
             }
-#if 0
-//          else
-//              if (GetViewData()->IsActive())
-//                  ErrorMessage(STR_PROTECTIONERR);
-#endif
         }
     }
     else if (rHint.ISA(ScTablesHint))               // Tabelle eingefuegt / geloescht

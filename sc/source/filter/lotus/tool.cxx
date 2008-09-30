@@ -143,45 +143,6 @@ void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt )
     pDoc->ApplyAttr( nCol, nRow, nTab, aAttr );
 }
 
-
-
-
-sal_Char* ReplaceWith( sal_Char* pString, sal_Char cVon, sal_Char cNach )
-{   // Ersetzt alle Vorkommen von cVon durch cNach
-    //  cNach = 0 -> cVon wird aus String herausgeloescht!
-    // PREC:    pString:    Nullterminierter String
-    // POST:    cNach = 0:  aus String werden alle Vorkommen von cVon
-    //                      herausgeloescht (String wird kuerzer)
-    //          cNach !=0:  alle Vorkommen von cVon im String werden durch
-    //                      cNach ersetzt
-    DBG_ASSERT( pString != NULL, "ReplaceWith(): pString == NULL" );
-
-    sal_Char *pAkt, *pCpy;
-    if( cNach != 0 )
-    {   // Zeichen erstzen
-        for(  pAkt = pString ; *pAkt != 0 ; pAkt++ )
-        {
-            if( *pAkt == cVon )
-                *pAkt = cNach;
-        }
-    }
-    else
-    {   // Zeichen loeschen
-        for( pAkt = pCpy =pString ; *pAkt != 0 ; pAkt++ )
-        if( *pAkt != cVon )
-        {
-            *pCpy = *pAkt;
-            pCpy++;
-        }
-        *pCpy = 0;  // Nullterminator anhaengen
-    }
-
-    return pString;
-}
-
-
-
-
 void InitPage( void )
 {   // Seitenformat initialisieren, d.h. Default-Werte von SC holen
     //scGetPageFormat( 0, &aPage );

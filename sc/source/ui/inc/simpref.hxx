@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpref.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,8 +117,6 @@ public:
     void            SetFlags( BOOL bSetCloseOnButtonUp, BOOL bSetSingleCell, BOOL bSetMultiSelection );
 
     void            SetAutoReOpen(BOOL bFlag) {bAutoReOpen=bFlag;}
-
-    static  String  GetLastRefString();
 };
 
 

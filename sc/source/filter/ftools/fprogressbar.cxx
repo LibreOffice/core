@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fprogressbar.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,11 +231,11 @@ void ScfSimpleProgressBar::Init( sal_Size nSize )
 
 // ============================================================================
 
-ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText ) :
-    mrStrm( rStrm )
-{
-    Init( pDocShell, rText );
-}
+//UNUSED2008-05  ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText ) :
+//UNUSED2008-05      mrStrm( rStrm )
+//UNUSED2008-05  {
+//UNUSED2008-05      Init( pDocShell, rText );
+//UNUSED2008-05  }
 
 ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, USHORT nResId ) :
     mrStrm( rStrm )

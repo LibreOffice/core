@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputwin.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.57.22.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -548,11 +548,6 @@ void ScInputWindow::SetTextString( const String& rString )
     }
 }
 
-const String& ScInputWindow::GetTextString()
-{
-    return aTextWindow.GetTextString();
-}
-
 void ScInputWindow::SetOkCancelMode()
 {
     //! new method at ScModule to query if function autopilot is open
@@ -621,19 +616,19 @@ String __EXPORT ScInputWindow::GetText() const
 }
 
 
-EditView* ScInputWindow::ActivateEdit( const String&     rText,
-                                       const ESelection& rSel )
-{
-    if ( !aTextWindow.IsInputActive() )
-    {
-        aTextWindow.StartEditEngine();
-        aTextWindow.GrabFocus();
-        aTextWindow.SetTextString( rText );
-        aTextWindow.GetEditView()->SetSelection( rSel );
-    }
-
-    return aTextWindow.GetEditView();
-}
+//UNUSED2008-05  EditView* ScInputWindow::ActivateEdit( const String&     rText,
+//UNUSED2008-05                                         const ESelection& rSel )
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( !aTextWindow.IsInputActive() )
+//UNUSED2008-05      {
+//UNUSED2008-05          aTextWindow.StartEditEngine();
+//UNUSED2008-05          aTextWindow.GrabFocus();
+//UNUSED2008-05          aTextWindow.SetTextString( rText );
+//UNUSED2008-05          aTextWindow.GetEditView()->SetSelection( rSel );
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      return aTextWindow.GetEditView();
+//UNUSED2008-05  }
 
 BOOL ScInputWindow::IsInputActive()
 {

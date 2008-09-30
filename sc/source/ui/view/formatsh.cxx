@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatsh.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1971,15 +1971,6 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
     }
 }
 
-void ScFormatShell::ExecBckCol( SfxRequest& rReq )
-{
-    ExecuteAttr( rReq );
-}
-
-void ScFormatShell::GetBckColState( SfxItemSet& rSet )
-{
-    GetAttrState( rSet );
-}
 void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();

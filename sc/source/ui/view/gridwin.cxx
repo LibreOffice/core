@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.94.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -420,7 +420,9 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bEEMouse( FALSE ),
             nMouseStatus( SC_GM_NONE ),
             nNestedButtonState( SC_NESTEDBUTTON_NONE ),
+#if OLD_PIVOT_IMPLEMENTATION
             bPivotMouse( FALSE ),
+#endif
             bDPMouse( FALSE ),
             bRFMouse( FALSE ),
             nPagebreakMouse( SC_PD_NONE ),
@@ -1826,12 +1828,14 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
     }
 
+#if OLD_PIVOT_IMPLEMENTATION
     if (bPivotMouse)
     {
         PivotMouseButtonUp( rMEvt );
         bPivotMouse = FALSE;
         return;
     }
+#endif
 
     if (bDPMouse)
     {
@@ -2221,11 +2225,13 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
+#if OLD_PIVOT_IMPLEMENTATION
     if (bPivotMouse)
     {
         PivotMouseMove( rMEvt );
         return;
     }
+#endif
 
     if (bDPMouse)
     {
@@ -2435,8 +2441,10 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
     {
         if (!pViewData->GetView()->IsInActivatePart())
         {
+#if OLD_PIVOT_IMPLEMENTATION
             if (bPivotMouse)
                 bPivotMouse = FALSE;            // gezeichnet wird per bDragRect
+#endif
             if (bDPMouse)
                 bDPMouse = FALSE;               // gezeichnet wird per bDragRect
             if (bDragRect)

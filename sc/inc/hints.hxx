@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hints.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +43,10 @@ class ScPaintHint : public SfxHint
     USHORT      nParts;
     BOOL        bPrint;     //  Flag, ob auch Druck/Vorschau betroffen ist
 
+    ScPaintHint(); // disabled
+
 public:
                     TYPEINFO();
-                    ScPaintHint();
                     ScPaintHint( const ScRange& rRng, USHORT nPaint = PAINT_ALL );
                     ~ScPaintHint();
 
@@ -95,7 +96,7 @@ class ScPointerChangedHint : public SfxHint
 public:
                     TYPEINFO();
 
-                    ScPointerChangedHint( USHORT nF );
+//UNUSED2008-05     ScPointerChangedHint( USHORT nF );
                     ~ScPointerChangedHint();
 
     USHORT          GetFlags() const            { return nFlags; }

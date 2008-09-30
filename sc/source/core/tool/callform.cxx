@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: callform.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -413,21 +413,6 @@ BOOL FuncData::Call(void** ppParam)
                 break;
             default : break;
         }
-    }
-    return bRet;
-}
-
-//------------------------------------------------------------------------
-
-BOOL FuncData::Advice( AdvData pfCallback )
-{
-    BOOL bRet = FALSE;
-    osl::Module* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(ADVICE));
-    if (fProc != NULL)
-    {
-        ((::Advice)fProc)(nNumber, pfCallback);
-        bRet = TRUE;
     }
     return bRet;
 }

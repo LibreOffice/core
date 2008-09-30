@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colrowst.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@ public:
 
     void                SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlags );
     void                SetHeight( SCROW nRow, sal_uInt16 nHeight );
-    void                HideRow( SCROW nRow );
     void                SetRowSettings( SCROW nRow, sal_uInt16 nHeight, sal_uInt16 nFlags );
 
     void                SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex );

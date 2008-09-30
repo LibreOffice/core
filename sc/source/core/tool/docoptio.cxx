@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docoptio.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,84 +112,6 @@ ScDocOptions::~ScDocOptions()
 
 //------------------------------------------------------------------------
 
-void ScDocOptions::Save(SvStream& rStream, BOOL bConfig) const
-{
-    ScWriteHeader aHdr( rStream, 28 );
-
-    rStream << bIsIgnoreCase;
-    rStream << bIsIter;
-    rStream << nIterCount;
-    rStream << fIterEps;
-    rStream << nPrecStandardFormat;
-    rStream << nDay;
-    rStream << nMonth;
-    rStream << nYear;
-    rStream << nTabDistance;
-    rStream << bCalcAsShown;
-    rStream << bMatchWholeCell;
-    rStream << bDoAutoSpell;
-    rStream << bLookUpColRowNames;
-
-    if ( bConfig || rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
-    {
-        if ( !bConfig && 1901 <= nYear2000 && nYear2000 <= 1999 )
-        {   // fuer SO5 auf altes Format zweistellig abbilden
-            rStream << (USHORT) (nYear2000 - 1901);
-        }
-        else
-        {   // neues Format vierstellig, beliebiges Jahrhundert
-            // erzeugt in SO5 vor src513e ein Warning beim Laden
-            rStream << (USHORT) 29;     // Dummy, alter SO5 Default
-            rStream << nYear2000;       // echter Wert
-        }
-    }
-}
-
-void ScDocOptions::Load(SvStream& rStream)
-{
-    ScReadHeader aHdr( rStream );
-
-    rStream >> bIsIgnoreCase;
-    rStream >> bIsIter;
-    rStream >> nIterCount;
-    rStream >> fIterEps;
-    rStream >> nPrecStandardFormat;
-    rStream >> nDay;
-    rStream >> nMonth;
-    rStream >> nYear;
-    if ( aHdr.BytesLeft() )
-        rStream >> nTabDistance;
-    else
-        nTabDistance = lcl_GetDefaultTabDist();
-    if ( aHdr.BytesLeft() )
-        rStream >> bCalcAsShown;
-    else
-        bCalcAsShown = FALSE;
-    if ( aHdr.BytesLeft() )
-        rStream >> bMatchWholeCell;
-    else
-        bMatchWholeCell = FALSE;
-    if ( aHdr.BytesLeft() )
-        rStream >> bDoAutoSpell;
-    else
-        bDoAutoSpell = FALSE;
-    if ( aHdr.BytesLeft() )
-        rStream >> bLookUpColRowNames;
-    else
-        bLookUpColRowNames = TRUE;
-    if ( aHdr.BytesLeft() )
-    {
-        rStream >> nYear2000;       // SO5 ab 24.06.98
-        // SO51 ab src513e
-        if ( aHdr.BytesLeft() )
-            rStream >> nYear2000;   // der echte Wert
-        else
-            nYear2000 += 1901;      // altes zweistelliges auf neues vierstelliges
-    }
-    else
-        nYear2000 = 18 + 1901;      // alter Wert vor SO5
-}
-
 void ScDocOptions::ResetDocOptions()
 {
     bIsIgnoreCase       = FALSE;
@@ -213,9 +135,9 @@ void ScDocOptions::ResetDocOptions()
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
 //========================================================================
 
-ScTpCalcItem::ScTpCalcItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
-{
-}
+//UNUSED2008-05  ScTpCalcItem::ScTpCalcItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 

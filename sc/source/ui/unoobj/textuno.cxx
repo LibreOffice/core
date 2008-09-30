@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textuno.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,14 +110,6 @@ SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, "ScHeaderFooterContentObj", "c
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv.one.Text.Text" )
 
 //------------------------------------------------------------------------
-
-ScHeaderFooterContentObj::ScHeaderFooterContentObj() :
-    pLeftText   ( NULL ),
-    pCenterText ( NULL ),
-    pRightText  ( NULL )
-{
-    //  fuer getReflection
-}
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                     const EditTextObject* pCenter,
@@ -934,15 +926,6 @@ ScEditEngineTextObj::ScEditEngineTextObj() :
 
 ScEditEngineTextObj::~ScEditEngineTextObj() throw()
 {
-}
-
-void ScEditEngineTextObj::SetText( const String& rStr )
-{
-    GetEditEngine()->SetText( rStr );
-
-    ESelection aSel;
-    ::GetSelection( aSel, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSel );
 }
 
 void ScEditEngineTextObj::SetText( const EditTextObject& rTextObject )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xerecord.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,11 +43,11 @@ void XclExpRecordBase::Save( XclExpStream& /*rStrm*/ )
 {
 }
 
-void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
-{
-    for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
-        Save( rStrm );
-}
+//UNUSED2008-05  void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
+//UNUSED2008-05  {
+//UNUSED2008-05      for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
+//UNUSED2008-05          Save( rStrm );
+//UNUSED2008-05  }
 
 // ----------------------------------------------------------------------------
 

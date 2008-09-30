@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexprt.cxx,v $
- * $Revision: 1.213 $
+ * $Revision: 1.212.28.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2049,24 +2049,24 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
     }
 }
 
-sal_Bool ScXMLExport::GetMerge (const uno::Reference <sheet::XSpreadsheet>& xTable,
-                            const sal_Int32 nCol, const sal_Int32 nRow,
-                            table::CellRangeAddress& aCellAddress)
-{
-    uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xTable->getCellRangeByPosition(nCol, nRow, nCol, nRow), uno::UNO_QUERY);
-    if (xSheetCellRange.is())
-    {
-        uno::Reference<sheet::XSheetCellCursor> xCursor(xTable->createCursorByRange(xSheetCellRange));
-        if(xCursor.is())
-        {
-            uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
-            xCursor->collapseToMergedArea();
-            aCellAddress = xCellAddress->getRangeAddress();
-            return sal_True;
-        }
-    }
-    return sal_False;
-}
+//UNUSED2008-05  sal_Bool ScXMLExport::GetMerge (const uno::Reference <sheet::XSpreadsheet>& xTable,
+//UNUSED2008-05                                  const sal_Int32 nCol, const sal_Int32 nRow,
+//UNUSED2008-05                                  table::CellRangeAddress& aCellAddress)
+//UNUSED2008-05  {
+//UNUSED2008-05      uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xTable->getCellRangeByPosition(nCol, nRow, nCol, nRow), uno::UNO_QUERY);
+//UNUSED2008-05      if (xSheetCellRange.is())
+//UNUSED2008-05      {
+//UNUSED2008-05          uno::Reference<sheet::XSheetCellCursor> xCursor(xTable->createCursorByRange(xSheetCellRange));
+//UNUSED2008-05          if (xCursor.is())
+//UNUSED2008-05          {
+//UNUSED2008-05              uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
+//UNUSED2008-05              xCursor->collapseToMergedArea();
+//UNUSED2008-05              aCellAddress = xCellAddress->getRangeAddress();
+//UNUSED2008-05              return sal_True;
+//UNUSED2008-05          }
+//UNUSED2008-05      }
+//UNUSED2008-05      return sal_False;
+//UNUSED2008-05  }
 
 sal_Bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
                             const uno::Reference <sheet::XSpreadsheet>& xTable)
@@ -2113,50 +2113,50 @@ sal_Bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
     return !bReady;
 }
 
-sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCellRange>& xCellRange,
-                            const uno::Reference <sheet::XSpreadsheet>& xTable,
-                            const sal_Int32 nCol, const sal_Int32 nRow,
-                            table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const
-{
-    bIsFirst = sal_False;
-    uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
-    if (xArrayFormulaRange.is())
-    {
-        rtl::OUString sArrayFormula(xArrayFormulaRange->getArrayFormula());
-        if (sArrayFormula.getLength())
-        {
-            uno::Reference<sheet::XSheetCellRange> xMatrixSheetCellRange (xArrayFormulaRange, uno::UNO_QUERY);
-            if (xMatrixSheetCellRange.is())
-            {
-                uno::Reference<sheet::XSheetCellCursor> xMatrixSheetCursor(xTable->createCursorByRange(xMatrixSheetCellRange));
-                if (xMatrixSheetCursor.is())
-                {
-                    xMatrixSheetCursor->collapseToCurrentArray();
-                    uno::Reference<sheet::XCellRangeAddressable> xMatrixCellAddress (xMatrixSheetCursor, uno::UNO_QUERY);
-                    if (xMatrixCellAddress.is())
-                    {
-                        aCellAddress = xMatrixCellAddress->getRangeAddress();
-                        if ((aCellAddress.StartColumn == nCol && aCellAddress.StartRow == nRow) &&
-                            (aCellAddress.EndColumn > nCol || aCellAddress.EndRow > nRow))
-                        {
-                            bIsFirst = sal_True;
-                            return sal_True;
-                        }
-                        else if (aCellAddress.StartColumn != nCol || aCellAddress.StartRow != nRow ||
-                            aCellAddress.EndColumn != nCol || aCellAddress.EndRow != nRow)
-                            return sal_True;
-                        else
-                        {
-                            bIsFirst = sal_True;
-                            return sal_True;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return sal_False;
-}
+//UNUSED2008-05  sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCellRange>& xCellRange,
+//UNUSED2008-05                                  const uno::Reference <sheet::XSpreadsheet>& xTable,
+//UNUSED2008-05                                  const sal_Int32 nCol, const sal_Int32 nRow,
+//UNUSED2008-05                                  table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const
+//UNUSED2008-05  {
+//UNUSED2008-05      bIsFirst = sal_False;
+//UNUSED2008-05      uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
+//UNUSED2008-05      if (xArrayFormulaRange.is())
+//UNUSED2008-05      {
+//UNUSED2008-05          rtl::OUString sArrayFormula(xArrayFormulaRange->getArrayFormula());
+//UNUSED2008-05          if (sArrayFormula.getLength())
+//UNUSED2008-05          {
+//UNUSED2008-05              uno::Reference<sheet::XSheetCellRange> xMatrixSheetCellRange (xArrayFormulaRange, uno::UNO_QUERY);
+//UNUSED2008-05              if (xMatrixSheetCellRange.is())
+//UNUSED2008-05              {
+//UNUSED2008-05                  uno::Reference<sheet::XSheetCellCursor> xMatrixSheetCursor(xTable->createCursorByRange(xMatrixSheetCellRange));
+//UNUSED2008-05                  if (xMatrixSheetCursor.is())
+//UNUSED2008-05                  {
+//UNUSED2008-05                      xMatrixSheetCursor->collapseToCurrentArray();
+//UNUSED2008-05                      uno::Reference<sheet::XCellRangeAddressable> xMatrixCellAddress (xMatrixSheetCursor, uno::UNO_QUERY);
+//UNUSED2008-05                      if (xMatrixCellAddress.is())
+//UNUSED2008-05                      {
+//UNUSED2008-05                          aCellAddress = xMatrixCellAddress->getRangeAddress();
+//UNUSED2008-05                          if ((aCellAddress.StartColumn == nCol && aCellAddress.StartRow == nRow) &&
+//UNUSED2008-05                              (aCellAddress.EndColumn > nCol || aCellAddress.EndRow > nRow))
+//UNUSED2008-05                          {
+//UNUSED2008-05                              bIsFirst = sal_True;
+//UNUSED2008-05                              return sal_True;
+//UNUSED2008-05                          }
+//UNUSED2008-05                          else if (aCellAddress.StartColumn != nCol || aCellAddress.StartRow != nRow ||
+//UNUSED2008-05                                   aCellAddress.EndColumn != nCol || aCellAddress.EndRow != nRow)
+//UNUSED2008-05                              return sal_True;
+//UNUSED2008-05                          else
+//UNUSED2008-05                          {
+//UNUSED2008-05                              bIsFirst = sal_True;
+//UNUSED2008-05                              return sal_True;
+//UNUSED2008-05                          }
+//UNUSED2008-05                      }
+//UNUSED2008-05                  }
+//UNUSED2008-05              }
+//UNUSED2008-05          }
+//UNUSED2008-05      }
+//UNUSED2008-05      return sal_False;
+//UNUSED2008-05  }
 
 sal_Bool ScXMLExport::IsMatrix (const ScAddress& aCell,
                             table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const
@@ -2831,13 +2831,13 @@ sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddr
     return sal_False;
 }
 
-sal_Bool ScXMLExport::IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
-{
-    uno::Reference<sheet::XCellAddressable> xAddressable (xCell, uno::UNO_QUERY);
-    if ( xAddressable.is() )
-        return IsEditCell(xAddressable->getCellAddress());
-    return sal_False;
-}
+//UNUSED2008-05  sal_Bool ScXMLExport::IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
+//UNUSED2008-05  {
+//UNUSED2008-05      uno::Reference<sheet::XCellAddressable> xAddressable (xCell, uno::UNO_QUERY);
+//UNUSED2008-05      if ( xAddressable.is() )
+//UNUSED2008-05          return IsEditCell(xAddressable->getCellAddress());
+//UNUSED2008-05      return sal_False;
+//UNUSED2008-05  }
 
 sal_Bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
 {
@@ -2851,43 +2851,43 @@ sal_Bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
     }
 }
 
-sal_Bool ScXMLExport::IsAnnotationEqual(const uno::Reference<table::XCell>& /* xCell1 */,
-                                        const uno::Reference<table::XCell>& /* xCell2 */)
-{
-    // no longer compareable, because the position and size and other attributes can also differ
-
-/*  uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor1(xCell1, uno::UNO_QUERY);
-    uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor2(xCell2, uno::UNO_QUERY);
-    if (xSheetAnnotationAnchor1.is() && xSheetAnnotationAnchor2.is())
-    {
-        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation1(xSheetAnnotationAnchor1->getAnnotation());
-        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation2(xSheetAnnotationAnchor2->getAnnotation());
-        uno::Reference<text::XSimpleText> xSimpleText1(xSheetAnnotation1, uno::UNO_QUERY);
-        uno::Reference<text::XSimpleText> xSimpleText2(xSheetAnnotation2, uno::UNO_QUERY);
-        if (xSheetAnnotation1.is() && xSimpleText1.is() &&
-            xSheetAnnotation2.is() && xSimpleText2.is())
-        {
-            rtl::OUString sText1(xSimpleText1->getString());
-            rtl::OUString sText2(xSimpleText2->getString());
-            sal_Int32 nLength1(sText1.getLength());
-            sal_Int32 nLength2(sText2.getLength());
-            if (nLength1 && nLength2)
-                if (sText1 == sText2 &&
-                    xSheetAnnotation1->getAuthor() == xSheetAnnotation2->getAuthor() &&
-                    xSheetAnnotation1->getDate() == xSheetAnnotation2->getDate() &&
-                    xSheetAnnotation1->getIsVisible() == xSheetAnnotation2->getIsVisible())
-                    return sal_True;
-                else
-                    return sal_False;
-            else
-                if (nLength1 || nLength2)
-                    return sal_False;
-                else
-                    return sal_True;
-        }
-    }*/
-    return sal_False;
-}
+//UNUSED2008-05  sal_Bool ScXMLExport::IsAnnotationEqual(const uno::Reference<table::XCell>& /* xCell1 */,
+//UNUSED2008-05                                          const uno::Reference<table::XCell>& /* xCell2 */)
+//UNUSED2008-05  {
+//UNUSED2008-05      // no longer compareable, because the position and size and other attributes can also differ
+//UNUSED2008-05
+//UNUSED2008-05  /* uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor1(xCell1, uno::UNO_QUERY);
+//UNUSED2008-05      uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor2(xCell2, uno::UNO_QUERY);
+//UNUSED2008-05      if (xSheetAnnotationAnchor1.is() && xSheetAnnotationAnchor2.is())
+//UNUSED2008-05      {
+//UNUSED2008-05          uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation1(xSheetAnnotationAnchor1->getAnnotation());
+//UNUSED2008-05          uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation2(xSheetAnnotationAnchor2->getAnnotation());
+//UNUSED2008-05          uno::Reference<text::XSimpleText> xSimpleText1(xSheetAnnotation1, uno::UNO_QUERY);
+//UNUSED2008-05          uno::Reference<text::XSimpleText> xSimpleText2(xSheetAnnotation2, uno::UNO_QUERY);
+//UNUSED2008-05          if (xSheetAnnotation1.is() && xSimpleText1.is() &&
+//UNUSED2008-05              xSheetAnnotation2.is() && xSimpleText2.is())
+//UNUSED2008-05          {
+//UNUSED2008-05              rtl::OUString sText1(xSimpleText1->getString());
+//UNUSED2008-05              rtl::OUString sText2(xSimpleText2->getString());
+//UNUSED2008-05              sal_Int32 nLength1(sText1.getLength());
+//UNUSED2008-05              sal_Int32 nLength2(sText2.getLength());
+//UNUSED2008-05              if (nLength1 && nLength2)
+//UNUSED2008-05                  if (sText1 == sText2 &&
+//UNUSED2008-05                      xSheetAnnotation1->getAuthor() == xSheetAnnotation2->getAuthor() &&
+//UNUSED2008-05                      xSheetAnnotation1->getDate() == xSheetAnnotation2->getDate() &&
+//UNUSED2008-05                      xSheetAnnotation1->getIsVisible() == xSheetAnnotation2->getIsVisible())
+//UNUSED2008-05                      return sal_True;
+//UNUSED2008-05                  else
+//UNUSED2008-05                      return sal_False;
+//UNUSED2008-05              else
+//UNUSED2008-05                  if (nLength1 || nLength2)
+//UNUSED2008-05                      return sal_False;
+//UNUSED2008-05                  else
+//UNUSED2008-05                      return sal_True;
+//UNUSED2008-05          }
+//UNUSED2008-05      }*/
+//UNUSED2008-05      return sal_False;
+//UNUSED2008-05  }
 
 sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ddelink.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@ public:
                                             // von SvBaseLink ueberladen:
     virtual void    DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    void            NewData(SCSIZE nCols, SCSIZE nRows);
 
                                             // von SvtBroadcaster ueberladen:
     virtual void    ListenersGone();

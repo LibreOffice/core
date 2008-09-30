@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xltracer.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,15 +99,10 @@ public:
 
     /** Adds an attribute to be traced with the next Trace() call. */
     void                        AddAttribute( const ::rtl::OUString& rName, const ::rtl::OUString& rValue );
-    /** Adds an attribute to be traced with the next Trace() call. */
-    void                        AddAttribute( const ::rtl::OUString& rName, sal_Int32 nValue );
 
     /** Creates an element including all attributes set up to this call.
         @descr  Removes all attributes after the element is traced. */
     void                        Trace( const ::rtl::OUString& rElementID, const ::rtl::OUString& rMessage );
-    /** Creates an element including all attributes set up to this call.
-        @descr  Removes all attributes after the element is traced. */
-    void                        Trace( const ::rtl::OUString& rElementID, sal_Int32 nMessage );
 
     /** Calls Trace() with a known document properties problem. */
     void                        TraceLog( XclTracerId eProblem, sal_Int32 nValue = 0 );
@@ -125,24 +120,15 @@ public:
     void                        TraceDates(sal_uInt16 nNumFmt);
     void                        TraceBorderLineStyle(bool bBorderLineStyle);
     void                        TraceFillPattern(bool bFillPattern);
-    void                        TraceInvisibleGrid(bool bVisibleGrid);
     void                        TraceFormulaExtName();
     void                        TraceFormulaMissingArg();
     void                        TracePivotDataSource(bool bExternal);
     void                        TracePivotChartExists();
     void                        TraceChartUnKnownType();
-    void                        TraceChartTrendLines();
-    void                        TraceChartErrorBars();
     void                        TraceChartOnlySheet();
-    void                        TraceChartRange();
-    void                        TraceChartDSName();
     void                        TraceChartDataTable();
     void                        TraceChartLegendPosition();
-    void                        TraceChartTextFormatting();
     void                        TraceChartEmbeddedObj();
-    void                        TraceChartAxisAutoCross();
-    void                        TraceChartAxisManualCross();
-    void                        TraceChartInvalidXY();
     void                        TraceUnsupportedObjects();
     void                        TraceObjectNotPrintable();
     void                        TraceDVType(bool bType);

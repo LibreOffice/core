@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmatrix.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,8 +199,6 @@ public:
     void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex)
         { pMat[nIndex].fVal = fVal; }
-    void PutDoubleAndResetString( double fVal, SCSIZE nC, SCSIZE nR );
-    void PutDoubleAndResetString( double fVal, SCSIZE nIndex );
     void PutString( const String& rStr, SCSIZE nC, SCSIZE nR);
     void PutString( const String& rStr, SCSIZE nIndex);
     void PutEmpty( SCSIZE nC, SCSIZE nR);
@@ -217,8 +215,6 @@ public:
 
     void FillDouble( double fVal,
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
-    /// lower left triangle
-    void FillDoubleLowerLeft( double fVal, SCSIZE nC2 );
 
     /** May be used before obtaining the double value of an element to avoid
         passing its NAN around.
@@ -295,10 +291,6 @@ public:
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
-    /** Copy upper left of this matrix to mRes matrix.
-        This matrix's dimensions must be greater than the mRes matrix
-        dimensions. */
-    void MatCopyUpperLeft( ScMatrix& mRes) const;
 
     // Convert ScInterpreter::CompareMat values (-1,0,1) to boolean values
     void CompareEqual();

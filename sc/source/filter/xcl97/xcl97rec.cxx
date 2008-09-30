@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97rec.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.87.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -916,13 +916,6 @@ ExcBofW8::ExcBofW8()
 }
 
 
-// --- class ExcBofC8 ------------------------------------------------
-
-ExcBofC8::ExcBofC8()
-{
-    nDocType = 0x0020;
-}
-
 // --- class ExcBundlesheet8 -----------------------------------------
 
 ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB nTab ) :
@@ -966,45 +959,6 @@ sal_Size XclObproj::GetLen() const
 {
     return 0;
 }
-
-
-
-// --- class XclDConRef ----------------------------------------------
-
-XclDConRef::XclDConRef( const ScRange& rSrcR, const String& rWB ) :
-        aSourceRange( rSrcR )
-{
-    String  sTemp( ( sal_Unicode ) 0x02 );
-
-    sTemp += rWB;
-    pWorkbook = new XclExpString( sTemp );
-}
-
-XclDConRef::~XclDConRef()
-{
-    delete pWorkbook;
-}
-
-void XclDConRef::SaveCont( XclExpStream& rStrm )
-{
-    rStrm   << (UINT16) aSourceRange.aStart.Row()
-            << (UINT16) aSourceRange.aEnd.Row()
-            << (UINT8)  aSourceRange.aStart.Col()
-            << (UINT8)  aSourceRange.aEnd.Col()
-            << *pWorkbook
-            << (UINT8)  0x00;
-}
-
-UINT16 XclDConRef::GetNum() const
-{
-    return 0x0051;
-}
-
-sal_Size XclDConRef::GetLen() const
-{
-    return 7 + pWorkbook->GetSize();
-}
-
 
 
 // ---- class XclCodename --------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokstack.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,7 +167,7 @@ class TokenPool
         inline void                 operator >>( TokenStack& rStack );
         inline const TokenId        Store( void );
         const TokenId               Store( const double& rDouble );
-        const TokenId               StoreError( USHORT nError );
+//UNUSED2008-05  const TokenId               StoreError( USHORT nError );
 
                                     // nur fuer Range-Names
         const TokenId               Store( const UINT16 nIndex );
@@ -188,7 +188,7 @@ class TokenPool
         inline const SingleRefData* GetSRD( const TokenId& nId ) const;
         BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
-        const String*               GetString( const TokenId& nId ) const;
+//UNUSED2008-05  const String*               GetString( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 

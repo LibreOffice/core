@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printopt.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,9 +90,9 @@ inline int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 
 // -----------------------------------------------------------------------
 
-ScTpPrintItem::ScTpPrintItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
-{
-}
+//UNUSED2008-05  ScTpPrintItem::ScTpPrintItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScTpPrintItem::ScTpPrintItem( USHORT nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
@@ -207,11 +207,6 @@ void ScPrintCfg::Commit()
 void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
 {
     *(ScPrintOptions*)this = rNew;
-    SetModified();
-}
-
-void ScPrintCfg::OptionsChanged()
-{
     SetModified();
 }
 

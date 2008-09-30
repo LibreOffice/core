@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputhdl.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.77.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1333,14 +1333,6 @@ void ScInputHandler::StopInputWinEngine( BOOL bAll )
     pTopView = NULL;        // invalid now
 }
 
-void ScInputHandler::ActivateInputWindow( const String&     rText,
-                                          const ESelection& rSel )
-{
-    if ( pInputWin )
-        if ( !pInputWin->IsInputActive() )
-            pTopView = pInputWin->ActivateEdit( rText, rSel );
-}
-
 EditView* ScInputHandler::GetActiveView()
 {
     UpdateActiveView();
@@ -1674,12 +1666,6 @@ void ScInputHandler::SyncViews( EditView* pSourceView )
         aSel = pTopView->GetSelection();
         lcl_SetTopSelection( pTableView, aSel );
     }
-}
-
-void ScInputHandler::SetAllUpdateMode( BOOL bUpdate )
-{
-    ImplCreateEditEngine();
-    pEngine->SetUpdateMode( bUpdate );
 }
 
 IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )

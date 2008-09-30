@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapiuno.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.21.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,16 +224,6 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rN
     return NULL;    // nicht gefunden
 }
 
-String lcl_ColumnTitle( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab )
-{
-    //  Spaltennamen, wie sie in der Pivottabelle angezeigt werden
-    String aStr;
-    pDoc->GetString(nCol, nRow, nTab, aStr);
-    if (aStr.Len() == 0)
-        aStr = ColToAlpha( nCol );
-    return aStr;
-}
-
 String lcl_CreatePivotName( ScDocShell* pDocShell )
 {
     if (pDocShell)
@@ -388,38 +378,6 @@ rtl::OUString lcl_GetOriginalName( const uno::Reference<container::XNamed> xDim 
         xOriginal = xDim;
 
     return xOriginal->getName();
-}
-
-void lcl_SetSaveData(const uno::Reference<container::XIndexAccess>& xFields, ScDPSaveData* pSaveData)
-{
-    if (xFields.is() && pSaveData)
-    {
-        sal_Int32 nFieldsCount(xFields->getCount());
-        for (sal_Int32 i = 0; i < nFieldsCount; ++i)
-        {
-            uno::Any aDim = xFields->getByIndex(i);
-            uno::Reference<container::XNamed> xDim;
-            uno::Reference<beans::XPropertySet> xDimProps;
-            if ((aDim >>= xDim) && (aDim >>= xDimProps))
-            {
-                //rtl::OUString sName(xDim->getName());
-                rtl::OUString sName( lcl_GetOriginalName(xDim) );
-                ScDPSaveDimension* pDim = sName.getLength() ? pSaveData->GetDimensionByName(sName) : 0;
-                if (pDim)
-                {
-                    uno::Any aAny = xDimProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
-                    sheet::DataPilotFieldOrientation eOrient;
-                    if (aAny >>= eOrient)
-                        pDim->SetOrientation( sal::static_int_cast<USHORT>( eOrient ) );
-
-                    aAny = xDimProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FUNCTION)));
-                    sheet::GeneralFunction eFunc;
-                    if (aAny >>= eFunc)
-                        pDim->SetFunction( sal::static_int_cast<USHORT>( eFunc ) );
-                }
-            }
-        }
-    }
 }
 
 void SAL_CALL ScDataPilotTablesObj::insertNewByName( const rtl::OUString& aNewName,

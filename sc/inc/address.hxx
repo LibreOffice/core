@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: address.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.17.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -330,9 +330,6 @@ public:
 
     inline size_t hash() const;
 
-    // moved from ScTripel
-    /// "(1,2,3)"
-    String GetText() const;
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
     String GetColRowString( bool bAbsolute = FALSE,
                             const Details& rDetails = detailsOOOa1) const;
@@ -475,7 +472,6 @@ public:
     // The document for the maximum defined sheet number
     bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     void Justify();
-    void ExtendOne();
     void ExtendTo( const ScRange& rRange );
     bool Intersects( const ScRange& ) const;    // do two ranges intersect?
     inline bool operator==( const ScRange& r ) const;

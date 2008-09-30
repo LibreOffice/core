@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olinetab.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,9 +54,6 @@ public:
                             ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize,
                                                 BOOL bNewHidden = FALSE );
                             ScOutlineEntry( const ScOutlineEntry& rEntry );
-                            ScOutlineEntry( SvStream& rStream, ScMultipleReadHeader& rHdr );
-
-    void                    Store( SvStream& rStream, ScMultipleWriteHeader& rHdr );
 
     virtual DataObject*     Clone() const;
 
@@ -135,9 +132,6 @@ public:
                                 BOOL bShow,
                                 const ScBitMaskCompressedArray< SCCOLROW, BYTE>& rHiddenFlags );
 
-    void                    Load( SvStream& rStream );
-    void                    Store( SvStream& rStream );
-
     void                    RemoveAll();
 };
 
@@ -163,9 +157,6 @@ public:
     BOOL                    TestInsertRow( SCSIZE nSize );
     void                    InsertRow( SCROW nStartRow, SCSIZE nSize );
     BOOL                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
-
-    void                    Load( SvStream& rStream );
-    void                    Store( SvStream& rStream );
 };
 
 

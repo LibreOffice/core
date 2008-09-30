@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scdll.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,32 +130,31 @@
 
 //------------------------------------------------------------------
 
-//  filter detection can't use ScFilterOptions (in sc-dll),
-//  so access to wk3 flag must be implemented here again
-
-class ScLibOptions : public utl::ConfigItem
-{
-    BOOL        bWK3Flag;
-
-public:
-                ScLibOptions();
-    BOOL        GetWK3Flag() const          { return bWK3Flag; }
-};
-
-#define CFGPATH_LIBFILTER       "Office.Calc/Filter/Import/Lotus123"
-#define ENTRYSTR_WK3            "WK3"
-
-ScLibOptions::ScLibOptions() :
-    ConfigItem( rtl::OUString::createFromAscii( CFGPATH_LIBFILTER ) ),
-    bWK3Flag( FALSE )
-{
-    com::sun::star::uno::Sequence<rtl::OUString> aNames(1);
-    aNames[0] = rtl::OUString::createFromAscii( ENTRYSTR_WK3 );
-    com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues = GetProperties(aNames);
-    if ( aValues.getLength() == 1 && aValues[0].hasValue() )
-        bWK3Flag = comphelper::getBOOL( aValues[0] );
-}
-
+//UNUSED2008-05  // filter detection can't use ScFilterOptions (in sc-dll),
+//UNUSED2008-05  // so access to wk3 flag must be implemented here again
+//UNUSED2008-05
+//UNUSED2008-05  class ScLibOptions : public utl::ConfigItem
+//UNUSED2008-05  {
+//UNUSED2008-05      BOOL        bWK3Flag;
+//UNUSED2008-05
+//UNUSED2008-05  public:
+//UNUSED2008-05                  ScLibOptions();
+//UNUSED2008-05      BOOL        GetWK3Flag() const          { return bWK3Flag; }
+//UNUSED2008-05  };
+//UNUSED2008-05
+//UNUSED2008-05  #define CFGPATH_LIBFILTER      "Office.Calc/Filter/Import/Lotus123"
+//UNUSED2008-05  #define ENTRYSTR_WK3           "WK3"
+//UNUSED2008-05
+//UNUSED2008-05  ScLibOptions::ScLibOptions() :
+//UNUSED2008-05      ConfigItem( rtl::OUString::createFromAscii( CFGPATH_LIBFILTER ) ),
+//UNUSED2008-05      bWK3Flag( FALSE )
+//UNUSED2008-05  {
+//UNUSED2008-05      com::sun::star::uno::Sequence<rtl::OUString> aNames(1);
+//UNUSED2008-05      aNames[0] = rtl::OUString::createFromAscii( ENTRYSTR_WK3 );
+//UNUSED2008-05      com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues = GetProperties(aNames);
+//UNUSED2008-05      if ( aValues.getLength() == 1 && aValues[0].hasValue() )
+//UNUSED2008-05          bWK3Flag = comphelper::getBOOL( aValues[0] );
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------
 
@@ -366,51 +365,51 @@ void ScDLL::Exit()
 
 #define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
 
-void ScDLL::FillStatusBar(StatusBar &rStatusBar)
-{
-    // Dokumentposition (Tabelle x / y)
-    rStatusBar.InsertItem( SID_STATUS_DOCPOS,
-                            TEXT_WIDTH( String().Fill( 10, 'X' ) ),
-                            SIB_LEFT|SIB_AUTOSIZE );
-
-    // Seitenvorlage
-    rStatusBar.InsertItem( SID_STATUS_PAGESTYLE,
-                            TEXT_WIDTH( String().Fill( 15, 'X' ) ),
-                            SIB_LEFT|SIB_AUTOSIZE );
-
-    // Ma"sstab
-    rStatusBar.InsertItem(  SID_ATTR_ZOOM,
-                            SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-
-    // Einfuege-/Ueberschreibmodus
-    rStatusBar.InsertItem( SID_ATTR_INSERT,
-                            SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-
-    // Selektionsmodus
-    rStatusBar.InsertItem( SID_STATUS_SELMODE,
-                            SvxSelectionModeControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-
-    // Dokument geaendert
-    rStatusBar.InsertItem( SID_DOC_MODIFIED,
-                            SvxModifyControl::GetDefItemWidth(rStatusBar));
-
-    // signatures
-    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-
-    // Mail
-    rStatusBar.InsertItem( SID_MAIL_NOTIFY,
-                            TEXT_WIDTH( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Mail")) ),
-                            SIB_CENTER );
-
-    // den aktuellen Kontext anzeigen Uhrzeit / FramePos / TabellenInfo / Errors
-    rStatusBar.InsertItem( SID_ATTR_SIZE,
-                            SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
-}
+//UNUSED2008-05  void ScDLL::FillStatusBar(StatusBar &rStatusBar)
+//UNUSED2008-05  {
+//UNUSED2008-05      // Dokumentposition (Tabelle x / y)
+//UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_DOCPOS,
+//UNUSED2008-05                              TEXT_WIDTH( String().Fill( 10, 'X' ) ),
+//UNUSED2008-05                              SIB_LEFT|SIB_AUTOSIZE );
+//UNUSED2008-05
+//UNUSED2008-05      // Seitenvorlage
+//UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_PAGESTYLE,
+//UNUSED2008-05                              TEXT_WIDTH( String().Fill( 15, 'X' ) ),
+//UNUSED2008-05                              SIB_LEFT|SIB_AUTOSIZE );
+//UNUSED2008-05
+//UNUSED2008-05      // Ma"sstab
+//UNUSED2008-05      rStatusBar.InsertItem(  SID_ATTR_ZOOM,
+//UNUSED2008-05                              SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
+//UNUSED2008-05                              SIB_CENTER );
+//UNUSED2008-05
+//UNUSED2008-05      // Einfuege-/Ueberschreibmodus
+//UNUSED2008-05      rStatusBar.InsertItem( SID_ATTR_INSERT,
+//UNUSED2008-05                              SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
+//UNUSED2008-05                              SIB_CENTER );
+//UNUSED2008-05
+//UNUSED2008-05      // Selektionsmodus
+//UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_SELMODE,
+//UNUSED2008-05                              SvxSelectionModeControl::GetDefItemWidth(rStatusBar),
+//UNUSED2008-05                              SIB_CENTER );
+//UNUSED2008-05
+//UNUSED2008-05      // Dokument geaendert
+//UNUSED2008-05      rStatusBar.InsertItem( SID_DOC_MODIFIED,
+//UNUSED2008-05                              SvxModifyControl::GetDefItemWidth(rStatusBar));
+//UNUSED2008-05
+//UNUSED2008-05      // signatures
+//UNUSED2008-05      rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+//UNUSED2008-05      rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+//UNUSED2008-05
+//UNUSED2008-05      // Mail
+//UNUSED2008-05      rStatusBar.InsertItem( SID_MAIL_NOTIFY,
+//UNUSED2008-05                              TEXT_WIDTH( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Mail")) ),
+//UNUSED2008-05                              SIB_CENTER );
+//UNUSED2008-05
+//UNUSED2008-05      // den aktuellen Kontext anzeigen Uhrzeit / FramePos / TabellenInfo / Errors
+//UNUSED2008-05      rStatusBar.InsertItem( SID_ATTR_SIZE,
+//UNUSED2008-05                              SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
+//UNUSED2008-05                              SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
+//UNUSED2008-05  }
 
 #undef TEXT_WIDTH
 

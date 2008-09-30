@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputopt.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,8 +81,6 @@ public:
     BOOL        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
 
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
-    friend SvStream&        operator>>  ( SvStream& rStream, ScInputOptions& rOpt );
-    friend SvStream&        operator<<  ( SvStream& rStream, const ScInputOptions& rOpt );
 };
 
 

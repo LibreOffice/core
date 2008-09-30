@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namebuff.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.15.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,8 +118,6 @@ public:
     inline UINT16           GetLastIndex( void );
     inline void             SetBase( UINT16 nNewBase = 0 );
     void                    operator <<( const String& rNewString );
-    void                    Reset( void );
-    BOOL                    Find( const sal_Char* pRefName, UINT16& rIndex );
 };
 
 //#94039# prevent empty rootdata
@@ -307,7 +305,6 @@ public:
     BOOL            GetScTabIndex( UINT16 nExcSheetIndex, UINT16& rIn_LastTab_Out_ScIndex );
     BOOL            IsLink( const UINT16 nExcSheetIndex ) const;
     BOOL            GetLink( const UINT16 nExcSheetIndex, String &rAppl, String &rDoc ) const;
-    BOOL            IsExternal( UINT16 nExcSheetIndex ) const;
 
     void            Reset( void );
 };
@@ -329,8 +326,6 @@ struct ExtName
     inline          ExtName( const String& r ) : aName( r ), nStorageId( 0 ) {}
 
     BOOL            IsDDE( void ) const;
-    BOOL            IsOLE( void ) const;
-    BOOL            IsName( void ) const;
 };
 
 

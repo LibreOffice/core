@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: groupdlg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,6 @@ public:
                         BOOL    bRows    = TRUE  );
             ~ScGroupDlg();
 
-    BOOL GetRowsChecked() const;
     BOOL GetColsChecked() const;
 
 private:

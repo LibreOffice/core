@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbashapes.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,8 @@ protected:
     css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, css::uno::Any aRange ) throw (css::uno::RuntimeException);
     css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, css::uno::Any aRange ) throw (css::uno::RuntimeException);
     rtl::OUString createName( rtl::OUString sName );
-    css::awt::Point calculateTopLeftMargin( css::uno::Reference< oo::vba::XHelperInterface > xDocument );
+    //TODO helperapi using a writer document
+    //css::awt::Point calculateTopLeftMargin( css::uno::Reference< oo::vba::XHelperInterface > xDocument );
 
 public:
     ScVbaShapes( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes );

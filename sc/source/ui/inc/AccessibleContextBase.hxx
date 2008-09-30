@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleContextBase.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,9 +303,6 @@ public:
         ChangeName();
 
 protected:
-    /// Calls all Listener to tell they that the object is now DEFUNC
-    void CommitDefunc() const;
-
     /// Calls all FocusListener to tell they that the focus is gained.
     void CommitFocusGained() const;
 

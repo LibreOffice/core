@@ -67,7 +67,6 @@ protected:
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
-                    ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable );
     virtual         ~ScDrawView();
 
     virtual void    MarkListHasChanged();
@@ -112,7 +111,7 @@ public:
     void            SetMarkedOriginalSize();
 
     BOOL            SelectObject( const String& rName );
-    String          GetSelectedChartName() const;
+//UNUSED2008-05  String         GetSelectedChartName() const;
     BOOL            HasMarkedControl() const;
 
     FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);

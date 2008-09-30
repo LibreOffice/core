@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapitype.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,11 +67,6 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnabl
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
-}
-
-BOOL ScDataPilotSourceTypeDlg::IsSelection() const
-{
-    return aBtnSelection.IsChecked();
 }
 
 BOOL ScDataPilotSourceTypeDlg::IsDatabase() const

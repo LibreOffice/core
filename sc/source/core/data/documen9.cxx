@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen9.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.42.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,13 +78,6 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
-
-void ScDocument::SetLinkManager( SvxLinkManager* pNew )
-{
-    pLinkManager = pNew;
-    if (pDrawLayer)
-        pDrawLayer->SetLinkManager( pNew );
-}
 
 SfxBroadcaster* ScDocument::GetDrawBroadcaster()
 {
@@ -214,20 +207,6 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
                 pOldObject = aIter.Next();
             }
-        }
-    }
-}
-
-void ScDocument::ClearDrawPage(SCTAB nTab)
-{
-    if (pDrawLayer)
-    {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        if (pPage)
-            pPage->Clear();
-        else
-        {
-            DBG_ERROR("ScDocument::DeleteDrawObjects: pPage ???");
         }
     }
 }
@@ -381,19 +360,6 @@ void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
             pDrawLayer->DeleteObjectsInArea( nTab, nCol1, nRow1, nCol2, nRow2 );
 }
 
-void ScDocument::DeleteObjects( SCTAB nTab )
-{
-    if (!pDrawLayer)
-        return;
-
-    if ( ValidTab(nTab) && pTab[nTab] )
-        pDrawLayer->DeleteObjects( nTab );
-    else
-    {
-        DBG_ERROR("DeleteObjects: falsche Tabelle");
-    }
-}
-
 void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
 {
     if (!pDrawLayer)
@@ -445,30 +411,6 @@ BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
     return FALSE;
 }
 
-
-void ScDocument::StopAnimations( SCTAB nTab, Window* /* pWin */ )
-{
-    if (!pDrawLayer)
-        return;
-    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-    if (!pPage)
-        return;
-
-    SdrObjListIter aIter( *pPage, IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject)
-    {
-        if (pObject->ISA(SdrGrafObj))
-        {
-            SdrGrafObj* pGrafObj = (SdrGrafObj*)pObject;
-            if ( pGrafObj->IsAnimated() )
-//!             pGrafObj->StopAnimation( pWin );
-                pGrafObj->StopAnimation();
-        }
-        pObject = aIter.Next();
-    }
-}
 
 void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 {
@@ -523,57 +465,57 @@ BOOL ScDocument::HasNoteObject( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     return bFound;
 }
 
-void ScDocument::RefreshNoteFlags()
-{
-    if (!pDrawLayer)
-        return;
-
-    BOOL bAnyIntObj = FALSE;
-    SCTAB nTab;
-    ScPostIt aNote(this);
-    for (nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
-    {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
-        if (pPage)
-        {
-            SdrObjListIter aIter( *pPage, IM_FLAT );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
-            {
-                if ( pObject->GetLayer() == SC_LAYER_INTERN )
-                {
-                    bAnyIntObj = TRUE;  // for all internal objects, including detective
-
-                    if ( pObject->ISA( SdrCaptionObj ) )
-                    {
-                        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-                        if ( pData )
-                        {
-                            if ( GetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote))
-                                if ( !aNote.IsShown() )
-                                {
-                                    aNote.SetShown(TRUE);
-                                    SetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote);
-                                }
-                        }
-                    }
-                }
-                pObject = aIter.Next();
-            }
-        }
-    }
-
-    if (bAnyIntObj)
-    {
-        //  update attributes for all note objects and the colors of detective objects
-        //  (we don't know with which settings the file was created)
-
-        ScDetectiveFunc aFunc( this, 0 );
-        aFunc.UpdateAllComments();
-        aFunc.UpdateAllArrowColors();
-    }
-}
+//UNUSED2008-05  void ScDocument::RefreshNoteFlags()
+//UNUSED2008-05  {
+//UNUSED2008-05      if (!pDrawLayer)
+//UNUSED2008-05          return;
+//UNUSED2008-05
+//UNUSED2008-05      BOOL bAnyIntObj = FALSE;
+//UNUSED2008-05      SCTAB nTab;
+//UNUSED2008-05      ScPostIt aNote(this);
+//UNUSED2008-05      for (nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+//UNUSED2008-05      {
+//UNUSED2008-05          SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+//UNUSED2008-05          DBG_ASSERT(pPage,"Page ?");
+//UNUSED2008-05          if (pPage)
+//UNUSED2008-05          {
+//UNUSED2008-05              SdrObjListIter aIter( *pPage, IM_FLAT );
+//UNUSED2008-05              SdrObject* pObject = aIter.Next();
+//UNUSED2008-05              while (pObject)
+//UNUSED2008-05              {
+//UNUSED2008-05                  if ( pObject->GetLayer() == SC_LAYER_INTERN )
+//UNUSED2008-05                  {
+//UNUSED2008-05                      bAnyIntObj = TRUE;  // for all internal objects, including detective
+//UNUSED2008-05
+//UNUSED2008-05                      if ( pObject->ISA( SdrCaptionObj ) )
+//UNUSED2008-05                      {
+//UNUSED2008-05                          ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+//UNUSED2008-05                          if ( pData )
+//UNUSED2008-05                          {
+//UNUSED2008-05                              if ( GetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote))
+//UNUSED2008-05                                  if ( !aNote.IsShown() )
+//UNUSED2008-05                                  {
+//UNUSED2008-05                                      aNote.SetShown(TRUE);
+//UNUSED2008-05                                      SetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote);
+//UNUSED2008-05                                  }
+//UNUSED2008-05                          }
+//UNUSED2008-05                      }
+//UNUSED2008-05                  }
+//UNUSED2008-05                  pObject = aIter.Next();
+//UNUSED2008-05              }
+//UNUSED2008-05          }
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      if (bAnyIntObj)
+//UNUSED2008-05      {
+//UNUSED2008-05          //  update attributes for all note objects and the colors of detective objects
+//UNUSED2008-05          //  (we don't know with which settings the file was created)
+//UNUSED2008-05
+//UNUSED2008-05          ScDetectiveFunc aFunc( this, 0 );
+//UNUSED2008-05          aFunc.UpdateAllComments();
+//UNUSED2008-05          aFunc.UpdateAllArrowColors();
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 BOOL ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
 {

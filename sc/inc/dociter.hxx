@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dociter.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,10 +105,11 @@ private:
 
     BOOL            GetThis(double& rValue, USHORT& rErr);
 public:
-                    ScValueIterator(ScDocument* pDocument,
-                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
-                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
-                                    BOOL bSTotal = FALSE, BOOL bTextAsZero = FALSE);
+//UNUSED2008-05  ScValueIterator(ScDocument* pDocument,
+//UNUSED2008-05                  SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
+//UNUSED2008-05                  SCCOL nECol, SCROW nERow, SCTAB nETab,
+//UNUSED2008-05                  BOOL bSTotal = FALSE, BOOL bTextAsZero = FALSE);
+
                     ScValueIterator(ScDocument* pDocument,
                                     const ScRange& rRange, BOOL bSTotal = FALSE,
                                     BOOL bTextAsZero = FALSE );

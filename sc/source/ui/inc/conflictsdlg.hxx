@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conflictsdlg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,7 @@ private:
     static void                     Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap );
 
 public:
-    static bool                     HasSharedAction( ScConflictsList& rConflictsList, ULONG nSharedAction );
+//UNUSED2008-05  static bool                     HasSharedAction( ScConflictsList& rConflictsList, ULONG nSharedAction );
     static bool                     HasOwnAction( ScConflictsList& rConflictsList, ULONG nOwnAction );
 
     static ScConflictsListEntry*    GetSharedActionEntry( ScConflictsList& rConflictsList, ULONG nSharedAction );
@@ -151,11 +151,11 @@ class ScConflictsListBox: public SvxRedlinTable
 private:
 
 public:
-                        ScConflictsListBox( Window* pParent, WinBits nBits = WB_BORDER );
+//UNUSED2008-05         ScConflictsListBox( Window* pParent, WinBits nBits = WB_BORDER );
                         ScConflictsListBox( Window* pParent, const ResId& rResId );
                         ~ScConflictsListBox();
 
-    ULONG               GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const;
+//UNUSED2008-05  ULONG               GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const;
 };
 
 //=============================================================================

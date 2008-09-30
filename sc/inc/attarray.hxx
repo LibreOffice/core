@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attarray.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,8 +166,8 @@ public:
 
     BOOL    IsEmpty() const;
 
-    SCROW   GetFirstEntryPos() const;
-    SCROW   GetLastEntryPos( BOOL bIncludeBottom ) const;
+//UNUSED2008-05  SCROW  GetFirstEntryPos() const;
+//UNUSED2008-05  SCROW  GetLastEntryPos( BOOL bIncludeBottom ) const;
 
     BOOL    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     BOOL    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
@@ -188,9 +188,7 @@ public:
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 
-    void    Save( SvStream& rStream ) const;
-    void    Load( SvStream& rStream );
-    void    ConvertFontsAfterLoad();     // old binary file format
+//UNUSED2008-05  void    ConvertFontsAfterLoad();     // old binary file format
 };
 
 

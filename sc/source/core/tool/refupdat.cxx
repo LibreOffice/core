@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refupdat.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -939,6 +939,7 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCRO
     return eRet;
 }
 
+#if OLD_PIVOT_IMPLEMENTATION
 ScRefUpdateRes ScRefUpdate::DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                     ScRange& rRef )
 {
@@ -969,6 +970,6 @@ ScRefUpdateRes ScRefUpdate::DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nG
 
     return eRet;
 }
-
+#endif
 
 

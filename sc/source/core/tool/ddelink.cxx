@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ddelink.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,11 +234,6 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
         aHint.SetDdeLink( aAppl, aTopic, aItem, nMode );
         pDoc->BroadcastUno( aHint );
     }
-}
-
-void ScDdeLink::NewData(SCSIZE nCols, SCSIZE nRows)
-{
-    pResult = new ScMatrix( nCols, nRows );
 }
 
 void ScDdeLink::ResetValue()

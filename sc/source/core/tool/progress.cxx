@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: progress.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,26 +142,6 @@ ScProgress::~ScProgress()
         bGlobalNoUserBreak = TRUE;
     }
 }
-
-
-// static
-
-void ScProgress::SetAllowInterpret( BOOL bAllow )
-{   // Grundzustand: Allow, Dummy gesetzt, pOld==NULL
-    if ( !bAllow && bAllowInterpretProgress )
-    {   // vorherigen/Dummy merken und Dummy setzen
-        pOldInterpretProgress = pInterpretProgress;
-        pInterpretProgress = &theDummyInterpretProgress;
-        bAllowInterpretProgress = FALSE;
-    }
-    else if ( bAllow && !bAllowInterpretProgress )
-    {   // Dummy weg und vorherigen/Dummy setzen
-        pInterpretProgress = pOldInterpretProgress;
-        pOldInterpretProgress = NULL;
-        bAllowInterpretProgress = TRUE;
-    }
-}
-
 
 // static
 

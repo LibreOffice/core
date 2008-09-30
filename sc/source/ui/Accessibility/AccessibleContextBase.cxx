@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleContextBase.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -580,16 +580,6 @@ void ScAccessibleContextBase::ChangeName()
     getAccessibleName(); // create the new name
 
     aEvent.NewValue <<= msName;
-
-    CommitChange(aEvent);
-}
-
-void ScAccessibleContextBase::CommitDefunc() const
-{
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
-    aEvent.NewValue <<= AccessibleStateType::DEFUNC;
 
     CommitChange(aEvent);
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: userlist.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,18 +84,6 @@ __EXPORT ScUserListData::~ScUserListData()
 {
     delete[] pSubStrings;
     delete[] pUpperSub;
-}
-
-ScUserListData::ScUserListData( SvStream& rStream )
-{
-    rStream.ReadByteString( aStr, rStream.GetStreamCharSet() );
-    InitTokens();
-}
-
-BOOL ScUserListData::Store( SvStream& rStream ) const
-{
-    rStream.WriteByteString( aStr, rStream.GetStreamCharSet() );
-    return TRUE;
 }
 
 void ScUserListData::SetString( const String& rStr )
@@ -259,34 +247,6 @@ ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
                 Insert( new ScUserListData( sMonthLong ));
         }
     }
-}
-
-BOOL ScUserList::Load( SvStream& rStream )
-{
-    BOOL    bSuccess = TRUE;
-    USHORT  nNewCount;
-
-    while( nCount > 0 )
-        AtFree(0);                  // alles loeschen
-
-    rStream >> nNewCount;
-
-    for ( USHORT i=0; i<nNewCount && bSuccess; i++ )
-        Insert( new ScUserListData( rStream ) );
-
-    return bSuccess;
-}
-
-BOOL ScUserList::Store( SvStream& rStream ) const
-{
-    BOOL bSuccess = TRUE;
-
-    rStream << nCount;
-
-    for ( USHORT i=0; i<nCount && bSuccess; i++ )
-        bSuccess = ((const ScUserListData*)At(i))->Store( rStream );
-
-    return bSuccess;
 }
 
 DataObject* ScUserList::Clone() const

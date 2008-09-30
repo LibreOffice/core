@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangelst.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@ public:
     virtual         ~ScRangeList();
     ScRangeList&    operator=(const ScRangeList& rList);
     void            RemoveAll();
-    ScRangeList*    Clone() const;
     void            Append( const ScRange& rRange )
                     {
                         ScRangePtr pR = new ScRange( rRange );
@@ -68,9 +67,6 @@ public:
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     ScRange*        Find( const ScAddress& ) const;
-    ScRange*        Find( const ScRange& ) const;
-    BOOL            Load( SvStream&, USHORT nVer );
-    BOOL            Store( SvStream& ) const;
     BOOL            operator==( const ScRangeList& ) const;
     BOOL            Intersects( const ScRange& ) const;
     BOOL            In( const ScRange& ) const;
@@ -102,8 +98,6 @@ public:
     void            DeleteOnTab( SCTAB nTab );
     ScRangePair*    Find( const ScAddress& ) const;
     ScRangePair*    Find( const ScRange& ) const;
-    BOOL            Load( SvStream&, USHORT nVer );
-    BOOL            Store( SvStream& ) const;
     ScRangePair**   CreateNameSortedArray( ULONG& nCount, ScDocument* ) const;
     BOOL            operator==( const ScRangePairList& ) const;
 };

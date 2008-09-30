@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docpool.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,6 @@ public:
     virtual const SfxPoolItem&  Put( const SfxPoolItem&, USHORT nWhich = 0 );
     virtual void                Remove( const SfxPoolItem& );
     static void                 CheckRef( const SfxPoolItem& );
-    void                        MyLoadCompleted();
 
     void StyleDeleted( ScStyleSheet* pStyle );      // Loeschen von Vorlagen im Organizer
     virtual SfxItemPresentation     GetPresentation(

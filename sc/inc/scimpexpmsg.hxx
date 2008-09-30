@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scimpexpmsg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,74 +35,73 @@
 #include <tools/string.hxx>
 #include <tools/solar.h>
 
-enum ScImpExpMsg
-{
-    SC_IMPEXPMSG_UNKNOWN
-};
-
-
-class String;
-
-
-class ScImpExpLogMsg
-{
-private:
-    ScImpExpMsg             eId;
-    String*                 pPos;
-    String*                 pHint;
-protected:
-public:
-                            ScImpExpLogMsg( ScImpExpMsg eId );
-                            ScImpExpLogMsg( ScImpExpMsg eId, const String& rPosition );
-                            ScImpExpLogMsg( ScImpExpMsg eId, const String& rPosition, const String& rAdditionalHint );
-                            ScImpExpLogMsg( const ScImpExpLogMsg& rCpy );
-    virtual                 ~ScImpExpLogMsg();
-
-    ScImpExpLogMsg&         operator =( const ScImpExpLogMsg& rCpy );
-
-    void                    Set( ScImpExpMsg eId, const String* pPos = NULL, const String* pHint = NULL );
-
-    inline ScImpExpMsg      GetId( void ) const;
-    inline const String*    GetPos( void ) const;
-    inline const String*    GetHint( void ) const;
-
-    static String           GetMsg( ScImpExpMsg eId );
-    inline String           GetMsg( void ) const;
-};
-
-
-
-
-inline ScImpExpLogMsg& ScImpExpLogMsg::operator =( const ScImpExpLogMsg& r )
-{
-    Set( r.eId, r.pPos, r.pHint );
-    return *this;
-}
-
-
-inline ScImpExpMsg ScImpExpLogMsg::GetId( void ) const
-{
-    return eId;
-}
-
-
-inline const String* ScImpExpLogMsg::GetPos( void ) const
-{
-    return pPos;
-}
-
-
-inline const String* ScImpExpLogMsg::GetHint( void ) const
-{
-    return pHint;
-}
-
-
-inline String ScImpExpLogMsg::GetMsg( void ) const
-{
-    return GetMsg( eId );
-}
-
+//UNUSED2008-05  enum ScImpExpMsg
+//UNUSED2008-05  {
+//UNUSED2008-05      SC_IMPEXPMSG_UNKNOWN
+//UNUSED2008-05  };
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  class String;
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  class ScImpExpLogMsg
+//UNUSED2008-05  {
+//UNUSED2008-05  private:
+//UNUSED2008-05      ScImpExpMsg             eId;
+//UNUSED2008-05      String*                 pPos;
+//UNUSED2008-05      String*                 pHint;
+//UNUSED2008-05  protected:
+//UNUSED2008-05  public:
+//UNUSED2008-05                              ScImpExpLogMsg( ScImpExpMsg eId );
+//UNUSED2008-05                              ScImpExpLogMsg( ScImpExpMsg eId, const String& rPosition );
+//UNUSED2008-05                              ScImpExpLogMsg( ScImpExpMsg eId, const String& rPosition, const String& rAdditionalHint );
+//UNUSED2008-05                              ScImpExpLogMsg( const ScImpExpLogMsg& rCpy );
+//UNUSED2008-05      virtual                 ~ScImpExpLogMsg();
+//UNUSED2008-05
+//UNUSED2008-05      ScImpExpLogMsg&         operator =( const ScImpExpLogMsg& rCpy );
+//UNUSED2008-05
+//UNUSED2008-05      void                    Set( ScImpExpMsg eId, const String* pPos = NULL, const String* pHint = NULL );
+//UNUSED2008-05
+//UNUSED2008-05      inline ScImpExpMsg      GetId( void ) const;
+//UNUSED2008-05      inline const String*    GetPos( void ) const;
+//UNUSED2008-05      inline const String*    GetHint( void ) const;
+//UNUSED2008-05
+//UNUSED2008-05      static String           GetMsg( ScImpExpMsg eId );
+//UNUSED2008-05      inline String           GetMsg( void ) const;
+//UNUSED2008-05  };
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  inline ScImpExpLogMsg& ScImpExpLogMsg::operator =( const ScImpExpLogMsg& r )
+//UNUSED2008-05  {
+//UNUSED2008-05      Set( r.eId, r.pPos, r.pHint );
+//UNUSED2008-05      return *this;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  inline ScImpExpMsg ScImpExpLogMsg::GetId( void ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return eId;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  inline const String* ScImpExpLogMsg::GetPos( void ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return pPos;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  inline const String* ScImpExpLogMsg::GetHint( void ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return pHint;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  inline String ScImpExpLogMsg::GetMsg( void ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      return GetMsg( eId );
+//UNUSED2008-05  }
 
 #endif
 

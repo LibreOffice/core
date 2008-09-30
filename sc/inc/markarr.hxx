@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: markarr.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@ public:
             ~ScMarkArray();
     void    Reset( BOOL bMarked = FALSE );
     BOOL    GetMark( SCROW nRow ) const;
-    void    SetMark( SCROW nRow, BOOL bMarked );
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked );
     BOOL    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     BOOL    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
@@ -67,8 +66,6 @@ public:
 
     BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
     void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
-    void    SwapCol(ScMarkArray& rMarkArray);
-    void    MoveTo(SCROW nStartRow, SCROW nEndRow, ScMarkArray& rMarkArray);
 
     /// Including current row, may return -1 if bUp and not found
     SCsROW  GetNextMarked( SCsROW nRow, BOOL bUp ) const;

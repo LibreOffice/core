@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbahelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,6 @@ namespace org
         void implnPaste();
         void implnCut();
         void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose);
-        bool isRangeShortCut( const ::rtl::OUString& sParam );
         css::uno::Reference< css::frame::XModel >
             getCurrentDocument() throw (css::uno::RuntimeException);
         ScTabViewShell* getBestViewShell( css::uno::Reference< css::frame::XModel>& xModel ) ;

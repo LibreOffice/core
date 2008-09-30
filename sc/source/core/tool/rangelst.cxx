@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangelst.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -249,53 +249,6 @@ BOOL ScRangeList::operator==( const ScRangeList& r ) const
     return TRUE;
 }
 
-
-BOOL ScRangeList::Store( SvStream& rStream ) const
-{
-//    BOOL bOk = TRUE;
-    ULONG nListCount = Count();
-    ULONG nBytes = sizeof(UINT32) + nListCount * sizeof(ScRange);
-    ScWriteHeader aHdr( rStream, nBytes );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << (UINT32) nCount;
-    for ( ULONG j = 0; j < nCount && bOk; j++ )
-    {
-        rStream << *GetObject( j );
-        if( rStream.GetError() != SVSTREAM_OK )
-            bOk = FALSE;
-    }
-    return bOk;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-
-BOOL ScRangeList::Load( SvStream& rStream, USHORT /* nVer */ )
-{
-//    BOOL bOk = TRUE;
-    ScReadHeader aHdr( rStream );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    ScRange aRange;
-    UINT32 n;
-    rStream >> n;
-    ULONG nCount = n;
-    for ( ULONG j = 0; j < nCount && bOk; j++ )
-    {
-        rStream >> aRange;
-        Append( aRange );
-        if( rStream.GetError() != SVSTREAM_OK )
-            bOk = FALSE;
-    }
-    return bOk;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-
 BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
@@ -348,19 +301,6 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 }
 
 
-ScRange* ScRangeList::Find( const ScRange& rRange ) const
-{
-    ULONG nListCount = Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
-    {
-        ScRange* pR = GetObject( j );
-        if ( *pR == rRange )
-            return pR;
-    }
-    return NULL;
-}
-
-
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
     ScRangeListBase(),
     SvRefBase()
@@ -368,12 +308,6 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
     ULONG nListCount = rList.Count();
     for ( ULONG j = 0; j < nListCount; j++ )
         Append( *rList.GetObject( j ) );
-}
-
-
-ScRangeList* ScRangeList::Clone() const
-{
-    return new ScRangeList( *this );
 }
 
 
@@ -559,74 +493,6 @@ BOOL ScRangePairList::operator==( const ScRangePairList& r ) const
             return FALSE;           // auch andere Reihenfolge ist ungleich
     }
     return TRUE;
-}
-
-
-BOOL ScRangePairList::Store( SvStream& /* rStream */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    BOOL bOk = TRUE;
-    ULONG nCount = Count();
-    ULONG nBytes = sizeof(UINT32) + nCount * sizeof(ScRangePair);
-    ScWriteHeader aHdr( rStream, nBytes );
-    rStream << (UINT32) nCount;
-    for ( ULONG j = 0; j < nCount && bOk; j++ )
-    {
-        rStream << *GetObject( j );
-        if( rStream.GetError() != SVSTREAM_OK )
-            bOk = FALSE;
-    }
-    return bOk;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-
-BOOL ScRangePairList::Load( SvStream& rStream, USHORT /* nVer */ )
-{
-//    BOOL bOk = TRUE;
-    ScReadHeader aHdr( rStream );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    ScRangePair aRangePair;
-    ScRange aRange;
-    UINT32 n;
-    rStream >> n;
-    ULONG nCount = n;
-    for ( ULONG j = 0; j < nCount && bOk; j++ )
-    {
-        if ( nVer < SC_COLROWNAME_RANGEPAIR )
-        {   // aus technical Beta 4.0 versuchen mit altem Verhalten zu uebernehmen
-            rStream >> aRange;
-            aRangePair.GetRange(0) = aRange;
-            ScRange& r = aRangePair.GetRange(1);
-            r = aRange;
-            SCCOL nCol2 = aRange.aEnd.Col();
-            SCROW nRow2 = aRange.aEnd.Row();
-            if ( static_cast<SCCOLROW>(nCol2 - aRange.aStart.Col()) >=
-                    (nRow2 - aRange.aStart.Row()) )
-            {   // ColNames
-                r.aStart.SetRow( Min( static_cast<SCROW>(nRow2 + 1), MAXROW ) );
-                r.aEnd.SetRow( MAXROW );
-            }
-            else
-            {   // RowNames
-                r.aStart.SetCol( Min( static_cast<SCCOL>(nCol2 + 1), MAXCOL ) );
-                r.aEnd.SetCol( MAXCOL );
-            }
-        }
-        else
-            rStream >> aRangePair;
-        Append( aRangePair );
-        if( rStream.GetError() != SVSTREAM_OK )
-            bOk = FALSE;
-    }
-    return bOk;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 

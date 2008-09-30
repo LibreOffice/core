@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datauno.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -502,10 +502,6 @@ public:
                             // nField[] hier innerhalb des Bereichs:
     void                    GetQueryParam(ScQueryParam& rQueryParam) const;
     void                    SetQueryParam(const ScQueryParam& rQueryParam);
-    void                    GetSortParam(ScSortParam& rSortParam) const;
-    void                    SetSortParam(const ScSortParam& rSortParam);
-    void                    GetImportParam(ScImportParam& rImportParam) const;
-    void                    SetImportParam(const ScImportParam& rImportParam);
     void                    GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     void                    SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dociter.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.21.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -221,46 +221,46 @@ void lcl_IterGetNumberFormat( ULONG& nFormat, const ScAttrArray*& rpArr,
     }
 }
 
-ScValueIterator::ScValueIterator( ScDocument* pDocument,
-                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
-                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
-                                    BOOL bSTotal, BOOL bTextZero ) :
-    pDoc( pDocument ),
-    nNumFmtIndex(0),
-    nStartCol( nSCol),
-    nStartRow( nSRow),
-    nStartTab( nSTab ),
-    nEndCol( nECol ),
-    nEndRow( nERow),
-    nEndTab( nETab ),
-    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    bNumValid( FALSE ),
-    bSubTotal(bSTotal),
-    bNextValid( FALSE ),
-    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
-    bTextAsZero( bTextZero )
-{
-    PutInOrder( nStartCol, nEndCol);
-    PutInOrder( nStartRow, nEndRow);
-    PutInOrder( nStartTab, nEndTab );
-
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
-
-    nCol = nStartCol;
-    nRow = nStartRow;
-    nTab = nStartTab;
-
-    nColRow = 0;                    // wird bei GetFirst initialisiert
-
-    nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
-    pAttrArray = 0;
-    nAttrEndRow = 0;
-}
+//UNUSED2008-05  ScValueIterator::ScValueIterator( ScDocument* pDocument,
+//UNUSED2008-05                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
+//UNUSED2008-05                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
+//UNUSED2008-05                                    BOOL bSTotal, BOOL bTextZero ) :
+//UNUSED2008-05  pDoc( pDocument ),
+//UNUSED2008-05  nNumFmtIndex(0),
+//UNUSED2008-05  nStartCol( nSCol),
+//UNUSED2008-05  nStartRow( nSRow),
+//UNUSED2008-05  nStartTab( nSTab ),
+//UNUSED2008-05  nEndCol( nECol ),
+//UNUSED2008-05  nEndRow( nERow),
+//UNUSED2008-05  nEndTab( nETab ),
+//UNUSED2008-05  nNumFmtType( NUMBERFORMAT_UNDEFINED ),
+//UNUSED2008-05  bNumValid( FALSE ),
+//UNUSED2008-05  bSubTotal(bSTotal),
+//UNUSED2008-05  bNextValid( FALSE ),
+//UNUSED2008-05  bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
+//UNUSED2008-05  bTextAsZero( bTextZero )
+//UNUSED2008-05  {
+//UNUSED2008-05      PutInOrder( nStartCol, nEndCol);
+//UNUSED2008-05      PutInOrder( nStartRow, nEndRow);
+//UNUSED2008-05      PutInOrder( nStartTab, nEndTab );
+//UNUSED2008-05
+//UNUSED2008-05      if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
+//UNUSED2008-05      if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
+//UNUSED2008-05      if (!ValidRow(nStartRow)) nStartRow = MAXROW;
+//UNUSED2008-05      if (!ValidRow(nEndRow)) nEndRow = MAXROW;
+//UNUSED2008-05      if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
+//UNUSED2008-05      if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
+//UNUSED2008-05
+//UNUSED2008-05      nCol = nStartCol;
+//UNUSED2008-05      nRow = nStartRow;
+//UNUSED2008-05      nTab = nStartTab;
+//UNUSED2008-05
+//UNUSED2008-05      nColRow = 0;                    // wird bei GetFirst initialisiert
+//UNUSED2008-05
+//UNUSED2008-05      nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
+//UNUSED2008-05      pAttrArray = 0;
+//UNUSED2008-05      nAttrEndRow = 0;
+//UNUSED2008-05  }
 
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
             BOOL bSTotal, BOOL bTextZero ) :

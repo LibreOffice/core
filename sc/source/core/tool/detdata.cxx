@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detdata.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,59 +115,6 @@ BOOL ScDetOpList::operator==( const ScDetOpList& r ) const
             bEqual = FALSE;
 
     return bEqual;
-}
-
-void ScDetOpList::Load( SvStream& rStream )
-{
-    ScMultipleReadHeader aHdr( rStream );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-
-    USHORT nNewCount;
-    rStream >> nNewCount;
-
-    ScAddress aPos;
-    USHORT nOper;
-
-    for (USHORT i=0; i<nNewCount; i++)
-    {
-        //  1) Position (ScAddress)
-        //  2) Operation (USHORT)
-
-        aHdr.StartEntry();
-
-        rStream >> aPos;
-        rStream >> nOper;
-        Append( new ScDetOpData( aPos, (ScDetOpType) nOper ) );
-
-        aHdr.EndEntry();
-    }
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-void ScDetOpList::Store( SvStream& rStream ) const
-{
-    ScMultipleWriteHeader aHdr( rStream );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-
-    USHORT nCount = Count();
-    rStream << nCount;
-
-    for (USHORT i=0; i<nCount; i++)
-    {
-        //  1) Position (ScAddress)
-        //  2) Operation (USHORT)
-
-        aHdr.StartEntry();
-
-        ScDetOpData* pData = (*this)[i];
-        rStream << pData->GetPos();
-        rStream << (USHORT) pData->GetOperation();
-
-        aHdr.EndEntry();
-    }
-#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 

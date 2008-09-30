@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpsave.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,7 +146,6 @@ public:
     void                    SetLayoutName(const String* pName);
     const String&           GetLayoutName() const;
     BOOL                    HasLayoutName() const;
-    void                    ResetLayoutName();
 
     const ::com::sun::star::sheet::DataPilotFieldReference* GetReferenceValue() const   { return pReferenceValue; }
     void                    SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
@@ -232,9 +231,6 @@ public:
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::sheet::XDimensionsSupplier>& xSource );
-
-    void                    Store( SvStream& rStream ) const;
-    void                    Load( SvStream& rStream );
 
     BOOL                    IsEmpty() const;
 

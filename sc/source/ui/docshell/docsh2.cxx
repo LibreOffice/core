@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,54 +240,3 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
     }
     return pDrawLayer;
 }
-
-//------------------------------------------------------------------
-
-
-void ScDocShell::RemoveUnknownObjects()
-{
-    //  OLE-Objekte loeschen, wenn kein Drawing-Objekt dazu existiert
-    //  Loeschen wie in SvPersist::CleanUp
-
-    ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
-    uno::Sequence < rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-
-        for( sal_Int32 i=0; i<aNames.getLength(); i++ )
-        {
-            String aObjName = aNames[i];
-            BOOL bFound = FALSE;
-            if ( pDrawLayer )
-            {
-                SCTAB nTabCount = static_cast<sal_Int16>(pDrawLayer->GetPageCount());
-                for (SCTAB nTab=0; nTab<nTabCount && !bFound; nTab++)
-                {
-                    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-                    DBG_ASSERT(pPage,"Page ?");
-                    if (pPage)
-                    {
-                        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-                        SdrObject* pObject = aIter.Next();
-                        while (pObject && !bFound)
-                        {
-                            // name from InfoObject is PersistName
-                            if ( pObject->ISA(SdrOle2Obj) &&
-                                    static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == aObjName )
-                                bFound = TRUE;
-                            pObject = aIter.Next();
-                        }
-                    }
-                }
-            }
-
-            if (!bFound)
-            {
-                //TODO/LATER: hacks not supported anymore
-                //DBG_ASSERT(pEle->GetRefCount()==2, "Loeschen von referenziertem Storage");
-                GetEmbeddedObjectContainer().RemoveEmbeddedObject( aObjName );
-            }
-            else
-                i++;
-        }
-}
-
-

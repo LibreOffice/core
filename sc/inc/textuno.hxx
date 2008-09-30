@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textuno.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,8 +77,9 @@ private:
     EditTextObject* pRightText;
     SfxBroadcaster  aBC;
 
+    ScHeaderFooterContentObj(); // disabled
+
 public:
-                            ScHeaderFooterContentObj();
                             ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                       const EditTextObject* pCenter,
                                                       const EditTextObject* pRight );
@@ -352,7 +353,6 @@ public:
                         ScEditEngineTextObj();
         virtual                         ~ScEditEngineTextObj() throw();
 
-    void                SetText( const String& rStr );
     void                SetText( const EditTextObject& rTextObject );
     EditTextObject*     CreateTextObject();
 };

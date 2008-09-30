@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formula.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -763,72 +763,26 @@ IMPL_LINK( ScFormulaDlg, BtnHdl, PushButton*, pBtn )
 //                          Funktionen fuer 1. Seite
 //  --------------------------------------------------------------------------
 
-void ScFormulaDlg::ResizeArgArr( const ScFuncDesc* pNewFunc )
-{
-    if ( pFuncDesc != pNewFunc )
-    {
-        DeleteArgs();
-
-        if ( pNewFunc )
-        {
-            nArgs = pNewFunc->GetSuppressedArgCount();
-            if ( nArgs > 0 )
-            {
-                pArgArr = new String*[nArgs];
-                for ( USHORT i=0; i<nArgs; i++ )
-                    pArgArr[i] = new String;
-            }
-        }
-
-        pFuncDesc = pNewFunc;
-    }
-}
-
-void ScFormulaDlg::UpdateFunctionDesc()
-{
-    ScModule* pScMod = SC_MOD();
-
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return;
-    USHORT nCat = pScFuncPage->GetCategory();
-    if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
-    pData->SetCatSel( nCat );
-    USHORT nFunc = pScFuncPage->GetFunction();
-    if ( nFunc == LISTBOX_ENTRY_NOTFOUND ) nFunc = 0;
-    pData->SetFuncSel( nFunc );
-
-    if (   (pScFuncPage->GetFunctionEntryCount() > 0)
-        && (pScFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
-    {
-        const ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
-                                pScFuncPage->GetFunction() );
-        if (pDesc)
-        {
-            pDesc->InitArgumentInfo();      // full argument info is needed
-
-            String aSig = pDesc->GetSignature();
-
-            aFtFuncName.SetText( aSig );
-            if(pDesc->pFuncDesc)
-                aFtFuncDesc.SetText( *(pDesc->pFuncDesc) );
-            else
-                aFtFuncDesc.SetText(EMPTY_STRING );
-            ResizeArgArr( pDesc );
-
-            if ( pArgArr && pArgArr[0] && pArgArr[0]->Len() )       // noch Argumente da?
-                aSig = pDesc->GetFormulaString( pArgArr );          // fuer Eingabezeile
-            //@ pScMod->InputReplaceSelection( aSig );
-        }
-    }
-    else
-    {
-        aFtFuncName.SetText( EMPTY_STRING );
-        aFtFuncDesc.SetText( EMPTY_STRING );
-
-        //ResizeArgArr( NULL );
-        pScMod->InputReplaceSelection( EMPTY_STRING );
-    }
-}
+//UNUSED2008-05  void ScFormulaDlg::ResizeArgArr( const ScFuncDesc* pNewFunc )
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( pFuncDesc != pNewFunc )
+//UNUSED2008-05      {
+//UNUSED2008-05          DeleteArgs();
+//UNUSED2008-05
+//UNUSED2008-05          if ( pNewFunc )
+//UNUSED2008-05          {
+//UNUSED2008-05              nArgs = pNewFunc->GetSuppressedArgCount();
+//UNUSED2008-05              if ( nArgs > 0 )
+//UNUSED2008-05              {
+//UNUSED2008-05                  pArgArr = new String*[nArgs];
+//UNUSED2008-05                  for ( USHORT i=0; i<nArgs; i++ )
+//UNUSED2008-05                      pArgArr[i] = new String;
+//UNUSED2008-05              }
+//UNUSED2008-05          }
+//UNUSED2008-05
+//UNUSED2008-05          pFuncDesc = pNewFunc;
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 // Handler fuer Listboxen
 
@@ -993,65 +947,20 @@ void ScFormulaDlg::EditNextFunc( BOOL bForward, xub_StrLen nFStart )
     }
 }
 
-void ScFormulaDlg::EditFuncParas(xub_StrLen nEditPos)
-{
-    if(pFuncDesc!=NULL)
-    {
-        ScModule* pScMod = SC_MOD();
-        ScFormEditData* pData = pScMod->GetFormEditData();
-        if (!pData) return;
-
-        String aFormula = pScMod->InputGetFormulaStr();
-        aFormula +=')';
-        xub_StrLen nFStart = pData->GetFStart();
-
-        DeleteArgs();
-
-        nArgs = pFuncDesc->GetSuppressedArgCount();
-
-        xub_StrLen nArgPos=ScFormulaUtil::GetArgStart( aFormula, nFStart, 0 );
-        pArgArr = ScFormulaUtil::GetArgStrings( aFormula, nFStart, nArgs );
-
-        USHORT nActiv=aScParaWin.GetSliderPos();
-        BOOL    bFlag=FALSE;
-        for(USHORT i=0;i<nArgs;i++)
-        {
-            xub_StrLen nLength=(pArgArr[i])->Len();
-            aScParaWin.SetArgument(i,*(pArgArr[i]));
-            if(nArgPos<=nEditPos && nEditPos<nArgPos+nLength)
-            {
-                nActiv=i;
-                bFlag=TRUE;
-            }
-            nArgPos+=nLength+1;
-        }
-
-        if(bFlag)
-        {
-            aScParaWin.SetSliderPos(nActiv);
-        }
-
-        aScParaWin.UpdateParas();
-        UpdateValues();
-    }
-
-}
-
-
-IMPL_LINK( ScFormulaDlg, ScrollHdl, ScParaWin*, EMPTYARG )
-{
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return 0;
-    USHORT nOffset = aScParaWin.GetSliderPos();
-    pData->SetOffset( nOffset );
-
-    aScParaWin.UpdateParas();
-
-    UpdateValues();
-
-    return 0;
-}
+//UNUSED2008-05  IMPL_LINK( ScFormulaDlg, ScrollHdl, ScParaWin*, EMPTYARG )
+//UNUSED2008-05  {
+//UNUSED2008-05      ScModule* pScMod = SC_MOD();
+//UNUSED2008-05      ScFormEditData* pData = pScMod->GetFormEditData();
+//UNUSED2008-05      if (!pData) return 0;
+//UNUSED2008-05      USHORT nOffset = aScParaWin.GetSliderPos();
+//UNUSED2008-05      pData->SetOffset( nOffset );
+//UNUSED2008-05
+//UNUSED2008-05      aScParaWin.UpdateParas();
+//UNUSED2008-05
+//UNUSED2008-05      UpdateValues();
+//UNUSED2008-05
+//UNUSED2008-05      return 0;
+//UNUSED2008-05  }
 
 BOOL ScFormulaDlg::CalcValue( const String& rStrExp, String& rStrResult )
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prevloc.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ class ScPreviewLocationData
     SCTAB       nPrintTab;
     List        aEntries;
 
-    ScAddress   GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const;
+//UNUSED2008-05  ScAddress  GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const;
     Rectangle   GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
 
 public:
@@ -144,7 +144,6 @@ public:
     //  Check if any cells (including column/row headers) are in the visible area
     BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
 
-    BOOL    GetCell( const Point& rPos, ScAddress& rCellPos, Rectangle& rCellRect ) const;
     BOOL    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
 
     // returns the rectangle where the EditEngine draws the text of a Header Cell

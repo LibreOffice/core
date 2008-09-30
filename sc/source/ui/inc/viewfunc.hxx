@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,7 @@ private:
 
 public:
                     ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-                    ScViewFunc( Window* pParent, const ScViewFunc& rViewFunc, ScTabViewShell* pViewShell );
+//UNUSED2008-05     ScViewFunc( Window* pParent, const ScViewFunc& rViewFunc, ScTabViewShell* pViewShell );
                     ~ScViewFunc();
 
     const ScPatternAttr*    GetSelectionPattern ();
@@ -299,10 +299,10 @@ public:
                                             BOOL bColorOnly );
 
     void            SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote );
-    void            DoSpellingChecker( BOOL bRecord = TRUE );
+//UNUSED2008-05  void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
-    DECL_LINK( SpellError, void * );
+//UNUSED2008-05  DECL_LINK( SpellError, void * );
 
     /** Generic implementation of sheet conversion functions. */
     void            DoSheetConversion( const ScConversionParam& rParam, BOOL bRecord = TRUE );
@@ -335,7 +335,7 @@ protected:
                                      const SvxBorderLine* pSrcLine,
                                      BOOL                 bColor );
 
-    void            PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd );
+//UNUSED2008-05  void            PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd );
 
 
 private:

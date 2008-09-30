@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsrc.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,9 +190,6 @@ public:
     virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
     virtual void                UpdateData();
     virtual SfxBroadcaster&     GetBroadcaster() const;
-
-    void                        SetDoUpdateData(sal_Bool bValue);
-    sal_Bool                    IsDirty() const;
 };
 
 #endif

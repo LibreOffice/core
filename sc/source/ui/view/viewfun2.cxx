@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun2.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.40.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -829,36 +829,36 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd )
-{
-    SCTAB nTab = GetViewData()->GetTabNo();
-    ScDocument* pDoc = GetViewData()->GetDocument();
-
-    USHORT nParts = PAINT_GRID;
-    SCCOL nStartCol = 0;
-    SCROW nStartRow = 0;
-    SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
-    SCROW nEndRow = MAXROW;
-    if ( bColumns )
-    {
-        nParts |= PAINT_TOP;
-        nStartCol = static_cast<SCCOL>(nStart);
-        nEndCol = static_cast<SCCOL>(nEnd);
-    }
-    else
-    {
-        nParts |= PAINT_LEFT;
-        nStartRow = nStart;
-        nEndRow = nEnd;
-    }
-    if (pDoc->HasAttrib( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
-                            HASATTR_MERGED | HASATTR_OVERLAPPED ))
-    {
-        nStartCol = 0;
-        nStartRow = 0;
-    }
-    GetViewData()->GetDocShell()->PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
-}
+//UNUSED2008-05  void ScViewFunc::PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd )
+//UNUSED2008-05  {
+//UNUSED2008-05      SCTAB nTab = GetViewData()->GetTabNo();
+//UNUSED2008-05      ScDocument* pDoc = GetViewData()->GetDocument();
+//UNUSED2008-05
+//UNUSED2008-05      USHORT nParts = PAINT_GRID;
+//UNUSED2008-05      SCCOL nStartCol = 0;
+//UNUSED2008-05      SCROW nStartRow = 0;
+//UNUSED2008-05      SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
+//UNUSED2008-05      SCROW nEndRow = MAXROW;
+//UNUSED2008-05      if ( bColumns )
+//UNUSED2008-05      {
+//UNUSED2008-05          nParts |= PAINT_TOP;
+//UNUSED2008-05          nStartCol = static_cast<SCCOL>(nStart);
+//UNUSED2008-05          nEndCol = static_cast<SCCOL>(nEnd);
+//UNUSED2008-05      }
+//UNUSED2008-05      else
+//UNUSED2008-05      {
+//UNUSED2008-05          nParts |= PAINT_LEFT;
+//UNUSED2008-05          nStartRow = nStart;
+//UNUSED2008-05          nEndRow = nEnd;
+//UNUSED2008-05      }
+//UNUSED2008-05      if (pDoc->HasAttrib( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
+//UNUSED2008-05                           HASATTR_MERGED | HASATTR_OVERLAPPED ))
+//UNUSED2008-05      {
+//UNUSED2008-05          nStartCol = 0;
+//UNUSED2008-05          nStartRow = 0;
+//UNUSED2008-05      }
+//UNUSED2008-05      GetViewData()->GetDocShell()->PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
+//UNUSED2008-05  }
 
 
 //----------------------------------------------------------------------------

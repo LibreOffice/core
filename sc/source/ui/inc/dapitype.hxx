@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapitype.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@ public:
             ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal );
             ~ScDataPilotSourceTypeDlg();
 
-    BOOL    IsSelection() const;
     BOOL    IsDatabase() const;
     BOOL    IsExternal() const;
 };

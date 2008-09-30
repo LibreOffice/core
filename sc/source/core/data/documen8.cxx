@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen8.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.52.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,55 +102,6 @@
 
 
 // STATIC DATA -----------------------------------------------------------
-
-
-
-//------------------------------------------------------------------------
-
-void ScDocument::ImplLoadDocOptions( SvStream& rStream )
-{
-    USHORT d,m,y;
-
-    DBG_ASSERT( pDocOptions, "No DocOptions to load! :-(" );
-
-    pDocOptions->Load( rStream );
-
-    if ( pDocOptions->GetStdPrecision() > 20 ) //!!! ist 20 als Maximum konstant ???
-    {
-        DBG_ERROR( "Document options corrupted. Setting to defaults." );
-        pDocOptions->ResetDocOptions();
-    }
-
-    pDocOptions->GetDate( d,m,y );
-    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-    pFormatter->ChangeNullDate( d,m,y );
-    pFormatter->ChangeStandardPrec( pDocOptions->GetStdPrecision() );
-    pFormatter->SetYear2000( pDocOptions->GetYear2000() );
-}
-
-//------------------------------------------------------------------------
-
-void ScDocument::ImplLoadViewOptions( SvStream& rStream )
-{
-    DBG_ASSERT( pViewOptions, "No ViewOptions to load! :-(" );
-    rStream >> *pViewOptions;
-}
-
-//------------------------------------------------------------------------
-
-void ScDocument::ImplSaveDocOptions( SvStream& rStream ) const
-{
-    DBG_ASSERT( pDocOptions, "No DocOptions to save! :-(" );
-    pDocOptions->Save( rStream );
-}
-
-//------------------------------------------------------------------------
-
-void ScDocument::ImplSaveViewOptions( SvStream& rStream ) const
-{
-    DBG_ASSERT( pViewOptions, "No ViewOptions to save! :-(" );
-    rStream << *pViewOptions;
-}
 
 //------------------------------------------------------------------------
 
@@ -1442,93 +1393,6 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScDocument::SaveAreaLinks(SvStream& /* rStream */) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-
-    //  erstmal zaehlen...
-
-    USHORT nAreaCount = 0;
-    USHORT i;
-    for (i=0; i<nCount; i++)
-        if ((*rLinks[i])->ISA(ScAreaLink))      // rLinks[i] = Pointer auf Ref
-            ++nAreaCount;
-
-    //  Header
-
-    ScMultipleWriteHeader aHdr( rStream );
-    rStream << nAreaCount;
-
-    //  Links speichern
-
-    for (i=0; i<nCount; i++)
-    {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
-        {
-            ScAreaLink* pLink = (ScAreaLink*)pBase;
-
-            aHdr.StartEntry();
-
-            rStream.WriteByteString( pLink->GetFile(), rStream.GetStreamCharSet() );
-            rStream.WriteByteString( pLink->GetFilter(), rStream.GetStreamCharSet() );
-            rStream.WriteByteString( pLink->GetSource(), rStream.GetStreamCharSet() );
-            rStream << pLink->GetDestArea();                // ScRange
-            rStream.WriteByteString( pLink->GetOptions(), rStream.GetStreamCharSet() );
-            //  filter options starting from 336
-
-            aHdr.EndEntry();
-        }
-    }
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-void ScDocument::LoadAreaLinks(SvStream& rStream)
-{
-    ScMultipleReadHeader aHdr( rStream );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-
-    if (!pShell)
-    {
-        DBG_ERROR("AreaLinks koennen nicht ohne Shell geladen werden");
-        return;
-    }
-
-    String aFile, aFilter, aOptions, aSource;
-    ScRange aDestArea;
-
-    USHORT nCount;
-    rStream >> nCount;
-    for (USHORT i=0; i<nCount; i++)
-    {
-        aHdr.StartEntry();
-
-        rStream.ReadByteString( aFile,   rStream.GetStreamCharSet() );
-        rStream.ReadByteString( aFilter, rStream.GetStreamCharSet() );
-        rStream.ReadByteString( aSource, rStream.GetStreamCharSet() );
-        rStream >> aDestArea;
-        if ( aHdr.BytesLeft() )         // Filter-Optionen ab 336
-            rStream.ReadByteString( aOptions, rStream.GetStreamCharSet() );
-        else
-            aOptions.Erase();
-        aHdr.EndEntry();
-
-        ScAreaLink* pLink = new ScAreaLink( pShell, aFile, aFilter, aOptions,
-                                            aSource, aDestArea.aStart, 0 );
-        pLink->SetInCreate( TRUE );
-        pLink->SetDestArea( aDestArea );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFile, &aFilter, &aSource );
-        pLink->Update();
-        pLink->SetInCreate( FALSE );
-    }
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-
 //------------------------------------------------------------------------
 
 // TimerDelays etc.
@@ -1548,14 +1412,6 @@ BOOL ScDocument::CheckMacroWarn()
     //  in SfxObjectShell::AdjustMacroMode, called by SfxObjectShell::CallBasic.
 
     return TRUE;
-}
-
-BOOL ScDocument::HasMacroCallsAfterLoad()
-{
-    //  not used any longer
-
-    DBG_ERROR("obsolete method HasMacroCallsAfterLoad called");
-    return FALSE;
 }
 
 //------------------------------------------------------------------------

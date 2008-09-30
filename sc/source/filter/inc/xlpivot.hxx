@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlpivot.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -490,7 +490,6 @@ struct XclPCNumGroupInfo
 
     explicit            XclPCNumGroupInfo();
 
-    bool                IsNumType() const;
     void                SetNumType();
 
     sal_Int32           GetScDateType() const;
@@ -520,8 +519,9 @@ public:
 
     /** Returns true, if this is a standard field build directly from source data. */
     bool                IsStandardField() const;
-    /** Returns true, if the items of the field are calculated from a formula. */
-    bool                IsCalculatedField() const;
+
+//UNUSED2008-05  /** Returns true, if the items of the field are calculated from a formula. */
+//UNUSED2008-05  bool                IsCalculatedField() const;
 
     /** Returns true, if this field is a grouping field. */
     bool                IsStdGroupField() const;

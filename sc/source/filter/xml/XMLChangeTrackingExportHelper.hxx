@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.17.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +94,6 @@ public:
     ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
 
-    void WriteChangeViewSettings();
     void CollectAutoStyles();
     void CollectAndWriteChanges();
 };

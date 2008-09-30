@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLStylesImportHelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,8 +187,6 @@ public:
     void SetAttributes(rtl::OUString* pStyleName,
         rtl::OUString* pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
-    void AddRange(const com::sun::star::table::CellRangeAddress& rRange);
-    void AddCell(const ScAddress& rAddress);
     void AddCell(const com::sun::star::table::CellAddress& rAddress);
     void InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc); // a row is inserted before nRow
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc); // a col is inserted before nCol

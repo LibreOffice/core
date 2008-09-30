@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: token.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.15.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,10 +179,10 @@ public:
             BOOL                TextEqual( const ScToken& rToken ) const;
             BOOL                Is3DRef() const;    // reference with 3D flag set
 
-    // If token in RPN resulted from resolving a name and contains an absolute
-    // reference. Token must be obtained through ScTokenArray::GetNextReferenceRPN()
-    // or similar.
-            BOOL                IsRPNReferenceAbsName() const;
+//UNUSED2008-05  // If token in RPN resulted from resolving a name and contains an absolute
+//UNUSED2008-05  // reference. Token must be obtained through ScTokenArray::GetNextReferenceRPN()
+//UNUSED2008-05  // or similar.
+//UNUSED2008-05  BOOL                IsRPNReferenceAbsName() const;
 
     /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
         ranges as needed for ocRange.

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xltracer.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,26 +103,11 @@ void XclTracer::AddAttribute( const OUString& rName, const OUString& rValue )
         mpTracer->AddAttribute( rName, rValue );
 }
 
-void XclTracer::AddAttribute( const OUString& rName, sal_Int32 nValue )
-{
-    if( mbEnabled )
-        mpTracer->AddAttribute( rName, OUString::valueOf( nValue ) );
-}
-
 void XclTracer::Trace( const OUString& rElementID, const OUString& rMessage )
 {
     if( mbEnabled )
     {
         mpTracer->Trace( rElementID, rMessage );
-        mpTracer->ClearAttributes();
-    }
-}
-
-void XclTracer::Trace( const OUString& rElementID, sal_Int32 nMessage )
-{
-    if( mbEnabled )
-    {
-        mpTracer->Trace( rElementID, OUString::valueOf( nMessage ) );
         mpTracer->ClearAttributes();
     }
 }
@@ -219,17 +204,6 @@ void XclTracer::TraceFillPattern( bool bFillPattern)
         ProcessTraceOnce(eFillPattern);
 }
 
-void XclTracer::TraceInvisibleGrid( bool bVisibleGrid)
-{
-    // Excel supports Grid lines on a per sheet basis while
-    // Calc displays grid lines on a per doc basis based on the
-    // first visible sheet. If the first visible sheet has the
-    // grid turned off then potentially we may have a problem.
-
-    if(!bVisibleGrid)
-        ProcessTraceOnce(eInvisibleGrid);
-}
-
 void XclTracer::TraceFormulaExtName( )
 {
     // import cannot access Excel External name ranges in
@@ -260,35 +234,9 @@ void XclTracer::TraceChartUnKnownType()
     ProcessTraceOnce(eChartUnKnownType);
 }
 
-void XclTracer::TraceChartTrendLines()
-{
-    ProcessTraceOnce(eChartTrendLines);
-}
-
-void XclTracer::TraceChartErrorBars()
-{
-    ProcessTraceOnce( eChartErrorBars );
-}
-
 void XclTracer::TraceChartOnlySheet()
 {
     ProcessTraceOnce(eChartOnlySheet);
-}
-
-void XclTracer::TraceChartRange()
-{
-    // Chart range symmetry is essential to display a chart. If the count
-    // of category values is not equal to the count of values or the start row/column
-    // depending on type, is not the same, then the chart range is said to be not
-    // symmetrical and will not display correctly.
-    ProcessTraceOnce(eChartRange);
-}
-
-void XclTracer::TraceChartDSName()
-{
-    // Data series names must be linked to a cell to appear. Hard
-    // coded strings contained in the ChartSeriestext() do not appear.
-    ProcessTraceOnce(eChartDSName);
 }
 
 void XclTracer::TraceChartDataTable()
@@ -304,35 +252,10 @@ void XclTracer::TraceChartLegendPosition()
     ProcessTraceOnce(eChartLegendPosition);
 }
 
-void XclTracer::TraceChartTextFormatting()
-{
-    // text formatting in titles or data labels not supported.
-    ProcessTraceOnce(eChartTextFormatting);
-}
-
 void XclTracer::TraceChartEmbeddedObj()
 {
     // drawing objects e.g. text boxes etc not supported inside charts
     ProcessTraceOnce(eChartEmbeddedObj);
-}
-
-void XclTracer::TraceChartAxisAutoCross()
-{
-    // Axis intervals generated automatically may not be the same.
-    ProcessTraceOnce(eChartAxisAuto);
-}
-
-void XclTracer::TraceChartAxisManualCross()
-{
-    // Manual axis crossing point changed
-    ProcessTraceOnce(eChartAxisManual);
-}
-
-void XclTracer::TraceChartInvalidXY()
-{
-    // Scatter charts will ony appear if the category(X) data range is
-    // located in the left most column in relation to the value range.
-    ProcessTraceOnce(eChartInvalidXY);
 }
 
 void XclTracer::TraceUnsupportedObjects()

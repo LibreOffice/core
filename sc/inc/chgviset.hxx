@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgviset.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,10 +133,6 @@ public:
 
     BOOL                IsShowRejected() const { return bShowRejected; }
     void                SetShowRejected( BOOL bVal ) { bShowRejected = bVal; }
-
-
-    void                Load( SvStream& rStream, USHORT nVer );
-    void                Store( SvStream& rStream ) const;
 
     ScChangeViewSettings&   operator=   ( const ScChangeViewSettings& r );
 

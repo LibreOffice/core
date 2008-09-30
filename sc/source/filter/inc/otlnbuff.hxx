@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: otlnbuff.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@ class XclImpOutlineBuffer
         void            SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
         void            SetOutlineArray( ScOutlineArray* pOArray );
         void            Reset( void );
-        void            Reset( ScOutlineArray* pOArray );
         void            MakeScOutline( void );
         void            SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
                             BOOL bOuted, BOOL bHidden );

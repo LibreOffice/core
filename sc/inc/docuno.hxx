@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docuno.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,10 +116,7 @@ public:
 
     ScDocument*             GetDocument() const;
     SfxObjectShell*         GetEmbeddedObject() const;
-    BOOL                    IsEmbedded() const;
-    double                  GetOutputFactor() const;
 
-    BOOL                    AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
     void                    UpdateAllRowHeights();
 
     ScDrawLayer*                            MakeDrawLayer();
@@ -658,7 +655,7 @@ private:
     ScDocShell*             pDocShell;
 
 public:
-                            ScSpreadsheetSettingsObj(ScDocShell* pDocSh);
+//UNUSED2008-05             ScSpreadsheetSettingsObj(ScDocShell* pDocSh);
     virtual                 ~ScSpreadsheetSettingsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

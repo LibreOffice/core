@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prevwsh.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,10 +95,6 @@ public:
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScPreviewShell);
 
-                    ScPreviewShell( SfxViewFrame*           pViewFrame,
-                                    const ScPreviewShell&   rWin );
-                    ScPreviewShell( SfxViewFrame*           pViewFrame,
-                                    Window*                 pParent);
                     ScPreviewShell( SfxViewFrame*           pViewFrame,
                                     SfxViewShell*           pOldSh );
 

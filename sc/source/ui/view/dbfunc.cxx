@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,10 +60,10 @@ ScDBFunc::ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewSh
 {
 }
 
-ScDBFunc::ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell ) :
-    ScViewFunc( pParent, rDBFunc, pViewShell )
-{
-}
+//UNUSED2008-05  ScDBFunc::ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell ) :
+//UNUSED2008-05      ScViewFunc( pParent, rDBFunc, pViewShell )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScDBFunc::~ScDBFunc()
 {

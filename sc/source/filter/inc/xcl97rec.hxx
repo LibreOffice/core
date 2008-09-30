@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97rec.hxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.48.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -338,15 +338,6 @@ public:
 };
 
 
-// --- class ExcBofC8 ------------------------------------------------
-// Header Record fuer CHARTs
-
-class ExcBofC8 : public ExcBof8_Base
-{
-public:
-                                ExcBofC8();
-};
-
 // --- class ExcBundlesheet8 -----------------------------------------
 
 class ExcBundlesheet8 : public ExcBundlesheetBase
@@ -371,25 +362,6 @@ class XclObproj : public ExcRecord
 public:
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
-};
-
-
-// --- class XclDConRef ----------------------------------------------
-
-class XclDConRef : public ExcRecord
-{
-private:
-    ScRange                 aSourceRange;
-    XclExpString*           pWorkbook;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            XclDConRef( const ScRange& rSrcR, const String& rWB );
-    virtual                 ~XclDConRef();
-
-    virtual UINT16          GetNum() const;
-    virtual sal_Size        GetLen() const;
 };
 
 

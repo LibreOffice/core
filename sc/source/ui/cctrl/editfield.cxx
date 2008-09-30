@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editfield.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,11 +56,6 @@ sal_Unicode lclGetGroupSep()
 } // namespace
 
 // ============================================================================
-
-ScDoubleField::ScDoubleField( Window* pParent, WinBits nStyle ) :
-    Edit( pParent, nStyle )
-{
-}
 
 ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId )

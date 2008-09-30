@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printopt.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,7 @@ class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTpPrintItem( USHORT nWhich );
+//UNUSED2008-05  ScTpPrintItem( USHORT nWhich );
                 ScTpPrintItem( USHORT nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
@@ -94,7 +94,6 @@ public:
             ScPrintCfg();
 
     void            SetOptions( const ScPrintOptions& rNew );
-    void            OptionsChanged();   // after direct access to ScPrintOptions base class
 
     virtual void    Commit();
 };
