@@ -45,6 +45,7 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
+#include <docsh.hxx>
 #include <viewopt.hxx>
 #include <frmdlg.hxx>
 #include <frmpage.hxx>
@@ -194,6 +195,9 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC
                             : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE
                                                       : MACASSGN_FRMURL );
+        if ( m_pWrtShell && m_pWrtShell->GetView().GetDocShell()
+            && m_pWrtShell->GetView().GetDocShell()->GetFrame() && m_pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame() )
+            rPage.SetFrame( m_pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame()->GetFrameInterface() );
         break;
 
     case TP_BACKGROUND:

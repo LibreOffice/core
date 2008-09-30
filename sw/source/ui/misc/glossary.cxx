@@ -664,7 +664,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             aSet.Put( aItem );
 
             const SfxPoolItem* pItem;
-            SwMacroAssignDlg aMacDlg( this, aSet, MACASSGN_TEXTBAUST );
+            SwMacroAssignDlg aMacDlg( this, aSet, *pSh, MACASSGN_TEXTBAUST );
             if( RET_OK == aMacDlg.Execute() &&
                 SFX_ITEM_SET == aMacDlg.GetOutputItemSet()->GetItemState(
                     RES_FRMMACRO, sal_False, &pItem ))

@@ -48,7 +48,12 @@ enum DlgEventType
 class SwMacroAssignDlg : public SfxMacroAssignDlg
 {
 public:
-    SwMacroAssignDlg( Window* pParent, SfxItemSet& rSet, DlgEventType eType );
+    SwMacroAssignDlg(
+        Window* pParent,
+        SfxItemSet& rSet,
+        const SwWrtShell& rSh,
+        DlgEventType eType
+    );
     virtual ~SwMacroAssignDlg();
 
     static void AddEvents( SfxMacroTabPage& rPg, DlgEventType eType );
