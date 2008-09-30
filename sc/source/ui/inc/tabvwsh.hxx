@@ -358,8 +358,7 @@ public:
     void            SetEditChartName(const String& aStr){aEditChartName=aStr;}
 //UNUSED2008-05  const String&   GetEditChartName() const;
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ScNavigatorSettings*    GetNavigatorSettings();
 

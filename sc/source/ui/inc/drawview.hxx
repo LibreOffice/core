@@ -70,8 +70,7 @@ public:
     virtual         ~ScDrawView();
 
     virtual void    MarkListHasChanged();
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj);
 

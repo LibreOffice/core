@@ -121,8 +121,7 @@ ScAnchorType ScDrawView::GetAnchor() const
     return SCA_DONTKNOW;
 }
 
-void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                     const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
     {
@@ -140,7 +139,7 @@ void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
             UpdateWorkArea();
     }
     else
-        FmFormView::SFX_NOTIFY( rBC,rBCType,rHint,rHintType );
+        FmFormView::Notify( rBC,rHint );
 }
 
 void ScDrawView::UpdateIMap( SdrObject* pObj )

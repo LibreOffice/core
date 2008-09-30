@@ -114,8 +114,7 @@ public:
                     GetSourceData() const       { return aSourceData; }
     BYTE            GetSourceDesignMode() const { return nSourceDesignMode; }
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
     virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );

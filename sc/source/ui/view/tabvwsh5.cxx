@@ -58,8 +58,7 @@
 
 //==================================================================
 
-void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(SfxSimpleHint))                       // ohne Parameter
     {
@@ -304,7 +303,7 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         }
     }
 
-    SfxViewShell::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    SfxViewShell::Notify( rBC, rHint );
 }
 
 //------------------------------------------------------------------

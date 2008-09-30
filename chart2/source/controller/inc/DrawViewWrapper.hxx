@@ -93,7 +93,7 @@ public:
     SdrObject* getNamedSdrObject( const rtl::OUString& rName ) const;
     bool IsObjectHit( SdrObject* pObj, const Point& rPnt ) const;
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     static SdrObject* getSdrObject( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape );
