@@ -409,7 +409,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
                 USHORT nPage = maTabControl.GetCurPageId() - 1;
                 mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
-                mpImpl->ProcessModifyPageSlot (
+                ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
                     mpActualPage,
                     mePageKind);
@@ -431,7 +431,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
                 SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                mpImpl->AssignLayout (
+                ::sd::ViewShell::mpImpl->AssignLayout (
                     GetDoc()->GetSdPage((USHORT)pWhatPage->GetValue(), mePageKind),
                     (AutoLayout)pWhatLayout->GetValue());
             }

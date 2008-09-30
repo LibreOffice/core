@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviews1.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.79.34.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -387,7 +387,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         // If the master view toolbar is not shown we hide it before
         // switching the edit mode.
-        if (mpImpl->mbIsInitialized
+        if (::sd::ViewShell::mpImpl->mbIsInitialized
             && IsMainViewShell()
             && ! bShowMasterViewToolbar)
         {
@@ -460,7 +460,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         // If the master view toolbar is to be shown we turn it on after the
         // edit mode has been changed.
-        if (mpImpl->mbIsInitialized
+        if (::sd::ViewShell::mpImpl->mbIsInitialized
             && IsMainViewShell()
             && bShowMasterViewToolbar)
         {

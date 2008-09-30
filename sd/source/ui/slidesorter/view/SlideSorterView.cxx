@@ -754,7 +754,7 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
     if (pDocShell!=NULL && pDocShell->IsEnableSetModified())
         mbModelChangedWhileModifyEnabled = true;
 
-    ::sd::View::SFX_NOTIFY(rBroadcaster, rBroadcastType, rHint, rHintType);
+    ::sd::View::Notify(rBroadcaster, rHint);
 }
 
 

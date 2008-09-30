@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlsheet.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,7 @@ protected:
     virtual void Load (SvStream& rIn, USHORT nVersion);
     virtual void Store(SvStream& rOut);
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
     virtual             ~SdStyleSheet();
 
     void throwIfDisposed() throw (::com::sun::star::uno::RuntimeException);

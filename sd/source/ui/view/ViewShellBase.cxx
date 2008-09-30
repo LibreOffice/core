@@ -479,12 +479,9 @@ SdDrawDocument* ViewShellBase::GetDocument (void) const
 
 
 
-void ViewShellBase::SFX_NOTIFY(SfxBroadcaster& rBC,
-    const TypeId& rBCType,
-    const SfxHint& rHint,
-    const TypeId& rHintType)
+void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SfxViewShell::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    SfxViewShell::Notify(rBC, rHint);
 
     if (rHint.IsA(TYPE(SfxEventHint)))
     {
