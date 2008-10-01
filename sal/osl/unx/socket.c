@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: socket.c,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@
 #undef HAVE_POLL_H
 #endif
 
-#if defined(LINUX) || defined (IRIX) || defined(NETBSD) || defined ( FREEBSD )
+#if defined(LINUX) || defined (IRIX) || defined(NETBSD) || defined ( FREEBSD ) || defined (MACOSX)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
@@ -57,12 +57,6 @@
 #include <poll.h>
 #define HAVE_POLL_H
 #endif /* SOLARIS */
-
-#if defined(MACOSX)
-/* Include our own poll.h because OS X doesn't implement one */
-#include "poll.h"
-#define HAVE_POLL_H
-#endif
 
 #ifndef HAVE_POLL_H
 #define POLLIN  0x0001
