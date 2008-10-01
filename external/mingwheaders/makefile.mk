@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.10.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,6 @@ FILES_TO_COPY_FROM_W32API=amvideo.h \
               winbase.h \
               wininet.h \
               winnt.h \
-              winuser.h \
               winver.h \
               wtypes.h
 
@@ -126,6 +125,7 @@ FILES_TO_COPY_FROM_PSDK=adoctint.h \
             wincrypt.h \
             wingdi.h \
             winsock2.h \
+            winuser.h \
             ws2def.h \
             ws2ipdef.h \
             ws2tcpip.h \

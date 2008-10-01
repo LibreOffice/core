@@ -30,7 +30,7 @@
 +#
 +# $RCSfile: raptor-1.4.17.patch,v $
 +#
-+# $Revision: 1.3 $
++# $Revision: 1.2.6.2 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -185,7 +185,7 @@
  if test "$echo_libtool_libs" = "yes"; then
    echo @libdir@/@RAPTOR_LIBTOOLLIBS@
 --- misc/raptor-1.4.17/src/win32_raptor_config.h	Tue Oct  2 06:12:55 2007
-+++ misc/build/raptor-1.4.17/src/win32_raptor_config.h	Mon Jun 16 15:55:38 2008
++++ misc/build/raptor-1.4.17/src/win32_raptor_config.h	2008-07-06 10:27:03.553625000 +0900
 @@ -38,6 +38,8 @@
  
  #define HAVE_STDLIB_H 1
@@ -235,7 +235,17 @@
  #define snprintf _snprintf
  #define access _access
  #define stricmp _stricmp
-@@ -125,7 +137,8 @@
+@@ -114,7 +126,9 @@
+ 
+ #define RAPTOR_PARSER_GUESS 1
+ #define RAPTOR_PARSER_GRDDL 1
++#ifndef __MINGW32__ /* conflicts with normal configure result */
+ #define RAPTOR_PARSER_N3 1
++#endif
+ #define RAPTOR_PARSER_TURTLE 1
+ #define RAPTOR_PARSER_NTRIPLES 1
+ #define RAPTOR_PARSER_RDFXML 1
+@@ -125,7 +139,8 @@
  #define RAPTOR_SERIALIZER_RDFXML_ABBREV 1
  #define RAPTOR_SERIALIZER_NTRIPLES 1
  
@@ -271,3 +281,23 @@
  	  ;;
  
  	irix | nonstopux)
+--- misc/raptor-1.4.17/configure	2008-03-17 16:37:20.000000000 +0900
++++ misc/build/raptor-1.4.17/configure	2008-07-06 09:05:29.974875000 +0900
+@@ -4317,7 +4317,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -4326,7 +4326,7 @@
+   # func_win32_libid shell function, so use a weaker test based on 'objdump',
+   # unless we find 'file', for example because we are cross-compiling.
+   if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'

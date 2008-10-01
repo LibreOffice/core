@@ -496,90 +496,6 @@
  
  #ifndef VOID
  #define VOID void
---- include/winuser.h.orig	2006-11-19 08:08:37.000000000 +0900
-+++ include/winuser.h	2007-01-20 00:22:52.765625000 +0900
-@@ -950,12 +950,14 @@
- #define SM_SLOWMACHINE 73
- #define SM_MIDEASTENABLED 74
- #define SM_MOUSEWHEELPRESENT 75
-+#if (WINVER >= 0x0500)
- #define SM_XVIRTUALSCREEN 76
- #define SM_YVIRTUALSCREEN 77
- #define SM_CXVIRTUALSCREEN 78
- #define SM_CYVIRTUALSCREEN 79
- #define SM_CMONITORS 80
- #define SM_SAMEDISPLAYFORMAT 81
-+#endif
- #define SM_IMMENABLED 82
- #define SM_CXFOCUSBORDER 83
- #define SM_CYFOCUSBORDER 84
-@@ -2473,7 +2475,9 @@
- typedef BOOL(CALLBACK *DRAWSTATEPROC)(HDC,LPARAM,WPARAM,int,int);
- typedef BOOL(CALLBACK *WNDENUMPROC)(HWND,LPARAM);
- typedef BOOL(CALLBACK *ENUMWINDOWSPROC)(HWND,LPARAM);
-+#if (WINVER >= 0x0500)
- typedef BOOL(CALLBACK* MONITORENUMPROC)(HMONITOR,HDC,LPRECT,LPARAM);
-+#endif
- typedef BOOL(CALLBACK *NAMEENUMPROCA)(LPSTR,LPARAM);
- typedef BOOL(CALLBACK *NAMEENUMPROCW)(LPWSTR,LPARAM);
- typedef NAMEENUMPROCA DESKTOPENUMPROCA;
-@@ -3149,6 +3153,7 @@
- 	UINT cbSize;
- 	DWORD dwTime;
- } LASTINPUTINFO,*PLASTINPUTINFO;
-+#if (WINVER >= 0x0500)
- typedef struct tagMONITORINFO {
- 	DWORD cbSize;
- 	RECT rcMonitor;
-@@ -3181,6 +3186,7 @@
- 	WCHAR	szDevice[CCHDEVICENAME];
- } MONITORINFOEXW,*LPMONITORINFOEXW;
- #endif /* __cplusplus */
-+#endif
- typedef struct tagKBDLLHOOKSTRUCT {
- 	DWORD vkCode;
- 	DWORD scanCode;
-@@ -3549,7 +3555,9 @@
- WINUSERAPI BOOL WINAPI EnumDesktopsA(HWINSTA,DESKTOPENUMPROCA,LPARAM);
- WINUSERAPI BOOL WINAPI EnumDesktopsW(HWINSTA,DESKTOPENUMPROCW,LPARAM);
- WINUSERAPI BOOL WINAPI EnumDesktopWindows(HDESK,ENUMWINDOWSPROC,LPARAM);
-+#if (WINVER >= 0x0500)
- WINUSERAPI BOOL WINAPI EnumDisplayMonitors(HDC,LPCRECT,MONITORENUMPROC,LPARAM);
-+#endif
- #ifndef NOGDI
- WINUSERAPI BOOL WINAPI EnumDisplaySettingsA(LPCSTR,DWORD,PDEVMODEA);
- WINUSERAPI BOOL WINAPI EnumDisplaySettingsW(LPCWSTR,DWORD,PDEVMODEW);
-@@ -3741,8 +3749,10 @@
- WINUSERAPI BOOL WINAPI GetTitleBarInfo(HWND,PTITLEBARINFO);
- #endif
- WINUSERAPI BOOL WINAPI GetWindowInfo(HWND,PWINDOWINFO);
-+#if (WINVER >= 0x0500)
- WINUSERAPI BOOL WINAPI GetMonitorInfoA(HMONITOR,LPMONITORINFO);
- WINUSERAPI BOOL WINAPI GetMonitorInfoW(HMONITOR,LPMONITORINFO);
-+#endif
- WINUSERAPI UINT WINAPI GetWindowModuleFileNameA(HWND,LPSTR,UINT);
- WINUSERAPI UINT WINAPI GetWindowModuleFileNameW(HWND,LPWSTR,UINT);
- WINUSERAPI BOOL WINAPI GrayStringA(HDC,HBRUSH,GRAYSTRINGPROC,LPARAM,int,int,int,int,int);
-@@ -4093,7 +4103,9 @@
- typedef CBT_CREATEWNDW CBT_CREATEWND, *LPCBT_CREATEWND;
- typedef MDICREATESTRUCTW MDICREATESTRUCT,*LPMDICREATESTRUCT;
- typedef MULTIKEYHELPW MULTIKEYHELP,*PMULTIKEYHELP,*LPMULTIKEYHELP;
-+#if (WINVER >= 0x0500)
- typedef MONITORINFOEXW MONITORINFOEX, *LPMONITORINFOEX;
-+#endif
- #define AppendMenu AppendMenuW
- #define BroadcastSystemMessage BroadcastSystemMessageW
- #define BroadcastSystemMessageEx BroadcastSystemMessageExW
-@@ -4258,7 +4270,9 @@
- typedef CBT_CREATEWNDA CBT_CREATEWND, *LPCBT_CREATEWND;
- typedef MDICREATESTRUCTA MDICREATESTRUCT,*LPMDICREATESTRUCT;
- typedef MULTIKEYHELPA MULTIKEYHELP,*PMULTIKEYHELP,*LPMULTIKEYHELP;
-+#if (WINVER >= 0x0500)
- typedef MONITORINFOEXA MONITORINFOEX, *LPMONITORINFOEX;
-+#endif
- #define AppendMenu AppendMenuA
- #define BroadcastSystemMessage BroadcastSystemMessageA
- #define BroadcastSystemMessageEx BroadcastSystemMessageExA
 --- include/winver.h.orig	2006-03-26 09:21:36.000000000 +0900
 +++ include/winver.h	2006-03-26 09:21:42.000000000 +0900
 @@ -101,10 +101,10 @@
@@ -2410,7 +2326,7 @@
  
 --- include/specstrings.h.orig	2008-01-18 22:17:38.000000000 +0900
 +++ include/specstrings.h	2008-03-26 22:08:28.484125000 +0900
-@@ -6,7 +6,105 @@
+@@ -6,7 +6,106 @@
  #if _MSC_VER
  #pragma once
  #endif
@@ -2475,6 +2391,7 @@
 +#define __inout_bcount_full(x)
 +#define __inout_bcount_opt(x)
 +#define __inout_bcount_part(x,y)
++#define __inout_bcount_part_opt(x,y)
 +#define __inout_ecount(x)
 +#define __inout_ecount_opt(x)
 +#define __inout_opt
@@ -2924,6 +2841,77 @@
 +#endif  /* _WINSOCK2_H */
  
 
+--- include/winuser.h.orig	2008-07-19 14:56:51.278750000 +0900
++++ include/winuser.h	2008-07-20 08:20:08.111750000 +0900
+@@ -11,6 +11,15 @@
+ #ifndef _WINUSER_
+ #define _WINUSER_
+ 
++#define __in
++#define __out
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static
++#endif
++DECLARE_HANDLE(HHOOK);
++typedef CONST GUID *LPCGUID;
+ 
+ 
+ #pragma once
+@@ -39,7 +48,7 @@
+ #define WINVER  0x0500      /* version 5.0 */
+ #endif /* !WINVER */
+ 
+-#include <stdarg.h>
++#include <../include/stdarg.h>
+ 
+ #ifndef NOUSER
+ 
+@@ -215,6 +224,8 @@
+ #pragma warning(disable:4995)
+ #endif
+ 
++WINUSERAPI UINT WINAPI WinExec(LPCSTR,UINT);
++
+ WINUSERAPI
+ int
+ WINAPI
+@@ -10717,7 +10728,7 @@
+ #define CDS_RESET                    0x40000000
+ #define CDS_NORESET                  0x10000000
+ 
+-#include <tvout.h>
++//#include <tvout.h>
+ 
+ /* Return values for ChangeDisplaySettings */
+ #define DISP_CHANGE_SUCCESSFUL       0
+@@ -12571,16 +12582,20 @@
+ 
+ 
+ 
+-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+-#if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
+-#include "winuser.inl"
+-#endif /* ISOLATION_AWARE_ENABLED */
+-#endif /* RC */
++//#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
++//#if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
++//#include "winuser.inl"
++//#endif /* ISOLATION_AWARE_ENABLED */
++//#endif /* RC */
+ 
+ #ifdef __cplusplus
+ }
+ #endif  /* __cplusplus */
+ 
++#undef __in
++#undef __out
++#undef __inline
++
+ #endif /* !_WINUSER_ */
+ 
+ 
 --- include/ws2ipdef.h.orig	2008-01-18 22:17:44.000000000 +0900
 +++ include/ws2ipdef.h	2008-03-27 20:23:19.096125000 +0900
 @@ -1,3 +1,6 @@

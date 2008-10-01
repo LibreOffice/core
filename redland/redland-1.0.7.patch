@@ -30,7 +30,7 @@
 +#
 +# $RCSfile: redland-1.0.7.patch,v $
 +#
-+# $Revision: 1.3 $
++# $Revision: 1.2.6.2 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -512,7 +512,7 @@
  #ifdef WITH_THREADS
    world = uri->world;
 --- misc/redland-1.0.7/librdf/win32_rdf_config.h	Sun May  6 19:14:36 2007
-+++ misc/build/redland-1.0.7/librdf/win32_rdf_config.h	Mon Jun 16 15:55:52 2008
++++ misc/build/redland-1.0.7/librdf/win32_rdf_config.h	Sat Jul 12 08:56:20 2008
 @@ -45,7 +45,8 @@
  #define HAVE_STRICMP 1
  
@@ -590,7 +590,7 @@
  
  /* Define to 1 if you have the <memory.h> header file. */
  #define HAVE_MEMORY_H 1
-@@ -161,22 +162,27 @@
+@@ -161,25 +162,33 @@
  #define HAVE_MKTEMP 1
  
  /* MySQL libraries are present */
@@ -619,7 +619,13 @@
  
  /* Define to 1 if you have the <pthread.h> header file. */
  /* #undef HAVE_PTHREAD_H */
-@@ -248,7 +254,7 @@
++#ifdef __MINGW32__
++#undef HAVE_PTHREAD_H */
++#endif
+ 
+ /* Define to 1 if you have the <stdint.h> header file. */
+ #define HAVE_STDINT_H 1
+@@ -248,7 +257,7 @@
  #define SIZEOF_UNSIGNED_LONG_LONG 8
  
  /* SQLite API version */
@@ -628,7 +634,7 @@
  
  /* Define to 1 if you have the ANSI C header files. */
  #define STDC_HEADERS 1
-@@ -256,14 +262,17 @@
+@@ -256,14 +265,17 @@
  /* Building file storage */
  #define STORAGE_FILE 1
  
@@ -685,8 +691,20 @@
 +LGPL is applied is otherwise unspecified.
 +
 --- misc/redland-1.0.7/ltmain.sh	2007-11-28 06:23:09.000000000 +0900
-+++ misc/build/redland-1.0.7/ltmain.sh	2008-07-08 11:59:22.000000000 +0900
-@@ -3237,9 +3237,9 @@
++++ misc/build/redland-1.0.7/ltmain.sh	2008-07-06 15:44:48.725250000 +0900
+@@ -1557,6 +1557,11 @@
+ 	[\\/]* | [A-Za-z]:[\\/]*) ;;
+ 	*)
+ 	  absdir=`cd "$dir" && pwd`
++	  case $host_os in
++	    mingw*)
++	      absdir=`cygpath -m $absdir`
++	      ;;
++	    esac
+ 	  if test -z "$absdir"; then
+ 	    $echo "$modename: cannot determine absolute directory name of \`$dir'" 1>&2
+ 	    absdir="$dir"
+@@ -3237,9 +3242,9 @@
  	    revision="$number_revision"
  	    ;;
  	  freebsd-aout|freebsd-elf|sunos)
@@ -699,7 +717,7 @@
  	    ;;
  	  irix|nonstopux)
  	    current=`expr $number_major + $number_minor`
-@@ -3319,8 +3319,8 @@
+@@ -3319,8 +3324,8 @@
  	  ;;
  
  	freebsd-elf)
@@ -710,3 +728,34 @@
  	  ;;
  
  	irix | nonstopux)
+--- misc/redland-1.0.7/configure	2007-12-17 16:58:16.000000000 +0900
++++ misc/build/redland-1.0.7/configure	2008-07-06 15:12:01.397125000 +0900
+@@ -4544,7 +4544,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -4553,7 +4553,7 @@
+   # func_win32_libid shell function, so use a weaker test based on 'objdump',
+   # unless we find 'file', for example because we are cross-compiling.
+   if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'
+--- misc/redland-1.0.7/utils/rdfproc.c	2007-10-23 23:55:06.000000000 +0900
++++ misc/build/redland-1.0.7/utils/rdfproc.c	2008-07-06 17:44:47.615875000 +0900
+@@ -30,7 +30,7 @@
+ #endif
+ 
+ #ifdef WIN32
+-#include <win32_config.h>
++#include <win32_rdf_config.h>
+ #endif
+ 
+ #include <stdio.h>

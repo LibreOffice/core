@@ -8,7 +8,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.2.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ LIB1OBJFILES= \
 
 .IF "$(GUI)"=="WNT" 
 .IF "$(COM)"=="GCC"
-LIB2ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
+LIB1ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 .ENDIF
 .ENDIF
 

@@ -30,7 +30,7 @@
 +#
 +# $RCSfile: rasqal-0.9.15.patch,v $
 +#
-+# $Revision: 1.3 $
++# $Revision: 1.2.6.2 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -200,8 +200,20 @@
  #define RASQAL_DEBUG 1
  #endif
 --- misc/rasqal-0.9.15/ltmain.sh	2006-03-12 03:49:04.000000000 +0900
-+++ misc/build/rasqal-0.9.15/ltmain.sh	2008-07-08 12:00:00.000000000 +0900
-@@ -3195,9 +3195,9 @@
++++ misc/build/rasqal-0.9.15/ltmain.sh	2008-07-06 14:30:56.975375000 +0900
+@@ -1518,6 +1518,11 @@
+ 	[\\/]* | [A-Za-z]:[\\/]*) ;;
+ 	*)
+ 	  absdir=`cd "$dir" && pwd`
++	  case $host_os in
++	    mingw*)
++	      absdir=`cygpath -m $absdir`
++	      ;;
++	    esac
+ 	  if test -z "$absdir"; then
+ 	    $echo "$modename: cannot determine absolute directory name of \`$dir'" 1>&2
+ 	    absdir="$dir"
+@@ -3195,9 +3200,9 @@
  	    revision="$number_revision"
  	    ;;
  	  freebsd-aout|freebsd-elf|sunos)
@@ -214,7 +226,7 @@
  	    ;;
  	  irix|nonstopux)
  	    current=`expr $number_major + $number_minor - 1`
-@@ -3275,8 +3275,8 @@
+@@ -3275,8 +3280,8 @@
  	  ;;
  
  	freebsd-elf)

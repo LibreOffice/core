@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.3.16.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,6 +49,11 @@ dummy:
 
 dummy:
     @echo "Nothing to do (Cairo not enabled)."
+
+.ELIF "$(BUILD_CAIRO)" != ""
+
+dummy:
+       @echo "Not using prebuilt binaries, cairo will be built from source."
 
 .ELIF  "$(OS)" != "MACOSX" && "$(GUI)" != "WNT"
 
