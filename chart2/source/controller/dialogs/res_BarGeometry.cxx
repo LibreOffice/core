@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_BarGeometry.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,10 +62,6 @@ void BarGeometryResources::SetPosPixel( const Point& rPosition )
 
     m_aFT_Geometry.SetPosPixel( rPosition );
     m_aLB_Geometry.SetPosPixel( Point( rPosition.X()+aDistanceSize.Width(), rPosition.Y()+m_aFT_Geometry.GetSizePixel().Height()+aDistanceSize.Height()) );
-}
-Point BarGeometryResources::GetPosPixel() const
-{
-    return m_aFT_Geometry.GetPosPixel();
 }
 Size BarGeometryResources::GetSizePixel() const
 {

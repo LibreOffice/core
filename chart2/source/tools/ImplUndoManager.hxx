@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImplUndoManager.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,7 +177,6 @@ public:
     // removes all actions that have been inserted more than nMaxSize steps ago.
     // The models of those actions are disposed of
     void limitSize( sal_Int32 nMaxSize );
-    sal_Int32 getCurrentLimitation() const;
 
 private:
     void applyLimitation();

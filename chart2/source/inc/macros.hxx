@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macros.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@
     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr())
 #else
 //avoid compilation warnings
-#define ASSERT_EXCEPTION(ex) (void)(ex);
+#define ASSERT_EXCEPTION(ex) (void)(ex)
 #endif
 
 #define U2C(ouString) (::rtl::OUStringToOString(ouString,RTL_TEXTENCODING_ASCII_US).getStr())

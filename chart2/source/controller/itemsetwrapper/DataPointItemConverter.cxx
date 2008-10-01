@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataPointItemConverter.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,7 +244,7 @@ DataPointItemConverter::DataPointItemConverter(
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
-                                                                 C2U( "ReferenceDiagramSize" )));
+                                                                 C2U( "ReferencePageSize" )));
     if( bDataSeries )
     {
         m_aConverters.push_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1050,11 +1050,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if(aCommand.equals("Cut"))
         this->executeDispatch_Cut();
     else if(aCommand.equals("DataRanges"))
-    {
-        //only test:
-//         this->executeDispatch_ObjectToDefault();
         this->executeDispatch_SourceData();
-    }
     //----------------------------------
     else if(aCommand.equals("Update")) //Update Chart
     {

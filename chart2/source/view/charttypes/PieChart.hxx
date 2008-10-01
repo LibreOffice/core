@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PieChart.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,6 @@ private: //methods
                         , double fLogicZ, double fDepth, double fExplodePercentage
                         , tPropertyNameValueMap* pOverWritePropertiesMap );
 
-    bool                isSingleRingChart() const;
     double              getMaxOffset() const;
     bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do
     void                resetLabelPositionsToPreviousState();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImplChartModel.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,8 +106,6 @@ public:
     void RemoveAllDiagrams();
     /** @return true, if the chart was found and removed, false otherwise.
      */
-    bool RemoveDiagram( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::chart2::XDiagram > & xDiagram );
     void AppendDiagram( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::chart2::XDiagram > & xDiagram );
     ::com::sun::star::uno::Reference<
@@ -141,10 +139,6 @@ public:
         ::com::sun::star::chart2::XChartTypeManager >
         GetChartTypeManager();
 
-    void SetChartTypeTemplate(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartTypeTemplate > & xTemplate );
-
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartTypeTemplate >
         GetChartTypeTemplate();
@@ -165,9 +159,6 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
         GetUndoManager();
-
-    ::std::vector< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > > GetData();
 
     void CreateDefaultChart();
 

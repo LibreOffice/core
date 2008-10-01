@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ItemConverter.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,17 +127,6 @@ public:
         GetWhichPairs.
      */
     SfxItemSet CreateEmptyItemSet() const;
-
-    /** States whether conversion is still likely to work.
-
-        In particular, it is checked if the XPropertySet given in the CTOR is
-        still valid, i.e. not disposed.  It is assumed that the XPropertySet is
-        valid when the converter is constructed.
-
-        This only works if the XPropertySet given in the CTOR supports the
-        interface ::com::sun::star::lang::XComponent.
-     */
-    bool IsValid() const;
 
     /** Invalidates all items in rDestSet, that are set (state SFX_ITEM_SET) in
         both item sets (rDestSet and rSourceSet) and have differing content.

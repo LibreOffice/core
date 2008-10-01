@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_ChartType.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,6 @@ public:
     virtual ~Dim3DLookResourceGroup();
 
     void  showControls( bool bShow );
-    Point getPosition();
     long  getHeight();
     void  setPosition( const Point& rPoint );
 
@@ -201,10 +200,6 @@ void Dim3DLookResourceGroup::showControls( bool bShow )
 {
     m_aCB_3DLook.Show(bShow);
     m_aLB_Scheme.Show(bShow);
-}
-Point Dim3DLookResourceGroup::getPosition()
-{
-    return m_aCB_3DLook.GetPosPixel();
 }
 long Dim3DLookResourceGroup::getHeight()
 {
@@ -266,7 +261,6 @@ public:
     virtual ~SortByXValuesResourceGroup();
 
     void  showControls( bool bShow );
-    Point getPosition();
     long  getHeight();
     void  setPosition( const Point& rPoint );
 
@@ -291,10 +285,6 @@ SortByXValuesResourceGroup::~SortByXValuesResourceGroup()
 void SortByXValuesResourceGroup::showControls( bool bShow )
 {
     m_aCB_XValueSorting.Show(bShow);
-}
-Point SortByXValuesResourceGroup::getPosition()
-{
-    return m_aCB_XValueSorting.GetPosPixel();
 }
 long SortByXValuesResourceGroup::getHeight()
 {
@@ -730,7 +720,6 @@ public:
     virtual ~GeometryResourceGroup();
 
     void  showControls( bool bShow );
-    Point getPosition();
     long  getHeight();
     void  setPosition( const Point& rPoint );
 
@@ -755,10 +744,6 @@ GeometryResourceGroup::~GeometryResourceGroup()
 void GeometryResourceGroup::showControls( bool bShow )
 {
     m_aGeometryResources.Show(bShow);
-}
-Point GeometryResourceGroup::getPosition()
-{
-    return m_aGeometryResources.GetPosPixel();
 }
 long GeometryResourceGroup::getHeight()
 {

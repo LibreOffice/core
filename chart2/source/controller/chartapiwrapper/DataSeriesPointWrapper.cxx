@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSeriesPointWrapper.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.44.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@
 #include "WrappedSymbolProperties.hxx"
 #include "WrappedDataCaptionProperties.hxx"
 #include "WrappedSeriesAreaOrLineProperty.hxx"
+#include "WrappedScaleTextProperties.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 // header for define DBG_ASSERT
@@ -184,6 +185,7 @@ const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrappe
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
@@ -582,26 +584,27 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
 // ================================================================================
 
 //ReferenceSizePropertyProvider
-void DataSeriesPointWrapper::setCurrentSizeAsReference()
+void DataSeriesPointWrapper::updateReferenceSize()
 {
-    /*
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
-        xProp->setPropertyValue( C2U("ReferenceDiagramSize"), uno::makeAny(
-                            m_spChart2ModelContact->GetDiagramSize() ));
-    */
+    {
+        if( xProp->getPropertyValue( C2U("ReferencePageSize") ).hasValue() )
+            xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+                m_spChart2ModelContact->GetPageSize() ));
+    }
 }
 Any DataSeriesPointWrapper::getReferenceSize()
 {
     Any aRet;
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( C2U("ReferenceDiagramSize") );
+        aRet = xProp->getPropertyValue( C2U("ReferencePageSize") );
     return aRet;
 }
 awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
 {
-    return m_spChart2ModelContact->GetDiagramSize();
+    return m_spChart2ModelContact->GetPageSize();
 }
 
 // ================================================================================
@@ -705,6 +708,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
 
     WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
+    WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
     //add unnamed fill properties (different inner names here)
 //     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
@@ -741,10 +745,6 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapRectanglePoint" ), C2U( "FillBitmapRectanglePoint" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapPositionOffsetX" ), C2U( "FillBitmapPositionOffsetX" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillBitmapPositionOffsetY" ), C2U( "FillBitmapPositionOffsetY" ) ) );
-
-    //aWrappedProperties.push_back( new  WrappedNamedProperty( C2U( "FillBitmapName" ), C2U( "FillBitmap" ), m_spChart2ModelContact ) );
-    //[optional, property] com::sun::star::awt::XBitmap FillBitmap;
-    //[optional, property] string FillBitmapURL;
 
     aWrappedProperties.push_back( new WrappedProperty( C2U( "SolidType" ), C2U( "Geometry3D" ) ) );
     aWrappedProperties.push_back( new WrappedSegmentOffsetProperty() );

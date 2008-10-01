@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConfigColorScheme.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@ public:
     virtual ~ChartConfigItem();
 
     void addPropertyNotification( const OUString & rPropertyName );
-    void removePropertyNotification( const OUString & rPropertyName );
 
     uno::Any getProperty( const OUString & aPropertyName );
 
@@ -99,12 +98,6 @@ void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
 {
     m_aPropertiesToNotify.insert( rPropertyName );
     EnableNotification( ContainerHelper::ContainerToSequence( m_aPropertiesToNotify ));
-}
-
-void ChartConfigItem::removePropertyNotification( const OUString & rPropertyName )
-{
-    if( m_aPropertiesToNotify.erase( rPropertyName ))
-        EnableNotification( ContainerHelper::ContainerToSequence( m_aPropertiesToNotify ));
 }
 
 uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )

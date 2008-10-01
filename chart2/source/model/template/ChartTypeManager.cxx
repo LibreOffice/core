@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeManager.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_chart2.hxx"
 #include "ChartTypeManager.hxx"
 #include "macros.hxx"
-#include "ContextHelper.hxx"
 #include "StackMode.hxx"
 #include "ContainerHelper.hxx"
 
@@ -48,6 +47,7 @@
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
 #include <cppuhelper/component_context.hxx>
+#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>

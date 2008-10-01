@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AreaChart.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.53.42.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -862,15 +862,7 @@ void AreaChart::createShapes()
                         drawing::Direction3D aSymbolSize(0,0,0);
                         if( bCreateSymbol )
                         {
-                            if(m_nDimension==3)
-                            {
-                                /* //no symbols for 3D
-                                m_pShapeFactory->createSymbol3D( xPointGroupShape_Shapes
-                                        , aScenePosition, aTransformedGeom.m_aSize
-                                        , (*aSeriesIter)->getSymbolTypeOfPoint( nIndex ) );
-                                        */
-                            }
-                            else //m_nDimension!=3
+                            if(m_nDimension!=3)
                             {
                                 if( pSymbolProperties )
                                 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataPoint.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,12 +86,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 
 namespace chart
 {
-
-DataPoint::DataPoint() :
-        ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
-        m_bNoParentPropAllowed( false )
-{}
 
 DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentProperties ) :
         ::property::OPropertySet( m_aMutex ),

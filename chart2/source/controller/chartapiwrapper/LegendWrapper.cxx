@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LegendWrapper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.16.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,11 +48,11 @@
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
-// #include "NamedProperties.hxx"
-// #include "WrappedNamedProperty.hxx"
 #include "WrappedCharacterHeightProperty.hxx"
 #include "PositionAndSizeHelper.hxx"
 #include "WrappedDirectStateProperty.hxx"
+#include "WrappedAutomaticPositionProperties.hxx"
+#include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
@@ -265,6 +265,8 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
 //         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+        ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
+        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -380,12 +382,15 @@ void SAL_CALL LegendWrapper::removeEventListener(
 // ================================================================================
 
 //ReferenceSizePropertyProvider
-void LegendWrapper::setCurrentSizeAsReference()
+void LegendWrapper::updateReferenceSize()
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
-        xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
-                            m_spChart2ModelContact->GetPageSize() ));
+    {
+        if( xProp->getPropertyValue( C2U("ReferencePageSize") ).hasValue() )
+            xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+                m_spChart2ModelContact->GetPageSize() ));
+    }
 }
 Any LegendWrapper::getReferenceSize()
 {
@@ -424,11 +429,12 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     aWrappedProperties.push_back( new WrappedLegendAlignmentProperty() );
-//     WrappedNamedProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     //same problem as for wall: thje defaults ion the old chart are different for different charttypes, so we need to export explicitly
     aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("FillStyle"), C2U("FillStyle") ) );
     aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("FillColor"), C2U("FillColor") ));
+    WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
+    WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
     return aWrappedProperties;
 }

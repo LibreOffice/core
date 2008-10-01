@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DialogModel.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,16 +152,6 @@ public:
                       ::com::sun::star::beans::PropertyValue > & rArguments );
 
     void startControllerLockTimer();
-
-    /** Applies the content of xSource to xDestination.  As a result
-        xDestination is a copy of xSource, but maintains its identity.
-        (Something like a flat assignment operator)
-     */
-    static void restoreModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xSource,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xDestination );
 
     static ::rtl::OUString ConvertRoleFromInternalToUI( const ::rtl::OUString & rRoleString );
     static ::rtl::OUString ConvertRoleFromUIToInternal( const ::rtl::OUString & rRoleString );

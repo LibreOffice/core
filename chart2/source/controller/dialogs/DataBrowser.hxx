@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowser.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,8 +103,6 @@ public:
     bool SetReadOnly( bool bNewState );
     bool IsReadOnly() const;
 
-    /// @return true, if data has been modified
-    bool IsDirty() const;
     /// reset the dirty status, if changes have been saved
     void SetClean();
 
@@ -141,15 +139,7 @@ public:
     void SwapRow();
     void SwapColumn();
 
-//  void QuickSortRow();
-//  void QuickSortCol();
-
-    // sorting the entire table
-//  void QuickSortTableCols ();
-//  void QuickSortTableRows ();
-
     void SetCursorMovedHdl( const Link& rLink );
-    const Link& GetCursorMovedHdl() const;
 
     void SetCellModifiedHdl( const Link& rLink );
 

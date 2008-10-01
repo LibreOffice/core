@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RegressionCurveHelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,11 +164,6 @@ public:
             ::com::sun::star::uno::XComponentContext > & xContext );
 
     // ------------------------------------------------------------
-
-    /// returns a calculator object for mean-value lines (used by the view)
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveCalculator >
-        createMeanValueLineCalculator();
 
     /// returns a calculator object for regression curves (used by the view)
     static ::com::sun::star::uno::Reference<

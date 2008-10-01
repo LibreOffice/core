@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImplUndoManager.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -417,11 +417,6 @@ void UndoStack::limitSize( sal_Int32 nMaxSize )
 {
     m_nSizeLimit = nMaxSize;
     applyLimitation();
-}
-
-sal_Int32 UndoStack::getCurrentLimitation() const
-{
-    return m_nSizeLimit;
 }
 
 void UndoStack::applyLimitation()

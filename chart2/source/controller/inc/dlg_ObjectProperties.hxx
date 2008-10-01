@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_ObjectProperties.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.42.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +53,10 @@ public:
 
     bool HasGeometryProperties() const;
     bool HasStatisticProperties() const;
-    bool HasRegressionProperties() const;
     bool ProvidesSecondaryYAxis() const;
     bool ProvidesOverlapAndGapWidth() const;
     bool ProvidesBarConnectors() const;
     bool HasAreaProperties() const;
-    bool HasLineProperties() const;
     bool HasSymbolProperties() const;
     bool HasScaleProperties() const;
     bool CanAxisLabelsBeStaggered() const;
@@ -78,12 +76,10 @@ private:
 
     bool m_bHasGeometryProperties;
     bool m_bHasStatisticProperties;
-    bool m_bHasRegressionProperties;
     bool m_bProvidesSecondaryYAxis;
     bool m_bProvidesOverlapAndGapWidth;
     bool m_bProvidesBarConnectors;
     bool m_bHasAreaProperties;
-    bool m_bHasLineProperties;
     bool m_bHasSymbolProperties;
     bool m_bHasScaleProperties;
     bool m_bCanAxisLabelsBeStaggered;

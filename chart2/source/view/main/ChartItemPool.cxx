@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartItemPool.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.9.42.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,13 +67,6 @@ struct ChartItemPoolInitialization
 
 namespace chart
 {
-
-ChartItemPool * GetChartItemPool()
-{
-    return rtl_Instance< ChartItemPool, ChartItemPoolInitialization, ::osl::MutexGuard,
-        ::osl::GetGlobalMutex >::create(
-            ChartItemPoolInitialization(), ::osl::GetGlobalMutex());
-}
 
 ChartItemPool::ChartItemPool():
         SfxItemPool( String( RTL_CONSTASCII_USTRINGPARAM( "ChartItemPool" )), SCHATTR_START, SCHATTR_END, NULL, NULL )

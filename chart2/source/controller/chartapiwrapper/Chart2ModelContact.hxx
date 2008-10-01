@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Chart2ModelContact.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,37 +87,15 @@ public:
     sal_Int32 getExplicitNumberFormatKeyForAxis(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
 
-    /** returns an element with name rElementName found in the list corresponding to the type PropertyName
-    (e.g. if rTableTypePropertyName == "FillGradientName" and rElementName == "Gradient 3", then this method will return the corresponding gradient )
-    */
-    ::com::sun::star::uno::Any GetListElementByName(
-        const ::rtl::OUString & rElementName, const ::rtl::OUString & rTableTypePropertyName );
-
-    /** search the list corresponding to rTableTypePropertyName for an element that has the same values as rElement.
-    returns the found name.
-    */
-    ::rtl::OUString GetNameOfListElement(
-        const ::com::sun::star::uno::Any& rElementValue, const ::rtl::OUString & rTableTypePropertyName );
-
-
     /** Returns the size of the page in logic coordinates.  This value is used
         for setting an appropriate "ReferencePageSize" for FontHeights.
      */
     ::com::sun::star::awt::Size GetPageSize() const;
 
-    /** Returns the size of the diagram object in logic coordinates.  This value
-        is used for setting an appropriate "ReferenceDiagramSize" for FontHeights.
-     */
-    ::com::sun::star::awt::Size GetDiagramSize() const;
-
     /** Returns the size of the diagram object in logic coordinates inclusive
         the space reserved for axis titles.
      */
     ::com::sun::star::awt::Size GetDiagramSizeInclusive() const;
-
-    /** Returns the position of the object in logic coordinates.
-     */
-    ::com::sun::star::awt::Point GetDiagramPosition() const;
 
     /** Returns the position of the diagram in logic coordinates inclusive
         the space reserved for axis titles.

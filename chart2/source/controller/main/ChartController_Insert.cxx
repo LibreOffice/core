@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Insert.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include "AxisHelper.hxx"
 #include "TitleHelper.hxx"
 #include "DiagramHelper.hxx"
-#include "ContextHelper.hxx"
 #include "macros.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"

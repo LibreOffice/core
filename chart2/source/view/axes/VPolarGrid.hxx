@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VPolarGrid.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,10 +85,12 @@ private: //member
                     , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
                     , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
+#if NOTYET
     void    create2DAngleGrid( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
                     , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
                     , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
+#endif
 };
 
 //.............................................................................

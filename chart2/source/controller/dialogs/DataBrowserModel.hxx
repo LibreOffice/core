@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowserModel.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,10 +58,6 @@ public:
             ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~DataBrowserModel();
 
-    void setModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-
     /** Inserts a new data series after the data series to which the data column
         with index nAfterColumnIndex belongs.
      */
@@ -101,21 +97,9 @@ public:
 
     sal_Int32 getColumnCount() const;
     sal_Int32 getMaxRowCount() const;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >
-        getDataOfColumn( sal_Int32 nColumnIndex ) const;
+
     // returns the UI string of the corresponding role
     ::rtl::OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
-
-    /** Applies the content of xSource to xDestination.  As a result
-        xDestination is a copy of xSource, but maintains its identity.
-        (Something like a flat assignment operator)
-     */
-    static void restoreModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xSource,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xDestination );
 
     struct tDataHeader
     {
@@ -164,7 +148,6 @@ public:
 
 private:
     void updateFromModel();
-    void applyToModel();
 
     void addErrorBarRanges(
         const ::com::sun::star::uno::Reference<

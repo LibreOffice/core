@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Splines.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,95 +59,6 @@ struct lcl_EqualsFirstDoubleOfPair : ::std::binary_function< ::std::pair< double
         return ( ::rtl::math::approxEqual( rOne.first, rOther.first ) );
     }
 };
-
-//-----------------------------------------------------------------------------
-
-struct Point3D
-{
-    Point3D( double X, double Y, double Z );
-    Point3D();
-
-    double X;
-    double Y;
-    double Z;
-};
-Point3D::Point3D( double fX, double fY, double fZ )
-: X(fX), Y(fY), Z(fZ)
-{
-}
-Point3D::Point3D()
-: X(0.0), Y(0.0), Z(0.0)
-{
-}
-
-typedef ::std::vector< Point3D >  t3DPointVecType;
-
-
-struct lcl_LessXOfPoint3D : ::std::binary_function< Point3D, Point3D, bool >
-{
-    inline bool operator() ( const Point3D& rOne, const Point3D& rOther )
-    {
-        return ( rOne.X < rOther.X );
-    }
-};
-
-t3DPointVecType lcl_makeVector3D( const drawing::PolyPolygonShape3D& rPoly, sal_Int32 nPolyIndex=0 )
-{
-    t3DPointVecType aRet;
-    if(nPolyIndex>=0&&nPolyIndex<rPoly.SequenceX.getLength())
-    {
-        sal_Int32 nPointCount = rPoly.SequenceX[nPolyIndex].getLength();
-        if(nPointCount)
-        {
-            const double* pXSequence = rPoly.SequenceX[nPolyIndex].getConstArray();
-            const double* pYSequence = rPoly.SequenceY[nPolyIndex].getConstArray();
-            const double* pZSequence = rPoly.SequenceZ[nPolyIndex].getConstArray();
-            aRet.resize(nPointCount);
-            for(sal_Int32 nN=0;nN<nPointCount;nN++)
-            {
-                aRet[ nN ].X  = pXSequence[nN];
-                aRet[ nN ].Y  = pYSequence[nN];
-                aRet[ nN ].Z  = pZSequence[nN];
-            }
-        }
-    }
-    return aRet;
-}
-
-void lcl_makePolygonFromVector3D( const t3DPointVecType& rVector, drawing::PolyPolygonShape3D& rPoly )
-{
-    sal_Int32 nPointCount = static_cast<sal_Int32>(rVector.size());
-
-    rPoly.SequenceX.realloc(1);
-    rPoly.SequenceY.realloc(1);
-    rPoly.SequenceZ.realloc(1);
-    rPoly.SequenceX[0].realloc( nPointCount );
-    rPoly.SequenceY[0].realloc( nPointCount );
-    rPoly.SequenceZ[0].realloc( nPointCount );
-
-    if(!nPointCount)
-        return;
-
-    double* pXSequence = rPoly.SequenceX[0].getArray();
-    double* pYSequence = rPoly.SequenceY[0].getArray();
-    double* pZSequence = rPoly.SequenceZ[0].getArray();
-
-    for(sal_Int32 nN=0;nN<nPointCount;nN++)
-    {
-        Point3D aP = rVector[nN];
-        pXSequence[nN] = aP.X;
-        pYSequence[nN] = aP.Y;
-        pZSequence[nN] = aP.Z;
-    }
-}
-
-void lcl_getSortedPolyPolygonShape3D( const drawing::PolyPolygonShape3D& rUnsortedInput, drawing::PolyPolygonShape3D& rSortedOutput )
-{
-
-    t3DPointVecType aVector = lcl_makeVector3D( rUnsortedInput);
-    ::std::sort( aVector.begin(), aVector.end(), lcl_LessXOfPoint3D() );
-    lcl_makePolygonFromVector3D( aVector, rSortedOutput );
-}
 
 //-----------------------------------------------------------------------------
 
@@ -342,30 +253,6 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
              (( a*a*a - a ) * m_aSecDerivY[ m_nKLow ] +
               ( b*b*b - b ) * m_aSecDerivY[ m_nKHigh ] ) *
              ( h*h ) / 6.0 );
-}
-
-tPointVecType makeVector( const drawing::PolyPolygonShape3D& rPoly, sal_Int32 nPolyIndex=0 )
-{
-    //creates a vector from only one poly within the PolyPolygon
-    //the third dimension is ignored (3D->2D)
-
-    tPointVecType aRet;
-    if(nPolyIndex>=0&&nPolyIndex<rPoly.SequenceX.getLength())
-    {
-        sal_Int32 nPointCount = rPoly.SequenceX[nPolyIndex].getLength();
-        if(nPointCount)
-        {
-            const double* pXSequence = rPoly.SequenceX[nPolyIndex].getConstArray();
-            const double* pYSequence = rPoly.SequenceY[nPolyIndex].getConstArray();
-            aRet.resize(nPointCount);
-            for(sal_Int32 nN=0;nN<nPointCount;nN++)
-            {
-                aRet[ nN ].first  = pXSequence[nN];
-                aRet[ nN ].second = pYSequence[nN];
-            }
-        }
-    }
-    return aRet;
 }
 
 //-----------------------------------------------------------------------------

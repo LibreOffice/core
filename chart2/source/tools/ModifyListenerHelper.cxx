@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModifyListenerHelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,57 +210,6 @@ void SAL_CALL ModifyEventForwarder::disposing()
 {
     // dispose was called at this
     DisposeAndClear( this );
-}
-
-// ================================================================================
-
-ModifyListenerOnDemmandRefresh::ModifyListenerOnDemmandRefresh( ::osl::Mutex & rMutex )
-        : m_rMutex( rMutex ),
-          m_bNeedsUpdate( true )
-{
-}
-
-void ModifyListenerOnDemmandRefresh::listenAtDocument(
-    const Reference< chart2::XChartDocument > & xModel )
-{
-    Reference< util::XModifyBroadcaster > xBroadcaster( xModel, uno::UNO_QUERY );
-    if( xBroadcaster.is())
-    {
-        try
-        {
-            xBroadcaster->addModifyListener( Reference< util::XModifyListener >( this ));
-        }
-        catch( const uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-}
-
-void ModifyListenerOnDemmandRefresh::update()
-{
-    m_bNeedsUpdate = false;
-}
-
-bool ModifyListenerOnDemmandRefresh::needsUpdate() const
-{
-    return m_bNeedsUpdate;
-}
-
-// ____ XModifyListener ____
-void SAL_CALL ModifyListenerOnDemmandRefresh::modified(
-    const lang::EventObject& /* aEvent */ )
-    throw (uno::RuntimeException)
-{
-    m_bNeedsUpdate = true;
-}
-
-// ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ModifyListenerOnDemmandRefresh::disposing(
-    const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
-{
-    m_bNeedsUpdate = true;
 }
 
 } //  namespace ModifyListenerHelper

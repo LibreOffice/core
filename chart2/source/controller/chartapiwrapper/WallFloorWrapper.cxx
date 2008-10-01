@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WallFloorWrapper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,11 +39,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-// #include "NamedProperties.hxx"
 #include "FillProperties.hxx"
 #include "LineProperties.hxx"
 #include "UserDefinedProperties.hxx"
-// #include "WrappedNamedProperty.hxx"
 #include "WrappedDirectStateProperty.hxx"
 
 #include <algorithm>
@@ -167,8 +165,6 @@ const Sequence< beans::Property >& WallFloorWrapper::getPropertySequence()
 const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
-
-//     WrappedNamedProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
     // use direct state always, so that in XML the value is always
     // exported. Because in the old chart the defaults is as follows:

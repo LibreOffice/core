@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_ObjectProperties.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.23.42.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,12 +102,10 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_aLocalizedName()
         , m_bHasGeometryProperties(false)
         , m_bHasStatisticProperties(false)
-        , m_bHasRegressionProperties(false)
         , m_bProvidesSecondaryYAxis(false)
         , m_bProvidesOverlapAndGapWidth(false)
         , m_bProvidesBarConnectors(false)
         , m_bHasAreaProperties(false)
-        , m_bHasLineProperties(false)
         , m_bHasSymbolProperties(false)
         , m_bHasScaleProperties(false)
         , m_bCanAxisLabelsBeStaggered(false)
@@ -151,7 +149,6 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         if( bHasSeriesProperties )
         {
             m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount );
-            m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType, nDimensionCount );
             m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 );
             m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
             m_bProvidesBarConnectors =  ChartTypeHelper::isSupportingBarConnectors( xChartType, nDimensionCount );
@@ -161,12 +158,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                                             .getLength() ? true : false;
         }
     }
-    m_bHasLineProperties     = true; //@todo ask object
 
     if( OBJECTTYPE_DATA_ERRORS == m_eObjectType )
         m_bHasStatisticProperties = true;
-    else if( OBJECTTYPE_DATA_CURVE == m_eObjectType )
-        m_bHasRegressionProperties = true;
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
     {
@@ -217,10 +211,6 @@ bool ObjectPropertiesDialogParameter::HasStatisticProperties() const
 {
     return m_bHasStatisticProperties;
 }
-bool ObjectPropertiesDialogParameter::HasRegressionProperties() const
-{
-    return m_bHasRegressionProperties;
-}
 bool ObjectPropertiesDialogParameter::ProvidesSecondaryYAxis() const
 {
     return m_bProvidesSecondaryYAxis;
@@ -236,10 +226,6 @@ bool ObjectPropertiesDialogParameter::ProvidesBarConnectors() const
 bool ObjectPropertiesDialogParameter::HasAreaProperties() const
 {
     return m_bHasAreaProperties;
-}
-bool ObjectPropertiesDialogParameter::HasLineProperties() const
-{
-    return m_bHasLineProperties;
 }
 bool ObjectPropertiesDialogParameter::HasSymbolProperties() const
 {

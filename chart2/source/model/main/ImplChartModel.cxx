@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImplChartModel.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,7 @@
 #include "precompiled_chart2.hxx"
 #include "ImplChartModel.hxx"
 #include "DataSeries.hxx"
-#include "StyleFamilies.hxx"
-#include "StyleFamily.hxx"
 #include "macros.hxx"
-#include "ContextHelper.hxx"
 #include "PageBackground.hxx"
 #include "DiagramHelper.hxx"
 #include "NameContainer.hxx"
@@ -164,93 +161,8 @@ ImplChartModel::ImplChartModel( const ImplChartModel & rOther, const Reference< 
 ImplChartModel::~ImplChartModel()
 {}
 
-// ImplChartModel::CreateStyles()
-// {
-//     // set style
-//     Reference< container::XNameAccess > xGraphicsFamily(
-//         GetStyleFamilies()->getByName( C2U( "graphics" )), uno::UNO_QUERY );
-
-//     if( xGraphicsFamily.is())
-//         const sal_Int32 nModul = Reference< container::XIndexAccess >(
-//             xGraphicsFamily, uno::UNO_QUERY )->getCount();
-//     for( size_t nI = 0; nI < nMaxSeries; ++nI )
-//     {
-//         try
-//         {
-//             Reference< ::com::sun::star::style::XStyle > xStyle(
-//                 xGraphicsFamily->getByName(
-//                     aStyleNameStub + OUString::valueOf(
-//                         static_cast< sal_Int32 >( (nI % nModul)+1 ))), uno::UNO_QUERY );
-
-//             Reference< beans::XPropertySet > xSeriesProp(
-//                 aResult[ nI ], uno::UNO_QUERY );
-
-//             if( xSeriesProp.is())
-//             {
-//                 xSeriesProp->setPropertyValue(
-//                     C2U( "Color" ),
-//                     uno::makeAny( nDefaultColors[ sal_Int32( nI % nMaxDefaultColors ) ]));
-
-//                 // set style
-//                 Reference< ::com::sun::star::style::XStyleSupplier >
-//                     xStyleSupp( xSeriesProp->getPropertyValue( C2U( "FirstGraphicsFormat" )),
-//                                 uno::UNO_QUERY );
-
-//                 if( xStyleSupp.is())
-//                 {
-//                     xStyleSupp->setStyle( xStyle );
-//                 }
-//             }
-//         }
-//         catch( uno::Exception ex )
-//         {
-//             OSL_ENSURE( false, "Couldn't set style" );
-//         }
-//     }
-// }
-
-
 Reference< container::XNameAccess > ImplChartModel::GetStyleFamilies()
 {
-    if( ! m_xFamilies.is())
-    {
-//         StyleFamilies * pStyleFamilies = new StyleFamilies();
-//         StyleFamily *  pGraphicsFamily = new StyleFamily();
-//         Reference< container::XNameAccess > xGraphicsFamily( pGraphicsFamily );
-
-        // add some default styles for graphics
-
-        // randomly generated default colors
-
-//         sal_Int32 i = 0;
-//         const sal_Int32 nMax = sizeof( nDefaults ) / sizeof( sal_Int32 );
-//         for( ; i < nMax; ++i )
-//         {
-//             try
-//             {
-//                 Reference< ::com::sun::star::style::XStyle > xStyle(
-//                     new GraphicsPropertiesStyle( xGraphicsFamily ) );
-//                 xStyle->setName( C2U( "Series " ) + OUString::valueOf( static_cast< sal_Int32 >(i + 1) ) );
-//                 Reference< beans::XPropertySet > xProp( xStyle, uno::UNO_QUERY );
-//                 if( xProp.is())
-//                 {
-//                     xProp->setPropertyValue( C2U( "Color" ), uno::makeAny( nDefaults[ i ] ));
-//                 }
-//                 pGraphicsFamily->AddStyle( xStyle );
-//             }
-//             catch( uno::Exception ex )
-//             {
-//                 OSL_ENSURE( false, "Error on creating styles" );
-//             }
-//         }
-
-//         bool bResult = pStyleFamilies->AddStyleFamily(
-//             C2U( "graphics" ), xGraphicsFamily );
-
-//         OSL_ASSERT( bResult );
-//         m_xFamilies.set( pStyleFamilies );
-    }
-
     return m_xFamilies;
 }
 
@@ -260,19 +172,6 @@ void ImplChartModel::RemoveAllDiagrams()
 {
     ModifyListenerHelper::removeListenerFromAllElements( m_aDiagrams, m_xModifyListener );
     m_aDiagrams.clear();
-}
-
-bool ImplChartModel::RemoveDiagram( const Reference< chart2::XDiagram > & xDiagram )
-{
-    tDiagramContainer::iterator aIt( ::std::find(
-                                         m_aDiagrams.begin(), m_aDiagrams.end(),
-                                         xDiagram ));
-    if( aIt == m_aDiagrams.end() )
-        return false;
-
-    ModifyListenerHelper::removeListener( *aIt, m_xModifyListener );
-    m_aDiagrams.erase( aIt );
-    return true;
 }
 
 void ImplChartModel::AppendDiagram( const Reference< chart2::XDiagram > & xDiagram )
@@ -412,12 +311,6 @@ void ImplChartModel::SetChartTypeManager(
 Reference< chart2::XChartTypeManager > ImplChartModel::GetChartTypeManager()
 {
     return m_xChartTypeManager;
-}
-
-void ImplChartModel::SetChartTypeTemplate(
-    const Reference< chart2::XChartTypeTemplate > & xTemplate )
-{
-    m_xChartTypeTemplate = xTemplate;
 }
 
 Reference< chart2::XChartTypeTemplate > ImplChartModel::GetChartTypeTemplate()
@@ -560,45 +453,6 @@ Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
 Reference< chart2::XUndoManager > ImplChartModel::GetUndoManager()
 {
     return m_xUndoManager;
-}
-
-// OUString
-::std::vector< Reference< chart2::data::XLabeledDataSequence > > ImplChartModel::GetData()
-{
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResult;
-
-    Reference< chart2::XDiagram > xDia;
-    if( m_aDiagrams.size() > 0 )
-        xDia.set( GetDiagram(0) );
-
-    if( xDia.is())
-    {
-        try
-        {
-            // categories
-            Reference< chart2::data::XLabeledDataSequence > xCategories(
-                DiagramHelper::getCategoriesFromDiagram( xDia ));
-            aResult.push_back( xCategories );
-
-            // data series
-            ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-                DiagramHelper::getDataSeriesFromDiagram( xDia ));
-            for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-                     aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
-            {
-                Reference< chart2::data::XDataSource > xSource( *aIt, uno::UNO_QUERY_THROW );
-                Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeq( xSource->getDataSequences());
-                ::std::copy( aDataSeq.getConstArray(), aDataSeq.getConstArray() + aDataSeq.getLength(),
-                             back_inserter( aResult ));
-            }
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    return aResult;
 }
 
 void ImplChartModel::SetNewData( const Reference< chart2::data::XDataSource > & xDataSource,

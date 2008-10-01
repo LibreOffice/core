@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WrappedCharacterHeightProperty.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +80,7 @@ void WrappedCharacterHeightProperty_Base::setPropertyValue( const Any& rOuterVal
     if(xInnerPropertySet.is())
     {
         if( m_pRefSizePropProvider )
-            m_pRefSizePropProvider->setCurrentSizeAsReference();
+            m_pRefSizePropProvider->updateReferenceSize();
         xInnerPropertySet->setPropertyValue( m_aInnerName, rOuterValue );
     }
 }

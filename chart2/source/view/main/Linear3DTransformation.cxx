@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Linear3DTransformation.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,11 +60,6 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
     double fZ = rSourceValues[2];
     if(m_bSwapXAndY)
         std::swap(fX,fY);
-    /*
-    ::basegfx::B3DPoint aSource( SequenceToB3DPoint( rSourceValues ) );
-    ::basegfx::B3DPoint aTarget = m_Matrix*aSource;
-    return B3DPointToSequence(aTarget);
-    */
     Sequence< double > aNewVec(3);
     double fZwi;
 

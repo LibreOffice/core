@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RangeHighlighter.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,23 +67,6 @@ void lcl_fillRanges(
         rOutRanges[i].AllowMerginigWithOtherRanges = sal_False;
         rOutRanges[i].Index = nIndex;
     }
-}
-
-sal_Int32 lcl_getColor( const Reference< beans::XPropertySet > & xProp )
-{
-    sal_Int32 nResult = PREFERED_DEFAULT_COLOR;
-
-    try
-    {
-        if( xProp.is())
-            xProp->getPropertyValue( C2U("Color")) >>= nResult;
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    return nResult;
 }
 
 } // anonymous namespace
@@ -216,7 +199,6 @@ void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram >
 void RangeHighlighter::fillRangesForDataSeries( const uno::Reference< chart2::XDataSeries > & xSeries )
 {
     sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
-//         lcl_getColor( Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
     Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
     if( xSource.is())
         lcl_fillRanges( m_aSelectedRanges,
@@ -270,7 +252,6 @@ void RangeHighlighter::fillRangesForCategories( const Reference< chart2::XAxis >
 void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface > & xDataSeries, sal_Int32 nIndex )
 {
     sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
-//         lcl_getColor( Reference< beans::XPropertySet >( xDataPoint, uno::UNO_QUERY ));
     if( xDataSeries.is())
     {
         Reference< chart2::data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY );

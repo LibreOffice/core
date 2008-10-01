@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartDebugTrace.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@ namespace chart
 namespace debug
 {
 
+#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
 /** Does several OSL_TRACEs that show information about the given chart document
     (e.g. the chart-type manager, diagrams etc.)
 
@@ -61,6 +62,7 @@ void ChartDebugTraceDiagram(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDiagram > & xDiagram,
     int nIndent = 0 );
+#endif
 
 } // namespace debug
 } //  namespace chart

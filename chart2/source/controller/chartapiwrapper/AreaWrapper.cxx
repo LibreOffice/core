@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AreaWrapper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,6 @@
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
-// #include "NamedProperties.hxx"
-// #include "WrappedNamedProperty.hxx"
 
 #include <algorithm>
 
@@ -188,8 +186,6 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("LineStyle"), C2U("LineStyle") ) );
-
-//     WrappedNamedProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
     return aWrappedProperties;
 }

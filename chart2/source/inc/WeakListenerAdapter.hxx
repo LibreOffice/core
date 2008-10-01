@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WeakListenerAdapter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +98,6 @@ class WeakModifyListenerAdapter :
 {
 public:
     explicit WeakModifyListenerAdapter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > & xListener );
-    explicit WeakModifyListenerAdapter(
         const ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener > & xListener );
     virtual ~WeakModifyListenerAdapter();
 
@@ -117,8 +115,6 @@ class WeakSelectionChangeListenerAdapter :
 public:
     explicit WeakSelectionChangeListenerAdapter(
         const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener );
-    explicit WeakSelectionChangeListenerAdapter(
-        const ::com::sun::star::uno::WeakReference< ::com::sun::star::view::XSelectionChangeListener > & xListener );
     virtual ~WeakSelectionChangeListenerAdapter();
 
 protected:

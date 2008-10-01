@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Stripe.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,11 +65,6 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
 {
     m_aPoint3.PositionZ += fDepth;
     m_aPoint4.PositionZ += fDepth;
-}
-
-drawing::Direction3D Stripe::GetDirectionTo4() const
-{
-    return m_aPoint4-m_aPoint1;
 }
 
 /*

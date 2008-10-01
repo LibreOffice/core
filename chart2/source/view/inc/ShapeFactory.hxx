@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFactory.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,14 +148,6 @@ public:
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& xGraphic );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createSymbol3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::Position3D& rPos
-                    , const ::com::sun::star::drawing::Direction3D& rSize
-                    , sal_Int32 nStandardSymbol
-                    , sal_Int32 nBorderColor=0
-                    , sal_Int32 nFillColor=0 );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget

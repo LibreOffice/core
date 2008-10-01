@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScaleAutomatism.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,6 +183,11 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
 
         rExplicitScale.Origin = fDefaulOrigin;
     }
+}
+
+ScaleData ScaleAutomatism::getScale() const
+{
+    return m_aSourceScale;
 }
 
 // private --------------------------------------------------------------------

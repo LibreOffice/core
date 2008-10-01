@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.28 $
+# $Revision: 1.28.42.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,7 +59,6 @@ SLOFILES=	\
     $(SLO)$/ObjectIdentifier.obj \
     $(SLO)$/CachedDataSequence.obj \
     $(SLO)$/CommonConverters.obj \
-    $(SLO)$/ContextHelper.obj \
     $(SLO)$/DataSeriesHelper.obj \
     $(SLO)$/DataSource.obj \
     $(SLO)$/DataSourceHelper.obj \
@@ -71,15 +70,12 @@ SLOFILES=	\
     $(SLO)$/LinearRegressionCurveCalculator.obj \
     $(SLO)$/LogarithmicRegressionCurveCalculator.obj \
     $(SLO)$/MeanValueRegressionCurveCalculator.obj \
-    $(SLO)$/OEnumeration.obj \
-    $(SLO)$/OIndexContainer.obj \
     $(SLO)$/OPropertySet.obj \
     $(SLO)$/WrappedPropertySet.obj \
     $(SLO)$/WrappedProperty.obj \
     $(SLO)$/WrappedIgnoreProperty.obj \
     $(SLO)$/WrappedDefaultProperty.obj \
     $(SLO)$/WrappedDirectStateProperty.obj \
-    $(SLO)$/OStyle.obj \
     $(SLO)$/PotentialRegressionCurveCalculator.obj \
     $(SLO)$/RegressionCurveHelper.obj \
     $(SLO)$/RegressionCurveModel.obj \

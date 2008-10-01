@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DialogModel.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -714,37 +714,6 @@ bool DialogModel::setData(
     }
 
     return true;
-}
-
-// static
-void DialogModel::restoreModel(
-    const Reference< chart2::XChartDocument > & xSource,
-    const Reference< chart2::XChartDocument > & xDestination )
-{
-    ControllerLockGuard aLockedControllers( Reference< frame::XModel >( xDestination, uno::UNO_QUERY ) );
-
-    if( xSource.is() && xDestination.is())
-    {
-        try
-        {
-            // diagram
-            xDestination->setFirstDiagram( xSource->getFirstDiagram());
-
-            // main title
-            Reference< chart2::XTitled > xDestinationTitled( xDestination, uno::UNO_QUERY_THROW );
-            Reference< chart2::XTitled > xSourceTitled( xSource, uno::UNO_QUERY_THROW );
-            xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject());
-
-            // page background
-            comphelper::copyProperties(
-                xSource->getPageBackground(),
-                xDestination->getPageBackground() );
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
 }
 
 // static

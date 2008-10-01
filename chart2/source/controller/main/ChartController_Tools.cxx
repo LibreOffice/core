@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Tools.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,42 +233,12 @@ void lcl_InsertStringAsTextShapeIntoDrawPage(
 namespace chart
 {
 
-awt::Size ChartController::impl_getDiagramSize( sal_Int32 nDiaIndex ) const
-{
-   awt::Size aResult;
-
-    try
-    {
-        ExplicitValueProvider * pValueProvider(
-        ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
-        if( pValueProvider )
-        {
-            awt::Rectangle aRect( pValueProvider->getRectangleOfObject( ObjectIdentifier::createClassifiedIdentifier(
-                OBJECTTYPE_DIAGRAM, OUString::valueOf( sal_Int32( nDiaIndex )))));
-            aResult.Width = aRect.Width;
-            aResult.Height = aRect.Height;
-        }
-        else
-        {
-            // fallback: page size
-            aResult = ChartModelHelper::getPageSize( m_aModel->getModel() );
-        }
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    return aResult;
-}
-
 ::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider() const
 {
     awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()) );
 
     return ::std::auto_ptr< ReferenceSizeProvider >(
-        new ReferenceSizeProvider(
-            aPageSize, impl_getDiagramSize(),
+        new ReferenceSizeProvider( aPageSize,
             Reference< chart2::XChartDocument >( m_aModel->getModel(), uno::UNO_QUERY )));
 }
 

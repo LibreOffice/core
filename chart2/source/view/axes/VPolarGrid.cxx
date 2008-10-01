@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VPolarGrid.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
     else
         rPoints[0].realloc(0);
 }
-
+#ifdef NOTYET
 void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget
         , ::std::vector< ::std::vector< TickInfo > >& /* rRadiusTickInfos */
         , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
@@ -176,6 +176,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
         m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
 }
+#endif
 
 void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogicTarget
         , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos

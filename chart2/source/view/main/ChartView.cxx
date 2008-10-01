@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartView.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.46.22.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -551,16 +551,17 @@ public:
 
     void initializeCooSysAndSeriesPlotter( const uno::Reference< frame::XModel >& xChartModel );
     void initAxisUsageList();
-    void doAutoScaling();
+    void doAutoScaling( const uno::Reference< frame::XModel >& xChartModel );
     void updateScalesAndIncrementsOnAxes();
     void setScalesFromCooSysToPlotter();
     void setNumberFormatsFromAxes();
     drawing::Direction3D getPreferredAspectRatio();
-    bool shouldKeep2DAspectRatio();
 
     std::vector< VSeriesPlotter* >& getSeriesPlotterList() { return m_aSeriesPlotterList; }
     std::vector< VCoordinateSystem* >& getCooSysList() { return m_rVCooSysList; }
     std::vector< LegendEntryProvider* > getLegendEntryProviderList();
+
+    void AdaptScaleOfYAxisWithoutAttachedSeries( const uno::Reference< frame::XModel >& xChartModel );
 
 private:
     std::vector< VSeriesPlotter* > m_aSeriesPlotterList;
@@ -882,7 +883,7 @@ void SeriesPlotterContainer::updateScalesAndIncrementsOnAxes()
         m_rVCooSysList[nC]->updateScalesAndIncrementsOnAxes();
 }
 
-void SeriesPlotterContainer::doAutoScaling()
+void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel >& xChartModel )
 {
     //precondition: need a initialized m_aSeriesPlotterList
     //precondition: need a initialized m_aAxisUsageList
@@ -947,6 +948,109 @@ void SeriesPlotterContainer::doAutoScaling()
                 aVCooSysList_Z[nC]->setExplicitScaleAndIncrement( 2, nAxisIndex, aExplicitScale, aExplicitIncrement );
         }
     }
+    AdaptScaleOfYAxisWithoutAttachedSeries( xChartModel );
+}
+
+void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::Reference< frame::XModel >& xChartModel )
+{
+    //issue #i80518#
+
+    ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
+    const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
+
+    for( sal_Int32 nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
+    {
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        {
+            AxisUsage& rAxisUsage = (*aAxisIter).second;
+            ::std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
+            if( !aVCooSysList_Y.size() )
+                continue;
+
+            uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+            if( xDiagram.is() )
+            {
+                bool bSeriesAttachedToThisAxis = false;
+                sal_Int32 nAttachedAxisIndex = -1;
+                {
+                    ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+                    ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
+                    for( ; aIter != aSeriesVector.end(); aIter++ )
+                    {
+                        sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
+                        if( nAxisIndex == nCurrentIndex )
+                        {
+                            bSeriesAttachedToThisAxis = true;
+                            break;
+                        }
+                        else if( nAttachedAxisIndex<0 || nAttachedAxisIndex>nCurrentIndex )
+                            nAttachedAxisIndex=nCurrentIndex;
+                    }
+                }
+
+                if( !bSeriesAttachedToThisAxis && nAttachedAxisIndex >= 0 )
+                {
+                    for( size_t nC = 0; nC < aVCooSysList_Y.size(); ++nC )
+                    {
+                        aVCooSysList_Y[nC]->prepareScaleAutomatismForDimensionAndIndex( rAxisUsage.aScaleAutomatism, 1, nAttachedAxisIndex );
+
+                        ExplicitScaleData aExplicitScaleSource = aVCooSysList_Y[nC]->getExplicitScale( 1,nAttachedAxisIndex );
+                        ExplicitIncrementData aExplicitIncrementSource = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAttachedAxisIndex );
+
+                        ExplicitScaleData aExplicitScaleDest = aVCooSysList_Y[nC]->getExplicitScale( 1,nAxisIndex );;
+                        ExplicitIncrementData aExplicitIncrementDest = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAxisIndex );;
+
+                        aExplicitScaleDest.Orientation = aExplicitScaleSource.Orientation;
+                        aExplicitScaleDest.Scaling = aExplicitScaleSource.Scaling;
+                        aExplicitScaleDest.Breaks = aExplicitScaleSource.Breaks;
+                        aExplicitScaleDest.AxisType = aExplicitScaleSource.AxisType;
+
+                        aExplicitIncrementDest.BaseValue = aExplicitIncrementSource.BaseValue;
+
+                        ScaleData aScale( rAxisUsage.aScaleAutomatism.getScale() );
+                        if( !aScale.Minimum.hasValue() )
+                        {
+                            bool bNewMinOK = true;
+                            double fMax=0.0;
+                            if( aScale.Maximum >>= fMax )
+                                bNewMinOK = (aExplicitScaleSource.Minimum <= fMax);
+                            if( bNewMinOK )
+                                aExplicitScaleDest.Minimum = aExplicitScaleSource.Minimum;
+                        }
+                        else
+                            aExplicitIncrementDest.BaseValue = aExplicitScaleDest.Minimum;
+
+                        if( !aScale.Maximum.hasValue() )
+                        {
+                            bool bNewMaxOK = true;
+                            double fMin=0.0;
+                            if( aScale.Minimum >>= fMin )
+                                bNewMaxOK = (fMin <= aExplicitScaleSource.Maximum);
+                            if( bNewMaxOK )
+                                aExplicitScaleDest.Maximum = aExplicitScaleSource.Maximum;
+                        }
+                        if( !aScale.Origin.hasValue() )
+                            aExplicitScaleDest.Origin = aExplicitScaleSource.Origin;
+
+                        if( !aScale.IncrementData.Distance.hasValue() )
+                            aExplicitIncrementDest.Distance = aExplicitIncrementSource.Distance;
+
+                        bool bAutoMinorInterval = true;
+                        if( aScale.IncrementData.SubIncrements.getLength() )
+                            bAutoMinorInterval = !( aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() );
+                        if( bAutoMinorInterval )
+                        {
+                            if( aExplicitIncrementDest.SubIncrements.getLength() && aExplicitIncrementSource.SubIncrements.getLength() )
+                                aExplicitIncrementDest.SubIncrements[0].IntervalCount =
+                                    aExplicitIncrementSource.SubIncrements[0].IntervalCount;
+                        }
+
+                        aVCooSysList_Y[nC]->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScaleDest, aExplicitIncrementDest );
+                    }
+                }
+            }
+        }
+    }
 }
 
 drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
@@ -992,22 +1096,6 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
     }
     aPreferredAspectRatio = drawing::Direction3D(fx, fy, fz);
     return aPreferredAspectRatio;
-}
-
-bool SeriesPlotterContainer::shouldKeep2DAspectRatio()
-{
-    bool bOutKeep2DAspectRatio = false;
-
-    //detect wether the aspect ratio needs to be kept
-    ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
-    const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin()
-        ; aPlotterIter != aPlotterEnd; aPlotterIter++ )
-    {
-        bOutKeep2DAspectRatio = bOutKeep2DAspectRatio || (*aPlotterIter)->keepAspectRatio();
-    }
-
-    return bOutKeep2DAspectRatio;
 }
 
 //-----------------------------------------------------
@@ -1065,7 +1153,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
         pVCooSys->createVAxisList( xNumberFormatsSupplier
-                                        , rAvailableSize //font reference size
+                                        , rPageSize //font reference size
                                         , BaseGFXHelper::B2IRectangleToAWTRectangle( aAvailableOuterRect ) //maximum space for labels
                                         );
     }
@@ -1073,7 +1161,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
 
     // - prepare list of all axis and how they are used
     rSeriesPlotterContainer.initAxisUsageList();
-    rSeriesPlotterContainer.doAutoScaling();
+    rSeriesPlotterContainer.doAutoScaling( m_xChartModel );
     rSeriesPlotterContainer.setScalesFromCooSysToPlotter();
     rSeriesPlotterContainer.setNumberFormatsFromAxes();
 
@@ -1084,7 +1172,6 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     //aspect ratio
     drawing::Direction3D aPreferredAspectRatio(
         rSeriesPlotterContainer.getPreferredAspectRatio() );
-//     bool bKeepAspectRatio = rSeriesPlotterContainer.shouldKeep2DAspectRatio();
 
     uno::Reference< drawing::XShapes > xCoordinateRegionTarget(0);
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
@@ -1131,7 +1218,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
             createTransformationSceneToScreen( aNewInnerRect ) ));
 
         //redo autoscaling to get size and text dependent automatic main increment count
-        rSeriesPlotterContainer.doAutoScaling();
+        rSeriesPlotterContainer.doAutoScaling( m_xChartModel );
         rSeriesPlotterContainer.updateScalesAndIncrementsOnAxes();
         rSeriesPlotterContainer.setScalesFromCooSysToPlotter();
 
@@ -1177,10 +1264,9 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     {
         //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
-        pSeriesPlotter->setPageReferenceSize( rPageSize );
         rtl::OUString aCID; //III
         pSeriesPlotter->initPlotter(xCoordinateRegionTarget,xTextTargetShapes,m_xShapeFactory,aCID);
-        pSeriesPlotter->setDiagramReferenceSize( rAvailableSize );
+        pSeriesPlotter->setPageReferenceSize( rPageSize );
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
         if(2==nDimensionCount)
             pSeriesPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );

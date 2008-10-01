@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReferenceSizePropertyProvider.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@ namespace wrapper
 class ReferenceSizePropertyProvider
 {
 public:
-    virtual void setCurrentSizeAsReference() = 0;
+    virtual void updateReferenceSize() = 0;
     virtual ::com::sun::star::uno::Any getReferenceSize() = 0;
     virtual ::com::sun::star::awt::Size getCurrentSizeForReference() = 0;
 };

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReferenceSizeProvider.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include "DiagramHelper.hxx"
 #include "macros.hxx"
 #include "AxisHelper.hxx"
+#include "DataSeriesHelper.hxx"
 
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
@@ -58,10 +59,8 @@ namespace chart
 
 ReferenceSizeProvider::ReferenceSizeProvider(
     awt::Size aPageSize,
-    awt::Size aDiagramSize,
     const Reference< XChartDocument > & xChartDoc ) :
         m_aPageSize( aPageSize ),
-        m_aDiagramSize( aDiagramSize ),
         m_xChartDoc( xChartDoc ),
         m_bUseAutoScale( getAutoResizeState( xChartDoc ) == AUTO_RESIZE_YES )
 {}
@@ -69,11 +68,6 @@ ReferenceSizeProvider::ReferenceSizeProvider(
 awt::Size ReferenceSizeProvider::getPageSize() const
 {
     return m_aPageSize;
-}
-
-awt::Size ReferenceSizeProvider::getDiagramSize() const
-{
-    return m_aDiagramSize;
 }
 
 bool ReferenceSizeProvider::useAutoScale() const
@@ -115,7 +109,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
             }
         }
 
-        setValuesAtPropertySet( xTitleProp, REF_PAGE, /* bAdaptFontSizes = */ false );
+        setValuesAtPropertySet( xTitleProp, /* bAdaptFontSizes = */ false );
     }
     catch( const uno::Exception & ex )
     {
@@ -145,7 +139,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
                 {
                     for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
                         setValuesAtPropertySet(
-                            (*aIt)->getDataPointByIndex( aPointIndexes[i] ), REF_DIAGRAM );
+                            (*aIt)->getDataPointByIndex( aPointIndexes[i] ) );
                 }
             }
             catch( const uno::Exception & ex )
@@ -154,26 +148,23 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
             }
 
             //it is important to correct the datapoint properties first as they do reference the series properties
-            setValuesAtPropertySet( xSeriesProp, REF_DIAGRAM );
+            setValuesAtPropertySet( xSeriesProp );
         }
     }
 }
 
 void ReferenceSizeProvider::setValuesAtPropertySet(
     const Reference< beans::XPropertySet > & xProp,
-    ReferenceSizeProvider::ReferenceSizeType eType,
     bool bAdaptFontSizes /* = true */ )
 {
     if( ! xProp.is())
         return;
 
-    static const OUString aPageRefStr( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize"));
-    static const OUString aDiaRefStr(  RTL_CONSTASCII_USTRINGPARAM("ReferenceDiagramSize"));
+    static const OUString aRefSizeName( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize"));
 
     try
     {
-        OUString aRefSizeName( (eType == REF_PAGE) ? aPageRefStr : aDiaRefStr );
-        awt::Size aRefSize( (eType == REF_PAGE) ? getPageSize() : getDiagramSize() );
+        awt::Size aRefSize( getPageSize() );
         awt::Size aOldRefSize;
         bool bHasOldRefSize( xProp->getPropertyValue( aRefSizeName ) >>= aOldRefSize );
 
@@ -202,18 +193,16 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
 
 void ReferenceSizeProvider::getAutoResizeFromPropSet(
     const Reference< beans::XPropertySet > & xProp,
-    ReferenceSizeProvider::ReferenceSizeType eType,
     ReferenceSizeProvider::AutoResizeState & rInOutState )
 {
-    static const OUString aPageRefStr( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize"));
-    static const OUString aDiaRefStr(  RTL_CONSTASCII_USTRINGPARAM("ReferenceDiagramSize"));
+    static const OUString aRefSizeName( RTL_CONSTASCII_USTRINGPARAM("ReferencePageSize"));
     AutoResizeState eSingleState = AUTO_RESIZE_UNKNOWN;
 
     if( xProp.is())
     {
         try
         {
-            if( xProp->getPropertyValue((eType == REF_PAGE) ? aPageRefStr : aDiaRefStr ).hasValue())
+            if( xProp->getPropertyValue( aRefSizeName ).hasValue())
                 eSingleState = AUTO_RESIZE_YES;
             else
                 eSingleState = AUTO_RESIZE_NO;
@@ -243,7 +232,7 @@ void ReferenceSizeProvider::getAutoResizeFromTitle(
 {
     Reference< beans::XPropertySet > xProp( xTitle, uno::UNO_QUERY );
     if( xProp.is())
-        getAutoResizeFromPropSet( xProp, REF_PAGE, rInOutState );
+        getAutoResizeFromPropSet( xProp, rInOutState );
 }
 
 void ReferenceSizeProvider::impl_getAutoResizeFromTitled(
@@ -298,7 +287,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     // Legend
     Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
     if( xLegendProp.is())
-        getAutoResizeFromPropSet( xLegendProp, REF_PAGE, eResult );
+        getAutoResizeFromPropSet( xLegendProp, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 
@@ -308,7 +297,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     {
         Reference< beans::XPropertySet > xProp( aAxes[i], uno::UNO_QUERY );
         if( xProp.is())
-            getAutoResizeFromPropSet( xProp, REF_DIAGRAM, eResult );
+            getAutoResizeFromPropSet( xProp, eResult );
         Reference< XTitled > xTitled( aAxes[i], uno::UNO_QUERY );
         if( xTitled.is())
         {
@@ -328,7 +317,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         Reference< beans::XPropertySet > xSeriesProp( *aIt, uno::UNO_QUERY );
         if( xSeriesProp.is())
         {
-            getAutoResizeFromPropSet( xSeriesProp, REF_DIAGRAM, eResult );
+            getAutoResizeFromPropSet( xSeriesProp, eResult );
             if( eResult == AUTO_RESIZE_AMBIGUOUS )
                 return eResult;
 
@@ -341,8 +330,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
                     for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
                     {
                         getAutoResizeFromPropSet(
-                            (*aIt)->getDataPointByIndex( aPointIndexes[i] ),
-                            REF_DIAGRAM, eResult );
+                            (*aIt)->getDataPointByIndex( aPointIndexes[i] ), eResult );
                         if( eResult == AUTO_RESIZE_AMBIGUOUS )
                             return eResult;
                     }
@@ -385,7 +373,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     // Legend
     Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
     if( xLegendProp.is())
-        setValuesAtPropertySet( xLegendProp, REF_PAGE );
+        setValuesAtPropertySet( xLegendProp );
 
     // Axes (incl. Axis Titles)
     Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
@@ -393,7 +381,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     {
         Reference< beans::XPropertySet > xProp( aAxes[i], uno::UNO_QUERY );
         if( xProp.is())
-            setValuesAtPropertySet( xProp, REF_DIAGRAM );
+            setValuesAtPropertySet( xProp );
         impl_setValuesAtTitled( Reference< XTitled >( aAxes[i], uno::UNO_QUERY ));
     }
 

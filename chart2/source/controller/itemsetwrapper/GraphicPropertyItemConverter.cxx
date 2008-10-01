@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GraphicPropertyItemConverter.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,29 +291,6 @@ void GraphicPropertyItemConverter::FillSpecialItem(
         }
         break;
 
-//         case XATTR_FILLBMP_POS:
-//         case XATTR_FILLBMP_SIZEX:
-//         case XATTR_FILLBMP_SIZEY:
-//         case XATTR_FILLBMP_SIZELOG:
-//         case XATTR_FILLBMP_TILEOFFSETX:
-//         case XATTR_FILLBMP_TILEOFFSETY:
-//         case XATTR_FILLBMP_STRETCH:
-//         case XATTR_FILLBMP_POSOFFSETX:
-//         case XATTR_FILLBMP_POSOFFSETY:
-//             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
-//             {
-                // avoid assertions while bitmap stuff is not working
-//             try
-//             {
-//                 FillBitmapItem( nWhichId, rOutItemSet );
-//             }
-//             catch( beans::UnknownPropertyException ex )
-//             {
-//                 ASSERT_EXCEPTION( ex );
-//             }
-//             }
-//             break;
-
         case XATTR_FILLFLOATTRANSPARENCE:
             try
             {
@@ -543,30 +520,6 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 }
             }
             break;
-
-//         case XATTR_FILLBMP_POS:
-//         case XATTR_FILLBMP_SIZEX:
-//         case XATTR_FILLBMP_SIZEY:
-//         case XATTR_FILLBMP_SIZELOG:
-//         case XATTR_FILLBMP_TILEOFFSETX:
-//         case XATTR_FILLBMP_TILEOFFSETY:
-//         case XATTR_FILLBMP_STRETCH:
-//         case XATTR_FILLBMP_POSOFFSETX:
-//         case XATTR_FILLBMP_POSOFFSETY:
-//             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
-//             {
-            // avoid assertions while bitmap stuff is not working
-//             try
-//             {
-//                 ApplyBitmapItem( nWhichId, rItemSet );
-//                 bChanged = true;
-//             }
-//             catch( beans::UnknownPropertyException ex )
-//             {
-//                 ASSERT_EXCEPTION( ex );
-//             }
-//             }
-//             break;
 
         case XATTR_FILLFLOATTRANSPARENCE:
             try
@@ -856,133 +809,6 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
     }
 
     return bChanged;
-}
-
-void GraphicPropertyItemConverter::FillBitmapItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( beans::UnknownPropertyException )
-{
-    uno::Reference< beans::XPropertySet > xProp( GetPropertySet() );
-    OSL_ASSERT( xProp.is());
-    chart2::FillBitmap aBitmap;
-    ( xProp->getPropertyValue( C2U( "Bitmap" ))) >>= aBitmap;
-
-    switch( nWhichId )
-    {
-        // bitmap property
-        case XATTR_FILLBITMAP:
-        {
-            XFillBitmapItem aBmpIt;
-            aBmpIt.PutValue( uno::makeAny( aBitmap.aURL ), MID_GRAFURL );
-            rOutItemSet.Put( aBmpIt );
-        }
-        break;
-
-        case XATTR_FILLBMP_TILE:
-            rOutItemSet.Put( XFillBmpTileItem(
-                                 aBitmap.aBitmapMode == drawing::BitmapMode_REPEAT ));
-            rOutItemSet.Put( XFillBmpStretchItem( FALSE ));
-            break;
-        case XATTR_FILLBMP_STRETCH:
-            rOutItemSet.Put( XFillBmpStretchItem(
-                                 aBitmap.aBitmapMode == drawing::BitmapMode_STRETCH ));
-            rOutItemSet.Put( XFillBmpTileItem( FALSE ));
-            break;
-        case XATTR_FILLBMP_POS:
-            break;
-        case XATTR_FILLBMP_SIZEX:
-            break;
-        case XATTR_FILLBMP_SIZEY:
-            break;
-        case XATTR_FILLBMP_SIZELOG:
-            break;
-        case XATTR_FILLBMP_TILEOFFSETX:
-            break;
-        case XATTR_FILLBMP_TILEOFFSETY:
-            break;
-        case XATTR_FILLBMP_POSOFFSETX:
-            break;
-        case XATTR_FILLBMP_POSOFFSETY:
-            break;
-    }
-}
-
-void GraphicPropertyItemConverter::ApplyBitmapItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
-    throw( beans::UnknownPropertyException )
-{
-    static const ::rtl::OUString aBitmapPropName(
-        RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ));
-    uno::Reference< beans::XPropertySet > xProp( GetPropertySet() );
-    OSL_ASSERT( xProp.is());
-    chart2::FillBitmap aBitmap;
-    uno::Any aValue;
-
-    try
-    {
-        ( xProp->getPropertyValue( aBitmapPropName )) >>= aBitmap;
-
-        switch( nWhichId )
-        {
-            // bitmap property
-            case XATTR_FILLBITMAP:
-            {
-                const XFillBitmapItem & rBitmapItem =
-                    static_cast< const XFillBitmapItem & >(
-                        rItemSet.Get( nWhichId ));
-                rBitmapItem.QueryValue( aValue, MID_GRAFURL );
-                aValue >>= aBitmap.aURL;
-
-                // must remember bitmap, so that URL stays valid
-                //ToDo: Never deleted yet !!!
-//                 GraphicObject * pTESTING_CACHE = new GraphicObject(
-//                     rBitmapItem.GetValue().GetGraphicObject() );
-            }
-            break;
-
-            case XATTR_FILLBMP_TILE:
-            case XATTR_FILLBMP_STRETCH:
-            {
-                const XFillBmpStretchItem & rStretchItem =
-                    static_cast< const XFillBmpStretchItem & >(
-                        rItemSet.Get( XATTR_FILLBMP_STRETCH ));
-                const XFillBmpTileItem & rTileItem =
-                    static_cast< const XFillBmpTileItem & >(
-                        rItemSet.Get( XATTR_FILLBMP_TILE ));
-
-                if( rTileItem.GetValue() != FALSE )
-                    aBitmap.aBitmapMode = drawing::BitmapMode_REPEAT;
-                else if( rStretchItem.GetValue() != FALSE )
-                    aBitmap.aBitmapMode = drawing::BitmapMode_STRETCH;
-                else
-                    aBitmap.aBitmapMode = drawing::BitmapMode_NO_REPEAT;
-            }
-            break;
-
-            case XATTR_FILLBMP_POS:
-                break;
-            case XATTR_FILLBMP_SIZEX:
-                break;
-            case XATTR_FILLBMP_SIZEY:
-                break;
-            case XATTR_FILLBMP_SIZELOG:
-                break;
-            case XATTR_FILLBMP_TILEOFFSETX:
-                break;
-            case XATTR_FILLBMP_TILEOFFSETY:
-                break;
-            case XATTR_FILLBMP_POSOFFSETX:
-                break;
-            case XATTR_FILLBMP_POSOFFSETY:
-                break;
-        }
-
-        xProp->setPropertyValue( aBitmapPropName, uno::makeAny( aBitmap ));
-    }
-    catch( beans::UnknownPropertyException ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
 }
 
 } //  namespace wrapper

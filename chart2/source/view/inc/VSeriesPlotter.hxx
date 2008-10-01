@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VSeriesPlotter.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,8 +285,6 @@ public:
     //get series names for the z axis labels
     ::com::sun::star::uno::Sequence< rtl::OUString > getSeriesNames() const;
 
-    void setDiagramReferenceSize( const ::com::sun::star::awt::Size & rDiagramRefSize );
-
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
@@ -448,7 +446,6 @@ private: //member
 
     typedef std::map< sal_Int32 , PlottingPositionHelper* > tSecondaryPosHelperMap;
     mutable tSecondaryPosHelperMap   m_aSecondaryPosHelperMap;
-    ::com::sun::star::awt::Size      m_aDiagramReferenceSize;
     ::com::sun::star::awt::Size      m_aPageReferenceSize;
 };
 

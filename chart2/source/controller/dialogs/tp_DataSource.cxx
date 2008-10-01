@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_DataSource.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -571,31 +571,6 @@ void DataSourceTabPage::updateControlState()
     m_aEDT_RANGE.Enable( bHasValidRole );
     lcl_ShowChooserButton( m_aIMB_RANGE_MAIN, m_aEDT_RANGE, bShowIB );
     isValid();
-}
-
-
-void DataSourceTabPage::disableAll()
-{
-    m_aFT_SERIES.Disable();
-    m_apLB_SERIES->Disable();
-
-    m_aBTN_ADD.Disable();
-    m_aBTN_REMOVE.Disable();
-
-    m_aFT_ROLE.Disable();
-    m_aLB_ROLE.Disable();
-
-    m_aFT_RANGE.Disable();
-    m_aEDT_RANGE.Disable();
-    m_aIMB_RANGE_MAIN.Disable();
-
-    m_aFT_CATEGORIES.Disable();
-    m_aFT_DATALABELS.Disable();
-    m_aEDT_CATEGORIES.Disable();
-    m_aIMB_RANGE_CAT.Disable();
-
-    m_aBTN_UP.Disable();
-    m_aBTN_DOWN.Disable();
 }
 
 IMPL_LINK( DataSourceTabPage, SeriesSelectionChangedHdl, void *, EMPTYARG )

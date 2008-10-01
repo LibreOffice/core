@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dlg_InsertTrendline.hxx,v $
- * $Revision: 1.3.44.1 $
+ * $RCSfile: WrappedScaleTextProperties.hxx,v $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,45 +27,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CHART2_DLG_INSERT_TRENDLINE_HXX
-#define _CHART2_DLG_INSERT_TRENDLINE_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <svtools/itemset.hxx>
-#include <memory>
+#ifndef CHART_WRAPPED_SCALETEXT_PROPERTIES_HXX
+#define CHART_WRAPPED_SCALETEXT_PROPERTIES_HXX
+
+#include "WrappedProperty.hxx"
+#include "Chart2ModelContact.hxx"
+
+#include <boost/shared_ptr.hpp>
+#include <vector>
 
 //.............................................................................
 namespace chart
 {
-//.............................................................................
+namespace wrapper
+{
 
-class TrendlineResources;
-class InsertTrendlineDialog : public ModalDialog
+class WrappedScaleTextProperties
 {
 public:
-    InsertTrendlineDialog( Window* pParent, const SfxItemSet& rMyAttrs );
-    virtual ~InsertTrendlineDialog();
-
-    void FillItemSet( SfxItemSet& rOutAttrs );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-
-    // sets the size so that all control texts fit. Has to be done after
-    // complete construction of the dialog
-    void adjustSize();
-
-private:
-    const SfxItemSet & rInAttrs;
-
-    OKButton          aBtnOK;
-    CancelButton      aBtnCancel;
-    HelpButton        aBtnHelp;
-
-    ::std::auto_ptr< TrendlineResources >    m_apTrendlineResources;
+    static void addProperties( ::std::vector< ::com::sun::star::beans::Property >& rOutProperties );
+    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
+                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-//.............................................................................
+} //namespace wrapper
 } //namespace chart
 //.............................................................................
-
 #endif

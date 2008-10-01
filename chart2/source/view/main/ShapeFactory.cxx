@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFactory.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -461,59 +461,6 @@ uno::Any createPolyPolygon_Cone(
 
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
-
-uno::Any createPolyPolygon_PieSegment(
-              double fHeight
-            , double fWidthRadius
-            , double fInnerRadius = 0.0)
-{
-    DBG_ASSERT(fHeight>0, "The height of a pie segment needs to be > 0");
-    DBG_ASSERT(fInnerRadius>=0, "The inner radius of a pie segment needs to be >= 0");
-    DBG_ASSERT(fWidthRadius>0, "The width radius of a pie segment needs to be > 0");
-
-    const BOOL bClosed = true;
-
-    const sal_Int32 nPointCount = bClosed ? 5 : 4;
-
-    //--------------------------------------
-    drawing::PolyPolygonShape3D aPP;
-
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
-
-    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
-    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
-    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
-
-    pOuterSequenceX->realloc(nPointCount);
-    pOuterSequenceY->realloc(nPointCount);
-    pOuterSequenceZ->realloc(nPointCount);
-
-    double* pInnerSequenceX = pOuterSequenceX->getArray();
-    double* pInnerSequenceY = pOuterSequenceY->getArray();
-    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-
-    for(sal_Int32 nN = nPointCount; nN--;)
-        *pInnerSequenceZ++ = 0.0;
-
-    *pInnerSequenceY++ = fHeight/2.0;
-    *pInnerSequenceY++ = fHeight/2.0;
-    *pInnerSequenceY++ = -fHeight/2.0;
-    *pInnerSequenceY++ = -fHeight/2.0;
-    if(bClosed)
-        *pInnerSequenceY++ = fHeight/2.0;
-
-    *pInnerSequenceX++ = fInnerRadius;
-    *pInnerSequenceX++ = fInnerRadius+fWidthRadius;
-    *pInnerSequenceX++ = fInnerRadius+fWidthRadius;
-    *pInnerSequenceX++ = fInnerRadius;
-    if(bClosed)
-        *pInnerSequenceX++ = fInnerRadius;
-
-    return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
-}
-
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1535,80 +1482,6 @@ uno::Reference< drawing::XShape >
         }
     }
     return xShape;
-}
-
-uno::Reference< drawing::XShape >
-        ShapeFactory::createSymbol3D( const uno::Reference< drawing::XShapes >& xTarget
-                    , const drawing::Position3D& rPosition
-                    , const drawing::Direction3D& rSize
-                    , sal_Int32 nStandardSymbol
-                    , sal_Int32 nBorderColor
-                    , sal_Int32 nFillColor )
-{
-    if( !xTarget.is() )
-        return 0;
-
-    //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
-    xTarget->add(xShape);
-
-    //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
-    {
-        try
-        {
-            //depth
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
-                , uno::makeAny((sal_Int32)rSize.DirectionZ) );
-
-            //PercentDiagonal
-            sal_Int16 nPercentDiagonal = 0;
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
-                , uno::makeAny( nPercentDiagonal ) );
-
-            //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
-                , uno::makeAny( createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ) );
-
-            //BorderColor
-            xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
-                , uno::makeAny( nBorderColor ) );
-
-            //FillColor
-            xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
-                , uno::makeAny( nFillColor ) );
-        }
-        catch( uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-    }
-    return xShape;
-}
-
-void setShapeName( uno::Reference< drawing::XShape >& xShape , const ::rtl::OUString& rName )
-{
-    if( !xShape.is() )
-        return;
-
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
-    {
-        try
-        {
-            xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME )
-                , uno::makeAny( rName ) );
-        }
-        catch( uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-    }
 }
 
 uno::Reference< drawing::XShapes >

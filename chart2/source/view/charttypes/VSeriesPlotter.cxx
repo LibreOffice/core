@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VSeriesPlotter.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1693,15 +1693,15 @@ uno::Sequence< rtl::OUString > VSeriesPlotter::getSeriesNames() const
 
 namespace
 {
-struct lcl_setDiaRefSizeAtSeriesGroup : public ::std::unary_function< VDataSeriesGroup, void >
+struct lcl_setRefSizeAtSeriesGroup : public ::std::unary_function< VDataSeriesGroup, void >
 {
-    lcl_setDiaRefSizeAtSeriesGroup( awt::Size aRefSize ) : m_aRefSize( aRefSize ) {}
+    lcl_setRefSizeAtSeriesGroup( awt::Size aRefSize ) : m_aRefSize( aRefSize ) {}
     void operator()( VDataSeriesGroup & rGroup )
     {
         ::std::vector< VDataSeries* >::iterator aIt( rGroup.m_aSeriesVector.begin());
         const ::std::vector< VDataSeries* >::iterator aEndIt( rGroup.m_aSeriesVector.end());
         for( ; aIt != aEndIt; ++aIt )
-            (*aIt)->setDiagramReferenceSize( m_aRefSize );
+            (*aIt)->setPageReferenceSize( m_aRefSize );
     }
 
 private:
@@ -1709,20 +1709,15 @@ private:
 };
 } // anonymous namespace
 
-void VSeriesPlotter::setDiagramReferenceSize( const ::com::sun::star::awt::Size & rDiagramRefSize )
+void VSeriesPlotter::setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize )
 {
-    m_aDiagramReferenceSize = rDiagramRefSize;
+    m_aPageReferenceSize = rPageRefSize;
 
     // set reference size also at all data series
 
     ::std::vector< VDataSeriesGroup > aSeriesGroups( FlattenVector( m_aZSlots ));
     ::std::for_each( aSeriesGroups.begin(), aSeriesGroups.end(),
-                     lcl_setDiaRefSizeAtSeriesGroup( m_aDiagramReferenceSize ));
-}
-
-void VSeriesPlotter::setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize )
-{
-    m_aPageReferenceSize = rPageRefSize;
+                     lcl_setRefSizeAtSeriesGroup( m_aPageReferenceSize ));
 }
 
 //better performance for big data

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CachedDataSequence.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,24 +201,6 @@ void CachedDataSequence::registerProperties()
                       ::getCppuType( & m_aHiddenValues ) );
 }
 
-void CachedDataSequence::PreferMixedData()
-{
-    if( m_eCurrentDataType != MIXED )
-        Impl_setMixedData( Impl_getMixedData() );
-}
-
-void CachedDataSequence::PreferNumericalData()
-{
-    if( m_eCurrentDataType != NUMERICAL )
-        Impl_setNumericalData( Impl_getNumericalData() );
-}
-
-void CachedDataSequence::PreferTextualData()
-{
-    if( m_eCurrentDataType != TEXTUAL )
-        Impl_setTextualData( Impl_getTextualData() );
-}
-
 Sequence< double > CachedDataSequence::Impl_getNumericalData() const
 {
     if( m_eCurrentDataType == NUMERICAL )
@@ -311,39 +293,6 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     return aResult;
 }
 
-void CachedDataSequence::Impl_setNumericalData( const Sequence< double > & rSeq )
-{
-    if( m_eCurrentDataType != NUMERICAL )
-    {
-        m_aTextualSequence.realloc( 0 );
-        m_aMixedSequence.realloc( 0 );
-        m_eCurrentDataType = NUMERICAL;
-    }
-    m_aNumericalSequence = rSeq;
-}
-
-void CachedDataSequence::Impl_setTextualData( const Sequence< OUString > & rSeq )
-{
-    if( m_eCurrentDataType != TEXTUAL )
-    {
-        m_aNumericalSequence.realloc( 0 );
-        m_aMixedSequence.realloc( 0 );
-        m_eCurrentDataType = TEXTUAL;
-    }
-    m_aTextualSequence = rSeq;
-}
-
-void CachedDataSequence::Impl_setMixedData( const Sequence< uno::Any > & rSeq )
-{
-    if( m_eCurrentDataType != MIXED )
-    {
-        m_aNumericalSequence.realloc( 0 );
-        m_aTextualSequence.realloc( 0 );
-        m_eCurrentDataType = MIXED;
-    }
-    m_aMixedSequence = rSeq;
-}
-
 // ================================================================================
 
 Sequence< OUString > CachedDataSequence::getSupportedServiceNames_Static()
@@ -402,16 +351,6 @@ Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
         return Impl_getNumericalData();
     // \--
 }
-
-// void SAL_CALL CachedDataSequence::setNumericalData( const Sequence< double >& aData )
-//     throw (uno::RuntimeException)
-// {
-//     // /--
-//     MutexGuard aGuard( GetMutex() );
-//     Impl_setNumericalData( aData );
-//     // \--
-// }
-
 
 // ________ XTextualDataSequence ________
 Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
@@ -502,11 +441,6 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
     }
 }
 
-void CachedDataSequence::fireModifyEvent()
-{
-    // note: currently never called, as the data is not mutable
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
 // lang::XInitialization:
 void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
 {

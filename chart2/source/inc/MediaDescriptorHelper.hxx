@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MediaDescriptorHelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,8 +62,6 @@ public:
                             ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
     virtual ~MediaDescriptorHelper();
 
-    ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue > getAll();
     ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue > getReducedForModel();
 

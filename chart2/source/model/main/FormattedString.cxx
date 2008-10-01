@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedString.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,12 +86,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 
 namespace chart
 {
-
-FormattedString::FormattedString( const ::rtl::OUString & rString ) :
-        ::property::OPropertySet( m_aMutex ),
-    m_aString( rString ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{}
 
 FormattedString::FormattedString(
         uno::Reference< uno::XComponentContext > const & /* xContext */ ) :

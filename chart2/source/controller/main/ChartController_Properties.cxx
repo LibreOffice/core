@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Properties.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,10 +66,6 @@
 
 //for auto_ptr
 #include <memory>
-
-// for test in executeDispatch_ObjectToDefault
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
@@ -167,7 +163,7 @@ namespace
             {
                 ::std::auto_ptr< awt::Size > pRefSize;
                 if( pRefSizeProvider.get() )
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getDiagramSize()));
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 uno::Reference< beans::XPropertySet > xDiaProp;
                 xDiaProp.set( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
@@ -200,7 +196,7 @@ namespace
             {
                 ::std::auto_ptr< awt::Size > pRefSize;
                 if( pRefSizeProvider.get() )
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getDiagramSize()));
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 wrapper::GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
                     wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT;
@@ -323,7 +319,7 @@ namespace
             {
                 ::std::auto_ptr< awt::Size > pRefSize;
                 if( pRefSizeProvider.get() )
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getDiagramSize()));
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 pItemConverter =  new wrapper::AllAxisItemConverter( xChartModel, rDrawModel.GetItemPool(),
                                                                      rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ), pRefSize );
@@ -660,50 +656,6 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     }
     catch( uno::RuntimeException& )
     {
-    }
-}
-
-void SAL_CALL ChartController::executeDispatch_ObjectToDefault()
-{
-    ::rtl::OUString aObjectCID(m_aSelection.getSelectedCID());
-    if( !aObjectCID.getLength() )
-    {
-        DBG_ERROR("nothing is selected");
-        return;
-    }
-
-    try
-    {
-        //-------------------------------------------------------------
-        //get type of selected object
-        ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
-        if( OBJECTTYPE_UNKNOWN==eObjectType )
-        {
-            DBG_ERROR("unknown ObjectType");
-            return;
-        }
-        //-------------------------------------------------------------
-        //get properties of selected object
-        uno::Reference< beans::XPropertySet > xObjectProperties = NULL;
-        xObjectProperties = ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
-        if(!xObjectProperties.is())
-            return;
-
-        uno::Sequence< beans::Property > aProps( xObjectProperties->getPropertySetInfo()->getProperties() );
-        uno::Reference< beans::XPropertyState > xState( xObjectProperties, uno::UNO_QUERY );
-
-        if( xState.is() )
-        {
-            for( sal_Int32 i = 0; i < aProps.getLength(); ++i )
-            {
-                if( aProps[i].Attributes & beans::PropertyAttribute::MAYBEDEFAULT )
-                    xState->setPropertyToDefault( aProps[i].Name );
-            }
-        }
-    }
-    catch( uno::Exception& e )
-    {
-        ASSERT_EXCEPTION( e );
     }
 }
 

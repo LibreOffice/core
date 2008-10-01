@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RangeSelectionHelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,8 +57,6 @@ public:
     bool hasRangeSelection();
     ::com::sun::star::uno::Reference<
             ::com::sun::star::sheet::XRangeSelection > getRangeSelection();
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XCellRangesAccess > getCellRangesAccess();
     void raiseRangeSelectionDocument();
     bool chooseRange(
         const ::rtl::OUString & aCurrentRange,
@@ -67,7 +65,6 @@ public:
     void stopRangeListening( bool bRemoveListener = true );
     bool verifyCellRange( const ::rtl::OUString & rRangeStr );
     bool verifyArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArguments );
-    ::rtl::OUString getCellRangeContent( const ::rtl::OUString & rRangeStr );
 
 private:
     ::com::sun::star::uno::Reference<

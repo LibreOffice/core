@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Chart2ModelContact.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,85 +178,10 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-uno::Any Chart2ModelContact::GetListElementByName(
-    const rtl::OUString& rElementName, const rtl::OUString& rTableTypePropertyName )
-{
-    uno::Any aResult;
-    try
-    {
-        tTableMap::iterator aIter( m_aTableMap.find(rTableTypePropertyName) );
-        if( aIter == m_aTableMap.end() )
-        {
-            DBG_ERROR("no container found for the given type (gradient/hatch etc)");
-            return aResult;
-        }
-
-        if( !aIter->second->hasByName(rElementName) )
-        {
-            DBG_ERROR("no element with the given name found");
-            return aResult;
-        }
-
-        aResult = aIter->second->getByName(rElementName);
-    }
-    catch( uno::Exception& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    return aResult;
-}
-
-::rtl::OUString Chart2ModelContact::GetNameOfListElement(
-        const uno::Any& rElementValue, const ::rtl::OUString& rTableTypePropertyName )
-{
-    try
-    {
-        tTableMap::iterator aIter( m_aTableMap.find(rTableTypePropertyName) );
-        if( aIter == m_aTableMap.end() )
-        {
-            DBG_ERROR("no container found for the given type (gradient/hatch etc)");
-            return ::rtl::OUString();
-        }
-
-        uno::Reference< container::XNameContainer > xTable( aIter->second, uno::UNO_QUERY );
-        if( xTable.is() )
-        {
-            uno::Sequence< rtl::OUString > aNames( xTable->getElementNames() );
-            for( sal_Int32 nN = aNames.getLength(); nN--; )
-            {
-                if( xTable->getByName( aNames[nN] ) == rElementValue )
-                {
-                    return aNames[nN];
-                }
-            }
-        }
-    }
-    catch( uno::Exception& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    return ::rtl::OUString();
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 awt::Size Chart2ModelContact::GetPageSize() const
 {
     return ChartModelHelper::getPageSize(m_xChartModel);
-}
-
-awt::Size Chart2ModelContact::GetDiagramSize() const
-{
-    awt::Size aSize;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
-    {
-        aSize = ToSize( pProvider->getRectangleOfObject( lcl_getCIDForDiagram( m_xChartModel ) ) );
-    }
-    return aSize;
 }
 
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleInclusive() const
@@ -283,17 +208,6 @@ awt::Size Chart2ModelContact::GetDiagramSizeInclusive() const
 awt::Point Chart2ModelContact::GetDiagramPositionInclusive() const
 {
     return ToPoint( this->GetDiagramRectangleInclusive() );
-}
-
-awt::Point Chart2ModelContact::GetDiagramPosition() const
-{
-    awt::Point aPoint;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
-    {
-        aPoint = ToPoint( pProvider->getRectangleOfObject( lcl_getCIDForDiagram( m_xChartModel ) ) );
-    }
-    return aPoint;
 }
 
 awt::Size Chart2ModelContact::GetLegendSize() const

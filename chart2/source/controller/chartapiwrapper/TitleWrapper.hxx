@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TitleWrapper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,7 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
 
     //ReferenceSizePropertyProvider
-    virtual void setCurrentSizeAsReference();
+    virtual void updateReferenceSize();
     virtual ::com::sun::star::uno::Any getReferenceSize();
     virtual ::com::sun::star::awt::Size getCurrentSizeForReference();
 

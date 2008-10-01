@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TickmarkHelper.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -344,11 +344,6 @@ double TickmarkHelper::getMaximumAtIncrement( double fMax, const ExplicitIncreme
     return fRet;
 }
 
-double TickmarkHelper::getScaledWidth() const
-{
-    return m_fScaledVisibleMax - m_fScaledVisibleMin;
-}
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -555,20 +550,6 @@ bool TickmarkHelper::isVisible( double fScaledValue ) const
             return false;
     }
     return true;
-}
-
-bool TickmarkHelper::isPostEquidistant( sal_Int32 nDepth ) const
-{
-    if( nDepth<0 || nDepth>m_rIncrement.SubIncrements.getLength() )
-    {
-        DBG_ERROR("invalid depth for tickmark");
-        return true;
-    }
-
-    if( nDepth==0 )
-        return m_rIncrement.PostEquidistant;
-
-    return m_rIncrement.SubIncrements[nDepth-1].PostEquidistant;
 }
 
 void TickmarkHelper::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const

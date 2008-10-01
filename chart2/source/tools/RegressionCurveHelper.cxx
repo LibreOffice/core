@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RegressionCurveHelper.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,12 +136,6 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 }
 
 // ------------------------------------------------------------
-
-// static
-Reference< XRegressionCurveCalculator > RegressionCurveHelper::createMeanValueLineCalculator()
-{
-    return Reference< XRegressionCurveCalculator >( new MeanValueRegressionCurveCalculator());
-}
 
 // static
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(

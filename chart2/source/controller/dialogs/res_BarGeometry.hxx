@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_BarGeometry.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,6 @@ public:
     virtual ~BarGeometryResources();
 
     void  SetPosPixel( const Point& rPosition );
-    Point GetPosPixel() const;
     Size  GetSizePixel() const;
 
     void Show( bool bShow );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_Location.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
+#ifdef LOCATION_PAGE
 
 LocationTabPage::LocationTabPage( svt::OWizardMachine* pParent
         , const uno::Reference< XChartDocument >& xChartModel
@@ -67,7 +68,7 @@ bool LocationTabPage::canAdvance() const
 {
     return false;
 }
-
+#endif
 //.............................................................................
 } //namespace chart
 //.............................................................................

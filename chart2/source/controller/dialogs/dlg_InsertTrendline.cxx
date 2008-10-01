@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_InsertTrendline.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,11 +96,6 @@ void InsertTrendlineDialog::adjustSize()
         LogicToPixel( Size( RSC_SP_CTRL_X + RSC_CD_PUSHBUTTON_WIDTH + RSC_SP_DLG_INNERBORDER_RIGHT, 0 ),
                       MapMode( MAP_APPFONT )).getWidth());
     SetSizePixel( aDialogSize );
-}
-
-void InsertTrendlineDialog::Reset()
-{
-    m_apTrendlineResources->Reset(rInAttrs);
 }
 
 void InsertTrendlineDialog::FillItemSet(SfxItemSet& rOutAttrs)

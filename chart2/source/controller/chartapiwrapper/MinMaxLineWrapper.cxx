@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MinMaxLineWrapper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,6 @@ MinMaxLineWrapper::MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > 
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
         , m_pPropertyArrayHelper()
-        //, m_aWrappedLineDashNameProperty( spChart2ModelContact )
         , m_aWrappedLineJointProperty( C2U("LineJoint"), uno::makeAny( drawing::LineJoint_NONE ))
 {
 }
@@ -192,8 +191,6 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const ::rtl::OUString& rPrope
                             xPropSet->setPropertyValue( C2U("Transparency"), rValue );
                         else if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
                             m_aWrappedLineJointProperty.setPropertyValue( rValue, xPropSet );
-                        //else if( rPropertyName.equals( m_aWrappedLineDashNameProperty.getOuterName() ) )
-                        //    m_aWrappedLineDashNameProperty.setPropertyValue( rValue, xPropSet );
                         else
                             xPropSet->setPropertyValue( rPropertyName, rValue );
                         return;
@@ -238,8 +235,6 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const ::rtl::OUString& rP
             aRet = xPropSet->getPropertyValue( C2U("Transparency") );
         else if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
             aRet = m_aWrappedLineJointProperty.getPropertyValue( xPropSet );
-        //else if( rPropertyName.equals( m_aWrappedLineDashNameProperty.getOuterName() ) )
-        //    aRet = m_aWrappedLineDashNameProperty.getPropertyValue( xPropSet );
         else
             aRet = xPropSet->getPropertyValue( rPropertyName );
 
