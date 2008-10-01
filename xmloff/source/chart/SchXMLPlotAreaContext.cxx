@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLPlotAreaContext.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -405,6 +405,16 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
                     mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")), pPropStyleContext, pStylesCtxt );
+
+                    //handle automatic position and size
+                    bool bAutoSize = false;
+                    bool bAutoPosition = false;
+                    SchXMLTools::getPropertyFromContext(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticSize")), pPropStyleContext, pStylesCtxt ) >>= bAutoSize;
+                    SchXMLTools::getPropertyFromContext(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticPosition")), pPropStyleContext, pStylesCtxt ) >>= bAutoPosition;
+                    mbHasSize = mbHasSize && !bAutoSize;
+                    mbHasPosition = mbHasPosition && !bAutoPosition;
 
                     //correct default starting angle for old 3D pies
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )

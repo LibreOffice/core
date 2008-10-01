@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.34.8.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,8 +133,11 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "StackedBarsConnected", CHART, XML_CONNECT_BARS, XML_TYPE_BOOL ),
 
     MAP_ENTRY_ODF12( "GroupBarsPerAxis", CHART, XML_GROUP_BARS_PER_AXIS, XML_TYPE_BOOL ),
+    MAP_ENTRY_ODF12( "AutomaticPosition", CHART, XML_AUTOMATIC_POSITION, XML_TYPE_BOOL ),
+    MAP_ENTRY_ODF12( "AutomaticSize", CHART, XML_AUTOMATIC_SIZE, XML_TYPE_BOOL ),
     MAP_ENTRY_ODF12( "StartingAngle", CHART, XML_ANGLE_OFFSET, XML_TYPE_NUMBER ),
     MAP_ENTRY_ODF12( "MissingValueTreatment", CHART, XML_TREAT_EMPTY_CELLS, XML_SCH_TYPE_MISSING_VALUE_TREATMENT ),
+    MAP_ENTRY( "ScaleText", CHART, XML_SCALE_TEXT, XML_TYPE_BOOL ),
 
     // spline settings
     MAP_ENTRY( "SplineOrder", CHART, XML_SPLINE_ORDER, XML_TYPE_NUMBER ),
