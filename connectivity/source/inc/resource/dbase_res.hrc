@@ -1,0 +1,64 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dbase_res.hrc,v $
+ * $Revision: 1.1.2.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef CONNECTIVITY_RESOURCE_DBASE_HRC
+#define CONNECTIVITY_RESOURCE_DBASE_HRC
+
+#include "resource/conn_shared_res.hrc"
+#include "resource/common_res.hrc"
+
+// ============================================================================
+// = the calc driver's resource strings
+// ============================================================================
+
+#define STR_COULD_NOT_DELETE_INDEX              ( STR_DBASE_BASE +    0 )
+#define STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE   ( STR_DBASE_BASE +    1 )
+#define STR_SQL_NAME_ERROR                      ( STR_DBASE_BASE +    2 )
+#define STR_COULD_NOT_DELETE_FILE               ( STR_DBASE_BASE +    3 )
+#define STR_INVALID_COLUMN_TYPE                 ( STR_DBASE_BASE +    4 )
+#define STR_INVALID_COLUMN_PRECISION            ( STR_DBASE_BASE +    5 )
+#define STR_INVALID_PRECISION_SCALE             ( STR_DBASE_BASE +    6 )
+#define STR_INVALID_COLUMN_NAME_LENGTH          ( STR_DBASE_BASE +    7 )
+#define STR_DUPLICATE_VALUE_IN_COLUMN           ( STR_DBASE_BASE +    8 )
+#define STR_INVALID_COLUMN_DECIMAL_VALUE        ( STR_DBASE_BASE +    9 )
+#define STR_COLUMN_NOT_ALTERABLE                ( STR_DBASE_BASE +   10 )
+#define STR_COLUMN_NOT_ADDABLE                  ( STR_DBASE_BASE +   11 )
+#define STR_COLUMN_NOT_DROP                     ( STR_DBASE_BASE +   12 )
+#define STR_COULD_NOT_ALTER_TABLE               ( STR_DBASE_BASE +   13 )
+#define STR_INVALID_DBASE_FILE                  ( STR_DBASE_BASE +   14 )
+#define STR_ONL_ONE_COLUMN_PER_INDEX            ( STR_DBASE_BASE +   15 )
+#define STR_COULD_NOT_CREATE_INDEX              ( STR_DBASE_BASE +   16 )
+#define STR_COULD_NOT_CREATE_INDEX_NAME         ( STR_DBASE_BASE +   17 )
+#define STR_INVALID_COLUMN_VALUE                ( STR_DBASE_BASE +   18 )
+#define STR_TABLE_NOT_DROP                      ( STR_DBASE_BASE +   19 )
+
+
+#endif // CONNECTIVITY_RESOURCE_DBASE_HRC
+
