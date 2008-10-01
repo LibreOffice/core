@@ -18490,10 +18490,7 @@ fi
 
 
 if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
-         { echo "$as_me:$LINENO: WARNING: building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >&5
-echo "$as_me: WARNING: building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >&2;}
-   echo "building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >>warn
-   { echo "$as_me:$LINENO: checking for /System/Library/Frameworks/AppKit.framework" >&5
+         { echo "$as_me:$LINENO: checking for /System/Library/Frameworks/AppKit.framework" >&5
 echo $ECHO_N "checking for /System/Library/Frameworks/AppKit.framework... $ECHO_C" >&6; }
    if test -d "/System/Library/Frameworks/AppKit.framework/"; then
       { echo "$as_me:$LINENO: result: yes" >&5

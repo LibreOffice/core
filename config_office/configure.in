@@ -4261,8 +4261,6 @@ dnl see if we have the AppKit framework for building with Quartz graphics.
 if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
    dnl System is either Mac OS X or pure Darwin, and --with-x was not specified
    dnl Default to Aqua graphics if available.
-   AC_MSG_WARN([building without-x is not fully supported yet. Specify --with-x or be ready to face build problems])
-   echo "building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >>warn
    AC_MSG_CHECKING([for /System/Library/Frameworks/AppKit.framework])
    if test -d "/System/Library/Frameworks/AppKit.framework/"; then
       AC_MSG_RESULT([yes])

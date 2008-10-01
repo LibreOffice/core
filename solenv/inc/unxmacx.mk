@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacx.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.34.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,10 @@ LINKOUTPUT_FILTER=
 #  compiling STLport sources too, either internally or externally.
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1
 .IF "$(GUIBASE)"=="unx" && "$(USE_SYSTEM_STL)"!="YES"
-CDEFS+= -DX_LOCALE
+CDEFS+=-DX_LOCALE
+.ENDIF
+.IF "$(GUIBASE)"=="aqua"
+CDEFS+=-DQUARTZ
 .ENDIF
 
 # Name of library where static data members are initialized
