@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recently_used_file.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,11 +91,7 @@ recently_used_file::recently_used_file() :
         if (NULL == file_)
             throw "I/O error opening ~/.recently-used";
 
-#if defined(MACOSX) && (BUILD_OS_MINOR == 2)
-    if (flock(fileno(file_),(LOCK_EX | LOCK_NB)) != 0)
-#else
         if (lockf(fileno(file_), F_LOCK, 0) != 0)
-#endif
         {
             fclose(file_);
             throw "Cannot lock ~/.recently-used";
@@ -108,11 +104,7 @@ recently_used_file::recently_used_file() :
 //------------------------------------------------
 recently_used_file::~recently_used_file()
 {
-#if defined(MACOSX) && (BUILD_OS_MINOR == 2)
-        flock(fileno(file_),LOCK_UN);
-#else
     lockf(fileno(file_), F_ULOCK, 0);
-#endif
     fclose(file_);
 }
 
