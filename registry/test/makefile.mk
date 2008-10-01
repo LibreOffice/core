@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.10.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,8 +35,8 @@ PRJNAME=registry
 TARGET=regtest
 
 USE_LDUMP2=TRUE
-#LDUMP2=LDUMP3
 
+ENABLE_EXCEPTIONS := TRUE
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
@@ -62,6 +62,7 @@ SHL1IMPLIB= rgt
 SHL1STDLIBS=	\
                 $(SALLIB) \
                 $(SALHELPERLIB)	\
+                $(REGLIB) \
                 $(STDLIBCPP)
 
 SHL1LIBS=	$(LIB1TARGET)

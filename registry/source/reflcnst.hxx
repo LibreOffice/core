@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: reflcnst.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,9 +284,7 @@ inline sal_uInt32 readUtf8(const sal_uInt8* buffer, sal_Char* v, sal_uInt32 maxS
 
 
 sal_uInt32 writeFloat(sal_uInt8* buffer, float v);
-sal_uInt32 readFloat(const sal_uInt8* buffer, float& v);
 sal_uInt32 writeDouble(sal_uInt8* buffer, double v);
-sal_uInt32 readDouble(const sal_uInt8* buffer, double& v);
 sal_uInt32 writeString(sal_uInt8* buffer, const sal_Unicode* v);
 sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSize);
 

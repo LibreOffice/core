@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: test.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,9 @@
 #include <stdio.h>
 
 #if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
+int main()
 #else
-int _cdecl main( int argc, char * argv[] )
+int _cdecl main()
 #endif
 {
     void test_coreReflection();

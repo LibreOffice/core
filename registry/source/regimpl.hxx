@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regimpl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,17 +124,12 @@ public:
 
     RegError    dumpRegistry(RegKeyHandle hKey) const;
 
-    RegError    createLink(RegKeyHandle hKey,
-                           const OUString& linkName,
-                           const OUString& linkTarget);
-
        RegError     deleteLink(RegKeyHandle hKey,
                            const OUString& linkName);
 
 public:
     virtual ~ORegistry();
 
-    sal_Bool            isKeyOpen(const OUString&   keyName) const;
     sal_Bool            isReadOnly() const
         { return m_readOnly; }
 
@@ -161,8 +156,6 @@ protected:
 
     RegError    deleteSubkeysAndValues(ORegKey* pKey,
                                        RESOLVE eResolve=RESOLVE_FULL);
-
-    sal_uInt32      countSubKeys(ORegKey* pKey);
 
     RegError    loadAndSaveValue(ORegKey* pTargetKey,
                                  ORegKey* pSourceKey,

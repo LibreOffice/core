@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excomp.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,7 @@ SAL_IMPLEMENT_MAIN()
     typelib_TypeDescription* pTypeDesc = NULL;
     OUString sType = OUString::createFromAscii("com.sun.star.text.XTextDocument");
     typelib_typedescription_getByName( &pTypeDesc, sType.pData);
-    typelib_InterfaceTypeDescription* pInterDesc = (typelib_InterfaceTypeDescription*)pTypeDesc;
+//  typelib_InterfaceTypeDescription* pInterDesc = (typelib_InterfaceTypeDescription*)pTypeDesc;
 
     Reference< XInterface > xIFace = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration"));
     Reference< XImplementationRegistration > xImpReg( xIFace, UNO_QUERY);

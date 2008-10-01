@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: keyimpl.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,41 +56,6 @@ ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
 
     checkLink();
 }
-
-//*********************************************************************
-//  ORegKey()
-//
-ORegKey::ORegKey(const OUString& keyName, const OUString& linkName,
-                 ORegistry* pReg)
-    : m_refCount(1)
-    , m_name(keyName)
-    , m_bDeleted(sal_False)
-    , m_pRegistry(pReg)
-{
-    if (linkName.getLength())
-    {
-        m_link = linkName;
-        m_isLink = sal_True;
-
-        setValue(OUString( RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET") ), RG_VALUETYPE_UNICODE,
-                 (RegValue*)linkName.pData->buffer, linkName.getLength()+1);
-    } else
-    {
-        m_isLink = sal_False;
-    }
-}
-
-//*********************************************************************
-//  ORegKey()
-//
-ORegKey::ORegKey()
-    : m_refCount(1)
-    , m_bDeleted(sal_False)
-    , m_isLink(sal_False)
-    , m_pRegistry(NULL)
-{
-}
-
 
 //*********************************************************************
 //  ~ORegKey()
@@ -256,23 +221,6 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
         closeKey((RegKeyHandle)pKey);
     }
     return REG_NO_ERROR;
-}
-
-
-//*********************************************************************
-//  closeSubKeys
-//
-RegError ORegKey::closeSubKeys(RegKeyHandle* phSubKeys, sal_uInt32 nSubKeys)
-{
-    RegError    _ret = REG_NO_ERROR;
-
-    for (sal_uInt32 i=0; i < nSubKeys; i++)
-    {
-        _ret = closeKey(phSubKeys[i]);
-    }
-
-    rtl_freeMemory(phSubKeys);
-    return _ret;
 }
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testregistry.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,6 +105,7 @@ static void mergeKeys(
     xDestKey->closeKey();
 }
 
+
 OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
@@ -121,16 +122,7 @@ OUString getExePath()
 
 void setStarUserRegistry()
 {
-    RegistryLoader* pLoader = new RegistryLoader();
-
-    if (!pLoader->isLoaded())
-    {
-        delete pLoader;
-        return;
-    }
-
-    Registry *myRegistry = new Registry(*pLoader);
-    delete pLoader;
+    Registry *myRegistry = new Registry();
 
     RegistryKey rootKey, rKey, rKey2;
 
@@ -150,16 +142,7 @@ void setStarUserRegistry()
 
 void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarget)
 {
-    RegistryLoader* pLoader = new RegistryLoader();
-
-    if (!pLoader->isLoaded())
-    {
-        delete pLoader;
-        return;
-    }
-
-    Registry *myRegistry = new Registry(*pLoader);
-    delete pLoader;
+    Registry *myRegistry = new Registry();
 
     RegistryKey rootKey;
 
@@ -687,9 +670,9 @@ void test_DefaultRegistry(
 
 SAL_IMPLEMENT_MAIN()
 {
-    setStarUserRegistry();
-    setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
-                             OUString::createFromAscii("/Test/FifthKey/MyFirstLink"));
+//  setStarUserRegistry();
+     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
+                              OUString::createFromAscii("/Test/FifthKey/MyFirstLink"));
 
     OUString reg1( RTL_CONSTASCII_USTRINGPARAM("testreg1.rdb") );
     OUString reg2( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") );

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: options.cxx,v $
- * $Revision: 1.4.8.1 $
+ * $RCSfile: regdiagnose.h,v $
+ * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,43 +28,20 @@
  *
  ************************************************************************/
 
-#include    <codemaker/options.hxx>
 
-using namespace rtl;
+#ifndef REG_DIAGNOSE_H
+#define REG_DIAGNOSE_H
 
-Options::Options()
-{
-}
+#include <osl/diagnose.h>
 
-Options::~Options()
-{
+#define REG_ENSURE(c, m)   _REG_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
 
-}
+#define _REG_ENSURE(c, f, l, m) \
+    do \
+    {  \
+        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
+            _OSL_GLOBAL osl_breakDebug(); \
+    } while (0)
 
-const OString& Options::getProgramName() const
-{
-    return m_program;
-}
 
-sal_Bool Options::isValid(const OString& option)
-{
-    return (m_options.count(option) > 0);
-}
-
-const OString Options::getOption(const OString& option)
-    throw( IllegalArgument )
-{
-    if (m_options.count(option) > 0)
-    {
-        return m_options[option];
-    } else
-    {
-        throw IllegalArgument("Option is not valid or currently not set.");
-    }
-}
-
-const StringVector& Options::getInputFiles()
-{
-    return m_inputFiles;
-}
-
+#endif // REG_DIAGNOSE_H
