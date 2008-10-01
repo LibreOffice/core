@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bridgetest.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1160,24 +1160,47 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         }
 
         Reference< XInterface > xOriginal;
+        bool remote;
         sal_Int32 i;
         if( rArgs.getLength() > 1 && 0 == rArgs[0].compareToAscii( "-u" ) )
         {
-            xOriginal = UnoUrlResolver::create( m_xContext )->resolve(
-                rArgs[1] );
+            remote = true;
             i = 2;
         }
         else
         {
-            // local test
-            xOriginal =
-                m_xContext->getServiceManager()->createInstanceWithContext(
-                    rArgs[0], m_xContext );
+            remote = false;
             i = 1;
         }
-        bool noCurrentContext = i < rArgs.getLength()
+        bool noCurrentContext = false;
+        if (i < rArgs.getLength()
             && rArgs[i].equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("noCurrentContext"));
+                RTL_CONSTASCII_STRINGPARAM("noCurrentContext")))
+        {
+            noCurrentContext = true;
+            ++i;
+        }
+        bool stress = false;
+        if (i < rArgs.getLength()
+            && rArgs[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("stress")))
+        {
+            stress = true;
+            ++i;
+        }
+
+        for (;;) {
+            Reference< XInterface > o;
+            if (remote) {
+                o = UnoUrlResolver::create(m_xContext)->resolve(rArgs[1]);
+            } else {
+                o = m_xContext->getServiceManager()->createInstanceWithContext(
+                    rArgs[0], m_xContext);
+            }
+            if (!stress) {
+                xOriginal = o;
+                break;
+            }
+        }
 
         if (! xOriginal.is())
         {

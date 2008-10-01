@@ -40,7 +40,7 @@ TARGET = runner_convwatch
 
 # --- Files --------------------------------------------------------
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 JAVAFILES = \
  TriState.java \
  IniFile.java \

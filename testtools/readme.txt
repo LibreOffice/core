@@ -20,3 +20,15 @@ This will add a new compiler define (-DCOMPCHECK) and will be used in the
 bridgetest.cxx to switch off the code which uses the getCaughtException function.
 However, there is still a test which causes the test component to throw
 and IllegalArgumentException. This still works.
+
+
+Using source/bridgetest for stress testing
+==========================================
+
+Start a modified bridgetest_server (with the final "--singleaccept" argument
+removed from the uno executable call) or a modified bridgetest_javaserver (with
+the final "singleaccept" argument replaced with "multi" in the java executable
+call), then start a modified bridgetest_client (with a final "stress" argument
+added to the uno executable call).  The client will continuously establish
+connections to the server which are immediately destroyed again.  The test will
+run forever, unless an error occurs.

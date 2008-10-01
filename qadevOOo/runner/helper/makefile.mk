@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.11.16.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,8 +41,7 @@ TARGET = runner_helper
 
 # --- Files --------------------------------------------------------
 
-JARFILES = ridl.jar jurt.jar juh.jar jut.jar \
-           unoil.jar
+JARFILES = ridl.jar jurt.jar juh.jar unoil.jar
 
 JAVAFILES =	APIDescGetter.java      \
             ConfigurationRead.java  \
