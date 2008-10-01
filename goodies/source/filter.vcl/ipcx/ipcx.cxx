@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ipcx.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,6 +182,13 @@ void PCXReader::ImplReadHeader()
 
     *pPCX >> nbyte; nBitsPerPlanePix = (ULONG)nbyte;
     *pPCX >> nMinX >> nMinY >> nMaxX >> nMaxY;
+
+    if ((nMinX > nMaxX) || (nMinY > nMaxY))
+    {
+        nStatus = FALSE;
+        return;
+    }
+
     nWidth = nMaxX-nMinX+1;
     nHeight = nMaxY-nMinY+1;
 
@@ -234,6 +241,11 @@ void PCXReader::ImplReadBody()
     nCount = 0;
     for ( ny = 0; ny < nHeight; ny++ )
     {
+        if (pPCX->GetError() || pPCX->IsEof())
+        {
+            nStatus = FALSE;
+            break;
+        }
         nPercent = ny * 60 / nHeight + 10;
         if ( ny == 0 || nLastPercent + 4 <= nPercent )
         {
