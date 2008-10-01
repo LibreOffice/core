@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindows.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.69.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3694,7 +3694,10 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_ALIGN,
                      0);
-    VCLXEdit::ImplGetPropertyIds( rIds );
+    // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box
+    // #i92690# / 2008-08-12 / frank.schoenheit@sun.com
+    // VCLXEdit::ImplGetPropertyIds( rIds );
+    VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
 VCLXComboBox::VCLXComboBox()
