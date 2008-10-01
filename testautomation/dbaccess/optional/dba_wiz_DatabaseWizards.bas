@@ -43,7 +43,7 @@ sub main
 
     use "dbaccess/optional/includes/wiz_DatabaseWizard.inc"
     
-    call hStatusIn ("dbaccess" , "dba_wiz_DatabaseWizard.bas")
+    call hStatusIn ("dbaccess" , "dba_wiz_DatabaseWizards.bas")
     
     call wiz_DatabaseWizard
         

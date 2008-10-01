@@ -121,9 +121,9 @@ testcase tAutomaticControlFocus1
     ' /// check if the control has the focus after reload.
     printlog " check if the second control has the focus after reload."
     Kontext "DocumentWriter"
-    DocumentWriter.TypeKeys "<HOME>" , true
+    DocumentWriter.TypeKeys "<MOD1 HOME>" , true
     sleep(1)       
-	DocumentWriter.TypeKeys "<SHIFT END>" , true
+	DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
     sleep(1)
     DocumentWriter.TypeKeys "<MOD1 C>" , true
     sleep(1)
@@ -210,9 +210,9 @@ testcase tAutomaticControlFocus2
     ' /// check if the second control has the focus after reload.
     printlog " check if the second control has the focus after reload."
     Kontext "DocumentWriter"
-    DocumentWriter.TypeKeys "<HOME>" , true
+    DocumentWriter.TypeKeys "<MOD1 HOME>" , true
     sleep(1)       
-	DocumentWriter.TypeKeys "<SHIFT END>" , true
+	DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
     sleep(1)
     DocumentWriter.TypeKeys "<MOD1 C>" , true
     sleep(1)
@@ -670,9 +670,9 @@ testcase tTabStop
     '/// check if the right control has the focus
     printlog "check if the right control has the focus"
     Kontext "DocumentWriter"
-        DocumentWriter.TypeKeys "<HOME>" , true
+        DocumentWriter.TypeKeys "<MOD1 HOME>" , true
         sleep(1)
-        DocumentWriter.TypeKeys "<SHIFT END>" , true
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
@@ -685,9 +685,9 @@ testcase tTabStop
         printlog "check that tyou travel to the right controls via TAB"
         DocumentWriter.TypeKeys "<TAB>" , true
         sleep(1)
-        DocumentWriter.TypeKeys "<HOME>" , true
+        DocumentWriter.TypeKeys "<MOD1 HOME>" , true
         sleep(1)
-        DocumentWriter.TypeKeys "<SHIFT END>" , true
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
@@ -871,9 +871,9 @@ testcase tActivationOrder
             sleep(4)
        
     Kontext "DocumentWriter"
-        DocumentWriter.TypeKeys "<HOME>" , true
+        DocumentWriter.TypeKeys "<MOD1 HOME>" , true
         sleep(1)
-        DocumentWriter.TypeKeys "<SHIFT END>" , true
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
@@ -925,9 +925,9 @@ testcase tActivationOrder
     sleep(2)
         
     Kontext "DocumentWriter"
-        DocumentWriter.TypeKeys "<HOME>" , true
+        DocumentWriter.TypeKeys "<MOD1 HOME>" , true
         sleep(1)
-        DocumentWriter.TypeKeys "<SHIFT END>" , true
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
@@ -963,9 +963,6 @@ testcase tActivationOrder
 endcase
 '-------------------------------------------------------------------------
 testcase tAddFields
-
-    warnlog "#88576# The Add Field test does not work due issue 88576."
-    goto endsub
     
     Dim sControlName1 as String
     Dim sControlName2 as String
