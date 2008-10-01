@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: componenttools.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,16 +65,6 @@ namespace frm
         addTypes( _rTypes1 );
         addTypes( _rTypes2 );
         addTypes( _rTypes3 );
-    }
-
-    //--------------------------------------------------------------------
-    TypeBag::TypeBag( const TypeSequence& _rTypes1, const TypeSequence& _rTypes2, const TypeSequence& _rTypes3,
-        const TypeSequence& _rTypes4 )
-    {
-        addTypes( _rTypes1 );
-        addTypes( _rTypes2 );
-        addTypes( _rTypes3 );
-        addTypes( _rTypes4 );
     }
 
     //--------------------------------------------------------------------

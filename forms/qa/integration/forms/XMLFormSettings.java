@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLFormSettings.java,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,6 +92,12 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
         XNode stringElement = defaultInstance.createElement( "stringElement" );
         XNode booleanAttrib = defaultInstance.createAttribute( stringElement, "booleanAttribute", "true" );
         XNode dateAttrib = defaultInstance.createAttribute( stringElement, "dateAttribute" );
+
+        // when it comes to saving and loading, only one child of the root element of the instance
+        // is handled (is this a bug? see xmloff/source/xforms/XFormsInstanceContext.cxx, method
+        // CreateChildContext).
+        // So, we remove the default node of the instance which it has all the time
+        defaultInstance.removeNode( "instanceData" );
 
         assure( "booleanAttrib's parent is wrong",
             UnoRuntime.areSame( stringElement, booleanAttrib.getParentNode() ) );

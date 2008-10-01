@@ -8,6 +8,8 @@ package org.openoffice.xforms;
 import com.sun.star.xml.dom.DOMException;
 import com.sun.star.xml.dom.XDocument;
 import com.sun.star.xml.dom.XNode;
+import com.sun.star.xml.dom.XNodeList;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -95,6 +97,38 @@ public class Instance
         if ( _initialNodeValue != null )
             node.setNodeValue( _initialNodeValue );
         return node;
+    }
+
+    /** removes a child of the root-level node from the instance
+     *
+     * @param _elementName
+     *  the name of the to-be-removed child
+     */
+    public XNode removeNode( String _elementName ) throws DOMException
+    {
+        return removeNode( m_domInstance, _elementName );
+    }
+
+    /** removes a node from the instance
+     *
+     * @param _parentElement
+     *  the node whose child is to be removed
+     * @param _elementName
+     *  the name of the to-be-removed child
+     */
+    public XNode removeNode( XNode _parentElement, String _elementName ) throws DOMException
+    {
+        XNodeList nodes = _parentElement.getChildNodes();
+        for ( int i=0; i<nodes.getLength(); ++i )
+        {
+            XNode node = nodes.item(i);
+            if ( node.getLocalName().equals( _elementName ) )
+            {
+                _parentElement.removeChild( node );
+                return node;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     /** creates an attribute for the root node of the instance
