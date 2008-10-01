@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.45 $
+ * $Revision: 1.45.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,6 +169,7 @@ public:
     bool                CheckContext();
     void                UpdateWindow( NSRect& rRect ); // delivered in NSView coordinates
     void                RefreshRect( const CGRect& );
+    void                RefreshRect( const NSRect& rRect );
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
@@ -385,6 +386,11 @@ private:
 // --- some trivial inlines
 
 inline void AquaSalGraphics::RefreshRect( const CGRect& rRect )
+{
+    RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
+}
+
+inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }

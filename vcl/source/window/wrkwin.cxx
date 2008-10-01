@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrkwin.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.138.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,6 +195,12 @@ void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode, sal_Int32 nDisplay )
 {
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
+
+    if( (nDisplay < 0)
+    || (nDisplay >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
+    {
+        nDisplay = GetScreenNumber();
+    }
 
     mbFullScreenMode = bFullScreenMode != 0;
     if ( !mbSysChild )

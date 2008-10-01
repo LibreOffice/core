@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.134 $
+ * $Revision: 1.133.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6270,10 +6270,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
     const ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
     for( int i = 0; i < nGlyphs; i++ )
     {
-        if( ! pGlyphs[i] )
-            continue;
         const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
-
         const ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
         if( isBuiltinFont( pCurrentFont ) )

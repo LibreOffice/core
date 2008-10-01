@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrkwin.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +82,14 @@ public:
 
     virtual BOOL    Close();
 
-    void            ShowFullScreenMode( BOOL bFullScreenMode = TRUE, sal_Int32 nDisplay = 0 );
+    /** The default value of nDisplay = -1 means "don't care" and
+        allows to backends to use any screen [** or display? terminology!]
+        they like (most probably the current one).
+
+        NOTE: The default value cannot be 0, because 0 is a legitimate
+        screen number.
+     */
+    void            ShowFullScreenMode( BOOL bFullScreenMode = TRUE, sal_Int32 nDisplay = -1 );
     void            EndFullScreenMode() { ShowFullScreenMode( FALSE ); }
     BOOL            IsFullScreenMode() const { return mbFullScreenMode; }
 

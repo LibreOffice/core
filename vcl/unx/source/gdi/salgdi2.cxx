@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi2.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -820,8 +820,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( !pDstVisFmt )
         return false;
 
-    XRenderPictureAttributes aAttr;
-    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, aAttr );
+    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, NULL );
     if( !aDstPic )
         return false;
 
@@ -844,7 +843,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         return false;
 
     XRenderPictFormat* pSrcVisFmt = pDstVisFmt;
-    Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, aAttr );
+    Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, NULL );
     if( !aSrcPic )
         return false;
 
@@ -899,8 +898,9 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
     const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, TRUE );
 
+    XRenderPictureAttributes aAttr;
     aAttr.repeat = true;
-    Picture aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, aAttr );
+    Picture aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, &aAttr );
     if( !aAlphaPic )
         return false;
 
@@ -948,17 +948,12 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     if( !pDstVisFmt )
         return false;
 
-    XRenderPictureAttributes aAttr;
-    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, aAttr );
+    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, NULL );
     if( !aDstPic )
         return false;
 
-      XRenderColor aRenderColor = {
-        SALCOLOR_RED(nBrushColor_),
-        SALCOLOR_GREEN(nBrushColor_),
-        SALCOLOR_BLUE(nBrushColor_),
-        255 - 255L*nTransparency/100
-    };
+    const double fTransparency = (100 - nTransparency) * (1.0/100);
+    const XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency);
 
     rPeer.FillRectangle( PictOpOver,
                          aDstPic,

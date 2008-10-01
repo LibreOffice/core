@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1312,9 +1312,39 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*  pPtr, ULONG nSize )
+BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
+    void* pEpsData, ULONG nByteCount )
 {
-    return FALSE;
+    // convert the raw data to an NSImageRef
+    NSData* xNSData = [NSData dataWithBytes:(void*)pEpsData length:(int)nByteCount];
+    NSImageRep* xEpsImage = [NSEPSImageRep imageRepWithData: xNSData];
+    if( !xEpsImage )
+        return false;
+
+    // get the target context
+    if( !CheckContext() )
+        return false;
+
+    // NOTE: flip drawing, else the nsimage would be drawn upside down
+    CGContextSaveGState( mrContext );
+//  CGContextTranslateCTM( mrContext, 0, +mnHeight );
+    CGContextScaleCTM( mrContext, +1, -1 );
+    nY = /*mnHeight*/ - (nY + nHeight);
+
+    // prepare the target context
+    NSGraphicsContext* pOrigNSCtx = [NSGraphicsContext currentContext];
+    NSGraphicsContext* pDrawNSCtx = [NSGraphicsContext graphicsContextWithGraphicsPort: mrContext flipped: IsFlipped()];
+    [NSGraphicsContext setCurrentContext: pDrawNSCtx];
+    // draw the EPS
+    const NSRect aDstRect = {{nX,nY},{nWidth,nHeight}};
+    const BOOL bOK = [xEpsImage drawInRect: aDstRect];
+    CGContextRestoreGState( mrContext );
+    // mark the destination rectangle as updated
+       RefreshRect( aDstRect );
+    // restore the NSGraphicsContext, TODO: do we need this?
+    [NSGraphicsContext setCurrentContext: pOrigNSCtx];
+
+    return bOK;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

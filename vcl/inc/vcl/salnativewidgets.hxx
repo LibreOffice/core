@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.108.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -402,11 +402,17 @@ class ImplControlValue
                                 { mTristate = nTristate; mString = sString; mNumber = nNumeric; mOptionalVal = aOptVal; };
         inline ImplControlValue( ButtonValue nTristate, rtl::OUString sString, long nNumeric ) \
                                 { mTristate = nTristate; mString = sString; mNumber = nNumeric; mOptionalVal = NULL; };
-        inline ImplControlValue( ButtonValue nTristate )    { mTristate = nTristate; mOptionalVal = NULL; };
-        inline ImplControlValue( rtl::OUString sString )    { mString = sString; mOptionalVal = NULL; };
-        inline ImplControlValue( long nNumeric )        { mNumber = nNumeric; mOptionalVal = NULL; };
-        inline ImplControlValue( void * aOptVal )       { mOptionalVal = aOptVal; };
-        inline ImplControlValue() { mTristate = BUTTONVALUE_DONTKNOW; mNumber = 0; mOptionalVal = NULL; };
+        explicit ImplControlValue( ButtonValue nTristate )
+            : mTristate(nTristate), mNumber(0), mOptionalVal(NULL) {}
+        explicit ImplControlValue( rtl::OUString& rString )
+            : mTristate(BUTTONVALUE_DONTKNOW), mString(rString), mNumber(0), mOptionalVal(NULL) {}
+        explicit ImplControlValue( long nNumeric )
+            : mTristate(BUTTONVALUE_DONTKNOW), mNumber( nNumeric), mOptionalVal(NULL) {}
+        explicit ImplControlValue( void* aOptVal )
+             : mTristate(BUTTONVALUE_DONTKNOW), mNumber(0), mOptionalVal(aOptVal) {}
+        inline ImplControlValue()
+            : mTristate(BUTTONVALUE_DONTKNOW), mNumber(0), mOptionalVal(NULL) {}
+
         inline ~ImplControlValue() { mOptionalVal = NULL; };
 
         inline ButtonValue      getTristateVal( void ) const { return mTristate; }

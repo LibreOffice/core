@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.158 $
+ * $Revision: 1.157.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1053,7 +1053,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
-        rEntry.m_aPicture = rRenderPeer.CreatePicture ( rEntry.m_aPixmap, pVisualFormat, CPRepeat, aAttr );
+        rEntry.m_aPicture = rRenderPeer.CreatePicture ( rEntry.m_aPixmap, pVisualFormat, CPRepeat, &aAttr );
     }
 
     // set font foreground color and opacity
@@ -1061,8 +1061,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // notify xrender of target drawable
-    XRenderPictureAttributes aAttr;
-    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, aAttr );
+    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
 
     // set clipping
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
