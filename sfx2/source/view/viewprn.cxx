@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewprn.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
+#include "com/sun/star/view/XRenderable.hpp"
+
 #include <svtools/itempool.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -64,10 +66,134 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 
+#include "toolkit/awt/vclxdevice.hxx"
+
 #include "view.hrc"
 #include "helpid.hrc"
 
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+
 TYPEINIT1(SfxPrintingHint, SfxHint);
+
+// -----------------------------------------------------------------------
+
+class SfxPrinterListener : public vcl::PrinterListener
+{
+    Reference< frame::XModel >          mxModel;
+public:
+    SfxPrinterListener( const Reference< frame::XModel >& i_xModel )
+    : mxModel( i_xModel )
+    {
+    }
+
+    virtual ~SfxPrinterListener();
+
+    virtual int  getPageCount() const;
+    virtual void getPageParameters( int i_nPage, JobSetup& o_rPageSetup, Size& o_rPageSize ) const;
+    virtual void printPage( int i_nPage ) const;
+    virtual void setListeners();  // optional
+    virtual void jobFinished();   // optional
+};
+
+SfxPrinterListener::~SfxPrinterListener()
+{
+}
+
+int SfxPrinterListener::getPageCount() const
+{
+    int nPages = 0;
+    boost::shared_ptr<Printer> pPrinter( getPrinter() );
+    if( mxModel.is() && pPrinter )
+    {
+        Reference< view::XRenderable > xRenderable( mxModel, UNO_QUERY );
+        if( xRenderable.is() )
+        {
+            VCLXDevice* pXDevice = new VCLXDevice();
+            pXDevice->SetOutputDevice( &(*pPrinter) );
+
+            Sequence< beans::PropertyValue > aRenderOptions( 1 );
+            aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+            aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+
+            nPages = xRenderable->getRendererCount( makeAny( mxModel ), aRenderOptions );
+        }
+    }
+    return nPages;
+}
+
+void SfxPrinterListener::getPageParameters( int i_nPage, JobSetup& o_rPageSetup, Size& o_rPageSize ) const
+{
+    Size aPageSize;
+    boost::shared_ptr<Printer> pPrinter( getPrinter() );
+
+    // FIXME: get page setup from writer
+    o_rPageSetup = pPrinter->GetJobSetup();
+
+    if( mxModel.is() && pPrinter )
+    {
+        Reference< view::XRenderable > xRenderable( mxModel, UNO_QUERY );
+        if( xRenderable.is() )
+        {
+            VCLXDevice* pXDevice = new VCLXDevice();
+            pXDevice->SetOutputDevice( &(*pPrinter) );
+
+            Sequence< beans::PropertyValue > aRenderOptions( 1 );
+            aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+            aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+
+            sal_Int32 nPages = xRenderable->getRendererCount( makeAny( mxModel ), aRenderOptions );
+
+            if( i_nPage < nPages )
+            {
+                Sequence< beans::PropertyValue > aRenderProps( xRenderable->getRenderer( i_nPage, makeAny( mxModel ), aRenderOptions ) );
+
+                for( sal_Int32 nProperty = 0, nPropertyCount = aRenderProps.getLength(); nProperty < nPropertyCount; ++nProperty )
+                {
+                    if( aRenderProps[ nProperty ].Name == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )
+                    {
+                        awt::Size aSize;
+                        aRenderProps[ nProperty].Value >>= aSize;
+                        aPageSize.Width() = aSize.Width;
+                        aPageSize.Height() = aSize.Height;
+                    }
+                }
+            }
+        }
+    }
+    o_rPageSize = aPageSize;
+}
+
+void SfxPrinterListener::printPage( int i_nPage ) const
+{
+    boost::shared_ptr<Printer> pPrinter( getPrinter() );
+    if( mxModel.is() && pPrinter )
+    {
+        Reference< view::XRenderable > xRenderable( mxModel, UNO_QUERY );
+        if( xRenderable.is() )
+        {
+            VCLXDevice* pXDevice = new VCLXDevice();
+            pXDevice->SetOutputDevice( &(*pPrinter) );
+
+            Sequence< beans::PropertyValue > aRenderOptions( 1 );
+            aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+            aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+
+            sal_Int32 nPages = xRenderable->getRendererCount( makeAny( mxModel ), aRenderOptions );
+
+            if( i_nPage < nPages )
+                xRenderable->render( i_nPage, makeAny( mxModel ), aRenderOptions );
+        }
+    }
+}
+
+void SfxPrinterListener::setListeners()
+{
+}
+
+void SfxPrinterListener::jobFinished()
+{
+}
 
 // -----------------------------------------------------------------------
 
@@ -401,7 +527,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     {
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        case SID_PRINTDOC:
         case SID_SETUPPRINTER:
         case SID_PRINTER_NAME :
         {
@@ -708,8 +833,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-        case SID_PRINTDOCDIRECT:
+        //case SID_PRINTDOCDIRECT:
         {
             if ( SID_PRINTDOCDIRECT == nId )
             {
@@ -810,8 +934,20 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             }
 
             delete pPrintDlg;
-            break;
         }
+
+        break;
+
+        case SID_PRINTDOC:
+        case SID_PRINTDOCDIRECT:
+        {
+            Reference< frame::XModel > xModel( GetObjectShell()->GetModel() );
+            boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( xModel ) );
+            // FIXME: job setup
+            // FIXME: job properties
+            Printer::PrintJob( pListener, JobSetup(), com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >() );
+        }
+        break;
     }
 }
 
