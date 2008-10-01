@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabledlg.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,6 +241,8 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         aRightMF.SetRefValue(pTblData->GetSpace());
         aLeftMF.MetricField::SetMin(0); // wird vom Percentfield ueberschrieben
         aRightMF.MetricField::SetMin(0);//                 -""-
+        aLeftMF.MetricField::SetMax(99); //
+        aRightMF.MetricField::SetMax(99);//
         aLeftMF.SetPrcntValue(aLeftMF.NormalizePercent(nLeft ), FUNIT_TWIP );
         aRightMF.SetPrcntValue(aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
     }

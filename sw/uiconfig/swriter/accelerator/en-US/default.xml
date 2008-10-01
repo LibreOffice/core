@@ -3,8 +3,8 @@
     <accel:item accel:code="KEY_F11" xlink:href=".uno:DesignerDialog"/>
     <accel:item accel:code="KEY_F11" accel:shift="true" xlink:href=".uno:StyleNewByExample"/>
     <accel:item accel:code="KEY_F11" accel:shift="true" accel:mod1="true" xlink:href=".uno:StyleUpdateByExample"/>
-    <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href=".uno:StyleCatalog"/>
-    <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
+        <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href=".uno:ActivateStyleApply"/>
+        <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
     <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href=".uno:Undo"/>
     <accel:item accel:code="KEY_BACKSPACE" accel:mod2="true" xlink:href=".uno:Undo"/>
     <accel:item accel:code="KEY_UNDO" xlink:href=".uno:Undo"/>

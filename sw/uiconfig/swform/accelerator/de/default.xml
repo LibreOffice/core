@@ -34,7 +34,7 @@
   <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Escape"/>
   <accel:item accel:code="KEY_F" accel:shift="true" accel:mod1="true" xlink:href=".uno:Bold"/>
   <accel:item accel:code="KEY_F10" accel:mod1="true" xlink:href=".uno:ControlCodes"/>
-  <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href=".uno:StyleCatalog"/>
+  <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href=".uno:ActivateStyleApply"/>
   <accel:item accel:code="KEY_F11" accel:shift="true" accel:mod1="true" xlink:href=".uno:StyleUpdateByExample"/>
   <accel:item accel:code="KEY_F11" accel:shift="true" xlink:href=".uno:StyleNewByExample"/>
   <accel:item accel:code="KEY_F11" xlink:href=".uno:DesignerDialog"/>

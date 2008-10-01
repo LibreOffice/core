@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwXMLTextBlocks.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,7 +230,16 @@ ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const Strin
     }
 
     if(aOldName != aPackageName)
-        xBlkRoot->renameElement ( aOldName, aPackageName );
+    {
+        try
+        {
+            xBlkRoot->renameElement ( aOldName, aPackageName );
+        }
+        catch( const container::ElementExistException& rEx )
+        {
+            (void)rEx;
+        }
+    }
     uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->commit();

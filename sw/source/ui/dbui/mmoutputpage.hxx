@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mmoutputpage.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,6 +118,8 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     long            m_nFromToNFPos;
     long            m_nRBOffset;
 
+    bool            m_bCancelSaving;
+
     SwMailMergeWizard*  m_pWizard;
 
     //some dialog data
@@ -138,7 +140,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK(SendAsHdl_Impl, PushButton*);
     DECL_LINK(SendDocumentsHdl_Impl, PushButton*);
     DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
-
+    DECL_LINK(SaveCancelHdl_Impl, Button*);
 protected:
         virtual bool    canAdvance() const;
         virtual void    ActivatePage();
