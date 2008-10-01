@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sm.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,6 @@
 #include <sys/poll.h>
 #include <fcntl.h>
 
-// [ed] 6/15/02 Use the poll replacement on OS X
-// [ericb] 5/7/05 mismatch in Mac OSX 10.4, test is necessary
-#if defined (MACOSX) && (BUILD_OS_MAJOR==10) && (BUILD_OS_MINOR<4)
-#include <poll.h>
-#else
-#include <sys/poll.h>
-#endif
 #include <stdio.h>
 
 #include <osl/process.h>
