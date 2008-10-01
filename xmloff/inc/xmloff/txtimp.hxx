@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.13.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,9 @@
 
 #include <map>
 #include <vector>
+#include <memory>
+#include <boost/utility.hpp>
+
 #include <tools/list.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>
@@ -57,7 +60,6 @@ class XMLTextListsHelper;
 class SvXMLImport;
 class SvXMLStylesContext;
 class XMLTextListBlockContext;
-class XMLTextListItemContext;
 class SvxXMLListStyleContext;
 class XMLPropStyleContext;
 class SvI18NMap;
@@ -262,6 +264,17 @@ enum XMLTextPAttrTokens
     XML_TOK_TEXT_P_END=XML_TOK_UNKNOWN
 };
 
+enum XMLTextNumberedParagraphAttrTokens
+{
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID,
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID,
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_LEVEL,
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_STYLE_NAME,
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING,
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE,
+    XML_TOK_TEXT_NUMBERED_PARAGRAPH_END=XML_TOK_UNKNOWN
+};
+
 enum XMLTextListBlockAttrTokens
 {
     XML_TOK_TEXT_LIST_BLOCK_XMLID,
@@ -361,29 +374,29 @@ enum XMLTextType
 // create type for section list, XMLSectionList_Impl
 DECLARE_LIST( XMLSectionList_Impl, XMLSectionImportContext* )
 
-class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
+    private boost::noncopyable
 {
-    SvXMLTokenMap *pTextElemTokenMap;
-    SvXMLTokenMap *pTextPElemTokenMap;
-    SvXMLTokenMap *pTextPAttrTokenMap;
-    SvXMLTokenMap *pTextFieldAttrTokenMap;
-    SvXMLTokenMap *pTextListBlockAttrTokenMap;
-    SvXMLTokenMap *pTextListBlockElemTokenMap;
-    SvXMLTokenMap *pTextFrameAttrTokenMap;
-    SvXMLTokenMap *pTextContourAttrTokenMap;
-    SvXMLTokenMap *pTextHyperlinkAttrTokenMap;
-    SvXMLTokenMap *pTextMasterPageElemTokenMap;
-    SvStringsDtor *pPrevFrmNames;
-    SvStringsDtor *pNextFrmNames;
+    ::std::auto_ptr<SvXMLTokenMap> pTextElemTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextPElemTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextPAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextFieldAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextNumberedParagraphAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextListBlockAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextListBlockElemTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextFrameAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextContourAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextHyperlinkAttrTokenMap;
+    ::std::auto_ptr<SvXMLTokenMap> pTextMasterPageElemTokenMap;
+    ::std::auto_ptr<SvStringsDtor> pPrevFrmNames;
+    ::std::auto_ptr<SvStringsDtor> pNextFrmNames;
 
     // --> OD 2008-04-25 #refactorlists#
-    XMLTextListsHelper* mpTextListsHelper;
+    ::std::auto_ptr<XMLTextListsHelper> mpTextListsHelper;
     // <--
 
     SvXMLImportContextRef xAutoStyles;
     SvXMLImportContextRef xFontDecls;
-    SvXMLImportContextRef xListBlock;
-    SvXMLImportContextRef xListItem;
 
     XMLSectionList_Impl aSectionList;
 
@@ -393,7 +406,7 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
     UniReference < SvXMLImportPropertyMapper > xSectionImpPrMap;
     UniReference < SvXMLImportPropertyMapper > xRubyImpPrMap;
 
-    SvI18NMap *pRenameMap;
+    ::std::auto_ptr<SvI18NMap> pRenameMap;
     // --> OD 2006-10-12 #i69629# - change and extend data structure:
     // - data structure contains candidates of paragraph styles, which
     //   will be assigned to the outline style
@@ -568,6 +581,7 @@ public:
     inline const SvXMLTokenMap& GetTextHyperlinkAttrTokenMap();
     inline const SvXMLTokenMap& GetTextMasterPageElemTokenMap();
 
+    const SvXMLTokenMap& GetTextNumberedParagraphAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockElemTokenMap();
     const SvXMLTokenMap& GetTextFieldAttrTokenMap(); // impl: txtfldi.cxx
@@ -587,18 +601,6 @@ public:
     sal_Bool IsBlockMode() { return bBlockMode; }
     sal_Bool IsOrganizerMode() { return bOrganizerMode; }
     sal_Bool IsProgress() { return bProgress; }
-
-    XMLTextListBlockContext *GetListBlock();
-    SvXMLImportContext *_GetListBlock() { return &xListBlock; }
-    sal_Bool IsInList() const { return xListBlock.Is(); }
-    void SetListBlock( XMLTextListBlockContext *pListBlock );
-    void _SetListBlock( SvXMLImportContext *pListBlock );
-
-    XMLTextListItemContext *GetListItem();
-    SvXMLImportContext *_GetListItem() { return &xListItem; }
-    sal_Bool HasListItem() const { return xListItem.Is(); }
-    void SetListItem( XMLTextListItemContext *pListItem );
-    void _SetListItem( SvXMLImportContext *pListItem );
 
     XMLSectionList_Impl& GetSectionList() { return aSectionList; }
 
@@ -891,77 +893,68 @@ public:
     SvXMLImport& GetXMLImport() { return rSvXMLImport;}
 
     // --> OD 2008-04-25 #refactorlists#
-    // --> OD 2008-08-15 #i92811#
-    // - add optional parameter <sListStyleDefaultListId>
-    void KeepListAsProcessed( ::rtl::OUString sListId,
-                              ::rtl::OUString sListStyleName,
-                              ::rtl::OUString sContinueListId,
-                              ::rtl::OUString sListStyleDefaultListId = ::rtl::OUString() );
+    XMLTextListsHelper& GetTextListHelper() { return *mpTextListsHelper; }
     // <--
 
-    sal_Bool IsListProcessed( const ::rtl::OUString sListId ) const;
-
-    ::rtl::OUString GetContinueListIdOfProcessedList(
-                                        const ::rtl::OUString sListId ) const;
-    const ::rtl::OUString& GetLastProcessedListId() const;
-    const ::rtl::OUString& GetListStyleOfLastProcessedList() const;
-
-    ::rtl::OUString GenerateNewListId() const;
-    // <--
+    // forwards to TextListHelper; these are used in many places
+    /// push a list context on the list context stack
+    void PushListContext(XMLTextListBlockContext *i_pListBlock = 0);
+    /// pop the list context stack
+    void PopListContext();
 };
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
 {
-    if( !pTextElemTokenMap )
-        pTextElemTokenMap = _GetTextElemTokenMap();
+    if( !pTextElemTokenMap.get() )
+        pTextElemTokenMap.reset( _GetTextElemTokenMap() );
 
     return *pTextElemTokenMap;
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextPElemTokenMap()
 {
-    if( !pTextPElemTokenMap )
-        pTextPElemTokenMap = _GetTextPElemTokenMap();
+    if( !pTextPElemTokenMap.get() )
+        pTextPElemTokenMap.reset( _GetTextPElemTokenMap() );
 
     return *pTextPElemTokenMap;
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextPAttrTokenMap()
 {
-    if( !pTextPAttrTokenMap )
-        pTextPAttrTokenMap = _GetTextPAttrTokenMap();
+    if( !pTextPAttrTokenMap.get() )
+        pTextPAttrTokenMap.reset( _GetTextPAttrTokenMap() );
 
     return *pTextPAttrTokenMap;
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
 {
-    if( !pTextFrameAttrTokenMap )
-        pTextFrameAttrTokenMap = _GetTextFrameAttrTokenMap();
+    if( !pTextFrameAttrTokenMap.get() )
+        pTextFrameAttrTokenMap.reset( _GetTextFrameAttrTokenMap() );
 
     return *pTextFrameAttrTokenMap;
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextContourAttrTokenMap()
 {
-    if( !pTextContourAttrTokenMap )
-        pTextContourAttrTokenMap = _GetTextContourAttrTokenMap();
+    if( !pTextContourAttrTokenMap.get() )
+        pTextContourAttrTokenMap.reset( _GetTextContourAttrTokenMap() );
 
     return *pTextContourAttrTokenMap;
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
 {
-    if( !pTextHyperlinkAttrTokenMap )
-        pTextHyperlinkAttrTokenMap = _GetTextHyperlinkAttrTokenMap();
+    if( !pTextHyperlinkAttrTokenMap.get() )
+        pTextHyperlinkAttrTokenMap.reset( _GetTextHyperlinkAttrTokenMap() );
 
     return *pTextHyperlinkAttrTokenMap;
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextMasterPageElemTokenMap()
 {
-    if( !pTextMasterPageElemTokenMap )
-        pTextMasterPageElemTokenMap = _GetTextMasterPageElemTokenMap();
+    if( !pTextMasterPageElemTokenMap.get() )
+        pTextMasterPageElemTokenMap.reset( _GetTextMasterPageElemTokenMap() );
 
     return *pTextMasterPageElemTokenMap;
 }

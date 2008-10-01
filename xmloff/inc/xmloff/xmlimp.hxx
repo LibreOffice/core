@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,12 +46,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_XGRAPHICOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XEMBEDDEDOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/weak.hxx>
 #include <xmloff/txtimp.hxx>
@@ -328,7 +324,7 @@ public:
                               const ::rtl::OUString& rName,
                               const ::rtl::OUString& rDisplayName );
     ::rtl::OUString GetStyleDisplayName( sal_uInt16 nFamily,
-                                      const ::rtl::OUString& rName );
+                                      const ::rtl::OUString& rName ) const;
 
     ProgressBarHelper*  GetProgressBarHelper();
 

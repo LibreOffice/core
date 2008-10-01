@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.132 $
+ * $Revision: 1.130.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3032,6 +3032,11 @@ namespace xmloff { namespace token {
 
         // ODF 1.2 metadata
         TOKEN( "meta-field",            XML_META_FIELD ),
+        TOKEN( "about",                 XML_ABOUT ),
+        TOKEN( "datatype",              XML_DATATYPE ),
+
+        // ODF 1.2 numbered-paragraph
+        TOKEN( "list-id",               XML_LIST_ID ),
 
         TOKEN( "treat-empty-cells",     XML_TREAT_EMPTY_CELLS ),
         TOKEN( "leave-gap",             XML_LEAVE_GAP ),

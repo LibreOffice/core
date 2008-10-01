@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ximpshap.hxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.48.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,9 +66,8 @@ protected:
     rtl::OUString               maShapeName;
     rtl::OUString               maThumbnailURL;
 
-    /// old list item and block (#91964#)
-    SvXMLImportContextRef       mxOldListBlock;
-    SvXMLImportContextRef       mxOldListItem;
+    /// whether to restore list context (#91964#)
+    bool                        mbListContextPushed;
 
     sal_uInt16                  mnStyleFamily;
     sal_uInt16                  mnClass;

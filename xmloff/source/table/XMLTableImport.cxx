@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableImport.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,8 +167,7 @@ public:
     Reference< XMergeableCell > mxCell;
     Reference< XTextCursor >    mxCursor;
     Reference< XTextCursor >    mxOldCursor;
-    SvXMLImportContextRef       mxOldListBlock;
-    SvXMLImportContextRef       mxOldListItem;
+    bool                        mbListContextPushed;
 
     sal_Int32 mnColSpan, mnRowSpan, mnRepeated;
 };
@@ -626,6 +625,7 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
 XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, USHORT nPrfx, const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext( rImport, nPrfx, rLName )
 , mxCell( xCell )
+, mbListContextPushed( false )
 , mnColSpan( 1 )
 , mnRowSpan( 1 )
 , mnRepeated( 1 )
@@ -716,10 +716,8 @@ SvXMLImportContext * XMLCellImportContext::CreateChildContext( USHORT nPrefix, c
 
             // remember old list item and block (#91964#) and reset them
             // for the text frame
-            mxOldListBlock = xTxtImport->_GetListBlock();
-            mxOldListItem = xTxtImport->_GetListItem();
-            xTxtImport->_SetListBlock( NULL );
-            xTxtImport->_SetListItem( NULL );
+            xTxtImport->PushListContext();
+            mbListContextPushed = true;
         }
     }
 
@@ -759,10 +757,8 @@ void XMLCellImportContext::EndElement()
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
 
     // reinstall old list item (if necessary) #91964#
-    if ( mxOldListBlock.Is() )
-    {
-        GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
-        GetImport().GetTextImport()->_SetListItem( mxOldListItem );
+    if (mbListContextPushed) {
+        GetImport().GetTextImport()->PopListContext();
     }
 }
 

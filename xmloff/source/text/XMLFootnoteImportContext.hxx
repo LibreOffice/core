@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLFootnoteImportContext.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,8 +59,7 @@ class XMLFootnoteImportContext : public SvXMLImportContext
         ::com::sun::star::text::XTextCursor> xOldCursor;
 
     /// old list item and block (#89891#)
-    SvXMLImportContextRef xListBlock;
-    SvXMLImportContextRef xListItem;
+    bool mbListContextPushed;
 
     /// text import helper; holds current XTextCursor (and XText)
     XMLTextImportHelper& rHelper;

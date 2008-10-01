@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.112.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +47,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumfi.hxx>
-#ifndef _XMLOFF_XMLEVENTIMPORTHELPER_HXX
 #include "XMLEventImportHelper.hxx"
-#endif
 #include "XMLStarBasicContextFactory.hxx"
 #include "XMLScriptContextFactory.hxx"
 #include "StyleMap.hxx"
@@ -66,9 +64,7 @@
 #include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
-#ifndef _VCL_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
-#endif
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
@@ -1350,7 +1346,7 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
 }
 
 OUString SvXMLImport::GetStyleDisplayName( sal_uInt16 nFamily,
-                                           const OUString& rName )
+                                           const OUString& rName ) const
 {
     OUString sName( rName );
     if( mpStyleMap && rName.getLength() )

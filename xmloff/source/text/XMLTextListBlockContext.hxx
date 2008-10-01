@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +50,8 @@ class XMLTextListBlockContext : public SvXMLImportContext
     SvXMLImportContextRef   mxParentListBlock;
 
     sal_Int16               mnLevel;
-    sal_Bool                mbRestartNumbering : 1;
-    sal_Bool                mbSetDefaults : 1;
+    sal_Bool                mbRestartNumbering;
+    sal_Bool                mbSetDefaults;
 
     // --> OD 2008-04-22 #refactorlists#
     // text:id property of <list> element, only valid for root <list> element

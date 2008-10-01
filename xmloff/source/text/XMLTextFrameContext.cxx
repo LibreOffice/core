@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextFrameContext.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.75.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,17 +32,13 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -65,19 +61,13 @@
 #include "XMLImageMapContext.hxx"
 #include "XMLTextFrameContext.hxx"
 
-#ifndef _XMLOFF_XMLTEXTLISTBLOCKCONTEXT_HXX
 #include "XMLTextListBlockContext.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTEXTLISTITEMCONTEXT_HXX
 #include "XMLTextListItemContext.hxx"
-#endif
 #include <xmloff/attrlist.hxx>
 #include <comphelper/stl_types.hxx>
 
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -376,8 +366,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
         ::com::sun::star::io::XOutputStream > xBase64Stream;
 
     /// old list item and block (#89891#)
-    SvXMLImportContextRef xListBlock;
-    SvXMLImportContextRef xListItem;
+    bool mbListContextPushed;
 
     const ::rtl::OUString sWidth;
     const ::rtl::OUString sWidthType;
@@ -794,10 +783,8 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 
         // remember old list item and block (#89892#) and reset them
         // for the text frame
-        xListBlock = xTextImportHelper->GetListBlock();
-        xListItem = xTextImportHelper->GetListItem();
-        xTextImportHelper->SetListBlock( NULL );
-        xTextImportHelper->SetListItem( NULL );
+        xTextImportHelper->PushListContext();
+        mbListContextPushed = true;
     }
 }
 
@@ -824,6 +811,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         sal_uInt16 nNewType,
         const Reference< XAttributeList > & rFrameAttrList )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
+,   mbListContextPushed( false )
 ,   sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
 ,   sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
 ,   sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
@@ -1098,12 +1086,8 @@ void XMLTextFrameContext_Impl::EndElement()
     }
 
     // reinstall old list item (if necessary) #89892#
-    if ( xListBlock.Is() )
-    {
-        GetImport().GetTextImport()->SetListBlock(
-            (XMLTextListBlockContext*)&xListBlock );
-        GetImport().GetTextImport()->SetListItem(
-            (XMLTextListItemContext*)&xListItem );
+    if (mbListContextPushed) {
+        GetImport().GetTextImport()->PopListContext();
     }
 
     if (( nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN ) && xPropSet.is())
