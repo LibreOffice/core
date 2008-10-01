@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_gfx.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,13 +110,6 @@ PrinterGfx::Init (const JobData& rData)
 
 void
 PrinterGfx::GetResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const
-{
-    rDpiX = mnDpi;
-    rDpiY = mnDpi;
-}
-
-void
-PrinterGfx::GetScreenFontResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const
 {
     rDpiX = mnDpi;
     rDpiY = mnDpi;

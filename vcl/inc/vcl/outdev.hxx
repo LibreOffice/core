@@ -1087,6 +1087,37 @@ public:
                                         LanguageType eLang,
                                         ULONG nFlags,
                                         const OutputDevice* pOutDev = NULL );
+
+    /** helper method removing transparencies from a metafile (e.g. for printing)
+
+        @returns
+        true: transparencies were removed
+        false: output metafile is unchanged input metafile
+
+        @attention this is a member method, so current state can influence the result !
+    */
+    bool                RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
+                                                          long nMaxBmpDPIX, long nMaxBmpDPIY,
+                                                          bool bReduceTransparency,
+                                                          bool bTransparencyAutoMode,
+                                                          bool bDownsampleBitmaps
+                                                          );
+    /** Retrieve downsampled and cropped bitmap
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmap)
+     */
+    Bitmap              GetDownsampledBitmap( const Size& rDstSz,
+                                              const Point& rSrcPt, const Size& rSrcSz,
+                                              const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
+    /** Retrieve downsampled and cropped bitmapEx
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmapEx)
+     */
+    BitmapEx            GetDownsampledBitmapEx( const Size& rDstSz,
+                                                const Point& rSrcPt, const Size& rSrcSz,
+                                                const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY );
 };
 
 #endif // _SV_OUTDEV_HXX

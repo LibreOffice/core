@@ -8,7 +8,7 @@
  *
  * $RCSfile: randrwrapper.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.5.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,6 +281,7 @@ void RandRWrapper::releaseWrapper()
 #endif
 
 #include "saldisp.hxx"
+#include "salframe.h"
 
 void SalDisplay::InitRandR( XLIB_Window aRoot ) const
 {
@@ -314,6 +315,7 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
         if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
         {
             // update screens
+            bool bNotify = false;
             for( size_t i = 0; i < m_aScreens.size(); i++ )
             {
                 if( m_aScreens[i].m_bInit )
@@ -329,6 +331,10 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
                     pSizes = pWrapper->XRRConfigSizes( pConfig, &nSizes );
                     XRRScreenSize *pTargetSize = pSizes + nId;
 
+                    bNotify = bNotify ||
+                              m_aScreens[i].m_aSize.Width() != pTargetSize->width ||
+                              m_aScreens[i].m_aSize.Height() != pTargetSize->height;
+
                     m_aScreens[i].m_aSize = Size( pTargetSize->width, pTargetSize->height );
 
                     pWrapper->XRRFreeScreenConfigInfo( pConfig );
@@ -338,6 +344,8 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
                     #endif
                 }
             }
+            if( bNotify && ! m_aFrames.empty() )
+                m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
         }
     }
     #else

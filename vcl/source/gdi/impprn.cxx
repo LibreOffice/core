@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impprn.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.86.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,6 +148,16 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
                     // execute action here to avoid DPI processing of bitmap;
                     pAct->Execute( this );
 
+#ifdef VERBOSE_DEBUG
+                    Push();
+                    SetLineColor(COL_RED);
+                    SetFillColor();
+                    DrawRect( Rectangle(
+                                  static_cast<MetaBmpScaleAction*>(pAct)->GetPoint(),
+                                  static_cast<MetaBmpScaleAction*>(pAct)->GetSize()) );
+                    Pop();
+#endif
+
                     // seek to end of this comment
                     do
                     {
@@ -173,9 +183,9 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             const Bitmap&       rBmp = pBmpScaleAction->GetBitmap();
 
             DrawBitmap( pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
-                        GetPreparedBitmap( pBmpScaleAction->GetSize(),
-                                           Point(), rBmp.GetSizePixel(),
-                                           rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
+                        GetDownsampledBitmap( pBmpScaleAction->GetSize(),
+                                              Point(), rBmp.GetSizePixel(),
+                                              rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
         }
@@ -185,9 +195,9 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             const Bitmap&           rBmp = pBmpScalePartAction->GetBitmap();
 
             DrawBitmap( pBmpScalePartAction->GetDestPoint(), pBmpScalePartAction->GetDestSize(),
-                        GetPreparedBitmap( pBmpScalePartAction->GetDestSize(),
-                                           pBmpScalePartAction->GetSrcPoint(), pBmpScalePartAction->GetSrcSize(),
-                                           rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
+                        GetDownsampledBitmap( pBmpScalePartAction->GetDestSize(),
+                                              pBmpScalePartAction->GetSrcPoint(), pBmpScalePartAction->GetSrcSize(),
+                                              rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
         }
@@ -197,9 +207,9 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             const BitmapEx&         rBmpEx = pBmpExScaleAction->GetBitmapEx();
 
             DrawBitmapEx( pBmpExScaleAction->GetPoint(), pBmpExScaleAction->GetSize(),
-                          GetPreparedBitmapEx( pBmpExScaleAction->GetSize(),
-                                               Point(), rBmpEx.GetSizePixel(),
-                                               rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
+                          GetDownsampledBitmapEx( pBmpExScaleAction->GetSize(),
+                                                  Point(), rBmpEx.GetSizePixel(),
+                                                  rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
         }
@@ -209,9 +219,9 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             const BitmapEx&             rBmpEx = pBmpExScalePartAction->GetBitmapEx();
 
             DrawBitmapEx( pBmpExScalePartAction->GetDestPoint(), pBmpExScalePartAction->GetDestSize(),
-                          GetPreparedBitmapEx( pBmpExScalePartAction->GetDestSize(),
-                                               pBmpExScalePartAction->GetSrcPoint(), pBmpExScalePartAction->GetSrcSize(),
-                                               rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
+                          GetDownsampledBitmapEx( pBmpExScalePartAction->GetDestSize(),
+                                                  pBmpExScalePartAction->GetSrcPoint(), pBmpExScalePartAction->GetSrcSize(),
+                                                  rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
         }
@@ -332,7 +342,11 @@ void ImplQPrinter::PrePrintPage( QueuePage* pPage )
     }
 
     maCurPageMetaFile = GDIMetaFile();
-    GetPreparedMetaFile( *pPage->mpMtf, maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY );
+    RemoveTransparenciesFromMetaFile( *pPage->mpMtf, maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY,
+                                     rPrinterOptions.IsReduceTransparency(),
+                                     rPrinterOptions.GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO,
+                                     rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency()
+                                     );
 }
 
 void ImplQPrinter::PostPrintPage()

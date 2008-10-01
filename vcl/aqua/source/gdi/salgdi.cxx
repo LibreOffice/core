@@ -417,24 +417,6 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
-{
-    GetResolution( rDPIX, rDPIY );
-
-    // the screen font resolution should equal the real resolution
-    // but to satisfy the quite insane heuristics in Window::ImplUpdateGlobalSettings()
-    // it needs to be tweaked
-    // TODO: remove the tweaking below if it becomes possible
-    if( (rDPIX < 72) || (rDPIY < 72) )
-    {
-        const long nMinDPI = (rDPIX <= rDPIY) ? rDPIX : rDPIY;
-        rDPIX = (72 * rDPIX + (nMinDPI/2)) / nMinDPI;
-        rDPIY = (72 * rDPIY + (nMinDPI/2)) / nMinDPI;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 USHORT AquaSalGraphics::GetBitCount()
 {
     USHORT nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
@@ -1232,6 +1214,31 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
 
 // -----------------------------------------------------------------------
 
+
+static void DrawPattern50( void* info, CGContextRef rContext )
+{
+    static const CGRect aRects[2] = { { {0,0}, { 2, 2 } }, { { 2, 2 }, { 2, 2 } } };
+    CGContextAddRects( rContext, aRects, 2 );
+    CGContextFillPath( rContext );
+}
+
+void AquaSalGraphics::Pattern50Fill()
+{
+    static const float aFillCol[4] = { 1,1,1,1 };
+    static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
+    if( ! GetSalData()->mxP50Space )
+        GetSalData()->mxP50Space = CGColorSpaceCreatePattern( GetSalData()->mxRGBSpace );
+    if( ! GetSalData()->mxP50Pattern )
+        GetSalData()->mxP50Pattern = CGPatternCreate( NULL, CGRectMake( 0, 0, 4, 4 ),
+                                                      CGAffineTransformIdentity, 4, 4,
+                                                      kCGPatternTilingConstantSpacing,
+                                                      false, &aCallback );
+
+    CGContextSetFillColorSpace( mrContext, GetSalData()->mxP50Space );
+    CGContextSetFillPattern( mrContext, GetSalData()->mxP50Pattern, aFillCol );
+    CGContextFillPath( mrContext );
+}
+
 void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( CheckContext() )
@@ -1250,11 +1257,10 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
         }
         else if ( nFlags & SAL_INVERT_50 )
         {
-            //workaround
-            // no xor in Core Graphics, so just invert
+            //CGContextSetAllowsAntialiasing( mrContext, false );
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
-            CGContextSetRGBFillColor( mrContext,1.0, 1.0, 1.0 , 1.0 );
-            CGContextFillRect ( mrContext, aCGRect );
+            CGContextAddRect( mrContext, aCGRect );
+            Pattern50Fill();
         }
         else // just invert
         {
@@ -1288,11 +1294,8 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
         }
         else if ( nSalFlags & SAL_INVERT_50 )
         {
-            // workaround
-            // no xor in Core Graphics, so just invert
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
-            CGContextSetRGBFillColor( mrContext,1.0, 1.0, 1.0 , 1.0 );
-            CGContextFillPath( mrContext );
+            Pattern50Fill();
         }
         else // just invert
         {

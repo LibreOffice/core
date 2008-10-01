@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.10 $
+ * $Revision: 1.9.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,9 +219,6 @@ public:
 
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
-    // get resolution for fonts (an implementations specific adjustment,
-    // ideally would be the same as the Resolution)
-    virtual void            GetScreenFontResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
     virtual USHORT          GetBitCount();
     // get the width of the device

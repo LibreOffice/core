@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gsub.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -322,8 +322,14 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             }
         }
     }
-
     return true;
+}
+
+void ReleaseGSUB(struct _TrueTypeFont* pTTFile)
+{
+    GlyphSubstitution* pGlyphSubstitution = (GlyphSubstitution*)pTTFile->pGSubstitution;
+    if( pGlyphSubstitution )
+        delete pGlyphSubstitution;
 }
 
 int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int /*wmode*/ )

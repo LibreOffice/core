@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: print.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,6 @@ class SalPrinter;
 class VirtualDevice;
 class Window;
 class ImplQPrinter;
-class RmPrinter;
 struct ImplPrivatePrinterData;
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -273,24 +272,6 @@ private:
 
 #ifdef _SPOOLPRINTER_EXT
 public:
-    void                        GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
-                                                     long nMaxBmpDPIX, long nMaxBmpDPIY );
-    /** Retrieve downsampled and cropped bitmap
-
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmap)
-     */
-    Bitmap                      GetPreparedBitmap( const Size& rDstSz,
-                                                   const Point& rSrcPt, const Size& rSrcSz,
-                                                   const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
-    /** Retrieve downsampled and cropped bitmapEx
-
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmapEx)
-     */
-    BitmapEx                    GetPreparedBitmapEx( const Size& rDstSz,
-                                                     const Point& rSrcPt, const Size& rSrcSz,
-                                                     const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY );
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
     void                        DrawGradientEx( OutputDevice* pOut, const PolyPolygon& rPolyPoly, const Gradient& rGradient );
 

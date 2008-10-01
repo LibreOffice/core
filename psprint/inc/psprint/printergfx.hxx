@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printergfx.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -339,7 +339,6 @@ public:
 
     // query depth and size
     void            GetResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const;
-    void            GetScreenFontResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const;
     sal_uInt16      GetBitCount ();
 
     // clip region

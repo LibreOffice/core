@@ -93,6 +93,8 @@ struct SalData
 
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
+    CGColorSpaceRef                               mxP50Space;
+    CGPatternRef                                  mxP50Pattern;
 
     std::vector< NSCursor* >                      maCursors;
     std::vector< NSMenuItem* >                    maFallbackMenu;

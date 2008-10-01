@@ -518,12 +518,6 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::GetScreenFontResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
-{
-    GetDisplay()->GetScreenFontResolution( rDPIX, rDPIY );
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 USHORT X11SalGraphics::GetBitCount() // const
 {
     return GetVisual().GetDepth();

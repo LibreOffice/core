@@ -171,6 +171,7 @@ SHL1STDLIBS+=\
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
             $(I18NISOLANGLIB)   \
+            $(I18NUTILLIB)   \
             $(COMPHELPERLIB)	\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \

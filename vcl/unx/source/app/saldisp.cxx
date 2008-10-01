@@ -2609,31 +2609,6 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
-void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const
-{
-    rDPIX = aResolution_.A();
-    rDPIY = aResolution_.B();
-    if( mbExactResolution )
-        return;
-
-    int   nThreshold;
-    if (m_aScreens[m_nDefaultScreen].m_aSize.Height() <= 600)
-        nThreshold =  96;
-    else if (m_aScreens[m_nDefaultScreen].m_aSize.Height() <= 768)
-        nThreshold = 108;
-    else
-        nThreshold = 120;
-
-    if( rDPIY < nThreshold )
-    {
-        rDPIX = Divide( rDPIX * nThreshold, rDPIY );
-        rDPIY = nThreshold;
-    }
-
-    // #i18602# always equalize x- and y-resolution
-    rDPIX = rDPIY;
-}
-
 void SalDisplay::InitXinerama()
 {
     if( m_aScreens.size() > 1 )

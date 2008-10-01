@@ -134,11 +134,6 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-void SvpSalGraphics::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
-{
-    rDPIX = rDPIY = 96;
-}
-
 USHORT SvpSalGraphics::GetBitCount()
 {
     return SvpElement::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );

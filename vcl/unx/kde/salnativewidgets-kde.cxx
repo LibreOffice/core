@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets-kde.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1827,19 +1827,8 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     if ( nPointHeight <= 0 )
         nPointHeight = rQFont.pointSize();
 
-    sal_Int32 nDPIX, nDPIY;
-    sal_Int32 nDispDPIY = GetX11SalData()->GetDisplay()->GetResolution().B();
-    GetX11SalData()->GetDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
-
-    int nHeight = nPointHeight * nDispDPIY / nDPIY;
-    // allow for rounding in back conversion (at SetFont)
-    while( (nHeight * nDPIY / nDispDPIY) > nPointHeight )
-        nHeight--;
-    while( (nHeight * nDPIY / nDispDPIY) < nPointHeight )
-        nHeight++;
-
     // Create the font
-    Font aFont( aInfo.m_aFamilyName, Size( 0, nHeight ) );
+    Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != psp::weight::Unknown )
         aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
     if( aInfo.m_eWidth != psp::width::Unknown )

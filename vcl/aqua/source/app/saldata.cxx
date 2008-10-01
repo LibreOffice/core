@@ -54,6 +54,8 @@ SalData::SalData()
     mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
+    mxP50Space( NULL ),
+    mxP50Pattern( NULL ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
     mnSystemVersion( VER_TIGER ),
@@ -65,8 +67,10 @@ SalData::SalData()
 
 SalData::~SalData()
 {
-    CFRelease( mxRGBSpace );
-    CFRelease( mxGraySpace );
+    CGPatternRelease( mxP50Pattern );
+    CGColorSpaceRelease( mxP50Space );
+    CGColorSpaceRelease( mxRGBSpace );
+    CGColorSpaceRelease( mxGraySpace );
     for( unsigned int i = 0; i < maCursors.size(); i++ )
     {
         NSCursor* pCurs = maCursors[i];

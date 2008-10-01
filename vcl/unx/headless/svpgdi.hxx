@@ -67,7 +67,6 @@ public:
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
-    virtual void            GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     virtual USHORT          GetBitCount();
     virtual long            GetGraphicsWidth() const;
 

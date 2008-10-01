@@ -2181,7 +2181,7 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
         }
     }
 
-    if ( !IsIconic( hWnd ) )
+    if ( !IsIconic( hWnd ) && IsWindowVisible( hWnd ) )
     {
         SetFocus( hWnd );
 

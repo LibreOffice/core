@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,7 +224,11 @@ public:
 
         // a form action was exported that is not suitable for PDF/A
         // the action was skipped
-        Warning_FormAction_Omitted_PDFA
+        Warning_FormAction_Omitted_PDFA,
+
+        // transparent objects were converted to a bitmap in order
+        // to removetransparencies from the output
+        Warning_Transparency_Converted
     };
 
     struct VCL_DLLPUBLIC AnyWidget

@@ -891,15 +891,12 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         {
             mpWindowImpl->mpFrameData->mnDPIX     = pParent->mpWindowImpl->mpFrameData->mnDPIX;
             mpWindowImpl->mpFrameData->mnDPIY     = pParent->mpWindowImpl->mpFrameData->mnDPIY;
-            mpWindowImpl->mpFrameData->mnFontDPIX = pParent->mpWindowImpl->mpFrameData->mnFontDPIX;
-            mpWindowImpl->mpFrameData->mnFontDPIY = pParent->mpWindowImpl->mpFrameData->mnFontDPIY;
         }
         else
         {
             if ( ImplGetGraphics() )
             {
                 mpGraphics->GetResolution( mpWindowImpl->mpFrameData->mnDPIX, mpWindowImpl->mpFrameData->mnDPIY );
-                mpGraphics->GetScreenFontResolution( mpWindowImpl->mpFrameData->mnFontDPIX, mpWindowImpl->mpFrameData->mnFontDPIY );
             }
         }
 
@@ -1683,13 +1680,13 @@ void Window::ImplPointToLogic( Font& rFont ) const
 
     if ( aSize.Width() )
     {
-        aSize.Width() *= mpWindowImpl->mpFrameData->mnFontDPIX;
+        aSize.Width() *= mpWindowImpl->mpFrameData->mnDPIX;
         aSize.Width() += 72/2;
         aSize.Width() /= 72;
         aSize.Width() *= nScreenFontZoom;
         aSize.Width() /= 100;
     }
-    aSize.Height() *= mpWindowImpl->mpFrameData->mnFontDPIY;
+    aSize.Height() *= mpWindowImpl->mpFrameData->mnDPIY;
     aSize.Height() += 72/2;
     aSize.Height() /= 72;
     aSize.Height() *= nScreenFontZoom;
@@ -1716,14 +1713,14 @@ void Window::ImplLogicToPoint( Font& rFont ) const
         aSize.Width() *= 100;
         aSize.Width() /= nScreenFontZoom;
         aSize.Width() *= 72;
-        aSize.Width() += mpWindowImpl->mpFrameData->mnFontDPIX/2;
-        aSize.Width() /= mpWindowImpl->mpFrameData->mnFontDPIX;
+        aSize.Width() += mpWindowImpl->mpFrameData->mnDPIX/2;
+        aSize.Width() /= mpWindowImpl->mpFrameData->mnDPIX;
     }
     aSize.Height() *= 100;
     aSize.Height() /= nScreenFontZoom;
     aSize.Height() *= 72;
-    aSize.Height() += mpWindowImpl->mpFrameData->mnFontDPIY/2;
-    aSize.Height() /= mpWindowImpl->mpFrameData->mnFontDPIY;
+    aSize.Height() += mpWindowImpl->mpFrameData->mnDPIY/2;
+    aSize.Height() /= mpWindowImpl->mpFrameData->mnDPIY;
 
     rFont.SetSize( aSize );
 }
@@ -5911,12 +5908,13 @@ Font Window::GetPointFont() const
 
 // -----------------------------------------------------------------------
 
+// TODO: remove in next incompatible build
 void Window::GetFontResolution( sal_Int32& nDPIX, sal_Int32& nDPIY ) const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    nDPIX = mpWindowImpl->mpFrameData->mnFontDPIX;
-    nDPIY = mpWindowImpl->mpFrameData->mnFontDPIY;
+    nDPIX = mpWindowImpl->mpFrameData->mnDPIX;
+    nDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 }
 
 // -----------------------------------------------------------------------

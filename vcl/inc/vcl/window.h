@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.h,v $
- * $Revision: 1.7 $
+ * $Revision: 1.6.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,8 +165,6 @@ struct ImplFrameData
     ImplFontCache*      mpFontCache;        // Font-Cache for this frame
     sal_Int32           mnDPIX;             // Original Screen Resolution
     sal_Int32           mnDPIY;             // Original Screen Resolution
-    sal_Int32           mnFontDPIX;         // Original Font Resolution
-    sal_Int32           mnFontDPIY;         // Original Font Resolution
     ImplMapRes          maMapUnitRes;       // for LogicUnitToPixel
     ULONG               mnAllSaveBackSize;  // Groesse aller Bitmaps fuer Hintergrund-Sicherung
     ULONG               mnFocusId;          // FocusId for PostUserLink
