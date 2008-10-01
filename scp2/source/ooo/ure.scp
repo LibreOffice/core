@@ -129,7 +129,7 @@ File gid_File_Exe_Regview
     // CompID = "DAB09DCD-8491-4DC8-B153-2BA81A830AC2";
 End
 
-#if !defined WNT && defined SOLAR_JAVA
+#if !defined MACOSX && !defined WNT && defined SOLAR_JAVA
 File gid_File_Exe_Javaldx
     BIN_FILE_BODY;
     Dir = gid_Dir_Ure_Bin;

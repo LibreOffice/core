@@ -186,75 +186,6 @@
 +#	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 +
 +
---- misc/STLport-4.5/src/gcc-3.0-macosx.mak	2008-07-18 14:14:26.000000000 +0200
-+++ misc/build/STLport-4.5/src/gcc-3.0-macosx.mak	2008-07-18 14:13:49.000000000 +0200
-@@ -1 +1,65 @@
--dummy
-+#
-+# Note : this makefile is for gcc-3, Mac OS X only !
-+#
-+
-+#
-+# compiler
-+# take these from the OOo build environment
-+CC*= gcc 
-+CXX*= g++
-+
-+#
-+# Basename for libraries
-+#
-+LIB_BASENAME = libstlport_gcc
-+
-+#
-+# guts for common stuff
-+#
-+#
-+LINK=libtool -static -o
-+DYN_LINK=g++ -o
-+
-+LDFLAGS_COMMON_dynamic= -dynamiclib -single_module 
-+
-+LDFLAGS_RELEASE_dynamic=   $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc.dylib
-+LDFLAGS_DEBUG_dynamic=     $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc.dylib
-+LDFLAGS_STLDEBUG_dynamic=  $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc_stldebug.dylib
-+
-+OBJEXT=o
-+DYNEXT=dylib
-+STEXT=a
-+RM=rm -rf
-+PATH_SEP=/
-+MKDIR=mkdir -p
-+COMP=GCC$(ARCH)
-+INSTALL_STEP = install_unix 
-+
-+all:  all_dynamic all_static symbolic_links 
-+
-+include common_macros.mak
-+
-+WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
-+
-+CXXFLAGS_COMMON =  -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS} ${ARCH_FLAGS}
-+
-+CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
-+CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
-+
-+CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g -fPIC
-+CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
-+
-+CXXFLAGS_STLDEBUG_static = $(CXXFLAGS_DEBUG_static) -D_STLP_DEBUG
-+CXXFLAGS_STLDEBUG_dynamic = $(CXXFLAGS_DEBUG_dynamic) -D_STLP_DEBUG
-+
-+include common_percent_rules.mak
-+include common_rules.mak
-+
-+
-+#install: all
-+#	cp -p $(LIB_TARGET) ${D_LIB_TARGET} ../lib
-+
-+#%.s: %.cpp
-+#	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
-+
-+
 --- misc/STLport-4.5/src/gcc-3.0-mingw.mak	2008-07-18 14:14:26.000000000 +0200
 +++ misc/build/STLport-4.5/src/gcc-3.0-mingw.mak	2008-07-18 14:13:49.000000000 +0200
 @@ -1 +1,108 @@
@@ -656,40 +587,6 @@
  #if (defined(__linux__) /* && ! defined (_GNU_SOURCE) */ ) || \
      defined (__CYGWIN__) || defined (__MINGW32__) || !(defined (_STLP_USE_GLIBC) || defined (__sun)) 
  #   define _STLP_NO_NATIVE_MBSTATE_T      1
-@@ -75,6 +106,8 @@
- 
- #  define __unix
- 
-+# if ( __GNUC__ < 3 )
-+
-  /* Mac OS X needs one and only one source file to initialize all static data
-   * members in template classes. Only one source file in an executable or
-   * library can declare instances for such data members, otherwise duplicate
-@@ -97,7 +130,23 @@
- #  define _STLP_NATIVE_CPP_C_HEADER(header) <../g++/##header##>
- #  define _STLP_NATIVE_OLD_STREAMS_HEADER(header) <../g++/##header##>
- #  define _STLP_NATIVE_CPP_RUNTIME_HEADER(header) <../g++/##header##>
--# endif
-+
-+# else
-+/* Mac OS X using gcc 3.3 handles all well */
-+#   undef  _STLP_NO_STATIC_TEMPLATE_DATA
-+#   define _STLP_STATIC_TEMPLATE_DATA 1
-+#   define _STLP_WEAK_ATTRIBUTE 1
-+#   undef _STLP_NO_LONG_DOUBLE
-+
-+#if 0
-+ /* Mac OS X needs all "::" scope references to be "std::" */
-+ #  define _STLP_NO_CSTD_FUNCTION_IMPORTS
-+ #  undef _STLP_VENDOR_GLOBAL_STD
-+ #  undef _STLP_VENDOR_GLOBAL_CSTD
-+#endif
-+
-+# endif   /* __GNUC__ < 3 */
-+# endif   /* __APPLE__ */
- 
- 
- # if defined(__BEOS__) && defined(__INTEL__)
 @@ -226,8 +275,45 @@
  
  # if (__GNUC__ >= 3)
@@ -1050,17 +947,6 @@
  inline char* _FILE_I_begin(const FILE& __f) { return (char*) __f._bf._base; }
 --- misc/STLport-4.5/stlport/stl/_threads.h	2001-09-04 19:10:20.000000000 +0200
 +++ misc/build/STLport-4.5/stlport/stl/_threads.h	2008-07-18 14:14:05.000000000 +0200
-@@ -42,8 +42,8 @@
- #  include <cstdlib>
- # endif
- 
--// On SUN and Mac OS X gcc, zero-initialization works just fine...
--# if defined (__sun) || ( defined(__GNUC__) && defined(__APPLE__) )
-+// On SUN zero-initialization works just fine...
-+# if defined (__sun)
- # define _STLP_MUTEX_INITIALIZER
- # endif
- 
 @@ -164,6 +164,15 @@
  #include <stdio.h>
  #  define _STLP_MUTEX_INITIALIZER = { 0 }

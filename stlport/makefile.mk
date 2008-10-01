@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.45 $
+# $Revision: 1.45.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,26 +66,18 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
-       .IF "$(OS)"=="MACOSX" && "$(BUILD_OS_MINOR)">"2"
-               PATCH_FILE_NAME=STLport-4.5-macxp-panther.patch
-       .ELSE
-               PATCH_FILE_NAME=STLport-4.5.patch
-       .ENDIF
-.ELSE			# "$(COMID)"=="gcc3"
-    .IF "$(OS)"=="MACOSX"
+    PATCH_FILE_NAME=STLport-4.5.patch
+.ELIF "$(GUI)"=="WNT"
+    .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
-        PATCH_FILE_NAME=STLport-4.0.macosx.patch
+        PATCH_FILE_NAME=STLport-4.0.patch
     .ELSE
-        .IF "$(GUI)"=="WNT"
-            .IF "$(CCNUMVER)"<="001300000000"
-                TARFILE_NAME=STLport-4.0
-                PATCH_FILE_NAME=STLport-4.0.patch
-            .ELSE			# "$(CCNUMVER)"<="001300000000"
-                TARFILE_NAME=STLport-4.5-0119
-                PATCH_FILE_NAME=STLport-4.5-0119.patch
-            .ENDIF			# "$(CCNUMVER)"<="001300000000"
-        .ELSE
-                TARFILE_NAME=STLport-4.0
+        TARFILE_NAME=STLport-4.5-0119
+        PATCH_FILE_NAME=STLport-4.5-0119.patch
+    .ENDIF
+.ELSE
+    TARFILE_NAME=STLport-4.0
+    PATCH_FILE_NAME=STLport-4.0.patch
         # To disable warnings from within STLport headers on unxsoli4 and
         # unxsols4, STLport-4.0.patch had to be extended mechanically by
         #
@@ -108,16 +100,13 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
         # STLport headers are read in by the compiler only at the end of a
         # compilation unit, outside the scope of stl/_prolog.h and
         # stl/_epilog.h.)
-                PATCH_FILE_NAME=STLport-4.0.patch
-        .ENDIF
-    .ENDIF			# "$(OS)"=="MACOSX"
-.ENDIF			# "$(COMID)"=="gcc3"
+.ENDIF
 
 .IF "$(USE_SHELL)"=="4nt"
 TAR_EXCLUDES=*/SC5/*
 .ENDIF          # "$(USE_SHELL)"=="4nt"
 
-ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
+ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
     src$/gcc-3.0-os2.mak src$/gcc-3.0-os2.def src$/common_macros_os2.mak
 
 
@@ -140,8 +129,6 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
         # FreeBSD needs a special makefile
         .IF "$(OS)"=="FREEBSD"
             BUILD_FLAGS=-f gcc-3.0-freebsd.mak
-        .ELIF "$(OS)"=="MACOSX"
-            BUILD_FLAGS=-f gcc-3.0-macosx.mak
         .ELIF "$(OS)"=="OS2"
             BUILD_FLAGS=-f gcc-3.0-os2.mak
         .ELIF "$(GUI)"=="WNT"
@@ -150,14 +137,11 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
             BUILD_FLAGS=-f gcc-3.0.mak
         .ENDIF
     .ELSE # "$(COMID)"=="gcc3"
-        # MacOS X/Darwin need a special makefile
-        .IF "$(OS)"=="MACOSX"
-            BUILD_FLAGS=-f gcc-apple-macosx.mak
-        .ELIF "$(OS)"=="FREEBSD"
+        .IF "$(OS)"=="FREEBSD"
             BUILD_FLAGS=-f gcc-freebsd.mak
-        .ELSE # "$(OS)"=="MACOSX"
+        .ELSE
             BUILD_FLAGS=-f gcc.mak
-        .ENDIF # "$(OS)"=="MACOSX"
+        .ENDIF
     .ENDIF # "$(COMID)"=="gcc3"
     BUILD_ACTION=$(GNUMAKE)
     # build in parallel
@@ -231,6 +215,10 @@ OUT2LIB= \
 all :
        @echo "         An already available installation of STLport has been chosen in the configure process."
        @echo "         Therefore the version provided here does not need to be built in addition."
+.ELIF "$(OS)"=="MACOSX"
+all:
+    @echo '--with-stlport=yes is not supported on Mac OS X'
+    false
 .ENDIF
 
 .INCLUDE : 	set_ext.mk

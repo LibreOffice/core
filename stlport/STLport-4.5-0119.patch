@@ -29,6 +29,15 @@
  
 --- misc/STLport-4.5-0119/src/vc_common.mak	Wed Apr 10 05:55:31 2002
 +++ misc/build/STLport-4.5-0119/src/vc_common.mak	Mon Jun  2 10:32:02 2008
+@@ -27,7 +27,7 @@
+ DYNEXT=dll
+ STEXT=lib
+ 
+-PATH_SEP=\\
++PATH_SEP=\ 
+ 
+ MKDIR=-mkdir
+ LINK_OUT=/out:
 @@ -51,7 +51,7 @@
  #
  
