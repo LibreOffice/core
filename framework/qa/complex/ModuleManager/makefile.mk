@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.4.76.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +38,7 @@ PACKAGE = complex$/ModuleManager
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar \
                   OOoRunner.jar mysql.jar
                   
 JAVAFILES       = CheckXModuleManager.java

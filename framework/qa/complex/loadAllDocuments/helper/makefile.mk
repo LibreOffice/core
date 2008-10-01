@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.6.76.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,7 +39,7 @@ PACKAGE = complex$/loadAllDocuments$/helper
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar \
                   Generator.jar
 JAVAFILES       = InteractionHandler.java StatusIndicator.java StreamSimulator.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)

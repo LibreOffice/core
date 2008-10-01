@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apinotifierimpl.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,13 +243,6 @@ void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::X
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: adding a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -279,13 +272,6 @@ void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans
         throw UnknownPropertyException(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: removing a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
     }
     catch (configuration::Exception& ex)
     {
@@ -318,13 +304,6 @@ void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::X
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: adding a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -352,13 +331,6 @@ void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans
         throw UnknownPropertyException(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: removing a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
     }
     catch (configuration::Exception& ex)
     {

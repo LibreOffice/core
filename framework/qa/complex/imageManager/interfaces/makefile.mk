@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.76.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ PACKAGE = imageManager$/interfaces
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
+JARFILES = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = _XComponent.java _XUIConfiguration.java _XImageManager.java \
                   _XUIConfigurationPersistence.java _XInitialization.java _XTypeProvider.java
 

@@ -39,7 +39,6 @@
     <project-build-dependency> sablot             </project-build-dependency>
     <project-build-dependency> unoil              </project-build-dependency>
     <project-build-dependency> offuh              </project-build-dependency>
-    <project-build-dependency> jut                </project-build-dependency>
     <project-build-dependency> external           </project-build-dependency>
     <project-build-dependency> XmlSearch          </project-build-dependency>
     <project-build-dependency> ucbhelper          </project-build-dependency>

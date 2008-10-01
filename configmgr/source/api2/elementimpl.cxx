@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementimpl.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,13 +473,6 @@ void implCommitChanges( UpdateRootElement& rElement ) throw(css::lang::WrappedTa
         rElement.getCommitter().commit();
     }
 
-    // map configuration::Exceptions
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rElement.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration: can't commit Changes: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);

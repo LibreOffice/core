@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configgroup.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,8 +197,6 @@ bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rC
     catch(css::script::CannotConvertException&)
     {
         // try to do more conversion here ?!
-
-        // throw a WrappedUnoException here ?!
         return false;
     }
     catch(uno::Exception&)

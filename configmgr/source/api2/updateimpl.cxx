@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updateimpl.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,12 +159,6 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -244,12 +238,6 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -318,12 +306,6 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
         ExceptionMapper e(ex);
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {
@@ -396,12 +378,6 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -469,12 +445,6 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -534,12 +504,6 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw NoSuchElementException( sMessage += e.message(), xContext );
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -595,12 +559,6 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw NoSuchElementException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {

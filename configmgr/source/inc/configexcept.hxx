@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configexcept.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,25 +88,6 @@ namespace configmgr
 
             virtual OUString message() const;
         };
-    //-------------------------------------------------------------------------
-
-        class WrappedUnoException : public Exception
-        {
-            uno::Any m_aUnoException;
-        public:
-            WrappedUnoException(uno::Any const& aUnoException);
-
-            OUString extractMessage() const;
-            uno::Exception extractUnoException() const;
-            uno::Any const& getAnyUnoException() const;
-
-            virtual OUString message() const;
-        };
-        template <class Except>
-        WrappedUnoException rethrowWrapped(Except const& anException)
-        {
-            throw WrappedUnoException( uno::makeAny(anException) );
-        }
     //-------------------------------------------------------------------------
     }
 

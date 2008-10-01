@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configexcept.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,45 +131,6 @@ namespace configmgr
         OUString TypeMismatch::message() const
         {
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(c_sTypeMismatch)).concat( m_sTypes );
-        }
-//-----------------------------------------------------------------------------
-
-        WrappedUnoException::WrappedUnoException(uno::Any const& aUnoException)
-        : Exception("UNO Service failed")
-        , m_aUnoException(aUnoException)
-        {
-            OSL_ENSURE( m_aUnoException.getValueTypeClass() == uno::TypeClass_EXCEPTION,
-                        "ERROR: Wrapping a non-exception into a WrappedUnoException !");
-
-        }
-        //---------------------------------------------------------------------
-
-        OUString WrappedUnoException::extractMessage() const
-        {
-            return extractUnoException().Message;
-        }
-        //---------------------------------------------------------------------
-
-        uno::Exception WrappedUnoException::extractUnoException() const
-        {
-            uno::Exception e;
-            OSL_VERIFY( m_aUnoException >>= e );
-            return e;
-        }
-        //---------------------------------------------------------------------
-
-        uno::Any const& WrappedUnoException::getAnyUnoException() const
-        {
-            return m_aUnoException;
-        }
-        //---------------------------------------------------------------------
-
-        OUString WrappedUnoException::message() const
-        {
-            return OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGMGR: Used Service failed with a"))
-                    += m_aUnoException.getValueType().getTypeName()
-                    += OUString(RTL_CONSTASCII_USTRINGPARAM(": "))
-                    += extractMessage();
         }
 //-----------------------------------------------------------------------------
     }

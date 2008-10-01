@@ -8,7 +8,7 @@
 
   $RCSfile: build.xml,v $
 
-  $Revision: 1.36 $
+  $Revision: 1.36.20.1 $
 
   This file is part of OpenOffice.org.
 
@@ -53,7 +53,6 @@
   <path id="idlclasspath">
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/unoil.jar"/>
-    <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>

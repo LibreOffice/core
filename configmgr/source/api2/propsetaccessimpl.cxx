@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propsetaccessimpl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,12 +377,6 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw PropertyVetoException( sMessage += e.message(), xContext );
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -461,12 +455,6 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw PropertyVetoException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {
@@ -549,12 +537,6 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw PropertyVetoException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {
@@ -642,12 +624,6 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw PropertyVetoException( sMessage += e.message(), xContext );
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -696,12 +672,6 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
         ExceptionMapper e(ex);
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw UnknownPropertyException( e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {
@@ -957,12 +927,6 @@ beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sP
         ExceptionMapper e(ex);
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw UnknownPropertyException( e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyState: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {
@@ -1289,12 +1253,6 @@ Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const OUString& sPropert
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw UnknownPropertyException( sMessage += e.message(), xContext );
     }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -1356,12 +1314,6 @@ Sequence< Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const Seque
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw UnknownPropertyException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
     {
