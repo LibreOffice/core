@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.10.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,7 +36,7 @@ TARGET  = examples_java_converterbridge
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar ridl.jar
+JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar ridl.jar
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 JARCOMPRESS 	= TRUE
 CUSTOMMANIFESTFILE = manifest
