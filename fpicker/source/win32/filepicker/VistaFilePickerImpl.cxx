@@ -565,7 +565,11 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     aLock.clear();
     // <- SYNCHRONIZED
 
+#ifdef __MINGW32__
+    iDialog->QueryInterface(IID_IFileDialog, (void **)(&iCustomize));
+#else
     iDialog.query(&iCustomize);
+#endif
 
     COMDLG_FILTERSPEC   *pFilt = &lFilters[0];
     iDialog->SetFileTypes(lFilters.size(), pFilt/*&lFilters[0]*/);
