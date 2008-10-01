@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablestylecellstylecontext.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,7 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             {
                 if ( mnLineType != XML_none )
                 {
-                    ShapeStyleRef rLineStyleRef = mrTableStylePart.getStyleRefs()[ mnLineType ];
+                    ShapeStyleRef& rLineStyleRef = mrTableStylePart.getStyleRefs()[ mnLineType ];
                     rLineStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
                     xRet.set( new StyleMatrixReferenceContext( *this, rLineStyleRef.maPhClr ) );
                 }
@@ -110,7 +110,7 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             break;
         case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
             {
-                ShapeStyleRef rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
+                ShapeStyleRef& rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
                 rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
                 xRet.set( new StyleMatrixReferenceContext( *this, rStyleRef.maPhClr ) );
             }

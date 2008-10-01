@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: presentationfragmenthandler.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -79,6 +80,11 @@ void PresentationFragmentHandler::startDocument() throw (SAXException, RuntimeEx
 
 void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeException)
 {
+    // todo: localized progress bar text
+    const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
+    if ( rxStatusIndicator.is() )
+        rxStatusIndicator->start( rtl::OUString(), 10000 );
+
     try
     {
         PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
@@ -94,7 +100,6 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     }
 
 #endif
-
         Reference< frame::XModel > xModel( rFilter.getModel() );
         Reference< drawing::XDrawPage > xSlide;
         sal_uInt32 nSlide;
@@ -105,6 +110,9 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
 
         for( nSlide = 0; nSlide < maSlidesVector.size(); nSlide++ )
         {
+            if ( rxStatusIndicator.is() )
+                rxStatusIndicator->setValue( ( nSlide * 10000 ) / maSlidesVector.size() );
+
             if( nSlide == 0 )
                 xDrawPages->getByIndex( 0 ) >>= xSlide;
             else
@@ -232,6 +240,8 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     }
 
     // todo error handling;
+    if ( rxStatusIndicator.is() )
+        rxStatusIndicator->end();
 }
 
 // CT_Presentation

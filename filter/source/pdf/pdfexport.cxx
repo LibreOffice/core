@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.69.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1307,7 +1307,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     bSkipSequence = sal_False;
                                 if ( (sal_uInt32)eJT > 2 )
                                     bSkipSequence = sal_False;
-                                if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) )
+                                if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
                                     bSkipSequence = sal_False;
                                 if ( bSkipSequence )
                                 {
