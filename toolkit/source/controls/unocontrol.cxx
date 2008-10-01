@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unocontrol.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.54.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -395,12 +395,18 @@ void UnoControl::disposeAccessibleContext()
 
 void UnoControl::dispose(  ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    if( getPeer().is() && mbDisposePeer )
+    Reference< XWindowPeer > xPeer;
     {
-        getPeer()->dispose();
-        setPeer( NULL);
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if( mbDisposePeer )
+        {
+            xPeer = mxPeer;
+        }
+        setPeer( NULL );
+    }
+    if( xPeer.is() )
+    {
+        xPeer->dispose();
     }
 
     // dispose and release our AccessibleContext

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: string.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,6 +176,18 @@ private:
     TOOLS_DLLPRIVATE void ImplStringConvert(
         rtl_TextEncoding, rtl_TextEncoding, BOOL);
 
+                        ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
+                        ByteString(int); // not implemented; to detect misuses
+                                         // of ByteString(sal_Char);
+    void                Assign(int); // not implemented; to detect misuses of
+                                     // Assign(sal_Char)
+    void                operator =(int); // not implemented; to detect misuses
+                                         // of operator =(sal_Char)
+    void                Append(int); // not implemented; to detect misuses of
+                                     // Append(char)
+    void                operator +=(int); // not implemented; to detect misuses
+                                          // of operator +=(sal_Char)
+
 public:
                         ByteString();
                         ByteString( const ByteString& rStr );
@@ -183,10 +195,7 @@ public:
                         ByteString( const rtl::OString& rStr );
                         ByteString( const sal_Char* pCharStr );
                         ByteString( const sal_Char* pCharStr, xub_StrLen nLen );
-                        ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString( sal_Char c );
-                        ByteString(int); // not implemented; to detect misuses
-                                         // of ByteString(sal_Char);
                         ByteString( const UniString& rUniStr,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
@@ -221,8 +230,6 @@ public:
     ByteString&         Assign( const sal_Char* pCharStr );
     ByteString&         Assign( const sal_Char* pCharStr, xub_StrLen nLen );
     ByteString&         Assign( sal_Char c );
-    void                Assign(int); // not implemented; to detect misuses of
-                                     // Assign(sal_Char)
     ByteString&         operator =( const ByteString& rStr )
                             { return Assign( rStr ); }
     ByteString&         operator =( const rtl::OString& rStr )
@@ -231,23 +238,17 @@ public:
                             { return Assign( pCharStr ); }
     ByteString&         operator =( const sal_Char c )
                             { return Assign( c ); }
-    void                operator =(int); // not implemented; to detect misuses
-                                         // of operator =(sal_Char)
 
     ByteString&         Append( const ByteString& rStr );
     ByteString&         Append( const sal_Char* pCharStr );
     ByteString&         Append( const sal_Char* pCharStr, xub_StrLen nLen );
     ByteString&         Append( char c );
-    void                Append(int); // not implemented; to detect misuses of
-                                     // Append(char)
     ByteString&         operator +=( const ByteString& rStr )
                             { return Append( rStr ); }
     ByteString&         operator +=( const sal_Char* pCharStr )
                             { return Append( pCharStr ); }
     ByteString&         operator +=( sal_Char c )
                             { return Append( c ); }
-    void                operator +=(int); // not implemented; to detect misuses
-                                          // of operator +=(sal_Char)
 
     void                SetChar( xub_StrLen nIndex, sal_Char c );
     sal_Char            GetChar( xub_StrLen nIndex ) const
@@ -467,6 +468,18 @@ private:
     TOOLS_DLLPRIVATE inline void ImplCopyData();
     TOOLS_DLLPRIVATE inline sal_Unicode * ImplCopyStringData(sal_Unicode *);
 
+                        UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
+                        UniString(int); // not implemented; to detect misuses of
+                                        // UniString(sal_Unicode)
+    void                Assign(int); // not implemented; to detect misuses of
+                                     // Assign(sal_Unicode)
+    void                operator =(int); // not implemented; to detect misuses
+                                         // of operator =(sal_Unicode)
+    void                Append(int); // not implemented; to detect misuses of
+                                     // Append(sal_Unicode)
+    void                operator +=(int); // not implemented; to detect misuses
+                                          // of operator +=(sal_Unicode)
+
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -475,10 +488,7 @@ public:
                         UniString( const rtl::OUString& rStr );
                         UniString( const sal_Unicode* pCharStr );
                         UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
-                        UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
                         UniString( sal_Unicode c );
-                        UniString(int); // not implemented; to detect misuses of
-                                        // UniString(sal_Unicode)
                         UniString(char c); // ...but allow "UniString('a')"
                         UniString( const ByteString& rByteStr,
                                    rtl_TextEncoding eTextEncoding,
@@ -519,8 +529,6 @@ public:
     UniString&          Assign( const sal_Unicode* pCharStr );
     UniString&          Assign( const sal_Unicode* pCharStr, xub_StrLen nLen );
     UniString&          Assign( sal_Unicode c );
-    void                Assign(int); // not implemented; to detect misuses of
-                                     // Assign(sal_Unicode)
     inline UniString & Assign(char c) // ...but allow "Assign('a')"
         { return Assign(static_cast< sal_Unicode >(c)); }
     UniString&          AssignAscii( const sal_Char* pAsciiStr );
@@ -533,8 +541,6 @@ public:
                             { return Assign( pCharStr ); }
     UniString&          operator =( sal_Unicode c )
                             { return Assign( c ); }
-    void                operator =(int); // not implemented; to detect misuses
-                                         // of operator =(sal_Unicode)
     inline UniString & operator =(char c) // ...but allow "= 'a'"
         { return operator =(static_cast< sal_Unicode >(c)); }
 
@@ -542,8 +548,6 @@ public:
     UniString&          Append( const sal_Unicode* pCharStr );
     UniString&          Append( const sal_Unicode* pCharStr, xub_StrLen nLen );
     UniString&          Append( sal_Unicode c );
-    void                Append(int); // not implemented; to detect misuses of
-                                     // Append(sal_Unicode)
     inline UniString & Append(char c) // ...but allow "Append('a')"
         { return Append(static_cast< sal_Unicode >(c)); }
     UniString&          AppendAscii( const sal_Char* pAsciiStr );
@@ -554,8 +558,6 @@ public:
                             { return Append( pCharStr ); }
     UniString&          operator +=( sal_Unicode c )
                             { return Append( c ); }
-    void                operator +=(int); // not implemented; to detect misuses
-                                          // of operator +=(sal_Unicode)
     inline UniString & operator +=(char c) // ...but allow "+= 'a'"
         { return operator +=(static_cast< sal_Unicode >(c)); }
 
