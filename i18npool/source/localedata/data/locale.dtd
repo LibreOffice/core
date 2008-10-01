@@ -403,7 +403,7 @@
 
 <!ELEMENT LC_MISC (ForbiddenCharacters?, BreakIteratorRules?, ReservedWords?)>
 <!ATTLIST LC_MISC %RefLocale;>
-<!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters)>
+<!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters, LineBreakHangingCharacters)>
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiterator_unicode.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -363,11 +363,17 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 {
         LineBreakResults lbr;
 
+        if (nStartPos >= Text.getLength()) {
+            lbr.breakIndex = Text.getLength();
+            lbr.breakType = BreakType::WORDBOUNDARY;
+            return lbr;
+        }
+
         loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR, 0, lineRule, Text);
 
         sal_Bool GlueSpace=sal_True;
         while (GlueSpace) {
-            if (line.aBreakIterator->isBoundary(nStartPos)) { //Line boundary break
+            if (line.aBreakIterator->preceding(nStartPos + 1) == nStartPos) { //Line boundary break
                 lbr.breakIndex = nStartPos;
                 lbr.breakType = BreakType::WORDBOUNDARY;
             } else if (hOptions.rHyphenator.is()) { //Hyphenation break

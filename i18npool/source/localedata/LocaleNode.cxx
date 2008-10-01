@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LocaleNode.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1449,15 +1449,18 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     if (forbidNode)    {
          of.writeParameter( "forbiddenBegin", forbidNode -> getChildAt(0)->getValue());
          of.writeParameter( "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
+         of.writeParameter( "hangingChars", forbidNode -> getChildAt(2)->getValue());
     } else {
          of.writeParameter( "forbiddenBegin", ::rtl::OUString());
          of.writeParameter( "forbiddenEnd", ::rtl::OUString());
+         of.writeParameter( "hangingChars", ::rtl::OUString());
     }
     of.writeAsciiString("\nstatic const sal_Unicode* LCForbiddenCharactersArray[] = {\n");
     of.writeAsciiString("\tforbiddenBegin,\n");
-    of.writeAsciiString("\tforbiddenEnd\n");
+    of.writeAsciiString("\tforbiddenEnd,\n");
+    of.writeAsciiString("\thangingChars\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getForbiddenCharacters_", "2", "LCForbiddenCharactersArray");
+    of.writeFunction("getForbiddenCharacters_", "3", "LCForbiddenCharactersArray");
 
     if (breakNode) {
          of.writeParameter( "EditMode", breakNode -> getChildAt(0)->getValue());

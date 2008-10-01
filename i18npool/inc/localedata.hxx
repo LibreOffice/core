@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localedata.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,6 +112,7 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getFollowPageWords( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasPhonetic( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isPhonetic( const com::sun::star::lang::Locale& rLocale, const rtl::OUString& algorithm ) throw(com::sun::star::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getHangingCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException );

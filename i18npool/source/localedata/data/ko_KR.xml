@@ -580,6 +580,7 @@
     <ForbiddenCharacters>
       <ForbiddenLineBeginCharacters>!%),.:;?]}¢￠?&apos;&quot;′″℃&gt;〉＞》」』】〕！％），．：；？］｝｡｣､･ ﾞﾟ</ForbiddenLineBeginCharacters>
       <ForbiddenLineEndCharacters>$(¥£[\{￡￥&apos;&quot;&lt;＜《「『【〔＄（［｛￦｢</ForbiddenLineEndCharacters>
+      <LineBreakHangingCharacters>!,.:;?、。！，．：；？</LineBreakHangingCharacters>
     </ForbiddenCharacters>
     <ReservedWords>
       <trueWord>참</trueWord>

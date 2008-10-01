@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiterator_cjk.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #define BREAKITERATOR_ALL
 #include <breakiterator_cjk.hxx>
+#include <localedata.hxx>
 #include <i18nutil/unicode.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -108,7 +109,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         LineBreakResults lbr;
 
         if (bOptions.allowPunctuationOutsideMargin &&
-                bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
+                hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
                 ++nStartPos == Text.getLength()) {
             ; // do nothing
         } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
@@ -122,16 +123,34 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         lbr.breakType = BreakType::WORDBOUNDARY;
         return lbr;
 }
+
+#define LOCALE(language, country) lang::Locale(OUString::createFromAscii(language), OUString::createFromAscii(country), OUString())
 //      ----------------------------------------------------
 //      class BreakIterator_zh
 //      ----------------------------------------------------;
 BreakIterator_zh::BreakIterator_zh()
 {
         dict = new xdictionary("zh");
+        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("zh", "CN"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
 }
 
 BreakIterator_zh::~BreakIterator_zh()
+{
+        delete dict;
+}
+
+//      ----------------------------------------------------
+//      class BreakIterator_zh_TW
+//      ----------------------------------------------------;
+BreakIterator_zh_TW::BreakIterator_zh_TW()
+{
+        dict = new xdictionary("zh");
+        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("zh", "TW"));
+        cBreakIterator = "com.sun.star.i18n.BreakIterator_zh_TW";
+}
+
+BreakIterator_zh_TW::~BreakIterator_zh_TW()
 {
         delete dict;
 }
@@ -143,6 +162,7 @@ BreakIterator_ja::BreakIterator_ja()
 {
         dict = new xdictionary("ja");
         dict->setJapaneseWordBreak();
+        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("ja", "JP"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
 }
 
@@ -156,6 +176,7 @@ BreakIterator_ja::~BreakIterator_ja()
 //      ----------------------------------------------------;
 BreakIterator_ko::BreakIterator_ko()
 {
+        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("ko", "KR"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
 }
 

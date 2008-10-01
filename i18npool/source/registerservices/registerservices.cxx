@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registerservices.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@
 #include <breakiteratorImpl.hxx>
 #include <breakiterator_cjk.hxx>
 #include <breakiterator_th.hxx>
-#include <breakiterator_hi.hxx>
 #include <breakiterator_unicode.hxx>
 
 #include <indexentrysupplier.hxx>
@@ -152,9 +151,9 @@ IMPL_CREATEINSTANCE_MSF( BreakIteratorImpl )
 IMPL_CREATEINSTANCE( BreakIterator_Unicode )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
+IMPL_CREATEINSTANCE( BreakIterator_zh_TW )
 IMPL_CREATEINSTANCE( BreakIterator_ko )
 IMPL_CREATEINSTANCE( BreakIterator_th )
-IMPL_CREATEINSTANCE( BreakIterator_hi )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
 IMPL_CREATEINSTANCE_MSF( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_Unicode )
@@ -369,15 +368,15 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.BreakIterator_zh",
         "com.sun.star.i18n.BreakIterator_zh",
         &BreakIterator_zh_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_zh_TW",
+        "com.sun.star.i18n.BreakIterator_zh_TW",
+        &BreakIterator_zh_TW_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_ko",
         "com.sun.star.i18n.BreakIterator_ko",
         &BreakIterator_ko_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_th",
         "com.sun.star.i18n.BreakIterator_th",
         &BreakIterator_th_CreateInstance },
-    {   "com.sun.star.i18n.BreakIterator_hi",
-        "com.sun.star.i18n.BreakIterator_hi",
-        &BreakIterator_hi_CreateInstance },
     {   "com.sun.star.i18n.Collator",
         "com.sun.star.i18n.Collator",
         &CollatorImpl_CreateInstance },

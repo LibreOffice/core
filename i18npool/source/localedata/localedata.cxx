@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localedata.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.59.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -999,6 +999,21 @@ LocaleData::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeExcepti
         }
 }
 
+OUString SAL_CALL
+LocaleData::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException)
+{
+        sal_Int16 LCForbiddenCharactersCount = 0;
+        sal_Unicode **LCForbiddenCharactersArray = NULL;
+
+        MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getForbiddenCharacters" );
+
+        if ( func ) {
+            LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
+            return OUString(LCForbiddenCharactersArray[2]);
+        }
+
+        return OUString();
+}
 
 Sequence< OUString > SAL_CALL
 LocaleData::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException)

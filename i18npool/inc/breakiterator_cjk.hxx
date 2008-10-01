@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiterator_cjk.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ public:
 
 protected:
     xdictionary *dict;
+    rtl::OUString hangingCharacters;
 };
 
 #define BREAKITERATOR_CJK( lang ) \
@@ -69,6 +70,7 @@ public:\
 
 #ifdef BREAKITERATOR_ALL
 BREAKITERATOR_CJK( zh )
+BREAKITERATOR_CJK( zh_TW )
 BREAKITERATOR_CJK( ja )
 BREAKITERATOR_CJK( ko )
 #endif

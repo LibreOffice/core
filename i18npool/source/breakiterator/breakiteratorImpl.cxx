@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiteratorImpl.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.27.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,6 +234,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal
 {
         if (nStartPos < 0 || nStartPos > Text.getLength())
             return -1;
+        if (Text.getLength() == 0) return 0;
         return LBI->beginOfSentence(Text, nStartPos, rLocale);
 }
 
@@ -242,6 +243,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_I
 {
         if (nStartPos < 0 || nStartPos > Text.getLength())
             return -1;
+        if (Text.getLength() == 0) return 0;
         return LBI->endOfSentence(Text, nStartPos, rLocale);
 }
 
