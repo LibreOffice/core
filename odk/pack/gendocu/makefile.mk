@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.22.28.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,7 +58,6 @@ JAVA_PACKAGES=\
 
 JAVA_SRC_FILES=\
         $(JAVA_SRC_DIR)$/jurt_src.zip \
-        $(JAVA_SRC_DIR)$/jut_src.zip \
         $(JAVA_SRC_DIR)$/juh_src.zip \
         $(JAVA_SRC_DIR)$/ridl_src.zip \
         $(JAVA_SRC_DIR)$/unoloader_src.zip

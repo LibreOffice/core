@@ -8,7 +8,7 @@
 #
 # $RCSfile: check.pl,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.26.8.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -313,8 +313,7 @@ if (-d "$StartDir") {
 
         my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use",
                  "uno","uno/class-use","comp","comp/helper",
-                 "comp/helper/class-use","tools","tools/uno",
-                 "tools/uno/class-use");
+                 "comp/helper/class-use");
 
         foreach $i (@dir_list)
         {
