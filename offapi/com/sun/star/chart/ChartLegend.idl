@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartLegend.idl,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,20 @@
 published service ChartLegend
 {
     service com::sun::star::drawing::Shape;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the position is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete position.
+     */
+    [optional, property] boolean AutomaticPosition;
+
+    //-------------------------------------------------------------------------
+
     service com::sun::star::style::CharacterProperties;
+
+    //-------------------------------------------------------------------------
 
     /** If a <type>ChartLegend</type> may be stored as XML file,
         this service should be supported in order to preserve unparsed

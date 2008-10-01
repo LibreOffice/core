@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Diagram.idl,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.92.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,30 @@
 published service Diagram
 {
 
+    interface com::sun::star::chart::XDiagram;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the position is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete position (note <type scope="com::sun::star::chart">XDiagram</type> is derived from <type scope="com::sun::star::drawing">XShape</type>).
+     */
+    [optional, property] boolean AutomaticPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the size is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete size (note <type scope="com::sun::star::chart">XDiagram</type> is derived from <type scope="com::sun::star::drawing">XShape</type>).
+     */
+    [optional, property] boolean AutomaticSize;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
     /** If a <type>Diagram</type> may be stored as XML file, this
         service should be supported in order to preserve unparsed XML
         attributes.
@@ -72,10 +96,6 @@ published service Diagram
     @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
-
-    interface com::sun::star::chart::XDiagram;
-
-    interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 

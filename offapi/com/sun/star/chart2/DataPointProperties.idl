@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataPointProperties.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.92.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -283,14 +283,14 @@ service DataPointProperties
      */
     [optional, property] long LabelPlacement;
 
-    /** The size of the diagram at the moment when the font size for
+    /** The size of the page at the moment when the font size for
         data labels was set.
 
         <p>This size is used to resize text in the view when the size
-        of the diagram has changed since the font sizes were set
+        of the page has changed since the font sizes were set
         (automatic text scaling).</p>
      */
-    [maybevoid, property] com::sun::star::awt::Size   ReferenceDiagramSize;
+    [maybevoid, property] com::sun::star::awt::Size   ReferencePageSize;
 
     // statistics
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Axis.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ service Axis
      */
     [property, maybevoid]      long      NumberFormat;
 
-    [property]      ::com::sun::star::awt::Size  ReferenceDiagramSize;
+    [property]      ::com::sun::star::awt::Size  ReferencePageSize;
 
     /** determines what kind of tickmarks should be shown for major ticks.
 
