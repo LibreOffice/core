@@ -40,7 +40,7 @@ PRJNAME = forms
 .IF "$(BUILD_QADEVOOO)" == "YES"
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
 JAVAFILES       :=  $(shell @$(FIND) org -name "*.java") \
                     $(shell @$(FIND) integration -name "*.java")
 JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(i:d)$/$(i:b).class)
