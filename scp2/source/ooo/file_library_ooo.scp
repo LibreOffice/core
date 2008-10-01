@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.308 $
+ * $Revision: 1.298.4.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1722,7 +1722,7 @@ File gid_File_Lib_Rasqal
     #endif
   #else
    #ifdef _gcc3
-    Name = "librasqal-1.dll";
+    Name = "librasqal-0.dll";
    #else
     Name = "rasqal.dll";
    #endif
@@ -1741,7 +1741,7 @@ File gid_File_Lib_Rdf
     #endif
   #else
    #ifdef _gcc3
-    Name = "librdf-1.dll";
+    Name = "librdf-0.dll";
    #else
     Name = "librdf.dll";
    #endif
