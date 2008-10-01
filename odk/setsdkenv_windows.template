@@ -3,19 +3,22 @@ REM This script sets all enviroment variables, which
 REM are necessary for building the examples of the Office Development Kit.
 REM The Script was developed for the operating systems Windows.
 REM The SDK name
-REM Example: set OO_SDK_NAME=OpenOffice.org_SDK
-set OO_SDK_NAME=
+REM Example: set OO_SDK_NAME=openoffice3.0_sdk
+set OO_SDK_NAME=openoffice.org3.0_sdk
 
 REM Installation directory of the Software Development Kit.
-REM Example: set OO_SDK_HOME=D:\OpenOffice.org_SDK
+REM Example: set OO_SDK_HOME=C:\Program Files\OpenOffice.org\Basic 3.0\sdk
 set OO_SDK_HOME=
 
 REM Office installation directory.
-REM Example: set OFFICE_HOME=C:\Programme\OpenOffice.org
+REM Example: set OFFICE_HOME=C:\Program Files\OpenOffice.org 3
 set OFFICE_HOME=
 
+REM Example: set OFFICE_HOME=C:\Program Files\OpenOffice.org\Basis 3.0
+set OFFICE_BASE_HOME=
+
 REM URE installation directory.
-REM Example: set OO_SDK_URE_HOME=C:\Programme\URE
+REM Example: set OO_SDK_URE_HOME=C:\Program Files\OpenOffice.org\URE
 set OO_SDK_URE_HOME=
 
 REM Directory of the make command.
@@ -27,21 +30,23 @@ REM Example: set OO_SDK_ZIP_HOME=D:\infozip\bin
 set OO_SDK_ZIP_HOME=
 
 REM Directory of the C++ compiler.
-REM Example:set OO_SDK_CPP_HOME=C:\Programme\Microsoft Visual Studio\VC98\bin
+REM Example:set OO_SDK_CPP_HOME=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
+REM Example:set CPP_WINDOWS_SDK=C:\Program Files\\Microsoft SDKs\Windows\v6.0A\
 set OO_SDK_CPP_HOME=
 set CPP_VC8=
+set CPP_WINDOWS_SDK=
 
 REM Directory of the C# and VB.NET compilers.
-REM Example:set OO_SDK_CLI_HOME=C:\WINXP\Microsoft.NET\Framework\v2.0.50727
+REM Example:set OO_SDK_CLI_HOME=C:\WINXP\Microsoft.NET\Framework\v1.0.3705
 set OO_SDK_CLI_HOME=
 
 REM Java SDK installation directory.
-REM Example: set OO_SDK_JAVA_HOME=C:\Program Files\Java\jdk1.6.0_03
+REM Example: set OO_SDK_JAVA_HOME=C:\Program Files\Java\jdk1.6.0_05
 set OO_SDK_JAVA_HOME=
 
 REM Special output directory
-REM Example: set OO_SDK_OUTPUT_DIR=c:\temp
-set OO_SDK_OUTPUT_DIR=
+REM Example: set OO_SDK_OUT=C:\openoffice.org3.0_sdk
+set OO_SDK_OUT=
 
 REM Automatic deployment
 REM Example: set SDK_AUTO_DEPLOYMENT=YES
@@ -50,7 +55,7 @@ set SDK_AUTO_DEPLOYMENT=YES
 set STLDEBUG=
 REM check stlport lib in 4NT shell
 REM if exist "%OO_SDK_HOME%\windows\lib\stlport_vc71_stldebug.lib". (
-REM    set STLDEBUG=_stldebug
+REM   set STLDEBUG=_stldebug
 REM )
 
 REM Check installation path for the StarOffice Development Kit.
@@ -60,13 +65,13 @@ if not defined OO_SDK_HOME (
  )
 
 REM Check installation path for the office.
-if not defined OFFICE_HOME (
-if not defined OO_SDK_URE_HOME (
-   echo Error: either of the variables OFFICE_HOME and
-   echo OO_SDK_URE_HOME is missing!
-   goto :error
- )
- )
+REM if not defined OFFICE_HOME (
+REM if not defined OO_SDK_URE_HOME (
+REM    echo Error: either of the variables OFFICE_HOME and
+REM    echo OO_SDK_URE_HOME is missing!
+REM    goto :error
+REM  )
+REM  )
 
 REM Check installation path for GNU make.
 if not defined OO_SDK_MAKE_HOME (
@@ -81,11 +86,19 @@ if not defined OO_SDK_ZIP_HOME (
  )
 
 REM Set library path. 
-set LIB=%OO_SDK_HOME%\windows\lib;%LIB%
+set LIB=%OO_SDK_HOME%\lib;%LIB%
+if defined CPP_WINDOWS_SDK (
+   set LIB=%LIB%;%CPP_WINDOWS_SDK%\lib
+ )
 
 REM Set office program path.
 if defined OFFICE_HOME (
    set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\program
+ )
+
+REM Set office program path.
+if defined OFFICE_BASE_HOME (
+   set OFFICE_BASE_PROGRAM_PATH=%OFFICE_BASE_HOME%\program
  )
 
 REM Set UNO path, necessary to ensure that the cpp examples using the
@@ -95,28 +108,28 @@ if defined OFFICE_HOME (
    set UNO_PATH=%OFFICE_PROGRAM_PATH%
  )
 
-if defined OO_SDK_URE_HOME (
-   set OO_SDK_URE_BIN_DIR=%OO_SDK_URE_HOME%\bin
-   set OO_SDK_URE_LIB_DIR=%OO_SDK_URE_HOME%\bin
-   set OO_SDK_URE_JAVA_DIR=%OO_SDK_URE_HOME%\java
- ) else (
-   set OO_SDK_URE_BIN_DIR=%OFFICE_PROGRAM_PATH%
-   set OO_SDK_URE_LIB_DIR=%OFFICE_PROGRAM_PATH%
-   set OO_SDK_URE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\classes
- )
+REM if defined OO_SDK_URE_HOME (
+set OO_SDK_URE_BIN_DIR=%OO_SDK_URE_HOME%\bin
+set OO_SDK_URE_LIB_DIR=%OO_SDK_URE_HOME%\bin
+set OO_SDK_URE_JAVA_DIR=%OO_SDK_URE_HOME%\java
+REM ) else (
+set OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%
+set OO_SDK_OFFICE_LIB_DIR=%OFFICE_BASE_PROGRAM_PATH%
+set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_BASE_PROGRAM_PATH%\classes
+REM )
 
 REM Set classpath
-set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\juh.jar;%OO_SDK_URE_JAVA_DIR%\jurt.jar;%OO_SDK_URE_JAVA_DIR%\ridl.jar;%OO_SDK_URE_JAVA_DIR%\unoloader.jar
-if defined OFFICE_HOME (
-    set CLASSPATH=%CLASSPATH%;%OO_SDK_URE_JAVA_DIR%\unoil.jar
- )
+set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\juh.jar;%OO_SDK_URE_JAVA_DIR%\jurt.jar;%OO_SDK_URE_JAVA_DIR%\ridl.jar;%OO_SDK_URE_JAVA_DIR%\unoloader.jar;%OO_SDK_OFFICE_JAVA_DIR%\unoil.jar
+REM if defined OFFICE_HOME (
+REM     set CLASSPATH=%CLASSPATH%;%OO_SDK_OFFICE_JAVA_DIR%\unoil.jar
+REM  )
 
 REM Add directory of the SDK tools to the path.
-set PATH=%OO_SDK_HOME%\windows\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_HOME%\WINexample.out\bin;%PATH%
+set PATH=%OO_SDK_HOME%\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_HOME%\WINexample.out\bin;%PATH%
 
 REM Set PATH appropriate to the output directory
-if defined OO_SDK_OUTPUT_DIR (
-   set PATH=%OO_SDK_OUTPUT_DIR%\%OO_SDK_NAME%\WINexample.out\bin;%PATH%
+if defined OO_SDK_OUT (
+   set PATH=%OO_SDK_OUT%\WINexample.out\bin;%PATH%
  ) else (
    set PATH=%OO_SDK_HOME%\WINexample.out\bin;%PATH%
  )
@@ -150,13 +163,14 @@ echo  * SDK environment is prepared for Windows
 echo  *
 echo  * SDK = %OO_SDK_HOME%
 echo  * Office = %OFFICE_HOME%
+echo  * Office Base = %OFFICE_BASE_HOME%
 echo  * URE = %OO_SDK_URE_HOME%
 echo  * Make = %OO_SDK_MAKE_HOME%
 echo  * Zip = %OO_SDK_ZIP_HOME%
 echo  * C++ Compiler = %OO_SDK_CPP_HOME%
 echo  * C# and VB.NET compilers = %OO_SDK_CLI_HOME%
 echo  * Java = %OO_SDK_JAVA_HOME%
-echo  * Special Output directory = %OO_SDK_OUTPUT_DIR%
+echo  * Special Output directory = %OO_SDK_OUT%
 echo  * Auto deployment = %SDK_AUTO_DEPLOYMENT%
 echo  *
 echo  ******************************************************************
