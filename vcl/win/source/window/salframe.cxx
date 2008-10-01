@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.157 $
+ * $Revision: 1.157.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
