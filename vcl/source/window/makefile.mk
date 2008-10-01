@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.25.114.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,6 +70,7 @@ SLOFILES= \
             $(SLO)$/mnemonicengine.obj  \
             $(SLO)$/msgbox.obj		\
             $(SLO)$/scrwnd.obj		\
+            $(SLO)$/printdlg.obj    \
             $(SLO)$/seleng.obj		\
             $(SLO)$/split.obj		\
             $(SLO)$/splitwin.obj	\

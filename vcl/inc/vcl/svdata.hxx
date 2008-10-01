@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdata.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -352,6 +352,7 @@ void        ImplDeInitSVData();
 void        ImplDestroySVData();
 Window*     ImplGetDefaultWindow();
 VCL_DLLPUBLIC ResMgr*     ImplGetResMgr();
+VCL_DLLPUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 void        ImplWindowAutoMnemonic( Window* pWindow );
 

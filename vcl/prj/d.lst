@@ -87,7 +87,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\outdev3d.hxx %_DEST%\inc%_EXT%\vcl\outdev3d.hxx
 ..\inc\vcl\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
 ..\inc\vcl\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
-..\inc\vcl\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
 ..\inc\vcl\prntypes.hxx %_DEST%\inc%_EXT%\vcl\prntypes.hxx
 ..\inc\vcl\ptrstyle.hxx %_DEST%\inc%_EXT%\vcl\ptrstyle.hxx
 ..\inc\vcl\regband.hxx %_DEST%\inc%_EXT%\vcl\regband.hxx

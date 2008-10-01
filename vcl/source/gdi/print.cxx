@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: print.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.65.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1309,7 +1309,7 @@ void Printer::PrintPage()
 // -----------------------------------------------------------------------
 
 
-ULONG ImplSalPrinterErrorCodeToVCL( ULONG nError )
+ULONG Printer::ImplSalPrinterErrorCodeToVCL( ULONG nError )
 {
     ULONG nVCLError;
     switch ( nError )

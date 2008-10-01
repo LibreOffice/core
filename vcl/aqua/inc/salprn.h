@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprn.h,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,10 +104,10 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
     // and concentrate the real work in one class
     // implement pull model print system
-    BOOL                        StartJob( const String* pFileName,
-                                          const String& rAppName,
-                                          ImplJobSetup* pSetupData,
-                                          ImplQPrinter* pQPrinter,
+    BOOL                        StartJob( const String* i_pFileName,
+                                          const String& i_rAppName,
+                                          ImplJobSetup* i_pSetupData,
+                                          vcl::PrinterListener& i_rListener,
                                           bool bIsQuickJob );
     BOOL                        EndJob();
     BOOL                        AbortJob();
@@ -142,10 +142,10 @@ class AquaSalPrinter : public SalPrinter
                                               ULONG i_nCopies, BOOL i_bCollate,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual BOOL                    StartJob( const String* pFileName,
-                                              const String& rAppName,
-                                              ImplJobSetup* pSetupData,
-                                              ImplQPrinter* pQPrinter );
+    virtual BOOL                    StartJob( const String* i_pFileName,
+                                              const String& i_rAppName,
+                                              ImplJobSetup* i_pSetupData,
+                                              vcl::PrinterListener& i_rListener );
 
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();

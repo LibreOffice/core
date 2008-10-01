@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aquaprintview.mm,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +33,15 @@
 
 #include "aquaprintview.h"
 #include "salprn.h"
-#include "vcl/impprn.hxx"
+#include "vcl/print.hxx"
 
 @implementation AquaPrintView
--(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
+-(id)initWithListener: (vcl::PrinterListener*)pListener withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
 {
     NSRect aRect = { { 0, 0 }, [pInfoPrinter->getPrintInfo() paperSize] };
     if( (self = [super initWithFrame: aRect]) != nil )
     {
-        mpQPrinter = pPrinter;
+        mpListener = pListener;
         mpInfoPrinter = pInfoPrinter;
     }
     return self;
@@ -76,6 +76,6 @@
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
     
     // page count is 1 based
-    mpQPrinter->PrintPage( nPage-1 + mpInfoPrinter->getCurPageRangeStart() );
+    mpListener->printFilteredPage( nPage-1 );
 }
 @end

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: print.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.114.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,18 @@
 #ifndef _SV_PRINT_H
 #define _SV_PRINT_H
 
-#include <tools/list.hxx>
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
 
 #include <vector>
 #include <hash_map>
 
 struct SalPrinterQueueInfo;
 class QueueInfo;
+class JobSetup;
+
+namespace vcl
+{ class PrinterListener; }
 
 // ------------------------
 // - private printer data -
@@ -87,5 +90,7 @@ public:
 // --------------
 
 void ImplDeletePrnQueueList();
+void SAL_DLLPRIVATE ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
+
 
 #endif // _SV_PRINT_H

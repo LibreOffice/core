@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdata.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.56.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -218,6 +218,15 @@ ResMgr* ImplGetResMgr()
         }
     }
     return pSVData->mpResMgr;
+}
+
+ResId VclResId( sal_Int32 nId )
+{
+    ResMgr* pMgr = ImplGetResMgr();
+    if( ! pMgr )
+        throw std::bad_alloc();
+
+    return ResId( nId, *pMgr );
 }
 
 DockingManager* ImplGetDockingManager()

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprn.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,7 @@
 class SalGraphics;
 class SalFrame;
 struct ImplJobSetup;
-class ImplQPrinter;
+namespace vcl { class PrinterListener; }
 
 // -----------------------
 // - SalPrinterQueueInfo -
@@ -125,7 +125,7 @@ public:                     // public for Sal Implementation
     virtual BOOL                    StartJob( const String* pFileName,
                                               const String& rAppName,
                                               ImplJobSetup* pSetupData,
-                                              ImplQPrinter* pQPrinter );
+                                              vcl::PrinterListener& rListener );
 
     virtual BOOL                    EndJob() = 0;
     virtual BOOL                    AbortJob() = 0;

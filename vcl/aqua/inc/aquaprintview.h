@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aquaprintview.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +37,14 @@
 
 class ImplQPrinter;
 class AquaSalInfoPrinter;
+namespace vcl { class PrinterListener; }
 
 @interface AquaPrintView : NSView
 {
-    ImplQPrinter*       mpQPrinter;
-    AquaSalInfoPrinter* mpInfoPrinter;
+    vcl::PrinterListener*       mpListener;
+    AquaSalInfoPrinter*         mpInfoPrinter;
 }
--(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
+-(id)initWithListener: (vcl::PrinterListener*)pListener withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
 -(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
 -(NSRect)rectForPage: (int)page;
 -(NSPoint)locationOfPrintRect: (NSRect)aRect;

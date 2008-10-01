@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prndlg.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.114.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,19 +33,122 @@
 
 #include <vcl/dllapi.h>
 
-#include <vcl/dialog.hxx>
+#include "vcl/print.hxx"
+#include "vcl/print.h"
 
-class Printer;
+#include "vcl/dialog.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/button.hxx"
+#include "vcl/scrbar.hxx"
+#include "vcl/gdimtf.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/field.hxx"
+#include "vcl/tabctrl.hxx"
+#include "vcl/tabpage.hxx"
 
-class VCL_DLLPUBLIC SystemDialog : public ModalDialog
+#include "tools/multisel.hxx"
+
+#include <boost/shared_ptr.hpp>
+
+
+namespace vcl
 {
-public:
-                        SystemDialog( Window* pParent, WinBits nWinStyle ) :
-                            ModalDialog( pParent, nWinStyle ) {}
-                        SystemDialog( Window* pParent, const ResId& rResId ) :
-                            ModalDialog( pParent, rResId ) {}
+    class PrintDialog : public ModalDialog
+    {
+        class PrintPreviewWindow : public Window
+        {
+            GDIMetaFile         maMtf;
+        public:
+            PrintPreviewWindow( Window* pParent, const ResId& );
+            virtual ~PrintPreviewWindow();
 
-    virtual short       Execute() { return 0; }
-};
+            virtual void Paint( const Rectangle& rRect );
+
+            void setPreview( const GDIMetaFile& );
+        };
+
+        class PrinterTabPage : public TabPage
+        {
+        public:
+            ListBox                                 maPrinters;
+            PushButton                              maSetupButton;
+            FixedText                               maType;
+            FixedText                               maTypeText;
+            FixedText                               maStatus;
+            FixedText                               maStatusText;
+            FixedText                               maLocation;
+            FixedText                               maLocText;
+            FixedText                               maComment;
+            FixedText                               maCommentText;
+            CheckBox                                maToFileBox;
+
+            PrinterTabPage( Window*, const ResId& );
+            virtual ~PrinterTabPage();
+        };
+
+        class JobTabPage : public TabPage
+        {
+        public:
+            FixedLine                               maPrintRange;
+            RadioButton                             maAllButton;
+            RadioButton                             maPagesButton;
+            RadioButton                             maSelectionButton;
+            Edit                                    maPagesEdit;
+
+            FixedLine                               maCopies;
+            FixedText                               maCopyCount;
+            NumericField                            maCopyCountField;
+            CheckBox                                maCollateBox;
+            FixedImage                              maCollateImage;
+
+            Image                                   maCollateImg;
+            Image                                   maCollateHCImg;
+            Image                                   maNoCollateImg;
+            Image                                   maNoCollateHCImg;
+
+            JobTabPage( Window*, const ResId& );
+            virtual ~JobTabPage();
+        };
+
+        OKButton                                maOKButton;
+        CancelButton                            maCancelButton;
+        PrintPreviewWindow                      maPreviewWindow;
+        FixedText                               maPageText;
+        ScrollBar                               maPageScrollbar;
+
+        TabControl                              maTabCtrl;
+        PrinterTabPage                          maPrinterPage;
+        JobTabPage                              maJobPage;
+
+        FixedLine                               maButtonLine;
+
+        boost::shared_ptr< PrinterListener >    maPListener;
+
+        rtl::OUString                           maPageStr;
+        sal_Int32                               mnCurPage;
+        sal_Int32                               mnCachedPages;
+        Rectangle                               maPreviewSpace;
+
+        void preparePreview();
+        void setPreviewText( sal_Int32 );
+        void updatePrinterText();
+        void checkControlDependencies();
+
+        DECL_LINK( ScrollHdl, ScrollBar* );
+        DECL_LINK( ScrollEndHdl, ScrollBar* );
+        DECL_LINK( SelectHdl, ListBox* );
+        DECL_LINK( ClickHdl, Button* );
+        DECL_LINK( ModifyHdl, Edit* );
+    public:
+        PrintDialog( Window*, const boost::shared_ptr< PrinterListener >& );
+        virtual ~PrintDialog();
+
+        bool isPrintToFile();
+        MultiSelection getPageSelection();
+        int getCopyCount();
+        bool isCollate();
+    };
+}
+
 
 #endif // _SV_PRNDLG_HXX

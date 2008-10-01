@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprn.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,8 +125,8 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
                 double dX = 0, dY = aPaperSize.height;
-                dX += [mpPrintInfo leftMargin];
-                dY -= [mpPrintInfo topMargin];
+                // dX += [mpPrintInfo leftMargin];
+                // dY -= [mpPrintInfo topMargin];
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
                 CGContextScaleCTM( i_rContext, 0.1, -0.1 );
             }
@@ -134,8 +134,8 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             {
                 CGContextRotateCTM( i_rContext, M_PI/2 );
                 double dX = aPaperSize.height, dY = -aPaperSize.width;
-                dY += [mpPrintInfo topMargin];
-                dX -= [mpPrintInfo rightMargin];
+                // dY += [mpPrintInfo topMargin];
+                // dX -= [mpPrintInfo rightMargin];
 
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
                 CGContextScaleCTM( i_rContext, -0.1, 0.1 );
@@ -447,76 +447,67 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     }
 }
 
-BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
-                                   const String& rAppName,
-                                   ImplJobSetup* pSetupData,
-                                   ImplQPrinter* pQPrinter,
+BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
+                                   const String& i_rAppName,
+                                   ImplJobSetup* i_pSetupData,
+                                   vcl::PrinterListener& i_rListener,
                                    bool bIsQuickJob )
 {
     if( mbJob )
         return FALSE;
 
     BOOL bSuccess = FALSE;
-    std::vector<ULONG> aPaperRanges;
-    if( ! pQPrinter->GetPaperRanges( aPaperRanges, true ) )
-        return FALSE;
 
-    size_t nRanges = aPaperRanges.size();
+    // FIXME: make paper ranges work again
+    mnCurPageRangeStart = 1;
+    mnCurPageRangeCount = i_rListener.getPageCount();
+
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
 
-    for( ULONG nCurRange = 0; nCurRange < nRanges-1; nCurRange++ )
+    mnStartPageOffsetX = mnStartPageOffsetY = 0;
+
+    // update job data
+    if( i_pSetupData )
+        SetData( ~0, i_pSetupData );
+
+    // create view
+    NSView* pPrintView = [[AquaPrintView alloc] initWithListener: &i_rListener withInfoPrinter: this];
+
+    NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
+
+    // set filename
+    if( i_pFileName )
     {
-        mnStartPageOffsetX = mnStartPageOffsetY = 0;
-
-        // update job data
-        ImplJobSetup* pSetup = pQPrinter->GetPageSetup( aPaperRanges[ nCurRange ] );
-        if( pSetup )
-            SetData( ~0, pSetup );
-        DBG_ASSERT( pSetup, "no job setup for range" );
-
-        mnCurPageRangeStart = aPaperRanges[nCurRange];
-        mnCurPageRangeCount = aPaperRanges[nCurRange+1] - aPaperRanges[nCurRange];
-        // create view
-        NSView* pPrintView = [[AquaPrintView alloc] initWithQPrinter: pQPrinter withInfoPrinter: this];
-
-        NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
-
-        // set filename
-        if( pFileName )
-        {
-            [mpPrintInfo setJobDisposition: NSPrintSaveJob];
-            NSString* pPath = CreateNSString( *pFileName );
-            [pPrintDict setObject: pPath forKey: NSPrintSavePath];
-            [pPath release];
-
-            // in this case we can only deliver the print job in one file
-            mnCurPageRangeStart = 0;
-            mnCurPageRangeCount = aPaperRanges.back();
-            nCurRange = nRanges;
-        }
-
-        [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetCopyCount()] autorelease] forKey: NSPrintCopies];
-        [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
-        [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
-        [pPrintDict setObject: [[NSNumber numberWithInt: (int)mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
-
-
-        // create print operation
-        NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
-
-        if( pPrintOperation )
-        {
-            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
-            [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
-            // [pPrintOperation setShowsProgressPanel: NO];
-            bSuccess = TRUE;
-            mbJob = true;
-            pInst->startedPrintJob();
-            [pPrintOperation runOperation];
-            pInst->endedPrintJob();
-            mbJob = false;
-        }
+        [mpPrintInfo setJobDisposition: NSPrintSaveJob];
+        NSString* pPath = CreateNSString( *i_pFileName );
+        [pPrintDict setObject: pPath forKey: NSPrintSavePath];
+        [pPath release];
     }
+
+    // FIXME copies
+    // [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetCopyCount()] autorelease] forKey: NSPrintCopies];
+    [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
+    [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
+    [pPrintDict setObject: [[NSNumber numberWithInt: mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
+
+
+    // create print operation
+    NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
+
+    if( pPrintOperation )
+    {
+        bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
+        [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
+        [pPrintOperation setShowsProgressPanel: bShowPanel ? YES : NO];
+        bSuccess = TRUE;
+        mbJob = true;
+        pInst->startedPrintJob();
+        [pPrintOperation runOperation];
+        pInst->endedPrintJob();
+        mbJob = false;
+    }
+
+    mnCurPageRangeStart = mnCurPageRangeCount = 0;
 
     return bSuccess;
 }
@@ -583,22 +574,22 @@ AquaSalPrinter::~AquaSalPrinter()
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalPrinter::StartJob( const String* pFileName,
-                               const String& rAppName,
-                               ImplJobSetup* pSetupData,
-                               ImplQPrinter* pQPrinter )
+BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
+                               const String& i_rAppName,
+                               ImplJobSetup* i_pSetupData,
+                               vcl::PrinterListener& i_rListener )
 {
     bool bIsQuickJob = false;
     std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
-        pSetupData->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
+        i_pSetupData->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
 
-    if( quick_it != pSetupData->maValueMap.end() )
+    if( quick_it != i_pSetupData->maValueMap.end() )
     {
         if( quick_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
             bIsQuickJob = true;
     }
 
-    return mpInfoPrinter->StartJob( pFileName, rAppName, pSetupData, pQPrinter, bIsQuickJob );
+    return mpInfoPrinter->StartJob( i_pFileName, i_rAppName, i_pSetupData, i_rListener, bIsQuickJob );
 }
 
 // -----------------------------------------------------------------------

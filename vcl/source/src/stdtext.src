@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stdtext.src,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,4 +122,9 @@ WarningBox  SV_EDIT_WARNING_BOX
 String SV_MAC_SCREENNNAME
 {
     Text [en-US] = "Screen %d";
+};
+
+String SV_STDTEXT_ALLFILETYPES
+{
+    Text [en-US] = "Any type";
 };

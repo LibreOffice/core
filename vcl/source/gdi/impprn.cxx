@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impprn.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -464,10 +464,12 @@ void ImplQPrinter::EndQueuePrint()
         DBG_ASSERT( mpPrinter, "no SalPrinter in ImplQPrinter" );
         if( mpPrinter )
         {
+            #if 0
             mpPrinter->StartJob( mbPrintFile ? &maPrintFile : NULL,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
                                  this );
+            #endif
             EndJob();
             mpParent->ImplEndPrint();
         }

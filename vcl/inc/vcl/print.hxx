@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: print.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.114.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +31,19 @@
 #ifndef _SV_PRINT_HXX
 #define _SV_PRINT_HXX
 
-#include <tools/errcode.hxx>
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
-#include <vcl/outdev.hxx>
-#include <vcl/prntypes.hxx>
-#include <vcl/jobset.hxx>
-#include <vcl/gdimtf.hxx>
-#include <tools/stream.hxx>
+#include "tools/errcode.hxx"
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
+#include "vcl/outdev.hxx"
+#include "vcl/prntypes.hxx"
+#include "vcl/jobset.hxx"
+#include "vcl/gdimtf.hxx"
+#include "tools/stream.hxx"
+#include "tools/multisel.hxx"
+
+#include "com/sun/star/beans/XPropertySet.hpp"
+
+#include <boost/shared_ptr.hpp>
 
 struct SalPrinterInfoQueue;
 class SalInfoPrinter;
@@ -47,12 +52,12 @@ class SalPrinter;
 class VirtualDevice;
 class Window;
 class ImplQPrinter;
-class RmPrinter;
 struct ImplPrivatePrinterData;
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
+namespace vcl {
+    class PrinterListener;
+    class PrintDialog;
+}
 
 // -----------------
 // - Printer-Types -
@@ -264,6 +269,11 @@ private:
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
     DECL_DLLPRIVATE_LINK(       ImplDestroyPrinterAsync, void* );
+
+    SAL_DLLPRIVATE bool StartJob( const XubString& rJobName, boost::shared_ptr<vcl::PrinterListener>& );
+
+    static SAL_DLLPRIVATE ULONG ImplSalPrinterErrorCodeToVCL( ULONG nError );
+
 public:
     SAL_DLLPRIVATE void         ImplEndPrint();
     SAL_DLLPRIVATE void         ImplUpdateQuickStatus();
@@ -421,6 +431,62 @@ public:
     *   if the printer list changed
     */
     static void updatePrinters();
+
+    /** execute a print job
+
+        starts a print job asynchronously (that is will return
+
+    */
+    static void PrintJob( const boost::shared_ptr<vcl::PrinterListener>& i_pListener,
+                          const JobSetup& i_rInitSetup,
+                          const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& i_xJobOptions
+                          );
+
+    // implementation detail of PrintJob being asynchronous
+    // not exported, not usable outside vcl
+    static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterListener>& i_pListener,
+                                             const JobSetup& i_rInitSetup,
+                                             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& i_xJobOptions
+                                             );
 };
+
+namespace vcl
+{
+class ImplPrinterListenerData;
+
+class VCL_DLLPUBLIC PrinterListener
+{
+    ImplPrinterListenerData* mpImplData;
+public:
+    PrinterListener();
+    virtual ~PrinterListener();
+
+    const boost::shared_ptr<Printer>& getPrinter() const;
+    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& getJobParameters() const;
+    const MultiSelection& getPageSelection() const;
+
+    virtual int  getPageCount() const = 0; // must be overloaded by the app
+    /* get the page parameters, namely the jobsetup that should be active for the page
+       (describing among others the physical page size) and the "page size". In writer
+       case this would probably be the same as the JobSetup since writer sets the page size
+       draw/impress for example print their page on the paper set on the printer,
+       possibly adjusting the page size to fit. That means the page size can be different from
+       the paper size.
+    */
+    virtual void getPageParameters( int i_nPage, JobSetup& o_rPageSetup, Size& o_rPageSize ) const = 0; // must be overloaded by the app, return page size in 1/100th mm
+    virtual void printPage( int i_nPage ) const = 0; // must be overloaded by the app
+    virtual void setListeners();  // optionally set listeners on mxJobParameters
+    virtual void jobFinished();   // optionally release resources bound to the job
+
+    void printFilteredPage( int i_nPage );
+
+    // implementation details, not usable outsid vcl
+    void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
+    void SAL_DLLPRIVATE setJobParameters( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& );
+    void SAL_DLLPRIVATE setPageSelection( const MultiSelection& );
+};
+
+}
+
 
 #endif  // _SV_PRINT_HXX
