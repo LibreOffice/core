@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_propertyobject.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_bridges.hxx"
 #include <stdlib.h>
 #include <osl/diagnose.h>
-#include <osl/process.h>
 
 #include <rtl/random.h>
 
@@ -494,14 +493,8 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
 
         if( bCall )
         {
-            // gather some more random data
-            oslProcessInfo data;
-            data.Size = sizeof( data );
-            osl_getProcessInfo( 0 , osl_Process_HEAPUSAGE | osl_Process_IDENTIFIER , &data );
-
             // calulate random number
             rtlRandomPool pool = rtl_random_createPool ();
-            rtl_random_addBytes( pool, &data , sizeof( data ) );
             rtl_random_getBytes( pool , &m_nRandomNumberOfRequest, sizeof( m_nRandomNumberOfRequest ) );
             rtl_random_destroyPool( pool );
         }

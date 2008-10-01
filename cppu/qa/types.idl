@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: types.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@ struct Struct2a: Struct2 { long member2; };
 struct Struct2b: Struct2a { long member3; };
 
 struct Poly< T > { long member; };
+
+struct Rec { sequence< Rec > x; };
 
 exception Exception1: com::sun::star::uno::Exception { long member; };
 

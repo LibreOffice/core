@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_writer.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,7 @@ void OWriterThread::touch( sal_Bool bImmediately )
 }
 
 
-void OWriterThread::abort()
+void OWriterThread::abortThread()
 {
     MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
 
@@ -150,10 +150,7 @@ void OWriterThread::sendEmptyMessage()
 {
     // must be called with locked marshaling mutex
     sal_Int32 a[2] = {0,0};
-    if( m_pConnection )
-    {
         m_pConnection->write( m_pConnection , (sal_Int8*) a , sizeof( sal_Int32) *2 );
-    }
 }
 
 void OWriterThread::insertReleaseRemoteCall(

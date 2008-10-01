@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_reader.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,16 +49,17 @@ public:
                    OWriterThread *pWriterThread );
     ~OReaderThread();
 
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
-
     // may only be called in the callstack of this thread !!!!!
     // run() -> disposeEnvironment() -> dispose() -> destroyYourself()
     void destroyYourself();
 
+private:
+    virtual void SAL_CALL run();
+    virtual void SAL_CALL onTerminated();
+
     inline sal_Bool readBlock( sal_Int32 *pnMessageCount );
     inline sal_Bool readFlags( struct MessageFlags *pFlags );
-private:
+
     void disposeEnvironment();
 
     inline sal_Bool getMemberTypeDescription(

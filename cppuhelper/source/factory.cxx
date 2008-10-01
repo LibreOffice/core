@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: factory.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -838,82 +838,63 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
 Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
+    OUString aActivatorUrl;
+    OUString aActivatorName;
+    OUString aLocation;
+
+    Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") ) );
+    if( xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
+    {
+        aActivatorUrl = xActivatorKey->getAsciiValue();
+
+        OUString tmpActivator(aActivatorUrl.getStr());
+        sal_Int32 nIndex = 0;
+        aActivatorName = tmpActivator.getToken(0, ':', nIndex );
+
+        Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") ) );
+        if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
+            aLocation = xLocationKey->getAsciiValue();
+    }
+    else
+    {
+        // old style"url"
+        // the location of the program code of the implementation
+        Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/URL") ) );
+        // is the the key of the right type ?
+        if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
+        {
+            // one implementation found -> try to activate
+            aLocation = xLocationKey->getAsciiValue();
+
+            // search protocol delemitter
+            sal_Int32 nPos = aLocation.indexOf(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
+            if( nPos != -1 )
+            {
+                aActivatorName = aLocation.copy( 0, nPos );
+                if( aActivatorName.compareToAscii( "java" ) == 0 )
+                    aActivatorName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java") );
+                else if( aActivatorName.compareToAscii( "module" ) == 0 )
+                    aActivatorName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") );
+                aLocation = aLocation.copy( nPos + 3 );
+            }
+        }
+    }
+
     Reference< XInterface > xFactory;
-    try
+    if( aActivatorName.getLength() != 0 )
     {
-        OUString aActivatorUrl;
-        OUString aActivatorName;
-        OUString aLocation;
-
-        Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") ) );
-        if( xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
+        Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
+        Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
+        Reference<XInterface > xMF;
+        if (xLoader.is())
         {
-            aActivatorUrl = xActivatorKey->getAsciiValue();
-
-            OUString tmpActivator(aActivatorUrl.getStr());
-            sal_Int32 nIndex = 0;
-            aActivatorName = tmpActivator.getToken(0, ':', nIndex );
-
-            Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") ) );
-            if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
-                aLocation = xLocationKey->getAsciiValue();
-        }
-        else
-        {
-            // old style"url"
-            // the location of the program code of the implementation
-            Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/URL") ) );
-            // is the the key of the right type ?
-            if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
-            {
-                // one implementation found -> try to activate
-                aLocation = xLocationKey->getAsciiValue();
-
-                // search protocol delemitter
-                sal_Int32 nPos = aLocation.indexOf(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
-                if( nPos != -1 )
-                {
-                    aActivatorName = aLocation.copy( 0, nPos );
-                    if( aActivatorName.compareToAscii( "java" ) == 0 )
-                        aActivatorName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java") );
-                    else if( aActivatorName.compareToAscii( "module" ) == 0 )
-                        aActivatorName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") );
-                    aLocation = aLocation.copy( nPos + 3 );
-                }
-            }
-        }
-
-        if( aActivatorName.getLength() != 0 )
-        {
-            Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
-            Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
-            Reference<XInterface > xMF;
-            if (xLoader.is())
-            {
-                // JSC: This exception must not be catched if a concept for exception handling
-                // is specified, implemented and used.
-                try
-                {
-                    xFactory = xLoader->activate( aImplementationName, aActivatorUrl, aLocation, xImplementationKey );
-                }
-                catch( CannotActivateFactoryException& e)
-                {
-                    OString msg( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
-                    OSL_TRACE(msg.getStr() );
-                }
-            }
+            xFactory = xLoader->activate( aImplementationName, aActivatorUrl, aLocation, xImplementationKey );
         }
     }
-    catch (InvalidRegistryException & e)
-    {
-        OString msg( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
-        OSL_TRACE(msg.getStr() );
-    }
-
     return xFactory;
 }
 

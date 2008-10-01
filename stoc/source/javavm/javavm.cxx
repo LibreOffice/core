@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: javavm.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.78.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,49 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
-
-/*
-  Code generation bug within Sun CC 5.2 on solaris sparc
-  Please check the following code against your compiler version before enabling
-  the optimization (when the program runs correct, it should print
-  1
-  2
-  ), otherwise nothing. The bug has crashed the
-  initVMConfiguration function, which can be found in this file.
-
-#include <stdio.h>
-
-static void b() {};
-struct E { ~E(){ b(); }  };
-
-void a()
-{
-    throw 42;
-}
-
-
-int main( int argc, char * argv[])
-{
-    E e1;
-    try
-    {
-        a();
-    }
-    catch( int i )
-    {
-    }
-    try
-    {
-        // this output never appears with CC -O test.cxx
-        fprintf( stderr,"1\n" );
-    }
-    catch( E & e )
-    {
-    }
-    // this output never appears with CC -O test.cxx
-    fprintf( stderr, "2\n" );
-}
-*/
 
 #include "javavm.hxx"
 

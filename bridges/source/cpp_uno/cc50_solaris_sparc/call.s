@@ -1,16 +1,3 @@
-.global doFlushCode
-.type doFlushCode,2
-doFlushCode:
-.L:     flush %o0
-        deccc %o1
-        bne .L
-        add %o0, 8, %o0
-        retl
-        nop
-.size doFlushCode,(.-doFlushCode)
-.align 8
-
-
 .global privateSnippetExecutor
 .type privateSnippetExecutor,2
 privateSnippetExecutor:

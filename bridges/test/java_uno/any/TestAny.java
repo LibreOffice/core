@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TestAny.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2043,6 +2043,16 @@ final class TestAny {
                               new Any(new Type(DerivedInterface.class),
                                       new DerivedInterface() {}),
                               new CompareBoxed());
+
+        // Misc:
+        try {
+            transport.mapAny(new Object());
+            System.out.println("BAD mapAny(Object), no exception");
+            success = false;
+        } catch (StackOverflowError e) {
+            System.out.println("BAD mapAny(Object): " + e);
+            success = false;
+        } catch (RuntimeException e) {}
 
         return success;
     }

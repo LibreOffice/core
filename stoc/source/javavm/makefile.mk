@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.23.14.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,14 +56,6 @@ SLOFILES= \
         $(SLO)$/javavm.obj		\
         $(SLO)$/jvmargs.obj	\
         $(SLO)$/interact.obj 
-
-.IF "$(COM)"=="C52"
-# Code generation bug in conjunction with exception handling
-# You can find a codesample in javavm.cxx in a comment
-# at the top of the file
-NOOPTFILES= \
-        $(SLO)$/javavm.obj
-.ENDIF			# "$(COM)"=="C52"
 
 SHL1TARGET= $(TARGET)
 SHL1VERSIONMAP = jen.map

@@ -12,6 +12,7 @@ The naming service allows the registration and retrieval of objects.
         <language>  c++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.uno.NamingService  </supported-service>
+        <type>com.sun.star.lang.DisposedException</type>
         <type>  com.sun.star.lang.XComponent                    </type>
         <type>  com.sun.star.lang.IllegalArgumentException      </type>
         <type>  com.sun.star.lang.XInitialization               </type>

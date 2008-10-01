@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thread.c,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.48.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@
 #define THREADIMPL_FLAGS_SUSPENDED  0x00004
 #define THREADIMPL_FLAGS_ACTIVE     0x00008
 #define THREADIMPL_FLAGS_ATTACHED   0x00010
+#define THREADIMPL_FLAGS_DESTROYED  0x00020
 
 typedef struct osl_thread_impl_st
 {
@@ -197,28 +198,30 @@ static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
 /*****************************************************************************/
 static void osl_thread_cleanup_Impl (void* pData)
 {
-    int active;
+    pthread_t thread;
+    int attached;
+    int destroyed;
     Thread_Impl* pImpl= (Thread_Impl*)pData;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
-    if (pImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED)
-    {
-        pImpl->m_Flags &= ~THREADIMPL_FLAGS_ATTACHED;
-        pthread_detach (pImpl->m_hThread);
-    }
-
-    active = ((pImpl->m_Flags & THREADIMPL_FLAGS_ACTIVE) > 0);
-    pImpl->m_Flags &= ~THREADIMPL_FLAGS_ACTIVE;
+    thread = pImpl->m_hThread;
+    attached = (pImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED) != 0;
+    destroyed = (pImpl->m_Flags & THREADIMPL_FLAGS_DESTROYED) != 0;
+    pImpl->m_Flags &= ~(THREADIMPL_FLAGS_ACTIVE | THREADIMPL_FLAGS_ATTACHED);
 
     pthread_mutex_unlock (&(pImpl->m_Lock));
 
-    if (!active)
-    {
-        /* release oslThreadIdentifier @@@ see TODO @@@ */
-        removeThreadId (pImpl->m_hThread);
+    /* release oslThreadIdentifier @@@ see TODO @@@ */
+    removeThreadId (thread);
 
-        /* free memory */
+    if (attached)
+    {
+        pthread_detach (thread);
+    }
+
+    if (destroyed)
+    {
         osl_thread_destruct_Impl (&pImpl);
     }
 }
@@ -354,7 +357,15 @@ oslThread osl_createSuspendedThread (
 void SAL_CALL osl_destroyThread(oslThread Thread)
 {
     if (Thread != NULL) {
-        osl_thread_cleanup_Impl(Thread);
+        Thread_Impl * impl = (Thread_Impl *) Thread;
+        int active;
+        pthread_mutex_lock(&impl->m_Lock);
+        active = (impl->m_Flags & THREADIMPL_FLAGS_ACTIVE) != 0;
+        impl->m_Flags |= THREADIMPL_FLAGS_DESTROYED;
+        pthread_mutex_unlock(&impl->m_Lock);
+        if (!active) {
+            osl_thread_destruct_Impl(&impl);
+        }
     }
 }
 
@@ -434,6 +445,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 /*****************************************************************************/
 void SAL_CALL osl_joinWithThread(oslThread Thread)
 {
+    pthread_t thread;
     int attached;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
@@ -449,6 +461,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
         return; /* EDEADLK */
     }
 
+    thread = pImpl->m_hThread;
     attached = ((pImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED) > 0);
     pImpl->m_Flags &= ~THREADIMPL_FLAGS_ATTACHED;
 
@@ -458,10 +471,10 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     {
         /* install cleanup handler to ensure consistent flags and state */
         pthread_cleanup_push (
-            osl_thread_join_cleanup_Impl, (void*)(pImpl->m_hThread));
+            osl_thread_join_cleanup_Impl, (void*)thread);
 
         /* join */
-        pthread_join (pImpl->m_hThread, NULL);
+        pthread_join (thread, NULL);
 
         /* remove cleanup handler */
         pthread_cleanup_pop (0);
