@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.cxx,v $
- * $Revision: 1.102 $
+ * $Revision: 1.102.88.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -330,7 +330,8 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
         SvxCaseMap eCaseMap = ( SvxCaseMap ) rItem.GetValue();
         rFont.SetCaseMap( eCaseMap );
         rCJKFont.SetCaseMap( eCaseMap );
-        rCTLFont.SetCaseMap( eCaseMap );
+        // #i78474# small caps do not exist in CTL fonts
+        rCTLFont.SetCaseMap( eCaseMap == SVX_CASEMAP_KAPITAELCHEN ? SVX_CASEMAP_NOT_MAPPED : eCaseMap );
     }
 
     // Outline
@@ -1965,7 +1966,8 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     {
         rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
         rCJKFont.SetCaseMap( (SvxCaseMap)nCapsPos );
-        rCTLFont.SetCaseMap( (SvxCaseMap)nCapsPos );
+        // #i78474# small caps do not exist in CTL fonts
+        rCTLFont.SetCaseMap( static_cast<SvxCaseMap>( nCapsPos == SVX_CASEMAP_KAPITAELCHEN ? SVX_CASEMAP_NOT_MAPPED : (SvxCaseMap)nCapsPos) );
     }
 
     BOOL bWordLine = m_aIndividualWordsBtn.IsChecked();

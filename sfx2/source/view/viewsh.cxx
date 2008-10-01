@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.82.98.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,8 @@
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/whiter.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
+#include <vcl/toolbox.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -64,9 +63,8 @@
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <toolkit/unohlp.hxx>
 
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include "view.hrc"
@@ -319,7 +317,65 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             rReq.Ignore();
             break;
         }
+        case SID_ACTIVATE_STYLE_APPLY:
+        {
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                    GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    com::sun::star::uno::UNO_QUERY);
 
+            Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+            Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            if ( xPropSet.is() )
+            {
+                try
+                {
+                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                    aValue >>= xLayoutManager;
+                    if ( xLayoutManager.is() )
+                    {
+                        rtl::OUString aTextResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/textobjectbar" ));
+                        uno::Reference< ui::XUIElement > xElement = xLayoutManager->getElement( aTextResString );
+                        if(!xElement.is())
+                        {
+                            rtl::OUString aFrameResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/frameobjectbar" ));
+                            xElement = xLayoutManager->getElement( aFrameResString );
+                        }
+                        if(!xElement.is())
+                        {
+                            rtl::OUString aOleResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/oleobjectbar" ));
+                            xElement = xLayoutManager->getElement( aOleResString );
+                        }
+                        if(xElement.is())
+                        {
+                            uno::Reference< awt::XWindow > xWin( xElement->getRealInterface(), uno::UNO_QUERY_THROW );
+                            Window* pWin = VCLUnoHelper::GetWindow( xWin );
+                            ToolBox* pTextToolbox = dynamic_cast< ToolBox* >( pWin );
+                            if( pTextToolbox )
+                            {
+                                USHORT nItemCount = pTextToolbox->GetItemCount();
+                                for( USHORT nItem = 0; nItem < nItemCount; ++nItem )
+                                {
+                                    USHORT nItemId = pTextToolbox->GetItemId( nItem );
+                                    const XubString& rCommand = pTextToolbox->GetItemCommand( nItemId );
+                                    if( rCommand.EqualsAscii( ".uno:StyleApply" ) )
+                                    {
+                                        Window* pItemWin = pTextToolbox->GetItemWindow( nItemId );
+                                        if( pItemWin )
+                                            pItemWin->GrabFocus();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+            rReq.Done();
+        }
+        break;
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         case SID_MAIL_SENDDOCASMS:
