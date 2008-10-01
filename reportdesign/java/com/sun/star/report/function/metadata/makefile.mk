@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.3.22.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +38,6 @@ PACKAGE = com$/sun$/star$/report$/function$/metadata
 .INCLUDE: settings.mk
 #----- compile .java files -----------------------------------------
 
-# JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 CLASSPATH!:==$(CLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)
 .ELSE
