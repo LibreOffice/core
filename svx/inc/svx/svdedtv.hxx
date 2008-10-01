@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,6 +230,9 @@ public:
     void SetUndoComment(const String& rComment);
     void SetUndoComment(const String& rComment, const String& rObjDescr);
 #endif
+
+    std::vector< SdrUndoAction* > CreateConnectorUndo( SdrObject& rO );
+    void AddUndoActions( std::vector< SdrUndoAction* >& );
 
     // Layerverwaltung. Mit Undo.
     SdrLayer* InsertNewLayer(const String& rName, USHORT nPos=0xFFFF);

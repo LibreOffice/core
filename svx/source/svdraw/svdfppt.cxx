@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.cxx,v $
- * $Revision: 1.164 $
+ * $Revision: 1.163.6.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2405,6 +2405,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 rOutliner.SetStyleSheet( 0, pSheet );
         }
         rOutliner.SetVertical( pTextObj->GetVertical() );
+        sal_Int16 nLastStartNumbering = -1;
         const PPTParagraphObj* pPreviousParagraph = NULL;
         for ( PPTParagraphObj* pPara = pTextObj->First(); pPara; pPara = pTextObj->Next() )
         {
@@ -2492,17 +2493,35 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
                     aSelection.nStartPos = aSelection.nEndPos;
                 }
+                boost::optional< sal_Int16 > oStartNumbering;
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-                pPara->ApplyTo( aParagraphAttribs, (SdrPowerPointImport&)*this, nDestinationInstance, pPreviousParagraph );
+                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, (SdrPowerPointImport&)*this, nDestinationInstance, pPreviousParagraph );
 
                 UINT32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
                 if ( !nIsBullet2 )
                     rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
 
+                if ( oStartNumbering )
+                {
+                    if ( *oStartNumbering != nLastStartNumbering )
+                        rOutliner.SetNumberingStartValue( nParaIndex, *oStartNumbering );
+                    else
+                        rOutliner.SetNumberingStartValue( nParaIndex, -1 );
+                    nLastStartNumbering = *oStartNumbering;
+                }
+                else
+                {
+                    nLastStartNumbering = -1;
+                    rOutliner.SetNumberingStartValue( nParaIndex, nLastStartNumbering );
+                }
+
                 pPreviousParagraph = pPara;
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
-                    rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
+                {
+                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, FALSE ) );
+//                  rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
+                }
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
                 delete[] pParaText;
@@ -2966,6 +2985,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 Rectangle aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 sal_Int32 nShapeId;
+                                                aProcessData.pTableRowProperties = NULL;
                                                 SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty, 0, &nShapeId );
                                                 if ( pObj )
                                                 {
@@ -3560,7 +3580,7 @@ PPTNumberFormatCreator::~PPTNumberFormatCreator()
 
 BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManager,
     SvxNumberFormat& rNumberFormat, UINT32 nLevel, UINT32 nInstance, UINT32 nDestinationInstance,
-        UINT32 nFontHeight, PPTParagraphObj* pPara )
+        boost::optional< sal_Int16 >& rStartNumbering, UINT32 nFontHeight,  PPTParagraphObj* pPara )
 {
     BOOL bHardAttribute = ( nDestinationInstance == 0xffffffff );
 
@@ -3733,8 +3753,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
             }
             break;
         }
-//      if ( nBuFlags & 0x02000000 )
-//          rNumberFormat.SetStart( nBuStart );
+        rStartNumbering = boost::optional< sal_Int16 >( nAnmScheme >> 16 );
     }
     return bHardAttribute;
 }
@@ -3755,7 +3774,8 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nTextOfs = rParaLevel.mnTextOfs;
     nBulletOfs = rParaLevel.mnBulletOfs;
 
-    ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, 0xffffffff, rCharLevel.mnFontHeight, NULL );
+    boost::optional< sal_Int16 > oStartNumbering;
+    ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, 0xffffffff, oStartNumbering, rCharLevel.mnFontHeight, NULL );
     if ( ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP ) && ( nBulletHeight > 0x7fff ) )
         nBulletHeight = rCharLevel.mnFontHeight ? ((-((sal_Int16)nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
     ImplGetNumberFormat( rManager, rNumberFormat, nLevel );
@@ -3785,7 +3805,8 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     }
 }
 
-BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj, UINT32 nDestinationInstance )
+BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj,
+                                                UINT32 nDestinationInstance, boost::optional< sal_Int16 >& rStartNumbering )
 {
     UINT32 nHardCount = 0;
     nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nDestinationInstance );
@@ -3801,7 +3822,7 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     if ( pPtr )
         pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
     nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
-                                                pParaObj->mnInstance, nDestinationInstance, nFontHeight, pParaObj );
+                                                pParaObj->mnInstance, nDestinationInstance, rStartNumbering, nFontHeight, pParaObj );
 
     if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
         pParaObj->UpdateBulletRelSize( nBulletHeight );
@@ -6101,7 +6122,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestin
     return (BOOL)bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, sal_uInt32 nDestinationInstance, const PPTParagraphObj* /*pPrev*/)
+void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, sal_uInt32 nDestinationInstance, const PPTParagraphObj* /*pPrev*/)
 {
     INT16   nVal2;
     UINT32  nVal, nUpperDist, nLowerDist;
@@ -6114,7 +6135,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         {
             SvxNumberFormat aNumberFormat( SVX_NUM_CHAR_SPECIAL );
             aNumberFormat.SetBulletChar( ' ' );
-            if ( GetNumberFormat( rManager, aNumberFormat, this, nDestinationInstance ) )
+            if ( GetNumberFormat( rManager, aNumberFormat, this, nDestinationInstance, rStartNumbering ) )
             {
                 SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
                 SvxNumRule* pRule = aNewNumBulletItem.GetNumRule();

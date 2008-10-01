@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlobj.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,13 +44,14 @@ class EditTextObject;
 class SvStream;
 class SfxItemPool;
 class SfxStyleSheetPool;
+class ParagraphData;
 
 class SVX_DLLPUBLIC OutlinerParaObject
 {
     friend class Outliner;
 
     EditTextObject*             pText;
-    sal_Int16*                  pDepthArr;
+    ParagraphData*              pParagraphDataArr;
     sal_uInt32                  nCount;
     BOOL                        bIsEditDoc;
                                 OutlinerParaObject( USHORT nParaCount );
@@ -69,7 +70,7 @@ public:
     void                        SetVertical( BOOL bVertical );
 
     sal_uInt32                  Count() const                   { return nCount; }
-    sal_Int16                   GetDepth( USHORT nPara ) const  { return pDepthArr[nPara]; }
+    sal_Int16                   GetDepth( USHORT nPara ) const;
     const EditTextObject&       GetTextObject() const           { return *pText; }
     void                        ClearPortionInfo();
     BOOL                        IsEditDoc() const               { return bIsEditDoc; }

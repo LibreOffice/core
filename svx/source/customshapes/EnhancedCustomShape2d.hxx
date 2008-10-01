@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShape2d.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,8 +134,6 @@ class EnhancedCustomShape2d : public SfxItemSet
         Point                       GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
                                                     const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
 
-        static void                 SwapStartAndEndArrow( SdrObject* pObj );
-
         void                        CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
                                                                                                 sal_Bool bLineGeometryNeededOnly, sal_Bool bSortFilledObjectsToBack );
         SdrObject*                  CreatePathObj( sal_Bool bLineGeometryNeededOnly );
@@ -212,6 +210,7 @@ class EnhancedCustomShape2d : public SfxItemSet
                                         rParameter, const sal_Int32 nPara, const sal_Bool bIsSpecialValue, sal_Bool bHorz );
         static sal_Bool             ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );
+        static void                 SwapStartAndEndArrow( SdrObject* pObj );
 };
 #endif
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svddrgmt.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.21.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -598,6 +598,7 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
     Hide();
     SdrUndoAction* pUndo=NULL;
     SdrUndoAction* pUndo2=NULL;
+    std::vector< SdrUndoAction* > vConnectorUndoActions;
     bool bRet=FALSE;
     SdrObject* pObj=GetDragObj();
     if (pObj!=NULL)
@@ -609,11 +610,13 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
                 pUndo=rView.GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
                 if (DragStat().IsEndDragChangesGeoAndAttributes())
                 {
+                    vConnectorUndoActions = rView.CreateConnectorUndo( *pObj );
                     pUndo2 = rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                 }
             }
             else
             {
+                vConnectorUndoActions = rView.CreateConnectorUndo( *pObj );
                 pUndo= rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
             }
         }
@@ -627,14 +630,18 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
 
         if(bRet)
         {
-            if(pUndo)
+            rView.AddUndoActions( vConnectorUndoActions );
+            if ( pUndo )
                 rView.AddUndo(pUndo);
 
-            if(pUndo2)
+            if ( pUndo2 )
                 rView.AddUndo(pUndo2);
         }
         else
         {
+            std::vector< SdrUndoAction* >::iterator vConnectorUndoIter( vConnectorUndoActions.begin() );
+            while( vConnectorUndoIter != vConnectorUndoActions.end() )
+                delete *vConnectorUndoIter++;
             delete pUndo;
             delete pUndo2;
         }

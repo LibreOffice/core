@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlobj.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@ OutlinerParaObject::OutlinerParaObject( USHORT nParaCount )
     DBG_CTOR(OutlinerParaObject,0);
 
     bIsEditDoc = TRUE;
-    pDepthArr = new sal_Int16[ nParaCount ];
+    pParagraphDataArr = new ParagraphData[ nParaCount ];
     nCount = nParaCount;
 }
 
@@ -62,8 +62,9 @@ OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& rObj )
 
     bIsEditDoc = rObj.bIsEditDoc;
     nCount = rObj.nCount;
-    pDepthArr = new sal_Int16[ nCount ];
-    memcpy( pDepthArr, rObj.pDepthArr, (size_t)(sizeof(sal_Int16)*nCount) );
+    pParagraphDataArr = new ParagraphData[ nCount ];
+    for( sal_uInt32 i = 0; i < nCount; i++ )
+        pParagraphDataArr[i] = rObj.pParagraphDataArr[i];
     pText = rObj.pText->Clone();
 }
 
@@ -74,8 +75,7 @@ OutlinerParaObject::OutlinerParaObject( const EditTextObject& rEditObj )
     bIsEditDoc  = TRUE;
     pText       = rEditObj.Clone();
     nCount      = pText->GetParagraphCount();
-    pDepthArr   = new sal_Int16[ nCount ];
-    memset( pDepthArr, 0, nCount*sizeof(sal_Int16) );
+    pParagraphDataArr   = new ParagraphData[ nCount ];
 }
 
 OutlinerParaObject::~OutlinerParaObject()
@@ -83,7 +83,15 @@ OutlinerParaObject::~OutlinerParaObject()
     DBG_DTOR(OutlinerParaObject,0);
 
     delete pText;
-    delete[] pDepthArr;
+    delete[] pParagraphDataArr;
+}
+
+sal_Int16 OutlinerParaObject::GetDepth( USHORT nPara ) const
+{
+    if( pParagraphDataArr && (nPara < nCount ) )
+        return pParagraphDataArr[nPara].nDepth;
+    else
+        return -1;
 }
 
 void OutlinerParaObject::ClearPortionInfo()
@@ -127,7 +135,7 @@ void OutlinerParaObject::Store(SvStream& rStream ) const
     pText->Store( rStream );
 
     for( USHORT nPos=0; nPos < nCount; nPos++ )
-        rStream << pDepthArr[ nPos ];
+        rStream << pParagraphDataArr[ nPos ].nDepth;
 
     rStream << bIsEditDoc;
 }
@@ -200,7 +208,7 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
                     pAllText->Insert( *pText, 0xffff );
                     delete pText;
                 }
-                pPObj->pDepthArr[ nCurPara ] = pPara->GetDepth();
+                pPObj->pParagraphDataArr[ nCurPara ] = *pPara;
                 delete pPara;
                 nCount--;
                 nCurPara++;
@@ -219,7 +227,7 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
         {
             pPObj->pText = EditTextObject::Create( rStream, pTextObjectPool );
             for( USHORT nCur=0; nCur < nCount; nCur++ )
-                rStream >> pPObj->pDepthArr[ nCur ];
+                rStream >> pPObj->pParagraphDataArr[ nCur ].nDepth;
             rStream >> pPObj->bIsEditDoc;
         }
     }

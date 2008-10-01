@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv2.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.146.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1572,7 +1572,10 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
         for (ULONG nm=nAnz; nm>0;) { // UndoActions fuer alle betroffenen Objekte anlegen
             nm--;
             SdrMark* pM=GetSdrMarkByIndex(nm);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pM->GetMarkedSdrObj()));
+            SdrObject* pObj = pM->GetMarkedSdrObj();
+            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
+            AddUndoActions( vConnectorUndoActions );
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
         }
 
         SdrMarkList aNewMark;

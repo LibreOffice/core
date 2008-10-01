@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.24.148.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -693,7 +693,10 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
         for (nm=nMarkAnz; nm>0;) {
             nm--;
             SdrMark* pM=rMark.GetMark(nm);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
+            SdrObject* pObj = pM->GetMarkedSdrObj();
+            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
+            AddUndoActions( vConnectorUndoActions );
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
         }
         // Sicherstellen, dass die OrderNums stimmen:
         rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
