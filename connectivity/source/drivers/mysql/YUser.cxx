@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YUser.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.6.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include "TConnection.hxx"
+#include "resource/common_res.hrc"
 
 using namespace connectivity;
 using namespace connectivity::mysql;
@@ -227,7 +228,11 @@ sal_Int32 SAL_CALL OMySQLUser::getGrantablePrivileges( const ::rtl::OUString& ob
 void SAL_CALL OMySQLUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     if ( objType != PrivilegeObject::TABLE )
-        ::dbtools::throwSQLException( "Privilege not granted: Only table privileges can be granted", "01007", *this );
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(STR_PRIVILEGE_NOT_GRANTED));
+        ::dbtools::throwGenericSQLException(sError,*this);
+    } // if ( objType != PrivilegeObject::TABLE )
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -253,7 +258,11 @@ void SAL_CALL OMySQLUser::grantPrivileges( const ::rtl::OUString& objName, sal_I
 void SAL_CALL OMySQLUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     if ( objType != PrivilegeObject::TABLE )
-        ::dbtools::throwSQLException( "Privilege not revoked: Only table privileges can be revoked", "01006", *this );
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(STR_PRIVILEGE_NOT_REVOKED));
+        ::dbtools::throwGenericSQLException(sError,*this);
+    }
 
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);

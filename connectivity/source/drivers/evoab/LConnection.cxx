@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LConnection.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,12 +43,11 @@
 #include <comphelper/processfactory.hxx>
 #include <vos/process.hxx>
 #include <tools/debug.hxx>
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
-#endif
 #include "diagnose_ex.h"
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/common_res.hrc"
 
 using namespace connectivity::evoab;
 using namespace connectivity::file;
@@ -173,8 +172,7 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
         else
         {
             OSL_TRACE( "No subschema given!!!\n");
-            ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("No subschema provided"),NULL);
+            throwGenericSQLException(STR_URI_SYNTAX_ERROR ,*this);
         }
     }
     else

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ODatabaseMetaData.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1604,6 +1604,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
     SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
+        default:
         case ResultSetType::FORWARD_ONLY:
             nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
             break;
@@ -1612,9 +1613,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-        default:
-            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1638,6 +1636,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) t
     SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
+        default:
         case ResultSetType::FORWARD_ONLY:
             nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
             break;
@@ -1646,9 +1645,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) t
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-        default:
-            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1662,6 +1658,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) t
     SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
+        default:
         case ResultSetType::FORWARD_ONLY:
             nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
             break;
@@ -1670,9 +1667,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) t
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-        default:
-            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 
@@ -1686,6 +1680,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) t
     SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
     switch(setType)
     {
+        default:
         case ResultSetType::FORWARD_ONLY:
             nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
             break;
@@ -1694,9 +1689,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) t
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-        default:
-            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid result set type." ) ), *this );
             break;
     }
 

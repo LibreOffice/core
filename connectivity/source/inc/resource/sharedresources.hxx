@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedresources.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,6 @@
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 
 //........................................................................
@@ -42,7 +41,7 @@ namespace connectivity
 {
 //........................................................................
 
-    typedef USHORT  ResourceId;
+    typedef sal_uInt16  ResourceId;
     //====================================================================
     //= SharedResources
     //====================================================================
@@ -62,9 +61,9 @@ namespace connectivity
                 the string from the resource file
         */
         ::rtl::OUString
-            getResurceString(
+            getResourceString(
                 ResourceId _nResId
-            );
+            ) const;
 
         /** loads a string from the shared resource file, and replaces
             a given ASCII pattern with a given string
@@ -84,7 +83,7 @@ namespace connectivity
                 ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace,
                 const ::rtl::OUString& _rStringToSubstitute
-            );
+            ) const;
 
         /** loads a string from the shared resource file, and replaces
             a given ASCII pattern with a given string
@@ -110,7 +109,7 @@ namespace connectivity
                 const ::rtl::OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2,
                 const ::rtl::OUString& _rStringToSubstitute2
-            );
+            ) const;
 
         /** loads a string from the shared resource file, and replaces
             a given ASCII pattern with a given string
@@ -142,7 +141,7 @@ namespace connectivity
                 const ::rtl::OUString& _rStringToSubstitute2,
                 const sal_Char* _pAsciiPatternToReplace3,
                 const ::rtl::OUString& _rStringToSubstitute3
-            );
+            ) const;
     };
 
 //........................................................................

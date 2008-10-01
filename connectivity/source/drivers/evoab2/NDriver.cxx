@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NDriver.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,9 @@
 #include <tools/debug.hxx>
 #include "NDebug.hxx"
 #include <signal.h>
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
+
 using namespace osl;
 using namespace connectivity::evoab;
 //using namespace connectivity::file;
@@ -162,7 +165,12 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
 Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( ! acceptsURL(url) )
+
     // if you have somthing special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }

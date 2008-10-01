@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NStatement.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,13 +262,10 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
                // odbc date
                (SQL_ISRULE( parseTree->getChild( 2 ), set_fct_spec ) &&
                 SQL_ISPUNCTUATION( parseTree->getChild( 2 )->getChild( 0 ), "{" ) ) ) )
-            ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii( "Query too complex" ), NULL);
+                getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
 
-        if (pPrec->getNodeType() != SQL_NODE_EQUAL &&
-            pPrec->getNodeType() != SQL_NODE_NOTEQUAL)
-            ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii( "Operator too complex" ), NULL);
+        if (pPrec->getNodeType() != SQL_NODE_EQUAL && pPrec->getNodeType() != SQL_NODE_NOTEQUAL)
+            getConnection()->throwGenericSQLException(STR_OPERATOR_TOO_COMPLEX,*this);
 
         rtl::OUString aMatchString;
         rtl::OUString aColumnName;
@@ -302,8 +299,7 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
         }
 
         if( ! SQL_ISRULE( parseTree->getChild( 0 ), column_ref) )
-            ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii( "Invalid Statement - Not a Column"), NULL );
+            getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
 
         OSQLParseNode *pColumn    = parseTree->getChild( 0 );                          // Match Item
         OSQLParseNode *pAtom      = parseTree->getChild( parseTree->count() - 2 );     // Match String
@@ -316,8 +312,7 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
                ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQL_NODE_STRING ) ) )
         {
             OSL_TRACE( "analyseSQL : pAtom->count() = %d\n", pAtom->count() );
-            ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii( "Invalid Statement - Not a String" ), NULL );
+            getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,*this);
         }
 
         const sal_Unicode WILDCARD = '%';
@@ -347,21 +342,16 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
             else if( bNotLike )
             {
                 // We currently can't handle a 'NOT LIKE' when there are '%'
-                ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii( "not like statement too complex" ), NULL );
+                getConnection()->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
             }
             else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
             {   // One occurance of '%'  matches...
                 if ( aMatchString.indexOf ( WILDCARD ) == 0 )
                     pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
-
                 else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
                     pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
-
                 else
-                    ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii( "like statement contains wildcard in the middle" ), NULL );
-
+                    getConnection()->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
 
                 if( pResult && bNotLike )
                     pResult = e_book_query_not( pResult, TRUE );
@@ -373,11 +363,10 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
                 pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );
             }
             else
-                ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii( "like statement contains too many wildcards" ), NULL );
+                getConnection()->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD_MANY,*this);
         }
         else
-                OSL_ASSERT( "Serious internal error" );
+            OSL_ASSERT( "Serious internal error" );
     }
 
     return pResult;
@@ -473,11 +462,8 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
         e_book_query_unref( pQuery );
         xColumns = m_aSQLIterator.getSelectColumns();
         if (!xColumns.isValid())
-        {
-            ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii("Invalid selection of columns"),
-                NULL);
-        }
+            getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
+
         OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) pResult->getMetaData().get();
         pMeta->setEvoabFields(xColumns);
     }

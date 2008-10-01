@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CommonTools.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,9 +223,6 @@ namespace connectivity
                 break;
             default:
                 ;
-//              throw( CannotConvertException( ::rtl::OUString::createFromAscii("TYPE is not supported!"), Reference< XInterface > (),
-//                                         aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 ) );
-
         }
         return aRes;
     }

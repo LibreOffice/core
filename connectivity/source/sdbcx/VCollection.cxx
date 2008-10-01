@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCollection.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.43.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,8 @@
 #include <comphelper/property.hxx>
 #include "TConnection.hxx"
 #include <rtl/ustrbuf.hxx>
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;
@@ -332,12 +334,12 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
 
     if ( !m_pElements->exists(aName) )
     {
-        ::rtl::OUStringBuffer aMessage;
-        aMessage.appendAscii( "There is no element named '" );
-        aMessage.append( aName );
-        aMessage.appendAscii( "'." );
-        // TODO: resource
-        throw NoSuchElementException( aMessage.makeStringAndClear(), static_cast< XTypeProvider* >( this ) );
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                STR_NO_ELEMENT_NAME,
+                "$name$", aName
+             ) );
+        throw NoSuchElementException( sError, static_cast< XTypeProvider* >( this ) );
     }
 
     return makeAny(getObject(m_pElements->findColumn(aName)));
@@ -454,7 +456,14 @@ void OCollection::notifyElementRemoved(const ::rtl::OUString& _sName)
 sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
     if ( !m_pElements->exists(columnName) )
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Unknown column name." ), static_cast<XTypeProvider*>(this) );
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                            STR_UNKNOWN_COLUMN_NAME,
+                            "$columnname$", columnName
+                         ) );
+        ::dbtools::throwGenericSQLException(sError,static_cast< XIndexAccess*>(this));
+    }
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one
 }

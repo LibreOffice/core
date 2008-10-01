@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Aolevariant.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,8 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include "diagnose_ex.h"
+#include "resource/sharedresources.hxx"
+#include "resource/ado_res.hrc"
 
 using namespace connectivity::ado;
 OLEString::OLEString()
@@ -437,8 +439,10 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
                                             0,
                                             vartype ) ) )
         {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceString(STR_TYPE_NOT_CONVERT));
             throw ::com::sun::star::sdbc::SQLException(
-                ::rtl::OUString::createFromAscii( "Could not convert type!" ),
+                sError,
                 NULL,
                 ::rtl::OUString::createFromAscii( "S1000" ),
                 1000,

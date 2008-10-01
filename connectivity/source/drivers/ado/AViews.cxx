@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AViews.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +34,12 @@
 #include "ado/AView.hxx"
 #include "ado/ATables.hxx"
 #include "ado/ACatalog.hxx"
-#ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
-#endif
 #include "ado/Awrapado.hxx"
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/ado_res.hrc"
 
 using namespace ::comphelper;
 
@@ -75,18 +74,12 @@ sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const 
 {
     OAdoView* pView = NULL;
     if ( !getImplementation( pView, descriptor ) || pView == NULL )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create view: invalid object descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_VIEW_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     WpADOCommand aCommand;
     aCommand.Create();
     if ( !aCommand.IsValid() )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create view: no command object." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pCatalog->getConnection()->throwGenericSQLException( STR_VIEW_NO_COMMAND_ERROR,static_cast<XTypeProvider*>(this) );
 
     ::rtl::OUString sName( _rForName );
     aCommand.put_Name(sName);

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CDriver.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,8 @@
 #include "calc/CConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
+#include "resource/sharedresources.hxx"
+#include "resource/calc_res.hrc"
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
@@ -99,7 +101,11 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    {
+        SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    }
     return Sequence< DriverPropertyInfo >();
 }
 // -----------------------------------------------------------------------------

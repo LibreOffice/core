@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YDriver.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,8 @@
 #include <connectivity/dbcharset.hxx>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include "TConnection.hxx"
-
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 //........................................................................
 namespace connectivity
@@ -384,7 +385,11 @@ namespace connectivity
     Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         if ( ! acceptsURL(url) )
-            ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+        {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+            ::dbtools::throwGenericSQLException(sMessage ,*this);
+        } // if ( ! acceptsURL(url) )
 
         return getDataDefinitionByConnection(connect(url,info));
     }

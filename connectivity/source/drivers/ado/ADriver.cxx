@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ADriver.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,11 @@
 #include "ado/adoimp.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
+#include "resource/ado_res.hrc"
 
+#include "resource/sharedresources.hxx"
 
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -140,11 +143,20 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
 {
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:ado:"),9));
 }
+// -----------------------------------------------------------------------------
+void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
+{
+    if ( !acceptsURL(_sUrl) )
+    {
+        SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( !acceptsURL(_sUrl) )
+}
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
-    if ( !acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    impl_checkURL_throw(url);
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
@@ -201,8 +213,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 // --------------------------------------------------------------------------------
 Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
-    if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    impl_checkURL_throw(url);
     return getDataDefinitionByConnection(connect(url,info));
 }
 

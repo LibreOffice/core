@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CConnection.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,8 +163,6 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     //  instead of at the first access to it
     if ( !m_xDoc.is() )
     {
-        SharedResources aResourceLoader;
-
         Any aErrorDetails;
         if ( aLoaderException.hasValue() )
         {
@@ -172,7 +170,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
             OSL_VERIFY( aLoaderException >>= aLoaderError );
 
             SQLException aDetailException;
-            aDetailException.Message = aResourceLoader.getResourceStringWithSubstitution(
+            aDetailException.Message = m_aResources.getResourceStringWithSubstitution(
                 STR_LOAD_FILE_ERROR_MESSAGE,
                 "$exception_type$", aLoaderException.getValueTypeName(),
                 "$error_message$", aLoaderError.Message
@@ -180,7 +178,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
             aErrorDetails <<= aDetailException;
         }
 
-        const ::rtl::OUString sError( aResourceLoader.getResourceStringWithSubstitution(
+        const ::rtl::OUString sError( m_aResources.getResourceStringWithSubstitution(
             STR_COULD_NOT_LOAD_FILE,
             "$filename$", m_aFileName
          ) );

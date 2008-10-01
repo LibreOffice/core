@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AIndexes.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-
+#include "resource/ado_res.hrc"
 using namespace ::comphelper;
 
 
@@ -71,19 +71,13 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
 {
     OAdoIndex* pIndex = NULL;
     if ( !getImplementation(pIndex,descriptor) || pIndex == NULL )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create index: invalid object descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pConnection->throwGenericSQLException( STR_INVALID_INDEX_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     ADOIndexes* pIndexes = m_aCollection;
     if ( FAILED( pIndexes->Append( OLEVariant( _rForName ), OLEVariant( pIndex->getImpl() ) ) ) )
     {
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not append index." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pConnection->throwGenericSQLException( STR_INVALID_INDEX_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
     }
 
     return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex->getImpl());

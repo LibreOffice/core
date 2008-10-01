@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FStatement.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,7 @@
 #include "file/FStatement.hxx"
 #include "file/FConnection.hxx"
 #include "file/FDriver.hxx"
-#ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
 #include "file/FResultSet.hxx"
-#endif
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <osl/thread.h>
@@ -47,6 +45,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "connectivity/dbexception.hxx"
+#include "resource/file_res.hrc"
 #include <algorithm>
 #include <tools/debug.hxx>
 
@@ -373,7 +372,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -----------------------------------------------------------------------------
 OSQLAnalyzer* OStatement_Base::createAnalyzer()
 {
-    return new OSQLAnalyzer();
+    return new OSQLAnalyzer(m_pConnection);
 }
 // -----------------------------------------------------------------------------
 void OStatement_Base::anylizeSQL()
@@ -468,31 +467,23 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         // sanity checks
         if ( xTabs.empty() )
             // no tables -> nothing to operate on -> error
-            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid table."),
-                                        static_cast<XWeak*>(this),
-                                        makeAny( m_aSQLIterator.getErrors() ) );
+            m_pConnection->throwGenericSQLException(STR_QUERY_NO_TABLE,*this);
 
         if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
             // more than one table -> can't operate on them -> error
-            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains more than one table."),
-                                        static_cast<XWeak*>(this),
-                                        makeAny( m_aSQLIterator.getErrors() ) );
+            m_pConnection->throwGenericSQLException(STR_QUERY_MORE_TABLES,*this);
 
         if ( (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT) && m_aSQLIterator.getSelectColumns()->empty() )
             // SELECT statement without columns -> error
-            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid column names."),
-                                        static_cast<XWeak*>(this),
-                                        makeAny( m_aSQLIterator.getErrors() ) );
+            m_pConnection->throwGenericSQLException(STR_QUERY_NO_COLUMN,*this);
 
         if ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_CREATE_TABLE )
             // CREATE TABLE is not supported at all
-            throwGenericSQLException(   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The \"CREATE TABLE\" of statement is not supported.")),
-                                        static_cast<XWeak*>(this));
+            m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
 
         if ( ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_ODBC_CALL ) || ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_UNKNOWN ) )
             // ODBC call or unknown statement type -> error
-            throwGenericSQLException(   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("This kind of statement is not supported.")),
-                                        static_cast<XWeak*>(this));
+            m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
 
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);

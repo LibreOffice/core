@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TConnection.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +33,22 @@
 #include "TConnection.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/officeresourcebundle.hxx>
+#include <connectivity/dbexception.hxx>
 
 using namespace connectivity;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
-using namespace::osl;
+using namespace com::sun::star::beans;
+using namespace ::osl;
 
+//------------------------------------------------------------------------------
+OMetaConnection::OMetaConnection()
+    : OMetaConnection_BASE(m_aMutex)
+    , m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
+{
+}
 //------------------------------------------------------------------------------
 void OMetaConnection::disposing()
 {
@@ -87,4 +96,14 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
     return s_aPropertyNameMap;
 }
 // -----------------------------------------------------------------------------
+void OMetaConnection::throwGenericSQLException( sal_uInt16 _nErrorResourceId,const Reference< XInterface>& _xContext )
+{
+    ::rtl::OUString sErrorMessage;
+    if ( _nErrorResourceId )
+        sErrorMessage = m_aResources.getResourceString( _nErrorResourceId );
+    Reference< XInterface> xContext = _xContext;
+    if ( !xContext.is() )
+        xContext = *this;
+    ::dbtools::throwGenericSQLException( sErrorMessage, xContext);
+}
 

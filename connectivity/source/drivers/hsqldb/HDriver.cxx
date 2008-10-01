@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HDriver.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,8 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <unotools/confignode.hxx>
+#include "resource/hsqldb_res.hrc"
+#include "resource/sharedresources.hxx"
 
 //........................................................................
 namespace connectivity
@@ -198,19 +200,21 @@ namespace connectivity
                 }
 
                 if ( !xStorage.is() || !sURL.getLength() )
-                    throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No storage property was set."))
-                        ,*this
-                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000"))
-                        ,1000,Any());
+                {
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
+                    ::dbtools::throwGenericSQLException(sMessage ,*this);
+                }
 
                 ::rtl::OUString sSystemPath;
                 osl_getSystemPathFromFileURL( sURL.pData, &sSystemPath.pData );
                 sal_Int32 nIndex = sSystemPath.lastIndexOf('.');
                 if ( !sURL.getLength() || !sSystemPath.getLength() )
-                    throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The file URL is not correct."))
-                        ,*this
-                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000"))
-                        ,1000,Any());
+                {
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sMessage = aResources.getResourceString(STR_INVALID_FILE_URL);
+                    ::dbtools::throwGenericSQLException(sMessage ,*this);
+                }
 
                 bool bIsNewDatabase = !xStorage->hasElements();
 
@@ -415,7 +419,11 @@ namespace connectivity
     Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         if ( ! acceptsURL(url) )
-            ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+        {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+            ::dbtools::throwGenericSQLException(sMessage ,*this);
+        }
 
         return getDataDefinitionByConnection(connect(url,info));
     }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DTable.hxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,7 @@ namespace connectivity
 
             void throwInvalidDbaseFormat();
             void SAL_CALL renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-            void throwInvalidColumnType(const ::rtl::OUString& _sError,const ::rtl::OUString& _sColumnName);
+            void throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl::OUString& _sColumnName);
 
         protected:
             virtual void FileClose();

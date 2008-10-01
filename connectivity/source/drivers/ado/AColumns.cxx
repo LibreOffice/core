@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AColumns.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/ado_res.hrc"
 
 using namespace connectivity::ado;
 using namespace connectivity;
@@ -72,10 +73,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
 {
     OAdoColumn* pColumn = NULL;
     if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not append column: invalid column descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     WpADOColumn aColumn = pColumn->getColumnImpl();
 

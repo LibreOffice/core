@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MacabStatement.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.56.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,8 @@
 #include "macaborder.hxx"
 #include "TConnection.hxx"
 #include <connectivity/dbexception.hxx>
+#include "resource/sharedresources.hxx"
+#include "resource/macab_res.hrc"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -57,6 +59,19 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
+
+namespace connectivity
+{
+    namespace macab
+    {
+    void impl_throwError(sal_uInt16 _nErrorId)
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(_nErrorId) );
+        ::dbtools::throwGenericSQLException(sError,NULL);
+    }
+    }
+}
 
 IMPLEMENT_SERVICE_INFO(MacabStatement, "com.sun.star.sdbc.drivers.MacabStatement", "com.sun.star.sdbc.Statement");
 //------------------------------------------------------------------------------
@@ -83,20 +98,12 @@ void MacabCommonStatement::disposing()
 // -----------------------------------------------------------------------------
 void MacabCommonStatement::resetParameters() const throw(::com::sun::star::sdbc::SQLException)
 {
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
-
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Parameters can appear only in prepared statements."),
-        NULL);
+    impl_throwError(STR_PARA_ONLY_PREPARED);
 }
 // -----------------------------------------------------------------------------
 void MacabCommonStatement::getNextParameter(::rtl::OUString &) const throw(::com::sun::star::sdbc::SQLException)
 {
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Parameters can appear only in prepared statements."),
-        NULL);
+    impl_throwError(STR_PARA_ONLY_PREPARED);
 }
 // -----------------------------------------------------------------------------
 MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pParseNode) const throw(SQLException)
@@ -237,9 +244,7 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
             }
         }
     }
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Syntax error or keyword not recognized."),
-        NULL);
+    impl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
     OSL_ASSERT(false);
     return 0;
@@ -287,9 +292,7 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
             }
         }
     }
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Syntax error or keyword not recognized."),
-        NULL);
+    impl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
     OSL_ASSERT(false);
     return 0;
@@ -317,9 +320,11 @@ void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(S
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.isValid())
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("Invalid selection of columns"),
-            NULL);
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(
+                STR_INVALID_COLUMN_SELECTION
+             ) );
+        ::dbtools::throwGenericSQLException(sError,NULL);
     }
     pMeta = static_cast<MacabResultSetMetaData *>(pResult->getMetaData().get());
     pMeta->setMacabFields(xColumns);
@@ -448,9 +453,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
                 // In case, somehow, we don't have anything with the name m_sTableName
                 if(aRecords == NULL)
                 {
-                    ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("No Such Table!"),
-                        NULL);
+                    impl_throwError(STR_NO_TABLE);
                 }
                 else
                 {
@@ -472,9 +475,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
 // To be continued: UPDATE
 //                  DELETE
 //                  etc...
-            ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii("Unsupported SQL statement"),
-                NULL);
+            impl_throwError(STR_QUERY_TOO_COMPLEX);
     }
 
     m_xResultSet = Reference<XResultSet>(pResult);

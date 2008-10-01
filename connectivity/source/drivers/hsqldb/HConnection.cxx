@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HConnection.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.56.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,9 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+
+#include "resource/sharedresources.hxx"
+#include "resource/hsqldb_res.hrc"
 
 /** === begin UNO using === **/
 using ::com::sun::star::util::XFlushListener;
@@ -239,12 +242,16 @@ namespace connectivity { namespace hsqldb
             return NULL;
 
         if ( !_DocumentUI.is() )
+        {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_DOCUMENTUI));
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The provided DocumentUI is not allowed to be NULL." ) ),
+                sError,
                 *this,
                 0
             );
-        // TODO: resource
+        } // if ( !_DocumentUI.is() )
+
 
 //        Reference< XExecutableDialog > xEditor = impl_createLinkedTableEditor_throw( _DocumentUI, _TableName );
 //        return xEditor.get();
@@ -266,9 +273,9 @@ namespace connectivity { namespace hsqldb
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString::createFromAscii( "error while obtaining the connection's table container" ),
-                *this, ::cppu::getCaughtException() );
-            // TODO: resource
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_TABLE_CONTAINER));
+            throw WrappedTargetException( sError ,*this, ::cppu::getCaughtException() );
         }
 
         OSL_POSTCOND( xTables.is(), "OHsqlConnection::impl_getTableContainer_throw: post condition not met!" );
@@ -306,9 +313,9 @@ namespace connectivity { namespace hsqldb
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString::createFromAscii( "error while creating the table editor dialog" ),
-                *this, ::cppu::getCaughtException() );
-            // TODO: resource
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_TABLE_EDITOR_DIALOG));
+            throw WrappedTargetException( sError ,*this, ::cppu::getCaughtException() );
         }
         return xDialog;
     }
@@ -332,9 +339,14 @@ namespace connectivity { namespace hsqldb
         }
 
         if ( !bDoesExist )
-            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There is no table named " ) ) + _rTableName,
-                *this, 0 );
-            // TODO: resource
+        {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                STR_NO_TABLENAME,
+                "$tablename$", _rTableName
+            ));
+            throw IllegalArgumentException( sError,*this, 0 );
+        } // if ( !bDoesExist )
     }
 
     // -------------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MStatement.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,15 +49,14 @@
 
 #include <algorithm>
 
-
 #include "diagnose_ex.h"
 #include "MDriver.hxx"
 #include "MStatement.hxx"
 #include "MConnection.hxx"
-#ifndef CONNECTIVITY_SRESULTSET_HXX
 #include "MResultSet.hxx"
-#endif
 #include "MDatabaseMetaData.hxx"
+#include "resource/mozab_res.hrc"
+#include "resource/common_res.hrc"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -212,15 +211,18 @@ void OStatement_Base::createTable( )
                 (*aIter)->getPropertyValue(sProprtyName) >>= sName;
                 if ( !aColumnAlias.hasAlias( sName ) )
                 {
-                    ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Driver does not support column name: " ) ) + sName,
-                        NULL );
+
+                    const ::rtl::OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
+                            STR_INVALID_COLUMNNAME,
+                            "$columnname$", sName
+                         ) );
+                    ::dbtools::throwGenericSQLException(sError,*this);
                 }
             }
             MDatabaseMetaDataHelper     _aDbHelper;
             if (!_aDbHelper.NewAddressBook(m_pConnection,ouTableName))
             {
-                getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId() );
+                getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId(),*this );
             }
             m_pSQLIterator.reset( new ::connectivity::OSQLParseTreeIterator(
                 m_pConnection, m_pConnection->createCatalog()->getTables(), m_aParser, NULL ) );
@@ -228,7 +230,7 @@ void OStatement_Base::createTable( )
 
     }
     else
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
+        getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
 }
 // -------------------------------------------------------------------------
 sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted)
@@ -254,7 +256,8 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
         m_pSQLIterator->traverseAll();
         const OSQLTables& xTabs = m_pSQLIterator->getTables();
         if(xTabs.empty())
-            ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Driver requires a single table to be specified in query")),NULL);
+            getOwnConnection()->throwGenericSQLException( STR_QUERY_AT_LEAST_ONE_TABLES,*this );
+
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
         for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
@@ -287,7 +290,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
             createTable();
             return sal_False;
         default:
-            ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
+            getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
         }
     }
     else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
@@ -296,7 +299,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
         return parseSql(sql + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
     }
     else
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
+        getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
     return sal_True;
 
 }

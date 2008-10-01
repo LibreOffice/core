@@ -9,7 +9,7 @@
 //
 // $RCSfile: sqlbison.y,v $
 //
-// $Revision: 1.67 $
+// $Revision: 1.66.6.5 $
 //
 // This file is part of OpenOffice.org.
 //
@@ -1094,53 +1094,68 @@ boolean_term:
 		}
 	|	row_value_constructor_elem  /*[^')' ',']*/
 		{
-			$$ = SQL_NEW_RULE;
-			sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
-			if(nErg == 1)
+    		if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				OSQLParseNode* pTemp = $$;
-				$$ = pTemp->removeAt((sal_uInt32)0);
-				delete pTemp;
+			    $$ = SQL_NEW_RULE;
+			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
+			    if(nErg == 1)
+			    {
+				    OSQLParseNode* pTemp = $$;
+				    $$ = pTemp->removeAt((sal_uInt32)0);
+				    delete pTemp;
+			    }
+			    else
+			    {
+				    delete $$;
+				    if(nErg)
+					    YYERROR;
+				    else
+					    YYABORT;
+			    }
 			}
 			else
-			{
-				delete $$;
-				if(nErg)
-					YYERROR;
-				else
-					YYABORT;
-			}
+				YYERROR;
 		}
 	|	boolean_term SQL_TOKEN_AND literal
 		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$3);
-			if(nErg < 1)
+		    if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				delete $$;
-				if(nErg)
-					YYERROR;
-				else
-					YYABORT;
+			    $$ = SQL_NEW_RULE;
+			    $$->append($1);
+			    $$->append($2);
+			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$3);
+			    if(nErg < 1)
+			    {
+				    delete $$;
+				    if(nErg)
+					    YYERROR;
+				    else
+					    YYABORT;
+			    }
 			}
+			else
+			    YYERROR;
 
 		}
 	|	boolean_term SQL_TOKEN_AND SQL_TOKEN_STRING
 		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$3);
-			if(nErg < 1)
+		    if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				delete $$;
-				if(nErg)
-					YYERROR;
-				else
-					YYABORT;
+			    $$ = SQL_NEW_RULE;
+			    $$->append($1);
+			    $$->append($2);
+			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$3);
+			    if(nErg < 1)
+			    {
+				    delete $$;
+				    if(nErg)
+					    YYERROR;
+				    else
+					    YYABORT;
+			    }
 			}
+			else
+			    YYERROR;
 
 		}
 	;
@@ -2841,25 +2856,39 @@ trim_fct:
 		}
 	;
 trim_operands:
-		string_value_exp
-	|	trim_spec value_exp SQL_TOKEN_FROM value_exp
-		{
+    trim_spec value_exp SQL_TOKEN_FROM value_exp
+        {
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 			$$->append($4);
 		}
-	|	 trim_spec SQL_TOKEN_FROM value_exp
-		{
+	| trim_spec SQL_TOKEN_FROM value_exp
+        {
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 		}
+	| value_exp SQL_TOKEN_FROM value_exp
+        {
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	| SQL_TOKEN_FROM value_exp
+	    {
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	| value_exp
 	;
+	
 trim_spec:
-		SQL_TOKEN_BOTH
+        SQL_TOKEN_BOTH
 	|	SQL_TOKEN_LEADING
 	|	SQL_TOKEN_TRAILING
 	;

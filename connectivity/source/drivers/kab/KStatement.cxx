@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: KStatement.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,9 @@
 #include "korder.hxx"
 #include "TConnection.hxx"
 #include <connectivity/dbexception.hxx>
+#include "resource/kab_res.hrc"
+#include "resource/sharedresources.hxx"
+
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -56,6 +59,16 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
+
+namespace
+{
+    void lcl_throwError(sal_uInt16 _nErrorId)
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(_nErrorId) );
+        ::dbtools::throwGenericSQLException(sError,NULL);
+    }
+}
 
 IMPLEMENT_SERVICE_INFO(KabStatement, "com.sun.star.sdbc.drivers.KabStatement", "com.sun.star.sdbc.Statement");
 //------------------------------------------------------------------------------
@@ -82,16 +95,12 @@ void KabCommonStatement::disposing()
 // -----------------------------------------------------------------------------
 void KabCommonStatement::resetParameters() const throw(::com::sun::star::sdbc::SQLException)
 {
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Parameters can appear only in prepared statements."),
-        NULL);
+    lcl_throwError(STR_PARA_ONLY_PREPARED);
 }
 // -----------------------------------------------------------------------------
 void KabCommonStatement::getNextParameter(::rtl::OUString &) const throw(::com::sun::star::sdbc::SQLException)
 {
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Parameters can appear only in prepared statements."),
-        NULL);
+    lcl_throwError(STR_PARA_ONLY_PREPARED);
 }
 // -----------------------------------------------------------------------------
 KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParseNode) const throw(SQLException)
@@ -232,9 +241,9 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
             }
         }
     }
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Syntax error or keyword not recognized."),
-        NULL);
+
+    lcl_throwError(STR_QUERY_TOO_COMPLEX);
+
     // Unreachable:
     OSL_ASSERT(false);
     return 0;
@@ -282,9 +291,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
             }
         }
     }
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Syntax error or keyword not recognized."),
-        NULL);
+    lcl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
     OSL_ASSERT(false);
     return 0;
@@ -311,9 +318,7 @@ void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLExce
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.isValid())
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("Invalid selection of columns"),
-            NULL);
+        lcl_throwError(STR_INVALID_COLUMN_SELECTION);
     }
     pMeta = static_cast<KabResultSetMetaData *>(pResult->getMetaData().get());
     pMeta->setKabFields(xColumns);
@@ -444,9 +449,7 @@ OSL_TRACE("KDE Address book - SQL Request: %s", OUtoCStr(sql));
 // To be continued: UPDATE
 //                  DELETE
 //                  etc...
-            ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii("Unsupported SQL statement"),
-                NULL);
+            lcl_throwError(STR_QUERY_TOO_COMPLEX);
     }
 
     return xRS;

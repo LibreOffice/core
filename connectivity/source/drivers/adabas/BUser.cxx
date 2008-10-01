@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BUser.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.17.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "connectivity/dbexception.hxx"
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
+#include "resource/adabas_res.hrc"
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -197,7 +198,7 @@ sal_Int32 SAL_CALL OAdabasUser::getGrantablePrivileges( const ::rtl::OUString& o
 void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     if ( objType != PrivilegeObject::TABLE )
-        ::dbtools::throwSQLException( "Privilege not granted: Only table privileges can be granted", "01007", *this );
+        m_pConnection->throwGenericSQLException(STR_PRIVILEGE_NOT_GRANTED,*this);
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
@@ -222,7 +223,7 @@ void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_
 void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     if ( objType != PrivilegeObject::TABLE )
-        ::dbtools::throwSQLException( "Privilege not revoked: Only table privileges can be revoked", "01006", *this );
+        m_pConnection->throwGenericSQLException(STR_PRIVILEGE_NOT_REVOKED,*this);
 
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);

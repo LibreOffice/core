@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FConnection.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 #include <connectivity/dbexception.hxx>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
+#include "resource/file_res.hrc"
 
 using namespace connectivity::file;
 using namespace dbtools;
@@ -107,6 +108,35 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 {
     osl_incrementInterlockedCount( &m_refCount );
 
+    ::rtl::OUString aExt;
+    const PropertyValue *pIter  = info.getConstArray();
+    const PropertyValue *pEnd    = pIter + info.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        if(0 == pIter->Name.compareToAscii("Extension"))
+            OSL_VERIFY( pIter->Value >>= aExt );
+        else if(0 == pIter->Name.compareToAscii("CharSet"))
+        {
+            ::rtl::OUString sIanaName;
+            OSL_VERIFY( pIter->Value >>= sIanaName );
+
+            ::dbtools::OCharsetMap aLookupIanaName;
+            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+            if (aLookup != aLookupIanaName.end())
+                m_nTextEncoding = (*aLookup).getEncoding();
+            else
+                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+        }
+        else if (0 == pIter->Name.compareToAscii("ShowDeleted"))
+        {
+            OSL_VERIFY( pIter->Value >>= m_bShowDeleted );
+        }
+        else if (0 == pIter->Name.compareToAscii("EnableSQL92Check"))
+        {
+            pIter->Value >>= m_bCheckSQL92;
+        }
+    } // for(;pIter != pEnd;++pIter)
+
     {
         sal_Int32 nLen = url.indexOf(':');
         nLen = url.indexOf(':',nLen+1);
@@ -119,39 +149,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             SvtPathOptions aPathOptions;
             aFileName = aPathOptions.SubstituteVariable(aFileName);
         }
+
         aURL.SetSmartURL(aFileName);
 
         setURL(aURL.GetMainURL(INetURLObject::NO_DECODE));
     }
-
-    ::rtl::OUString aExt;
-    const PropertyValue *pBegin  = info.getConstArray();
-    const PropertyValue *pEnd    = pBegin + info.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if(0 == pBegin->Name.compareToAscii("Extension"))
-            OSL_VERIFY( pBegin->Value >>= aExt );
-        else if(0 == pBegin->Name.compareToAscii("CharSet"))
-        {
-            ::rtl::OUString sIanaName;
-            OSL_VERIFY( pBegin->Value >>= sIanaName );
-
-            ::dbtools::OCharsetMap aLookupIanaName;
-            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
-            if (aLookup != aLookupIanaName.end())
-                m_nTextEncoding = (*aLookup).getEncoding();
-            else
-                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
-        }
-        else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
-        {
-            OSL_VERIFY( pBegin->Value >>= m_bShowDeleted );
-        }
-        else if (0 == pBegin->Name.compareToAscii("EnableSQL92Check"))
-        {
-            pBegin->Value >>= m_bCheckSQL92;
-        }
-    } // for(;pBegin != pEnd;++pBegin)
 
     if ( m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
     {
@@ -443,22 +445,16 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
 void OConnection::throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::OUString & _rsMessage)
 {
     SQLException aError;
-    aError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given."));
+    aError.Message = getResources().getResourceStringWithSubstitution(
+                STR_NO_VALID_FILE_URL,
+                "$URL$", _rsUrl
+            );
+
     aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
     aError.ErrorCode = 0;
     aError.Context = static_cast< XConnection* >(this);
-    SQLException aUrlError;
-    if(_rsUrl.getLength())
-    {
-        aUrlError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL: "));
-        aUrlError.Message += _rsUrl;
-    }
-    else
-        aUrlError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No URL supplied!"));
-
-    aError.NextException <<= aUrlError;
     if (_rsMessage.getLength())
-        aUrlError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += _rsMessage, aError.Context, ::rtl::OUString(), 0, Any());
+        aError.NextException <<= SQLException(_rsMessage, aError.Context, ::rtl::OUString(), 0, Any());
 
     throw aError;
 }

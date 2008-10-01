@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JDriver.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.43.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,8 @@
 #include <jvmfwk/framework.h>
 #include "diagnose_ex.h"
 #include "resource/jdbc_log.hrc"
-
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 #include <comphelper/componentcontext.hxx>
 
 using namespace connectivity;
@@ -232,7 +233,9 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
-    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }
 // -------------------------------------------------------------------------

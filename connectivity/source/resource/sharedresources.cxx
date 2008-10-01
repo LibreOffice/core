@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedresources.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,14 +189,14 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources::getResurceString( ResourceId _nResId )
+    ::rtl::OUString SharedResources::getResourceString( ResourceId _nResId ) const
     {
         return SharedResources_Impl::getInstance().getResourceString( _nResId );
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
-                const sal_Char* _pAsciiPatternToReplace, const ::rtl::OUString& _rStringToSubstitute )
+                const sal_Char* _pAsciiPatternToReplace, const ::rtl::OUString& _rStringToSubstitute ) const
     {
         ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace, _rStringToSubstitute ) );
@@ -206,7 +206,7 @@ namespace connectivity
     //--------------------------------------------------------------------
     ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1, const ::rtl::OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2, const ::rtl::OUString& _rStringToSubstitute2 )
+                const sal_Char* _pAsciiPatternToReplace2, const ::rtl::OUString& _rStringToSubstitute2 ) const
     {
         ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
@@ -218,7 +218,7 @@ namespace connectivity
     ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1, const ::rtl::OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const ::rtl::OUString& _rStringToSubstitute2,
-                const sal_Char* _pAsciiPatternToReplace3, const ::rtl::OUString& _rStringToSubstitute3 )
+                const sal_Char* _pAsciiPatternToReplace3, const ::rtl::OUString& _rStringToSubstitute3 ) const
     {
         ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );

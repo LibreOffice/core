@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ResultSet.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,9 @@
 #include <comphelper/types.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
+
 
 #include <string.h>
 
@@ -1530,10 +1533,12 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
 {
     if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
-        ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Unknown type for column: ");
-        sMsg += ::rtl::OUString::valueOf(columnIndex);
-        sMsg += ::rtl::OUString::createFromAscii(" !") ;
-        ::dbtools::throwGenericSQLException(sMsg,*this);
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                STR_UNKNOWN_COLUMN_TYPE,
+                "$position$", ::rtl::OUString::valueOf(columnIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
     }
 }
 // -------------------------------------------------------------------------

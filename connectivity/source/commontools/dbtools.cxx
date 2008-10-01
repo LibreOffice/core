@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtools.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.74.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,9 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 #include <algorithm>
 
@@ -1893,9 +1896,12 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             default:
                 {
-                    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("Unknown SQL Type for PreparedStatement.setObjectWithInfo (SQL Type=");
-                    aVal += ::rtl::OUString::valueOf(sqlType);
-                    throw SQLException( aVal,_xParams,::rtl::OUString(),0,Any());
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                            STR_UNKNOWN_PARA_TYPE,
+                            "$position$", ::rtl::OUString::valueOf(parameterIndex)
+                         ) );
+                    ::dbtools::throwGenericSQLException(sError,NULL);
                 }
         }
     }

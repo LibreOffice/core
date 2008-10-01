@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fanalyzer.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@ namespace connectivity
 {
     namespace file
     {
-
+        class OConnection;
         class OSQLAnalyzer
         {
             typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
@@ -46,6 +46,7 @@ namespace connectivity
             ::std::vector< TPredicates >        m_aSelectionEvaluations;
             ::vos::ORef<OPredicateCompiler>     m_aCompiler;
             ::vos::ORef<OPredicateInterpreter>  m_aInterpreter;
+            OConnection*                        m_pConnection;
 
             mutable sal_Bool                    m_bHasSelectionCode;
             mutable sal_Bool                    m_bSelectionFirstTime;
@@ -53,7 +54,7 @@ namespace connectivity
             void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList);
 
         public:
-            OSQLAnalyzer();
+            OSQLAnalyzer(OConnection* _pConnection);
             virtual ~OSQLAnalyzer();
             inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
                 { return ::rtl_allocateMemory( nSize ); }
@@ -64,6 +65,7 @@ namespace connectivity
             inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW( () )
                 {  }
 
+            OConnection* getConnection() const { return m_pConnection; }
             void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
             ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
             /** bind the select columns if they contain a function which needs a row value

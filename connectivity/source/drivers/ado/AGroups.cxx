@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AGroups.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +31,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "ado/AGroups.hxx"
-#ifndef _CONNECTIVITY_ADO_GROUP_HXX_
 #include "ado/AGroup.hxx"
-#endif
 #include "ado/ATable.hxx"
+#include "ado/AConnection.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/ado_res.hrc"
 
 using namespace comphelper;
 using namespace connectivity;
@@ -73,10 +73,7 @@ sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const
 {
     OAdoGroup* pGroup = NULL;
     if ( !getImplementation(pGroup,descriptor) || pGroup == NULL )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create group: invalid object descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_GROUP_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     m_aCollection.Append( pGroup->getImpl() );
     return createObject( _rForName );
