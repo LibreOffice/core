@@ -9,7 +9,7 @@
 
   $RCSfile: build.xml,v $
 
-  $Revision: 1.20 $
+  $Revision: 1.20.8.1 $
 
   This file is part of OpenOffice.org.
 
@@ -63,7 +63,6 @@
         <path id="classpath">
             <pathelement location="${officeclasses}/juh.jar"/>
             <pathelement location="${officeclasses}/jurt.jar"/>
-            <pathelement location="${officeclasses}/jut.jar"/>
             <pathelement location="${officeclasses}/ridl.jar"/>
             <pathelement location="${officeclasses}/unoil.jar"/>
             <!-- 3rd party libs -->
