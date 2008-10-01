@@ -839,7 +839,7 @@ sub wRectangleToClipboard
     try
         EditSelectAll
     catch
-        QAErrorlog "Unable to select object. Maybe not drawn!"
+        warnlog "Unable to select object. Maybe not drawn!"
     endcatch
     ' copy the selected object
     try

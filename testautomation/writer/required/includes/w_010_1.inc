@@ -90,7 +90,7 @@ testcase tInsertFormula
 	Sleep 1
     Kontext "OL_SW_Rechenleiste"
     if OL_SW_Rechenleiste.NotExists then
-        QAErrorlog "Formula border doesn't come up"
+        warnlog "Formula border doesn't come up"
     else
         printlog " Click 'Cancel' in object bar"
         Verwerfen.Click
@@ -504,7 +504,7 @@ testcase tGraphicBorders
         TB_Umrandungsstil.Close
         Sleep 1
     catch
-        QAErrorlog "#i78975#Error in Toolbox Borderstyle"
+        Warnlog "Error in Toolbox Borderstyle"
     endcatch
 
     try
@@ -518,7 +518,7 @@ testcase tGraphicBorders
         printlog " Close toolbox"
         Sleep 1
     catch
-		QAErrorlog "#i78975#Error in Toolbox Colour"
+		warnlog "Error in Toolbox Colour"
     endcatch
 
     Call hCloseDocument
@@ -709,7 +709,7 @@ testcase tFormulaApply
     Call wDokSchreiben ("<Mod1 A>")
     EditCopy
     if GetClipboardText <> "25" then 
-        QAErrorlog "#i80314#Not possible to calculate in tables anymore. Result isn't 25, is: " + GetClipboardText
+        warnlog "Not possible to calculate in tables anymore. Result isn't 25, is: " + GetClipboardText
     endif
     Call hCloseDocument
     printlog " Close active document"

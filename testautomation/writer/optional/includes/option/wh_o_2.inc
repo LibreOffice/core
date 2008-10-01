@@ -164,7 +164,7 @@ testcase tToolsOptionsHTMLPrint
     if ( bTempRadioBut(3) <> Dokumentende.IsChecked) Then WarnLog "'End of document' state changed"
     if ( bTempRadioBut(4) <> Seitenende.IsChecked  ) Then WarnLog "'End of page' state changed"
 
-    if ( Fax.GetSelIndex <> iTempListBox(1) ) Then QAErrorlog "#i62663#Fax state changed"
+    if ( Fax.GetSelIndex <> iTempListBox(1) ) Then warnlog "Fax state changed"
 
     printlog ("'/// - all UnCheck -> o ///")
 
@@ -305,7 +305,7 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 1
+	Do Until GetDocumentCount = 0
     	Call hCloseDocument
 	Loop
 endcase
@@ -502,7 +502,9 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------

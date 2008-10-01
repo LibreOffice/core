@@ -294,20 +294,20 @@ testcase tToolsNumbering5
 					end if			
 				Case 5
 					if Left$(sClipBrd(1), 2) <> "B)" then
-					    QAErrorlog "Seems numbering A) has not been correctly created"
+					    warnlog "Seems numbering A) has not been correctly created"
 					end if			
 				Case 6
 					if Left$(sClipBrd(1), 2) <> "b)" then
-						QAErrorlog "Seems numbering a) has not been correctly created"
+						warnlog "Seems numbering a) has not been correctly created"
 					end if			
 				Case 7
 					if Left$(sClipBrd(1), 2) <> "(b)" then
-						QAErrorlog "Seems numbering (a) has not been correctly created"
+						warnlog "Seems numbering (a) has not been correctly created"
 					end if			
 				Case 8
 					if Left$(sClipBrd(1), 3) <> "ii." then
 						'Warnlog "Seems numbering i. has not been correctly created"
-                        QAErrorlog "#i78524#Auto-capitalisation of letter i hinders Automatic numbering"
+                        warnlog "#i78524#Auto-capitalisation of letter i hinders Automatic numbering"
 					end if							
 			end select
 		else

@@ -293,7 +293,43 @@ endcase
 '
 '-------------------------------------------------------------
 '
-testcase tInsertSpecialCharacter
-   qaErrorLog "#125905# - Insert / SpecialCharacter doesn't work corrcetly in title dialog."   
+testcase tInsertSpecialCharacter   
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif   
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
+    EditObjectEdit   
+    printlog "Invoke Insert::Titles"
+    if fInvokeTitlesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke Titles dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    Kontext "InsertTitleDialog"
+    if fSetTitle(MainTitle , "Test title") = 0 then
+        Kontext "InsertTitleDialog"
+        InsertTitleDialog.OK
+        Kontext "DocumentChart"
+        printlog "Type <TAB> to select the title"
+        DocumentChart.TypeKeys "<TAB>" , TRUE
+        DocumentChart.UseMenu
+        printlog "Select menu 'Insert'"
+        hMenuSelectNr(4) 'INSERT
+        printlog "Select menu item 'Special Character'."
+        hMenuSelectNr(9) 'SPECIAL CHARACTER
+        printlog "Close the 'Insert Special Character'-dialog."
+        Kontext "Sonderzeichen"
+        Call Dialogtest( Sonderzeichen )
+        Sonderzeichen.CANCEL
+    else
+        warnlog "It was not possible to set the title. Test aborted!"
+        Kontext "InsertTitleDialog"
+        InsertTitleDialog.Cancel
+    endif
+    Call hCloseDocument   
 endcase
 

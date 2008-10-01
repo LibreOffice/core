@@ -870,7 +870,7 @@ testcase tFormatPage_15
     Feldtyp.Select sType
     Sleep 3
     if Formatliste.GetSelText <> sFormat then
-        QAErrorlog "the format setting should be " & sFormat & " but get " &Formatliste.GetSelText
+        warnlog "the format setting should be " & sFormat & " but get " &Formatliste.GetSelText
     end if
     TabDokumentFeldbefehle.Close
     

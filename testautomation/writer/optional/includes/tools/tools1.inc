@@ -83,9 +83,9 @@ function fFormatGraphic(Options as string) as boolean
 
 	try
 		FormatGraphics
-		sSlotOK = true        
-	catch        
-		QAErrorlog "Unable to execute Format / Graphics"			
+		sSlotOK = true
+	catch
+		warnlog "Unable to execute Format / Graphics"
 	endcatch
     sleep(1)
     Kontext
@@ -99,7 +99,7 @@ function fFormatGraphic(Options as string) as boolean
             case "TabZuschneiden"              : active.SetPage TabZuschneiden
             case "TabUmrandung"                : active.SetPage TabUmrandung
             case "TabHintergrund"              : active.SetPage TabHintergrund
-            case "TabMakro"                    
+            case "TabMakro"
                 active.SetPage TabMakro
                 ' if no JRE is installed a messagebox appears
                 Do
@@ -107,7 +107,7 @@ function fFormatGraphic(Options as string) as boolean
                     Kontext "Active"
                     if Active.Exists then
                         if Active.GetRT = 304 then
-                            if j = 1 then Warnlog Active.Gettext    
+                            if j = 1 then Warnlog Active.Gettext
                             Active.Ok
                         else
                             exit do

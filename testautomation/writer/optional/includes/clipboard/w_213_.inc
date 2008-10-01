@@ -330,7 +330,7 @@ testcase WriterToDrawGraphicLinked
       try
          EditPasteSpecial
       catch
-         QAErrorLog "Check why linked graphic fails !"
+         warnlog "Check why linked graphic fails !"
          Call hCloseDocument
          wait 500
          Call hCloseDocument

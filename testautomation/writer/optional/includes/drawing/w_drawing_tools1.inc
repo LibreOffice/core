@@ -754,10 +754,10 @@ testcase  tLine_3
     fFormatLine("TabLinie")
     if Stil.GetSelIndex    <> iLineStyle    then Warnlog "Line style is wrong."
     if Farbe.GetSelIndex   <> iColor        then Warnlog "Line color is wrong."
-    if Breite.GetText      <> sLineWidth    then QAErrorLog "#i40843# Line width is wrong."
+    if Breite.GetText      <> sLineWidth    then warnlog "Line width is wrong."
     
-    if StilLinks.GetSelIndex   <> iArrowStyleLeft  then Warnlog "#i72807#Arrow style is not correctly shown in format dialog"
-    if StilRechts.GetSelIndex  <> iArrowStyleRight then Warnlog "#i72807#Arrow style is not correctly shown in format dialog"
+    if StilLinks.GetSelIndex   <> iArrowStyleLeft  then Warnlog "Arrow style is not correctly shown in format dialog"
+    if StilRechts.GetSelIndex  <> iArrowStyleRight then Warnlog "Arrow style is not correctly shown in format dialog"
     
     TabLinie.Cancel
     

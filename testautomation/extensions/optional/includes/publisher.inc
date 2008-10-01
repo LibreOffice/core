@@ -41,6 +41,11 @@ testcase tExtensionPublisher
 
     '///<h1>Extension publisher and release notes</h1>
 
+    if ( gISOLang <> "en-US" ) then
+        qaerrorlog( "Test does not handle translated strings, aborting" )
+        goto endsub
+    endif
+
     '///<u><pre>Synopsis</pre></u>With CWS jl76 extensions can bring a link to the extension 
     '///+ publisher and the release notes which are displayed in the online update dialog
     '///+ for extensions - if provided. Otherwise these fields are not visible.<br>
@@ -103,7 +108,7 @@ testcase tExtensionPublisher
     try
         ToolsPackageManager
     catch
-        warnlog( "#i84786# UNopkg processes block UI" )
+        warnlog( "#i84786# Unopkg processes block UI" )
     endcatch
     
     '///+<li>Wait about 5 seconds - the &quot;Live-Deployment&quot; needs time to strike.</li>

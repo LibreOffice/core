@@ -317,7 +317,7 @@ testcase tToolsSpellcheck1Mistake
     printlog "   - replace wrong word with a suggestion"
     '/// replace wrong word with a suggestion ///
     if trim$(NotInDictionary.GetText) <> trim(sErrorSampleText) then
-        QAErrorlog "#i79988#" & sErrorSampleText & " has not been detected as mistake. Detected mistake is:" & NotInDictionary.GetText
+        warnlog " " & sErrorSampleText & " has not been detected as mistake. Detected mistake is:" & NotInDictionary.GetText
     end if
     if Suggestions.GetItemCount > 0 then
         if Suggestions.IsEnabled then

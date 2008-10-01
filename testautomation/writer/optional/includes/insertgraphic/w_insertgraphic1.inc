@@ -59,9 +59,6 @@ testcase tInsertGraphic_1
     Dim sPathName as String
     Dim i as integer
     
-    QAErrorlog "#i68646#Listbox is invisible to TestTool: Options->Paths->MultiPath selection"
-    goto endsub
-    
     PrintLog "- Test default dirtory of inserting graphic -1"
     '/// Test default directory of inserting graphic -1
     select case iSprache

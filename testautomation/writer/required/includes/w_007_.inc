@@ -307,7 +307,7 @@ testcase tToolsHyphenation
 	end if
     
     if gBuild < 9239 then
-        QAErrorlog "#i81689#Hyphenation dialog freezes office!"
+        QAErrorlog "Hyphenation dialog freezes office!"
         goto endsub
     end if
 

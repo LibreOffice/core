@@ -352,7 +352,7 @@ testcase tTableInsert3
     if (itemp(2) <> itemp(3)) then
         printlog "--- Table splitted" + itemp(3)
     else
-        QAErrorlog "put some more rows in!!!"
+        warnlog "put some more rows in!!!"
     end if
 
     Call hCloseDocument 	
@@ -723,7 +723,7 @@ testcase tTableNumberFormat
     if (Kategorie.GetSelIndex = 10) then
     		printlog "    - Value is correctly recognized as boolean"
     	elseif iSprache = 86 or iSprache = 82 or iSprache =88 then 
-    			qaerrorlog "#i73416#Boolean value in chinese and korean not recognized"
+    			warnlog "Boolean value in chinese and korean not recognized"
     		else
     		warnlog "The value " & fLocaleString("LocaleBooleanValue") & "is not recognized as boolean, it is " & Kategorie.GetSelText 
      end if
@@ -736,7 +736,7 @@ testcase tTableNumberFormat
     if (rechts.isChecked = true) then 
             printlog "    - Booleanvalue is correctly alligned"
         elseif iSprache = 86 or iSprache = 82 or iSprache = 88 then 
-    			qaerrorlog "#i73416#Boolean value in chinese and korean not recognized"
+    			warnlog "Boolean value in chinese and korean not recognized"
             else
             warnlog "wrong alignment of number"
     end if

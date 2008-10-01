@@ -228,7 +228,7 @@ testcase HTMLToCALCGraphicLinked
     try
         EditPasteSpecialCalc
     catch
-        QAErrorlog "Unable to execute 'Edit / Paste Special'! Test failed! Manually not reproducable"
+        warnlog "Unable to execute 'Edit / Paste Special'! Test failed! Manually not reproducable"
         Call hCloseDocument
         Call hCloseDocument
         goto endsub

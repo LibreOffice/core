@@ -207,7 +207,7 @@ function wKillUpcomingActives(optional sDocument as string)
             else
                 Select case sDocument
                     Case "sw31.sdw", "sw31.vor"
-                        QAErrorlog "#i76220#Saving sdw-file as sxw fails"
+                        warnlog "Saving sdw-file as sxw fails"
                     Case else
                         Warnlog Active.Gettext
                 end select

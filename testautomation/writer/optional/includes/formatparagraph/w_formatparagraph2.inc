@@ -813,7 +813,7 @@ testcase tParagraphTextFlow4
         Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then
-            QAErrorlog "#i39917# Something wrong in Consecutive typhens 0 : " &i
+            warnlog " Something wrong in Consecutive typhens 0 : " &i
             exit for
         end if
         Call wTypeKeys "<MOD1 Home>"
@@ -844,7 +844,7 @@ testcase tParagraphTextFlow4
         Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then 
-            QAErrorlog "#i39917# Something wrong in Consecutive typhens 1 : " &i
+            warnlog " Something wrong in Consecutive typhens 1 : " &i
             exit for
         end if
         Call wTypeKeys "<MOD1 Home>"
@@ -875,7 +875,7 @@ testcase tParagraphTextFlow4
         Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then
-            QAErrorlog "#i39917# Something wrong in Consecutive typhens 2 : " &i
+            warnlog " Something wrong in Consecutive typhens 2 : " &i
             exit for
         end if
         Call wTypeKeys "<MOD1 Home>"

@@ -1036,14 +1036,16 @@ function fGetSlideName (optional sCompare as string) as string
    Kontext "NavigatorDraw"
    if NavigatorDraw.exists (5) then
       sleep 3
-      '/// check in list, if the page changed ///'
+      printlog "check in list, if the page changed"
       fGetSlideName = Liste.GetSelText
    else
-      warnlog "   Navigator not open! in function fGetSlideName TBO"
+      warnlog "Navigator not open! in function fGetSlideName TBO"
       Kontext "NavigatorDraw"
       fGetSlideName = ""
    endif
    if (isMissing (sCompare) = False) then ' if optional parameter exists
+   printlog "fGetSlideName is: " & fGetSlideName
+   printlog "sCompare is: " & sCompare
       if fGetSlideName <> sCompare then
          warnlog "   Slide Name is '" + fGetSlideName + "'; should be: '" + sCompare + "'"
       endif

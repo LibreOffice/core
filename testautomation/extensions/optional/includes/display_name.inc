@@ -39,6 +39,11 @@
 
 testcase tExtensionDisplayName
 
+    if ( gISOLang <> "en-US" ) then
+        qaerrorlog( "Test is not locale-safe, en-US only" )
+        goto endsub
+    endif
+
     '///<h1>Extension display names</h1>
     '///<u><pre>Synopsis</pre></u>Since CWS jl76 a possibility exists to give an extension a name which
     '///+ differs from the filename to be displayed in the extension manager.<br>

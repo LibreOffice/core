@@ -50,22 +50,22 @@
 '*
 '\******************************************************************************
 testcase tEPS
+    
+    dim x as integer
+    dim i as integer
+    dim sFilter as string
+    dim sExt as string
 
-   dim x as integer
-   dim i as integer
-   dim sFilter as string
-   dim sExt as string
+    sFilter = "EPS - Encapsulated PostScript (.eps)"
+    sExt = ".eps"
 
-   sFilter = "EPS - Encapsulated PostScript (.eps)"
-   sExt = ".eps"
-
-   '/// open the document
+    open the document
    hFileOpen ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
 
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "EPSOptionen"
       if EPSOptionen.Exists (2) then
-      '/// check if all properties have the right count, and depend on each other ///'
+      printlog "check if all properties have the right count, and depend on each other"
       ' they do not affect annything, i can check (TBO)
       ' VorschauTIF.Check
       '  InterchangeEPSI.Check
@@ -81,7 +81,7 @@ testcase tEPS
             if (LZWKodierung.IsEnabled <> TRUE) then warnlog " :-("
             if (Keine.IsEnabled <> TRUE) then warnlog " :-("
             ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
-         '/// 'Color Resolution' listbox contains eight items ///'
+         printlog "'Color Resolution' listbox contains eight items"
          ' x = TextEinstellungen.GetItemCount
          ' if x <> 2 then warnlog "'TextEinstellungen' Count is wrong; should:2, is:" + x
          ' for i = 1 to x
@@ -89,7 +89,7 @@ testcase tEPS
          ' sleep 1
          ' Printlog " - " + i + ": '" +TextEinstellungen.GetSelText + "'"
          ' next i
-         '/// leave dialog with cancel -> there has to be no file created! ///'
+         printlog "leave dialog with cancel -> there has to be no file created!"
          EPSOptionen.Cancel
          sleep 5
          if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
@@ -108,11 +108,11 @@ testcase tEPS
          Active.OK
       end if
    end if
-   Printlog "'/// now save it realy and load the file afterwards ///'"
+   printlog " now save it realy and load the file afterwards"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "EPSOptionen"
       if EPSOptionen.Exists (2) then
-      '  TextEinstellungen.select 2
+      printlog "TextEinstellungen.select 2"
          EPSOptionen.OK
          sleep 5
       endif
@@ -130,7 +130,7 @@ testcase tEPS
 
    call hCloseDocument
 
-endcase
+endcase 'tEPS
 '-------------------------------------------------------------------------
 testcase tPCT
 
@@ -150,24 +150,24 @@ testcase tPCT
    sFilter = "PCT - Mac Pict (.pct;.pict)"
    sExt = ".pct"
 
-   '/// open the document
+   printlog " open the document
    sDocument = ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
    hFileOpen sDocument
 
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "PICTOptionen"
       if PICTOptionen.Exists (2) then
-      '/// check if all properties have the right count, and depend on each other ///'
+      printlog "check if all properties have the right count, and depend on each other"
          Original.Check
             if Breite.IsEnabled then warnlog " :-("
             if Hoehe.IsEnabled then warnlog " :-("
          Groesse.Check
             Breite.More
             Hoehe.Less
-         '/// leave dialog with cancel -> there has to be no file created! ///'
+         printlog "leave dialog with cancel -> there has to be no file created!"
          PICTOptionen.Cancel
          sleep 5
-         if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
+         if ( dir(OutputGrafikTBO+sExt) = "") then
             Printlog "Ok :-)"
          else
             warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
@@ -183,7 +183,7 @@ testcase tPCT
          Active.OK
       end if
    end if
-   Printlog "'/// now save it realy and load the file afterwards ///'"
+   printlog " now save it realy and load the file afterwards"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "PICTOptionen"
       if PICTOptionen.Exists (2) then
@@ -214,13 +214,13 @@ testcase tPCT
       Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
    endif
    hCloseDocument ()
-   Printlog "'/// now save a SELECTION in ORIGINAL SIZE and load the file afterwards ///'"
+   printlog " now save a SELECTION in ORIGINAL SIZE and load the file afterwards"
    hFileOpen (sDocument)
    sleep (10)
 
-    ' check if the document is writable
+    printlog "check if the document is writable"
     if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
+        printlog "make the document writable and check if it's succesfull"
         if fMakeDocumentWritable = false then
             warnlog "The document can't be make writeable. Test stopped."
             goto endsub
@@ -262,7 +262,7 @@ testcase tPCT
       endif
    endif
    hCloseDocument ()
-   Printlog "'/// now CREATE a rectangle, select it, save it in SIZE and load the file afterwards ///'"
+   printlog " now CREATE a rectangle, select it, save it in SIZE and load the file afterwards"
    hNewDocument()
    hRechteckErstellen ( 10, 10, 30, 40 )
    if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
@@ -271,7 +271,8 @@ testcase tPCT
          Groesse.Check
             Breite.SetText "9"
             Hoehe.SetText "9"
-            Groesse.Check 'Check "Size" one more time to make the change go through"
+            Groesse.Check 
+            printlog "Check 'Size' one more time to make the change go through"
             sx1 = Breite.GetText
             sY = Hoehe.GetText
          PICTOptionen.OK
@@ -330,7 +331,7 @@ testcase tPCT
 
    call hCloseDocument
 
-endcase
+endcase 'tPCT
 '-------------------------------------------------------------------------------
 testcase tPBM
 
@@ -342,10 +343,10 @@ testcase tPBM
    sFilter = "PBM - Portable Bitmap (.pbm)"
    sExt = ".pbm"
 
-   '/// open the document
+   printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
 
-   '/// save it ///'
+   printlog "Save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "PBMOptionen"
       if PBMOptionen.Exists (2) then
@@ -367,7 +368,7 @@ testcase tPBM
 
    call hCloseDocument
 
-endcase
+endcase 'tPBM
 '-------------------------------------------------------------------------------
 testcase tPGM
 
@@ -379,10 +380,10 @@ testcase tPGM
    sFilter = "PGM - Portable Graymap (.pgm)"
    sExt = ".pgm"
 
-   '/// open the document
+   printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString  ))
 
-   '/// save it ///'
+   printlog "Save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "PGMOptionen"
       if PGMOptionen.Exists (2) then
@@ -404,7 +405,7 @@ testcase tPGM
 
    call hCloseDocument
 
-endcase
+endcase 'tPGM
 '-------------------------------------------------------------------------------
 testcase tPPM
 
@@ -416,10 +417,10 @@ testcase tPPM
    sFilter = "PPM - Portable Pixelmap (.ppm)"
    sExt = ".ppm"
 
-   '/// open the document
+   printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString  ))
 
-   '/// save it ///'
+   printlog "Save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "PPMOptionen"
       if PPMOptionen.Exists (2) then
@@ -441,7 +442,7 @@ testcase tPPM
 
    call hCloseDocument
 
-endcase
+endcase 'tPPM
 '------------------------------------------------------------------------------
 testcase tRAS
 
@@ -453,10 +454,10 @@ testcase tRAS
     sFilter = "RAS - Sun Raster Image (.ras)"
     sExt = ".ras"
     
-     '/// open the document
+     printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
 
-   '/// save it ///'
+   printlog "Save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       if ( dir(OutputGrafikTBO+sExt) <> "") then
          Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
@@ -472,7 +473,7 @@ testcase tRAS
 
    call hCloseDocument
 
-endcase
+endcase 'tRAS
 '------------------------------------------------------------------------------
 testcase tTIFF
 
@@ -484,10 +485,10 @@ testcase tTIFF
     sFilter = "TIFF - Tagged Image File Format (.tif;.tiff)"
     sExt = ".tif"
     
-     '/// open the document
+     printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
 
-   '/// save it ///'
+   printlog "Save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       if ( dir(OutputGrafikTBO+sExt) <> "") then
          Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
@@ -503,7 +504,7 @@ testcase tTIFF
 
    call hCloseDocument
 
-endcase
+endcase 'tTIFF
 '------------------------------------------------------------------------------
 testcase tXPM
 
@@ -515,10 +516,10 @@ testcase tXPM
     sFilter = "XPM - X PixMap (.xpm)"
     sExt = ".xpm"
     
-     '/// open the document
+     printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
 
-   '/// save it ///'
+   printlog "save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       if ( dir(OutputGrafikTBO+sExt) <> "") then
          Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
@@ -534,7 +535,7 @@ testcase tXPM
 
    call hCloseDocument
 
-endcase
+endcase 'tXPM
 '-------------------------------------------------------------------------------
 testcase tGIF
 
@@ -546,10 +547,10 @@ testcase tGIF
    sFilter = "GIF - Graphics Interchange Format (.gif)"
    sExt = ".gif"
 
-   '/// open the document
+   printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
 
-   '/// save it ///'
+   printlog " save it ///'
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "GIFOptionen"
       if GIFOptionen.Exists (2) then
@@ -572,7 +573,7 @@ testcase tGIF
 
    call hCloseDocument
 
-endcase
+endcase 'tGIF
 '-------------------------------------------------------------------------------
 testcase tJPEG
 
@@ -584,10 +585,10 @@ testcase tJPEG
    sFilter = "JPEG - Joint Photographic Experts Group (.jpg;.jpeg;.jfif;.jif;.jpe)"
    sExt = ".jpg"
 
-   '/// open the document
+   printlog "Open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
 
-   '/// save it ///'
+   printlog " save it "
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "JpegOptionen"
       if JpegOptionen.Exists (2) then
@@ -610,5 +611,5 @@ testcase tJPEG
 
    call hCloseDocument
 
-endcase
+endcase 'tJPEG
 '-------------------------------------------------------------------------

@@ -1051,7 +1051,7 @@ testcase tDropDownLB_17
             if EntrysList.GetSelText <> sItem1(i-1) then Warnlog "Hope to get " & sItem1(i-1) & " but get " & EntrysList.GetSelText
         next i
     else
-        QAErrorlog "#i56768#Not all entrys in field correctly imported!"
+        warnlog "Not all entrys in field correctly imported!"
     end if
     FeldbefehlBearbeitenFunktionen.Cancel
     
@@ -1078,7 +1078,7 @@ testcase tDropDownLB_17
             if EntrysList.GetSelText <> sItem2(i-1) then Warnlog "Hope to get " & sItem2(i-1) & " but get " & EntrysList.GetSelText
         next i
     else
-        QAErrorlog "#i56768#Not all entrys in field correctly imported!"
+        warnlog "Not all entrys in field correctly imported!"
     end if
     FeldbefehlBearbeitenFunktionen.Cancel
     

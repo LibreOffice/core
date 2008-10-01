@@ -152,7 +152,8 @@ testcase tToolsOptionsHTMLContent
     ExtrasOptionenDlg.OK
     
     Call hCloseDocument
-
+    Call hCloseDocument
+    
 endcase
 
 '------------------------------------------------------------------------------
@@ -401,6 +402,7 @@ testcase tToolsOptionsHTMLLayout
     ExtrasOptionenDlg.OK
     
     Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------------------------------
@@ -646,7 +648,7 @@ testcase tToolsOptionsHTMLGrid
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Do Until GetDocumentCount = 1
+    Do Until GetDocumentCount = 0
         Call hCloseDocument
     Loop
 

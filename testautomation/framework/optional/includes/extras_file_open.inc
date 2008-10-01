@@ -45,7 +45,7 @@ private const MAX_FILE_COUNT = 3000 ' the max number of templates or samples
 
 testcase tOpenObjectsWithFileDialog( cCategory as string )
 
-    const CFN = "tOpenObjectsWithFileDialog::"
+    const CFN = "tOpenObjectsWithFileDialog::"   
 
     '///<h1>Open all templates using the File-Open dialog</h1>
     '///<i>Retrieve the templates out of ..\share\template\-directory</i><br>
@@ -69,20 +69,24 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     dim bSkipFile as boolean      ' turns true if file is to be skipped
     dim brc as boolean            ' some multi purpose boolan returncode
     dim cOfficePath as string
-    
+
     ' the path where the samples/templates are located, verify function params
     ' note that for some time the suffixes for the different filetypes are changed,
     ' so we have separate names for samples and templates.
         
-    cOfficePath = mid( gOfficeBasisPath, len( gNetzOfficePath ) + 1 )
+    if ( FileExists( gOfficeBasisPath ) ) then
+        cOfficePath = gOfficeBasisPath
+    else
+        cOfficePath = mid( gOfficeBasisPath, len( gNetzOfficePath ) + 1 )
+    endif
     printlog( "Using: " & cOfficePath )
     
     select case cCategory
-    case "SAMPLES"    : sRootPath = cOfficePath & "share\samples"
-                        sRootPathFallback = "/opt/openoffice.org/basis3.0/share/samples"
+    case "SAMPLES"    : sRootPath = cOfficePath & "share\samples\" & gISOLang
+                        sRootPathFallback = "/opt/openoffice.org/basis3.0/share/samples/" & gISOLang
                         sFIlter   = "*.od*"
-    case "TEMPLATES"  : sRootPath = cOfficePath & "share\template"
-                        sRootPathFallback = "/opt/openoffice.org/basis3.0/share/template"
+    case "TEMPLATES"  : sRootPath = cOfficePath & "share\template\" & gISOLang
+                        sRootPathFallback = "/opt/openoffice.org/basis3.0/share/template/" & gISOLang
                         sFilter   = "*.ot*"
     case default
         warnlog( CFN & "Invalid category passed to function" )
@@ -106,16 +110,31 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     printlog( "Using filter: " & sFilter   )
     GetAllFileList ( sRootPath, sFilter, lsFile() )
     hListDelete( lsFile(), 1 )
-    iTemplateCount = listCount( lsFile() )
-    for iCurrentTemplate = 1 to iTemplateCount
+
+    ' Remove .lock-files
+    iTemplateCount   = listCount( lsFile() )
+    iCurrentTemplate = 1
+    while( iCurrentTemplate <= iTemplateCount ) 
         if ( instr( lsFile( iCurrentTemplate ), "~lock." ) > 0 ) then
-            qaerrorlog( "There are lock-files in the shared layer. They will be removed" )
-            kill( lsFile( iCurrentTemplate ) )
             hListDelete( lsFile(), iCurrentTemplate )
+            iTemplateCount = iTemplateCount - 1
+        else
+            iCurrentTemplate = iCurrentTemplate + 1
         endif
-    next iCurrentTemplate
-    
-    
+    wend
+
+    ' do not test wizard related files
+    iTemplateCount   = listCount( lsFile() )
+    iCurrentTemplate = 1
+    while( iCurrentTemplate <= iTemplateCount ) 
+        if ( instr( lsFile( iCurrentTemplate ), "wizard" ) > 0 ) then
+            hListDelete( lsFile(), iCurrentTemplate )
+            iTemplateCount = iTemplateCount - 1
+        else
+            iCurrentTemplate = iCurrentTemplate + 1
+        endif
+    wend
+
     hListPrint ( lsFile() , "" , "" )
     if ( listcount( lsfile() ) = 1 ) then
         if ( gProductName = "OpenOffice.org" ) then

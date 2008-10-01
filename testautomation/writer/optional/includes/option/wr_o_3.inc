@@ -257,7 +257,9 @@ testcase tToolsOptionsWriterCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -720,7 +722,9 @@ testcase tToolsOptionsWriterInsert
     
     Call wOptionenUndo("Table")
     
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 ' ********************************************************************
@@ -1135,7 +1139,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     DocumentWriter.TypeKeys "<SHIFT LEFT>" 'deleting space
     EditCopy
     if GetClipboardText <> "twenty" then
-        QAErrorlog "#i80554#wrong word found, formatting broken"
+        warnlog "wrong word found, formatting broken"
     else
         printlog "Correct word found, aligment ok"
     end if

@@ -51,10 +51,10 @@ end sub
 
 testcase HTMLToHTMLText
 
-    if lcase(gPlatform) = "x86" and Val(mid$(gMinor, 2, Len(gMinor))) <= 129  then
-        QAErrorlog "#125780#Stacktrace ID: 251397"
-        goto endsub
-    end if    
+'    if lcase(gPlatform) = "x86" and Val(mid$(gMinor, 2, Len(gMinor))) <= 129  then
+'        QAErrorlog "#125780#Stacktrace ID: 251397"
+'        goto endsub
+'    end if    
     gApplication = "HTMLDOKUMENT"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "

@@ -42,6 +42,7 @@
 ' #1 fLoadVerySimpleChartAndSaveLocal       ' Load file with a very simple chart and save it loacally
 ' #1 fConvertChartTo3D                      ' Function to invoke the 'Insert::Titles...' dialog
 ' #1 fOpenTestDocumentAndSelectDataRange    ' Opens a test document and executes FormatDataRange
+' #1 fOpenTestDocumentAndInsertChart        ' Opens a test document and selects a data range at a specific position
 '*
 '\************************************************************************************************
 
@@ -179,4 +180,28 @@ function fOpenTestDocumentAndSelectDataRange(sInputFile as string) as BOOLEAN
     Kontext "TabChartTypeDataRange"
     call DialogTest ( TabChartTypeDataRange )        
     fOpenTestDocumentAndSelectDataRange = TRUE
+end function
+'
+'-------------------------------------------------------------------------
+'
+function fOpenTestDocumentAndInsertChart(sInputFile as string) as BOOLEAN
+    fOpenTestDocumentAndInsertChart = FALSE
+    call hFileOpen(sInputFile)
+    sleep(2)
+    Call sMakeReadOnlyDocumentEditable()    
+    Kontext "DocumentCalc"    
+    printlog "Type <STRG+HOME>"    
+    DocumentCalc.TypeKeys "<MOD1 HOME>"    
+    printlog "Type twice <RIGHT> cursor key"
+    DocumentCalc.TypeKeys "<RIGHT>" , 2    
+    printlog "Type thrice <DOWN> cursor key"
+    DocumentCalc.TypeKeys "<DOWN>" , 3        
+    printlog "Menu Insert chart to open chart wizard"    
+    InsertChart
+    try
+        WaitSlot()
+        fOpenTestDocumentAndInsertChart = TRUE
+    catch        
+        fOpenTestDocumentAndInsertChart = FALSE
+    endcatch
 end function

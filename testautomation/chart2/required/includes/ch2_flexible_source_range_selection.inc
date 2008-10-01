@@ -48,13 +48,10 @@
 testcase tDataRangeWizardCalc
     dim sDataRange as string
     dim sInputFile as string
-    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange01.ods")
-
-    '/// Open test document gtesttoolpath/chart2/required/input/ch_flexrange01.ods
+    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange01.ods")    
     printlog "Open test document gtesttoolpath/chart2/required/input/ch_flexrange01.ods"
     if fOpenTestDocumentAndInsertChart(sInputFile) then
         Kontext "ChartType"    
-        '///Choose the Chart type <i>bar</i> (should be the second in the top-down list)
         printlog "Choose the Chart type <i>bar</i> (should be the second in the top-down list)"
         if fSetChartType( "bar" ) > 0 then
             warnlog "Something went wrong setting chart type to BAR."
@@ -64,14 +61,12 @@ testcase tDataRangeWizardCalc
             call hCloseDocument
             goto endsub
         endif    
-        '///Switch to tabpage Data Range
         printlog "Switch to tabpage Data Range"
         Kontext "ChartWizard"
         GoNext.Click            
         Kontext "TabChartTypeDataRange"
         call DialogTest ( TabChartTypeDataRange )    
-        '///Check that the data range in edit field has the value $ChartFlexRange.$B$3:$E$6
-        printlog "heck that the data range in edit field has the value $ChartFlexRange.$B$3:$E$6"        
+        printlog "Check that the data range in edit field has the value $ChartFlexRange.$B$3:$E$6"        
         Kontext "TabChartTypeDataRange"
         sDataRange = DataRange.GetText
         if sDataRange <> "$ChartFlexRange.$B$3:$E$6" then
@@ -79,15 +74,13 @@ testcase tDataRangeWizardCalc
         else
             printlog "    Datarange is correct"
         endif    
-        '///Check if -Data series in rows- is enabled
         printlog "Check if -Data series in rows- is enabled"
         if Rows.IsEnabled then
             printlog "    Data series in rows is enabled" 
         else
             warnlog "Data series in rows is disabled"
-        endif            
-        '///Check if -Data series in columns- is enabled and chosen
-        printlog "Check if -Data series in columns- is enabled and chosen"
+        endif                    
+        printlog "Check if Data series in columns- is enabled and chosen"
         if Columns.IsEnabled then
             printlog "    Data series in columns is enabled"
             if Columns.IsChecked then
@@ -98,7 +91,6 @@ testcase tDataRangeWizardCalc
         else
             warnlog "Data series in columns is disabled"
         endif    
-        '///Check if -First row as label- is enabled and checked
         printlog "Check if -First row as label- is enabled and checked"
         if FirstRowAsLabel.IsEnabled then
             printlog "    First row as label is enabled"
@@ -110,7 +102,6 @@ testcase tDataRangeWizardCalc
         else
             warnlog "First row as label is disabled"
         endif    
-        '///Check if -First column as label- is enabled and not checked
         printlog "Check if -First column as label- is enabled and not checked"
         if FirstColumnAsLabel.IsEnabled then
             printlog "    First column as label is enabled"
@@ -121,45 +112,38 @@ testcase tDataRangeWizardCalc
             endif
         else
             warnlog "First column as label is disabled"
-        endif    
-        '///Press button Range Chooser
+        endif            
         printlog "Press button Range Chooser"
-        SelectDataRange.Click    
-        '///Enter invalid range $ChartFlexRange.$B$3:$E$0 and close Range Chooser
+        SelectDataRange.Click            
         printlog "Enter invalid range $ChartFlexRange.$B$3:$E$0 and close Range Chooser"    
         Kontext "AcceptOrRejectChangesArea"
         AreaEditField.SetText "$ChartFlexRange.$B$3:$E$0"
-        ShrinkButton.Click    
-        '///Check if -Data series in rows- is disabled
+        ShrinkButton.Click            
         printlog "Check if -Data series in rows- is disabled"
         Kontext "TabChartTypeDataRange"
         if NOT Rows.IsEnabled then
             printlog "    Data series in rows is disabled" 
         else
             warnlog "Data series in rows is enabled, but should be disabled"
-        endif    
-        '///Check if -Data series in columns- is disabled
+        endif            
         printlog "Check if -Data series in columns- is disabled"
         if NOT Columns.IsEnabled then
             printlog "    Data series in columns is disabled" 
         else
             warnlog "Data series in columns is enabled, but should be disabled"
-        endif   
-        '///Check if -First row as label- is disabled
+        endif           
         printlog "Check if -First row as label- is disabled"
         if NOT FirstRowAsLabel.IsEnabled then
             printlog "    First row as label is disabled" 
         else
             warnlog "First row as label is enabled, but should be disabled"
-        endif    
-        '///Check if -First column as label- is disabled
+        endif            
         printlog "Check if -First column as label- is disabled"
         if NOT FirstColumnAsLabel.IsEnabled then
             printlog "    First Column as label is disabled" 
         else
             warnlog "First Column as label is enabled, but should be disabled"
-        endif    
-        '///Check if Back, Next and Finish does not work
+        endif            
         printlog "Check if Back, Next and Finish does not work"
         Kontext "ChartWizard"
         GoBack.Click
@@ -170,19 +154,16 @@ testcase tDataRangeWizardCalc
             warnlog "Back button is not functionless"
             Kontext "ChartWizard"
             GoNext.Click
-        endif        
-        '///Enter valid range $ChartFlexRange.$B$3:$E$6
+        endif                
         printlog "Enter valid range $ChartFlexRange.$B$3:$E$6"
         Kontext "TabChartTypeDataRange"
-        DataRange.SetText "$ChartFlexRange.$B$3:$E$6"    
-        '///Check if -Data series in rows- is enabled
+        DataRange.SetText "$ChartFlexRange.$B$3:$E$6"            
         printlog "Check if -Data series in rows- is enabled"
         if Rows.IsEnabled then
             printlog "    Data series in rows is enabled" 
         else
             warnlog "Data series in rows is disabled"
-        endif            
-        '///Check if -Data series in columns- is enabled and chosen
+        endif                    
         printlog "Check if -Data series in columns- is enabled and chosen"
         if Columns.IsEnabled then
             printlog "    Data series in columns is enabled"
@@ -193,8 +174,7 @@ testcase tDataRangeWizardCalc
             endif
         else
             warnlog "Data series in rows is disabled"
-        endif    
-        '///Check if -First row as label- is enabled and checked
+        endif            
         printlog "Check if -First row as label- is enabled and checked"
         if FirstRowAsLabel.IsEnabled then
             printlog "    First row as label is enabled"
@@ -205,8 +185,7 @@ testcase tDataRangeWizardCalc
             endif
         else
             warnlog "First row as label is disabled"
-        endif    
-        '///Check if -First column as label- is enabled and not checked
+        endif            
         printlog "Check if -First column as label- is enabled and not checked"
         if FirstColumnAsLabel.IsEnabled then
             printlog "    First column as label is enabled"
@@ -217,12 +196,10 @@ testcase tDataRangeWizardCalc
             endif
         else
             warnlog "First column as label is disabled"
-        endif    
-        '///Press Cancel button
+        endif            
         printlog "Press Cancel button"
         Kontext "ChartWizard"
-        ChartWizard.Cancel    
-        '///Close document
+        ChartWizard.Cancel            
         printlog "Close document"
         Call hCloseDocument
     else
@@ -238,11 +215,9 @@ testcase tDataSeriesWizardCalc
     dim sDataRanges as string
     dim sRangeFor as string
     dim sCategories as string
-    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange02.ods")
-    '///Open test document <i>gTestToolPath</i>/chart2/required/input/ch_flexrange02.ods
+    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange02.ods")    
     printlog "Open test document gTestToolPath/chart2/required/input/ch_flexrange02.ods"    
-    if fOpenTestDocumentAndInsertChart(sInputFile) then
-        '///Choose the Chart type <i>XY (SCATTER)</i> (should be the second in the top-down list)
+    if fOpenTestDocumentAndInsertChart(sInputFile) then        
         Kontext "ChartType"
         printlog "Choose the Chart type XY (SCATTER) (should be the second in the top-down list)"
         if fSetChartType( "xy" ) > 0 then
@@ -252,11 +227,9 @@ testcase tDataSeriesWizardCalc
             call hCloseDocument
             goto endsub
         endif        
-        Kontext "ChartWizard"
-        '/// Click on Next button
+        Kontext "ChartWizard"        
         printlog "Click on Next button"
-        GoNext.Click
-        '/// Click on Next button
+        GoNext.Click        
         printlog "Click on Next button"        
         GoNext.Click
         Kontext "TabChartTypeDataSeries"
@@ -269,60 +242,52 @@ testcase tDataSeriesWizardCalc
             call hCloseDocument            
             goto endsub
         endif        
-        call DialogTest ( TabChartTypeDataSeries )            
-        '///Check if the data series listbox is enabled and contains three entries
+        call DialogTest ( TabChartTypeDataSeries )                    
         printlog "Check if the data series listbox is enabled and contains three entries"
         iDataSeries = DataSeries.GetItemCount
         if iDataSeries = 3 then
             printlog "    All 3 data series are available"
         else
             warnlog "There are " & iDataSeries & " data series instead of 3"
-        endif        
-        '///Check if the ADD button is enabled and click the button
+        endif                
         printlog "Check if the ADD button is enabled and click the button"
         if AddButton.IsEnabled then
             printlog "    ADD button is enabled"
             AddButton.Click
         else
             warnlog "ADD button is not enabled"
-        endif            
-        '///Check if there are now four entries in the data series listbox
+        endif                    
         printlog "Check if there are now four entries in the data series listbox"
         iDataSeries = DataSeries.GetItemCount
         if iDataSeries = 4 then
             printlog "    Adding a data series was successfull"
         else
             warnlog "There are " & iDataSeries & " data series instead of 4"
-        endif        
-        '///Check if the second data series was added below the highlighted one
+        endif                
         printlog "Check if the second data series was added below the highlighted one"
         if DataSeries.GetSelIndex = 2 then
             printlog "    The new data series was inserted below the highlighted (first) one"
         else
             warnlog "The new dataseries was not inserted below the highlighted one"
-        endif        
-        '///Check if the REMOVE button is enabled and click the button
+        endif                
         printlog "Check if the REMOVE button is enabled and click the button"
         if RemoveButton.IsEnabled then
             printlog "    REMOVE button is enabled"
             RemoveButton.Click
         else
             warnlog "REMOVE button is not enabled"
-        endif        
-        '///Check if there are now 3 entries in the data series listbox
+        endif                
         printlog "Check if there are now 3 entries in the data series listbox"
         iDataSeries = DataSeries.GetItemCount
         if iDataSeries = 3 then
             printlog "    Removing a data series was successfull"
         else
             warnlog "There are " & iDataSeries & " data series instead of 3"
-        endif        
-        '///Use UP button and verify that it it disabled on first entry
+        endif                
         printlog "Use UP button on last data series and verify that it it disabled on first entry"
         DataSeries.Select(3)
         if MoveUp.IsEnabled then
-            printlog "    The MoveUp button is enabled"
-            '/// Click on Move Up button twice."
+            printlog "    The MoveUp button is enabled"            
             printlog "Click on Move Up button twice."
             MoveUp.Click
             MoveUp.Click
@@ -338,13 +303,11 @@ testcase tDataSeriesWizardCalc
             endif
         else
             warnlog "Moving data series was not successfull"
-        endif        
-        '///Use DOWN button and verify that it is disabled on last entry
+        endif                
         printlog "Use DOWN button and verify that it is disabled on last entry"
         DataSeries.Select(1)
         if MoveDown.IsEnabled then
-            printlog "    The MoveDown button is enabled"
-            '/// Click Move Down button twice
+            printlog "    The MoveDown button is enabled"            
             printlog "Click Move Down button twice"
             MoveDown.Click
             MoveDown.Click
@@ -360,11 +323,9 @@ testcase tDataSeriesWizardCalc
             endif
         else
             warnlog "Moving data series was not successfull"
-        endif        
-        '///Select first entry in Data Ranges
+        endif                
         printlog "Select first entry in Data Ranges"
-        DataRanges.Select(1)        
-        '///Verify that the range matches the one in edit field
+        DataRanges.Select(1)                
         printlog "Verify that the range matches the one in edit field"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
         'Instead of 1,2 there must be 1,4 used becqause there are two invisible
@@ -375,12 +336,9 @@ testcase tDataSeriesWizardCalc
             printlog "    Both ranges are matching"
         else
             warnlog "The ranges does not match: " & sDataRanges & sRangeFor
-        endif        
-        '///Select second entry in Data Ranges
+        endif                
         printlog "Select second entry in Data Ranges"
-        DataRanges.Select 2
-        
-        '///Check that the range in the edit field has changed, too.
+        DataRanges.Select(2)                
         printlog "Check that the range in the edit field has changed, too."
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
         'Instead of 1,2 there must be 1,4 used becqause there are two invisible
@@ -391,11 +349,9 @@ testcase tDataSeriesWizardCalc
             printlog "    Both ranges are matching"
         else
             warnlog "The ranges does not match" & sDataRanges & sRangeFor
-        endif        
-        '///Change the range in edit field
+        endif                
         printlog "Change the range in edit field"
-        RangeFor.SetText "$ChartFlexRange.$D$5:$D$6;$ChartFlexRange.$D$8"            
-        '///Check that the range in Data Ranges has changed, too
+        RangeFor.SetText "$ChartFlexRange.$D$5:$D$6;$ChartFlexRange.$D$8"                    
         printlog "Check that the range in Data Ranges has changed, too"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
         'Instead of 1,2 there must be 1,4 used becqause there are two invisible
@@ -405,18 +361,14 @@ testcase tDataSeriesWizardCalc
            printlog "    The data range has also changed"
         else
             warnlog "The data range has not changed"
-        endif        
-        '///Click on Range Chooser and change the range
+        endif                
         printlog "Click on Range Chooser and change the range"
         SelectRange.Click
-        Kontext "AcceptOrRejectChangesArea"
-        '/// Enter $ChartFlexRange.$D$5:$D$6 in edit field
+        Kontext "AcceptOrRejectChangesArea"        
         printlog "Enter $ChartFlexRange.$D$5:$D$6 in edit field"
-        AreaEditField.SetText "$ChartFlexRange.$D$5:$D$6"
-        '/// Click on Shirnk button
+        AreaEditField.SetText "$ChartFlexRange.$D$5:$D$6"        
         printlog "Click on Shirnk button"
-        ShrinkButton.Click            
-        '///Check if the range in the Data ranges has been changed
+        ShrinkButton.Click                    
         printlog "Check if the range in Data ranges has changed"
         Kontext "TabChartTypeDataSeries"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
@@ -427,31 +379,24 @@ testcase tDataSeriesWizardCalc
            printlog "    The data range has also changed"
         else
             warnlog "The data range has not changed"
-        endif        
-        '///Edit range for Data Labels
-        printlog "Edit range for Data Labels"
-        '/// Set text $ChartFlexRange.$C$15:$C$16 in categories
+        endif                
+        printlog "Edit range for Data Labels"        
         printlog "Set text $ChartFlexRange.$C$15:$C$16 in categories"
         Categories.SetText "$ChartFlexRange.$C$15:$C$16"
-        sCategories = Categories.GetText
-        '/// Validate the changes have not been modified
+        sCategories = Categories.GetText        
         printlog "Validate the changes have not been modified"
         if sCategories = "$ChartFlexRange.$C$15:$C$16" then
             printlog "    The range has been modified"
         else
             warnlog "Modifiing the range was not successfull"
-        endif        
-        '///Click on Range Chooser and change the range
+        endif                
         printlog "Click on Range Chooser and change the range"
         SelectCategories.Click
-        Kontext "AcceptOrRejectChangesArea"
-        '/// Set text $ChartFlexRange.$C$5:$C$6 in the edit field
+        Kontext "AcceptOrRejectChangesArea"        
         printlog "Set text $ChartFlexRange.$C$5:$C$6 in the edit field"
-        AreaEditField.SetText "$ChartFlexRange.$C$5:$C$6"
-        '/// Click on Shrink button
+        AreaEditField.SetText "$ChartFlexRange.$C$5:$C$6"        
         printlog "Click on Shrink button"
-        ShrinkButton.Click        
-        '///Verify that the range is taken
+        ShrinkButton.Click                
         printlog "Verify that the range is taken"
         Kontext "TabChartTypeDataSeries"
         sCategories = Categories.GetText
@@ -459,12 +404,10 @@ testcase tDataSeriesWizardCalc
             printlog "    The range has been modified"
         else
             warnlog "Modifiing the range was not successfull"
-        endif        
-        '///Enter invalid range $ChartFlexRange.$C$5:$C$
+        endif                
         printlog "Enter invalid range $ChartFlexRange.$C$5:$C$"        
         Categories.SetText "$ChartFlexRange.$C$5:$C$"                        
-        Kontext "ChartWizard"
-        '/// Click on the Back button
+        Kontext "ChartWizard"       
         printlog "Click on the Back button"
         GoBack.Click
         Kontext "TabChartTypeDataSeries"
@@ -474,24 +417,18 @@ testcase tDataSeriesWizardCalc
             warnlog "Back button is not functionless"
             Kontext "ChartWizard"
             GoNext.Click
-        endif        
-        '///Enter $ChartFlexRange.$C$5:$C$6 - a valid range
+        endif                
         printlog "Enter $ChartFlexRange.$C$5:$C$6 - a valid range"
-        Categories.SetText "$ChartFlexRange.$C$5:$C$6"        
-        '///Press Range Chooser for Data Lables
+        Categories.SetText "$ChartFlexRange.$C$5:$C$6"                
         printlog "Press Range Chooser"
-        SelectCategories.Click        
-        '/// Press <END>-key
+        SelectCategories.Click                
         printlog "Press <END>-key"        
         Kontext "AcceptOrRejectChangesArea"
-        AreaEditField.TypeKeys "<END>"        
-        '///Enter a semicolon and the second range $ChartFlexRange.$C$8
+        AreaEditField.TypeKeys "<END>"                
         printlog "Enter a semicolon and the second range $ChartFlexRange.$C$8"
-        AreaEditField.TypeKeys ";$ChartFlexRange.$C$8"        
-        '///Close Range Chooser
+        AreaEditField.TypeKeys ";$ChartFlexRange.$C$8"                
         printlog "Close Range Chooser"
-        ShrinkButton.Click        
-        '///Verify that there is a multiple range
+        ShrinkButton.Click                
         printlog "Verify that there is a multiple range"
         Kontext "TabChartTypeDataSeries"
         sCategories = Categories.GetText
@@ -499,12 +436,10 @@ testcase tDataSeriesWizardCalc
             printlog "    The range has been modified to a multiple range"
         else
             warnlog "Modifiing the range was not successfull"
-        endif        
-        '///Press Cancel button
+        endif                
         printlog "Press Cancel button"
         Kontext "ChartWizard"
-        ChartWizard.Cancel        
-        '///Close document
+        ChartWizard.Cancel                
         printlog "Close document"
         Call hCloseDocument
     else
@@ -517,12 +452,9 @@ endcase
 testcase tDataRangeDialogCalc
     dim sDataRange as string
     dim sInputFile as string
-    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange03.ods" )
-
-    '///Open test document <i>gTestToolPath</i>/chart2/required/input/ch_flexrange03.ods
+    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange03.ods" )    
     printlog "Open test document gTestToolPath/chart2/required/input/ch_flexrange03.ods"        
-    if fOpenTestDocumentAndSelectDataRange(sInputFile) then    
-        '///Check data range in edit field is $ChartFlexRange.$D$4:$G$6;$ChartFlexRange.$C$5:$G$6;$ChartFlexRange.$C$4
+    if fOpenTestDocumentAndSelectDataRange(sInputFile) then            
         printlog "Check if the data range in edit field is $ChartFlexRange.$D$4:$G$6;$ChartFlexRange.$C$5:$G$6;$ChartFlexRange.$C$4"
         Kontext "TabChartTypeDataRange"
         sDataRange = DataRange.GetText
@@ -530,15 +462,13 @@ testcase tDataRangeDialogCalc
             warnlog "This is not the expected datarange, it is " & sDataRange & " but should be $ChartFlexRange.$C$4:$G$6" 
         else
             printlog "    Datarange is correct"
-        endif    
-        '///Check if -Data series in columns- is enabled
+        endif            
         printlog "Check if -Data series in columns- is enabled"
         if Columns.IsEnabled then
             printlog "    Data series in columns is enabled" 
         else
             warnlog "Data series in columns is disabled"
-        endif            
-        '///Check if -Data series in rows- is enabled and chosen
+        endif                    
         printlog "Check if -Data series in columns- is enabled and chosen"
         if Rows.IsEnabled then
             printlog "    Data series in rows is enabled"
@@ -549,8 +479,7 @@ testcase tDataRangeDialogCalc
             endif
         else
             warnlog "Data series in rows is disabled"
-        endif    
-        '///Check if -First row as label- is enabled and checked
+        endif            
         printlog "Check if -First row as label- is enabled and checked"
         if FirstRowAsLabel.IsEnabled then
             printlog "    First row as label is enabled"
@@ -561,8 +490,7 @@ testcase tDataRangeDialogCalc
             endif
         else
             warnlog "First row as label is disabled"
-        endif    
-        '///Check if -First column as label- is enabled and checked
+        endif            
         printlog "Check if -First column as label- is enabled and checked"
         if FirstColumnAsLabel.IsEnabled then
             printlog "    First column as label is enabled"
@@ -573,45 +501,38 @@ testcase tDataRangeDialogCalc
             endif
         else
             warnlog "First column as label is disabled"
-        endif    
-        '///Press button Range Chooser
+        endif            
         printlog "Press button Range Chooser"
-        SelectDataRange.Click    
-        '///Enter an $ChartFlexRange.$B$3:$E$0 in Range Chooser and close Range Chooser
+        SelectDataRange.Click            
         printlog "Enter $ChartFlexRange.$B$3:$E$0 in Range Chooser and close Range Chooser"    
         Kontext "AcceptOrRejectChangesArea"
         AreaEditField.SetText "$ChartFlexRange.$B$3:$E$0"
-        ShrinkButton.Click    
-        '///Check if -Data series in rows- is disabled
+        ShrinkButton.Click            
         printlog "Check if -Data series in rows- is disabled"
         Kontext "TabChartTypeDataRange"
         if NOT Rows.IsEnabled then
             printlog "    Data series in rows is disabled" 
         else
             warnlog "Data series in rows is enabled, but should be disabled"
-        endif    
-        '///Check if -Data series in columns- is disabled
+        endif            
         printlog "Check if -Data series in columns- is disabled"
         if NOT Columns.IsEnabled then
             printlog "    Data series in columns is disabled" 
         else
             warnlog "Data series in columns is enabled, but should be disabled"
-        endif    
-        '///Check if -First row as label- is disabled
+        endif            
         printlog "Check if -First row as label- is disabled"
         if NOT FirstRowAsLabel.IsEnabled then
             printlog "    First row as label is disabled" 
         else
             warnlog "First row as label is enabled, but should be disabled"
-        endif    
-        '///Check if -First column as label- is disabled
+        endif            
         printlog "Check if -First column as label- is disabled"
         if NOT FirstColumnAsLabel.IsEnabled then
             printlog "    First Column as label is disabled" 
         else
             warnlog "First Column as label is enabled, but should be disabled"
-        endif    
-        '///Check that OK button is disabled
+        endif            
         printlog "Check if OK button is disabled"
         try
             Kontext "TabChartTypeDataRange"
@@ -620,19 +541,16 @@ testcase tDataRangeDialogCalc
             goto endsub
         catch
             printlog "    The OK button is disabled"
-        endcatch    
-        '///Enter a valid multiple range
+        endcatch            
         printlog "Enter a valid range"
         Kontext "TabChartTypeDataRange"
-        DataRange.SetText "$ChartFlexRange.$C$4:$G$6;$ChartFlexRange.$C$8:$G$8"    
-        '///Check if -Data series in columns- is enabled
+        DataRange.SetText "$ChartFlexRange.$C$4:$G$6;$ChartFlexRange.$C$8:$G$8"            
         printlog "Check if -Data series in columns- is enabled"
         if Columns.IsEnabled then
             printlog "    Data series in columns is enabled" 
         else
             warnlog "Data series in columns is disabled"
-        endif            
-        '///Check if -Data series in rows- is enabled and chosen
+        endif                    
         printlog "Check if -Data series in columns- is enabled and chosen"
         if Rows.IsEnabled then
             printlog "    Data series in rows is enabled"
@@ -643,8 +561,7 @@ testcase tDataRangeDialogCalc
             endif
         else
             warnlog "Data series in rows is disabled"
-        endif    
-        '///Check if -First row as label- is enabled and checked
+        endif            
         printlog "Check if -First row as label- is enabled and checked"
         if FirstRowAsLabel.IsEnabled then
             printlog "    First row as label is enabled"
@@ -655,8 +572,7 @@ testcase tDataRangeDialogCalc
             endif
         else
             warnlog "First row as label is disabled"
-        endif    
-        '///Check if -First column as label- is enabled and checked
+        endif            
         printlog "Check if -First column as label- is enabled and checked"
         if FirstColumnAsLabel.IsEnabled then
             printlog "    First column as label is enabled"
@@ -667,12 +583,10 @@ testcase tDataRangeDialogCalc
             endif
         else
             warnlog "First column as label is disabled"
-        endif    
-        '///Press Cancel button
+        endif            
         printlog "Press Cancel button"
         Kontext "TabChartTypeDataRange"
-        TabChartTypeDataRange.Cancel    
-        '///Close document
+        TabChartTypeDataRange.Cancel            
         printlog "Close document"
         Call hCloseDocument
     else
@@ -688,46 +602,39 @@ testcase tDataSeriesDialogCalc
     dim sDataRanges as string
     dim sRangeFor as string
     dim sCategories as string
-    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange04.ods")
-    '///Open test document <i>gTestToolPath</i>/chart2/required/input/ch_flexrange04.ods
+    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange04.ods")    
     printlog "Open test document gTestToolPath/chart2/required/input/ch_flexrange04.ods"    
     if fOpenTestDocumentAndSelectDataRange(sInputFile) then
-        Kontext
-        '///Switch to tabpage Data Series
+        Kontext        
         Active.SetPage TabChartTypeDataSeries
-        Kontext "TabChartTypeDataSeries"
-        '///Check if the data series listbox is enabled and contains one entry
+        Kontext "TabChartTypeDataSeries"        
         printlog "Check if the data series listbox is enabled and contains one entry"
         iDataSeries = DataSeries.GetItemCount
         if iDataSeries = 1 then
             printlog "    One data serie is available"
         else
             warnlog "There are " & iDataSeries & " data series instead of 1"
-        endif        
-        '///Check if the ADD button is enabled and click the button
+        endif                
         printlog "Check if the ADD button is enabled and click the button"
         if AddButton.IsEnabled then
             printlog "    ADD button is enabled"
             AddButton.Click
         else
             warnlog "ADD button is not enabled"
-        endif        
-        '///Check if there are now two entries in the data series listbox
+        endif                
         printlog "Check if there are now two entries in the data series listbox"
         iDataSeries = DataSeries.GetItemCount
         if iDataSeries = 2 then
             printlog "    Adding a data series was successfull"
         else
             warnlog "There are " & iDataSeries & " data series instead of 2"
-        endif        
-        '///Check if the new data series was added below the highlighted one
+        endif                
         printlog "Check if the new data series was added below the highlighted one"
         if DataSeries.GetSelIndex = 2 then
             printlog "    The new data series was inserted below the highlighted (first) one"
         else
             warnlog "The new dataseries was not inserted below the highlighted one"
-        endif        
-        '///Use UP button and verify that it it disabled on first entry
+        endif                
         printlog "Use UP button on last data series and verify that it it disabled on first entry"
         DataSeries.Select(2)
         if MoveUp.IsEnabled then
@@ -745,8 +652,7 @@ testcase tDataSeriesDialogCalc
             endif
         else
             warnlog "Moving data series was not successfull"
-        endif        
-        '///Use DOWN button and verify that it is disabled on last entry
+        endif                
         printlog "Use DOWN button and verify that it is disabled on last entry"
         DataSeries.Select(1)
         if MoveDown.IsEnabled then
@@ -764,27 +670,23 @@ testcase tDataSeriesDialogCalc
             endif
         else
             warnlog "Moving data series was not successfull"
-        endif        
-        '///Check if the REMOVE button is enabled and click the button
+        endif                
         printlog "Check if the REMOVE button is enabled and click the button"
         if RemoveButton.IsEnabled then
             printlog "    REMOVE button is enabled"
             RemoveButton.Click
         else
             warnlog "REMOVE button is not enabled"
-        endif        
-        '///Check if there are now one entry in the data series listbox
+        endif                
         printlog "Check if there are now one entry in the data series listbox"
         iDataSeries = DataSeries.GetItemCount
         if iDataSeries = 1 then
             printlog "    Removing a data series was successfull"
         else
             warnlog "There are " & iDataSeries & " data series instead of 1"
-        endif        
-        '///Select first entry in Data Ranges
+        endif                
         printlog "Select first entry in Data Ranges"
-        DataRanges.Select(1)            
-        '///Verify that the range for NAME matches the one in edit field
+        DataRanges.Select(1)                    
         printlog "Verify that the range for NAME matches the one in edit field"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
         'Instead of 1,2 there must be 1,4 used becqause there are two invisible
@@ -795,11 +697,9 @@ testcase tDataSeriesDialogCalc
             printlog "    Both ranges are matching"
         else
             warnlog "The ranges does not match: " & sDataRanges & sRangeFor
-        endif        
-        '///Select second entry in Data Ranges
+        endif                
         printlog "Select second entry in Data Ranges"
-        DataRanges.Select(2)        
-        '///Check that the range in the edit field has changed too
+        DataRanges.Select(2)                
         printlog "Check that the range in the edit field has changed too"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
         'Instead of 1,2 there must be 1,4 used becqause there are two invisible
@@ -810,11 +710,9 @@ testcase tDataSeriesDialogCalc
             printlog "    Both ranges are matching"
         else
             warnlog "The ranges does not match" & sDataRanges & sRangeFor
-        endif        
-        '///Change the range in edit field
+        endif                
         printlog "Change the range in edit field"
-        RangeFor.SetText "$ChartFlexRange.$D$5:$D$10"            
-        '///Check that the range in Data Ranges has changed too
+        RangeFor.SetText "$ChartFlexRange.$D$5:$D$10"                    
         printlog "Check that the range in Data Ranges has changed too"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
         'Instead of 1,2 there must be 1,4 used becqause there are two invisible
@@ -824,14 +722,12 @@ testcase tDataSeriesDialogCalc
            printlog "    The data range has also changed"
         else
             warnlog "The data range has not changed"
-        endif    
-        '///Click on Range Chooser and change the range
+        endif            
         printlog "Click on Range Chooser and change the range"
         SelectRange.Click
         Kontext "AcceptOrRejectChangesArea"
         AreaEditField.SetText "$ChartFlexRange.$D$5:$D$12"
-        ShrinkButton.Click            
-        '///Check if the range in the Data ranges has changed
+        ShrinkButton.Click                    
         printlog "Check if the range in Data ranges has changed"
         Kontext "TabChartTypeDataSeries"
         'GetSelText(line,column) is a new parameter since CWS:SRC680gh13
@@ -842,8 +738,7 @@ testcase tDataSeriesDialogCalc
            printlog "    The data range has also changed"
         else
             warnlog "The data range has not changed"
-        endif    
-        '///Edit range for Categories
+        endif            
         printlog "Edit range for Categories"
         Categories.SetText "$ChartFlexRange.$B$5:$B$10"
         sCategories = Categories.GetText
@@ -851,14 +746,12 @@ testcase tDataSeriesDialogCalc
             printlog "    The range has been modified"
         else
             warnlog "Modifiing the range was not successfull"
-        endif        
-        '///Click on Range Chooser and change the range to $ChartFlexRange.$B$5:$B$12
+        endif                
         printlog "Click on Range Chooser and change the range to $ChartFlexRange.$B$5:$B$12"
         SelectCategories.Click
         Kontext "AcceptOrRejectChangesArea"
         AreaEditField.SetText "$ChartFlexRange.$B$5:$B$12"
-        ShrinkButton.Click        
-        '///Verify that the range is taken
+        ShrinkButton.Click                
         printlog "Verify that the range is taken"
         Kontext "TabChartTypeDataSeries"
         sCategories = Categories.GetText
@@ -866,11 +759,9 @@ testcase tDataSeriesDialogCalc
             printlog "    The range has been modified"
         else
             warnlog "Modifiing the range was not successfull"
-       endif        
-        '///Enter $ChartFlexRange.$B$5:$B$ as an invalid range
+       endif                
         printlog "Enter $ChartFlexRange.$B$5:$B$ as an invalid range"
-        Categories.SetText "$ChartFlexRange.$B$5:$B$"        
-        '///Check that the OK button does not work
+        Categories.SetText "$ChartFlexRange.$B$5:$B$"                
         printlog "Check that the OK button does not work"
         try
             Kontext "TabChartTypeDataSeries"
@@ -879,25 +770,19 @@ testcase tDataSeriesDialogCalc
             goto endsub
         catch
             printlog "    The OK button is disabled"
-        endcatch        
-        '///Enter as valid range $ChartFlexRange.$B$5:$B$12
+        endcatch                
         printlog "Enter as valid range $ChartFlexRange.$B$5:$B$12"
         Kontext "TabChartTypeDataSeries"
-        Categories.SetText "$ChartFlexRange.$B$5:$B$12"        
-        '///Press Range Chooser
+        Categories.SetText "$ChartFlexRange.$B$5:$B$12"                
         printlog "Press Range Chooser"
-        SelectCategories.Click        
-        '///Move cursor to the end
+        SelectCategories.Click                
         printlog "Move cursor to the end"
         Kontext "AcceptOrRejectChangesArea"
-        AreaEditField.TypeKeys "<END>"        
-        '///Enter a semicolon and the second range $ChartFlexRange.$B$14
+        AreaEditField.TypeKeys "<END>"                
         printlog "Enter a semicolon and the second range $ChartFlexRange.$B$14"
-        AreaEditField.TypeKeys ";$ChartFlexRange.$B$14"        
-        '///Close Range Chooser
+        AreaEditField.TypeKeys ";$ChartFlexRange.$B$14"                
          printlog "Close Range Chooser"
-        ShrinkButton.Click        
-        '///Verify that there is a multiple range 
+        ShrinkButton.Click                 
         printlog "Verify that there is a multiple range"
         Kontext "TabChartTypeDataSeries"
         sCategories = Categories.GetText
@@ -905,44 +790,14 @@ testcase tDataSeriesDialogCalc
             printlog "    The range has been modified to a multiple range"
         else
             warnlog "Modifiing the range was not successfull"
-        endif        
-        '///Press Cancel button
+        endif                
         printlog "Press Cancel button"
         Kontext "TabChartTypeDataSeries"
-        TabChartTypeDataSeries.Cancel        
-        '///Close document
+        TabChartTypeDataSeries.Cancel                
         printlog "Close document"
         Call hCloseDocument
     else
         warnlog "It was not possible to open the test document."
     endif
 endcase
-'
-'-------------------------------------------------------------------------
-'
-function fOpenTestDocumentAndInsertChart(sInputFile as string) as BOOLEAN
-    fOpenTestDocumentAndInsertChart = FALSE
-    call hFileOpen(sInputFile)
-    sleep(2)
-    Call sMakeReadOnlyDocumentEditable()    
-    Kontext "DocumentCalc"
-    '/// Type <STRG+HOME>
-    printlog "Type <STRG+HOME>"    
-    DocumentCalc.TypeKeys "<MOD1 HOME>"
-    '/// Type twice <RIGHT> cursor key
-    printlog "Type twice <RIGHT> cursor key"
-    DocumentCalc.TypeKeys "<RIGHT>" , 2
-    '/// Type thrice <DOWN> cursor key
-    printlog "Type thrice <DOWN> cursor key"
-    DocumentCalc.TypeKeys "<DOWN>" , 3    
-    '/// Menu Insert chart to open chart wizard
-    printlog "Menu Insert chart to open chart wizard"    
-    InsertChart
-    try
-        WaitSlot()
-        fOpenTestDocumentAndInsertChart = TRUE
-    catch        
-        fOpenTestDocumentAndInsertChart = FALSE
-    endcatch
-end function
 

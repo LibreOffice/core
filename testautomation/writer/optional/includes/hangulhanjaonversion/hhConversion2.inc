@@ -1022,7 +1022,7 @@ testcase tHHConversion_18
    Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
-       QAErrorlog "#i39308# Should get " & sResult & " but get " & GetClipboardText
+       QAErrorlog "Should get " & sResult & " but get " & GetClipboardText
    end if
 
   Call hCloseDocument

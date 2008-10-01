@@ -255,11 +255,11 @@ testcase tFormatStylist3
                     if AllStyles <> "122" then
                         Select Case iSprache
                             Case 07
-                                QAErrorlog "#i69453#Double styles in stylist"
+                                warnlog "Double styles in stylist"
                             Case 55
-                                QAErrorlog "#i48359#Missing Style in Stylist"
+                                warnlog "Missing Style in Stylist"
                             Case 31
-                                QAErrorlog "#i55810#Missing Style in Stylist"
+                                warnlog "Missing Style in Stylist"
                             Case else
                                 Warnlog "There are " + AllStyles + " styles in this category and not 122!"
                         end select
@@ -554,7 +554,7 @@ testcase tAssigningStyles1
     Kontext "Textobjectbar"
     if Vorlage.GetItemCount <> 7 then
         Select case iSprache
-            case 82     : QAErrorlog "#i65956#Korean: Number of styles in styleslistbox wrong"
+            case 82     : warnlog "Korean: Number of styles in styleslistbox wrong"
             case else   : Warnlog "Not 7 entrys in Styles & Formatting combobox but: " & Vorlage.GetItemCount
         end select
     end if
@@ -719,7 +719,7 @@ testcase tAssigningStyles4
     wait 500    
     Kontext "Textobjectbar"
     if Vorlage.GetSelIndex <> 2 then
-        QAErrorlog "#i63400#Seems paragraph has not been set to default! " & Vorlage.GetSelText & "(" & Vorlage.GetSelIndex & ")" 
+        warnlog "Seems paragraph has not been set to default! " & Vorlage.GetSelText & "(" & Vorlage.GetSelIndex & ")" 
     end if
 
     printlog "Close Document"

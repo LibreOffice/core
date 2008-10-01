@@ -556,7 +556,7 @@ testcase tFormatNumberingBullets
         try
             Auswahl.Click
         catch
-            QAErrorlog "#i67185#Numbering option 'Linked graphics' is missing"
+            QAErrorlog "Numbering option 'Linked graphics' is missing"
             TabOptionenNumerierung.Cancel
             Call hCloseDocument
             goto endsub
@@ -604,7 +604,7 @@ testcase tFormatStylist
     PrintLog "- Format / Stylist"
 	
 	if gPlatgroup = "unx" then
-		QAErrorlog "HDE: Doesn't run on unix"
+		QAErrorlog "Doesn't run on unix"
 		goto endsub
 	end if
     printlog " Open new document"

@@ -527,7 +527,7 @@ testcase tTextframes_83
     '/// + input a positive number in vertical by
     Call fFormatFrame("TabType")
     if Vertical.GetItemCount <> 6 then
-        QAErrorlog "#i74734#Russian: Missing string in frame options"
+        warnlog " Missing string in frame options"
         TabType.Cancel
         Call hCloseDocument
         goto endsub
@@ -589,7 +589,7 @@ testcase tTextframes_84
     '/// + input a negative number in vertical by
     Call fFormatFrame("TabType")
     if Vertical.GetItemCount <> 6 then
-        QAErrorlog "#i74734#Russian: Missing string in frame options"
+        warnlog " Missing string in frame options"
         TabType.Cancel
         Call hCloseDocument
         goto endsub

@@ -908,7 +908,7 @@ testcase tInsertGraphic_29
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then QAErrorlog "#138144#Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked      <> TRUE then warnlog "Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
@@ -1018,7 +1018,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then QAErrorlog "#138144#Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked      <> TRUE then warnlog "Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
@@ -1038,7 +1038,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Kontur.IsChecked  <> TRUE then Warnlog "i35239 - Contour configuration is wrong !"
+    if Kontur.IsChecked  <> TRUE then Warnlog "Contour configuration is wrong !"
    TabUmlauf.Cancel
 
    Call hCloseDocument

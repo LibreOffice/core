@@ -39,6 +39,11 @@
 
 testcase tScriptingOrganizers( iDialog as integer )
 
+    if ( instr( gtSysName , "Solaris" ) > 0 ) then
+	qaerrorlog( "#i93502# JavaScript organizer broken" )
+        goto endsub
+    endif
+
     '///<H1>Test scripting-organizers</H1>
     ' 1 = BeanShell (.bsh)
     ' 2 = JavaScript (.js)

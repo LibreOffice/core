@@ -919,7 +919,7 @@ testcase tDisplaySection_6
       Sleep 2
       Call wTypeKeys "<home><Shift End>"
       EditCopy
-      if GetClipboardText <> sectionContent(j-1) then  QAErrorLog "The focus is NOT in the correct location"
+      if GetClipboardText <> sectionContent(j-1) then  warnlog "The focus is NOT in the correct location"
       Kontext "NavigatorWriter"
    next j
 
@@ -952,7 +952,7 @@ testcase tDisplaySection_7
    Auswahlliste.TypeKeys "<down><return>"
 
    printlog "  -- check if the section name in navigator is right "
-   if Auswahlliste.GetitemText(2) <> "sectionNormal" then QAErrorLog "The section can't be displayed immediately in the Navigator."
+   if Auswahlliste.GetitemText(2) <> "sectionNormal" then warnlog "The section can't be displayed immediately in the Navigator."
 
    'Close Navigator before close the document
    fCloseNavigator

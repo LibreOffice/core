@@ -223,7 +223,7 @@ testcase t_TB_InsertFields
     printlog "- Toolbox ( normal ) : Fields"
 
 	if gPlatgroup = "unx" then
-		QAErrorlog "HDE: Doesn't run on unix"
+		QAErrorlog "Doesn't run on unix"
 		goto endsub
 	end if	
     Call hNewDocument

@@ -366,6 +366,10 @@ testcase tDialogCharacter
 endcase
 
 testcase tSetFormatCharacter
+    if iSprache = 48 then
+        qaerrorlog "Test not adapted to polish, 48."
+        goto endsub
+    endif
     Dim i as integer
     dim iWest as integer
     dim iAsian as integer

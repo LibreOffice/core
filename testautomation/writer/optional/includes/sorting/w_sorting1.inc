@@ -61,10 +61,6 @@ end sub
 
 testcase tToolsSort1
     PrintLog "- Tools / Sort normal Text ( 1. Column )"    
-    if iSprache = 82 then
-        QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
-        goto endsub
-    end if
     Printlog "   - alphanumeric ascending ( Key 1 )"
     Call hNewDocument
     Call wTypeKeys "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
@@ -181,24 +177,20 @@ testcase tToolsSort2
     Call AbsteigendKontrollieren ( TRUE )
 
     Printlog "   - numeric ascending ( Key 2 )"
-    if iSprache = 82 then
-        QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
-    else
-        Call wTypeKeys "<Mod1 a>"
-        Call wTypeKeys "<Delete>"
-        Sleep 1
-        Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
-        Call wTypeKeys ( "<Mod1 a>" )
-        ToolsSort
-        Kontext "Sortieren"
-        Schluessel1.Uncheck
-        Schluessel2.Check
-        Spalte2.SetText "1"
-        Schluesseltyp2.Select 2
-        Aufsteigend2.Check
-        Sortieren.OK
-        Call AufsteigendKontrollieren ( TRUE )
-    end if
+    Call wTypeKeys "<Mod1 a>"
+    Call wTypeKeys "<Delete>"
+    Sleep 1
+    Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
+    Call wTypeKeys ( "<Mod1 a>" )
+    ToolsSort
+    Kontext "Sortieren"
+    Schluessel1.Uncheck
+    Schluessel2.Check
+    Spalte2.SetText "1"
+    Schluesseltyp2.Select 2
+    Aufsteigend2.Check
+    Sortieren.OK
+    Call AufsteigendKontrollieren ( TRUE )
     
     Printlog "   - numeric descending ( Key 2 )"
     Call wTypeKeys ( "<Mod1 a>" )
@@ -213,25 +205,21 @@ testcase tToolsSort2
     Call AbsteigendKontrollieren ( TRUE )
 
     Printlog "   - numeric ascending ( Key 3 )"
-    if iSprache = 82 then
-        QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
-    else    
-        Call wTypeKeys ( "<Mod1 a>" )
-        Call wTypeKeys ( "<Delete>" )
-        Sleep 1
-        Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
-        Call wTypeKeys ( "<Mod1 a>" )
-        ToolsSort
-        Kontext "Sortieren"
-        Schluessel1.Uncheck
-        Schluessel2.UnCheck
-        Schluessel3.Check
-        Spalte3.SetText "1"
-        Schluesseltyp3.Select 2
-        Aufsteigend3.Check
-        Sortieren.OK
-        Call AufsteigendKontrollieren ( TRUE )
-    end if
+    Call wTypeKeys ( "<Mod1 a>" )
+    Call wTypeKeys ( "<Delete>" )
+    Sleep 1
+    Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
+    Call wTypeKeys ( "<Mod1 a>" )
+    ToolsSort
+    Kontext "Sortieren"
+    Schluessel1.Uncheck
+    Schluessel2.UnCheck
+    Schluessel3.Check
+    Spalte3.SetText "1"
+    Schluesseltyp3.Select 2
+    Aufsteigend3.Check
+    Sortieren.OK
+    Call AufsteigendKontrollieren ( TRUE )
 
     Printlog "   - numeric descending ( Key 3 )"
     Call wTypeKeys ( "<Mod1 a>" )
@@ -254,10 +242,6 @@ endcase
 testcase tToolsSort3
     Dim i as Integer : Dim Trennzeichen as String
     PrintLog "- Tools / Sorting text in several lines"
-    if iSprache = 82 then
-        QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
-        goto endsub
-    end if
     for i=1 to 3
         select case i
             case 1: Printlog "  - Seperator is a tabulator"
@@ -339,10 +323,6 @@ endcase
 
 testcase tToolsSort4
     PrintLog "- Tools / Sorting in table with header"
-    if iSprache = 82 then
-        QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
-        goto endsub
-    end if
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
     else
@@ -465,10 +445,6 @@ endcase
 
 testcase tToolsSort5
     PrintLog "- Tools / Sorting in table without header"
-    if iSprache = 82 then
-        QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
-        goto endsub
-    end if
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
     else

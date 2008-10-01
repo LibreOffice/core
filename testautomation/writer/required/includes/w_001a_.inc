@@ -246,7 +246,7 @@ testcase tFileTemplatesAddressbookSource
                 AddressbookSource.Cancel
             end if
         else
-            QAErrorlog "#i62423#Adress Source Autopilot crashes"
+            Warnlog "Somethine wrong with Adress Source Autopilot - Check it."
             PrintLog " Close dialog"
             Kontext "AddressbookSource"
             AddressbookSource.Cancel
