@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impdialog.src,v $
- * $Revision: 1.43 $
+ * $Revision: 1.41.4.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,25 +38,11 @@ String STR_PDF_EXPORT
 };
 
 //strings used in encryption UI
-String STR_PDF_EXPORT_USPWD
-{
-    Text[ en-US ] = "Set ~open password...";
-};
 
 //password dialog title
 String STR_PDF_EXPORT_UDPWD
 {
     Text[ en-US ] = "Set Open Password";
-};
-
-String STR_PDF_EXPORT_CB_PERM
-{
-        Text[ en-US ] = "~Restrict permissions";
-};
-
-String STR_PDF_EXPORT_OSPWD
-{
-    Text[ en-US ] = "Set ~permission password...";
 };
 
 //password dialog title
@@ -172,7 +158,7 @@ TabPage  RID_PDF_TAB_GENER
         Pos = MAP_APPFONT ( 12, 128 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
-        Text[ en-US ] = "P~DF/A-1";
+        Text[ en-US ] = "P~DF/A-1a";
     };
     CheckBox CB_TAGGEDPDF
     {
@@ -512,119 +498,144 @@ TabPage  RID_PDF_TAB_SECURITY
     Hide = TRUE;
 
 //////////////////////////////////////
-    CheckBox CB_SEC_ENCRYPT
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 164 , 10 ) ;
-        TabStop = TRUE ;
-        Text[ en-US ] = "~Encrypt the PDF document";
-    };
-
     PushButton BTN_USER_PWD
     {
         TabStop = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12, 16 ) ;
-        Size = MAP_APPFONT ( 106 , 14 ) ;
+        Pos = MAP_APPFONT ( 12, 5 ) ;
+        Size = MAP_APPFONT ( 100 , 13 ) ;
+        Text[ en-US ] = "Set ~open password...";
     };
 
-    FixedText FT_USER_PWD_EMPTY
+    FixedText FT_USER_PWD
     {
-        Pos = MAP_APPFONT( 121 , 19 );
-        Size = MAP_APPFONT( 52, 8 );
-        Text [ en-US ] = "Not set" ;
+        Pos = MAP_APPFONT(12 , 25 );
+        Size = MAP_APPFONT( 160, 20 );
     };
 
-    CheckBox CB_SEL_PERMISSIONS
+    String  STR_USER_PWD_SET
     {
-        Pos = MAP_APPFONT ( 6 , 36 ) ;
-        Size = MAP_APPFONT ( 164 , 10 ) ;
-        TabStop = TRUE ;
+        Text [ en-US ] = "Open password set";
+    };
+
+    String  STR_USER_PWD_ENC
+    {
+        Text [ en-US ] = "PDF document will be encrypted";
+    };
+
+    String  STR_USER_PWD_UNSET
+    {
+        Text [ en-US ] = "No open password set";
+    };
+
+    String  STR_USER_PWD_UNENC
+    {
+        Text [ en-US ] = "PDF document will not be encrypted";
     };
 
     PushButton BTN_OWNER_PWD
     {
         TabStop = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12, 49 ) ;
-        Size = MAP_APPFONT ( 106 , 14 ) ;
+        Pos = MAP_APPFONT ( 12, 45 ) ;
+        Size = MAP_APPFONT ( 100 , 13 ) ;
+        Text[ en-US ] = "Set ~permission password...";
     };
 
-    FixedText FT_OWNER_PWD_EMPTY
+    FixedText FT_OWNER_PWD
     {
-        Pos = MAP_APPFONT( 121 , 52 );
-        Size = MAP_APPFONT( 52, 8 );
-        Text [ en-US ] = "Not set" ;
+        Pos = MAP_APPFONT( 12 , 65 );
+        Size = MAP_APPFONT( 160, 20 );
+    };
+
+    String  STR_OWNER_PWD_SET
+    {
+        Text [ en-US ] = "Permission password set";
+    };
+
+    String  STR_OWNER_PWD_REST
+    {
+        Text [ en-US ] = "PDF document will be restricted";
+    };
+
+    String  STR_OWNER_PWD_UNSET
+    {
+        Text [ en-US ] = "No permission password set";
+    };
+
+    String  STR_OWNER_PWD_UNREST
+    {
+        Text [ en-US ] = "PDF document will be unrestricted";
     };
 
 //////////////////////////////
     FixedLine FL_PRINT_PERMISSIONS
     {
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 158  , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT (156  , 8 ) ;
         Text[ en-US ] = "Printing" ;
     };
     RadioButton RB_PRINT_NONE
     {
-        Pos = MAP_APPFONT ( 18 , 77 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 101 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Not permitted";
     };
     RadioButton RB_PRINT_LOWRES
     {
-        Pos = MAP_APPFONT ( 18 , 90 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 112 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Low resolution (150 dpi)";
     };
     RadioButton RB_PRINT_HIGHRES
     {
-        Pos = MAP_APPFONT ( 18 , 103 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 123 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~High resolution";
     };
 
 /////////////////////////////
     FixedLine FL_CHANGES_ALLOWED
     {
-        Pos = MAP_APPFONT ( 12 , 116 ) ;
-        Size = MAP_APPFONT ( 158  , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT (156  , 8 ) ;
         Text[ en-US ] = "Changes" ;
     };
     RadioButton RB_CHANGES_NONE
     {
-        Pos = MAP_APPFONT ( 18 , 127 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 145 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "No~t permitted";
     };
     RadioButton RB_CHANGES_INSDEL
     {
-        Pos = MAP_APPFONT ( 18 , 140 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 157 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Inserting, deleting, and rotating pages";
     };
     RadioButton RB_CHANGES_FILLFORM
     {
-        Pos = MAP_APPFONT ( 18 , 153 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 168 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Filling in form fields";
     };
     RadioButton RB_CHANGES_COMMENT
     {
-        Pos = MAP_APPFONT ( 18 , 166 ) ;
+        Pos = MAP_APPFONT ( 18 , 179 ) ;
         Size = MAP_APPFONT ( 152 , 16 ) ;
         WordBreak = TRUE ;
         Text[ en-US ] = "~Commenting, filling in form fields";
     };
     RadioButton RB_CHANGES_ANY_NOCOPY
     {
-        Pos = MAP_APPFONT ( 18 , 185 ) ;
+        Pos = MAP_APPFONT ( 18 , 198 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text[ en-US ] = "~Any except extracting pages";
     };
 
     CheckBox CB_ENDAB_COPY
     {
-        Pos = MAP_APPFONT ( 12 , 198 ) ;
+        Pos = MAP_APPFONT ( 12 , 211 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Ena~ble copying of content" ;
@@ -632,7 +643,7 @@ TabPage  RID_PDF_TAB_SECURITY
 
     CheckBox CB_ENAB_ACCESS
     {
-        Pos = MAP_APPFONT ( 12 , 211 ) ;
+        Pos = MAP_APPFONT ( 12 , 224 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Enable text access for acce~ssibility tools" ;
@@ -799,5 +810,13 @@ ModalDialog RID_PDF_ERROR_DLG
     String STR_WARN_FORMACTION_PDFA
     {
         Text [en-US] = "A form control contained an action not supported by the PDF/A standard. The action was skipped";
+    };
+    String STR_WARN_TRANSP_CONVERTED
+    {
+        Text [en-US] = "Some objects were converted to an image in order to remove transparencies, because the target PDF format does not support transparencies. Possibly better results can be achieved if you remove the transparent objects before exporting.";
+    };
+    String STR_WARN_TRANSP_CONVERTED_SHORT
+    {
+        Text [en-US] = "Transparencies removed";
     };
 };

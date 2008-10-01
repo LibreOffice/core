@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impdialog.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -314,14 +314,15 @@ public:
 //class security tab page
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
-    CheckBox                    maCbEncrypt;
-
     PushButton                  maPbUserPwd;
-    FixedText                   maFtUserPwdEmpty;
+    FixedText                   maFtUserPwd;
+    String                      maUserPwdSet;
+    String                      maUserPwdUnset;
 
-    CheckBox                    maCbPermissions;
     PushButton                  maPbOwnerPwd;
-    FixedText                   maFtOwnerPwdEmpty;
+    FixedText                   maFtOwnerPwd;
+    String                      maOwnerPwdSet;
+    String                      maOwnerPwdUnset;
 
     FixedLine                   maFlPrintPermissions;
     RadioButton                 maRbPrintNone;
@@ -339,25 +340,21 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     CheckBox                    maCbEnableAccessibility;
 
     String                      msUserPassword;
-    String                      msSetUserPwd;
     String                      msUserPwdTitle;
 
-    String                      msRestrPermissions;
     String                      msOwnerPassword;
-    String                      msSetOwnerPwd;
     String                      msOwnerPwdTitle;
 
     ResMgr*                     mpaResMgr;
 
     long nWidth;
 
-    DECL_LINK( TogglemaCbEncryptHdl, void* );
-    DECL_LINK( TogglemaCbPermissionsHdl, void* );
-
     DECL_LINK( ClickmaPbUserPwdHdl, void* );
     DECL_LINK( ClickmaPbOwnerPwdHdl, void* );
 
-    void                        ImplPwdPushButton( String &, String & , FixedText & );
+    void enablePermissionControls();
+
+    void                        ImplPwdPushButton( const String &, String & );
 
 public:
     ImpPDFTabSecurityPage( Window* pParent,
