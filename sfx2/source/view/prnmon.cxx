@@ -240,7 +240,7 @@ BOOL SfxPrintProgress_Impl::SetPage( USHORT nPage, const String &rPage )
 
 IMPL_LINK( SfxPrintProgress_Impl, CancelHdl, Button *, EMPTYARG )
 {
-    if ( !pViewShell->GetPrinter()->IsJobActive() )
+    if ( !pViewShell->GetPrinter()->IsJobActive() && pViewShell->GetPrinter()->IsPrinting() )
         // we are still in StartJob, cancelling now might lead to a crash
         return 0;
 
