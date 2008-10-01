@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreelistbox.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -562,6 +562,10 @@ namespace
         USHORT nCount = _rMenu.GetItemCount();
         for ( USHORT pos = 0; pos < nCount; ++pos )
         {
+            // do not adjust separators
+            if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
+                continue;
+
             USHORT nId = _rMenu.GetItemId(pos);
             String aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
@@ -572,7 +576,16 @@ namespace
             }
 
             USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
-            _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemBits( nId ), pos );
+            _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
+                _rMenu.GetItemBits( nId ), pos );
+
+            // more things to preserve:
+            // - the help command
+            ::rtl::OUString sHelpURL = _rMenu.GetHelpCommand( nId );
+            if ( sHelpURL.getLength() )
+                _rMenu.SetHelpCommand(  nCommandId, sHelpURL  );
+
+            // remove the "old" item
             _rMenu.RemoveItem( pos+1 );
         }
     }

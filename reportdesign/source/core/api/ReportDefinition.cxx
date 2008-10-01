@@ -108,7 +108,7 @@
 #include "ReportHelperImpl.hxx"
 #include <svtools/itempool.hxx>
 
-
+#include <svx/paperinf.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
@@ -289,6 +289,10 @@ OStyle::OStyle()
 :OStyle_PBASE(m_aBHelper)
 ,m_aSize(21000,29700)
 {
+    const ::Size aDefaultSize = SvxPaperInfo::GetPaperSize(SvxPaperInfo::GetDefaultSvxPaper(Application::GetSettings().GetLanguage()),MAP_100TH_MM);
+    m_aSize.Height = aDefaultSize.Height();
+    m_aSize.Width = aDefaultSize.Width();
+
     const style::GraphicLocation eGraphicLocation = style::GraphicLocation_NONE;
     const sal_Bool bFalse = sal_False;
     const sal_Bool bTrue = sal_True;
@@ -1385,6 +1389,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
         { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
@@ -1411,6 +1416,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Reference<XComponent> xCom(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
     if( !bErr )
     {
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml"))));
         if( !WriteThroughComponent(
             xCom, "settings.xml",
             "com.sun.star.comp.report.XMLSettingsExporter",
@@ -1426,6 +1432,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
 
     if( !bErr )
     {
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml"))));
         if( !WriteThroughComponent(
             xCom, "meta.xml",
             "com.sun.star.comp.report.XMLMetaExporter",
@@ -1441,6 +1448,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
 
     if( !bErr )
     {
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml"))));
         if( !WriteThroughComponent(
             xCom, "styles.xml",
             "com.sun.star.comp.report.XMLStylesExporter",
@@ -1456,6 +1464,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
 
     if ( !bErr )
     {
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
         if( !WriteThroughComponent(
                 xCom, "content.xml",
                 "com.sun.star.comp.report.ExportFilter",

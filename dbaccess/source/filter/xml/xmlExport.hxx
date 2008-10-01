@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,7 +151,7 @@ class ODBExport : public SvXMLExport
     mutable UniReference < XMLPropertySetMapper >   m_xRowStylesPropertySetMapper;
 
     Reference<XPropertySet>                         m_xDataSource;
-    ::dbaui::ODsnTypeCollection                     m_aTypeCollection;
+    ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
     sal_Bool                                        m_bAllreadyFilled;
 
     void                    exportDataSource();

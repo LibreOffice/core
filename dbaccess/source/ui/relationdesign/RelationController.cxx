@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationController.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.56.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,7 +232,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     switch (_nId)
     {
         case SID_RELATION_ADD_RELATION:
-            aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && isEditable();
+            aReturn.bEnabled = !m_vTableData.empty() && isConnected() && isEditable();
             aReturn.bChecked = false;
             break;
         case ID_BROWSER_SAVEDOC:

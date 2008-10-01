@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DbAdminImpl.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#include <svtools/poolitem.hxx>
 
 class Window;
 //.........................................................................
@@ -141,7 +142,7 @@ namespace dbaui
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
         */
-        static DATASOURCE_TYPE  getDatasourceType( const SfxItemSet& _rSet );
+        static ::dbaccess::DATASOURCE_TYPE  getDatasourceType( const SfxItemSet& _rSet );
 
         /** returns the connection URL
             @return

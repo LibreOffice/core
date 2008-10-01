@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,11 +232,22 @@ Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( con
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException)
 {
-    Sequence< ::rtl::OUString > aRet(2);
-    sal_Int32 nPos = 0;
-    aRet[nPos++] = m_pModelImplementation->getObjectContainerStorageName( ODatabaseModelImpl::E_FORM );
-    aRet[nPos++] = m_pModelImplementation->getObjectContainerStorageName( ODatabaseModelImpl::E_REPORT );
-    return aRet;
+    Reference< XStorage > xRootStor( m_pModelImplementation->getRootStorage() );
+    if ( !xRootStor.is() )
+        return Sequence< ::rtl::OUString >();
+
+    ::std::vector< ::rtl::OUString > aNames;
+
+    Reference< XNameAccess > xNames( xRootStor, UNO_QUERY_THROW );
+    Sequence< ::rtl::OUString > aElementNames( xNames->getElementNames() );
+    for ( sal_Int32 i=0; i<aElementNames.getLength(); ++i )
+    {
+        if ( xRootStor->isStorageElement( aElementNames[i] ) )
+            aNames.push_back( aElementNames[i] );
+    }
+    return aNames.empty()
+        ?  Sequence< ::rtl::OUString >()
+        :  Sequence< ::rtl::OUString >( &aNames[0], aNames.size() );
 }
 
 //--------------------------------------------------------------------------

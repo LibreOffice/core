@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbu_resource.hrc,v $
- * $Revision: 1.104 $
+ * $Revision: 1.104.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -390,7 +390,7 @@
 //========================================================================
 // untyped resources
 
-#define RSC_DATASOURCE_TYPES            RID_UNTYPED_START +  1
+// free
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
 #define RSC_DATASOURCE_TYPE_UINAMES     RID_UNTYPED_START +  3
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4

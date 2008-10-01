@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CollectionView.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.50.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,10 +366,17 @@ void OCollectionView::initCurrentPath()
     {
         if ( m_xContent.is() )
         {
-            ::rtl::OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
-            const static ::rtl::OUString sFormsCID(RTL_CONSTASCII_USTRINGPARAM("private:forms"));
-            m_bCreateForm = sFormsCID.compareTo(sCID) == 0;
-            m_aFTCurrentPath.SetText(sCID.copy(8));
+            const ::rtl::OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
+            const static ::rtl::OUString s_sFormsCID(RTL_CONSTASCII_USTRINGPARAM("private:forms"));
+            const static ::rtl::OUString s_sReportsCID(RTL_CONSTASCII_USTRINGPARAM("private:reports"));
+            m_bCreateForm = s_sFormsCID.compareTo(sCID) == 0;
+            ::rtl::OUString sPath(RTL_CONSTASCII_USTRINGPARAM("/"));
+            if ( m_bCreateForm && sCID.getLength() != s_sFormsCID.getLength())
+                sPath = sCID.copy(s_sFormsCID.getLength());
+            else if ( !m_bCreateForm && sCID.getLength() != s_sReportsCID.getLength() )
+                sPath = sCID.copy(s_sReportsCID.getLength());
+
+            m_aFTCurrentPath.SetText(sPath);
             Reference<XChild> xChild(m_xContent,UNO_QUERY);
             bEnable = xChild.is() && Reference<XNameAccess>(xChild->getParent(),UNO_QUERY).is();
         }

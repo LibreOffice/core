@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
+#include "core_resource.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -152,6 +153,7 @@ public:
     };
 
 private:
+    OModuleClient                                                               m_aModuleClient;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationTableView.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.26.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,105 +30,60 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_RELATION_TABLEVIEW_HXX
+
 #include "RelationTableView.hxx"
-#endif
-#ifndef DBAUI_JOINEXCHANGE_HXX
+
+
 #include "JoinExchange.hxx"
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
+
+
 #include <comphelper/extract.hxx>
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
+
+
 #include "browserids.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+
+
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+
+
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
+
+
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+
+
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
+
+
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef DBAUI_RELATIONDESIGNVIEW_HXX
 #include "RelationDesignView.hxx"
-#endif
-#ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
-#ifndef DBAUI_RTABLECONNECTION_HXX
 #include "RTableConnection.hxx"
-#endif
-#ifndef DBAUI_RTABLECONNECTIONDATA_HXX
 #include "RTableConnectionData.hxx"
-#endif
-#ifndef DBAUI_RELATIONDIALOG_HXX
 #include "RelationDlg.hxx"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _DBU_REL_HRC_
 #include "dbu_rel.hrc"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef DBAUI_RELTABLEWINDOW_HXX
 #include "RTableWindow.hxx"
-#endif
-#ifndef DBACCESS_JACCESS_HXX
 #include "JAccess.hxx"
-#endif
-#ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
 
 using namespace dbaui;
 using namespace ::dbtools;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -142,8 +97,11 @@ using namespace ::com::sun::star::accessibility;
 DBG_NAME(ORelationTableView)
 //------------------------------------------------------------------------
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
-    : OJoinTableView( pParent, pView )
+    :OJoinTableView( pParent, pView )
+    , ::comphelper::OContainerListener(m_aMutex)
     ,m_pExistingConnection(NULL)
+    ,m_bInRemove(false)
+
 {
     DBG_CTOR(ORelationTableView,NULL);
     SetHelpId(HID_CTL_RELATIONTAB);
@@ -153,12 +111,23 @@ ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pV
 ORelationTableView::~ORelationTableView()
 {
     DBG_DTOR(ORelationTableView,NULL);
+    if ( m_pContainerListener.is() )
+        m_pContainerListener->dispose();
 }
 
 //------------------------------------------------------------------------
 void ORelationTableView::ReSync()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
+    if ( !m_pContainerListener.is() )
+    {
+        Reference< XConnection> xConnection = m_pView->getController().getConnection();
+        Reference< XTablesSupplier > xTableSupp( xConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables = xTableSupp->getTables();
+        Reference< XContainer> xContainer(xTables,uno::UNO_QUERY);
+        if ( xContainer.is() )
+            m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
+    }
     // Es kann sein, dass in der DB Tabellen ausgeblendet wurden, die eigentlich Bestandteil einer Relation sind. Oder eine Tabelle
     // befand sich im Layout (durchaus ohne Relation), existiert aber nicht mehr. In beiden Faellen wird das Anlegen des TabWins schief
     // gehen, und alle solchen TabWinDatas oder darauf bezogenen ConnDatas muss ich dann loeschen.
@@ -343,7 +312,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData().get();
     try
     {
-        if (pTabConnData->DropRelation())
+        if ( m_bInRemove || pTabConnData->DropRelation())
             return OJoinTableView::RemoveConnection( pConn ,sal_True);
     }
     catch(SQLException& e)
@@ -407,7 +376,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
     OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_DELETE_WINDOW),String(),WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
-    if(aDlg.Execute() == RET_YES)
+    if ( m_bInRemove || aDlg.Execute() == RET_YES )
     {
         m_pView->getController().getUndoMgr()->Clear();
         OJoinTableView::RemoveTabWin( pTabWin );
@@ -487,5 +456,34 @@ OTableWindow* ORelationTableView::createWindow(const TTableWindowData::value_typ
 bool ORelationTableView::allowQueries() const
 {
     return false;
+}
+// -----------------------------------------------------------------------------
+void ORelationTableView::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
+{
+
+}
+// -----------------------------------------------------------------------------
+void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
+{
+    m_bInRemove = true;
+    ::rtl::OUString sName;
+    if ( _rEvent.Accessor >>= sName )
+    {
+        OTableWindow* pTableWindow = GetTabWindow(sName);
+        if ( pTableWindow )
+        {
+            m_pView->getController().getUndoMgr()->Clear();
+            OJoinTableView::RemoveTabWin( pTableWindow );
+
+            m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
+            m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
+            m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
+        }
+    } // if ( _rEvent.Accessor >>= sName )
+    m_bInRemove = false;
+}
+// -----------------------------------------------------------------------------
+void ORelationTableView::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
 }
 

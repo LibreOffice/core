@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.35.68.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -80,7 +80,6 @@ SLOFILES=	\
         $(SLO)$/ToolBoxHelper.obj			\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\
-        $(SLO)$/dsntypes.obj                \
         $(SLO)$/defaultobjectnamecheck.obj  \
         $(SLO)$/dsmeta.obj                  \
         $(SLO)$/controllerframe.obj			\

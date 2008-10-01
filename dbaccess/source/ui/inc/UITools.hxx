@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,7 @@ class SvLBoxEntry;
 namespace dbaui
 {
 // .........................................................................
-    class ODsnTypeCollection;
+    //class ODsnTypeCollection;
     class DBTreeListBox;
 
     /** creates a new connection and appends the eventlistener
@@ -369,25 +369,6 @@ namespace dbaui
         @return
             the configuration node name of user defined drivers.
     */
-    ::rtl::OUString getUserDefinedDriverNodeName();
-
-    /** returns the configuration node name of user defined driver type display name.
-        @return
-            the configuration node name of user defined driver type display name.
-    */
-    ::rtl::OUString getDriverTypeDisplayNodeName();
-
-    /** returns the configuration node name of user defined driver DSN prefix.
-        @return
-            the configuration node name of user defined driver DSN prefix.
-    */
-    ::rtl::OUString getDriverDsnPrefixNodeName();
-
-    /** returns the configuration node name of user defined driver extension.
-        @return
-            the configuration node name of user defined driver extension.
-    */
-    ::rtl::OUString getDriverExtensionNodeName();
 
     /** returns the result of the user action when view the query dialog.
         @param  _pParent

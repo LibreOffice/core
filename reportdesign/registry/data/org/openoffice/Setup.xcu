@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Setup.xcu,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 <oor:component-data oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="Office">
         <node oor:name="Factories">
-            <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="report">
+            <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" >
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >ReportCommands</value>
                 </prop>

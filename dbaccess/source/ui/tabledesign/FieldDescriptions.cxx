@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldDescriptions.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.50.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -519,10 +519,26 @@ sal_Int32                   OFieldDescription::GetType()                const
 // -----------------------------------------------------------------------------
 sal_Int32                   OFieldDescription::GetPrecision()           const
 {
+    sal_Int32 nPrec = m_nPrecision;
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_PRECISION) )
-        return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_PRECISION));
-    else
-        return m_nPrecision;
+        nPrec = ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_PRECISION));
+
+    TOTypeInfoSP pTypeInfo = getTypeInfo();
+    if ( pTypeInfo )
+    {
+        switch ( pTypeInfo->nType )
+        {
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::INTEGER:
+            case DataType::BIGINT:
+                if ( !nPrec )
+                    nPrec = pTypeInfo->nPrecision;
+                break;
+        } // switch ( pTypeInfo->nType )
+    }
+
+    return nPrec;
 }
 // -----------------------------------------------------------------------------
 sal_Int32                   OFieldDescription::GetScale()               const

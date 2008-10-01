@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RTableConnection.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,8 +91,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
 {
     DBG_CHKTHIS(ORelationTableConnection,NULL);
     OTableConnection::Draw( rRect );
-    ORelationTableConnectionData* pData =
-        static_cast< ORelationTableConnectionData* >(GetData().get());
+    ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());
     if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
         return;
 

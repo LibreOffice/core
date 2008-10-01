@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableController.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.40.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#include "dsntypes.hxx"
 
 class FixedText;
 namespace dbaui
@@ -70,10 +71,11 @@ namespace dbaui
     class OTableController : public OTableController_BASE
     {
     private:
-        OModuleClient        m_aModuleClient;
+        OModuleClient                                   m_aModuleClient;
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_vRowList;
-        OTypeInfoMap                m_aTypeInfo;
-        ::std::vector<OTypeInfoMap::iterator> m_aTypeInfoIndex;
+        OTypeInfoMap                                    m_aTypeInfo;
+        ::std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;
+        ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
 
@@ -125,7 +127,7 @@ namespace dbaui
         sal_Bool isAddAllowed()     const;
         sal_Bool isDropAllowed()    const;
         sal_Bool isAlterAllowed()   const;
-
+        bool     isAutoIncrementPrimaryKey() const;
 
         inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
         inline const ::rtl::OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }

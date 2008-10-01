@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionPage.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,6 +155,7 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
+#include "dsnItem.hxx"
 #if defined(WIN) || defined(WNT)
 #define _ADO_DATALINK_BROWSE_
 #endif
@@ -248,61 +249,61 @@ namespace dbaui
         LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         switch( m_eType )
         {
-            case DST_DBASE:
+            case  ::dbaccess::DST_DBASE:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_DBASE_PATH_OR_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_DBASE_PATH);
                 break;
-            case DST_FLAT:
+            case  ::dbaccess::DST_FLAT:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_FLAT_PATH_OR_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_FLAT_PATH);
                 break;
-            case DST_CALC:
+            case  ::dbaccess::DST_CALC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_CALC_PATH);
                 break;
-            case DST_ADABAS:
+            case  ::dbaccess::DST_ADABAS:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_ADABAS_DATABASE_NAME)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_ADABAS_DATABASE);
                 break;
-            case DST_ADO:
+            case  ::dbaccess::DST_ADO:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;
-            case DST_MSACCESS:
-            case DST_MSACCESS_2007:
+            case  ::dbaccess::DST_MSACCESS:
+            case  ::dbaccess::DST_MSACCESS_2007:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MSACCESS_MDB_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
-            case DST_MYSQL_NATIVE:
-            case DST_MYSQL_JDBC:
+            case  ::dbaccess::DST_MYSQL_NATIVE:
+            case  ::dbaccess::DST_MYSQL_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MYSQL_DATABASE_NAME)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_MYSQL_DATABASE);
                 break;
-            case DST_ORACLE_JDBC:
+            case  ::dbaccess::DST_ORACLE_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_ORACLE_DATABASE_NAME)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
                 break;
-            case DST_MYSQL_ODBC:
-            case DST_ODBC:
+            case  ::dbaccess::DST_MYSQL_ODBC:
+            case  ::dbaccess::DST_ODBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
-                m_aET_Connection.SetHelpId( m_eType == DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
+                m_aET_Connection.SetHelpId( m_eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
                 break;
-            case DST_LDAP:
+            case  ::dbaccess::DST_LDAP:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_HOSTNAME)));
                 m_aET_Connection.SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
                 break;
-            case DST_MOZILLA:
+            case  ::dbaccess::DST_MOZILLA:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MOZILLA_PROFILE_NAME)));
                 m_aET_Connection.SetHelpId( HID_DSADMIN_MOZILLA_PROFILE_NAME );
                 break;
-            case DST_THUNDERBIRD:
+            case  ::dbaccess::DST_THUNDERBIRD:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_THUNDERBIRD_PROFILE_NAME)));
                 m_aET_Connection.SetHelpId( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
                 break;
-            case DST_OUTLOOK:
-            case DST_OUTLOOKEXP:
-            case DST_EVOLUTION:
-            case DST_KAB:
-            case DST_MACAB:
+            case  ::dbaccess::DST_OUTLOOK:
+            case  ::dbaccess::DST_OUTLOOKEXP:
+            case  ::dbaccess::DST_EVOLUTION:
+            case  ::dbaccess::DST_KAB:
+            case  ::dbaccess::DST_MACAB:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
                 {
                     String sText = m_aFT_Connection.GetText();
@@ -313,7 +314,7 @@ namespace dbaui
                 }
                 m_aET_Connection.Hide();
                 break;
-            case DST_JDBC:
+            case  ::dbaccess::DST_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 // run through
             default:
@@ -350,7 +351,7 @@ namespace dbaui
             String sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
-            BOOL bEnableJDBC = m_eType == DST_JDBC;
+            BOOL bEnableJDBC = m_eType ==  ::dbaccess::DST_JDBC;
             m_aJavaDriver.SetText(pJdbcDrvItem->GetValue());
 
             m_aJavaDriverLabel.Show(bEnableJDBC);
@@ -404,7 +405,7 @@ namespace dbaui
 
         fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
-        if ( m_eType == DST_JDBC )
+        if ( m_eType ==  ::dbaccess::DST_JDBC )
         {
             fillString(_rSet,&m_aJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
         }
@@ -440,7 +441,7 @@ namespace dbaui
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         BOOL bEnableTestConnection = !m_aET_Connection.IsVisible() || (m_aET_Connection.GetTextNoPrefix().Len() != 0);
-        if ( m_eType == DST_JDBC )
+        if ( m_eType ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (m_aJavaDriver.GetText().Len() != 0);
         m_aTestConnection.Enable(bEnableTestConnection);
         return true;

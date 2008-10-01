@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkeddocuments.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,10 +122,6 @@
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
-// -----------------
-#ifndef _DBU_MISCRES_HRC_
-#include "dbumiscres.hrc"
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>

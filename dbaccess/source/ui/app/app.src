@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.src,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -464,4 +464,9 @@ String STR_SUB_DOCS_WITH_SCRIPTS_DETAIL
 
                     "Note that you won't be able to embed macros or scripts into the database document until "
                     "this migration is done. ";
+};
+
+String RID_STR_EMBEDDED_DATABASE
+{
+    Text [ en-US ] = "Embedded database";
 };

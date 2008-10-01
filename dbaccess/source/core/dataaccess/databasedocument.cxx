@@ -40,6 +40,11 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/numberedcollection.hxx>
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/property.hxx>
+
+#include <svtools/saveopt.hxx>
+
 #include <framework/titlehelper.hxx>
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -120,6 +125,8 @@
 
 #include <algorithm>
 #include <functional>
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -1025,6 +1032,21 @@ void ODatabaseDocument::writeStorage( const Reference< XStorage >& _rxTargetStor
     Reference< XStatusIndicator > xStatusIndicator;
     lcl_extractAndStartStatusIndicator( _rMediaDescriptor, xStatusIndicator, aDelegatorArguments );
 
+    /** property map for export info set */
+    comphelper::PropertyMapEntry aExportInfoMap[] =
+    {
+        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+
+    SvtSaveOptions aSaveOpt;
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(aSaveOpt.IsPrettyPrinting()));
+    sal_Int32 nArgsLen = aDelegatorArguments.getLength();
+    aDelegatorArguments.realloc(nArgsLen+1);
+    aDelegatorArguments[nArgsLen++] <<= xInfoSet;
+
     Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
     xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( (rtl::OUString)MIMETYPE_OASIS_OPENDOCUMENT_DATABASE ) );
 
@@ -1033,9 +1055,11 @@ void ODatabaseDocument::writeStorage( const Reference< XStorage >& _rxTargetStor
     Sequence< PropertyValue > aMediaDescriptor;
     _rMediaDescriptor >>= aMediaDescriptor;
 
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml"))));
     WriteThroughComponent( xComponent, "settings.xml", "com.sun.star.comp.sdb.XMLSettingsExporter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
     WriteThroughComponent( xComponent, "content.xml", "com.sun.star.comp.sdb.DBExportFilter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 

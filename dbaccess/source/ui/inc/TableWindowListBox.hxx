@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowListBox.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,13 +30,8 @@
 #ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #define DBAUI_TABLEWINDOWLISTBOX_HXX
 
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
 
 struct AcceptDropEvent;
 struct ExecuteDropEvent;

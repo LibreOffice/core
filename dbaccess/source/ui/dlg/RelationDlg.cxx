@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationDlg.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -246,7 +246,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     try
     {
         ORelationTableConnectionData* pOrigConnData = static_cast<ORelationTableConnectionData*>(m_pOrigConnData.get());
-        if (*pConnData != *pOrigConnData || pConnData->Update())
+        if ( *pConnData == *pOrigConnData || pConnData->Update())
         {
             m_pOrigConnData->CopyFrom( *m_pConnData );
             EndDialog( RET_OK );

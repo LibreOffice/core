@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindow.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.26.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,54 +61,26 @@
 #include <vcl/wall.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_QUERY_HRC
 #include "Query.hrc"
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef DBACCESS_TABLEWINDOWACCESS_HXX
 #include "TableWindowAccess.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
+
 
 using namespace dbaui;
 using namespace ::utl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -131,7 +103,8 @@ using namespace ::com::sun::star::accessibility;
 DBG_NAME(OTableWindow)
 //------------------------------------------------------------------------------
 OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData )
-          :Window( pParent, WB_3DLOOK|WB_MOVEABLE )
+          : ::comphelper::OContainerListener(m_aMutex)
+          ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTypeImage( this )
           ,m_aTitle( this )
           ,m_pListBox(NULL)
@@ -171,7 +144,10 @@ OTableWindow::~OTableWindow()
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
         ::std::auto_ptr<Window> aTemp(m_pListBox);
         m_pListBox = NULL;
-    }
+    } // if (m_pListBox)
+    if ( m_pContainerListener.is() )
+        m_pContainerListener->dispose();
+
     m_pAccessible = NULL;
 }
 // -----------------------------------------------------------------------------
@@ -227,6 +203,13 @@ OTableWindowListBox* OTableWindow::CreateListBox()
 //------------------------------------------------------------------------------
 BOOL OTableWindow::FillListBox()
 {
+    m_pListBox->Clear();
+    if ( !m_pContainerListener.is() )
+    {
+        Reference< XContainer> xContainer(m_pData->getColumns(),UNO_QUERY);
+        if ( xContainer.is() )
+            m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
+    }
     // mark all primary keys with special image
     ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
     ImageList aImageList(TmpRes);
@@ -848,3 +831,19 @@ String OTableWindow::getTitle() const
     return m_aTitle.GetText();
 }
 // -----------------------------------------------------------------------------
+void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
+{
+    FillListBox();
+}
+// -----------------------------------------------------------------------------
+void OTableWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+    FillListBox();
+}
+// -----------------------------------------------------------------------------
+void OTableWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+    FillListBox();
+}
+// -----------------------------------------------------------------------------
+

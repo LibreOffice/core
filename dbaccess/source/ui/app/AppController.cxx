@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.63.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -938,8 +938,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_DSUSERADMIN:
             {
-                DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                aReturn.bEnabled = DST_EMBEDDED_HSQLDB != eType;
+                ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType;
             }
             break;
             case SID_DB_APP_DSRELDESIGN:
@@ -955,23 +955,23 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED_HSQLDB != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_MACAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType &&  ::dbaccess::DST_MOZILLA != eType &&  ::dbaccess::DST_EVOLUTION != eType &&  ::dbaccess::DST_KAB != eType &&  ::dbaccess::DST_MACAB != eType &&  ::dbaccess::DST_OUTLOOK != eType &&  ::dbaccess::DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
                 aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED_HSQLDB != eType;
+                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType;
                 }
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType( ::comphelper::getString( m_xDataSource->getPropertyValue( PROPERTY_URL ) ) );
+                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType( ::comphelper::getString( m_xDataSource->getPropertyValue( PROPERTY_URL ) ) );
                     aReturn.bEnabled = AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( eType );
                 }
                 break;
@@ -1023,8 +1023,16 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    ::rtl::OUString sDSTypeName = m_aTypeCollection.getTypeDisplayName(eType);
+                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    ::rtl::OUString sDSTypeName;
+                    if ( m_aTypeCollection.isEmbeddedDatabase( eType ) )
+                    {
+                        sDSTypeName = String( ModuleRes( RID_STR_EMBEDDED_DATABASE ) );
+                    }
+                    else
+                    {
+                        sDSTypeName = m_aTypeCollection.getTypeDisplayName(eType);
+                    }
                     aReturn.sTitle = sDSTypeName;
                 }
                 break;
@@ -1034,7 +1042,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 {
                     ::rtl::OUString sURL;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType( sURL );
+                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType( sURL );
 
                     String sDatabaseName;
                     String sHostName;
@@ -3032,7 +3040,9 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
 
     Sequence< NamedDatabaseObject > aCurrentSelection;
-    getContainer()->describeCurrentSelectionForType( getContainer()->getElementType(), aCurrentSelection );
+    const ElementType eType( getContainer()->getElementType() );
+    if ( eType != E_NONE )
+        getContainer()->describeCurrentSelectionForType( eType, aCurrentSelection );
     return makeAny( aCurrentSelection );
 }
 // -----------------------------------------------------------------------------

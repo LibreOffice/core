@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppDetailPageHelper.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,7 +473,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _r
 void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
     OSL_ENSURE( _eType < E_ELEMENT_TYPE_COUNT, "OAppDetailPageHelper::describeCurrentSelectionForType: invalid type!" );
-    DBTreeListBox* pList = m_pLists[ _eType ];
+    DBTreeListBox* pList = ( _eType < E_ELEMENT_TYPE_COUNT ) ? m_pLists[ _eType ] : NULL;
     OSL_ENSURE( pList, "OAppDetailPageHelper::describeCurrentSelectionForType: "
                        "You really should ensure this type has already been viewed before!" );
     if ( !pList )

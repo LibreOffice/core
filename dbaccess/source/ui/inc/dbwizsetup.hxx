@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbwizsetup.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,6 @@ namespace dbaui
 {
 //.........................................................................
 
-class ODsnTypeCollection;
 class OGenericAdministrationPage;
 
 //=========================================================================
@@ -85,8 +84,8 @@ private:
     OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
-    DATASOURCE_TYPE         m_eType;
-    DATASOURCE_TYPE         m_eOldType;
+    ::dbaccess::DATASOURCE_TYPE         m_eType;
+    ::dbaccess::DATASOURCE_TYPE         m_eOldType;
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
@@ -109,7 +108,8 @@ private:
     String                  m_sWorkPath;
     OGeneralPage*           m_pGeneralPage;
     OMySQLIntroPageSetup*   m_pMySQLIntroPage;
-    ODsnTypeCollection*     m_pCollection;  /// the DSN type collection instance
+    ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;  /// the DSN type collection instance
 
 
 
@@ -131,7 +131,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::dbaccess::DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
     virtual void enableConfirmSettings( bool _bEnable );
@@ -182,7 +182,7 @@ private:
             the first state in this path, following by an arbitrary number of others, as in
             RoadmapWizard::declarePath.
     */
-    void declareAuthDepPath( DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... );
+    void declareAuthDepPath( ::dbaccess::DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... );
 
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
     sal_Bool SaveDatabaseDocument();
@@ -190,9 +190,9 @@ private:
     String createUniqueFileName(const INetURLObject& rURL);
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
-    DATASOURCE_TYPE VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const;
+    ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;
 
-    DATASOURCE_TYPE getDefaultDatabaseType() const;
+    ::dbaccess::DATASOURCE_TYPE getDefaultDatabaseType() const;
 
     void updateTypeDependentStates();
     sal_Bool callSaveAsDialog();

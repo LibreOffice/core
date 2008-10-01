@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindow.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,28 +30,17 @@
 #ifndef DBAUI_TABLEWINDOW_HXX
 #define DBAUI_TABLEWINDOW_HXX
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef DBAUI_TABLEWINDOWTITLE_HXX
 #include "TableWindowTitle.hxx"
-#endif
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
+#include <rtl/ref.hxx>
 #include "TableWindowData.hxx"
-#endif
 #include <vector>
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
-#include <unotools/eventlisteneradapter.hxx>
-#endif
+
+#include <comphelper/containermultiplexer.hxx>
+#include "cppuhelper/basemutex.hxx"
 
 class SvLBoxEntry;
 namespace dbaui
@@ -69,7 +58,9 @@ namespace dbaui
     class OJoinTableView;
     class OTableWindowAccess;
 
-    class OTableWindow : public Window
+    class OTableWindow : public ::cppu::BaseMutex
+                        ,public ::comphelper::OContainerListener
+                        ,public Window
     {
         friend class OTableWindowTitle;
         friend class OTableWindowListBox;
@@ -83,12 +74,18 @@ namespace dbaui
     private:
         TTableWindowData::value_type
                                 m_pData;
+        ::rtl::Reference< comphelper::OContainerListenerAdapter>
+                                m_pContainerListener;
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
         UINT16                  m_nSizingFlags;
         BOOL                    m_bActive;
 
         void Draw3DBorder( const Rectangle& rRect );
+        // OContainerListener
+        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual void    Resize();

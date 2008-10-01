@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbwiz.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,12 +55,14 @@ FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 FORWARD_DECLARE_INTERFACE(sdbc,XConnection)
 FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
 
+namespace dbaccess
+{
+    class ODsnTypeCollection;
+}
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-
-class ODsnTypeCollection;
 
 //=========================================================================
 //= ODbTypeWizDialog
@@ -75,7 +77,7 @@ private:
     OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
-    DATASOURCE_TYPE         m_eType;
+    ::dbaccess::DATASOURCE_TYPE         m_eType;
 
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
@@ -99,7 +101,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::dbaccess::DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);

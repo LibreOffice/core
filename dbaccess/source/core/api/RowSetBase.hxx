@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSetBase.hxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,7 @@
 #ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
 #endif
-
+#include "core_resource.hxx"
 #include <comphelper/componentcontext.hxx>
 
 #include <functional>
@@ -127,6 +127,7 @@ namespace dbaccess
                         public ::comphelper::OPropertyStateContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
+        OModuleClient                           m_aModuleClient;
     protected:
         typedef ::std::vector<ORowSetDataColumn*>   TDataColumns;
         ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself

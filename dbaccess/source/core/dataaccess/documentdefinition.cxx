@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.64.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1605,7 +1605,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         aMediaDesc.put( "ComponentData", aComponentData.getPropertyValues() );
     }
 
-    aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
+    if ( m_pImpl->m_aProps.aTitle.getLength() )
+        aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
 
     // .........................................................................
     // put the common load arguments into the document's media descriptor

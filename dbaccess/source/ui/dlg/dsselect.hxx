@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsselect.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,7 @@ protected:
 #endif
 
 public:
-    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet = NULL );
+    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, ::dbaccess::DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}

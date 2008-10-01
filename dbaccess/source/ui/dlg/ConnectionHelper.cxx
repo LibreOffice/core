@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionHelper.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.48.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "dsnItem.hxx"
 #ifndef DBAUI_CONNECTIONHELPER_HXX
 #include "ConnectionHelper.hxx"
 #endif
@@ -224,7 +225,7 @@ DBG_NAME(OConnectionHelper)
         BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing(m_eType);
         m_aFT_Connection.Show();
         m_aET_Connection.Show();
-        m_aET_Connection.ShowPrefix(DST_JDBC == m_eType );
+        m_aET_Connection.ShowPrefix( ::dbaccess::DST_JDBC == m_eType );
         m_aPB_Connection.Show(sal_True);
 
         LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
@@ -255,7 +256,7 @@ DBG_NAME(OConnectionHelper)
 
         switch ( m_eType )
         {
-        case DST_CALC:
+        case  ::dbaccess::DST_CALC:
             m_pAdminDialog->enableConfirmSettings( getURLNoPrefix().Len() > 0 );
             break;
         default:
@@ -269,8 +270,8 @@ DBG_NAME(OConnectionHelper)
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         switch ( m_eType )
         {
-            case DST_DBASE:
-            case DST_FLAT:
+            case  ::dbaccess::DST_DBASE:
+            case  ::dbaccess::DST_FLAT:
             {
                 try
                 {
@@ -322,7 +323,7 @@ DBG_NAME(OConnectionHelper)
                 }
             }
             break;
-            case DST_CALC:
+            case  ::dbaccess::DST_CALC:
             {
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN
                                                 ,SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
@@ -330,7 +331,7 @@ DBG_NAME(OConnectionHelper)
                 askForFileName(aFileDlg);
             }
             break;
-            case DST_MSACCESS:
+            case  ::dbaccess::DST_MSACCESS:
             {
                 ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
                 String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
@@ -340,7 +341,7 @@ DBG_NAME(OConnectionHelper)
                 askForFileName(aFileDlg);
             }
             break;
-            case DST_MSACCESS_2007:
+            case  ::dbaccess::DST_MSACCESS_2007:
             {
                 ::rtl::OUString sAccdb(RTL_CONSTASCII_USTRINGPARAM("*.accdb"));
                 String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
@@ -350,7 +351,7 @@ DBG_NAME(OConnectionHelper)
                 askForFileName(aFileDlg);
             }
             break;
-            case DST_ADABAS:
+            case  ::dbaccess::DST_ADABAS:
             {
                 // collect all names from the config dir
                 // and all dir's of the DBWORK/wrk or DBROOT/wrk dir
@@ -417,7 +418,7 @@ DBG_NAME(OConnectionHelper)
                     if (RET_OK == aSelector.Execute())
                     {
                         setURLNoPrefix(aSelector.GetSelected());
-                        //  checkCreateDatabase(DST_ADABAS);
+                        //  checkCreateDatabase( ::dbaccess::DST_ADABAS);
                         SetRoadmapStateValue(sal_True);
                         callModifiedHdl();
                     }
@@ -431,8 +432,8 @@ DBG_NAME(OConnectionHelper)
                 }
             }
             break;
-            case DST_MYSQL_ODBC:
-            case DST_ODBC:
+            case  ::dbaccess::DST_MYSQL_ODBC:
+            case  ::dbaccess::DST_ODBC:
             {
                 // collect all ODBC data source names
                 ::rtl::OUString sCurrDatasource=getURLNoPrefix();
@@ -448,7 +449,7 @@ DBG_NAME(OConnectionHelper)
             }
             break;
 #ifdef _ADO_DATALINK_BROWSE_
-            case DST_ADO:
+            case  ::dbaccess::DST_ADO:
             {
                 ::rtl::OUString sOldDataSource=getURLNoPrefix();
                 ::rtl::OUString sNewDataSource;
@@ -465,11 +466,11 @@ DBG_NAME(OConnectionHelper)
             }
             break;
 #endif
-            case DST_MOZILLA:
-            case DST_THUNDERBIRD:
+            case  ::dbaccess::DST_MOZILLA:
+            case  ::dbaccess::DST_THUNDERBIRD:
             {
                 MozillaProductType profileType = MozillaProductType_Mozilla;
-                if (m_eType == DST_THUNDERBIRD)
+                if (m_eType ==  ::dbaccess::DST_THUNDERBIRD)
                     profileType = MozillaProductType_Thunderbird;
 
                 Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
@@ -811,11 +812,11 @@ DBG_NAME(OConnectionHelper)
     //-------------------------------------------------------------------------
     long OConnectionHelper::PreNotify( NotifyEvent& _rNEvt )
     {
-        if (    (DST_DBASE == m_eType)
-            ||  (DST_FLAT == m_eType)
-            ||  (DST_MSACCESS == m_eType)
-            ||  (DST_MSACCESS_2007 == m_eType)
-            ||  (DST_CALC == m_eType) )
+        if (    ( ::dbaccess::DST_DBASE == m_eType)
+            ||  ( ::dbaccess::DST_FLAT == m_eType)
+            ||  ( ::dbaccess::DST_MSACCESS == m_eType)
+            ||  ( ::dbaccess::DST_MSACCESS_2007 == m_eType)
+            ||  ( ::dbaccess::DST_CALC == m_eType) )
             switch (_rNEvt.GetType())
             {
                 case EVENT_GETFOCUS:
@@ -932,11 +933,11 @@ DBG_NAME(OConnectionHelper)
         String sOldPath;
         sOldPath = m_aET_Connection.GetSavedValueNoPrefix();
         sURL = m_aET_Connection.GetTextNoPrefix();
-        if (    (DST_DBASE == m_eType)
-            ||  (DST_FLAT == m_eType)
-            ||  (DST_MSACCESS == m_eType)
-            ||  (DST_MSACCESS_2007 == m_eType)
-            ||  (DST_CALC == m_eType) )
+        if (    ( ::dbaccess::DST_DBASE == m_eType)
+            ||  ( ::dbaccess::DST_FLAT == m_eType)
+            ||  ( ::dbaccess::DST_MSACCESS == m_eType)
+            ||  ( ::dbaccess::DST_MSACCESS_2007 == m_eType)
+            ||  ( ::dbaccess::DST_CALC == m_eType) )
         {
             if ((sURL != sOldPath) && (0 != sURL.Len()))
             {   // the text changed since entering the control
@@ -945,7 +946,7 @@ DBG_NAME(OConnectionHelper)
                 OFileNotation aTransformer(sURL);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 
-                if ( (DST_CALC == m_eType) || (DST_MSACCESS == m_eType) || (DST_MSACCESS_2007 == m_eType) )
+                if ( ( ::dbaccess::DST_CALC == m_eType) || ( ::dbaccess::DST_MSACCESS == m_eType) || ( ::dbaccess::DST_MSACCESS_2007 == m_eType) )
                 { // #106016# --------------------------
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {

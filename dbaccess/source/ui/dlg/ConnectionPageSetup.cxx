@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionPageSetup.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,12 +272,12 @@ namespace dbaui
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
         // special handling for oracle, this can only happen
         // if the user enters the same url as used for Oracle and we are on the JDBC path
-        if ( DST_ORACLE_JDBC == m_eType )
-            m_eType = DST_JDBC;
+        if (  ::dbaccess::DST_ORACLE_JDBC == m_eType )
+            m_eType =  ::dbaccess::DST_JDBC;
 
         OConnectionHelper::implInitControls(_rSet, _bSaveValue);
 
-        if ( m_eType >= DST_USERDEFINE1 )
+        if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
         {
             String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
             FixedText* ppTextControls[] ={&m_aFT_Connection};

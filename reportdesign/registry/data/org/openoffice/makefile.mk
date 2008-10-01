@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.2.6.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,9 +44,6 @@ LOCALIZEDFILES= \
     
 XCUFILES= \
     $(LOCALIZEDFILES)
-
-MODULEFILES= \
-    Setup-report.xcu
 
 .INCLUDE :  target.mk
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbadmin.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.108.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "dsnItem.hxx"
 #ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
 #endif
@@ -181,43 +182,43 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     resetPages(xDatasource);
 
-    DATASOURCE_TYPE eType = getDatasourceType(*getOutputSet());
+    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*getOutputSet());
 
     // and insert the new ones
     switch ( eType )
     {
-        case DST_DBASE:
+        case  ::dbaccess::DST_DBASE:
             addDetailPage(PAGE_DBASE, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
             //  bResetPasswordRequired = sal_True;
             break;
 
-        case DST_ADO:
+        case  ::dbaccess::DST_ADO:
             addDetailPage(PAGE_ADO, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdo);
             break;
 
-        case DST_FLAT:
+        case  ::dbaccess::DST_FLAT:
             addDetailPage(PAGE_TEXT, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
             //  bResetPasswordRequired = sal_True;
             break;
 
-        case DST_ODBC:
+        case  ::dbaccess::DST_ODBC:
             addDetailPage(PAGE_ODBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateODBC);
             break;
 
-        case DST_MYSQL_ODBC:
+        case  ::dbaccess::DST_MYSQL_ODBC:
             addDetailPage(PAGE_MYSQL_ODBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLODBC);
             break;
-        case DST_MYSQL_JDBC:
+        case  ::dbaccess::DST_MYSQL_JDBC:
             addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
             break;
-        case DST_MYSQL_NATIVE:
+        case  ::dbaccess::DST_MYSQL_NATIVE:
             addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLNATIVE);
             break;
-        case DST_ORACLE_JDBC:
+        case  ::dbaccess::DST_ORACLE_JDBC:
             addDetailPage(PAGE_ORACLE_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
             break;
 
-        case DST_ADABAS:
+        case  ::dbaccess::DST_ADABAS:
             // for adabas we have more than one page
             // CAUTION: the order of inserting pages matters.
             // the major detail page should be inserted last always (thus, it becomes the first page after
@@ -225,19 +226,19 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
             addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdabas);
             break;
 
-        case DST_LDAP:
+        case  ::dbaccess::DST_LDAP:
             addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;
-        case DST_USERDEFINE1:   /// first user defined driver
-        case DST_USERDEFINE2:
-        case DST_USERDEFINE3:
-        case DST_USERDEFINE4:
-        case DST_USERDEFINE5:
-        case DST_USERDEFINE6:
-        case DST_USERDEFINE7:
-        case DST_USERDEFINE8:
-        case DST_USERDEFINE9:
-        case DST_USERDEFINE10:
+        case  ::dbaccess::DST_USERDEFINE1:  /// first user defined driver
+        case  ::dbaccess::DST_USERDEFINE2:
+        case  ::dbaccess::DST_USERDEFINE3:
+        case  ::dbaccess::DST_USERDEFINE4:
+        case  ::dbaccess::DST_USERDEFINE5:
+        case  ::dbaccess::DST_USERDEFINE6:
+        case  ::dbaccess::DST_USERDEFINE7:
+        case  ::dbaccess::DST_USERDEFINE8:
+        case  ::dbaccess::DST_USERDEFINE9:
+        case  ::dbaccess::DST_USERDEFINE10:
             {
                 LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
                 String aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
@@ -385,7 +386,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-DATASOURCE_TYPE ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::dbaccess::DATASOURCE_TYPE ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -395,7 +396,7 @@ void ODbAdminDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 //-------------------------------------------------------------------------
-SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ODsnTypeCollection* _pTypeCollection)
+SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
     // just to be sure ....
     _rpSet = NULL;
@@ -408,7 +409,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
-    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix( DST_ADABAS ) : String());
+    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix(  ::dbaccess::DST_ADABAS ) : String());
     *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&sFilterAll, 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);

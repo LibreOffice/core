@@ -8,7 +8,7 @@
  *
  * $RCSfile: dsntypes.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.68.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,18 +29,17 @@
  *
  ************************************************************************/
 
-#ifndef _DBAUI_DSNTYPES_HXX_
-#define _DBAUI_DSNTYPES_HXX_
+#ifndef _DBACCESS_DSNTYPES_HXX_
+#define _DBACCESS_DSNTYPES_HXX_
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <svtools/poolitem.hxx>
-
 #include <comphelper/stl_types.hxx>
 #include "dbaccessdllapi.h"
+#include <tools/string.hxx>
 
 //.........................................................................
-namespace dbaui
+namespace dbaccess
 {
 //.........................................................................
 
@@ -148,6 +147,9 @@ public:
     /// check if the given data source tyoe is based on the file system - i.e. the URL is a prefix plus a file URL
     sal_Bool isFileSystemBased(DATASOURCE_TYPE _eType) const;
 
+    /// checks if the given data source type embeds its data into the database document
+    bool isEmbeddedDatabase( DATASOURCE_TYPE _eType ) const;
+
     /** returns default settings for newly created databases of the given type.
 
         Currently implemented (and used) for DST_EMBEDDED_HSQLDB only
@@ -177,12 +179,12 @@ protected:
 //-------------------------------------------------------------------------
 //- ODsnTypeCollection::TypeIterator
 //-------------------------------------------------------------------------
-class ODsnTypeCollection::TypeIterator
+class DBACCESS_DLLPUBLIC ODsnTypeCollection::TypeIterator
 {
     friend class ODsnTypeCollection;
 
-    friend bool operator==(const TypeIterator& lhs, const TypeIterator& rhs);
-    friend bool operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
+    friend bool DBACCESS_DLLPUBLIC operator==(const TypeIterator& lhs, const TypeIterator& rhs);
+    friend bool DBACCESS_DLLPUBLIC operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
 
 protected:
     const ODsnTypeCollection*   m_pContainer;
@@ -209,30 +211,9 @@ protected:
     TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);
 };
 
-//=========================================================================
-//= DbuTypeCollectionItem
-//=========================================================================
-/** allows an ODsnTypeCollection to be transported in an SfxItemSet
-*/
-class DbuTypeCollectionItem : public SfxPoolItem
-{
-    ODsnTypeCollection* m_pCollection;
-
-public:
-    TYPEINFO();
-    DbuTypeCollectionItem(sal_Int16 nWhich = 0, ODsnTypeCollection* _pCollection = NULL);
-    DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource);
-
-    virtual int              operator==(const SfxPoolItem& _rItem) const;
-    virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const;
-
-    ODsnTypeCollection* getCollection() const { return m_pCollection; }
-};
-
-
 //.........................................................................
-}   // namespace dbaui
+}   // namespace dbaccess
 //.........................................................................
 
-#endif // _DBAUI_DSNTYPES_HXX_
+#endif // _DBACCESS_DSNTYPES_HXX_
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DriverSettings.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 
 
 using namespace dbaui;
-void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::std::vector< sal_Int32>& _out_rDetailsIds )
+void ODriversSettings::getSupportedIndirectSettings( ::dbaccess::DATASOURCE_TYPE _eType, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.
@@ -68,12 +68,12 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
     // the rest is hard-coded. On the long run, all of this should be done via DataSourceUI::hasSetting
     switch ( _eType )
     {
-        case DST_DBASE:
+        case  ::dbaccess::DST_DBASE:
             _out_rDetailsIds.push_back(DSID_SHOWDELETEDROWS);
             _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
-        case DST_FLAT:
+        case  ::dbaccess::DST_FLAT:
             _out_rDetailsIds.push_back(DSID_FIELDDELIMITER);
             _out_rDetailsIds.push_back(DSID_TEXTDELIMITER);
             _out_rDetailsIds.push_back(DSID_DECIMALDELIMITER);
@@ -83,7 +83,7 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
             _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
-        case DST_ADABAS:
+        case  ::dbaccess::DST_ADABAS:
             _out_rDetailsIds.push_back(DSID_CHARSET);
             _out_rDetailsIds.push_back(DSID_CONN_SHUTSERVICE);
             _out_rDetailsIds.push_back(DSID_CONN_DATAINC);
@@ -92,40 +92,40 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
             _out_rDetailsIds.push_back(DSID_CONN_CTRLPWD);
             break;
 
-        case DST_ADO:
+        case  ::dbaccess::DST_ADO:
             _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
-        case DST_ODBC:
+        case  ::dbaccess::DST_ODBC:
             _out_rDetailsIds.push_back(DSID_ADDITIONALOPTIONS);
             _out_rDetailsIds.push_back(DSID_CHARSET);
             _out_rDetailsIds.push_back(DSID_USECATALOG);
             break;
 
-        case DST_MYSQL_NATIVE:
+        case  ::dbaccess::DST_MYSQL_NATIVE:
             _out_rDetailsIds.push_back(DSID_CHARSET);
             _out_rDetailsIds.push_back(DSID_CONN_SOCKET);
             break;
-        case DST_MYSQL_JDBC:
+        case  ::dbaccess::DST_MYSQL_JDBC:
             _out_rDetailsIds.push_back(DSID_CHARSET);
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             break;
 
-        case DST_MYSQL_ODBC:
+        case  ::dbaccess::DST_MYSQL_ODBC:
             _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
-        case DST_LDAP:
+        case  ::dbaccess::DST_LDAP:
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_USESSL);
             break;
 
-        case DST_JDBC:
+        case  ::dbaccess::DST_JDBC:
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             break;
 
-        case DST_ORACLE_JDBC:
+        case  ::dbaccess::DST_ORACLE_JDBC:
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             _out_rDetailsIds.push_back(DSID_IGNORECURRENCY);
             break;

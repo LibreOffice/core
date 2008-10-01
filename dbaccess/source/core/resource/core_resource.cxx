@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: core_resource.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,7 @@
 
 #include "core_resource.hxx"
 
-#ifndef _TOOLS_SIMPLERESMGR_HXX_
-#include <tools/simplerm.hxx>
-#endif
+#include <tools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
 #ifndef _SV_SVAPP_HXX
@@ -54,13 +52,9 @@ namespace dbaccess
     //==================================================================
     //= ResourceManager
     //==================================================================
-    SimpleResMgr* ResourceManager::m_pImpl = NULL;
-
-    //------------------------------------------------------------------
-    ResourceManager::EnsureDelete::~EnsureDelete()
-    {
-        delete ResourceManager::m_pImpl;
-    }
+    ::osl::Mutex    ResourceManager::s_aMutex;
+    sal_Int32       ResourceManager::s_nClients = 0;
+    ResMgr*         ResourceManager::m_pImpl = NULL;
 
     //------------------------------------------------------------------
     void ResourceManager::ensureImplExists()
@@ -72,13 +66,7 @@ namespace dbaccess
 
         ByteString sFileName("dba");
 
-        m_pImpl = SimpleResMgr::Create(sFileName.GetBuffer(), aLocale);
-
-        if (m_pImpl)
-        {
-            // now that we have an impl class make sure it's deleted on unloading the library
-            static ResourceManager::EnsureDelete    s_aDeleteTheImplClass;
-        }
+        m_pImpl = ResMgr::CreateResMgr(sFileName.GetBuffer(), aLocale);
     }
 
     //------------------------------------------------------------------
@@ -88,7 +76,7 @@ namespace dbaccess
 
         ensureImplExists();
         if (m_pImpl)
-            sReturn = m_pImpl->ReadString(_nResId);
+            sReturn = String(ResId(_nResId,*m_pImpl));
 
         return sReturn;
     }
@@ -99,6 +87,28 @@ namespace dbaccess
         String sString( loadString( _nResId ) );
         sString.SearchAndReplaceAscii( _pPlaceholderAscii, _rReplace );
         return sString;
+    }
+    //-------------------------------------------------------------------------
+    void ResourceManager::registerClient()
+    {
+        ::osl::MutexGuard aGuard(s_aMutex);
+        ++s_nClients;
+    }
+
+    //-------------------------------------------------------------------------
+    void ResourceManager::revokeClient()
+    {
+        ::osl::MutexGuard aGuard(s_aMutex);
+        if (!--s_nClients && m_pImpl)
+        {
+            delete m_pImpl;
+            m_pImpl = NULL;
+        }
+    }
+    ResMgr* ResourceManager::getResManager()
+    {
+        ensureImplExists();
+        return m_pImpl;
     }
 
 //.........................................................................

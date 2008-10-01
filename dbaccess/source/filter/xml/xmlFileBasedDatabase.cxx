@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlFileBasedDatabase.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     }
     if ( sLocation.getLength() && sMediaType.getLength() )
     {
-        ::rtl::OUString sURL(dbaui::ODsnTypeCollection::getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
+        ::rtl::OUString sURL(dbaccess::ODsnTypeCollection::getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
         sURL += sLocation;
         try
         {

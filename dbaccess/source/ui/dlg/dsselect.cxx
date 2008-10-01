@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsselect.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 //==================================================================
-ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet)
+ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, ::dbaccess::DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
      ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
      ,m_aDatasource         (this, ModuleRes(LB_DATASOURCE))
@@ -120,7 +120,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
      ,m_aCreateAdabasDB     (this, ModuleRes(PB_CREATE))
      ,m_pOutputSet(_pOutputSet)
 {
-    if (DST_ADABAS == _eType)
+    if ( ::dbaccess::DST_ADABAS == _eType)
     {   // set a new title (indicating that we're browsing local data sources only)
         SetText(ModuleRes(STR_LOCAL_DATASOURCES));
         m_aDescription.SetText(ModuleRes(STR_DESCRIPTION2));
@@ -158,7 +158,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
     fillListBox(_rDatasources);
 #ifdef HAVE_ODBC_ADMINISTRATION
     // allow ODBC datasource managenment
-    if ( DST_ODBC == _eType || DST_MYSQL_ODBC == _eType )
+    if (  ::dbaccess::DST_ODBC == _eType ||  ::dbaccess::DST_MYSQL_ODBC == _eType )
     {
         m_aManageDatasources.Show();
         m_aManageDatasources.Enable();

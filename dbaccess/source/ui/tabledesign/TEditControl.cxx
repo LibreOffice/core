@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TEditControl.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.60.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -688,6 +688,17 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
         case FIELD_PROPERTY_SCALE:
         case FIELD_PROPERTY_BOOL_DEFAULT:
             pDescrWin->SaveData(pActFieldDescr);
+
+            if ( FIELD_PROPERTY_AUTOINC == nColId && pActFieldDescr->IsAutoIncrement() )
+            {
+                OTableController& rController = GetView()->getController();
+                if ( rController.isAutoIncrementPrimaryKey() )
+                {
+                    pActFieldDescr->SetPrimaryKey( true );
+                    InvalidateHandleColumn();
+                    Invalidate();
+                }
+            }
             break;
     }
     return sal_True;
@@ -1553,8 +1564,8 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
             // oder wenn Spalten nicht gedroped werden können und das Required Flag ist nicht gesetzt
             // oder wenn eine ::com::sun::star::sdbcx::View vorhanden ist und das Required Flag nicht gesetzt ist
             TOTypeInfoSP pTypeInfo = pFieldDescr->getTypeInfo();
-            if( pTypeInfo->nSearchType == ColumnSearch::NONE                    ||
-                (pFieldDescr->IsNullable() && pRow->IsReadOnly())
+            if(     pTypeInfo->nSearchType == ColumnSearch::NONE
+                || (pFieldDescr->IsNullable() && pRow->IsReadOnly())
               )
                 return sal_False;
         }
@@ -1758,6 +1769,14 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
     {
         _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
         _pFieldDesc->SetControlDefault(Any());
+    } // if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
+    if ( _pFieldDesc->IsAutoIncrement() && !_bPrimaryKey )
+    {
+        OTableController& rController = GetView()->getController();
+        if ( rController.isAutoIncrementPrimaryKey() )
+        {
+            _pFieldDesc->SetAutoIncrement(false);
+        }
     }
     //////////////////////////////////////////////////////////////////////
     // update field description
@@ -1777,13 +1796,12 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     long nIndex = 0;
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    for(;aIter != m_pRowList->end();++aIter)
+    for(sal_Int32 nRow = 0;aIter != m_pRowList->end();++aIter,++nRow)
     {
         OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
-        if( pFieldDescr && (*aIter)->IsPrimaryKey() )
+        if( pFieldDescr && (*aIter)->IsPrimaryKey() && (!bSet || !IsRowSelected(nRow)) )
         {
-            nIndex = aIter - m_pRowList->begin();
-            AdjustFieldDescription(pFieldDescr,aDeletedPrimKeys,nIndex,bSet,sal_False);
+            AdjustFieldDescription(pFieldDescr,aDeletedPrimKeys,nRow,bSet,sal_False);
         }
     }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbu_app.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,11 +67,12 @@
 #define RID_STR_TABLES_HELP_TEXT_WIZARD     RID_STR_APP_START + 28
 #define RID_STR_FORMS_HELP_TEXT_WIZARD      RID_STR_APP_START + 29
 #define RID_STR_REPORT_HELP_TEXT            RID_STR_APP_START + 30
+#define RID_STR_EMBEDDED_DATABASE           RID_STR_APP_START + 31
 
 
 // please adjust checking before insert new strings
 
-#if RID_STR_REPORT_HELP_TEXT > RID_STR_APP_END
+#if RID_STR_EMBEDDED_DATABASE > RID_STR_APP_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 

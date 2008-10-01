@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.6.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,8 +48,6 @@ XCUFILES= \
     $(LOCALIZEDFILES) \
     ReportDesign.xcu \
     Paths.xcu
-
-MODULEFILES= Embedding-report.xcu
 
 .INCLUDE :  target.mk
 

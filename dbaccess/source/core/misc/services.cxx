@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: services.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "module_dba.hxx"
 #include <osl/diagnose.h>
 #include "DatabaseDataProvider.hxx"
+#include "dbaccessdllapi.h"
 
 /********************************************************************************************/
 
@@ -54,7 +55,7 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
 
-namespace {
+namespace dba{
 //--------------------------------------------------------------------------
     ::cppu::ImplementationEntry entries[] = {
         { &::dbaccess::DatabaseDataProvider::Create, &::dbaccess::DatabaseDataProvider::getImplementationName_Static, &::dbaccess::DatabaseDataProvider::getSupportedServiceNames_Static,
@@ -86,7 +87,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -96,7 +97,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
+extern "C" DBACCESS_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
                 void* pServiceManager,
                 void* pRegistryKey
             )
@@ -107,7 +108,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         return ::dba::DbaModule::getInstance().writeComponentInfos(
             static_cast< XMultiServiceFactory* >( pServiceManager ),
             static_cast< XRegistryKey* >( pRegistryKey ) )
-            && cppu::component_writeInfoHelper(pServiceManager, pRegistryKey, entries);
+            && cppu::component_writeInfoHelper(pServiceManager, pRegistryKey, dba::entries);
     }
     catch (InvalidRegistryException& )
     {
@@ -118,7 +119,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" DBACCESS_DLLPUBLIC void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* pRegistryKey)
@@ -135,6 +136,6 @@ extern "C" void* SAL_CALL component_getFactory(
         xRet->acquire();
     else
         return cppu::component_getFactoryHelper(
-            pImplementationName, pServiceManager, pRegistryKey, entries);
+            pImplementationName, pServiceManager, pRegistryKey, dba::entries);
     return xRet.get();
 };

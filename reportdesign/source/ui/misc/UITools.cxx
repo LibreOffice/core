@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.7.28.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,6 +281,7 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
             pRet->addProperty(PROPERTY_LEFTMARGIN);
             pRet->addProperty(PROPERTY_RIGHTMARGIN);
             pRet->addProperty(PROPERTY_PAPERSIZE);
+            pRet->addProperty(PROPERTY_BACKCOLOR);
         }
     }
     return pRet;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContainerMediator.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,7 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
         m_aForwardList.erase(sElementName);
         try
         {
-            Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY_THROW );
+            Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY );
             if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
                 xNameContainer->removeByName( sElementName );
         }
