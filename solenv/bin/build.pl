@@ -2742,16 +2742,22 @@ sub generate_html_file {
         print HTML '\', \'\')\"); title=\"';
         print HTML scalar keys %modules_with_errors;
         print HTML ' module(s) with errors\">Total Progress:</a></td>");' . "\n";
-        print HTML 'document.write("        <td height=8* width=';
+        print HTML 'document.write("        <td>");' . "\n";
+        print HTML 'document.write("            <table width=100px valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0>");' . "\n";
+        print HTML 'document.write("                <tr>");' . "\n";
+        print HTML 'document.write("                    <td height=20px width=';
         print HTML $successes_percent + $errors_percent;
         if (scalar keys %modules_with_errors) {
-            print HTML '* bgcolor=red valign=top></td>");' . "\n";
+            print HTML '% bgcolor=red valign=top></td>");' . "\n";
         } else {
-            print HTML '* bgcolor=#25A528 valign=top></td>");' . "\n";
+            print HTML '% bgcolor=#25A528 valign=top></td>");' . "\n";
         };
-        print HTML 'document.write("        <td width=';
+        print HTML 'document.write("                    <td width=';
         print HTML 100 - ($successes_percent + $errors_percent);
-        print HTML '* bgcolor=lightgrey valign=top></td>");' . "\n";
+        print HTML '% bgcolor=lightgrey valign=top></td>");' . "\n";
+        print HTML 'document.write("                </tr>");' . "\n";
+        print HTML 'document.write("            </table>");' . "\n";
+        print HTML 'document.write("        </td>");' . "\n";
         print HTML 'document.write("        <td align=right>&nbsp Build time: ' . $build_duration .'</td>");' . "\n";
         print HTML 'document.write("    </tr>");' . "\n";
         print HTML 'document.write("</table>");' . "\n";
@@ -2795,14 +2801,14 @@ sub generate_html_file {
 
         print HTML $successes_percent + $errors_percent;
         if ($errors_number) {
-            print HTML '* bgcolor=red valign=top></td>");' . "\n";
+            print HTML '% bgcolor=red valign=top></td>");' . "\n";
         } else {
-            print HTML '* bgcolor=#25A528 valign=top></td>");' . "\n";
+            print HTML '% bgcolor=#25A528 valign=top></td>");' . "\n";
         };
         print HTML 'document.write("                    <td width=';
 
         print HTML 100 - ($successes_percent + $errors_percent);
-        print HTML '* bgcolor=lightgrey valign=top></td>");' . "\n";
+        print HTML '% bgcolor=lightgrey valign=top></td>");' . "\n";
         print HTML 'document.write("                </tr>");' . "\n";
         print HTML 'document.write("            </table>");' . "\n";
         print HTML 'document.write("        </td>");' . "\n";
