@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.3.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +41,8 @@ TARGET=so_lucene
 .INCLUDE :	antsettings.mk
 # --- Files --------------------------------------------------------
 
+.IF "$(SOLAR_JAVA)" != ""
+
 LUCENE_MAJOR=2
 LUCENE_MINOR=3
 LUCENE_MICRO=2
@@ -58,9 +60,13 @@ BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
 
 OUT2BIN=.$/build$/$(LUCENE_CORE_JAR) .$/build$/contrib$/analyzers$/$(LUCENE_ANALYZERS_JAR)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-.INCLUDE : tg_ext.mk 
 
+.IF "$(SOLAR_JAVA)" != ""
+.INCLUDE : tg_ext.mk 
+.ENDIF
