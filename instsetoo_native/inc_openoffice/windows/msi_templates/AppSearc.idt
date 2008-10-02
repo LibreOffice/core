@@ -1,12 +1,6 @@
 Property	Signature_
 s72	s72
 AppSearch	Property	Signature_
-UREINSTALLLOCATION	ureinstalluser
-UREINSTALLLOCATION	ureinstallmachine
-BASISINSTALLLOCATION	basisinstalluser
-BASISINSTALLLOCATION	basisinstallmachine
-OFFICEINSTALLLOCATION	officeinstalluser
-OFFICEINSTALLLOCATION	officeinstallmachine
 UREUNINSTALLLOCATION	ureuninstalluser
 UREUNINSTALLLOCATION	ureuninstallmachine
 BASISUNINSTALLLOCATION	basisuninstalluser

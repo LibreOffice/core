@@ -682,7 +682,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $revuniquefilename = "";
     my $revshortfilename = "";
     my $allupdatesequences = "";
+    my $allupdatecomponents = "";
     my $allupdatefileorder = "";
+    my $allupdatecomponentorder = "";
     my $shortdirname = "";
     my $componentid = "";
     my $componentidkeypath = "";
@@ -698,7 +700,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             $installer::globals::updatedatabase = 1;
             $refdatabase = installer::windows::update::readdatabase($allvariableshashref->{'UPDATE_DATABASE'}, $languagestringref);
-            ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatefileorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
+            ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder, $allupdatecomponentorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
             if ( $mergemodulesarrayref > -1 ) { installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref); }
         }
     }
@@ -1492,7 +1494,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # Example for a link: l 000 root sys /usr/bin/linkname filename
                 # The source field specifies the file to link to
 
-                my $epmfilename = "epm_" . $installer::globals::product . "_" . $onepackagename . $linkaddon . "_" . $installer::globals::compiler . "_" . $installer::globals::build . "_" . $installer::globals::minor . "_" . $$languagestringref . ".lst";
+                my $epmfilename = "epm_" . $onepackagename . $linkaddon . ".lst";
 
                 installer::logger::print_message( "... creating epm list file $epmfilename ... \n" );
 
@@ -1853,9 +1855,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Collection all available directory trees
         installer::windows::directory::collectdirectorytrees($directoriesforepmarrayref);
 
-        $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref, $uniquefilename, $allupdatesequences, $allupdatefileorder);
+        $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref, $uniquefilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
-        if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder); }
+        if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder, $allupdatecomponentorder); }
 
         installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }

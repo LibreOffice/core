@@ -330,7 +330,7 @@ File gid_Brand_File_BasisLink
    TXT_FILE_BODY;
    Dir = gid_Dir_Brand_Root;
    Name = "basis-link";
-   Styles = (PACKED, SCPZIP_REPLACE, ONLY_INSTALLED_PRODUCT);
+   Styles = (PACKED);
 End
 #elif defined MACOSX
 Directory gid_Brand_Dir_BasisLink

@@ -8,7 +8,7 @@
 #
 # $RCSfile: postset.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.47.50.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,6 +35,6 @@
 defaultlangiso=en-US
 
 # Complete list of all supported ISO codes
-completelangiso=af ar as-IN be-BY bg br bn bn-BD bn-IN bs by ca cs cy da de dz el en-GB en-US en-ZA eo es et eu fa fi fr ga gd gl gu-IN he hi-IN hr hu it ja ka km kn ko ku lo lt lv mk mn ms ml-IN mr-IN my ne nb nl nn nr ns oc or-IN pa-IN pl pt pt-BR ru rw sk sl sh sr ss st sv sw sw-TZ te-IN ti-ER ta-IN th tn tr ts tg ur-IN uk uz ve vi xh zh-CN zh-TW zu
+completelangiso=af ar as-IN be-BY bg br bn bn-BD bn-IN bs by ca cs cy da de dz el en-GB en-US en-ZA eo es et eu fa fi fr ga gd gl gu gu-IN he hi-IN hr hu it ja ka km kn ko ku lo lt lv mk mn ms ml-IN mr-IN my ne nb nl nn nr ns oc or-IN pa-IN pl pt pt-BR ru rw sk sl sh sr ss st sv sw sw-TZ te-IN ti-ER ta-IN th tn tr ts tg ur-IN uk uz ve vi xh zh-CN zh-TW zu
 
 alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(uniq $(subst,ALL,$(completelangiso) $(WITH_LANG)))))

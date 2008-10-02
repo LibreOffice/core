@@ -338,7 +338,9 @@ sub create_database_hashes
 
     my %uniquefilename = ();
     my %allupdatesequences = ();
+    my %allupdatecomponents = ();
     my %allupdatefileorder = ();
+    my %allupdatecomponentorder = ();
     my %revuniquefilename = ();
     my %revshortfilename = ();
     my %shortdirname = ();
@@ -377,11 +379,13 @@ sub create_database_hashes
         $revuniquefilename{$uniquename} = $key;
         if ( $shortname ne "" ) { $revshortfilename{$shortname} = $key; }
 
-        # Saving Sequences for unique names
+        # Saving Sequences for unique names (and also components)
         $allupdatesequences{$uniquename} = $sequence;
+        $allupdatecomponents{$uniquename} = $comp;
 
-        # Saving unique names for sequences
+        # Saving unique names and components for sequences
         $allupdatefileorder{$sequence} = $uniquename;
+        $allupdatecomponentorder{$sequence} = $comp;
     }
 
     # 2. Hash, required in Directory table.
@@ -446,7 +450,7 @@ sub create_database_hashes
 
     $installer::globals::updatesequencecounter = $installer::globals::updatelastsequence;
 
-    return (\%uniquefilename, \%revuniquefilename, \%revshortfilename, \%allupdatesequences, \%allupdatefileorder, \%shortdirname, \%componentid, \%componentidkeypath, \%alloldproperties, \%allupdatelastsequences, \%allupdatediskids);
+    return (\%uniquefilename, \%revuniquefilename, \%revshortfilename, \%allupdatesequences, \%allupdatecomponents, \%allupdatefileorder, \%allupdatecomponentorder, \%shortdirname, \%componentid, \%componentidkeypath, \%alloldproperties, \%allupdatelastsequences, \%allupdatediskids);
 }
 
 
