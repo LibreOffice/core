@@ -895,9 +895,11 @@ sub get_stand_dir {
 #    $StandDir = getcwd();
     if ( defined $ENV{PWD} ) {
         $StandDir = $ENV{PWD};
-    } else {
+    } elsif (defined $ENV{_cwd}) {
         $StandDir = $ENV{_cwd};
-    }
+    } else {
+        $StandDir = cwd();
+    };
         print "curr dir: $StandDir\n";
     my $previous_dir = '';
     do {
