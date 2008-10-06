@@ -197,6 +197,7 @@ elsif ($gui eq $cygwin) {
     $SVERSION_INI = $ENV{USERPROFILE} . $PS . "Anwendungsdaten" . $PS . "sversion.ini";
     $SOFFICEBIN = "soffice";
     $bootstrapini = "bootstrap.ini";
+    $UNOPKGBIN="unopkg.exe";
     $bootstrapiniTemp = $bootstrapini . "_";
     $CygwinLineends = $/;
     $WinLineends = "\r\n";
