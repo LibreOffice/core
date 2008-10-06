@@ -93,6 +93,7 @@ private:
 public:
 
     // XTopWindowListener
+    using cppu::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& )
         throw(::com::sun::star::uno::RuntimeException) {}
     virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e )
