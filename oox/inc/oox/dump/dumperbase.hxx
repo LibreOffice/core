@@ -1277,6 +1277,7 @@ protected:
     inline explicit     StorageObjectBase() {}
 
 protected:
+    using               ObjectBase::construct;
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
     void                construct( const ObjectBase& rParent );
 
@@ -1298,8 +1299,6 @@ protected:
     void                addPreferredStorage( const String& rStrgPath );
 
 private:
-    using               ObjectBase::construct;
-
     ::rtl::OUString     getSysFileName(
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysOutPath );
@@ -1351,6 +1350,7 @@ public:
 protected:
     inline explicit     OutputObjectBase() {}
 
+    using               ObjectBase::construct;
     void                construct( const ObjectBase& rParent, const ::rtl::OUString& rSysFileName );
     void                construct( const ObjectBase& rParent, const OutputRef& rxOut );
     void                construct( const OutputObjectBase& rParent );
@@ -1409,8 +1409,6 @@ protected:
     void                writeValueItem( const ItemFormat& rItemFmt, Type nData );
 
 private:
-    using               ObjectBase::construct;
-
     OutputRef           mxOut;
 };
 
@@ -1517,6 +1515,7 @@ public:
 protected:
     inline explicit     InputObjectBase() {}
 
+    using               OutputObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OutputRef& rxOut );
     void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
@@ -1591,8 +1590,6 @@ protected:
     Type1               dumpValue( bool bType1, const ItemFormat& rItemFmt );
 
 private:
-    using               OutputObjectBase::construct;
-
     BinaryInputStreamRef mxStrm;
 };
 
@@ -1786,6 +1783,7 @@ protected:
     inline sal_Int64    getRecSize() const { return mnRecSize; }
     inline NameListRef  getRecNames() const { return maRecNames.getNameList( cfg() ); }
 
+    using               InputObjectBase::construct;
     void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
@@ -1793,7 +1791,6 @@ protected:
                             const BinaryInputStreamRef& rxRecStrm,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
-
     void                construct(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
@@ -1809,8 +1806,6 @@ protected:
     virtual void        implDumpRecordBody();
 
 private:
-    using               InputObjectBase::construct;
-
     void                constructRecObjBase(
                             const BinaryInputStreamRef& rxBaseStrm,
                             const String& rRecNames,
@@ -1836,6 +1831,7 @@ protected:
 
     inline StreamDataSequence& getRecordDataSequence() { return *mxRecData; }
 
+    using               RecordObjectBase::construct;
     void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
@@ -1843,21 +1839,18 @@ protected:
                             const BinaryInputStreamRef& rxRecStrm,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
-
     void                construct(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
                             const BinaryInputStreamRef& rxRecStrm,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
-
     void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
                             const ::rtl::OUString& rSysFileName,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
-
     void                construct(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxBaseStrm,
@@ -1866,9 +1859,6 @@ protected:
 
     virtual bool        implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize );
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) = 0;
-
-private:
-    using               RecordObjectBase::construct;
 
 private:
     typedef ::boost::shared_ptr< StreamDataSequence > StreamDataSeqRef;
@@ -1891,10 +1881,8 @@ public:
 protected:
     inline explicit     DumperBase() {}
 
-    void                construct( const ConfigRef& rxConfig );
-
-private:
     using               ObjectBase::construct;
+    void                construct( const ConfigRef& rxConfig );
 };
 
 // ============================================================================

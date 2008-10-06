@@ -135,6 +135,7 @@ public:
 protected:
     inline explicit     OleStorageObject() {}
 
+    using               StorageObjectBase::construct;
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
     void                construct( const ObjectBase& rParent );
 
@@ -143,9 +144,6 @@ protected:
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
-
-private:
-    using               StorageObjectBase::construct;
 };
 
 // ============================================================================
@@ -179,6 +177,7 @@ class OcxPropertyObjectBase : public InputObjectBase
 protected:
     inline explicit     OcxPropertyObjectBase() {}
 
+    using               InputObjectBase::construct;
     void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
@@ -245,8 +244,6 @@ protected:
     void                dumpToPosition( sal_Int64 nPos );
 
 private:
-    using               InputObjectBase::construct;
-
     void                constructOcxPropObj( const String& rPropNameList, bool b64BitPropFlags );
 
     void                dumpVersion();
@@ -255,10 +252,10 @@ private:
     void                dumpLargeProperties();
 
 private:
-    enum LargePropertyType { PROPTYPE_POS, PROPTYPE_SIZE, PROPTYPE_GUID, PROPTYPE_STRING, PROPTYPE_STRINGARRAY };
-
     struct LargeProperty
     {
+        enum LargePropertyType { PROPTYPE_POS, PROPTYPE_SIZE, PROPTYPE_GUID, PROPTYPE_STRING, PROPTYPE_STRINGARRAY };
+
         LargePropertyType   mePropType;
         ::rtl::OUString     maItemName;
         sal_uInt32          mnDataSize;

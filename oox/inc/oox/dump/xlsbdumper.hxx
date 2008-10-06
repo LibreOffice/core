@@ -55,6 +55,7 @@ protected:
     explicit            RecordObjectBase();
     virtual             ~RecordObjectBase();
 
+    using               SequenceRecordObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
     void                construct( const RecordObjectBase& rParent );
 
@@ -94,8 +95,6 @@ protected:
 
     // ------------------------------------------------------------------------
 private:
-    using               SequenceRecordObjectBase::construct;
-
     bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
 private:

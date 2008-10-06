@@ -50,6 +50,7 @@ public:
 protected:
     inline explicit     DffStreamObject() {}
 
+    using               SequenceRecordObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
     void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
 
@@ -59,8 +60,6 @@ protected:
     virtual void        implDumpClientAnchor();
 
 private:
-    using               SequenceRecordObjectBase::construct;
-
     void                constructDffObj();
 
     sal_uInt16          dumpDffOptPropHeader();

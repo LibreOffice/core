@@ -706,19 +706,19 @@ void OcxPropertyObjectBase::dumpUnknownProperty()
 void OcxPropertyObjectBase::dumpPosProperty()
 {
     if( startNextProperty() )
-        maLargeProps.push_back( LargeProperty( PROPTYPE_POS, getPropertyName(), 8 ) );
+        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_POS, getPropertyName(), 8 ) );
 }
 
 void OcxPropertyObjectBase::dumpSizeProperty()
 {
     if( startNextProperty() )
-        maLargeProps.push_back( LargeProperty( PROPTYPE_SIZE, getPropertyName(), 8 ) );
+        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_SIZE, getPropertyName(), 8 ) );
 }
 
 void OcxPropertyObjectBase::dumpGuidProperty( OUString* pValue )
 {
     if( startNextProperty() )
-        maLargeProps.push_back( LargeProperty( PROPTYPE_GUID, getPropertyName(), 16, pValue ) );
+        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_GUID, getPropertyName(), 16, pValue ) );
 }
 
 void OcxPropertyObjectBase::dumpStringProperty( OUString* pValue )
@@ -727,7 +727,7 @@ void OcxPropertyObjectBase::dumpStringProperty( OUString* pValue )
     {
         alignInput< sal_uInt32 >();
         sal_uInt32 nLen = dumpHex< sal_uInt32 >( getPropertyName(), "OCX-STRINGLEN" );
-        maLargeProps.push_back( LargeProperty( PROPTYPE_STRING, getPropertyName(), nLen, pValue ) );
+        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_STRING, getPropertyName(), nLen, pValue ) );
     }
 }
 
@@ -737,7 +737,7 @@ void OcxPropertyObjectBase::dumpStringArrayProperty()
     {
         alignInput< sal_uInt32 >();
         sal_uInt32 nLen = dumpHex< sal_uInt32 >( getPropertyName(), "CONV-DEC" );
-        maLargeProps.push_back( LargeProperty( PROPTYPE_STRINGARRAY, getPropertyName(), nLen ) );
+        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_STRINGARRAY, getPropertyName(), nLen ) );
     }
 }
 
@@ -820,7 +820,7 @@ void OcxPropertyObjectBase::dumpLargeProperties()
         {
             switch( aIt->mePropType )
             {
-                case PROPTYPE_POS:
+                case LargeProperty::PROPTYPE_POS:
                 {
                     MultiItemsGuard aMultiGuard( out() );
                     writeEmptyItem( aIt->maItemName );
@@ -828,7 +828,7 @@ void OcxPropertyObjectBase::dumpLargeProperties()
                     dumpDec< sal_Int32 >( "left", "CONV-HMM-TO-CM" );
                 }
                 break;
-                case PROPTYPE_SIZE:
+                case LargeProperty::PROPTYPE_SIZE:
                 {
                     MultiItemsGuard aMultiGuard( out() );
                     writeEmptyItem( aIt->maItemName );
@@ -836,21 +836,21 @@ void OcxPropertyObjectBase::dumpLargeProperties()
                     dumpDec< sal_Int32 >( "height", "CONV-HMM-TO-CM" );
                 }
                 break;
-                case PROPTYPE_GUID:
+                case LargeProperty::PROPTYPE_GUID:
                 {
                     OUString aGuid = dumpGuid( aIt->maItemName );
                     if( aIt->mpItemValue )
                         *aIt->mpItemValue = cfg().getStringOption( aGuid, OUString() );
                 }
                 break;
-                case PROPTYPE_STRING:
+                case LargeProperty::PROPTYPE_STRING:
                 {
                     OUString aString = dumpString( aIt->maItemName, aIt->mnDataSize, false );
                     if( aIt->mpItemValue )
                         *aIt->mpItemValue = aString;
                 }
                 break;
-                case PROPTYPE_STRINGARRAY:
+                case LargeProperty::PROPTYPE_STRINGARRAY:
                 {
                     writeEmptyItem( aIt->maItemName );
                     IndentGuard aIndGuard2( out() );
@@ -879,7 +879,7 @@ void OcxPropertyObjectBase::dumpLargeProperties()
             writeEmptyItem( aIt->maItemName );
             if( ensureValid( aIt->mnData == 0xFFFF ) )
             {
-                IndentGuard aIndGuard( out() );
+                IndentGuard aIndGuard2( out() );
                 OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
                 if( aClassName.equalsAscii( "StdFont" ) )
                     StdFontObject( *this ).dump();

@@ -146,6 +146,7 @@ protected:
     inline explicit     BiffObjectBase() {}
     virtual             ~BiffObjectBase();
 
+    using               InputObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, ::oox::xls::BiffType eBiff, const ::rtl::OUString& rSysFileName );
     void                construct( const BiffObjectBase& rParent );
 
@@ -219,9 +220,6 @@ protected:
     void                dumpDffClientRect();
     void                dumpEmbeddedDff();
     void                dumpOcxControl();
-
-private:
-    using               InputObjectBase::construct;
 
 private:
     typedef ::boost::shared_ptr< BiffSharedData >       BiffSharedDataRef;
@@ -382,14 +380,12 @@ protected:
     inline explicit     RecordStreamObject() {}
     virtual             ~RecordStreamObject();
 
+    using               BiffObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, ::oox::xls::BiffType eBiff, const ::rtl::OUString& rSysFileName );
 
     virtual bool        implIsValid() const;
 
     inline FormulaObject& getFormulaDumper() const { return *mxFmlaObj; }
-
-private:
-    using               BiffObjectBase::construct;
 
 private:
     typedef ::boost::shared_ptr< FormulaObject > FormulaObjectRef;
@@ -408,8 +404,6 @@ protected:
     virtual void        implDumpRecordBody();
 
 private:
-    using               RecordStreamObject::construct;
-
     void                initializePerSheet();
 
     ::rtl::OUString     createFontName( const ::rtl::OUString& rName, sal_uInt16 nHeight, bool bBold, bool bItalic ) const;

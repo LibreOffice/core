@@ -2839,7 +2839,6 @@ void WorkbookStreamObject::dumpObjRec()
 
 void WorkbookStreamObject::dumpObjRecBiff3()
 {
-    BiffInputStream& rStrm = getBiffStream();
     dumpDec< sal_uInt32 >( "obj-count" );
     sal_uInt16 nObjType = dumpDec< sal_uInt16 >( "obj-type", "OBJ-TYPE" );
     dumpDec< sal_uInt16 >( "obj-id" );
@@ -2903,7 +2902,6 @@ void WorkbookStreamObject::dumpObjRecBiff3()
 
 void WorkbookStreamObject::dumpObjRecBiff4()
 {
-    BiffInputStream& rStrm = getBiffStream();
     dumpDec< sal_uInt32 >( "obj-count" );
     sal_uInt16 nObjType = dumpDec< sal_uInt16 >( "obj-type", "OBJ-TYPE" );
     dumpDec< sal_uInt16 >( "obj-id" );
