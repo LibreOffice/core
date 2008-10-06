@@ -148,7 +148,7 @@ RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit 
         }
     }
 
-    GdkDisplay *pDisplay = aWindowHandle.DisplayPointer ? gdk_x11_lookup_xdisplay((void*)aWindowHandle.DisplayPointer) : NULL;
+    GdkDisplay *pDisplay = aWindowHandle.DisplayPointer ? gdk_x11_lookup_xdisplay(reinterpret_cast<void*>(static_cast<sal_IntPtr>(aWindowHandle.DisplayPointer))) : NULL;
     GdkWindow* pParent = pDisplay ? gdk_window_lookup_for_display(pDisplay, aWindowHandle.WindowHandle) : NULL;
     if (!pParent && pDisplay)
         pParent = mpCreatedParent = gdk_window_foreign_new_for_display( pDisplay, aWindowHandle.WindowHandle);
