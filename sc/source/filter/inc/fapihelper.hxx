@@ -89,22 +89,22 @@ public:
     /** Creates an instance from the passed service name, using the process service factory. */
     static XInterfaceRef CreateInstance( const ::rtl::OUString& rServiceName );
 
-//UNUSED2008-05  /** Creates an instance from the passed service name, using the passed service factory. */
-//UNUSED2008-05  static XInterfaceRef CreateInstanceWithArgs(
-//UNUSED2008-05                          XServiceFactoryRef xFactory,
-//UNUSED2008-05                          const ::rtl::OUString& rServiceName,
-//UNUSED2008-05                          const UnoAnySequence& rArgs );
-//UNUSED2008-05
+    /** Creates an instance from the passed service name, using the passed service factory. */
+    static XInterfaceRef CreateInstanceWithArgs(
+                            XServiceFactoryRef xFactory,
+                            const ::rtl::OUString& rServiceName,
+                            const UnoAnySequence& rArgs );
+
 //UNUSED2008-05  /** Creates an instance from the passed service name, using the service factory of the passed object. */
 //UNUSED2008-05  static XInterfaceRef CreateInstanceWithArgs(
 //UNUSED2008-05                          SfxObjectShell* pShell,
 //UNUSED2008-05                          const ::rtl::OUString& rServiceName,
 //UNUSED2008-05                          const UnoAnySequence& rArgs );
-//UNUSED2008-05
-//UNUSED2008-05  /** Creates an instance from the passed service name, using the process service factory. */
-//UNUSED2008-05  static XInterfaceRef CreateInstanceWithArgs(
-//UNUSED2008-05                          const ::rtl::OUString& rServiceName,
-//UNUSED2008-05                          const UnoAnySequence& rArgs );
+
+    /** Creates an instance from the passed service name, using the process service factory. */
+    static XInterfaceRef CreateInstanceWithArgs(
+                            const ::rtl::OUString& rServiceName,
+                            const UnoAnySequence& rArgs );
 
     /** Opens a password dialog and returns the entered password.
         @return  The entered password or an empty string on 'Cancel' or any error. */

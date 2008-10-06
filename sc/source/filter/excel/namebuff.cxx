@@ -294,69 +294,51 @@ BOOL ExtName::IsDDE( void ) const
 }
 
 
-const sal_Char* ExtNameBuff::pJoostTest = "Joost ist immer noch doof!";
-
-
-ExtNameBuff::~ExtNameBuff()
+BOOL ExtName::IsOLE( void ) const
 {
-    ExtName*    pDel = ( ExtName* ) List::First();
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( ExtName* ) List::Next();
-    }
+    return ( nFlags & 0x0002 ) != 0;
 }
 
 
-void ExtNameBuff::AddDDE( const String& rName )
+ExtNameBuff::ExtNameBuff( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
 {
-    ExtName*    pNew = new ExtName( rName );
-    pNew->nFlags = 0x0001;
-
-    List::Insert( pNew, LIST_APPEND );
 }
 
 
-void ExtNameBuff::AddOLE( const String& rName, UINT32 nStorageId )
+void ExtNameBuff::AddDDE( const String& rName, sal_Int16 nRefIdx )
 {
-    ExtName*    pNew = new ExtName( rName );
-    pNew->nFlags = 0x0002;
-    pNew->nStorageId = nStorageId;
-
-    List::Insert( pNew, LIST_APPEND );
+    ExtName aNew( rName, 0x0001 );
+    maExtNames[ nRefIdx ].push_back( aNew );
 }
 
 
-void ExtNameBuff::AddName( const String& rName )
+void ExtNameBuff::AddOLE( const String& rName, sal_Int16 nRefIdx, UINT32 nStorageId )
 {
-    ExtName* pNew = new ExtName( pExcRoot->pIR->GetScAddInName( rName ) );
-    pNew->nFlags = 0x0004;
-
-    List::Insert( pNew, LIST_APPEND );
+    ExtName aNew( rName, 0x0002 );
+    aNew.nStorageId = nStorageId;
+    maExtNames[ nRefIdx ].push_back( aNew );
 }
 
 
-const ExtName* ExtNameBuff::GetName( const UINT16 nExcelIndex ) const
+void ExtNameBuff::AddName( const String& rName, sal_Int16 nRefIdx )
 {
-    DBG_ASSERT( nExcelIndex > 0, "*ExtNameBuff::GetName(): Index kann nur >0 sein!" );
+    ExtName aNew( GetScAddInName( rName ), 0x0004 );
+    maExtNames[ nRefIdx ].push_back( aNew );
+}
 
-    return ( const ExtName* ) List::GetObject( nExcelIndex - 1 );
+
+const ExtName* ExtNameBuff::GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const
+{
+    DBG_ASSERT( nNameIdx > 0, "ExtNameBuff::GetNameByIndex() - invalid name index" );
+    ExtNameMap::const_iterator aIt = maExtNames.find( nRefIdx );
+    return ((aIt != maExtNames.end()) && (0 < nNameIdx) && (nNameIdx <= aIt->second.size())) ? &aIt->second[ nNameIdx - 1 ] : 0;
 }
 
 
 void ExtNameBuff::Reset( void )
 {
-    ExtName*    pDel = ( ExtName* ) List::First();
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( ExtName* ) List::Next();
-    }
-
-    sal_Char cTmp = *pJoostTest;
-    cTmp++;
-
-    List::Clear();
+    maExtNames.clear();
 }
 
 

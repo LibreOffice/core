@@ -1469,6 +1469,11 @@ XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
         InsertBuiltinFormats();
 }
 
+void XclNumFmtBuffer::InitializeImport()
+{
+    maFmtMap.clear();
+}
+
 //UNUSED2008-05  const XclNumFmt* XclNumFmtBuffer::GetFormat( sal_uInt16 nXclNumFmt ) const
 //UNUSED2008-05  {
 //UNUSED2008-05      XclNumFmtMap::const_iterator aIt = maFmtMap.find( nXclNumFmt );

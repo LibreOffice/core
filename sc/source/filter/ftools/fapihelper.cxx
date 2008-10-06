@@ -111,35 +111,35 @@ Reference< XInterface > ScfApiHelper::CreateInstance( const OUString& rServiceNa
     return CreateInstance( ::comphelper::getProcessServiceFactory(), rServiceName );
 }
 
-//UNUSED2008-05  Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-//UNUSED2008-05          Reference< XMultiServiceFactory > xFactory, const OUString& rServiceName, const Sequence< Any >& rArgs )
-//UNUSED2008-05  {
-//UNUSED2008-05      Reference< XInterface > xInt;
-//UNUSED2008-05      if( xFactory.is() )
-//UNUSED2008-05      {
-//UNUSED2008-05          try
-//UNUSED2008-05          {
-//UNUSED2008-05              xInt = xFactory->createInstanceWithArguments( rServiceName, rArgs );
-//UNUSED2008-05          }
-//UNUSED2008-05          catch( Exception& )
-//UNUSED2008-05          {
-//UNUSED2008-05              DBG_ERRORFILE( "ScfApiHelper::CreateInstanceWithArgs - cannot create instance" );
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05      return xInt;
-//UNUSED2008-05  }
-//UNUSED2008-05
+Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
+        Reference< XMultiServiceFactory > xFactory, const OUString& rServiceName, const Sequence< Any >& rArgs )
+{
+    Reference< XInterface > xInt;
+    if( xFactory.is() )
+    {
+        try
+        {
+            xInt = xFactory->createInstanceWithArguments( rServiceName, rArgs );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "ScfApiHelper::CreateInstanceWithArgs - cannot create instance" );
+        }
+    }
+    return xInt;
+}
+
 //UNUSED2008-05  Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
 //UNUSED2008-05          SfxObjectShell* pShell, const OUString& rServiceName, const Sequence< Any >& rArgs )
 //UNUSED2008-05  {
 //UNUSED2008-05      return CreateInstanceWithArgs( GetServiceFactory( pShell ), rServiceName, rArgs );
 //UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-//UNUSED2008-05          const OUString& rServiceName, const Sequence< Any >& rArgs )
-//UNUSED2008-05  {
-//UNUSED2008-05      return CreateInstanceWithArgs( ::comphelper::getProcessServiceFactory(), rServiceName, rArgs );
-//UNUSED2008-05  }
+
+Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
+        const OUString& rServiceName, const Sequence< Any >& rArgs )
+{
+    return CreateInstanceWithArgs( ::comphelper::getProcessServiceFactory(), rServiceName, rArgs );
+}
 
 String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium )
 {

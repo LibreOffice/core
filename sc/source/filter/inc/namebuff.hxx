@@ -327,6 +327,7 @@ struct ExtName
     inline          ExtName( const String& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
 
     BOOL            IsDDE( void ) const;
+    BOOL            IsOLE( void ) const;
 };
 
 

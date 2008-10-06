@@ -770,18 +770,18 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
     return nRet;
 }
 
-//UNUSED2008-05  sal_Size XclImpStream::CopyRecordToStream( SvStream& rOutStrm )
-//UNUSED2008-05  {
-//UNUSED2008-05      sal_Size nRet = 0;
-//UNUSED2008-05      if( mbValidRec )
-//UNUSED2008-05      {
-//UNUSED2008-05          PushPosition();
-//UNUSED2008-05          RestorePosition( maFirstRec );
-//UNUSED2008-05          nRet = CopyToStream( rOutStrm, GetRecSize() );
-//UNUSED2008-05          PopPosition();
-//UNUSED2008-05      }
-//UNUSED2008-05      return nRet;
-//UNUSED2008-05  }
+sal_Size XclImpStream::CopyRecordToStream( SvStream& rOutStrm )
+{
+    sal_Size nRet = 0;
+    if( mbValidRec )
+    {
+        PushPosition();
+        RestorePosition( maFirstRec );
+        nRet = CopyToStream( rOutStrm, GetRecSize() );
+        PopPosition();
+    }
+    return nRet;
+}
 
 void XclImpStream::Seek( sal_Size nPos )
 {
