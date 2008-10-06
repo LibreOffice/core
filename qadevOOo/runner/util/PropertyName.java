@@ -43,10 +43,6 @@ public interface PropertyName {
      */
     final public static String APP_KILL_COMMAND = "AppKillCommand";
     /**
-     * parameter name: "AppKillCommand"
-     */
-    final public static String APP_KILL_COMMAND = "AppKillCommand";
-    /**
      * parameter name: "ConnectionString"
      */
     final public static String CONNECTION_STRING = "ConnectionString";
