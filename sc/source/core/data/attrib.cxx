@@ -942,7 +942,7 @@ class ScFieldChangerEditEngine : public ScEditEngineDefaulter
     BOOL        bConvert;
 
 public:
-//UNUSED2008-05  ScFieldChangerEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool );
+    ScFieldChangerEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool );
     virtual     ~ScFieldChangerEditEngine() {}
 
     virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara,
@@ -952,15 +952,15 @@ public:
 //UNUSED2008-05  BOOL           ConvertFields();
 };
 
-//UNUSED2008-05  ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePoolP,
-//UNUSED2008-05              BOOL bDeleteEnginePoolP ) :
-//UNUSED2008-05          ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
-//UNUSED2008-05          aExtFileId( TYPE( SvxExtFileField ) ),
-//UNUSED2008-05          nConvPara( 0 ),
-//UNUSED2008-05          nConvPos( 0 ),
-//UNUSED2008-05          bConvert( FALSE )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
+ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePoolP,
+            BOOL bDeleteEnginePoolP ) :
+        ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
+        aExtFileId( TYPE( SvxExtFileField ) ),
+        nConvPara( 0 ),
+        nConvPos( 0 ),
+        bConvert( FALSE )
+{
+}
 
 String ScFieldChangerEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             USHORT nPara, USHORT nPos, Color*& /* rTxtColor */, Color*& /* rFldColor */ )
