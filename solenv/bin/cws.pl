@@ -153,6 +153,12 @@ sub parse_command_line
         $command = 'task';
     }
 
+    # An unkown option might be accompanied with a valid command.
+    # Show the command specific help
+    if ( !$success ) {
+        do_help([$command])
+    }
+
     verify_options($command, \%options_hash);
     return ($command, \@ARGV, \%options_hash);
 }
@@ -1274,15 +1280,18 @@ sub do_create
     my $ooo_creation_comment = "CWS-TOOLING: create CWS " . $cws->child() . " from $ooo_short_url (milestone: " . $cws->master() . ":$milestone)";
     # create branches an ooo server and an optional so server
     print STDERR "... create branch:\t'$ooo_cws_url'";
-    svn_copy($ooo_creation_comment, $ooo_milestone_url, $ooo_cws_url);
+    svn_copy($ooo_creation_comment, $ooo_master_url, $ooo_cws_url);
     if ( defined($so_svn_server) ) {
         my $so_short_url = get_short_url($so_svn_server, $so_master_url);
         my $so_creation_comment = "CWS-TOOLING: create CWS " . $cws->child() . " from $so_short_url (milestone: " . $cws->master() . ":$milestone)";
         print STDERR "... create branch:\t'$so_cws_url'";
-        svn_copy($so_creation_comment, $so_milestone_url, $so_cws_url);
+        svn_copy($so_creation_comment, $so_master_url, $so_cws_url);
     }
 
     if ( $is_migration ) {
+        # Set master and milestone
+        $cws->master($master);
+        $cws->milestone($milestone);
         my $rc = $cws->set_subversion_flag(1);
         if ( !$rc ) {
             print_error("Failed to set subversion flag on child workspace '$cws_name'.\nContact EIS administrator!\n", 12);
@@ -1307,6 +1316,10 @@ sub do_rebase
     }
     if ( exists($options_ref->{'commit'}) && exists($options_ref->{'milestone'}) ) {
         print_error("Option -m (--milestone) and -C (--commit) are mutually exclusive.", 0 );
+        do_help(['rebase']);
+    }
+    if ( !exists($options_ref->{'commit'}) && !exists($options_ref->{'milestone'}) ) {
+        print_error("At least one of the options -m (--milestone) or -C (--commit) are required.", 0 );
         do_help(['rebase']);
     }
 
@@ -1520,10 +1533,10 @@ sub do_fetch
         # on having "modules" from different repositories in the same
         # directory besides each other.
         my $so_basedir = dirname($src_root);
-        if ( -d "$so_basedir/so" ) {
+        if ( -d "$so_basedir/sun" ) {
             $so_setup =1;
             $ooo_path = "$so_basedir/ooo";
-            $so_path = "$so_basedir/so";
+            $so_path = "$so_basedir/sun";
         }
         else {
             $ooo_path = $src_root;
@@ -1558,27 +1571,29 @@ sub do_fetch
             my $so_url = $so_svn_server . $url_suffix;
             svn_checkout($so_url, 'sun');
             my $cwd = getcwd();
-            if ( !mkdir("$cwd/src") ) {
-                print_error("Can't create directory '$cwd/src': $!.", 44);
+            my $milestone = $cws->milestone();
+            my $srcdir = "$cwd/src.$milestone";
+            if ( !mkdir("$srcdir") ) {
+                print_error("Can't create directory '$srcdir': $!.", 44);
             }
             if ( !opendir(DIR, "$cwd/ooo") ) {
                 print_error("Can't open directory '$cwd/sun': $!.", 44);
             }
-            my @ooo_top_level_dirs = grep { /^\./ } readdir(DIR);
+            my @ooo_top_level_dirs = grep { !/^\./ } readdir(DIR);
             close(DIR);
             if ( !opendir(DIR, "$cwd/sun") ) {
                 print_error("Can't open directory '$cwd/sun': $!.", 44);
             }
-            my @so_top_level_dirs = grep { /^\./ } readdir(DIR);
+            my @so_top_level_dirs = grep { !/^\./ } readdir(DIR);
             close(DIR);
             foreach(@ooo_top_level_dirs) {
-                if ( !symlink("$cwd/ooo/$_", "$cwd/src/$_") ) {
-                    print_error("Can't symlink directory '$cwd/ooo/$_ -> $cwd/src/$_': $!.", 44);
+                if ( !symlink("$cwd/ooo/$_", "$srcdir/$_") ) {
+                    print_error("Can't symlink directory '$cwd/ooo/$_ -> $srcdir/$_': $!.", 44);
                 }
             }
             foreach(@so_top_level_dirs) {
-                if ( !symlink("$cwd/sun/$_", "$cwd/src/$_") ) {
-                    print_error("Can't symlink directory '$cwd/sun/$_ -> $cwd/src/$_': $!.", 44);
+                if ( !symlink("$cwd/sun/$_", "$srcdir/$_") ) {
+                    print_error("Can't symlink directory '$cwd/sun/$_ -> $srcdir/$_': $!.", 44);
                 }
             }
         }
@@ -1755,8 +1770,9 @@ sub svn_copy
     my $dest = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing branch: '$source' -> '$dest'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing branch: '$source' -> '$dest'\n";
     }
+
     my @result = execute_svn_command(0, 'copy', "-m '$comment'", $source, $dest);
     if ( $result[1] =~ /Committed revision (\d+)\./ ) {
         print STDERR ", committed revision $1\n";
@@ -1771,15 +1787,22 @@ sub svn_milestone_revision
     my $milestone_url = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing log --stop-on-copy: '$milestone_url'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing log --stop-on-copy: '$milestone_url'\n";
     }
 
     my @result = execute_svn_command(0, 'log', '--stop-on-copy', $milestone_url);
 
-    if ( defined($result[1]) && $result[1] =~ /^r(\d+) | / ) {
-        return $1;
+    # There might be revisions committed to a tag (allowed in subversion).
+    # The lowestmost revision listed in a 'log --stop-on-copy' is the one which
+    # was current when the tag was created
+    my $revision = 0;
+    foreach ( @result ) {
+        if ( /^r(\d+)\s+\|\s+/ ) {
+            $revision = $1;
+        }
     }
-    return 0;
+
+    return $revision;
 }
 
 sub svn_path_exists
@@ -1788,8 +1811,10 @@ sub svn_path_exists
 
     my @result = svn_info($url);
 
-    if ( defined($result[0]) && $result[0] =~ /^Path: / ) {
-        return 1;
+    foreach ( @result ) {
+        if ( /^Path: / ) {
+            return 1;
+        }
     }
     return 0;
 }
@@ -1800,10 +1825,13 @@ sub svn_wc_url
 
     my @result = svn_info($wc_path);
 
-    if ( defined($result[1]) && $result[1] =~ /^URL: (.+)$/ ) {
-        return $1;
+    foreach ( @result ) {
+        if ( /^URL: (.+)$/ ) {
+            return $1;
+        }
     }
-    print_error("Can't retrive svn info from working copy '$wc_path'\n", 23);
+
+    print_error("Can't retrieve svn info from working copy '$wc_path'\n", 23);
 }
 
 sub svn_wc_root
@@ -1812,10 +1840,13 @@ sub svn_wc_root
 
     my @result = svn_info($wc_path);
 
-    if ( defined($result[1]) && $result[1] =~ /^Repository Root: (.+)$/ ) {
-        return $1;
+    foreach ( @result ) {
+        if ( /^Repository Root: (.+)$/ ) {
+            return $1;
+        }
     }
-    print_error("Can't retrive svn info from working copy '$wc_path'\n", 23);
+
+    print_error("Can't retrieve svn info from working copy '$wc_path'\n", 23);
 }
 
 sub svn_info
@@ -1823,7 +1854,7 @@ sub svn_info
     my $url = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing info: '$url'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing info: '$url'\n";
     }
 
     my @result = execute_svn_command(0, 'info', '--depth empty', $url);
@@ -1836,7 +1867,7 @@ sub svn_merge
     my $wc  = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing merge: '$url -> $wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing merge: '$url -> $wc'\n";
     }
 
     my $log_file = "$wc/REBASE.LOG";
@@ -1846,11 +1877,11 @@ sub svn_merge
 
 sub svn_switch
 {
-    my $url = shift;
     my $wc  = shift;
+    my $url = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing switch: '$url -> $wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing switch: '$url -> $wc'\n";
     }
 
     my @result = execute_svn_command('print', 'switch', $url, $wc);
@@ -1863,7 +1894,7 @@ sub svn_checkout
     my $wc  = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing checkout: '$url -> $wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing checkout: '$url -> $wc'\n";
     }
 
     my @result = execute_svn_command('print', 'checkout', $url, $wc);
@@ -1876,7 +1907,7 @@ sub svn_commit
     my $commit_message = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing commit: '$wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing commit: '$wc'\n";
     }
 
     my $log_file = "$wc/REBASE.LOG";
@@ -1895,7 +1926,7 @@ sub execute_svn_command
     $command = "svn $command $options $args_str";
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... execute command line: '$command'\n";
+        print STDERR "\nCWS-DEBUG: ... execute command line: '$command'\n";
     }
 
     my @result;
