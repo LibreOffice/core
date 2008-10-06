@@ -790,7 +790,7 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     if( nVersion <= 20400 )
         return false;
     const char* pDirName = (const char*)rDirName.getStr();
-    bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.getDefConfig(), (FcChar8*)pDirName ) == FcTrue);
+    bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bRet );
