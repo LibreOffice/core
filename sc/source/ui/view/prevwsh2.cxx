@@ -67,7 +67,7 @@
 //#define _FSYS_HXX
 //#define _STREAM_HXX
 #define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
+//#define _SV_MULTISEL_HXX
 
 //SV
 //#define _CLIP_HXX ***

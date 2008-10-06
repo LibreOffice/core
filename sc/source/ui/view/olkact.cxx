@@ -229,7 +229,7 @@
 //#define _SVDLAYER_HXX
 //#define _SVDRAG_HXX
 #define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
+//#define _SV_MULTISEL_HXX
 #define _SVRTV_HXX
 #define _SVTABBX_HXX
 
