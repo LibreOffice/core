@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simstr.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -578,7 +578,7 @@ int
 Simstr::pos_first(char c) const
 {
    int i = 0;
-   for (i = 0; i < len ? sz[i] != c : false; i++);
+   for (i = 0; i < len ? sz[i] != c : false; i++) ;
    if (i >= len)
       return NO_POS;
    else
@@ -592,7 +592,7 @@ Simstr::pos_first_after( char           c,
    int i = 0;
    if (startSearchPos >= i)
       i = startSearchPos+1;
-   for (; i < len ? sz[i] != c : false; i++);
+   for (; i < len ? sz[i] != c : false; i++) ;
    if (i >= len)
       return NO_POS;
    else
@@ -604,7 +604,7 @@ int
 Simstr::pos_last(char c) const
 {
    int i = 0;
-   for (i = len-1; i >= 0 ? sz[i] != c : false; i--);
+   for (i = len-1; i >= 0 ? sz[i] != c : false; i--) ;
    if (i < 0)
       return NO_POS;
    else
@@ -655,7 +655,7 @@ Simstr::is_no_text() const
       return true;
 
    int i;
-   for (i = 0; sz[i] <= 32 && i < len; i++);
+   for (i = 0; sz[i] <= 32 && i < len; i++) ;
    if (i < len)
         return false;
     return true;
