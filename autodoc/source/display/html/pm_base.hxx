@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pm_base.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,13 @@
 
 
 class OuputPage_Environment;
-class csi::xml::Element;
+namespace csi
+{
+    namespace xml
+    {
+        class Element;
+    }
+}
 class PageDisplay;
 
 

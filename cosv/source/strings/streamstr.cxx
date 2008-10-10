@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: streamstr.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -568,7 +568,7 @@ StreamStr::strip_front(char i_cToRemove)
     const_iterator it = begin();
     for ( ;
           it != end() ? *it == i_cToRemove : false;
-          ++it );
+          ++it ) ;
     pop_front(it - begin());
 }
 
@@ -578,7 +578,7 @@ StreamStr::strip_back(char i_cToRemove)
     const_iterator it = end();
     for ( ;
           it != begin() ? *(it-1) == i_cToRemove : false;
-          --it );
+          --it ) ;
     pop_back(end() - it);
 }
 
@@ -595,7 +595,7 @@ StreamStr::strip_front_whitespace()
     const_iterator it = begin();
     for ( ;
           it != end() ? *it < 33 : false;
-          ++it );
+          ++it ) ;
     pop_front(it - begin());
 }
 
@@ -605,7 +605,7 @@ StreamStr::strip_back_whitespace()
     const_iterator it = end();
     for ( ;
           it != begin() ? *(it-1) < 33 : false;
-          --it );
+          --it ) ;
     pop_back(end() - it);
 }
 

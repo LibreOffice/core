@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: defdescr.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,7 +178,7 @@ Do_bConcatenate( csv::StreamStr &    o_rText,
         uintt nPos;
         for ( nPos = o_rText.tellp() - 1;
               nPos > 0 ? o_rText.c_str()[nPos] == ' ' : false;
-              --nPos );
+              --nPos ) ;
         o_rText.seekp(nPos+1);
         io_bConcatenate = false;
     }
