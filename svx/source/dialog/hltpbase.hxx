@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hltpbase.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -212,7 +212,7 @@ protected:
     USHORT             GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
 
-    const BOOL IsHTMLDoc() const;
+    BOOL IsHTMLDoc() const;
 };
 
 #endif // _SVX_TABBASE_HYPERLINK_HXX

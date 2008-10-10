@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hlmarkwn.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,11 +101,11 @@ public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
     ~SvxHlinkDlgMarkWnd();
 
-    const BOOL MoveTo ( Point aNewPos );
+    BOOL MoveTo ( Point aNewPos );
     void RefreshTree ( String aStrURL );
     void SelectEntry ( String aStrMark );
 
-    const BOOL ConnectToDialog( BOOL bDoit = TRUE );
+    BOOL ConnectToDialog( BOOL bDoit = TRUE );
 
     USHORT SetError( USHORT nError);
 };

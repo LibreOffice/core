@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: deflt3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,11 +94,11 @@ public:
 
     const B3dMaterial& GetDefaultBackMaterial() { return aDefaultBackMaterial; }
     void SetDefaultBackMaterial(const B3dMaterial& rNew) { aDefaultBackMaterial = rNew; }
-    const BOOL GetDefaultCreateNormals() { return bDefaultCreateNormals; }
+    BOOL GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
     void SetDefaultCreateNormals(const BOOL bNew) { bDefaultCreateNormals = bNew; }
-    const BOOL GetDefaultCreateTexture() { return bDefaultCreateTexture; }
+    BOOL GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
     void SetDefaultCreateTexture(const BOOL bNew) { bDefaultCreateTexture = bNew; }
-    const BOOL GetDefaultUseDifferentBackMaterial() { return bDefaultUseDifferentBackMaterial; }
+    BOOL GetDefaultUseDifferentBackMaterial() const { return bDefaultUseDifferentBackMaterial; }
     void SetDefaultUseDifferentBackMaterial(const BOOL bNew) { bDefaultUseDifferentBackMaterial = bNew; }
 
     // Cube-Objekt
@@ -106,9 +106,9 @@ public:
     void SetDefaultCubePos(const basegfx::B3DPoint& rNew) { aDefaultCubePos = rNew; }
     const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
     void SetDefaultCubeSize(const basegfx::B3DVector& rNew) { aDefaultCubeSize = rNew; }
-    const UINT16 GetDefaultCubeSideFlags() { return nDefaultCubeSideFlags; }
+    UINT16 GetDefaultCubeSideFlags() const { return nDefaultCubeSideFlags; }
     void SetDefaultCubeSideFlags(const UINT16 nNew) { nDefaultCubeSideFlags = nNew; }
-    const BOOL GetDefaultCubePosIsCenter() { return bDefaultCubePosIsCenter; }
+    BOOL GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
     void SetDefaultCubePosIsCenter(const BOOL bNew) { bDefaultCubePosIsCenter = bNew; }
 
     // Sphere-Objekt
@@ -118,33 +118,33 @@ public:
     void SetDefaultSphereSize(const basegfx::B3DPoint& rNew) { aDefaultSphereSize = rNew; }
 
     // Lathe-Objekt
-    const long GetDefaultLatheEndAngle() { return nDefaultLatheEndAngle; }
+    long GetDefaultLatheEndAngle() const { return nDefaultLatheEndAngle; }
     void SetDefaultLatheEndAngle(const long nNew) { nDefaultLatheEndAngle = nNew; }
-    const BOOL GetDefaultLatheSmoothed() { return bDefaultLatheSmoothed; }
+    BOOL GetDefaultLatheSmoothed() const { return bDefaultLatheSmoothed; }
     void SetDefaultLatheSmoothed(const BOOL bNew) { bDefaultLatheSmoothed = bNew; }
-    const BOOL GetDefaultLatheSmoothFrontBack() { return bDefaultLatheSmoothFrontBack; }
+    BOOL GetDefaultLatheSmoothFrontBack() const { return bDefaultLatheSmoothFrontBack; }
     void SetDefaultLatheSmoothFrontBack(const BOOL bNew) { bDefaultLatheSmoothFrontBack = bNew; }
-    const BOOL GetDefaultLatheCharacterMode() { return bDefaultLatheCharacterMode; }
+    BOOL GetDefaultLatheCharacterMode() const { return bDefaultLatheCharacterMode; }
     void SetDefaultLatheCharacterMode(const BOOL bNew) { bDefaultLatheCharacterMode = bNew; }
-    const BOOL GetDefaultLatheCloseFront() { return bDefaultLatheCloseFront; }
+    BOOL GetDefaultLatheCloseFront() const { return bDefaultLatheCloseFront; }
     void SetDefaultLatheCloseFront(const BOOL bNew) { bDefaultLatheCloseFront = bNew; }
-    const BOOL GetDefaultLatheCloseBack() { return bDefaultLatheCloseBack; }
+    BOOL GetDefaultLatheCloseBack() const { return bDefaultLatheCloseBack; }
     void SetDefaultLatheCloseBack(const BOOL bNew) { bDefaultLatheCloseBack = bNew; }
 
     // Extrude-Objekt
-    const BOOL GetDefaultExtrudeSmoothed() { return bDefaultExtrudeSmoothed; }
+    BOOL GetDefaultExtrudeSmoothed() const { return bDefaultExtrudeSmoothed; }
     void SetDefaultExtrudeSmoothed(const BOOL bNew) { bDefaultExtrudeSmoothed = bNew; }
-    const BOOL GetDefaultExtrudeSmoothFrontBack() { return bDefaultExtrudeSmoothFrontBack; }
+    BOOL GetDefaultExtrudeSmoothFrontBack() const { return bDefaultExtrudeSmoothFrontBack; }
     void SetDefaultExtrudeSmoothFrontBack(const BOOL bNew) { bDefaultExtrudeSmoothFrontBack = bNew; }
-    const BOOL GetDefaultExtrudeCharacterMode() { return bDefaultExtrudeCharacterMode; }
+    BOOL GetDefaultExtrudeCharacterMode() const { return bDefaultExtrudeCharacterMode; }
     void SetDefaultExtrudeCharacterMode(const BOOL bNew) { bDefaultExtrudeCharacterMode = bNew; }
-    const BOOL GetDefaultExtrudeCloseFront() { return bDefaultExtrudeCloseFront; }
+    BOOL GetDefaultExtrudeCloseFront() const { return bDefaultExtrudeCloseFront; }
     void SetDefaultExtrudeCloseFront(const BOOL bNew) { bDefaultExtrudeCloseFront = bNew; }
-    const BOOL GetDefaultExtrudeCloseBack() { return bDefaultExtrudeCloseBack; }
+    BOOL GetDefaultExtrudeCloseBack() const { return bDefaultExtrudeCloseBack; }
     void SetDefaultExtrudeCloseBack(const BOOL bNew) { bDefaultExtrudeCloseBack = bNew; }
 
     // Scene-Objekt
-    const BOOL GetDefaultDither() { return bDefaultDither; }
+    BOOL GetDefaultDither() const { return bDefaultDither; }
     void SetDefaultDither(const BOOL bNew) { bDefaultDither = bNew; }
 };
 

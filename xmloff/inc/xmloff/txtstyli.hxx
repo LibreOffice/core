@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtstyli.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,7 @@ public:
 
     const ::rtl::OUString& GetListStyle() const { return sListStyleName; }
     // --> OD 2006-10-13 #i69629#
-    inline const sal_Bool IsListStyleSet() const
+    sal_Bool IsListStyleSet() const
     {
         return mbListStyleSet;
     }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macrconf.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +141,7 @@ public:
     sal_uInt16                  GetSlotId(SfxMacroInfoPtr);
     void                    ReleaseSlotId(sal_uInt16 nId);
     void                    RegisterSlotId(sal_uInt16 nId);
-    const SfxMacroInfoPtr   GetMacroInfo(sal_uInt16 nId) const;
+    SfxMacroInfo*           GetMacroInfo(sal_uInt16 nId) const;
     sal_Bool                    ExecuteMacro(sal_uInt16 nId, const String& rArgs ) const;
     sal_Bool                    ExecuteMacro( SfxObjectShell*, const SvxMacro*, const String& ) const;
     sal_Bool                    CheckMacro(sal_uInt16 nId) const;
@@ -149,7 +149,7 @@ public:
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void Release_Impl();
-    SAL_DLLPRIVATE const SfxMacroInfoPtr GetMacroInfo_Impl( const SvxMacro *pMacro ) const;
+    SAL_DLLPRIVATE const SfxMacroInfo* GetMacroInfo_Impl( const SvxMacro *pMacro ) const;
     DECL_DLLPRIVATE_LINK( CallbackHdl_Impl, SfxMacroConfig*);
     DECL_DLLPRIVATE_LINK( EventHdl_Impl, SfxMacroInfo*);
 //#endif

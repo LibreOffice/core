@@ -230,7 +230,6 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
             OSL_ASSERT( hStdout );
             sal_Char  pBuffer[256];
             sal_uInt64  nBytesRead;
-            OSL_ASSERT( pBuffer );
             oslFileError nFileErr = osl_File_E_None;
             nFileErr = osl_readFile( hStdout, pBuffer, 256, &nBytesRead);
             if ( nFileErr != osl_File_E_None )

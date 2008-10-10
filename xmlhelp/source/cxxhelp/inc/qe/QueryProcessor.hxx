@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryProcessor.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,7 @@ namespace xmlsearch {
             }
 
 
-            const sal_Int32 getHitCount() const { return nHits_; }
+            sal_Int32 getHitCount() const { return nHits_; }
 
             const std::vector< rtl::OUString >& getTerms() const { return terms_; }
 

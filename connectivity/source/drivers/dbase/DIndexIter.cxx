@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DIndexIter.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,13 +175,13 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand));
+                while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand)) ;
                 break;
             case SQLFilterOperator::LESS:
-                while ( ( ( pKey = GetNextKey() ) != NULL ) && pKey->getValue().isNull());
+                while ( ( ( pKey = GetNextKey() ) != NULL ) && pKey->getValue().isNull()) ;
                 break;
             case SQLFilterOperator::LESS_EQUAL:
-                while ( ( pKey = GetNextKey() ) != NULL );
+                while ( ( pKey = GetNextKey() ) != NULL ) ;
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
             case SQLFilterOperator::EQUAL:
@@ -190,7 +190,7 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
             case SQLFilterOperator::GREATER:
                 pKey = GetFirstKey(m_aRoot,*m_pOperand);
                 if ( !pKey )
-                    while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand));
+                    while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand)) ;
         }
     }
     else

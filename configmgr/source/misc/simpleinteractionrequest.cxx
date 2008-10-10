@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpleinteractionrequest.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,7 @@ SimpleInteractionRequest::SimpleInteractionRequest(
 }
 
 //=========================================================================
-const SimpleInteractionRequest::Continuation SimpleInteractionRequest::getResponse() const
+SimpleInteractionRequest::Continuation SimpleInteractionRequest::getResponse() const
 {
     uno::Reference< task::XInteractionContinuation > xSelection = this->getSelection();
     if ( xSelection.is() )

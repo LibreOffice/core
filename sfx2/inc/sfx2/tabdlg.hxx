@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabdlg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,7 +181,7 @@ public:
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     const SfxItemSet*   GetOutputItemSet( USHORT nId ) const;
     int                 FillOutputItemSet();
-    const BOOL          IsFormat() const { return bFmt; }
+    BOOL            IsFormat() const { return bFmt; }
 
     const OKButton&     GetOKButton() const { return aOKBtn; }
     OKButton&           GetOKButton() { return aOKBtn; }

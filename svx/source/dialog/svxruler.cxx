@@ -2719,7 +2719,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             const USHORT nIdx = GetDragAryPos()+TAB_GAP;
             pRuler_Imp->nTotalDist -= pTabs[nIdx].nPos;
             pRuler_Imp->SetPercSize(nTabCount);
-            for(USHORT n=0;n<=nIdx;pRuler_Imp->pPercBuf[n++]=0);
+            for(USHORT n=0;n<=nIdx;pRuler_Imp->pPercBuf[n++]=0) ;
             for(USHORT i = nIdx+1; i < nTabCount; ++i)
             {
                 const long nDelta = pTabs[i].nPos - pTabs[nIdx].nPos;

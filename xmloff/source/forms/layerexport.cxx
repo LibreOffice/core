@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerexport.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -512,7 +512,7 @@ namespace xmloff
     {
         struct AccumulateSize : public ::std::binary_function< size_t, MapPropertySet2Map::value_type, size_t >
         {
-            const size_t operator()( size_t _size, const MapPropertySet2Map::value_type& _map )
+            size_t operator()( size_t _size, const MapPropertySet2Map::value_type& _map ) const
             {
                 return _size + _map.second.size();
             }

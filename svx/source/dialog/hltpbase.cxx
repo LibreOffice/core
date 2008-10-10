@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hltpbase.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -539,7 +539,7 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
 |*
 |************************************************************************/
 
-const BOOL SvxHyperlinkTabPageBase::IsHTMLDoc() const
+BOOL SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->IsHTMLDoc();
 }

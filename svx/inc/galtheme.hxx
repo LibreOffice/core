@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: galtheme.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,7 +127,7 @@ public:
 
     static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, BOOL bReadOnly );
 
-    const ULONG                 GetObjectCount() const { return aObjectList.Count(); }
+    ULONG                   GetObjectCount() const { return aObjectList.Count(); }
 
     SgaObject*                  AcquireObject( ULONG nPos );
     void                        ReleaseObject( SgaObject* pObj );

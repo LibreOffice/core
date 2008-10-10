@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hlmarkwn.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +186,7 @@ USHORT SvxHlinkDlgMarkWnd::SetError( USHORT nError)
 |*
 |************************************************************************/
 
-const BOOL SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
+BOOL SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
 {
     if ( !mbUserMoved )
     {
@@ -206,7 +206,7 @@ void SvxHlinkDlgMarkWnd::Move ()
         mbUserMoved = TRUE;
 }
 
-const BOOL SvxHlinkDlgMarkWnd::ConnectToDialog( BOOL bDoit )
+BOOL SvxHlinkDlgMarkWnd::ConnectToDialog( BOOL bDoit )
 {
     BOOL bOldStatus = mbUserMoved;
 

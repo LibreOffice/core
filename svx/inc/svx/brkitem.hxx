@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brkitem.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,7 @@ public:
     // MS VC4.0 kommt durcheinander
     void             SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
-    const SvxBreak           GetBreak() const { return SvxBreak( GetValue() ); }
+    SvxBreak             GetBreak() const { return SvxBreak( GetValue() ); }
     void                     SetBreak( const SvxBreak eNew )
                                 { SetValue( (USHORT)eNew ); }
 };

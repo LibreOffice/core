@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: queries.h,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -363,19 +363,19 @@ class QueryAnalyzer
         // return type of query. User can decide then, which action should be started.
         // For faster work we converted query string into corresponding enum value!
         //---------------------------------------------------------------------------------------------------------
-        EQuery getQueryType() { return m_eQuery; } const
+        EQuery getQueryType() const { return m_eQuery; }
 
         //---------------------------------------------------------------------------------------------------------
         // access to additional parameter values
         // Methods return default of realy set values!
         //---------------------------------------------------------------------------------------------------------
-        sal_uInt32 getIFlags       () { return m_nIFlags       ; } const
-        sal_uInt32 getEFlags       () { return m_nEFlags       ; } const
-        ESortProp  getSortProp     () { return m_eSortProp     ; } const
-        sal_Bool   getDescending   () { return m_bDescending   ; } const
-        sal_Bool   getCaseSensitive() { return m_bCaseSensitive; } const
-        sal_Bool   getUseOrder     () { return m_bUseOrder     ; } const
-        sal_Bool   getDefaultFirst () { return m_bDefaultFirst ; } const
+        sal_uInt32 getIFlags       () const { return m_nIFlags       ; }
+        sal_uInt32 getEFlags       () const { return m_nEFlags       ; }
+        ESortProp  getSortProp     () const { return m_eSortProp     ; }
+        sal_Bool   getDescending   () const { return m_bDescending   ; }
+        sal_Bool   getCaseSensitive() const { return m_bCaseSensitive; }
+        sal_Bool   getUseOrder     () const { return m_bUseOrder     ; }
+        sal_Bool   getDefaultFirst () const { return m_bDefaultFirst ; }
 
         //---------------------------------------------------------------------------------------------------------
         // this method checks if given string match any supported query.

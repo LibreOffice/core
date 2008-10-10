@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprov.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.72.92.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -938,7 +938,7 @@ Svx_CompareMap(const void* pSmaller, const void* pBigger )
 
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
-    for(UINT16 i=0;i<SVXMAP_END;aMapArr[i++]=NULL);
+    for(UINT16 i=0;i<SVXMAP_END;aMapArr[i++]=NULL) ;
 }
 
 // ---------------------------------------------------------------------

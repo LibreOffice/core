@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MQuery.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,9 +111,9 @@ namespace connectivity
             {
             }
 
-            const ::rtl::OUString&    getName()  { return m_aName; }
-            const MQueryOp::cond_type getCond()  { return m_aBooleanCondition; }
-            const ::rtl::OUString&    getValue() { return m_aValue; }
+            const ::rtl::OUString&    getName() const { return m_aName; }
+            MQueryOp::cond_type getCond() const { return m_aBooleanCondition; }
+            const ::rtl::OUString&    getValue() const { return m_aValue; }
         };
 
         class MQuery;

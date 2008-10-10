@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpleinteractionrequest.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,7 @@ namespace apihelper {
         * @return the continuation choosen by an interaction handler or
         *         CONTINUATION_UNKNOWN, if the request was not (yet) handled.
         */
-        const Continuation getResponse() const;
+        Continuation getResponse() const;
     };
 
 /** These are the constants that can be passed to the constructor of class

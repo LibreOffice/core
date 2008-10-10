@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxrtf.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 SV_IMPL_PTRARR( SvxRTFColorTbl, ColorPtr )
 SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
 
-const CharSet lcl_GetDefaultTextEncodingForRTF()
+CharSet lcl_GetDefaultTextEncodingForRTF()
 {
 
     ::com::sun::star::lang::Locale aLocale;

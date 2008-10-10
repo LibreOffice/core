@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hlnkitem.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ public:
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTable; }
 
     void SetMacroEvents (const USHORT nEvents) { nMacroEvents = nEvents; }
-    const   USHORT GetMacroEvents() const { return nMacroEvents; }
+    USHORT GetMacroEvents() const { return nMacroEvents; }
 
     virtual SvStream&           Store( SvStream &, USHORT nItemVersion ) const;
     virtual SfxPoolItem*        Create( SvStream &, USHORT nVer ) const;

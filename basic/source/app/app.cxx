@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.79.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1465,7 +1465,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 else
                 {
                     AppWin *w = NULL;
-                    for ( w = pList->Last() ; w ? !w->ISA(AppBasEd) : FALSE ; w = pList->Prev() );
+                    for ( w = pList->Last() ; w ? !w->ISA(AppBasEd) : FALSE ; w = pList->Prev() ) ;
                     if ( w )
                     {
                         p = ((AppBasEd*)w);

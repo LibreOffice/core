@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.48.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -551,14 +551,14 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceFactory();
 
     // --> OD 2006-03-10 #i51726#
-    inline const SvtModuleOptions::EFactory GetModelType() const
+    SvtModuleOptions::EFactory GetModelType() const
     {
         return meModelType;
     }
     // <--
 
     // --> OD 2006-09-27 #i69627#
-    const sal_Bool writeOutlineStyleAsNormalListStyle() const;
+    sal_Bool writeOutlineStyleAsNormalListStyle() const;
     // <--
        bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
 

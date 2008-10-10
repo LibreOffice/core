@@ -554,7 +554,7 @@ BOOL StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
     for(SvLBoxEntry *pTmpEntry=FirstChild(pTarget);
         pTmpEntry && COMPARE_LESS==pCollator->compareString(
             GetEntryText(pTmpEntry),GetEntryText(pEntry));
-        pTmpEntry=NextSibling(pTmpEntry),lPos++);
+        pTmpEntry=NextSibling(pTmpEntry),lPos++) ;
 
     return bRet? (BOOL)2: FALSE;
 }
@@ -695,7 +695,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                     for ( ii = 0;
                          ii < pCmp->Count() && COMPARE_LESS ==
                          pCollator->compareString( (*pCmp->pChilds)[ii]->aName,
-                                        pEntry->aName);++ii);
+                                        pEntry->aName);++ii) ;
                     pCmp->Put(pEntry,ii);
                     break;
                 }
@@ -2871,7 +2871,7 @@ void SfxTemplateCatalog_Impl::CheckItem(USHORT nMesId, BOOL /*bCheck*/)
     if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
         return;
     USHORT i;
-    for ( i = 0; i < aFamIds.Count() && aFamIds[i] != nMesId; i++ );
+    for ( i = 0; i < aFamIds.Count() && aFamIds[i] != nMesId; i++ ) ;
     aFamList.SelectEntryPos(i);
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfilt.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,8 +119,8 @@ String SfxFilter::GetDefaultExtension() const
 String SfxFilter::GetSuffixes() const
 {
     String aRet = GetWildcard()();
-    while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND );
-    while( aRet.SearchAndReplace( ';', ',' ) != STRING_NOTFOUND );
+    while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;
+    while( aRet.SearchAndReplace( ';', ',' ) != STRING_NOTFOUND ) ;
     return aRet;
 }
 

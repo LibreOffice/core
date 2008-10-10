@@ -3568,7 +3568,7 @@ EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
 
 EscherGraphicProvider::~EscherGraphicProvider()
 {
-    for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] );
+    for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] ) ;
     delete[] mpBlibEntrys;
 }
 

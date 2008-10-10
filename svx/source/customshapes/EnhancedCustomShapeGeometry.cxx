@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.92.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5565,7 +5565,7 @@ static const sal_uInt16 mso_DefaultFillingTable[] =
 {
     0x0000, 0x0018, 0x01ff, 0x0000, 0x0c00, 0x01e0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0600, 0x0000, 0x0000, 0x0000, 0x0000
 };
-const sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
+sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
 {
     sal_Bool bIsFilledByDefault = sal_True;
     sal_uInt32 i = (sal_uInt32)eSpType;
@@ -5573,7 +5573,7 @@ const sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
         bIsFilledByDefault = ( mso_DefaultFillingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
     return bIsFilledByDefault;
 }
-const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
+sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
 {
     sal_Int16 nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
@@ -5610,7 +5610,7 @@ static const sal_uInt16 mso_DefaultStrokingTable[] =
     0x0000, 0x0000, 0x0000, 0x0000
 };
 // #i28269#
-const sal_Bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
+sal_Bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
 {
     sal_Bool bIsStrokedByDefault = sal_True;
     sal_uInt32 i = (sal_uInt32)eSpType;
@@ -5623,7 +5623,7 @@ static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 {
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0010, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 };
-const sal_Bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
+sal_Bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
 {
     sal_Bool bSortFilledObjectsToBackByDefault = sal_True;
     sal_uInt32 i = (sal_uInt32)eSpType;

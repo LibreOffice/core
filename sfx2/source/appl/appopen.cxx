@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appopen.cxx,v $
- * $Revision: 1.121 $
+ * $Revision: 1.121.96.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,7 +211,7 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
                  SfxViewFrame::GetFirst( xDoc, TYPE(SfxTopViewFrame) );
              pFrame && !pFrame->IsVisible_Impl();
              pFrame = (SfxTopViewFrame*)
-                 SfxViewFrame::GetNext( *pFrame, xDoc, TYPE(SfxTopViewFrame) ) );
+                 SfxViewFrame::GetNext( *pFrame, xDoc, TYPE(SfxTopViewFrame) ) ) ;
         if ( pFrame )
         {
             SfxViewFrame *pCur = SfxViewFrame::Current();

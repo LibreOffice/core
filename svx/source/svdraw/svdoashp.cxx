@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.51.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -420,7 +420,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
     return mpLastShadowGeometry;
 }
 
-const sal_Bool SdrObjCustomShape::IsTextPath() const
+sal_Bool SdrObjCustomShape::IsTextPath() const
 {
     const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
     sal_Bool bTextPathOn = sal_False;
@@ -431,7 +431,7 @@ const sal_Bool SdrObjCustomShape::IsTextPath() const
     return bTextPathOn;
 }
 
-const sal_Bool SdrObjCustomShape::UseNoFillStyle() const
+sal_Bool SdrObjCustomShape::UseNoFillStyle() const
 {
     sal_Bool bRet = sal_False;
     rtl::OUString sShapeType;
@@ -445,7 +445,7 @@ const sal_Bool SdrObjCustomShape::UseNoFillStyle() const
     return bRet;
 }
 
-const sal_Bool SdrObjCustomShape::IsMirroredX() const
+sal_Bool SdrObjCustomShape::IsMirroredX() const
 {
     sal_Bool bMirroredX = sal_False;
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -455,7 +455,7 @@ const sal_Bool SdrObjCustomShape::IsMirroredX() const
         *pAny >>= bMirroredX;
     return bMirroredX;
 }
-const sal_Bool SdrObjCustomShape::IsMirroredY() const
+sal_Bool SdrObjCustomShape::IsMirroredY() const
 {
     sal_Bool bMirroredY = sal_False;
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -488,12 +488,12 @@ void SdrObjCustomShape::SetMirroredY( const sal_Bool bMirrorY )
     SetMergedItem( aGeometryItem );
 }
 
-const double SdrObjCustomShape::GetObjectRotation() const
+double SdrObjCustomShape::GetObjectRotation() const
 {
     return fObjectRotation;
 }
 
-const double SdrObjCustomShape::GetExtraTextRotation() const
+double SdrObjCustomShape::GetExtraTextRotation() const
 {
     const com::sun::star::uno::Any* pAny;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
@@ -504,7 +504,7 @@ const double SdrObjCustomShape::GetExtraTextRotation() const
         *pAny >>= fExtraTextRotateAngle;
     return fExtraTextRotateAngle;
 }
-const sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
+sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 {
     sal_Bool bRet = sal_False;
     Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) ); // a candidate for being cached
