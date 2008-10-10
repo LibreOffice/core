@@ -605,7 +605,7 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 //*********************************************************************
 //  reg_getName
 //
-const RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
+RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
 {
     return getName(hRegistry, pName);
 }

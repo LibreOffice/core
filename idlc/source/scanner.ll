@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scanner.ll,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,7 +189,7 @@ static double asciiToFloat(const sal_Char *s)
            	}
            	if (e > 0)
            	{
-            	for (k = 1; e > 0; k *= 10, e--);
+            	for (k = 1; e > 0; k *= 10, e--) ;
                	if (negexp)
                 	d /= k;
                	else
@@ -223,9 +223,9 @@ static void parseLineAndFile(sal_Char* pBuf)
 		return;
 
 	/* Find line number */
-	for (r++; *r == ' ' || *r == '\t' || isalpha(*r); r++);
+	for (r++; *r == ' ' || *r == '\t' || isalpha(*r); r++) ;
 	h = r;
-	for (; *r != '\0' && *r != ' ' && *r != '\t'; r++);
+	for (; *r != '\0' && *r != ' ' && *r != '\t'; r++) ;
 	*r++ = 0;
 	idlc()->setLineNumber((sal_uInt32)atol(h));
 
@@ -236,7 +236,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 			return;
 	}
 	h = ++r;
-	for (; *r != '"'; r++);
+	for (; *r != '"'; r++) ;
 	*r = 0;
 	if (*h == '\0')
 		idlc()->setFileName(::rtl::OString("standard input"));

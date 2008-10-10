@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registry.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
     @param  hKey identifies a currently open key which name will be returned.
     @param  pKeyName contains the keyname if succeeds else an empty string.
 */
-const RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName);
+RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName);
 
 
 /** This function sets a value of a key.
@@ -429,7 +429,7 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
     @param  pName returns the name of the registry if the function succeeds otherwise an empty string.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-const RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName);
+RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName);
 
 
 /** This function returns the access mode of the registry.

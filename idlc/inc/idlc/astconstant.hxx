@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astconstant.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,7 @@ public:
 
     AstExpression* getConstValue()
         { return m_pConstValue; }
-    const ExprType getConstValueType()
+    ExprType getConstValueType() const
         { return m_constValueType; }
 
     sal_Bool dumpBlob(

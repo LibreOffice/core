@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regkey.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1053,7 +1053,7 @@ RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey)
 //*********************************************************************
 //  reg_getKeyName
 //
-const RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName)
+RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName)
 {
     if (hKey)
     {
