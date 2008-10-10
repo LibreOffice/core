@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipPackage.hxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,7 @@ public:
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *pZipFile;}
     const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
-    const sal_Int16 getFormat() { return m_nFormat; }
+    sal_Int16 getFormat() const { return m_nFormat; }
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )

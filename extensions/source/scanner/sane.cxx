@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sane.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.16.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,7 @@ SANE_Status     (*Sane::p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
 void            (*Sane::p_cancel)( SANE_Handle ) = 0;
 SANE_Status     (*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
 SANE_Status     (*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
-const SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
+SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
 
 static BOOL bSaneSymbolLoadFailed = FALSE;
 
@@ -237,7 +237,7 @@ void Sane::Init()
             LoadSymbol( "sane_set_io_mode" );
         p_get_select_fd = (SANE_Status(*)(SANE_Handle, SANE_Int*))
             LoadSymbol( "sane_get_select_fd" );
-        p_strstatus = (const SANE_String_Const(*)(SANE_Status))
+        p_strstatus = (SANE_String_Const(*)(SANE_Status))
             LoadSymbol( "sane_strstatus" );
         if( bSaneSymbolLoadFailed )
             DeInit();
@@ -248,7 +248,7 @@ void Sane::Init()
             nStatus = p_get_devices( (const SANE_Device***)&ppDevices,
                                      SANE_FALSE );
             FAIL_SHUTDOWN_STATE( nStatus, "sane_get_devices", );
-            for( nDevices = 0 ; ppDevices[ nDevices ]; nDevices++ );
+            for( nDevices = 0 ; ppDevices[ nDevices ]; nDevices++ ) ;
         }
     }
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL

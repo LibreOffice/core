@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plaintextformatter.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,10 +132,10 @@ namespace logging
     ::rtl::OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord ) throw (RuntimeException)
     {
         char buffer[ 30 ];
-        const size_t buffer_size = sizeof( buffer );
-        size_t used = snprintf( buffer, buffer_size, "%10i", (int)_rRecord.SequenceNumber );
-        if ( used >= buffer_size )
-            buffer[ buffer_size ] = 0;
+        const int buffer_size = sizeof( buffer );
+        int used = snprintf( buffer, buffer_size, "%10i", (int)_rRecord.SequenceNumber );
+        if ( used >= buffer_size || used < 0 )
+            buffer[ buffer_size - 1 ] = 0;
 
         ::rtl::OUStringBuffer aLogEntry;
         aLogEntry.appendAscii( buffer );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testapp.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,7 @@ public:
 
 private:
     ImplTestToolObj *pImpl;     // Alles was von der Implementation abhängt
-    static CErrors* const GetFehlerListe() { return pFehlerListe; }
+    static const CErrors* GetFehlerListe() { return pFehlerListe; }
     BOOL bUseIPC;
     Link aLogHdl;               // Zum Logen der Fehlermeldungen im Testtool
     Link aWinInfoHdl;           // Anzeigen der Windows/Controls der zu testenden App
