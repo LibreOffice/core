@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: headerfooterdlg.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,10 +42,10 @@
 
 class SfxObjectShell;
 class SdUndoGroup;
-class ::sd::ViewShell;
 
 namespace sd
 {
+class ViewShell;
 
 class HeaderFooterTabPage;
 

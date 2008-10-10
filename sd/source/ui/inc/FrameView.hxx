@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FrameView.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,39 +82,39 @@ public:
 
     void SetRuler(const BOOL bRulerOn)
                  { mbRuler = bRulerOn; }
-    const BOOL HasRuler() { return mbRuler; }
+    BOOL HasRuler() const { return mbRuler; }
 
     void SetNoColors(const BOOL bNoCol)
                  { mbNoColors = bNoCol; }
-    const BOOL IsNoColors() { return mbNoColors; }
+    BOOL IsNoColors() const { return mbNoColors; }
 
     void SetNoAttribs(const BOOL bNoAttr)
                  { mbNoAttribs = bNoAttr; }
-    const BOOL IsNoAttribs() { return mbNoAttribs; }
+    BOOL IsNoAttribs() const { return mbNoAttribs; }
 
     void SetVisArea(const Rectangle& rVisArea)
                  { maVisArea = rVisArea; }
     const Rectangle GetVisArea() { return maVisArea; }
 
     void SetPageKind(PageKind eKind) { mePageKind = eKind; }
-    const PageKind GetPageKind() { return mePageKind; }
+    PageKind GetPageKind() const { return mePageKind; }
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page kind that was selected while last saving this document */
     void SetPageKindOnLoad(PageKind eKind) { mePageKindOnLoad = eKind; }
 
     /** can be used to get the page kind that was selected on last save of this document */
-    const PageKind GetPageKindOnLoad() { return mePageKindOnLoad; }
+    PageKind GetPageKindOnLoad() const { return mePageKindOnLoad; }
 
     void SetSelectedPage (USHORT nPage);
-    const USHORT GetSelectedPage (void) const;
+    USHORT GetSelectedPage () const;
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page that was selected while last saving this document */
     void SetSelectedPageOnLoad (USHORT nPage) { mnSelectedPageOnLoad = nPage; }
 
     /** can be used to get the page that was selected on last save of this document */
-    const USHORT GetSelectedPageOnLoad (void) const { return mnSelectedPageOnLoad; }
+    USHORT GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
 
     void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
@@ -131,20 +131,20 @@ public:
 
     void SetLayerMode(BOOL bMode)
                  { mbLayerMode = bMode; }
-    const BOOL IsLayerMode() { return mbLayerMode; }
+    BOOL IsLayerMode() const { return mbLayerMode; }
 
     void SetQuickEdit(BOOL bQEdit)
                  { mbQuickEdit = bQEdit; }
-    const BOOL IsQuickEdit() { return mbQuickEdit; }
+    BOOL IsQuickEdit() const { return mbQuickEdit; }
 
     void        SetBigHandles( BOOL bOn = TRUE ) { mbBigHandles = bOn; }
-    const BOOL  IsBigHandles() const { return mbBigHandles; }
+    BOOL    IsBigHandles() const { return mbBigHandles; }
 
     void        SetDoubleClickTextEdit( BOOL bOn = TRUE ) { mbDoubleClickTextEdit = bOn; }
-    const BOOL  IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
+    BOOL    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
     void        SetClickChangeRotation( BOOL bOn = TRUE ) { mbClickChangeRotation = bOn; }
-    const BOOL  IsClickChangeRotation() const { return mbClickChangeRotation; }
+    BOOL    IsClickChangeRotation() const { return mbClickChangeRotation; }
 
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
@@ -168,10 +168,10 @@ public:
 
     void SetPresentationViewShellId(USHORT nId)
                  { mnPresViewShellId = nId; }
-    const USHORT GetPresentationViewShellId() { return mnPresViewShellId; }
+    USHORT GetPresentationViewShellId() const { return mnPresViewShellId; }
 
     void SetSlotId(USHORT nId) { mnSlotId = nId; }
-    const USHORT GetSlotId() { return mnSlotId; }
+    USHORT GetSlotId() const { return mnSlotId; }
 
     void SetSlidesPerRow(USHORT nSlides) { mnSlidesPerRow = nSlides; }
     USHORT GetSlidesPerRow() const { return mnSlidesPerRow; }

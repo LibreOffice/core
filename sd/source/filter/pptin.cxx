@@ -701,7 +701,7 @@ sal_Bool ImplSdPPTImport::Import()
                             else
                                 pParagraphs[ nLevel ] = NULL;
                         }
-                        for ( nLevel = 0; nLevel < 9; delete pParagraphs[ nLevel++ ] );
+                        for ( nLevel = 0; nLevel < 9; delete pParagraphs[ nLevel++ ] ) ;
                         /////////////////////////
                         // subtitle stylesheet //
                         /////////////////////////

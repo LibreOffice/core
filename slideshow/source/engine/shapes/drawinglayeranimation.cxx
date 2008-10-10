@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawinglayeranimation.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -819,7 +819,7 @@ ActivityImpl::ActivityImpl(
     mbScrollIn = (meAnimKind == drawing::TextAnimationKind_SLIDE);
 
     // adopted from in AInfoBlinkText::ImplInit():
-    sal_Int16 nRepeat;
+    sal_Int16 nRepeat(0);
     getPropertyValue( nRepeat, xProps, OUSTR("TextAnimationCount") );
     mnRepeat = nRepeat;
 
@@ -844,7 +844,7 @@ ActivityImpl::ActivityImpl(
     mfRotationAngle /= -100.0; // (switching direction)
 
     // set frequency
-    sal_Int16 nDelay;
+    sal_Int16 nDelay(0);
     getPropertyValue( nDelay, xProps, OUSTR("TextAnimationDelay") );
     // set delay if not automatic
     mnFrequency = (nDelay ? nDelay :

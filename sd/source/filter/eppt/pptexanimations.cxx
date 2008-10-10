@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptexanimations.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +108,7 @@ using namespace ::com::sun::star::presentation;
 namespace ppt
 {
 
-const void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode eTranslateMode )
+void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode eTranslateMode )
 {
     if ( eTranslateMode != TRANSLATE_NONE )
     {
@@ -164,7 +164,7 @@ const void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode e
     }
 }
 
-const sal_uInt32 ImplTranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const rtl::OUString& rPresetSubType )
+sal_uInt32 ImplTranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const rtl::OUString& rPresetSubType )
 {
     sal_uInt32  nPresetSubType = 0;
     sal_Bool    bTranslated = sal_False;

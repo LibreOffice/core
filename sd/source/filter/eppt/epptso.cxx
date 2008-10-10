@@ -228,7 +228,7 @@ GroupTable::GroupTable() :
 
 GroupTable::~GroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] );
+    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] ) ;
     delete[] mpGroupEntry;
 }
 
@@ -282,7 +282,7 @@ sal_uInt32 GroupTable::GetGroupsClosed()
 
 void GroupTable::ClearGroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] );
+    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] ) ;
     mnCurrentGroupEntry = 0;
 }
 
@@ -4102,7 +4102,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
     rSt << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0x1f ) << (sal_uInt32)24   // Mouse Over Action
         << (sal_uInt32)( EPP_InteractiveInfo << 16 ) << (sal_uInt32)16;
-    for ( int i = 0; i < 4; i++, rSt << (sal_uInt32)0 );
+    for ( int i = 0; i < 4; i++, rSt << (sal_uInt32)0 ) ;
 }
 
 //  -----------------------------------------------------------------------
@@ -4254,7 +4254,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
         }
         nGroups = GetGroupsClosed();
-        for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() );
+        for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() ) ;
 
         if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE ) )
         {
@@ -5488,7 +5488,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     }
     ClearGroupTable();                              // gruppierungen wegschreiben, sofern noch irgendwelche offen sind, was eigendlich nicht sein sollte
     nGroups = GetGroupsClosed();
-    for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() );
+    for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() ) ;
     mnPagesWritten++;
 }
 

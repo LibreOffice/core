@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpaction.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.106.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,9 @@
 
 #include <vector>
 
-class ::sd::View;
+namespace sd {
+    class View;
+}
 class SdDrawDocument;
 
 /*************************************************************************
