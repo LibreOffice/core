@@ -937,7 +937,7 @@ void XclChPropSetHelper::ReadMarkerProperties(
 sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet )
 {
     // chart2 handles rotation as double in the range [0,360)
-    double fAngle;
+    double fAngle(0);
     bool bStacked;
     maRotationHlp.ReadFromPropertySet( rPropSet );
     maRotationHlp >> fAngle >> bStacked;

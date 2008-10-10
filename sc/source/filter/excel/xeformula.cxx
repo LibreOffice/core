@@ -628,7 +628,7 @@ void XclExpFmlaCompImpl::AppendInlineArrays( ScfUInt8Vec& rExtensionTokens )
 
         if( meBiff == EXC_BIFF8 )
         {
-            rExtensionTokens.push_back( sal::static_int_cast<const sal_uInt8>( nMaxC - 1 ) );
+            rExtensionTokens.push_back( sal::static_int_cast<sal_uInt8>( nMaxC - 1 ) );
             rExtensionTokens.resize( rExtensionTokens.size() + 2 );
             ShortToSVBT16( static_cast< USHORT >( nMaxR - 1 ), &*(rExtensionTokens.end() - 2) );
         }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbacolorformat.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 using namespace org::openoffice;
 using namespace com::sun::star;
 
-const sal_Int32
+sal_Int32
 MsoColorIndizes::getColorIndex( sal_Int32 nIndex )
 {
     const static sal_Int32 COLORINDIZES[56] =

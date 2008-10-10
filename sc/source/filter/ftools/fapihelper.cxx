@@ -376,7 +376,7 @@ bool ScfPropSetHelper::ReadValue( String& rString )
 
 bool ScfPropSetHelper::ReadValue( Color& rColor )
 {
-    sal_Int32 nApiColor;
+    sal_Int32 nApiColor(0);
     bool bRet = ReadValue( nApiColor );
     rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
     return bRet;

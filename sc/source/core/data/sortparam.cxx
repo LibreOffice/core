@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sortparam.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,8 +125,8 @@ BOOL ScSortParam::operator==( const ScSortParam& rOther ) const
     // Anzahl der Sorts gleich?
     USHORT nLast      = 0;
     USHORT nOtherLast = 0;
-    while ( bDoSort[nLast++] && nLast < MAXSORT );
-    while ( rOther.bDoSort[nOtherLast++] && nOtherLast < MAXSORT );
+    while ( bDoSort[nLast++] && nLast < MAXSORT ) ;
+    while ( rOther.bDoSort[nOtherLast++] && nOtherLast < MAXSORT ) ;
     nLast--;
     nOtherLast--;
     if (   (nLast           == nOtherLast)

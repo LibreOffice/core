@@ -506,7 +506,7 @@ sal_Size XclImpStream::GetRecSize()
     if( !mbHasComplRec )
     {
         PushPosition();
-        while( JumpToNextContinue() );  // JumpToNextContinue() adds up mnCurrRecSize
+        while( JumpToNextContinue() ) ;  // JumpToNextContinue() adds up mnCurrRecSize
         mnComplRecSize = mnCurrRecSize;
         mbHasComplRec = true;
         PopPosition();
@@ -525,7 +525,7 @@ sal_uInt16 XclImpStream::GetNextRecId()
     if( mbValidRec )
     {
         PushPosition();
-        while( JumpToNextContinue() );  // skip following CONTINUE records
+        while( JumpToNextContinue() ) ;  // skip following CONTINUE records
         if( mnNextRecPos < mnStreamSize )
         {
             mrStrm.Seek( mnNextRecPos );
