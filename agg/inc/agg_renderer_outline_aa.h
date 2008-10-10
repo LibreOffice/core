@@ -1476,11 +1476,11 @@ namespace agg
             {
                 if(li.vertical())
                 {
-                    while(li.step_ver());
+                    while(li.step_ver()) ;
                 }
                 else
                 {
-                    while(li.step_hor());
+                    while(li.step_hor()) ;
                 }
             }
         }
@@ -1492,11 +1492,11 @@ namespace agg
             line_interpolator_aa1<self_type> li(*this, lp, sx, sy);
             if(li.vertical())
             {
-                while(li.step_ver());
+                while(li.step_ver()) ;
             }
             else
             {
-                while(li.step_hor());
+                while(li.step_hor()) ;
             }
         }
 
@@ -1507,11 +1507,11 @@ namespace agg
             line_interpolator_aa2<self_type> li(*this, lp, ex, ey);
             if(li.vertical())
             {
-                while(li.step_ver());
+                while(li.step_ver()) ;
             }
             else
             {
-                while(li.step_hor());
+                while(li.step_hor()) ;
             }
         }
 
@@ -1524,11 +1524,11 @@ namespace agg
             line_interpolator_aa3<self_type> li(*this, lp, sx, sy, ex, ey);
             if(li.vertical())
             {
-                while(li.step_ver());
+                while(li.step_ver()) ;
             }
             else
             {
-                while(li.step_hor());
+                while(li.step_hor()) ;
             }
         }
 
