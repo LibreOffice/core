@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: feshview.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.61.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3121,7 +3121,7 @@ const Color SwFEShell::GetShapeBackgrd() const
     @returns boolean, indicating, if the horizontal text direction of the
     page, the selected drawing object is on, is right-to-left.
 */
-const bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
+bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
 {
     bool bRet = false;
 

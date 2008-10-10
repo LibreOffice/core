@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtcol.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,7 @@ public:
     BOOL IsAtDocNodeSet() const;
 
     // --> OD 2006-11-22 #i71574#
-    inline const bool AssignedToListLevelOfOutlineStyle() const
+    inline bool AssignedToListLevelOfOutlineStyle() const
     {
         return ( /*0 <= GetOutlineLevel() &&*/ GetOutlineLevel() < MAXLEVEL );
     }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anchoredobjectposition.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ namespace objectpositioning
                 return *mpFrmFmt;
             }
             // --> OD 2006-03-15 #i62875#
-            inline const bool DoesObjFollowsTextFlow() const
+            inline bool DoesObjFollowsTextFlow() const
             {
                 return mbFollowTextFlow;
             }

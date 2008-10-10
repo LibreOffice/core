@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numrule.hxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,7 +341,7 @@ namespace numfunc
 
         @author OD
     */
-    const bool IsDefBulletFontUserDefined();
+    bool IsDefBulletFontUserDefined();
 
     /** retrieve font used for the default bullet list characters
 
@@ -353,7 +353,7 @@ namespace numfunc
 
         @author OD
     */
-    const sal_Unicode GetBulletChar( BYTE nLevel );
+    sal_Unicode GetBulletChar( BYTE nLevel );
 
     /** configuration, if at first position of the first list item the <TAB>-key
         increased the indent of the complete list or only demotes this list item.
@@ -364,14 +364,14 @@ namespace numfunc
 
         @author OD
     */
-    const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
+    sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
 
     /**
         OD 2008-06-06 #i89178#
 
         @author OD
     */
-    const SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
+    SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
 }
 
 #endif  // _NUMRULE_HXX

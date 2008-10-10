@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfrm.hxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.56.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -590,7 +590,7 @@ public:
     inline void SwitchRTLtoLTR( Point& rPoint ) const { SwitchLTRtoRTL( rPoint ); };
 
     // OD 14.03.2003 #i11760# - access to new member <mbNoFollowFormat>
-    inline const bool FollowFormatAllowed() const
+    inline bool FollowFormatAllowed() const
     {
         return mbFollowFormatAllowed;
     }

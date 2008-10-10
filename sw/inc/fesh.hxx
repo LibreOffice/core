@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fesh.hxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.63.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -758,7 +758,7 @@ public:
         @returns boolean, indicating, if the horizontal text direction of the
         page, the selected drawing object is on, is right-to-left.
     */
-    const bool IsShapeDefaultHoriTextDirR2L() const;
+    bool IsShapeDefaultHoriTextDirR2L() const;
 
     void ParkCursorInTab();
 

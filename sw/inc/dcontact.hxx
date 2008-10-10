@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dcontact.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.26.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,7 +149,7 @@ public:
         { return (const SwFrmFmt*)GetRegisteredIn(); }
 
     // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
-    const bool IsInDTOR() const;
+    bool IsInDTOR() const;
 
     /** method to move drawing object to corresponding visible layer
 

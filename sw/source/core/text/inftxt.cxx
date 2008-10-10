@@ -110,7 +110,7 @@ using namespace ::com::sun::star::beans;
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
-    extern const bool IsDefBulletFontUserDefined();
+    extern bool IsDefBulletFontUserDefined();
 }
 // <--
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fldmgr.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,7 @@ public:
 
     inline const String& GetCurFldPar1() const;
     inline const String& GetCurFldPar2() const;
-    inline const ULONG   GetCurFldFmt() const;
+    inline ULONG   GetCurFldFmt() const;
 
     // Ein Feld ermitteln
     SwField*        GetCurFld();
@@ -229,7 +229,7 @@ inline const String& SwFldMgr::GetCurFldPar1() const
 inline const String& SwFldMgr::GetCurFldPar2() const
     { return aCurPar2; }
 
-inline const ULONG   SwFldMgr::GetCurFldFmt() const
+inline ULONG   SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }
 
 

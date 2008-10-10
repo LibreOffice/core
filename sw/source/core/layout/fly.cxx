@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fly.cxx,v $
- * $Revision: 1.92 $
+ * $Revision: 1.92.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2769,7 +2769,7 @@ const SwRect SwFlyFrm::GetObjBoundRect() const
 // <--
 
 // --> OD 2006-08-10 #i68520#
-const bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
+bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
 {
     const bool bChanged( Frm().Pos().Y() != _nTop );
 
@@ -2777,7 +2777,7 @@ const bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
 
     return bChanged;
 }
-const bool SwFlyFrm::_SetObjLeft( const SwTwips _nLeft )
+bool SwFlyFrm::_SetObjLeft( const SwTwips _nLeft )
 {
     const bool bChanged( Frm().Pos().X() != _nLeft );
 

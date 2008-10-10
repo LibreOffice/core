@@ -121,7 +121,7 @@ public:
     inline SwFont *GetFnt() { return pFnt; }
     inline const SwFont *GetFnt() const { return pFnt; }
 
-    inline const BYTE GetPropFont() const { return nPropFont; }
+    inline BYTE GetPropFont() const { return nPropFont; }
     inline void SetPropFont( const BYTE nNew ) { nPropFont = nNew; }
 
     inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }

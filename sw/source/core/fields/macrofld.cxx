@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macrofld.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ String SwMacroField::GetLibName() const
         USHORT nPos = aMacro.Len();
 
         for (USHORT i = 0; i < 3 && nPos > 0; i++)
-            while (aMacro.GetChar(--nPos) != '.' && nPos > 0);
+            while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
         return aMacro.Copy(0, nPos );
     }
@@ -129,7 +129,7 @@ String SwMacroField::GetMacroName() const
             USHORT nPos = aMacro.Len();
 
             for (USHORT i = 0; i < 3 && nPos > 0; i++)
-                while (aMacro.GetChar(--nPos) != '.' && nPos > 0);
+                while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
             return aMacro.Copy( ++nPos );
         }

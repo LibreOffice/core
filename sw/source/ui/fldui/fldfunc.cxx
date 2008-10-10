@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fldfunc.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -578,7 +578,7 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     Application::SetDefDialogParent( pBtn );
 
     String sMacro(TurnMacroString(aNameED.GetText()));
-    while (sMacro.SearchAndReplace('.', ';') != STRING_NOTFOUND);
+    while (sMacro.SearchAndReplace('.', ';') != STRING_NOTFOUND) ;
 
     if (GetFldMgr().ChooseMacro(sMacro))
         UpdateSubType();

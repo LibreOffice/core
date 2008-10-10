@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtflcnt.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ public:
           SwTxtFlyCnt *GetTxtFlyCnt()       { return pTxtAttr; }
 
     // OD 27.06.2003 #108784#
-    const bool Sw3ioExportAllowed() const;
+    bool Sw3ioExportAllowed() const;
 };
 
 #endif

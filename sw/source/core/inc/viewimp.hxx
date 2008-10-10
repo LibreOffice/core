@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,7 +244,7 @@ public:
     BOOL IsPaintInScroll() const { return bPaintInScroll; }
 
     // neues Interface fuer StarView Drawing
-    inline const BOOL HasDrawView() const { return 0 != pDrawView; }
+    inline BOOL HasDrawView() const { return 0 != pDrawView; }
           SwDrawView* GetDrawView()       { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
           SdrPageView*GetPageView()       { return pSdrPageView; }

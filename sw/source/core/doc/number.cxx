@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: number.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1240,7 +1240,7 @@ namespace numfunc
                 return msFontname;
             }
             // --> OD 2008-06-02 #i63395#
-            inline const bool IsFontnameUserDefined() const
+            inline bool IsFontnameUserDefined() const
             {
                 return mbUserDefinedFontname;
             }
@@ -1249,15 +1249,15 @@ namespace numfunc
             {
                 return *mpFont;
             }
-            inline const short GetFontWeight() const
+            inline short GetFontWeight() const
             {
                 return static_cast<short>(meFontWeight);
             }
-            inline const short GetFontItalic() const
+            inline short GetFontItalic() const
             {
                 return static_cast<short>(meFontItalic);
             }
-            inline const sal_Unicode GetChar( BYTE p_nListLevel ) const
+            inline sal_Unicode GetChar( BYTE p_nListLevel ) const
             {
                 if ( p_nListLevel > MAXLEVEL )
                 {
@@ -1476,7 +1476,7 @@ namespace numfunc
     }
 
     // --> OD 2008-06-02 #i63395#
-    const bool IsDefBulletFontUserDefined()
+    bool IsDefBulletFontUserDefined()
     {
         return SwDefBulletConfig::getInstance()->IsFontnameUserDefined();
     }
@@ -1487,7 +1487,7 @@ namespace numfunc
         return SwDefBulletConfig::getInstance()->GetFont();
     }
 
-    const sal_Unicode GetBulletChar( BYTE nLevel )
+    sal_Unicode GetBulletChar( BYTE nLevel )
     {
         return SwDefBulletConfig::getInstance()->GetChar( nLevel );
     }
@@ -1514,7 +1514,7 @@ namespace numfunc
                 return mpInstance;
             }
 
-            inline const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
+            inline sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
             {
                 return mbChangeIndentOnTabAtFirstPosOfFirstListItem;
             }
@@ -1618,13 +1618,13 @@ namespace numfunc
         LoadConfig();
     }
 
-    const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
+    sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
     {
         return SwNumberingUIBehaviorConfig::getInstance()->ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
 
     // --> OD 2008-06-06 #i89178#
-    const SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
+    SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
     {
         SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;
         SvtSaveOptions aSaveOptions;

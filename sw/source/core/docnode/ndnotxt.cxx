@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndnotxt.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,7 +217,7 @@ BOOL SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
     return TRUE;
 }
 
-const BOOL SwNoTxtNode::IsPixelContour() const
+BOOL SwNoTxtNode::IsPixelContour() const
 {
     BOOL bRet;
     if( bContourMapModeValid )

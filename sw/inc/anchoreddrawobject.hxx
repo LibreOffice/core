@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anchoreddrawobject.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,8 +136,8 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         virtual void RegisterAtCorrectPage();
 
         // --> OD 2006-08-10 #i68520#
-        virtual const bool _SetObjTop( const SwTwips _nTop);
-        virtual const bool _SetObjLeft( const SwTwips _nLeft);
+        virtual bool _SetObjTop( const SwTwips _nTop);
+        virtual bool _SetObjLeft( const SwTwips _nLeft);
         // <--
 
         // --> OD 2006-10-05 #i70122#
@@ -216,7 +216,7 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         virtual void UpdateLayoutDir();
         // <--
         // --> OD 2006-03-17 #i62875#
-        const bool IsOutsidePage() const;
+        bool IsOutsidePage() const;
         // <--
 
         // new Loop control

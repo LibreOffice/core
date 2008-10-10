@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.121 $
+ * $Revision: 1.121.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,7 +197,7 @@ public:
     void LockLines( BOOL bLock );
 
     /// OD 13.08.2002 - correct type of function
-    const USHORT Free() const { return nFree; }
+    USHORT Free() const { return nFree; }
 };
 
 class SwSubsRects : public SwLineRects
@@ -3295,7 +3295,7 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
 
     @return true, if background is transparent drawn.
 */
-const sal_Bool SwFlyFrm::IsBackgroundTransparent() const
+sal_Bool SwFlyFrm::IsBackgroundTransparent() const
 {
     sal_Bool bBackgroundTransparent = GetFmt()->IsBackgroundTransparent();
     if ( !bBackgroundTransparent &&
@@ -3347,7 +3347,7 @@ const sal_Bool SwFlyFrm::IsBackgroundTransparent() const
 
     @return true, if shadow color is transparent.
 */
-const sal_Bool SwFlyFrm::IsShadowTransparent() const
+sal_Bool SwFlyFrm::IsShadowTransparent() const
 {
     return GetFmt()->IsShadowTransparent();
 };

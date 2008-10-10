@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dcontact.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.61.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -212,7 +212,7 @@ SwContact::~SwContact()
 }
 
 // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
-const bool SwContact::IsInDTOR() const
+bool SwContact::IsInDTOR() const
 {
     return mbInDTOR;
 }

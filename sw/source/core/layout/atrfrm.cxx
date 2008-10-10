@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrfrm.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.72.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2885,7 +2885,7 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     @return true, if background color is transparent, but not "no fill"
     or the transparency of a existing background graphic is set.
 */
-const sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
+sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     sal_Bool bReturn = sal_False;
 
@@ -2925,7 +2925,7 @@ const sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 
     @return true, if background brush is "inherited" from parent/grandparent
 */
-const sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
+sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
     sal_Bool bReturn = sal_False;
 

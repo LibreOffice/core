@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,13 +128,13 @@ public:
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
 
-    inline const BYTE GetAutoFmtLvl() const     { return nAFmtNumLvl; }
+    inline BYTE GetAutoFmtLvl() const     { return nAFmtNumLvl; }
     inline void SetAutoFmtLvl( BYTE nVal )      { nAFmtNumLvl = nVal; }
 
-    inline const BOOL IsSetNumLSpace() const  { return bSetNumLSpace; }
+    inline BOOL IsSetNumLSpace() const  { return bSetNumLSpace; }
     inline void SetNumLSpace( BOOL bFlag )        { bSetNumLSpace = bFlag; }
 
-    inline const BOOL IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
+    inline BOOL IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
     inline void SetIgnoreDontExpand( BOOL bNew )  { bIgnoreDontExpand = bNew; }
 
     BYTE    GetNodeType() const { return nNodeType; }

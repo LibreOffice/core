@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.hxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.64.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -493,7 +493,7 @@ public:
            sal_Bool IsPaintLocked() const { return nLockPaint != 0; }
 
     // Abfragen/Erzeugen DrawView + PageView
-    const sal_Bool HasDrawView() const;
+    sal_Bool HasDrawView() const;
     void MakeDrawView();
 
     //DrawView darf u.U. am UI benutzt werden.

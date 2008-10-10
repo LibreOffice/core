@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmfmt.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,7 +187,7 @@ public:
         @return true, if background color is transparent, but not "no fill"
         or a existing background graphic is transparent.
     */
-    virtual const sal_Bool IsBackgroundTransparent() const;
+    virtual sal_Bool IsBackgroundTransparent() const;
 
     /** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
 
@@ -200,7 +200,7 @@ public:
 
         @return true, if background brush is "inherited" from parent/grandparent
     */
-    const sal_Bool IsBackgroundBrushInherited() const;
+    sal_Bool IsBackgroundBrushInherited() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
 };
