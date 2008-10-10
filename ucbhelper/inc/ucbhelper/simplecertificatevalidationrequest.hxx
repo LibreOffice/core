@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simplecertificatevalidationrequest.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,7 @@ public:
       * @return the continuation choosen by an interaction handler or
       *         CONTINUATION_UNKNOWN, if the request was not (yet) handled.
       */
-    const sal_Int32 getResponse() const;
+    sal_Int32 getResponse() const;
 };
 
 } // namespace ucbhelper

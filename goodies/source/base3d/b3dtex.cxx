@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dtex.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -385,12 +385,12 @@ void B3dTexture::SetSwitchVal()
 |*
 \************************************************************************/
 
-const BitmapColor B3dTexture::GetBitmapColor(long nX, long nY)
+BitmapColor B3dTexture::GetBitmapColor(long nX, long nY) const
 {
     return pReadAccess->GetColor(nY, nX);
 }
 
-const sal_uInt8 B3dTexture::GetBitmapTransparency(long nX, long nY)
+sal_uInt8 B3dTexture::GetBitmapTransparency(long nX, long nY) const
 {
     if(pAlphaReadAccess)
         return pAlphaReadAccess->GetColor(nY, nX).GetIndex();

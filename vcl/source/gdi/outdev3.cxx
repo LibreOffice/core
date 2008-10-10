@@ -843,7 +843,7 @@ void OutputDevice::RemoveFontSubstitute( USHORT n )
 void ImplDirectFontSubstitution::RemoveFontSubstitute( int nIndex )
 {
     FontSubstList::iterator it = maFontSubstList.begin();
-    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it );
+    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
     if( it != maFontSubstList.end() )
         maFontSubstList.erase( it );
 }
@@ -877,8 +877,8 @@ bool ImplDirectFontSubstitution::GetFontSubstitute( int nIndex,
     String& rFontName, String& rSubstFontName, USHORT& rFlags ) const
 {
     FontSubstList::const_iterator it = maFontSubstList.begin();
-    for( int nCount = 0; nCount++ != nIndex; ++it );
-        if( it == maFontSubstList.end() )
+    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
+    if( it == maFontSubstList.end() )
         return false;
 
     const ImplFontSubstEntry* pEntry = &(*it);

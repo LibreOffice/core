@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bucket.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +112,7 @@
     } \
     void TheClassName##TheExtension::InitializeSize(UINT16 TheSize) { \
         UINT16 nSiz; \
-        for(nShift=0,nSiz=1;nSiz<sizeof(TheClassName);nSiz<<=1,nShift++); \
+        for(nShift=0,nSiz=1;nSiz<sizeof(TheClassName);nSiz<<=1,nShift++) ; \
         nBlockShift = TheSize - nShift; \
         nMask = (1L << nBlockShift)-1L; \
         nSlotSize = 1<<nShift; \

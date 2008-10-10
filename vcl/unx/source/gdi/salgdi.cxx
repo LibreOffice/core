@@ -1300,7 +1300,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             typedef std::pair<VerticalTrapSet::iterator, VerticalTrapSet::iterator> VTSPair;
             VTSPair aVTSPair = aVerticalTraps.equal_range( *aActiveTrapsIt );
             VerticalTrapSet::iterator aVTSit = aVTSPair.first;
-            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit );
+            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit ) ;
             if( aVTSit != aVTSPair.second )
                 aVerticalTraps.erase( aVTSit );
             // then update the old trapezoid's bottom

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gcach_rbmp.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,7 @@ static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
         // store left aligned remainder if needed
         if( nTemp > 1 )
         {
-            for(; nTemp < 0x100U; nTemp += nTemp );
+            for(; nTemp < 0x100U; nTemp += nTemp ) ;
             *(p1++) = (unsigned char)nTemp;
         }
         // pad scanline with zeroes
@@ -162,7 +162,7 @@ static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
         // store left aligned remainder if needed
         if( nTemp > 1 )
         {
-            for(; nTemp < 0x100; nTemp += nTemp );
+            for(; nTemp < 0x100; nTemp += nTemp ) ;
             *(p1++) = (unsigned char)nTemp;
         }
         // scanline pad is already clean

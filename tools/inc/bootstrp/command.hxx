@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: command.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.40.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,7 @@ public:
                     /** Spawns the Process
                         @return 0 when spawned without errors, otherwise a error code
                     */
-    operator const  int();
+    operator int();
 
     ByteString          GetCommandLine_() { return aCommandLine; }
     ByteString          GetCommand() { return aCommand; }
@@ -162,7 +162,7 @@ class CCommandd : public CCommand
 public:
                     CCommandd( ByteString &rString, CommandBits nBits );
                     CCommandd( const char *pChar, CommandBits nBits );
-    operator const  int();
+    operator int();
 };
 
 #endif

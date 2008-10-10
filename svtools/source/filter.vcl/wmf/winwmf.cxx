@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winwmf.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1085,7 +1085,7 @@ void WMFReader::ReadWMF()
 
 // ------------------------------------------------------------------------
 
-const static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
+static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
 {
     Point aSource( rSource );
     if ( nMapMode == MM_HIMETRIC )
@@ -1100,7 +1100,7 @@ const static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound
         rPlaceableBound.Bottom() = aSource.Y();
 }
 
-const static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
+static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
 {
     GetWinExtMax( rSource.TopLeft(), rPlaceableBound, nMapMode );
     GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );

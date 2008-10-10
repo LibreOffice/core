@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chaptercollator.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,8 +73,8 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
         return CollatorImpl::compareSubstring( str1, off1,  len1, str2, off2, len2 );
 
     sal_Int32 i1, i2;
-    for (i1 = len1; i1 && (cclass->getCharacterType(str1, off1+i1-1, nLocale) & DIGIT); i1--);
-    for (i2 = len2; i2 && (cclass->getCharacterType(str2, off2+i2-1, nLocale) & DIGIT); i2--);
+    for (i1 = len1; i1 && (cclass->getCharacterType(str1, off1+i1-1, nLocale) & DIGIT); i1--) ;
+    for (i2 = len2; i2 && (cclass->getCharacterType(str2, off2+i2-1, nLocale) & DIGIT); i2--) ;
 
     sal_Int32 ans = CollatorImpl::compareSubstring(str1, off1, i1, str2, off2, i2);
     if( ans != 0 )

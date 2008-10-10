@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simplecertificatevalidationrequest.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,7 @@ SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sa
 }
 
 //=========================================================================
-const sal_Int32 SimpleCertificateValidationRequest::getResponse() const
+sal_Int32 SimpleCertificateValidationRequest::getResponse() const
 {
     rtl::Reference< InteractionContinuation > xSelection = getSelection();
     if ( xSelection.is() )

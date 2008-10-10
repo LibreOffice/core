@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mkfilt.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,7 +213,7 @@ void MkFilter::Filter()
                 {
                     MkLine *pMkLine = pLine->pPrivateTnrLst->GetObject(i);
                     ByteString aLine = pMkLine->aLine;
-                    while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 );
+                    while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 ) ;
                     fputs( aLine.GetBuffer(), pOut );
                     fprintf( stderr, "o" );
                 }

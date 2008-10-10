@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fsys.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -294,7 +294,7 @@ private:
 protected:
     void                ImpTrim( FSysPathStyle eStyle );
     const ByteString&   ImpTheName() const;
-    const DirEntryFlag  ImpTheFlag() const { return eFlag; };
+    DirEntryFlag        ImpTheFlag() const { return eFlag; };
     DirEntry*           ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize = TRUE );
     DirEntry*           ImpGetParent() { return pParent; }
 #ifdef FEAT_FSYS_DOUBLESPEED

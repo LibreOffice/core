@@ -52,7 +52,7 @@ class PrinterColor
 {
 public:
 
-    typedef enum    ColorSpace { eInvalid, eRGB };
+    enum    ColorSpace { eInvalid, eRGB };
 
 private:
 

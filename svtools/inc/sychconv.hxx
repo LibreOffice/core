@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sychconv.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,7 @@ class SymCharConverter
 {
 public:
 
-    static const BOOL   Convert( Font& rFont, UniString& rString, OutputDevice* pDev = NULL );
+    static BOOL Convert( Font& rFont, UniString& rString, OutputDevice* pDev = NULL );
 };
 
 #endif // _CHARCONV_HXX

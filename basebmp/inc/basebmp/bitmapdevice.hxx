@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapdevice.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,7 +125,7 @@ public:
 
         This is just a frontend for getPalette->size()
      */
-    const sal_Int32 getPaletteEntryCount() const;
+    sal_Int32 getPaletteEntryCount() const;
 
     /** Clear whole device with given color
 

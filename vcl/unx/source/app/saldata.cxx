@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.58.98.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -649,7 +649,7 @@ void SalXLib::Remove( int nFD )
     {
         for ( nFD = nFDs_ - 1;
               nFD >= 0 && !yieldTable[nFD].fd;
-              nFD-- );
+              nFD-- ) ;
 
         nFDs_ = nFD + 1;
     }

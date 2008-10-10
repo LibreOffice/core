@@ -1711,13 +1711,13 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
             // we have to use the brute force method...
             for( sal_uInt32 cCode = 0x0020;; )
             {
-                for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode );
+                for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode ) ;
                 if( cCode >= 0xFFF0 )
                     break;
                 ++aResult.mnPairCount;
                 if( pCodes )
                     *(pCodes++) = cCode;
-                for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode );
+                for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode ) ;
                 if( pCodes )
                     *(pCodes++) = cCode;
             }

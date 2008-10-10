@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prj.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +88,7 @@ ByteString SimpleConfig::GetNext()
     ByteString aString;
 
     if ( aStringBuffer =="" )
-      while ((aStringBuffer = GetNextLine()) == "\t"); //solange bis != "\t"
+      while ((aStringBuffer = GetNextLine()) == "\t") ; //solange bis != "\t"
     if ( aStringBuffer =="" )
         return ByteString();
 
@@ -112,7 +112,7 @@ ByteString  SimpleConfig::GetNextLine()
         return "\t";
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
-    while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND );
+    while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
     BOOL bFound = FALSE;
     ByteString aEraseString;

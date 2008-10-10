@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylepool.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,7 @@ namespace {
         // <--
         ~Node();
         // --> OD 2008-03-11 #i86923#
-        const bool hasItemSet( const bool bCheckUsage ) const;
+        bool hasItemSet( const bool bCheckUsage ) const;
         // <--
         // --> OD 2008-04-29 #i87808#
 //        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return aItemSet[aItemSet.size()-1]; }
@@ -121,7 +121,7 @@ namespace {
     // <--
 
     // --> OD 2008-05-06 #i86923#
-    const bool Node::hasItemSet( const bool bCheckUsage ) const
+    bool Node::hasItemSet( const bool bCheckUsage ) const
     {
         bool bHasItemSet = false;
 

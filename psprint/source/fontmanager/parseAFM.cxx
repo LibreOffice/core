@@ -314,7 +314,7 @@ static char *linetoken( FileInputStream* stream )
     static char ident[MAX_NAME]; /* storage buffer for keywords */
     int ch, idx;
 
-    while ((ch = stream->getChar()) == ' ' || ch == '\t' );
+    while ((ch = stream->getChar()) == ' ' || ch == '\t' ) ;
 
     idx = 0;
     while (ch != -1 && ch != lineterm && ch != '\r' && idx < MAX_NAME-1 )

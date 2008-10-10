@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontcfg.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.49.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -772,7 +772,7 @@ static bool ImplKillTrailingWithExceptions( String& rName, const char* const* pp
         else
         {
             // skip exception strings
-            while( *++ppStr );
+            while( *++ppStr ) ;
         }
     }
 

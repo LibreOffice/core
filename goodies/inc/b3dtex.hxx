@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dtex.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,8 +275,8 @@ protected:
     virtual ~B3dTexture();
 
     // Interne Zugriffsfunktion auf die BitMapFarben
-    inline const BitmapColor GetBitmapColor(long nX, long nY);
-    inline const sal_uInt8 GetBitmapTransparency(long nX, long nY);
+    inline BitmapColor GetBitmapColor(long nX, long nY) const;
+    inline sal_uInt8 GetBitmapTransparency(long nX, long nY) const;
 
     // Generate switch val for optimized own texture mapping
     void SetSwitchVal();

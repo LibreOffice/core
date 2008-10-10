@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rscdef.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -741,7 +741,7 @@ RscFile :: ~RscFile(){
     //von hinten nach vorne ist besser wegen der Abhaengigkeiten
     //Objekte zerstoeren sich, wenn Referenzzaehler NULL
     aDefLst.Last();
-    while( aDefLst.Remove() );
+    while( aDefLst.Remove() ) ;
 }
 
 /*************************************************************************
@@ -1318,7 +1318,7 @@ void RscFileTab :: DeleteFileContext( ULONG lFileKey ){
             aDefTree.Remove( pDef );
             pDef = pFName->aDefLst.Next();
         };
-        while( pFName->aDefLst.Remove( (ULONG)0 ) );
+        while( pFName->aDefLst.Remove( (ULONG)0 ) ) ;
     }
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frqitem.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -533,7 +533,7 @@ DateTime SfxFrequencyItem::CalcNextTick( const DateTime& rBase, BOOL bFirst )
                 aDT.SetDay( 1 );
                 aDT += (long)(aNextDate.GetDaysInMonth() - 1);
                 if( aDT.GetDayOfWeek() != nDay )
-                    for( aDT--; aDT.GetDayOfWeek() != nDay; aDT-- );
+                    for( aDT--; aDT.GetDayOfWeek() != nDay; aDT-- ) ;
                 aNextDate = aDT;
             }
             else

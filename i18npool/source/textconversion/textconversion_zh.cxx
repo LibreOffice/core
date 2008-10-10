@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textconversion_zh.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,7 +187,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                         bottom = current + 1;
                     else {
                         if (toSChinese)   // Traditionary/Simplified conversion,
-                            for (current = entry[current]-1; current > 0 && wordData[current-1]; current--);
+                            for (current = entry[current]-1; current > 0 && wordData[current-1]; current--) ;
                         else  // Simplified/Traditionary conversion, forwards search for next word
                             current = entry[current] + word.getLength() + 1;
                         sal_Int32 start=current;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: strmadpt.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -971,7 +971,7 @@ bool SvDataPipe_Impl::removeMark(sal_uInt32 nPosition)
     if (t == m_aMarks.end())
         return false;
     m_aMarks.erase(t);
-    while (remove(m_pFirstPage));
+    while (remove(m_pFirstPage)) ;
     return true;
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gsicheck.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,8 +60,8 @@ private:
 
 public:
     GSILine( const ByteString &rLine, ULONG nLine );
-    LineFormat  const GetLineFormat() const    { return aFormat; }
-    ULONG       const GetLineNumber() const    { return nLineNumber; }
+    LineFormat  GetLineFormat() const    { return aFormat; }
+    ULONG       GetLineNumber() const    { return nLineNumber; }
 
     ByteString  const GetUniqId()     const    { return aUniqId; }
     ByteString  const GetLineType()   const    { return aLineType; }
@@ -79,10 +79,10 @@ public:
     ParserMessageList* GetMessageList() { return &aMessages; };
     BOOL HasMessages(){ return ( aMessages.Count() > 0 ); };
 
-    BOOL const IsOK() { return bOK; }
+    BOOL IsOK() const { return bOK; }
     void NotOK();
 
-    BOOL const IsFixed() { return bFixed; }
+    BOOL IsFixed() const { return bFixed; }
     void SetFixed() { bFixed = TRUE; };
 };
 

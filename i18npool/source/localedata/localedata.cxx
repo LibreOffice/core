@@ -614,7 +614,7 @@ LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
 
 // return a static (!) string resulting from replacing all occurrences of
 // 'oldStr' string in 'formatCode' string with 'newStr' string
-static sal_Unicode const * const replace( sal_Unicode const * const formatCode, sal_Unicode const * const oldStr, sal_Unicode const * const newStr)
+static const sal_Unicode * replace( sal_Unicode const * const formatCode, sal_Unicode const * const oldStr, sal_Unicode const * const newStr)
 {
 // make reasonable assumption of maximum length of formatCode.
 #define MAX_FORMATCODE_LENTH 512
