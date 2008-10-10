@@ -129,7 +129,7 @@ ListStyle::~ListStyle()
 
 }
 
-const bool ListStyle::isListLevelDefined(int iLevel) const
+bool ListStyle::isListLevelDefined(int iLevel) const
 {
     if (mppListLevels[iLevel] == NULL)
         return false;
