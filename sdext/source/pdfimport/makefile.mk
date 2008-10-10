@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.2.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -107,7 +107,7 @@ COMPONENT_XCU= \
     $(EXTENSIONDIR)$/pdf_types.xcu
 
 CONVERTER_FILE= \
-    $(EXTENSIONDIR)$/xpdfimport$(EXECPOST) \
+    $(EXTENSIONDIR)$/xpdfimport$(EXECPOST)
 
 COMPONENT_DIALOGS= \
     $(EXTENSIONDIR)$/basic$/Module1.xba \
@@ -131,7 +131,7 @@ EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) make
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
-$(CONVERTER_FILE) : $(SOLARBINDIR)$/$$(@:f)
+$(CONVERTER_FILE) : $(BIN)$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

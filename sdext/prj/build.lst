@@ -7,10 +7,12 @@ dx	sdext\source\minimizer\registry\data\org\openoffice\Office\UI			nmake	-	all s
 dx	sdext\source\minimizer\registry\data\org\openoffice\Office 		nmake	-	all sdext_minimizer_rdooo NULL
 dx	sdext\source\presenter					nmake	-	all sdext_presenter sdext_inc NULL
 dx	sdext\inc								nmake	-	all	sdext_inc				NULL
+dx  sdext\source\pdfimport\xpdfwrapper     nmake   -   all dx_xpdfwrap                        NULL
+dx  sdext\source\pdfimport\xpdftest        nmake   -   all dx_parsetest               dx_xpdfwrap NULL
 dx	sdext\source\pdfimport\wrapper		nmake	-	all	sdext_pdfwrap	sdext_inc		NULL
 dx	sdext\source\pdfimport\misc		nmake	-	all	sdext_misc	sdext_inc		NULL
 dx	sdext\source\pdfimport\odf		nmake	-	all	sdext_odf	sdext_inc		NULL
 dx	sdext\source\pdfimport\pdfparse		nmake	-	all	sdext_pdfparse	sdext_inc		NULL
 dx	sdext\source\pdfimport\sax		nmake	-	all	sdext_sax	sdext_inc		NULL
 dx	sdext\source\pdfimport\tree		nmake	-	all	sdext_tree	sdext_inc		NULL
-dx	sdext\source\pdfimport			nmake	-	all	sdext_pdfi sdext_pdfwrap sdext_misc sdext_odf sdext_pdfparse sdext_sax sdext_tree sdext_inc NULL
+dx	sdext\source\pdfimport			nmake	-	all	sdext_pdfi sdext_pdfwrap sdext_misc sdext_odf sdext_pdfparse sdext_sax sdext_tree sdext_inc dx_xpdfwrap NULL

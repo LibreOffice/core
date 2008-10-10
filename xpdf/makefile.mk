@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +41,12 @@ TARGET=xpdflib
 # --- Settings -----------------------------------------------------
 
 .INCLUDE: settings.mk
+
+.IF "$(SYSTEM_POPPLER)" == "YES"
+dummy:
+        @echo "An already available installation of poppler should exist on your system."
+        @echo "Therefore xpdf provided here does not need to be built in addition."
+.ENDIF
 
 # --- Files --------------------------------------------------------
 

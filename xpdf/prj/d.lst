@@ -1,3 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\xpdf
-..\%__SRC%\bin\xpdfimport.* %_DEST%\bin%_EXT%\xpdfimport.*
-..\%__SRC%\bin\xpdfimport   %_DEST%\bin%_EXT%\xpdfimport
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\xpdf\*.h
+..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%

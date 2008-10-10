@@ -1,4 +1,2 @@
 xp      xpdf : solenv sal soltools NULL
 xp      xpdf						nmake   -       all     xp_xpdf NULL
-xp		xpdf\wrapper			    nmake	-		all		xp_xpdfwrap xp_xpdf NULL
-xp		xpdf\test				    nmake	-		all		xp_parsetest xp_xpdfwrap NULL

@@ -8,7 +8,7 @@
  *
  * $RCSfile: wrapper.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -799,7 +799,7 @@ oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
     // skip garbage \r \n at start of line
     while( osl_File_E_None == (nRes=osl_readFile(pFile, &aChar, 1, &nBytesRead)) &&
            nBytesRead == 1 &&
-           (aChar == '\n' || aChar == '\r') );
+           (aChar == '\n' || aChar == '\r') ) ;
 
     if( aChar != '\n' && aChar != '\r' )
         line.append( aChar );
