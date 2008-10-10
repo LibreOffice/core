@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgimport.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -588,7 +588,7 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
     if ( pFilter )
     {
         String aRet = pFilter->GetDefaultExtension();
-        while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND );
+        while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;
         sExtension = aRet;
     }
     // then look for which of them settings are stored in the configuration
