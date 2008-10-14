@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templwin.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.82.58.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -905,7 +905,12 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 {
     try
     {
-        m_xDocProps->loadFromMedium( rURL, Sequence<PropertyValue>() );
+        uno::Reference < task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(
+            ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
+        uno::Sequence < beans::PropertyValue> aProps(1);
+        aProps[0].Name = ::rtl::OUString::createFromAscii("InteractionHandler");
+        aProps[0].Value <<= xInteractionHandler;
+        m_xDocProps->loadFromMedium( rURL, aProps );
         pEditWin->fill( m_xDocProps, rURL );
     }
     catch ( UnknownPropertyException& ) {}
@@ -976,12 +981,18 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                     if ( pTextWin->IsReallyVisible() )
                     {
                         sal_Bool    b = sal_True;
-                        Sequence < PropertyValue > aArgs( 3 );
+                        Sequence < PropertyValue > aArgs( 4 );
                         aArgs[0].Name = ASCII_STR("Preview");
                         aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
                         aArgs[1].Name = ASCII_STR("ReadOnly");
                         aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
                         aArgs[2].Name = ASCII_STR("AsTemplate");    // prevents getting an empty URL with getURL()!
+
+                        uno::Reference < task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(
+                            ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
+                        aArgs[3].Name = ::rtl::OUString::createFromAscii("InteractionHandler");
+                        aArgs[3].Value <<= xInteractionHandler;
+
                         b = sal_False;
                         aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
                         xDisp->dispatch( aURL, aArgs );

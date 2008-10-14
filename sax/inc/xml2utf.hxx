@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xml2utf.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,6 @@ class Text2UnicodeConverter
 
 public:
     Text2UnicodeConverter( const ::rtl::OString & sEncoding );
-    Text2UnicodeConverter( rtl_TextEncoding encoding );
     ~Text2UnicodeConverter();
 
     ::com::sun::star::uno::Sequence < sal_Unicode > convert( const ::com::sun::star::uno::Sequence<sal_Int8> & );
@@ -69,7 +68,6 @@ private:
 class Unicode2TextConverter
 {
 public:
-    Unicode2TextConverter( const ::rtl::OString & sEncoding );
     Unicode2TextConverter( rtl_TextEncoding encoding );
     ~Unicode2TextConverter();
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contentenumeration.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,6 @@ namespace svt
     using ::rtl::OUString;
     using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
-    using ::ucbhelper::Content;
 
     //====================================================================
     //= FileViewContentEnumerator
@@ -203,10 +202,10 @@ namespace svt
             aProps[10] = OUString::createFromAscii( "IsFloppy" );
             aProps[11] = OUString::createFromAscii( "IsCompactDisc" );
 
+            Reference< XCommandEnvironment > xEnvironment;
             try
             {
                 FolderDescriptor aFolder;
-                Reference< XCommandEnvironment > xEnvironment;
                 {
                     ::osl::MutexGuard aGuard( m_aMutex );
                     aFolder = m_aFolder;
@@ -214,7 +213,7 @@ namespace svt
                 }
                 if ( !aFolder.aContent.get().is() )
                 {
-                    aFolder.aContent = Content( aFolder.sURL, xEnvironment );
+                    aFolder.aContent = ::ucbhelper::Content( aFolder.sURL, xEnvironment );
                     {
                         ::osl::MutexGuard aGuard( m_aMutex );
                         m_aFolder.aContent = aFolder.aContent;
@@ -291,9 +290,13 @@ namespace svt
                             if ( bHasTargetURL &&
                                 INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
                             {
-                                Content aCnt( aTargetURL, NULL );
+                                ::ucbhelper::Content aCnt( aTargetURL, xEnvironment );
+                                try
+                                {
                                 aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
                                 aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
+                                }
+                                catch (...) {}
                             }
 
                             if ( bContainsDate )

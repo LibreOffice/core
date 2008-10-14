@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attrlistimpl.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,37 +173,6 @@ void AttributeList::addAttribute(   const OUString &sName ,
 void AttributeList::clear()
 {
     m_pImpl->vecAttribute.clear();
-}
-
-void AttributeList::removeAttribute( const OUString &sName )
-{
-    vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
-            m_pImpl->vecAttribute.erase( ii );
-            break;
-        }
-    }
-}
-
-
-void AttributeList::setAttributeList( const Reference<  XAttributeList >  &r )
-{
-    assert( r.is() );
-
-    sal_Int16 nMax = r->getLength();
-    clear();
-    m_pImpl->vecAttribute.reserve( nMax );
-
-    for( int i = 0 ; i < nMax ; i ++ ) {
-       m_pImpl->vecAttribute.push_back(
-           TagAttribute(
-               r->getNameByIndex( static_cast<sal_Int16>(i) ) ,
-               r->getTypeByIndex( static_cast<sal_Int16>(i) ) ,
-               r->getValueByIndex( static_cast<sal_Int16>(i) ) ) );
-    }
-    assert( nMax == getLength() );
 }
 
 }
