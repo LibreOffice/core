@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FlatTContext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,23 +48,11 @@ public:
     XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
-    // attr list/text content persistence + attribute processing
-    XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
-                              sal_uInt16 nActionMap );
-
     // attr list/text content persistence + renaming
     XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
-
-    // attr list/text content persistence + renaming + attribute processing
-    XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
-                              sal_uInt16 nActionMap );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framecontainer.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -307,23 +307,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::
 }
 
 /**-***************************************************************************************************************
-    @short      return state information, if container is empty or not
-    @descr      -
-
-    @return     <TRUE/> if container is filled or <FALSE/> if he is empty.
-
-    @threadsafe yes
-    @modified   01.07.2002 15:09,as96863
- *****************************************************************************************************************/
-sal_Bool FrameContainer::hasElements() const
-{
-    /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
-    return( m_aContainer.size()>0 );
-    /* } SAFE */
-}
-
-/**-***************************************************************************************************************
     @short      set the given frame as  the new active one inside this container
     @descr      We accept this frame only, if it's already a part of this container.
 
@@ -365,88 +348,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
     /* } SAFE */
 }
 
-/**-***************************************************************************************************************
-    @short      enables the async quit mode, which terminates the office if last task will be closed
-    @descr      If the last visible task will gone, nobody show any UI then. But without any UI the user
-                has no chance to quit the application realy. So we must shutdown by ourself.
-                We do that by an async quit call.
-
-                But note: It's not neccessary to use this mechanism, if using the office doesn't require it.
-                e.g. the command line parameters "-invisible", -headless" starts the office in a server mode.
-                In this case the outside user controls the lifetime of it and must terminate it manually.
-
-    @param      xDesktop
-                    only the child frame container of the desktop instance can use this special quit mode.
-                    Because only top level frames are used for checking.
-
-    @threadsafe yes
-    @modified   30.01.2003 11:26,as96863
- *****************************************************************************************************************/
-void FrameContainer::enableQuitTimer( const css::uno::Reference< css::frame::XDesktop >& )
-{
-/*DEPRECATEME
-    // SAFE {
-    WriteGuard aWriteLock( m_aLock );
-    m_xDesktop   = xDesktop;
-    m_bAsyncQuit = xDesktop.is();
-    aWriteLock.unlock();
-    // } SAFE
-*/
-}
-
-/**-***************************************************************************************************************
-    @short      disable the async quit mechanism again
-    @descr      Set the right state internaly and forget the desktop reference.
-                It's not neccessary to save this information any longer.
-                If user wish to establish this mode again he must do it with "enableQuitTimer()".
-
-    @threadsafe yes
-    @modified   30.01.2003 11:23,as96863
- *****************************************************************************************************************/
-void FrameContainer::disableQuitTimer()
-{
-/*DEPRECATEME
-    // SAFE {
-    WriteGuard aWriteLock( m_aLock );
-    m_bAsyncQuit = sal_False;
-    m_xDesktop   = css::uno::WeakReference< css::frame::XDesktop >();
-    aWriteLock.unlock();
-    // } SAFE
-*/
-}
-
-/**-***************************************************************************************************************
-    @short      asyncronous callback for our special quit feature
-    @descr      In case the last frame was removed from this container and our owner is the desktop itself,
-                we have to terminate the whole application.
-                But we have to check, between starting this mechanism and now no new frame was opened.
-
-    @threadsafe yes
-    @modified   30.01.2003 11:24,as96863
- *****************************************************************************************************************/
-/*DEPRECATEME
-IMPL_LINK( FrameContainer, implts_asyncQuit, void*, pVoid )
-{
-    // SAFE {
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::frame::XDesktop > xDesktop ( m_xDesktop.get(), css::uno::UNO_QUERY );
-    aReadLock.unlock();
-    // } SAFE
-
-    css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xDesktop, css::uno::UNO_QUERY );
-    if (xSupplier.is())
-    {
-        css::uno::Reference< css::container::XElementAccess > xFrames( xSupplier->getFrames(), css::uno::UNO_QUERY );
-        if (!xFrames.is() || !xFrames->hasElements() )
-        {
-            LOG_WARNING("FrameContainer::implts_asyncQuit()", "force terminate ...\nPlease check if it's realy neccessary!")
-            xDesktop->terminate();
-        }
-    }
-
-    return 0;
-}
-*/
 /**-***************************************************************************************************************
     @short      implements a simple search based on current container items
     @descr      It can be used for findFrame() and implements a deep down search.

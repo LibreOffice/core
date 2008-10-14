@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: jobresult.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,7 +142,6 @@ class JobResult : private ThreadHelpBase
 
         sal_Bool                                     existPart        ( sal_uInt32 eParts ) const;
         css::uno::Sequence< css::beans::NamedValue > getArguments     (                   ) const;
-        sal_Bool                                     getDeactivate    (                   ) const;
         css::frame::DispatchResultEvent              getDispatchResult(                   ) const;
 };
 

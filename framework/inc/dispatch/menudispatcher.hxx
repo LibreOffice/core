@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menudispatcher.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -258,23 +258,6 @@ class MenuDispatcher   :   // interfaces
     private:
 
         DECL_LINK( Close_Impl, void* );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void impl_sendStatusEvent(  const   css::uno::Reference< XFRAME >&  xEventSource    ,
-                                    const   ::rtl::OUString&        sURL            ,
-                                            sal_Bool                bLoadState      );
-
 
         /*-****************************************************************************************************//**
             @short      -

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: job.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,8 +208,6 @@ class Job : public  css::lang::XTypeProvider
         void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
                                         const css::uno::Reference< css::uno::XInterface >&                xSourceFake  );
         void     setJobData           ( const JobData&                                                    aData        );
-        JobData  getJobData           (                                                                                );
-        JobData& getJobDataRef        (                                                                                );
         void     execute              ( const css::uno::Sequence< css::beans::NamedValue >&               lDynamicArgs );
         void     die                  (                                                                                );
 

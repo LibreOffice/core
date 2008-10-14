@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.42 $
+# $Revision: 1.42.40.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,14 +54,11 @@ SHL1OBJS = \
     $(SLO)$/desktopcontext.obj \
     $(SLO)$/desktopresid.obj \
     $(SLO)$/dispatchwatcher.obj \
-    $(SLO)$/intro.obj \
     $(SLO)$/langselect.obj \
     $(SLO)$/lockfile.obj \
     $(SLO)$/lockfile2.obj \
     $(SLO)$/migration.obj \
     $(SLO)$/officeipcthread.obj \
-    $(SLO)$/oinstanceprovider.obj \
-    $(SLO)$/opluginframefactory.obj \
     $(SLO)$/pages.obj \
     $(SLO)$/sofficemain.obj \
     $(SLO)$/userinstall.obj \

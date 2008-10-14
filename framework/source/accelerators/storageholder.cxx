@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: storageholder.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -517,40 +517,6 @@ void StorageHolder::operator=(const StorageHolder& rCopy)
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
-}
-
-//-----------------------------------------------
-css::uno::Reference< css::embed::XStorage > StorageHolder::createTempStorageBasedOnFolder(const ::rtl::OUString&                                        sFolder  ,
-                                                                                          const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR    ,
-                                                                                                sal_Bool                                                bReadOnly)
-{
-    // error during opening the temp file isnt realy a runtime error -> handle it gracefully
-    css::uno::Reference< css::io::XOutputStream > xTempFile(xSMGR->createInstance(SERVICENAME_TEMPFILE), css::uno::UNO_QUERY);
-    if (!xTempFile.is())
-        return css::uno::Reference< css::embed::XStorage >();
-
-    // creation of needed resources is mandatory -> error = runtime error
-    css::uno::Reference< css::embed::XPackageStructureCreator > xPackageCreator(xSMGR->createInstance(SERVICENAME_PACKAGESTRUCTURECREATOR), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::lang::XSingleServiceFactory >     xStorageFactory(xSMGR->createInstance(SERVICENAME_STORAGEFACTORY)         , css::uno::UNO_QUERY_THROW);
-
-    // create zip package
-    xPackageCreator->convertToPackage(sFolder, xTempFile);
-
-    // seek it back - so it can be used in a defined way.
-    css::uno::Reference< css::io::XSeekable > xSeekable(xTempFile, css::uno::UNO_QUERY_THROW);
-    xSeekable->seek(0);
-
-    // open the temp. zip package - using the right open mode
-    sal_Int32 nOpenMode = css::embed::ElementModes::READWRITE;
-    if (bReadOnly)
-        nOpenMode = css::embed::ElementModes::READ;
-
-    css::uno::Sequence< css::uno::Any > lArgs(2);
-    lArgs[0] <<= xTempFile;
-    lArgs[1] <<= nOpenMode;
-
-    css::uno::Reference< css::embed::XStorage > xStorage(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
-    return xStorage;
 }
 
 //-----------------------------------------------

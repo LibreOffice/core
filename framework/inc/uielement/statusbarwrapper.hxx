@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statusbarwrapper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,8 +58,6 @@ class StatusBarWrapper : public UIConfigElementWrapperBase
         StatusBarWrapper(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~StatusBarWrapper();
-
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);

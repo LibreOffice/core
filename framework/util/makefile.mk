@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.124 $
+# $Revision: 1.124.26.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -216,7 +216,6 @@ SHL4OBJS=       \
                 $(SLO)$/backingwindow.obj           \
                 $(SLO)$/buttontoolbarcontroller.obj       \
                 $(SLO)$/closedispatcher.obj         \
-                $(SLO)$/colorlistener.obj           \
                 $(SLO)$/comboboxtoolbarcontroller.obj     \
                 $(SLO)$/complextoolbarcontroller.obj      \
                 $(SLO)$/configaccess.obj            \
@@ -293,7 +292,6 @@ SHL4OBJS=       \
                 $(SLO)$/progressbarwrapper.obj          \
                 $(SLO)$/recentfilesmenucontroller.obj   \
                 $(SLO)$/registerservices.obj        \
-                $(SLO)$/restricteduiinteraction.obj \
                 $(SLO)$/servicehandler.obj          \
                 $(SLO)$/sessionlistener.obj         \
                 $(SLO)$/simpletextstatusbarcontroller.obj \
@@ -309,11 +307,9 @@ SHL4OBJS=       \
                 $(SLO)$/stillinteraction.obj        \
                 $(SLO)$/storageholder.obj                \
                 $(SLO)$/tagwindowasmodified.obj           \
-                $(SLO)$/targetfinder.obj            \
                 $(SLO)$/targethelper.obj            \
                 $(SLO)$/taskcreator.obj             \
                 $(SLO)$/taskcreatorsrv.obj              \
-                $(SLO)$/timerhelper.obj             \
                 $(SLO)$/titlebarupdate.obj          \
                 $(SLO)$/togglebuttontoolbarcontroller.obj \
                 $(SLO)$/toolbarcontrollerfactory.obj\
@@ -389,7 +385,7 @@ SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 DEF5NAME=       $(SHL5TARGET)
 
 SHL5VERSIONMAP= exports.map
-            
+
 RESLIB1NAME=        fwe
 RESLIB1IMAGES=      $(PRJ)$/res
 RESLIB1SRSFILES=    $(SRS)$/fwk_classes.srs \

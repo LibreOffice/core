@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,6 @@ namespace desktop
 /*--------------------------------------------------------------------
     Description:    Application-class
  --------------------------------------------------------------------*/
-class IntroWindow_Impl;
 class CommandLineArgs;
 class Lockfile;
 class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TransformerBase.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1480,24 +1480,6 @@ const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
     OSL_ENSURE( nSize >nPos+2 , "invalid context" );
 
     return nSize > nPos+2 ? (*m_pContexts)[nSize-(nPos+2)].get() : 0;
-}
-
-bool XMLTransformerBase::isDraw() const
-{
-    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
-    return xSI.is() && xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
-}
-
-bool XMLTransformerBase::isImpress() const
-{
-    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
-    return xSI.is() && xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
-}
-
-bool XMLTransformerBase::isCalc() const
-{
-    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
-    return xSI.is() && xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) );
 }
 
 bool XMLTransformerBase::isWriter() const

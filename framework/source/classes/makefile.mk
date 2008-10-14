@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.36 $
+# $Revision: 1.36.82.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,6 @@ SLOFILES=           \
                     $(SLO)$/propertysethelper.obj					\
                     $(SLO)$/framecontainer.obj						\
                     $(SLO)$/taskcreator.obj							\
-                    $(SLO)$/targetfinder.obj						\
                     $(SLO)$/menumanager.obj							\
                     $(SLO)$/bmkmenu.obj								\
                     $(SLO)$/droptargetlistener.obj					\
@@ -58,7 +57,6 @@ SLOFILES=           \
                     $(SLO)$/addonmenu.obj							\
                     $(SLO)$/addonsoptions.obj						\
                     $(SLO)$/fwkresid.obj                            \
-                    $(SLO)$/colorlistener.obj                       \
                     $(SLO)$/framelistanalyzer.obj                   \
                     $(SLO)$/sfxhelperfunctions.obj                  \
                     $(SLO)$/menuextensionsupplier.obj

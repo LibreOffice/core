@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objstor.cxx,v $
- * $Revision: 1.212 $
+ * $Revision: 1.212.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2427,7 +2427,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // copy the original itemset, but remove the "version" item, because pMediumTmp
     // is a new medium "from scratch", so no version should be stored into it
-    SfxItemSet* pSet = pRetrMedium->GetItemSet() ? new SfxAllItemSet(*pRetrMedium->GetItemSet()): 0;
+    SfxItemSet* pSet = new SfxAllItemSet(*pRetrMedium->GetItemSet());
     pSet->ClearItem( SID_VERSION );
 
     // create a medium as a copy; this medium is only for writingm, because it uses the same name as the original one

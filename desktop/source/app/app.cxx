@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.224 $
+ * $Revision: 1.224.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include "app.hxx"
 #include "desktop.hrc"
 #include "appinit.hxx"
-#include "intro.hxx"
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "desktopresid.hxx"

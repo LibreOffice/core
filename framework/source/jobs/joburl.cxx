@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: joburl.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,24 +181,6 @@ sal_Bool JobURL::getEvent( /*OUT*/ ::rtl::OUString& sEvent ) const
 }
 
 //________________________________
-
-sal_Bool JobURL::getEventArgs( /*OUT*/ ::rtl::OUString& sEventArgs ) const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-
-             sEventArgs = ::rtl::OUString();
-    sal_Bool bSet       = ((m_eRequest & E_EVENT) == E_EVENT);
-    if (bSet)
-        sEventArgs = m_sEventArgs;
-
-    aReadLock.unlock();
-    /* } SAFE */
-
-    return bSet;
-}
-
-//________________________________
 /**
     @short      get the alias item of this job URL
     @descr      Because the three possible parts of such URL (event, alias, service)
@@ -232,24 +214,6 @@ sal_Bool JobURL::getAlias( /*OUT*/ ::rtl::OUString& sAlias ) const
 }
 
 //________________________________
-
-sal_Bool JobURL::getAliasArgs( /*OUT*/ ::rtl::OUString& sAliasArgs ) const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-
-             sAliasArgs = ::rtl::OUString();
-    sal_Bool bSet       = ((m_eRequest & E_ALIAS) == E_ALIAS);
-    if (bSet)
-        sAliasArgs = m_sAliasArgs;
-
-    aReadLock.unlock();
-    /* } SAFE */
-
-    return bSet;
-}
-
-//________________________________
 /**
     @short      get the service item of this job URL
     @descr      Because the three possible parts of such URL (event, service, service)
@@ -275,24 +239,6 @@ sal_Bool JobURL::getService( /*OUT*/ ::rtl::OUString& sService ) const
     sal_Bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sService = m_sService;
-
-    aReadLock.unlock();
-    /* } SAFE */
-
-    return bSet;
-}
-
-//________________________________
-
-sal_Bool JobURL::getServiceArgs( /*OUT*/ ::rtl::OUString& sServiceArgs ) const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-
-             sServiceArgs = ::rtl::OUString();
-    sal_Bool bSet         = ((m_eRequest & E_SERVICE) == E_SERVICE);
-    if (bSet)
-        sServiceArgs = m_sServiceArgs;
 
     aReadLock.unlock();
     /* } SAFE */
@@ -653,6 +599,60 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     /* } SAFE */
 
     return sBuffer.makeStringAndClear();
+}
+
+//________________________________
+
+sal_Bool JobURL::getServiceArgs( /*OUT*/ ::rtl::OUString& sServiceArgs ) const
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+
+             sServiceArgs = ::rtl::OUString();
+    sal_Bool bSet         = ((m_eRequest & E_SERVICE) == E_SERVICE);
+    if (bSet)
+        sServiceArgs = m_sServiceArgs;
+
+    aReadLock.unlock();
+    /* } SAFE */
+
+    return bSet;
+}
+
+//________________________________
+
+sal_Bool JobURL::getEventArgs( /*OUT*/ ::rtl::OUString& sEventArgs ) const
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+
+             sEventArgs = ::rtl::OUString();
+    sal_Bool bSet       = ((m_eRequest & E_EVENT) == E_EVENT);
+    if (bSet)
+        sEventArgs = m_sEventArgs;
+
+    aReadLock.unlock();
+    /* } SAFE */
+
+    return bSet;
+}
+
+//________________________________
+
+sal_Bool JobURL::getAliasArgs( /*OUT*/ ::rtl::OUString& sAliasArgs ) const
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+
+             sAliasArgs = ::rtl::OUString();
+    sal_Bool bSet       = ((m_eRequest & E_ALIAS) == E_ALIAS);
+    if (bSet)
+        sAliasArgs = m_sAliasArgs;
+
+    aReadLock.unlock();
+    /* } SAFE */
+
+    return bSet;
 }
 
 #endif // ENABLE_COMPONENT_SELF_CHECK

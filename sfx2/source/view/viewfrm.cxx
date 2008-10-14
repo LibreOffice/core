@@ -2893,7 +2893,7 @@ void SfxViewFrame::StateView_Impl
 
                 case SID_NEWWINDOW:
                 {
-                    if ( !GetViewShell()->NewWindowAllowed() && !pDocSh->HasName() )
+                    if ( !GetViewShell()->NewWindowAllowed() /* && !pDocSh->HasName() */ )
                             rSet.DisableItem( nWhich );
                     else
                     {

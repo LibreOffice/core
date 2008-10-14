@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: targethelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,21 +78,6 @@ class TargetHelper
     // interface
 
     public:
-
-        //___________________________________________
-
-        /** @short  it checks, if the given target name is a well known special
-                    one anyway and return a suitable enum value.
-
-            @note   An empty target is similar to "_self"!
-
-            @param  sTarget
-                    the unknown target name, which should be checked.
-
-            @return Returns a suitable enum value, which classify the
-                    given target name.
-         */
-        static ESpecialTarget classifyTarget(const ::rtl::OUString& sTarget);
 
         //___________________________________________
 

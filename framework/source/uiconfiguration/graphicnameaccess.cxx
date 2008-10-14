@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicnameaccess.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,11 +58,6 @@ GraphicNameAccess::~GraphicNameAccess()
 void GraphicNameAccess::addElement( const rtl::OUString& rName, const uno::Reference< graphic::XGraphic >& rElement )
 {
     m_aNameToElementMap.insert( NameGraphicHashMap::value_type( rName, rElement ));
-}
-
-sal_uInt32 GraphicNameAccess::size() const
-{
-    return m_aNameToElementMap.size();
 }
 
 // XNameAccess

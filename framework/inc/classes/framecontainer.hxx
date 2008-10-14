@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framecontainer.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,6 @@
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
 #endif
-#include <classes/targetfinder.hxx>
 #include <macros/debug.hxx>
 #include <general.h>
 
@@ -135,7 +134,6 @@ class FrameContainer : private ThreadHelpBase
 
         /// checks and free memory
         sal_Bool exist      ( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
-        sal_Bool hasElements(                                                         ) const;
         void     clear      (                                                         );
 
         /// deprecated IndexAccess!
@@ -144,12 +142,7 @@ class FrameContainer : private ThreadHelpBase
 
         /// replacement for deprectaed index access
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
-        /// for special feature "async quit timer" of desktop only!
-        void enableQuitTimer ( const css::uno::Reference< css::frame::XDesktop >& xDesktop );
-        void disableQuitTimer();
-/*DEPRECATEME
-        DECL_LINK( implts_asyncQuit, void* );
-*/
+
         /// special helper for Frame::findFrame()
         css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const ::rtl::OUString& sName ) const;
         css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const ::rtl::OUString& sName ) const;

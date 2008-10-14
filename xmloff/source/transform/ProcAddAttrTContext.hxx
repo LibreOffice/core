@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ProcAddAttrTContext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +42,6 @@ class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
 
 public:
     TYPEINFO();
-
-    XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
-                              sal_uInt16 nActionMap,
-                              sal_uInt16 nAPrefix,
-                              ::xmloff::token::XMLTokenEnum eAToken,
-                              ::xmloff::token::XMLTokenEnum eVToken );
 
     XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,

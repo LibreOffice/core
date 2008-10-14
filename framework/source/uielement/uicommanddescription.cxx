@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uicommanddescription.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,7 +175,6 @@ class ConfigurationAccess_UICommand : // interfaces
         void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const rtl::OUString& aLabel );
         Any                       getUILabelFromCommand( const rtl::OUString& rCommandURL );
         Sequence< rtl::OUString > getAllCommands();
-        void                      resetCache();
         sal_Bool                  fillCache();
         sal_Bool                  addGenericInfoToCache();
 
@@ -389,13 +388,6 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& 
     }
 
     return Any();
-}
-
-void ConfigurationAccess_UICommand::resetCache()
-{
-    m_aCmdInfoCache.clear();
-    m_bCacheFilled = sal_False;
-    m_bGenericDataRetrieved = sal_False;
 }
 
 sal_Bool ConfigurationAccess_UICommand::fillCache()

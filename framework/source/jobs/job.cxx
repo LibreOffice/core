@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: job.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,22 +197,6 @@ void Job::setJobData( const JobData& aData )
 
     m_aJobCfg = aData;
     aWriteLock.unlock();
-    /* } SAFE */
-}
-
-JobData Job::getJobData()
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    return m_aJobCfg;
-    /* } SAFE */
-}
-
-JobData& Job::getJobDataRef()
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    return m_aJobCfg;
     /* } SAFE */
 }
 

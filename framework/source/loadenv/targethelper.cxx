@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: targethelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,44 +45,6 @@ namespace framework{
 
 //_______________________________________________
 // declarations
-
-/*-----------------------------------------------
-    05.08.2003 09:12
------------------------------------------------*/
-TargetHelper::ESpecialTarget TargetHelper::classifyTarget(const ::rtl::OUString& sTarget)
-{
-    if (
-        (!sTarget.getLength()              ) ||
-        (sTarget.equals(SPECIALTARGET_SELF))
-       )
-        return E_SELF;
-
-    if (sTarget.equals(SPECIALTARGET_PARENT))
-        return E_PARENT;
-
-    if (sTarget.equals(SPECIALTARGET_TOP))
-        return E_TOP;
-
-    if (sTarget.equals(SPECIALTARGET_BLANK))
-        return E_BLANK;
-
-    if (sTarget.equals(SPECIALTARGET_DEFAULT))
-        return E_DEFAULT;
-
-    if (sTarget.equals(SPECIALTARGET_BEAMER))
-        return E_BEAMER;
-
-    if (sTarget.equals(SPECIALTARGET_MENUBAR))
-        return E_MENUBAR;
-
-    if (sTarget.equals(SPECIALTARGET_HELPAGENT))
-        return E_HELPAGENT;
-
-    if (sTarget.equals(SPECIALTARGET_HELPTASK))
-        return E_HELPTASK;
-
-    return E_NOT_SPECIAL;
-}
 
 /*-----------------------------------------------
     05.08.2003 09:08

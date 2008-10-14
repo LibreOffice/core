@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: jobdata.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -252,12 +252,10 @@ class JobData : private ThreadHelpBase
         EMode                                        getMode                 () const;
         EEnvironment                                 getEnvironment          () const;
         ::rtl::OUString                              getEnvironmentDescriptor() const;
-        ::rtl::OUString                              getAlias                () const;
         ::rtl::OUString                              getService              () const;
         ::rtl::OUString                              getEvent                () const;
         css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
         css::uno::Sequence< css::beans::NamedValue > getJobConfig            () const;
-        JobResult                                    getResult               () const;
 
         sal_Bool                                     hasConfig               () const;
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicnameaccess.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,6 @@ namespace framework
             virtual ~GraphicNameAccess();
 
             void addElement( const rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rElement );
-            sal_uInt32 size() const;
 
             // XNameAccess
             virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
