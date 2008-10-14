@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: loadlisteneradapter.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,11 +135,6 @@ namespace bib
     }
 
     // XEventListener
-    //---------------------------------------------------------------------
-    void OComponentAdapterBase::disposing()
-    {
-        // nothing to do here
-    }
 
     //---------------------------------------------------------------------
     void SAL_CALL OComponentAdapterBase::disposing( const EventObject& _rSource ) throw( RuntimeException )

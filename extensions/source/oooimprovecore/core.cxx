@@ -7,7 +7,7 @@
  *
  * $RCSfile: core.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,6 @@ namespace oooimprovecore
 
         protected:
             Core(const Reference<XComponentContext>& context);
-            Core(const Reference<XMultiServiceFactory>& sf);
             virtual ~Core();
 
             // XCore
@@ -97,10 +96,6 @@ namespace oooimprovecore {
             context->getServiceManager()->createInstanceWithContext(
                 OUString::createFromAscii("com.sun.star.lang.MultiServiceFactory"), context),
             UNO_QUERY))
-    { }
-
-    Core::Core(const Reference<XMultiServiceFactory>& sf)
-        : m_ServiceFactory(sf)
     { }
 
     Core::~Core()
