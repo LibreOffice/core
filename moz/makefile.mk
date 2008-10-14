@@ -65,15 +65,11 @@ SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/us
 
 # ----- pkg-config end -------
 
-MOZILLA_VERSION*=1.7.5
-.IF "$(MOZILLA_VERSION)"=="1.7b"
-TARFILE_NAME=mozilla-source-1.7b-source
-.ELSE
-TARFILE_NAME=mozilla-source-$(MOZILLA_VERSION)
-.ENDIF
-TARFILE_ROOTDIR=mozilla
+MOZILLA_VERSION*=1.1.12
+TARFILE_NAME=seamonkey-$(MOZILLA_VERSION).source
 
-PATCH_FILE_NAME=mozilla-source-$(MOZILLA_VERSION).patch 
+TARFILE_ROOTDIR=mozilla
+PATCH_FILE_NAME=seamonkey-source-$(MOZILLA_VERSION).patch 
 
 # These files are needed for the W32 build when BUILD_MOZAB is set
 LIBIDL_VC71_ZIPFILE_NAME*=vc71-libIDL-0.6.8-bin.zip
@@ -83,7 +79,13 @@ WINTOOLS_ZIPFILE_NAME*=wintools.zip
 ADDITIONAL_FILES=mailnews$/addrbook$/src$/nsAbMD5sum.cpp
 
 CONFIGURE_DIR=
-MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
+.IF "$(GUIBASE)"!="aqua"
+MOZILLA_CONFIGURE_FLAGS += $(SYSBASE_X11)
+.ENDIF
+
+MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
+                --enable-application=suite \
+                --enable-system-cairo \
                 --enable-ldap \
                 --enable-crypto \
                 --enable-optimize \
@@ -104,7 +106,8 @@ MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
                 --disable-oji \
                 --disable-profilesharing \
                 --disable-boehm \
-                --disable-jsloader
+                --disable-jsloader 
+
 
 #disable profilelocking to share profile with mozilla
 #disable activex and activex-scripting to remove the dependence of Microsoft_SDK\src\mfc\atlbase.h
@@ -112,12 +115,20 @@ MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
 #disable others to save build times
 
 .IF "$(GUI)"=="UNX"
+.IF "$(GUIBASE)"=="aqua"
+MOZILLA_CONFIGURE_FLAGS+= \
+    --with-macos-sdk=/Developer/SDKs/MacOSX10.4u.sdk \
+    --disable-glibtest \
+    --enable-macos-target=10.4 \
+    --disable-libxul
+.ELSE
 #We do not need mozilla ui, but libIDL version are decided by default toolkit.
 #default-toolkit=xlib need libIDL < 0.68
 #default-toolkit=gtk2 need libIDL > 0.8 (know as libIDL2)
 .IF "x$(DEFAULT_MOZILLA_TOOLKIT)"=="x"
 DEFAULT_MOZILLA_TOOLKIT=gtk2
 .ENDIF
+.ENDIF # "$(GUIBASE)"=="aqua"
 MOZILLA_CONFIGURE_FLAGS+= --enable-default-toolkit=$(DEFAULT_MOZILLA_TOOLKIT)
 .ENDIF
 
@@ -152,7 +163,7 @@ ASFLAGS=-m64
 .EXPORT: CFLAGS ASFLAGS
 .ENDIF
 
-MOZDIR=$(MISC)$/build$/mozilla
+MOZDIR=$(MISC)$/build$/seamonkey
 MOZTARGET=$(OS)$(COM)$(CPU)
 
 .IF "$(GUI)"=="WNT"
