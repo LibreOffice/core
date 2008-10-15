@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.9.24.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,13 +34,10 @@ PRJ		= ..$/..$/..$/..
 TARGET	= java_uno_accessbridge
 PACKAGE	= org$/openoffice$/accessibility
 
-USE_JAVAVER:=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-.IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
 JARFILES = jurt.jar unoil.jar ridl.jar 
 JAVAFILES = \
     AccessBridge.java \
@@ -54,7 +51,6 @@ JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE) org/openoffice/java/accessibility 
 CUSTOMMANIFESTFILE      = manifest
-.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 # --- Targets ------------------------------------------------------
 
