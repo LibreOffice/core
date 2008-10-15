@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rscdep.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,7 @@ main( int argc, char **argv )
 {
     int c;
     char aBuf[255];
+    char pFileNamePrefix[255];
     char pOutputFileName[255];
     char pSrsFileName[255];
     String aSrsBaseName;
@@ -105,6 +106,11 @@ main( int argc, char **argv )
     for ( int i=1; i<argc; i++)
     {
         strcpy( aBuf, (const char *)argv[i] );
+        if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
+        {
+            strcpy(pFileNamePrefix, &aBuf[3]);
+            //break;
+        }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
         {
             strcpy(pOutputFileName, &aBuf[4]);
@@ -137,6 +143,11 @@ main( int argc, char **argv )
             {
                 char aBuf2[255];
                 (void) strcpy( aBuf2, aToken.GetBuffer());
+                if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
+                {
+                    strcpy(pFileNamePrefix, &aBuf[3]);
+                    //break;
+                }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'o' )
                 {
                     strcpy(pOutputFileName, &aBuf2[3]);
@@ -212,7 +223,8 @@ main( int argc, char **argv )
 
     DirEntry aEntry(".");
     aEntry.ToAbs();
-    String aCwd = aEntry.GetName();
+//  String aCwd = aEntry.GetName();
+    String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
 /*  USHORT nPos;
 #ifndef UNX
     while ( (nPos = aCwd.Search('\\') != STRING_NOTFOUND  ))
