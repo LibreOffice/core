@@ -8,7 +8,7 @@
 #
 # $RCSfile: antsettings.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.166.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,5 +84,8 @@ ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(
 ANT=
 ANT_FLAGS=
 .ENDIF
- 
+
+.IF "$(WITH_LANG)"!=""
+ANT_FLAGS+=-Dsolar.langs="$(WITH_LANG)" -Dsolar.localized="true"
+.ENDIF			# "$(WITH_LANG)"!=""
  

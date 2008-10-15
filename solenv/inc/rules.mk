@@ -8,7 +8,7 @@
 #
 # $RCSfile: rules.mk,v $
 #
-# $Revision: 1.103 $
+# $Revision: 1.103.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -624,7 +624,7 @@ $(MISC)$/%.dpr :
     @echo Making: $@
     @@-$(RM) $@
     dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) NO_HIDS=true make_srs_deps=true $(DEPSRSFILES)
-    -$(TYPE) $(MISC)$/$(PWD:f).*.dprr >> $@
+    -$(TYPE) $(MISC)$/$(TARGET).*.dprr >> $@
 .ENDIF			# "$(nodep)"==""
 
 $(MISC)$/%.dpz :
