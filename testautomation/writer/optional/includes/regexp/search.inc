@@ -1522,8 +1522,10 @@ sub wSetFindAndReplaceToDefault(WhichDocument as integer)
             Call hNewDocument  ' empty Document
         Case 1
             Call hFileOpen ( gTesttoolPath +"writer\optional\input\search\such_u_e.sxw")
+            Call sMakeReadOnlyDocumentEditable
         case 2
             Call hFileOpen ( gTesttoolPath +"writer\optional\input\search\attrib.sxw")
+            Call sMakeReadOnlyDocumentEditable
     end select
     kontext "FindAndReplace"
     Sleep 2

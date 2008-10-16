@@ -96,6 +96,7 @@ testcase tToolsOptionsHTMLSourceText
 '/// Function test: Syntax Highlighting ///'
    '///+ uses "input\\writer\\options\\htmltag.html" ///
    hFileOpen ( gTesttoolPath + "writer\optional\input\options\htmltag.html" )
+   Call sMakeReadOnlyDocumentEditable
 
 '///+ Check if we are in HTML-Source-View ///'
    try

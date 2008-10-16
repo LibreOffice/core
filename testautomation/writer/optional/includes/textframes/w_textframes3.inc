@@ -266,6 +266,7 @@ testcase tTextframes_36
     '/// + frames which are placed on different pages
     '/// + There are 2 pages in the file and 1 frame/page
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to first frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -351,6 +352,7 @@ testcase tTextframes_37
     '/// + There are 2 frames in the header
     
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to first frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -408,6 +410,7 @@ testcase tTextframes_38
     '/// + frames which are placed on header
     '/// + There are 2 frames in the header
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to first frame
     Call wTypeKeys ( "<Shift F4>" )

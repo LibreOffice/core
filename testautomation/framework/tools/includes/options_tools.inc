@@ -224,8 +224,8 @@ sub DialogTestForViewOptions
     TabHintergrund.Close
     EditSearchAndReplace
 
-    Kontext "SuchenUndErsetzenWriter"
-    SuchenUndErsetzenWriter.Close
+    Kontext "FindAndReplace"
+    FindAndReplace.Close
 
 end sub
 

@@ -163,6 +163,7 @@ testcase tToolsOptionsHTMLLayout
     Dim iTemp(3) as integer
     '///Open "writer\\optional\\input\\options\\options1.sxw ///
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     
     printlog "'///- Tools/Options/Writer: View ///"
     ToolsOptions
@@ -414,6 +415,7 @@ testcase tToolsOptionsHTMLGrid
         
     '/// uses: "writer\\optional\\input\\options\\options1.sxw" ///
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
    
     printlog "'///- Tools/Options/HTML: Grid ///"    
     printlog ("'/// - save states ///")
@@ -565,8 +567,8 @@ testcase tToolsOptionsHTMLGrid
     '///  ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw" ) ///'
     '/// NOT Possible Without <ALT> + <cursor> stuff :-((((( BugID: 84741 ///'
     '/// uses"writer\optional\input\options\htmltag.html" ///
-    hFileOpen ( gTesttoolPath + "writer\optional\input\options\htmltag.html" )
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\htmltag.html" )
+    Call sMakeReadOnlyDocumentEditable
     
     '/// check if writeable!///'
     try

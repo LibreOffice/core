@@ -62,6 +62,7 @@ testcase tHyphenation_1
 
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys "<End><Shift Mod1 Left>"
 
@@ -140,6 +141,7 @@ testcase tHyphenation_2
 
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys "<End><Shift Mod1 Left>"
 
@@ -251,6 +253,7 @@ testcase tHyphenation_3
 
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys "<End><Shift Mod1 Left>"
 

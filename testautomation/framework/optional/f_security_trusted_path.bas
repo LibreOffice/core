@@ -44,7 +44,7 @@ sub main
 
     ' this is the trusted path we want to add to the list
     dim cWorkPath as string
-        cWorkPath = gTesttoolPath & "framework\basic\input\BasicDocs\"
+        cWorkPath = gTesttoolPath & "framework\optional\input\BasicDocs\"
         cWorkPath = convertpath( cWorkPath )
 
     ' this is the file to be loaded, located directly below trusted path

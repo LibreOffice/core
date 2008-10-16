@@ -314,6 +314,7 @@ testcase tToolsAutocorrectWordCompletion_4
     TabWortergaenzung.OK
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\advanced\" + sTestFile )
+    Call sMakeReadOnlyDocumentEditable
     Sleep 4
 
     ToolsAutocorrect

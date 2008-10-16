@@ -106,6 +106,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     '/// use a document to check the font with styles///'
     '///+ use 'input\\writer\\optional\\options\\options2.sxw' ///
     Call hFileOpen ( sFileName )
+    Call sMakeReadOnlyDocumentEditable
     printlog "- Tools/Options/Writer: DefaultFont"
 
     printlog ("/// - save states ///")
@@ -241,6 +242,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     Printlog "'///  - verify global settings don't affect saved Document ///"
     '///+ use input\\writer\\optional\\options\\options2.sxw ///
     Call hFileOpen ( sFileName )
+    Call sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Up>", 5
     Call wTypeKeys "<Home><Right>"
@@ -465,6 +467,7 @@ testcase tToolsOptionsWriterPrint1
 
     '/// uses "input\\writer\\optional\\options\\options3.sxw" ///
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options3.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "'///- Tools/Options/Writer: PrintWriter ///"
 
     printlog ("'/// - save states ///")

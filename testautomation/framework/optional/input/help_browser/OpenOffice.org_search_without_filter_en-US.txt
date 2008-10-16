@@ -1,6 +1,5 @@
 Glossary of Internet Terms
 General Glossary
-Insert Applet
 Macro
 Organize Macros
 Data
@@ -15,7 +14,9 @@ Mobile Device Filters for Pocket Device Appliances
 Scripting OpenOffice.org
 Java Platform Support
 OpenOffice.org
+Accessibility
 Java
 Class Path
 Start Parameters
 Insert Script
+Mail Merge Wizard - Document Type

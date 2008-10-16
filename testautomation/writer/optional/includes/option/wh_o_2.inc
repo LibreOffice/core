@@ -84,6 +84,7 @@ testcase tToolsOptionsHTMLPrint
     '(4) = Seitenende
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\test.html" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "'///- Tools/Options/HTML: PrintHTML ///"
 
     printlog ("'/// - save states ///")

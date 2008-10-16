@@ -218,6 +218,7 @@ testcase tTextframes_20
     '/// + The frame is ocupied in the whole 1st page and wraped as Through
     '/// + Some text are behind the frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -283,6 +284,7 @@ testcase tTextframes_21
     '/// + Some text are in the 2nd page
     
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -349,6 +351,7 @@ testcase tTextframes_22
     '/// + Some text are in the 2nd page
     
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     printlog "- Test wrap - before"
     
@@ -463,6 +466,7 @@ testcase tTextframes_23
     '/// + Some text are in the 2nd page
     
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     printlog "- Test wrap - before"
     

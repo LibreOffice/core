@@ -118,6 +118,7 @@ testcase tL10N_1
     
     '/// Open test file AboveBelow.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if reference above/below is changed after language is changed
     
@@ -232,6 +233,7 @@ testcase tL10N_2
     
     '/// Open test file Date.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if Date is changed after language is changed
     j = UBound(iCountry)
@@ -339,6 +341,7 @@ testcase tL10N_3
     
     '/// Open test file Time.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if time is changed after language is changed
     j = UBound(iCountry)

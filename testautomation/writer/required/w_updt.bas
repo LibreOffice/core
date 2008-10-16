@@ -87,7 +87,6 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\required\includes\g_001.inc"
-    use "global\required\includes\g_009.inc" 
     use "global\required\includes\g_option.inc"                	' global subroutines for Tools / Options
     use "global\required\includes\g_customize.inc" 				' Global customize routines
     use "global\tools\includes\optional\t_xml_filter1.inc"            		' global routines for XML-functionality    

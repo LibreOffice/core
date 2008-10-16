@@ -47,22 +47,8 @@ StarOffice Calc : add-ins;for programming
 StarOffice Calc : add-ins;functions
 StarOffice Calc : add-ons, see UNO components
 StarOffice Calc : adding
-StarOffice Calc : adding;automatic captions (Writer)
-StarOffice Calc : adding;buttons in toolbars
-StarOffice Calc : adding;conditions for XForm items
-StarOffice Calc : adding;draw objects
-StarOffice Calc : adding;Fontwork objects
-StarOffice Calc : adding;items in Data Navigator
-StarOffice Calc : adding;namespaces in XForms
 StarOffice Calc : adding;numbers in cell ranges
-StarOffice Calc : adding;paragraph borders
-StarOffice Calc : adding;pictures from Gallery
-StarOffice Calc : adding;pictures in Gallery
-StarOffice Calc : adding;plug-ins
-StarOffice Calc : adding;push buttons
 StarOffice Calc : adding;specified numbers
-StarOffice Calc : adding;table borders
-StarOffice Calc : adding;textures on chart bars
 StarOffice Calc : additional selection mode
 StarOffice Calc : address books
 StarOffice Calc : address books;LDAP server (Base)
@@ -76,7 +62,6 @@ StarOffice Calc : addressing;relative and absolute
 StarOffice Calc : adjusting array ranges
 StarOffice Calc : ADO databases (Base)
 StarOffice Calc : advanced filters
-StarOffice Calc : advanced filters - Filter: Applying Advanced Filters
 StarOffice Calc : Agenda Wizard
 StarOffice Calc : aging filter
 StarOffice Calc : algebraic signs
@@ -191,7 +176,6 @@ StarOffice Calc : automatic line breaks
 StarOffice Calc : automatic lines/borders in text
 StarOffice Calc : automatic saving
 StarOffice Calc : AutoPilots, see wizards
-StarOffice Calc : AutoShapes feature in Microsoft Office
 StarOffice Calc : AutoValue
 StarOffice Calc : AutoValue;database tables
 StarOffice Calc : AVEDEV function
@@ -211,7 +195,6 @@ StarOffice Calc : axes;showing axes in charts
 StarOffice Calc : axes in charts
 StarOffice Calc : B function
 StarOffice Calc : back-solving
-StarOffice Calc : back-solving;solver
 StarOffice Calc : backgrounds
 StarOffice Calc : backgrounds;cell ranges
 StarOffice Calc : backgrounds;cells and pages
@@ -315,6 +298,7 @@ StarOffice Calc : calculating;internal rates of return, regular payments
 StarOffice Calc : calculating;iterative references (Calc)
 StarOffice Calc : calculating;linear depreciations
 StarOffice Calc : calculating;modified internal rates of return
+StarOffice Calc : calculating;multiple sheets
 StarOffice Calc : calculating;net present values
 StarOffice Calc : calculating;nominal interest rates
 StarOffice Calc : calculating;number of payment periods
@@ -444,7 +428,6 @@ StarOffice Calc : cells;validity
 StarOffice Calc : centered text
 StarOffice Calc : centimeters
 StarOffice Calc : certificates
-StarOffice Calc : Change Case feature in Microsoft Office
 StarOffice Calc : changes
 StarOffice Calc : changes;accepting or rejecting
 StarOffice Calc : changes;comparing to original
@@ -537,7 +520,7 @@ StarOffice Calc : CHOOSE function
 StarOffice Calc : choosing printers
 StarOffice Calc : circle drawings
 StarOffice Calc : CLEAN function
-StarOffice Calc : clearing, see deleting
+StarOffice Calc : clearing, see also deleting/removing
 StarOffice Calc : Client Side ImageMap
 StarOffice Calc : clipboard
 StarOffice Calc : clipboard;cutting
@@ -551,7 +534,6 @@ StarOffice Calc : closing;toolbars
 StarOffice Calc : CODE function
 StarOffice Calc : coefficient of correlation
 StarOffice Calc : collaboration
-StarOffice Calc : collaboration;sharing documents
 StarOffice Calc : color bar
 StarOffice Calc : colors
 StarOffice Calc : colors;adding
@@ -609,12 +591,10 @@ StarOffice Calc : commands;SQL
 StarOffice Calc : comments
 StarOffice Calc : comments;on cells
 StarOffice Calc : comments;on changes
-StarOffice Calc : comments feature in Microsoft Office
 StarOffice Calc : common terms
 StarOffice Calc : common terms;Chinese dictionary
 StarOffice Calc : common terms;glossaries
 StarOffice Calc : common terms;Internet glossary
-StarOffice Calc : Compare and Merge feature in Microsoft Office
 StarOffice Calc : comparisons
 StarOffice Calc : comparisons;document versions
 StarOffice Calc : comparisons;operators in Calc
@@ -626,6 +606,7 @@ StarOffice Calc : complex numbers in analysis functions
 StarOffice Calc : complex text layout
 StarOffice Calc : complex text layout;definition
 StarOffice Calc : complex text layout;enabling
+StarOffice Calc : complex text layout, see CTL
 StarOffice Calc : compose key to insert special characters
 StarOffice Calc : CONCATENATE function
 StarOffice Calc : concatenation, see ampersand symbol
@@ -759,6 +740,7 @@ StarOffice Calc : csv files
 StarOffice Calc : csv files;importing and exporting
 StarOffice Calc : csv files;spreadsheets
 StarOffice Calc : CTL
+StarOffice Calc : CTL;(not) wrapping words
 StarOffice Calc : CTL;complex text layout languages
 StarOffice Calc : CTL;definition
 StarOffice Calc : CTL;options
@@ -818,7 +800,9 @@ StarOffice Calc : data;validity check
 StarOffice Calc : data binding change in XForms
 StarOffice Calc : data field options for Data Pilot
 StarOffice Calc : data labels in charts
-StarOffice Calc : Data Navigator display options
+StarOffice Calc : Data Navigator
+StarOffice Calc : Data Navigator;adding/editing items
+StarOffice Calc : Data Navigator;display options
 StarOffice Calc : data ranges in charts
 StarOffice Calc : data series
 StarOffice Calc : data series import
@@ -965,7 +949,6 @@ StarOffice Calc : default templates;changing
 StarOffice Calc : default templates;organizing
 StarOffice Calc : defaults
 StarOffice Calc : defaults;currency formats
-StarOffice Calc : defaults;currency formats - Formatting Spreadsheets
 StarOffice Calc : defaults;documents
 StarOffice Calc : defaults;file formats in file dialogs
 StarOffice Calc : defaults;file formats in StarOffice
@@ -995,20 +978,18 @@ StarOffice Calc : DEGREES function
 StarOffice Calc : deleting
 StarOffice Calc : deleting;all direct formatting
 StarOffice Calc : deleting;cell contents
-StarOffice Calc : deleting;cells
-StarOffice Calc : deleting;column breaks
-StarOffice Calc : deleting;columns
+StarOffice Calc : deleting;cells/rows/columns
 StarOffice Calc : deleting;databases (Base)
 StarOffice Calc : deleting;DataPilot tables
 StarOffice Calc : deleting;decimal places
 StarOffice Calc : deleting;hyperlinks
 StarOffice Calc : deleting;lines in text
+StarOffice Calc : deleting;manual column breaks
 StarOffice Calc : deleting;manual row breaks
 StarOffice Calc : deleting;models/instances
 StarOffice Calc : deleting;namespaces in XForms
 StarOffice Calc : deleting;notes
 StarOffice Calc : deleting;print ranges
-StarOffice Calc : deleting;rows
 StarOffice Calc : deleting;spreadsheets
 StarOffice Calc : deleting;tab stops
 StarOffice Calc : deleting;templates
@@ -1085,7 +1066,6 @@ StarOffice Calc : docking;definition
 StarOffice Calc : docking;toolbars
 StarOffice Calc : docking;windows
 StarOffice Calc : Document Converter Wizard
-StarOffice Calc : Document Map feature in Microsoft Office
 StarOffice Calc : Document Map, see Navigator
 StarOffice Calc : document types in StarOffice
 StarOffice Calc : documents
@@ -1194,9 +1174,7 @@ StarOffice Calc : editing;DataPilot tables
 StarOffice Calc : editing;draw objects
 StarOffice Calc : editing;Fontwork objects
 StarOffice Calc : editing;hyperlinks
-StarOffice Calc : editing;items in Data Navigator
 StarOffice Calc : editing;menus
-StarOffice Calc : editing;namespaces in XForms
 StarOffice Calc : editing;notes
 StarOffice Calc : editing;objects
 StarOffice Calc : editing;pictures
@@ -1372,11 +1350,11 @@ StarOffice Calc : filtering;data in databases
 StarOffice Calc : filtering;data in forms
 StarOffice Calc : filtering;DataPilot tables
 StarOffice Calc : filters
+StarOffice Calc : filters;applying/removing
 StarOffice Calc : filters;comparison operators
 StarOffice Calc : filters;copying visible cells only
 StarOffice Calc : filters;defining advanced filters
 StarOffice Calc : filters;for import and export
-StarOffice Calc : filters;introduction
 StarOffice Calc : filters;Navigator
 StarOffice Calc : filters;pictures
 StarOffice Calc : filters;XML filter settings
@@ -1517,7 +1495,6 @@ StarOffice Calc : forms;sorting data
 StarOffice Calc : forms;subforms
 StarOffice Calc : forms;wizards
 StarOffice Calc : forms;XForms
-StarOffice Calc : Formula Auditing feature in Microsoft Office
 StarOffice Calc : formula bar
 StarOffice Calc : formula bar;accepting inputs
 StarOffice Calc : formula bar;canceling inputs
@@ -1646,8 +1623,8 @@ StarOffice Calc : GIF format
 StarOffice Calc : glossaries
 StarOffice Calc : glossaries;common terms
 StarOffice Calc : glossaries;Internet terms
-StarOffice Calc : goal seek example
 StarOffice Calc : goal seeking
+StarOffice Calc : goal seeking;example
 StarOffice Calc : goal seeking;solver
 StarOffice Calc : gradients off for faster printing
 StarOffice Calc : graphical text art
@@ -1865,6 +1842,7 @@ StarOffice Calc : input support in spreadsheets
 StarOffice Calc : insert mode for entering text
 StarOffice Calc : inserting
 StarOffice Calc : inserting;breaks
+StarOffice Calc : inserting;buttons in toolbars
 StarOffice Calc : inserting;cell ranges
 StarOffice Calc : inserting;cell ranges from spreadsheets
 StarOffice Calc : inserting;cells
@@ -1878,6 +1856,7 @@ StarOffice Calc : inserting;datasource records in spreadsheets
 StarOffice Calc : inserting;drawings
 StarOffice Calc : inserting;external data
 StarOffice Calc : inserting;floating frames
+StarOffice Calc : inserting;Fontwork objects
 StarOffice Calc : inserting;form fields
 StarOffice Calc : inserting;formulas
 StarOffice Calc : inserting;fractions
@@ -1892,14 +1871,18 @@ StarOffice Calc : inserting;notes
 StarOffice Calc : inserting;objects from Gallery
 StarOffice Calc : inserting;objects, toolbar icon
 StarOffice Calc : inserting;OLE objects
+StarOffice Calc : inserting;paragraph borders
 StarOffice Calc : inserting;paragraph bullets
+StarOffice Calc : inserting;pictures in Gallery
 StarOffice Calc : inserting;plug-ins
+StarOffice Calc : inserting;push buttons
 StarOffice Calc : inserting;references, by drag and drop
 StarOffice Calc : inserting;rows
 StarOffice Calc : inserting;sheets
 StarOffice Calc : inserting;special characters
 StarOffice Calc : inserting;tab stops
 StarOffice Calc : inserting;text files with data
+StarOffice Calc : inserting;textures on chart bars
 StarOffice Calc : inserting;values
 StarOffice Calc : inserting functions
 StarOffice Calc : inserting functions;function list window
@@ -2059,7 +2042,6 @@ StarOffice Calc : lines;draw functions
 StarOffice Calc : lines;drawing in text
 StarOffice Calc : lines;editing points
 StarOffice Calc : lines;removing automatic lines
-StarOffice Calc : Lines and Page Breaks feature in Microsoft Office
 StarOffice Calc : lines of text
 StarOffice Calc : lines of text;alignment
 StarOffice Calc : LINEST function
@@ -2120,7 +2102,6 @@ StarOffice Calc : macros;security
 StarOffice Calc : macros;security warning dialog
 StarOffice Calc : macros;selecting security warnings
 StarOffice Calc : magnifiers
-StarOffice Calc : Mail Merge feature in Microsoft Office
 StarOffice Calc : manual column breaks
 StarOffice Calc : manual row breaks
 StarOffice Calc : margins
@@ -2130,7 +2111,6 @@ StarOffice Calc : margins;shadows
 StarOffice Calc : marking cells
 StarOffice Calc : marking changes
 StarOffice Calc : marking, see selecting
-StarOffice Calc : Markup feature in Microsoft Office
 StarOffice Calc : MATCH function
 StarOffice Calc : Math formula editor
 StarOffice Calc : mathematical functions
@@ -2293,7 +2273,7 @@ StarOffice Calc : NOT function
 StarOffice Calc : notes
 StarOffice Calc : notes;displaying (Calc)
 StarOffice Calc : notes;help text for cells
-StarOffice Calc : notes;inserting/editing/deleting
+StarOffice Calc : notes;inserting/editing/deleting/printing
 StarOffice Calc : notes;on cells
 StarOffice Calc : notes;printing
 StarOffice Calc : notes;printing in text
@@ -2579,7 +2559,6 @@ StarOffice Calc : pie charts;options
 StarOffice Calc : pie charts 
 StarOffice Calc : Pivot table import
 StarOffice Calc : Pivot table, see DataPilot function
-StarOffice Calc : Pivot tables feature in Microsoft Office
 StarOffice Calc : pixel editor
 StarOffice Calc : pixel graphics
 StarOffice Calc : pixel graphics;inserting and editing
@@ -2819,7 +2798,6 @@ StarOffice Calc : references;testing cell contents
 StarOffice Calc : references;to cells
 StarOffice Calc : references;to cells in another document
 StarOffice Calc : references;URL in cells
-StarOffice Calc : Refresh Data feature in Microsoft Office
 StarOffice Calc : register-true
 StarOffice Calc : register-true;definition
 StarOffice Calc : registering
@@ -2829,7 +2807,8 @@ StarOffice Calc : registering;StarOffice
 StarOffice Calc : regression analysis
 StarOffice Calc : regression curves in charts
 StarOffice Calc : regression lines
-StarOffice Calc : regression lines - Statistical Functions Part Five
+StarOffice Calc : regression lines;FORECAST function
+StarOffice Calc : regression lines;LINEST function
 StarOffice Calc : regular expressions
 StarOffice Calc : regular expressions;list of
 StarOffice Calc : regular expressions;opening files
@@ -2853,8 +2832,8 @@ StarOffice Calc : remove noise filter
 StarOffice Calc : removing
 StarOffice Calc : removing;bullets and numbering
 StarOffice Calc : removing;cell range filters
+StarOffice Calc : removing;filters
 StarOffice Calc : removing;form filters
-StarOffice Calc : removing;manual column breaks
 StarOffice Calc : removing, see also deleting
 StarOffice Calc : renaming sheets
 StarOffice Calc : reorganizing charts
@@ -2863,7 +2842,6 @@ StarOffice Calc : repeating
 StarOffice Calc : repeating;columns/rows on printed pages
 StarOffice Calc : repeating;commands
 StarOffice Calc : REPLACE function
-StarOffice Calc : Replace text as you type feature in Microsoft Office
 StarOffice Calc : replacement options
 StarOffice Calc : replacement table
 StarOffice Calc : replacing
@@ -2930,13 +2908,13 @@ StarOffice Calc : row headers;highlighting (Calc)
 StarOffice Calc : row headers;using in formulas
 StarOffice Calc : rows
 StarOffice Calc : rows;deleting
-StarOffice Calc : rows;deleting with filters
 StarOffice Calc : rows;finding labels automatically
 StarOffice Calc : rows;freezing
 StarOffice Calc : rows;heights
 StarOffice Calc : rows;hiding
 StarOffice Calc : rows;inserting
 StarOffice Calc : rows;optimal heights
+StarOffice Calc : rows;removing/redisplaying with filters
 StarOffice Calc : rows;repeating when printing
 StarOffice Calc : rows;swapping with columns
 StarOffice Calc : rows;visible and invisible
@@ -3067,7 +3045,6 @@ StarOffice Calc : shadows;characters, using context menu
 StarOffice Calc : shared libraries
 StarOffice Calc : shared libraries;programming
 StarOffice Calc : sharing documents
-StarOffice Calc : sharing documents;collaboration
 StarOffice Calc : sharpening filter
 StarOffice Calc : sheet area names
 StarOffice Calc : SHEET function
@@ -3109,7 +3086,6 @@ StarOffice Calc : sheets;searching all
 StarOffice Calc : sheets;selecting multiple
 StarOffice Calc : sheets;showing multiple
 StarOffice Calc : sheets;simultaneous multiple filling
-StarOffice Calc : sheets;transferring values
 StarOffice Calc : SHEETS function
 StarOffice Calc : shortcut keys
 StarOffice Calc : shortcut keys;assigning macros
@@ -3119,7 +3095,6 @@ StarOffice Calc : shortcut keys;in databases
 StarOffice Calc : shortcut keys;spreadsheets
 StarOffice Calc : shortcut keys;StarOffice accessibility
 StarOffice Calc : shortcut keys;StarOffice Calc accessibility
-StarOffice Calc : Show/Hide feature in Microsoft Office
 StarOffice Calc : showing
 StarOffice Calc : showing;cell references
 StarOffice Calc : showing;changes
@@ -3193,7 +3168,6 @@ StarOffice Calc : spellcheck;default languages
 StarOffice Calc : spellcheck;dialog
 StarOffice Calc : spellcheck;dictionary of exceptions
 StarOffice Calc : spellcheck;ignore list
-StarOffice Calc : Spelling and Grammar feature in Microsoft Office
 StarOffice Calc : spin button creation
 StarOffice Calc : spoolfiles with Xprinter
 StarOffice Calc : spreadsheets
@@ -3543,7 +3517,6 @@ StarOffice Calc : traces;precedents and dependents
 StarOffice Calc : traces;precedents for multiple cells
 StarOffice Calc : traces;refreshing
 StarOffice Calc : tracing errors
-StarOffice Calc : Track changes feature in Microsoft Office
 StarOffice Calc : traditional Chinese
 StarOffice Calc : traditional Chinese;translating to simplified chinese
 StarOffice Calc : transparency
@@ -3621,7 +3594,6 @@ StarOffice Calc : user-defined functions
 StarOffice Calc : user-defined styles
 StarOffice Calc : user-defined styles;automatically replacing
 StarOffice Calc : UTF-8/UCS2 support
-StarOffice Calc : Validation feature in Microsoft Office
 StarOffice Calc : validity
 StarOffice Calc : VALUE function
 StarOffice Calc : values
@@ -3697,8 +3669,8 @@ StarOffice Calc : WEEKS function
 StarOffice Calc : WEEKSINYEAR function
 StarOffice Calc : WEIBULL function
 StarOffice Calc : what if operations
-StarOffice Calc : what-if analysis
-StarOffice Calc : what-if analysis;solver
+StarOffice Calc : what if operations;solver
+StarOffice Calc : what if operations;two variables
 StarOffice Calc : widths of cells
 StarOffice Calc : windows
 StarOffice Calc : windows;docking
@@ -3727,10 +3699,9 @@ StarOffice Calc : WordArt, see Fontwork
 StarOffice Calc : words
 StarOffice Calc : words;automatically replacing
 StarOffice Calc : words;wrapping in cells
-StarOffice Calc : Workbook feature in Microsoft Office
+StarOffice Calc : words;wrapping in CTL
 StarOffice Calc : WORKDAY function
 StarOffice Calc : working directory change
-StarOffice Calc : Worksheet feature in Microsoft Office
 StarOffice Calc : worksheet names
 StarOffice Calc : wrapping text
 StarOffice Calc : wrapping text;in cells
@@ -3742,6 +3713,9 @@ StarOffice Calc : X axes;grid formatting
 StarOffice Calc : X axes;scaling
 StarOffice Calc : X axes;showing
 StarOffice Calc : XForms
+StarOffice Calc : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Calc : XForms;conditions
+StarOffice Calc : XForms;opening/editing
 StarOffice Calc : XIRR function
 StarOffice Calc : XML converters
 StarOffice Calc : XML file formats
@@ -3749,10 +3723,8 @@ StarOffice Calc : XML filters
 StarOffice Calc : XML filters;creating/testing
 StarOffice Calc : XML filters;saving as package/installing/deleting
 StarOffice Calc : XML filters;settings
-StarOffice Calc : XML Forms
+StarOffice Calc : XML Forms, see XForms
 StarOffice Calc : XNPV function
-StarOffice Calc : XSLT based filters
-StarOffice Calc : XSLT based filters;settings
 StarOffice Calc : XSLT filters, see also XML filters
 StarOffice Calc : XY charts
 StarOffice Calc : Y axes
@@ -3812,22 +3784,6 @@ StarOffice Basic : activating;plug-ins
 StarOffice Basic : ActiveX control
 StarOffice Basic : Adabas D databases (base)
 StarOffice Basic : add-ons, see UNO components
-StarOffice Basic : adding
-StarOffice Basic : adding;automatic captions (Writer)
-StarOffice Basic : adding;Basic libraries
-StarOffice Basic : adding;buttons in toolbars
-StarOffice Basic : adding;conditions for XForm items
-StarOffice Basic : adding;draw objects
-StarOffice Basic : adding;Fontwork objects
-StarOffice Basic : adding;items in Data Navigator
-StarOffice Basic : adding;namespaces in XForms
-StarOffice Basic : adding;paragraph borders
-StarOffice Basic : adding;pictures from Gallery
-StarOffice Basic : adding;pictures in Gallery
-StarOffice Basic : adding;plug-ins
-StarOffice Basic : adding;push buttons
-StarOffice Basic : adding;table borders
-StarOffice Basic : adding;textures on chart bars
 StarOffice Basic : adding libraries
 StarOffice Basic : additional selection mode
 StarOffice Basic : address books
@@ -3911,7 +3867,6 @@ StarOffice Basic : automatic line breaks
 StarOffice Basic : automatic lines/borders in text
 StarOffice Basic : automatic saving
 StarOffice Basic : AutoPilots, see wizards
-StarOffice Basic : AutoShapes feature in Microsoft Office
 StarOffice Basic : AutoValue
 StarOffice Basic : AutoValue;database tables
 StarOffice Basic : axes in charts
@@ -4026,7 +3981,6 @@ StarOffice Basic : cells;showing grid lines (Calc)
 StarOffice Basic : centered text
 StarOffice Basic : centimeters
 StarOffice Basic : certificates
-StarOffice Basic : Change Case feature in Microsoft Office
 StarOffice Basic : changes
 StarOffice Basic : changes;accepting or rejecting
 StarOffice Basic : changes;comparing to original
@@ -4097,7 +4051,6 @@ StarOffice Basic : closing
 StarOffice Basic : closing;documents
 StarOffice Basic : closing;toolbars
 StarOffice Basic : collaboration
-StarOffice Basic : collaboration;sharing documents
 StarOffice Basic : color bar
 StarOffice Basic : colors
 StarOffice Basic : colors;adding
@@ -4129,12 +4082,10 @@ StarOffice Basic : commands;SQL
 StarOffice Basic : comments
 StarOffice Basic : comments;on changes
 StarOffice Basic : comments;Rem statement
-StarOffice Basic : comments feature in Microsoft Office
 StarOffice Basic : common terms
 StarOffice Basic : common terms;Chinese dictionary
 StarOffice Basic : common terms;glossaries
 StarOffice Basic : common terms;Internet glossary
-StarOffice Basic : Compare and Merge feature in Microsoft Office
 StarOffice Basic : comparison operators
 StarOffice Basic : comparison operators;StarOffice Basic
 StarOffice Basic : comparisons
@@ -4145,6 +4096,7 @@ StarOffice Basic : complete screen view
 StarOffice Basic : complex text layout
 StarOffice Basic : complex text layout;definition
 StarOffice Basic : complex text layout;enabling
+StarOffice Basic : complex text layout, see CTL
 StarOffice Basic : components
 StarOffice Basic : components;addressing
 StarOffice Basic : compose key to insert special characters
@@ -4238,6 +4190,7 @@ StarOffice Basic : cropping pictures
 StarOffice Basic : CSng function
 StarOffice Basic : CStr function
 StarOffice Basic : CTL
+StarOffice Basic : CTL;(not) wrapping words
 StarOffice Basic : CTL;complex text layout languages
 StarOffice Basic : CTL;definition
 StarOffice Basic : CTL;options
@@ -4277,7 +4230,9 @@ StarOffice Basic : data;read-only
 StarOffice Basic : data;sorting in forms
 StarOffice Basic : data;user data
 StarOffice Basic : data binding change in XForms
-StarOffice Basic : Data Navigator display options
+StarOffice Basic : Data Navigator
+StarOffice Basic : Data Navigator;adding/editing items
+StarOffice Basic : Data Navigator;display options
 StarOffice Basic : data source browser
 StarOffice Basic : data source explorer
 StarOffice Basic : data source view
@@ -4475,7 +4430,6 @@ StarOffice Basic : docking;definition
 StarOffice Basic : docking;toolbars
 StarOffice Basic : docking;windows
 StarOffice Basic : Document Converter Wizard
-StarOffice Basic : Document Map feature in Microsoft Office
 StarOffice Basic : Document Map, see Navigator
 StarOffice Basic : document types in StarOffice
 StarOffice Basic : documents
@@ -4559,9 +4513,7 @@ StarOffice Basic : editing;database tables and queries
 StarOffice Basic : editing;draw objects
 StarOffice Basic : editing;Fontwork objects
 StarOffice Basic : editing;hyperlinks
-StarOffice Basic : editing;items in Data Navigator
 StarOffice Basic : editing;menus
-StarOffice Basic : editing;namespaces in XForms
 StarOffice Basic : editing;notes
 StarOffice Basic : editing;objects
 StarOffice Basic : editing;pictures
@@ -4813,7 +4765,6 @@ StarOffice Basic : forms;sorting data
 StarOffice Basic : forms;subforms
 StarOffice Basic : forms;wizards
 StarOffice Basic : forms;XForms
-StarOffice Basic : Formula Auditing feature in Microsoft Office
 StarOffice Basic : formula texts
 StarOffice Basic : formula texts;printing in StarOffice Math
 StarOffice Basic : formulas
@@ -5024,6 +4975,8 @@ StarOffice Basic : Input statement
 StarOffice Basic : InputBox function
 StarOffice Basic : insert mode for entering text
 StarOffice Basic : inserting
+StarOffice Basic : inserting;Basic libraries
+StarOffice Basic : inserting;buttons in toolbars
 StarOffice Basic : inserting;cell ranges from spreadsheets
 StarOffice Basic : inserting;charts
 StarOffice Basic : inserting;clipboard options
@@ -5031,6 +4984,7 @@ StarOffice Basic : inserting;data from text documents
 StarOffice Basic : inserting;datasource records in spreadsheets
 StarOffice Basic : inserting;drawings
 StarOffice Basic : inserting;floating frames
+StarOffice Basic : inserting;Fontwork objects
 StarOffice Basic : inserting;form fields
 StarOffice Basic : inserting;hyperlinks
 StarOffice Basic : inserting;line breaks in cells
@@ -5039,10 +4993,14 @@ StarOffice Basic : inserting;new text tables defaults
 StarOffice Basic : inserting;notes
 StarOffice Basic : inserting;objects from Gallery
 StarOffice Basic : inserting;OLE objects
+StarOffice Basic : inserting;paragraph borders
 StarOffice Basic : inserting;paragraph bullets
+StarOffice Basic : inserting;pictures in Gallery
 StarOffice Basic : inserting;plug-ins
+StarOffice Basic : inserting;push buttons
 StarOffice Basic : inserting;special characters
 StarOffice Basic : inserting;tab stops
+StarOffice Basic : inserting;textures on chart bars
 StarOffice Basic : installing
 StarOffice Basic : installing;ActiveX control
 StarOffice Basic : installing;mobile device filters
@@ -5160,7 +5118,6 @@ StarOffice Basic : lines;draw functions
 StarOffice Basic : lines;drawing in text
 StarOffice Basic : lines;editing points
 StarOffice Basic : lines;removing automatic lines
-StarOffice Basic : Lines and Page Breaks feature in Microsoft Office
 StarOffice Basic : lines of text
 StarOffice Basic : lines of text;alignment
 StarOffice Basic : lines of text;in Basic editor
@@ -5221,14 +5178,12 @@ StarOffice Basic : macros;security warning dialog
 StarOffice Basic : macros;selecting security warnings
 StarOffice Basic : macros;stopping
 StarOffice Basic : magnifiers
-StarOffice Basic : Mail Merge feature in Microsoft Office
 StarOffice Basic : margins
 StarOffice Basic : margins;pages
 StarOffice Basic : margins;setting with the mouse
 StarOffice Basic : margins;shadows
 StarOffice Basic : marking changes
 StarOffice Basic : marking, see selecting
-StarOffice Basic : Markup feature in Microsoft Office
 StarOffice Basic : masked field control
 StarOffice Basic : Math formula editor
 StarOffice Basic : measurement units
@@ -5327,7 +5282,7 @@ StarOffice Basic : non-printing characters (Writer)
 StarOffice Basic : Not operator (logical)
 StarOffice Basic : notes
 StarOffice Basic : notes;displaying (Calc)
-StarOffice Basic : notes;inserting/editing/deleting
+StarOffice Basic : notes;inserting/editing/deleting/printing
 StarOffice Basic : notes;printing in text
 StarOffice Basic : Nothing object
 StarOffice Basic : Now function
@@ -5535,7 +5490,6 @@ StarOffice Basic : pictures;inserting from Gallery
 StarOffice Basic : pictures;number of
 StarOffice Basic : pictures;printing
 StarOffice Basic : pictures;scaling/resizing
-StarOffice Basic : Pivot tables feature in Microsoft Office
 StarOffice Basic : pixel editor
 StarOffice Basic : pixel graphics
 StarOffice Basic : pixel graphics;inserting and editing
@@ -5712,7 +5666,6 @@ StarOffice Basic : references
 StarOffice Basic : references;displaying in color (Calc)
 StarOffice Basic : references;expanding (Calc)
 StarOffice Basic : references;iterative (Calc)
-StarOffice Basic : Refresh Data feature in Microsoft Office
 StarOffice Basic : register-true
 StarOffice Basic : register-true;definition
 StarOffice Basic : registering
@@ -5743,7 +5696,6 @@ StarOffice Basic : removing, see also deleting
 StarOffice Basic : renaming modules and dialogs
 StarOffice Basic : repeating
 StarOffice Basic : repeating;commands
-StarOffice Basic : Replace text as you type feature in Microsoft Office
 StarOffice Basic : replacement options
 StarOffice Basic : replacement table
 StarOffice Basic : replacing
@@ -5887,7 +5839,6 @@ StarOffice Basic : shadows;borders
 StarOffice Basic : shadows;characters
 StarOffice Basic : shadows;characters, using context menu
 StarOffice Basic : sharing documents
-StarOffice Basic : sharing documents;collaboration
 StarOffice Basic : sharpening filter
 StarOffice Basic : sheet tabs
 StarOffice Basic : sheet tabs;displaying
@@ -5900,7 +5851,6 @@ StarOffice Basic : shortcut keys;Basic IDE
 StarOffice Basic : shortcut keys;general
 StarOffice Basic : shortcut keys;in databases
 StarOffice Basic : shortcut keys;StarOffice accessibility
-StarOffice Basic : Show/Hide feature in Microsoft Office
 StarOffice Basic : showing
 StarOffice Basic : showing;changes
 StarOffice Basic : showing;docked windows
@@ -5957,7 +5907,6 @@ StarOffice Basic : spellcheck;default languages
 StarOffice Basic : spellcheck;dialog
 StarOffice Basic : spellcheck;dictionary of exceptions
 StarOffice Basic : spellcheck;ignore list
-StarOffice Basic : Spelling and Grammar feature in Microsoft Office
 StarOffice Basic : spin button creation
 StarOffice Basic : Split function
 StarOffice Basic : spoolfiles with Xprinter
@@ -6188,7 +6137,6 @@ StarOffice Basic : tools bar
 StarOffice Basic : tooltips
 StarOffice Basic : tooltips;extended tips
 StarOffice Basic : tooltips;help
-StarOffice Basic : Track changes feature in Microsoft Office
 StarOffice Basic : traditional Chinese
 StarOffice Basic : traditional Chinese;translating to simplified chinese
 StarOffice Basic : translating dialogs
@@ -6255,7 +6203,6 @@ StarOffice Basic : user-defined styles
 StarOffice Basic : user-defined styles;automatically replacing
 StarOffice Basic : UTF-8/UCS2 support
 StarOffice Basic : Val function
-StarOffice Basic : Validation feature in Microsoft Office
 StarOffice Basic : values
 StarOffice Basic : values;of variables
 StarOffice Basic : values;rounded as shown (Calc)
@@ -6335,9 +6282,8 @@ StarOffice Basic : WordArt, see Fontwork
 StarOffice Basic : words
 StarOffice Basic : words;automatically replacing
 StarOffice Basic : words;wrapping in cells
-StarOffice Basic : Workbook feature in Microsoft Office
+StarOffice Basic : words;wrapping in CTL
 StarOffice Basic : working directory change
-StarOffice Basic : Worksheet feature in Microsoft Office
 StarOffice Basic : wrapping text
 StarOffice Basic : wrapping text;in cells
 StarOffice Basic : write protection on/off
@@ -6345,16 +6291,17 @@ StarOffice Basic : Write statement
 StarOffice Basic : writing aids options
 StarOffice Basic : WYSIWYG in fonts lists
 StarOffice Basic : XForms
+StarOffice Basic : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Basic : XForms;conditions
+StarOffice Basic : XForms;opening/editing
 StarOffice Basic : XML converters
 StarOffice Basic : XML file formats
 StarOffice Basic : XML filters
 StarOffice Basic : XML filters;creating/testing
 StarOffice Basic : XML filters;saving as package/installing/deleting
 StarOffice Basic : XML filters;settings
-StarOffice Basic : XML Forms
+StarOffice Basic : XML Forms, see XForms
 StarOffice Basic : Xor operator (logical)
-StarOffice Basic : XSLT based filters
-StarOffice Basic : XSLT based filters;settings
 StarOffice Basic : XSLT filters, see also XML filters
 StarOffice Basic : Year function
 StarOffice Basic : years
@@ -6387,21 +6334,6 @@ StarOffice Base : activating;plug-ins
 StarOffice Base : ActiveX control
 StarOffice Base : Adabas D databases (base)
 StarOffice Base : add-ons, see UNO components
-StarOffice Base : adding
-StarOffice Base : adding;automatic captions (Writer)
-StarOffice Base : adding;buttons in toolbars
-StarOffice Base : adding;conditions for XForm items
-StarOffice Base : adding;draw objects
-StarOffice Base : adding;Fontwork objects
-StarOffice Base : adding;items in Data Navigator
-StarOffice Base : adding;namespaces in XForms
-StarOffice Base : adding;paragraph borders
-StarOffice Base : adding;pictures from Gallery
-StarOffice Base : adding;pictures in Gallery
-StarOffice Base : adding;plug-ins
-StarOffice Base : adding;push buttons
-StarOffice Base : adding;table borders
-StarOffice Base : adding;textures on chart bars
 StarOffice Base : additional selection mode
 StarOffice Base : address books
 StarOffice Base : address books;LDAP server (Base)
@@ -6475,7 +6407,6 @@ StarOffice Base : automatic line breaks
 StarOffice Base : automatic lines/borders in text
 StarOffice Base : automatic saving
 StarOffice Base : AutoPilots, see wizards
-StarOffice Base : AutoShapes feature in Microsoft Office
 StarOffice Base : AutoValue
 StarOffice Base : AutoValue;database tables
 StarOffice Base : axes in charts
@@ -6570,7 +6501,6 @@ StarOffice Base : cells;showing grid lines (Calc)
 StarOffice Base : centered text
 StarOffice Base : centimeters
 StarOffice Base : certificates
-StarOffice Base : Change Case feature in Microsoft Office
 StarOffice Base : changes
 StarOffice Base : changes;accepting or rejecting
 StarOffice Base : changes;comparing to original
@@ -6632,7 +6562,6 @@ StarOffice Base : closing
 StarOffice Base : closing;documents
 StarOffice Base : closing;toolbars
 StarOffice Base : collaboration
-StarOffice Base : collaboration;sharing documents
 StarOffice Base : color bar
 StarOffice Base : colors
 StarOffice Base : colors;adding
@@ -6662,12 +6591,10 @@ StarOffice Base : commands;repeating
 StarOffice Base : commands;SQL
 StarOffice Base : comments
 StarOffice Base : comments;on changes
-StarOffice Base : comments feature in Microsoft Office
 StarOffice Base : common terms
 StarOffice Base : common terms;Chinese dictionary
 StarOffice Base : common terms;glossaries
 StarOffice Base : common terms;Internet glossary
-StarOffice Base : Compare and Merge feature in Microsoft Office
 StarOffice Base : comparisons
 StarOffice Base : comparisons;document versions
 StarOffice Base : comparisons;operators in default filter dialog
@@ -6676,6 +6603,7 @@ StarOffice Base : complete screen view
 StarOffice Base : complex text layout
 StarOffice Base : complex text layout;definition
 StarOffice Base : complex text layout;enabling
+StarOffice Base : complex text layout, see CTL
 StarOffice Base : compose key to insert special characters
 StarOffice Base : concatenation, see ampersand symbol
 StarOffice Base : conditional separators
@@ -6746,6 +6674,7 @@ StarOffice Base : crash reports
 StarOffice Base : criteria of query design (Base)
 StarOffice Base : cropping pictures
 StarOffice Base : CTL
+StarOffice Base : CTL;(not) wrapping words
 StarOffice Base : CTL;complex text layout languages
 StarOffice Base : CTL;definition
 StarOffice Base : CTL;options
@@ -6781,7 +6710,9 @@ StarOffice Base : data;read-only
 StarOffice Base : data;sorting in forms
 StarOffice Base : data;user data
 StarOffice Base : data binding change in XForms
-StarOffice Base : Data Navigator display options
+StarOffice Base : Data Navigator
+StarOffice Base : Data Navigator;adding/editing items
+StarOffice Base : Data Navigator;display options
 StarOffice Base : data source browser
 StarOffice Base : data source explorer
 StarOffice Base : data source view
@@ -6935,7 +6866,6 @@ StarOffice Base : docking;definition
 StarOffice Base : docking;toolbars
 StarOffice Base : docking;windows
 StarOffice Base : Document Converter Wizard
-StarOffice Base : Document Map feature in Microsoft Office
 StarOffice Base : Document Map, see Navigator
 StarOffice Base : document types in StarOffice
 StarOffice Base : documents
@@ -7018,9 +6948,7 @@ StarOffice Base : editing;database tables and queries
 StarOffice Base : editing;draw objects
 StarOffice Base : editing;Fontwork objects
 StarOffice Base : editing;hyperlinks
-StarOffice Base : editing;items in Data Navigator
 StarOffice Base : editing;menus
-StarOffice Base : editing;namespaces in XForms
 StarOffice Base : editing;notes
 StarOffice Base : editing;objects
 StarOffice Base : editing;pictures
@@ -7239,7 +7167,6 @@ StarOffice Base : forms;sorting data
 StarOffice Base : forms;subforms
 StarOffice Base : forms;wizards
 StarOffice Base : forms;XForms
-StarOffice Base : Formula Auditing feature in Microsoft Office
 StarOffice Base : formula texts
 StarOffice Base : formula texts;printing in StarOffice Math
 StarOffice Base : formulas
@@ -7414,6 +7341,7 @@ StarOffice Base : inner joins (Base)
 StarOffice Base : input method window
 StarOffice Base : insert mode for entering text
 StarOffice Base : inserting
+StarOffice Base : inserting;buttons in toolbars
 StarOffice Base : inserting;cell ranges from spreadsheets
 StarOffice Base : inserting;charts
 StarOffice Base : inserting;clipboard options
@@ -7421,6 +7349,7 @@ StarOffice Base : inserting;data from text documents
 StarOffice Base : inserting;datasource records in spreadsheets
 StarOffice Base : inserting;drawings
 StarOffice Base : inserting;floating frames
+StarOffice Base : inserting;Fontwork objects
 StarOffice Base : inserting;form fields
 StarOffice Base : inserting;hyperlinks
 StarOffice Base : inserting;line breaks in cells
@@ -7429,10 +7358,14 @@ StarOffice Base : inserting;new text tables defaults
 StarOffice Base : inserting;notes
 StarOffice Base : inserting;objects from Gallery
 StarOffice Base : inserting;OLE objects
+StarOffice Base : inserting;paragraph borders
 StarOffice Base : inserting;paragraph bullets
+StarOffice Base : inserting;pictures in Gallery
 StarOffice Base : inserting;plug-ins
+StarOffice Base : inserting;push buttons
 StarOffice Base : inserting;special characters
 StarOffice Base : inserting;tab stops
+StarOffice Base : inserting;textures on chart bars
 StarOffice Base : installing
 StarOffice Base : installing;ActiveX control
 StarOffice Base : installing;mobile device filters
@@ -7523,7 +7456,6 @@ StarOffice Base : lines;draw functions
 StarOffice Base : lines;drawing in text
 StarOffice Base : lines;editing points
 StarOffice Base : lines;removing automatic lines
-StarOffice Base : Lines and Page Breaks feature in Microsoft Office
 StarOffice Base : lines of text
 StarOffice Base : lines of text;alignment
 StarOffice Base : links
@@ -7565,14 +7497,12 @@ StarOffice Base : macros;security
 StarOffice Base : macros;security warning dialog
 StarOffice Base : macros;selecting security warnings
 StarOffice Base : magnifiers
-StarOffice Base : Mail Merge feature in Microsoft Office
 StarOffice Base : margins
 StarOffice Base : margins;pages
 StarOffice Base : margins;setting with the mouse
 StarOffice Base : margins;shadows
 StarOffice Base : marking changes
 StarOffice Base : marking, see selecting
-StarOffice Base : Markup feature in Microsoft Office
 StarOffice Base : Math formula editor
 StarOffice Base : measurement units
 StarOffice Base : measurement units;changing on rulers
@@ -7652,7 +7582,7 @@ StarOffice Base : non-breaking spaces (Writer)
 StarOffice Base : non-printing characters (Writer)
 StarOffice Base : notes
 StarOffice Base : notes;displaying (Calc)
-StarOffice Base : notes;inserting/editing/deleting
+StarOffice Base : notes;inserting/editing/deleting/printing
 StarOffice Base : notes;printing in text
 StarOffice Base : number formats
 StarOffice Base : number formats;codes
@@ -7841,7 +7771,6 @@ StarOffice Base : pictures;inserting from Gallery
 StarOffice Base : pictures;number of
 StarOffice Base : pictures;printing
 StarOffice Base : pictures;scaling/resizing
-StarOffice Base : Pivot tables feature in Microsoft Office
 StarOffice Base : pixel editor
 StarOffice Base : pixel graphics
 StarOffice Base : pixel graphics;inserting and editing
@@ -8001,7 +7930,6 @@ StarOffice Base : references
 StarOffice Base : references;displaying in color (Calc)
 StarOffice Base : references;expanding (Calc)
 StarOffice Base : references;iterative (Calc)
-StarOffice Base : Refresh Data feature in Microsoft Office
 StarOffice Base : register-true
 StarOffice Base : register-true;definition
 StarOffice Base : registering
@@ -8030,7 +7958,6 @@ StarOffice Base : removing;form filters
 StarOffice Base : removing, see also deleting
 StarOffice Base : repeating
 StarOffice Base : repeating;commands
-StarOffice Base : Replace text as you type feature in Microsoft Office
 StarOffice Base : replacement options
 StarOffice Base : replacement table
 StarOffice Base : replacing
@@ -8154,7 +8081,6 @@ StarOffice Base : shadows;borders
 StarOffice Base : shadows;characters
 StarOffice Base : shadows;characters, using context menu
 StarOffice Base : sharing documents
-StarOffice Base : sharing documents;collaboration
 StarOffice Base : sharpening filter
 StarOffice Base : sheet tabs
 StarOffice Base : sheet tabs;displaying
@@ -8165,7 +8091,6 @@ StarOffice Base : shortcut keys;assigning macros
 StarOffice Base : shortcut keys;general
 StarOffice Base : shortcut keys;in databases
 StarOffice Base : shortcut keys;StarOffice accessibility
-StarOffice Base : Show/Hide feature in Microsoft Office
 StarOffice Base : showing
 StarOffice Base : showing;changes
 StarOffice Base : showing;docked windows
@@ -8220,7 +8145,6 @@ StarOffice Base : spellcheck;default languages
 StarOffice Base : spellcheck;dialog
 StarOffice Base : spellcheck;dictionary of exceptions
 StarOffice Base : spellcheck;ignore list
-StarOffice Base : Spelling and Grammar feature in Microsoft Office
 StarOffice Base : spin button creation
 StarOffice Base : spoolfiles with Xprinter
 StarOffice Base : spreadsheets
@@ -8428,7 +8352,6 @@ StarOffice Base : tools bar
 StarOffice Base : tooltips
 StarOffice Base : tooltips;extended tips
 StarOffice Base : tooltips;help
-StarOffice Base : Track changes feature in Microsoft Office
 StarOffice Base : traditional Chinese
 StarOffice Base : traditional Chinese;translating to simplified chinese
 StarOffice Base : transparency
@@ -8483,7 +8406,6 @@ StarOffice Base : user-defined dictionaries;editing
 StarOffice Base : user-defined styles
 StarOffice Base : user-defined styles;automatically replacing
 StarOffice Base : UTF-8/UCS2 support
-StarOffice Base : Validation feature in Microsoft Office
 StarOffice Base : values
 StarOffice Base : values;rounded as shown (Calc)
 StarOffice Base : variables
@@ -8547,24 +8469,24 @@ StarOffice Base : WordArt, see Fontwork
 StarOffice Base : words
 StarOffice Base : words;automatically replacing
 StarOffice Base : words;wrapping in cells
-StarOffice Base : Workbook feature in Microsoft Office
+StarOffice Base : words;wrapping in CTL
 StarOffice Base : working directory change
-StarOffice Base : Worksheet feature in Microsoft Office
 StarOffice Base : wrapping text
 StarOffice Base : wrapping text;in cells
 StarOffice Base : write protection on/off
 StarOffice Base : writing aids options
 StarOffice Base : WYSIWYG in fonts lists
 StarOffice Base : XForms
+StarOffice Base : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Base : XForms;conditions
+StarOffice Base : XForms;opening/editing
 StarOffice Base : XML converters
 StarOffice Base : XML file formats
 StarOffice Base : XML filters
 StarOffice Base : XML filters;creating/testing
 StarOffice Base : XML filters;saving as package/installing/deleting
 StarOffice Base : XML filters;settings
-StarOffice Base : XML Forms
-StarOffice Base : XSLT based filters
-StarOffice Base : XSLT based filters;settings
+StarOffice Base : XML Forms, see XForms
 StarOffice Base : XSLT filters, see also XML filters
 StarOffice Base : years
 StarOffice Base : years;2-digit options
@@ -8599,27 +8521,6 @@ StarOffice Writer : activating;plug-ins
 StarOffice Writer : ActiveX control
 StarOffice Writer : Adabas D databases (base)
 StarOffice Writer : add-ons, see UNO components
-StarOffice Writer : adding
-StarOffice Writer : adding;automatic captions (Writer)
-StarOffice Writer : adding;buttons in toolbars
-StarOffice Writer : adding;captions
-StarOffice Writer : adding;chapter numbers in captions
-StarOffice Writer : adding;conditions for XForm items
-StarOffice Writer : adding;draw objects
-StarOffice Writer : adding;Fontwork objects
-StarOffice Writer : adding;input fields
-StarOffice Writer : adding;items in Data Navigator
-StarOffice Writer : adding;namespaces in XForms
-StarOffice Writer : adding;numbering
-StarOffice Writer : adding;page borders
-StarOffice Writer : adding;paragraph borders
-StarOffice Writer : adding;pictures from Gallery
-StarOffice Writer : adding;pictures in Gallery
-StarOffice Writer : adding;plug-ins
-StarOffice Writer : adding;push buttons
-StarOffice Writer : adding;rows/columns, by keyboard
-StarOffice Writer : adding;table borders
-StarOffice Writer : adding;textures on chart bars
 StarOffice Writer : additional selection mode
 StarOffice Writer : address books
 StarOffice Writer : address books;exchanging
@@ -8723,7 +8624,6 @@ StarOffice Writer : automatic saving
 StarOffice Writer : automatic spellcheck
 StarOffice Writer : automatic word completion
 StarOffice Writer : AutoPilots, see wizards
-StarOffice Writer : AutoShapes feature in Microsoft Office
 StarOffice Writer : AutoText
 StarOffice Writer : AutoValue
 StarOffice Writer : AutoValue;database tables
@@ -8880,7 +8780,6 @@ StarOffice Writer : centering;text frames on pages
 StarOffice Writer : centimeters
 StarOffice Writer : central documents
 StarOffice Writer : certificates
-StarOffice Writer : Change Case feature in Microsoft Office
 StarOffice Writer : changes
 StarOffice Writer : changes;accepting or rejecting
 StarOffice Writer : changes;automatic
@@ -8992,7 +8891,6 @@ StarOffice Writer : closing
 StarOffice Writer : closing;documents
 StarOffice Writer : closing;toolbars
 StarOffice Writer : collaboration
-StarOffice Writer : collaboration;sharing documents
 StarOffice Writer : color bar
 StarOffice Writer : colors
 StarOffice Writer : colors;adding
@@ -9030,12 +8928,10 @@ StarOffice Writer : commands;repeating
 StarOffice Writer : commands;SQL
 StarOffice Writer : comments
 StarOffice Writer : comments;on changes
-StarOffice Writer : comments feature in Microsoft Office
 StarOffice Writer : common terms
 StarOffice Writer : common terms;Chinese dictionary
 StarOffice Writer : common terms;glossaries
 StarOffice Writer : common terms;Internet glossary
-StarOffice Writer : Compare and Merge feature in Microsoft Office
 StarOffice Writer : comparisons
 StarOffice Writer : comparisons;document versions
 StarOffice Writer : comparisons;operators in default filter dialog
@@ -9045,6 +8941,7 @@ StarOffice Writer : completion of words
 StarOffice Writer : complex text layout
 StarOffice Writer : complex text layout;definition
 StarOffice Writer : complex text layout;enabling
+StarOffice Writer : complex text layout, see CTL
 StarOffice Writer : compose key to insert special characters
 StarOffice Writer : concatenation, see ampersand symbol
 StarOffice Writer : concordance files
@@ -9140,6 +9037,7 @@ StarOffice Writer : cross-references;inserting and updating
 StarOffice Writer : cross-references;inserting with Navigator
 StarOffice Writer : cross-references;modifying
 StarOffice Writer : CTL
+StarOffice Writer : CTL;(not) wrapping words
 StarOffice Writer : CTL;complex text layout languages
 StarOffice Writer : CTL;definition
 StarOffice Writer : CTL;options
@@ -9179,7 +9077,9 @@ StarOffice Writer : data;sorting in forms
 StarOffice Writer : data;user data
 StarOffice Writer : data binding change in XForms
 StarOffice Writer : data labels in charts
-StarOffice Writer : Data Navigator display options
+StarOffice Writer : Data Navigator
+StarOffice Writer : Data Navigator;adding/editing items
+StarOffice Writer : Data Navigator;display options
 StarOffice Writer : data ranges in charts
 StarOffice Writer : data series
 StarOffice Writer : data source browser
@@ -9380,7 +9280,6 @@ StarOffice Writer : docking;Navigator window
 StarOffice Writer : docking;toolbars
 StarOffice Writer : docking;windows
 StarOffice Writer : Document Converter Wizard
-StarOffice Writer : Document Map feature in Microsoft Office
 StarOffice Writer : Document Map, see Navigator
 StarOffice Writer : document templates
 StarOffice Writer : document types in StarOffice
@@ -9477,9 +9376,7 @@ StarOffice Writer : editing;footnotes/endnotes
 StarOffice Writer : editing;hyperlinks
 StarOffice Writer : editing;index format
 StarOffice Writer : editing;indexes/tables of contents
-StarOffice Writer : editing;items in Data Navigator
 StarOffice Writer : editing;menus
-StarOffice Writer : editing;namespaces in XForms
 StarOffice Writer : editing;notes
 StarOffice Writer : editing;objects
 StarOffice Writer : editing;pictures
@@ -9772,7 +9669,6 @@ StarOffice Writer : forms;sorting data
 StarOffice Writer : forms;subforms
 StarOffice Writer : forms;wizards
 StarOffice Writer : forms;XForms
-StarOffice Writer : Formula Auditing feature in Microsoft Office
 StarOffice Writer : formula texts
 StarOffice Writer : formula texts;printing in StarOffice Math
 StarOffice Writer : formulas
@@ -10023,8 +9919,10 @@ StarOffice Writer : input fields in text
 StarOffice Writer : input method window
 StarOffice Writer : insert mode for entering text
 StarOffice Writer : inserting
+StarOffice Writer : inserting;buttons in toolbars
 StarOffice Writer : inserting;captions
 StarOffice Writer : inserting;cell ranges from spreadsheets
+StarOffice Writer : inserting;chapter numbers in captions
 StarOffice Writer : inserting;charts
 StarOffice Writer : inserting;clipboard options
 StarOffice Writer : inserting;cross-references
@@ -10034,6 +9932,7 @@ StarOffice Writer : inserting;date fields
 StarOffice Writer : inserting;drawings
 StarOffice Writer : inserting;envelopes
 StarOffice Writer : inserting;floating frames
+StarOffice Writer : inserting;Fontwork objects
 StarOffice Writer : inserting;footnotes/endnotes
 StarOffice Writer : inserting;form fields
 StarOffice Writer : inserting;from Gallery into text
@@ -10046,15 +9945,20 @@ StarOffice Writer : inserting;lines under headers
 StarOffice Writer : inserting;movies/sounds
 StarOffice Writer : inserting;new text tables defaults
 StarOffice Writer : inserting;notes
+StarOffice Writer : inserting;numbering
 StarOffice Writer : inserting;objects from Gallery
 StarOffice Writer : inserting;OLE objects
 StarOffice Writer : inserting;page breaks
 StarOffice Writer : inserting;page numbers
+StarOffice Writer : inserting;paragraph borders
 StarOffice Writer : inserting;paragraph bullets
 StarOffice Writer : inserting;paragraphs before/after tables
 StarOffice Writer : inserting;pictures
+StarOffice Writer : inserting;pictures in Gallery
 StarOffice Writer : inserting;pictures, by dialog
 StarOffice Writer : inserting;plug-ins
+StarOffice Writer : inserting;push buttons
+StarOffice Writer : inserting;rows/columns, by keyboard
 StarOffice Writer : inserting;scanned images
 StarOffice Writer : inserting;sections
 StarOffice Writer : inserting;special characters
@@ -10063,6 +9967,7 @@ StarOffice Writer : inserting;tables in text
 StarOffice Writer : inserting;text blocks
 StarOffice Writer : inserting;text documents
 StarOffice Writer : inserting;text frames
+StarOffice Writer : inserting;textures on chart bars
 StarOffice Writer : installing
 StarOffice Writer : installing;ActiveX control
 StarOffice Writer : installing;mobile device filters
@@ -10183,7 +10088,6 @@ StarOffice Writer : lines;footnotes/endnotes
 StarOffice Writer : lines;inserting horizontal lines
 StarOffice Writer : lines;removing automatic lines
 StarOffice Writer : lines;under headers/above footers
-StarOffice Writer : Lines and Page Breaks feature in Microsoft Office
 StarOffice Writer : lines of text
 StarOffice Writer : lines of text;alignment
 StarOffice Writer : lines of text;indents
@@ -10243,7 +10147,6 @@ StarOffice Writer : macros;security warning dialog
 StarOffice Writer : macros;selecting security warnings
 StarOffice Writer : magnifiers
 StarOffice Writer : mail merge
-StarOffice Writer : Mail Merge feature in Microsoft Office
 StarOffice Writer : manual hyphenation in text
 StarOffice Writer : manual numbering in text
 StarOffice Writer : manual page breaks
@@ -10254,7 +10157,6 @@ StarOffice Writer : margins;setting with the mouse
 StarOffice Writer : margins;shadows
 StarOffice Writer : marking changes
 StarOffice Writer : marking, see selecting
-StarOffice Writer : Markup feature in Microsoft Office
 StarOffice Writer : master documents
 StarOffice Writer : master documents;creating/editing/exporting
 StarOffice Writer : master documents;properties
@@ -10314,9 +10216,9 @@ StarOffice Writer : moving;text sections
 StarOffice Writer : moving;toolbars
 StarOffice Writer : moving;using guide lines in presentations
 StarOffice Writer : MS ADO interface (Base)
+StarOffice Writer : multi-column text
 StarOffice Writer : multi-line titles in forms
 StarOffice Writer : multi-page view of documents
-StarOffice Writer : multicolumn text
 StarOffice Writer : multiple documents
 StarOffice Writer : multiple documents;indexes
 StarOffice Writer : multiple documents;opening
@@ -10364,10 +10266,9 @@ StarOffice Writer : non-breaking dashes
 StarOffice Writer : non-breaking spaces (Writer)
 StarOffice Writer : non-printing characters (Writer)
 StarOffice Writer : non-printing text
-StarOffice Writer : non-printing text - Creating Non-printing Text
 StarOffice Writer : notes
 StarOffice Writer : notes;displaying (Calc)
-StarOffice Writer : notes;inserting/editing/deleting
+StarOffice Writer : notes;inserting/editing/deleting/printing
 StarOffice Writer : notes;printing in text
 StarOffice Writer : number formats
 StarOffice Writer : number formats;codes
@@ -10660,7 +10561,6 @@ StarOffice Writer : pictures;scanning
 StarOffice Writer : pie charts
 StarOffice Writer : pie charts;options
 StarOffice Writer : pie charts 
-StarOffice Writer : Pivot tables feature in Microsoft Office
 StarOffice Writer : pixel editor
 StarOffice Writer : pixel graphics
 StarOffice Writer : pixel graphics;inserting and editing
@@ -10746,7 +10646,7 @@ StarOffice Writer : printing;fitting to pages in presentations
 StarOffice Writer : printing;fitting to pages in StarOffice Math
 StarOffice Writer : printing;formulas in StarOffice Math
 StarOffice Writer : printing;hidden pages of presentations
-StarOffice Writer : printing;hiding text from printing
+StarOffice Writer : printing;hiding text frames from printing
 StarOffice Writer : printing;in original size in StarOffice Math
 StarOffice Writer : printing;individual brochures
 StarOffice Writer : printing;left/right pages
@@ -10849,7 +10749,6 @@ StarOffice Writer : references;in Writer tables
 StarOffice Writer : references;inserting cross-references
 StarOffice Writer : references;iterative (Calc)
 StarOffice Writer : references;modifying cross-references
-StarOffice Writer : Refresh Data feature in Microsoft Office
 StarOffice Writer : refusing word completions
 StarOffice Writer : register-true
 StarOffice Writer : register-true;definition
@@ -10890,7 +10789,6 @@ StarOffice Writer : reorganizing charts
 StarOffice Writer : repeating
 StarOffice Writer : repeating;commands
 StarOffice Writer : repeating;table headings after page breaks
-StarOffice Writer : Replace text as you type feature in Microsoft Office
 StarOffice Writer : replacement options
 StarOffice Writer : replacement table
 StarOffice Writer : replacing
@@ -11069,7 +10967,6 @@ StarOffice Writer : shadows;characters
 StarOffice Writer : shadows;characters, using context menu
 StarOffice Writer : shadows;headers/footers
 StarOffice Writer : sharing documents
-StarOffice Writer : sharing documents;collaboration
 StarOffice Writer : sharpening filter
 StarOffice Writer : sheet tabs
 StarOffice Writer : sheet tabs;displaying
@@ -11083,7 +10980,6 @@ StarOffice Writer : shortcut keys;general
 StarOffice Writer : shortcut keys;in databases
 StarOffice Writer : shortcut keys;in text documents
 StarOffice Writer : shortcut keys;StarOffice accessibility
-StarOffice Writer : Show/Hide feature in Microsoft Office
 StarOffice Writer : showing
 StarOffice Writer : showing;changes
 StarOffice Writer : showing;docked windows
@@ -11148,7 +11044,6 @@ StarOffice Writer : spellcheck;default languages
 StarOffice Writer : spellcheck;dialog
 StarOffice Writer : spellcheck;dictionary of exceptions
 StarOffice Writer : spellcheck;ignore list
-StarOffice Writer : Spelling and Grammar feature in Microsoft Office
 StarOffice Writer : spelling in thesaurus
 StarOffice Writer : spin button creation
 StarOffice Writer : splitting cells
@@ -11392,11 +11287,9 @@ StarOffice Writer : text;kerning
 StarOffice Writer : text;language selection
 StarOffice Writer : text;line numbers
 StarOffice Writer : text;line spacing
-StarOffice Writer : text;multicolumn
+StarOffice Writer : text;multi-column
 StarOffice Writer : text;navigating and selecting with keyboard
 StarOffice Writer : text;non-printable
-StarOffice Writer : text;non-printable - Creating Non-printing Text
-StarOffice Writer : text;not printing
 StarOffice Writer : text;number of words/characters
 StarOffice Writer : text;overwriting or inserting
 StarOffice Writer : text;printing in black
@@ -11510,7 +11403,6 @@ StarOffice Writer : tooltips
 StarOffice Writer : tooltips;extended tips
 StarOffice Writer : tooltips;help
 StarOffice Writer : totals in text tables
-StarOffice Writer : Track changes feature in Microsoft Office
 StarOffice Writer : traditional Chinese
 StarOffice Writer : traditional Chinese;translating to simplified chinese
 StarOffice Writer : transparency
@@ -11587,7 +11479,6 @@ StarOffice Writer : user-defined indexes
 StarOffice Writer : user-defined styles
 StarOffice Writer : user-defined styles;automatically replacing
 StarOffice Writer : UTF-8/UCS2 support
-StarOffice Writer : Validation feature in Microsoft Office
 StarOffice Writer : values
 StarOffice Writer : values;rounded as shown (Calc)
 StarOffice Writer : variable dates
@@ -11670,10 +11561,9 @@ StarOffice Writer : words;backgrounds
 StarOffice Writer : words;counting in text
 StarOffice Writer : words;disabling spellcheck
 StarOffice Writer : words;wrapping in cells
+StarOffice Writer : words;wrapping in CTL
 StarOffice Writer : words;wrapping/not wrapping in text
-StarOffice Writer : Workbook feature in Microsoft Office
 StarOffice Writer : working directory change
-StarOffice Writer : Worksheet feature in Microsoft Office
 StarOffice Writer : wrapping text
 StarOffice Writer : wrapping text;editing contours
 StarOffice Writer : wrapping text;in cells
@@ -11686,15 +11576,16 @@ StarOffice Writer : X axes;grid formatting
 StarOffice Writer : X axes;scaling
 StarOffice Writer : X axes;showing
 StarOffice Writer : XForms
+StarOffice Writer : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Writer : XForms;conditions
+StarOffice Writer : XForms;opening/editing
 StarOffice Writer : XML converters
 StarOffice Writer : XML file formats
 StarOffice Writer : XML filters
 StarOffice Writer : XML filters;creating/testing
 StarOffice Writer : XML filters;saving as package/installing/deleting
 StarOffice Writer : XML filters;settings
-StarOffice Writer : XML Forms
-StarOffice Writer : XSLT based filters
-StarOffice Writer : XSLT based filters;settings
+StarOffice Writer : XML Forms, see XForms
 StarOffice Writer : XSLT filters, see also XML filters
 StarOffice Writer : XY charts
 StarOffice Writer : Y axes
@@ -11745,23 +11636,6 @@ StarOffice Draw : activating;plug-ins
 StarOffice Draw : ActiveX control
 StarOffice Draw : Adabas D databases (base)
 StarOffice Draw : add-ons, see UNO components
-StarOffice Draw : adding
-StarOffice Draw : adding;automatic captions (Writer)
-StarOffice Draw : adding;buttons in toolbars
-StarOffice Draw : adding;conditions for XForm items
-StarOffice Draw : adding;draw objects
-StarOffice Draw : adding;Fontwork objects
-StarOffice Draw : adding;headers/footers in all slides
-StarOffice Draw : adding;items in Data Navigator
-StarOffice Draw : adding;namespaces in XForms
-StarOffice Draw : adding;paragraph borders
-StarOffice Draw : adding;pictures from Gallery
-StarOffice Draw : adding;pictures in Gallery
-StarOffice Draw : adding;plug-ins
-StarOffice Draw : adding;push buttons
-StarOffice Draw : adding;table borders
-StarOffice Draw : adding;text frames
-StarOffice Draw : adding;textures on chart bars
 StarOffice Draw : additional selection mode
 StarOffice Draw : address books
 StarOffice Draw : address books;LDAP server (Base)
@@ -11861,7 +11735,6 @@ StarOffice Draw : automatic slide changes;rehearse timings
 StarOffice Draw : automatic slide shows
 StarOffice Draw : automatic slide transition
 StarOffice Draw : AutoPilots, see wizards
-StarOffice Draw : AutoShapes feature in Microsoft Office
 StarOffice Draw : AutoValue
 StarOffice Draw : AutoValue;database tables
 StarOffice Draw : averages in charts
@@ -11979,7 +11852,6 @@ StarOffice Draw : cells;showing grid lines (Calc)
 StarOffice Draw : centered text
 StarOffice Draw : centimeters
 StarOffice Draw : certificates
-StarOffice Draw : Change Case feature in Microsoft Office
 StarOffice Draw : changes
 StarOffice Draw : changes;accepting or rejecting
 StarOffice Draw : changes;comparing to original
@@ -12076,7 +11948,6 @@ StarOffice Draw : closing;documents
 StarOffice Draw : closing;shapes
 StarOffice Draw : closing;toolbars
 StarOffice Draw : collaboration
-StarOffice Draw : collaboration;sharing documents
 StarOffice Draw : color bar
 StarOffice Draw : colors
 StarOffice Draw : colors;adding
@@ -12119,12 +11990,10 @@ StarOffice Draw : commands;repeating
 StarOffice Draw : commands;SQL
 StarOffice Draw : comments
 StarOffice Draw : comments;on changes
-StarOffice Draw : comments feature in Microsoft Office
 StarOffice Draw : common terms
 StarOffice Draw : common terms;Chinese dictionary
 StarOffice Draw : common terms;glossaries
 StarOffice Draw : common terms;Internet glossary
-StarOffice Draw : Compare and Merge feature in Microsoft Office
 StarOffice Draw : comparisons
 StarOffice Draw : comparisons;document versions
 StarOffice Draw : comparisons;operators in default filter dialog
@@ -12133,6 +12002,7 @@ StarOffice Draw : complete screen view
 StarOffice Draw : complex text layout
 StarOffice Draw : complex text layout;definition
 StarOffice Draw : complex text layout;enabling
+StarOffice Draw : complex text layout, see CTL
 StarOffice Draw : compose key to insert special characters
 StarOffice Draw : concatenation, see ampersand symbol
 StarOffice Draw : conditional separators
@@ -12230,6 +12100,7 @@ StarOffice Draw : cross-fading;creating cross-fades
 StarOffice Draw : cross-fading;slides
 StarOffice Draw : cross-fading;two draw objects
 StarOffice Draw : CTL
+StarOffice Draw : CTL;(not) wrapping words
 StarOffice Draw : CTL;complex text layout languages
 StarOffice Draw : CTL;definition
 StarOffice Draw : CTL;options
@@ -12277,7 +12148,9 @@ StarOffice Draw : data;sorting in forms
 StarOffice Draw : data;user data
 StarOffice Draw : data binding change in XForms
 StarOffice Draw : data labels in charts
-StarOffice Draw : Data Navigator display options
+StarOffice Draw : Data Navigator
+StarOffice Draw : Data Navigator;adding/editing items
+StarOffice Draw : Data Navigator;display options
 StarOffice Draw : data ranges in charts
 StarOffice Draw : data series
 StarOffice Draw : data source browser
@@ -12451,7 +12324,6 @@ StarOffice Draw : docking;definition
 StarOffice Draw : docking;toolbars
 StarOffice Draw : docking;windows
 StarOffice Draw : Document Converter Wizard
-StarOffice Draw : Document Map feature in Microsoft Office
 StarOffice Draw : Document Map, see Navigator
 StarOffice Draw : document types in StarOffice
 StarOffice Draw : documents
@@ -12558,9 +12430,7 @@ StarOffice Draw : editing;glue points
 StarOffice Draw : editing;gradients
 StarOffice Draw : editing;guides and snap points
 StarOffice Draw : editing;hyperlinks
-StarOffice Draw : editing;items in Data Navigator
 StarOffice Draw : editing;menus
-StarOffice Draw : editing;namespaces in XForms
 StarOffice Draw : editing;notes
 StarOffice Draw : editing;objects
 StarOffice Draw : editing;pictures
@@ -12826,7 +12696,6 @@ StarOffice Draw : forms;sorting data
 StarOffice Draw : forms;subforms
 StarOffice Draw : forms;wizards
 StarOffice Draw : forms;XForms
-StarOffice Draw : Formula Auditing feature in Microsoft Office
 StarOffice Draw : formula texts
 StarOffice Draw : formula texts;printing in StarOffice Math
 StarOffice Draw : formulas
@@ -13054,6 +12923,7 @@ StarOffice Draw : insert mode for entering text
 StarOffice Draw : inserting
 StarOffice Draw : inserting;3D objects
 StarOffice Draw : inserting;arrows
+StarOffice Draw : inserting;buttons in toolbars
 StarOffice Draw : inserting;callouts in presentations
 StarOffice Draw : inserting;cell ranges from spreadsheets
 StarOffice Draw : inserting;charts
@@ -13064,8 +12934,10 @@ StarOffice Draw : inserting;drawings
 StarOffice Draw : inserting;ellipses
 StarOffice Draw : inserting;files
 StarOffice Draw : inserting;floating frames
+StarOffice Draw : inserting;Fontwork objects
 StarOffice Draw : inserting;form fields
 StarOffice Draw : inserting;glue points
+StarOffice Draw : inserting;headers/footers in all slides
 StarOffice Draw : inserting;hyperlinks
 StarOffice Draw : inserting;layers
 StarOffice Draw : inserting;line breaks in cells
@@ -13076,17 +12948,22 @@ StarOffice Draw : inserting;notes
 StarOffice Draw : inserting;objects from files
 StarOffice Draw : inserting;objects from Gallery
 StarOffice Draw : inserting;OLE objects
+StarOffice Draw : inserting;paragraph borders
 StarOffice Draw : inserting;paragraph bullets
 StarOffice Draw : inserting;pictures
+StarOffice Draw : inserting;pictures in Gallery
 StarOffice Draw : inserting;plug-ins
 StarOffice Draw : inserting;polygons
+StarOffice Draw : inserting;push buttons
 StarOffice Draw : inserting;rectangles
 StarOffice Draw : inserting;slides
 StarOffice Draw : inserting;slides as links
 StarOffice Draw : inserting;slides from files
 StarOffice Draw : inserting;special characters
 StarOffice Draw : inserting;tab stops
+StarOffice Draw : inserting;text frames
 StarOffice Draw : inserting;text in presentations
+StarOffice Draw : inserting;textures on chart bars
 StarOffice Draw : installing
 StarOffice Draw : installing;ActiveX control
 StarOffice Draw : installing;mobile device filters
@@ -13204,7 +13081,6 @@ StarOffice Draw : lines;drawing in text
 StarOffice Draw : lines;editing points
 StarOffice Draw : lines;inserting
 StarOffice Draw : lines;removing automatic lines
-StarOffice Draw : Lines and Page Breaks feature in Microsoft Office
 StarOffice Draw : lines of text
 StarOffice Draw : lines of text;alignment
 StarOffice Draw : links
@@ -13254,14 +13130,12 @@ StarOffice Draw : macros;security warning dialog
 StarOffice Draw : macros;selecting security warnings
 StarOffice Draw : magnetic lines in presentations
 StarOffice Draw : magnifiers
-StarOffice Draw : Mail Merge feature in Microsoft Office
 StarOffice Draw : margins
 StarOffice Draw : margins;pages
 StarOffice Draw : margins;setting with the mouse
 StarOffice Draw : margins;shadows
 StarOffice Draw : marking changes
 StarOffice Draw : marking, see selecting
-StarOffice Draw : Markup feature in Microsoft Office
 StarOffice Draw : master layouts with headers and footers
 StarOffice Draw : master pages, see slide masters
 StarOffice Draw : master views
@@ -13362,7 +13236,7 @@ StarOffice Draw : notes
 StarOffice Draw : notes;adding to slides
 StarOffice Draw : notes;default formatting
 StarOffice Draw : notes;displaying (Calc)
-StarOffice Draw : notes;inserting/editing/deleting
+StarOffice Draw : notes;inserting/editing/deleting/printing
 StarOffice Draw : notes;printing in presentations
 StarOffice Draw : notes;printing in text
 StarOffice Draw : number formats
@@ -13585,7 +13459,6 @@ StarOffice Draw : pie charts
 StarOffice Draw : pie charts;options
 StarOffice Draw : pie charts 
 StarOffice Draw : pivot points of draw objects
-StarOffice Draw : Pivot tables feature in Microsoft Office
 StarOffice Draw : pixel editor
 StarOffice Draw : pixel graphics
 StarOffice Draw : pixel graphics;inserting and editing
@@ -13772,7 +13645,6 @@ StarOffice Draw : references
 StarOffice Draw : references;displaying in color (Calc)
 StarOffice Draw : references;expanding (Calc)
 StarOffice Draw : references;iterative (Calc)
-StarOffice Draw : Refresh Data feature in Microsoft Office
 StarOffice Draw : register-true
 StarOffice Draw : register-true;definition
 StarOffice Draw : registering
@@ -13805,7 +13677,6 @@ StarOffice Draw : renaming layers
 StarOffice Draw : reorganizing charts
 StarOffice Draw : repeating
 StarOffice Draw : repeating;commands
-StarOffice Draw : Replace text as you type feature in Microsoft Office
 StarOffice Draw : replacement options
 StarOffice Draw : replacement table
 StarOffice Draw : replacing
@@ -13945,7 +13816,6 @@ StarOffice Draw : shadows;borders
 StarOffice Draw : shadows;characters
 StarOffice Draw : shadows;characters, using context menu
 StarOffice Draw : sharing documents
-StarOffice Draw : sharing documents;collaboration
 StarOffice Draw : sharpening filter
 StarOffice Draw : shearing objects
 StarOffice Draw : sheet tabs
@@ -13961,7 +13831,6 @@ StarOffice Draw : shortcut keys;in databases
 StarOffice Draw : shortcut keys;in drawings
 StarOffice Draw : shortcut keys;in presentations
 StarOffice Draw : shortcut keys;StarOffice accessibility
-StarOffice Draw : Show/Hide feature in Microsoft Office
 StarOffice Draw : showing
 StarOffice Draw : showing;changes
 StarOffice Draw : showing;docked windows
@@ -14067,7 +13936,6 @@ StarOffice Draw : spellcheck;default languages
 StarOffice Draw : spellcheck;dialog
 StarOffice Draw : spellcheck;dictionary of exceptions
 StarOffice Draw : spellcheck;ignore list
-StarOffice Draw : Spelling and Grammar feature in Microsoft Office
 StarOffice Draw : spheres
 StarOffice Draw : spin button creation
 StarOffice Draw : splitting
@@ -14244,7 +14112,6 @@ StarOffice Draw : text documents
 StarOffice Draw : text documents;creating/opening
 StarOffice Draw : text documents;importing/exporting
 StarOffice Draw : text documents;inserting in slides
-StarOffice Draw : text documents;inserting in slides - Importing HTML Pages Into Presentations 
 StarOffice Draw : text documents;inserting spreadsheet cells
 StarOffice Draw : text documents;print settings
 StarOffice Draw : text documents;printing
@@ -14316,7 +14183,6 @@ StarOffice Draw : tooltips
 StarOffice Draw : tooltips;extended tips
 StarOffice Draw : tooltips;help
 StarOffice Draw : torus
-StarOffice Draw : Track changes feature in Microsoft Office
 StarOffice Draw : traditional Chinese
 StarOffice Draw : traditional Chinese;translating to simplified chinese
 StarOffice Draw : transition effects
@@ -14378,7 +14244,6 @@ StarOffice Draw : user-defined dictionaries;editing
 StarOffice Draw : user-defined styles
 StarOffice Draw : user-defined styles;automatically replacing
 StarOffice Draw : UTF-8/UCS2 support
-StarOffice Draw : Validation feature in Microsoft Office
 StarOffice Draw : values
 StarOffice Draw : values;rounded as shown (Calc)
 StarOffice Draw : variables
@@ -14450,9 +14315,8 @@ StarOffice Draw : WordArt, see Fontwork
 StarOffice Draw : words
 StarOffice Draw : words;automatically replacing
 StarOffice Draw : words;wrapping in cells
-StarOffice Draw : Workbook feature in Microsoft Office
+StarOffice Draw : words;wrapping in CTL
 StarOffice Draw : working directory change
-StarOffice Draw : Worksheet feature in Microsoft Office
 StarOffice Draw : wrapping text
 StarOffice Draw : wrapping text;in cells
 StarOffice Draw : write protection on/off
@@ -14463,15 +14327,16 @@ StarOffice Draw : X axes;grid formatting
 StarOffice Draw : X axes;scaling
 StarOffice Draw : X axes;showing
 StarOffice Draw : XForms
+StarOffice Draw : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Draw : XForms;conditions
+StarOffice Draw : XForms;opening/editing
 StarOffice Draw : XML converters
 StarOffice Draw : XML file formats
 StarOffice Draw : XML filters
 StarOffice Draw : XML filters;creating/testing
 StarOffice Draw : XML filters;saving as package/installing/deleting
 StarOffice Draw : XML filters;settings
-StarOffice Draw : XML Forms
-StarOffice Draw : XSLT based filters
-StarOffice Draw : XSLT based filters;settings
+StarOffice Draw : XML Forms, see XForms
 StarOffice Draw : XSLT filters, see also XML filters
 StarOffice Draw : XY charts
 StarOffice Draw : Y axes
@@ -14525,23 +14390,6 @@ StarOffice Impress : activating;plug-ins
 StarOffice Impress : ActiveX control
 StarOffice Impress : Adabas D databases (base)
 StarOffice Impress : add-ons, see UNO components
-StarOffice Impress : adding
-StarOffice Impress : adding;automatic captions (Writer)
-StarOffice Impress : adding;buttons in toolbars
-StarOffice Impress : adding;conditions for XForm items
-StarOffice Impress : adding;draw objects
-StarOffice Impress : adding;Fontwork objects
-StarOffice Impress : adding;headers/footers in all slides
-StarOffice Impress : adding;items in Data Navigator
-StarOffice Impress : adding;namespaces in XForms
-StarOffice Impress : adding;paragraph borders
-StarOffice Impress : adding;pictures from Gallery
-StarOffice Impress : adding;pictures in Gallery
-StarOffice Impress : adding;plug-ins
-StarOffice Impress : adding;push buttons
-StarOffice Impress : adding;table borders
-StarOffice Impress : adding;text frames
-StarOffice Impress : adding;textures on chart bars
 StarOffice Impress : additional selection mode
 StarOffice Impress : address books
 StarOffice Impress : address books;LDAP server (Base)
@@ -14641,7 +14489,6 @@ StarOffice Impress : automatic slide changes;rehearse timings
 StarOffice Impress : automatic slide shows
 StarOffice Impress : automatic slide transition
 StarOffice Impress : AutoPilots, see wizards
-StarOffice Impress : AutoShapes feature in Microsoft Office
 StarOffice Impress : AutoValue
 StarOffice Impress : AutoValue;database tables
 StarOffice Impress : averages in charts
@@ -14759,7 +14606,6 @@ StarOffice Impress : cells;showing grid lines (Calc)
 StarOffice Impress : centered text
 StarOffice Impress : centimeters
 StarOffice Impress : certificates
-StarOffice Impress : Change Case feature in Microsoft Office
 StarOffice Impress : changes
 StarOffice Impress : changes;accepting or rejecting
 StarOffice Impress : changes;comparing to original
@@ -14856,7 +14702,6 @@ StarOffice Impress : closing;documents
 StarOffice Impress : closing;shapes
 StarOffice Impress : closing;toolbars
 StarOffice Impress : collaboration
-StarOffice Impress : collaboration;sharing documents
 StarOffice Impress : color bar
 StarOffice Impress : colors
 StarOffice Impress : colors;adding
@@ -14899,12 +14744,10 @@ StarOffice Impress : commands;repeating
 StarOffice Impress : commands;SQL
 StarOffice Impress : comments
 StarOffice Impress : comments;on changes
-StarOffice Impress : comments feature in Microsoft Office
 StarOffice Impress : common terms
 StarOffice Impress : common terms;Chinese dictionary
 StarOffice Impress : common terms;glossaries
 StarOffice Impress : common terms;Internet glossary
-StarOffice Impress : Compare and Merge feature in Microsoft Office
 StarOffice Impress : comparisons
 StarOffice Impress : comparisons;document versions
 StarOffice Impress : comparisons;operators in default filter dialog
@@ -14913,6 +14756,7 @@ StarOffice Impress : complete screen view
 StarOffice Impress : complex text layout
 StarOffice Impress : complex text layout;definition
 StarOffice Impress : complex text layout;enabling
+StarOffice Impress : complex text layout, see CTL
 StarOffice Impress : compose key to insert special characters
 StarOffice Impress : concatenation, see ampersand symbol
 StarOffice Impress : conditional separators
@@ -15010,6 +14854,7 @@ StarOffice Impress : cross-fading;creating cross-fades
 StarOffice Impress : cross-fading;slides
 StarOffice Impress : cross-fading;two draw objects
 StarOffice Impress : CTL
+StarOffice Impress : CTL;(not) wrapping words
 StarOffice Impress : CTL;complex text layout languages
 StarOffice Impress : CTL;definition
 StarOffice Impress : CTL;options
@@ -15057,7 +14902,9 @@ StarOffice Impress : data;sorting in forms
 StarOffice Impress : data;user data
 StarOffice Impress : data binding change in XForms
 StarOffice Impress : data labels in charts
-StarOffice Impress : Data Navigator display options
+StarOffice Impress : Data Navigator
+StarOffice Impress : Data Navigator;adding/editing items
+StarOffice Impress : Data Navigator;display options
 StarOffice Impress : data ranges in charts
 StarOffice Impress : data series
 StarOffice Impress : data source browser
@@ -15231,7 +15078,6 @@ StarOffice Impress : docking;definition
 StarOffice Impress : docking;toolbars
 StarOffice Impress : docking;windows
 StarOffice Impress : Document Converter Wizard
-StarOffice Impress : Document Map feature in Microsoft Office
 StarOffice Impress : Document Map, see Navigator
 StarOffice Impress : document types in StarOffice
 StarOffice Impress : documents
@@ -15338,9 +15184,7 @@ StarOffice Impress : editing;glue points
 StarOffice Impress : editing;gradients
 StarOffice Impress : editing;guides and snap points
 StarOffice Impress : editing;hyperlinks
-StarOffice Impress : editing;items in Data Navigator
 StarOffice Impress : editing;menus
-StarOffice Impress : editing;namespaces in XForms
 StarOffice Impress : editing;notes
 StarOffice Impress : editing;objects
 StarOffice Impress : editing;pictures
@@ -15606,7 +15450,6 @@ StarOffice Impress : forms;sorting data
 StarOffice Impress : forms;subforms
 StarOffice Impress : forms;wizards
 StarOffice Impress : forms;XForms
-StarOffice Impress : Formula Auditing feature in Microsoft Office
 StarOffice Impress : formula texts
 StarOffice Impress : formula texts;printing in StarOffice Math
 StarOffice Impress : formulas
@@ -15834,6 +15677,7 @@ StarOffice Impress : insert mode for entering text
 StarOffice Impress : inserting
 StarOffice Impress : inserting;3D objects
 StarOffice Impress : inserting;arrows
+StarOffice Impress : inserting;buttons in toolbars
 StarOffice Impress : inserting;callouts in presentations
 StarOffice Impress : inserting;cell ranges from spreadsheets
 StarOffice Impress : inserting;charts
@@ -15844,8 +15688,10 @@ StarOffice Impress : inserting;drawings
 StarOffice Impress : inserting;ellipses
 StarOffice Impress : inserting;files
 StarOffice Impress : inserting;floating frames
+StarOffice Impress : inserting;Fontwork objects
 StarOffice Impress : inserting;form fields
 StarOffice Impress : inserting;glue points
+StarOffice Impress : inserting;headers/footers in all slides
 StarOffice Impress : inserting;hyperlinks
 StarOffice Impress : inserting;layers
 StarOffice Impress : inserting;line breaks in cells
@@ -15856,17 +15702,22 @@ StarOffice Impress : inserting;notes
 StarOffice Impress : inserting;objects from files
 StarOffice Impress : inserting;objects from Gallery
 StarOffice Impress : inserting;OLE objects
+StarOffice Impress : inserting;paragraph borders
 StarOffice Impress : inserting;paragraph bullets
 StarOffice Impress : inserting;pictures
+StarOffice Impress : inserting;pictures in Gallery
 StarOffice Impress : inserting;plug-ins
 StarOffice Impress : inserting;polygons
+StarOffice Impress : inserting;push buttons
 StarOffice Impress : inserting;rectangles
 StarOffice Impress : inserting;slides
 StarOffice Impress : inserting;slides as links
 StarOffice Impress : inserting;slides from files
 StarOffice Impress : inserting;special characters
 StarOffice Impress : inserting;tab stops
+StarOffice Impress : inserting;text frames
 StarOffice Impress : inserting;text in presentations
+StarOffice Impress : inserting;textures on chart bars
 StarOffice Impress : installing
 StarOffice Impress : installing;ActiveX control
 StarOffice Impress : installing;mobile device filters
@@ -15984,7 +15835,6 @@ StarOffice Impress : lines;drawing in text
 StarOffice Impress : lines;editing points
 StarOffice Impress : lines;inserting
 StarOffice Impress : lines;removing automatic lines
-StarOffice Impress : Lines and Page Breaks feature in Microsoft Office
 StarOffice Impress : lines of text
 StarOffice Impress : lines of text;alignment
 StarOffice Impress : links
@@ -16034,14 +15884,12 @@ StarOffice Impress : macros;security warning dialog
 StarOffice Impress : macros;selecting security warnings
 StarOffice Impress : magnetic lines in presentations
 StarOffice Impress : magnifiers
-StarOffice Impress : Mail Merge feature in Microsoft Office
 StarOffice Impress : margins
 StarOffice Impress : margins;pages
 StarOffice Impress : margins;setting with the mouse
 StarOffice Impress : margins;shadows
 StarOffice Impress : marking changes
 StarOffice Impress : marking, see selecting
-StarOffice Impress : Markup feature in Microsoft Office
 StarOffice Impress : master layouts with headers and footers
 StarOffice Impress : master pages, see slide masters
 StarOffice Impress : master views
@@ -16142,7 +15990,7 @@ StarOffice Impress : notes
 StarOffice Impress : notes;adding to slides
 StarOffice Impress : notes;default formatting
 StarOffice Impress : notes;displaying (Calc)
-StarOffice Impress : notes;inserting/editing/deleting
+StarOffice Impress : notes;inserting/editing/deleting/printing
 StarOffice Impress : notes;printing in presentations
 StarOffice Impress : notes;printing in text
 StarOffice Impress : number formats
@@ -16365,7 +16213,6 @@ StarOffice Impress : pie charts
 StarOffice Impress : pie charts;options
 StarOffice Impress : pie charts 
 StarOffice Impress : pivot points of draw objects
-StarOffice Impress : Pivot tables feature in Microsoft Office
 StarOffice Impress : pixel editor
 StarOffice Impress : pixel graphics
 StarOffice Impress : pixel graphics;inserting and editing
@@ -16552,7 +16399,6 @@ StarOffice Impress : references
 StarOffice Impress : references;displaying in color (Calc)
 StarOffice Impress : references;expanding (Calc)
 StarOffice Impress : references;iterative (Calc)
-StarOffice Impress : Refresh Data feature in Microsoft Office
 StarOffice Impress : register-true
 StarOffice Impress : register-true;definition
 StarOffice Impress : registering
@@ -16585,7 +16431,6 @@ StarOffice Impress : renaming layers
 StarOffice Impress : reorganizing charts
 StarOffice Impress : repeating
 StarOffice Impress : repeating;commands
-StarOffice Impress : Replace text as you type feature in Microsoft Office
 StarOffice Impress : replacement options
 StarOffice Impress : replacement table
 StarOffice Impress : replacing
@@ -16725,7 +16570,6 @@ StarOffice Impress : shadows;borders
 StarOffice Impress : shadows;characters
 StarOffice Impress : shadows;characters, using context menu
 StarOffice Impress : sharing documents
-StarOffice Impress : sharing documents;collaboration
 StarOffice Impress : sharpening filter
 StarOffice Impress : shearing objects
 StarOffice Impress : sheet tabs
@@ -16741,7 +16585,6 @@ StarOffice Impress : shortcut keys;in databases
 StarOffice Impress : shortcut keys;in drawings
 StarOffice Impress : shortcut keys;in presentations
 StarOffice Impress : shortcut keys;StarOffice accessibility
-StarOffice Impress : Show/Hide feature in Microsoft Office
 StarOffice Impress : showing
 StarOffice Impress : showing;changes
 StarOffice Impress : showing;docked windows
@@ -16847,7 +16690,6 @@ StarOffice Impress : spellcheck;default languages
 StarOffice Impress : spellcheck;dialog
 StarOffice Impress : spellcheck;dictionary of exceptions
 StarOffice Impress : spellcheck;ignore list
-StarOffice Impress : Spelling and Grammar feature in Microsoft Office
 StarOffice Impress : spheres
 StarOffice Impress : spin button creation
 StarOffice Impress : splitting
@@ -17024,7 +16866,6 @@ StarOffice Impress : text documents
 StarOffice Impress : text documents;creating/opening
 StarOffice Impress : text documents;importing/exporting
 StarOffice Impress : text documents;inserting in slides
-StarOffice Impress : text documents;inserting in slides - Importing HTML Pages Into Presentations 
 StarOffice Impress : text documents;inserting spreadsheet cells
 StarOffice Impress : text documents;print settings
 StarOffice Impress : text documents;printing
@@ -17096,7 +16937,6 @@ StarOffice Impress : tooltips
 StarOffice Impress : tooltips;extended tips
 StarOffice Impress : tooltips;help
 StarOffice Impress : torus
-StarOffice Impress : Track changes feature in Microsoft Office
 StarOffice Impress : traditional Chinese
 StarOffice Impress : traditional Chinese;translating to simplified chinese
 StarOffice Impress : transition effects
@@ -17158,7 +16998,6 @@ StarOffice Impress : user-defined dictionaries;editing
 StarOffice Impress : user-defined styles
 StarOffice Impress : user-defined styles;automatically replacing
 StarOffice Impress : UTF-8/UCS2 support
-StarOffice Impress : Validation feature in Microsoft Office
 StarOffice Impress : values
 StarOffice Impress : values;rounded as shown (Calc)
 StarOffice Impress : variables
@@ -17230,9 +17069,8 @@ StarOffice Impress : WordArt, see Fontwork
 StarOffice Impress : words
 StarOffice Impress : words;automatically replacing
 StarOffice Impress : words;wrapping in cells
-StarOffice Impress : Workbook feature in Microsoft Office
+StarOffice Impress : words;wrapping in CTL
 StarOffice Impress : working directory change
-StarOffice Impress : Worksheet feature in Microsoft Office
 StarOffice Impress : wrapping text
 StarOffice Impress : wrapping text;in cells
 StarOffice Impress : write protection on/off
@@ -17243,15 +17081,16 @@ StarOffice Impress : X axes;grid formatting
 StarOffice Impress : X axes;scaling
 StarOffice Impress : X axes;showing
 StarOffice Impress : XForms
+StarOffice Impress : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Impress : XForms;conditions
+StarOffice Impress : XForms;opening/editing
 StarOffice Impress : XML converters
 StarOffice Impress : XML file formats
 StarOffice Impress : XML filters
 StarOffice Impress : XML filters;creating/testing
 StarOffice Impress : XML filters;saving as package/installing/deleting
 StarOffice Impress : XML filters;settings
-StarOffice Impress : XML Forms
-StarOffice Impress : XSLT based filters
-StarOffice Impress : XSLT based filters;settings
+StarOffice Impress : XML Forms, see XForms
 StarOffice Impress : XSLT filters, see also XML filters
 StarOffice Impress : XY charts
 StarOffice Impress : Y axes
@@ -17296,21 +17135,6 @@ StarOffice Chart : activating;plug-ins
 StarOffice Chart : ActiveX control
 StarOffice Chart : Adabas D databases (base)
 StarOffice Chart : add-ons, see UNO components
-StarOffice Chart : adding
-StarOffice Chart : adding;automatic captions (Writer)
-StarOffice Chart : adding;buttons in toolbars
-StarOffice Chart : adding;conditions for XForm items
-StarOffice Chart : adding;draw objects
-StarOffice Chart : adding;Fontwork objects
-StarOffice Chart : adding;items in Data Navigator
-StarOffice Chart : adding;namespaces in XForms
-StarOffice Chart : adding;paragraph borders
-StarOffice Chart : adding;pictures from Gallery
-StarOffice Chart : adding;pictures in Gallery
-StarOffice Chart : adding;plug-ins
-StarOffice Chart : adding;push buttons
-StarOffice Chart : adding;table borders
-StarOffice Chart : adding;textures on chart bars
 StarOffice Chart : additional selection mode
 StarOffice Chart : address books
 StarOffice Chart : address books;LDAP server (Base)
@@ -17387,7 +17211,6 @@ StarOffice Chart : automatic line breaks
 StarOffice Chart : automatic lines/borders in text
 StarOffice Chart : automatic saving
 StarOffice Chart : AutoPilots, see wizards
-StarOffice Chart : AutoShapes feature in Microsoft Office
 StarOffice Chart : AutoValue
 StarOffice Chart : AutoValue;database tables
 StarOffice Chart : averages in charts
@@ -17492,7 +17315,6 @@ StarOffice Chart : cells;showing grid lines (Calc)
 StarOffice Chart : centered text
 StarOffice Chart : centimeters
 StarOffice Chart : certificates
-StarOffice Chart : Change Case feature in Microsoft Office
 StarOffice Chart : changes
 StarOffice Chart : changes;accepting or rejecting
 StarOffice Chart : changes;comparing to original
@@ -17580,7 +17402,6 @@ StarOffice Chart : closing
 StarOffice Chart : closing;documents
 StarOffice Chart : closing;toolbars
 StarOffice Chart : collaboration
-StarOffice Chart : collaboration;sharing documents
 StarOffice Chart : color bar
 StarOffice Chart : colors
 StarOffice Chart : colors;adding
@@ -17613,12 +17434,10 @@ StarOffice Chart : commands;repeating
 StarOffice Chart : commands;SQL
 StarOffice Chart : comments
 StarOffice Chart : comments;on changes
-StarOffice Chart : comments feature in Microsoft Office
 StarOffice Chart : common terms
 StarOffice Chart : common terms;Chinese dictionary
 StarOffice Chart : common terms;glossaries
 StarOffice Chart : common terms;Internet glossary
-StarOffice Chart : Compare and Merge feature in Microsoft Office
 StarOffice Chart : comparisons
 StarOffice Chart : comparisons;document versions
 StarOffice Chart : comparisons;operators in default filter dialog
@@ -17627,6 +17446,7 @@ StarOffice Chart : complete screen view
 StarOffice Chart : complex text layout
 StarOffice Chart : complex text layout;definition
 StarOffice Chart : complex text layout;enabling
+StarOffice Chart : complex text layout, see CTL
 StarOffice Chart : compose key to insert special characters
 StarOffice Chart : concatenation, see ampersand symbol
 StarOffice Chart : conditional separators
@@ -17697,6 +17517,7 @@ StarOffice Chart : crash reports
 StarOffice Chart : criteria of query design (Base)
 StarOffice Chart : cropping pictures
 StarOffice Chart : CTL
+StarOffice Chart : CTL;(not) wrapping words
 StarOffice Chart : CTL;complex text layout languages
 StarOffice Chart : CTL;definition
 StarOffice Chart : CTL;options
@@ -17734,7 +17555,9 @@ StarOffice Chart : data;sorting in forms
 StarOffice Chart : data;user data
 StarOffice Chart : data binding change in XForms
 StarOffice Chart : data labels in charts
-StarOffice Chart : Data Navigator display options
+StarOffice Chart : Data Navigator
+StarOffice Chart : Data Navigator;adding/editing items
+StarOffice Chart : Data Navigator;display options
 StarOffice Chart : data ranges in charts
 StarOffice Chart : data series
 StarOffice Chart : data source browser
@@ -17892,7 +17715,6 @@ StarOffice Chart : docking;definition
 StarOffice Chart : docking;toolbars
 StarOffice Chart : docking;windows
 StarOffice Chart : Document Converter Wizard
-StarOffice Chart : Document Map feature in Microsoft Office
 StarOffice Chart : Document Map, see Navigator
 StarOffice Chart : document types in StarOffice
 StarOffice Chart : documents
@@ -17976,9 +17798,7 @@ StarOffice Chart : editing;database tables and queries
 StarOffice Chart : editing;draw objects
 StarOffice Chart : editing;Fontwork objects
 StarOffice Chart : editing;hyperlinks
-StarOffice Chart : editing;items in Data Navigator
 StarOffice Chart : editing;menus
-StarOffice Chart : editing;namespaces in XForms
 StarOffice Chart : editing;notes
 StarOffice Chart : editing;objects
 StarOffice Chart : editing;pictures
@@ -18204,7 +18024,6 @@ StarOffice Chart : forms;sorting data
 StarOffice Chart : forms;subforms
 StarOffice Chart : forms;wizards
 StarOffice Chart : forms;XForms
-StarOffice Chart : Formula Auditing feature in Microsoft Office
 StarOffice Chart : formula texts
 StarOffice Chart : formula texts;printing in StarOffice Math
 StarOffice Chart : formulas
@@ -18385,6 +18204,7 @@ StarOffice Chart : inner joins (Base)
 StarOffice Chart : input method window
 StarOffice Chart : insert mode for entering text
 StarOffice Chart : inserting
+StarOffice Chart : inserting;buttons in toolbars
 StarOffice Chart : inserting;cell ranges from spreadsheets
 StarOffice Chart : inserting;charts
 StarOffice Chart : inserting;clipboard options
@@ -18392,6 +18212,7 @@ StarOffice Chart : inserting;data from text documents
 StarOffice Chart : inserting;datasource records in spreadsheets
 StarOffice Chart : inserting;drawings
 StarOffice Chart : inserting;floating frames
+StarOffice Chart : inserting;Fontwork objects
 StarOffice Chart : inserting;form fields
 StarOffice Chart : inserting;hyperlinks
 StarOffice Chart : inserting;line breaks in cells
@@ -18400,10 +18221,14 @@ StarOffice Chart : inserting;new text tables defaults
 StarOffice Chart : inserting;notes
 StarOffice Chart : inserting;objects from Gallery
 StarOffice Chart : inserting;OLE objects
+StarOffice Chart : inserting;paragraph borders
 StarOffice Chart : inserting;paragraph bullets
+StarOffice Chart : inserting;pictures in Gallery
 StarOffice Chart : inserting;plug-ins
+StarOffice Chart : inserting;push buttons
 StarOffice Chart : inserting;special characters
 StarOffice Chart : inserting;tab stops
+StarOffice Chart : inserting;textures on chart bars
 StarOffice Chart : installing
 StarOffice Chart : installing;ActiveX control
 StarOffice Chart : installing;mobile device filters
@@ -18496,7 +18321,6 @@ StarOffice Chart : lines;draw functions
 StarOffice Chart : lines;drawing in text
 StarOffice Chart : lines;editing points
 StarOffice Chart : lines;removing automatic lines
-StarOffice Chart : Lines and Page Breaks feature in Microsoft Office
 StarOffice Chart : lines of text
 StarOffice Chart : lines of text;alignment
 StarOffice Chart : links
@@ -18539,14 +18363,12 @@ StarOffice Chart : macros;security
 StarOffice Chart : macros;security warning dialog
 StarOffice Chart : macros;selecting security warnings
 StarOffice Chart : magnifiers
-StarOffice Chart : Mail Merge feature in Microsoft Office
 StarOffice Chart : margins
 StarOffice Chart : margins;pages
 StarOffice Chart : margins;setting with the mouse
 StarOffice Chart : margins;shadows
 StarOffice Chart : marking changes
 StarOffice Chart : marking, see selecting
-StarOffice Chart : Markup feature in Microsoft Office
 StarOffice Chart : Math formula editor
 StarOffice Chart : mean value lines in charts
 StarOffice Chart : measurement units
@@ -18628,7 +18450,7 @@ StarOffice Chart : non-breaking spaces (Writer)
 StarOffice Chart : non-printing characters (Writer)
 StarOffice Chart : notes
 StarOffice Chart : notes;displaying (Calc)
-StarOffice Chart : notes;inserting/editing/deleting
+StarOffice Chart : notes;inserting/editing/deleting/printing
 StarOffice Chart : notes;printing in text
 StarOffice Chart : number formats
 StarOffice Chart : number formats;codes
@@ -18822,7 +18644,6 @@ StarOffice Chart : pictures;scaling/resizing
 StarOffice Chart : pie charts
 StarOffice Chart : pie charts;options
 StarOffice Chart : pie charts 
-StarOffice Chart : Pivot tables feature in Microsoft Office
 StarOffice Chart : pixel editor
 StarOffice Chart : pixel graphics
 StarOffice Chart : pixel graphics;inserting and editing
@@ -18985,7 +18806,6 @@ StarOffice Chart : references
 StarOffice Chart : references;displaying in color (Calc)
 StarOffice Chart : references;expanding (Calc)
 StarOffice Chart : references;iterative (Calc)
-StarOffice Chart : Refresh Data feature in Microsoft Office
 StarOffice Chart : register-true
 StarOffice Chart : register-true;definition
 StarOffice Chart : registering
@@ -19016,7 +18836,6 @@ StarOffice Chart : removing, see also deleting
 StarOffice Chart : reorganizing charts
 StarOffice Chart : repeating
 StarOffice Chart : repeating;commands
-StarOffice Chart : Replace text as you type feature in Microsoft Office
 StarOffice Chart : replacement options
 StarOffice Chart : replacement table
 StarOffice Chart : replacing
@@ -19144,7 +18963,6 @@ StarOffice Chart : shadows;borders
 StarOffice Chart : shadows;characters
 StarOffice Chart : shadows;characters, using context menu
 StarOffice Chart : sharing documents
-StarOffice Chart : sharing documents;collaboration
 StarOffice Chart : sharpening filter
 StarOffice Chart : sheet tabs
 StarOffice Chart : sheet tabs;displaying
@@ -19156,7 +18974,6 @@ StarOffice Chart : shortcut keys;charts
 StarOffice Chart : shortcut keys;general
 StarOffice Chart : shortcut keys;in databases
 StarOffice Chart : shortcut keys;StarOffice accessibility
-StarOffice Chart : Show/Hide feature in Microsoft Office
 StarOffice Chart : showing
 StarOffice Chart : showing;changes
 StarOffice Chart : showing;docked windows
@@ -19211,7 +19028,6 @@ StarOffice Chart : spellcheck;default languages
 StarOffice Chart : spellcheck;dialog
 StarOffice Chart : spellcheck;dictionary of exceptions
 StarOffice Chart : spellcheck;ignore list
-StarOffice Chart : Spelling and Grammar feature in Microsoft Office
 StarOffice Chart : spin button creation
 StarOffice Chart : spoolfiles with Xprinter
 StarOffice Chart : spreadsheets
@@ -19425,7 +19241,6 @@ StarOffice Chart : tools bar
 StarOffice Chart : tooltips
 StarOffice Chart : tooltips;extended tips
 StarOffice Chart : tooltips;help
-StarOffice Chart : Track changes feature in Microsoft Office
 StarOffice Chart : traditional Chinese
 StarOffice Chart : traditional Chinese;translating to simplified chinese
 StarOffice Chart : transparency
@@ -19481,7 +19296,6 @@ StarOffice Chart : user-defined dictionaries;editing
 StarOffice Chart : user-defined styles
 StarOffice Chart : user-defined styles;automatically replacing
 StarOffice Chart : UTF-8/UCS2 support
-StarOffice Chart : Validation feature in Microsoft Office
 StarOffice Chart : values
 StarOffice Chart : values;rounded as shown (Calc)
 StarOffice Chart : variables
@@ -19546,9 +19360,8 @@ StarOffice Chart : WordArt, see Fontwork
 StarOffice Chart : words
 StarOffice Chart : words;automatically replacing
 StarOffice Chart : words;wrapping in cells
-StarOffice Chart : Workbook feature in Microsoft Office
+StarOffice Chart : words;wrapping in CTL
 StarOffice Chart : working directory change
-StarOffice Chart : Worksheet feature in Microsoft Office
 StarOffice Chart : wrapping text
 StarOffice Chart : wrapping text;in cells
 StarOffice Chart : write protection on/off
@@ -19559,15 +19372,16 @@ StarOffice Chart : X axes;grid formatting
 StarOffice Chart : X axes;scaling
 StarOffice Chart : X axes;showing
 StarOffice Chart : XForms
+StarOffice Chart : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Chart : XForms;conditions
+StarOffice Chart : XForms;opening/editing
 StarOffice Chart : XML converters
 StarOffice Chart : XML file formats
 StarOffice Chart : XML filters
 StarOffice Chart : XML filters;creating/testing
 StarOffice Chart : XML filters;saving as package/installing/deleting
 StarOffice Chart : XML filters;settings
-StarOffice Chart : XML Forms
-StarOffice Chart : XSLT based filters
-StarOffice Chart : XSLT based filters;settings
+StarOffice Chart : XML Forms, see XForms
 StarOffice Chart : XSLT filters, see also XML filters
 StarOffice Chart : XY charts
 StarOffice Chart : Y axes
@@ -19612,21 +19426,6 @@ StarOffice Math : activating;plug-ins
 StarOffice Math : ActiveX control
 StarOffice Math : Adabas D databases (base)
 StarOffice Math : add-ons, see UNO components
-StarOffice Math : adding
-StarOffice Math : adding;automatic captions (Writer)
-StarOffice Math : adding;buttons in toolbars
-StarOffice Math : adding;conditions for XForm items
-StarOffice Math : adding;draw objects
-StarOffice Math : adding;Fontwork objects
-StarOffice Math : adding;items in Data Navigator
-StarOffice Math : adding;namespaces in XForms
-StarOffice Math : adding;paragraph borders
-StarOffice Math : adding;pictures from Gallery
-StarOffice Math : adding;pictures in Gallery
-StarOffice Math : adding;plug-ins
-StarOffice Math : adding;push buttons
-StarOffice Math : adding;table borders
-StarOffice Math : adding;textures on chart bars
 StarOffice Math : addition signs
 StarOffice Math : additional selection mode
 StarOffice Math : address books
@@ -19727,7 +19526,6 @@ StarOffice Math : automatic line breaks
 StarOffice Math : automatic lines/borders in text
 StarOffice Math : automatic saving
 StarOffice Math : AutoPilots, see wizards
-StarOffice Math : AutoShapes feature in Microsoft Office
 StarOffice Math : AutoValue
 StarOffice Math : AutoValue;database tables
 StarOffice Math : axes in charts
@@ -19856,7 +19654,6 @@ StarOffice Math : centered horizontally;alignment (Math)
 StarOffice Math : centered text
 StarOffice Math : centimeters
 StarOffice Math : certificates
-StarOffice Math : Change Case feature in Microsoft Office
 StarOffice Math : changes
 StarOffice Math : changes;accepting automatically
 StarOffice Math : changes;accepting or rejecting
@@ -19923,7 +19720,6 @@ StarOffice Math : closing
 StarOffice Math : closing;documents
 StarOffice Math : closing;toolbars
 StarOffice Math : collaboration
-StarOffice Math : collaboration;sharing documents
 StarOffice Math : color bar
 StarOffice Math : colored characters
 StarOffice Math : colors
@@ -19955,12 +19751,10 @@ StarOffice Math : commands;SQL
 StarOffice Math : comments
 StarOffice Math : comments;entering in StarOffice Math
 StarOffice Math : comments;on changes
-StarOffice Math : comments feature in Microsoft Office
 StarOffice Math : common terms
 StarOffice Math : common terms;Chinese dictionary
 StarOffice Math : common terms;glossaries
 StarOffice Math : common terms;Internet glossary
-StarOffice Math : Compare and Merge feature in Microsoft Office
 StarOffice Math : comparisons
 StarOffice Math : comparisons;document versions
 StarOffice Math : comparisons;operators in default filter dialog
@@ -19972,6 +19766,7 @@ StarOffice Math : complex numbers;symbols
 StarOffice Math : complex text layout
 StarOffice Math : complex text layout;definition
 StarOffice Math : complex text layout;enabling
+StarOffice Math : complex text layout, see CTL
 StarOffice Math : compose key to insert special characters
 StarOffice Math : concatenating math symbols
 StarOffice Math : concatenation, see ampersand symbol
@@ -20052,6 +19847,7 @@ StarOffice Math : crash reports
 StarOffice Math : criteria of query design (Base)
 StarOffice Math : cropping pictures
 StarOffice Math : CTL
+StarOffice Math : CTL;(not) wrapping words
 StarOffice Math : CTL;complex text layout languages
 StarOffice Math : CTL;definition
 StarOffice Math : CTL;options
@@ -20089,7 +19885,9 @@ StarOffice Math : data;read-only
 StarOffice Math : data;sorting in forms
 StarOffice Math : data;user data
 StarOffice Math : data binding change in XForms
-StarOffice Math : Data Navigator display options
+StarOffice Math : Data Navigator
+StarOffice Math : Data Navigator;adding/editing items
+StarOffice Math : Data Navigator;display options
 StarOffice Math : data source browser
 StarOffice Math : data source explorer
 StarOffice Math : data source view
@@ -20256,7 +20054,6 @@ StarOffice Math : docking;definition
 StarOffice Math : docking;toolbars
 StarOffice Math : docking;windows
 StarOffice Math : Document Converter Wizard
-StarOffice Math : Document Map feature in Microsoft Office
 StarOffice Math : Document Map, see Navigator
 StarOffice Math : document types in StarOffice
 StarOffice Math : documents
@@ -20346,9 +20143,7 @@ StarOffice Math : editing;database tables and queries
 StarOffice Math : editing;draw objects
 StarOffice Math : editing;Fontwork objects
 StarOffice Math : editing;hyperlinks
-StarOffice Math : editing;items in Data Navigator
 StarOffice Math : editing;menus
-StarOffice Math : editing;namespaces in XForms
 StarOffice Math : editing;notes
 StarOffice Math : editing;objects
 StarOffice Math : editing;pictures
@@ -20596,7 +20391,6 @@ StarOffice Math : forms;sorting data
 StarOffice Math : forms;subforms
 StarOffice Math : forms;wizards
 StarOffice Math : forms;XForms
-StarOffice Math : Formula Auditing feature in Microsoft Office
 StarOffice Math : formula cursor in StarOffice Math
 StarOffice Math : formula display sizes
 StarOffice Math : formula fonts
@@ -20820,6 +20614,7 @@ StarOffice Math : input method window
 StarOffice Math : insert mode for entering text
 StarOffice Math : inserting
 StarOffice Math : inserting;brackets
+StarOffice Math : inserting;buttons in toolbars
 StarOffice Math : inserting;cell ranges from spreadsheets
 StarOffice Math : inserting;charts
 StarOffice Math : inserting;clipboard options
@@ -20828,6 +20623,7 @@ StarOffice Math : inserting;data from text documents
 StarOffice Math : inserting;datasource records in spreadsheets
 StarOffice Math : inserting;drawings
 StarOffice Math : inserting;floating frames
+StarOffice Math : inserting;Fontwork objects
 StarOffice Math : inserting;form fields
 StarOffice Math : inserting;gaps
 StarOffice Math : inserting;hyperlinks
@@ -20837,11 +20633,15 @@ StarOffice Math : inserting;new text tables defaults
 StarOffice Math : inserting;notes
 StarOffice Math : inserting;objects from Gallery
 StarOffice Math : inserting;OLE objects
+StarOffice Math : inserting;paragraph borders
 StarOffice Math : inserting;paragraph bullets
+StarOffice Math : inserting;pictures in Gallery
 StarOffice Math : inserting;plug-ins
+StarOffice Math : inserting;push buttons
 StarOffice Math : inserting;special characters
 StarOffice Math : inserting;tab stops
 StarOffice Math : inserting;text in StarOffice Math
+StarOffice Math : inserting;textures on chart bars
 StarOffice Math : installing
 StarOffice Math : installing;ActiveX control
 StarOffice Math : installing;mobile device filters
@@ -20953,7 +20753,6 @@ StarOffice Math : lines;inserting in formulas
 StarOffice Math : lines;removing automatic lines
 StarOffice Math : lines;scalable
 StarOffice Math : lines;with edges
-StarOffice Math : Lines and Page Breaks feature in Microsoft Office
 StarOffice Math : lines of text
 StarOffice Math : lines of text;alignment
 StarOffice Math : links
@@ -20999,7 +20798,6 @@ StarOffice Math : macros;security
 StarOffice Math : macros;security warning dialog
 StarOffice Math : macros;selecting security warnings
 StarOffice Math : magnifiers
-StarOffice Math : Mail Merge feature in Microsoft Office
 StarOffice Math : margins
 StarOffice Math : margins;pages
 StarOffice Math : margins;setting with the mouse
@@ -21010,7 +20808,6 @@ StarOffice Math : markers;next
 StarOffice Math : markers;previous
 StarOffice Math : marking changes
 StarOffice Math : marking, see selecting
-StarOffice Math : Markup feature in Microsoft Office
 StarOffice Math : Math formula editor
 StarOffice Math : mathematical symbols
 StarOffice Math : mathematical symbols;catalog
@@ -21113,7 +20910,7 @@ StarOffice Math : not subset set operators
 StarOffice Math : not superset set operators
 StarOffice Math : notes
 StarOffice Math : notes;displaying (Calc)
-StarOffice Math : notes;inserting/editing/deleting
+StarOffice Math : notes;inserting/editing/deleting/printing
 StarOffice Math : notes;printing in text
 StarOffice Math : number formats
 StarOffice Math : number formats;codes
@@ -21319,7 +21116,6 @@ StarOffice Math : pictures;inserting from Gallery
 StarOffice Math : pictures;number of
 StarOffice Math : pictures;printing
 StarOffice Math : pictures;scaling/resizing
-StarOffice Math : Pivot tables feature in Microsoft Office
 StarOffice Math : pixel editor
 StarOffice Math : pixel graphics
 StarOffice Math : pixel graphics;inserting and editing
@@ -21494,7 +21290,6 @@ StarOffice Math : references
 StarOffice Math : references;displaying in color (Calc)
 StarOffice Math : references;expanding (Calc)
 StarOffice Math : references;iterative (Calc)
-StarOffice Math : Refresh Data feature in Microsoft Office
 StarOffice Math : refreshing formula view
 StarOffice Math : register-true
 StarOffice Math : register-true;definition
@@ -21527,7 +21322,6 @@ StarOffice Math : removing;form filters
 StarOffice Math : removing, see also deleting
 StarOffice Math : repeating
 StarOffice Math : repeating;commands
-StarOffice Math : Replace text as you type feature in Microsoft Office
 StarOffice Math : replacement options
 StarOffice Math : replacement table
 StarOffice Math : replacing
@@ -21668,7 +21462,6 @@ StarOffice Math : shadows;borders
 StarOffice Math : shadows;characters
 StarOffice Math : shadows;characters, using context menu
 StarOffice Math : sharing documents
-StarOffice Math : sharing documents;collaboration
 StarOffice Math : sharpening filter
 StarOffice Math : sheet tabs
 StarOffice Math : sheet tabs;displaying
@@ -21680,7 +21473,6 @@ StarOffice Math : shortcut keys;general
 StarOffice Math : shortcut keys;in databases
 StarOffice Math : shortcut keys;in formulas
 StarOffice Math : shortcut keys;StarOffice accessibility
-StarOffice Math : Show/Hide feature in Microsoft Office
 StarOffice Math : showing
 StarOffice Math : showing;changes
 StarOffice Math : showing;docked windows
@@ -21743,7 +21535,6 @@ StarOffice Math : spellcheck;default languages
 StarOffice Math : spellcheck;dialog
 StarOffice Math : spellcheck;dictionary of exceptions
 StarOffice Math : spellcheck;ignore list
-StarOffice Math : Spelling and Grammar feature in Microsoft Office
 StarOffice Math : spin button creation
 StarOffice Math : spoolfiles with Xprinter
 StarOffice Math : spreadsheets
@@ -21979,7 +21770,6 @@ StarOffice Math : tooltips
 StarOffice Math : tooltips;extended tips
 StarOffice Math : tooltips;help
 StarOffice Math : toward relation
-StarOffice Math : Track changes feature in Microsoft Office
 StarOffice Math : traditional Chinese
 StarOffice Math : traditional Chinese;translating to simplified chinese
 StarOffice Math : transparency
@@ -22049,7 +21839,6 @@ StarOffice Math : user-defined operators;unary and binary
 StarOffice Math : user-defined styles
 StarOffice Math : user-defined styles;automatically replacing
 StarOffice Math : UTF-8/UCS2 support
-StarOffice Math : Validation feature in Microsoft Office
 StarOffice Math : values
 StarOffice Math : values;absolute
 StarOffice Math : values;rounded as shown (Calc)
@@ -22128,9 +21917,8 @@ StarOffice Math : WordArt, see Fontwork
 StarOffice Math : words
 StarOffice Math : words;automatically replacing
 StarOffice Math : words;wrapping in cells
-StarOffice Math : Workbook feature in Microsoft Office
+StarOffice Math : words;wrapping in CTL
 StarOffice Math : working directory change
-StarOffice Math : Worksheet feature in Microsoft Office
 StarOffice Math : wrapping text
 StarOffice Math : wrapping text;in cells
 StarOffice Math : wrapping text;in formulas
@@ -22138,15 +21926,16 @@ StarOffice Math : write protection on/off
 StarOffice Math : writing aids options
 StarOffice Math : WYSIWYG in fonts lists
 StarOffice Math : XForms
+StarOffice Math : XForms;adding/editing/deleting/organizing namespaces
+StarOffice Math : XForms;conditions
+StarOffice Math : XForms;opening/editing
 StarOffice Math : XML converters
 StarOffice Math : XML file formats
 StarOffice Math : XML filters
 StarOffice Math : XML filters;creating/testing
 StarOffice Math : XML filters;saving as package/installing/deleting
 StarOffice Math : XML filters;settings
-StarOffice Math : XML Forms
-StarOffice Math : XSLT based filters
-StarOffice Math : XSLT based filters;settings
+StarOffice Math : XML Forms, see XForms
 StarOffice Math : XSLT filters, see also XML filters
 StarOffice Math : years
 StarOffice Math : years;2-digit options

@@ -56,6 +56,7 @@ testcase DrawToWriterScrollingText
   printlog "  Select Scrolling text "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>"
@@ -107,6 +108,7 @@ testcase DrawToWriterGroupedObject
   printlog "  Select Grouped Object "
   printlog "  Copy selected Object "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",2
@@ -158,6 +160,7 @@ testcase DrawToWriter3D
   printlog "  Select cell <A5:C5> "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",3
@@ -209,6 +212,7 @@ testcase DrawToWriterFontwork
   printlog "  Select Fontwork "
   printlog "  Copy selected Fontwork "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",4
@@ -260,6 +264,7 @@ testcase DrawToWriterBullets
   printlog "  Select Bullets "
   printlog "  Copy selected Bullets "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",5
@@ -311,6 +316,7 @@ testcase DrawToWriterDimensionLines
   printlog "  Select Dimension Lines "
   printlog "  Copy selected Dimension Lines "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -363,6 +369,7 @@ testcase DrawToWriterConnectors
   printlog "  Select Connectors "
   printlog "  Copy selected Connectors "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"

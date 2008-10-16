@@ -56,6 +56,7 @@ testcase CalcToWriterText1
   printlog "  Select cell <A2> "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   DocumentCalc.TypeKeys "<Mod1 Home>"
@@ -108,6 +109,7 @@ testcase CalcToWriterText2
   printlog "  Select cell <A1>, press F2 and select all "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   DocumentCalc.TypeKeys "<Mod1 Home>"
@@ -162,6 +164,7 @@ testcase CalcToWriterCalculation
   printlog "  Select cell <A5:C5> "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   DocumentCalc.TypeKeys "<Mod1 Home>"
@@ -215,6 +218,7 @@ testcase CalcToWriterHyperlink1
   printlog "  Select cell <A8> "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   DocumentCalc.TypeKeys "<Mod1 Home>"
@@ -267,6 +271,7 @@ testcase CalcToWriterHyperlink2
   printlog "  Select cell <A8> "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   DocumentCalc.TypeKeys "<Mod1 Home>"
@@ -321,6 +326,7 @@ testcase CalcToWriterDrawObject
   printlog "  Select Drawing object "
   printlog "  Copy selected object "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   Call wNavigatorAuswahl(8,1)
@@ -372,6 +378,7 @@ testcase CalcToWriterOLE
   printlog "  Select OLE-Object "
   printlog "  Copy selected object "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\calc.sxc")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentCalc"
   printlog "  Jump to beginning of document "
   Call wNavigatorAuswahl(6,1)

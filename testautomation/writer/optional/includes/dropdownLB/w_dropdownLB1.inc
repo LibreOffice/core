@@ -1031,6 +1031,7 @@ testcase tDropDownLB_17
     Call hNewDocument
     PrintLog "- Open a word document  which includes 2 entries."
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     PrintLog "- Set focus in front of first line."
     Call wTypeKeys "<MOD1 Home>"
     PrintLog "- Edit/Fields."

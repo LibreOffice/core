@@ -223,6 +223,9 @@ testcase tAdabas
     qaerrorlog "not yet implemented"
     goto endsub
 
+    qaerrorlog "not yet implemented"
+    goto endsub
+
     if gPlatform = "x86" then
         printlog "Adabas doesn't exists under x86."
         goto endsub    

@@ -670,6 +670,7 @@ goto endsub
     Call hFileOpen(xExport)
 
     Sleep 1
+    Call sMakeReadOnlyDocumentEditable
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
     xExportFile = gOfficepath + "user\work\ecksport.doc"

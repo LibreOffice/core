@@ -311,6 +311,7 @@ testcase tFieldsOther_2
 
   '/// Open test file chapterTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 End><Return>"
 
@@ -395,6 +396,7 @@ testcase tFieldsOther_4
 
   '/// Open test file pageTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 Home>"
    Call wTypeKeys "<End><Return>"
@@ -450,6 +452,7 @@ testcase tFieldsOther_5
 
   '/// Open test file pageTest.sxw which includes 3 pages
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Go to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -858,6 +861,7 @@ testcase tFieldsOther_7
   '/// 2 tables , 2 pictures , 22 paragraph , 1 object ,
   '/// 2 words , 12 characters and 2 pages
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 Home><Down>"
 
@@ -918,6 +922,7 @@ testcase tFieldsOther_8
     
     '/// Open test file diploma.ott
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     Call wTypeKeys "<MOD1 Home>"
     

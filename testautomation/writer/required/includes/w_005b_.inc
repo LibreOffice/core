@@ -1066,10 +1066,10 @@ testcase tFormatPositionAndSizeLegend
     end if
     printlog " Open new document"
     Call hNewDocument
-    Call wZeichenobjektEinfuegen ( "Legende", 45, 25, 50, 50 )
+    Call wZeichenobjektEinfuegen ( "Legende", 45, 35, 50, 50 )
     printlog " Insert a legend"
     sleep (1)
-    Call wObjektSelektieren(43, 23, 75, 75)
+    Call wObjektSelektieren(43, 33, 75, 75)
 
     sleep (1)
     try

@@ -88,6 +88,7 @@ testcase tToolsNumbering12
 				'/// open file
 				sleep 2
 				Call hFileOpen ( DocFileList(i) )
+                Call sMakeReadOnlyDocumentEditable
 				
 				Kontext "Filterauswahl"
 				if Filterauswahl.Exists then
@@ -114,6 +115,7 @@ testcase tToolsNumbering12
 					Call hCloseDocument
 					printlog "  - load previous saved document"
 					Call hFileOpen ( ExportFileName )
+                    Call sMakeReadOnlyDocumentEditable
 					Sleep (2)
 					printlog "  - close document"
 					Call hCloseDocument
@@ -136,6 +138,7 @@ testcase tToolsNumbering13
     printlog "#i73790 regression testing"
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Document has Heading1-Heading3 formatted, be sure it is
     Call wDokSchreiben ("<Mod1 Home>")
     '/// Point cursor to top of document with <STRG HOME>

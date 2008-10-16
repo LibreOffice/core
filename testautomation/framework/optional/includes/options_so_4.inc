@@ -707,7 +707,7 @@ testcase func_StarOfficeView_1
   Dim sSave as String
 
 '///StarOffice / View => 'Display : Look & Feel' and 'Scaling'
-
+hNewDocument
 '///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
@@ -758,6 +758,7 @@ testcase func_StarOfficeView_1
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
+   hclosedocument
 endcase
 
 ' > * > * > * > * > * > * > * > * > * > * > * > * > * > * > * > *

@@ -73,6 +73,7 @@ testcase tDocInformation_1
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// File / Properties / Description , input some
   '/// + new text in Title
@@ -124,6 +125,7 @@ testcase tDocInformation_2
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// File / Properties / Description , input some
   '/// + text in Subject
@@ -174,6 +176,7 @@ testcase tDocInformation_3
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// File / Properties / Description , input some
   '/// + text in Keywords
@@ -225,6 +228,7 @@ testcase tDocInformation_4
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// File / Properties / Description , input some
   '/// + text in Description
@@ -291,6 +295,7 @@ testcase tDocInformation_5
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// File / Properties / Description , input some
   '/// + text in Description
@@ -359,6 +364,7 @@ testcase tDocInformation_6
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call fFindWord ("Created")
    Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
@@ -466,6 +472,7 @@ testcase tDocInformation_7_1
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
    Call hFileSaveAsKill (sSaveAsFile)
 
    Call fFindWord ("Modified")
@@ -592,6 +599,7 @@ testcase tDocInformation_7_2
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call fFindWord ("Modified")
    Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
@@ -699,6 +707,7 @@ testcase tDocInformation_8
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call fFindWord ("Last printed")
    Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
@@ -809,6 +818,7 @@ testcase tDocInformation_9
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Change author to author : Test2 Test1
    ToolsOptions
@@ -899,6 +909,7 @@ testcase tDocInformation_10
 
   '/// Open test file fields_docinfos.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Save the file as another file
    Call hFileSaveAsKill(sSaveAsFile)

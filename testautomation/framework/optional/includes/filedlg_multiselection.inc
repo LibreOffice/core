@@ -39,9 +39,6 @@
 
 testcase tFiledlgMultiselection1()
 
-    warnlog( "#i78597# - Crash when loading multiple documents using multiselection - excluding test" )
-    goto endsub
-
     '///<h1>Select a number of different documents and load</h1>
     '///<ul>
     
@@ -51,57 +48,64 @@ testcase tFiledlgMultiselection1()
     ' that loading files using multiselection might lead to a crash.
 
     '///+<li>Determine the workdirectory</li>
-    dim cWorkPath as string
-        cWorkPath = gTesttoolPath & "framework\filedlg\input\multiselect\"
-        cWorkPath = convertpath( cWorkPath )
-        
+    dim cWorkPath as string : cWorkPath = hGetWorkPath() & "multiselection"
     dim cMsg as string
         
     dim iCurrentFile as integer
     dim iInitialDocumentCount as integer
     dim iOpenDocuments as integer
-    dim iWait as integer 
-        iWait = 0
+    dim iWait as integer  : iWait = 0
+    
+    dim iDocType as integer
+    dim iDocument as integer
+    dim cFilter( 4 ) as string
+        cFilter( 1 ) = "writer8"
+        cFilter( 2 ) = "calc8"
+        cFilter( 3 ) = "impress8"
+        cFilter( 4 ) = "draw8"
+        
+    dim cFile as string
         
     dim brc as boolean
     
     const TESTFILE_COUNT = 60 ' the number of documents in cWorkPath
-    
+    const DOC_IDENTIFIER = "Initial document for multi selection test"
+
     '///<ul>
-    '///+<li>Test enter: Only one document may be open</li>
-    if ( getDocumentCount <> 1 ) then
-    	printlog( "Restarting office, incorrect number of documents open" )
-    	call exitRestartTheOffice()
-    endif
+
+    ' Minimum cleanup
+    while( getDocumentCount > 0 ) 
+        hDestroyDocument()
+    wend
+
+    ' create the workdirectory
+    mkdir( cWorkPath )
     
-    '///+<li>Test enter: It must be a WRITER document</li>
-    kontext "DocumentWriter"
-    if ( not documentwriter.exists() ) then
-    	printlog( "Incorrect documenttype, need a WRITER document, restarting" )
-    	call exitRestartTheOffice()
-    endif
-    
-    '///+<li>And even more precisely: The first doc!</li>
-    if ( not hIdentifyWriterDoc( "The first doc!" , false ) ) then
-    	printlog( "Incorrect WRITER document, restarting" )
-    	call exitRestartTheOffice()
-    endif
+    ' create a bulk of files
+    for iDocType = 1 to 4
+        hNumericDocType( iDocType )
+        hNewDocument()
+        hChangeDoc()
+        for iDocument = 1 to 15
+            cFile = cWorkPath & "\" & "test_" & cFilter( iDocType ) & iDocument 
+            hFileSaveAsWithFilterKill( cFile, cFilter( iDocType ) )
+        next iDocument
+        hCloseDocument()
+    next iDocType
+            
+    gApplication = "WRITER"
+    hCreateDocument()
+    DocumentWriter.typeKeys( DOC_IDENTIFIER )
     
     '///+<li>Close the navigator if present</li>
     hCloseNavigator()
     '///</ul>
     
-    '///+<li>Store the number of open documents (should be exactly one now)</li>
-    iInitialDocumentCount = getDocumentCount ' must be exactly 1 at this point
-    if ( iInitialDocumentCount <> 1 ) then
-    	warnlog( "Expected exactly one writer document (The first doc!)" )
-    endif
-
     '///+<li>Open the filepicker (via menu or toolbar)</li>
     printlog( "FileOpen" )
     FileOpen
 
-    '///+<li>Go to the workdirectory (framework\filedlg\input\multiselect\)</li>
+    '///+<li>Go to the workdirectory</li>
     printlog( "Go to the workdirectory: " & cWorkPath )
     kontext "OeffnenDlg"
     DateiName.typeKeys( cWorkPath )
@@ -130,7 +134,7 @@ testcase tFiledlgMultiselection1()
     while ( getDocumentCount < ( TESTFILE_COUNT + 1 ) ) 
     
     	iWait = iWait + 1
-    	sleep( 1 )
+    	sleep( 1 ) ' This is intentional, do not remove or replace
 
         if ( iWait = ( TESTFILE_COUNT + 1 ) ) then
         	warnlog( "The documents were not loaded within 60 seconds, abort" )
@@ -144,27 +148,40 @@ testcase tFiledlgMultiselection1()
     '///+<li>Close all the files again</li>
     printlog( "Starting to close all documents" )
     for iCurrentFile = 1 to TESTFILE_COUNT
-        sleep( 1 )
+        WaitSlot() ' sleep( 1 )
         FileClose
     next iCurrentFile
     printlog( "Finished closing documents" )
     
     '///+<li>Verify that the correct document is open &quot;The first doc!&quot;</li>
     if ( getDocumentCount <> 1 ) then
-    	warnlog( "Only <The first doc!> should be open. This is not the case" )
+    	warnlog( "Only the identification document should be open." )
     	iOpenDocuments = getDocumentCount
     	for iCurrentFile = 1 to iOpenDocuments - 1
     		hDestroyDocument()
         next iCurrentFile
         call ExitRestartTheOffice()
     else
-        brc = hIdentifyWriterDoc( "The first doc!" , false )
+        brc = hIdentifyWriterDoc( DOC_IDENTIFIER , false )
         if ( not brc ) then
-        	warnlog( "Incorrect document order / <The first doc!> is missing" )
+            warnlog( "The identification document is missing" )
         else
             printlog( "Ok, test succeeded" )
+            hDestroyDocument()
         endif
     endif
+    
+    ' remove workfiles again
+    for iDocType = 1 to 4
+        hNumericDocType( iDocType )
+        for iDocument = 1 to 15
+            cFile = cWorkPath & "\" & "test_" & cFilter( iDocType ) & iDocument 
+            hDeleteFile( cFile )
+        next iDocument
+    next iDocType
+    
+    rmdir( cWorkPath )
+    
     
     hCloseNavigator()
     '///</ul>

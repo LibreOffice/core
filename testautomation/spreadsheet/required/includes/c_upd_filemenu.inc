@@ -291,12 +291,11 @@ testcase tFileRecentDocuments
     Printlog " Enter some text"
     Kontext "DocumentCalc"
     DocumentCalc.Typekeys "The first doc!<RETURN>"
-    sTestFile = convertpath(gTesttoolPath & "spreadsheet/required/input/recentdocument.ods")
-    '/// Open Test File <i>spreadsheet/required/input/recentdocument.ods</i>
-    Printlog " Open Test File spreadsheet/required/input/recentdocument.ods"
+    Printlog " Copy Test File spreadsheet/required/input/recentdocument.ods locally"
+    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\required\input\recentdocument.ods"),gOfficePath + ConvertPath("user/work/recentdocument.ods")
+    Printlog " Load local copied testfile recentdocument.ods"
+    sTestFile = convertpath(gOfficePath & "user/work/recentdocument.ods")
     Call hFileOpen(sTestFile)
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
     '/// Close the document.
     Printlog " Close the document."
     '/// Now an item in <i>File / Recent Documents</i> should exist

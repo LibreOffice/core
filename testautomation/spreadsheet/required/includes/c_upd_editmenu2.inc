@@ -649,7 +649,7 @@ testcase tEditObjectEdit
     '/// Deactivate OLE-object
     printlog " Deactivate OLE-object"
     Kontext "DocumentCalc"
-    DocumentCalc.TypeKeys "<Return>"
+    DocumentCalc.TypeKeys "<ESCAPE>" , 2
     '/// Select OLE-object
     printlog " Select OLE-object"
     fselectFirstOLE

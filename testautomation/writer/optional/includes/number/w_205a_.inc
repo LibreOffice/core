@@ -54,6 +54,7 @@ testcase tToolsOutlineNumbering1
     PrintLog "- Tools / Outline Numbering: Part 1 - Numbering"
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\numbering1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     ToolsOutlineNumbering
     Kontext
     Active.SetPage TabKapitelnumerierung
@@ -348,6 +349,7 @@ testcase tToolsOutlineNumbering2
     PrintLog "- Tools / Outline Numbering: Part 2 - Tabpage Position"
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\numbering1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     ToolsOutlineNumbering
     Kontext
     Active.SetPage TabKapitelnumerierung

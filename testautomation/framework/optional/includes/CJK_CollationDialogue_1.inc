@@ -520,7 +520,7 @@ testcase tStrokeSort
   Call hNewDocument
  '/// Open a test file and check <i>No Grid</i> checkbox
   Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
-
+  sMakeReadOnlyDocumentEditable
   EditSelectAll
 
  '/// Open <i>Tools/Sort</i>
@@ -608,7 +608,7 @@ testcase tPinyinSort
   Call hNewDocument
  '/// Open a test file and check <i>No Grid</i> checkbox
   Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
-
+  sMakeReadOnlyDocumentEditable
   EditSelectAll
 
  '/// Open <i>Tools/Sort</i>

@@ -113,7 +113,7 @@ testcase tToolsSpellcheck
         case else
     end select
 
-    ToolsSpellcheck
+    ToolsSpellcheckWriter
     printlog " Tools / Spellcheck / Check"
     WaitSlot (500)
     Kontext "Active"

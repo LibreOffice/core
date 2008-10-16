@@ -863,6 +863,7 @@ testcase tParagraphSection_1
 
   '/// Open a file with 4 paragraphs, the 4th paragraph is crossing the page
    Call hFileOpen(documentName)
+   Call sMakeReadOnlyDocumentEditable
 
    EditSelectAll
    Call fInsertSection(sectionName)
@@ -1204,6 +1205,7 @@ testcase tScenarioSection_1
 
   '/// open testdocument (tScenarioSection_1.sxw) ///
    Call hFileOpen ( gTesttoolpath + "writer\optional\input\section\tScenarioSection_1.sxw")
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Select 'File /Send -> Create Masterdocument ///
    FileSendCreateMasterdocument
@@ -1323,6 +1325,7 @@ testcase tScenarioSection_2
 
   '/// open testdocument (tScenarioSection_2.sxw) ///
    Call hFileOpen ( gTesttoolpath + "writer\optional\input\section\tScenarioSection_2.sxw")
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Select 'File -> Send -> Create Masterdocument ///
    FileSendCreateMasterdocument

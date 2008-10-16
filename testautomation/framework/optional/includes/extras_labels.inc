@@ -65,7 +65,7 @@ testcase tLabelTypes()
     dim irc as integer
     
     dim sFile as string
-        sFile = Labels_" & gISOLang & ".txt"
+        sFile = "Labels_" & gISOLang & ".txt"
 
     dim sFileIn as string
         sFileIn = gTesttoolPath & "framework\optional\input\extras_formats\" & sFile

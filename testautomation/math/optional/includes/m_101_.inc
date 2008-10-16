@@ -573,7 +573,7 @@ testcase tFilePrint
     catch
         warnlog "FilePrint is not accessible, because closing Formula failed :-( ?!"
     endcatch
-    hFileSaveAsWithFilterKill (convertpath( gOfficePath + "user/work/fileprint" + iSprache + ".odt"), gWriterFilter)
+    hFileSaveAsWithFilterKill (convertpath( gOfficePath + "user/work/fileprint" + iSprache + ".odt"), "writer8")
     Call hCloseDocument
 endcase
 

@@ -44,6 +44,9 @@ end sub
 '-------------------------------------------------------------------------
 testcase tNewReport
 
+    qaerrorlog "#i92543# crash when closing report"
+    goto endsub
+
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
         
     Kontext "Insight"

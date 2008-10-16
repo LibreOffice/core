@@ -82,7 +82,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_control_objects.inc"
-    use "global\tools\includes\optional\key_tools.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
     
     use "framework\tools\includes\init_tools.inc"
     use "framework\tools\includes\options_tools.inc"

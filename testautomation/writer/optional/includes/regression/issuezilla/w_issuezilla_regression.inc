@@ -90,7 +90,7 @@ testcase i64991
     Kontext "ScriptSelector"
     For i = 1 to LibraryTreeList.GetItemCount
         LibraryTreeList.Select i
-        if LibraryTreeList.GetSelText = "i64991" then
+        if InStr(LibraryTreeList.GetSelText,"i64991") then
             printlog " - open node 'i64991' in Library list"
             i = LibraryTreeList.GetItemCount + 1     
             LibraryTreeList.TypeKeys "+"
@@ -162,6 +162,7 @@ testcase i65094
     '/// Open file \\writer\\optional\\input\\regression\\issuezilla\\i65094a.odt
     printlog "- Open file: i65094a.odt" 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\regression\issuezilla\i65094a.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Compare document with other version \\writer\\optional\\input\\regression\\issuezilla\\i65094b.odt
 '    UseBindings
     printlog "- Compare document with other version"
@@ -172,6 +173,7 @@ testcase i65094
 '    Sleep 2
     Oeffnen.Click
     Sleep 5
+    Call sMakeReadOnlyDocumentEditable
     printlog "- Accept all"
     '/// In Redlining dialog select 'Accept all'
     Kontext "Redlining"
@@ -243,6 +245,7 @@ testcase i69521
     Call hNewDocument
     '/// Load document: \\writer\\optional\\input\\regression\\issuezilla\\i69521.odt
     Call hFileOpen (gTesttoolpath & "writer\optional\input\regression\issuezilla\i69521.odt")
+    Call sMakeReadOnlyDocumentEditable
     '/// Loaded document should have 5 EPS Graphics
     iItems = CountItemsInNavigatorGroup(4)
     if iItems <> 5 then
@@ -412,12 +415,24 @@ testcase i88656
     printlog "Use the menu: Format - Autoformat - Apply and Edit Changes."
     FormatAutoformatApplyAndEditChanges
 
+    kontext "active"
+    if active.exists(2) then
+       printlog " In the dialog: choose 'Accept."
+       active.Ok
+    end if
+
     printlog "Press SHIFT + HOME. To select the text we just wrote."
-    wTypeKeys ("SHIFT HOME")
+    wTypeKeys ("<SHIFT HOME>")
 
     'with text selected
     printlog "Again, but with the text selected; use the menu: Format - Autoformat - Apply and Edit Changes."
     FormatAutoformatApplyAndEditChanges
+
+    kontext "active"
+    if active.exists(3) then
+       printlog " In the dialog: choose 'no'."
+       active.Cancel
+    end if
 
     kontext "active"
     if active.exists(3) then

@@ -693,7 +693,7 @@ TableProperties .uno:TableDialog
 ' *********** Tools Menu  ***********
 ' ****
 ' **** All applications
-ToolsSpellcheck .uno:SpellingAndGrammarDialog
+ToolsSpellcheck .uno:SpellDialog
 ToolsSpellcheckAutoSpellcheck SID_AUTOSPELL_CHECK
 ToolsLanguageHangulHanjaConversion .uno:HangulHanjaConversion
 ToolsLanguageChineseTranslation .uno:ChineseConversion
@@ -716,6 +716,7 @@ ToolsPackagemanager service:com.sun.star.deployment.ui.PackageManagerDialog
 ToolsMailMergeWizard .uno:MailMergeWizard
 
 ' **** Writer
+ToolsSpellcheckWriter .uno:SpellingAndGrammarDialog
 ToolsOutlineNumbering FN_NUMBERING_OUTLINE_DLG
 ToolsLineNumbering FN_LINE_NUMBERING_DLG
 ToolsPageNumber FN_CHANGE_PAGENUM
@@ -877,7 +878,7 @@ HelpHelpAgent SID_HELP_PI
 HelpTips SID_HELPTIPS
 HelpExtendedTips SID_HELPBALLOONS
 HelpEntendedHelp SID_HELPBALLOONS
-HelpCheckForUpdates .uno:OnlineUpdate
+HelpCheckForUpdates sym:vnd.sun.star.job:alias=UpdateCheck
 HelpAboutStarOffice SID_ABOUT
 HelpPurchaseStarOffice service:com.sun.star.tab.tabreg?purchase
 

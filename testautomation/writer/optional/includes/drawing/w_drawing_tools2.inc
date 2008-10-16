@@ -643,6 +643,7 @@ testcase  tGroup_12
     
       PrintLog "- Open previous saved document "
     Call hFileOpen (sDocument)
+    Call sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     Call gMouseClick(34,34)    'set focus in the group
     

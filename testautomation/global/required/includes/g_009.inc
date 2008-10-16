@@ -69,17 +69,7 @@ testcase tHelpCheckForUpdates
                 bOnceAgain = FALSE
             endif
             try
-              '  HelpCheckForUpdates
-                'Workyround for old testtools
-                dim xa
-                dim aa
-                dim ba
-                xa = hGetUnoService()
-                aa = xa.createInstance("com.sun.star.frame.DispatchHelper")
-                ba = xa.createInstance("com.sun.star.frame.Desktop")
-                'printlog aa.dbg_Methods
-                'printlog ba.dbg_Methods
-                aa.executeDispatch(ba, "vnd.sun.star.job:alias=UpdateCheck", "",0,Array())
+                HelpCheckForUpdates
             catch
                 bOnceAgain = FALSE
                 if (gtplatform = "sol") OR (gtplatform = "x86") or gOOO then

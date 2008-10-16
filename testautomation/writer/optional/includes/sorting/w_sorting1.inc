@@ -252,9 +252,12 @@ testcase tToolsSort3
         end select
         if gApplication = "WRITER" then
             Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort2.odt" )
+            Call sMakeReadOnlyDocumentEditable
         else
             Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort2.odm" )
+            Call sMakeReadOnlyDocumentEditable
         end if
+
         if i <> 1 then TrennzeichenSetzen ( Trennzeichen )
 
         Printlog "     - alphanumeric ascending after 1.Column, followed by 4.Column and 3. Column"
@@ -325,10 +328,13 @@ testcase tToolsSort4
     PrintLog "- Tools / Sorting in table with header"
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
+        Call sMakeReadOnlyDocumentEditable
     else
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
+        Call sMakeReadOnlyDocumentEditable
     end if
     Call wTypeKeys "<Mod1 a>", 2
+
     Printlog "   - 3. column alphanum., 1. column num., 3. column alphanum. ascending"
     ToolsSort
     Kontext "Sortieren"
@@ -447,9 +453,12 @@ testcase tToolsSort5
     PrintLog "- Tools / Sorting in table without header"
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
+        Call sMakeReadOnlyDocumentEditable
     else
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
+        Call sMakeReadOnlyDocumentEditable
     end if
+
     Call wNavigatorAuswahl (2, 2)
     Call wTypeKeys "<Mod1 a>", 2
     Printlog "   - 3. column alphanum., 1. column num., 2. column alphanum. ascending"
@@ -574,10 +583,13 @@ testcase tToolsSort6
 
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort3.odt" )
+        Call sMakeReadOnlyDocumentEditable
     else
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort3.odm" )
+        Call sMakeReadOnlyDocumentEditable
     end if
     Call wTypeKeys "<Mod1 a>", 2
+
     Printlog "   - Sort 1. column numeric descending"
     ToolsSort
     Kontext "Sortieren"

@@ -429,7 +429,12 @@ testcase tToolsCatalog
                 Commands.typeKeys "<mod1 a>"
                 '/// Edit->Copy ///'
                 sleep 1
-                EditCopy
+                try
+                    EditCopy
+                catch
+                    commands.typekeys "<mod1 c>"
+                    qaerrorlog "Workaround failed slot EditCopy with <Strg>+c:"+getClipboardText()
+                endcatch
                 sTemp = getClipboardText()
                 Kontext "DocumentWriter"
                 '///+ click into writer document to leave math  ///'
@@ -474,20 +479,8 @@ testcase tToolsCatalog
         next j
     next i
     sFileName = convertpath( gOfficePath + "user/work/math/level1/ftc_a.odt")
-'    hSpeichernUnterMitFilterKill (sFileName+".doc", "Microsoft Word 97/2000/XP (.doc)")
     
-    ' make sure saving in latest writer filter works, checking global filtername and if necessary change it
-    sFilter = hGetUIFiltername("writer8")
-    sFilterExt() = hGetFilternameExtension("writer8")
-    sFilterName = sFilter + " (." + sFilterExt(0) + ")"
-    printlog sFilterName
-    printlog gWriterFilter
-    if (sFilterName <> gWriterFilter) then
-    gWriterFilter = sFilterName
-    warnlog "Filtername differs from reference; Changing now globaly: gWriterFilter"
-    endif
-    
-    hSpeichernUnterMitFilterKill (sFileName, gWriterFilter)
+    hFileSaveAsWithFilterKill (sFileName, "writer8")
     '/// close application ///'
     Call hCloseDocument
 endcase

@@ -100,6 +100,7 @@ testcase tSetReferences_1
 
   '/// Open test file pageTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -187,6 +188,7 @@ testcase tInsertReference_1
 
   '/// Open test file pageTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -246,6 +248,7 @@ testcase tInsertReference_2
 
   '/// Open test file chapterTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd line
    Call wTypeKeys "<MOD1 Home>"
@@ -676,6 +679,7 @@ testcase tInsertBookmark_1
 
   '/// Open test file pageTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -733,6 +737,7 @@ testcase tInsertBookmark_2
 
   '/// Open test file chapterTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd line
    Call wTypeKeys "<MOD1 Home>"

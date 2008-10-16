@@ -2,5 +2,6 @@ Glossary of Internet Terms
 Organize Macros
 MySQL Connection
 Java Platform Support
+StarOffice
 Java
 Start Parameters

@@ -216,6 +216,7 @@ testcase tEditNavigator3
     printlog "- Edit / Navigator : check some Navigator-Functions"
     '/// Open document ( navigator.odt ) ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator ///
     Kontext "Navigator"
     if Navigator.NotExists then EditNavigator
@@ -352,6 +353,7 @@ testcase tEditNavigator4
     printlog "- Edit / Navigator : check entry's in Navigator Index"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"' ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator through Edit / Navigator ///
     EditNavigator
     Kontext "NavigatorWriter"
@@ -413,6 +415,7 @@ testcase tEditNavigator5
     printlog "- Edit / Navigator : Check Jumpmark from Index in Navigator"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"'  ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator ///
     Kontext "NavigatorWriter"
     if Not NavigatorWriter.Exists then
@@ -587,6 +590,7 @@ testcase tEditNavigator6
     printlog "- Edit / Navigator : Rename Objects"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\st1_1.sxw" ' ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\st1_1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     Kontext "Navigator"
     '/// Open Navigator ///
     if Navigator.NotExists then EditNavigator

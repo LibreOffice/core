@@ -397,10 +397,6 @@ endcase
 '------------------------------------------------
 
 testcase tFormatPage
-
-    warnlog( "#i90650# Test excluded, server timout when switching tabpage" )
-    goto endsub
-    
     PrintLog "- Format / Page"
 
     printlog " Open new document"
@@ -570,6 +566,7 @@ testcase tFormatNumberingBullets
     Kontext "TabOptionenNumerierung"
 
     Sleep 1
+
     try
         Auswahl.Click
         referencecounter = hMenuItemGetCount
@@ -1001,5 +998,4 @@ testcase tFormatWrapArea
     printlog " Close active document"
     Call hCloseDocument
 endcase
-
 

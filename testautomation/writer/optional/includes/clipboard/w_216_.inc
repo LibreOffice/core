@@ -63,6 +63,7 @@ goto endsub
     printlog "  Select first paragraph "
     printlog "  Copy selected text "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     sleep (3)
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
@@ -119,6 +120,7 @@ testcase HTMLToWRITERField
     printlog "  Select paragraph with 'Date Field' "
     printlog "  Copy selected text "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",2
@@ -173,6 +175,7 @@ testcase HTMLToWRITERTable
     printlog "  Select 'Table' "
     printlog "  Copy selected table "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",5
@@ -227,6 +230,7 @@ testcase HTMLToWRITERGraphicLinked
     printlog "  Select 'Linked Graphic' "
     printlog "  Copy selected Linked Graphic "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -280,6 +284,7 @@ testcase HTMLToWRITERControl
     printlog "  Select 'Control' "
     printlog "  Copy selected Control "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -334,6 +339,7 @@ testcase HTMLToWRITERFloatingFrame
     printlog "  Select 'Floating Frame' "
     printlog "  Copy selected Floating Frame "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )

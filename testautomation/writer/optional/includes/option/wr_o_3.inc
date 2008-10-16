@@ -983,9 +983,12 @@ testcase tToolsOptionsWriterCompatibility2
     printlog "open document  ./writer/leve11/input/options/compatibility1.doc"
     printlog "check formatting of current opened document"
     Call hFileOpen ( gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
+    Call sMakeReadOnlyDocumentEditable
+
     Call wTypeKeys ("<Mod1 Home>")
     Call wTypeKeys ("<Down>")
     Call wTypeKeys ("<Shift Right>")
+
     try
         EditCopy
         if GetClipboardtext <> "A" then

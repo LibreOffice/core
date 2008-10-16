@@ -39,6 +39,9 @@
 
 testcase tBasicVBACompatImportEnabled()
 
+    warnlog( "#i92666# loading sample document crashes the office" )
+    goto endsub
+
     printlog( "Test VBA compatibility switch / executable Microsoft(R) Excel(R) Macros" )
     printlog( "Test case 3: Import macros and set them executable" )
     

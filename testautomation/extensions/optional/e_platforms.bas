@@ -55,7 +55,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
 
     use "global\tools\includes\optional\t_extension_manager_tools.inc"
-    use "global\tools\includes\optional\key_tools.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()

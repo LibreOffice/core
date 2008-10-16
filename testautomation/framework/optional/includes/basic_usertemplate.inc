@@ -60,7 +60,7 @@ testcase tMacroUsertemplate
 
     dim sPathOut as string ' output path for workfile
     const FILEOUT = "tMacroUserTemplate"
-    dim sFilter as string : sFilter = hGetUIFilterName( "writer8_template" )
+    const FILTER = "writer8_template" 
         
     dim iCurrentNode as integer
 
@@ -156,7 +156,7 @@ testcase tMacroUsertemplate
     '///+<li>Save it as {...work/user/template/MyTemplate} (template, autosuffix)</li>
     printlog( "" )
     printlog( "Save as template" )
-    hFileSaveAsWithFilterKill( sPathOut & FILEOUT, sFilter )
+    hFileSaveAsWithFilterKill( sPathOut & FILEOUT, FILTER )
     
     '///+<li>Close document</li>
     hDestroyDocument()
@@ -167,7 +167,7 @@ testcase tMacroUsertemplate
     FileNewFromTemplate
     
     '///+<li>Find MyTemplate (note: No suffix displayed)</li>
-    hFindTemplate( FILEOUT )
+    irc = hFindTemplate( FILEOUT )
         
     '///+<li>Create a new document based ton this template</li>
     hSelectDocumentObject( irc, 1 )
