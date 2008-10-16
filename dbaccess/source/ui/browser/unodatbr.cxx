@@ -3094,11 +3094,6 @@ void SbaTableQueryBrowser::impl_initialize()
         m_aDocScriptSupport = ::boost::optional< bool >( Reference< XEmbeddedScripts >( xDocument, UNO_QUERY ).is() );
     }
 
-    // TODO: remove the following line. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-    m_aDocScriptSupport = ::boost::optional< bool> ( false );
-
     if ( implSelect( sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing, xConnection, sal_True ) )
     {
         try

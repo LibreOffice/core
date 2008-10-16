@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmm_global.hrc,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,12 @@
 #define DLG_MACRO_MIGRATION     RID_DBMM_DIALOG_START + 0
 
 //=====================================================================
+//= error boxes
+//=====================================================================
+
+#define ERR_INVALID_BACKUP_LOCATION     RID_DBMM_DIALOG_START + 0
+
+//=====================================================================
 //= tab pages
 //=====================================================================
 
@@ -59,17 +65,22 @@
 //= strings
 //=====================================================================
 
-#define STR_FORM                ( RID_DBMM_STRING_START +  0 )
-#define STR_REPORT              ( RID_DBMM_STRING_START +  1 )
-#define STR_OVERALL_PROGRESS    ( RID_DBMM_STRING_START +  2 )
-#define STR_DATABASE_DOCUMENT   ( RID_DBMM_STRING_START +  3 )
-#define STR_SAVED_COPY_TO       ( RID_DBMM_STRING_START +  4 )
-#define STR_MOVED_LIBRARY       ( RID_DBMM_STRING_START +  5 )
-#define STR_OOO_BASIC           ( RID_DBMM_STRING_START +  6 )
-#define STR_JAVA_SCRIPT         ( RID_DBMM_STRING_START +  7 )
-#define STR_BEAN_SHELL          ( RID_DBMM_STRING_START +  8 )
-#define STR_JAVA                ( RID_DBMM_STRING_START +  9 )
-#define STR_PYTHON              ( RID_DBMM_STRING_START + 10 )
-#define STR_DIALOG              ( RID_DBMM_STRING_START + 11 )
+#define STR_FORM                    ( RID_DBMM_STRING_START +  0 )
+#define STR_REPORT                  ( RID_DBMM_STRING_START +  1 )
+#define STR_OVERALL_PROGRESS        ( RID_DBMM_STRING_START +  2 )
+#define STR_DATABASE_DOCUMENT       ( RID_DBMM_STRING_START +  3 )
+#define STR_SAVED_COPY_TO           ( RID_DBMM_STRING_START +  4 )
+#define STR_MOVED_LIBRARY           ( RID_DBMM_STRING_START +  5 )
+#define STR_OOO_BASIC               ( RID_DBMM_STRING_START +  6 )
+#define STR_JAVA_SCRIPT             ( RID_DBMM_STRING_START +  7 )
+#define STR_BEAN_SHELL              ( RID_DBMM_STRING_START +  8 )
+#define STR_JAVA                    ( RID_DBMM_STRING_START +  9 )
+#define STR_PYTHON                  ( RID_DBMM_STRING_START + 10 )
+#define STR_DIALOG                  ( RID_DBMM_STRING_START + 11 )
+#define STR_MIGRATING_LIBS          ( RID_DBMM_STRING_START + 12 )
+#define STR_ERRORS                  ( RID_DBMM_STRING_START + 13 )
+#define STR_WARNINGS                ( RID_DBMM_STRING_START + 14 )
+#define STR_EXCEPTION               ( RID_DBMM_STRING_START + 15 )
+#define STR_LIBRARY_TYPE_AND_NAME   ( RID_DBMM_STRING_START + 16 )
 
 #endif // DBACCESS_DBMM_GLOBAL_HRC

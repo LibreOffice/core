@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppControllerDnD.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.26.6.4 $
  *
  * This file is part of OpenOffice.org.
  *

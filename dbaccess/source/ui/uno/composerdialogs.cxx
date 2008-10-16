@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: composerdialogs.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *

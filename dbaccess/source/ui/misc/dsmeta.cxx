@@ -68,26 +68,26 @@ namespace dbaui
             bAutoIncrementIsPrimaryKey     = ( _AutoPKey  != 0 );
         }
 
-        enum Special { All, None };
+        enum Special { All, AllButIgnoreCurrency, None };
 
         InitAdvanced( Special _eType )
             :AdvancedSettingsSupport()
         {
-            bGeneratedValues               = ( _eType == All );
-            bUseSQL92NamingConstraints     = ( _eType == All );
-            bAppendTableAliasInSelect      = ( _eType == All );
-            bUseKeywordAsBeforeAlias       = ( _eType == All );
-            bUseBracketedOuterJoinSyntax   = ( _eType == All );
-            bIgnoreDriverPrivileges        = ( _eType == All );
-            bParameterNameSubstitution     = ( _eType == All );
-            bDisplayVersionColumns         = ( _eType == All );
-            bUseCatalogInSelect            = ( _eType == All );
-            bUseSchemaInSelect             = ( _eType == All );
-            bUseIndexDirectionKeyword      = ( _eType == All );
-            bUseDOSLineEnds                = ( _eType == All );
-            bBooleanComparisonMode         = ( _eType == All );
-            bFormsCheckRequiredFields      = ( _eType == All );
-            bIgnoreCurrency                = false; // Oracle special
+            bGeneratedValues               = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseSQL92NamingConstraints     = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bAppendTableAliasInSelect      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseKeywordAsBeforeAlias       = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseBracketedOuterJoinSyntax   = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bIgnoreDriverPrivileges        = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bParameterNameSubstitution     = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bDisplayVersionColumns         = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseCatalogInSelect            = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseSchemaInSelect             = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseIndexDirectionKeyword      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bUseDOSLineEnds                = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bBooleanComparisonMode         = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bFormsCheckRequiredFields      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
+            bIgnoreCurrency                = ( _eType == All );
             bAutoIncrementIsPrimaryKey     = false; // hsqldb special
         }
     };
@@ -128,8 +128,8 @@ namespace dbaui
             s_aSupport[  ::dbaccess::DST_CALC                ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
             s_aSupport[  ::dbaccess::DST_FLAT                ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_JDBC                ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_ODBC                ] = InitAdvanced( InitAdvanced::All );
+            s_aSupport[  ::dbaccess::DST_JDBC                ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_ODBC                ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
             s_aSupport[  ::dbaccess::DST_ADO                 ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
             s_aSupport[  ::dbaccess::DST_MOZILLA             ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_THUNDERBIRD         ] = InitAdvanced( InitAdvanced::None );
@@ -143,18 +143,16 @@ namespace dbaui
             s_aSupport[  ::dbaccess::DST_MACAB               ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_MSACCESS_2007       ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 );
             s_aSupport[  ::dbaccess::DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1 );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE2         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE3         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE4         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE5         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE6         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE7         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE8         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE9         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE10        ] = InitAdvanced( InitAdvanced::All );
-
-            s_aSupport[  ::dbaccess::DST_ORACLE_JDBC         ].bIgnoreCurrency = true;
+            s_aSupport[  ::dbaccess::DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE2         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE3         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE4         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE5         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE6         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE7         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE8         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE9         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
+            s_aSupport[  ::dbaccess::DST_USERDEFINE10        ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
         }
         return s_aSupport[ _eType ];
     }

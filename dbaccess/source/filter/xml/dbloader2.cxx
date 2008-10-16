@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.32.28.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -62,6 +61,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -473,16 +473,32 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
         else
         {
-            Sequence< Any > aCreationArgs( 1 );
-            aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
-            xDocumentDataSource.set( xDatabaseContext->createInstanceWithArguments( aCreationArgs ), UNO_QUERY_THROW );
+            ::comphelper::NamedValueCollection aCreationArgs;
+            aCreationArgs.put( (::rtl::OUString)INFO_POOLURL, sSalvagedURL );
+            xDocumentDataSource.set( xDatabaseContext->createInstanceWithArguments( aCreationArgs.getWrappedNamedValues() ), UNO_QUERY_THROW );
         }
 
         xModel.set( xDocumentDataSource->getDatabaseDocument(), UNO_QUERY );
-        if ( xModel.is() && bNewAndInteractive )
+
+        if ( bCreateNew && xModel.is() )
         {
-            const ::rtl::OUString sURL = xModel->getURL();
-            bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
+            if ( bNewAndInteractive )
+            {
+                bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
+            }
+            else
+            {
+                try
+                {
+                    Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
+                    xLoad->initNew();
+                    bSuccess = true;
+                }
+                catch( const Exception& )
+                {
+                    bSuccess = false;
+                }
+            }
 
             // initially select the "Tables" category (will be done below)
             nInitialSelection = ::com::sun::star::sdb::application::DatabaseObjectContainer::TABLES;
@@ -501,7 +517,11 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         try
         {
             aMediaDesc.put( "FileName", _rURL );
-            xModel->attachResource( _rURL, aMediaDesc.getPropertyValues() );
+            Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
+
+            Sequence< PropertyValue > aResource( aMediaDesc.getPropertyValues() );
+            xLoad->load( aResource );
+            xModel->attachResource( _rURL, aResource );
         }
         catch(const Exception&)
         {
@@ -523,8 +543,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             {
                 xController->attachModel( xModel );
                 rFrame->setComponent( xController->getComponentWindow(), xController.get() );
-                xModel->setCurrentController( xController.get() );
                 xController->attachFrame( rFrame );
+                xModel->setCurrentController( xController.get() );
             }
         }
         catch( const Exception& )
@@ -536,43 +556,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     if (bSuccess)
     {
-        try
-        {
-            Reference< css::container::XSet > xModelCollection;
-            if ( m_aContext.createComponent( "com.sun.star.frame.GlobalEventBroadcaster", xModelCollection ) )
-                xModelCollection->insert(css::uno::makeAny(xModel));
-
-            Reference< css::document::XEventListener > xDocEventBroadcaster(xModel,UNO_QUERY_THROW);
-            css::document::EventObject aEvent;
-            aEvent.Source = xModel;
-            ::std::vector< ::rtl::OUString > aEvents;
-            if ( bCreateNew )
-            {
-                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCreate")));
-                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew"))); // UI event
-            }
-            else
-            {
-                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoadFinished")));
-                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad"))); // UI event
-            }
-
-            std::vector< rtl::OUString >::iterator aIter = aEvents.begin();
-            const std::vector< rtl::OUString >::iterator aEnd = aEvents.end();
-            for (; aIter != aEnd; ++aIter)
-            {
-                aEvent.EventName = *aIter;
-                xDocEventBroadcaster->notifyEvent(aEvent);
-            }
-
-            aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated"));
-            Reference< css::document::XEventListener > xGlobalDocEventBroadcaster(xModelCollection,UNO_QUERY_THROW);
-            xGlobalDocEventBroadcaster->notifyEvent(aEvent);
-        }
-        catch(Exception)
-        {
-            OSL_ENSURE(0,"Could not add database model to global model collection and broadcast the events OnNew/OnLoad!");
-        }
         if ( rListener.is() )
             rListener->loadFinished(this);
 

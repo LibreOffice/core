@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.20.2.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_
 
 #include "ModelImpl.hxx"
+#include "documenteventnotifier.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -46,28 +47,33 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <cppuhelper/compbase10.hxx>
-#include <cppuhelper/implbase3.hxx>
-
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 /** === end UNO includes === **/
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 16
 #include <comphelper/implbase_var.hxx>
 #endif
 
+#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <rtl/ref.hxx>
+
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace comphelper {
     class NamedValueCollection;
@@ -78,18 +84,70 @@ namespace dbaccess
 {
 //........................................................................
 
-class ODatabaseContext;
+class DocumentEvents;
+class DocumentEventExecutor;
+class DocumentGuard;
 
 typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   Controllers;
 
 //============================================================
+//= ViewMonitor
+//============================================================
+/** helper class monitoring the views of a document, and firing appropriate events
+    when views are attached / detached
+*/
+class ViewMonitor : public boost::noncopyable
+{
+public:
+    ViewMonitor( DocumentEventNotifier& _rEventNotifier )
+        :m_rEventNotifier( _rEventNotifier )
+        ,m_bIsNewDocument( true )
+        ,m_bEverHadController( false )
+        ,m_bLastIsFirstEverController( false )
+        ,m_xLastConnectedController()
+    {
+    }
+
+    void    reset()
+    {
+        m_bEverHadController = false;
+        m_bLastIsFirstEverController = false;
+        m_xLastConnectedController.clear();
+    }
+
+    /** to be called when a view (aka controller) has been connected to the document
+        @return
+            <TRUE/> if and only if this was the first-ever controller connected to the document
+    */
+    bool    onControllerConnected(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
+             );
+
+    /**  to be called when a controller is set as current controller
+    */
+    void    onSetCurrentController(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
+             );
+
+    void    onLoadedDocument() { m_bIsNewDocument = false; }
+
+private:
+    DocumentEventNotifier&  m_rEventNotifier;
+    bool                    m_bIsNewDocument;
+    bool                    m_bEverHadController;
+    bool                    m_bLastIsFirstEverController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                            m_xLastConnectedController;
+};
+
+//============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::comphelper::WeakComponentImplHelper14 <   ::com::sun::star::frame::XModel2
+typedef ::comphelper::WeakComponentImplHelper16 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster
-                                                ,   ::com::sun::star::document::XEventListener
+                                                ,   ::com::sun::star::document::XDocumentEventBroadcaster
                                                 ,   ::com::sun::star::view::XPrintable
                                                 ,   ::com::sun::star::util::XCloseable
                                                 ,   ::com::sun::star::lang::XServiceInfo
@@ -99,6 +157,8 @@ typedef ::comphelper::WeakComponentImplHelper14 <   ::com::sun::star::frame::XMo
                                                 ,   ::com::sun::star::document::XEmbeddedScripts
                                                 ,   ::com::sun::star::document::XScriptInvocationContext
                                                 ,   ::com::sun::star::script::provider::XScriptProviderSupplier
+                                                ,   ::com::sun::star::document::XEventsSupplier
+                                                ,   ::com::sun::star::frame::XLoadable
                                                 >   ODatabaseDocument_OfficeDocument;
 
 typedef ::cppu::ImplHelper3<    ::com::sun::star::frame::XTitle
@@ -110,40 +170,63 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
                         ,public ODatabaseDocument_OfficeDocument
                         ,public ODatabaseDocument_Title
 {
+    enum InitState
+    {
+        NotInitialized,
+        Initializing,
+        Initialized
+    };
+
     DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >,TNumberedController);
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
 
     ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                                                           m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                                                           m_aDocEventListeners;
     ::cppu::OInterfaceContainerHelper                                                           m_aStorageListeners;
+
+    DocumentEvents*                                                                             m_pEventContainer;
+    ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
+    DocumentEventNotifier                                                                       m_aEventNotifier;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >                    m_xCurrentController;
     Controllers                                                                                 m_aControllers;
+    ViewMonitor                                                                                 m_aViewMonitor;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xForms;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xReports;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::script::provider::XScriptProvider > m_xScriptProvider;
 
+    /** @short  such module manager is used to classify new opened documents. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >                 m_xModuleManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                         m_xTitleHelper;
+    TNumberedController                                                                         m_aNumberedControllers;
+
+    /** true if and only if the DatabaseDocument's "initNew" or "load" have been called (or, well,
+        the document has be initialized implicitly - see storeAsURL
+    */
+    InitState                                                                                   m_eInitState;
+    bool                                                                                        m_bClosing;
+
+    enum StoreType { SAVE, SAVE_AS };
     /** stores the document to the given URL, rebases it to the respective new storage, if necessary, resets
         the modified flag, and notifies any listeners as required
+
+        @param _rURL
+            the URL to store the document to
+        @param _rArguments
+            arguments for storing the document (MediaDescriptor)
+        @param _eType
+            the type of the store process (Save or SaveAs). The method will automatically
+            notify the proper events for this type.
+        @param _rGuard
+            the instance lock to be released before doing synchronous notifications
     */
     void impl_storeAs_throw(
             const ::rtl::OUString& _rURL,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArguments,
-            const sal_Char* _pAsciiDocumentEventName,
-            ModelMethodGuard& _rGuard
+            const StoreType _eType,
+            DocumentGuard& _rGuard
          );
-
-    /** @short  such module manager is used to classify new opened documents. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >         m_xModuleManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
-    TNumberedController                                                                 m_aNumberedControllers;
-
-    /** notifies the global event broadcaster
-        The method must be called without our mutex locked
-    */
-    void impl_notifyEvent_nolck_nothrow( const ::com::sun::star::document::EventObject& _rEvent );
 
     /** notifies our storage change listeners that our underlying storage changed
 
@@ -256,13 +339,13 @@ public:
     virtual void SAL_CALL setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getCurrentSelection(  ) throw (::com::sun::star::uno::RuntimeException) ;
 
-// ::com::sun::star::frame::XModel2
+    // XModel2
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL getControllers(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createDefaultViewController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createViewController( const ::rtl::OUString& ViewName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
 
-// ::com::sun::star::frame::XStorable
+    // XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::rtl::OUString SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual sal_Bool SAL_CALL isReadonly(  ) throw (::com::sun::star::uno::RuntimeException) ;
@@ -270,41 +353,43 @@ public:
     virtual void SAL_CALL storeAsURL( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL storeToURL( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
 
-// ::com::sun::star::util::XModifyBroadcaster
+    // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::util::XModifiable
+    // ::com::sun::star::util::XModifiable
     virtual sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setModified( sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException) ;
-// ::com::sun::star::document::XEventBroadcaster
+
+    // XEventBroadcaster
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::document::XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    // XDocumentEventBroadcaster
+    virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-
-// ::com::sun::star::view::XPrintable
+    // XPrintable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aPrinter ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL print( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
 
-// XFormDocumentsSupplier
+    // XFormDocumentsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getFormDocuments(  ) throw (::com::sun::star::uno::RuntimeException);
 
-// XReportDocumentsSupplier
+    // XReportDocumentsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getReportDocuments(  ) throw (::com::sun::star::uno::RuntimeException);
 
-// XCloseable
+    // XCloseable
     virtual void SAL_CALL close( sal_Bool DeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
-// XUIConfigurationManagerSupplier
+    // XUIConfigurationManagerSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
-// XDocumentSubStorageSupplier
+    // XDocumentSubStorageSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
@@ -329,6 +414,13 @@ public:
 
     // XScriptProviderSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::provider::XScriptProvider > SAL_CALL getScriptProvider(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XEventsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XLoadable
+    virtual void SAL_CALL initNew(  ) throw (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XTitle
     virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -356,7 +448,50 @@ public:
     static void clearObjectContainer(
                 ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >& _rxContainer);
 
+    /** checks whether the component is already initialized, throws a NotInitializedException if not
+    */
+    inline void checkInitialized() const
+    {
+        if ( !impl_isInitialized() )
+            throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), getThis() );
+    }
+
+    /** checks the document is currently in the initialization phase, or already initialized.
+        Throws NotInitializedException if not so.
+    */
+    inline void checkNotUninitilized() const
+    {
+        if ( impl_isInitialized() || impl_isInitializing() )
+            // fine
+            return;
+
+        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), getThis() );
+    }
+
+    /** checks whether the document is currently being initialized, or already initialized,
+        throws a DoubleInitializationException if so
+    */
+    inline void checkNotInitialized() const
+    {
+        if ( impl_isInitializing() || impl_isInitialized() )
+            throw ::com::sun::star::frame::DoubleInitializationException( ::rtl::OUString(), getThis() );
+    }
+
 private:
+    /** returns whether the model is currently being initialized
+    */
+    bool    impl_isInitializing() const { return m_eInitState == Initializing; }
+
+    /** returns whether the model is already initialized, i.e. the XModel's "initNew" or "load" methods have been called
+    */
+    bool    impl_isInitialized() const { return m_eInitState == Initialized; }
+
+    /// tells the model it is being initialized now
+    void    impl_setInitializing() { m_eInitState = Initializing; }
+
+    /// tells the model its initialization is done
+    void    impl_setInitialized();
+
     /** closes the frames of all connected controllers
 
     @param _bDeliverOwnership
@@ -399,7 +534,7 @@ private:
 
     /** imports the document from the given resource.
     */
-    bool    impl_import_throw( const ::comphelper::NamedValueCollection& _rResource );
+    void    impl_import_throw( const ::comphelper::NamedValueCollection& _rResource );
 
     /** creates a storage for the given URL, truncating it if a file with this name already exists
 
@@ -414,9 +549,21 @@ private:
                 const ::rtl::OUString& _rURL
             ) const;
 
-    /** clears the guard before notifying.
+    /** sets our "modified" flag
+
+        will notify all our respective listeners, if the "modified" state actually changed
+
+        @param _bModified
+            the (new) flag indicating whether the document is currently modified or not
+        @param _rGuard
+            the guard for our instance. At method entry, the guard must hold the lock. At the moment
+            of method leave, the lock will be released.
+        @precond
+            our mutex is locked
+        @postcond
+            our mutex is not locked
     */
-    void    impl_setModified_throw( sal_Bool _bModified, ModelMethodGuard& _rGuard );
+    void    impl_setModified_nothrow( sal_Bool _bModified, DocumentGuard& _rGuard );
 
     /** stores the document to the given storage
 
@@ -440,6 +587,61 @@ private:
 
     /// determines whether we should disable the scripting related interfaces
     bool    impl_shouldDisallowScripting_nolck_nothrow() const;
+
+    /** checks whether we need to implicitly initialize the document
+
+    */
+};
+
+/** an extended version of the ModelMethodGuard, which also cares for the initialization state
+    of the document
+*/
+class DocumentGuard : public ModelMethodGuard
+{
+public:
+    enum MethodType
+    {
+        // a method which is to initialize the document
+        InitMethod,
+        // a default method
+        DefaultMethod,
+        // a method which is used (externally) during the initialization phase
+        MethodUsedDuringInit,
+        // a method which does not need initialization - use with care!
+        MethodWithoutInit
+    };
+
+    /** constructs the guard
+
+        @param _document
+            the ODatabaseDocument instance
+
+        @throws ::com::sun::star::lang::DisposedException
+            If the given component is already disposed
+
+        @throws ::com::sun::star::frame::DoubleInitializationException
+            if _eType is InitMethod, and the given component is already initialized, or currently being initialized.
+
+        @throws ::com::sun::star::lang::NotInitializedException
+            if _eType is DefaultMethod, and the given component is not yet initialized; or if _eType
+            is MethodUsedDuringInit, and the component is still uninitialized, and not in the initialization
+            phase currently.
+    */
+    DocumentGuard( const ODatabaseDocument& _document, MethodType _eType = DefaultMethod )
+        :ModelMethodGuard( _document )
+    {
+        switch ( _eType )
+        {
+            case InitMethod:            _document.checkNotInitialized();   break;
+            case DefaultMethod:         _document.checkInitialized();      break;
+            case MethodUsedDuringInit:  _document.checkNotUninitilized();  break;
+            case MethodWithoutInit:                                         break;
+        }
+    }
+
+    ~DocumentGuard()
+    {
+    }
 };
 
 //........................................................................

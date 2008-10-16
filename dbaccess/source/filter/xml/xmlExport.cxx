@@ -244,10 +244,9 @@ namespace dbaxml
     };
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
-: SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS)
+: SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS | nExportFlag)
 ,m_bAllreadyFilled(sal_False)
 {
-    setExportFlags( EXPORT_OASIS | nExportFlag);
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
     GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
 

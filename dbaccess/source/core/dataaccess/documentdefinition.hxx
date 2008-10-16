@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.hxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.28.6.4 $
  *
  * This file is part of OpenOffice.org.
  *

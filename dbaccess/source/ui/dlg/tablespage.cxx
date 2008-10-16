@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablespage.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.33.6.2 $
  *
  * This file is part of OpenOffice.org.
  *

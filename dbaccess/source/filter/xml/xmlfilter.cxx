@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilter.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,9 @@
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_XMLSCRIPTI_HXX
+#include <xmloff/xmlscripti.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
@@ -216,13 +219,9 @@ sal_Int32 ReadThroughComponent(
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( IOException& )
-    {
-        return 1;
-    }
     catch( Exception& )
     {
-        return 1;
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     // success!
@@ -474,6 +473,9 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, sal_True);
             break;
+        case XML_TOK_DOC_SCRIPT:
+            pContext = CreateScriptContext( rLocalName );
+            break;
     }
 
     if ( !pContext )
@@ -538,13 +540,14 @@ const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OOO, XML_SETTINGS,              XML_TOK_DOC_SETTINGS    },
+            { XML_NAMESPACE_OOO,    XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
             { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OOO, XML_STYLES,                XML_TOK_DOC_STYLES      },
+            { XML_NAMESPACE_OOO,    XML_STYLES,             XML_TOK_DOC_STYLES      },
             { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OOO, XML_AUTOMATIC_STYLES,      XML_TOK_DOC_AUTOSTYLES  },
+            { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
             { XML_NAMESPACE_OFFICE, XML_DATABASE,           XML_TOK_DOC_DATABASE    },
-            { XML_NAMESPACE_OOO, XML_DATABASE,              XML_TOK_DOC_DATABASE    },
+            { XML_NAMESPACE_OOO,    XML_DATABASE,           XML_TOK_DOC_DATABASE    },
+            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT      },
             XML_TOKEN_MAP_END
         };
         m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -779,6 +782,11 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::r
             SetStyles((SvXMLStylesContext*)pContext);
     }
     return pContext;
+}
+// -----------------------------------------------------------------------------
+SvXMLImportContext* ODBFilter::CreateScriptContext( const ::rtl::OUString& _rLocalName )
+{
+    return new XMLScriptContext( *this, XML_NAMESPACE_OFFICE, _rLocalName, GetModel() );
 }
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapper() const

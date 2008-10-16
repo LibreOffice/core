@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolboxcontroller.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.13.98.2 $
  *
  * This file is part of OpenOffice.org.
  *

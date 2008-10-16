@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macromigrationdialog.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,11 +75,13 @@ namespace dbmm
 
         // Dialog overridables
         virtual BOOL    Close();
+        virtual short   Execute();
 
     private:
         void    impl_showCloseDocsError( bool _bShow );
         bool    impl_closeSubDocs_nothrow();
         bool    impl_backupDocument_nothrow() const;
+        void    impl_reloadDocument_nothrow( bool _bMigrationSuccess );
 
     private:
         DECL_LINK( OnStartMigration, void* );

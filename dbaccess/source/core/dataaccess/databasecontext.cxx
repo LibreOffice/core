@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasecontext.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.43.4.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,33 +190,36 @@ Sequence< ::rtl::OUString > ODatabaseContext::getSupportedServiceNames(  ) throw
 }
 
 //--------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
+Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
 {
     ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext.getLegacyServiceFactory(), *this ) );
-    Reference< XDataSource > xDataSource( pImpl->getDataSource() );
+    Reference< XDataSource > xDataSource( pImpl->getOrCreateDataSource() );
+
     return xDataSource.get();
+}
+
+//--------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
+{
+    // for convenience of the API user, we ensure the document is fully initialized (effectively: XLoadable::initNew
+    // has been called at the DatabaseDocument).
+    return impl_createNewDataSource();
 }
 
 //--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
-    const Any* pIter = _rArguments.getConstArray();
-    const Any* pEnd = pIter + _rArguments.getLength();
-    NamedValue aValue;
-    Reference< XInterface > xExistent;
-    ::rtl::OUString sURL;
-    for (; pIter != pEnd; ++pIter)
-    {
-        if ( (*pIter >>= aValue) && aValue.Name == INFO_POOLURL && (aValue.Value >>= sURL) )
-        {
-            xExistent = getObject(sURL);
-            break;
-        }
-    }
-    if ( !xExistent.is() )
-        xExistent = createInstance();
+    ::comphelper::NamedValueCollection aArgs( _rArguments );
+    ::rtl::OUString sURL = aArgs.getOrDefault( (::rtl::OUString)INFO_POOLURL, ::rtl::OUString() );
 
-    return xExistent;
+    Reference< XInterface > xDataSource;
+    if ( sURL.getLength() )
+        xDataSource = getObject( sURL );
+
+    if ( !xDataSource.is() )
+        xDataSource = impl_createNewDataSource();
+
+    return xDataSource;
 }
 // DatabaseAccessContext_Base
 //------------------------------------------------------------------------------
@@ -233,7 +236,6 @@ void ODatabaseContext::disposing()
             ++aIter
         )
     {
-        OSL_ENSURE(aIter->second->m_refCount != 0,"Object is already disposed");
         aIter->second->dispose();
     }
     m_aDatabaseObjects.clear();
@@ -333,22 +335,24 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
     {
         pExistent.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), *this ) );
 
+        Reference< XModel > xModel( pExistent->createNewModel_deliverOwnership( false ), UNO_SET_THROW );
+        Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
+
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "FileName", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
         aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ) );
 
-        Reference< XModel > xModel = pExistent->createNewModel_deliverOwnership();
-        DBG_ASSERT( xModel.is(), "ODatabaseContext::loadObjectFromURL: no model?" );
-
-        xModel->attachResource( _sURL, aArgs.getPropertyValues() );
+        Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
+        xLoad->load( aResource );
+        xModel->attachResource( _sURL, aResource );
 
         ::utl::CloseableComponent aEnsureClose( xModel );
     }
 
     setTransientProperties( _sURL, *pExistent );
 
-    return pExistent->getDataSource().get();
+    return pExistent->getOrCreateDataSource().get();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )
@@ -358,7 +362,7 @@ void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODat
     try
     {
         ::rtl::OUString sAuthFailedPassword;
-        Reference< XPropertySet > xDSProps( _rDataSourceModel.getDataSource(), UNO_QUERY_THROW );
+        Reference< XPropertySet > xDSProps( _rDataSourceModel.getOrCreateDataSource(), UNO_QUERY_THROW );
         const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
         const PropertyValue* pProp = rSessionPersistentProps.getConstArray();
         const PropertyValue* pPropsEnd = rSessionPersistentProps.getConstArray() + rSessionPersistentProps.getLength();
@@ -428,7 +432,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 //------------------------------------------------------------------------------
 void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl)
 {
-    Reference< XPropertySet > xSource(_rModelImpl.getDataSource(),UNO_QUERY);
+    Reference< XPropertySet > xSource( _rModelImpl.getOrCreateDataSource(), UNO_QUERY );
     ::comphelper::NamedValueCollection aRememberProps;
 
     try
@@ -641,7 +645,7 @@ Reference< XInterface > ODatabaseContext::getObject(const ::rtl::OUString& _rNam
     ObjectCacheIterator aFind = m_aDatabaseObjects.find(_rName);
     Reference< XInterface > xExistent;
     if ( aFind != m_aDatabaseObjects.end() )
-        xExistent = aFind->second->getDataSource();
+        xExistent = aFind->second->getOrCreateDataSource();
     return xExistent;
 }
 // -----------------------------------------------------------------------------

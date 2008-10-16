@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoDirectSql.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.7.142.3 $
  *
  * This file is part of OpenOffice.org.
  *

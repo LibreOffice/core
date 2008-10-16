@@ -76,6 +76,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -263,6 +264,8 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::task;
 using ::com::sun::star::document::XEmbeddedScripts;
+using ::com::sun::star::document::XDocumentEventBroadcaster;
+using ::com::sun::star::document::DocumentEvent;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
@@ -513,18 +516,22 @@ void SAL_CALL OApplicationController::disposing()
             ::rtl::OUString sUrl = m_xModel->getURL();
             if ( sUrl.getLength() )
             {
-                ::rtl::OUString     aFilter;
-                INetURLObject       aURL( m_xModel->getURL() );
-                const SfxFilter* pFilter = getStandardDatabaseFilter();
-                if ( pFilter )
-                    aFilter = pFilter->GetFilterName();
+                ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
+                if ( true == aArgs.getOrDefault( "PickListEntry", true ) )
+                {
+                    ::rtl::OUString     aFilter;
+                    INetURLObject       aURL( m_xModel->getURL() );
+                    const SfxFilter* pFilter = getStandardDatabaseFilter();
+                    if ( pFilter )
+                        aFilter = pFilter->GetFilterName();
 
-                // add to svtool history options
-                SvtHistoryOptions().AppendItem( ePICKLIST,
-                        aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
-                        aFilter,
-                        getStrippedDatabaseName(),
-                        ::rtl::OUString() );
+                    // add to svtool history options
+                    SvtHistoryOptions().AppendItem( ePICKLIST,
+                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                            aFilter,
+                            getStrippedDatabaseName(),
+                            ::rtl::OUString() );
+                }
             }
 
             m_aModelConnector.clear();
@@ -533,6 +540,7 @@ void SAL_CALL OApplicationController::disposing()
     }
     catch(Exception)
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     m_pView = NULL;
@@ -642,6 +650,17 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
 //--------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    // notify the OnPrepareViewClosing event (before locking any mutex)
+    Reference< XDocumentEventBroadcaster > xBroadcaster( m_xModel, UNO_QUERY );
+    if ( xBroadcaster.is() )
+    {
+        xBroadcaster->notifyDocumentEvent(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrepareViewClosing" ) ),
+            this,
+            Any()
+        );
+    }
+
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -819,11 +838,9 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 // Our document supports embedding scripts into it, if and only if there are no
                 // forms/reports with macros/scripts into them. So, we need to enable migration
                 // if and only if the database document does *not* support embedding scripts.
-//                bool bAvailable = !Reference< XEmbeddedScripts >( m_xModel, UNO_QUERY ).is();
-                // TODO: revert to the disabled code. The current version is just to be able
-                // to integrate an intermediate version of the CWS, which should behave as
-                // if no macros in DB docs are allowed
-                bool bAvailable = false;
+                bool bAvailable =
+                        !Reference< XEmbeddedScripts >( m_xModel, UNO_QUERY ).is()
+                    &&  !Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly();
                 aReturn.bEnabled = bAvailable;
                 if ( !bAvailable )
                     aReturn.bInvisible = true;
@@ -2732,11 +2749,6 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
     // if we have forms or reports which contain macros/scripts, then show a warning
     // which suggests the user to migrate them to the database document
 
-    // TODO: remove the following line. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-    return 0L;
-/*
     Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
     if ( xDocumentScripts.is() )
     {
@@ -2779,7 +2791,6 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
     }
 
     return 1L;
-*/
 }
 
 // -----------------------------------------------------------------------------
@@ -2801,7 +2812,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     if ( _rxModel.is() )
     {
         m_xDocumentModify.set( m_xModel, UNO_QUERY_THROW );
-        m_aModelConnector = ModelControllerConnector( _rxModel, this );
+        m_aModelConnector.connect( _rxModel, this );
         onConnectedModel();
     }
     else

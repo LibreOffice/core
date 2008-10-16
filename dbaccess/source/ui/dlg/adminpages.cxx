@@ -320,7 +320,7 @@ namespace dbaui
                     eImage = OSQLMessageBox::Error;
                     aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
                 }
-                OSQLMessageBox aMsg(this,sTitle,aMessage,eImage);
+                OSQLMessageBox aMsg( this, sTitle, aMessage, WB_OK, eImage );
                 aMsg.Execute();
             }
             if ( !bSuccess )

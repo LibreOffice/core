@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlEnums.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,8 @@ namespace dbaxml
         XML_TOK_DOC_AUTOSTYLES,
         XML_TOK_DOC_SETTINGS,
         XML_TOK_DOC_DATABASE,
-        XML_TOK_DOC_STYLES
+        XML_TOK_DOC_STYLES,
+        XML_TOK_DOC_SCRIPT
     };
     enum XMLDatabaseToken
     {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macromigrationwizard.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -64,6 +65,7 @@ namespace dbmm
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::lang::IllegalArgumentException;
+    using ::com::sun::star::frame::XStorable;
     /** === end UNO using === **/
 
     //====================================================================
@@ -209,7 +211,7 @@ namespace dbmm
         if ( _rArguments.getLength() != 1 )
             throw IllegalArgumentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid number of initialization arguments. Expected 1." ) ),
-                    // TODO: resoource
+                    // TODO: resource
                 *this,
                 1
             );
@@ -218,6 +220,15 @@ namespace dbmm
         if ( !m_xDocument.is() )
             throw IllegalArgumentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No database document found in the initializatin arguments." ) ),
+                    // TODO: resource
+                *this,
+                1
+            );
+
+        Reference< XStorable > xDocStor( m_xDocument, UNO_QUERY_THROW );
+        if ( xDocStor->isReadonly() )
+            throw IllegalArgumentException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Not applicable to read-only documents." ) ),
                     // TODO: resource
                 *this,
                 1

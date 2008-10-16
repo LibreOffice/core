@@ -915,74 +915,30 @@ void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
+    Reference< XInteractionHandler > xHandler( getORB()->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
     try
     {
         if (callSaveAsDialog() == sal_True)
         {
             m_pImpl->saveChanges(*m_pOutSet);
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-#if OSL_DEBUG_LEVEL > 0
-            SFX_ITEMSET_GET(*m_pOutSet, pDocUrl, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
-            (void)pDocUrl;
-#endif
-            Reference<XStorable> xStore(getDataSourceOrModel(xDatasource),UNO_QUERY);
-            Reference<XComponent> xComponent(xStore,UNO_QUERY);
-            ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-            if ( xStore.is() )
-            {
-                if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eCreateNew )
-                    CreateDatabase();
-                Reference< XModel > xModel(xStore, UNO_QUERY);
+            Reference< XModel > xModel( getDataSourceOrModel( xDatasource ), UNO_QUERY_THROW );
+            Reference< XStorable > xStore( xModel, UNO_QUERY_THROW );
 
-                Sequence<PropertyValue> aArgs = xModel->getArgs();
+            if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eCreateNew )
+                CreateDatabase();
 
-                sal_Bool bOverwrite = sal_True;
-                sal_Bool bAddOverwrite = sal_True;
-                sal_Bool bAddInteractionHandler = sal_True;
-                PropertyValue* pIter = aArgs.getArray();
-                PropertyValue* pEnd  = pIter + aArgs.getLength();
-                for(;pIter != pEnd;++pIter)
-                {
-                    if ( pIter->Name.equalsAscii("Overwrite") )
-                    {
-                        pIter->Value <<= bOverwrite;
-                        bAddOverwrite = sal_False;
-                    }
-                    if ( pIter->Name.equalsAscii("InteractionHandler") )
-                    {
-                        pIter->Value <<= xHandler;
-                        bAddInteractionHandler = sal_False;
-                    }
+            ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+            aArgs.put( "Overwrite", sal_Bool( sal_True ) );
+            aArgs.put( "InteractionHandler", xHandler );
 
-                }
-                if ( bAddOverwrite )
-                {
-                    sal_Int32 nLen = aArgs.getLength();
-                    aArgs.realloc(nLen+1);
-                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
-                    aArgs[nLen].Value <<= bOverwrite;
-                }
-                if ( bAddInteractionHandler )
-                {
-                    sal_Int32 nLen = aArgs.getLength();
-                    aArgs.realloc(nLen+1);
-                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
-                    aArgs[nLen].Value <<= xHandler;
-                }
-                xStore->storeAsURL(sPath,aArgs);
+            ::rtl::OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
+            xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
 
-                if (pFinalPage != NULL)
-                {
-                    if (pFinalPage->IsDatabaseDocumentToBeRegistered())
-                        RegisterDataSourceByLocation(sPath);
-                }
-                else
-                {
-                    RegisterDataSourceByLocation(sPath);
-                }
-                return sal_True;
-            }
+            if ( !pFinalPage || pFinalPage->IsDatabaseDocumentToBeRegistered() )
+                RegisterDataSourceByLocation( sPath );
+
+            return sal_True;
         }
     }
     catch (Exception& e)
@@ -1318,10 +1274,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             skipUntil(PAGE_DBSETUPWIZARD_FINAL);
         }
         if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
-            return SaveDatabaseDocument() ? OWizardMachine::onFinish(_nResult) : sal_False;
+            return SaveDatabaseDocument() ? OWizardMachine::onFinish( _nResult ) : sal_False;
         else
         {
-               enableButtons( WZB_FINISH, sal_False);
+               enableButtons( WZB_FINISH, sal_False );
             return sal_False;
         }
     }

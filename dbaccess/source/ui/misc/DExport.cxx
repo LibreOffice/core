@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DExport.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.40.32.2 $
  *
  * This file is part of OpenOffice.org.
  *

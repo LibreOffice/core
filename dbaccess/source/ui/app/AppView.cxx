@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppView.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.22.6.3 $
  *
  * This file is part of OpenOffice.org.
  *

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: migrationlog.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@ namespace dbmm
 //........................................................................
 
     typedef sal_Int16 DocumentID;
+    struct MigrationError;
 
     //====================================================================
     //= MigrationLog
@@ -59,6 +60,17 @@ namespace dbmm
 
         //----------------------------------------------------------------
         //- event logging
+
+        /** logs an unrecoverable error during the migration process
+        */
+        void        logFailure( const MigrationError& _rError );
+
+        /** logs a recoverable (or at least ignorable) error during the migration process
+        */
+        void        logRecoverable( const MigrationError& _rError );
+
+        /// checks whether logFailure has been called
+        bool        hadFailure() const;
 
         /// logs the fact that the database document has been backed up
         void        backedUpDocument( const ::rtl::OUString& _rNewDocumentLocation );
@@ -80,7 +92,7 @@ namespace dbmm
 
         /** logs that the migration for a certain document has been finished
         */
-        void        finishedDocument( const DocumentID _nDocID, const bool _bSuccessful );
+        void        finishedDocument( const DocumentID _nDocID );
 
         //----------------------------------------------------------------
         //- information retrieval

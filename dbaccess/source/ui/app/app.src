@@ -451,18 +451,17 @@ String STR_FOLDER_LABEL
 
 String STR_SUB_DOCS_WITH_SCRIPTS
 {
-    Text [ en-US ] = "The document contains forms and/or reports with macros and/or scripts embedded.";
+    Text [ en-US ] = "The document contains forms or reports with embedded macros.";
 };
 
 String STR_SUB_DOCS_WITH_SCRIPTS_DETAIL
 {
-    Text [ en-US ] = "Scripts and macros should nowadays be embedded into the database document itself.\n\n"
+    Text [ en-US ] = "Macros should be embedded into the database document itself.\n\n"
 
                     "You can continue to use your document as before, however, you are encouraged to migrate "
-                    "your scripts and macros. The menu item 'Tools / Migrate Scripts and Macros ...' will "
-                    "assist you with this.\n\n"
+                    "your macros. The menu item 'Tools / Migrate Macros ...' will assist you with this.\n\n"
 
-                    "Note that you won't be able to embed macros or scripts into the database document until "
+                    "Note that you won't be able to embed macros into the database document itself until "
                     "this migration is done. ";
 };
 

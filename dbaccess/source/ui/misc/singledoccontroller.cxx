@@ -169,13 +169,9 @@ namespace dbaui
 
         bool    documentHasScriptSupport() const
         {
-            // TODO: revert to the disabled code. The current version is just to be able
-            // to integrate an intermediate version of the CWS, which should behave as
-            // if no macros in DB docs are allowed
-            return false;
-//            OSL_PRECOND( !!m_aDocScriptSupport,
-//                "OSingleDocumentControllerImpl::documentHasScriptSupport: not completely initialized, yet - don't know!?" );
-//            return !!m_aDocScriptSupport && *m_aDocScriptSupport;
+            OSL_PRECOND( !!m_aDocScriptSupport,
+                "OSingleDocumentControllerImpl::documentHasScriptSupport: not completely initialized, yet - don't know!?" );
+            return !!m_aDocScriptSupport && *m_aDocScriptSupport;
         }
 
         void    setDocumentScriptSupport( const bool _bSupport )

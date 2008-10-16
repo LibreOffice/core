@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.36.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -333,15 +333,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         {
             rFrame->setComponent( xController->getComponentWindow(), xController.get() );
             xController->attachFrame(rFrame);
-        }
-
-        if ( xDatabaseDocument.is() )
-        {
-            Reference< document::XEventListener > xGlobalDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
-            document::EventObject aEvent( xDatabaseDocument, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated")) );
-            xGlobalDocEventBroadcaster->notifyEvent(aEvent);
-            // TODO: is this correct? The newly created view is not a view for the database document, at least not in
-            // the sense that its XController::getModel would return the database document
         }
 
         if ( rListener.is() )

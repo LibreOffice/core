@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationControl.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.23.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
