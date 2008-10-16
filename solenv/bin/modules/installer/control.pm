@@ -41,6 +41,38 @@ use installer::scriptitems;
 use installer::systemactions;
 
 #########################################################
+# Function that can be used for additional controls.
+# Search happens in $installer::globals::patharray.
+#########################################################
+
+sub check_needed_files_in_path
+{
+    my ( $filesref ) = @_;
+
+    foreach $onefile ( @{$filesref} )
+    {
+        installer::logger::print_message( "...... searching $onefile ..." );
+
+        my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$onefile, $installer::globals::patharray , 0);
+
+        if ( $$fileref eq "" )
+        {
+            $error = 1;
+            installer::logger::print_error( "$onefile not found\n" );
+        }
+        else
+        {
+            installer::logger::print_message( "\tFound: $$fileref\n" );
+        }
+    }
+
+    if ( $error )
+    {
+        installer::exiter::exit_program("ERROR: Could not find all needed files in path!", "check_needed_files_in_path");
+    }
+}
+
+#########################################################
 # Checking the local system
 # Checking existence of needed files in include path
 #########################################################
@@ -64,6 +96,8 @@ sub check_system_path
         $local_pathseparator = ';';
     }
     my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
+
+    $installer::globals::patharray = $patharrayref;
 
     my @needed_files_in_path = ();
 

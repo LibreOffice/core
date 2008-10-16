@@ -131,6 +131,7 @@ BEGIN
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
+    $patharray = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -163,6 +164,7 @@ BEGIN
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
     $updatedatabase = 0;
+    $updatedatabasepath = "";
     $pfffileexists = 0;
     $pffcabfilename = "ooobasis3.0_pff.cab";
     $mergemodulenumber = 0;

@@ -84,6 +84,7 @@ use installer::windows::java;
 use installer::windows::media;
 use installer::windows::mergemodule;
 use installer::windows::msiglobal;
+use installer::windows::msp;
 use installer::windows::patch;
 use installer::windows::property;
 use installer::windows::removefile;
@@ -697,11 +698,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $allvariableshashref->{'UPDATE_DATABASE'} )
         {
             installer::logger::print_message( "... analyzing update database ...\n" );
+            $refdatabase = installer::windows::update::readdatabase($allvariableshashref, $languagestringref, $includepatharrayref);
 
-            $installer::globals::updatedatabase = 1;
-            $refdatabase = installer::windows::update::readdatabase($allvariableshashref->{'UPDATE_DATABASE'}, $languagestringref);
-            ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder, $allupdatecomponentorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
-            if ( $mergemodulesarrayref > -1 ) { installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref); }
+            if ( $installer::globals::updatedatabase )
+            {
+                ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder, $allupdatecomponentorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
+                if ( $mergemodulesarrayref > -1 ) { installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref); }
+            }
         }
     }
 
@@ -2187,6 +2190,21 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $finalinstalldir = "";
         installer::worker::clean_output_tree(); # removing directories created in the output tree
         ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+
+        #######################################################
+        # Creating Windows msp patches
+        #######################################################
+
+        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ) && ( ! ( $^O =~ /cygwin/i ))) # not supported for cygwin yet
+        {
+            # Required:
+            # Temp path for administrative installations: $installer::globals::temppath
+            # Path of new installation set: $finalinstalldir
+            # Path of old installation set: $installer::globals::updatedatabasepath
+            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref);
+            ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+            installer::worker::clean_output_tree(); # removing directories created in the output tree
+        }
 
         #######################################################
         # Creating download installation set
