@@ -31,6 +31,8 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\packinfo\solariscopyrightfile %_DEST%\bin%_EXT%\solariscopyrightfile
 ..\source\packinfo\*.txt %_DEST%\bin%_EXT%\*.txt
+..\source\packinfo\*.pcp %_DEST%\bin%_EXT%\*.pcp
+..\scripts\admin.pl %_DEST%\bin%_EXT%\admin.pl
 ..\scripts\*.txt %_DEST%\bin%_EXT%\*.txt
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
