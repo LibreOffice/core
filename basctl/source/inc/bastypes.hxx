@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastypes.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +323,7 @@ public:
                     ~LibInfos();
 
     void            InsertInfo( LibInfoItem* pItem );
-    void            RemoveInfo( const LibInfoKey& rKey );
+    void            RemoveInfoFor( const ScriptDocument& _rDocument );
 
     LibInfoItem*    GetInfo( const LibInfoKey& rKey );
 };

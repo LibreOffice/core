@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.2.20.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,20 +55,9 @@ JARCOMPRESS 	= TRUE
 
 # --- Runner Settings ----------------------------------------------
 
-# create connection string for OOoRunner
-.IF "$(RUNNER_CONNECTION_STRING)" == ""
-    .IF "$(OOO_RUNNER_PORT)" == ""
-        OOO_RUNNER_PORT=8100
-    .ENDIF
-    .IF "$(OOO_RUNNER_HOST)" == ""
-        OOO_RUNNER_HOST=localhost
-    .ENDIF
-    RUNNER_CONNECTION_STRING=socket,host=$(OOO_RUNNER_HOST),port=$(OOO_RUNNER_PORT)
-.ENDIF
-
 # classpath and argument list
 RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
-RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex -cs $(RUNNER_CONNECTION_STRING)
+RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 .END
 
 # --- Targets ------------------------------------------------------

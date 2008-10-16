@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propcontroller.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1362,7 +1362,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::Clicked : caught an exception !")
+            DBG_UNHANDLED_EXCEPTION();
         }
         m_xInteractiveHandler = NULL;
     }

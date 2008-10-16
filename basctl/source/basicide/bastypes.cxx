@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastypes.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -900,13 +900,24 @@ void LibInfos::InsertInfo( LibInfoItem* pItem )
     m_aLibInfoMap.insert( LibInfoMap::value_type( aKey, pItem ) );
 }
 
-void LibInfos::RemoveInfo( const LibInfoKey& rKey )
+void LibInfos::RemoveInfoFor( const ScriptDocument& _rDocument )
 {
-    LibInfoMap::iterator it = m_aLibInfoMap.find( rKey );
-    if ( it != m_aLibInfoMap.end() )
+    for (   LibInfoMap::iterator it = m_aLibInfoMap.begin();
+            it != m_aLibInfoMap.end();
+        )
     {
+        if ( it->first.GetDocument() != _rDocument )
+        {
+            ++it;
+            continue;
+        }
+
         LibInfoItem* pItem = it->second;
+
+        LibInfoMap::iterator next_it = it; ++next_it;
         m_aLibInfoMap.erase( it );
+        it = next_it;
+
         delete pItem;
     }
 }
