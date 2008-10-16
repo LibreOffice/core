@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wizardmachine.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.4.10.2 $
  *
  * This file is part of OpenOffice.org.
  *

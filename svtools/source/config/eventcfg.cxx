@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventcfg.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,19 +250,13 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
     }
     else
     {
-        SupportedEventsVector::const_iterator vit = m_supportedEvents.begin();
-        SupportedEventsVector::const_iterator vit_end = m_supportedEvents.end();
-        for(;vit!=vit_end;++vit)
-        {
-            if(vit->equals(aName))
-            {
-                props[1].Value <<= OUString();
-                break;
-            }
-        }
-        if(vit==vit_end)
-            throw container::NoSuchElementException( OUString::createFromAscii("No such element in event configuration"),
-                Reference< XInterface > () );
+        // not yet accessed - is it a supported name?
+        SupportedEventsVector::const_iterator pos = ::std::find(
+            m_supportedEvents.begin(), m_supportedEvents.end(), aName );
+        if ( pos == m_supportedEvents.end() )
+            throw container::NoSuchElementException( aName, NULL );
+
+        props[1].Value <<= OUString();
     }
     aRet <<= props;
     return aRet;
@@ -276,7 +270,16 @@ Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw 
 
 sal_Bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
 {
-    return ( m_eventBindingHash.find( aName ) != m_eventBindingHash.end() );
+    if ( m_eventBindingHash.find( aName ) != m_eventBindingHash.end() )
+        return sal_True;
+
+    // never accessed before - is it supported in general?
+    SupportedEventsVector::const_iterator pos = ::std::find(
+        m_supportedEvents.begin(), m_supportedEvents.end(), aName );
+    if ( pos != m_supportedEvents.end() )
+        return sal_True;
+
+    return sal_False;
 }
 
 Type SAL_CALL GlobalEventConfig_Impl::getElementType(  ) throw (RuntimeException)

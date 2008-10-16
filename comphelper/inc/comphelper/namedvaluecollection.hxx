@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedvaluecollection.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,12 +281,20 @@ namespace comphelper
             return aValues;
         }
 
-        /** returns a Sequence< Any >, as to be used for i.e. XInitialization::initialize
+        /** returns a Sequence< Any >, containing PropertyValues
         */
         inline ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
                 getWrappedPropertyValues() const
         {
             return impl_wrap< ::com::sun::star::beans::PropertyValue >();
+        }
+
+        /** returns a Sequence< Any >, containing NamedValues
+        */
+        inline ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+                getWrappedNamedValues() const
+        {
+            return impl_wrap< ::com::sun::star::beans::NamedValue >();
         }
 
         /** transforms the collection into a sequence of NamedValues

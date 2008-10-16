@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedvaluecollection.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ namespace comphelper
         else if ( _rElements >>= aPropertyValue )
             impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
         else
-            OSL_ENSURE( false, "NamedValueCollection::NamedValueCollection(Any): unsupported type!" );
+            OSL_ENSURE( !_rElements.hasValue(), "NamedValueCollection::NamedValueCollection(Any): unsupported type!" );
     }
 
     //--------------------------------------------------------------------
