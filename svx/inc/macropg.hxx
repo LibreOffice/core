@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macropg.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.166.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,22 @@
 #include "svx/svxdllapi.h"
 
 #include <hash_map>
+#include <vector>
 
 typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
-typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > UIEventsStringHash;
+
+struct SVX_DLLPRIVATE EventDisplayName
+{
+    const sal_Char* pAsciiEventName;
+    USHORT          nEventResourceID;
+    EventDisplayName() : pAsciiEventName( NULL ), nEventResourceID(0) { }
+    EventDisplayName( const sal_Char* _pAsciiName, const USHORT _nResId )
+        : pAsciiEventName( _pAsciiName )
+        , nEventResourceID( _nResId )
+    {
+    }
+};
+typedef ::std::vector< EventDisplayName >   EventDisplayNames;
 
 class _SvxMacroTabPage;
 class SvStringsDtor;
@@ -77,7 +90,7 @@ protected:
     EventsHash m_appEventsHash;
     EventsHash m_docEventsHash;
     bool bReadOnly, bDocModified, bAppEvents, bInitialized;
-    UIEventsStringHash aUIStrings;
+    EventDisplayNames aDisplayNames;
 
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 

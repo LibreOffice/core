@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScriptProviderForBeanShell.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,7 +244,7 @@ class ScriptImpl implements XScript
                 throw new ScriptFrameworkErrorException(
                     mfu.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                    ScriptFrameworkErrorType.MALFORMED_URL );
             }
             catch ( NoSuitableClassLoaderException nsc )
             {
@@ -307,7 +307,7 @@ class ScriptImpl implements XScript
                     throw new ScriptFrameworkErrorException(
                         "Failed to read script", null,
                         metaData.getLanguageName(), metaData.getLanguage(),
-                        ScriptFrameworkErrorType.UNKNOWN );
+                        ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
                 }
                 result = interpreter.eval( source );
 

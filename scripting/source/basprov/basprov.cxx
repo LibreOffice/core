@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basprov.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.21.6.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,7 +365,7 @@ namespace basprov
             throw provider::ScriptFrameworkErrorException(
                 errorMsg, Reference< XInterface >(),
                 scriptURI, OUSTR("Basic"),
-                provider::ScriptFrameworkErrorType::UNKNOWN );
+                provider::ScriptFrameworkErrorType::MALFORMED_URL );
         }
 
 
@@ -440,7 +440,7 @@ namespace basprov
                 aMessage.makeStringAndClear(),
                 Reference< XInterface >(),
                 scriptURI, OUSTR("Basic"),
-                provider::ScriptFrameworkErrorType::UNKNOWN );
+                provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT );
         }
 
         return xScript;

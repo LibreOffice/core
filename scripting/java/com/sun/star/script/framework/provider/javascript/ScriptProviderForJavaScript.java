@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScriptProviderForJavaScript.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -260,7 +260,7 @@ class ScriptImpl implements XScript
                 throw new ScriptFrameworkErrorException(
                     mfu.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                    ScriptFrameworkErrorType.MALFORMED_URL );
             }
             catch ( com.sun.star.script.framework.provider.NoSuitableClassLoaderException nsc )
             {

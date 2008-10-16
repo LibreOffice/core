@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basscript.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,7 @@ namespace basprov
                          m_funcName,
                          ::rtl::OUString(
                              RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ),
-                        provider::ScriptFrameworkErrorType::UNKNOWN  );
+                        provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
             }
 

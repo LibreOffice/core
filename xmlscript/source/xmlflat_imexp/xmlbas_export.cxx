@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlbas_export.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,10 @@
 #include "xmlscript/xml_helper.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -253,12 +250,21 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 m_xHandler->startElement( aLibContElementName, xLibContAttribs );
 
                 Reference< script::XLibraryContainer2 > xLibContainer;
-                if ( m_xModel.is() )
+
+                // try the XEmbeddedScripts interface
+                Reference< document::XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
+                if ( xDocumentScripts.is() )
+                    xLibContainer.set( xDocumentScripts->getBasicLibraries().get() );
+
+                if ( !xLibContainer.is() )
                 {
+                    // try the "BasicLibraries" property (old-style, for compatibility)
                     Reference< beans::XPropertySet > xPSet( m_xModel, UNO_QUERY );
                     if ( xPSet.is() )
                         xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ) >>= xLibContainer;
                 }
+
+                OSL_ENSURE( xLibContainer.is(), "XMLBasicExporterBase::filter: nowhere to export to!" );
 
                 if ( xLibContainer.is() )
                 {
