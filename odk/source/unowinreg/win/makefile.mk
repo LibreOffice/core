@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.12.34.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -88,6 +88,7 @@ $(BIN)$/unowinreg.dll : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/unowinreg
 
 # --- Files --------------------------------------------------------
 
+LINKFLAGS+=-MANIFEST:NO
 SLOFILES = \
     $(SLO)$/unowinreg.obj
 SHL1TARGET=$(TARGET)
@@ -103,7 +104,7 @@ STDSHL=
 SHL1STDLIBS +=\
         $(KERNEL32LIB)\
         $(ADVAPI32LIB)
-        
+
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
