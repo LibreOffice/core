@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EventObject.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,9 @@ module com {   module sun {   module star {   module document {
 
     @see XEventListener
     @see XEventBroadcaster
+
+    @deprecated
+    @see DocumentEvent
  */
 published struct EventObject: com::sun::star::lang::EventObject
 {

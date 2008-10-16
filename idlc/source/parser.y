@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parser.y,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.10.1 $
  *
  * This file is part of OpenOffice.org.
  *

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDocument.idl,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,11 +66,17 @@
 #include <com/sun/star/document/XViewDataSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_document_XDocumentEventBroadcaster_idl__
+#include <com/sun/star/document/XDocumentEventBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_document_XEmbeddedScripts_idl__
+#include <com/sun/star/document/XEmbeddedScripts.idl>
+#endif
+
 //=============================================================================
 
 module com {   module sun {   module star {   module document {
-
-published interface XEmbeddedScripts;
 
 //=============================================================================
 /** abstract service which specifies a storable and printable document
@@ -132,10 +138,16 @@ published service OfficeDocument
     interface com::sun::star::view::XPrintable;
 
     //-------------------------------------------------------------------------
+    /** is an old and deprecated version of the <type>XDocumentEventBroadcaster</type> interface
+        @deprecated
+     */
+    [optional] interface XEventBroadcaster;
+
+    //-------------------------------------------------------------------------
     /** makes it possible to register listeners which are called whenever
         a document event occurs
      */
-    [optional] interface XEventBroadcaster;
+    [optional] interface XDocumentEventBroadcaster;
 
     //-------------------------------------------------------------------------
     /** access to bound event handlers

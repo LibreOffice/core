@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.46.12.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,15 +44,16 @@ PACKAGE=com$/sun$/star$/document
 IDLFILES=\
     AmbigousFilterRequest.idl\
     BrokenPackageRequest.idl\
-        CorruptedFilterConfigurationException.idl\
+    CorruptedFilterConfigurationException.idl\
+    DocumentEvent.idl\
     DocumentInfo.idl\
-        DocumentProperties.idl\
+    DocumentProperties.idl\
     EventDescriptor.idl\
     EventObject.idl\
     Events.idl\
     ExportFilter.idl\
     ExtendedTypeDetection.idl\
-        ExtendedTypeDetectionFactory.idl\
+    ExtendedTypeDetectionFactory.idl\
     FilterAdapter.idl\
     FilterFactory.idl\
     FilterOptionsRequest.idl\
@@ -74,6 +75,8 @@ IDLFILES=\
     UpdateDocMode.idl\
     XActionLockable.idl\
     XBinaryStreamResolver.idl\
+    XDocumentEventBroadcaster.idl\
+    XDocumentEventListener.idl\
     XDocumentInfo.idl\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
