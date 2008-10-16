@@ -38,14 +38,15 @@
 '\***********************************************************************
 sub db_hsqldb
 
-    call tGeneral
-    call tOpenDatabaseWithViews
-    call tRenameTableWhichUsedInViews
+    'call tGeneral
+    call tRenameTable
+    'call tOpenDatabaseWithViews
+    'call tRenameTableWhichUsedInViews
     
-    call tQueryOpenInSQLMode
+    'call tQueryOpenInSQLMode
                     
-    app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
-    call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
+    'app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
+    'call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
     
 end sub
 
@@ -137,6 +138,44 @@ testcase tGeneral
             warnlog "Data Source could not be created - beyond testcases stopped"
 		endif
 	
+endcase
+'-------------------------------------------------------------------------
+testcase tRenameTable
+
+    app.FileCopy ConvertPath(gTesttoolPath + "dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb"),ConvertPath(gOfficePath + "user/work/TT_hsqldb.odb")
+    call fOpenDatabase(ConvertPath(gOfficePath + "user/work/TT_hsqldb.odb"))
+    
+    fFindTable("TT_1")
+    
+    printlog "rename the selected table"
+    Kontext "Insight"
+        Insight.UseMenu
+        call hMenuSelectNr(2)
+        call hMenuSelectNr(7)
+
+    printlog "insert any new name"
+    Kontext "FormFolderNameDialog"    
+        FolderReName.setText("newname")        
+        printlog "and close the rename dialog with OK"
+        FormFolderNameDialog.OK
+       
+    printlog "check if a message box appear"
+    Kontext "MessageBox"
+        if (MessageBox.exists()) then                     
+            warnlog MessageBox.GetFixedText(1)
+        endif
+        
+    printlog "Save and Close the database"
+    fCloseDatabase(true)
+    
+    call fOpenDatabase(ConvertPath(gOfficePath + "user/work/TT_hsqldb.odb"))
+    
+    fOpenTable("newname")
+    
+    fCloseTableView()
+    
+    fCloseDatabase()
+    
 endcase
 '-------------------------------------------------------------------------
 testcase tOpenDatabaseWithViews

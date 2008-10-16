@@ -44,6 +44,7 @@
 ' #1 tPreview    
 ' #1 tTableFilters
 ' #1 tRegisterDatabaseDialog
+' #1 tDatabaseBeamer
 '*
 '\***********************************************************************************
 sub MainApp
@@ -58,6 +59,7 @@ sub MainApp
     call tTableFilters
     
     call tRegisterDatabaseDialog
+    call tDatabaseBeamer
     
 end sub
 '-------------------------------------------------------------------------
@@ -564,24 +566,58 @@ testcase tRegisterDatabaseDialog
     call hCloseDocument        
         
 endcase
+'--------------------------------------------------------------------
+testcase tDatabaseBeamer
+    
+    printlog "open new document"    
+    call hNewDocument
+    
+    printlog "open the database beamer"    
+    ViewCurrentDatabase
+    WaitSlot(1)
+    
+    printlog "select database Bibliography"
+    Kontext "DatabaseSelection"
+    DatabaseSelection.select 1
+    
+    printlog "open the selected database"
+    DatabaseSelection.OpenContextmenu    
+    hMenuSelectNr(1)
+    WaitSlot(1)
+    
+    Kontext "Insight"
+    If Insight.exists(10) then
+        printlog "database open -> OK"
+        printlog "close the open database"
+        call fCloseDatabase
+    else
+        warnlog "database mot open"
+    endif
+    
+    printlog "close the open document"        
+    call hCloseDocument        
+        
+endcase
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
 function fDateiOeffnen ( DocName$ )
     
-    Dim DieDatei as String
+    'Dim DieDatei as String
     
-    DieDatei = ConvertPath ( DocName$ )
+    'DieDatei = ConvertPath ( DocName$ )
     
-    FileOpen
-    sleep (1)
-    Kontext "OeffnenDlg"
-    Dateiname.SetText DieDatei
-    sleep (3)
-    Oeffnen.Click
-    sleep (3)
+    'FileOpen
+    'sleep (1)
+    'Kontext "OeffnenDlg"
+    'Dateiname.SetText DieDatei
+    'sleep (3)
+    'Oeffnen.Click
+    'sleep (3)
 
-    fDateiOeffnen = true
+    'fDateiOeffnen = true
+    
+    fDateiOeffnen = hFileOpen(DocName$)
     
 end function
 '-------------------------------------------------------------------------

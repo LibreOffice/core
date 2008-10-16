@@ -945,7 +945,7 @@ OpenForm .uno:DBOpen
 EditTable .uno:DBEdit
 EditReport .uno:DBEdit
 Delete .uno:DBDelete
-
+MigrateMacros .uno:DBMigrateScripts
 ' ********************************
 ' *** UNO Slots for Basic IDE  ***
 ' ****

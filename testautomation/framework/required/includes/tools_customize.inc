@@ -623,8 +623,7 @@ function hUpdtToolsCustomizeEvents()
     
     '///+<li>Check that the SaveIn control has two items</li>
     kontext "TabCustomizeEvents"
-    select case gApplication
-    case "INSIGHT"      :   brc = hToolsCustomizeTestSaveIn( 1 )
+    select case gApplication    
     case "BACKGROUND"   :   brc = hToolsCustomizeTestSaveIn( 1 )
     case else           :   brc = hToolsCustomizeTestSaveIn( 2 )
     end select
