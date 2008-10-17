@@ -8,7 +8,7 @@
  *
  * $RCSfile: tests.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -346,8 +346,8 @@ namespace
             basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
-            if( aCurClip.count() )
-                aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, false );
+            if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
+                aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
             getCurrentContext().Clip = aNewClip;
         }
@@ -357,8 +357,8 @@ namespace
             basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
-            if( aCurClip.count() )
-                aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, false );
+            if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
+                aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
             getCurrentContext().Clip = aNewClip;
         }
