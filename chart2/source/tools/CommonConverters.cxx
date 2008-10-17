@@ -164,6 +164,48 @@ drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint)
         );
 }
 
+::basegfx::B3DVector Direction3DToB3DVector( const drawing::Direction3D& rDirection)
+{
+    return ::basegfx::B3DVector(
+          rDirection.DirectionX
+        , rDirection.DirectionY
+        , rDirection.DirectionZ
+        );
+}
+
+drawing::PolyPolygonShape3D MakeLine3D(
+    const drawing::Position3D & rStart,
+    const drawing::Position3D & rEnd )
+{
+    drawing::PolyPolygonShape3D aPP;
+
+    aPP.SequenceX.realloc(1);
+    aPP.SequenceY.realloc(1);
+    aPP.SequenceZ.realloc(1);
+
+    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
+    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
+    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
+
+    pOuterSequenceX->realloc(2);
+    pOuterSequenceY->realloc(2);
+    pOuterSequenceZ->realloc(2);
+
+    double* pInnerSequenceX = pOuterSequenceX->getArray();
+    double* pInnerSequenceY = pOuterSequenceY->getArray();
+    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+
+    *pInnerSequenceX++ = rStart.PositionX;
+    *pInnerSequenceY++ = rStart.PositionY;
+    *pInnerSequenceZ++ = rStart.PositionZ;
+
+    *pInnerSequenceX++ = rEnd.PositionX;
+    *pInnerSequenceY++ = rEnd.PositionY;
+    *pInnerSequenceZ++ = rEnd.PositionZ;
+
+    return aPP;
+}
+
 void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position3D& rPos, sal_Int32 nPolygonIndex )
 {
     if(nPolygonIndex<0)

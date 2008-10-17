@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.12.68.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,6 +83,7 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(BASEGFXLIB)		\
+                $(DRAWINGLAYERLIB)	\
                 $(GOODIESLIB)		\
                 $(BASEGFXLIB) 		\
                 $(SALLIB)			\

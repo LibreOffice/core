@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_sc.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.160.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,12 +67,6 @@
 #include <cwchar>
 #include <float.h>
 #include <functional>
-#include <goodies/b3dcolor.hxx>
-#include <goodies/b3dcompo.hxx>
-#include <goodies/b3dentty.hxx>
-#include <goodies/b3dlight.hxx>
-#include <goodies/bucket.hxx>
-#include <goodies/matril3d.hxx>
 #include <offuh/com/sun/star/awt/Point.hdl>
 #include <offuh/com/sun/star/awt/Point.hpp>
 #include <offuh/com/sun/star/awt/Size.hdl>

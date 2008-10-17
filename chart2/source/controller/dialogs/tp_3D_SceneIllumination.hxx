@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_3D_SceneIllumination.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ private:
 private:
     DECL_LINK(fillControlsFromModel, void *);
 
-    void applyLightSourceToModel( Base3DLightNumber nLightNumber );
+    void applyLightSourceToModel( sal_uInt32 nLightNumber );
     void applyLightSourcesToModel();
 
     FixedText   m_aFT_LightSource;

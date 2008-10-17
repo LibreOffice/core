@@ -104,6 +104,18 @@ com::sun::star::drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPo
 ::basegfx::B3DPoint Direction3DToB3DPoint( const com::sun::star::drawing::Direction3D& rDirection);
 
 //-----------------------------------------------------------------------------
+/** Direction3D -> B3DVector
+*/
+::basegfx::B3DVector Direction3DToB3DVector( const com::sun::star::drawing::Direction3D& rDirection);
+
+//-----------------------------------------------------------------------------
+/** two drawing::Position3D -> PolyPolygonShape3D
+*/
+::com::sun::star::drawing::PolyPolygonShape3D
+    MakeLine3D( const ::com::sun::star::drawing::Position3D & rStart,
+                const ::com::sun::star::drawing::Position3D & rEnd );
+
+//-----------------------------------------------------------------------------
 /** PolyPolygonShape3D + drawing::Position3D -> PolyPolygonShape3D
 */
 void AddPointToPoly( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly

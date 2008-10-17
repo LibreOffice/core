@@ -1131,12 +1131,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             && aKeyCode.GetCode() == KEY_R)
         {
                 // 3D-Kontext wieder zerstoeren
-            Base3D* pBase3D = (Base3D*) GetWindow()->Get3DContext();
-
-            if (pBase3D)
-            {
-                pBase3D->Destroy(GetWindow());
-            }
             GetWindow()->Invalidate();
             bReturn = TRUE;
         }
