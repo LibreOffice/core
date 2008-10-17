@@ -1102,9 +1102,15 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                            makeAny(nStartValue));
             }
 
-            if (sListId.getLength()) {
-                xPropSet->setPropertyValue( sPropNameListId, makeAny(sListId) );
+            // --> OD 2008-04-23 #refactorlists#
+            if ( xPropSetInfo->hasPropertyByName( sPropNameListId ) )
+            {
+                if (sListId.getLength()) {
+                    xPropSet->setPropertyValue( sPropNameListId,
+                        makeAny(sListId) );
+                }
             }
+            // <--
 
             GetTextListHelper().SetListItem( (XMLTextListItemContext *)0 );
         }
