@@ -93,24 +93,6 @@ const char *PositiveList[] = {
     "chart2/source/controller/menu/MenuItems_tmpl.hrc",
     "chart2/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
     "chart2/source/controller/dialogs/res_Trendline_tmpl.hrc",
-    "svx.lnk/inc/globlmn_tmpl.hrc",
-    "sw.lnk/source/ui/inc/swmn_tmpl.hrc",
-    "sw.lnk/source/ui/inc/swacc_tmpl.hrc",
-    "sw.lnk/source/ui/inc/toolbox_tmpl.hrc",
-    "offmgr.lnk/inc/offmenu_tmpl.hrc",
-    "offmgr.lnk/source/offapp/intro/intro_tmpl.hrc",
-    "dbaccess.lnk/source/ui/inc/toolbox_tmpl.hrc",
-    "svx.lnk/source/intro/intro_tmpl.hrc",
-    "dbaccess.lnk/source/ui/dlg/AutoControls_tmpl.hrc",
-    "svx.lnk/source/unodialogs/textconversiondlgs/chinese_direction_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_DataLabel_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_Statistic_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_Titlesx_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
-    "chart2.lnk/source/controller/menu/MenuItems_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
-    "chart2.lnk/source/controller/dialogs/res_Trendline_tmpl.hrc",
     "NULL"
 };
 
@@ -816,7 +798,6 @@ void Help()
         "\tFileName: Output file when extract mode, input file when merge mode\n"
         "\tl1...ln: supported languages (\"all\" for all languages).\n"
         "\tf1...fn: fallback languages for supported languages\n"
-        "\tskip_links: do not follow linked directorys"
         "\tQQ: quiet output)"
     );
 
@@ -903,8 +884,8 @@ int _cdecl main( int argc, char *argv[] )
             nState = STATE_FILENAME;
         else if ( sSwitch.Equals( "-QQ" ))
             bQuiet2 = true;
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-SKIP_LINKS" ))
-            bSkipLinks = true;
+    //    else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-SKIP_LINKS" ))
+    //        bSkipLinks = true;
         else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-O" ) )
             nState = STATE_OUTPUT;
         else {

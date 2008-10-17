@@ -78,6 +78,7 @@ my $sdf_regex  = "((([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t
 my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xhp|xcd|xgf|xxl|xrb)";
 # Always use this date to prevent cvs conflicts
 my $default_date = "2002-02-02 02:02:02";
+my @sdfparticles;
 
 #### main ####
 parse_options();
@@ -386,9 +387,19 @@ sub merge_gsicheck{
     $sdffile = $tmpfile;
 }
 #########################################################
+# find search function
+sub wanted
+{
+    my $file = $File::Find::name;
+    if( -f $file && $file =~ /.*localize.sdf$/ && !( $file =~ /.*\.svn.*/ ) ) {
+        push   @sdfparticles , $file;
+        if( $bVerbose eq "1" ) { print STDOUT "$file\n"; }
+        else { print ".";  }
+    }
+}
+
 sub collectfiles{
     print STDOUT "### Localize\n";
-    my @sdfparticles;
     my $localizehash_ref;
     my ( $bAll , $bUseLocalize, $langhash_ref , $bHasSourceLanguage , $bFakeEnglish ) = parseLanguages();
 
@@ -400,15 +411,7 @@ sub collectfiles{
     print STDOUT "### Searching sdf particles\n";
     my $working_path = getcwd();
     chdir $srcpath;
-    find sub {
-        my $file = $File::Find::name;
-        if( -f && $file =~ /.*localize.sdf$/ ) {
-            push   @sdfparticles , $file;
-            if( $bVerbose eq "1" ) { print STDOUT "$file\n"; }
-            else { print ".";  }
-
-         }
-    } , getcwd() ;#"."; #$srcpath;
+    find ( { wanted => \&wanted , follow => 1 }, getcwd() );
     chdir $working_path;
 
     my $nFound  = $#sdfparticles +1;
@@ -437,7 +440,7 @@ sub collectfiles{
         # -e
         # if ( -x $command ){
         if( $command ){
-            if( !$bVerbose  ){ $args .= " -QQ -skip_links "; }
+            if( !$bVerbose  ){ $args .= " -QQ "; }
             $args .= " -e -f $localizeSDF -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US";}
@@ -452,14 +455,7 @@ sub collectfiles{
               remove_duplicates( \@list );
               foreach my $isokey ( @list ){
                 switch :{
-                    #( $isokey=~ /^de$/i  )
-                    #    && do{
-                    #            if( $bFlag eq "TRUE" ){ $args .= ",de"; }
-                    #            else  {
-                    #                $args .=  "de";  $bFlag = "TRUE";
-                    #             }
-                    #          };
-                        ( $isokey=~ /^en-US$/i  )
+                       ( $isokey=~ /^en-US$/i  )
                         && do{
                                 if( $bFlag eq "TRUE" ){ $args .= ",en-US"; }
                                 else {
@@ -479,9 +475,6 @@ sub collectfiles{
 
         my $rc = system( $command.$args );
 
-        #my $output = `$command.$args`;
-        #my $rc = $? << 8;
-
         if( $rc < 0 ){    print STDERR "ERROR: localize rc = $rc\n"; exit( -1 ); }
         ( $localizehash_ref )  = read_file( $localizeSDF , $langhash_ref );
 
@@ -492,7 +485,6 @@ sub collectfiles{
 
     ## Fill fackback hash
     my( $fallbackhashhash_ref ) = fetch_fallback( \@sdfparticles , $localizeSDF ,  $langhash_ref );
-#    my( $fallbackhashhash_ref ) = fetch_fallback( \@sdfparticles , $localizeSDF , $langhash_ref );
     my %block;
     my $cur_fallback;
     if( !$bAll) {
