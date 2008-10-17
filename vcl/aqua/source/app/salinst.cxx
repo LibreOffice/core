@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.54.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@
 #include "salvd.h"
 #include "salbmp.h"
 #include "salprn.h"
-#include "salogl.h"
 #include "saltimer.h"
 #include "vclnsapp.h"
 
@@ -940,13 +939,6 @@ void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rRetur
 SalTimer* AquaSalInstance::CreateSalTimer()
 {
     return new AquaSalTimer();
-}
-
-// -----------------------------------------------------------------------
-
-SalOpenGL* AquaSalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
-{
-    return new AquaSalOpenGL( pGraphics );
 }
 
 // -----------------------------------------------------------------------

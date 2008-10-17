@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpdummies.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,28 +30,12 @@
 
 #ifndef _SVP_SVPDUMMIES_HXX
 
-#include <vcl/salogl.hxx>
 #include <vcl/salobj.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/salimestatus.hxx>
 #include <vcl/salsys.hxx>
 
 class SalGraphics;
-
-class SvpSalOpenGL : public SalOpenGL
-{
-public:
-    SvpSalOpenGL() {}
-    virtual ~SvpSalOpenGL();
-
-    // overload all pure virtual methods
-    virtual bool        IsValid();
-    virtual oglFunction GetOGLFnc( const char * );
-    virtual void        OGLEntry( SalGraphics* pGraphics );
-    virtual void        OGLExit( SalGraphics* pGraphics );
-    virtual void        StartScene( SalGraphics* pGraphics );
-    virtual void        StopScene();
-};
 
 class SvpSalObject : public SalObject
 {

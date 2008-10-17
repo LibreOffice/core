@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,6 @@
 #include <vcl/salsys.hxx>
 #include <saltimer.h>
 #include <vcl/salatype.hxx>
-#include <salogl.h>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
@@ -634,7 +633,6 @@ WinSalInstance::WinSalInstance()
 
 WinSalInstance::~WinSalInstance()
 {
-    WinSalOpenGL::Release();
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     delete mpSalWaitMutex;
@@ -1062,13 +1060,6 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 SalTimer* WinSalInstance::CreateSalTimer()
 {
     return new WinSalTimer();
-}
-
-// -----------------------------------------------------------------------
-
-SalOpenGL* WinSalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
-{
-    return new WinSalOpenGL( pGraphics );
 }
 
 // -----------------------------------------------------------------------

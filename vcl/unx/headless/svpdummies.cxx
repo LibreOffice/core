@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpdummies.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,6 @@
 #include "svpdummies.hxx"
 #include "svpinst.hxx"
 #include <rtl/ustrbuf.hxx>
-
-// SalOpenGL
-SvpSalOpenGL::~SvpSalOpenGL() {}
-bool SvpSalOpenGL::IsValid() { return false; }
-oglFunction SvpSalOpenGL::GetOGLFnc( const char * ) { return NULL; }
-void SvpSalOpenGL::OGLEntry( SalGraphics* ) {}
-void SvpSalOpenGL::OGLExit( SalGraphics* ) {}
-void SvpSalOpenGL::StartScene( SalGraphics* ) {}
-void SvpSalOpenGL::StopScene() {}
 
 // SalObject
 SvpSalObject::SvpSalObject()

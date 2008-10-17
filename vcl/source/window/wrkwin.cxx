@@ -45,7 +45,6 @@
 #include <vcl/brdwin.hxx>
 #include <vcl/window.h>
 #include <vcl/wrkwin.hxx>
-#include <vcl/opengl.hxx>
 #include <vcl/sysdata.hxx>
 
 // =======================================================================
@@ -70,15 +69,6 @@ void WorkWindow::ImplInitWorkWindowData()
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-#if defined WNT
-    /*
-     * #98153# since SystemParentData typically contains a HWND from
-     * another process and the OpenGL implementation does not like
-     * our child window of another processes frame we disable it here.
-     */
-    if( pSystemParentData )
-        OpenGL::Invalidate();
-#endif
     USHORT nFrameStyle = BORDERWINDOW_STYLE_FRAME;
     if ( nStyle & WB_APP )
         nFrameStyle |= BORDERWINDOW_STYLE_APP;

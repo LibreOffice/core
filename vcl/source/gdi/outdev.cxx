@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.60.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,10 +55,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdata.hxx>
 #include <vcl/print.hxx>
-#include <vcl/salotype.hxx>
-#include <vcl/opengl.hxx>
 #include <implncvt.hxx>
-#include <vcl/outdev3d.hxx>
 #include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
@@ -419,7 +416,6 @@ OutputDevice::OutputDevice() :
     mpGetDevSizeList    = NULL;
     mpObjStack          = NULL;
     mpOutDevData        = NULL;
-    mp3DContext         = NULL;
     mpPDFWriter         = NULL;
     mpAlphaVDev         = NULL;
     mpExtOutDevData     = NULL;
@@ -498,9 +494,6 @@ OutputDevice::~OutputDevice()
         delete mpUnoGraphicsList;
         mpUnoGraphicsList = NULL;
     }
-
-    if ( mp3DContext )
-        mp3DContext->Destroy( this );
 
     if ( mpOutDevData )
         ImplDeInitOutDevData();
@@ -3052,30 +3045,6 @@ ULONG OutputDevice::GetColorCount() const
 BOOL OutputDevice::HasAlpha()
 {
     return mpAlphaVDev != NULL;
-}
-
-// -----------------------------------------------------------------------
-
-OpenGL* OutputDevice::GetOpenGL()
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    OpenGL* pOGL;
-
-    if( OUTDEV_PRINTER != meOutDevType )
-    {
-        pOGL = new OpenGL( this );
-
-        if( !pOGL->IsValid() )
-        {
-            delete pOGL;
-            pOGL = NULL;
-        }
-    }
-    else
-        pOGL = NULL;
-
-    return pOGL;
 }
 
 // -----------------------------------------------------------------------

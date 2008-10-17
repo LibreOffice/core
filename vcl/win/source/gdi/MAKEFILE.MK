@@ -8,7 +8,7 @@
 #
 # $RCSfile: MAKEFILE.MK,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.13.152.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,6 @@ SLOFILES=   $(SLO)$/salgdi.obj   \
             $(SLO)$/salvd.obj    \
             $(SLO)$/salprn.obj   \
             $(SLO)$/salbmp.obj	 \
-            $(SLO)$/salogl.obj	\
             $(SLO)$/winlayout.obj	\
             $(SLO)$/wntgdi.obj      \
             $(SLO)$/salnativewidgets-luna.obj

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,6 @@ struct ImplJobSetup;
 class SalGraphics;
 class SalFrame;
 class SalObject;
-class SalOpenGL;
 class SalMenu;
 class SalMenuItem;
 class SalVirtualDevice;
@@ -124,8 +123,6 @@ public:
 
     // SalTimer
     virtual SalTimer*           CreateSalTimer() = 0;
-    // SalOpenGL
-    virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics ) = 0;
     // SalI18NImeStatus
     virtual SalI18NImeStatus*   CreateI18NImeStatus() = 0;
     // SalSystem

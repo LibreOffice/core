@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@
 #include <dtint.hxx>
 #include <salprn.h>
 #include <sm.hxx>
-#include <salogl.h>
 
 // -------------------------------------------------------------------------
 //
@@ -117,9 +116,6 @@ extern "C"
 
 X11SalInstance::~X11SalInstance()
 {
-    // release (possibly open) OpenGL context
-    X11SalOpenGL::Release();
-
     // close session management
     SessionManagerClient::close();
 
@@ -131,13 +127,6 @@ X11SalInstance::~X11SalInstance()
     pSalData->deInitNWF();
     delete pSalData;
     SetSalData( NULL );
-
-    // eventually free OpenGL lib
-    // this needs to be done after XCloseDisplay
-    // since GL may have added extension data - including a
-    // function pointer that gets called on XCloseDisplay - to
-    // the display structure
-    X11SalOpenGL::ReleaseLib();
 
       delete mpSalYieldMutex;
 }
@@ -286,9 +275,4 @@ SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, ULONG
 void X11SalInstance::DestroyFrame( SalFrame* pFrame )
 {
     delete pFrame;
-}
-
-SalOpenGL* X11SalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
-{
-    return new X11SalOpenGL( pGraphics );
 }

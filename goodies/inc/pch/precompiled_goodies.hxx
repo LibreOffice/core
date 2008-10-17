@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_goodies.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,9 +158,7 @@
 #include "vcl/lstbox.hxx"
 #include "vcl/metric.hxx"
 #include "vcl/msgbox.hxx"
-#include "vcl/opengl.hxx"
 #include "vcl/outdev.hxx"
-#include "vcl/outdev3d.hxx"
 #include "vcl/region.hxx"
 #include "vcl/salbtype.hxx"
 #include "vcl/sv.h"

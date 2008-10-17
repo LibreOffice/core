@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svmain.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.73.92.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@
 #include <svsys.h>
 #endif
 #include <vcl/salinst.hxx>
-#include <vcl/salogl.hxx>
 #include <vcl/salwtype.hxx>
 #ifndef _VOS_SIGNAL_HXX
 #include <vos/signal.hxx>

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.26.28.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +55,6 @@ SLOFILES=	\
         $(SLO)$/salbmp.obj		\
         $(SLO)$/salgdi.obj		\
         $(SLO)$/salvd.obj		\
-        $(SLO)$/salogl.obj		\
         $(SLO)$/dtint.obj		\
         $(SLO)$/salcvt.obj		\
         $(SLO)$/xfont.obj		\

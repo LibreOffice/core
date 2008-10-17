@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.101.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,7 +95,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <vcl/keycodes.hxx>
 #include <vcl/salbtype.hxx>
 #include <salbmp.h>
-#include <salogl.h>
 #ifndef _OSL_THREADMUTEX_H_
 #include <osl/mutex.h>
 #endif
@@ -494,8 +493,6 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
         pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
         pWeight[ i ] -= pVInfos[ i ].visualid;
     }
-
-    X11SalOpenGL::MakeVisualWeights( pDisplay, pVInfos, pWeight, nVisuals );
 
     int nBestVisual = 0;
     int nBestWeight = -1024;

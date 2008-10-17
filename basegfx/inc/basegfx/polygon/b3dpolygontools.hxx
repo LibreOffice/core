@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolygontools.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,9 +81,6 @@ namespace basegfx
         // get area of polygon
         double getArea(const B3DPolygon& rCandidate);
 
-        // get normal vector of polygon
-        ::basegfx::B3DVector getNormal(const ::basegfx::B3DPolygon& rCandidate);
-
         // get signed area of polygon
         double getSignedArea(const B3DPolygon& rCandidate);
 
@@ -140,6 +137,37 @@ namespace basegfx
             If bChangeY, y texture coordinate will be recalculated.
          */
         B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX = true, bool bChangeY = true);
+
+        // test if point is inside epsilon-range around an edge defined
+        // by the two given points. Can be used for HitTesting. The epsilon-range
+        // is defined to be the cylinder centered to the given edge, using radius
+        // fDistance, and the sphere around both points with radius fDistance.
+        bool isInEpsilonRange(const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, const B3DPoint& rTestPosition, double fDistance);
+
+        // test if point is inside epsilon-range around the given Polygon. Can be used
+        // for HitTesting. The epsilon-range is defined to be the cylinder centered to
+        // the given edge, using radius fDistance, and the sphere around both points with radius fDistance.
+        bool isInEpsilonRange(const B3DPolygon& rCandidate, const B3DPoint& rTestPosition, double fDistance);
+
+        // isInside tests for B3DPoint and other B3DPolygon. On border is not inside as long as
+        // not true is given in bWithBorder flag.
+        bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
+        bool isInside(const B3DPolygon& rCandidate, const B3DPolygon& rPolygon, bool bWithBorder = false);
+
+        // calculates if given point is on given line, taking care of the numerical epsilon
+        bool isPointOnLine(const B3DPoint& rStart, const B3DPoint& rEnd, const B3DPoint& rCandidate, bool bWithPoints = false);
+
+        // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses
+        // isPointOnLine internally
+        bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithPoints = true);
+
+        // helper to get a fCut position between a plane (given with normal and a point)
+        // and a line given by start and end point
+        bool getCutBetweenLineAndPlane(const B3DVector& rPlaneNormal, const B3DPoint& rPlanePoint, const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, double& fCut);
+
+        // helper to get a fCut position between a 3d Polygon
+        // and a line given by start and end point
+        bool getCutBetweenLineAndPolygon(const B3DPolygon& rCandidate, const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, double& fCut);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 3D Polygons

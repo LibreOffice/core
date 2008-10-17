@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@
 #include <salobj.h>
 #include <saltimer.h>
 #include <salsound.h>
-#include <salogl.h>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
@@ -825,13 +824,6 @@ SalTimer* Os2SalInstance::CreateSalTimer()
 SalSound* Os2SalInstance::CreateSalSound()
 {
     return new Os2SalSound();
-}
-
-// -----------------------------------------------------------------------
-
-SalOpenGL* Os2SalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
-{
-    return new Os2SalOpenGL( pGraphics );
 }
 
 // -----------------------------------------------------------------------

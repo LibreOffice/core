@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygontools.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,7 +230,7 @@ namespace basegfx
                 for(sal_uInt32 a(0L); a < nPolygonCount; a++)
                 {
                     const B2DPolygon aPolygon(rCandidate.getB2DPolygon(a));
-                    const sal_Bool bInside(isInside(aPolygon, rPoint, bWithBorder));
+                    const bool bInside(isInside(aPolygon, rPoint, bWithBorder));
 
                     if(bInside)
                     {

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.113 $
+# $Revision: 1.112.22.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,7 +97,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/msgbox.hxx      \
             $(INC)$/vcl$/octree.hxx      \
             $(INC)$/vcl$/outdev.hxx      \
-            $(INC)$/vcl$/outdev3d.hxx    \
             $(INC)$/vcl$/pointr.hxx      \
             $(INC)$/vcl$/ptrstyle.hxx    \
             $(INC)$/vcl$/prntypes.hxx    \

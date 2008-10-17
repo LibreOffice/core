@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,6 @@ class TextRectInfo;
 class FontInfo;
 class FontMetric;
 class GDIMetaFile;
-class OutDev3D;
-class OpenGL;
 class List;
 class GfxLink;
 class Line;
@@ -304,7 +302,6 @@ class VCL_DLLPUBLIC OutputDevice : public Resource
     friend class Bitmap;
     friend class ImplImageBmp;
     friend class ImplQPrinter;
-    friend class OpenGL;
     friend class Printer;
     friend class SalGraphicsLayout;
     friend class System;
@@ -328,7 +325,6 @@ private:
     ImplObjStack*       mpObjStack;
     ImplOutDevData*     mpOutDevData;
     List*               mpUnoGraphicsList;
-    OutDev3D*           mp3DContext;
     vcl::PDFWriterImpl* mpPDFWriter;
     vcl::ExtOutDevData* mpExtOutDevData;
 
@@ -575,10 +571,6 @@ public:
     */
     bool                supportsOperation( OutDevSupportType ) const;
 
-    void                Set3DContext( OutDev3D* p3DContext ) { mp3DContext = p3DContext; }
-
-    OutDev3D*           Get3DContext() const { return mp3DContext; }
-    OpenGL*             GetOpenGL();
     vcl::PDFWriterImpl* GetPDFWriter() const { return mpPDFWriter; }
 
     void                SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1552,12 +1552,10 @@ namespace basegfx
         {
             // build edge vector
             const B2DVector aEdge(rEdgeEnd - rEdgeStart);
-            bool bDeltaXIsZero(fTools::equalZero(aEdge.getX()));
-            bool bDeltaYIsZero(fTools::equalZero(aEdge.getY()));
             bool bDoDistanceTestStart(false);
             bool bDoDistanceTestEnd(false);
 
-            if(bDeltaXIsZero && bDeltaYIsZero)
+            if(aEdge.equalZero())
             {
                 // no edge, just a point. Do one of the distance tests.
                 bDoDistanceTestStart = true;
@@ -1570,7 +1568,6 @@ namespace basegfx
                     (aPerpend.getY() * (rTestPosition.getX() - rEdgeStart.getX())
                     + aPerpend.getX() * (rEdgeStart.getY() - rTestPosition.getY())) /
                     (aEdge.getX() * aEdge.getX() + aEdge.getY() * aEdge.getY()));
-
                 const double fZero(0.0);
                 const double fOne(1.0);
 
@@ -1588,9 +1585,8 @@ namespace basegfx
                 {
                     // inside line [0.0 .. 1.0]
                     const B2DPoint aCutPoint(interpolate(rEdgeStart, rEdgeEnd, fCut));
-                    const double fDeltaX(rTestPosition.getX() - aCutPoint.getX());
-                    const double fDeltaY(rTestPosition.getY() - aCutPoint.getY());
-                    const double fDistanceSquare(fDeltaX * fDeltaX + fDeltaY * fDeltaY);
+                    const B2DVector aDelta(rTestPosition - aCutPoint);
+                    const double fDistanceSquare(aDelta.scalar(aDelta));
 
                     if(fDistanceSquare <= fDistance * fDistance)
                     {
@@ -1598,16 +1594,15 @@ namespace basegfx
                     }
                     else
                     {
-                        return sal_False;
+                        return false;
                     }
                 }
             }
 
             if(bDoDistanceTestStart)
             {
-                const double fDeltaX(rTestPosition.getX() - rEdgeStart.getX());
-                const double fDeltaY(rTestPosition.getY() - rEdgeStart.getY());
-                const double fDistanceSquare(fDeltaX * fDeltaX + fDeltaY * fDeltaY);
+                const B2DVector aDelta(rTestPosition - rEdgeStart);
+                const double fDistanceSquare(aDelta.scalar(aDelta));
 
                 if(fDistanceSquare <= fDistance * fDistance)
                 {
@@ -1616,9 +1611,8 @@ namespace basegfx
             }
             else if(bDoDistanceTestEnd)
             {
-                const double fDeltaX(rTestPosition.getX() - rEdgeEnd.getX());
-                const double fDeltaY(rTestPosition.getY() - rEdgeEnd.getY());
-                const double fDistanceSquare(fDeltaX * fDeltaX + fDeltaY * fDeltaY);
+                const B2DVector aDelta(rTestPosition - rEdgeEnd);
+                const double fDistanceSquare(aDelta.scalar(aDelta));
 
                 if(fDistanceSquare <= fDistance * fDistance)
                 {

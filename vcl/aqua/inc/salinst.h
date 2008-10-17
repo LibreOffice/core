@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.h,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,7 +129,6 @@ public:
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String             GetDefaultPrinter();
     virtual SalTimer*           CreateSalTimer();
-    virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics );
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();

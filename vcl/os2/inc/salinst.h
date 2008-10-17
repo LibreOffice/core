@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.h,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +88,6 @@ public:
     virtual String             GetDefaultPrinter();
     virtual SalSound*           CreateSalSound();
     virtual SalTimer*           CreateSalTimer();
-    virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics );
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();

@@ -82,9 +82,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
-..\inc\vcl\opengl.hxx %_DEST%\inc%_EXT%\vcl\opengl.hxx
 ..\inc\vcl\outdev.hxx %_DEST%\inc%_EXT%\vcl\outdev.hxx
-..\inc\vcl\outdev3d.hxx %_DEST%\inc%_EXT%\vcl\outdev3d.hxx
 ..\inc\vcl\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
 ..\inc\vcl\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
 ..\inc\vcl\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
@@ -95,7 +93,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\salbtype.hxx %_DEST%\inc%_EXT%\vcl\salbtype.hxx
 ..\inc\vcl\salctype.hxx %_DEST%\inc%_EXT%\vcl\salctype.hxx
 ..\inc\vcl\salgtype.hxx %_DEST%\inc%_EXT%\vcl\salgtype.hxx
-..\inc\vcl\salotype.hxx %_DEST%\inc%_EXT%\vcl\salotype.hxx
 ..\inc\vcl\salstype.hxx %_DEST%\inc%_EXT%\vcl\salstype.hxx
 ..\inc\vcl\salnativewidgets.hxx %_DEST%\inc%_EXT%\vcl\salnativewidgets.hxx
 ..\inc\vcl\scrbar.hxx %_DEST%\inc%_EXT%\vcl\scrbar.hxx

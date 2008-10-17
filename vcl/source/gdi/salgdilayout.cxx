@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdilayout.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,12 +52,9 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdata.hxx>
 #include <vcl/print.hxx>
-#include <vcl/salotype.hxx>
-#include <vcl/opengl.hxx>
 #ifndef _VCL_IMPLNCVT_HXX
 #include <implncvt.hxx>
 #endif
-#include <vcl/outdev3d.hxx>
 #include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
