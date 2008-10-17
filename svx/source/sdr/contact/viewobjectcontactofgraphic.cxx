@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewobjectcontactofgraphic.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <svx/sdr/event/eventhandler.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -87,7 +88,7 @@ namespace sdr
     {
         // Test graphics state and eventually trigger a SwapIn event or an Asynchronous
         // load event. Return value gives info if SwapIn was triggered or not
-        bool ViewObjectContactOfGraphic::impPrepareForPaint()
+        bool ViewObjectContactOfGraphic::impPrepareGraphicWithAsynchroniousLoading()
         {
             bool bRetval(false);
             SdrGrafObj& rGrafObj = getSdrGrafObj();
@@ -167,6 +168,46 @@ namespace sdr
             return bRetval;
         }
 
+        // Test graphics state and eventually trigger a SwapIn event. Return value
+        // gives info if SwapIn was triggered or not
+        bool ViewObjectContactOfGraphic::impPrepareGraphicWithSynchroniousLoading()
+        {
+            bool bRetval(false);
+            SdrGrafObj& rGrafObj = getSdrGrafObj();
+
+            if(rGrafObj.IsSwappedOut())
+            {
+                if(rGrafObj.IsLinkedGraphic())
+                {
+                    // update graphic link
+                    rGrafObj.ImpUpdateGraphicLink();
+                }
+                else
+                {
+                    ObjectContact& rObjectContact = GetObjectContact();
+
+                    if(rObjectContact.isOutputToPrinter())
+                    {
+                        // #i76395# preview mechanism is only active if
+                        // swapin is called from inside paint preparation, so mbInsidePaint
+                        // has to be false to be able to print with high resolution
+                        rGrafObj.ForceSwapIn();
+                    }
+                    else
+                    {
+                        // SwapIn direct
+                        rGrafObj.mbInsidePaint = sal_True;
+                        rGrafObj.ForceSwapIn();
+                        rGrafObj.mbInsidePaint = sal_False;
+                    }
+
+                    bRetval = true;
+                }
+            }
+
+            return bRetval;
+        }
+
         // This is the call from the asynch graphic loading. This may only be called from
         // AsynchGraphicLoadingEvent::ExecuteEvent(). Do load the graphics. The event will
         // be deleted (consumed) and forgetAsynchGraphicLoadingEvent will be called.
@@ -203,17 +244,29 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
-            static bool bDoAsyncLoading(false); // ATM taken out
-            bool bSwapInDone(bDoAsyncLoading ? const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareForPaint() : false);
-            bool bSwapInExclusiveForPrinting(bSwapInDone && GetObjectContact().isOutputToPrinter());
+            SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
+            const bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
+            static bool bSuppressAsynchLoading(false);
+            bool bSwapInDone(false);
+
+            if(bDoAsynchronGraphicLoading && !bSuppressAsynchLoading)
+            {
+                bSwapInDone = const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithAsynchroniousLoading();
+            }
+            else
+            {
+                bSwapInDone = const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithSynchroniousLoading();
+            }
 
             // get return value by calling parent
             drawinglayer::primitive2d::Primitive2DSequence xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
 
             // if swap in was forced only for printing, swap out again
+            const bool bSwapInExclusiveForPrinting(bSwapInDone && GetObjectContact().isOutputToPrinter());
+
             if(bSwapInExclusiveForPrinting)
             {
-                const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj().ForceSwapOut();
+                rGrafObj.ForceSwapOut();
             }
 
             return xRetval;

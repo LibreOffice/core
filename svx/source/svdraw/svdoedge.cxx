@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.45.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1675,7 +1675,7 @@ void SdrEdgeObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralEDGE);
 }
 
-basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
 

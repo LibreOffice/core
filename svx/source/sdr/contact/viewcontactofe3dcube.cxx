@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewcontactofe3dcube.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,9 +91,6 @@ namespace sdr
             const basegfx::B3DVector abjectRange(aCubeRange.getRange());
             aWorldTransform.scale(abjectRange.getX(), abjectRange.getY(), abjectRange.getZ());
             aWorldTransform.translate(aCubeRange.getMinX(), aCubeRange.getMinY(), aCubeRange.getMinZ());
-
-            // add object to world transformation
-            aWorldTransform *= GetE3dCubeObj().GetTransform();
 
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);

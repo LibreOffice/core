@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dragmt3d.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,9 @@
 
 #include <svx/svddrgmt.hxx>
 #include <svx/view3d.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <vcl/timer.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 
 class E3dScene;
 
@@ -43,32 +44,29 @@ class E3dScene;
 |* Parameter fuer Interaktion eines 3D-Objektes
 |*
 \************************************************************************/
-
 class E3dDragMethodUnit
 {
 public:
-    E3dObject*          p3DObj;
-    basegfx::B3DPolygon         aWireframePoly;
-    basegfx::B3DHomMatrix           aDisplayTransform;
-    basegfx::B3DHomMatrix           aInvDisplayTransform;
-    basegfx::B3DHomMatrix            aInitTransform;
-    basegfx::B3DHomMatrix           aTransform;
-    INT32               nStartAngle;
-    INT32               nLastAngle;
+    E3dObject*                      mp3DObj;
+    basegfx::B3DPolyPolygon         maWireframePoly;
+    basegfx::B3DHomMatrix           maDisplayTransform;
+    basegfx::B3DHomMatrix           maInvDisplayTransform;
+    basegfx::B3DHomMatrix           maInitTransform;
+    basegfx::B3DHomMatrix           maTransform;
+    sal_Int32                       mnStartAngle;
+    sal_Int32                       mnLastAngle;
 
-    // TimingVars
-    UINT8                       nOrigQuality;
-
-    E3dDragMethodUnit() {}
+    E3dDragMethodUnit()
+    :   mp3DObj(0),
+        maWireframePoly(),
+        maDisplayTransform(),
+        maInvDisplayTransform(),
+        maInitTransform(),
+        maTransform(),
+        mnStartAngle(0),
+        mnLastAngle(0)
+    {}
 };
-
-/*************************************************************************
-|*
-|* Parameter fuer Interaktion eines 3D-Objektes
-|*
-\************************************************************************/
-
-SV_DECL_PTRARR_DEL(E3dDragMethodUnitGroup, E3dDragMethodUnit*, 1, 3)
 
 /*************************************************************************
 |*
@@ -79,13 +77,12 @@ SV_DECL_PTRARR_DEL(E3dDragMethodUnitGroup, E3dDragMethodUnit*, 1, 3)
 class E3dDragMethod : public SdrDragMethod
 {
 protected:
-    E3dDragMethodUnitGroup      aGrp;
-    E3dDragConstraint           eConstraint;
-    Point                       aLastPos;
-    Rectangle                   aFullBound;
-    BOOL                        bMoveFull;
-    BOOL                        bMovedAtAll;
-    Timer                       aCallbackTimer;
+    ::std::vector< E3dDragMethodUnit >  maGrp;
+    E3dDragConstraint                   meConstraint;
+    Point                               maLastPos;
+    Rectangle                           maFullBound;
+    bool                                mbMoveFull;
+    bool                                mbMovedAtAll;
 
 public:
     TYPEINFO();
@@ -95,15 +92,12 @@ public:
         BOOL bFull=FALSE);
 
     virtual void TakeComment(String& rStr) const;
-
     virtual FASTBOOL Beg();
     virtual void Mov(const Point& rPnt);
     virtual void Brk();
     virtual FASTBOOL End(FASTBOOL bCopy);
 
     E3dView& Get3DView()  { return (E3dView&)rView;  }
-
-    DECL_LINK(TimerInterruptHdl, void*);
 
     // for migration from XOR to overlay
     virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
@@ -118,7 +112,7 @@ public:
 
 class E3dDragRotate : public E3dDragMethod
 {
-    basegfx::B3DPoint           aGlobalCenter;
+    basegfx::B3DPoint                   maGlobalCenter;
 
 public:
     TYPEINFO();
@@ -140,8 +134,8 @@ public:
 
 class E3dDragMove : public E3dDragMethod
 {
-    SdrHdlKind              eWhatDragHdl;
-    Point                   aScaleFixPos;
+    SdrHdlKind              meWhatDragHdl;
+    Point                   maScaleFixPos;
 
 public:
     TYPEINFO();

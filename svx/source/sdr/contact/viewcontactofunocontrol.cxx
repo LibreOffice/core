@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofunocontrol.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,9 +180,9 @@ namespace sdr { namespace contact {
         }
         else
         {
-            // Use parent implementation. This should never be needed, see documentation in
-            // ViewContact::createViewIndependentPrimitive2DSequence()
-            return ViewContactOfSdrObj::createViewIndependentPrimitive2DSequence();
+            // #i93161# This UnoControl does not yet have a xControlModel (can happen
+            // during diverse creations). Without a model, create no visualisation.
+            return drawinglayer::primitive2d::Primitive2DSequence();
         }
     }
 

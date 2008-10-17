@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: e3dcompoundproperties.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,32 +131,32 @@ namespace sdr
                 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
                 case SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
                 case SDRATTR_3DOBJ_DOUBLE_SIDED:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
                 case SDRATTR_3DOBJ_NORMALS_KIND:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
                 case SDRATTR_3DOBJ_NORMALS_INVERT:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
                 case SDRATTR_3DOBJ_TEXTURE_PROJ_X:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
                 case SDRATTR_3DOBJ_TEXTURE_PROJ_Y:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
             }

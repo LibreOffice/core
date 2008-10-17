@@ -47,7 +47,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace drawinglayer { namespace {
+namespace drawinglayer { namespace geometry {
     class ImpViewInformation2D;
 }}
 

@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrtextprimitive2d.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,11 +262,13 @@ namespace drawinglayer
             const SdrText& rSdrText,
             const ::basegfx::B2DHomMatrix& rTextRangeTransform,
             bool bUnlimitedPage,
-            bool bCellText)
+            bool bCellText,
+            bool bWordWrap)
         :   SdrTextPrimitive2D(rSdrText),
             maTextRangeTransform(rTextRangeTransform),
             mbUnlimitedPage(bUnlimitedPage),
-            mbCellText(bCellText)
+            mbCellText(bCellText),
+            mbWordWrap(bWordWrap)
         {
         }
 
@@ -278,7 +280,8 @@ namespace drawinglayer
 
                 return (getTextRangeTransform() == rCompare.getTextRangeTransform()
                     && getUnlimitedPage() == rCompare.getUnlimitedPage()
-                    && getCellText() == rCompare.getCellText());
+                    && getCellText() == rCompare.getCellText()
+                    && getWordWrap() == rCompare.getWordWrap());
             }
 
             return false;
@@ -286,7 +289,7 @@ namespace drawinglayer
 
         SdrTextPrimitive2D* SdrBlockTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrBlockTextPrimitive2D(getSdrText(), rTransform * getTextRangeTransform(), getUnlimitedPage(), getCellText());
+            return new SdrBlockTextPrimitive2D(getSdrText(), rTransform * getTextRangeTransform(), getUnlimitedPage(), getCellText(), getWordWrap());
         }
 
         // provide unique ID

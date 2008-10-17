@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactoftableobj.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,7 +123,7 @@ namespace drawinglayer
                         getTransform(),
                         *getSdrFTAttribute().getText(),
                         0,
-                        true));
+                        true, false));
                 }
             }
 

@@ -44,6 +44,7 @@
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <i18npool/lang.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <vcl/mapmod.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // forward declaration
@@ -58,6 +59,17 @@ namespace com { namespace sun { namespace star { namespace rendering {
     class XPolyPolygon2D;
 }}}}
 
+namespace drawinglayer { namespace primitive2d {
+    class MaskPrimitive2D;
+    class MetafilePrimitive2D;
+    class TextSimplePortionPrimitive2D;
+    class BitmapPrimitive2D;
+    class AlphaPrimitive2D;
+    class PolygonStrokePrimitive2D;
+    class FillBitmapPrimitive2D;
+    class UnifiedAlphaPrimitive2D;
+}}
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -67,7 +79,12 @@ namespace drawinglayer
         class canvasProcessor2D : public BaseProcessor2D
         {
         private:
-            // the destination canvas
+            // The Pixel renderer resets the original MapMode from the OutputDevice.
+            // For some situations it is necessary to get it again, so it is rescued here
+            MapMode                                                 maOriginalMapMode;
+
+            // the (current) destination OutDev and canvas
+            OutputDevice*                                           mpOutputDevice;
             com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >    mxCanvas;
             com::sun::star::rendering::ViewState                    maViewState;
             com::sun::star::rendering::RenderState                  maRenderState;
@@ -78,7 +95,8 @@ namespace drawinglayer
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
 
-            // the current clipping PolyPolygon from MaskPrimitive2D
+            // the current clipping PolyPolygon from MaskPrimitive2D, always in
+            // object coordinates
             basegfx::B2DPolyPolygon                                 maClipPolyPolygon;
 
             // determined LanguageType
@@ -88,10 +106,20 @@ namespace drawinglayer
             // virtual render method when the primitive implementation is BasePrimitive2D-based.
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
+            // direct primitive renderer support
+            void impRenderMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate);
+            void impRenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rMetaCandidate);
+            void impRenderTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
+            void impRenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
+            void impRenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rAlphaCandidate);
+            void impRenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive);
+            void impRenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapPrimitive2D);
+            void impRenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate);
+
         public:
             canvasProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
-                const com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >& rCanvas);
+                OutputDevice& rOutDev);
             virtual ~canvasProcessor2D();
 
             // access to Drawinglayer configuration options

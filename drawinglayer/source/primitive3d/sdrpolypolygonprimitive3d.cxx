@@ -41,6 +41,7 @@
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/attribute/sdrattribute.hxx>
+#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -58,17 +59,36 @@ namespace drawinglayer
 
             if(getPolyPolygon3D().count())
             {
-                // add fill
+                ::std::vector< basegfx::B3DPolyPolygon > aFill;
+                aFill.push_back(getPolyPolygon3D());
+
                 if(getSdrLFSAttribute().getFill())
                 {
-                    // create single PolyPolygonFill primitives
-                    ::std::vector< basegfx::B3DPolyPolygon > aFill;
-                    aFill.push_back(getPolyPolygon3D());
+                    // add fill
+                    aRetval = create3DPolyPolygonFillPrimitives(
+                        aFill,
+                        getTransform(),
+                        getTextureSize(),
+                        getSdr3DObjectAttribute(),
+                        *getSdrLFSAttribute().getFill(),
+                        getSdrLFSAttribute().getFillFloatTransGradient());
+                }
+                else
+                {
+                    // create simplified 3d hit test geometry
+                    const attribute::SdrFillAttribute aSimplifiedFillAttribute(0.0, basegfx::BColor(), 0, 0, 0);
 
                     aRetval = create3DPolyPolygonFillPrimitives(
-                        aFill, getTransform(), getTextureSize(),
-                        getSdr3DObjectAttribute(), *getSdrLFSAttribute().getFill(),
-                        getSdrLFSAttribute().getFillFloatTransGradient());
+                        aFill,
+                        getTransform(),
+                        getTextureSize(),
+                        getSdr3DObjectAttribute(),
+                        aSimplifiedFillAttribute,
+                        0);
+
+                    // encapsulate in HitTestPrimitive3D and add
+                    const Primitive3DReference xRef(new HitTestPrimitive3D(aRetval));
+                    aRetval = Primitive3DSequence(&xRef, 1L);
                 }
 
                 // add line

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdomeas.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -823,7 +823,7 @@ void SdrMeasureObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralMEASURE);
 }
 
-basegfx::B2DPolyPolygon SdrMeasureObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrMeasureObj::TakeXorPoly() const
 {
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
@@ -1239,7 +1239,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     // get XOR Poly as base
-    XPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
+    XPolyPolygon aTmpPolyPolygon(TakeXorPoly());
 
     // get local ItemSet and StyleSheet
     SfxItemSet aSet(GetObjectItemSet());

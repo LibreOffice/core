@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdograf.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,7 +142,7 @@ public:
     virtual                 ~SdrGrafObj();
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
-    const GraphicObject&    GetGraphicObject() const;
+    const GraphicObject&    GetGraphicObject( bool bForceSwapIn = false) const;
 
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
@@ -186,7 +186,7 @@ public:
     virtual void            TakeObjNamePlural(String& rName) const;
 
     // #i25616#
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     virtual void            operator=(const SdrObject& rObj);
     virtual FASTBOOL        HasSpecialDrag() const;

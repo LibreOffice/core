@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: e3dsceneproperties.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,7 +198,7 @@ namespace sdr
 
             // local changes
             E3dScene& rObj = (E3dScene&)GetSdrObject();
-            rObj.StructureChanged(&((E3dScene&)GetSdrObject()));
+            rObj.StructureChanged();
 
             switch(nWhich)
             {
@@ -244,145 +244,6 @@ namespace sdr
                         rObj.SetCamera(aSceneCam);
                     }
 
-                    break;
-                }
-                case SDRATTR_3DSCENE_TWO_SIDED_LIGHTING     :
-                {
-                    rObj.GetLightGroup().SetModelTwoSide(rObj.GetTwoSidedLighting());
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_1           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor1(), Base3DMaterialDiffuse, Base3DLight0);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_2           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor2(), Base3DMaterialDiffuse, Base3DLight1);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_3           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor3(), Base3DMaterialDiffuse, Base3DLight2);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_4           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor4(), Base3DMaterialDiffuse, Base3DLight3);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_5           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor5(), Base3DMaterialDiffuse, Base3DLight4);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_6           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor6(), Base3DMaterialDiffuse, Base3DLight5);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_7           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor7(), Base3DMaterialDiffuse, Base3DLight6);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTCOLOR_8           :
-                {
-                    rObj.GetLightGroup().SetIntensity( rObj.GetLightColor8(), Base3DMaterialDiffuse, Base3DLight7);
-                    break;
-                }
-                case SDRATTR_3DSCENE_AMBIENTCOLOR           :
-                {
-                    rObj.GetLightGroup().SetGlobalAmbientLight(rObj.GetGlobalAmbientColor());
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_1              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff1(), Base3DLight0);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_2              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff2(), Base3DLight1);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_3              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff3(), Base3DLight2);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_4              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff4(), Base3DLight3);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_5              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff5(), Base3DLight4);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_6              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff6(), Base3DLight5);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_7              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff7(), Base3DLight6);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTON_8              :
-                {
-                    rObj.GetLightGroup().Enable( rObj.GetLightOnOff8(), Base3DLight7);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_1       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection1(), Base3DLight0);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_2       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection2(), Base3DLight1);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_3       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection3(), Base3DLight2);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_4       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection4(), Base3DLight3);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_5       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection5(), Base3DLight4);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_6       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection6(), Base3DLight5);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_7       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection7(), Base3DLight6);
-                    break;
-                }
-                case SDRATTR_3DSCENE_LIGHTDIRECTION_8       :
-                {
-                    rObj.GetLightGroup().SetDirection( rObj.GetLightDirection8(), Base3DLight7);
-                    break;
-                }
-
-                // these are Item changes which may shrink/expand the object, e.g. line
-                // size and line on/off
-                case XATTR_LINESTYLE :
-                case XATTR_LINEWIDTH :
-                {
-                    rObj.CorrectSceneDimensions();
                     break;
                 }
             }
@@ -450,48 +311,6 @@ namespace sdr
                     }
                 }
             }
-        }
-
-        void E3dSceneProperties::SetLightItemsFromLightGroup(B3dLightGroup& rLightGroup)
-        {
-            // force ItemSet
-            GetObjectItemSet();
-
-            // TwoSidedLighting
-            mpItemSet->Put(Svx3DTwoSidedLightingItem(rLightGroup.GetModelTwoSide()));
-
-            // LightColors
-            mpItemSet->Put(Svx3DLightcolor1Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0)));
-            mpItemSet->Put(Svx3DLightcolor2Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1)));
-            mpItemSet->Put(Svx3DLightcolor3Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2)));
-            mpItemSet->Put(Svx3DLightcolor4Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3)));
-            mpItemSet->Put(Svx3DLightcolor5Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4)));
-            mpItemSet->Put(Svx3DLightcolor6Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5)));
-            mpItemSet->Put(Svx3DLightcolor7Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6)));
-            mpItemSet->Put(Svx3DLightcolor8Item(rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7)));
-
-            // AmbientColor
-            mpItemSet->Put(Svx3DAmbientcolorItem(rLightGroup.GetGlobalAmbientLight()));
-
-            // LightOn
-            mpItemSet->Put(Svx3DLightOnOff1Item(rLightGroup.IsEnabled(Base3DLight0)));
-            mpItemSet->Put(Svx3DLightOnOff2Item(rLightGroup.IsEnabled(Base3DLight1)));
-            mpItemSet->Put(Svx3DLightOnOff3Item(rLightGroup.IsEnabled(Base3DLight2)));
-            mpItemSet->Put(Svx3DLightOnOff4Item(rLightGroup.IsEnabled(Base3DLight3)));
-            mpItemSet->Put(Svx3DLightOnOff5Item(rLightGroup.IsEnabled(Base3DLight4)));
-            mpItemSet->Put(Svx3DLightOnOff6Item(rLightGroup.IsEnabled(Base3DLight5)));
-            mpItemSet->Put(Svx3DLightOnOff7Item(rLightGroup.IsEnabled(Base3DLight6)));
-            mpItemSet->Put(Svx3DLightOnOff8Item(rLightGroup.IsEnabled(Base3DLight7)));
-
-            // LightDirection
-            mpItemSet->Put(Svx3DLightDirection1Item(rLightGroup.GetDirection( Base3DLight0 )));
-            mpItemSet->Put(Svx3DLightDirection2Item(rLightGroup.GetDirection( Base3DLight1 )));
-            mpItemSet->Put(Svx3DLightDirection3Item(rLightGroup.GetDirection( Base3DLight2 )));
-            mpItemSet->Put(Svx3DLightDirection4Item(rLightGroup.GetDirection( Base3DLight3 )));
-            mpItemSet->Put(Svx3DLightDirection5Item(rLightGroup.GetDirection( Base3DLight4 )));
-            mpItemSet->Put(Svx3DLightDirection6Item(rLightGroup.GetDirection( Base3DLight5 )));
-            mpItemSet->Put(Svx3DLightDirection7Item(rLightGroup.GetDirection( Base3DLight6 )));
-            mpItemSet->Put(Svx3DLightDirection8Item(rLightGroup.GetDirection( Base3DLight7 )));
         }
 
         void E3dSceneProperties::SetSceneItemsFromCamera()

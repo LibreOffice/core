@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: obj3d.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,18 +34,10 @@
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/volume3d.hxx>
-
-#ifndef _DEF3D_HXX
 #include <svx/def3d.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/deflt3d.hxx>
 #include <vcl/bitmap.hxx>
-#include <goodies/b3dgeom.hxx>
-#include <goodies/matril3d.hxx>
-#include <goodies/b3dtex.hxx>
-#include <goodies/b3dlight.hxx>
-#include <goodies/base3d.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/xflclit.hxx>
 #include <svtools/itemset.hxx>
@@ -63,21 +55,16 @@ class SfxPoolItem;
 class Viewport3D;
 class E3dScene;
 class E3dPolyScene;
-class Base3D;
-namespace basegfx { class B3DPolyPolygon; }
 
-namespace sdr
-{
-    namespace properties
-    {
-        class BaseProperties;
-        class E3dProperties;
-        class E3dCompoundProperties;
-        class E3dExtrudeProperties;
-        class E3dLatheProperties;
-        class E3dSphereProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace basegfx { class B3DPolyPolygon; }
+namespace sdr { namespace properties {
+    class BaseProperties;
+    class E3dProperties;
+    class E3dCompoundProperties;
+    class E3dExtrudeProperties;
+    class E3dLatheProperties;
+    class E3dSphereProperties;
+}}
 
 /*************************************************************************
 |*
@@ -88,8 +75,8 @@ namespace sdr
 class E3DObjGeoData : public SdrObjGeoData
 {
 public:
-    Volume3D                    aLocalBoundVol;     // umschliessendes Volumen des Objekts
-    basegfx::B3DHomMatrix       aTfMatrix;          // lokale Transformation
+    basegfx::B3DRange           maLocalBoundVol;    // umschliessendes Volumen des Objekts
+    basegfx::B3DHomMatrix       maTransformation;   // lokale Transformation
 
     E3DObjGeoData() {}
 };
@@ -104,12 +91,12 @@ class E3dObjList : public SdrObjList
 {
 public:
     TYPEINFO();
-    E3dObjList(SdrModel* pNewModel, SdrPage* pNewPage, E3dObjList* pNewUpList=NULL);
+    E3dObjList(SdrModel* pNewModel = 0, SdrPage* pNewPage = 0, E3dObjList* pNewUpList = 0);
     E3dObjList(const E3dObjList& rSrcList);
     virtual ~E3dObjList();
 
-    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND,
-        const SdrInsertReason* pReason=NULL);
+    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
+    virtual void InsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
     virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
     virtual SdrObject* RemoveObject(ULONG nObjNum);
 };
@@ -132,28 +119,24 @@ class SVX_DLLPUBLIC E3dObject : public SdrAttrObj
     friend class E3dDragMethod;
 
  protected:
-    E3dObjList*     pSub;               // Subliste (Childobjekte)
+    E3dObjList                  maSubList;          // Subliste (Childobjekte)
 
-    Volume3D        aBoundVol;          // umschliessendes Volumen mit allen Childs
-    Volume3D        aLocalBoundVol;     // umschliessendes Volumen des Objekts
-    basegfx::B3DHomMatrix       aTfMatrix;          // lokale Transformation
-    basegfx::B3DHomMatrix       aFullTfMatrix;      // globale Transformation (inkl. Parents)
+    basegfx::B3DRange           maLocalBoundVol;    // umschliessendes Volumen des Objekts (aus geometrieerzeugung)
+    basegfx::B3DHomMatrix       maTransformation;   // lokale Transformation
+    basegfx::B3DHomMatrix       maFullTransform;    // globale Transformation (inkl. Parents)
 
     // Flags
-    unsigned        bTfHasChanged           : 1;
-    unsigned        bBoundVolValid          : 1;
-    unsigned        bIsSelected             : 1;
+    unsigned        mbTfHasChanged          : 1;
+    unsigned        mbIsSelected            : 1;
 
  public:
-    virtual void SetBoundVolInvalid();
+    void SetBoundVolInvalid();
 
  protected:
-    virtual void SetTransformChanged();
+    void SetTransformChanged();
     virtual void NewObjectInserted(const E3dObject* p3DObj);
-    virtual void StructureChanged(const E3dObject* p3DObj);
-    virtual void RecalcBoundVolume();
-
-    basegfx::B2DPolyPolygon ImpCreateWireframePoly() const;
+    virtual void StructureChanged();
+    basegfx::B3DRange RecalcBoundVolume() const;
 
 protected:
     // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
@@ -181,13 +164,7 @@ public:
     virtual void        SetModel(SdrModel* pNewModel);
     virtual void        NbcMove(const Size& rSize);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-
     virtual SdrObjList* GetSubList() const;
-
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
-    virtual FASTBOOL HasSpecialDrag() const;
 
     // 3D-Objekt in die Gruppe einfuegen; Eigentumsuebergang!
     virtual void Insert3DObj(E3dObject* p3DObj);
@@ -196,56 +173,24 @@ public:
     E3dObject* GetParentObj() const;
     virtual E3dScene* GetScene() const;
 
-    const Volume3D& GetLocalBoundVolume() { return aLocalBoundVol; }
-    virtual const Volume3D& GetBoundVolume() const;
-    basegfx::B3DPoint GetCenter();
+    const basegfx::B3DRange& GetBoundVolume() const;
+    void InvalidateBoundVolume();
 
     // komplette Transformation inklusive aller Parents berechnen
     const basegfx::B3DHomMatrix& GetFullTransform() const;
 
     // Transformationsmatrix abfragen bzw. (zurueck)setzen
-    virtual const basegfx::B3DHomMatrix& GetTransform() const;
+    const basegfx::B3DHomMatrix& GetTransform() const;
     virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix);
-    virtual void NbcResetTransform();
     virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
-    virtual void ResetTransform();
-
-    // Translation
-    virtual void NbcTranslate(const basegfx::B3DVector& rTrans);
-    virtual void Translate(const basegfx::B3DVector& rTrans);
-    // Skalierung
-    virtual void NbcScaleX  (double fSx);
-    virtual void NbcScaleY  (double fSy);
-    virtual void NbcScaleZ  (double fSz);
-    virtual void NbcScale   (double fSx, double fSy, double fSz);
-    virtual void NbcScale   (double fS);
-
-    virtual void ScaleX (double fSx);
-    virtual void ScaleY (double fSy);
-    virtual void ScaleZ (double fSz);
-    virtual void Scale  (double fSx, double fSy, double fSz);
-    virtual void Scale  (double fS);
-
-    // Rotation mit Winkel in Radiant
-    virtual void NbcRotateX(double fAng);
-    virtual void NbcRotateY(double fAng);
-    virtual void NbcRotateZ(double fAng);
-
-    virtual void RotateX(double fAng);
-    virtual void RotateY(double fAng);
-    virtual void RotateZ(double fAng);
 
     // [FG] 2D-Rotationen, werden hier als Rotationen um die Z-Achse, die in den Bildschirm zeigt,
     //      implementiert plus eine Verschiebung der Scene. Dies bedeutet auch die Scene (E3dScene)
     //      muss diese Routine in der Klasse als virtual definieren.
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
 
-    // Transformation auf die Koordinaten (nicht auf die lokale Matrix)
-    // eines Objekts und seiner Childs anwenden; Objekte, die eigene
-    // Koordinaten speichern, muessen diese Methode implementieren
-    // Wireframe-Darstellung des Objekts erzeugen und die Linien als
-    // Punkt-Paare in rPoly3D ablegen
-    void CreateWireframe(basegfx::B3DPolygon& rWirePoly, const basegfx::B3DHomMatrix* pTf = 0L) const;
+    // get wireframe polygon for local object. No transform is applied.
+    basegfx::B3DPolyPolygon CreateWireframe() const;
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
     virtual void TakeObjNameSingul(String& rName) const;
@@ -258,8 +203,8 @@ public:
     virtual void          RestGeoData(const SdrObjGeoData& rGeo);
 
     // Selektion Setzen/Lesen
-    BOOL GetSelected() const { return bIsSelected; }
-    void SetSelected(BOOL bNew);
+    bool GetSelected() const { return mbIsSelected; }
+    void SetSelected(bool bNew);
 
     // Aufbrechen
     virtual BOOL IsBreakObjPossible();
@@ -286,129 +231,15 @@ class SVX_DLLPUBLIC E3dCompoundObject : public E3dObject
     friend class sdr::properties::E3dLatheProperties;
     friend class sdr::properties::E3dSphereProperties;
 
-    // for access from E3dCompoundProperties only
-    void InvalidateGeometry() { bGeometryValid = sal_False; }
-
 protected:
-    // Die Darstellungsgeometrie dieses Objektes
-    B3dGeometry             aDisplayGeometry;
-
     // Material des Objektes
     Color                   aMaterialAmbientColor;
-    B3dMaterial             aBackMaterial;
 
     // Attribute zur Geometrieerzeugung
     unsigned                bCreateNormals              : 1;
     unsigned                bCreateTexture              : 1;
 
-    // Wird zwischen Vorder- und Hintergrundmaterial unterschieden
-    unsigned                bUseDifferentBackMaterial   : 1;
-
-    // Geometrie gueltig?
-    unsigned                bGeometryValid              : 1;
-
-    // THB: Temporary fix for SJ's flipping problem
-    // TODO: Clarify with AW
-    unsigned                bFullTfIsPositive           : 1;
-
 protected:
-    // Hilfsfunktionen zur Geometrieerzeugung
-    basegfx::B3DPolyPolygon ImpGrowPoly(
-        const basegfx::B3DPolyPolygon& rPolyPolyGrow,
-        const basegfx::B3DPolyPolygon& rPolyPolyNormals,
-        double fFactor);
-    basegfx::B2VectorOrientation ImpGetOrientationInPoint(
-        const basegfx::B3DPolygon& rPolygon,
-        sal_uInt32 nIndex);
-    basegfx::B3DPolyPolygon ImpCorrectGrownPoly(
-        const basegfx::B3DPolyPolygon& aToBeCorrected,
-        const basegfx::B3DPolyPolygon& aOriginal);
-
-    basegfx::B3DPolyPolygon ImpScalePoly(
-        const basegfx::B3DPolyPolygon& rPolyPolyScale,
-        double fFactor);
-
-    void ImpCreateFront(
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rFrontNormals,
-        BOOL bCreateNormals = TRUE,
-        BOOL bCreateTexture = TRUE);
-    void ImpCreateBack(
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rBackNormals,
-        BOOL bCreateNormals = TRUE,
-        BOOL bCreateTexture = TRUE);
-
-    basegfx::B3DPolyPolygon ImpCreateByPattern(const basegfx::B3DPolyPolygon& rPattern);
-    basegfx::B3DPolyPolygon ImpAddFrontNormals(
-        const basegfx::B3DPolyPolygon& rNormalsFront,
-        const basegfx::B3DPoint& rOffset);
-    basegfx::B3DPolyPolygon ImpAddBackNormals(
-        const basegfx::B3DPolyPolygon& rNormalsBack,
-        const basegfx::B3DPoint& rOffset);
-
-    basegfx::B3DPolyPolygon ImpAddInBetweenNormals(
-        const basegfx::B3DPolyPolygon& rPolyPolyFront,
-        const basegfx::B3DPolyPolygon& rPolyPolyBack,
-        const basegfx::B3DPolyPolygon& rNormals,
-        BOOL bSmoothed = TRUE);
-    void ImpCreateInBetween(
-        const basegfx::B3DPolyPolygon& rPolyPolyFront,
-        const basegfx::B3DPolyPolygon& rPolyPolyBack,
-        const basegfx::B3DPolyPolygon& rFrontNormals,
-        const basegfx::B3DPolyPolygon& rBackNormals,
-        BOOL bCreateNormals = TRUE,
-        double fSurroundFactor=1.0,
-        double fTextureStart=0.0,
-        double fTextureDepth=1.0,
-        BOOL bRotateTexture90=FALSE);
-
-    // Geometrieerzeugung
-    void AddGeometry(
-        const basegfx::B3DPolyPolygon& rPolyPolygon,
-        BOOL bHintIsComplex=TRUE,
-        BOOL bOutline=FALSE);
-    void AddGeometry(
-        const basegfx::B3DPolyPolygon& rPolyPolygon,
-        const basegfx::B3DPolyPolygon& rPolyPolygonNormal,
-        BOOL bHintIsComplex=TRUE,
-        BOOL bOutline=FALSE);
-    void AddGeometry(
-        const basegfx::B3DPolyPolygon& rPolyPolygon,
-        const basegfx::B3DPolyPolygon& rPolyPolygonNormal,
-        const basegfx::B2DPolyPolygon& rPolyPolygonTexture,
-        BOOL bHintIsComplex=TRUE,
-        BOOL bOutline=FALSE);
-    void StartCreateGeometry();
-
-    // Segmenterzeugung
-    void ImpCreateSegment(
-        const basegfx::B3DPolyPolygon& rFront,      // vorderes Polygon
-        const basegfx::B3DPolyPolygon& rBack,           // hinteres Polygon
-        const basegfx::B3DPolyPolygon* pPrev = 0L,  // smooth uebergang zu Vorgaenger
-        const basegfx::B3DPolyPolygon* pNext = 0L,  // smooth uebergang zu Nachfolger
-        BOOL bCreateFront = TRUE,           // vorderen Deckel erzeugen
-        BOOL bCreateBack = TRUE,            // hinteren Deckel erzeugen
-        double fPercentDiag = 0.05,         // Anteil des Deckels an der Tiefe
-        BOOL bSmoothLeft = TRUE,            // Glaetten der umlaufenden Normalen links
-        BOOL bSmoothRight = TRUE,           // Glaetten der umlaufenden Normalen rechts
-        BOOL bSmoothFrontBack = FALSE,      // Glaetten der Abschlussflaechen
-        double fSurroundFactor = 1.0,       // Wertebereich der Texturkoordinaten im Umlauf
-        double fTextureStart = 0.0,         // TexCoor ueber Extrude-Tiefe
-        double fTextureDepth = 1.0,         // TexCoor ueber Extrude-Tiefe
-        BOOL bCreateTexture = TRUE,
-        BOOL bCreateNormals = TRUE,
-        BOOL bCharacterExtrude = FALSE,     // FALSE=exakt, TRUE=ohne Ueberschneidungen
-        BOOL bRotateTexture90 = FALSE,      // Textur der Seitenflaechen um 90 Grad kippen
-        // #i28528#
-        basegfx::B3DPolyPolygon* pLineGeometryFront = 0L,   // For creation of line geometry front parts
-        basegfx::B3DPolyPolygon* pLineGeometryBack = 0L,    // For creation of line geometry back parts
-        basegfx::B3DPolyPolygon* pLineGeometry = 0L     // For creation of line geometry in-betweens
-        );
-
-    // #i28528#
-    basegfx::B3DPolyPolygon ImpCompleteLinePolygon(const basegfx::B3DPolyPolygon& rLinePolyPoly, sal_uInt32 nPolysPerRun, sal_Bool bClosed);
-
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
     // convert given basegfx::B3DPolyPolygon to screen coor
@@ -420,6 +251,11 @@ public :
     E3dCompoundObject();
     E3dCompoundObject(E3dDefaultAttributes& rDefault);
     virtual ~E3dCompoundObject();
+
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
+    virtual sal_uInt32 GetHdlCount() const;
+    virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
+    virtual FASTBOOL HasSpecialDrag() const;
 
     // DoubleSided: TRUE/FALSE
     BOOL GetDoubleSided() const
@@ -461,14 +297,6 @@ public :
     sal_uInt16 GetMaterialSpecularIntensity() const
         { return ((const Svx3DMaterialSpecularIntensityItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
 
-    // TextureKind: 1 == Base3DTextureLuminance, 2 == Base3DTextureIntensity, 3 == Base3DTextureColor
-    Base3DTextureKind GetTextureKind() const
-        { return (Base3DTextureKind)((const Svx3DTextureKindItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue(); }
-
-    // TextureMode: 1 == Base3DTextureReplace, 2 == Base3DTextureModulate, 3 == Base3DTextureBlend
-    Base3DTextureMode GetTextureMode() const
-        { return (Base3DTextureMode)((const Svx3DTextureModeItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue(); }
-
     // TextureFilter: TRUE/FALSE
     BOOL GetTextureFilter() const
         { return ((const Svx3DTextureFilterItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
@@ -480,22 +308,9 @@ public :
 
     virtual UINT16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
-    virtual const Volume3D& GetBoundVolume() const;
 
     // Hittest, wird an Geometrie weitergegeben
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-
-    // #110988# test if given hit candidate point is inside bound volume of object. Used
-    // from CheckHit.
-    sal_Bool ImpIsInsideBoundVolume(const basegfx::B3DPoint& rFront, const basegfx::B3DPoint& rBack, const Point& rPnt) const;
-
-    // Geometrieerzeugung
-    void DestroyGeometry();
-    virtual void CreateGeometry();
-    void ReCreateGeometry();
-
-    // Give out simple line geometry
-    virtual basegfx::B3DPolyPolygon Get3DLineGeometry() const;
 
     // Parameter Geometrieerzeugung setzen/lesen
     BOOL GetCreateNormals() const { return bCreateNormals; }
@@ -507,32 +322,11 @@ public :
     // Copy-Operator
     virtual void operator=(const SdrObject&);
 
-    // DisplayGeometry rausruecken
-    const B3dGeometry& GetDisplayGeometry() const;
-
-    // Schattenattribute holen
-    Color GetShadowColor() const;
-    BOOL DrawShadowAsOutline() const;
-    INT32 GetShadowXDistance() const;
-    INT32 GetShadowYDistance() const;
-    BOOL DoDrawShadow();
-
-    // Nromalen invertiert benutzen
-private:
-    SVX_DLLPRIVATE void SetInvertNormals(BOOL bNew);
-public:
-
     // Material des Objektes
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }
     void SetMaterialAmbientColor(const Color& rColor);
 
-    const B3dMaterial& GetBackMaterial() const { return aBackMaterial; }
-    void SetBackMaterial(const B3dMaterial& rNew);
-    BOOL GetUseDifferentBackMaterial() const { return bUseDifferentBackMaterial; }
-    void SetUseDifferentBackMaterial(BOOL bNew);
-
     // #110988#
-    double GetMinimalDepthInViewCoor(E3dScene& rScene) const;
     sal_Bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };
 

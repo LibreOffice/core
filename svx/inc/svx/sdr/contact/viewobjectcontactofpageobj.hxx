@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewobjectcontactofpageobj.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +37,9 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-namespace {
+namespace sdr { namespace contact {
     class PagePrimitiveExtractor;
-}
+}}
 
 class SdrPage;
 

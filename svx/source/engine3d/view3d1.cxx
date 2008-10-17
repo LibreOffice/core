@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view3d1.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-
 #include <tools/shl.hxx>
 #include "svditer.hxx"
 #include <svx/svdpool.hxx>
@@ -54,6 +53,7 @@
 #include <svx/cube3d.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/e3dsceneupdater.hxx>
 
 /*************************************************************************
 |*
@@ -95,7 +95,7 @@ void E3dView::ConvertMarkedToPolyObj(BOOL bLineToArea)
 |*
 \************************************************************************/
 
-void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask, BOOL bCorrectScenes)
+void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 {
     if(pObj->ISA(E3dLatheObj))
     {
@@ -115,12 +115,9 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask, B
     }
     else if(pObj->IsGroupObject())
     {
-        if(bCorrectScenes && pObj->ISA(E3dScene))
-            ((E3dScene*)pObj)->CorrectSceneDimensions();
-
         SdrObjList* pList = pObj->GetSubList();
         for(sal_uInt32 a(0); a < pList->GetObjCount(); a++)
-            Imp_E3dView_InorderRun3DObjects(pList->GetObj(a), rMask, bCorrectScenes);
+            Imp_E3dView_InorderRun3DObjects(pList->GetObj(a), rMask);
     }
 }
 
@@ -152,7 +149,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL /*bOnly3DAttr*/) co
         for(sal_uInt32 a(0); a < nMarkCnt; a++)
         {
             SdrObject* pObj = GetMarkedObjectByIndex(a);
-            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems, FALSE);
+            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
         }
     }
 
@@ -196,20 +193,38 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL
     }
     else
     {
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        const sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+        std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+        sal_uInt32 a;
+
+        // create late modifiers for evtl. updatable scenes
+        for(a = 0; a < nMarkCnt; a++)
+        {
+            SdrObject* pObj = GetMarkedObjectByIndex(a);
+
+            if(dynamic_cast< E3dObject* >(pObj))
+            {
+                aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(GetMarkedObjectByIndex(a)));
+            }
+        }
+
         // set at selected objects
         SetAttrToMarked(rAttr, bReplaceAll);
 
-        // Durchlauf mit Korrektur der veraenderten Szenen,
-        // da die enthaltenen Objekte geometrisch veraendert sein koennen
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
-
-        for(sal_uInt32 a(0); a < nMarkCnt; a++)
+        // old run
+        for(a = 0; a < nMarkCnt; a++)
         {
             SdrObject* pObj = GetMarkedObjectByIndex(a);
-            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems, TRUE);
+            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
         }
 
+        // fire scene updaters
+        while(aUpdaters.size())
+        {
+            delete aUpdaters.back();
+            aUpdaters.pop_back();
+        }
     }
 
     // DefaultValues pflegen

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofsdrobjcustomshape.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,7 @@ namespace sdr
                 {
                     // prepare text box geometry
                     ::basegfx::B2DHomMatrix aTextBoxMatrix;
+                    bool bWordWrap(false);
 
                     if(bHasText)
                     {
@@ -135,6 +136,9 @@ namespace sdr
                         }
 
                         aTextBoxMatrix.translate(aTextBoxRange.getMinX(), aTextBoxRange.getMinY());
+
+                        // check if SdrTextWordWrapItem is set
+                        bWordWrap = ((SdrTextWordWrapItem&)(GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue();
                     }
 
                     // make sure a (even empty) SdrShadowTextAttribute exists for
@@ -146,7 +150,7 @@ namespace sdr
 
                     // create primitive
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        *pAttribute, xGroup, aTextBoxMatrix));
+                        *pAttribute, xGroup, aTextBoxMatrix, bWordWrap));
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
 

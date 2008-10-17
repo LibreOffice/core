@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: float3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +61,6 @@ enum ViewType3D
 };
 
 class SdrModel;
-class B3dLightGroup;
-
 class FmFormModel;
 class FmFormPage;
 class VirtualDevice;
@@ -201,10 +199,9 @@ private:
     ImageButton         aBtnLatheObject;
     ImageButton         aBtnPerspective;
     Svx3DPreviewControl aCtlPreview;
-    SvxLightCtl3D       aCtlLightPreview; // <-- Probleme mit Select/Change-Hdl, wenn ueberladen
+    SvxLightCtl3D       aCtlLightPreview;
 
 // der Rest ...
-    B3dLightGroup*      pLightGroup;
     Image               aImgLightOn;
     Image               aImgLightOff;
     BOOL                bUpdate;

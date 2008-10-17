@@ -8,7 +8,7 @@
  *
  * $RCSfile: svdotextdecomposition.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,9 @@ namespace
         basegfx::B2DHomMatrix                                       maNewTransformA;
         basegfx::B2DHomMatrix                                       maNewTransformB;
 
+        // the visible area for contour text decomposition
+        basegfx::B2DVector                                          maScale;
+
         DECL_LINK(decomposeContourTextPrimitive, DrawPortionInfo* );
         DECL_LINK(decomposeBlockTextPrimitive, DrawPortionInfo* );
         DECL_LINK(decomposeStretchTextPrimitive, DrawPortionInfo* );
@@ -112,8 +115,9 @@ namespace
         {
         }
 
-        void decomposeContourTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
+        void decomposeContourTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB, const basegfx::B2DVector& rScale)
         {
+            maScale = rScale;
             maNewTransformA = rNewTransformA;
             maNewTransformB = rNewTransformB;
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeContourTextPrimitive));
@@ -511,7 +515,9 @@ namespace
 
     IMPL_LINK(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo)
     {
-        if(pInfo)
+        // for contour text, ignore (clip away) all portions which are below
+        // the visible area given by maScale
+        if(pInfo && (double)pInfo->mrStartPos.Y() < maScale.getY())
         {
             impHandleDrawPortionInfo(*pInfo);
         }
@@ -641,7 +647,7 @@ bool SdrTextObj::impDecomposeContourTextPrimitive(
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeContourTextPrimitive(aNewTransformA, aNewTransformB);
+    aConverter.decomposeContourTextPrimitive(aNewTransformA, aNewTransformB, aScale);
 
     // cleanup outliner
     rOutliner.Clear();
@@ -705,7 +711,7 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     }
     else
     {
-        if(IsTextFrame() && !rSdrBlockTextPrimitive.getUnlimitedPage())
+        if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
         {
             rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
         }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdomeas.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +42,9 @@ class SdrOutliner;
 struct ImpMeasureRec;
 struct ImpMeasurePoly;
 
-namespace sdr
-{
-    namespace properties
-    {
-        class MeasureProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace sdr { namespace properties {
+    class MeasureProperties;
+}}
 
 //************************************************************
 //   Hilfsklasse SdrMeasureObjGeoData
@@ -115,7 +111,7 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
     virtual FASTBOOL HasSpecialDrag() const;

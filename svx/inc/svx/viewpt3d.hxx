@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewpt3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +61,8 @@ class SVX_DLLPUBLIC Viewport3D
  protected:
     basegfx::B3DHomMatrix       aViewTf;        // die eigentliche Transformationsmatrix
     basegfx::B3DPoint           aVRP;           // View Reference Point
-    basegfx::B3DVector      aVPN;           // View Plane Normal
-    basegfx::B3DVector      aVUV;           // View Up Vector
+    basegfx::B3DVector          aVPN;           // View Plane Normal
+    basegfx::B3DVector          aVUV;           // View Up Vector
     basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-Koordinaten)
                                     // bisher wird nur die Z-Koordinate beachtet
     double          fVPD;           // View Plane Distance
@@ -117,9 +117,6 @@ class SVX_DLLPUBLIC Viewport3D
 
     void SetViewWindow(double fX, double fY, double fW, double fH);
     void GetViewWindow(double& rX, double& rY, double& rW, double& rH) const;
-
-    // View-Window genau um das mit rTransform transformierte Volumen legen
-    void FitViewToVolume(const basegfx::B3DRange& rVolume, const basegfx::B3DHomMatrix& rTransform);
 
     void SetDeviceWindow(const Rectangle& rRect);
     const Rectangle& GetDeviceWindow() const { return aDeviceRect; }

@@ -52,6 +52,8 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
+#include <vcl/window.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -118,13 +120,6 @@ namespace drawinglayer
                     aScale = basegfx::absolute(aScale);
                     basegfx::B2DVector aDiscreteSize(rViewInformation.getObjectToViewTransformation() * aScale);
 
-                    // calc screen zoom for text display
-                    basegfx::B2DVector aScreenZoom(
-                        basegfx::fTools::equalZero(aScale.getX()) ? 1.0 : aDiscreteSize.getX() / aScale.getX(),
-                        basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : aDiscreteSize.getY() / aScale.getY());
-                    static double fZoomScale(26.0); // do not ask for this constant factor, but it gets the zoom right
-                    aScreenZoom *= fZoomScale;
-
                     // limit to a maximum square size, e.g. 300x150 pixels (45000)
                     const SvtOptionsDrawinglayer aDrawinglayerOpt;
                     const double fDiscreteMax(aDrawinglayerOpt.GetQuadraticFormControlRenderLimit());
@@ -137,7 +132,6 @@ namespace drawinglayer
                         // get factor and adapt to scaled size
                         fFactor = sqrt(fDiscreteMax / fDiscreteQuadratic);
                         aDiscreteSize *= fFactor;
-                        aScreenZoom *= fFactor;
                     }
 
                     // go to integer
@@ -163,8 +157,57 @@ namespace drawinglayer
                             // link graphics and view
                             xControlView->setGraphics(xGraphics);
 
-                            // set zoom at control view for text scaling
-                            xControlView->setZoom((float)aScreenZoom.getX(), (float)aScreenZoom.getY());
+                            {   // #i93162# For painting the control setting a Zoom (using setZoom() at the xControlView)
+                                // is needed to define the font size. Normally this is done in
+                                // ViewObjectContactOfUnoControl::createPrimitive2DSequence by using positionControlForPaint().
+                                // For some reason the difference between MAP_TWIPS and MAP_100TH_MM still plays
+                                // a role there so that for Draw/Impress/Calc (the MAP_100TH_MM users) i need to set a zoom
+                                // here, too. The factor includes the needed scale, but is calculated by pure comparisons. It
+                                // is somehow related to the twips/100thmm relationship.
+                                bool bUserIs100thmm(false);
+                                const uno::Reference< awt::XControl > xControl(xControlView, uno::UNO_QUERY);
+
+                                if(xControl.is())
+                                {
+                                    uno::Reference< awt::XWindowPeer > xWindowPeer(xControl->getPeer());
+
+                                    if(xWindowPeer.is())
+                                    {
+                                        VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation(xWindowPeer);
+
+                                        if(pVCLXWindow)
+                                        {
+                                            Window* pWindow = pVCLXWindow->GetWindow();
+
+                                            if(pWindow)
+                                            {
+                                                pWindow = pWindow->GetParent();
+
+                                                if(pWindow)
+                                                {
+                                                    if(MAP_100TH_MM == pWindow->GetMapMode().GetMapUnit())
+                                                    {
+                                                        bUserIs100thmm = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if(bUserIs100thmm)
+                                {
+                                    // calc screen zoom for text display. fFactor is already added indirectly in aDiscreteSize
+                                    basegfx::B2DVector aScreenZoom(
+                                        basegfx::fTools::equalZero(aScale.getX()) ? 1.0 : aDiscreteSize.getX() / aScale.getX(),
+                                        basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : aDiscreteSize.getY() / aScale.getY());
+                                    static double fZoomScale(28.0); // do not ask for this constant factor, but it gets the zoom right
+                                    aScreenZoom *= fZoomScale;
+
+                                    // set zoom at control view for text scaling
+                                    xControlView->setZoom((float)aScreenZoom.getX(), (float)aScreenZoom.getY());
+                                }
+                            }
 
                             try
                             {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgctl3d.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.226.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,101 +31,93 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <svx/dlgctl3d.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/xflclit.hxx>
-#include <svx/fmmodel.hxx>
-#include <svx/fmpage.hxx>
 #include <svx/view3d.hxx>
+#include <svx/fmmodel.hxx>
+#include <svtools/itempool.hxx>
+#include <svx/fmpage.hxx>
 #include <svx/polysc3d.hxx>
-#include <svx/obj3d.hxx>
-#include <svx/camera3d.hxx>
-#include <svx/volume3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/cube3d.hxx>
-#include <vcl/event.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/style.hxx>
-
-#include <svx/dlgctl3d.hxx>
-#include <goodies/base3d.hxx>
-#include <tools/link.hxx>
-
-// #i58240#
-#ifndef _SVX_HELPID_HRC
+#include <vcl/svapp.hxx>
+#include <svx/helperhittest3d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/polygn3d.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
 #include "helpid.hrc"
-#endif
+#include <algorithm>
 
-/*************************************************************************
-|*  3D Preview Control
-|*  Ctor
-\************************************************************************/
-Svx3DPreviewControl::Svx3DPreviewControl( Window* pParent, const ResId& rResId ) :
-            Control     ( pParent, rResId ),
-            pModel      ( NULL ),
-            pFmPage     ( NULL ),
-            p3DView     ( NULL ),
-            pScene      ( NULL ),
-            p3DObj      ( NULL ),
-            nObjectType ( PREVIEW_OBJECTTYPE_SPHERE )
+//////////////////////////////////////////////////////////////////////////////
+
+Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId)
+:   Control(pParent, rResId),
+    mpModel(0),
+    mpFmPage(0),
+    mp3DView(0),
+    mpScene(0),
+    mp3DObj(0),
+    mnObjectType(PREVIEW_OBJECTTYPE_SPHERE)
 {
     Construct();
+
+    // do not paint background self, DrawingLayer paints this buffered and as page
+    SetControlBackground();
+    SetBackground();
 }
 
-/*************************************************************************
-|* Ctor
-\************************************************************************/
-Svx3DPreviewControl::Svx3DPreviewControl( Window* pParent, WinBits nStyle ) :
-            Control     ( pParent, nStyle ),
-            pModel      ( NULL ),
-            pFmPage     ( NULL ),
-            p3DView     ( NULL ),
-            pScene      ( NULL ),
-            p3DObj      ( NULL ),
-            nObjectType ( PREVIEW_OBJECTTYPE_SPHERE )
+Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, WinBits nStyle)
+:   Control(pParent, nStyle),
+    mpModel(0),
+    mpFmPage(0),
+    mp3DView(0),
+    mpScene(0),
+    mp3DObj(0),
+    mnObjectType(PREVIEW_OBJECTTYPE_SPHERE)
 {
     Construct();
+
+    // do not paint background self, DrawingLayer paints this buffered and as page
+    SetControlBackground();
+    SetBackground();
 }
 
-/*************************************************************************
-|* Dtor
-\************************************************************************/
 Svx3DPreviewControl::~Svx3DPreviewControl()
 {
-    delete p3DView;
-    delete pModel;
+    delete mp3DView;
+    delete mpModel;
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::Construct
-\************************************************************************/
 void Svx3DPreviewControl::Construct()
 {
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
     EnableRTL (FALSE);
-
     SetMapMode( MAP_100TH_MM );
 
     // Model
-    pModel = new FmFormModel();
-    pModel->GetItemPool().FreezeIdRanges();
+    mpModel = new FmFormModel();
+    mpModel->GetItemPool().FreezeIdRanges();
 
     // Page
-    pFmPage = new FmFormPage( *pModel, NULL );
-    pModel->InsertPage( pFmPage, 0 );
+    mpFmPage = new FmFormPage( *mpModel, NULL );
+    mpModel->InsertPage( mpFmPage, 0 );
 
     // 3D View
-    p3DView = new E3dView( pModel, this );
+    mp3DView = new E3dView( mpModel, this );
+    mp3DView->SetBufferedOutputAllowed(true);
+    mp3DView->SetBufferedOverlayAllowed(true);
 
     // 3D Scene
-    pScene = new E3dPolyScene(p3DView->Get3DDefaultAttributes());
+    mpScene = new E3dPolyScene(mp3DView->Get3DDefaultAttributes());
 
-    // Objekt
+    // initially create object
     SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
 
-    // Kameraeinstellungen, Perspektive ...
-    Camera3D& rCamera  = (Camera3D&) pScene->GetCamera();
-    const Volume3D& rVolume = pScene->GetBoundVolume();
+    // camera and perspective
+    Camera3D& rCamera  = (Camera3D&) mpScene->GetCamera();
+    const basegfx::B3DRange& rVolume = mpScene->GetBoundVolume();
     double fW = rVolume.getWidth();
     double fH = rVolume.getHeight();
     double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
@@ -133,27 +125,25 @@ void Svx3DPreviewControl::Construct()
     rCamera.SetAutoAdjustProjection(FALSE);
     rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     basegfx::B3DPoint aLookAt;
-    double fDefaultCamPosZ = p3DView->GetDefaultCamPosZ();
+    double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
     basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
     rCamera.SetPosAndLookAt(aCamPos, aLookAt);
-    double fDefaultCamFocal = p3DView->GetDefaultCamFocal();
+    double fDefaultCamFocal = mp3DView->GetDefaultCamFocal();
     rCamera.SetFocalLength(fDefaultCamFocal);
     rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
 
-    pScene->SetCamera( rCamera );
-    pFmPage->InsertObject( pScene );
+    mpScene->SetCamera( rCamera );
+    mpFmPage->InsertObject( mpScene );
 
-    pScene->RotateX( DEG2RAD( 25 ) );
-    pScene->RotateY( DEG2RAD( 40 ) ); // Weil es auch ein Wuerfel sein kann
+    basegfx::B3DHomMatrix aRotation;
+    aRotation.rotate(DEG2RAD( 25 ), 0.0, 0.0);
+    aRotation.rotate(0.0, DEG2RAD( 40 ), 0.0);
+    mpScene->SetTransform(aRotation * mpScene->GetTransform());
 
-    // SnapRects der Objekte ungueltig
-    pScene->SetRectsDirty();
+    // invalidate SnapRects of objects
+    mpScene->SetRectsDirty();
 
-    // Transformationen initialisieren, damit bei RecalcSnapRect()
-    // richtig gerechnet wird
-    pScene->InitTransformationSet();
-
-    SfxItemSet aSet( pModel->GetItemPool(),
+    SfxItemSet aSet( mpModel->GetItemPool(),
         XATTR_LINESTYLE, XATTR_LINESTYLE,
         XATTR_FILL_FIRST, XATTR_FILLBITMAP,
         0, 0 );
@@ -161,94 +151,74 @@ void Svx3DPreviewControl::Construct()
     aSet.Put( XFillStyleItem( XFILL_SOLID ) );
     aSet.Put( XFillColorItem( String(), Color( COL_WHITE ) ) );
 
-//-/    pScene->NbcSetAttributes( aSet, FALSE );
-    pScene->SetMergedItemSet(aSet);
-
-    // Default-Attribute holen (ohne markiertes Objekt)
-//  SfxItemSet aDefaultSet = p3DView->Get3DAttributes();
+    mpScene->SetMergedItemSet(aSet);
 
     // PageView
-    SdrPageView* pPageView = p3DView->ShowSdrPage( pFmPage );
-//  SdrPageView* pPageView = p3DView->ShowPage( pFmPage, Point() );
-    p3DView->hideMarkHandles();
+    SdrPageView* pPageView = mp3DView->ShowSdrPage( mpFmPage );
+    mp3DView->hideMarkHandles();
 
-    // Szene markieren
-    p3DView->MarkObj( pScene, pPageView );
-
-    // Initiale Groesse
-    pScene->FitSnapRectToBoundVol();
-//  Set3DAttributes(aDefaultSet);
+    // mark scene
+    mp3DView->MarkObj( mpScene, pPageView );
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::Resize
-\************************************************************************/
 void Svx3DPreviewControl::Resize()
 {
-    // Seite der Page
+    // size of page
     Size aSize( GetSizePixel() );
     aSize = PixelToLogic( aSize );
-    pFmPage->SetSize( aSize );
+    mpFmPage->SetSize( aSize );
 
-    // Groesse setzen
+    // set size
     Size aObjSize( aSize.Width()*5/6, aSize.Height()*5/6 );
     Point aObjPoint( (aSize.Width() - aObjSize.Width()) / 2,
         (aSize.Height() - aObjSize.Height()) / 2);
     Rectangle aRect( aObjPoint, aObjSize);
-    pScene->SetSnapRect( aRect );
+    mpScene->SetSnapRect( aRect );
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::Paint
-\************************************************************************/
-void Svx3DPreviewControl::Paint( const Rectangle& rRect )
+void Svx3DPreviewControl::Paint(const Rectangle& rRect)
 {
-    p3DView->CompleteRedraw( this, Region( rRect ) );
+    mp3DView->CompleteRedraw(this, Region(rRect));
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::MouseButtonDown
-\************************************************************************/
-void Svx3DPreviewControl::MouseButtonDown( const MouseEvent& rMEvt )
+void Svx3DPreviewControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    Control::MouseButtonDown( rMEvt );
+    Control::MouseButtonDown(rMEvt);
+
     if( rMEvt.IsShift() && rMEvt.IsMod1() )
     {
-        SetObjectType( (nObjectType+1) % 2 );
+        if(PREVIEW_OBJECTTYPE_SPHERE == GetObjectType())
+        {
+            SetObjectType(PREVIEW_OBJECTTYPE_CUBE);
+        }
+        else
+        {
+            SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
+        }
     }
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::SetObjectType
-\************************************************************************/
-void Svx3DPreviewControl::SetObjectType( UINT16 nType )
+void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
 {
-    if( nObjectType != nType || !p3DObj)
+    if( mnObjectType != nType || !mp3DObj)
     {
-        SfxItemSet aSet(
-            pModel->GetItemPool(),
-            SDRATTR_START,  SDRATTR_END,
-            0, 0);
+        SfxItemSet aSet(mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0, 0);
+        mnObjectType = nType;
 
-        nObjectType = nType;
-
-        if( p3DObj )
+        if( mp3DObj )
         {
-//-/            p3DObj->TakeAttributes( aSet, FALSE, FALSE );
-            aSet.Put(p3DObj->GetMergedItemSet());
-
-            pScene->Remove3DObj( p3DObj );
-            delete p3DObj;
-            p3DObj = NULL;
+            aSet.Put(mp3DObj->GetMergedItemSet());
+            mpScene->Remove3DObj( mp3DObj );
+            delete mp3DObj;
+            mp3DObj = NULL;
         }
 
         switch( nType )
         {
             case PREVIEW_OBJECTTYPE_SPHERE:
             {
-                // Kugel erzeugen
-                p3DObj = new E3dSphereObj(
-                    p3DView->Get3DDefaultAttributes(),
+                mp3DObj = new E3dSphereObj(
+                    mp3DView->Get3DDefaultAttributes(),
                     basegfx::B3DPoint( 0, 0, 0 ),
                     basegfx::B3DVector( 5000, 5000, 5000 ));
             }
@@ -256,656 +226,552 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
 
             case PREVIEW_OBJECTTYPE_CUBE:
             {
-                // Wuerfel erzeugen
-                p3DObj = new E3dCubeObj(
-                    p3DView->Get3DDefaultAttributes(),
+                mp3DObj = new E3dCubeObj(
+                    mp3DView->Get3DDefaultAttributes(),
                     basegfx::B3DPoint( -2500, -2500, -2500 ),
                     basegfx::B3DVector( 5000, 5000, 5000 ));
             }
             break;
         }
 
-        // Rein in die Szene
-        pScene->Insert3DObj( p3DObj );
+        mpScene->Insert3DObj( mp3DObj );
+        mp3DObj->SetMergedItemSet(aSet);
 
-//-/        p3DObj->NbcSetAttributes( aSet, FALSE );
-        p3DObj->SetMergedItemSet(aSet);
-
-        // Refresh
         Resize();
     }
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::Get3DAttributes
-\************************************************************************/
 SfxItemSet Svx3DPreviewControl::Get3DAttributes() const
 {
-    return( p3DView->Get3DAttributes( pScene ) );
+    return mp3DObj->GetMergedItemSet();
 }
-/*************************************************************************
-|* Svx3DPreviewControl::Set3DAttributes
-\************************************************************************/
+
 void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 {
-    p3DView->Set3DAttributes( rAttr, pScene, TRUE );
+    mp3DObj->SetMergedItemSet(rAttr, true);
     Resize();
 }
 
-/*************************************************************************
-|* Svx3DPreviewControl::SetObjectType
-\************************************************************************/
-void Svx3DPreviewControl::Set3DObject( const E3dObject* pObj )
+//////////////////////////////////////////////////////////////////////////////
+
+#define RADIUS_LAMP_PREVIEW_SIZE    (4500.0)
+#define RADIUS_LAMP_SMALL           (600.0)
+#define RADIUS_LAMP_BIG             (1000.0)
+#define NO_LIGHT_SELECTED           (0xffffffff)
+#define MAX_NUMBER_LIGHTS              (8)
+
+Svx3DLightControl::Svx3DLightControl(Window* pParent, const ResId& rResId)
+:   Svx3DPreviewControl(pParent, rResId),
+    maUserInteractiveChangeCallback(),
+    maUserSelectionChangeCallback(),
+    maChangeCallback(),
+    maSelectionChangeCallback(),
+    maSelectedLight(NO_LIGHT_SELECTED),
+    mpExpansionObject(0),
+    mpLampBottomObject(0),
+    mpLampShaftObject(0),
+    maLightObjects(MAX_NUMBER_LIGHTS, (E3dObject*)0),
+    mfRotateX(-20.0),
+    mfRotateY(45.0),
+    mfRotateZ(0.0),
+    maActionStartPoint(),
+    mnInteractionStartDistance(5 * 5 * 2),
+    mfSaveActionStartHor(0.0),
+    mfSaveActionStartVer(0.0),
+    mfSaveActionStartRotZ(0.0),
+    mbMouseMoved(false),
+    mbGeometrySelected(false)
 {
-    if( pObj->ISA( E3dCompoundObject ) )
+    Construct2();
+}
+
+Svx3DLightControl::Svx3DLightControl(Window* pParent, WinBits nStyle)
+:   Svx3DPreviewControl(pParent, nStyle),
+    maUserInteractiveChangeCallback(),
+    maUserSelectionChangeCallback(),
+    maChangeCallback(),
+    maSelectionChangeCallback(),
+    maSelectedLight(NO_LIGHT_SELECTED),
+    mpExpansionObject(0),
+    mpLampBottomObject(0),
+    mpLampShaftObject(0),
+    maLightObjects(MAX_NUMBER_LIGHTS, (E3dObject*)0),
+    mfRotateX(-20.0),
+    mfRotateY(45.0),
+    mfRotateZ(0.0),
+    maActionStartPoint(),
+    mnInteractionStartDistance(5 * 5 * 2),
+    mfSaveActionStartHor(0.0),
+    mfSaveActionStartVer(0.0),
+    mfSaveActionStartRotZ(0.0),
+    mbMouseMoved(false),
+    mbGeometrySelected(false)
+{
+    Construct2();
+}
+
+Svx3DLightControl::~Svx3DLightControl()
+{
+    // SdrObjects like mpExpansionObject and mpLampBottomObject/mpLampShaftObject get deleted
+    // with deletion of the DrawingLayer and model
+}
+
+void Svx3DLightControl::Construct2()
+{
     {
-        pScene->Remove3DObj( p3DObj );
-        delete p3DObj;
-        p3DObj = (E3dCompoundObject*)pObj->Clone();
-        pScene->Insert3DObj( p3DObj );
-        Resize();
+        // hide all page stuff, use control background (normally gray)
+        const Color aDialogColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
+        mp3DView->SetPageVisible(false);
+        mp3DView->SetApplicationBackgroundColor(aDialogColor);
+        mp3DView->SetApplicationDocumentColor(aDialogColor);
     }
-    else if( pObj->ISA( E3dPolyScene ) )
+
     {
-        SdrObject* pObject = pFmPage->RemoveObject( pScene->GetOrdNum() );
-        SdrObject::Free( pObject );
-        p3DObj = NULL;
-        pScene = (E3dPolyScene*)pObj->Clone();
-        pFmPage->InsertObject( pScene );
-        Resize();
+        // create invisible expansion object
+        const double fMaxExpansion(RADIUS_LAMP_BIG + RADIUS_LAMP_PREVIEW_SIZE);
+        mpExpansionObject = new E3dCubeObj(
+            mp3DView->Get3DDefaultAttributes(),
+            basegfx::B3DPoint(-fMaxExpansion, -fMaxExpansion, -fMaxExpansion),
+            basegfx::B3DVector(2.0 * fMaxExpansion, 2.0 * fMaxExpansion, 2.0 * fMaxExpansion));
+        mpScene->Insert3DObj( mpExpansionObject );
+        SfxItemSet aSet(mpModel->GetItemPool());
+        aSet.Put( XLineStyleItem( XLINE_NONE ) );
+        aSet.Put( XFillStyleItem( XFILL_NONE ) );
+        mpExpansionObject->SetMergedItemSet(aSet);
     }
-}
 
-/*************************************************************************
-|*
-|*  3D Preview Control
-|*
-\************************************************************************/
-
-SvxPreviewCtl3D::SvxPreviewCtl3D( Window* pParent, const ResId& rResId)
-:   Control( pParent, rResId )
-{
-    // Members initialisieren
-    Init();
-}
-
-SvxPreviewCtl3D::SvxPreviewCtl3D( Window* pParent, WinBits nStyle)
-:   Control( pParent, nStyle)
-{
-    // Members initialisieren
-    Init();
-}
-
-void SvxPreviewCtl3D::Init()
-{
-    // Members mit Defaults fuellen
-    bGeometryCube=FALSE;
-    fRotateX=-20.0;
-    fRotateY=45.0;
-    fRotateZ=0.0;
-    fDistance=10.0;
-    fDeviceSize=1.5;
-
-    // MapMode waehlen
-    SetMapMode( MAP_100TH_MM );
-
-    // Hintergrund in einem schoenen neutralen Grau
-//  SetBackground( Wallpaper( Color( COL_GRAY ) ) );
-
-    // Segmente
-    nHorSegs = 24;
-    nVerSegs = 12;
-
-    // Normalenmodus
-    nNormalMode = PREVIEW_NORMAL_MODE_OBJECT;
-
-    // ShadeMode
-    nShadeMode = PREVIEW_SHADEMODE_GOURAUD;
-
-    // Geometrie erzeugen
-    CreateGeometry();
-
-    // Material initialisieren
-    Color aColWhite(COL_WHITE);
-    Color aColBlack(COL_BLACK);
-
-    aObjectMaterial.SetMaterial(aColWhite, Base3DMaterialAmbient);
-    aObjectMaterial.SetMaterial(aColWhite, Base3DMaterialDiffuse);
-    aObjectMaterial.SetMaterial(aColWhite, Base3DMaterialSpecular);
-    aObjectMaterial.SetMaterial(aColBlack, Base3DMaterialEmission);
-    aObjectMaterial.SetShininess(32);
-}
-
-SvxPreviewCtl3D::~SvxPreviewCtl3D()
-{
-}
-
-void SvxPreviewCtl3D::Paint( const Rectangle& )
-{
-    // Base3D anfordern
-    Base3D* pBase3D = Base3D::Create(this, nShadeMode == PREVIEW_SHADEMODE_DRAFT);
-
-    Rectangle aVisible(Point(0,0), GetOutputSizePixel());
-    aVisible = PixelToLogic(aVisible);
-
-    // Orientierung
-    basegfx::B3DHomMatrix mOrient;
-    aCameraSet.SetObjectTrans(mOrient);
-    aCameraSet.SetOrientation(
-        basegfx::B3DPoint(0.0, 0.0, fDistance),
-        basegfx::B3DVector(0.0, 0.0, 1.0),
-        basegfx::B3DVector(0.0, 1.0, 0.0));
-//  aCameraSet.SetOrientation(mOrient);
-
-    // Matritzen setzen
-    pBase3D->SetTransformationSet(&aCameraSet);
-
-    // Licht setzen
-    pBase3D->SetLightGroup(&aLights);
-
-    // ShadeMode setzen
-    if(nShadeMode == PREVIEW_SHADEMODE_FLAT || nShadeMode == PREVIEW_SHADEMODE_DRAFT)
-        pBase3D->SetShadeModel(Base3DFlat);
-    else if(nShadeMode == PREVIEW_SHADEMODE_GOURAUD)
-        pBase3D->SetShadeModel(Base3DSmooth);
-    else
-        pBase3D->SetShadeModel(Base3DPhong);
-
-    // Ausgaberechteck setzen
-    aCameraSet.SetDeviceRectangle(-fDeviceSize, fDeviceSize, -fDeviceSize, fDeviceSize, FALSE);
-    aCameraSet.SetFrontClippingPlane(fDistance - fDeviceSize);
-    aCameraSet.SetBackClippingPlane(fDistance + fDeviceSize);
-    aCameraSet.SetViewportRectangle(aVisible);
-
-    // Matritzen setzen
-    pBase3D->SetTransformationSet(&aCameraSet);
-
-    // Werte fuer Objekt setzen
-    pBase3D->SetActiveTexture();
-    pBase3D->SetMaterial(aObjectMaterial.GetMaterial(Base3DMaterialAmbient), Base3DMaterialAmbient);
-    pBase3D->SetMaterial(aObjectMaterial.GetMaterial(Base3DMaterialDiffuse), Base3DMaterialDiffuse);
-    pBase3D->SetMaterial(aObjectMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular);
-    pBase3D->SetMaterial(aObjectMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission);
-    pBase3D->SetShininess(aObjectMaterial.GetShininess());
-
-    pBase3D->SetRenderMode(Base3DRenderFill);
-    pBase3D->SetCullMode(Base3DCullBack);
-
-    // ScissorRegion defaultmaessig disablen
-    pBase3D->ActivateScissorRegion(FALSE);
-
-    // Nicht flach
-    pBase3D->SetForceFlat(FALSE);
-
-    // Geometrie ausgeben
-    DrawGeometryClip(pBase3D);
-}
-
-void SvxPreviewCtl3D::DrawGeometryClip(Base3D *pBase3D)
-{
-    // spezielles Clipping fuer OpenGL, um keine floating windows ueberzumalen
-    if(pBase3D->GetBase3DType() == BASE3D_TYPE_OPENGL
-        && GetOutDevType() == OUTDEV_WINDOW
-        && pBase3D->GetTransformationSet())
     {
-        Window* pWin = (Window*)this;
-        Region aClipRegion = pWin->GetActiveClipRegion();
+        // create lamp control object (Yellow lined object)
+        // base circle
+        const basegfx::B2DPolygon a2DCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE));
+        basegfx::B3DPolygon a3DCircle(basegfx::tools::createB3DPolygonFromB2DPolygon(a2DCircle));
+        basegfx::B3DHomMatrix aTransform;
 
-        // ClipRegion ist gesetzt, benutze diese
-        RegionHandle aRegionHandle = aClipRegion.BeginEnumRects();
-        Rectangle aClipRect;
+        aTransform.rotate(F_PI2, 0.0, 0.0);
+        aTransform.translate(0.0, -RADIUS_LAMP_PREVIEW_SIZE, 0.0);
+        a3DCircle.transform(aTransform);
 
-        while(aClipRegion.GetEnumRects(aRegionHandle, aClipRect))
+        // create object for it
+        mpLampBottomObject = new E3dPolygonObj(
+            mp3DView->Get3DDefaultAttributes(),
+            basegfx::B3DPolyPolygon(a3DCircle),
+            true);
+        mpScene->Insert3DObj( mpLampBottomObject );
+
+        // half circle with stand
+        basegfx::B2DPolygon a2DHalfCircle;
+        a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, 0.0));
+        a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, -RADIUS_LAMP_PREVIEW_SIZE));
+        a2DHalfCircle.append(basegfx::tools::createPolygonFromEllipseSegment(
+            basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE, RADIUS_LAMP_PREVIEW_SIZE, F_2PI - F_PI2, F_PI2));
+        basegfx::B3DPolygon a3DHalfCircle(basegfx::tools::createB3DPolygonFromB2DPolygon(a2DHalfCircle));
+
+        // create object for it
+        mpLampShaftObject = new E3dPolygonObj(
+            mp3DView->Get3DDefaultAttributes(),
+            basegfx::B3DPolyPolygon(a3DHalfCircle),
+            true);
+        mpScene->Insert3DObj( mpLampShaftObject );
+
+        // initially invisible
+        SfxItemSet aSet(mpModel->GetItemPool());
+        aSet.Put( XLineStyleItem( XLINE_NONE ) );
+        aSet.Put( XFillStyleItem( XFILL_NONE ) );
+
+        mpLampBottomObject->SetMergedItemSet(aSet);
+        mpLampShaftObject->SetMergedItemSet(aSet);
+    }
+
+    {
+        // change camera settings
+        Camera3D& rCamera  = (Camera3D&) mpScene->GetCamera();
+        const basegfx::B3DRange& rVolume = mpScene->GetBoundVolume();
+        double fW = rVolume.getWidth();
+        double fH = rVolume.getHeight();
+        double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
+
+        rCamera.SetAutoAdjustProjection(FALSE);
+        rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
+        basegfx::B3DPoint aLookAt;
+        double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
+        basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
+        rCamera.SetPosAndLookAt(aCamPos, aLookAt);
+        double fDefaultCamFocal = mp3DView->GetDefaultCamFocal();
+        rCamera.SetFocalLength(fDefaultCamFocal);
+        rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
+
+        mpScene->SetCamera( rCamera );
+
+        basegfx::B3DHomMatrix aNeutral;
+        mpScene->SetTransform(aNeutral);
+    }
+
+    // invalidate SnapRects of objects
+    mpScene->SetRectsDirty();
+}
+
+void Svx3DLightControl::ConstructLightObjects()
+{
+    for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
+    {
+        // get rid of evtl. existing light object
+        if(maLightObjects[a])
         {
-            if(aClipRect.IsOver(pBase3D->GetTransformationSet()->GetLogicalViewportBounds()))
-            {
-                // Viewport setzen
-                pBase3D->SetScissorRegion(aClipRect, TRUE);
+            mpScene->Remove3DObj(maLightObjects[a]);
+            delete maLightObjects[a];
+            maLightObjects[a] = 0;
+        }
 
-                // Zeichne alle Objekte
-                pBase3D->StartScene();
-                DrawGeometry(pBase3D);
-                pBase3D->EndScene();
+        if(GetLightOnOff(a))
+        {
+            const bool bIsSelectedLight(a == maSelectedLight);
+            basegfx::B3DVector aDirection(GetLightDirection(a));
+            aDirection.normalize();
+            aDirection *= RADIUS_LAMP_PREVIEW_SIZE;
+
+            const double fLampSize(bIsSelectedLight ? RADIUS_LAMP_BIG : RADIUS_LAMP_SMALL);
+            E3dObject* pNewLight = new E3dSphereObj(
+                mp3DView->Get3DDefaultAttributes(),
+                basegfx::B3DPoint( 0, 0, 0 ),
+                basegfx::B3DVector( fLampSize, fLampSize, fLampSize));
+            mpScene->Insert3DObj(pNewLight);
+
+            basegfx::B3DHomMatrix aTransform;
+            aTransform.translate(aDirection.getX(), aDirection.getY(), aDirection.getZ());
+            pNewLight->SetTransform(aTransform);
+
+            SfxItemSet aSet(mpModel->GetItemPool());
+            aSet.Put( XLineStyleItem( XLINE_NONE ) );
+            aSet.Put( XFillStyleItem( XFILL_SOLID ) );
+            aSet.Put( XFillColorItem(String(), GetLightColor(a)));
+            pNewLight->SetMergedItemSet(aSet);
+
+            maLightObjects[a] = pNewLight;
+        }
+    }
+}
+
+void Svx3DLightControl::AdaptToSelectedLight()
+{
+    if(NO_LIGHT_SELECTED == maSelectedLight)
+    {
+        // make mpLampBottomObject/mpLampShaftObject invisible
+        SfxItemSet aSet(mpModel->GetItemPool());
+        aSet.Put( XLineStyleItem( XLINE_NONE ) );
+        aSet.Put( XFillStyleItem( XFILL_NONE ) );
+        mpLampBottomObject->SetMergedItemSet(aSet);
+        mpLampShaftObject->SetMergedItemSet(aSet);
+    }
+    else
+    {
+        basegfx::B3DVector aDirection(GetLightDirection(maSelectedLight));
+        aDirection.normalize();
+
+        // make mpLampBottomObject/mpLampShaftObject visible (yellow hairline)
+        SfxItemSet aSet(mpModel->GetItemPool());
+        aSet.Put( XLineStyleItem( XLINE_SOLID ) );
+        aSet.Put( XLineColorItem(String(), COL_YELLOW));
+        aSet.Put( XLineWidthItem(0));
+        aSet.Put( XFillStyleItem( XFILL_NONE ) );
+        mpLampBottomObject->SetMergedItemSet(aSet);
+        mpLampShaftObject->SetMergedItemSet(aSet);
+
+        // adapt transformation of mpLampShaftObject
+        basegfx::B3DHomMatrix aTransform;
+        double fRotateY(0.0);
+
+        if(!basegfx::fTools::equalZero(aDirection.getZ()) || !basegfx::fTools::equalZero(aDirection.getX()))
+        {
+            fRotateY = atan2(-aDirection.getZ(), aDirection.getX());
+        }
+
+        aTransform.rotate(0.0, fRotateY, 0.0);
+        mpLampShaftObject->SetTransform(aTransform);
+
+        // adapt transformation of selected light
+        E3dObject* pSelectedLight = maLightObjects[sal_Int32(maSelectedLight)];
+
+        if(pSelectedLight)
+        {
+            aTransform.identity();
+            aTransform.translate(
+                aDirection.getX() * RADIUS_LAMP_PREVIEW_SIZE,
+                aDirection.getY() * RADIUS_LAMP_PREVIEW_SIZE,
+                aDirection.getZ() * RADIUS_LAMP_PREVIEW_SIZE);
+            pSelectedLight->SetTransform(aTransform);
+        }
+    }
+}
+
+void Svx3DLightControl::TrySelection(Point aPosPixel)
+{
+    if(mpScene)
+    {
+        const Point aPosLogic(PixelToLogic(aPosPixel));
+        const basegfx::B2DPoint aPoint(aPosLogic.X(), aPosLogic.Y());
+        std::vector< const E3dCompoundObject* > aResult;
+        getAllHit3DObjectsSortedFrontToBack(aPoint, *mpScene, aResult);
+
+        if(aResult.size())
+        {
+            // take the frontmost one
+            const E3dCompoundObject* pResult = aResult[0];
+
+            if(pResult == mp3DObj)
+            {
+                if(!mbGeometrySelected)
+                {
+                    mbGeometrySelected = true;
+                    maSelectedLight = NO_LIGHT_SELECTED;
+                    ConstructLightObjects();
+                    AdaptToSelectedLight();
+                    Invalidate();
+
+                    if(maSelectionChangeCallback.IsSet())
+                    {
+                        maSelectionChangeCallback.Call(this);
+                    }
+                }
+            }
+            else
+            {
+                sal_uInt32 aNewSelectedLight(NO_LIGHT_SELECTED);
+
+                for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
+                {
+                    if(maLightObjects[a] && maLightObjects[a] == pResult)
+                    {
+                        aNewSelectedLight = a;
+                    }
+                }
+
+                if(aNewSelectedLight != maSelectedLight)
+                {
+                    SelectLight(aNewSelectedLight);
+
+                    if(maSelectionChangeCallback.IsSet())
+                    {
+                        maSelectionChangeCallback.Call(this);
+                    }
+                }
             }
         }
-        aClipRegion.EndEnumRects(aRegionHandle);
+    }
+}
+
+void Svx3DLightControl::Paint(const Rectangle& rRect)
+{
+    Svx3DPreviewControl::Paint(rRect);
+}
+
+void Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    bool bCallParent(true);
+
+    // switch state
+    if(rMEvt.IsLeft())
+    {
+        if(IsSelectionValid() || mbGeometrySelected)
+        {
+            mbMouseMoved = false;
+            bCallParent = false;
+            maActionStartPoint = rMEvt.GetPosPixel();
+            StartTracking();
+        }
+        else
+        {
+            // Einfacher Click ohne viel Bewegen, versuche eine
+            // Selektion
+            TrySelection(rMEvt.GetPosPixel());
+            bCallParent = false;
+        }
+    }
+
+    // call parent
+    if(bCallParent)
+    {
+        Svx3DPreviewControl::MouseButtonDown(rMEvt);
+    }
+}
+
+void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
+{
+    if(rTEvt.IsTrackingEnded())
+    {
+        if(rTEvt.IsTrackingCanceled())
+        {
+            if(mbMouseMoved)
+            {
+                // interrupt tracking
+                mbMouseMoved = false;
+
+                if(mbGeometrySelected)
+                {
+                    SetRotation(mfSaveActionStartVer, mfSaveActionStartHor, mfSaveActionStartRotZ);
+                }
+                else
+                {
+                    SetPosition(mfSaveActionStartHor, mfSaveActionStartVer);
+                }
+
+                if(maChangeCallback.IsSet())
+                {
+                    maChangeCallback.Call(this);
+                }
+            }
+        }
+        else
+        {
+            const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
+
+            if(mbMouseMoved)
+            {
+                // was change dinteractively
+            }
+            else
+            {
+                // simple click without much movement, try selection
+                TrySelection(rMEvt.GetPosPixel());
+            }
+        }
     }
     else
     {
-        // Zeichne alle Objekte
-        pBase3D->StartScene();
-        DrawGeometry(pBase3D);
-        pBase3D->EndScene();
-    }
-}
+        const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
+        Point aDeltaPos = rMEvt.GetPosPixel() - maActionStartPoint;
 
-void SvxPreviewCtl3D::DrawGeometry(Base3D *pBase3D)
-{
-    pBase3D->DrawPolygonGeometry(aGeometry);
-}
-
-void SvxPreviewCtl3D::SetGeometry(BOOL bGeomCube)
-{
-    if(bGeometryCube != bGeomCube)
-    {
-        bGeometryCube = bGeomCube;
-        CreateGeometry();
-    }
-    Invalidate();
-}
-
-void SvxPreviewCtl3D::SetRotation(double fRotX, double fRotY, double fRotZ)
-{
-    if(fRotX != fRotateX || fRotY != fRotateY || fRotZ != fRotateZ)
-    {
-        fRotateX = fRotX;
-        fRotateY = fRotY;
-        fRotateZ = fRotZ;
-        CreateGeometry();
-    }
-    Invalidate();
-}
-
-void SvxPreviewCtl3D::GetRotation(double& rRotX, double& rRotY, double& rRotZ)
-{
-    rRotX = fRotateX;
-    rRotY = fRotateY;
-    rRotZ = fRotateZ;
-}
-
-// Zugriffsfunktionen Materialien
-void SvxPreviewCtl3D::SetMaterial(Color rNew, Base3DMaterialValue eVal)
-{
-    if(aObjectMaterial.GetMaterial(eVal) != rNew)
-    {
-        aObjectMaterial.SetMaterial(rNew, eVal);
-        Invalidate();
-    }
-}
-
-Color SvxPreviewCtl3D::GetMaterial(Base3DMaterialValue eVal)
-{
-    return aObjectMaterial.GetMaterial(eVal);
-}
-
-void SvxPreviewCtl3D::SetShininess(UINT16 nNew)
-{
-    if(aObjectMaterial.GetShininess() != nNew)
-    {
-        aObjectMaterial.SetShininess(nNew);
-        Invalidate();
-    }
-}
-
-UINT16 SvxPreviewCtl3D::GetShininess()
-{
-    return aObjectMaterial.GetShininess();
-}
-
-// Lichtquellen setzen
-void SvxPreviewCtl3D::SetLightGroup(B3dLightGroup* pNew)
-{
-    if(pNew)
-    {
-        aLights = *pNew;
-        Invalidate();
-    }
-}
-
-// View-Einstellungen
-void SvxPreviewCtl3D::SetUserDistance(double fNew)
-{
-    if(fNew != fDistance)
-    {
-        fDistance = fNew;
-        Invalidate();
-    }
-}
-
-void SvxPreviewCtl3D::SetDeviceSize(double fNew)
-{
-    if(fNew != fDeviceSize)
-    {
-        fDeviceSize = fNew;
-        Invalidate();
-    }
-}
-
-// Zugriffsfunktionen Segmentierung
-void SvxPreviewCtl3D::SetHorizontalSegments(UINT16 nNew)
-{
-    if(nNew != nHorSegs)
-    {
-        nHorSegs = nNew;
-        CreateGeometry();
-        Invalidate();
-    }
-}
-
-void SvxPreviewCtl3D::SetVerticalSegments(UINT16 nNew)
-{
-    if(nNew != nVerSegs)
-    {
-        nVerSegs = nNew;
-        CreateGeometry();
-        Invalidate();
-    }
-}
-
-void SvxPreviewCtl3D::SetSegments(UINT16 nNewHor, UINT16 nNewVer)
-{
-    if(nNewHor != nHorSegs || nNewVer != nVerSegs)
-    {
-        nHorSegs = nNewHor;
-        nVerSegs = nNewVer;
-        CreateGeometry();
-        Invalidate();
-    }
-}
-
-// Zugriff Normalenmodus
-void SvxPreviewCtl3D::SetNormalMode(UINT16 nNew)
-{
-    if(nNew != nNormalMode)
-    {
-        nNormalMode = nNew;
-        CreateGeometry();
-        Invalidate();
-    }
-}
-
-// Zugriff auf ShadeMode
-void SvxPreviewCtl3D::SetShadeMode(UINT16 nNew)
-{
-    if(nNew != nShadeMode)
-    {
-        nShadeMode = nNew;
-        Invalidate();
-    }
-}
-
-void SvxPreviewCtl3D::CreateGeometry()
-{
-    // Wuerfel erzeugen fuer Objektgroesse
-    basegfx::B3DRange aVolume;
-    aVolume.expand(basegfx::B3DPoint(-1.0, -1.0, -1.0));
-    aVolume.expand(basegfx::B3DPoint( 1.0,  1.0,  1.0));
-
-    if(bGeometryCube)
-    {
-        // Wuerfel erzeugen
-        aGeometry.CreateCube(aVolume);
-    }
-    else
-    {
-        // AHCTUNG: Das PreviewControl hat bis zu dieser Stelle KEINE
-        // Begrenzung in der Anzahl der Hor/Ver Segmente. Diese wird hier nun
-        // explizit eingeschraenkt.
-        double fHSegs = (nHorSegs > 50) ? 50.0 : (double)nHorSegs;
-        double fVSegs = (nVerSegs > 50) ? 50.0 : (double)nVerSegs;
-
-        // Kugel erzeugen
-        aGeometry.CreateSphere(aVolume, fHSegs, fVSegs);
-    }
-
-    if(nNormalMode != PREVIEW_NORMAL_MODE_OBJECT)
-    {
-        if(!(nNormalMode == PREVIEW_NORMAL_MODE_FLAT))
+        if(!mbMouseMoved)
         {
-            aGeometry.CreateDefaultNormalsSphere();
+            if(sal_Int32(aDeltaPos.X() * aDeltaPos.X() + aDeltaPos.Y() * aDeltaPos.Y()) > mnInteractionStartDistance)
+            {
+                if(mbGeometrySelected)
+                {
+                    GetRotation(mfSaveActionStartVer, mfSaveActionStartHor, mfSaveActionStartRotZ);
+                }
+                else
+                {
+                    // intercation start, save values
+                    GetPosition(mfSaveActionStartHor, mfSaveActionStartVer);
+                }
+
+                mbMouseMoved = true;
+            }
+        }
+
+        if(mbMouseMoved)
+        {
+            if(mbGeometrySelected)
+            {
+                double fNewRotX = mfSaveActionStartVer - ((double)aDeltaPos.Y() * F_PI180);
+                double fNewRotY = mfSaveActionStartHor + ((double)aDeltaPos.X() * F_PI180);
+
+                // cut horizontal
+                while(fNewRotY < 0.0)
+                {
+                    fNewRotY += F_2PI;
+                }
+
+                while(fNewRotY >= F_2PI)
+                {
+                    fNewRotY -= F_2PI;
+                }
+
+                // cut vertical
+                if(fNewRotX < -F_PI2)
+                {
+                    fNewRotX = -F_PI2;
+                }
+
+                if(fNewRotX > F_PI2)
+                {
+                    fNewRotX = F_PI2;
+                }
+
+                SetRotation(fNewRotX, fNewRotY, mfSaveActionStartRotZ);
+
+                if(maChangeCallback.IsSet())
+                {
+                    maChangeCallback.Call(this);
+                }
+            }
+            else
+            {
+                // interaction in progress
+                double fNewPosHor = mfSaveActionStartHor + ((double)aDeltaPos.X());
+                double fNewPosVer = mfSaveActionStartVer - ((double)aDeltaPos.Y());
+
+                // cut horizontal
+                while(fNewPosHor < 0.0)
+                {
+                    fNewPosHor += 360.0;
+                }
+
+                while(fNewPosHor >= 360.0)
+                {
+                    fNewPosHor -= 360.0;
+                }
+
+                // cut vertical
+                if(fNewPosVer < -90.0)
+                {
+                    fNewPosVer = -90.0;
+                }
+
+                if(fNewPosVer > 90.0)
+                {
+                    fNewPosVer = 90.0;
+                }
+
+                SetPosition(fNewPosHor, fNewPosVer);
+
+                if(maChangeCallback.IsSet())
+                {
+                    maChangeCallback.Call(this);
+                }
+            }
         }
     }
+}
 
-    // Gesetzte Rotation ausfuehren
-    if(fRotateX != 0.0 || fRotateY != 0.0 || fRotateZ != 0.0)
+void Svx3DLightControl::Resize()
+{
+    // set size of page
+    const Size aSize(PixelToLogic(GetSizePixel()));
+    mpFmPage->SetSize(aSize);
+
+    // set position and size of scene
+    mpScene->SetSnapRect(Rectangle(Point(0, 0), aSize));
+}
+
+void Svx3DLightControl::SetObjectType(sal_uInt16 nType)
+{
+    // call parent
+    Svx3DPreviewControl::SetObjectType(nType);
+
+    // apply object rotation
+    if(mp3DObj)
     {
-        basegfx::B3DHomMatrix aRotMat;
-        if(fRotateY != 0.0)
-            aRotMat.rotate(0.0, fRotateY * F_PI180, 0.0);
-        if(fRotateX != 0.0)
-            aRotMat.rotate(-fRotateX * F_PI180, 0.0, 0.0);
-        if(fRotateZ != 0.0)
-            aRotMat.rotate(0.0, 0.0, fRotateZ * F_PI180);
-        aGeometry.Transform(aRotMat);
+        basegfx::B3DHomMatrix aObjectRotation;
+        aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
+        mp3DObj->SetTransform(aObjectRotation);
     }
 }
 
-/*************************************************************************
-|*
-|*  3D Light Control
-|*
-\************************************************************************/
-
-SvxLightPrevievCtl3D::SvxLightPrevievCtl3D( Window* pParent, const ResId& rResId)
-:   SvxPreviewCtl3D(pParent, rResId)
+bool Svx3DLightControl::IsSelectionValid()
 {
-    // Members initialisieren
-    Init();
-}
-
-SvxLightPrevievCtl3D::SvxLightPrevievCtl3D( Window* pParent, WinBits nStyle )
-:   SvxPreviewCtl3D(pParent, nStyle)
-{
-    // Members initialisieren
-    Init();
-}
-
-void SvxLightPrevievCtl3D::Init()
-{
-    // Do never mirror the preview window.  This explicitly includes right
-    // to left writing environments.
-    EnableRTL (FALSE);
-
-    // Lokale Parameter fuellen
-    eSelectedLight = Base3DLightNone;
-    fObjectRadius = 1.414;
-    fDistanceToObject = 0.4;
-    fScaleSizeSelected = 1.8;
-    fLampSize = 0.1;
-    nInteractionStartDistance = 5 * 5 * 2;
-    bMouseMoved = FALSE;
-    bGeometrySelected = FALSE;
-
-    // Device groesser, da Lampen angezeigt werden
-    SetDeviceSize(2.0);
-
-    // Geometrie fuer Lampenobjekt erzeugen
-    CreateLightGeometry();
-}
-
-SvxLightPrevievCtl3D::~SvxLightPrevievCtl3D()
-{
-}
-
-void SvxLightPrevievCtl3D::SelectLight(Base3DLightNumber eNew)
-{
-    if(eNew != eSelectedLight)
+    if((NO_LIGHT_SELECTED != maSelectedLight) && (GetLightOnOff(maSelectedLight)))
     {
-        eSelectedLight = eNew;
-        bGeometrySelected = FALSE;
-        Invalidate();
+        return true;
     }
+
+    return false;
 }
 
-void SvxLightPrevievCtl3D::SelectGeometry()
-{
-    if(!bGeometrySelected)
-    {
-        bGeometrySelected = TRUE;
-        eSelectedLight = Base3DLightNone;
-        Invalidate();
-    }
-}
-
-void SvxLightPrevievCtl3D::SetObjectRadius(double fNew)
-{
-    if(fObjectRadius != fNew)
-    {
-        fObjectRadius = fNew;
-        Invalidate();
-    }
-}
-
-void SvxLightPrevievCtl3D::SetDistanceToObject(double fNew)
-{
-    if(fDistanceToObject != fNew)
-    {
-        fDistanceToObject = fNew;
-        Invalidate();
-    }
-}
-
-void SvxLightPrevievCtl3D::SetScaleSizeSelected(double fNew)
-{
-    if(fScaleSizeSelected != fNew)
-    {
-        fScaleSizeSelected = fNew;
-        Invalidate();
-    }
-}
-
-void SvxLightPrevievCtl3D::SetLampSize(double fNew)
-{
-    if(fLampSize != fNew)
-    {
-        fLampSize = fNew;
-        CreateLightGeometry();
-        Invalidate();
-    }
-}
-
-void SvxLightPrevievCtl3D::DrawGeometry(Base3D *pBase3D)
-{
-    // call parent; zeichnet das Objekt selbst
-    SvxPreviewCtl3D::DrawGeometry(pBase3D);
-
-    // Lichter zeichnen
-    for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
-    {
-        Base3DLightNumber eLightNum = (Base3DLightNumber)(Base3DLight0 + a);
-        if(aLights.IsEnabled(eLightNum))
-            DrawLightGeometry(eLightNum, pBase3D);
-    }
-}
-
-void SvxLightPrevievCtl3D::DrawLightGeometry(Base3DLightNumber eLightNum,
-    Base3D* pBase3D)
-{
-    // Geometrie bereitstellen
-    B3dGeometry aNew;
-    basegfx::B3DHomMatrix aTrans;
-    double fRadius = fObjectRadius + fDistanceToObject;
-    Color aLineColor(COL_YELLOW);
-    aNew = aLightGeometry;
-
-    if(eLightNum == eSelectedLight)
-        aTrans.scale(fScaleSizeSelected, fScaleSizeSelected, fScaleSizeSelected);
-
-    basegfx::B3DVector aDirection(aLights.GetDirection(eLightNum));
-    aDirection.normalize();
-    aDirection *= fRadius;
-    aTrans.translate(aDirection.getX(), aDirection.getY(), aDirection.getZ());
-
-    aNew.Transform(aTrans);
-
-    // Material setzen
-    Color aZwi;
-    aZwi = aLights.GetIntensity(Base3DMaterialDiffuse, eLightNum);
-    pBase3D->SetMaterial(aZwi, Base3DMaterialAmbient);
-//  pBase3D->SetMaterial(aZwi, Base3DMaterialDiffuse);
-    pBase3D->SetMaterial(aZwi, Base3DMaterialEmission);
-    aZwi = aLights.GetIntensity(Base3DMaterialSpecular, eLightNum);
-    pBase3D->SetMaterial(aZwi, Base3DMaterialSpecular);
-
-    // Lampe Zeichnen
-    pBase3D->SetRenderMode(Base3DRenderLine);
-    pBase3D->DrawPolygonGeometry(aNew);
-
-    if(eLightNum == eSelectedLight)
-    {
-        // Beleuchtung aus und Linienfarbe setzen
-        BOOL bLightingWasEnabled = aLights.IsLightingEnabled();
-        aLights.EnableLighting(FALSE);
-        pBase3D->SetLightGroup(&aLights);
-        pBase3D->SetLineWidth();
-
-        // Kreis am Boden zeichnen
-        basegfx::B3DPoint aPoint(0.0, -fRadius, fRadius);
-        pBase3D->StartPrimitive(Base3DLineLoop);
-        pBase3D->SetColor(aLineColor);
-
-        double fWink;
-        for(fWink=-F_PI;fWink < F_PI; fWink += F_2PI/24.0)
-        {
-            aPoint.setZ(-cos(fWink) * fRadius);
-            aPoint.setX(-sin(fWink) * fRadius);
-            pBase3D->AddVertex(aPoint);
-        }
-        pBase3D->EndPrimitive();
-
-        // Kreisbogen zeichnen
-        double fBodenWinkel = atan2(-aDirection.getX(), -aDirection.getZ());
-        double fSinBoden = sin(fBodenWinkel) * fRadius;
-        double fCosBoden = cos(fBodenWinkel) * fRadius;
-        pBase3D->StartPrimitive(Base3DLineStrip);
-        pBase3D->SetColor(aLineColor);
-
-        for(fWink=-F_PI2;fWink < F_PI2; fWink += F_PI/12.0)
-        {
-            aPoint.setX(cos(fWink) * -fSinBoden);
-            aPoint.setY(sin(fWink) * fRadius);
-            aPoint.setZ(cos(fWink) * -fCosBoden);
-            pBase3D->AddVertex(aPoint);
-        }
-        pBase3D->EndPrimitive();
-
-        // Verbindung zeichnen
-        pBase3D->StartPrimitive(Base3DLineStrip);
-        pBase3D->SetColor(aLineColor);
-        aPoint = basegfx::B3DPoint(0.0, -fRadius, 0.0);
-        pBase3D->AddVertex(aPoint);
-        aPoint.setX(-fSinBoden);
-        aPoint.setZ(-fCosBoden);
-        pBase3D->AddVertex(aPoint);
-        aPoint.setY(0.0);
-        pBase3D->AddVertex(aPoint);
-        pBase3D->EndPrimitive();
-
-        // Beleuchtung wieder eischalten
-        aLights.EnableLighting(bLightingWasEnabled);
-        pBase3D->SetLightGroup(&aLights);
-    }
-}
-
-void SvxLightPrevievCtl3D::CreateLightGeometry()
-{
-    // Wuerfel erzeugen fuer Objektgroesse
-    basegfx::B3DRange aVolume;
-    aVolume.expand(basegfx::B3DPoint(-fLampSize, -fLampSize, -fLampSize));
-    aVolume.expand(basegfx::B3DPoint( fLampSize,  fLampSize,  fLampSize));
-
-    // Kugel erzeugen
-    aLightGeometry.CreateSphere(aVolume, 4.0, 3.0);
-}
-
-// Selektion gueltig? D.h.: Lampe ist Selektiert un auch EINGESCHALTET
-BOOL SvxLightPrevievCtl3D::IsSelectionValid()
-{
-    if((eSelectedLight != Base3DLightNone)
-        && (aLights.GetLightObject(eSelectedLight).IsEnabled()))
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-// Selektierte Lampe Position in Polarkoordinaten holen/setzen
-// dabei geht Hor:[0..360.0[ und Ver:[-90..90] Grad
-void SvxLightPrevievCtl3D::GetPosition(double& rHor, double& rVer)
+void Svx3DLightControl::GetPosition(double& rHor, double& rVer)
 {
     if(IsSelectionValid())
     {
-        basegfx::B3DVector aDirection(aLights.GetDirection(eSelectedLight));
+        basegfx::B3DVector aDirection(GetLightDirection(maSelectedLight));
         aDirection.normalize();
         rHor = atan2(-aDirection.getX(), -aDirection.getZ()) + F_PI; // 0..2PI
         rVer = atan2(aDirection.getY(), aDirection.getXZLength()); // -PI2..PI2
@@ -914,302 +780,260 @@ void SvxLightPrevievCtl3D::GetPosition(double& rHor, double& rVer)
     }
     if(IsGeometrySelected())
     {
-        rHor = fRotateY;
-        rVer = fRotateX;
+        rHor = mfRotateY;
+        rVer = mfRotateX;
     }
 }
 
-void SvxLightPrevievCtl3D::SetPosition(double fHor, double fVer)
+void Svx3DLightControl::SetPosition(double fHor, double fVer)
 {
     if(IsSelectionValid())
     {
-        basegfx::B3DVector aDirection;
+        // set selected light's direction
         fHor = (fHor * F_PI180) - F_PI; // -PI..PI
         fVer *= F_PI180; // -PI2..PI2
-        aDirection.setX(cos(fVer) * -sin(fHor));
-        aDirection.setY(sin(fVer));
-        aDirection.setZ(cos(fVer) * -cos(fHor));
+        basegfx::B3DVector aDirection(cos(fVer) * -sin(fHor), sin(fVer), cos(fVer) * -cos(fHor));
         aDirection.normalize();
-        aLights.SetDirection(aDirection, eSelectedLight);
-        Invalidate();
+
+        if(!aDirection.equal(GetLightDirection(maSelectedLight)))
+        {
+            // set changed light direction at SdrScene
+            SfxItemSet aSet(mpModel->GetItemPool());
+
+            switch(maSelectedLight)
+            {
+                case 0: aSet.Put(Svx3DLightDirection1Item(aDirection)); break;
+                case 1: aSet.Put(Svx3DLightDirection2Item(aDirection)); break;
+                case 2: aSet.Put(Svx3DLightDirection3Item(aDirection)); break;
+                case 3: aSet.Put(Svx3DLightDirection4Item(aDirection)); break;
+                case 4: aSet.Put(Svx3DLightDirection5Item(aDirection)); break;
+                case 5: aSet.Put(Svx3DLightDirection6Item(aDirection)); break;
+                case 6: aSet.Put(Svx3DLightDirection7Item(aDirection)); break;
+                default:
+                case 7: aSet.Put(Svx3DLightDirection8Item(aDirection)); break;
+            }
+
+            mpScene->SetMergedItemSet(aSet);
+
+            // correct 3D light's and LampFrame's geometries
+            AdaptToSelectedLight();
+            Invalidate();
+        }
     }
     if(IsGeometrySelected())
     {
-        SetRotation(fVer, fHor, fRotateZ);
+        if(mfRotateX != fVer || mfRotateY != fHor)
+        {
+            mfRotateX = fVer;
+            mfRotateY = fHor;
+
+            if(mp3DObj)
+            {
+                basegfx::B3DHomMatrix aObjectRotation;
+                aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
+                mp3DObj->SetTransform(aObjectRotation);
+
+                Invalidate();
+            }
+        }
     }
 }
 
-// Interaktion
-void SvxLightPrevievCtl3D::MouseButtonDown( const MouseEvent& rMEvt )
+void Svx3DLightControl::SetRotation(double fRotX, double fRotY, double fRotZ)
 {
-    BOOL bCallParent = TRUE;
-
-    // Status switchen
-    if(rMEvt.IsLeft())
+    if(IsGeometrySelected())
     {
-        if(IsSelectionValid() || bGeometrySelected)
+        if(fRotX != mfRotateX || fRotY != mfRotateY || fRotZ != mfRotateZ)
         {
-            bMouseMoved = FALSE;
-            bCallParent = FALSE;
-            aActionStartPoint = rMEvt.GetPosPixel();
-            StartTracking();
-        }
-        else
-        {
-            // Einfacher Click ohne viel Bewegen, versuche eine
-            // Selektion
-            TrySelection(rMEvt.GetPosPixel());
-            bCallParent = FALSE;
+            mfRotateX = fRotX;
+            mfRotateY = fRotY;
+            mfRotateZ = fRotZ;
+
+            if(mp3DObj)
+            {
+                basegfx::B3DHomMatrix aObjectRotation;
+                aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
+                mp3DObj->SetTransform(aObjectRotation);
+
+                Invalidate();
+            }
         }
     }
+}
 
+void Svx3DLightControl::GetRotation(double& rRotX, double& rRotY, double& rRotZ)
+{
+    rRotX = mfRotateX;
+    rRotY = mfRotateY;
+    rRotZ = mfRotateZ;
+}
+
+void Svx3DLightControl::Set3DAttributes( const SfxItemSet& rAttr )
+{
     // call parent
-    if(bCallParent)
-        SvxPreviewCtl3D::MouseButtonDown(rMEvt);
+    Svx3DPreviewControl::Set3DAttributes(rAttr);
+
+    if(maSelectedLight != NO_LIGHT_SELECTED && !GetLightOnOff(maSelectedLight))
+    {
+        // selected light is no more active, select new one
+        maSelectedLight = NO_LIGHT_SELECTED;
+    }
+
+    // local updates
+    ConstructLightObjects();
+    AdaptToSelectedLight();
+    Invalidate();
 }
 
-void SvxLightPrevievCtl3D::Tracking( const TrackingEvent& rTEvt )
+void Svx3DLightControl::SelectLight(sal_uInt32 nLightNumber)
 {
-    if(rTEvt.IsTrackingEnded())
+    if(nLightNumber > 7)
     {
-        if(rTEvt.IsTrackingCanceled())
+        nLightNumber = NO_LIGHT_SELECTED;
+    }
+
+    if(NO_LIGHT_SELECTED != nLightNumber)
+    {
+        if(!GetLightOnOff(nLightNumber))
         {
-            if(bMouseMoved)
-            {
-                // Interaktion abbrechen
-                bMouseMoved = FALSE;
-                if(bGeometrySelected)
-                {
-                    SetRotation(fSaveActionStartVer, fSaveActionStartHor, fSaveActionStartRotZ);
-                }
-                else
-                {
-                    SetPosition(fSaveActionStartHor, fSaveActionStartVer);
-                }
-                if(aChangeCallback.IsSet())
-                    aChangeCallback.Call(this);
-            }
-        }
-        else
-        {
-            const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
-            if(bMouseMoved)
-            {
-                // Wurde interaktiv veraendert
-            }
-            else
-            {
-                // Einfacher Click ohne viel Bewegen, versuche eine
-                // Selektion
-                TrySelection(rMEvt.GetPosPixel());
-            }
+            nLightNumber = NO_LIGHT_SELECTED;
         }
     }
-    else
+
+    if(nLightNumber != maSelectedLight)
     {
-        const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
-        Point aDeltaPos = rMEvt.GetPosPixel() - aActionStartPoint;
-
-        if(!bMouseMoved)
-        {
-            if(INT32(aDeltaPos.X() * aDeltaPos.X() + aDeltaPos.Y() * aDeltaPos.Y())
-                > nInteractionStartDistance)
-            {
-                if(bGeometrySelected)
-                {
-                    GetRotation(fSaveActionStartVer, fSaveActionStartHor, fSaveActionStartRotZ);
-                }
-                else
-                {
-                    // Start der Interaktion, Werte Sichern
-                    GetPosition(fSaveActionStartHor, fSaveActionStartVer);
-                }
-                bMouseMoved = TRUE;
-            }
-        }
-
-        if(bMouseMoved)
-        {
-            if(bGeometrySelected)
-            {
-                double fNewRotX = fSaveActionStartVer - ((double)aDeltaPos.Y());
-                double fNewRotY = fSaveActionStartHor + ((double)aDeltaPos.X());
-
-                // Horizontal abgleichen
-                while(fNewRotY < 0.0)
-                    fNewRotY += 360.0;
-                while(fNewRotY >= 360.0)
-                    fNewRotY -= 360.0;
-
-                // Vertikal cutten
-                if(fNewRotX < -90.0)
-                    fNewRotX = -90.0;
-                if(fNewRotX > 90.0)
-                    fNewRotX = 90.0;
-
-                SetRotation(fNewRotX, fNewRotY, fSaveActionStartRotZ);
-
-                if(aChangeCallback.IsSet())
-                    aChangeCallback.Call(this);
-            }
-            else
-            {
-                // Interaktion im vollen Gange
-                double fNewPosHor = fSaveActionStartHor + ((double)aDeltaPos.X());
-                double fNewPosVer = fSaveActionStartVer - ((double)aDeltaPos.Y());
-
-                // Horizontal abgleichen
-                while(fNewPosHor < 0.0)
-                    fNewPosHor += 360.0;
-                while(fNewPosHor >= 360.0)
-                    fNewPosHor -= 360.0;
-
-                // Vertikal cutten
-                if(fNewPosVer < -90.0)
-                    fNewPosVer = -90.0;
-                if(fNewPosVer > 90.0)
-                    fNewPosVer = 90.0;
-
-                SetPosition(fNewPosHor, fNewPosVer);
-
-                if(aChangeCallback.IsSet())
-                    aChangeCallback.Call(this);
-            }
-        }
+        maSelectedLight = nLightNumber;
+        mbGeometrySelected = false;
+        ConstructLightObjects();
+        AdaptToSelectedLight();
+        Invalidate();
     }
 }
 
-// Selektion einer Lampe
-void SvxLightPrevievCtl3D::TrySelection(Point aPosPixel)
+bool Svx3DLightControl::GetLightOnOff(sal_uInt32 nNum) const
 {
-    BOOL bNewSelection(FALSE);
-    Base3DLightNumber eNew = Base3DLightNone;
-
-    for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
+    if(nNum <= 7)
     {
-        Base3DLightNumber eActualLight = (Base3DLightNumber)(Base3DLight0 + a);
-        if(aLights.IsEnabled(eActualLight))
-        {
-            basegfx::B3DVector aLightPos(aLights.GetDirection(eActualLight));
-            aLightPos.normalize();
-            aLightPos *= GetObjectRadius() + GetDistanceToObject();
-            basegfx::B3DPoint aScreenPos(aCameraSet.ObjectToViewCoor(aLightPos));
-            Point aScreenPosPixel((long)(aScreenPos.getX() + 0.5), (long)(aScreenPos.getY() + 0.5));
-            aScreenPosPixel = LogicToPixel(aScreenPosPixel);
-            aScreenPosPixel -= aPosPixel;
-            INT32 nDistance = (aScreenPosPixel.getX() * aScreenPosPixel.getX()) + (aScreenPosPixel.getY() * aScreenPosPixel.getY());
+        const SfxItemSet aLightItemSet(Get3DAttributes());
 
-            if(nDistance < nInteractionStartDistance)
-            {
-                eNew = eActualLight;
-                bNewSelection = TRUE;
-            }
+        switch(nNum)
+        {
+            case 0 : return ((const Svx3DLightOnOff1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
+            case 1 : return ((const Svx3DLightOnOff2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
+            case 2 : return ((const Svx3DLightOnOff3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
+            case 3 : return ((const Svx3DLightOnOff4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
+            case 4 : return ((const Svx3DLightOnOff5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
+            case 5 : return ((const Svx3DLightOnOff6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
+            case 6 : return ((const Svx3DLightOnOff7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
+            case 7 : return ((const Svx3DLightOnOff8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
         }
     }
 
-    if(bNewSelection && eSelectedLight != eNew)
-    {
-        // Auswaehlen
-        SelectLight(eNew);
-
-        // Falls tatsaechlich eine andere Lampe selektiert
-        // wurde, rufe den entsprechenden Callback
-        if(aSelectionChangeCallback.IsSet())
-            aSelectionChangeCallback.Call(this);
-    }
-    else
-    {
-        // Punkt in logische Koordinaten umrechnen
-        Point aPosLogic = PixelToLogic(aPosPixel);
-
-        // Punkte generieren
-        basegfx::B3DPoint aHitFront(aPosLogic.X(), aPosLogic.Y(), 0.0);
-        basegfx::B3DPoint aHitBack(aPosLogic.X(), aPosLogic.Y(), ZBUFFER_DEPTH_RANGE);
-
-        // Umrechnen
-        aHitFront = aCameraSet.ViewToObjectCoor(aHitFront);
-        aHitBack = aCameraSet.ViewToObjectCoor(aHitBack);
-
-        // Eventuell die Geometrie des Beispielobjektes waehlen
-        if(aGeometry.CheckHit(aHitFront, aHitBack, 0))
-        {
-            // Auswaehlen
-            SelectGeometry();
-
-            // Falls tatsaechlich eine andere Lampe selektiert
-            // wurde, rufe den entsprechenden Callback
-            if(aSelectionChangeCallback.IsSet())
-                aSelectionChangeCallback.Call(this);
-        }
-    }
+    return false;
 }
 
-/*************************************************************************
-|*
-|*  3D Light Control Konstruktor
-|*
-\************************************************************************/
+Color Svx3DLightControl::GetLightColor(sal_uInt32 nNum) const
+{
+    if(nNum <= 7)
+    {
+        const SfxItemSet aLightItemSet(Get3DAttributes());
+
+        switch(nNum)
+        {
+            case 0 : return ((const Svx3DLightcolor1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
+            case 1 : return ((const Svx3DLightcolor2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
+            case 2 : return ((const Svx3DLightcolor3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
+            case 3 : return ((const Svx3DLightcolor4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
+            case 4 : return ((const Svx3DLightcolor5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
+            case 5 : return ((const Svx3DLightcolor6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
+            case 6 : return ((const Svx3DLightcolor7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
+            case 7 : return ((const Svx3DLightcolor8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
+        }
+    }
+
+    return Color(COL_BLACK);
+}
+
+basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
+{
+    if(nNum <= 7)
+    {
+        const SfxItemSet aLightItemSet(Get3DAttributes());
+
+        switch(nNum)
+        {
+            case 0 : return ((const Svx3DLightDirection1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
+            case 1 : return ((const Svx3DLightDirection2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
+            case 2 : return ((const Svx3DLightDirection3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
+            case 3 : return ((const Svx3DLightDirection4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
+            case 4 : return ((const Svx3DLightDirection5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
+            case 5 : return ((const Svx3DLightDirection6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
+            case 6 : return ((const Svx3DLightDirection7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
+            case 7 : return ((const Svx3DLightDirection8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
+        }
+    }
+
+    return basegfx::B3DVector();
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
 :   Control(pParent, rResId),
-    aLightControl(this, 0),
-    aHorScroller(this, WB_HORZ | WB_DRAG),
-    aVerScroller(this, WB_VERT | WB_DRAG),
-    aSwitcher(this, 0)
+    maLightControl(this, 0),
+    maHorScroller(this, WB_HORZ | WB_DRAG),
+    maVerScroller(this, WB_VERT | WB_DRAG),
+    maSwitcher(this, 0)
 {
-    // Members initialisieren
+    // init members
     Init();
 }
 
 SvxLightCtl3D::SvxLightCtl3D( Window* pParent, WinBits nStyle )
 :   Control(pParent, nStyle),
-    aLightControl(this, 0),
-    aHorScroller(this, WB_HORZ | WB_DRAG),
-    aVerScroller(this, WB_VERT | WB_DRAG),
-    aSwitcher(this, 0)
+    maLightControl(this, 0),
+    maHorScroller(this, WB_HORZ | WB_DRAG),
+    maVerScroller(this, WB_VERT | WB_DRAG),
+    maSwitcher(this, 0)
 {
-    // Members initialisieren
+    // init members
     Init();
 }
 
 void SvxLightCtl3D::Init()
 {
     // #i58240# set HelpIDs for scrollbars and switcher
-    aHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
-    aVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
-    aSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
-
-    // Lokale Parameter setzen
-    bSphereUsed = TRUE;
-    bVectorValid = FALSE;
+    maHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
+    maVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
+    maSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
 
     // Light preview
-    aLightControl.Show();
-    aLightControl.SetChangeCallback( LINK(this, SvxLightCtl3D, InternalInteractiveChange) );
-    aLightControl.SetSelectionChangeCallback( LINK(this, SvxLightCtl3D, InternalSelectionChange) );
+    maLightControl.Show();
+    maLightControl.SetChangeCallback( LINK(this, SvxLightCtl3D, InternalInteractiveChange) );
+    maLightControl.SetSelectionChangeCallback( LINK(this, SvxLightCtl3D, InternalSelectionChange) );
 
     // Horiz Scrollbar
-    aHorScroller.Show();
-    aHorScroller.SetRange(Range(0, 36000));
-    aHorScroller.SetLineSize(100);
-    aHorScroller.SetPageSize(1000);
-    aHorScroller.SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
+    maHorScroller.Show();
+    maHorScroller.SetRange(Range(0, 36000));
+    maHorScroller.SetLineSize(100);
+    maHorScroller.SetPageSize(1000);
+    maHorScroller.SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
 
     // Vert Scrollbar
-    aVerScroller.Show();
-    aVerScroller.SetRange(Range(0, 18000));
-    aVerScroller.SetLineSize(100);
-    aVerScroller.SetPageSize(1000);
-    aVerScroller.SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
+    maVerScroller.Show();
+    maVerScroller.SetRange(Range(0, 18000));
+    maVerScroller.SetLineSize(100);
+    maVerScroller.SetPageSize(1000);
+    maVerScroller.SetScrollHdl( LINK(this, SvxLightCtl3D, ScrollBarMove) );
 
     // Switch Button
-    aSwitcher.Show();
-    aSwitcher.SetClickHdl( LINK(this, SvxLightCtl3D, ButtonPress) );
+    maSwitcher.Show();
+    maSwitcher.SetClickHdl( LINK(this, SvxLightCtl3D, ButtonPress) );
 
-    // Selektion klaeren
+    // check selection
     CheckSelection();
 
-    // Neues Layout
+    // new layout
     NewLayout();
 }
 
@@ -1217,73 +1041,56 @@ SvxLightCtl3D::~SvxLightCtl3D()
 {
 }
 
-void SvxLightCtl3D::SetVector(const basegfx::B3DVector& rNew)
-{
-    aVector = rNew;
-    aVector.normalize();
-    bVectorValid = TRUE;
-}
-
-const basegfx::B3DVector& SvxLightCtl3D::GetVector()
-{
-    // Grobe Anbindung an altes Verhalten, um eine Reaktion zu haben
-    aVector = aLightControl.GetLightGroup()->GetDirection(aLightControl.GetSelectedLight());
-    aVector.normalize();
-    return aVector;
-}
-
 void SvxLightCtl3D::Resize()
 {
     // call parent
     Control::Resize();
 
-    // Neues Layout
+    // new layout
     NewLayout();
 }
 
 void SvxLightCtl3D::NewLayout()
 {
     // Layout members
-    Size aSize = GetOutputSizePixel();
-    long nScrollSize = aHorScroller.GetSizePixel().Height();
+    const Size aSize(GetOutputSizePixel());
+    const sal_Int32 nScrollSize(maHorScroller.GetSizePixel().Height());
 
-    // Preview Fenster
+    // Preview control
     Point aPoint(0, 0);
     Size aDestSize(aSize.Width() - nScrollSize, aSize.Height() - nScrollSize);
-    aLightControl.SetPosSizePixel(aPoint, aDestSize);
+    maLightControl.SetPosSizePixel(aPoint, aDestSize);
 
-    // Horizontaler Scrollbar
+    // hor scrollbar
     aPoint.Y() = aSize.Height() - nScrollSize;
     aDestSize.Height() = nScrollSize;
-    aHorScroller.SetPosSizePixel(aPoint, aDestSize);
+    maHorScroller.SetPosSizePixel(aPoint, aDestSize);
 
-    // Vertikaler Scrollbar
+    // vert scrollbar
     aPoint.X() = aSize.Width() - nScrollSize;
     aPoint.Y() = 0;
     aDestSize.Width() = nScrollSize;
     aDestSize.Height() = aSize.Height() - nScrollSize;
-    aVerScroller.SetPosSizePixel(aPoint, aDestSize);
+    maVerScroller.SetPosSizePixel(aPoint, aDestSize);
 
-    // Button
+    // button
     aPoint.Y() = aSize.Height() - nScrollSize;
     aDestSize.Height() = nScrollSize;
-    aSwitcher.SetPosSizePixel(aPoint, aDestSize);
+    maSwitcher.SetPosSizePixel(aPoint, aDestSize);
 }
 
-// Selektion auf Gueltigkeit pruefen
 void SvxLightCtl3D::CheckSelection()
 {
-    BOOL bSelectionValid = (aLightControl.IsSelectionValid()
-        || aLightControl.IsGeometrySelected());
-    aHorScroller.Enable(bSelectionValid);
-    aVerScroller.Enable(bSelectionValid);
+    const bool bSelectionValid(maLightControl.IsSelectionValid() || maLightControl.IsGeometrySelected());
+    maHorScroller.Enable(bSelectionValid);
+    maVerScroller.Enable(bSelectionValid);
 
     if(bSelectionValid)
     {
         double fHor, fVer;
-        aLightControl.GetPosition(fHor, fVer);
-        aHorScroller.SetThumbPos( INT32(fHor * 100.0) );
-        aVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+        maLightControl.GetPosition(fHor, fVer);
+        maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+        maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
     }
 }
 
@@ -1291,8 +1098,7 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
 {
     double fHor, fVer;
 
-    aLightControl.GetPosition(fHor, fVer);
-
+    maLightControl.GetPosition(fHor, fVer);
     fHor += fDeltaHor;
     fVer += fDeltaVer;
 
@@ -1302,18 +1108,19 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
     if ( fVer < -90.0 )
         return;
 
-    aLightControl.SetPosition(fHor, fVer);
-    aHorScroller.SetThumbPos( INT32(fHor * 100.0) );
-    aVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+    maLightControl.SetPosition(fHor, fVer);
+    maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+    maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
 
-    if(aUserInteractiveChangeCallback.IsSet())
-        aUserInteractiveChangeCallback.Call(this);
-
+    if(maUserInteractiveChangeCallback.IsSet())
+    {
+        maUserInteractiveChangeCallback.Call(this);
+    }
 }
 
 void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
+    const KeyCode aCode(rKEvt.GetKeyCode());
 
     if( aCode.GetModifier() )
     {
@@ -1324,71 +1131,98 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
     switch ( aCode.GetCode() )
     {
         case KEY_SPACE:
-            ;
+        {
             break;
+        }
         case KEY_LEFT:
+        {
             move(  -4.0,  0.0 ); // #i58242# changed move direction in X
             break;
+        }
         case KEY_RIGHT:
+        {
             move( 4.0,  0.0 ); // #i58242# changed move direction in X
             break;
+        }
         case KEY_UP:
+        {
             move(  0.0,  4.0 );
             break;
+        }
         case KEY_DOWN:
+        {
             move(  0.0, -4.0 );
             break;
+        }
         case KEY_PAGEUP:
+        {
+            sal_Int32 nLight(maLightControl.GetSelectedLight() - 1);
+
+            while((nLight >= 0) && !maLightControl.GetLightOnOff(nLight))
             {
-                B3dLightGroup* pLights = aLightControl.GetLightGroup();
-                int eLight = aLightControl.GetSelectedLight() - 1;
-
-                while( (eLight >= Base3DLight0) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
-                    eLight--;
-
-                if( eLight < Base3DLight0 )
-                {
-                    eLight =  Base3DLight7;
-                    while( (eLight >= Base3DLight0) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
-                        eLight--;
-                }
-
-                if( eLight >= Base3DLight0 )
-                {
-                    aLightControl.SelectLight((Base3DLightNumber)eLight);
-                    CheckSelection();
-                    if(aUserSelectionChangeCallback.IsSet())
-                        aUserSelectionChangeCallback.Call(this);
-                }
-                break;
+                nLight--;
             }
+
+            if(nLight < 0)
+            {
+                nLight = 7;
+
+                while((nLight >= 0) && !maLightControl.GetLightOnOff(nLight))
+                {
+                    nLight--;
+                }
+            }
+
+            if(nLight >= 0)
+            {
+                maLightControl.SelectLight(nLight);
+                CheckSelection();
+
+                if(maUserSelectionChangeCallback.IsSet())
+                {
+                    maUserSelectionChangeCallback.Call(this);
+                }
+            }
+
+            break;
+        }
         case KEY_PAGEDOWN:
+        {
+            sal_Int32 nLight(maLightControl.GetSelectedLight() - 1);
+
+            while(nLight <= 7 && !maLightControl.GetLightOnOff(nLight))
             {
-                B3dLightGroup* pLights = aLightControl.GetLightGroup();
-                int eLight = aLightControl.GetSelectedLight() + 1;
-
-                while( (eLight < Base3DLightNone) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
-                    eLight++;
-
-                if( eLight == Base3DLightNone )
-                {
-                    eLight = Base3DLight0;
-                    while( (eLight < Base3DLightNone) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
-                        eLight++;
-                }
-
-                if( eLight < Base3DLightNone )
-                {
-                    aLightControl.SelectLight((Base3DLightNumber)eLight);
-                    CheckSelection();
-                    if(aUserSelectionChangeCallback.IsSet())
-                        aUserSelectionChangeCallback.Call(this);
-                }
-                break;
+                nLight++;
             }
+
+            if(nLight > 7)
+            {
+                nLight = 0;
+
+                while(nLight <= 7 && !maLightControl.GetLightOnOff(nLight))
+                {
+                    nLight++;
+                }
+            }
+
+            if(nLight <= 7)
+            {
+                maLightControl.SelectLight(nLight);
+                CheckSelection();
+
+                if(maUserSelectionChangeCallback.IsSet())
+                {
+                    maUserSelectionChangeCallback.Call(this);
+                }
+            }
+
+            break;
+        }
         default:
+        {
             Control::KeyInput( rKEvt );
             break;
+        }
     }
 }
 
@@ -1396,20 +1230,20 @@ void SvxLightCtl3D::GetFocus()
 {
     Control::GetFocus();
 
-    if( HasFocus() && IsEnabled() )
+    if(HasFocus() && IsEnabled())
     {
         CheckSelection();
 
-        Size aFocusSize = aLightControl.GetOutputSizePixel();
+        Size aFocusSize = maLightControl.GetOutputSizePixel();
 
         aFocusSize.Width() -= 4;
         aFocusSize.Height() -= 4;
 
         Rectangle aFocusRect( Point( 2, 2 ), aFocusSize );
 
-        aFocusRect = aLightControl.PixelToLogic( aFocusRect );
+        aFocusRect = maLightControl.PixelToLogic( aFocusRect );
 
-        aLightControl.ShowFocus( aFocusRect );
+        maLightControl.ShowFocus( aFocusRect );
     }
 }
 
@@ -1417,31 +1251,37 @@ void SvxLightCtl3D::LoseFocus()
 {
     Control::LoseFocus();
 
-    aLightControl.HideFocus();
+    maLightControl.HideFocus();
 }
 
 IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, EMPTYARG)
 {
-    INT32 nHor = aHorScroller.GetThumbPos();
-    INT32 nVer = aVerScroller.GetThumbPos();
+    const sal_Int32 nHor(maHorScroller.GetThumbPos());
+    const sal_Int32 nVer(maVerScroller.GetThumbPos());
 
-    aLightControl.SetPosition(
+    maLightControl.SetPosition(
         ((double)nHor) / 100.0,
         ((double)((18000 - nVer) - 9000)) / 100.0);
 
-    if(aUserInteractiveChangeCallback.IsSet())
-        aUserInteractiveChangeCallback.Call(this);
-
-    // ...um Kompatibel zu bleiben, kann spaeter wieder raus
-    //InteractiveChange(NULL);
+    if(maUserInteractiveChangeCallback.IsSet())
+    {
+        maUserInteractiveChangeCallback.Call(this);
+    }
 
     return 0;
 }
 
 IMPL_LINK( SvxLightCtl3D, ButtonPress, void*, EMPTYARG)
 {
-    aLightControl.SetGeometry(bSphereUsed);
-    bSphereUsed = !bSphereUsed;
+    if(PREVIEW_OBJECTTYPE_SPHERE == GetSvx3DLightControl().GetObjectType())
+    {
+        GetSvx3DLightControl().SetObjectType(PREVIEW_OBJECTTYPE_CUBE);
+    }
+    else
+    {
+        GetSvx3DLightControl().SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
+    }
+
     return 0;
 }
 
@@ -1449,15 +1289,14 @@ IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, EMPTYARG)
 {
     double fHor, fVer;
 
-    aLightControl.GetPosition(fHor, fVer);
-    aHorScroller.SetThumbPos( INT32(fHor * 100.0) );
-    aVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+    maLightControl.GetPosition(fHor, fVer);
+    maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+    maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
 
-    if(aUserInteractiveChangeCallback.IsSet())
-        aUserInteractiveChangeCallback.Call(this);
-
-    // ...um Kompatibel zu bleiben, kann spaeter wieder raus
-    //InteractiveChange(NULL);
+    if(maUserInteractiveChangeCallback.IsSet())
+    {
+        maUserInteractiveChangeCallback.Call(this);
+    }
 
     return 0;
 }
@@ -1466,26 +1305,13 @@ IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, EMPTYARG)
 {
     CheckSelection();
 
-    if(aUserSelectionChangeCallback.IsSet())
-        aUserSelectionChangeCallback.Call(this);
-
-    // ...um Kompatibel zu bleiben, kann spaeter wieder raus
-    //SelectionChange(NULL);
+    if(maUserSelectionChangeCallback.IsSet())
+    {
+        maUserSelectionChangeCallback.Call(this);
+    }
 
     return 0;
 }
 
-// ...um Kompatibel zu bleiben, kann spaeter wieder raus
-/*
-IMPL_LINK( SvxLightCtl3D, InteractiveChange, void*, EMPTYARG)
-{
-    return NULL;
-} */
-
-/*
-IMPL_LINK( SvxLightCtl3D, SelectionChange, void*, EMPTYARG)
-{
-    return NULL;
-}*/
-
-
+//////////////////////////////////////////////////////////////////////////////
+// eof

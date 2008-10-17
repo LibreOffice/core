@@ -8,7 +8,7 @@
  *
  * $RCSfile: objectcontacttools.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,7 @@ namespace sdr
                 if(bTryToTestCanvas)
                 {
                     // create test-cancas-Processor
-                    return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev.GetCanvas());
+                    return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev);
                 }
                 else
                 {

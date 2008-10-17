@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: float3d.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -236,7 +236,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
         aCtlLightPreview    ( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
 
-        pLightGroup         ( NULL ),
         aImgLightOn         ( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
         aImgLightOff        ( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
 
@@ -400,9 +399,9 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
     // Preview-Callback
     aLink = LINK( this, Svx3DWin, ChangeLightCallbackHdl );
-    aCtlLightPreview.SetUserInteractiveChangeCallback( aLink );
+    aCtlLightPreview.SetUserInteractiveChangeCallback(aLink);
     aLink = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
-    aCtlLightPreview.SetUserSelectionChangeCallback( aLink );
+    aCtlLightPreview.SetUserSelectionChangeCallback(aLink);
 
     aSize = GetOutputSizePixel();
     SetMinOutputSizePixel( aSize );
@@ -433,8 +432,6 @@ __EXPORT Svx3DWin::~Svx3DWin()
     delete pConvertTo3DItem;
     delete pConvertTo3DLatheItem;
 
-    delete pLightGroup;
-
     if(mpRemember2DAttributes)
         delete mpRemember2DAttributes;
 
@@ -447,10 +444,7 @@ void Svx3DWin::Construct()
     aBtnGeo.Check();
     Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     aLink.Call( &aBtnGeo );
-
     aCtlLightPreview.Hide();
-    pLightGroup = new B3dLightGroup();
-    *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
 }
 
 // -----------------------------------------------------------------------
@@ -464,7 +458,7 @@ void Svx3DWin::Reset()
     ClickUpdateHdl( NULL );
 
     // Nichts selektieren, um Fehler beim erstselektieren zu vermeiden
-    aCtlLightPreview.GetPreviewControl().SelectLight(Base3DLight0);
+    aCtlLightPreview.GetSvx3DLightControl().SelectLight(0);
 }
 
 bool Svx3DWin::GetUILightState( ImageButton& aBtn ) const
@@ -640,7 +634,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             {
                 aNumHorizontal.SetValue( nValue );
                 // evtl. am Ende...
-                aCtlLightPreview.GetPreviewControl().SetHorizontalSegments( (UINT16)nValue );
+                // aCtlLightPreview.GetSvx3DLightControl().SetHorizontalSegments( (UINT16)nValue );
                 bUpdate = TRUE;
             }
             else if( aNumHorizontal.IsEmptyFieldValue() )
@@ -667,8 +661,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             {
                 aNumVertical.SetValue( nValue );
                 // evtl. am Ende...
-                aCtlLightPreview.GetPreviewControl().SetVerticalSegments( (UINT16)nValue );
-                //aCtlPreview.SetVerticalSegments( (UINT16)nValue );
+                //aCtlLightPreview.GetSvx3DLightControl().SetVerticalSegments( (UINT16)nValue );
                 bUpdate = TRUE;
             }
             else if( aNumVertical.IsEmptyFieldValue() )
@@ -1006,8 +999,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight0 );
             bUpdate = TRUE;
         }
     }
@@ -1028,7 +1019,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight1 )) )
         {
             SetUILightState( aBtnLight1, bOn );
-            pLightGroup->Enable( bOn, Base3DLight0 );
             bUpdate = TRUE;
         }
         if( aBtnLight1.GetState() == STATE_DONTKNOW )
@@ -1046,13 +1036,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_1);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight0 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight0 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 2 (Farbe)
@@ -1064,8 +1048,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight1 );
             bUpdate = TRUE;
         }
     }
@@ -1086,7 +1068,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight2 )) )
         {
             SetUILightState( aBtnLight2, bOn );
-            pLightGroup->Enable( bOn, Base3DLight1 );
             bUpdate = TRUE;
         }
         if( aBtnLight2.GetState() == STATE_DONTKNOW )
@@ -1104,13 +1085,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_2);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight1 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight1 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 3 (Farbe)
@@ -1122,8 +1097,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight2 );
-
             bUpdate = TRUE;
         }
     }
@@ -1144,7 +1117,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight3)) )
         {
             SetUILightState( aBtnLight3, bOn );
-            pLightGroup->Enable( bOn, Base3DLight2 );
             bUpdate = TRUE;
         }
         if( aBtnLight3.GetState() == STATE_DONTKNOW )
@@ -1162,13 +1134,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_3);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight2 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight2 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 4 (Farbe)
@@ -1180,8 +1146,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight3 );
-
             bUpdate = TRUE;
         }
     }
@@ -1202,7 +1166,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight4 )) )
         {
             SetUILightState( aBtnLight4, bOn );
-            pLightGroup->Enable( bOn, Base3DLight3 );
             bUpdate = TRUE;
         }
         if( aBtnLight4.GetState() == STATE_DONTKNOW )
@@ -1220,13 +1183,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_4);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight3 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight3 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 5 (Farbe)
@@ -1238,8 +1195,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight4 );
-
             bUpdate = TRUE;
         }
     }
@@ -1260,7 +1215,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight5 )) )
         {
             SetUILightState( aBtnLight5, bOn );
-            pLightGroup->Enable( bOn, Base3DLight4 );
             bUpdate = TRUE;
         }
         if( aBtnLight5.GetState() == STATE_DONTKNOW )
@@ -1278,13 +1232,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_5);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight4 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight4 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 6 (Farbe)
@@ -1296,8 +1244,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight5 );
-
             bUpdate = TRUE;
         }
     }
@@ -1318,7 +1264,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight6 )) )
         {
             SetUILightState( aBtnLight6, bOn );
-            pLightGroup->Enable( bOn, Base3DLight5 );
             bUpdate = TRUE;
         }
         if( aBtnLight6.GetState() == STATE_DONTKNOW )
@@ -1336,13 +1281,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_6);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight5 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight5 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 7 (Farbe)
@@ -1354,8 +1293,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight6 );
-
             bUpdate = TRUE;
         }
     }
@@ -1376,7 +1313,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight7 )) )
         {
             SetUILightState( aBtnLight7 , bOn );
-            pLightGroup->Enable( bOn, Base3DLight6 );
             bUpdate = TRUE;
         }
         if( aBtnLight7.GetState() == STATE_DONTKNOW )
@@ -1394,13 +1330,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_7);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight6 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight6 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Licht 8 (Farbe)
@@ -1412,8 +1342,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetIntensity( aColor, Base3DMaterialDiffuse, Base3DLight7 );
-
             bUpdate = TRUE;
         }
     }
@@ -1434,7 +1362,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight8 )) )
         {
             SetUILightState( aBtnLight8, bOn );
-            pLightGroup->Enable( bOn, Base3DLight7 );
             bUpdate = TRUE;
         }
         if( aBtnLight8.GetState() == STATE_DONTKNOW )
@@ -1452,13 +1379,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_8);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const Svx3DLightDirection8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
-        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight7 );
-        if( aVector != aVector2 )
-        {
-            pLightGroup->SetDirection( aVector, Base3DLight7 );
-            bUpdate = TRUE;
-        }
+        bUpdate = TRUE;
     }
 
     // Umgebungslicht
@@ -1470,8 +1391,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            pLightGroup->SetGlobalAmbientLight( aColor );
-
             bUpdate = TRUE;
         }
     }
@@ -1630,7 +1549,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aColor = ((const XFillColorItem&)rAttrs.Get(XATTR_FILLCOLOR)).GetColorValue();
-        aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialDiffuse );
         ColorLB* pLb = &aLbMatColor;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1652,7 +1570,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aColor = ((const Svx3DMaterialEmissionItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue();
-        aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialEmission );
         ColorLB* pLb = &aLbMatEmission;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1674,7 +1591,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aColor = ((const Svx3DMaterialSpecularItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue();
-        aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialSpecular );
         ColorLB* pLb = &aLbMatSpecular;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1696,7 +1612,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         UINT16 nValue = ((const Svx3DMaterialSpecularIntensityItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
-        aCtlLightPreview.GetPreviewControl().SetShininess( nValue );
         if( nValue != aMtrMatSpecularIntensity.GetValue() )
         {
             aMtrMatSpecularIntensity.SetValue( nValue );
@@ -1749,8 +1664,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( bUpdate || bOnly3DChanged )
     {
         // Preview updaten
-        aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
-
         SfxItemSet aSet(rAttrs);
 
         // set LineStyle hard to XLINE_NONE when it's not set so that
@@ -1764,6 +1677,32 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aSet.Put(XFillColorItem(String(), Color(COL_WHITE)));
 
         aCtlPreview.Set3DAttributes(aSet);
+        aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes(aSet);
+
+        // try to select light corresponding to active button
+        sal_uInt32 nNumber(0xffffffff);
+
+        if(aBtnLight1.IsChecked())
+            nNumber = 0;
+        else if(aBtnLight2.IsChecked())
+            nNumber = 1;
+        else if(aBtnLight3.IsChecked())
+            nNumber = 2;
+        else if(aBtnLight4.IsChecked())
+            nNumber = 3;
+        else if(aBtnLight5.IsChecked())
+            nNumber = 4;
+        else if(aBtnLight6.IsChecked())
+            nNumber = 5;
+        else if(aBtnLight7.IsChecked())
+            nNumber = 6;
+        else if(aBtnLight8.IsChecked())
+            nNumber = 7;
+
+        if(nNumber != 0xffffffff)
+        {
+            aCtlLightPreview.GetSvx3DLightControl().SelectLight(nNumber);
+        }
     }
 
     // handle state of converts possible
@@ -1774,9 +1713,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 // -----------------------------------------------------------------------
 void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 {
-    // 2D-Attribute und alle anderen holen
-//  rAttrs.Put( aCtlPreview.Get3DAttributes() );
-
     // get remembered 2d attributes from the dialog
     if(mpRemember2DAttributes)
     {
@@ -1974,6 +1910,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     Image aImg;
     basegfx::B3DVector aVector;
     Color aColor;
+    const SfxItemSet aLightItemSet(aCtlLightPreview.GetSvx3DLightControl().Get3DAttributes());
+
     // Licht 1 Farbe
     if( aLbLight1.GetSelectEntryCount() )
     {
@@ -1992,8 +1930,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 1 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight0 );
-            rAttrs.Put(Svx3DLightDirection1Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1));
         }
     }
     else
@@ -2018,8 +1955,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 2 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight1 );
-            rAttrs.Put(Svx3DLightDirection2Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2));
         }
     }
     else
@@ -2043,8 +1979,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 3 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight2 );
-            rAttrs.Put(Svx3DLightDirection3Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3));
         }
     }
     else
@@ -2068,8 +2003,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 4 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight3 );
-            rAttrs.Put(Svx3DLightDirection4Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4));
         }
     }
     else
@@ -2093,8 +2027,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 5 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight4 );
-            rAttrs.Put(Svx3DLightDirection5Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5));
         }
     }
     else
@@ -2118,8 +2051,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 6 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight5 );
-            rAttrs.Put(Svx3DLightDirection6Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6));
         }
     }
     else
@@ -2143,8 +2075,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 7 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight6 );
-            rAttrs.Put(Svx3DLightDirection7Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7));
         }
     }
     else
@@ -2168,8 +2099,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         // Licht 8 (Richtung)
         if( bValue )
         {
-            aVector = pLightGroup->GetDirection( Base3DLight7 );
-            rAttrs.Put(Svx3DLightDirection8Item(aVector));
+            rAttrs.Put(aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8));
         }
     }
     else
@@ -2958,30 +2888,12 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
                  p == &aLbMatEmission ||
                  p == &aLbMatSpecular )
         {
-            aColor = ( ( (ColorLB*)p )->GetSelectEntryColor() );
-
-            Base3DMaterialValue eType = Base3DMaterialDiffuse;
-            //if( p == &aLbMatColor )
-            if( p == &aLbMatEmission )
-                eType = Base3DMaterialEmission;
-            else if( p == &aLbMatSpecular )
-                eType = Base3DMaterialSpecular;
-
-            //aCtlPreview.SetMaterial( aColor, eType );
-            aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, eType );
-
             aLbMatFavorites.SelectEntryPos( 0 );
-
             bUpdatePreview = TRUE;
         }
         // Beleuchtung
         else if( p == &aLbAmbientlight )
         {
-            Color aColor2 = aLbAmbientlight.GetSelectEntryColor();
-            pLightGroup->SetGlobalAmbientLight( aColor2 );
-
-            aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
-            //aCtlPreview.SetLightGroup( pLightGroup );
             bUpdatePreview = TRUE;
         }
         else if( p == &aLbLight1 ||
@@ -2993,17 +2905,6 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
                  p == &aLbLight7 ||
                  p == &aLbLight8 )
         {
-            Color aColor2 = ( (ColorLB*)p )->GetSelectEntryColor();
-            USHORT nLightSource = GetLightSource();
-
-            *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
-
-            pLightGroup->SetIntensity( aColor2,
-                            Base3DMaterialDiffuse,
-                            (Base3DLightNumber) nLightSource );
-
-            aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
-            //aCtlPreview.SetLightGroup( pLightGroup );
             bUpdatePreview = TRUE;
         }
         else if( p == &aLbShademode )
@@ -3025,27 +2926,20 @@ IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
         // Material
         if( pField == &aMtrMatSpecularIntensity )
         {
-            UINT16 nValue = (UINT16) ( (MetricField*)pField )->GetValue();
-            //aCtlPreview.SetShininess( nValue );
-            aCtlLightPreview.GetPreviewControl().SetShininess( nValue );
             bUpdatePreview = TRUE;
         }
         else if( pField == &aNumHorizontal )
         {
-            UINT16 nValue = (UINT16) ( (NumericField*)pField )->GetValue();
-            aCtlLightPreview.GetPreviewControl().SetHorizontalSegments( nValue );
-            //aCtlPreview.SetHorizontalSegments( nValue );
             bUpdatePreview = TRUE;
         }
         else if( pField == &aNumVertical )
         {
-            UINT16 nValue = (UINT16) ( (NumericField*)pField )->GetValue();
-            aCtlLightPreview.GetPreviewControl().SetVerticalSegments( nValue );
-            //aCtlPreview.SetVerticalSegments( nValue );
             bUpdatePreview = TRUE;
         }
         else if( pField == &aMtrSlant )
+        {
             bUpdatePreview = TRUE;
+        }
 
         if( bUpdatePreview == TRUE )
             UpdatePreview();
@@ -3063,19 +2957,25 @@ IMPL_LINK( Svx3DWin, ClickLightHdl, PushButton*, pBtn )
         USHORT nLightSource = GetLightSource( pBtn );
         ColorLB* pLb = GetLbByButton( pBtn );
         Color aColor( pLb->GetSelectEntryColor() );
-        *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
+        SfxItemSet aLightItemSet(aCtlLightPreview.GetSvx3DLightControl().Get3DAttributes());
+        const bool bOnOff(GetUILightState( *(ImageButton*)pBtn ));
 
-        pLightGroup->SetIntensity( aColor,
-                        Base3DMaterialDiffuse,
-                        (Base3DLightNumber) nLightSource );
+        switch(nLightSource)
+        {
+            case 0: aLightItemSet.Put(Svx3DLightcolor1Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff1Item(bOnOff)); break;
+            case 1: aLightItemSet.Put(Svx3DLightcolor2Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff2Item(bOnOff)); break;
+            case 2: aLightItemSet.Put(Svx3DLightcolor3Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff3Item(bOnOff)); break;
+            case 3: aLightItemSet.Put(Svx3DLightcolor4Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff4Item(bOnOff)); break;
+            case 4: aLightItemSet.Put(Svx3DLightcolor5Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff5Item(bOnOff)); break;
+            case 5: aLightItemSet.Put(Svx3DLightcolor6Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff6Item(bOnOff)); break;
+            case 6: aLightItemSet.Put(Svx3DLightcolor7Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff7Item(bOnOff)); break;
+            default:
+            case 7: aLightItemSet.Put(Svx3DLightcolor8Item(aColor)); aLightItemSet.Put(Svx3DLightOnOff8Item(bOnOff)); break;
+        }
 
-        pLightGroup->Enable( GetUILightState( *(ImageButton*)pBtn ),    (Base3DLightNumber) nLightSource );
-
-        aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
-        aCtlLightPreview.GetPreviewControl().SelectLight( (Base3DLightNumber) nLightSource );
+        aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes(aLightItemSet);
+        aCtlLightPreview.GetSvx3DLightControl().SelectLight(nLightSource);
         aCtlLightPreview.CheckSelection();
-
-        //aCtlPreview.SetLightGroup( pLightGroup );
     }
     return( 0L );
 }
@@ -3099,9 +2999,6 @@ IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, EMPTYARG )
 
 IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
 {
-    *pLightGroup = *aCtlLightPreview.GetPreviewControl().GetLightGroup();
-    //aCtlPreview.SetLightGroup( pLightGroup );
-
     return( 0L );
 }
 
@@ -3110,11 +3007,10 @@ IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
 
 IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, EMPTYARG )
 {
-    Base3DLightNumber eLight = aCtlLightPreview.GetPreviewControl().GetSelectedLight();
+    const sal_uInt32 nLight(aCtlLightPreview.GetSvx3DLightControl().GetSelectedLight());
+    PushButton* pBtn = 0;
 
-    PushButton* pBtn = NULL;
-
-    switch( eLight )
+    switch( nLight )
     {
         case 0: pBtn = &aBtnLight1; break;
         case 1: pBtn = &aBtnLight2; break;
@@ -3233,6 +3129,7 @@ void Svx3DWin::UpdatePreview()
     // Attribute holen und im Preview setzen
     GetAttr( aSet );
     aCtlPreview.Set3DAttributes( aSet );
+    aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes( aSet );
 }
 
 //////////////////////////////////////////////////////////////////////////////

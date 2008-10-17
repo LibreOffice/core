@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdograf.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.84.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,9 +291,13 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 
 // -----------------------------------------------------------------------------
 
-const GraphicObject& SdrGrafObj::GetGraphicObject() const
+const GraphicObject& SdrGrafObj::GetGraphicObject(bool bForceSwapIn) const
 {
-    ForceSwapIn();
+    if(bForceSwapIn)
+    {
+        ForceSwapIn();
+    }
+
     return *pGraphic;
 }
 
@@ -685,7 +689,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 // -----------------------------------------------------------------------------
 // #i25616#
 
-basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly(sal_Bool bDetail) const
+basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
 {
     if(mbInsidePaint)
     {
@@ -707,7 +711,7 @@ basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly(sal_Bool bDetail) const
     else
     {
         // call parent
-        return SdrRectObj::TakeXorPoly(bDetail);
+        return SdrRectObj::TakeXorPoly();
     }
 }
 

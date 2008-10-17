@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdobj.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +33,7 @@
 
 #include <memory>
 #include <cppuhelper/weakref.hxx>
-
-#ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
-#endif
 #include <tools/weakbase.hxx>
 #include <svtools/lstner.hxx>
 #include <vcl/timer.hxx>
@@ -45,13 +42,7 @@
 #include <svx/svdglue.hxx> // Klebepunkte
 #include <svx/xdash.hxx>
 #include <svx/xpoly.hxx>
-
-//#ifndef _POLY3D_HXX
-//#include <svx/poly3d.hxx>
-//#endif
 #include <svx/xenum.hxx>
-
-// #111096#
 #include <vcl/bitmapex.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include "svx/svxdllapi.h"
@@ -712,7 +703,7 @@ public:
     // Das Xor-Polygon wird von der View zu Draggen des Objektes benoetigt.
     // Alle Polygone innerhalb des PolyPolygon werden als PolyLine interpretiert.
     // Moechte man ein geschlossenes Polygon, so muss man es explizit schliessen.
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     // Die Kontur fuer TextToContour
     virtual basegfx::B2DPolyPolygon TakeContour() const;

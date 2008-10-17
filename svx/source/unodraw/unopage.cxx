@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.50.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -618,7 +618,6 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 pScene->SetCamera(aCam);
 
                 pScene->SetRectsDirty();
-                pScene->InitTransformationSet();
             }
             else if(pNewObj->ISA(E3dExtrudeObj))
             {
@@ -627,10 +626,6 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
                 aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
                 aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
-
-                // #87922#
-                // To avoid that CreateGeometry(...) sets the DoubleSided
-                // item at once, use a closed poylgon.
                 aNewPolygon.setClosed(true);
                 pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
@@ -644,10 +639,6 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
                 aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
                 aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
-
-                // #87922#
-                // To avoid that CreateGeometry(...) sets the DoubleSided
-                // item at once, use a closed poylgon.
                 aNewPolygon.setClosed(true);
                 pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 

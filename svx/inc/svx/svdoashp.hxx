@@ -32,9 +32,7 @@
 #define _SVDOASHP_HXX
 
 #include <svx/svdobj.hxx>
-#ifndef _SVDOATTR_HXX
 #include <svx/svdotext.hxx>
-#endif
 #include <svx/svdhdl.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
@@ -236,7 +234,7 @@ public:
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual basegfx::B2DPolyPolygon TakeContour() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);

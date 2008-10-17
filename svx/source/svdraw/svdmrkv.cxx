@@ -972,8 +972,8 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                 // build handles
-                const Point aTmpPos1(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY()));
-                const Point aTmpPos2(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY()));
+                const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
+                const Point aTmpPos2(basegfx::fround(aGradTransVector.maPositionB.getX()), basegfx::fround(aGradTransVector.maPositionB.getY()));
                 SdrHdlColor* pColHdl1 = new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, SDR_HANDLE_COLOR_SIZE_NORMAL, TRUE);
                 SdrHdlColor* pColHdl2 = new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, SDR_HANDLE_COLOR_SIZE_NORMAL, TRUE);
                 SdrHdlGradient* pGradHdl = new SdrHdlGradient(aTmpPos1, aTmpPos2, FALSE);
@@ -1014,8 +1014,8 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles
-                    const Point aTmpPos1(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY()));
-                    const Point aTmpPos2(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY()));
+                    const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
+                    const Point aTmpPos2(basegfx::fround(aGradTransVector.maPositionB.getX()), basegfx::fround(aGradTransVector.maPositionB.getY()));
                     SdrHdlColor* pColHdl1 = new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, aHdlSize, FALSE);
                     SdrHdlColor* pColHdl2 = new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, aHdlSize, FALSE);
                     SdrHdlGradient* pGradHdl = new SdrHdlGradient(aTmpPos1, aTmpPos2, TRUE);

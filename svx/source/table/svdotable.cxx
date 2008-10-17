@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotable.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1997,9 +1997,9 @@ void SdrTableObj::operator=(const SdrObject& rObj)
 
 // --------------------------------------------------------------------
 
-basegfx::B2DPolyPolygon SdrTableObj::TakeXorPoly(sal_Bool bDetail ) const
+basegfx::B2DPolyPolygon SdrTableObj::TakeXorPoly() const
 {
-    return SdrTextObj::TakeXorPoly( bDetail );
+    return SdrTextObj::TakeXorPoly();
 }
 
 // --------------------------------------------------------------------

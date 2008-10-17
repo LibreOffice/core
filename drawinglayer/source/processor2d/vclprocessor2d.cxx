@@ -659,7 +659,7 @@ namespace drawinglayer
                 {
                     aMask.transform(maCurrentTransformation);
                     const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
-                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
                     if(aBufferDevice.isVisible())
                     {
@@ -719,7 +719,7 @@ namespace drawinglayer
             {
                 basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
                 aRange.transform(maCurrentTransformation);
-                impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+                impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
                 if(aBufferDevice.isVisible())
                 {
@@ -892,41 +892,6 @@ namespace drawinglayer
                 const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
 
                 mpOutputDevice->DrawPixel(aPos, aVCLColor);
-            }
-        }
-
-        // wrong spell primitive
-        void VclProcessor2D::RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate)
-        {
-            const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rWrongSpellCandidate.getTransformation());
-            const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
-            const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
-
-            static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
-            static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
-            static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
-
-            if(nFontPixelHeight > nMinimumFontHeight)
-            {
-                const basegfx::B2DPoint aStart(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
-                const basegfx::B2DPoint aStop(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
-                const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
-                const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
-                sal_uInt16 nWaveStyle(WAVE_FLAT);
-
-                if(nFontPixelHeight > nMediumFontHeight)
-                {
-                    nWaveStyle = WAVE_NORMAL;
-                }
-                else if(nFontPixelHeight > nSmallFontHeight)
-                {
-                    nWaveStyle = WAVE_SMALL;
-                }
-
-                const basegfx::BColor aProcessedColor(maBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
-                mpOutputDevice->SetLineColor(Color(aProcessedColor));
-                mpOutputDevice->SetFillColor();
-                mpOutputDevice->DrawWaveLine(aVclStart, aVclStop, nWaveStyle);
             }
         }
 

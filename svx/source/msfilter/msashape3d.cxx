@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msashape3d.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -324,8 +324,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
 
         // Kameraeinstellungen, Perspektive ...
         Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
-        const Volume3D& rVolume = pScene->GetBoundVolume();
-        pScene->CorrectSceneDimensions();
+        const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
         pScene->NbcSetSnapRect( rSnapRect );
 
         // InitScene replacement
@@ -406,7 +405,6 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
             pScene->SetCamera( rCamera );
         }
         pScene->NbcSetTransform( aNewTransform );
-        pScene->FitSnapRectToBoundVol();
 
         ///////////
         // light //
@@ -480,7 +478,6 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
         pScene->SetMergedItem( Svx3DMaterialSpecularIntensityItem( nItensity ) );
 
         pScene->SetModel( pObj->GetModel() );
-        pScene->InitTransformationSet();
         pRet->SetSnapRect( CalculateNewSnapRect( rSnapRect, rPropSet ) );
 
         // removing placeholder objects

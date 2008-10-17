@@ -336,10 +336,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonGradientPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence PolyPolygonGradientPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create SubSequence with FillGradientPrimitive2D
-            FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(getB2DRange(rViewInformation), getFillGradient());
+            const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+            FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(aPolyPolygonRange, getFillGradient());
             const Primitive2DReference xSubRef(pNewGradient);
             const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
@@ -382,10 +383,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonHatchPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence PolyPolygonHatchPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create SubSequence with FillHatchPrimitive2D
-            FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(getB2DRange(rViewInformation), getBColor(), getFillHatch());
+            const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+            FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(aPolyPolygonRange, getBColor(), getFillHatch());
             const Primitive2DReference xSubRef(pNewHatch);
             const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
@@ -428,15 +430,15 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonBitmapPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence PolyPolygonBitmapPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create SubSequence with FillBitmapPrimitive2D
-            const basegfx::B2DRange aOwnRange(getB2DRange(rViewInformation));
+            const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
             basegfx::B2DHomMatrix aNewObjectTransform;
-            aNewObjectTransform.set(0, 0, aOwnRange.getWidth());
-            aNewObjectTransform.set(1, 1, aOwnRange.getHeight());
-            aNewObjectTransform.set(0, 2, aOwnRange.getMinX());
-            aNewObjectTransform.set(1, 2, aOwnRange.getMinY());
+            aNewObjectTransform.set(0, 0, aPolyPolygonRange.getWidth());
+            aNewObjectTransform.set(1, 1, aPolyPolygonRange.getHeight());
+            aNewObjectTransform.set(0, 2, aPolyPolygonRange.getMinX());
+            aNewObjectTransform.set(1, 2, aPolyPolygonRange.getMinY());
             FillBitmapPrimitive2D* pNewBitmap = new FillBitmapPrimitive2D(aNewObjectTransform, getFillBitmap());
             const Primitive2DReference xSubRef(pNewBitmap);
             const Primitive2DSequence aSubSequence(&xSubRef, 1L);

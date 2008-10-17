@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svddrgv.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,7 +185,8 @@ BOOL SdrDragView::IsAction() const
 void SdrDragView::MovAction(const Point& rPnt)
 {
     SdrExchangeView::MovAction(rPnt);
-    if (pDragBla!=NULL) {
+    if (pDragBla!=NULL)
+    {
         MovDragObj(rPnt);
     }
 }
@@ -213,9 +214,11 @@ void SdrDragView::BrkAction()
 
 void SdrDragView::TakeActionRect(Rectangle& rRect) const
 {
-    if (pDragBla!=NULL) {
+    if (pDragBla!=NULL)
+    {
         rRect=aDragStat.GetActionRect();
-        if (rRect.IsEmpty()) {
+        if (rRect.IsEmpty())
+        {
             BOOL b1st=TRUE;
             SdrPageView* pPV = GetSdrPageView();
 
@@ -224,21 +227,27 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
                 if (pPV->HasMarkedObjPageView())
                 {
                     const basegfx::B2DRange aBoundRange(basegfx::tools::getRange(pPV->getDragPoly()));
-                    const Rectangle aR(FRound(aBoundRange.getMinX()), FRound(aBoundRange.getMinY()), FRound(aBoundRange.getMaxX()), FRound(aBoundRange.getMaxY()));
+                    const Rectangle aR(basegfx::fround(aBoundRange.getMinX()), basegfx::fround(aBoundRange.getMinY()), basegfx::fround(aBoundRange.getMaxX()), basegfx::fround(aBoundRange.getMaxY()));
 
-                    if (b1st) {
+                    if (b1st)
+                    {
                         b1st=FALSE;
                         rRect=aR;
-                    } else {
+                    }
+                    else
+                    {
                         rRect.Union(aR);
                     }
                 }
             }
         }
-        if (rRect.IsEmpty()) {
+        if (rRect.IsEmpty())
+        {
             rRect=Rectangle(aDragStat.GetNow(),aDragStat.GetNow());
         }
-    } else {
+    }
+    else
+    {
         SdrExchangeView::TakeActionRect(rRect);
     }
 }
@@ -262,12 +271,16 @@ void SdrDragView::SetDragPolys(bool bReset)
         if(pPV)
         {
             pPV->setDragPoly0(basegfx::B2DPolyPolygon());
-            if (pPV->HasMarkedObjPageView()) {
-                for (ULONG nm=0; nm<nMarkAnz; nm++) {
+            if (pPV->HasMarkedObjPageView())
+            {
+                for (ULONG nm=0; nm<nMarkAnz; nm++)
+                {
                     SdrMark* pM=GetSdrMarkByIndex(nm);
-                    if (pM->GetPageView()==pPV) {
+                    if (pM->GetPageView()==pPV)
+                    {
                         const SdrUShortCont* pPts=bGlue ? pM->GetMarkedGluePoints() : pM->GetMarkedPoints();
-                        if (pPts!=NULL && pPts->GetCount()!=0) {
+                        if (pPts!=NULL && pPts->GetCount()!=0)
+                        {
                             const SdrObject* pObj=pM->GetMarkedSdrObj();
                             const SdrPathObj* pPath=bGlue ? NULL : PTR_CAST(SdrPathObj,pObj);
                             const basegfx::B2DPolyPolygon aPathXPP = (pPath) ? pPath->GetPathPoly() : basegfx::B2DPolyPolygon();
@@ -343,7 +356,7 @@ void SdrDragView::SetDragPolys(bool bReset)
 
                         if(pM->GetPageView()==pPV)
                         {
-                            aDazuPP = pM->GetMarkedSdrObj()->TakeXorPoly(sal_False);
+                            aDazuPP = pM->GetMarkedSdrObj()->TakeXorPoly();
                             const sal_uInt32 nDazuPolyAnz(aDazuPP.count());
                             nPolyCnt += nDazuPolyAnz;
 
@@ -400,14 +413,19 @@ BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos, BOOL bTR ) const
         !pDragBla->ISA(SdrDragMovHdl)) // nicht beim Handlesschieben
     {
         SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->ISA(SdrCaptionObj)) {
+        if (pObj->ISA(SdrCaptionObj))
+        {
             Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
             BOOL bTail=eDragHdl==HDL_POLY; // Schwanz wird gedraggt (nicht so ganz feine Abfrage hier)
             BOOL bOwn=pDragBla->ISA(SdrDragObjOwn); // Objektspeziefisch
-            if (!bTail) { // bei bTail liefert TakeActionRect schon das richtige
-                if (bOwn) { // bOwn kann sein MoveTextFrame, ResizeTextFrame aber eben nicht mehr DragTail
+            if (!bTail)
+            { // bei bTail liefert TakeActionRect schon das richtige
+                if (bOwn)
+                { // bOwn kann sein MoveTextFrame, ResizeTextFrame aber eben nicht mehr DragTail
                     rPos=aPt;
-                } else {
+                }
+                else
+                {
                     // hier nun dragging des gesamten Objekts (Move, Resize, ...)
                     pDragBla->MovPoint(aPt); // ,Point()); //GetSdrPageViewOfMarkedByIndex(0)->GetOffset());
                 }
@@ -482,11 +500,15 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         }
         else if(!bNotDraggable)
         {
-            switch (eDragMode) {
-                case SDRDRAG_ROTATE: case SDRDRAG_SHEAR: case SDRDRAG_DISTORT: {
-                    switch (eDragHdl) {
+            switch (eDragMode)
+            {
+                case SDRDRAG_ROTATE: case SDRDRAG_SHEAR: case SDRDRAG_DISTORT:
+                {
+                    switch (eDragHdl)
+                    {
                         case HDL_LEFT:  case HDL_RIGHT:
-                        case HDL_UPPER: case HDL_LOWER: {
+                        case HDL_UPPER: case HDL_LOWER:
+                        {
                             // Sind 3D-Objekte selektiert?
                             BOOL b3DObjSelected = FALSE;
                             for(UINT32 a=0;!b3DObjSelected && a<GetMarkedObjectCount();a++)
@@ -503,31 +525,43 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             pDragBla=new SdrDragShear(*this,eDragMode==SDRDRAG_ROTATE);
                         } break;
                         case HDL_UPLFT: case HDL_UPRGT:
-                        case HDL_LWLFT: case HDL_LWRGT: {
-                            if (eDragMode==SDRDRAG_SHEAR || eDragMode==SDRDRAG_DISTORT) {
+                        case HDL_LWLFT: case HDL_LWRGT:
+                        {
+                            if (eDragMode==SDRDRAG_SHEAR || eDragMode==SDRDRAG_DISTORT)
+                            {
                                 if (!IsDistortAllowed(TRUE) && !IsDistortAllowed(FALSE)) return FALSE;
                                 pDragBla=new SdrDragDistort(*this);
-                            } else {
+                            }
+                            else
+                            {
                                 if (!IsRotateAllowed(TRUE)) return FALSE;
                                 pDragBla=new SdrDragRotate(*this);
                             }
                         } break;
-                        default: {
-                            if (IsMarkedHitMovesAlways() && eDragHdl==HDL_MOVE) { // HDL_MOVE ist auch wenn Obj direkt getroffen
+                        default:
+                        {
+                            if (IsMarkedHitMovesAlways() && eDragHdl==HDL_MOVE)
+                            { // HDL_MOVE ist auch wenn Obj direkt getroffen
                                 if (!IsMoveAllowed()) return FALSE;
                                 pDragBla=new SdrDragMove(*this);
-                            } else {
+                            }
+                            else
+                            {
                                 if (!IsRotateAllowed(TRUE)) return FALSE;
                                 pDragBla=new SdrDragRotate(*this);
                             }
                         }
                     }
                 } break;
-                case SDRDRAG_MIRROR: {
-                    if (eDragHdl==HDL_MOVE && IsMarkedHitMovesAlways()) {
+                case SDRDRAG_MIRROR:
+                {
+                    if (eDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
+                    {
                         if (!IsMoveAllowed()) return FALSE;
                         pDragBla=new SdrDragMove(*this);
-                    } else {
+                    }
+                    else
+                    {
                         if (!IsMirrorAllowed(TRUE,TRUE)) return FALSE;
                         pDragBla=new SdrDragMirror(*this);
                     }
@@ -585,11 +619,15 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     break;
                 }
 
-                case SDRDRAG_CROOK : {
-                    if (eDragHdl==HDL_MOVE && IsMarkedHitMovesAlways()) {
+                case SDRDRAG_CROOK :
+                {
+                    if (eDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
+                    {
                         if (!IsMoveAllowed()) return FALSE;
                         pDragBla=new SdrDragMove(*this);
-                    } else {
+                    }
+                    else
+                    {
                         if (!IsCrookAllowed(TRUE) && !IsCrookAllowed(FALSE)) return FALSE;
                         pDragBla=new SdrDragCrook(*this);
                     }
@@ -628,15 +666,19 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 }
             }
         }
-        if (pForcedMeth!=NULL) {
+        if (pForcedMeth!=NULL)
+        {
             delete pDragBla;
             pDragBla=pForcedMeth;
         }
         aDragStat.SetDragMethod(pDragBla);
-        if (pDragBla!=NULL) {
+        if (pDragBla!=NULL)
+        {
             bRet=pDragBla->Beg();
-            if (!bRet) {
-                if (pHdl==NULL && IS_TYPE(SdrDragObjOwn,pDragBla)) {
+            if (!bRet)
+            {
+                if (pHdl==NULL && IS_TYPE(SdrDragObjOwn,pDragBla))
+                {
                     // Aha, Obj kann nicht Move SpecialDrag, also MoveFrameDrag versuchen
                     delete pDragBla;
                     pDragBla=NULL;
@@ -648,7 +690,8 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     bRet=pDragBla->Beg();
                 }
             }
-            if (!bRet) {
+            if (!bRet)
+            {
                 delete pDragBla;
                 pDragBla=NULL;
                 aDragStat.SetDragMethod(pDragBla);
@@ -684,10 +727,12 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
     if(pDragBla && aDragStat.IsMinMoved() && (IsInsertGluePoint() || aDragStat.GetNow() != aDragStat.GetPrev()))
     {
         ULONG nHdlAnzMerk=0;
-        if (bEliminatePolyPoints) { // IBM Special
+        if (bEliminatePolyPoints)
+        { // IBM Special
             nHdlAnzMerk=GetMarkablePointCount();
         }
-        if (IsInsertGluePoint()) {
+        if (IsInsertGluePoint())
+        {
             BegUndo(aInsPointUndoStr);
             AddUndo(pInsPointUndo);
         }
@@ -695,12 +740,15 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
         if (IsInsertGluePoint()) EndUndo();
         delete pDragBla;
         pDragBla=NULL;
-        if (bEliminatePolyPoints) { // IBM Special
-            if (nHdlAnzMerk!=GetMarkablePointCount()) {
+        if (bEliminatePolyPoints)
+        { // IBM Special
+            if (nHdlAnzMerk!=GetMarkablePointCount())
+            {
                 UnmarkAllPoints();
             }
         }
-        if (bInsPolyPoint) {
+        if (bInsPolyPoint)
+        {
             //HMHBOOL bVis=IsMarkHdlShown();
             //HMHif (bVis) HideMarkHdl();
             SetMarkHandles();
@@ -724,7 +772,9 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
             }
         }
         SetDragPolys(true);
-    } else {
+    }
+    else
+    {
         BrkDragObj();
     }
     bInsPolyPoint=FALSE;
@@ -735,11 +785,13 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
 
 void SdrDragView::BrkDragObj()
 {
-    if (pDragBla!=NULL) {
+    if (pDragBla!=NULL)
+    {
         pDragBla->Brk();
         delete pDragBla;
         pDragBla=NULL;
-        if (bInsPolyPoint) {
+        if (bInsPolyPoint)
+        {
             //HMHBOOL bVis=IsMarkHdlShown();
             //HMHif (bVis) HideMarkHdl();
             pInsPointUndo->Undo(); // Den eingefuegten Punkt wieder raus
@@ -749,7 +801,8 @@ void SdrDragView::BrkDragObj()
             bInsPolyPoint=FALSE;
             //HMHif (bVis) ShowMarkHdl();
         }
-        if (IsInsertGluePoint()) {
+        if (IsInsertGluePoint())
+        {
             pInsPointUndo->Undo(); // Den eingefuegten Klebepunkt wieder raus
             delete pInsPointUndo;
             pInsPointUndo=NULL;
@@ -857,7 +910,8 @@ BOOL SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
         sal_uInt32 nNextPnt(mnInsPointNum);
         Point aPnt(aDragStat.GetNow());
         BOOL bOk=EndDragObj(FALSE);
-        if (bOk==TRUE && eCmd!=SDRCREATE_FORCEEND) {
+        if (bOk==TRUE && eCmd!=SDRCREATE_FORCEEND)
+        {
             // Ret=True bedeutet: Action ist vorbei.
             bOk=!(ImpBegInsObjPoint(sal_True, nNextPnt, aPnt, eCmd == SDRCREATE_NEXTOBJECT, pDragWin));
         }
@@ -869,14 +923,19 @@ BOOL SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
 BOOL SdrDragView::IsInsGluePointPossible() const
 {
     BOOL bRet=FALSE;
-    if (IsInsGluePointMode() && AreObjectsMarked()) {
-        if (GetMarkedObjectCount()==1) {
+    if (IsInsGluePointMode() && AreObjectsMarked())
+    {
+        if (GetMarkedObjectCount()==1)
+        {
             // FALSE liefern, wenn 1 Objekt und dieses ein Verbinder ist.
             const SdrObject* pObj=GetMarkedObjectByIndex(0);
-            if (!HAS_BASE(SdrEdgeObj,pObj)) {
+            if (!HAS_BASE(SdrEdgeObj,pObj))
+            {
                bRet=TRUE;
             }
-        } else {
+        }
+        else
+        {
             bRet=TRUE;
         }
     }
@@ -889,7 +948,8 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
     SdrObject* pObj;
     SdrPageView* pPV;
     ULONG nMarkNum;
-    if (PickMarkedObj(rPnt,pObj,pPV,&nMarkNum,SDRSEARCH_PASS2BOUND)) {
+    if (PickMarkedObj(rPnt,pObj,pPV,&nMarkNum,SDRSEARCH_PASS2BOUND))
+    {
         BrkAction();
         UnmarkAllGluePoints();
         //SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
@@ -902,31 +962,41 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
 
         aInsPointUndoStr=aStr;
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
-        if (pGPL!=NULL) {
+        if (pGPL!=NULL)
+        {
             USHORT nGlueIdx=pGPL->Insert(SdrGluePoint());
             SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
             USHORT nGlueId=rGP.GetId();
             rGP.SetAbsolutePos(rPnt,*pObj);
 
             SdrHdl* pHdl=NULL;
-            if (MarkGluePoint(pObj,nGlueId,pPV)) {
+            if (MarkGluePoint(pObj,nGlueId,pPV))
+            {
                 pHdl=GetGluePointHdl(pObj,nGlueId);
             }
-            if (pHdl!=NULL && pHdl->GetKind()==HDL_GLUE && pHdl->GetObj()==pObj && pHdl->GetObjHdlNum()==nGlueId) {
+            if (pHdl!=NULL && pHdl->GetKind()==HDL_GLUE && pHdl->GetObj()==pObj && pHdl->GetObjHdlNum()==nGlueId)
+            {
                 SetInsertGluePoint(TRUE);
                 bRet=BegDragObj(rPnt,NULL,pHdl,0);
-                if (bRet) {
+                if (bRet)
+                {
                     aDragStat.SetMinMoved();
                     MovDragObj(rPnt);
-                } else {
+                }
+                else
+                {
                     SetInsertGluePoint(FALSE);
                     delete pInsPointUndo;
                     pInsPointUndo=NULL;
                 }
-            } else {
+            }
+            else
+            {
                 DBG_ERROR("BegInsGluePoint(): GluePoint-Handle nicht gefunden");
             }
-        } else {
+        }
+        else
+        {
             // Keine Klebepunkte moeglich bei diesem Objekt (z.B. Edge)
             SetInsertGluePoint(FALSE);
             delete pInsPointUndo;
@@ -940,10 +1010,14 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
 BOOL SdrDragView::IsMoveOnlyDragObj(BOOL bAskRTTI) const
 {
     bool bRet=false;
-    if (pDragBla!=NULL && !IsDraggingPoints() && !IsDraggingGluePoints()) {
-        if (bAskRTTI) {
+    if (pDragBla!=NULL && !IsDraggingPoints() && !IsDraggingGluePoints())
+    {
+        if (bAskRTTI)
+        {
             bRet=IS_TYPE(SdrDragMove,pDragBla);
-        } else {
+        }
+        else
+        {
             bRet=pDragBla->IsMoveOnly();
         }
     }
@@ -982,26 +1056,32 @@ void SdrDragView::HideDragObj()
 
 void SdrDragView::SetNoDragXorPolys(BOOL bOn)
 {
-    if (IsNoDragXorPolys()!=bOn) {
+    if (IsNoDragXorPolys()!=bOn)
+    {
         BOOL bDragging=pDragBla!=NULL;
         BOOL bShown=bDragging && aDragStat.IsShown();
         if (bShown) HideDragObj();
         bNoDragXorPolys=bOn;
-        if (bDragging) {
+        if (bDragging)
+        {
             SetDragPolys();
             pDragBla->MovAllPoints(); // die gedraggten Polys neu berechnen
         }
-        if (bShown) ShowDragObj();
+        if (bShown)
+            ShowDragObj();
     }
 }
 
 void SdrDragView::SetDragStripes(BOOL bOn)
 {
-    if (pDragBla!=NULL && aDragStat.IsShown()) {
+    if (pDragBla!=NULL && aDragStat.IsShown())
+    {
         HideDragObj();
         bDragStripes=bOn;
         ShowDragObj();
-    } else {
+    }
+    else
+    {
         bDragStripes=bOn;
     }
 }
@@ -1018,7 +1098,8 @@ void SdrDragView::SetDragStripes(BOOL bOn)
 
 BOOL SdrDragView::IsOrthoDesired() const
 {
-    if (pDragBla!=NULL && (IS_TYPE(SdrDragObjOwn,pDragBla) || IS_TYPE(SdrDragResize,pDragBla))) {
+    if (pDragBla!=NULL && (IS_TYPE(SdrDragObjOwn,pDragBla) || IS_TYPE(SdrDragResize,pDragBla)))
+    {
         return bOrthoDesiredOnMarked;
     }
     return FALSE;
@@ -1028,49 +1109,61 @@ BOOL SdrDragView::IsOrthoDesired() const
 
 void SdrDragView::SetRubberEdgeDragging(BOOL bOn)
 {
-    if (bOn!=IsRubberEdgeDragging()) {
+    if (bOn!=IsRubberEdgeDragging())
+    {
         ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=nAnz!=0 && IsDragObj() &&
                  (nRubberEdgeDraggingLimit>=nAnz);
-        if (bShowHide) HideDragObj();
+        if (bShowHide)
+            HideDragObj();
         bRubberEdgeDragging=bOn;
-        if (bShowHide) ShowDragObj();
+        if (bShowHide)
+            ShowDragObj();
     }
 }
 
 void SdrDragView::SetRubberEdgeDraggingLimit(USHORT nEdgeObjAnz)
 {
-    if (nEdgeObjAnz!=nRubberEdgeDraggingLimit) {
+    if (nEdgeObjAnz!=nRubberEdgeDraggingLimit)
+    {
         ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=IsRubberEdgeDragging() && nAnz!=0 && IsDragObj() &&
                  (nEdgeObjAnz>=nAnz)!=(nRubberEdgeDraggingLimit>=nAnz);
-        if (bShowHide) HideDragObj();
+        if (bShowHide)
+            HideDragObj();
         nRubberEdgeDraggingLimit=nEdgeObjAnz;
-        if (bShowHide) ShowDragObj();
+        if (bShowHide)
+            ShowDragObj();
     }
 }
 
 void SdrDragView::SetDetailedEdgeDragging(BOOL bOn)
 {
-    if (bOn!=IsDetailedEdgeDragging()) {
+    if (bOn!=IsDetailedEdgeDragging())
+    {
         ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=nAnz!=0 && IsDragObj() &&
                  (nDetailedEdgeDraggingLimit>=nAnz);
-        if (bShowHide) HideDragObj();
+        if (bShowHide)
+            HideDragObj();
         bDetailedEdgeDragging=bOn;
-        if (bShowHide) ShowDragObj();
+        if (bShowHide)
+            ShowDragObj();
     }
 }
 
 void SdrDragView::SetDetailedEdgeDraggingLimit(USHORT nEdgeObjAnz)
 {
-    if (nEdgeObjAnz!=nDetailedEdgeDraggingLimit) {
+    if (nEdgeObjAnz!=nDetailedEdgeDraggingLimit)
+    {
         ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=IsDetailedEdgeDragging() && nAnz!=0 && IsDragObj() &&
                  (nEdgeObjAnz>=nAnz)!=(nDetailedEdgeDraggingLimit>=nAnz);
-        if (bShowHide) HideDragObj();
+        if (bShowHide)
+            HideDragObj();
         nDetailedEdgeDraggingLimit=nEdgeObjAnz;
-        if (bShowHide) ShowDragObj();
+        if (bShowHide)
+            ShowDragObj();
     }
 }
 

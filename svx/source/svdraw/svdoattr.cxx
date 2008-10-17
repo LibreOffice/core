@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoattr.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,8 +115,9 @@ const Rectangle& SdrAttrObj::GetSnapRect() const
     if(bSnapRectDirty)
     {
         ((SdrAttrObj*)this)->RecalcSnapRect();
-        ((SdrAttrObj*)this)->bSnapRectDirty = FALSE;
+        ((SdrAttrObj*)this)->bSnapRectDirty = false;
     }
+
     return maSnapRect;
 }
 

@@ -44,6 +44,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
+#include <drawinglayer/attribute/sdrattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -66,119 +68,139 @@ namespace drawinglayer
             {
                 const bool bBackScale(!basegfx::fTools::equal(getBackScale(), 1.0));
                 const bool bClosedRotation(!bBackScale && getHorizontalSegments() && basegfx::fTools::equal(getRotation(), F_2PI));
+                sal_uInt32 a;
+                basegfx::B3DRange aRange;
 
-                // add fill
+                // decide what to create
+                const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind());
+                const bool bCreateTextureCoordiantesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bCreateTextureCoordiantesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
+                basegfx::B2DHomMatrix aTexTransform;
+
+                if(getSdrLFSAttribute().getFill() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
+                {
+                    aTexTransform.set(0, 0, 0.0);
+                    aTexTransform.set(0, 1, 1.0);
+                    aTexTransform.set(1, 0, 1.0);
+                    aTexTransform.set(1, 1, 0.0);
+
+                    aTexTransform.translate(0.0, -0.5);
+                    aTexTransform.scale(1.0, -1.0);
+                    aTexTransform.translate(0.0, 0.5);
+                }
+
+                // create geometry
+                ::std::vector< basegfx::B3DPolyPolygon > aFill;
+                extractPlanesFromSlice(aFill, rSliceVector,
+                    bCreateNormals, getSmoothHorizontalNormals(), getSmoothNormals(), getSmoothLids(), bClosedRotation,
+                    0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
+
+                // get full range
+                for(a = 0L; a < aFill.size(); a++)
+                {
+                    aRange.expand(basegfx::tools::getRange(aFill[a]));
+                }
+
+                // normal creation
                 if(getSdrLFSAttribute().getFill())
                 {
-                    sal_uInt32 a;
-                    basegfx::B3DRange aRange;
-
-                    // decide what to create
-                    const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind());
-                    const bool bCreateTextureCoordiantesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
-                    const bool bCreateTextureCoordiantesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
-                    basegfx::B2DHomMatrix aTexTransform;
-
-                    if(bCreateTextureCoordiantesX || bCreateTextureCoordiantesY)
+                    if(::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
                     {
-                        aTexTransform.set(0, 0, 0.0);
-                        aTexTransform.set(0, 1, 1.0);
-                        aTexTransform.set(1, 0, 1.0);
-                        aTexTransform.set(1, 1, 0.0);
-
-                        aTexTransform.translate(0.0, -0.5);
-                        aTexTransform.scale(1.0, -1.0);
-                        aTexTransform.translate(0.0, 0.5);
-                    }
-
-                    // create geometry
-                    ::std::vector< basegfx::B3DPolyPolygon > aFill;
-                    extractPlanesFromSlice(aFill, rSliceVector,
-                        bCreateNormals, getSmoothHorizontalNormals(), getSmoothNormals(), getSmoothLids(), bClosedRotation,
-                        0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
-
-                    // get full range
-                    for(a = 0L; a < aFill.size(); a++)
-                    {
-                        aRange.expand(basegfx::tools::getRange(aFill[a]));
-                    }
-
-                    // normal creation
-                    {
-                        if(::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
-                        {
-                            // create sphere normals
-                            const basegfx::B3DPoint aCenter(aRange.getCenter());
-
-                            for(a = 0L; a < aFill.size(); a++)
-                            {
-                                aFill[a] = basegfx::tools::applyDefaultNormalsSphere(aFill[a], aCenter);
-                            }
-                        }
-                        else if(::com::sun::star::drawing::NormalsKind_FLAT == getSdr3DObjectAttribute().getNormalsKind())
-                        {
-                            for(a = 0L; a < aFill.size(); a++)
-                            {
-                                aFill[a].clearNormals();
-                            }
-                        }
-
-                        if(getSdr3DObjectAttribute().getNormalsInvert())
-                        {
-                            // invert normals
-                            for(a = 0L; a < aFill.size(); a++)
-                            {
-                                aFill[a] = basegfx::tools::invertNormals(aFill[a]);
-                            }
-                        }
-                    }
-
-                    // texture coordinates
-                    {
-                        // handle texture coordinates X
-                        const bool bParallelX(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionX());
-                        const bool bSphereX(!bParallelX && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionX()));
-
-                        // handle texture coordinates Y
-                        const bool bParallelY(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionY());
-                        const bool bSphereY(!bParallelY && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionY()));
-
-                        if(bParallelX || bParallelY)
-                        {
-                            // apply parallel texture coordinates in X and/or Y
-
-                            for(a = 0L; a < aFill.size(); a++)
-                            {
-                                aFill[a] = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill[a], aRange, bParallelX, bParallelY);
-                            }
-                        }
-
-                        if(bSphereX || bSphereY)
-                        {
-                            // apply spherical texture coordinates in X and/or Y
-                            const basegfx::B3DPoint aCenter(aRange.getCenter());
-
-                            for(a = 0L; a < aFill.size(); a++)
-                            {
-                                aFill[a] = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill[a], aCenter, bSphereX, bSphereY);
-                            }
-                        }
-
-                        // transform texture coordinates to texture size
-                        basegfx::B2DHomMatrix aTexMatrix;
-                        aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
+                        // create sphere normals
+                        const basegfx::B3DPoint aCenter(aRange.getCenter());
 
                         for(a = 0L; a < aFill.size(); a++)
                         {
-                            aFill[a].transformTextureCoordiantes(aTexMatrix);
+                            aFill[a] = basegfx::tools::applyDefaultNormalsSphere(aFill[a], aCenter);
+                        }
+                    }
+                    else if(::com::sun::star::drawing::NormalsKind_FLAT == getSdr3DObjectAttribute().getNormalsKind())
+                    {
+                        for(a = 0L; a < aFill.size(); a++)
+                        {
+                            aFill[a].clearNormals();
                         }
                     }
 
-                    // create single PolyPolygonFill primitives
+                    if(getSdr3DObjectAttribute().getNormalsInvert())
+                    {
+                        // invert normals
+                        for(a = 0L; a < aFill.size(); a++)
+                        {
+                            aFill[a] = basegfx::tools::invertNormals(aFill[a]);
+                        }
+                    }
+                }
+
+                // texture coordinates
+                if(getSdrLFSAttribute().getFill())
+                {
+                    // handle texture coordinates X
+                    const bool bParallelX(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionX());
+                    const bool bSphereX(!bParallelX && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionX()));
+
+                    // handle texture coordinates Y
+                    const bool bParallelY(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionY());
+                    const bool bSphereY(!bParallelY && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionY()));
+
+                    if(bParallelX || bParallelY)
+                    {
+                        // apply parallel texture coordinates in X and/or Y
+
+                        for(a = 0L; a < aFill.size(); a++)
+                        {
+                            aFill[a] = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFill[a], aRange, bParallelX, bParallelY);
+                        }
+                    }
+
+                    if(bSphereX || bSphereY)
+                    {
+                        // apply spherical texture coordinates in X and/or Y
+                        const basegfx::B3DPoint aCenter(aRange.getCenter());
+
+                        for(a = 0L; a < aFill.size(); a++)
+                        {
+                            aFill[a] = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill[a], aCenter, bSphereX, bSphereY);
+                        }
+                    }
+
+                    // transform texture coordinates to texture size
+                    basegfx::B2DHomMatrix aTexMatrix;
+                    aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
+
+                    for(a = 0L; a < aFill.size(); a++)
+                    {
+                        aFill[a].transformTextureCoordiantes(aTexMatrix);
+                    }
+                }
+
+                if(getSdrLFSAttribute().getFill())
+                {
+                    // add fill
                     aRetval = create3DPolyPolygonFillPrimitives(
-                        aFill, getTransform(), getTextureSize(),
-                        getSdr3DObjectAttribute(), *getSdrLFSAttribute().getFill(),
+                        aFill,
+                        getTransform(),
+                        getTextureSize(),
+                        getSdr3DObjectAttribute(),
+                        *getSdrLFSAttribute().getFill(),
                         getSdrLFSAttribute().getFillFloatTransGradient());
+                }
+                else
+                {
+                    // create simplified 3d hit test geometry
+                    const attribute::SdrFillAttribute aSimplifiedFillAttribute(0.0, basegfx::BColor(), 0, 0, 0);
+
+                    aRetval = create3DPolyPolygonFillPrimitives(
+                        aFill,
+                        getTransform(),
+                        getTextureSize(),
+                        getSdr3DObjectAttribute(),
+                        aSimplifiedFillAttribute,
+                        0);
+
+                    // encapsulate in HitTestPrimitive3D and add
+                    const Primitive3DReference xRef(new HitTestPrimitive3D(aRetval));
+                    aRetval = Primitive3DSequence(&xRef, 1L);
                 }
 
                 // add line
@@ -191,7 +213,7 @@ namespace drawinglayer
                         const sal_uInt32 nCount(aHorLine.count());
                         basegfx::B3DPolyPolygon aNewLineGeometry;
 
-                        for(sal_uInt32 a(1); a < nCount; a++)
+                        for(a = 1; a < nCount; a++)
                         {
                             // for each loop pair create the connection edges
                             createReducedOutlines(
@@ -202,10 +224,10 @@ namespace drawinglayer
                                 aNewLineGeometry);
                         }
 
-                        for(sal_uInt32 b(0); b < nCount; b++)
+                        for(a = 0; a < nCount; a++)
                         {
                             // filter hor lines for empty loops (those who have their defining point on the Y-Axis)
-                            basegfx::B3DPolygon aCandidate(aHorLine.getB3DPolygon(b));
+                            basegfx::B3DPolygon aCandidate(aHorLine.getB3DPolygon(a));
                             aCandidate.removeDoublePoints();
 
                             if(aCandidate.count())

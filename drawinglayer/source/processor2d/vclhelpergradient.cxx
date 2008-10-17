@@ -89,7 +89,7 @@ namespace drawinglayer
 
                 if(a)
                 {
-                    if(a - 1L < rMatrices.size())
+                    if(a - 1L < static_cast< sal_uInt32 >(rMatrices.size()))
                     {
                         basegfx::B2DPolygon aNewPoly(rUnitPolygon);
                         aNewPoly.transform(rMatrices[a - 1L]);

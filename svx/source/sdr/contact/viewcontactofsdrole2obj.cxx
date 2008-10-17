@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewcontactofsdrole2obj.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +112,20 @@ namespace sdr
                 if(bScaleContent)
                 {
                     // Create outline and placeholder graphic with some scaling
-                    const Size aPrefSize(rOLEGraphic.GetPrefSize());
+                    // #i94431# for some reason, i forgot to take the PrefMapMode of the graphic
+                    // into account. Since EmptyPresObj's are only used in Draw/Impress, it is
+                    // safe to assume 100th mm as target.
+                    Size aPrefSize(rOLEGraphic.GetPrefSize());
+
+                    if(MAP_PIXEL == rOLEGraphic.GetPrefMapMode().GetMapUnit())
+                    {
+                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MAP_100TH_MM);
+                    }
+                    else
+                    {
+                        aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, rOLEGraphic.GetPrefMapMode(), MAP_100TH_MM);
+                    }
+
                     const double fOffsetX((aObjectRange.getWidth() - aPrefSize.getWidth()) / 2.0);
                     const double fOffsetY((aObjectRange.getHeight() - aPrefSize.getHeight()) / 2.0);
 

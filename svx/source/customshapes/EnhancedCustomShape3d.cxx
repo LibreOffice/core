@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShape3d.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,18 +33,14 @@
 #include "EnhancedCustomShape3d.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
-#ifndef _SV_POLY_HXX
 #include <tools/poly.hxx>
-#endif
 #include <svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svtools/poolitem.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/xfillit0.hxx>
-#ifndef SVX_XSFLCLIT_HXX
 #include <svx/xsflclit.hxx>
-#endif
 #include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflclit.hxx>
@@ -64,9 +60,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <svx/sdr/properties/properties.hxx>
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 
@@ -87,6 +81,7 @@ void GetOrigin( SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOr
         rOriginY =-0.50;
     }
 }
+
 void GetRotateAngle( SdrCustomShapeGeometryItem& rItem, double& rAngleX, double& rAngleY )
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
@@ -100,6 +95,7 @@ void GetRotateAngle( SdrCustomShapeGeometryItem& rItem, double& rAngleX, double&
     rAngleX *= F_PI180;
     rAngleY *= F_PI180;
 }
+
 void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rSkewAngle )
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
@@ -112,6 +108,7 @@ void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rS
     }
     rSkewAngle *= F_PI180;
 }
+
 void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, double& rBackwardDepth, double& rForwardDepth )
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
@@ -135,6 +132,7 @@ void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, d
         rForwardDepth *= fMap;
     }
 }
+
 double GetDouble( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, double fDefault, const double* pMap )
 {
     double fRetValue = fDefault;
@@ -145,6 +143,7 @@ double GetDouble( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPrope
         fRetValue *= *pMap;
     return fRetValue;
 }
+
 drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawing::ShadeMode eDefault )
 {
     drawing::ShadeMode eRet( eDefault );
@@ -154,6 +153,7 @@ drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawin
         *pAny >>= eRet;
     return eRet;
 }
+
 sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Int32 nDefault )
 {
     sal_Int32 nRetValue = nDefault;
@@ -162,6 +162,7 @@ sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPro
         *pAny >>= nRetValue;
     return nRetValue;
 }
+
 sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Bool bDefault )
 {
     sal_Bool bRetValue = bDefault;
@@ -170,6 +171,7 @@ sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPrope
         *pAny >>= bRetValue;
     return bRetValue;
 }
+
 awt::Point GetPoint( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const awt::Point& rDefault )
 {
     awt::Point aRetValue( rDefault );
@@ -178,6 +180,7 @@ awt::Point GetPoint( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPr
         *pAny >>= aRetValue;
     return aRetValue;
 }
+
 drawing::Position3D GetPosition3D( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName,
                                     const drawing::Position3D& rDefault, const double* pMap )
 {
@@ -410,7 +413,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             if( aPolyPoly.count() )
             {
                 const basegfx::B2DRange aTempRange(basegfx::tools::getRange(aPolyPoly));
-                const Rectangle aBoundRect(FRound(aTempRange.getMinX()), FRound(aTempRange.getMinY()), FRound(aTempRange.getMaxX()), FRound(aTempRange.getMaxY()));
+                const Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 
                 E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 10 : fDepth );
@@ -499,8 +502,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             // Kameraeinstellungen, Perspektive ...
             Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
-            const Volume3D& rVolume = pScene->GetBoundVolume();
-            pScene->CorrectSceneDimensions();
+            const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
             pScene->NbcSetSnapRect( aSnapRect );
 
             // InitScene replacement
@@ -573,8 +575,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 rCamera.SetPosAndLookAt( aNewCamPos, _aLookAt );
                 pScene->SetCamera( rCamera );
             }
+
             pScene->NbcSetTransform( aNewTransform );
-            pScene->FitSnapRectToBoundVol();
 
             ///////////
             // light //
@@ -663,7 +665,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
 // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
 //          pScene->SetModel( pModel );
-            pScene->InitTransformationSet();
             pRet->SetSnapRect( CalculateNewSnapRect( pCustomShape, aBoundRect2d, pMap ) );
 
             // removing placeholder objects

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.178 $
+ * $Revision: 1.178.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2292,8 +2292,8 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
             basegfx::B2DHomMatrix aNewHomogenMatrix;
             mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-            aVclPoint.X() += FRound(aNewHomogenMatrix.get(0, 2));
-            aVclPoint.Y() += FRound(aNewHomogenMatrix.get(1, 2));
+            aVclPoint.X() += basegfx::fround(aNewHomogenMatrix.get(0, 2));
+            aVclPoint.Y() += basegfx::fround(aNewHomogenMatrix.get(1, 2));
 
             // #88657# metric of pool maybe twips (writer)
             ForceMetricToItemPoolMetric(aVclPoint);
@@ -2716,8 +2716,8 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-        aVclPoint.X() -= FRound(aNewHomogenMatrix.get(0, 2));
-        aVclPoint.Y() -= FRound(aNewHomogenMatrix.get(1, 2));
+        aVclPoint.X() -= basegfx::fround(aNewHomogenMatrix.get(0, 2));
+        aVclPoint.Y() -= basegfx::fround(aNewHomogenMatrix.get(1, 2));
 
         awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
         rValue <<= aPnt;

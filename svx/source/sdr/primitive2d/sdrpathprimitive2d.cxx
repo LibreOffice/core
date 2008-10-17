@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrpathprimitive2d.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,7 @@ namespace drawinglayer
             // add text
             if(maSdrLFSTAttribute.getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(maUnitPolyPolygon, maTransform, *maSdrLFSTAttribute.getText(), maSdrLFSTAttribute.getLine(), false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(maUnitPolyPolygon, maTransform, *maSdrLFSTAttribute.getText(), maSdrLFSTAttribute.getLine(), false, false));
             }
 
             // add shadow

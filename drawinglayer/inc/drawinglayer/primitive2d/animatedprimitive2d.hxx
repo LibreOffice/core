@@ -129,7 +129,7 @@ namespace drawinglayer
 
 namespace drawinglayer
 {
-    namespace
+    namespace primitive2d
     {
         class BufferedMatrixDecompose
         {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
 
+//////////////////////////////////////////////////////////////////////////////
+
 namespace sdr { namespace contact {
 
 // ----------------------------------
@@ -61,13 +63,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
     if( pWindow )
     {
         mpMediaWindow = new SdrMediaWindow( pWindow, *this );
-
-        // #i72701#
-        // To avoid popping up of a window on a non-initialized position, the
-        // window will be invisible now as initial state. It will be made visible
-        // in paint
         mpMediaWindow->hide();
-
         executeMediaItem( rMediaItem );
     }
 }
@@ -136,7 +132,27 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
     if( mpMediaWindow )
+    {
         mpMediaWindow->updateMediaItem( rItem );
+
+        // show/hide is now dependent of play state
+        if(avmedia::MEDIASTATE_STOP == rItem.getState())
+        {
+            mpMediaWindow->hide();
+        }
+        else
+        {
+            basegfx::B2DRange aViewRange(getObjectRange());
+            aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
+
+            const Rectangle aViewRectangle(
+                (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
+                (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
+
+            mpMediaWindow->setPosSize(aViewRectangle);
+            mpMediaWindow->show();
+        }
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -158,52 +174,6 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
 // ------------------------------------------------------------------------------
 
 }} // end of namespace sdr::contact
-
-//////////////////////////////////////////////////////////////////////////////
-// primitive stuff
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-
-using namespace com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace contact
-    {
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrMediaObj::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
-        {
-            // call parent and get Primitive2D. This includes visibility test already
-            drawinglayer::primitive2d::Primitive2DSequence xRetval(ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo));
-
-            // if mpMediaWindow is used, make sure position and size is correct. Also test visibility
-            // to detect invisible objects (e.g. control layer painting (!))
-            if(mpMediaWindow && xRetval.hasElements())
-            {
-                // get range
-                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const ::basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
-
-                // create view rectangle
-                ::basegfx::B2DRange aViewRange(aRange);
-                aViewRange.transform(rViewInformation2D.getViewTransformation());
-
-                const Rectangle aViewRectangle(
-                    (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
-                    (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
-
-                mpMediaWindow->setPosSize(aViewRectangle);
-            }
-
-            return xRetval;
-        }
-    } // end of namespace contact
-} // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

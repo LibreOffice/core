@@ -31,10 +31,10 @@
 #ifndef _E3D_DEFLT3D_HXX
 #define _E3D_DEFLT3D_HXX
 
-#include <goodies/matril3d.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include "svx/svxdllapi.h"
+#include <tools/color.hxx>
 
 /*************************************************************************
 |*
@@ -47,38 +47,33 @@ class SVX_DLLPUBLIC E3dDefaultAttributes
 private:
     // Compound-Objekt
     Color               aDefaultAmbientColor;
-    B3dMaterial         aDefaultBackMaterial;
-    BOOL                bDefaultCreateNormals                   ;
-    BOOL                bDefaultCreateTexture                   ;
-    BOOL                bDefaultUseDifferentBackMaterial        ;
+    BOOL                bDefaultCreateNormals;
+    BOOL                bDefaultCreateTexture;
 
     // Cube-Objekt
-    basegfx::B3DPoint               aDefaultCubePos;
-    basegfx::B3DVector          aDefaultCubeSize;
+    basegfx::B3DPoint   aDefaultCubePos;
+    basegfx::B3DVector  aDefaultCubeSize;
     UINT16              nDefaultCubeSideFlags;
-    BOOL                bDefaultCubePosIsCenter                 ;
+    BOOL                bDefaultCubePosIsCenter;
 
     // Sphere-Objekt
-    basegfx::B3DPoint               aDefaultSphereCenter;
-    basegfx::B3DVector          aDefaultSphereSize;
+    basegfx::B3DPoint   aDefaultSphereCenter;
+    basegfx::B3DVector  aDefaultSphereSize;
 
     // Lathe-Objekt
     long                nDefaultLatheEndAngle;
-    BOOL                bDefaultLatheSmoothed                   ;
-    BOOL                bDefaultLatheSmoothFrontBack            ;
-    BOOL                bDefaultLatheCharacterMode              ;
+    BOOL                bDefaultLatheSmoothed;
+    BOOL                bDefaultLatheSmoothFrontBack;
+    BOOL                bDefaultLatheCharacterMode;
     BOOL                bDefaultLatheCloseFront;
     BOOL                bDefaultLatheCloseBack;
 
     // Extrude-Objekt
-    BOOL                bDefaultExtrudeSmoothed                 ;
-    BOOL                bDefaultExtrudeSmoothFrontBack          ;
-    BOOL                bDefaultExtrudeCharacterMode            ;
+    BOOL                bDefaultExtrudeSmoothed;
+    BOOL                bDefaultExtrudeSmoothFrontBack;
+    BOOL                bDefaultExtrudeCharacterMode;
     BOOL                bDefaultExtrudeCloseFront;
     BOOL                bDefaultExtrudeCloseBack;
-
-    // Scene-Objekt
-    BOOL                bDefaultDither                          ;
 
 public:
     // Konstruktor
@@ -92,14 +87,10 @@ public:
     const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
     void SetDefaultAmbientColor(const Color& rNew) { aDefaultAmbientColor = rNew; }
 
-    const B3dMaterial& GetDefaultBackMaterial() { return aDefaultBackMaterial; }
-    void SetDefaultBackMaterial(const B3dMaterial& rNew) { aDefaultBackMaterial = rNew; }
     BOOL GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
     void SetDefaultCreateNormals(const BOOL bNew) { bDefaultCreateNormals = bNew; }
     BOOL GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
     void SetDefaultCreateTexture(const BOOL bNew) { bDefaultCreateTexture = bNew; }
-    BOOL GetDefaultUseDifferentBackMaterial() const { return bDefaultUseDifferentBackMaterial; }
-    void SetDefaultUseDifferentBackMaterial(const BOOL bNew) { bDefaultUseDifferentBackMaterial = bNew; }
 
     // Cube-Objekt
     const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
@@ -142,10 +133,6 @@ public:
     void SetDefaultExtrudeCloseFront(const BOOL bNew) { bDefaultExtrudeCloseFront = bNew; }
     BOOL GetDefaultExtrudeCloseBack() const { return bDefaultExtrudeCloseBack; }
     void SetDefaultExtrudeCloseBack(const BOOL bNew) { bDefaultExtrudeCloseBack = bNew; }
-
-    // Scene-Objekt
-    BOOL GetDefaultDither() const { return bDefaultDither; }
-    void SetDefaultDither(const BOOL bNew) { bDefaultDither = bNew; }
 };
 
 #endif          // _E3D_DEFLT3D_HXX

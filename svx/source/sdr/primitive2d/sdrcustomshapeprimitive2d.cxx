@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrcustomshapeprimitive2d.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,8 +53,9 @@ namespace drawinglayer
             // add text
             if(getSdrSTAttribute().getText())
             {
-                const ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromRect(::basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTextBox(), *getSdrSTAttribute().getText(), 0, false));
+                const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(
+                    basegfx::B2DPolyPolygon(aUnitOutline), getTextBox(), *getSdrSTAttribute().getText(), 0, false, getWordWrap()));
             }
 
             // add shadow
@@ -78,11 +79,13 @@ namespace drawinglayer
         SdrCustomShapePrimitive2D::SdrCustomShapePrimitive2D(
             const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
             const Primitive2DSequence& rSubPrimitives,
-            const ::basegfx::B2DHomMatrix& rTextBox)
+            const basegfx::B2DHomMatrix& rTextBox,
+            bool bWordWrap)
         :   BasePrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
-            maTextBox(rTextBox)
+            maTextBox(rTextBox),
+            mbWordWrap(bWordWrap)
         {
         }
 
@@ -94,7 +97,8 @@ namespace drawinglayer
 
                 return (getSdrSTAttribute() == rCompare.getSdrSTAttribute()
                     && getSubPrimitives() == rCompare.getSubPrimitives()
-                    && getTextBox() == rCompare.getTextBox());
+                    && getTextBox() == rCompare.getTextBox()
+                    && getWordWrap() == rCompare.getWordWrap());
             }
 
             return false;

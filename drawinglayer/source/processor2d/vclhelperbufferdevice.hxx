@@ -59,7 +59,8 @@ namespace drawinglayer
     public:
         impBufferDevice(
             OutputDevice& rOutDev,
-            const basegfx::B2DRange& rRange);
+            const basegfx::B2DRange& rRange,
+            bool bAddOffsetToMapping);
         ~impBufferDevice();
 
         void paint(double fTrans = 0.0);

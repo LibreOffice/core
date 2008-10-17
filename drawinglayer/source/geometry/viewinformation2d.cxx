@@ -52,7 +52,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer
 {
-    namespace
+    namespace geometry
     {
         class ImpViewInformation2D
         {

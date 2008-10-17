@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdhdl.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <algorithm>
+
 #include <svx/svdhdl.hxx>
 #include "svdtouch.hxx"
 #include <svx/svdpagv.hxx>
@@ -41,7 +43,6 @@
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bmpacc.hxx>
-#include <goodies/b3dcolor.hxx>
 
 #include <svx/sxekitm.hxx>
 #include "svdstr.hrc"
@@ -67,6 +68,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
@@ -815,7 +817,8 @@ Pointer SdrHdl::GetPointer() const
     PointerStyle ePtr=POINTER_MOVE;
     BOOL bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
     // Fuer Resize von gedrehten Rechtecken die Mauszeiger etwas mitdrehen
-    if (bSize && nDrehWink!=0) {
+    if (bSize && nDrehWink!=0)
+    {
         long nHdlWink=0;
         switch (eKind) {
             case HDL_UPLFT: nHdlWink=13500; break;
@@ -833,18 +836,22 @@ Pointer SdrHdl::GetPointer() const
         while (nHdlWink<0) nHdlWink+=18000;
         while (nHdlWink>=18000) nHdlWink-=18000;
         nHdlWink/=4500;
-        switch ((BYTE)nHdlWink) {
+        switch ((BYTE)nHdlWink)
+        {
             case 0: ePtr=POINTER_ESIZE;    break;
             case 1: ePtr=POINTER_NESIZE; break;
             case 2: ePtr=POINTER_SSIZE;    break;
             case 3: ePtr=POINTER_SESIZE; break;
         } // switch
     }
-    if (ePtr==POINTER_MOVE) {
+    if (ePtr==POINTER_MOVE)
+    {
         BOOL bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
         BOOL bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
-        if (bSize && pHdlList!=NULL && (bRot || bDis)) {
-            switch (eKind) {
+        if (bSize && pHdlList!=NULL && (bRot || bDis))
+        {
+            switch (eKind)
+            {
                 case HDL_UPLFT: case HDL_UPRGT:
                 case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? POINTER_ROTATE : POINTER_REFHAND; break;
                 case HDL_LEFT : case HDL_RIGHT: ePtr=POINTER_VSHEAR; break;
@@ -852,8 +859,11 @@ Pointer SdrHdl::GetPointer() const
                 default:
                     break;
             }
-        } else {
-            switch (eKind) {
+        }
+        else
+        {
+            switch (eKind)
+            {
                 case HDL_UPLFT: ePtr=POINTER_NWSIZE;  break;
                 case HDL_UPPER: ePtr=POINTER_NSIZE;     break;
                 case HDL_UPRGT: ePtr=POINTER_NESIZE;  break;
@@ -1023,17 +1033,20 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
         pWrite->DrawLine(Point(nWidth - 1, 1), Point(nWidth - 1, nHeight - 2));
 
         // draw lighter UpperLeft
-        B3dColor aMixCol(aCol);
-        B3dColor aFactor(0x40, 0x40, 0x40);
-        aMixCol += aFactor;
-        pWrite->SetLineColor((Color)aMixCol);
+        const Color aLightColor(
+            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetRed() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
+            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetGreen() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
+            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetBlue() + (sal_Int16)0x0040), (sal_Int16)0x00ff)));
+        pWrite->SetLineColor(aLightColor);
         pWrite->DrawLine(Point(1, 1), Point(1, nHeight - 2));
         pWrite->DrawLine(Point(2, 1), Point(nWidth - 2, 1));
 
         // draw darker LowerRight
-        aMixCol = aCol;
-        aMixCol -= aFactor;
-        pWrite->SetLineColor((Color)aMixCol);
+        const Color aDarkColor(
+            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetRed() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
+            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetGreen() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
+            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetBlue() - (sal_Int16)0x0040), (sal_Int16)0x0000)));
+        pWrite->SetLineColor(aDarkColor);
         pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
         pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
 
@@ -1421,21 +1434,10 @@ void E3dVolumeMarker::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
-                        {
-                            const sal_uInt32 nCnt(aWireframePoly.count());
-
-                            for(sal_uInt32 i(0L); i < nCnt; i++)
+                        if(rPageWindow.GetOverlayManager() && aWireframePoly.count())
                             {
-                                const basegfx::B2DPolygon aPoly(aWireframePoly.getB2DPolygon(i));
-                                const basegfx::B2DPoint aPointA(aPoly.getB2DPoint(0L));
-                                const basegfx::B2DPoint aPointB(aPoly.getB2DPoint(1L));
-
                                 ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                    ::sdr::overlay::OverlayLineStriped(
-                                        aPointA,
-                                        aPointB
-                                    );
+                                ::sdr::overlay::OverlayPolyPolygonStriped(aWireframePoly);
                                 DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                                 // OVERLAYMANAGER
@@ -1453,7 +1455,6 @@ void E3dVolumeMarker::CreateB2dIAObject()
             }
         }
     }
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1542,27 +1543,38 @@ void ImpEdgeHdl::SetLineCode(SdrEdgeLineCode eCode)
 Pointer ImpEdgeHdl::GetPointer() const
 {
     SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
-    if (pEdge==NULL) return SdrHdl::GetPointer();
-    if (nObjHdlNum<=1) return Pointer(POINTER_MOVEPOINT); //Pointer(POINTER_DRAW_CONNECT);
-    if (IsHorzDrag()) return Pointer(POINTER_ESIZE);
-    else return Pointer(POINTER_SSIZE);
+    if (pEdge==NULL)
+        return SdrHdl::GetPointer();
+    if (nObjHdlNum<=1)
+        return Pointer(POINTER_MOVEPOINT); //Pointer(POINTER_DRAW_CONNECT);
+    if (IsHorzDrag())
+        return Pointer(POINTER_ESIZE);
+    else
+        return Pointer(POINTER_SSIZE);
 }
 
 BOOL ImpEdgeHdl::IsHorzDrag() const
 {
     SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
-    if (pEdge==NULL) return FALSE;
-    if (nObjHdlNum<=1) return FALSE;
+    if (pEdge==NULL)
+        return FALSE;
+    if (nObjHdlNum<=1)
+        return FALSE;
 
     SdrEdgeKind eEdgeKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
-    if (eEdgeKind==SDREDGE_ORTHOLINES || eEdgeKind==SDREDGE_BEZIER) {
+    if (eEdgeKind==SDREDGE_ORTHOLINES || eEdgeKind==SDREDGE_BEZIER)
+    {
         return !rInfo.ImpIsHorzLine(eLineCode,*pEdge->pEdgeTrack);
-    } else if (eEdgeKind==SDREDGE_THREELINES) {
+    }
+    else if (eEdgeKind==SDREDGE_THREELINES)
+    {
         long nWink=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
-        if (nWink==0 || nWink==18000) return TRUE;
-        else return FALSE;
+        if (nWink==0 || nWink==18000)
+            return TRUE;
+        else
+            return FALSE;
     }
     return FALSE;
 }
@@ -1632,7 +1644,8 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
 Pointer ImpMeasureHdl::GetPointer() const
 {
-    switch (nObjHdlNum) {
+    switch (nObjHdlNum)
+    {
         case 0: case 1: return Pointer(POINTER_HAND);
         case 2: case 3: return Pointer(POINTER_MOVEPOINT);
         case 4: case 5: return SdrHdl::GetPointer(); // wird dann entsprechend gedreht
@@ -1655,7 +1668,8 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
     // Level 1: Erst normale Handles, dann Glue, dann User, dann Plushandles, dann Retpunkt-Handles
     unsigned n1=1;
     unsigned n2=1;
-    if (eKind1!=eKind2) {
+    if (eKind1!=eKind2)
+    {
         if (eKind1==HDL_REF1 || eKind1==HDL_REF2 || eKind1==HDL_MIRX) n1=5;
         else if (eKind1==HDL_GLUE) n1=2;
         else if (eKind1==HDL_USER) n1=3;
@@ -1667,29 +1681,41 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
     }
     if (((SdrHdl*)pElem1)->IsPlusHdl()) n1=4;
     if (((SdrHdl*)pElem2)->IsPlusHdl()) n2=4;
-    if (n1==n2) {
+    if (n1==n2)
+    {
         // Level 2: PageView (Pointer)
         SdrPageView* pPV1=((SdrHdl*)pElem1)->GetPageView();
         SdrPageView* pPV2=((SdrHdl*)pElem2)->GetPageView();
-        if (pPV1==pPV2) {
+        if (pPV1==pPV2)
+        {
             // Level 3: Position (x+y)
             SdrObject* pObj1=((SdrHdl*)pElem1)->GetObj();
             SdrObject* pObj2=((SdrHdl*)pElem2)->GetObj();
-            if (pObj1==pObj2) {
+            if (pObj1==pObj2)
+            {
                 sal_uInt32 nNum1=((SdrHdl*)pElem1)->GetObjHdlNum();
                 sal_uInt32 nNum2=((SdrHdl*)pElem2)->GetObjHdlNum();
-                if (nNum1==nNum2) { // #48763#
+                if (nNum1==nNum2)
+                { // #48763#
                     if (eKind1==eKind2)
                         return (long)pElem1<(long)pElem2 ? -1 : 1; // Notloesung, um immer die gleiche Sortierung zu haben
                     return (USHORT)eKind1<(USHORT)eKind2 ? -1 : 1;
-                } else return nNum1<nNum2 ? -1 : 1;
-            } else {
+                }
+                else
+                    return nNum1<nNum2 ? -1 : 1;
+            }
+            else
+            {
                 return (long)pObj1<(long)pObj2 ? -1 : 1;
             }
-        } else {
+        }
+        else
+        {
             return (long)pPV1<(long)pPV2 ? -1 : 1;
         }
-    } else {
+    }
+    else
+    {
         return n1<n2 ? -1 : 1;
     }
 }
@@ -2104,17 +2130,22 @@ void SdrHdlList::Sort()
 
 ULONG SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
 {
-    if (pHdl==NULL) return CONTAINER_ENTRY_NOTFOUND;
+    if (pHdl==NULL)
+        return CONTAINER_ENTRY_NOTFOUND;
     ULONG nPos=aList.GetPos(pHdl);
     return nPos;
 }
 
 void SdrHdlList::AddHdl(SdrHdl* pHdl, BOOL bAtBegin)
 {
-    if (pHdl!=NULL) {
-        if (bAtBegin) {
+    if (pHdl!=NULL)
+    {
+        if (bAtBegin)
+        {
             aList.Insert(pHdl,ULONG(0));
-        } else {
+        }
+        else
+        {
             aList.Insert(pHdl,CONTAINER_APPEND);
         }
         pHdl->SetHdlList(this);
@@ -2126,15 +2157,23 @@ SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, BOOL bBack, BOOL bNext, SdrH
    SdrHdl* pRet=NULL;
    ULONG nAnz=GetHdlCount();
    ULONG nNum=bBack ? 0 : nAnz;
-   while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL) {
-       if (!bBack) nNum--;
+   while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL)
+   {
+       if (!bBack)
+           nNum--;
        SdrHdl* pHdl=GetHdl(nNum);
-       if (bNext) {
-           if (pHdl==pHdl0) bNext=FALSE;
-       } else {
-           if (pHdl->IsHdlHit(rPnt)) pRet=pHdl;
+       if (bNext)
+       {
+           if (pHdl==pHdl0)
+               bNext=FALSE;
        }
-       if (bBack) nNum++;
+       else
+       {
+           if (pHdl->IsHdlHit(rPnt))
+               pRet=pHdl;
+       }
+       if (bBack)
+           nNum++;
    }
    return pRet;
 }
@@ -2142,9 +2181,11 @@ SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, BOOL bBack, BOOL bNext, SdrH
 SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
 {
    SdrHdl* pRet=NULL;
-   for (ULONG i=0; i<GetHdlCount() && pRet==NULL; i++) {
+   for (ULONG i=0; i<GetHdlCount() && pRet==NULL; i++)
+   {
        SdrHdl* pHdl=GetHdl(i);
-       if (pHdl->GetKind()==eKind1) pRet=pHdl;
+       if (pHdl->GetKind()==eKind1)
+           pRet=pHdl;
    }
    return pRet;
 }

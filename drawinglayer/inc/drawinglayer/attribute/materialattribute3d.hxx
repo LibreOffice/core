@@ -41,7 +41,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace drawinglayer { namespace {
+namespace drawinglayer { namespace attribute {
     class ImpMaterialAttribute3D;
 }}
 

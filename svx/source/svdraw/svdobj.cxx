@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdobj.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.99.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,7 +189,7 @@ void SdrObjUserData::PaintMacro(OutputDevice& rOut, const Rectangle& /*rDirtyRec
         return;
 
     const RasterOp eRop(rOut.GetRasterOp());
-    const basegfx::B2DPolyPolygon aPolyPolygon(pObj->TakeXorPoly(true));
+    const basegfx::B2DPolyPolygon aPolyPolygon(pObj->TakeXorPoly());
     const sal_uInt32 nCount(aPolyPolygon.count());
 
     rOut.SetLineColor(COL_BLACK);
@@ -913,26 +913,24 @@ const Rectangle& SdrObject::GetLastBoundRect() const
 void SdrObject::RecalcBoundRect()
 {
     // central new method which will calculate the BoundRect using primitive geometry
-    const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(GetViewContact().getViewIndependentPrimitive2DSequence());
-
-    if(xPrimitives.hasElements())
+    if(aOutRect.IsEmpty())
     {
-        // use neutral ViewInformation
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+        const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(GetViewContact().getViewIndependentPrimitive2DSequence());
 
-        // get the range of the primitives
-        const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
-
-        if(!aRange.isEmpty())
+        if(xPrimitives.hasElements())
         {
-            aOutRect = Rectangle(
-                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
-                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+            // use neutral ViewInformation and get the range of the primitives
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
+
+            if(!aRange.isEmpty())
+            {
+                aOutRect = Rectangle(
+                        (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
+                        (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+                return;
+            }
         }
-    }
-    else
-    {
-        aOutRect = Rectangle();
     }
 }
 
@@ -1127,7 +1125,7 @@ XubString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, FASTBOOL bNoUni
     return aStr;
 }
 
-basegfx::B2DPolyPolygon SdrObject::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrObject::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval;
     const Rectangle aR(GetCurrentBoundRect());
@@ -1140,26 +1138,80 @@ basegfx::B2DPolyPolygon SdrObject::TakeXorPoly(sal_Bool /*bDetail*/) const
 basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const sdr::contact::ViewContact& rVC(GetViewContact());
-    const drawinglayer::primitive2d::Primitive2DSequence xSequence(rVC.getViewIndependentPrimitive2DSequence());
 
-    if(xSequence.hasElements())
+    // create cloned object without text, but with XLINE_SOLID,
+    // COL_BLACK as line color and XFILL_NONE
+    SdrObject* pClone = Clone();
+
+    if(pClone)
     {
-        // use neutral ViewInformation
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+        const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >(this);
 
-        // create extractor, process and get result
-        drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
-        aExtractor.process(xSequence);
-        const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
-        const sal_uInt32 nSize(rResult.size());
-
-        // the topology for contour is correctly a vector of PolyPolygons; for
-        // historical reasons cut it back to a single PolyPolygon here
-        for(sal_uInt32 a(0); a < nSize; a++)
+        if(pTextObj)
         {
-            aRetval.append(rResult[a]);
+            // no text and no text animation
+            pClone->SetMergedItem(SdrTextAniKindItem(SDRTEXTANI_NONE));
+            pClone->SetOutlinerParaObject(0);
         }
+
+        const SdrEdgeObj* pEdgeObj = dynamic_cast< const SdrEdgeObj* >(this);
+
+        if(pEdgeObj)
+        {
+            // create connections if connector, will be cleaned up when
+            // deleting the connector again
+            SdrObject* pLeft = pEdgeObj->GetConnectedNode(TRUE);
+            SdrObject* pRight = pEdgeObj->GetConnectedNode(FALSE);
+
+            if(pLeft)
+            {
+                pClone->ConnectToNode(TRUE, pLeft);
+            }
+
+            if(pRight)
+            {
+                pClone->ConnectToNode(FALSE, pRight);
+            }
+        }
+
+        SfxItemSet aNewSet(*GetObjectItemPool());
+
+        // solid black lines and no fill
+        aNewSet.Put(XLineStyleItem(XLINE_SOLID));
+        aNewSet.Put(XLineColorItem(String(), Color(COL_BLACK)));
+        aNewSet.Put(XFillStyleItem(XFILL_NONE));
+        pClone->SetMergedItemSet(aNewSet);
+
+        // get sequence from clone
+        const sdr::contact::ViewContact& rVC(pClone->GetViewContact());
+        const drawinglayer::primitive2d::Primitive2DSequence xSequence(rVC.getViewIndependentPrimitive2DSequence());
+
+        if(xSequence.hasElements())
+        {
+            // use neutral ViewInformation
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+
+            // create extractor, process and get result
+            drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
+            aExtractor.process(xSequence);
+            const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
+            const sal_uInt32 nSize(rResult.size());
+
+            // when count is one, it is implied that the object has only it's normal
+            // contour anyways and TakeCountour() is to return an empty PolyPolygon
+            // (see old implementation for historical reasons)
+            if(nSize > 1)
+            {
+                // the topology for contour is correctly a vector of PolyPolygons; for
+                // historical reasons cut it back to a single PolyPolygon here
+                for(sal_uInt32 a(0); a < nSize; a++)
+                {
+                    aRetval.append(rResult[a]);
+                }
+            }
+        }
+
+        delete pClone;
     }
 
     return aRetval;
@@ -1782,7 +1834,7 @@ void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, cons
     else
     {
         const RasterOp eRop(rOut.GetRasterOp());
-        const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly(true));
+        const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly());
         const sal_uInt32 nCount(aPolyPolygon.count());
 
         rOut.SetLineColor(COL_BLACK);

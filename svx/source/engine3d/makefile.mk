@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.15.18.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,6 +43,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
+        $(SLO)$/e3dsceneupdater.obj \
+        $(SLO)$/helperminimaldepth3d.obj	\
+        $(SLO)$/helperhittest3d.obj			\
         $(SLO)$/obj3d.obj 		\
         $(SLO)$/scene3d.obj		\
         $(SLO)$/polysc3d.obj	\

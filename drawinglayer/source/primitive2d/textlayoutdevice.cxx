@@ -278,12 +278,8 @@ namespace drawinglayer
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
-            const OutputDevice& rOutDev)
+            const OutputDevice& /*rOutDev*/)
         {
-#ifndef WIN32
-            // not used under unix, but reference for warning-free
-            (void)rOutDev;
-#endif
             sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
             sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
             Font aRetval(
@@ -305,10 +301,26 @@ namespace drawinglayer
 #ifdef WIN32
             if(nWidth != nHeight)
             {
-                const FontMetric aFontMetric(rOutDev.GetFontMetric(aRetval));
-                const double fCurrentWidth(aFontMetric.GetWidth());
-
-                aRetval.SetWidth(basegfx::fround(fCurrentWidth * (nWidth/nHeight)));
+                // #i92757#
+                // Removed the relative calculation with GetFontMetric() usage again. On
+                // the one hand it was wrong (integer division always created zero), OTOH
+                // calculating a scale factor from current to target width and then using
+                // it to actually scale the current width does nothing but set the target
+                // value directly. Maybe more is needed here with WIN version of font
+                // width/height handling, but currently, this works the simple way.
+                //
+                // As can be seen, when this can stay the simple way, the OutputDevice
+                // can be removed from the whole getVclFontFromFontAttributes implementations
+                // again and make it more VCL-independent.
+                //
+                // Adapted nWidth usage to nWidth-1 to be completely compatible with
+                // non-primitive version.
+                //
+                // previous stuff:
+                //  const FontMetric aFontMetric(rOutDev.GetFontMetric(aRetval));
+                //  const double fCurrentWidth(aFontMetric.GetWidth());
+                //  aRetval.SetWidth(basegfx::fround(fCurrentWidth * ((double)nWidth/(double)nHeight)));
+                aRetval.SetWidth(nWidth ? nWidth - 1 : 0);
             }
 #endif
 

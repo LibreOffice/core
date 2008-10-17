@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshap3.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -378,15 +378,15 @@ bool Svx3DSceneObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty
             while(aIter.IsMore())
             {
                 E3dObject* p3DObj = (E3dObject*)aIter.Next();
-                p3DObj->NbcResetTransform();
+                p3DObj->NbcSetTransform(basegfx::B3DHomMatrix());
             }
 
             // reset scene transformation and make a complete recalc
-            pScene->NbcResetTransform();
+            pScene->NbcSetTransform(basegfx::B3DHomMatrix());
 
             // fill old camera from new parameters
             Camera3D aCam(pScene->GetCamera());
-            const Volume3D& rVolume = pScene->GetBoundVolume();
+            const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
             double fW = rVolume.getWidth();
             double fH = rVolume.getHeight();
 
@@ -431,12 +431,8 @@ bool Svx3DSceneObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty
 
             // set scene transformation again at scene
             pScene->NbcSetTransform(aSceneTAR.maMat);
-            pScene->FitSnapRectToBoundVol();
             pScene->NbcSetSnapRect(aSceneTAR.maRect);
 
-            // #86559# init transformation set to allow correct
-            // calculation of BoundRect
-            pScene->InitTransformationSet();
             return true;
         }
         break;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdxcgv.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -665,8 +665,9 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
             aMtf.Record( &aOut );
 
             // aXOut.SetOffset( Point( -aBoundRect.Left(), -aBoundRect.Top() ) );
+            // #i92760# offset set in wrong direction, corrected
             MapMode aOffsetMapMode(aOut.GetMapMode());
-            aOffsetMapMode.SetOrigin(aBoundRect.TopLeft());
+            aOffsetMapMode.SetOrigin(Point(-aBoundRect.Left(), -aBoundRect.Top()));
             aOut.SetMapMode(aOffsetMapMode);
 
             pObj->SingleObjectPainter( aOut ); // #110094#-17

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: e3dsphereproperties.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,12 +71,12 @@ namespace sdr
             {
                 case SDRATTR_3DOBJ_HORZ_SEGS:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
                 case SDRATTR_3DOBJ_VERT_SEGS:
                 {
-                    rObj.InvalidateGeometry();
+                    rObj.ActionChanged();
                     break;
                 }
             }
