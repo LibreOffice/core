@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fucon3d.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -269,22 +269,23 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
     Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
 
     // get transformed BoundVolume of the new object
-    Volume3D aBoundVol;
-    const Volume3D& rObjVol = p3DObj->GetBoundVolume();
-    const ::basegfx::B3DHomMatrix& rObjTrans  = p3DObj->GetTransform();
-    aBoundVol.expand(rObjVol.GetTransformVolume(rObjTrans));
+    basegfx::B3DRange aBoundVol;
+    basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
+    aObjVol.transform(p3DObj->GetTransform());
+    aBoundVol.expand(aObjVol);
     double fDeepth(aBoundVol.getDepth());
 
     aCamera.SetPRP(::basegfx::B3DPoint(0.0, 0.0, 1000.0));
     aCamera.SetPosition(::basegfx::B3DPoint(0.0, 0.0, mpView->GetDefaultCamPosZ() + fDeepth / 2));
     aCamera.SetFocalLength(mpView->GetDefaultCamFocal());
     pScene->SetCamera(aCamera);
+    basegfx::B3DHomMatrix aTransformation;
 
     switch (nSlotId)
     {
         case SID_3D_CUBE:
         {
-            pScene->RotateX(DEG2RAD(20));
+            aTransformation.rotate(DEG2RAD(20), 0.0, 0.0);
         }
         break;
 
@@ -297,7 +298,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         case SID_3D_SHELL:
         case SID_3D_HALF_SPHERE:
         {
-            pScene->RotateX(DEG2RAD(200));
+            aTransformation.rotate(DEG2RAD(200), 0.0, 0.0);
         }
         break;
 
@@ -312,7 +313,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         case SID_3D_TORUS:
         {
 //              pScene->RotateX(DEG2RAD(15));
-            pScene->RotateX(DEG2RAD(90));
+            aTransformation.rotate(DEG2RAD(90), 0.0, 0.0);
         }
         break;
 
@@ -322,7 +323,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         break;
     }
 
-    pScene->FitSnapRectToBoundVol();
+    pScene->SetTransform(aTransformation * pScene->GetTransform());
 
     SfxItemSet aAttr (mpViewShell->GetPool());
     pScene->SetMergedItemSetAndBroadcast(aAttr);
@@ -458,9 +459,9 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
 
     // E3dView::SetCurrent3DObj part
     // get transformed BoundVolume of the object
-    const Volume3D& rObjVol = p3DObj->GetBoundVolume();
-    const ::basegfx::B3DHomMatrix& rObjTrans = p3DObj->GetTransform();
-    Volume3D aVolume(rObjVol.GetTransformVolume(rObjTrans));
+    basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
+    aObjVol.transform(p3DObj->GetTransform());
+    basegfx::B3DRange aVolume(aObjVol);
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
     Rectangle a3DRect(0, 0, (long)fW, (long)fH);
@@ -493,7 +494,6 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
 
     // make object interactive at once
     pScene->SetRectsDirty();
-    pScene->InitTransformationSet();
 
     // Take care of restrictions for the rectangle
     Rectangle aRect(rRectangle);

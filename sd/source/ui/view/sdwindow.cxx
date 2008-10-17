@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdwindow.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_sd.hxx"
 
 #include "Window.hxx"
-#include "goodies/base3d.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 

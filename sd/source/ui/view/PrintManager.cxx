@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PrintManager.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,8 +67,6 @@
 #include "strings.hrc"
 
 #include <svx/svdopath.hxx>
-#include <goodies/base3d.hxx>
-
 #include "sdabstdlg.hxx"
 #include "printdlg.hrc"
 #include "prntopts.hrc"
@@ -591,12 +589,6 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
         // Druckerschach wieder zuruecksetzen
         pPrinter->SetPaperBin( nOldPaperBin );
-
-        // 3D-Kontext wieder zerstoeren
-        Base3D *pBase3D = (Base3D*) pPrinter->Get3DContext();
-
-        if( pBase3D )
-            pBase3D->Destroy( pPrinter );
     }
 
     return 0;
