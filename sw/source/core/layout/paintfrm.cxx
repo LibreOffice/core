@@ -6622,6 +6622,19 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         aDev.SetFillColor();
         aDev.SetFont( pOld->GetFont() );
 
+        //Rechteck ggf. ausdehnen, damit die Umrandunge mit aufgezeichnet werden.
+        SwRect aOut( pFly->Frm() );
+        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFly );
+        const SwBorderAttrs &rAttrs = *aAccess.Get();
+        if ( rAttrs.CalcRightLine() )
+            aOut.SSize().Width() += 2*nPixelSzW;
+        if ( rAttrs.CalcBottomLine() )
+            aOut.SSize().Height()+= 2*nPixelSzH;
+
+        // #i92711# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
+        const Region aRepaintRegion(aOut.SVRect());
+        pSh->DLPrePaint2(aRepaintRegion);
+
         Window *pWin = pSh->GetWin();
         USHORT nZoom = pSh->GetViewOptions()->GetZoom();
         ::SetOutDevAndWin( pSh, &aDev, 0, 100 );
@@ -6631,15 +6644,6 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         SwViewImp *pImp = pSh->Imp();
         pFlyOnlyDraw = pFly;
         pLines = new SwLineRects;
-
-        //Rechteck ggf. ausdehnen, damit die Umrandunge mit aufgezeichnet werden.
-        SwRect aOut( pFly->Frm() );
-        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFly );
-        const SwBorderAttrs &rAttrs = *aAccess.Get();
-        if ( rAttrs.CalcRightLine() )
-            aOut.SSize().Width() += 2*nPixelSzW;
-        if ( rAttrs.CalcBottomLine() )
-            aOut.SSize().Height()+= 2*nPixelSzH;
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrm* pFlyPage = pFly->FindPageFrm();
@@ -6666,6 +6670,9 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pFlyMetafileOut = 0;
         bFlyMetafile = FALSE;
         ::SetOutDevAndWin( pSh, pOld, pWin, nZoom );
+
+        // #i92711# end Pre/PostPaint encapsulation when pOut is back and content is painted
+           pSh->DLPostPaint2();
 
         aMet.Stop();
         aMet.Move( -pFly->Frm().Left(), -pFly->Frm().Top() );

@@ -2256,7 +2256,7 @@ namespace sdr
                             // get ranges
                             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(rCandidate.GetObjectContact().getViewInformation2D());
                             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
-                            basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(aNewSequence, rViewInformation2D));
+                            basegfx::B2DRange aObjectRange(rCandidate.getObjectRange());
 
                             // correct with virtual object's offset
                             aObjectRange.transform(rOffsetMatrix);
@@ -2518,20 +2518,20 @@ SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
     return bRet ? (SdrObject*)this : NULL;
 }
 
-::basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly(sal_Bool bDetail) const
+basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 {
-    ::basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly(bDetail));
-    ::basegfx::B2DHomMatrix aMatrix;
+    basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly());
+    basegfx::B2DHomMatrix aMatrix;
     aMatrix.translate(GetOffset().X(), GetOffset().Y());
     aRetval.transform(aMatrix);
 
     return aRetval;
 }
 
-::basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
+basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 {
-    ::basegfx::B2DPolyPolygon aRetval(rRefObj.TakeContour());
-    ::basegfx::B2DHomMatrix aMatrix;
+    basegfx::B2DPolyPolygon aRetval(rRefObj.TakeContour());
+    basegfx::B2DHomMatrix aMatrix;
     aMatrix.translate(GetOffset().X(), GetOffset().Y());
     aRetval.transform(aMatrix);
 

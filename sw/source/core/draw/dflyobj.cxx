@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dflyobj.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -562,7 +562,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 }
 
 
-::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly(sal_Bool ) const
+::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly() const
 {
     const Rectangle aSourceRectangle(GetFlyFrm()->Frm().SVRect());
     const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
