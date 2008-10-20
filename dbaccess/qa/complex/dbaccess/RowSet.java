@@ -41,7 +41,7 @@ import com.sun.star.util.XRefreshable;
 import connectivity.tools.HsqlDatabase;
 
 import complexlib.ComplexTestCase;
-import complexlib.ComplexTestCase.AssureException;
+import complexlib.Assurance.AssureException;
 
 
 public class RowSet extends ComplexTestCase {
@@ -952,3 +952,4 @@ public class RowSet extends ComplexTestCase {
         testParametersInteraction();
    }
 }
+
