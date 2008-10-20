@@ -59,9 +59,11 @@ namespace drawinglayer { namespace primitive2d {
     class MarkerArrayPrimitive2D;
     class PointArrayPrimitive2D;
     class ModifiedColorPrimitive2D;
+    class WrongSpellPrimitive2D;
     class PolygonStrokePrimitive2D;
     class ControlPrimitive2D;
     class PagePreviewPrimitive2D;
+    class ChartPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -108,7 +110,9 @@ namespace drawinglayer
             void RenderPagePreviewPrimitive2D(const primitive2d::PagePreviewPrimitive2D& rPagePreviewCandidate);
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
+            void RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate);
             void RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
+            void RenderChartPrimitive2D(const primitive2d::ChartPrimitive2D& rChartCandidate);
 
             /////////////////////////////////////////////////////////////////////////////
             // DrawMode adaption support
