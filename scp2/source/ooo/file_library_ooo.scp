@@ -694,7 +694,7 @@ File gid_File_Lib_Icudata
   #ifdef UNX
     Name = STRING(CONCAT7(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
-    Name = STRING(CONCAT5(icudt,ICU_MAJOR,ICU_MINOR,l,.dll));
+    Name = STRING(CONCAT4(icudt,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
