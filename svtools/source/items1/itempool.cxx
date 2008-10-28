@@ -673,20 +673,16 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
     else if ( pSecondary )
         pSecondary->SetPoolDefaultItem(rItem);
     else
+    {
         SFX_ASSERT( 0, rItem.Which(), "unknown Which-Id - cannot set pool default" );
+    }
 }
 
-// ----------------------------------------------------------------------
-
+/*
+ * Resets the default of the given <Which-Id> back to the static default.
+ * If a pool default exists it is removed.
+ */
 void SfxItemPool::ResetPoolDefaultItem( USHORT nWhichId )
-
-/*  [Beschreibung]
-
-    Diese Methode setzt den Default f"ur die angegeben <Which-Id> zur"uck
-    auf den statischen Default. Falls ein Pool-Default exisitiert, wird
-    dieser gel"oscht.
-*/
-
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     if ( IsInRange(nWhichId) )
@@ -702,7 +698,9 @@ void SfxItemPool::ResetPoolDefaultItem( USHORT nWhichId )
     else if ( pSecondary )
         pSecondary->ResetPoolDefaultItem(nWhichId);
     else
+    {
         SFX_ASSERT( 0, nWhichId, "unknown Which-Id - cannot set pool default" );
+    }
 }
 
 // -----------------------------------------------------------------------

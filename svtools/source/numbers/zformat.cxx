@@ -3945,7 +3945,9 @@ DateFormat SvNumberformat::GetDateOrder() const
         }
     }
     else
-        DBG_ERROR( "SvNumberformat::GetDateOrder: no date" );
+    {
+       DBG_ERROR( "SvNumberformat::GetDateOrder: no date" );
+    }
     return rLoc().getDateFormat();
 }
 

@@ -745,7 +745,9 @@ void ValueSetAcc::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
     else
+    {
         DBG_ASSERT (mpParent!=NULL, "ValueSetAcc not disposed but mpParent == NULL");
+    }
 }
 
 

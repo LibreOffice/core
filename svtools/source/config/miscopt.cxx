@@ -392,7 +392,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 if( seqValues[nProperty] >>= aSymbolsStyle )
                     SetSymbolsStyleName( aSymbolsStyle );
                 else
+                {
                     DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
+                }
                 m_bIsSymbolsStyleRO = seqRO[nProperty];
                 break;
             }
@@ -492,7 +494,9 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( seqValues[nProperty] >>= aSymbolsStyle )
                                                                 SetSymbolsStyleName( aSymbolsStyle );
                                                             else
+                                                            {
                                                                 DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
+                                                            }
                                                         }
                                                     break;
         }
