@@ -163,6 +163,7 @@
 // end test includes
 
 #include <org/openoffice/excel/Range.hpp>
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
 
 using namespace ::org::openoffice;
 using namespace ::com::sun::star;
@@ -442,6 +443,16 @@ public:
         return false;
     }
 
+    bool isDateType()
+    {
+        sal_Int16 nType = getNumberFormat();
+        if(( nType & util::NumberFormat::DATETIME ))
+        {
+            return true;
+        }
+        return false;
+    }
+
     rtl::OUString getNumberFormatString()
     {
         uno::Reference< uno::XInterface > xIf( mxRangeProps, uno::UNO_QUERY_THROW );
@@ -715,6 +726,8 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
             NumFormatHelper cellFormat( xRange );
             if ( cellFormat.isBooleanType() )
                 aValue = uno::makeAny( ( xCell->getValue() != 0.0 ) );
+            else if ( cellFormat.isDateType() )
+                aValue = uno::makeAny( bridge::oleautomation::Date( xCell->getValue() ) );
             else
                 aValue <<= xCell->getValue();
         }
