@@ -53,6 +53,7 @@
 #include <svtools/svtools.hrc>
 
 #include "basrid.hxx"
+#include "runtime.hxx"
 
 #include <svtools/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
@@ -230,6 +231,11 @@ SbxError ImpScan( const XubString& rWSrc, double& nVal, SbxDataType& rType,
         nVal = (double) l;
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
+    }
+    else if ( SbiRuntime::isVBAEnabled() )
+    {
+        OSL_TRACE("Reporting error converting");
+        return SbxERR_CONVERSION;
     }
     if( pLen )
         *pLen = (USHORT) ( p - pStart );

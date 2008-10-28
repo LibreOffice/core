@@ -117,7 +117,7 @@ static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
     if( !p->WhiteSpace() || eCurExpr != SbSYMBOL )
         return FALSE;
     if (   eTok == NUMBER || eTok == MINUS || eTok == FIXSTRING
-        || eTok == SYMBOL || eTok == COMMA  || eTok == DOT )
+        || eTok == SYMBOL || eTok == COMMA  || eTok == DOT || eTok == NOT )
     {
         return TRUE;
     }
@@ -495,6 +495,14 @@ SbiExprNode* SbiExpression::Operand()
     switch( eTok = pParser->Peek() )
     {
         case SYMBOL:
+            pRes = Term();
+            // process something like "IF Not r Is Nothing Then .."
+            if( pParser->IsVBASupportOn() && pParser->Peek() == IS )
+            {
+                eTok = pParser->Next();
+                pRes = new SbiExprNode( pParser, pRes, eTok, Like() );
+            }
+            break;
         case DOT:   // .with
             pRes = Term(); break;
         case NUMBER:
