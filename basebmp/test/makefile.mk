@@ -55,6 +55,12 @@ CFLAGS += -fno-inline
 
 .ENDIF
 
+# SunStudio 12 (-m64 and -m32 modes): three test cases of the unit tests fail
+# if compiled with default -xalias_level (and optimization level -xO3)
+.IF "$(OS)"=="SOLARIS" 
+CDEFS+=-xalias_level=compatible
+.ENDIF
+
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------

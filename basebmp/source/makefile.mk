@@ -57,9 +57,9 @@ CDEFS+= -DVIGRA_HAS_LONG_DOUBLE
 CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER -DVIGRA_WITHOUT_NESTED_TEMPLATE_PARAMS
 .ENDIF
 
-# SunStudio 12, LP64 mode (-m64): three test cases of the unit tests fail 
+# SunStudio 12 (-m64 and -m32 modes): three test cases of the unit tests fail 
 # if compiled with default -xalias_level (and optimization level -xO3)
-.IF "$(OS)$(CPU)"=="SOLARISU"
+.IF "$(OS)"=="SOLARIS"
 CDEFS+=-xalias_level=compatible
 .ENDIF
 
