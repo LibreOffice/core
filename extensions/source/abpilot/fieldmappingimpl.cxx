@@ -241,7 +241,9 @@ namespace abp
                             _rFieldAssignment[ sAddressProgrammatic ] = sDriverUI;
                     }
                     else
+                    {
                         DBG_ERROR( "fieldmapping::defaultMapping: invalid driver programmatic name!" );
+                    }
                 }
             }
             catch( const Exception& )

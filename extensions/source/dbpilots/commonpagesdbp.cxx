@@ -311,7 +311,9 @@ namespace dbp
                         setFormConnection( xConn );
                     }
                     else
+                    {
                         DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
+                    }
                 }
             }
             catch(SQLContext& e) { aSQLException <<= e; }

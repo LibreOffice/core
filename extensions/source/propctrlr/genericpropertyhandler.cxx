@@ -196,8 +196,9 @@ namespace pcr
         if ( ( index >= 0 ) && ( index < (sal_Int32)aDescriptions.size() ) )
             sDescription = aDescriptions[ index ];
         else
-            DBG_ERROR( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
-
+        {
+             DBG_ERROR( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
+        }
         return sDescription;
     }
 

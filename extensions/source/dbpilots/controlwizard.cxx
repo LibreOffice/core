@@ -429,8 +429,9 @@ namespace dbp
                 }
             }
             else
+            {
                 DBG_ASSERT(xPage.is(), "OControlWizard::implDeterminePage: can't determine the page (no model)!");
-
+            }
             m_aContext.xDrawPage = xPage;
         }
         catch(Exception&)
