@@ -1,0 +1,2 @@
+ar	apple_remote:	solenv	soltools NULL
+ar	apple_remote	nmake	-	u	ar_arem	 NULL
