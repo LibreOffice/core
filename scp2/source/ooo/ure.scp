@@ -1172,6 +1172,7 @@ Profile gid_Profile_Version_Ini_Ure
     ModuleID = gid_Module_Root_Ure_Hidden;
     Name = PROFILENAME(version);
     Dir = gid_Dir_Ure_Bin;
+    Styles = (PATCH);
 End
 
 ProfileItem gid_Ure_Profileitem_Version_Buildid

@@ -1902,13 +1902,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::windows::createfolder::create_createfolder_table($directoriesforepmarrayref, $filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
 
+        installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
+
         if ( ! $installer::globals::languagepack )   # the following tables not for language packs
         {
             installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
 
             installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
-
-            installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
 
             # Adding Assemblies into the tables MsiAssembly and MsiAssemblyName dynamically
             installer::windows::assembly::create_msiassembly_table($filesinproductlanguageresolvedarrayref, $newidtdir);

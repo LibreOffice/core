@@ -25,6 +25,7 @@ MigrateFeatureStates		600
 MoveFiles		1900
 MsiPublishAssemblies		3025
 MsiUnpublishAssemblies		875
+NewProductFound	NEWPRODUCTS	110
 PatchFiles		2000
 ProcessComponents		800
 PublishComponents		3000
@@ -49,6 +50,7 @@ RemoveODBC		1200
 RemoveRegistryValues		1300
 RemoveShortcuts		1600
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
+SameProductFound	SAMEPRODUCTS	120
 ScheduleReboot	ISSCHEDULEREBOOT	3125
 SelfRegModules		2850
 SelfUnregModules		1100

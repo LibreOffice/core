@@ -905,7 +905,7 @@ STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
 File gid_File_Lib_Mingwm10
     BIN_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = "mingwm10.dll";
 End
