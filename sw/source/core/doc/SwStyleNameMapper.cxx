@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwStyleNameMapper.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,6 +301,7 @@ const struct SwTableEntry PageDescProgNameTable [] =
     ENTRY( "HTML" ),
     ENTRY( "Footnote" ),
     ENTRY( "Endnote" ), // STR_POOLPAGE_PRGM_ENDNOTE
+    ENTRY( "Landscape" ),
     { 0, NULL }
 };
 

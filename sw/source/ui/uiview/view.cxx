@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.cxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.112.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1455,6 +1455,11 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             {
                bViewLayoutBookMode = * (sal_Bool *) pValue->Value.getValue();
                bGotViewLayoutBookMode = sal_True;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
+            {
+               pValue->Value >>= bSelectedFrame;
+               bGotIsSelectedFrame = sal_True;
             }
             pValue++;
         }

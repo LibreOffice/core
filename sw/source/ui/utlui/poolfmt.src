@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.src,v $
- * $Revision: 1.50 $
+ * $Revision: 1.50.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,6 @@
  // -----------------
 String STR_POOLCHR_FOOTNOTE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußnotenzeichen : Fu˜notenzeichen */
     Text [ en-US ] = "Footnote Characters" ;
 };
 String STR_POOLCHR_PAGENO
@@ -55,7 +54,6 @@ String STR_POOLCHR_NUM_LEVEL
 };
 String STR_POOLCHR_BUL_LEVEL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählungszeichen : Aufzõhlungszeichen */
     Text [ en-US ] = "Bullets" ;
 };
 String STR_POOLCHR_INET_NORMAL
@@ -64,8 +62,6 @@ String STR_POOLCHR_INET_NORMAL
 };
 String STR_POOLCHR_INET_VISIT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Besuchter Internet Link : besuchter Internet Link */
-    /* ### ACHTUNG: Neuer Text in Resource? Besuchter Internet Link : besuchter Internet Link */
     Text [ en-US ] = "Visited Internet Link" ;
 };
 String STR_POOLCHR_JUMPEDIT
@@ -79,6 +75,10 @@ String STR_POOLCHR_TOXJUMP
 String STR_POOLCHR_ENDNOTE
 {
     Text [ en-US ] = "Endnote Characters" ;
+};
+String STR_POOLPAGE_LANDSCAPE
+{
+   Text [ en-US ] = "Landscape" ;
 };
 String STR_POOLCHR_LINENUM
 {
@@ -173,27 +173,22 @@ String STR_POOLCOLL_STANDARD
 };
 String STR_POOLCOLL_TEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper : Textk÷rper */
     Text [ en-US ] = "Text body" ;
 };
 String STR_POOLCOLL_TEXT_IDENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper Einzug : Textk÷rper Einzug */
     Text [ en-US ] = "First line indent" ;
 };
 String STR_POOLCOLL_TEXT_NEGIDENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper Einzug negativ : Textk÷rper Einzug negativ */
     Text [ en-US ] = "Hanging indent" ;
 };
 String STR_POOLCOLL_TEXT_MOVE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper Einrückung : Textk÷rper Einr³ckung */
     Text [ en-US ] = "Text body indent" ;
 };
 String STR_POOLCOLL_GREETING
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Grußformel : Gru˜formel */
     Text [ en-US ] = "Complimentary close" ;
 };
 String STR_POOLCOLL_SIGNATURE
@@ -202,7 +197,6 @@ String STR_POOLCOLL_SIGNATURE
 };
 String STR_POOLCOLL_HEADLINE_BASE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
     Text [ en-US ] = "Heading" ;
 };
 String STR_POOLCOLL_NUMBUL_BASE
@@ -215,7 +209,6 @@ String STR_POOLCOLL_REGISTER_BASE
 };
 String STR_POOLCOLL_CONFRONTATION
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Gegenüberstellung : Gegen³berstellung */
     Text [ en-US ] = "List Indent" ;
 };
 String STR_POOLCOLL_MARGINAL
@@ -224,52 +217,42 @@ String STR_POOLCOLL_MARGINAL
 };
 String STR_POOLCOLL_HEADLINE1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 1 : šberschrift 1 */
     Text [ en-US ] = "Heading 1" ;
 };
 String STR_POOLCOLL_HEADLINE2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 2 : šberschrift 2 */
     Text [ en-US ] = "Heading 2" ;
 };
 String STR_POOLCOLL_HEADLINE3
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 3 : šberschrift 3 */
     Text [ en-US ] = "Heading 3" ;
 };
 String STR_POOLCOLL_HEADLINE4
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 4 : šberschrift 4 */
     Text [ en-US ] = "Heading 4" ;
 };
 String STR_POOLCOLL_HEADLINE5
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 5 : šberschrift 5 */
     Text [ en-US ] = "Heading 5" ;
 };
 String STR_POOLCOLL_HEADLINE6
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 5 : šberschrift 5 */
     Text [ en-US ] = "Heading 6" ;
 };
 String STR_POOLCOLL_HEADLINE7
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 7 : šberschrift 7 */
     Text [ en-US ] = "Heading 7" ;
 };
 String STR_POOLCOLL_HEADLINE8
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 8 : šberschrift 8 */
     Text [ en-US ] = "Heading 8" ;
 };
 String STR_POOLCOLL_HEADLINE9
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 9 : šberschrift 9 */
     Text [ en-US ] = "Heading 9" ;
 };
 String STR_POOLCOLL_HEADLINE10
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift 10 : šberschrift 10 */
     Text [ en-US ] = "Heading 10" ;
 };
 String STR_POOLCOLL_NUM_LEVEL1S
@@ -354,102 +337,82 @@ String STR_POOLCOLL_NUM_NONUM5
 };
 String STR_POOLCOLL_BUL_LEVEL1S
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 Anfang : Aufzõhlung 1 Anfang */
     Text [ en-US ] = "List 1 Start" ;
 };
 String STR_POOLCOLL_BUL_LEVEL1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 : Aufzõhlung 1 */
     Text [ en-US ] = "List 1" ;
 };
 String STR_POOLCOLL_BUL_LEVEL1E
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 Ende : Aufzõhlung 1 Ende */
     Text [ en-US ] = "List 1 End" ;
 };
 String STR_POOLCOLL_BUL_NONUM1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 Fortsetzung : Aufzõhlung 1 Fortsetzung */
     Text [ en-US ] = "List 1 Cont." ;
 };
 String STR_POOLCOLL_BUL_LEVEL2S
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 2 Anfang : Aufzõhlung 2 Anfang */
     Text [ en-US ] = "List 2 Start" ;
 };
 String STR_POOLCOLL_BUL_LEVEL2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 2 : Aufzõhlung 2 */
     Text [ en-US ] = "List 2" ;
 };
 String STR_POOLCOLL_BUL_LEVEL2E
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 2 Ende : Aufzõhlung 2 Ende */
     Text [ en-US ] = "List 2 End" ;
 };
 String STR_POOLCOLL_BUL_NONUM2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 2 Fortsetzung : Aufzõhlung 2 Fortsetzung */
     Text [ en-US ] = "List 2 Cont." ;
 };
 String STR_POOLCOLL_BUL_LEVEL3S
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 3 Anfang : Aufzõhlung 3 Anfang */
     Text [ en-US ] = "List 3 Start" ;
 };
 String STR_POOLCOLL_BUL_LEVEL3
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 3 : Aufzõhlung 3 */
     Text [ en-US ] = "List 3" ;
 };
 String STR_POOLCOLL_BUL_LEVEL3E
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 3 Ende : Aufzõhlung 3 Ende */
     Text [ en-US ] = "List 3 End" ;
 };
 String STR_POOLCOLL_BUL_NONUM3
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 3 Fortsetzung : Aufzõhlung 3 Fortsetzung */
     Text [ en-US ] = "List 3 Cont." ;
 };
 String STR_POOLCOLL_BUL_LEVEL4S
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 4 Anfang : Aufzõhlung 4 Anfang */
     Text [ en-US ] = "List 4 Start" ;
 };
 String STR_POOLCOLL_BUL_LEVEL4
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 4 : Aufzõhlung 4 */
     Text [ en-US ] = "List 4" ;
 };
 String STR_POOLCOLL_BUL_LEVEL4E
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 4 Ende : Aufzõhlung 4 Ende */
     Text [ en-US ] = "List 4 End" ;
 };
 String STR_POOLCOLL_BUL_NONUM4
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 4 Fortsetzung : Aufzõhlung 4 Fortsetzung */
     Text [ en-US ] = "List 4 Cont." ;
 };
 String STR_POOLCOLL_BUL_LEVEL5S
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 5 Anfang : Aufzõhlung 5 Anfang */
     Text [ en-US ] = "List 5 Start" ;
 };
 String STR_POOLCOLL_BUL_LEVEL5
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 5 : Aufzõhlung 5 */
     Text [ en-US ] = "List 5" ;
 };
 String STR_POOLCOLL_BUL_LEVEL5E
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 5 Ende : Aufzõhlung 5 Ende */
     Text [ en-US ] = "List 5 End" ;
 };
 String STR_POOLCOLL_BUL_NONUM5
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 5 Fortsetzung : Aufzõhlung 5 Fortsetzung */
     Text [ en-US ] = "List 5 Cont." ;
 };
 String STR_POOLCOLL_HEADER
@@ -466,17 +429,14 @@ String STR_POOLCOLL_HEADERR
 };
 String STR_POOLCOLL_FOOTER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
     Text [ en-US ] = "Footer" ;
 };
 String STR_POOLCOLL_FOOTERL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile links : Fu˜zeile links */
     Text [ en-US ] = "Footer left" ;
 };
 String STR_POOLCOLL_FOOTERR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile rechts : Fu˜zeile rechts */
     Text [ en-US ] = "Footer right" ;
 };
 String STR_POOLCOLL_TABLE
@@ -485,7 +445,6 @@ String STR_POOLCOLL_TABLE
 };
 String STR_POOLCOLL_TABLE_HDLN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabellen Überschrift : Tabellen šberschrift */
     Text [ en-US ] = "Table Heading" ;
 };
 String STR_POOLCOLL_FRAME
@@ -494,7 +453,6 @@ String STR_POOLCOLL_FRAME
 };
 String STR_POOLCOLL_FOOTNOTE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußnote : Fu˜note */
     Text [ en-US ] = "Footnote" ;
 };
 String STR_POOLCOLL_ENDNOTE
@@ -523,7 +481,6 @@ String STR_POOLCOLL_LABEL_DRAWING
 };
 String STR_POOLCOLL_JAKETADRESS
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Empfänger : Empfõnger */
     Text [ en-US ] = "Addressee" ;
 };
 String STR_POOLCOLL_SENDADRESS
@@ -532,7 +489,6 @@ String STR_POOLCOLL_SENDADRESS
 };
 String STR_POOLCOLL_TOX_IDXH
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Stichwortverzeichnis Überschrift : Stichwortverzeichnis šberschrift */
     Text [ en-US ] = "Index Heading" ;
 };
 String STR_POOLCOLL_TOX_IDX1
@@ -553,7 +509,6 @@ String STR_POOLCOLL_TOX_IDXBREAK
 };
 String STR_POOLCOLL_TOX_CNTNTH
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Inhaltsverzeichnis Überschrift : Inhaltsverzeichnis šberschrift */
     Text [ en-US ] = "Contents Heading" ;
 };
 String STR_POOLCOLL_TOX_CNTNT1
@@ -598,7 +553,6 @@ String STR_POOLCOLL_TOX_CNTNT10
 };
 String STR_POOLCOLL_TOX_USERH
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Benutzerverzeichnis Überschrift : Benutzerverzeichnis šberschrift */
     Text [ en-US ] = "User Index Heading" ;
 };
 String STR_POOLCOLL_TOX_USER1
@@ -764,27 +718,22 @@ String STR_POOLNUMRULE_NUM5
 };
 String STR_POOLNUMRULE_BUL1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 : Aufzõhlung 1 */
     Text [ en-US ] = "List 1" ;
 };
 String STR_POOLNUMRULE_BUL2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 : Aufzõhlung 1 */
     Text [ en-US ] = "List 2" ;
 };
 String STR_POOLNUMRULE_BUL3
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 : Aufzõhlung 1 */
     Text [ en-US ] = "List 3" ;
 };
 String STR_POOLNUMRULE_BUL4
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 1 : Aufzõhlung 4 */
     Text [ en-US ] = "List 4" ;
 };
 String STR_POOLNUMRULE_BUL5
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Aufzählung 5 : Aufzõhlung 5 */
     Text [ en-US ] = "List 5" ;
 };
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoobj.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.111.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -764,7 +764,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
     }
     if(!pRet)
     {
-        for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_ENDNOTE; ++i)
+        for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
         {
             const String aFmtName(SW_RES(i));
             if(aFmtName == rName)

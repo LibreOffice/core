@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfnote.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -268,7 +268,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
         // Seite
-    for( i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_ENDNOTE; ++i )
+    for( i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_LANDSCAPE; ++i )
         aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
     USHORT nCount = pSh->GetPageDescCnt();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,6 +256,7 @@
 #define STR_POOLPAGE_HTML               (RC_POOLPAGEDESC_BEGIN+  6)
 #define STR_POOLPAGE_FOOTNOTE           (RC_POOLPAGEDESC_BEGIN+  7)
 #define STR_POOLPAGE_ENDNOTE            (RC_POOLPAGEDESC_BEGIN+  8)
+#define STR_POOLPAGE_LANDSCAPE                  (RC_POOLPAGEDESC_BEGIN+  9)
 
 //-----------------
 // Numbering styles

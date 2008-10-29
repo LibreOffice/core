@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: break.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,7 +207,10 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
-
+    //add landscape page
+    if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
+                                    SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFmtName )))
+            ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
     CheckEnable();
     aPageNumEdit.SetText( aEmptyStr );
     FreeResource();
