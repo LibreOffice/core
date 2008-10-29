@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include "utility.hxx"
+#include <salhelper/simplereferenceobject.hxx>
 #include <vos/ref.hxx>
 
 namespace configmgr
@@ -49,15 +50,11 @@ namespace configmgr
        the new options or important options etc.
     */
 
-    class OOptions : public configmgr::SimpleReferenceObject
+    class OOptions : public salhelper::SimpleReferenceObject
     {
         RequestOptions  m_aRequestOptions;  // current options to use
 
     public:
-        typedef RequestOptions::Locale Locale;
-        typedef RequestOptions::LocaleString LocaleString;
-        typedef RequestOptions::Entity Entity;
-
         OOptions()
         : m_aRequestOptions()
         {}
@@ -69,23 +66,23 @@ namespace configmgr
         }
 
         OOptions(const OOptions& _aOtherOptions)
-        : configmgr::SimpleReferenceObject()
+        : SimpleReferenceObject()
         , m_aRequestOptions(_aOtherOptions.m_aRequestOptions)
         {
         }
 
         bool isForSessionUser()     const { return ! m_aRequestOptions.hasEntity(); }
 
-        LocaleString    getLocale() const { return m_aRequestOptions.getLocale(); }
-        Entity          getUser()   const { return m_aRequestOptions.getEntity(); }
+        rtl::OUString    getLocale() const { return m_aRequestOptions.getLocale(); }
+        rtl::OUString          getUser()   const { return m_aRequestOptions.getEntity(); }
 
         RequestOptions const & getRequestOptions() const
         { return m_aRequestOptions; }
 
-        void setUser(const Entity & _rUser)
+        void setUser(const rtl::OUString & _rUser)
         { m_aRequestOptions.setEntity(_rUser); }
 
-        void setLocale(const Locale & _rLocale)
+        void setLocale(const com::sun::star::lang::Locale & _rLocale)
         { m_aRequestOptions.setLocale(_rLocale); }
 
         void setMultiLocaleMode()
@@ -94,12 +91,11 @@ namespace configmgr
         void enableAsync(bool _bEnable)
         { m_aRequestOptions.enableAsync(_bEnable); }
     };
-    typedef vos::ORef<OOptions> OptionsRef;
 
     struct ltOptions
     {
         lessRequestOptions ltData;
-        bool operator()(OptionsRef const &o1, OptionsRef const &o2) const
+        bool operator()(vos::ORef<OOptions> const &o1, vos::ORef<OOptions> const &o2) const
         {
             return ltData(o1->getRequestOptions(),o2->getRequestOptions());
         }

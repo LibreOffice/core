@@ -53,7 +53,6 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace backenduno = ::com::sun::star::configuration::backend;
@@ -66,10 +65,8 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > const & CreationArg;
-
             explicit
-            UpdateService(CreationArg _xContext);
+            UpdateService(uno::Reference< uno::XComponentContext > const & _xContext);
 
             // XInitialization
             virtual void SAL_CALL
@@ -90,20 +87,17 @@ namespace configmgr
                     throw (uno::RuntimeException);
 
         protected:
-            typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
-            typedef uno::Reference< backenduno::XLayer >            Layer;
-
-            ServiceFactory getServiceFactory() const
+            uno::Reference< lang::XMultiServiceFactory > getServiceFactory() const
             { return m_xServiceFactory; }
 
             void  checkSourceLayer() SAL_THROW( (lang::IllegalAccessException) )
             { validateSourceLayerAndCheckNotEmpty(); }
 
-            Layer getSourceLayer()   SAL_THROW( (lang::IllegalAccessException) );
+            uno::Reference< backenduno::XLayer > getSourceLayer()   SAL_THROW( (lang::IllegalAccessException) );
 
-            void writeUpdatedLayer(Layer const & _xLayer);
+            void writeUpdatedLayer(uno::Reference< backenduno::XLayer > const & _xLayer);
 
-            virtual sal_Bool setImplementationProperty(OUString const & aName, uno::Any const & aValue);
+            virtual sal_Bool setImplementationProperty(rtl::OUString const & aName, uno::Any const & aValue);
 
             void raiseIllegalAccessException(sal_Char const * pMsg)
                 SAL_THROW( (lang::IllegalAccessException) );
@@ -112,11 +106,9 @@ namespace configmgr
             bool validateSourceLayerAndCheckNotEmpty() SAL_THROW( (lang::IllegalAccessException) );
 
         private:
-            typedef uno::Reference< backenduno::XLayerHandler >     LayerWriter;
-
-            ServiceFactory  m_xServiceFactory;
-            Layer           m_xSourceLayer;
-            LayerWriter     m_xLayerWriter;
+            uno::Reference< lang::XMultiServiceFactory >  m_xServiceFactory;
+            uno::Reference< backenduno::XLayer >           m_xSourceLayer;
+            uno::Reference< backenduno::XLayerHandler >     m_xLayerWriter;
             enum { merge, truncate, protect } m_aSourceMode;
 
             static ServiceInfoHelper getServiceInfo();

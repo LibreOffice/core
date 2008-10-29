@@ -90,7 +90,7 @@ namespace configmgr
 
         /**
            Convert Component name to Path name
-           @param aComponent    Component Name
+           @param aComponent    Component name
            */
         rtl::OUString componentToPath(const rtl::OUString& aComponent);
 

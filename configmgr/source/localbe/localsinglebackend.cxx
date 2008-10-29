@@ -57,7 +57,7 @@ namespace configmgr { namespace localbe {
 
 LocalSingleBackend::LocalSingleBackend(
         const uno::Reference<uno::XComponentContext>& xContext)
-        : SingleBackendBase(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
+        : cppu::WeakComponentImplHelper5<backend::XSchemaSupplier, backend::XMultiLayerStratum, backend::XBackendEntities, lang::XInitialization, lang::XServiceInfo>(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
 }
 //------------------------------------------------------------------------------
 
@@ -96,7 +96,7 @@ void SAL_CALL LocalSingleBackend::initialize(
 
     // Setting: schema diretory(ies)
     uno::Any const aSchemaDataSetting = context->getValueByName(kSchemaDataUrl);
-    uno::Sequence< OUString > aSchemas;
+    uno::Sequence< rtl::OUString > aSchemas;
     rtl::OUString schemas;
 
     if (aSchemaDataSetting >>= schemas)
@@ -154,7 +154,7 @@ void SAL_CALL LocalSingleBackend::initialize(
 
     // Setting: default layer(s)
     uno::Any const aDefaultDataSetting = context->getValueByName(kDefaultDataUrl);
-    uno::Sequence< OUString > aDefaults;
+    uno::Sequence< rtl::OUString > aDefaults;
     rtl::OUString defaults;
 
     if (aDefaultDataSetting >>= defaults)
@@ -248,7 +248,7 @@ void SAL_CALL LocalSingleBackend::initialize(
 
     if (mUserDataUrl.getLength() == 0)
     {
-        mUserDataUrl = OUString::createFromAscii("*");
+        mUserDataUrl = rtl::OUString::createFromAscii("*");
         OSL_ASSERT(!isValidFileURL(mUserDataUrl));
     }
 }
@@ -321,7 +321,7 @@ bool layerIdToUrl( const rtl::OUString& aLayerId,
         aIndex   = aLayerId.copy(0, sep).toInt32() ;
         if (0 == aIndex || !isValidEntity(aIndex)) return false;
 
-        OSL_ENSURE( aLayerId.copy(0, sep).equals(OUString::valueOf(aIndex)),
+        OSL_ENSURE( aLayerId.copy(0, sep).equals(rtl::OUString::valueOf(aIndex)),
                     "Invalid layer id was not detected");
     }
     aFileUrl = aLayerId.copy(sep + 1);
@@ -359,12 +359,12 @@ sal_Int32 LocalSingleBackend::findEntity(const rtl::OUString& aEntity)
         return k_UserLayerEntity;
     }
 
-    OUString sNormalizedEntityUrl(aEntity);
+    rtl::OUString sNormalizedEntityUrl(aEntity);
     normalizeURL(sNormalizedEntityUrl,*this);
 
     for (sal_Int32 ix = 0; ix < mDefaultDataUrls.getLength(); ++ix)
     {
-        OUString sNormalizedDefaultUrl(mDefaultDataUrls[ix]);
+        rtl::OUString sNormalizedDefaultUrl(mDefaultDataUrls[ix]);
         OSL_VERIFY(normalizeURL(sNormalizedDefaultUrl,*this,true));
 
         if (sNormalizedEntityUrl.equals(sNormalizedDefaultUrl))
@@ -375,7 +375,7 @@ sal_Int32 LocalSingleBackend::findEntity(const rtl::OUString& aEntity)
     }
 
     //Try normalized version of mUserDataUrl
-    OUString sNormalizedUserUrl(mUserDataUrl);
+    rtl::OUString sNormalizedUserUrl(mUserDataUrl);
 
     if (normalizeURL(sNormalizedUserUrl,*this,true))
     {
@@ -447,28 +447,28 @@ rtl::OUString SAL_CALL LocalSingleBackend::getUpdateLayerId(
 }
 //------------------------------------------------------------------------------
 
-OUString SAL_CALL LocalSingleBackend::getOwnerEntity()
+rtl::OUString SAL_CALL LocalSingleBackend::getOwnerEntity()
     throw (uno::RuntimeException)
 {
     return mUserDataUrl ;
 }
 //------------------------------------------------------------------------------
 
-OUString SAL_CALL LocalSingleBackend::getAdminEntity()
+rtl::OUString SAL_CALL LocalSingleBackend::getAdminEntity()
     throw (uno::RuntimeException)
 {
     return mDefaultDataUrls.getLength() > 0 ? mDefaultDataUrls[0] : mUserDataUrl;
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LocalSingleBackend::supportsEntity( const OUString& aEntity )
+sal_Bool SAL_CALL LocalSingleBackend::supportsEntity( const rtl::OUString& aEntity )
     throw (backend::BackendAccessException, uno::RuntimeException)
 {
     return isValidEntity(findEntity(aEntity)) ;
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LocalSingleBackend::isEqualEntity(const OUString& aEntity, const OUString& aOtherEntity)
+sal_Bool SAL_CALL LocalSingleBackend::isEqualEntity(const rtl::OUString& aEntity, const rtl::OUString& aOtherEntity)
     throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (aEntity.getLength() == 0)
@@ -485,10 +485,10 @@ sal_Bool SAL_CALL LocalSingleBackend::isEqualEntity(const OUString& aEntity, con
 
         throw lang::IllegalArgumentException(sMsg, *this, 2);
     }
-    OUString aNormalizedEntity(aEntity);
+    rtl::OUString aNormalizedEntity(aEntity);
     normalizeURL(aNormalizedEntity,*this);
 
-    OUString aNormalizedOther(aOtherEntity);
+    rtl::OUString aNormalizedOther(aOtherEntity);
     normalizeURL(aNormalizedOther,*this);
 
     return aNormalizedEntity == aNormalizedOther;
@@ -592,7 +592,7 @@ uno::Reference<backend::XSchema> SAL_CALL
     rtl::OUString subPath = componentToPath(aComponent) ;
 
     osl::File * schemaFile = NULL;
-    OUString errorMessage;
+    rtl::OUString errorMessage;
     bool bInsufficientAccess = false;
     for (sal_Int32 ix = 0; ix < mSchemaDataUrls.getLength(); ++ix)
     {
@@ -600,7 +600,7 @@ uno::Reference<backend::XSchema> SAL_CALL
 
         schemaUrl.append(subPath).append(kSchemaSuffix) ;
 
-        OUString const aFileUrl = schemaUrl.makeStringAndClear();
+        rtl::OUString const aFileUrl = schemaUrl.makeStringAndClear();
 
         std::auto_ptr<osl::File> checkFile( new osl::File(aFileUrl) );
         osl::File::RC rc = checkFile->open(OpenFlag_Read) ;
@@ -694,7 +694,7 @@ bool LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
                                              rtl::OUString& aSubLayerUrl)
 {
     OSL_ASSERT(isValidEntity(aLayerIndex));
-    OUString aLayerBaseUrl = (aLayerIndex == k_UserLayerEntity) ? mUserDataUrl : mDefaultDataUrls [entityToIndex(aLayerIndex)] ;
+    rtl::OUString aLayerBaseUrl = (aLayerIndex == k_UserLayerEntity) ? mUserDataUrl : mDefaultDataUrls [entityToIndex(aLayerIndex)] ;
 
     return impl_getLayerSubDirectories(aLayerBaseUrl,aLayerUrl,aSubLayerUrl);
 }
@@ -761,14 +761,14 @@ static const sal_Char * const kBackendService =
 static const sal_Char * const kLocalService =
                 "com.sun.star.configuration.backend.LocalSingleBackend" ;
 
-static AsciiServiceName kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
+static sal_Char const * kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
 static const ServiceImplementationInfo kServiceInfo = { kImplementation, kServiceNames, kServiceNames + 2 } ;
 
 const ServiceRegistrationInfo *getLocalBackendServiceInfo()
 { return getRegistrationInfo(&kServiceInfo) ; }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalBackend(const CreationContext& xContext) {
+instantiateLocalBackend(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalSingleBackend(xContext) ;
 }
 

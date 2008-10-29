@@ -42,7 +42,6 @@ namespace configmgr
     namespace backend
     {
         // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
         namespace backenduno    = ::com::sun::star::configuration::backend;
@@ -80,15 +79,15 @@ namespace configmgr
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
+                addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+                addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
@@ -96,19 +95,19 @@ namespace configmgr
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                dropNode( const OUString& aName )
+                dropNode( const rtl::OUString& aName )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+                overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+                addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+                addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
@@ -120,7 +119,7 @@ namespace configmgr
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+                setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
                     throw (backenduno::MalformedDataException, uno::RuntimeException);
 
         private:

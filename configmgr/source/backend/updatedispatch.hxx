@@ -34,6 +34,7 @@
 #include "change.hxx"
 #include "nodevisitor.hxx"
 #include "utility.hxx"
+#include <boost/utility.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
@@ -56,11 +57,10 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
 
-        class UpdateDispatcher : ChangeTreeAction, data::SetVisitor, Noncopyable
+        class UpdateDispatcher: private boost::noncopyable, private ChangeTreeAction, private data::SetVisitor
         {
         public:
-            typedef uno::Reference< backenduno::XUpdateHandler > UpdateHandler;
-            UpdateDispatcher(UpdateHandler const & _xUpdateHandler, OUString const & _aLocale);
+            UpdateDispatcher(uno::Reference< backenduno::XUpdateHandler > const & _xUpdateHandler, rtl::OUString const & _aLocale);
             ~UpdateDispatcher();
 
             void dispatchUpdate(configuration::AbsolutePath const & _aRootPath, SubtreeChange const& _anUpdate);
@@ -77,20 +77,20 @@ namespace configmgr
             virtual void handle(RemoveNode const& aRemoveNode);
             virtual void handle(SubtreeChange const& aSubtree) ;
 
-            virtual Result handle(data::ValueNodeAccess const& _aNode);
-            virtual Result handle(data::GroupNodeAccess const& _aNode);
-            virtual Result handle(data::SetNodeAccess const& _aNode);
-            virtual Result handle(data::TreeAccessor const& _aElement);
+            virtual bool handle(sharable::ValueNode * node);
+            virtual bool handle(sharable::GroupNode * node);
+            virtual bool handle(sharable::SetNode * node);
+            virtual bool handle(sharable::TreeFragment * tree);
         private:
             sal_Int16 getUpdateAttributes(node::Attributes const & _aAttributes, bool bAdded);
             sal_Int16 getUpdateAttributeMask(node::Attributes const & _aAttributes);
 
-            bool testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName);
+            bool testReplacedAndGetName(sharable::Node * node, rtl::OUString & _aName);
         private:
             configuration::AbsolutePath const * m_pContextPath;
-            UpdateHandler   m_xUpdateHandler;
-            OUString        m_aLocale;
-            OUString        m_aElementName;
+            uno::Reference< backenduno::XUpdateHandler >   m_xUpdateHandler;
+            rtl::OUString        m_aLocale;
+            rtl::OUString        m_aElementName;
             bool    m_bInValueSet;
             bool    m_bInLocalizedValues;
         };

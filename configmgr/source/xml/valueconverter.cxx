@@ -41,19 +41,14 @@ inline sal_Bool rtl_ascii_isWhitespace( sal_Unicode ch )
 
 namespace configmgr
 {
-    using rtl::OUString;
-    using namespace com::sun::star::uno;
-    using namespace std;
-// -----------------------------------------------------------------------------
-    typedef ValueConverter::StringList StringList;
 // -----------------------------------------------------------------------------
 static
-void throwConversionError(sal_Char const* pErrorMsg) CFG_THROW1( script::CannotConvertException )
+void throwConversionError(sal_Char const* pErrorMsg) SAL_THROW((script::CannotConvertException))
 {
     OSL_ENSURE(false, pErrorMsg);
 
     script::CannotConvertException error;
-    error.Message = OUString::createFromAscii(pErrorMsg);
+    error.Message = rtl::OUString::createFromAscii(pErrorMsg);
     throw error;
 }
 // -----------------------------------------------------------------------------
@@ -67,7 +62,7 @@ bool charInRange(Char ch, char from, char to) throw()
 // -----------------------------------------------------------------------------
 static
 inline
-unsigned makeHexNibble(unsigned char ch) CFG_THROW1 ( script::CannotConvertException)
+unsigned makeHexNibble(unsigned char ch) SAL_THROW((script::CannotConvertException))
 {
     unsigned nRet = 0;
 
@@ -85,7 +80,7 @@ unsigned makeHexNibble(unsigned char ch) CFG_THROW1 ( script::CannotConvertExcep
 // -----------------------------------------------------------------------------
 static
 inline
-unsigned readHexNibble(sal_Unicode ch) CFG_THROW1 ( script::CannotConvertException)
+unsigned readHexNibble(sal_Unicode ch) SAL_THROW((script::CannotConvertException))
 {
     if (!charInRange(ch, 0, 127)) throwConversionError("Non-Ascii Character in binary value");
 
@@ -95,7 +90,7 @@ unsigned readHexNibble(sal_Unicode ch) CFG_THROW1 ( script::CannotConvertExcepti
 // -----------------------------------------------------------------------------
 static
 inline
-unsigned int readHexByte(sal_Unicode const*& pStr) CFG_THROW1 ( script::CannotConvertException)
+unsigned int readHexByte(sal_Unicode const*& pStr) SAL_THROW((script::CannotConvertException))
 {
     register unsigned int nHigh = readHexNibble(*pStr++);
     register unsigned int nLow =  readHexNibble(*pStr++);
@@ -104,8 +99,8 @@ unsigned int readHexByte(sal_Unicode const*& pStr) CFG_THROW1 ( script::CannotCo
 
 // -----------------------------------------------------------------------------
 static
-void parseHexBinary(OUString const& aHexString_, uno::Sequence<sal_Int8>& rBinarySeq_)
-        CFG_UNO_THROW1 ( script::CannotConvertException )
+void parseHexBinary(rtl::OUString const& aHexString_, uno::Sequence<sal_Int8>& rBinarySeq_)
+        SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     // PRE: aBinaryString with HexCode
     // POST: rBinarySeq with the to Hex converted String
@@ -127,8 +122,8 @@ void parseHexBinary(OUString const& aHexString_, uno::Sequence<sal_Int8>& rBinar
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-uno::Sequence<sal_Int8> ValueConverter::parseBinary(OUString const& aBinaryString_) const
-        CFG_UNO_THROW1 ( script::CannotConvertException)
+uno::Sequence<sal_Int8> ValueConverter::parseBinary(rtl::OUString const& aBinaryString_) const
+        SAL_THROW((script::CannotConvertException, com::sun::star::uno::RuntimeException))
 {
     uno::Sequence<sal_Int8> aResultSeq;
 
@@ -153,8 +148,8 @@ bool ValueConverter::isList() const
 }
 
 // -----------------------------------------------------------------------------
-uno::Any ValueConverter::convertToAny(OUString const& aContent) const
-        CFG_UNO_THROW1( script::CannotConvertException)
+uno::Any ValueConverter::convertToAny(rtl::OUString const& aContent) const
+        SAL_THROW((script::CannotConvertException, com::sun::star::uno::RuntimeException))
 {
     uno::Any aValue;
 
@@ -166,7 +161,7 @@ uno::Any ValueConverter::convertToAny(OUString const& aContent) const
 
     else if (this->isList())
     {
-        StringList aContentList;
+        std::vector< rtl::OUString > aContentList;
         splitListData(aContent, aContentList);
         convertListToAny(aContentList, aValue);
     }
@@ -180,8 +175,8 @@ uno::Any ValueConverter::convertToAny(OUString const& aContent) const
 }
 
 // -----------------------------------------------------------------------------
-bool ValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rValue) const
-        CFG_UNO_THROW1 ( script::CannotConvertException )
+bool ValueConverter::convertScalarToAny(rtl::OUString const& aContent, uno::Any& rValue) const
+        SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     OSL_PRECOND(!this->isNull(),"ValueConverter::convertScalarToAny - check for NULL before calling");
     OSL_ENSURE(m_aType.getTypeClass() != uno::TypeClass_ANY,"'Any' values must be NULL");
@@ -189,7 +184,7 @@ bool ValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVal
     // check for Binary
     if (m_aType == getBinaryType())
     {
-        Sequence<sal_Int8> aBinarySeq = parseBinary(aContent);
+        com::sun::star::uno::Sequence<sal_Int8> aBinarySeq = parseBinary(aContent);
         rValue <<= aBinarySeq;
     }
 
@@ -203,8 +198,8 @@ bool ValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVal
 
 // -----------------------------------------------------------------------------
 template <class T>
-bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rConverter)
-        CFG_UNO_THROW1 ( script::CannotConvertException )
+bool convertListToSequence(std::vector< rtl::OUString > const& aStringList, uno::Sequence< T >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rConverter)
+        SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     OSL_ASSERT(aElementTypeClass == ::getCppuType(static_cast<T const*>(0)).getTypeClass());
 
@@ -212,7 +207,7 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rS
 
     sal_uInt32 nPos = 0;
 
-    for(StringList::const_iterator it = aStringList.begin();
+    for(std::vector< rtl::OUString >::const_iterator it = aStringList.begin();
         it != aStringList.end();
         ++it)
     {
@@ -243,7 +238,7 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rS
 
 static
 inline
-void stringListToSequence(uno::Sequence< OUString > & rSequence, StringList const & aStringList)
+void stringListToSequence(uno::Sequence< rtl::OUString > & rSequence, std::vector< rtl::OUString > const & aStringList)
 {
     rSequence .realloc( aStringList.size() );
 
@@ -253,32 +248,32 @@ void stringListToSequence(uno::Sequence< OUString > & rSequence, StringList cons
 
 static
 inline
-StringList sequenceToStringList(uno::Sequence< OUString > const & aSequence)
+std::vector< rtl::OUString > sequenceToStringList(uno::Sequence< rtl::OUString > const & aSequence)
 {
-    OUString const * const pBegin = aSequence.getConstArray();
-    OUString const * const pEnd = pBegin + aSequence.getLength();
+    rtl::OUString const * const pBegin = aSequence.getConstArray();
+    rtl::OUString const * const pEnd = pBegin + aSequence.getLength();
 
-    return StringList(pBegin,pEnd);
+    return std::vector< rtl::OUString >(pBegin,pEnd);
 }
 // -----------------------------------------------------------------------------
 
-uno::Sequence< OUString > ValueConverter::splitStringList(OUString const& aContent) const
+uno::Sequence< rtl::OUString > ValueConverter::splitStringList(rtl::OUString const& aContent) const
 {
-    StringList aList;
+    std::vector< rtl::OUString > aList;
     splitListData(aContent, aList);
 
-    uno::Sequence< OUString > aResult;
+    uno::Sequence< rtl::OUString > aResult;
     stringListToSequence(aResult,aList);
 
     return aResult;
 }
 // -----------------------------------------------------------------------------
 
-uno::Any ValueConverter::convertListToAny(uno::Sequence< OUString > const& aContentList) const
-    CFG_UNO_THROW1( script::CannotConvertException )
+uno::Any ValueConverter::convertListToAny(uno::Sequence< rtl::OUString > const& aContentList) const
+    SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     uno::Any aResult;
-    StringList const aStringList = sequenceToStringList(aContentList);
+    std::vector< rtl::OUString > const aStringList = sequenceToStringList(aContentList);
     convertListToAny(aStringList,aResult);
     return aResult;
 }
@@ -286,8 +281,8 @@ uno::Any ValueConverter::convertListToAny(uno::Sequence< OUString > const& aCont
 // special overload for binary sequence
 
 // template<> // use an explicit specialization
-bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Sequence<sal_Int8> >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rParser )
-        CFG_UNO_THROW1 ( script::CannotConvertException )
+bool convertListToSequence(std::vector< rtl::OUString > const& aStringList, uno::Sequence< uno::Sequence<sal_Int8> >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rParser )
+        SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     { (void)aElementTypeClass; }
     OSL_ASSERT(aElementTypeClass == uno::TypeClass_SEQUENCE);
@@ -296,7 +291,7 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Se
 
     sal_uInt32 nPos = 0;
 
-    for(StringList::const_iterator it = aStringList.begin();
+    for(std::vector< rtl::OUString >::const_iterator it = aStringList.begin();
         it != aStringList.end();
         ++it)
     {
@@ -309,8 +304,8 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Se
 // special overload for string sequence
 
 // template<> // use an explicit specialization
-bool convertListToSequence(StringList const& aStringList, uno::Sequence< OUString >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& /*rParser*/ )
-        CFG_UNO_THROW1 ( script::CannotConvertException )
+bool convertListToSequence(std::vector< rtl::OUString > const& aStringList, uno::Sequence< rtl::OUString >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& /*rParser*/ )
+        SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     { (void)aElementTypeClass; }
     OSL_ASSERT(aElementTypeClass == uno::TypeClass_STRING);
@@ -325,13 +320,13 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< OUStrin
 #define MAYBE_EXTRACT_SEQUENCE( type ) \
     if (aElementType == ::getCppuType( (type const *)0))    \
     {                                                       \
-        Sequence< type > aSequence;                         \
+        com::sun::star::uno::Sequence< type > aSequence;                         \
         convertListToSequence(aContentList,aSequence,aElementTypeClass, *this); \
         rValue <<= aSequence;                               \
     }
 
-bool ValueConverter::convertListToAny(StringList const& aContentList, uno::Any& rValue) const
-        CFG_UNO_THROW1 ( script::CannotConvertException )
+bool ValueConverter::convertListToAny(std::vector< rtl::OUString > const& aContentList, uno::Any& rValue) const
+        SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException))
 {
     OSL_PRECOND(!this->isNull(),"ValueConverter::convertListToAny - check for NULL before calling");
     OSL_ENSURE(m_aType.getTypeClass() == uno::TypeClass_SEQUENCE,"'Any' not allowed for lists");
@@ -341,7 +336,7 @@ bool ValueConverter::convertListToAny(StringList const& aContentList, uno::Any& 
 
     OSL_ENSURE(aElementTypeClass != uno::TypeClass_ANY,"'Any' not allowed for list elements");
 
-    MAYBE_EXTRACT_SEQUENCE( OUString )
+    MAYBE_EXTRACT_SEQUENCE( rtl::OUString )
     else
     MAYBE_EXTRACT_SEQUENCE( sal_Bool )
     else
@@ -353,7 +348,7 @@ bool ValueConverter::convertListToAny(StringList const& aContentList, uno::Any& 
     else
     MAYBE_EXTRACT_SEQUENCE( double )
     else
-    MAYBE_EXTRACT_SEQUENCE( Sequence<sal_Int8> )
+    MAYBE_EXTRACT_SEQUENCE( com::sun::star::uno::Sequence<sal_Int8> )
     else
     {
         OSL_ENSURE(false, "Unknown element type in list");
@@ -374,18 +369,18 @@ namespace
         static inline bool isWhitespace(sal_Unicode ch)
         {
             // note: for definition of whitescape see also
-            //   canUseWhitespace(OUString const&)
+            //   canUseWhitespace(rtl::OUString const&)
             // in xmlformater.cxx
             // -----------------------------------------------------------------------------
             return rtl_ascii_isWhitespace(ch) ? true : false;
         }
 
-        sal_Int32 findFirstTokenStart(OUString const& sText) const CFG_NOTHROW()
+        sal_Int32 findFirstTokenStart(rtl::OUString const& sText) const SAL_THROW(())
         {
             return findNextTokenStart(sText,0);
         }
 
-        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const  CFG_NOTHROW()
+        sal_Int32 findNextTokenStart(rtl::OUString const& sText, sal_Int32 nPrevTokenEnd) const  SAL_THROW(())
         {
             sal_Int32 const nEnd = sText.getLength();
             sal_Int32 nPos = nPrevTokenEnd;
@@ -404,7 +399,7 @@ namespace
                 return NO_MORE_TOKENS;
         }
 
-        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const CFG_NOTHROW()
+        sal_Int32 findTokenEnd(rtl::OUString const& sText, sal_Int32 nTokenStart) const SAL_THROW(())
         {
             sal_Int32 const nEnd = sText.getLength();
             sal_Int32 nPos = nTokenStart;
@@ -423,18 +418,18 @@ namespace
 // -----------------------------------------------------------------------------
     struct OTokenizeBySeparator
     {
-        OUString const sSeparator;
-        OTokenizeBySeparator(OUString const& _sSeparator) CFG_NOTHROW()
+        rtl::OUString const sSeparator;
+        OTokenizeBySeparator(rtl::OUString const& _sSeparator) SAL_THROW(())
             : sSeparator(_sSeparator)
         {
             OSL_PRECOND(sSeparator.trim().getLength() > 0, "Invalid empty separator string");
         }
 
-            sal_Int32 findFirstTokenStart(OUString const& /*sText*/) const CFG_NOTHROW()
+            sal_Int32 findFirstTokenStart(rtl::OUString const& /*sText*/) const SAL_THROW(())
         {
             return 0;
         }
-        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const CFG_NOTHROW()
+        sal_Int32 findNextTokenStart(rtl::OUString const& sText, sal_Int32 nPrevTokenEnd) const SAL_THROW(())
         {
             sal_Int32 const nEnd = sText.getLength();
             sal_Int32 nPos = nPrevTokenEnd;
@@ -446,7 +441,7 @@ namespace
             else
                 return NO_MORE_TOKENS;
         }
-        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const CFG_NOTHROW()
+        sal_Int32 findTokenEnd(rtl::OUString const& sText, sal_Int32 nTokenStart) const SAL_THROW(())
         {
             sal_Int32 const nEnd = sText.getLength();
             OSL_PRECOND( 0 <= nTokenStart && nTokenStart <= nEnd ,
@@ -462,8 +457,8 @@ namespace
     };
 // -----------------------------------------------------------------------------
     template <class Tokenizer>
-    void tokenizeListData(Tokenizer const& aTokenizer, OUString const& aContent, StringList& rContentList)
-            CFG_NOTHROW( )
+    void tokenizeListData(Tokenizer const& aTokenizer, rtl::OUString const& aContent, std::vector< rtl::OUString >& rContentList)
+            SAL_THROW(())
     {
         sal_Int32 nTokenPos = aTokenizer.findFirstTokenStart(aContent);
 
@@ -482,10 +477,10 @@ namespace
 // -----------------------------------------------------------------------------
 }
 // -----------------------------------------------------------------------------
-void ValueConverter::splitListData(OUString const& aContent, StringList& rContentList) const
-    CFG_NOTHROW( )
+void ValueConverter::splitListData(rtl::OUString const& aContent, std::vector< rtl::OUString >& rContentList) const
+    SAL_THROW(())
 {
-    OUString sSeparator = m_sSeparator;
+    rtl::OUString sSeparator = m_sSeparator;
 
     bool bSeparateByWhitespace = (sSeparator.trim().getLength() == 0);
 

@@ -48,7 +48,6 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
-    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.
@@ -71,68 +70,68 @@ namespace configmgr
 
     // setting values - may all throw (PropertyVeto)Exceptions on read-only property sets
         // XPropertySet
-        void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& aPropertyName, const uno::Any& aValue )
+        void implSetPropertyValue( NodeGroupAccess& rNode, const rtl::OUString& aPropertyName, const uno::Any& aValue )
             throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
                       lang::WrappedTargetException, uno::RuntimeException);
 
          // XMultiPropertySet
-       void implSetPropertyValues( NodeGroupAccess& rNode, const uno::Sequence< OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
+       void implSetPropertyValues( NodeGroupAccess& rNode, const uno::Sequence< rtl::OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
             throw(beans::PropertyVetoException, lang::IllegalArgumentException,
                       lang::WrappedTargetException, uno::RuntimeException);
 
         // XHierarchicalPropertySet
-        void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& aPropertyName, const uno::Any& aValue )
+        void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const rtl::OUString& aPropertyName, const uno::Any& aValue )
             throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
                   lang::WrappedTargetException, uno::RuntimeException);
 
          // XMultiHierarchicalPropertySet
-       void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const uno::Sequence< OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
+       void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const uno::Sequence< rtl::OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
             throw(beans::PropertyVetoException, lang::IllegalArgumentException,
                   lang::WrappedTargetException, uno::RuntimeException);
 
     // getting values
         // XPropertySet
-        uno::Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& PropertyName )
+        uno::Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const rtl::OUString& PropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
          // XMultiPropertySet
-        uno::Sequence< uno::Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames )
+        uno::Sequence< uno::Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw(uno::RuntimeException);
 
         // XHierarchicalPropertySet
-        uno::Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString& PropertyName )
+        uno::Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const rtl::OUString& PropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
          // XMultiHierarchicalPropertySet
-        uno::Sequence< uno::Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames )
+        uno::Sequence< uno::Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw(uno::RuntimeException);
 
     // SPECIAL: firePropertiesChangeEvent
          // XMultiPropertySet
-        void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+        void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
     // XPropertyState
-        beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sPropertyName )
+        beans::PropertyState implGetPropertyState( NodeAccess& rNode, const rtl::OUString& sPropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
-        void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sPropertyName )
+        void implSetPropertyToDefault( NodeGroupAccess& rNode, const rtl::OUString& sPropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
-        uno::Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const OUString& sPropertyName )
+        uno::Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const rtl::OUString& sPropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
     // XMultiPropertyState
-        uno::Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const uno::Sequence< OUString >& aPropertyName )
+        uno::Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
-        void implSetPropertiesToDefault( NodeGroupAccess& rNode, const uno::Sequence< OUString >& aPropertyNames )
+        void implSetPropertiesToDefault( NodeGroupAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
         void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
             throw(uno::RuntimeException);
 
-        uno::Sequence< uno::Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames )
+        uno::Sequence< uno::Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
     }
 

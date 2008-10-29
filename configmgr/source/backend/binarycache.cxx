@@ -55,25 +55,19 @@ namespace configmgr
     // -----------------------------------------------------------------------------
     namespace backend
     {
-
-        using ::rtl::OUString;
-
-        const OUString aSettingName(
+        const rtl::OUString aSettingName(
                 RTL_CONSTASCII_USTRINGPARAM( CONTEXT_ITEM_PREFIX_ "CacheUrl"));
         // ---------------------------------------------------------------------------------------
-        static inline bool isValidFileURL (OUString const& _sFileURL)
+        static inline bool isValidFileURL (rtl::OUString const& _sFileURL)
         {
-            using osl::File;
-
-            OUString sSystemPath;
-            return _sFileURL.getLength() && (File::E_None == File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
+            rtl::OUString sSystemPath;
+            return _sFileURL.getLength() && (osl::File::E_None == osl::File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
         }
         // -----------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------
         static
         bool implEnsureAbsoluteURL(rtl::OUString & _rsURL) // also strips embedded dots etc.
         {
-            using osl::File;
             if (!_rsURL.getLength())
                 return false;
 
@@ -88,7 +82,7 @@ namespace configmgr
             OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
 
             rtl::OUString sAbsolute;
-            if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
+            if ( osl::File::E_None == osl::File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
             {
                 _rsURL = sAbsolute;
                 return isValidFileURL(_rsURL);
@@ -104,7 +98,7 @@ namespace configmgr
         static const sal_Unicode kPathSeparator = '/' ;
         static const char kBinarySuffix[] = ".dat" ;
 
-        OUString BinaryCache::getCacheFileURL(const OUString& aComponent) const
+        rtl::OUString BinaryCache::getCacheFileURL(const rtl::OUString& aComponent) const
         {
             rtl::OUStringBuffer retCode (mBaseURL);
             retCode.append(kPathSeparator) ;
@@ -112,7 +106,7 @@ namespace configmgr
             retCode.append(aComponent) ;
             retCode.appendAscii(RTL_CONSTASCII_STRINGPARAM(kBinarySuffix));
 
-            OUString aResult = retCode.makeStringAndClear() ;
+            rtl::OUString aResult = retCode.makeStringAndClear() ;
 
             if (isValidFileURL(aResult))
             {
@@ -121,7 +115,7 @@ namespace configmgr
             else
             {
                 OSL_ENSURE(false, "Component File URL is invalid");
-                return OUString();
+                return rtl::OUString();
             }
         }
         // -----------------------------------------------------------------------------
@@ -134,7 +128,7 @@ namespace configmgr
             //initialise the base URL
             ContextReader aReader(xContext);
 
-            OUString sCacheUrl;
+            rtl::OUString sCacheUrl;
             if (!aReader.isAdminService())
             {
                         mbCacheEnabled = (aReader.getBestContext()->getValueByName(aSettingName) >>= sCacheUrl)
@@ -162,7 +156,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void BinaryCache::setOwnerEntity(const OUString & aOwnerEntity)
+        void BinaryCache::setOwnerEntity(const rtl::OUString & aOwnerEntity)
         {
             OSL_PRECOND(mOwnerEntity.getLength() == 0, "Owner entity of cache already set");
             mOwnerEntity = aOwnerEntity;
@@ -186,12 +180,12 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
         bool BinaryCache::readComponentData(MergedComponentData & aComponentData,
-                                MultiServiceFactory const & aFactory,
-                                OUString const & aComponent,
-                                OUString const & aSchemaVersion,
-                                OUString const & aEntity,
-                                localehelper::Locale const & aRequestedLocale,
-                                localehelper::LocaleSequence & outKnownLocales,
+                                uno::Reference< lang::XMultiServiceFactory > const & aFactory,
+                                rtl::OUString const & aComponent,
+                                rtl::OUString const & aSchemaVersion,
+                                rtl::OUString const & aEntity,
+                                com::sun::star::lang::Locale const & aRequestedLocale,
+                                std::vector< com::sun::star::lang::Locale > & outKnownLocales,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
                                 sal_Int32 nNumLayers,
                                 bool bIncludeTemplates)
@@ -221,11 +215,11 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         bool BinaryCache::writeComponentData(MergedComponentData const & aComponentData,
-                                MultiServiceFactory const & aFactory,
-                                OUString const & aComponent,
-                                OUString const & aSchemaVersion,
-                                OUString const & aEntity,
-                                localehelper::LocaleSequence const & aKnownLocales,
+                                uno::Reference< lang::XMultiServiceFactory > const & aFactory,
+                                rtl::OUString const & aComponent,
+                                rtl::OUString const & aSchemaVersion,
+                                rtl::OUString const & aEntity,
+                                std::vector< com::sun::star::lang::Locale > const & aKnownLocales,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
                                 sal_Int32 nNumLayers)
         {

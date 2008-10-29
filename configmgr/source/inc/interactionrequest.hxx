@@ -159,12 +159,6 @@ void SAL_CALL InteractionContinuation< XThisContinuation >::select()
 }
 //============================================================================
 
-typedef InteractionContinuation< task::XInteractionAbort > InteractionAbort;
-typedef InteractionContinuation< task::XInteractionRetry > InteractionRetry;
-typedef InteractionContinuation< task::XInteractionApprove > InteractionApprove;
-typedef InteractionContinuation< task::XInteractionDisapprove > InteractionDisapprove;
-//============================================================================
-
 
 } // namespace apihelper
 } // namespace configmgr

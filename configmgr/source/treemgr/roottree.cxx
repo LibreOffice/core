@@ -35,7 +35,6 @@
 #include "roottree.hxx"
 #include "roottreeimpl.hxx"
 #include "viewaccess.hxx"
-#include "nodeaccess.hxx"
 #include "viewfactory.hxx"
 #include "noderef.hxx"
 #include "nodechangeinfo.hxx"
@@ -49,44 +48,44 @@ namespace configmgr
 // factory methods
 //-----------------------------------------------------------------------------
 
-RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
-                                data::NodeAccess const& _aCacheNode,
-                                TreeDepth nDepth,
+rtl::Reference< Tree > createReadOnlyTree(  AbsolutePath const& aRootPath,
+                                            sharable::Node * cacheNode,
+                                unsigned int nDepth,
                 TemplateProvider const& aTemplateProvider)
 {
-    return RootTree( new RootTreeImpl(view::createReadOnlyStrategy(),
-                      aRootPath, _aCacheNode, nDepth,
+    return new RootTree(view::createReadOnlyStrategy(),
+                      aRootPath, cacheNode, nDepth,
                       aTemplateProvider
-                      ));
+                      );
 }
 //-----------------------------------------------------------------------------
 
-RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
-                                data::NodeAccess const& _aCacheNode,
-                                TreeDepth nDepth,
+rtl::Reference< Tree > createUpdatableTree( AbsolutePath const& aRootPath,
+                                            sharable::Node * cacheNode,
+                                unsigned int nDepth,
                                 TemplateProvider const& aTemplateProvider)
 {
-    return RootTree(new RootTreeImpl(view::createDeferredChangeStrategy(),
-                      aRootPath, _aCacheNode, nDepth,
+    return new RootTree(view::createDeferredChangeStrategy(),
+                      aRootPath, cacheNode, nDepth,
                       aTemplateProvider
-                      ));
+                      );
 }
 
 //-----------------------------------------------------------------------------
 // update on notify method
 //-----------------------------------------------------------------------------
 bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
-                        Tree const& aBaseTree, NodeRef const& aBaseNode,
+                        rtl::Reference< Tree > const& aBaseTree, NodeRef const& aBaseNode,
                         SubtreeChange const& aExternalChange)
 {
-    OSL_PRECOND( !aBaseTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    OSL_PRECOND(  aBaseTree.isValidNode(aBaseNode), "ERROR: Configuration: NodeRef does not match Tree");
+    OSL_PRECOND( !isEmpty(aBaseTree.get()), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( aBaseNode.isValid() && aBaseTree->isValidNode(aBaseNode.getOffset()), "ERROR: Configuration: NodeRef does not match Tree");
 
-    if (!aBaseTree.isEmpty())
+    if (!isEmpty(aBaseTree.get()))
     {
         OSL_ENSURE(rLocalChanges.empty(), "Should pass empty container to adjustToChanges(...)");
 
-        aBaseTree.getView().adjustToChanges(rLocalChanges, aBaseNode, aExternalChange);
+        view::ViewTreeAccess(aBaseTree.get()).adjustToChanges(rLocalChanges, aBaseNode, aExternalChange);
 
         return !rLocalChanges.empty();
     }
@@ -100,13 +99,13 @@ bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
 //-----------------------------------------------------------------------------
 struct CommitHelper::Data
 {
-    ElementList m_aRemovedElements; // filled to keep the elements alive 'till after notification
+    std::vector< rtl::Reference<ElementTree> > m_aRemovedElements; // filled to keep the elements alive 'till after notification
 };
 
 //-----------------------------------------------------------------------------
-CommitHelper::CommitHelper(TreeRef const& aTree)
+CommitHelper::CommitHelper(rtl::Reference< Tree > const& aTree)
 : m_pData(  )
-, m_pTree( TreeImplHelper::impl(aTree) )
+, m_pTree( aTree.get() )
 {
     OSL_ENSURE(m_pTree, "INTERNAL ERROR: Unexpected NULL tree in commit helper");
 }
@@ -126,12 +125,12 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
     m_pData.reset( new Data() );
 
     // get and check the changes
-    std::auto_ptr<SubtreeChange> pTreeChange(view::ViewTreeAccess(*m_pTree).preCommitChanges(m_pData->m_aRemovedElements));
+    std::auto_ptr<SubtreeChange> pTreeChange(view::ViewTreeAccess(m_pTree).preCommitChanges(m_pData->m_aRemovedElements));
     if (pTreeChange.get() == NULL)
         return false;
 
     // find the name and path of the change
-    OSL_ENSURE(m_pTree->getSimpleRootName().toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
+    OSL_ENSURE(m_pTree->getSimpleRootName() == pTreeChange->getNodeName(), "ERROR in Commit: Change name mismatch");
 
     // now fill the TreeChangeList
     rChangeList.setRootPath( m_pTree->getRootPath() );
@@ -152,7 +151,7 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
     if ( !matches(rChangeList.getRootNodePath(), aPath) )
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
-    view::ViewTreeAccess(*m_pTree).finishCommit(rChangeList.root);
+    view::ViewTreeAccess(m_pTree).finishCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 
@@ -166,7 +165,7 @@ void CommitHelper::failedCommit(TreeChangeList& rChangeList)
     if ( !matches(rChangeList.getRootNodePath(), aPath) )
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
-    view::ViewTreeAccess(*m_pTree).recoverFailedCommit(rChangeList.root);
+    view::ViewTreeAccess(m_pTree).recoverFailedCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 

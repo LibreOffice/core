@@ -44,7 +44,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	\
         $(SLO)$/confevents.obj	\
-        $(SLO)$/confeventhelpers.obj	\
         $(SLO)$/confsvccomponent.obj
 
 # --- Targets ----------------------------------

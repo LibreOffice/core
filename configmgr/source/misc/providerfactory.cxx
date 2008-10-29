@@ -55,7 +55,7 @@ namespace configmgr
 
     //---------------------------------------------------------------------------------------
 
-    ProviderFactory::ProviderFactory(OUString const & aImplementationName, bool bAdmin)
+    ProviderFactory::ProviderFactory(rtl::OUString const & aImplementationName, bool bAdmin)
     : m_aImplementationName(aImplementationName)
     , m_bAdmin(bAdmin)
     {
@@ -67,7 +67,7 @@ namespace configmgr
     }
     //---------------------------------------------------------------------------------------
 
-    uno::Reference< uno::XInterface > ProviderFactory::getProviderAlways(Context const & xContext)
+    uno::Reference< uno::XInterface > ProviderFactory::getProviderAlways(uno::Reference< uno::XComponentContext > const & xContext)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::getProviderAlways()");
         uno::Reference< uno::XInterface > xResult = getDefaultConfigProviderSingleton(xContext);
@@ -76,17 +76,15 @@ namespace configmgr
         OSL_ENSURE(xResult.is(), "Context could not create provider, but returned NULL instead of throwing an exception");
         if (!xResult.is())
         {
-            using ::com::sun::star::configuration::CannotLoadConfigurationException;
-
             static sal_Char const sCannotCreate[] = "Cannot create ConfigurationProvider. Unknown backend or factory error.";
 
-            throw CannotLoadConfigurationException( OUString(RTL_CONSTASCII_USTRINGPARAM(sCannotCreate)), *this );
+            throw com::sun::star::configuration::CannotLoadConfigurationException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sCannotCreate)), *this );
         }
 
         return xResult;
     }
     //---------------------------------------------------------------------------------------
-    uno::Reference< uno::XInterface > ProviderFactory::getProviderFromContext(Context const & xContext)
+    uno::Reference< uno::XInterface > ProviderFactory::getProviderFromContext(uno::Reference< uno::XComponentContext > const & xContext)
     {
         OSL_ENSURE(ContextReader::testAdminService(xContext, this->m_bAdmin),
                     "Creation context admin flag does not match service being created");
@@ -109,20 +107,20 @@ namespace configmgr
             OSL_ASSERT(aContext.isBootstrapValid());
 
             static const sal_Char sErrContext[] = "Cannot open Configuration: ";
-            OUString const sContext(RTL_CONSTASCII_USTRINGPARAM(sErrContext));
+            rtl::OUString const sContext(RTL_CONSTASCII_USTRINGPARAM(sErrContext));
             e.Message = sContext.concat(e.Message);
             throw;
         }
     }
     //---------------------------------------------------------------------------------------
-    uno::Reference< uno::XInterface > ProviderFactory::createProviderWithArguments(Context const & xContext, Arguments const & _aArguments)
+    uno::Reference< uno::XInterface > ProviderFactory::createProviderWithArguments(uno::Reference< uno::XComponentContext > const & xContext, uno::Sequence < uno::Any > const & _aArguments)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::createProviderWithArguments()");
 
         ContextReader aContext(xContext);
         ArgumentHelper aParser(aContext.getBootstrapContext());
 
-        NamedValues aValues(_aArguments.getLength() + 2);
+        uno::Sequence < beans::NamedValue > aValues(_aArguments.getLength() + 2);
         sal_Int32 nCount = parseArguments(aParser,aValues,_aArguments);
 
         bool bNeedNewBackend = aParser.hasBackendArguments();
@@ -140,7 +138,7 @@ namespace configmgr
 
         if (bNeedNewBackend)
         {
-            Context xMergedContext = BootstrapContext::createWrapper(xContext,aValues);
+            uno::Reference< uno::XComponentContext > xMergedContext = BootstrapContext::createWrapper(xContext,aValues);
             uno::Reference< uno::XInterface > xResult = getProviderFromContext(xMergedContext);
 
             return xResult;
@@ -154,28 +152,28 @@ namespace configmgr
         }
     }
     //---------------------------------------------------------------------------------------
-    uno::Reference< uno::XInterface > ProviderFactory::createProvider(Context const & xContext, bool bAdmin)
+    uno::Reference< uno::XInterface > ProviderFactory::createProvider(uno::Reference< uno::XComponentContext > const & xContext, bool bAdmin)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::createProvider(bAdmin)");
 
-        NamedValues aValues(2);
+        uno::Sequence < beans::NamedValue > aValues(2);
         aValues[0] = ArgumentHelper::makeAdminServiceOverride(bAdmin);
         aValues[1] = BootstrapContext::makePassthroughMarker(sal_False);
 
-        Context xMergedContext = BootstrapContext::createWrapper(xContext,aValues);
+        uno::Reference< uno::XComponentContext > xMergedContext = BootstrapContext::createWrapper(xContext,aValues);
         uno::Reference< uno::XInterface > xResult = getProviderFromContext(xMergedContext);
 
         return xResult;
     }
     //---------------------------------------------------------------------------------------
-    uno::Reference< uno::XInterface > ProviderFactory::createProvider(Context const & xContext)
+    uno::Reference< uno::XInterface > ProviderFactory::createProvider(uno::Reference< uno::XComponentContext > const & xContext)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::createProvider()");
 
         if (BootstrapContext::isPassthrough(xContext))
         {
             // make sure this uses a new BootstrapContext !
-            Context xPatchedContext = BootstrapContext::createWrapper(xContext,NamedValues());
+            uno::Reference< uno::XComponentContext > xPatchedContext = BootstrapContext::createWrapper(xContext,uno::Sequence < beans::NamedValue >());
             return getProviderFromContext(xPatchedContext);
         }
         else
@@ -183,7 +181,7 @@ namespace configmgr
     }
     //---------------------------------------------------------------------------------------
 
-    sal_Int32 ProviderFactory::parseArguments(ArgumentHelper & aParser, NamedValues & rValues, Arguments const & _aArguments)
+    sal_Int32 ProviderFactory::parseArguments(ArgumentHelper & aParser, uno::Sequence < beans::NamedValue > & rValues, uno::Sequence < uno::Any > const & _aArguments)
     {
         OSL_ASSERT(rValues.getLength() >= _aArguments.getLength());
 
@@ -234,7 +232,7 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
 
     uno::Reference< lang::XSingleComponentFactory > SAL_CALL createProviderFactory(
-            OUString const & aImplementationName,
+            rtl::OUString const & aImplementationName,
             bool bAdmin
         )
     {

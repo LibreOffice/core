@@ -80,7 +80,7 @@ namespace
 }
 //-----------------------------------------------------------------------------
 
-bool isSimpleName(OUString const& sName) SAL_THROW(())
+bool isSimpleName(rtl::OUString const& sName) SAL_THROW(())
 {
     sal_Unicode const* const pStr = sName.getStr();
     sal_Unicode const* const pEnd = pStr + sName.getLength();
@@ -97,57 +97,22 @@ bool isSimpleName(OUString const& sName) SAL_THROW(())
     return true;
 }
 //-----------------------------------------------------------------------------
-// class configuration::Name
-//-----------------------------------------------------------------------------
 
-// tag struct to ensure construction is routed through our helpers
-struct Path::PackageOnly {};
-
-//-----------------------------------------------------------------------------
-
-// Performance: Could optimize memory usage by using a string pool
-inline
-Name::Name(OUString const& aString, Path::PackageOnly) SAL_THROW(())
-: m_sRep(aString)
-{
-
-}
-//-----------------------------------------------------------------------------
-
-Name makeName(OUString const& sName, Name::NoValidate) SAL_THROW(())
-{
-    return Name( sName, Path::PackageOnly() );
-}
-//-----------------------------------------------------------------------------
-
-Name makeNodeName(OUString const& sName, Name::NoValidate) SAL_THROW(())
-{
-    OSL_ENSURE( isSimpleName(sName), "Creating a Name that is invalid as member node name");
-    return Name( sName, Path::PackageOnly() );
-}
-//-----------------------------------------------------------------------------
-
-Name makeElementName(OUString const& sName, Name::NoValidate) SAL_THROW(())
-{
-    return Name( sName, Path::PackageOnly() );
-}
-//-----------------------------------------------------------------------------
-
-Name validateNodeName(OUString const& sName)
+rtl::OUString validateNodeName(rtl::OUString const& sName)
 {
     if (!isSimpleName(sName))
         throw InvalidName(sName, "is not a valid name for a configuration node");
 
-    return Name( sName, Path::PackageOnly() );
+    return sName;
 }
 //-----------------------------------------------------------------------------
 
-Name validateElementName(OUString const& sName)
+rtl::OUString validateElementName(rtl::OUString const& sName)
 {
     if (sName.getLength() == 0)
         throw InvalidName(sName, "is not a valid name for a configuration item (empty names are not permitted)");
 
-    return Name( sName, Path::PackageOnly() );
+    return sName;
 }
 //-----------------------------------------------------------------------------
 
@@ -173,9 +138,9 @@ namespace // path helpers I
 
     static
     inline
-    OUString makeWildcardType() SAL_THROW(())
+    rtl::OUString makeWildcardType() SAL_THROW(())
     {
-        return OUString(&c_cAnytype,1);
+        return rtl::OUString(&c_cAnytype,1);
     }
 //-----------------------------------------------------------------------------
 
@@ -200,7 +165,7 @@ namespace // path helpers I
 //-----------------------------------------------------------------------------
     static
     inline
-    sal_Unicode lastChar(OUString const& _sString) SAL_THROW(())
+    sal_Unicode lastChar(rtl::OUString const& _sString) SAL_THROW(())
     {
         sal_Int32 const nLen = _sString.getLength();
 
@@ -210,8 +175,8 @@ namespace // path helpers I
     }
 //-----------------------------------------------------------------------------
 
-    Name implMakeCompositeName(OUString const& _sBaseName, OUString const& _sPredicate) SAL_THROW((InvalidName));
-    void implSplitCompositeName(Name const& _aCompositeName, OUString& _rBaseName, OUString& _rPredicate) SAL_THROW(());
+    rtl::OUString implMakeCompositeName(rtl::OUString const& _sBaseName, rtl::OUString const& _sPredicate) SAL_THROW((InvalidName));
+    void implSplitCompositeName(rtl::OUString const& _aCompositeName, rtl::OUString& _rBaseName, rtl::OUString& _rPredicate) SAL_THROW(());
 //-----------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------
@@ -224,81 +189,59 @@ namespace Path
 //-----------------------------------------------------------------------------
 
 inline // though public, this method is not available outside this translation unit
-Component::Component(OUString const& _sName, Path::PackageOnly _tag) SAL_THROW(())
-: m_aName(_sName, _tag)
-{
-}
-//-----------------------------------------------------------------------------
-
-inline // though public, this method is not available outside this translation unit
-Component::Component(Name const& _aName, Path::PackageOnly) SAL_THROW(())
-: m_aName(_aName)
+Component::Component(rtl::OUString const& _sName) SAL_THROW(())
+: m_aName(_sName)
 {
 }
 //-----------------------------------------------------------------------------
 
 bool Component::isSimpleName()    const SAL_THROW(())
 {
-    return !m_aName.isEmpty() && lastChar(m_aName.toString()) != c_rBracket;
+    return m_aName.getLength() != 0 && lastChar(m_aName) != c_rBracket;
 }
 //-----------------------------------------------------------------------------
 
-Name Component::getName()    const SAL_THROW(())
+rtl::OUString Component::getName()    const SAL_THROW(())
 {
     if (isSimpleName()) return m_aName;
 
-    OUString sName, sType;
+    rtl::OUString sName, sType;
     implSplitCompositeName(m_aName,sType,sName);
 
-    return Name(sName,PackageOnly());
+    return sName;
 }
 //-----------------------------------------------------------------------------
 
-Name Component::getTypeName()      const SAL_THROW(())
+rtl::OUString Component::getTypeName()      const SAL_THROW(())
 {
-    if (isSimpleName()) return Name();
+    if (isSimpleName()) return rtl::OUString();
 
-    OUString sName, sType;
+    rtl::OUString sName, sType;
     implSplitCompositeName(m_aName,sType,sName);
 
-    return Name(sType,PackageOnly());
+    return sType;
 }
 //-----------------------------------------------------------------------------
 
 Component makeEmptyComponent() SAL_THROW(())
 {
-    return Component( OUString(), PackageOnly() );
+    return Component( rtl::OUString() );
 }
 //-----------------------------------------------------------------------------
 
-Component wrapSimpleName(OUString const& _sName)
+Component wrapSimpleName(rtl::OUString const& _sName)
 {
-    OSL_ENSURE( isSimpleName(_sName), "Simple Name expected creating path component");
+    OSL_ENSURE( isSimpleName(_sName), "Simple name expected creating path component");
     if (!isSimpleName(_sName))
         throw InvalidName(_sName, "is not a simple name. Cannot convert to path component");
 
-    return Component( _sName, PackageOnly() );
+    return Component( _sName );
 }
 //-----------------------------------------------------------------------------
 
-Component wrapSimpleName(Name const& _aName)
+Component makeCompositeName(rtl::OUString const& _sElementName, rtl::OUString const& _sTypeName)
 {
-    return wrapSimpleName( _aName.toString() );
-}
-//-----------------------------------------------------------------------------
-
-Component makeCompositeName(Name const& _aElementName, Name const& _aTypeName)
-{
-    OUString const & sElementName = _aElementName.toString();
-    OUString const & sTypeName    = _aTypeName.toString();
-
-    return Component( implMakeCompositeName(sTypeName,sElementName), PackageOnly() );
-}
-//-----------------------------------------------------------------------------
-
-Component makeCompositeName(OUString const& _sElementName, OUString const& _sTypeName)
-{
-    return Component( implMakeCompositeName(_sTypeName,_sElementName), PackageOnly() );
+    return Component( implMakeCompositeName(_sTypeName,_sElementName) );
 }
 //-----------------------------------------------------------------------------
 
@@ -316,13 +259,13 @@ bool matches(Component const& lhs,Component const& rhs) SAL_THROW(())
     if (lhs.isSimpleName() || rhs.isSimpleName())
         return true;
 
-    Name aTypeLHS = lhs.getTypeName();
-    Name aTypeRHS = rhs.getTypeName();
+    rtl::OUString aTypeLHS = lhs.getTypeName();
+    rtl::OUString aTypeRHS = rhs.getTypeName();
 
     // this would need an extra test without our preflight check
     OSL_ASSERT(aTypeLHS != aTypeRHS); // would have been dicovered by first check
 
-    if ( isWildcardType(aTypeLHS.toString()) || isWildcardType(aTypeRHS.toString()) )
+    if ( isWildcardType(aTypeLHS) || isWildcardType(aTypeRHS) )
         return true;
 
     return false;
@@ -368,10 +311,10 @@ void Rep::prepend(Rep const& _aOther) SAL_THROW(())
 }
 //-----------------------------------------------------------------------------
 
-OUString Rep::toString(bool _bAbsolute) const SAL_THROW(())
+rtl::OUString Rep::toString(bool _bAbsolute) const SAL_THROW(())
 {
-    Iterator cur = begin();
-    Iterator const stop = end();
+    std::vector<Component>::const_reverse_iterator cur = begin();
+    std::vector<Component>::const_reverse_iterator const stop = end();
 
     rtl::OUStringBuffer sRet;
 
@@ -389,7 +332,7 @@ size_t Rep::hashCode() const  SAL_THROW(())
 {
     const unsigned long mangle_factor = 11; // 1011 (2)
     unsigned long nHash = 0;
-    for (Iterator it = begin(), stop = end(); it != stop; ++it)
+    for (std::vector<Component>::const_reverse_iterator it = begin(), stop = end(); it != stop; ++it)
     {
         nHash = mangle_factor*nHash + Path::hashCode(*it);
     }
@@ -417,7 +360,7 @@ bool matches(Rep const& lhs, Rep const& rhs) SAL_THROW(())
 }
 //-----------------------------------------------------------------------------
 
-bool isAbsolutePath(OUString const& _sPath) SAL_THROW(())
+bool isAbsolutePath(rtl::OUString const& _sPath) SAL_THROW(())
 {
     return detectAbsolutePath(_sPath);
 }
@@ -434,7 +377,7 @@ Rep stripMatchingPrefix(Rep const& _aPath,Rep const& _aPrefix) //  SAL_THROW((In
 {
     Rep aResult(_aPath);
 
-    for (Iterator it = _aPrefix.begin(); it != _aPrefix.end(); ++it)
+    for (std::vector<Component>::const_reverse_iterator it = _aPrefix.begin(); it != _aPrefix.end(); ++it)
     {
         if (aResult.isEmpty() || !matches(*it,aResult.getFirstName()))
             throw InvalidName(aResult.getFirstName().toPathString(), "does not match the expected location.");
@@ -469,9 +412,6 @@ namespace
     /// distinguishes which kind of path is held in a path object
     enum PathType { eRELATIVE = 1, eABSOLUTE = 2 };
 
-    // path parsing iterator type
-    typedef sal_Unicode const * StrPos;
-
 //-----------------------------------------------------------------------------
     // missing or mis leading in SAL/rtl: pStr1[nLength] must NOT be evaluated
     static
@@ -500,7 +440,7 @@ namespace
         @return
             the char being escaped or zero, if the range is no known escape
     */
-    sal_Unicode implParseEscape(StrPos pBegin, StrPos pEnd) SAL_THROW(())
+    sal_Unicode implParseEscape(sal_Unicode const *  pBegin, sal_Unicode const *  pEnd) SAL_THROW(())
     {
         OSL_PRECOND( pBegin <  pEnd, "Nonempty string range expected" );
         OSL_PRECOND( pBegin[0] == c_amp,        "String range is not a possible escape: missing start marker" );
@@ -549,7 +489,7 @@ namespace
         @return
             a pointer to the last character before pEnd that is not a name delimiter
     */
-    StrPos implFindNameStart(StrPos pBegin, StrPos pEnd) SAL_THROW(())
+    sal_Unicode const *  implFindNameStart(sal_Unicode const *  pBegin, sal_Unicode const *  pEnd) SAL_THROW(())
     {
         OSL_PRECOND(pBegin <= pEnd, "Invalid string range");
 
@@ -568,7 +508,7 @@ namespace
             <li><var>pEnd</var>, if no bracketed string was found</li>
             <li>NULL, if there was a closing bracket, but the beginning could not be discovered</li></ul>
     */
-    StrPos implFindPredicateStart(StrPos pBegin, StrPos pEnd) SAL_THROW(())
+    sal_Unicode const *  implFindPredicateStart(sal_Unicode const *  pBegin, sal_Unicode const *  pEnd) SAL_THROW(())
     {
         OSL_PRECOND(pBegin < pEnd, "Nonempty string range required");
 
@@ -619,7 +559,7 @@ namespace
 
     /// find the position of the given char in the range given.
     inline
-    sal_Int32 indexOfCharInRange(StrPos pBegin, StrPos pEnd, sal_Unicode ch) SAL_THROW(())
+    sal_Int32 indexOfCharInRange(sal_Unicode const *  pBegin, sal_Unicode const *  pEnd, sal_Unicode ch) SAL_THROW(())
     {
         return rtl_ustr_indexOfChar_WithLength(pBegin, pEnd-pBegin, ch);
     }
@@ -643,11 +583,11 @@ namespace
         @throw
             InvalidName, if the predicate data is not valid
     */
-    OUString implMakeNormalizedPredicate(StrPos pBeginContent, StrPos pEndContent, sal_Unicode const* pRequiredEscapes) SAL_THROW((InvalidName))
+    rtl::OUString implMakeNormalizedPredicate(sal_Unicode const *  pBeginContent, sal_Unicode const *  pEndContent, sal_Unicode const* pRequiredEscapes) SAL_THROW((InvalidName))
     {
         OSL_PRECOND(pBeginContent <= pEndContent, "Invalid string range");
         if (pBeginContent == pEndContent)
-            return OUString();
+            return rtl::OUString();
 
         rtl::OUStringBuffer aNormalized(pEndContent-pBeginContent + 4); // reserve approximate size initially
 
@@ -655,7 +595,7 @@ namespace
         aNormalized.append(c_lBracket).append(c_normal_quot);
 
         // content: copy over each char and handle escaping
-        for(StrPos pCur = pBeginContent; pCur != pEndContent; ++pCur)
+        for(sal_Unicode const *  pCur = pBeginContent; pCur != pEndContent; ++pCur)
         {
             sal_Unicode ch = *pCur;
 
@@ -665,7 +605,7 @@ namespace
                 if (ch == c_amp)
                 {
                     // find an escape end marker (after pCur). Result is pCur, if the end marker is not there
-                    StrPos pEndEscape = pCur + 1 + indexOfCharInRange(pCur+1,pEndContent,c_end_escape);
+                    sal_Unicode const *  pEndEscape = pCur + 1 + indexOfCharInRange(pCur+1,pEndContent,c_end_escape);
                     sal_Unicode ch2   = pCur != pEndEscape ? implParseEscape(pCur,pEndEscape+1) : 0;
 
                     if (ch2 != 0) // found and read a valid escape sequence
@@ -678,7 +618,7 @@ namespace
                     {
                         OSL_ENSURE(false, "Character '&' must be escaped in this context");
                         #if 0
-                            throw InvalidName(OUString(pBeginContent,pEndContent-pBeginContent),
+                            throw InvalidName(rtl::OUString(pBeginContent,pEndContent-pBeginContent),
                                           "is not a valid element name string. "
                                           "Character '&' must be escaped in this context");
                         #endif
@@ -686,7 +626,7 @@ namespace
                 }
                 else if ( containsChar(pRequiredEscapes, ch) )
                 {
-                    throw InvalidName(OUString(pBeginContent,pEndContent-pBeginContent),
+                    throw InvalidName(rtl::OUString(pBeginContent,pEndContent-pBeginContent),
                                         "is not a valid element name string. "
                                         "Some characters must be escaped in this context");
                 }
@@ -711,22 +651,22 @@ namespace
         @return
             the denormalized predicate content
     */
-    OUString implReadPredicate(StrPos pBegin, StrPos pEnd) SAL_THROW(())
+    rtl::OUString implReadPredicate(sal_Unicode const *  pBegin, sal_Unicode const *  pEnd) SAL_THROW(())
     {
         OSL_PRECOND(pBegin <= pEnd, "Invalid string range");
 
         rtl::OUStringBuffer aContent(pEnd-pBegin); // reserve approximate size initially
 
-        StrPos pReadPos = pBegin;
+        sal_Unicode const *  pReadPos = pBegin;
 
         // content: copy data, handling escapes
-        for(StrPos pCur = pReadPos; pCur != pEnd; ++pCur)
+        for(sal_Unicode const *  pCur = pReadPos; pCur != pEnd; ++pCur)
         {
             if (*pCur != c_amp) continue; // no escape here
 
         // handle an escape
             // find an escape end marker (after pCur). Result is pCur, if the end marker is not there
-            StrPos pEndEscape = pCur + 1 + indexOfCharInRange(pCur+1,pEnd,c_end_escape);
+            sal_Unicode const *  pEndEscape = pCur + 1 + indexOfCharInRange(pCur+1,pEnd,c_end_escape);
 
             OSL_ENSURE(pEndEscape != pCur, "Found dangling ampersand in normalized data");
 
@@ -761,7 +701,7 @@ namespace
         @throw
             InvalidName, if the predicate is not valid
     */
-    OUString implNormalizePredicate(StrPos pBegin, StrPos pEnd) SAL_THROW((InvalidName))
+    rtl::OUString implNormalizePredicate(sal_Unicode const *  pBegin, sal_Unicode const *  pEnd) SAL_THROW((InvalidName))
     {
         sal_Unicode sStopCharBuf[2];
         sal_Unicode const * pStopChars;
@@ -780,7 +720,7 @@ namespace
             OSL_PRECOND(pEnd[-1] == chUsedQuot,             "Non-matching quotes in bracketed quoted string");
 
             if (pEnd-pBegin <= 1 || pEnd[-1] != chUsedQuot)
-                throw InvalidName( OUString(pBegin, pEnd-pBegin), "is not a valid element predicate: quotes do not match");
+                throw InvalidName( rtl::OUString(pBegin, pEnd-pBegin), "is not a valid element predicate: quotes do not match");
 
             ++pBegin; --pEnd; // skip quotes
 
@@ -801,21 +741,21 @@ namespace
         }
 
         if (pBegin == pEnd)
-            throw InvalidName(OUString(pBegin-1,2),"Empty element name in predicate");
+            throw InvalidName(rtl::OUString(pBegin-1,2),"Empty element name in predicate");
 
         return implMakeNormalizedPredicate(pBegin, pEnd, pStopChars);
     }
 //-----------------------------------------------------------------------------
     /// parse a path into a sequence of components
-    Path::Rep implParsePath(OUString const& _aPathString, PathType eType) SAL_THROW((InvalidName))
+    Path::Rep implParsePath(rtl::OUString const& _aPathString, PathType eType) SAL_THROW((InvalidName))
     {
         Path::Rep aResult;
 
         dprint (stderr, "implParsePath '%s' ",
                  rtl::OUStringToOString(_aPathString, RTL_TEXTENCODING_UTF8).getStr());
 
-        StrPos pBegin = _aPathString.getStr();
-        StrPos pEnd   = pBegin + _aPathString.getLength();
+        sal_Unicode const *  pBegin = _aPathString.getStr();
+        sal_Unicode const *  pEnd   = pBegin + _aPathString.getLength();
 
         if (eType == eABSOLUTE)
         {
@@ -844,13 +784,13 @@ namespace
         while (pEnd != pBegin)
         {
             // check for predicate
-            StrPos pQuoteStart = implFindPredicateStart(pBegin, pEnd);
+            sal_Unicode const *  pQuoteStart = implFindPredicateStart(pBegin, pEnd);
             if (pQuoteStart == NULL)
                 throw InvalidName(_aPathString, "is not a valid path. Invalid name or predicate syntax");
 
-            StrPos pNameStart = implFindNameStart(pBegin, pQuoteStart);
+            sal_Unicode const *  pNameStart = implFindNameStart(pBegin, pQuoteStart);
 
-            OUString aElementName(pNameStart, pQuoteStart-pNameStart);
+            rtl::OUString aElementName(pNameStart, pQuoteStart-pNameStart);
 
             if (!isSimpleName(aElementName))
             {
@@ -867,13 +807,13 @@ namespace
             if (pQuoteStart != pEnd)
             {
                 dprint (stderr, "add 'normalize predicate'", "");
-                OUString aPred = implNormalizePredicate(pQuoteStart,pEnd);
+                rtl::OUString aPred = implNormalizePredicate(pQuoteStart,pEnd);
                 aElementName += aPred;
                 dprint (stderr, " [result pred '%s']",
                          rtl::OUStringToOString(aPred, RTL_TEXTENCODING_UTF8).getStr());
             }
 
-            aResult.prepend( Path::Component(aElementName, Path::PackageOnly()) );
+            aResult.prepend( Path::Component(aElementName) );
 
             pEnd = pNameStart;
             if (pNameStart != pBegin) --pEnd;
@@ -884,9 +824,9 @@ namespace
 //-----------------------------------------------------------------------------
 
     /// build a composite path component from a base name (type) and a (somewhat optional) predicate
-    Name implMakeCompositeName(OUString const& _sBaseName, OUString const& _sPredicate) SAL_THROW((InvalidName))
+    rtl::OUString implMakeCompositeName(rtl::OUString const& _sBaseName, rtl::OUString const& _sPredicate) SAL_THROW((InvalidName))
     {
-        OUString sComposite(_sBaseName);
+        rtl::OUString sComposite(_sBaseName);
 
         if (isEmptyString(_sBaseName))
             sComposite = makeWildcardType();
@@ -897,8 +837,8 @@ namespace
         dprint (stderr, "implMakeNormalizePred '%s' ",
                 rtl::OUStringToOString(_sPredicate, RTL_TEXTENCODING_UTF8).getStr());
 
-        StrPos pPredStart = _sPredicate.getStr();
-        StrPos pPredEnd   = pPredStart + _sPredicate.getLength();
+        sal_Unicode const *  pPredStart = _sPredicate.getStr();
+        sal_Unicode const *  pPredEnd   = pPredStart + _sPredicate.getLength();
 
         if (pPredStart != pPredEnd)
             sComposite += implMakeNormalizedPredicate(pPredStart, pPredEnd, NULL);
@@ -906,24 +846,23 @@ namespace
         dprint (stderr, " [result pred '%s']\n",
                 rtl::OUStringToOString(sComposite, RTL_TEXTENCODING_UTF8).getStr());
 
-        return Name( sComposite, Path::PackageOnly() );
+        return sComposite;
     }
 //-----------------------------------------------------------------------------
 
     /// split a composite path component into a base name (type) and a predicate (if present)
-    void implSplitCompositeName(Name const& _aCompositeName, OUString& _rBaseName, OUString& _rPredicate) SAL_THROW(())
+    void implSplitCompositeName(rtl::OUString const& _aCompositeName, rtl::OUString& _rBaseName, rtl::OUString& _rPredicate) SAL_THROW(())
     {
-        OUString sComposite = _aCompositeName.toString();
-        sal_Int32 nPos = sComposite.indexOf(c_lBracket);
+        sal_Int32 nPos = _aCompositeName.indexOf(c_lBracket);
 
         if (nPos >= 0)
         {
             OSL_ENSURE( nPos > 0, "Invalid name: Only predicate, no base type");
 
-            _rBaseName = sComposite.copy(0,nPos);
+            _rBaseName = _aCompositeName.copy(0,nPos);
 
-            StrPos pBeginPred = sComposite.getStr() + nPos;
-            StrPos pEndPred   = sComposite.getStr() + sComposite.getLength();
+            sal_Unicode const *  pBeginPred = _aCompositeName.getStr() + nPos;
+            sal_Unicode const *  pEndPred   = _aCompositeName.getStr() + _aCompositeName.getLength();
 
             OSL_ASSERT(pBeginPred[0] == c_lBracket);
             OSL_ENSURE(pBeginPred[1] == c_normal_quot, "Missing or unexpected quote mark");
@@ -935,9 +874,9 @@ namespace
         }
         else
         {
-            OSL_ENSURE( sComposite.indexOf(c_rBracket) < 0, "Invalid name: Predicate brackets not opened");
-            _rBaseName = sComposite;
-            _rPredicate = OUString();
+            OSL_ENSURE( _aCompositeName.indexOf(c_rBracket) < 0, "Invalid name: Predicate brackets not opened");
+            _rBaseName = _aCompositeName;
+            _rPredicate = rtl::OUString();
         }
     }
 //-----------------------------------------------------------------------------
@@ -954,7 +893,7 @@ void RelativePath::init() SAL_THROW(())
 }
 //-----------------------------------------------------------------------------
 
-RelativePath RelativePath::parse(OUString const& aString)
+RelativePath RelativePath::parse(rtl::OUString const& aString)
 {
     return RelativePath( implParsePath(aString, eRELATIVE) );
 }
@@ -974,7 +913,7 @@ RelativePath RelativePath::compose(RelativePath const& aPath) const SAL_THROW(()
     return RelativePath( aResult );
 }
 //-----------------------------------------------------------------------------
-OUString RelativePath::toString() const SAL_THROW(())
+rtl::OUString RelativePath::toString() const SAL_THROW(())
 {
     return m_aRep.toString(false);
 }
@@ -989,7 +928,7 @@ void AbsolutePath::init() SAL_THROW(())
 }
 //-----------------------------------------------------------------------------
 
-AbsolutePath AbsolutePath::parse(OUString const& aString)
+AbsolutePath AbsolutePath::parse(rtl::OUString const& aString)
 {
     return AbsolutePath( implParsePath(aString, eABSOLUTE) );
 }
@@ -1008,23 +947,17 @@ AbsolutePath AbsolutePath::detachedRoot() SAL_THROW(())
 }
 //-----------------------------------------------------------------------------
 
-static inline Path::Component implMakeSafeModuleName(OUString const& _sModuleName) SAL_THROW(())
+static inline Path::Component implMakeSafeModuleName(rtl::OUString const& _sModuleName) SAL_THROW(())
 {
     OSL_ENSURE( isSimpleName(_sModuleName), "A module name must be a simple name");
 
     // if (isSimpleName(_sModuleName)) sModuleName = escape_name( _sModuleName );
 
-    return Path::Component(_sModuleName, Path::PackageOnly());
+    return Path::Component(_sModuleName);
 }
 //-----------------------------------------------------------------------------
 
-AbsolutePath AbsolutePath::makeModulePath(Name const& _aModuleName, NoValidate) SAL_THROW(())
-{
-    return AbsolutePath( Path::Rep( implMakeSafeModuleName(_aModuleName.toString()) ) );
-}
-//-----------------------------------------------------------------------------
-
-AbsolutePath AbsolutePath::makeModulePath(OUString const& _sModuleName, NoValidate) SAL_THROW(())
+AbsolutePath AbsolutePath::makeModulePath(rtl::OUString const& _sModuleName) SAL_THROW(())
 {
     return AbsolutePath( Path::Rep( implMakeSafeModuleName(_sModuleName) ) );
 }
@@ -1058,7 +991,7 @@ bool AbsolutePath::isDetached() const SAL_THROW(())
 #endif
 //-----------------------------------------------------------------------------
 
-OUString AbsolutePath::toString() const SAL_THROW(())
+rtl::OUString AbsolutePath::toString() const SAL_THROW(())
 {
     return m_aRep.toString(true);
 }

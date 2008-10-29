@@ -41,7 +41,6 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
-    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.
@@ -96,24 +95,24 @@ namespace configmgr
 
         // XNamed
         //---------------------------------------------------------------------
-        OUString implGetName(NodeAccess& rNode, NodeElement& rElement)
+        rtl::OUString implGetName(NodeAccess& rNode, NodeElement& rElement)
             throw(uno::RuntimeException);
 
-        void implSetName(NodeAccess& rNode, NodeElement& rElement, const OUString& aName ) // generally not supported (! - missing exception)
+        void implSetName(NodeAccess& rNode, NodeElement& rElement, const rtl::OUString& aName ) // generally not supported (! - missing exception)
             throw(uno::RuntimeException);
 
-        void implSetName(NodeAccess& rNode, SetElement& rElement, const OUString& aName ) // maybe supported
+        void implSetName(NodeAccess& rNode, SetElement& rElement, const rtl::OUString& aName ) // maybe supported
             throw(uno::RuntimeException);
 
         // XServiceInfo
         //---------------------------------------------------------------------
-        OUString implGetImplementationName( NodeAccess& rNode, NodeElement& rElement )
+        rtl::OUString implGetImplementationName( NodeAccess& rNode, NodeElement& rElement )
             throw(uno::RuntimeException);
 
-        sal_Bool implSupportsService( NodeAccess& rNode, NodeElement& rElement, const OUString& ServiceName )
+        sal_Bool implSupportsService( NodeAccess& rNode, NodeElement& rElement, const rtl::OUString& ServiceName )
             throw(uno::RuntimeException);
 
-        uno::Sequence< OUString > implGetSupportedServiceNames( NodeAccess& rNode, NodeElement& rElement )
+        uno::Sequence< rtl::OUString > implGetSupportedServiceNames( NodeAccess& rNode, NodeElement& rElement )
             throw(uno::RuntimeException);
 
     // Root only only
@@ -144,7 +143,7 @@ namespace configmgr
     //-------------------------------------------------------------------------
         // XTemplateInstance
         //---------------------------------------------------------------------
-        OUString implGetTemplateName(SetElement& rElement)
+        rtl::OUString implGetTemplateName(SetElement& rElement)
             throw(uno::RuntimeException);
 
         // XUnoTunnel

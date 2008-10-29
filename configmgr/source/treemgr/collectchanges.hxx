@@ -37,8 +37,8 @@
 // pathes for accessors
 #include "configpath.hxx"
 
-// need TreeDepth and c_TreeDepthAll
-#include "treeimpl.hxx"
+// need c_TreeDepthAll
+#include "tree.hxx"
 
 namespace configmgr
 {
@@ -66,17 +66,17 @@ namespace configmgr
         {
             NodeChangesInformation& m_rTargetList;
             RelativePath            m_aAccessor;
-            Name                    m_aContextTypeName;
-            TreeImpl*               m_pBaseTree;
-            NodeOffset              m_nBaseNode;
-            TreeDepth               m_nDepthLeft;
+            rtl::OUString m_aContextTypeName;
+            Tree*               m_pBaseTree;
+            unsigned int                m_nBaseNode;
+            unsigned int                m_nDepthLeft;
 
         public:
             /// Constructs a Visitor object, sets the output target list and context
             CollectChanges( NodeChangesInformation& rTargetList_,
-                            TreeImpl& rStartTree_, NodeOffset nStartNode_,
-                            TemplateHolder aElementTemplate_,
-                            TreeDepth nMaxDepth = c_TreeDepthAll);
+                            Tree& rStartTree_, unsigned int nStartNode_,
+                            rtl::Reference<Template> aElementTemplate_,
+                            unsigned int nMaxDepth = c_TreeDepthAll);
 
             /// Adds a (translated) ValueChange to the target list
             void collectFrom(ValueChange const& aChange_);
@@ -104,7 +104,7 @@ namespace configmgr
 
         protected:
             /// Constructs a Visitor object for a child of another one's context
-            CollectChanges( CollectChanges const& rBase, Path::Component const& rChildName, Name const& aSubTypeName );
+            CollectChanges( CollectChanges const& rBase, Path::Component const& rChildName, rtl::OUString const& aSubTypeName );
 
         private:
             // ChangeTreeAction implementations

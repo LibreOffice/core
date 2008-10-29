@@ -75,13 +75,13 @@ bool MergedComponentData::hasTemplates() const
 }
 // -----------------------------------------------------------------------------
 
-OUString MergedComponentData::getTemplateAccessor (TemplateIdentifier const & _aTemplateName) const
+rtl::OUString MergedComponentData::getTemplateAccessor (backenduno::TemplateIdentifier const & _aTemplateName) const
 {
     return _aTemplateName.Name;
 }
 // -----------------------------------------------------------------------------
 
-bool MergedComponentData::hasTemplate(OUString const & _aTemplateName) const
+bool MergedComponentData::hasTemplate(rtl::OUString const & _aTemplateName) const
 {
     return m_pTemplatesTree.get() != NULL &&
             m_pTemplatesTree->getChild( _aTemplateName ) != NULL;
@@ -100,7 +100,7 @@ std::auto_ptr<ISubtree> MergedComponentData::extractTemplatesTree()
 }
 // -----------------------------------------------------------------------------
 
-std::auto_ptr<INode> MergedComponentData::extractTemplateNode(OUString const & _aTemplateName)
+std::auto_ptr<INode> MergedComponentData::extractTemplateNode(rtl::OUString const & _aTemplateName)
 {
     if (m_pTemplatesTree.get() == NULL)
         return std::auto_ptr<INode>();
@@ -109,7 +109,7 @@ std::auto_ptr<INode> MergedComponentData::extractTemplateNode(OUString const & _
 }
 // -----------------------------------------------------------------------------
 
-ISubtree const * MergedComponentData::findTemplate(OUString const & _aTemplateName) const
+ISubtree const * MergedComponentData::findTemplate(rtl::OUString const & _aTemplateName) const
 {
     INode const * pTemplateNode = m_pTemplatesTree->getChild(_aTemplateName);
 
@@ -121,7 +121,7 @@ ISubtree const * MergedComponentData::findTemplate(OUString const & _aTemplateNa
 }
 // -----------------------------------------------------------------------------
 
-std::auto_ptr<INode>    MergedComponentData::instantiateTemplate(OUString const & _aName, OUString const & _aTemplateName) const
+std::auto_ptr<INode>    MergedComponentData::instantiateTemplate(rtl::OUString const & _aName, rtl::OUString const & _aTemplateName) const
 {
     if (INode const * pTemplateNode = m_pTemplatesTree->getChild(_aTemplateName))
     {
@@ -152,7 +152,7 @@ void  MergedComponentData::setTemplatesTree(std::auto_ptr<ISubtree>  _aTemplateT
     m_pTemplatesTree = _aTemplateTree;
 }
 // -----------------------------------------------------------------------------
-ISubtree  * MergedComponentData::addTemplate(std::auto_ptr<ISubtree>  _aNode, TemplateIdentifier const & aTemplate)
+ISubtree  * MergedComponentData::addTemplate(std::auto_ptr<ISubtree>  _aNode, backenduno::TemplateIdentifier const & aTemplate)
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL template");
 

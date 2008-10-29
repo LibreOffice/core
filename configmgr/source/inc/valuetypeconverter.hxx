@@ -45,7 +45,6 @@ namespace configmgr
 {
     namespace uno       = ::com::sun::star::uno;
     namespace script    = ::com::sun::star::script;
-    using rtl::OUString;
 
 // -----------------------------------------------------------------------------
     class ValueConverter
@@ -54,10 +53,8 @@ namespace configmgr
         uno::Reference< script::XTypeConverter > m_xTypeConverter;
         /// Value info
         uno::Type   m_aType;
-        OUString    m_sSeparator;
+        rtl::OUString    m_sSeparator;
         bool        m_bNull;
-    public:
-        typedef std::vector< OUString > StringList;
     public:
         /// construct a value converter with no initial type info
         ValueConverter(const uno::Reference< script::XTypeConverter > & _xTC)
@@ -76,7 +73,7 @@ namespace configmgr
         }
 
         /// provide access to the TypeConverter that is used for converting string format
-        uno::Reference< script::XTypeConverter > const& getTypeConverter() const CFG_NOTHROW()
+        uno::Reference< script::XTypeConverter > const& getTypeConverter() const SAL_THROW(())
         {
             return m_xTypeConverter;
         }
@@ -101,7 +98,7 @@ namespace configmgr
         }
 
         /// set the separator of this converter
-        void setSeparator(OUString const & _aSeparator)
+        void setSeparator(rtl::OUString const & _aSeparator)
         {
             m_sSeparator = _aSeparator;
         }
@@ -122,35 +119,35 @@ namespace configmgr
         bool hasSeparator() const { return m_sSeparator.getLength() != 0; }
 
         /// converting a value
-        uno::Any convertToAny(OUString const& aContent) const
-            CFG_UNO_THROW1( script::CannotConvertException );
+        uno::Any convertToAny(rtl::OUString const& aContent) const
+            SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
         /// converting a list
-        uno::Any convertListToAny(uno::Sequence< OUString > const& aContentList) const
-            CFG_UNO_THROW1( script::CannotConvertException );
+        uno::Any convertListToAny(uno::Sequence< rtl::OUString > const& aContentList) const
+            SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
         /// converting a binary value
-        uno::Sequence<sal_Int8> parseBinary(OUString const& aBinaryString) const
-            CFG_UNO_THROW1( script::CannotConvertException );
+        uno::Sequence<sal_Int8> parseBinary(rtl::OUString const& aBinaryString) const
+            SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
         /// splits a string list
-        uno::Sequence< OUString > splitStringList(OUString const& aContent) const;
+        uno::Sequence< rtl::OUString > splitStringList(rtl::OUString const& aContent) const;
     private:
         /// converting a list
-        bool convertListToAny(StringList const& aContentList, uno::Any& rValue) const
-            CFG_UNO_THROW1( script::CannotConvertException );
+        bool convertListToAny(std::vector< rtl::OUString > const& aContentList, uno::Any& rValue) const
+            SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
         /// converting a scalar value
-        bool convertScalarToAny(OUString const& aContent, uno::Any& rValue) const
-            CFG_UNO_THROW1( script::CannotConvertException );
+        bool convertScalarToAny(rtl::OUString const& aContent, uno::Any& rValue) const
+            SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
         /// splitting a string list
-        void splitListData(OUString const& aContent, StringList& rContentList) const
-            CFG_NOTHROW( );
+        void splitListData(rtl::OUString const& aContent, std::vector< rtl::OUString >& rContentList) const
+            SAL_THROW(());
     private:
-        void implReset() CFG_NOTHROW()
+        void implReset() SAL_THROW(())
         {
-            m_sSeparator = OUString();
+            m_sSeparator = rtl::OUString();
             m_bNull = false;
         }
     };

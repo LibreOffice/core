@@ -33,9 +33,8 @@
 #include <stdio.h>
 #include "committer.hxx"
 #include "apitreeimplobj.hxx"
+#include "providerimpl.hxx"
 #include "roottree.hxx"
-#include "confproviderimpl2.hxx"
-#include "treeaccessor.hxx"
 #include "treechangelist.hxx"
 
 namespace configmgr
@@ -43,9 +42,6 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     namespace configapi
     {
-//-----------------------------------------------------------------------------
-        using configuration::Tree;
-        using configuration::CommitHelper;
 //-----------------------------------------------------------------------------
 namespace
 {
@@ -78,7 +74,7 @@ Committer::Committer(ApiRootTreeImpl& rTree)
 {}
 //-----------------------------------------------------------------------------
 
-ITreeManager* Committer::getUpdateProvider()
+OProviderImpl * Committer::getUpdateProvider()
 {
     return &m_rTree.getApiTree().getProvider().getProviderImpl();
 }
@@ -95,18 +91,18 @@ void Committer::commit()
 
     RequestOptions aOptions = m_rTree.getOptions()->getRequestOptions();
 
-    ITreeManager* pUpdateProvider = getUpdateProvider();
+    OProviderImpl * pUpdateProvider = getUpdateProvider();
     OSL_ASSERT(pUpdateProvider);
 
-    Tree aTree( rApiTree.getTree());
-    if (!aTree.hasChanges()) return;
+    rtl::Reference< configuration::Tree > aTree( rApiTree.getTree());
+    if (!aTree->hasChanges()) return;
 
     TreeChangeList  aChangeList(aOptions,
-                    aTree.getRootPath(),
-                    aTree.getAttributes(aTree.getRootNode()));
+                    aTree->getRootPath(),
+                    aTree->getAttributes(aTree->getRootNode()));
 
     // now do the commit
-    CommitHelper    aHelper(rApiTree.getTree());
+    configuration::CommitHelper aHelper(rApiTree.getTree());
     if (aHelper.prepareCommit(aChangeList))
     try
     {

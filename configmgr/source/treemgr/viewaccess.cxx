@@ -32,7 +32,7 @@
 #include "precompiled_configmgr.hxx"
 
 #include "viewaccess.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "noderef.hxx"
 
 //-----------------------------------------------------------------------------
@@ -48,9 +48,9 @@ configuration::NodeData* ViewTreeAccess::nodeData(configuration::NodeRef const& 
 }
 
 //-----------------------------------------------------------------------------
-configuration::NodeData* ViewTreeAccess::nodeData(NodeOffset _aNodePos) const
+configuration::NodeData* ViewTreeAccess::nodeData(unsigned int _aNodePos) const
 {
-    return m_aTree.get_impl()->nodeData(_aNodePos);
+    return m_tree->nodeData(_aNodePos);
 }
 
 //-----------------------------------------------------------------------------

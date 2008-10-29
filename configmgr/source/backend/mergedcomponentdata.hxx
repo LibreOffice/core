@@ -52,10 +52,6 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         namespace backenduno = ::com::sun::star::configuration::backend;
 
-        using  backenduno::TemplateIdentifier;
-
-        using ::rtl::OUString;
-
 // -----------------------------------------------------------------------------
 
         class MergedComponentData
@@ -66,28 +62,28 @@ namespace configmgr
 
             bool hasSchema()    const;
             bool hasTemplates() const;
-            bool hasTemplate(OUString const & _aTemplateName) const;
+            bool hasTemplate(rtl::OUString const & _aTemplateName) const;
 
-            OUString getTemplateAccessor (TemplateIdentifier const & _aTemplateName) const;
+            rtl::OUString getTemplateAccessor (backenduno::TemplateIdentifier const & _aTemplateName) const;
 
             ISubtree const * getSchemaTree() const     { return m_pSchemaTree.get(); }
             ISubtree const * getTemplatesTree() const  { return m_pTemplatesTree.get(); }
-            ISubtree const * findTemplate(OUString const & _aTemplateName) const;
+            ISubtree const * findTemplate(rtl::OUString const & _aTemplateName) const;
 
             ISubtree * getSchemaTree()      { return m_pSchemaTree.get(); }
             ISubtree * getTemplatesTree()   { return m_pTemplatesTree.get(); }
 
-            std::auto_ptr<INode> instantiateTemplate(OUString const & _aName, OUString const & _aTemplateName) const;
+            std::auto_ptr<INode> instantiateTemplate(rtl::OUString const & _aName, rtl::OUString const & _aTemplateName) const;
 
             void clear();
 
             ISubtree  * setSchemaRoot(std::auto_ptr<ISubtree>  _aSchemaRoot);
-            ISubtree  * addTemplate(std::auto_ptr<ISubtree>  _aNode, TemplateIdentifier const & aTemplate);
+            ISubtree  * addTemplate(std::auto_ptr<ISubtree>  _aNode, backenduno::TemplateIdentifier const & aTemplate);
             void  setTemplatesTree(std::auto_ptr<ISubtree>  _aTemplateTree);
 
             std::auto_ptr<ISubtree> extractSchemaTree();
             std::auto_ptr<ISubtree> extractTemplatesTree();
-            std::auto_ptr<INode>    extractTemplateNode(OUString const & _aTemplateName);
+            std::auto_ptr<INode>    extractTemplateNode(rtl::OUString const & _aTemplateName);
         private:
             std::auto_ptr<ISubtree> m_pSchemaTree;
             std::auto_ptr<ISubtree> m_pTemplatesTree;

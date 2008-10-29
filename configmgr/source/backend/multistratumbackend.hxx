@@ -56,20 +56,11 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backenduno = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper7< backenduno::XBackend,
-                                        backenduno::XBackendEntities,
-                                        backenduno::XVersionedSchemaSupplier,
-                                        backenduno::XBackendChangesNotifier,
-                                        backenduno::XBackendChangesListener,
-                                        lang::XInitialization,
-                                        lang::XServiceInfo> BackendBase ;
-
-
 /**
   Class implementing the Backend service for multibackend access.
   It creates the required backends and coordinates access to them.
   */
-class MultiStratumBackend : public BackendBase {
+class MultiStratumBackend : public cppu::WeakComponentImplHelper7< backenduno::XBackend, backenduno::XBackendEntities, backenduno::XVersionedSchemaSupplier, backenduno::XBackendChangesNotifier, backenduno::XBackendChangesListener, lang::XInitialization, lang::XServiceInfo > {
     public :
         /**
           Service constructor from a service factory.
@@ -212,19 +203,17 @@ class MultiStratumBackend : public BackendBase {
         uno::Reference<lang::XMultiServiceFactory> mFactory ;
         /** Mutex for resource protection */
         osl::Mutex mMutex ;
-        typedef std::vector< uno::Reference <uno::XInterface> > BackendStrata;
 
         uno::Reference<backenduno::XSchemaSupplier> mSchemaSupplier ;
         /** list of all backends */
-        BackendStrata mBackendStrata;
+        std::vector< uno::Reference <uno::XInterface> > mBackendStrata;
 
         rtl::OUString mOwnerEntity;
 
         /** Helper object that listens to the Strata Backends */
-        typedef uno::Reference<backenduno::XBackendChangesListener> ListenerRef;
-        ListenerRef mStrataListener;
+        uno::Reference<backenduno::XBackendChangesListener> mStrataListener;
         /** List of higher level listeners */
-        typedef std::multimap<rtl::OUString, ListenerRef> ListenerList;
+        typedef std::multimap< rtl::OUString, uno::Reference<backenduno::XBackendChangesListener> > ListenerList;
         ListenerList mListenerList;
 } ;
 

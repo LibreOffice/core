@@ -54,7 +54,7 @@ namespace configmgr
 
 static
 inline
-sal_Int16 impl_getIndexByName(uno::Reference< sax::XAttributeList > const& xAttribs, OUString const& aAttributeName)
+sal_Int16 impl_getIndexByName(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString const& aAttributeName)
 {
     OSL_PRECOND( xAttribs.is(), "ERROR: NULL Attribute list");
 
@@ -72,11 +72,11 @@ sal_Int16 impl_getIndexByName(uno::Reference< sax::XAttributeList > const& xAttr
 // -----------------------------------------------------------------------------
 static
 inline
-bool impl_maybeGetAttribute(uno::Reference< sax::XAttributeList > const& xAttribs, OUString const& aAttributeName, /* OUT */ OUString& rAttributeValue)
+bool impl_maybeGetAttribute(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString const& aAttributeName, /* OUT */ rtl::OUString& rAttributeValue)
 {
     OSL_PRECOND( xAttribs.is(), "ERROR: NULL Attribute list");
 
-    OUString aValue = xAttribs->getValueByName(aAttributeName);
+    rtl::OUString aValue = xAttribs->getValueByName(aAttributeName);
     if( aValue.getLength()!=0)
     {
         rAttributeValue = aValue;
@@ -87,7 +87,7 @@ bool impl_maybeGetAttribute(uno::Reference< sax::XAttributeList > const& xAttrib
 // -----------------------------------------------------------------------------
 
 /// retrieve the (almost) complete information for an element
-ElementInfo ElementParser::parseElementInfo(OUString const& _sTag, SaxAttributeList const& _xAttribs) const
+ElementInfo ElementParser::parseElementInfo(rtl::OUString const& _sTag, uno::Reference< sax::XAttributeList > const& _xAttribs) const
 {
     ElementType::Enum aType = this->getNodeType(_sTag,_xAttribs);
 
@@ -100,7 +100,7 @@ ElementInfo ElementParser::parseElementInfo(OUString const& _sTag, SaxAttributeL
 }
 // -----------------------------------------------------------------------------
 
-ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxAttributeList const& _xAttribs) const
+ElementType::Enum ElementParser::getNodeType(rtl::OUString const& _sElementName, uno::Reference< sax::XAttributeList > const& _xAttribs) const
 {
     { (void)_xAttribs; }
     OSL_PRECOND( _xAttribs.is(), "ERROR: NULL Attribute list");
@@ -162,10 +162,10 @@ ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxA
 // -----------------------------------------------------------------------------
 
 /// takes the node name from either an attribute or the element name
-OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList const& _xAttribs, ElementType::Enum _eType) const
+rtl::OUString ElementParser::getName(rtl::OUString const& _sElementName, uno::Reference< sax::XAttributeList > const& _xAttribs, ElementType::Enum _eType) const
 {
-    OUString aName;
-    OUString aPackage;
+    rtl::OUString aName;
+    rtl::OUString aPackage;
 
     bool bNameFound = this->maybeGetAttribute(_xAttribs, ATTR_NAME, aName);
     bool bPackage = false;
@@ -232,7 +232,7 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
     {
         static const sal_Unicode chPackageSep = '.';
 
-        aName = aPackage.concat(OUString(&chPackageSep,1)).concat(aName);
+        aName = aPackage.concat(rtl::OUString(&chPackageSep,1)).concat(aName);
     }
     else
     {
@@ -244,9 +244,9 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
 }
 // -----------------------------------------------------------------------------
 
-Operation::Enum ElementParser::getOperation(SaxAttributeList const& xAttribs,ElementType::Enum _eType) const
+Operation::Enum ElementParser::getOperation(uno::Reference< sax::XAttributeList > const& xAttribs,ElementType::Enum _eType) const
 {
-    OUString sOpName;
+    rtl::OUString sOpName;
     if ((_eType != ElementType::property) && (_eType !=ElementType::node))
     {
         return Operation::none;
@@ -276,21 +276,21 @@ Operation::Enum ElementParser::getOperation(SaxAttributeList const& xAttribs,Ele
 
 
 /// retrieve the locale stored in the attribute list
-bool ElementParser::getLanguage(SaxAttributeList const& xAttribs, OUString& _rsLanguage) const
+bool ElementParser::getLanguage(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString& _rsLanguage) const
 {
     return this->maybeGetAttribute(xAttribs, EXT_ATTR_LANGUAGE, _rsLanguage);
 }
 // -----------------------------------------------------------------------------
 
 /// reads attributes for nodes from the attribute list
-ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttribs,ElementType::Enum _eType) const
+sal_Int16 ElementParser::getNodeFlags(uno::Reference< sax::XAttributeList > const& xAttribs,ElementType::Enum _eType) const
 {
     namespace NodeAttribute   = ::com::sun::star::configuration::backend::NodeAttribute;
     namespace SchemaAttribute = ::com::sun::star::configuration::backend::SchemaAttribute;
 
     bool bValue;
 
-    ElementInfo::FlagsType aResult = 0;
+    sal_Int16 aResult = 0;
 
     switch(_eType)
     {
@@ -335,7 +335,7 @@ ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttr
 }
 // -----------------------------------------------------------------------------
 static
-void badValueType(Logger const & logger, sal_Char const * _pMsg, OUString const & _sType)
+void badValueType(Logger const & logger, sal_Char const * _pMsg, rtl::OUString const & _sType)
 {
     rtl::OUStringBuffer sMessageBuf;
     sMessageBuf.appendAscii( "Configuration XML parser: Bad value type attribute: " );
@@ -344,14 +344,14 @@ void badValueType(Logger const & logger, sal_Char const * _pMsg, OUString const 
     const sal_Unicode kQuote = '"';
     sMessageBuf.append(kQuote).append(_sType).append(kQuote);
 
-    OUString const sMessage = sMessageBuf.makeStringAndClear();
+    rtl::OUString const sMessage = sMessageBuf.makeStringAndClear();
     logger.error(sMessage);
     throw ElementParser::BadValueType(sMessage);
 }
 // -----------------------------------------------------------------------------
 static
 inline
-sal_Bool matchNsPrefix(OUString const & _sString, OUString const & _sPrefix)
+sal_Bool matchNsPrefix(rtl::OUString const & _sString, rtl::OUString const & _sPrefix)
 {
     return _sString.match(_sPrefix) &&
             _sString.getStr()[_sPrefix.getLength()] == k_NS_SEPARATOR;
@@ -359,7 +359,7 @@ sal_Bool matchNsPrefix(OUString const & _sString, OUString const & _sPrefix)
 // -----------------------------------------------------------------------------
 static
 inline
-sal_Bool matchSuffix(OUString const & _sString, OUString const & _sSuffix)
+sal_Bool matchSuffix(rtl::OUString const & _sString, rtl::OUString const & _sSuffix)
 {
     sal_Int32 nSuffixStart = _sString.getLength() - _sSuffix.getLength();
     if (nSuffixStart < 0)
@@ -370,7 +370,7 @@ sal_Bool matchSuffix(OUString const & _sString, OUString const & _sSuffix)
 // -----------------------------------------------------------------------------
 static
 inline
-OUString stripNsPrefix(OUString const & _sString, OUString const & _sPrefix)
+rtl::OUString stripNsPrefix(rtl::OUString const & _sString, rtl::OUString const & _sPrefix)
 {
     OSL_ASSERT( matchNsPrefix(_sString,_sPrefix) );
 
@@ -379,7 +379,7 @@ OUString stripNsPrefix(OUString const & _sString, OUString const & _sPrefix)
 // -----------------------------------------------------------------------------
 static
 inline
-OUString stripSuffix(OUString const & _sString, OUString const & _sSuffix)
+rtl::OUString stripSuffix(rtl::OUString const & _sString, rtl::OUString const & _sSuffix)
 {
     OSL_ASSERT( matchSuffix(_sString,_sSuffix) );
 
@@ -390,7 +390,7 @@ OUString stripSuffix(OUString const & _sString, OUString const & _sSuffix)
 // -----------------------------------------------------------------------------
 static
 inline
-OUString stripTypeName(Logger const & logger, OUString const & _sString, OUString const & _sPrefix)
+rtl::OUString stripTypeName(Logger const & logger, rtl::OUString const & _sString, rtl::OUString const & _sPrefix)
 {
     if ( matchNsPrefix(_sString,_sPrefix))
         return stripNsPrefix(_sString, _sPrefix);
@@ -401,7 +401,7 @@ OUString stripTypeName(Logger const & logger, OUString const & _sString, OUStrin
 }
 // -----------------------------------------------------------------------------
 static
-uno::Type xmlToScalarType(const OUString& _rType)
+uno::Type xmlToScalarType(const rtl::OUString& _rType)
 {
     uno::Type aRet;
 
@@ -421,7 +421,7 @@ uno::Type xmlToScalarType(const OUString& _rType)
         aRet = ::getCppuType(static_cast< double  const*>(0));
 
     else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_STRING))
-        aRet = ::getCppuType(static_cast<OUString const*>(0));
+        aRet = ::getCppuType(static_cast<rtl::OUString const*>(0));
 
     else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_BINARY))
         aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int8> const*>(0));
@@ -435,7 +435,7 @@ uno::Type xmlToScalarType(const OUString& _rType)
     return aRet;
 }
 // -----------------------------------------------------------------------------
-uno::Type xmlToListType(const OUString& _aElementType)
+uno::Type xmlToListType(const rtl::OUString& _aElementType)
 {
     uno::Type aRet;
 
@@ -467,9 +467,9 @@ uno::Type xmlToListType(const OUString& _aElementType)
 }
 // -----------------------------------------------------------------------------
 /// retrieve data type of a property,
-uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) const
+uno::Type ElementParser::getPropertyValueType(uno::Reference< sax::XAttributeList > const& xAttribs) const
 {
-    OUString sTypeName;
+    rtl::OUString sTypeName;
     if (!this->maybeGetAttribute(xAttribs, ATTR_VALUETYPE, sTypeName))
         return uno::Type(); // => VOID
 
@@ -478,15 +478,15 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
     // valuetype names are either 'xs:<type>' or 'oor:<type>' or 'oor:<type>-list'
     if (matchSuffix(sTypeName,VALUETYPE_LIST_SUFFIX))
     {
-        OUString sBasicName = stripTypeName( mLogger, stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
+        rtl::OUString sBasicName = stripTypeName( mLogger, stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
 
         aType = xmlToListType(sBasicName);
     }
     else
     {
-        OUString sPrefix = matchNsPrefix(sTypeName,NS_PREFIX_OOR) ? OUString( NS_PREFIX_OOR ) : OUString( NS_PREFIX_XS );
+        rtl::OUString sPrefix = matchNsPrefix(sTypeName,NS_PREFIX_OOR) ? rtl::OUString( NS_PREFIX_OOR ) : rtl::OUString( NS_PREFIX_XS );
 
-        OUString sBasicName = stripTypeName( mLogger, sTypeName, sPrefix );
+        rtl::OUString sBasicName = stripTypeName( mLogger, sTypeName, sPrefix );
 
         aType = xmlToScalarType(sBasicName);
     }
@@ -499,7 +499,7 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
 // -----------------------------------------------------------------------------
 
 /// retrieve element type and associated module name of a set,
-bool ElementParser::getSetElementType(SaxAttributeList const& xAttribs, OUString& aElementType, OUString& aElementTypeModule) const
+bool ElementParser::getSetElementType(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString& aElementType, rtl::OUString& aElementTypeModule) const
 {
     if (!this->maybeGetAttribute(xAttribs, ATTR_ITEMTYPE, aElementType))
         return false;
@@ -511,7 +511,7 @@ bool ElementParser::getSetElementType(SaxAttributeList const& xAttribs, OUString
 // -----------------------------------------------------------------------------
 
 /// retrieve instance type and associated module name of a set,
-bool ElementParser::getInstanceType(SaxAttributeList const& xAttribs, OUString& aElementType, OUString& aElementTypeModule) const
+bool ElementParser::getInstanceType(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString& aElementType, rtl::OUString& aElementTypeModule) const
 {
     if (!this->maybeGetAttribute(xAttribs, ATTR_ITEMTYPE, aElementType))
         return false;
@@ -523,14 +523,14 @@ bool ElementParser::getInstanceType(SaxAttributeList const& xAttribs, OUString& 
 // -----------------------------------------------------------------------------
 
 /// retrieve the component for an import or uses element,
-bool ElementParser::getImportComponent(SaxAttributeList const& xAttribs, OUString& _rsComponent) const
+bool ElementParser::getImportComponent(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString& _rsComponent) const
 {
     return this->maybeGetAttribute(xAttribs, ATTR_COMPONENT, _rsComponent);
 }
 // -----------------------------------------------------------------------------
 
 /// reads attributes for values from the attribute list
-bool ElementParser::isNull(SaxAttributeList const& _xAttribs) const
+bool ElementParser::isNull(uno::Reference< sax::XAttributeList > const& _xAttribs) const
 {
     bool bNull;
     return maybeGetAttribute(_xAttribs, EXT_ATTR_NULL, bNull) && bNull;
@@ -538,9 +538,9 @@ bool ElementParser::isNull(SaxAttributeList const& _xAttribs) const
 // -----------------------------------------------------------------------------
 
 /// reads attributes for values from the attribute list
-OUString ElementParser::getSeparator(SaxAttributeList const& _xAttribs) const
+rtl::OUString ElementParser::getSeparator(uno::Reference< sax::XAttributeList > const& _xAttribs) const
 {
-    OUString aSeparator;
+    rtl::OUString aSeparator;
     maybeGetAttribute(_xAttribs, ATTR_VALUESEPARATOR, aSeparator);
     return aSeparator;
 }
@@ -548,9 +548,9 @@ OUString ElementParser::getSeparator(SaxAttributeList const& _xAttribs) const
 
 // low-level internal methods
 /// checks for presence of a boolean attribute and assigns its value if it exists (and is a bool)
-bool ElementParser::maybeGetAttribute(SaxAttributeList const& xAttribs, OUString const& aAttributeName, bool& rAttributeValue) const
+bool ElementParser::maybeGetAttribute(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString const& aAttributeName, bool& rAttributeValue) const
 {
-    OUString sAttribute;
+    rtl::OUString sAttribute;
 
     if ( !this->maybeGetAttribute(xAttribs, aAttributeName, sAttribute) )
     {
@@ -574,7 +574,7 @@ bool ElementParser::maybeGetAttribute(SaxAttributeList const& xAttribs, OUString
 // -----------------------------------------------------------------------------
 
 /// checks for presence of an attribute and assigns its value if it exists
-bool ElementParser::maybeGetAttribute(SaxAttributeList const& xAttribs, OUString const& aAttributeName, OUString& rAttributeValue) const
+bool ElementParser::maybeGetAttribute(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString const& aAttributeName, rtl::OUString& rAttributeValue) const
 {
     return xAttribs.is() && impl_maybeGetAttribute(xAttribs, aAttributeName, rAttributeValue);
 }

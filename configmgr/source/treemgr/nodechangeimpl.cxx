@@ -34,7 +34,7 @@
 #include "nodechangeimpl.hxx"
 #include "nodechangeinfo.hxx"
 #include "nodeimpl.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "configset.hxx"
 #include "setnodeimpl.hxx"
 #include "groupnodeimpl.hxx"
@@ -68,22 +68,22 @@ view::ViewTreeAccess NodeChangeImpl::getTargetView()
 {
     OSL_ENSURE( m_aAffectedTree.is(), "ERROR: Configuration Change: Target Tree Access has not been set up" );
 
-    return Tree(m_aAffectedTree.get()).getView();
+    return view::ViewTreeAccess(m_aAffectedTree.get());
 }
 //-----------------------------------------------------------------------------
 
-TreeHolder NodeChangeImpl::getTargetTree() const
+rtl::Reference<Tree> NodeChangeImpl::getTargetTree() const
 {
-    TreeHolder aRet = m_aAffectedTree;
+    rtl::Reference<Tree> aRet = m_aAffectedTree;
     OSL_ENSURE( aRet.is(), "ERROR: Configuration Change: Target Tree has not been set up" );
 
     return aRet;
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset NodeChangeImpl::getTargetNode() const
+unsigned int NodeChangeImpl::getTargetNode() const
 {
-    NodeOffset nRet = m_nAffectedNode;
+    unsigned int nRet = m_nAffectedNode;
     OSL_ENSURE( nRet != 0, "ERROR: Configuration Change: Target Node has not been set up" );
     OSL_ENSURE( m_aAffectedTree.is() && m_aAffectedTree->isValidNode(nRet),
                 "ERROR: Configuration Change: Changing Node does not match tree" );
@@ -94,10 +94,10 @@ NodeOffset NodeChangeImpl::getTargetNode() const
 
 void NodeChangeImpl::setTarget(view::Node _aAffectedNode)
 {
-    this->setTarget(_aAffectedNode.tree().get_impl(), _aAffectedNode.get_offset());
+    this->setTarget(_aAffectedNode.tree(), _aAffectedNode.get_offset());
 
 }
-void NodeChangeImpl::setTarget(TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode)
+void NodeChangeImpl::setTarget(rtl::Reference<Tree> const& _aAffectedTree, unsigned int _nAffectedNode)
 {
     OSL_ENSURE(m_nState == 0 || (!m_aAffectedTree.is() && m_nState == eNoCheck), "WARNING: Configuration: Retargeting change that already was tested or applied");
 
@@ -126,7 +126,7 @@ bool NodeChangeImpl::isChange(bool bAllowUntested) const
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeImpl::ChangeCount NodeChangeImpl::getChangeDataCount() const
+sal_uInt32 NodeChangeImpl::getChangeDataCount() const
 {
     OSL_PRECOND(m_nState & eTestedChange, "WARNING: Configuration: Change was not tested  - change data count may be incorrect");
 
@@ -134,7 +134,7 @@ NodeChangeImpl::ChangeCount NodeChangeImpl::getChangeDataCount() const
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChangeImpl::fillChangeData(NodeChangeData& rChange, ChangeCount _ix) const
+bool NodeChangeImpl::fillChangeData(NodeChangeData& rChange, sal_uInt32 _ix) const
 {
     OSL_PRECOND(_ix < doGetChangeCount(), "ERROR: Configuration: Change index out of range");
     OSL_PRECOND(m_nState & eTestedChange, "WARNING: Configuration: Change was not tested  - fillChange is partially meaningless");
@@ -143,7 +143,7 @@ bool NodeChangeImpl::fillChangeData(NodeChangeData& rChange, ChangeCount _ix) co
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChangeImpl::fillChangeLocation(NodeChangeLocation& rChange, ChangeCount _ix) const
+bool NodeChangeImpl::fillChangeLocation(NodeChangeLocation& rChange, sal_uInt32 _ix) const
 {
     if (!m_aAffectedTree.is()) return false;
 
@@ -159,7 +159,7 @@ bool NodeChangeImpl::fillChangeLocation(NodeChangeLocation& rChange, ChangeCount
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChangeImpl::fillChangeInfo(NodeChangeInformation& rChange, ChangeCount _ix) const
+bool NodeChangeImpl::fillChangeInfo(NodeChangeInformation& rChange, sal_uInt32 _ix) const
 {
     return fillChangeLocation(rChange.location, _ix) & fillChangeData(rChange.change, _ix);
 }
@@ -190,7 +190,7 @@ void NodeChangeImpl::apply()
 //-----------------------------------------------------------------------------
 
 // default count is 1
-NodeChangeImpl::ChangeCount NodeChangeImpl::doGetChangeCount() const
+sal_uInt32 NodeChangeImpl::doGetChangeCount() const
 {
     return  1;
 }
@@ -237,14 +237,14 @@ ValueChangeImpl::ValueChangeImpl()
 }
 //-----------------------------------------------------------------------------
 
-ValueChangeImpl::ValueChangeImpl(UnoAny const& aNewValue)
+ValueChangeImpl::ValueChangeImpl(com::sun::star::uno::Any const& aNewValue)
 : m_aNewValue(aNewValue)
 , m_aOldValue()
 {
 }
 //-----------------------------------------------------------------------------
 
-ValueChangeImpl::ValueChangeImpl(UnoAny const& aNewValue, UnoAny const& aOldValue)
+ValueChangeImpl::ValueChangeImpl(com::sun::star::uno::Any const& aNewValue, com::sun::star::uno::Any const& aOldValue)
 : NodeChangeImpl(true)
 , m_aNewValue(aNewValue)
 , m_aOldValue(aOldValue)
@@ -257,25 +257,25 @@ ValueChangeImpl::~ValueChangeImpl()
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::setTarget(view::GroupNode const& _aParentNode, Name const& sNodeName)
+void ValueChangeImpl::setTarget(view::GroupNode const& _aParentNode, rtl::OUString const& sNodeName)
 {
-    OSL_ENSURE(!sNodeName.isEmpty(), "ValueChangeTarget is being set without a name");
+    OSL_ENSURE(sNodeName.getLength() != 0, "ValueChangeTarget is being set without a name");
 
     NodeChangeImpl::setTarget(_aParentNode.node());
     m_aName = sNodeName;
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName)
+void ValueChangeImpl::setTarget(rtl::Reference<Tree> const& aAffectedTree, unsigned int nParentNode, rtl::OUString const& sNodeName)
 {
-    OSL_ENSURE(!sNodeName.isEmpty(), "ValueChangeTarget is being set without a name");
+    OSL_ENSURE(sNodeName.getLength() != 0, "ValueChangeTarget is being set without a name");
 
     NodeChangeImpl::setTarget(aAffectedTree,nParentNode);
     m_aName = sNodeName;
 }
 //-----------------------------------------------------------------------------
 
-RelativePath ValueChangeImpl::doGetChangingNodePath(ChangeCount ) const
+RelativePath ValueChangeImpl::doGetChangingNodePath(sal_uInt32 ) const
 {
     return RelativePath( Path::wrapSimpleName(m_aName) );
 }
@@ -283,7 +283,7 @@ RelativePath ValueChangeImpl::doGetChangingNodePath(ChangeCount ) const
 
 bool ValueChangeImpl::doIsChangingSubnode() const
 {
-    return ! m_aName.isEmpty();
+    return m_aName.getLength() != 0;
 }
 //-----------------------------------------------------------------------------
 
@@ -293,7 +293,7 @@ bool ValueChangeImpl::doIsChange() const
 }
 //-----------------------------------------------------------------------------
 
-bool ValueChangeImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
+bool ValueChangeImpl::doFillChange(NodeChangeData& rChange, sal_uInt32) const
 {
     rChange.unoData.newValue = getNewValue();
     rChange.unoData.oldValue = getOldValue();
@@ -331,17 +331,17 @@ void ValueChangeImpl::doApply( view::Node const& rTarget)
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& )
+void ValueChangeImpl::preCheckValue(ValueMemberNode& rNode, com::sun::star::uno::Any& rOld, com::sun::star::uno::Any& )
 {
-    UnoAny aPrevValue = rNode.getValue();
+    com::sun::star::uno::Any aPrevValue = rNode.getValue();
     OSL_ENSURE(!rOld.hasValue() || rOld == aPrevValue, "ERROR: Configuration: Stored old value of target does not match the actual value");
     rOld = aPrevValue;
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::postCheckValue(ValueMemberNode& rNode, UnoAny& rNew)
+void ValueChangeImpl::postCheckValue(ValueMemberNode& rNode, com::sun::star::uno::Any& rNew)
 {
-    UnoAny aResultValue = rNode.getValue();
+    com::sun::star::uno::Any aResultValue = rNode.getValue();
     OSL_ENSURE(!rNew.hasValue() || rNew == aResultValue, "ERROR: Configuration: New value of target does not match the predicted result");
     rNew = aResultValue;
 }
@@ -351,13 +351,13 @@ void ValueChangeImpl::postCheckValue(ValueMemberNode& rNode, UnoAny& rNew)
 // Value operations: ValueReplaceImpl = set local value
 //-----------------------------------------------------------------------------
 
-ValueReplaceImpl::ValueReplaceImpl(UnoAny const& aNewValue)
+ValueReplaceImpl::ValueReplaceImpl(com::sun::star::uno::Any const& aNewValue)
 :ValueChangeImpl(aNewValue)
 {
 }
 //-----------------------------------------------------------------------------
 
-ValueReplaceImpl::ValueReplaceImpl(UnoAny const& aNewValue, UnoAny const& aOldValue)
+ValueReplaceImpl::ValueReplaceImpl(com::sun::star::uno::Any const& aNewValue, com::sun::star::uno::Any const& aOldValue)
 :ValueChangeImpl(aNewValue, aOldValue)
 {
 }
@@ -369,7 +369,7 @@ void ValueReplaceImpl::doApplyChange( ValueMemberUpdate& rNode)
 }
 //-----------------------------------------------------------------------------
 
-bool ValueReplaceImpl::doFillChange( NodeChangeData& rChange, ChangeCount _ix) const
+bool ValueReplaceImpl::doFillChange( NodeChangeData& rChange, sal_uInt32 _ix) const
 {
     rChange.type = NodeChangeData::eSetValue;
     return ValueChangeImpl::doFillChange(rChange, _ix);
@@ -386,7 +386,7 @@ ValueResetImpl::ValueResetImpl()
 }
 //-----------------------------------------------------------------------------
 
-ValueResetImpl::ValueResetImpl(UnoAny const& aNewValue, UnoAny const& aOldValue)
+ValueResetImpl::ValueResetImpl(com::sun::star::uno::Any const& aNewValue, com::sun::star::uno::Any const& aOldValue)
 :ValueChangeImpl(aNewValue, aOldValue)
 , m_bTargetIsDefault(false)
 {
@@ -405,7 +405,7 @@ bool ValueResetImpl::doIsChange() const
 }
 //-----------------------------------------------------------------------------
 
-bool ValueResetImpl::doFillChange( NodeChangeData& rChange, ChangeCount _ix) const
+bool ValueResetImpl::doFillChange( NodeChangeData& rChange, sal_uInt32 _ix) const
 {
     rChange.type = NodeChangeData::eSetDefault;
     ValueChangeImpl::doFillChange(rChange,_ix);
@@ -413,11 +413,11 @@ bool ValueResetImpl::doFillChange( NodeChangeData& rChange, ChangeCount _ix) con
 }
 //-----------------------------------------------------------------------------
 
-void ValueResetImpl::preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& rNew)
+void ValueResetImpl::preCheckValue(ValueMemberNode& rNode, com::sun::star::uno::Any& rOld, com::sun::star::uno::Any& rNew)
 {
     ValueChangeImpl::preCheckValue(rNode,rOld,rNew);
 
-    UnoAny aDefaultValue = rNode.getDefaultValue();
+    com::sun::star::uno::Any aDefaultValue = rNode.getDefaultValue();
     OSL_ENSURE(!rNew.hasValue() || rNew == aDefaultValue, "ERROR: Configuration: Stored new value of target does not match the actual default value");
     rNew = aDefaultValue;
     m_bTargetIsDefault = rNode.isDefault();
@@ -460,7 +460,7 @@ SetResetImpl::~SetResetImpl()
 }
 //-----------------------------------------------------------------------------
 
-RelativePath SetResetImpl::doGetChangingNodePath(ChangeCount _ix) const
+RelativePath SetResetImpl::doGetChangingNodePath(sal_uInt32 _ix) const
 {
     OSL_ENSURE( _ix < m_aTreeChanges.size() || _ix == scCommonBase, "Illegal Change index" );
     OSL_ASSERT( static_cast<size_t>(scCommonBase) > m_aTreeChanges.size() );
@@ -494,7 +494,7 @@ bool SetResetImpl::doIsChange() const
 }
 //-----------------------------------------------------------------------------
 
-bool SetResetImpl::doFillChange(NodeChangeData& rChange, ChangeCount _ix) const
+bool SetResetImpl::doFillChange(NodeChangeData& rChange, sal_uInt32 _ix) const
 {
     OSL_ENSURE( _ix < m_aTreeChanges.size() || _ix == scCommonBase, "Illegal Change index" );
     if (_ix >= m_aTreeChanges.size())
@@ -530,19 +530,18 @@ void SetResetImpl::doTest( view::Node const& rTarget)
                  it != stop;
                  ++it)
             {
-                Name aName = makeElementName(it->getNodeName(), Name::NoValidate());
+                rtl::OUString aName(it->getNodeName());
 
                 SetEntry anExistingEntry = accessor.findElement(aTargetSet,aName);
 
-                ElementTreeHolder aOldTree = anExistingEntry.tree();
-                ElementTreeHolder aNewTree;
+                rtl::Reference<ElementTree> aOldTree = anExistingEntry.tree();
+                rtl::Reference<ElementTree> aNewTree;
 
-                if (it->ISA(AddNode))
+                if (AddNode * addNode = dynamic_cast< AddNode * >(&*it))
                 {
-                    AddNode& rAddNode = static_cast<AddNode&>(*it);
-                    data::TreeSegment pAddedNode = rAddNode.getNewTree();
+                    rtl::Reference< data::TreeSegment > pAddedNode = addNode->getNewTree();
 
-                    OSL_ENSURE(pAddedNode.is(),"Processing an addNode to default - no node to add");
+                    OSL_ENSURE(pAddedNode.is(), "Processing an addNode to default - no node to add");
 
                     aNewTree = m_rElementFactory.instantiateOnDefault(pAddedNode,accessor.getElementTemplate(aTargetSet)).get();
                 }
@@ -566,15 +565,13 @@ void SetResetImpl::doTest( view::Node const& rTarget)
 
 void SetResetImpl::doApply( view::Node const& rTarget)
 {
-    typedef TreeChanges::iterator Iter;
-
     view::ViewTreeAccess accessor = this->getTargetView();
 
     view::SetNode aTargetSet(rTarget);
 
-    for (Iter it = m_aTreeChanges.begin(); it != m_aTreeChanges.end(); ++it)
+    for (std::vector< ElementTreeChange >::iterator it = m_aTreeChanges.begin(); it != m_aTreeChanges.end(); ++it)
     {
-        Name aElementName = it->m_aElementName.getName();
+        rtl::OUString aElementName = it->m_aElementName.getName();
 
         if (it->m_aRemovedElement.is())
             accessor.removeElement(aTargetSet, aElementName);
@@ -601,7 +598,7 @@ SetElementChangeImpl::SetElementChangeImpl(Path::Component const& aName, bool bN
 }
 //-----------------------------------------------------------------------------
 
-RelativePath SetElementChangeImpl::doGetChangingNodePath(ChangeCount ) const
+RelativePath SetElementChangeImpl::doGetChangingNodePath(sal_uInt32 ) const
 {
     return RelativePath(getFullElementName());
 }
@@ -622,7 +619,7 @@ void SetElementChangeImpl::doApply( view::Node const& rTarget)
 // Full Sets: SetInsertTreeImpl
 //-----------------------------------------------------------------------------
 
-SetInsertImpl::SetInsertImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck)
+SetInsertImpl::SetInsertImpl(Path::Component const& aName, rtl::Reference<ElementTree> const& aNewTree, bool bNoCheck)
 : SetElementChangeImpl(aName,bNoCheck)
 , m_aNewTree(aNewTree)
 {
@@ -635,7 +632,7 @@ bool SetInsertImpl::doIsChange() const
 }
 //-----------------------------------------------------------------------------
 
-bool SetInsertImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
+bool SetInsertImpl::doFillChange(NodeChangeData& rChange, sal_uInt32) const
 {
     rChange.type = NodeChangeData::eInsertElement;
     if (m_aNewTree.is())
@@ -645,14 +642,14 @@ bool SetInsertImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
 }
 //-----------------------------------------------------------------------------
 
-void SetInsertImpl::doTestElement( view::SetNode const& _aNode, Name const& aName)
+void SetInsertImpl::doTestElement( view::SetNode const& _aNode, rtl::OUString const& aName)
 {
     SetEntry anEntry = getTargetView().findElement(_aNode,aName); // require loaded children
     OSL_ENSURE(!anEntry.isValid(), "ERROR: Configuration: Adding a node that already exists");
 }
 //-----------------------------------------------------------------------------
 
-void SetInsertImpl::doApplyToElement( view::SetNode const& _aNode, Name const& aName)
+void SetInsertImpl::doApplyToElement( view::SetNode const& _aNode, rtl::OUString const& aName)
 {
     if (m_aNewTree.is())
     {
@@ -665,7 +662,7 @@ void SetInsertImpl::doApplyToElement( view::SetNode const& _aNode, Name const& a
 // Full Sets: SetReplaceTreeImpl
 //-----------------------------------------------------------------------------
 
-SetReplaceImpl::SetReplaceImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree)
+SetReplaceImpl::SetReplaceImpl(Path::Component const& aName, rtl::Reference<ElementTree> const& aNewTree)
 : SetElementChangeImpl(aName)
 , m_aNewTree(aNewTree)
 , m_aOldTree()
@@ -673,7 +670,7 @@ SetReplaceImpl::SetReplaceImpl(Path::Component const& aName, ElementTreeHolder c
 }
 //-----------------------------------------------------------------------------
 
-SetReplaceImpl::SetReplaceImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree)
+SetReplaceImpl::SetReplaceImpl(Path::Component const& aName, rtl::Reference<ElementTree> const& aNewTree, rtl::Reference<ElementTree> const& aOldTree)
 : SetElementChangeImpl(aName,true)
 , m_aNewTree(aNewTree)
 , m_aOldTree(aOldTree)
@@ -689,7 +686,7 @@ bool SetReplaceImpl::doIsChange() const
 //-----------------------------------------------------------------------------
 
 /// fills in pre- and post-change values, returns wether they differ
-bool SetReplaceImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
+bool SetReplaceImpl::doFillChange(NodeChangeData& rChange, sal_uInt32) const
 {
     rChange.type = NodeChangeData::eReplaceElement;
     if (m_aNewTree.is())
@@ -702,7 +699,7 @@ bool SetReplaceImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
 }
 //-----------------------------------------------------------------------------
 
-void SetReplaceImpl::doTestElement( view::SetNode const& _aNode, Name const& aName)
+void SetReplaceImpl::doTestElement( view::SetNode const& _aNode, rtl::OUString const& aName)
 {
     OSL_ASSERT(!m_aOldTree.is()); // already tested ?
 
@@ -714,7 +711,7 @@ void SetReplaceImpl::doTestElement( view::SetNode const& _aNode, Name const& aNa
 }
 //-----------------------------------------------------------------------------
 
-void SetReplaceImpl::doApplyToElement( view::SetNode const& _aNode, Name const& aName)
+void SetReplaceImpl::doApplyToElement( view::SetNode const& _aNode, rtl::OUString const& aName)
 {
     if (m_aOldTree != m_aNewTree)
     {
@@ -744,7 +741,7 @@ SetRemoveImpl::SetRemoveImpl(Path::Component const& aName)
 }
 //-----------------------------------------------------------------------------
 
-SetRemoveImpl::SetRemoveImpl(Path::Component const& aName, ElementTreeHolder const& aOldTree)
+SetRemoveImpl::SetRemoveImpl(Path::Component const& aName, rtl::Reference<ElementTree> const& aOldTree)
 : SetElementChangeImpl(aName,true)
 , m_aOldTree(aOldTree)
 {
@@ -759,7 +756,7 @@ bool SetRemoveImpl::doIsChange() const
 //-----------------------------------------------------------------------------
 
 /// fills in pre- and post-change values, returns wether they differ
-bool SetRemoveImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
+bool SetRemoveImpl::doFillChange(NodeChangeData& rChange, sal_uInt32) const
 {
     rChange.type = NodeChangeData::eRemoveElement;
     if (m_aOldTree.is())
@@ -769,7 +766,7 @@ bool SetRemoveImpl::doFillChange(NodeChangeData& rChange, ChangeCount) const
 }
 //-----------------------------------------------------------------------------
 
-void SetRemoveImpl::doTestElement( view::SetNode const& _aNode, Name const& aName)
+void SetRemoveImpl::doTestElement( view::SetNode const& _aNode, rtl::OUString const& aName)
 {
     OSL_ASSERT(!m_aOldTree.is()); // already tested ?
 
@@ -781,7 +778,7 @@ void SetRemoveImpl::doTestElement( view::SetNode const& _aNode, Name const& aNam
 }
 //-----------------------------------------------------------------------------
 
-void SetRemoveImpl::doApplyToElement( view::SetNode const& _aNode, Name const& aName)
+void SetRemoveImpl::doApplyToElement( view::SetNode const& _aNode, rtl::OUString const& aName)
 {
     getTargetView().removeElement(_aNode, aName);
 }

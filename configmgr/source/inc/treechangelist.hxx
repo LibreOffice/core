@@ -49,14 +49,10 @@ namespace configmgr
     //==========================================================================
     struct TreeChangeList
     {
-        typedef configuration::AbsolutePath   AbsolutePath;
-        typedef configuration::Name           Name;
-        typedef node::Attributes              NodeAttributes;
-
         TreeChangeList(const RequestOptions& _aOptions,
-                        const AbsolutePath& _rRootPath,
+                        const configuration::AbsolutePath& _rRootPath,
                         const SubtreeChange& _aSubtree,
-                        SubtreeChange::DeepChildCopy _doDeepCopy)
+                        treeop::DeepChildCopy _doDeepCopy)
                 : root(_aSubtree,_doDeepCopy)
                 , m_aLocation(_rRootPath)
                 , m_aOptions(_aOptions)
@@ -66,9 +62,9 @@ namespace configmgr
         @param      _rRootPath      path to the root of the whole to-be-updated subtree
         */
         TreeChangeList( const RequestOptions& _aOptions,
-                        const AbsolutePath& _rRootPath,
-                        const NodeAttributes& _rAttr = NodeAttributes())
-                : root(_rRootPath.getLocalName().getName().toString(), _rAttr)
+                        const configuration::AbsolutePath& _rRootPath,
+                        const node::Attributes& _rAttr = node::Attributes())
+                : root(_rRootPath.getLocalName().getName(), _rAttr)
                 , m_aLocation(_rRootPath)
                 , m_aOptions(_aOptions)
         {}
@@ -77,11 +73,11 @@ namespace configmgr
         @param      _rLocalName         relative path within the to-be-updated subtree
         */
         TreeChangeList( const RequestOptions& _aOptions,
-                        const AbsolutePath& _rRootPath,
-                        const Name& _rChildTemplateName,
-                        const Name& _rChildTemplateModule,
-                        const NodeAttributes& _rAttr = NodeAttributes())
-                : root(_rRootPath.getLocalName().getName().toString(), _rChildTemplateName.toString(), _rChildTemplateModule.toString(), _rAttr)
+                        const configuration::AbsolutePath& _rRootPath,
+                        rtl::OUString const & _rChildTemplateName,
+                        rtl::OUString const & _rChildTemplateModule,
+                        const node::Attributes& _rAttr = node::Attributes())
+                : root(_rRootPath.getLocalName().getName(), _rChildTemplateName, _rChildTemplateModule, _rAttr)
                 , m_aLocation(_rRootPath)
                 , m_aOptions(_aOptions)
         {}
@@ -89,7 +85,7 @@ namespace configmgr
         /** ctor
         @param      _rTreeList          list to initialize the path, no childs are copied
         */
-        TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
+        TreeChangeList( const TreeChangeList& _rTree, treeop::NoChildCopy _rNoCopy)
             : root(_rTree.root, _rNoCopy)
             , m_aLocation(_rTree.m_aLocation)
             , m_aOptions(_rTree.m_aOptions)
@@ -99,24 +95,24 @@ namespace configmgr
         bool isModuleRootChange() const { return m_aLocation.getDepth() <= 1; }
 
         /// get the module these changes belong to
-        Name getModuleName() const { return m_aLocation.getModuleName(); }
+        rtl::OUString getModuleName() const { return m_aLocation.getModuleName(); }
 
         /// get the full path to the root (location + root-name)
-        void setRootPath(const AbsolutePath& _rRootPath)
+        void setRootPath(const configuration::AbsolutePath& _rRootPath)
         { m_aLocation = _rRootPath; }
 
         /// get the full path to the root (location + root-name)
-        AbsolutePath const& getRootNodePath() const { return m_aLocation; }
+        configuration::AbsolutePath const& getRootNodePath() const { return m_aLocation; }
 
         /// get the full path to the root (location)
-        AbsolutePath getRootContextPath() const { return m_aLocation.getParentPath(); }
+        configuration::AbsolutePath getRootContextPath() const { return m_aLocation.getParentPath(); }
 
         RequestOptions const & getOptions() const { return m_aOptions; }
 
     public:
         SubtreeChange root;                      // the root of the whole tree of updates
     private:
-        AbsolutePath            m_aLocation;     // absolute path to the parent of the node corresponding to this->root
+        configuration::AbsolutePath            m_aLocation;  // absolute path to the parent of the node corresponding to this->root
         RequestOptions          m_aOptions;      // options for the tree that is concerned by these changes
     };
 //----------------------------------------------------------------------------

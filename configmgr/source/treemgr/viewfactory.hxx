@@ -40,14 +40,12 @@ namespace configmgr
     {
     // Different standard (static) strategies
     //---------------------------------------------------------------------
-        typedef rtl::Reference<ViewStrategy> ViewStrategyRef;
-
         /// provides a factory for read-only node implementations
-        ViewStrategyRef createReadOnlyStrategy();
+        rtl::Reference<ViewStrategy> createReadOnlyStrategy();
         /// provides a factory for nodes that cache changes temporarily
-        ViewStrategyRef createDeferredChangeStrategy();
+        rtl::Reference<ViewStrategy> createDeferredChangeStrategy();
         /// provides a factory for immediately commiting node implementations
-        ViewStrategyRef createDirectAccessStrategy(data::TreeSegment const & _aTreeSegment);
+        rtl::Reference<ViewStrategy> createDirectAccessStrategy(rtl::Reference< data::TreeSegment > const & _aTreeSegment);
     //---------------------------------------------------------------------
     }
 

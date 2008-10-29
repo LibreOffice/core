@@ -46,7 +46,7 @@ namespace configmgr
 //      class DisposeNotifier
 //-----------------------------------------------------------------------------
 
-void DisposeNotifier::appendAndClearContainer(ListenerContainer* pContainer)
+void DisposeNotifier::appendAndClearContainer(cppu::OInterfaceContainerHelper* pContainer)
 {
     if (pContainer)
     {
@@ -54,7 +54,7 @@ void DisposeNotifier::appendAndClearContainer(ListenerContainer* pContainer)
             cppu::OInterfaceIteratorHelper aIterator(*pContainer);
             while (aIterator.hasMoreElements())
             {
-                aListeners.push_back(Listener::query(aIterator.next()));
+                aListeners.push_back(uno::Reference< lang::XEventListener >::query(aIterator.next()));
             }
         }
         pContainer->clear();
@@ -63,7 +63,7 @@ void DisposeNotifier::appendAndClearContainer(ListenerContainer* pContainer)
 //-----------------------------------------------------------------------------
 void DisposeNotifier::notify()
 {
-    for(Listeners::iterator it = aListeners.begin(); it != aListeners.end(); ++it)
+    for(std::vector< uno::Reference< lang::XEventListener > >::iterator it = aListeners.begin(); it != aListeners.end(); ++it)
     {
         if (it->is())
         {

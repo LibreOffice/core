@@ -1,4 +1,4 @@
-cg	configmgr	:	offapi comphelper cppuhelper tools vos NULL
+cg	configmgr	: BOOST:boost offapi comphelper cppuhelper salhelper tools vos NULL
 cg	configmgr								usr1	-	all	cg_mkout NULL
 cg	configmgr\inc							nmake	-	all	cg_inc NULL
 cg	configmgr\source\misc					nmake	-	all	cg_misc cg_inc NULL

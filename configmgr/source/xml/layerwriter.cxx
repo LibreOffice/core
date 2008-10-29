@@ -55,7 +55,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
-            ( CreationContext const& xContext )
+            ( uno::Reference< uno::XComponentContext > const& xContext )
         {
             return * new LayerWriter(xContext);
         }
@@ -63,23 +63,21 @@ namespace configmgr
 
         namespace
         {
-            typedef uno::Reference< script::XTypeConverter > TypeConverter;
-
             static inline
-                TypeConverter createTCV(LayerWriter::ServiceFactory const & _xSvcFactory)
+                uno::Reference< script::XTypeConverter > createTCV(uno::Reference< lang::XMultiServiceFactory > const & _xSvcFactory)
             {
                 OSL_ENSURE(_xSvcFactory.is(),"Cannot create Write Formatter without a ServiceManager");
 
                 static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
 
-                return TypeConverter::query(_xSvcFactory->createInstance(k_sTCVService));
+                return uno::Reference< script::XTypeConverter >::query(_xSvcFactory->createInstance(k_sTCVService));
             }
         // -----------------------------------------------------------------------------
             static
             void translateSAXException( sax::SAXException & aSAXException,
                                         backenduno::XLayerHandler * context)
             {
-                OUString sMessage = aSAXException.Message;
+                rtl::OUString sMessage = aSAXException.Message;
 
                 uno::Any const & aWrappedException = aSAXException.WrappedException;
                 if (aWrappedException.hasValue())
@@ -116,7 +114,7 @@ namespace configmgr
             {
                 OSL_ASSERT(anIOException.isExtractableTo(getIOExceptionType()));
                 io::IOException const * pException = static_cast<io::IOException const *>(anIOException.getValue());
-                OUString sMessage = pException->Message;
+                rtl::OUString sMessage = pException->Message;
 
                 if (anIOException.isExtractableTo(getNotConnectedExceptionType()))
                 {
@@ -131,9 +129,9 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        LayerWriter::LayerWriter(CreationArg _xContext)
-            : LayerWriterService_Base(_xContext)
-            , m_xTCV( createTCV( LayerWriterService_Base::getServiceFactory() ) )
+        LayerWriter::LayerWriter(uno::Reference< uno::XComponentContext > const & _xContext)
+            : WriterService< ::com::sun::star::configuration::backend::XLayerHandler >(_xContext)
+            , m_xTCV( createTCV( WriterService< ::com::sun::star::configuration::backend::XLayerHandler >::getServiceFactory() ) )
             , m_bInProperty(false)
             , m_bStartedDocument(false)
         {
@@ -183,7 +181,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+        void SAL_CALL LayerWriter::overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -223,7 +221,7 @@ namespace configmgr
             m_aFormatter.prepareElement(info);
         }
 
-        void SAL_CALL LayerWriter::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
+        void SAL_CALL LayerWriter::addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -242,7 +240,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+        void SAL_CALL LayerWriter::addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -278,7 +276,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::dropNode( const OUString& aName )
+        void SAL_CALL LayerWriter::dropNode( const rtl::OUString& aName )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -302,7 +300,7 @@ namespace configmgr
        }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+        void SAL_CALL LayerWriter::addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -327,7 +325,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+        void SAL_CALL LayerWriter::addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -352,7 +350,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+        void SAL_CALL LayerWriter::overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -407,7 +405,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+        void SAL_CALL LayerWriter::setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
@@ -426,7 +424,7 @@ namespace configmgr
         void LayerWriter::raiseMalformedDataException(sal_Char const * pMsg)
         {
             OSL_ASSERT(pMsg);
-            OUString sMsg = OUString::createFromAscii(pMsg);
+            rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
 
             throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
         }
@@ -435,7 +433,7 @@ namespace configmgr
         void LayerWriter::raiseIllegalTypeException(sal_Char const * pMsg)
         {
             OSL_ASSERT(pMsg);
-            OUString sMsg = OUString::createFromAscii(pMsg);
+            rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
 
             com::sun::star::beans::IllegalTypeException e( sMsg, *this );
             throw backenduno::MalformedDataException( sMsg, *this, uno::makeAny(e) );
@@ -470,9 +468,9 @@ namespace configmgr
 
         void LayerWriter::startNode()
         {
-            OUString sTag = m_aFormatter.getElementTag();
+            rtl::OUString sTag = m_aFormatter.getElementTag();
             getWriteHandler()->startElement(sTag,m_aFormatter.getElementAttributes());
-            getWriteHandler()->ignorableWhitespace(OUString());
+            getWriteHandler()->ignorableWhitespace(rtl::OUString());
             m_aTagStack.push(sTag);
         }
         // -----------------------------------------------------------------------------
@@ -496,7 +494,7 @@ namespace configmgr
             OSL_ASSERT(!m_aTagStack.empty()); // checks done elsewhere
 
             getWriteHandler()->endElement(m_aTagStack.top());
-            getWriteHandler()->ignorableWhitespace(OUString());
+            getWriteHandler()->ignorableWhitespace(rtl::OUString());
 
             m_aTagStack.pop();
             m_bInProperty = false;
@@ -510,7 +508,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void LayerWriter::writeValue(uno::Any const & _aValue, OUString const & _aLocale)
+        void LayerWriter::writeValue(uno::Any const & _aValue, rtl::OUString const & _aLocale)
         {
             m_aFormatter.prepareSimpleElement( ElementType::value );
             m_aFormatter.addLanguage(_aLocale);
@@ -524,16 +522,16 @@ namespace configmgr
 
             aValueFormatter.addValueAttributes(m_aFormatter);
 
-            OUString sTag       = m_aFormatter.getElementTag();
-            OUString sContent   = aValueFormatter.getContent( this->m_xTCV );
+            rtl::OUString sTag       = m_aFormatter.getElementTag();
+            rtl::OUString sContent   = aValueFormatter.getContent( this->m_xTCV );
 
-            SaxHandler xOut = getWriteHandler();
+            uno::Reference< sax::XDocumentHandler > xOut = getWriteHandler();
             xOut->startElement(sTag, m_aFormatter.getElementAttributes());
 
             if (sContent.getLength()) xOut->characters(sContent);
 
             xOut->endElement(sTag);
-            xOut->ignorableWhitespace(OUString());
+            xOut->ignorableWhitespace(rtl::OUString());
         }
         // -----------------------------------------------------------------------------
 

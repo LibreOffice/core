@@ -52,16 +52,10 @@ namespace configmgr
     namespace configapi
     {
 // ---------------------------------------------------------------------------------------------------
-
-        using configuration::Tree;
-        using configuration::NodeID;
-        using configuration::SubNodeID;
-
-// ---------------------------------------------------------------------------------------------------
 // class Notifier (-Impl)
 // ---------------------------------------------------------------------------------------------------
 
-Notifier::Notifier(NotifierHolder const& aImpl,ApiTreeImpl const* pTree)
+Notifier::Notifier(vos::ORef<NotifierImpl> const& aImpl,ApiTreeImpl const* pTree)
 : m_aImpl(aImpl)
 , m_pTree(pTree)
 {
@@ -82,21 +76,21 @@ Notifier::~Notifier()
 }
 // ---------------------------------------------------------------------------------------------------
 
-Broadcaster Notifier::makeBroadcaster(NodeChange const& aChange, bool bLocal) const
+Broadcaster Notifier::makeBroadcaster(configuration::NodeChange const& aChange, bool bLocal) const
 {
     return Broadcaster(*this,aChange,bLocal);
 }
 // ---------------------------------------------------------------------------------------------------
 
-Broadcaster Notifier::makeBroadcaster(NodeChanges const& aChanges, bool bLocal) const
+Broadcaster Notifier::makeBroadcaster(configuration::NodeChanges const& aChanges, bool bLocal) const
 {
     OSL_ENSURE(!aChanges.isEmpty(),"Creating broadcaster for no changes");
     return Broadcaster(*this,aChanges,bLocal);
 }
 // ---------------------------------------------------------------------------------------------------
 
-NotifierImpl::NotifierImpl(configuration::TreeRef const& aTree)
-: m_aListeners(aTree.getContainedInnerNodeCount(), SubNodeToIndex(aTree))
+NotifierImpl::NotifierImpl(rtl::Reference< configuration::Tree > const& aTree)
+: m_aListeners(aTree->nodeCount(), SubNodeToIndex(aTree))
 {
 }
 // ---------------------------------------------------------------------------------------------------
@@ -107,120 +101,120 @@ NotifierImpl::~NotifierImpl()
 
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::add(NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const
+void Notifier::add(configuration::NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->add( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->add( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::add(NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const
+void Notifier::add(configuration::NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->add( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->add( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::add(NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const
+void Notifier::add(configuration::NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->add( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->add( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::addForAll(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const
+void Notifier::addForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->addForAll( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->addForAll( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::addForOne(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, Name const& aName) const
+void Notifier::addForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, rtl::OUString const& aName) const
 {
     if (xListener.is())
-        m_aImpl->addNamed( SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
+        m_aImpl->addNamed( configuration::SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::addForAll(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const
+void Notifier::addForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->addForAll( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->addForAll( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::addForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, Name const& aName) const
+void Notifier::addForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, rtl::OUString const& aName) const
 {
     if (xListener.is())
-        m_aImpl->addNamed( SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
+        m_aImpl->addNamed( configuration::SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::add(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener, uno::Sequence<OUString> const& aNames) const
+void Notifier::add(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener, uno::Sequence<rtl::OUString> const& aNames) const
 {
     if (xListener.is())
     {
         if (aNames.getLength() > 0)
-            m_aImpl->add( NodeID(m_pTree->getTree(),aNode), xListener, aNames);
+            m_aImpl->add( configuration::NodeID(m_pTree->getTree(),aNode), xListener, aNames);
         else
-            m_aImpl->add( NodeID(m_pTree->getTree(),aNode), xListener );
+            m_aImpl->add( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
     }
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::remove(NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const
+void Notifier::remove(configuration::NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->remove( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->remove( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::remove(NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const
+void Notifier::remove(configuration::NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->remove( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->remove( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::remove(NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const
+void Notifier::remove(configuration::NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->remove( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->remove( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::removeForAll(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const
+void Notifier::removeForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->removeForAll( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->removeForAll( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::removeForOne(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, Name const& aName) const
+void Notifier::removeForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, rtl::OUString const& aName) const
 {
     if (xListener.is())
-        m_aImpl->removeNamed( SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
+        m_aImpl->removeNamed( configuration::SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::removeForAll(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const
+void Notifier::removeForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->removeForAll( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->removeForAll( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::removeForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, Name const& aName) const
+void Notifier::removeForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, rtl::OUString const& aName) const
 {
     if (xListener.is())
-        m_aImpl->removeNamed( SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
+        m_aImpl->removeNamed( configuration::SubNodeID(m_pTree->getTree(),aNode, aName), xListener );
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::remove(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener) const
+void Notifier::remove(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener) const
 {
     if (xListener.is())
-        m_aImpl->remove( NodeID(m_pTree->getTree(),aNode), xListener );
+        m_aImpl->remove( configuration::NodeID(m_pTree->getTree(),aNode), xListener );
 }
 
 // ---------------------------------------------------------------------------------------------------

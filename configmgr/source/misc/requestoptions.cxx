@@ -40,7 +40,7 @@ namespace configmgr
 {
 // ---------------------------------------------------------------------------
 
-    RequestOptions::LocaleString RequestOptions::getIsoLocale() const
+    rtl::OUString RequestOptions::getIsoLocale() const
     {
         return localehelper::makeIsoLocale( m_sLocale );
     }
@@ -52,7 +52,7 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------
 
-    void RequestOptions::setIsoLocale(LocaleString const & _sLocale)
+    void RequestOptions::setIsoLocale(rtl::OUString const & _sLocale)
     {
         setLocale( localehelper::makeLocale( _sLocale ) );
     }
@@ -72,14 +72,14 @@ namespace configmgr
 // ---------------------------------------------------------------------------
 
     static inline
-    sal_Int32 hashRequestLocale(RequestOptions::Locale const & aLocale)
+    sal_Int32 hashRequestLocale(com::sun::star::lang::Locale const & aLocale)
     {
         return aLocale.Language.hashCode() ^ aLocale.Country.hashCode();
     }
 // ---------------------------------------------------------------------------
 
     static inline
-    sal_Int32 compareRequestLocale(RequestOptions::Locale const& lhs, RequestOptions::Locale const& rhs)
+    sal_Int32 compareRequestLocale(com::sun::star::lang::Locale const& lhs, com::sun::star::lang::Locale const& rhs)
     {
         sal_Int32 nDiff = lhs.Language.compareTo(rhs.Language);
         if (nDiff == 0)

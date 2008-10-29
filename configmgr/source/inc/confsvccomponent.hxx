@@ -48,14 +48,10 @@ namespace configmgr
     namespace css   = ::com::sun::star;
     namespace uno   = css::uno;
     namespace lang  = css::lang;
-    using ::rtl::OUString;
-
-//----------------------------------------------------------------------------
-    typedef ::cppu::WeakComponentImplHelper1< lang::XServiceInfo > ServiceImplBase;
 
 //----------------------------------------------------------------------------
     class ServiceComponentImpl
-        : public ServiceImplBase
+        : public ::cppu::WeakComponentImplHelper1< lang::XServiceInfo >
     {
     protected:
         ServiceImplementationInfo const*const     m_info;
@@ -67,17 +63,17 @@ namespace configmgr
         //virtual uno::Sequence<uno::Type> SAL_CALL getTypes(  ) throw(uno::RuntimeException) = 0;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(uno::RuntimeException);
+        virtual rtl::OUString SAL_CALL getImplementationName(  ) throw(uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(uno::RuntimeException);
-        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(uno::RuntimeException);
+        virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(uno::RuntimeException);
 
         // Component Helper - force override
         virtual void SAL_CALL disposing() = 0;
         // Component Helper - check object state
         virtual void checkAlive() throw (uno::RuntimeException);
         void checkAlive(char const* message) throw (uno::RuntimeException)
-            { checkAlive( OUString::createFromAscii(message) ); }
-        void checkAlive(OUString const& message) throw (uno::RuntimeException);
+            { checkAlive( rtl::OUString::createFromAscii(message) ); }
+        void checkAlive(rtl::OUString const& message) throw (uno::RuntimeException);
 
         // Extra helpers
         static uno::Sequence<sal_Int8> getStaticImplementationId(ServiceImplementationInfo const* pServiceInfo) throw(uno::RuntimeException);

@@ -43,7 +43,7 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-LayerUpdateMerger::LayerUpdateMerger(LayerSource const & _xSourceLayer, LayerUpdate const & _aLayerUpdate)
+LayerUpdateMerger::LayerUpdateMerger(uno::Reference< backenduno::XLayer > const & _xSourceLayer, LayerUpdate const & _aLayerUpdate)
 : BasicUpdateMerger(_xSourceLayer)
 , m_aLayerUpdate(_aLayerUpdate)
 , m_xCurrentNode()
@@ -70,7 +70,7 @@ void LayerUpdateMerger::flushUpdate()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerUpdateMerger::startLayer(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     BasicUpdateMerger::startLayer();
 
@@ -81,7 +81,7 @@ void SAL_CALL LayerUpdateMerger::startLayer(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerUpdateMerger::endLayer(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     BasicUpdateMerger::endLayer();
 
@@ -89,8 +89,8 @@ void SAL_CALL LayerUpdateMerger::endLayer(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -100,7 +100,7 @@ void SAL_CALL LayerUpdateMerger::overrideNode( const OUString& aName, sal_Int16 
 
     OSL_ASSERT(m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getNodeByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getNodeByName(aName);
     if (!xUpdate.is())
     {
         BasicUpdateMerger::overrideNode(aName, aAttributes, bClear);
@@ -122,8 +122,8 @@ void SAL_CALL LayerUpdateMerger::overrideNode( const OUString& aName, sal_Int16 
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -133,7 +133,7 @@ void SAL_CALL LayerUpdateMerger::addOrReplaceNode( const OUString& aName, sal_In
 
     OSL_ASSERT(m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getNodeByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getNodeByName(aName);
     if (!xUpdate.is())
     {
         BasicUpdateMerger::addOrReplaceNode(aName, aAttributes);
@@ -155,8 +155,8 @@ void SAL_CALL LayerUpdateMerger::addOrReplaceNode( const OUString& aName, sal_In
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -166,7 +166,7 @@ void SAL_CALL LayerUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& a
 
     OSL_ASSERT(m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getNodeByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getNodeByName(aName);
     if (!xUpdate.is())
     {
         BasicUpdateMerger::addOrReplaceNodeFromTemplate(aName, aTemplate, aAttributes);
@@ -189,7 +189,7 @@ void SAL_CALL LayerUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& a
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerUpdateMerger::endNode(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -202,7 +202,7 @@ void SAL_CALL LayerUpdateMerger::endNode(  )
     // write unhandled so far changes
     m_xCurrentNode->writeChildrenToLayer( getResultWriter().get() );
 
-    NodeUpdateRef xParent( m_xCurrentNode->getParent() );
+    rtl::Reference<NodeUpdate> xParent( m_xCurrentNode->getParent() );
 
     if (xParent.is())
         getResultWriter()->endNode();
@@ -214,8 +214,8 @@ void SAL_CALL LayerUpdateMerger::endNode(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::dropNode( const OUString& aName )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::dropNode( const rtl::OUString& aName )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -225,7 +225,7 @@ void SAL_CALL LayerUpdateMerger::dropNode( const OUString& aName )
 
     OSL_ASSERT(m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getNodeByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getNodeByName(aName);
     if (xUpdate.is())
     {
         m_xCurrentNode->removeNodeByName(aName);
@@ -248,8 +248,8 @@ void SAL_CALL LayerUpdateMerger::dropNode( const OUString& aName )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -259,7 +259,7 @@ void SAL_CALL LayerUpdateMerger::overrideProperty( const OUString& aName, sal_In
 
     OSL_ASSERT( m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getPropertyByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getPropertyByName(aName);
     if (!xUpdate.is())
     {
         BasicUpdateMerger::overrideProperty(aName, aAttributes, aType, bClear);
@@ -288,7 +288,7 @@ void SAL_CALL LayerUpdateMerger::overrideProperty( const OUString& aName, sal_In
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerUpdateMerger::endProperty(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -300,8 +300,8 @@ void SAL_CALL LayerUpdateMerger::endProperty(  )
 
     if (!m_xCurrentProp.is())
     {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: Ending property that wasn't started.") );
-        throw MalformedDataException( sMsg, *this, uno::Any() );
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: Ending property that wasn't started.") );
+        throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
     }
 
     // write unhandled so far values
@@ -314,7 +314,7 @@ void SAL_CALL LayerUpdateMerger::endProperty(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerUpdateMerger::setPropertyValue( const uno::Any& aValue )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -326,8 +326,8 @@ void SAL_CALL LayerUpdateMerger::setPropertyValue( const uno::Any& aValue )
 
     if (!m_xCurrentProp.is())
     {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: setting value, but no property is started.") );
-        throw MalformedDataException( sMsg, *this, uno::Any() );
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: setting value, but no property is started.") );
+        throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
     }
 
     if (!m_xCurrentProp->hasChange())
@@ -353,8 +353,8 @@ void SAL_CALL LayerUpdateMerger::setPropertyValue( const uno::Any& aValue )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString & aLocale )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -366,8 +366,8 @@ void SAL_CALL LayerUpdateMerger::setPropertyValueForLocale( const uno::Any& aVal
 
     if (!m_xCurrentProp.is())
     {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: setting value, but no property is started.") );
-        throw MalformedDataException( sMsg, *this, uno::Any() );
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: setting value, but no property is started.") );
+        throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
     }
 
     if (!m_xCurrentProp->hasChangeFor(aLocale))
@@ -393,8 +393,8 @@ void SAL_CALL LayerUpdateMerger::setPropertyValueForLocale( const uno::Any& aVal
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -403,7 +403,7 @@ void SAL_CALL LayerUpdateMerger::addProperty( const OUString& aName, sal_Int16 a
     }
     OSL_ASSERT( m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getPropertyByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getPropertyByName(aName);
     if (!xUpdate.is())
     {
         BasicUpdateMerger::addProperty(aName, aAttributes, aType);
@@ -442,8 +442,8 @@ void SAL_CALL LayerUpdateMerger::addProperty( const OUString& aName, sal_Int16 a
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (BasicUpdateMerger::isHandling())
     {
@@ -452,7 +452,7 @@ void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sa
     }
     OSL_ASSERT( m_xCurrentNode.is());
 
-    ElementUpdateRef xUpdate = m_xCurrentNode->getPropertyByName(aName);
+    rtl::Reference<ElementUpdate> xUpdate = m_xCurrentNode->getPropertyByName(aName);
     if (!xUpdate.is())
     {
         BasicUpdateMerger::addPropertyWithValue(aName, aAttributes, aValue);

@@ -44,9 +44,9 @@ namespace configmgr
 {
 //-----------------------------------------------------------------------------
     class ISubtree;
-    class IConfigDefaultProvider;
     class IDefaultableTreeManager;
     class RequestOptions;
+    class TreeManager;
 
     namespace uno = com::sun::star::uno;
 //-----------------------------------------------------------------------------
@@ -55,7 +55,6 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         class Tree;
-        class TreeRef;
         class NodeRef;
 //-----------------------------------------------------------------------------
 
@@ -68,9 +67,9 @@ namespace configmgr
         public:
             // factory methods
             static DefaultProvider createEmpty();
-            static DefaultProvider create(Tree const& _aRootTree,
+            static DefaultProvider create(rtl::Reference< Tree > const& _aRootTree,
                                           RequestOptions const& _xOptions,
-                                          rtl::Reference< IConfigDefaultProvider > const & _xDefaultProvider,
+                                          rtl::Reference< TreeManager > const & _xDefaultProvider,
                                           IDefaultableTreeManager* _pDefaultableTree);
 
             // actual c'tor
@@ -85,10 +84,10 @@ namespace configmgr
             bool isValid() const { return !! m_aProxy.is(); }
 
         /// tries to load a default instance of the specified node
-            std::auto_ptr<ISubtree> getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL();
+            std::auto_ptr<ISubtree> getDefaultTree(rtl::Reference< Tree > const& _aTree, NodeRef const& _aNode) const SAL_THROW((com::sun::star::uno::Exception));
 
         /// tries to load default data into the specified tree
-            bool fetchDefaultData(TreeRef const& _aTreeRef) const CFG_UNO_THROW_ALL();
+            bool fetchDefaultData(rtl::Reference< Tree > const& _aTreeRef) const SAL_THROW((com::sun::star::uno::Exception));
         };
 
 //-----------------------------------------------------------------------------

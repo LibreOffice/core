@@ -32,35 +32,29 @@
 #define CONFIGMGR_VALUEMEMBERNODE_HXX_
 
 #include "nodeimpl.hxx"
-#include "valuenodeaccess.hxx"
 
 namespace configmgr
 {
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-        typedef com::sun::star::uno::Any UnoAny;
-        typedef com::sun::star::uno::Type UnoType;
-
-        class Name;
-//-----------------------------------------------------------------------------
        /// handle class for values that are not nodes themselves, but members of a group
         class ValueMemberNode
         {
+        public:
             class DeferredImpl;
-            typedef rtl::Reference<DeferredImpl> DeferredImplRef;
-
-            data::ValueNodeAccess m_aNodeRef;
-            DeferredImplRef m_xDeferredOperation;
+        private:
+            sharable::ValueNode * m_node;
+            rtl::Reference<DeferredImpl> m_xDeferredOperation;
         private:
             friend class GroupNodeImpl;
             friend class DeferredGroupNodeImpl;
             friend class ValueMemberUpdate;
 
             /// create a ValueMemberNode for a given node
-            explicit ValueMemberNode(data::ValueNodeAccess const& _aNodeAccess);
+            explicit ValueMemberNode(sharable::ValueNode * node);
             /// create a deferred ValueMemberNode (xOriginal must not be empty)
-            ValueMemberNode(DeferredImplRef const& _xDeferred);
+            ValueMemberNode(rtl::Reference<DeferredImpl> const& _xDeferred);
         public:
             ValueMemberNode(ValueMemberNode const& rOriginal);
             ValueMemberNode& operator=(ValueMemberNode const& rOriginal);
@@ -73,7 +67,7 @@ namespace configmgr
             bool hasChange() const;
 
             /// retrieve the name of the underlying node
-            Name getNodeName() const;
+            rtl::OUString getNodeName() const;
             /// retrieve the attributes
             node::Attributes getAttributes()    const;
 
@@ -82,11 +76,11 @@ namespace configmgr
             /// is the default value of this node available
             bool canGetDefaultValue() const;
             /// retrieve the current value of this node
-            UnoAny  getValue()      const;
+            com::sun::star::uno::Any    getValue()      const;
             /// retrieve the default value of this node
-            UnoAny getDefaultValue() const;
+            com::sun::star::uno::Any getDefaultValue() const;
 
-            UnoType getValueType()  const;
+            com::sun::star::uno::Type   getValueType()  const;
 
         };
     //-------------------------------------------------------------------------
@@ -97,7 +91,6 @@ namespace configmgr
             ValueMemberNode                     m_aMemberNode;
             view::ViewStrategy *                m_pStrategy;
         private:
-            typedef ValueMemberNode::DeferredImplRef DeferredImplRef;
             friend class view::ViewStrategy;
 
             ValueMemberUpdate(ValueMemberNode const& rOriginal, view::ViewStrategy& _rStrategy)
@@ -111,7 +104,7 @@ namespace configmgr
             ValueMemberNode getNode() const { return m_aMemberNode; }
 
             /// Set this node to a new value
-            void    setValue(UnoAny const& aNewValue);
+            void    setValue(com::sun::star::uno::Any const& aNewValue);
 
             /// Set this node to assume its default value
             void    setDefault();

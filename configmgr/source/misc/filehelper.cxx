@@ -44,8 +44,6 @@
 
 namespace configmgr
 {
-    using namespace ::osl;
-
     //==========================================================================
     //= FileHelper
     //==========================================================================
@@ -56,21 +54,21 @@ namespace configmgr
         if (tryBackupFirst)
         {
             rtl::OUString aBakURL = _aURL.concat( ASCII(".bak") );
-            File::RC eBakError = File::move(_aURL,aBakURL);
-            if (eBakError == File::E_None)
+            osl::File::RC eBakError = osl::File::move(_aURL,aBakURL);
+            if (eBakError == osl::File::E_None)
                 return true;
         }
-        File::RC eError = File::remove(_aURL);
-        return eError == File::E_None || eError == File::E_NOENT;
+        osl::File::RC eError = osl::File::remove(_aURL);
+        return eError == osl::File::E_None || eError == osl::File::E_NOENT;
     }
     // -----------------------------------------------------------------------------
     void FileHelper::replaceFile(
-        const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) CFG_THROW1 (io::IOException)
+        const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) SAL_THROW((io::IOException))
     {
-        File::remove(_aToURL);
-        File::RC eError = File::move(_aFromURL, _aToURL);
-        if (eError != File::E_None &&
-            eError != File::E_NOENT)
+        osl::File::remove(_aToURL);
+        osl::File::RC eError = osl::File::move(_aFromURL, _aToURL);
+        if (eError != osl::File::E_None &&
+            eError != osl::File::E_NOENT)
         {
             rtl::OUStringBuffer sErrorBuf;
             sErrorBuf.appendAscii("Configmgr: replaceFile failed ");
@@ -88,14 +86,14 @@ namespace configmgr
     // -----------------------------------------------------------------------------
     bool FileHelper::fileExists(rtl::OUString const& _sFileURL)
     {
-        DirectoryItem aItem;
-        return DirectoryItem::get(_sFileURL, aItem) == Directory::E_None;
+        osl::DirectoryItem aItem;
+        return osl::DirectoryItem::get(_sFileURL, aItem) == osl::Directory::E_None;
     }
 
     // -----------------------------------------------------------------------------
     bool FileHelper::dirExists(rtl::OUString const& _sDirURL)
     {
-        return Directory(_sDirURL).open() == Directory::E_None;
+        return osl::Directory(_sDirURL).open() == osl::Directory::E_None;
     }
 
     // -----------------------------------------------------------------------------
@@ -105,10 +103,10 @@ namespace configmgr
         sal_uInt64 aSize = 0;
         rModifyTime = k_NullTime;
 
-        DirectoryItem aItem;
-        if (osl::FileBase::E_None == DirectoryItem::get(_sURL, aItem))
+        osl::DirectoryItem aItem;
+        if (osl::FileBase::E_None == osl::DirectoryItem::get(_sURL, aItem))
         {
-            FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type|osl_FileStatus_Mask_FileSize);
+            osl::FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type|osl_FileStatus_Mask_FileSize);
             if (osl::FileBase::E_None == aItem.getFileStatus(aStatus))
             {
                 if (aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
@@ -122,189 +120,189 @@ namespace configmgr
     }
 
     // -----------------------------------------------------------------------------
-    rtl::OUString FileHelper::createOSLErrorString(FileBase::RC eError)
+    rtl::OUString FileHelper::createOSLErrorString(osl::FileBase::RC eError)
     {
         rtl::OUString aRet;
         switch(eError)
         {
-        case FileBase::E_None:
+        case osl::FileBase::E_None:
             break;
 
-        case FileBase::E_PERM:
+        case osl::FileBase::E_PERM:
             aRet = ASCII("Operation not permitted");
             break;
 
-        case FileBase::E_NOENT:
+        case osl::FileBase::E_NOENT:
             aRet = ASCII("No such file or directory");
             break;
 
-        case FileBase::E_SRCH:
+        case osl::FileBase::E_SRCH:
             aRet = ASCII("unknown error: osl_File_E_SRCH");
             break;
 
-        case FileBase::E_INTR:
+        case osl::FileBase::E_INTR:
             aRet = ASCII("function call was interrupted");
             break;
 
-        case FileBase::E_IO:
+        case osl::FileBase::E_IO:
             aRet = ASCII("I/O error");
             break;
 
-        case FileBase::E_NXIO:
+        case osl::FileBase::E_NXIO:
             aRet = ASCII("No such device or address");
             break;
 
-        case FileBase::E_2BIG:
+        case osl::FileBase::E_2BIG:
             aRet = ASCII("unknown error: osl_File_E_2BIG");
             break;
 
-        case FileBase::E_NOEXEC:
+        case osl::FileBase::E_NOEXEC:
             aRet = ASCII("unknown error: osl_File_E_NOEXEC");
             break;
 
-        case FileBase::E_BADF:
+        case osl::FileBase::E_BADF:
             aRet = ASCII("Bad file");
             break;
 
-        case FileBase::E_CHILD:
+        case osl::FileBase::E_CHILD:
             aRet = ASCII("unknown error: osl_File_E_CHILD");
             break;
 
-        case FileBase::E_AGAIN:
+        case osl::FileBase::E_AGAIN:
             aRet = ASCII("Operation would block");
             break;
 
-        case FileBase::E_NOMEM:
+        case osl::FileBase::E_NOMEM:
             aRet = ASCII("not enough memory for allocating structures");
             break;
 
-        case FileBase::E_ACCES:
+        case osl::FileBase::E_ACCES:
             aRet = ASCII("Permission denied");
             break;
 
-        case FileBase::E_FAULT:
+        case osl::FileBase::E_FAULT:
             aRet = ASCII("Bad address");
             break;
 
-        case FileBase::E_BUSY:
+        case osl::FileBase::E_BUSY:
             aRet = ASCII("Text file busy");
             break;
 
-        case FileBase::E_EXIST:
+        case osl::FileBase::E_EXIST:
             aRet = ASCII("File exists");
             break;
 
-        case FileBase::E_XDEV:
+        case osl::FileBase::E_XDEV:
             aRet = ASCII("unknown error: osl_File_E_XDEV");
             break;
 
-        case FileBase::E_NODEV:
+        case osl::FileBase::E_NODEV:
             aRet = ASCII("No such device");
             break;
 
-        case FileBase::E_NOTDIR:
+        case osl::FileBase::E_NOTDIR:
             aRet = ASCII("Not a directory");
             break;
 
-        case FileBase::E_ISDIR:
+        case osl::FileBase::E_ISDIR:
             aRet = ASCII("Is a director");
             break;
 
-        case FileBase::E_INVAL:
+        case osl::FileBase::E_INVAL:
             aRet = ASCII("the format of the parameters was not valid");
             break;
 
-        case FileBase::E_NFILE:
+        case osl::FileBase::E_NFILE:
             aRet = ASCII("too many open files in the system");
             break;
 
-        case FileBase::E_MFILE:
+        case osl::FileBase::E_MFILE:
             aRet = ASCII("too many open files used by the process");
             break;
 
-        case FileBase::E_NOTTY:
+        case osl::FileBase::E_NOTTY:
             aRet = ASCII("unknown error: osl_File_E_NOTTY");
             break;
 
-        case FileBase::E_FBIG:
+        case osl::FileBase::E_FBIG:
             aRet = ASCII("File too large");
             break;
 
-        case FileBase::E_NOSPC:
+        case osl::FileBase::E_NOSPC:
             aRet = ASCII("No space left on device");
             break;
 
-        case FileBase::E_SPIPE:
+        case osl::FileBase::E_SPIPE:
             aRet = ASCII("unknown error: osl_File_E_SPIPE");
             break;
 
-        case FileBase::E_ROFS:
+        case osl::FileBase::E_ROFS:
             aRet = ASCII("Read-only file system");
             break;
 
-        case FileBase::E_MLINK:
+        case osl::FileBase::E_MLINK:
             aRet = ASCII("Too many links");
             break;
 
-        case FileBase::E_PIPE:
+        case osl::FileBase::E_PIPE:
             aRet = ASCII("unknown error: osl_File_E_PIPE");
             break;
 
-        case FileBase::E_DOM:
+        case osl::FileBase::E_DOM:
             aRet = ASCII("unknown error: osl_File_E_DOM");
             break;
 
-        case FileBase::E_RANGE:
+        case osl::FileBase::E_RANGE:
             aRet = ASCII("unknown error: osl_File_E_RANGE");
             break;
 
-        case FileBase::E_DEADLK:
+        case osl::FileBase::E_DEADLK:
             aRet = ASCII("unknown error: osl_File_E_DEADLK");
             break;
 
-        case FileBase::E_NAMETOOLONG:
+        case osl::FileBase::E_NAMETOOLONG:
             aRet = ASCII("File name too long");
             break;
 
-        case FileBase::E_NOLCK:
+        case osl::FileBase::E_NOLCK:
             aRet = ASCII("No record locks available");
             break;
 
-        case FileBase::E_NOSYS:
+        case osl::FileBase::E_NOSYS:
             aRet = ASCII("Function not implemente");
             break;
 
-        case FileBase::E_NOTEMPTY:
+        case osl::FileBase::E_NOTEMPTY:
             aRet = ASCII("Directory not empt");
             break;
 
-        case FileBase::E_LOOP:
+        case osl::FileBase::E_LOOP:
             aRet = ASCII("Too many symbolic links encountered");
             break;
 
-        case FileBase::E_ILSEQ:
+        case osl::FileBase::E_ILSEQ:
             aRet = ASCII("unknown error: osl_File_E_ILSEQ");
             break;
 
-        case FileBase::E_NOLINK:
+        case osl::FileBase::E_NOLINK:
             aRet = ASCII("Link has been severed");
             break;
 
-        case FileBase::E_MULTIHOP:
+        case osl::FileBase::E_MULTIHOP:
             aRet = ASCII("Multihop attempted");
             break;
 
-        case FileBase::E_USERS:
+        case osl::FileBase::E_USERS:
             aRet = ASCII("unknown error: osl_File_E_USERS");
             break;
 
-        case FileBase::E_OVERFLOW:
+        case osl::FileBase::E_OVERFLOW:
             aRet = ASCII("Value too large for defined data type");
             break;
 
             /* unmapped error: always last entry in enum! */
         default: OSL_ENSURE(false, "Found unknown OSL File Error");
-        case FileBase::E_invalidError:
+        case osl::FileBase::E_invalidError:
             aRet = ASCII("unmapped Error");
             break;
         }

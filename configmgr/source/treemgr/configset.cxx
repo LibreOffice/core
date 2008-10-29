@@ -34,7 +34,8 @@
 #include "configset.hxx"
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
+#include "treefragment.hxx"
 #include "template.hxx"
 #include "templateimpl.hxx"
 #include "configgroup.hxx"
@@ -47,234 +48,6 @@ namespace configmgr
 {
     namespace configuration
     {
-//-----------------------------------------------------------------------------
-typedef SetInsertImpl  SetInsertTreeImpl;
-typedef SetRemoveImpl  SetRemoveTreeImpl;
-typedef SetReplaceImpl SetReplaceTreeImpl;
-typedef SetInsertImpl  SetInsertValueImpl;
-typedef SetRemoveImpl  SetRemoveValueImpl;
-typedef SetReplaceImpl SetReplaceValueImpl;
-//-----------------------------------------------------------------------------
-// class ElementRef
-//-----------------------------------------------------------------------------
-
-ElementRef::ElementRef(ElementTreeImpl* pTree)
-: m_aTreeHolder(pTree)
-{
-}
-//-----------------------------------------------------------------------------
-
-ElementRef::ElementRef(ElementRef const& aOther)
-: m_aTreeHolder(aOther.m_aTreeHolder)
-{
-}
-//-----------------------------------------------------------------------------
-
-ElementRef& ElementRef::operator=(ElementRef const& aOther)
-{
-    m_aTreeHolder = aOther.m_aTreeHolder;
-    return *this;
-}
-//-----------------------------------------------------------------------------
-
-ElementRef::~ElementRef()
-{
-}
-//-----------------------------------------------------------------------------
-
-bool ElementRef::isValid() const
-{
-    return !!m_aTreeHolder.is();
-}
-
-//-----------------------------------------------------------------------------
-
-ElementTree ElementRef::getElementTree() const
-{
-   return ElementTree(m_aTreeHolder);
-}
-//-----------------------------------------------------------------------------
-
-Path::Component ElementRef::getFullName() const
-{
-    if (!isValid()) return Path::makeEmptyComponent();
-
-    return m_aTreeHolder->getExtendedRootName();
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder ElementRef::getTemplate() const
-{
-    if (!isValid()) return TemplateHolder();
-
-    return m_aTreeHolder->getTemplate();
-}
-//-----------------------------------------------------------------------------
-
-TreeRef ElementRef::getTreeRef() const
-{
-    return TreeRef(m_aTreeHolder.get());
-}
-//-----------------------------------------------------------------------------
-
-ElementRef ElementRef::extract(TreeRef const& aTree)
-{
-    TreeImpl* pTree = TreeImplHelper::impl(aTree);
-    ElementTreeImpl* pImpl = pTree ? pTree->asElementTree() : 0;
-    return ElementRef(pImpl);
-}
-
-//-----------------------------------------------------------------------------
-// class ElementTree
-//-----------------------------------------------------------------------------
-
-ElementTree::ElementTree()
-: m_aTreeHolder()
-{
-}
-//-----------------------------------------------------------------------------
-
-ElementTree::ElementTree(ElementTreeImpl* pTree)
-: m_aTreeHolder(pTree)
-{
-}
-//-----------------------------------------------------------------------------
-
-ElementTree::ElementTree(ElementTreeHolder const& pTree)
-: m_aTreeHolder(pTree)
-{
-}
-//-----------------------------------------------------------------------------
-
-ElementTree::ElementTree(ElementTree const& aOther)
-: m_aTreeHolder(aOther.m_aTreeHolder)
-{
-}
-//-----------------------------------------------------------------------------
-
-ElementTree& ElementTree::operator=(ElementTree const& aOther)
-{
-    m_aTreeHolder = aOther.m_aTreeHolder;
-    return *this;
-}
-//-----------------------------------------------------------------------------
-
-ElementTree::~ElementTree()
-{
-}
-//-----------------------------------------------------------------------------
-
-bool ElementTree::isValid() const
-{
-    return !!m_aTreeHolder.is();
-}
-//-----------------------------------------------------------------------------
-
-ElementTreeHolder ElementTree::get() const
-{
-    return m_aTreeHolder;
-}
-//-----------------------------------------------------------------------------
-
-ElementTreeImpl* ElementTree::getImpl() const
-{
-    return m_aTreeHolder.get();
-}
-//-----------------------------------------------------------------------------
-
-ElementTreeImpl* ElementTree::operator->() const
-{
-    return m_aTreeHolder.operator->();
-}
-//-----------------------------------------------------------------------------
-
-ElementTreeImpl& ElementTree::operator*() const
-{
-    return m_aTreeHolder.operator*();
-}
-//-----------------------------------------------------------------------------
-
-Tree ElementTree::getTree() const
-{
-    return Tree(m_aTreeHolder.get());
-}
-//-----------------------------------------------------------------------------
-
-ElementTree ElementTree::extract(Tree const& aTree)
-{
-    return ElementRef::extract(aTree.getRef()).getElementTree();
-}
-
-//-----------------------------------------------------------------------------
-// class TemplateInfo
-//-----------------------------------------------------------------------------
-
-TemplateInfo::TemplateInfo(TemplateHolder const& aTemplate)
-: m_aTemplate(aTemplate)
-{
-    OSL_ENSURE(m_aTemplate.is(), "ERROR: Configuration: Creating TemplateInfo without template information");
-    if (!m_aTemplate.is())
-        throw configuration::Exception("Missing template information");
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder TemplateInfo::getTemplate() const
-{
-    return m_aTemplate;
-}
-//-----------------------------------------------------------------------------
-
-UnoType TemplateInfo::getType() const
-{
-    return m_aTemplate->getInstanceType();
-}
-
-//-----------------------------------------------------------------------------
-
-OUString TemplateInfo::getTemplatePathString() const
-{
-    return m_aTemplate->getPathString();
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// class SetElementInfo
-//-----------------------------------------------------------------------------
-
-SetElementInfo::SetElementInfo(TemplateHolder const& aTemplate)
-: m_aTemplateInfo(aTemplate)
-{
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder SetElementInfo::getTemplate() const
-{
-    return m_aTemplateInfo.getTemplate();
-}
-//-----------------------------------------------------------------------------
-
-TemplateInfo SetElementInfo::getTemplateInfo() const
-{
-    return m_aTemplateInfo;
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder SetElementInfo::extractElementInfo(Tree const& aTree, NodeRef const& aNode)
-{
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: Getting Element Info requires a valid tree");
-    OSL_ENSURE(aNode.isValid(), "ERROR: Getting Element Info requires a valid node");
-    OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: Tree/Node mismatch");
-    if (aNode.isValid() )
-    {
-        view::ViewTreeAccess aView = aTree.getView();
-
-        OSL_ENSURE (aView.isSetNode(aNode), "WARNING: Getting Element Info requires a SET node");
-        if (aView.isSetNode(aNode))
-            return aView.getElementTemplate(aView.toSetNode(aNode));
-    }
-    return TemplateHolder();
-}
-
 //-----------------------------------------------------------------------------
 // class SetElementFactory
 //-----------------------------------------------------------------------------
@@ -304,54 +77,38 @@ SetElementFactory::~SetElementFactory()
 }
 
 //-----------------------------------------------------------------------------
-ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTemplate)
+rtl::Reference< ElementTree > SetElementFactory::instantiateTemplate(rtl::Reference<Template> const& aTemplate)
 {
     OSL_ENSURE(m_aProvider.m_aImpl.is(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
     OSL_ENSURE(aTemplate.is(), "ERROR: Template is NULL - cannot instantiate element");
 
-    if (!m_aProvider.m_aImpl.is()) return ElementTree::emptyElement();
-
-    if (!aTemplate.is()) return ElementTree::emptyElement();
-
-    data::TreeSegment aInstanceTree( m_aProvider.m_aImpl->instantiate(aTemplate) );
+    rtl::Reference< data::TreeSegment > aInstanceTree( m_aProvider.m_aImpl->instantiate(aTemplate) );
     OSL_ENSURE(aInstanceTree.is(), "ERROR: Cannot create Element Instance: Provider could not instantiate template");
 
-
-    if (!aInstanceTree.is()) return ElementTree::emptyElement();
     //set removable state
-    aInstanceTree.markRemovable();
+    aInstanceTree->fragment->header.state |= data::State::flag_removable;
 
-    ElementTree aRet( new ElementTreeImpl( aInstanceTree, aTemplate, m_aProvider ) );
-
-    return aRet;
+    return new ElementTree( aInstanceTree, aTemplate, m_aProvider );
 }
 //-----------------------------------------------------------------------------
-ElementTree SetElementFactory::instantiateOnDefault(data::TreeSegment const& _aElementData, TemplateHolder const& aDummyTemplate)
+rtl::Reference< ElementTree > SetElementFactory::instantiateOnDefault(rtl::Reference< data::TreeSegment > const& _aElementData, rtl::Reference<Template> const& aDummyTemplate)
 {
 //  OSL_ENSURE(m_aProvider.m_aImpl(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
     OSL_ENSURE(_aElementData.is(), "ERROR: Tree is NULL - cannot instantiate element");
     OSL_ENSURE(aDummyTemplate.is(), "ERROR: Template is NULL - cannot instantiate element");
 
-    if (!_aElementData.is()) return ElementTree::emptyElement();
-
-    ElementTree aRet( new ElementTreeImpl( _aElementData, aDummyTemplate, m_aProvider ) );
-    // ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, c_TreeDepthAll, aDummyTemplate, m_aProvider );
-    // pNewTree->takeNodeFrom(aTree);
-
-    // return ElementTree( pNewTree );
-
-    return aRet;
+    return new ElementTree( _aElementData, aDummyTemplate, m_aProvider );
 }
 //-----------------------------------------------------------------------------
 
-TemplateProvider SetElementFactory::findTemplateProvider(Tree const& aTree, NodeRef const& aNode)
+TemplateProvider SetElementFactory::findTemplateProvider(rtl::Reference< Tree > const& aTree, NodeRef const& aNode)
 {
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: Getting Element Factory requires a valid tree");
+    OSL_ENSURE(!isEmpty(aTree.get()), "ERROR: Getting Element Factory requires a valid tree");
     OSL_ENSURE(aNode.isValid(), "ERROR: Getting Element Factory requires a valid node");
-    OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: Tree/Node mismatch");
+    OSL_ENSURE(aTree->isValidNode(aNode.getOffset()), "ERROR: Tree/Node mismatch");
     if (aNode.isValid() )
     {
-        view::ViewTreeAccess aView = aTree.getView();
+      view::ViewTreeAccess aView(aTree.get());
 
         OSL_ENSURE (aView.isSetNode(aNode), "WARNING: Getting Element Factory requires a SET node");
         if (aView.isSetNode(aNode))
@@ -381,14 +138,14 @@ static node::Attributes getNewElementAttributes(bool bInserting)
 // Value Element Factory methods
 //-----------------------------------------------------------------------------
 
-ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny const& aValue, bool bInserting)
+rtl::Reference<ElementTree> ValueSetUpdater::makeValueElement(rtl::OUString const& aName, com::sun::star::uno::Any const& aValue, bool bInserting)
 {
 
     const node::Attributes aNewValueAttributes = getNewElementAttributes(bInserting); // TODO: get real value
 
-    UnoType aType = m_aTemplate->getInstanceType();
+    com::sun::star::uno::Type aType = m_aTemplate->getInstanceType();
 
-    OUString aTypeName = m_aTemplate->getName().toString();
+    rtl::OUString aTypeName = m_aTemplate->getName();
 
     std::auto_ptr<INode> pNode;
     if (aValue.hasValue())
@@ -396,13 +153,13 @@ ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny co
     else
         pNode.reset( new ValueNode(aTypeName, aType, aNewValueAttributes) );
 
-    data::TreeSegment aValueTree = data::TreeSegment::createNew(aName.toString(), pNode);
+    rtl::Reference< data::TreeSegment > aValueTree = data::TreeSegment::create(aName, pNode);
 
-    return new ElementTreeImpl(aValueTree, m_aTemplate, TemplateProvider() );
+    return new ElementTree(aValueTree, m_aTemplate, TemplateProvider() );
 }
 //-----------------------------------------------------------------------------
 
-ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, ElementNodeRef const& , UnoAny const& aValue, bool bInserting)
+rtl::Reference<ElementTree> ValueSetUpdater::makeValueElement(rtl::OUString const& aName, rtl::Reference< Tree > const& , com::sun::star::uno::Any const& aValue, bool bInserting)
 {
     // for now ignoring the node.
     // TODO: merge attributes etc. from that node's value
@@ -411,27 +168,27 @@ ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, ElementNo
 //-----------------------------------------------------------------------------
 
 
-TreeSetUpdater::TreeSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode, SetElementInfo const& aInfo)
+TreeSetUpdater::TreeSetUpdater(rtl::Reference< Tree > const& aParentTree, NodeRef const& aSetNode, rtl::Reference< Template > const& aTemplate)
 : m_aParentTree(aParentTree)
 , m_aSetNode(aSetNode)
-, m_aTemplate(aInfo.getTemplate())
+, m_aTemplate(aTemplate)
 {
     implValidateSet();
 }
 //-----------------------------------------------------------------------------
 
-ValueSetUpdater::ValueSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode,
-                                 SetElementInfo const& aInfo, UnoTypeConverter const& xConverter)
+ValueSetUpdater::ValueSetUpdater(rtl::Reference< Tree > const& aParentTree, NodeRef const& aSetNode,
+                                 rtl::Reference< Template > const& aTemplate, com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> const& xConverter)
 : m_aParentTree(aParentTree)
 , m_aSetNode(aSetNode)
-, m_aTemplate(aInfo.getTemplate())
+, m_aTemplate(aTemplate)
 , m_xTypeConverter(xConverter)
 {
     implValidateSet();
 }
 //-----------------------------------------------------------------------------
 
-SetDefaulter::SetDefaulter(Tree const& aParentTree, NodeRef const& aSetNode,
+SetDefaulter::SetDefaulter(rtl::Reference< Tree > const& aParentTree, NodeRef const& aSetNode,
                             DefaultProvider const& aDefaultProvider)
 : m_aParentTree(aParentTree)
 , m_aSetNode(aSetNode)
@@ -442,21 +199,21 @@ SetDefaulter::SetDefaulter(Tree const& aParentTree, NodeRef const& aSetNode,
 //-----------------------------------------------------------------------------
 
 /// validates that a actual set and an updater's construction parameters match
-static void doValidateSet(Tree const& aParentTree, NodeRef const& aSetNode)
+static void doValidateSet(rtl::Reference< Tree > const& aParentTree, NodeRef const& aSetNode)
 {
-    if (aParentTree.isEmpty())
+    if (isEmpty(aParentTree.get()))
         throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL tree");
 
     if (!aSetNode.isValid())
         throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL node");
 
-    if (!aParentTree.isValidNode(aSetNode))
+    if (!aParentTree->isValidNode(aSetNode.getOffset()))
         throw Exception("INTERNAL ERROR: Set Update: node does not match tree");
 
-    if (! aParentTree.getView().isSetNode(aSetNode))
+    if (! view::ViewTreeAccess(aParentTree.get()).isSetNode(aSetNode))
         throw Exception("INTERNAL ERROR: Set Update: node is not a set");
 
-    if (aParentTree.getAttributes(aSetNode).isReadonly())
+    if (aParentTree->getAttributes(aSetNode).isReadonly())
         throw ConstraintViolation( "Set Update: Set is read-only !" );
 }
 //-----------------------------------------------------------------------------
@@ -472,7 +229,7 @@ void TreeSetUpdater::implValidateSet()
     if (m_aTemplate->isInstanceValue())
         throw Exception("INTERNAL ERROR: Tree set update invoked on a value-set");
 
-    view::ViewTreeAccess aParentView = m_aParentTree.getView();
+    view::ViewTreeAccess aParentView(m_aParentTree.get());
 
     if ( aParentView.getElementTemplate(aParentView.toSetNode(m_aSetNode)) != m_aTemplate)
         throw Exception("INTERNAL ERROR: Set Update: template mismatch");
@@ -484,7 +241,7 @@ void ValueSetUpdater::implValidateSet()
 {
     doValidateSet(m_aParentTree,m_aSetNode);
 
-    UnoType aThisType = m_aTemplate->getInstanceType();
+    com::sun::star::uno::Type aThisType = m_aTemplate->getInstanceType();
 
     switch ( aThisType.getTypeClass())
     {
@@ -497,7 +254,7 @@ void ValueSetUpdater::implValidateSet()
     default: break;
     }
 
-    view::ViewTreeAccess aParentView = m_aParentTree.getView();
+    view::ViewTreeAccess aParentView(m_aParentTree.get());
 
     if ( aParentView.getElementTemplate(aParentView.toSetNode(m_aSetNode))->getInstanceType() != aThisType)
         throw Exception("INTERNAL ERROR: Set Update: element type mismatch");
@@ -514,48 +271,36 @@ void SetDefaulter::implValidateSet()
 }
 //-----------------------------------------------------------------------------
 
-static void doValidateElement(ElementRef const& aElement, bool bReqRemovable)
+static void doValidateElement(rtl::Reference< ElementTree > const& aElement, bool bReqRemovable)
 {
-    if (!aElement.isValid())
+    if (!aElement.is())
         throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL element");
-
-// DISABLED: replaceable/removable != writable
-//  if (!aElement.getAttributes().writable)
-//      throw ConstraintViolation( "Set Update: Existing element is read-only !" );
 
     if ( bReqRemovable)
     {
-        Tree aElementTree = aElement.getElementTree().getTree();
+        rtl::Reference< Tree > aElementTree = aElement.get();
 
-        if(!aElementTree.getAttributes(aElementTree.getRootNode()).isRemovable())
+        if(!aElementTree->getAttributes(aElementTree->getRootNode()).isRemovable())
             throw ConstraintViolation( "New Set Update: Existing element cannot be removed (or replaced) !" );
     }
 }
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid in this context and returns its name
-Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement, bool bReqRemovable)
+Path::Component TreeSetUpdater::implValidateElement(rtl::Reference< ElementTree > const& aElement, bool bReqRemovable)
 {
     doValidateElement(aElement,bReqRemovable);
-
-#if 0 // maybe reeanable for OSL_DEBUG_LEVEL>1 ?
-    ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
-    OSL_ENSURE( pElement, "INTERNAL ERROR: Set Element has wrong type of tree");
-    OSL_ENSURE( !pElement || pElement->isTemplateInstance(), "INTERNAL ERROR: Set Element without associated template found");
-    OSL_ENSURE( !pElement || pElement->isInstanceOf(m_aTemplate), "INTERNAL ERROR: Set Update: existing element does not match template");
-#endif
-
-    return aElement.getFullName();
+    return aElement->getExtendedRootName();
 }
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid and can be replaced in this context and returns its name
-Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement, bool mReqRemovable)
+Path::Component ValueSetUpdater::implValidateElement(rtl::Reference< ElementTree > const& aElement, bool mReqRemovable)
 {
     doValidateElement(aElement,mReqRemovable);
 
 #if OSL_DEBUG_LEVEL > 0
-    UnoType aNodeType = ElementHelper::getUnoType(aElement.getElementTree());
+    com::sun::star::uno::Type aNodeType = ElementHelper::getUnoType(aElement);
 
     OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_VOID, "INTERNAL ERROR: Set Element without associated type found");
     OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_INTERFACE,"INTERNAL ERROR: Set Element with complex type found");
@@ -565,40 +310,40 @@ Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement,
                "INTERNAL ERROR: Set Update: existing element does not match template type");
 #endif
 
-    return aElement.getFullName();
+    return aElement->getExtendedRootName();
 }
 //-----------------------------------------------------------------------------
-static void checkEligibleChild(ElementTree const& aElementTree, Tree const& aParentTree)
+static void checkEligibleChild(rtl::Reference< ElementTree > const& aElementTree, rtl::Reference< Tree > const& aParentTree)
 {
-    ElementTreeImpl const * const pElement = aElementTree.getImpl();    OSL_ASSERT(pElement);
+    ElementTree const * const pElement = aElementTree.get();    OSL_ASSERT(pElement);
 
     if (pElement->getContextTree() != NULL)
         throw ConstraintViolation( "Set Update: cannot insert an element that already has a parent." );
 
-    TreeImpl const* pAncestor = TreeImplHelper::impl(aParentTree);
+    Tree const* pAncestor = aParentTree.get();
     while (pAncestor != NULL)
     {
         if (pElement == pAncestor)
             throw ConstraintViolation( "Set Update: Circular insertion - trying to insert an element into self or descendant" );
 
         pAncestor = pAncestor->getContextTree();
-        OSL_ENSURE(pAncestor != TreeImplHelper::impl(aParentTree), "ERROR: Circular tree found");
+        OSL_ENSURE(pAncestor != aParentTree.get(), "ERROR: Circular tree found");
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void TreeSetUpdater::implValidateTree(ElementTree const& aElementTree)
+void TreeSetUpdater::implValidateTree(rtl::Reference< ElementTree > const& aElementTree)
 {
-    if (!aElementTree.isValid())
+    if (!aElementTree.is())
         throw ConstraintViolation( "Set Update: cannot replace element of complex set with NULL node. Remove the element instead !" );
 
     checkEligibleChild(aElementTree,m_aParentTree);
 
     if (! aElementTree->isTemplateInstance())
     {
-        throw TypeMismatch(OUString(RTL_CONSTASCII_USTRINGPARAM("<Unnamed> (Template missing)")),
-                                    m_aTemplate->getName().toString(), " - new element without template in Set Update");
+        throw TypeMismatch(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<Unnamed> (Template missing)")),
+                                    m_aTemplate->getName(), " - new element without template in Set Update");
     }
 
     if (!aElementTree->isInstanceOf(m_aTemplate))
@@ -609,17 +354,17 @@ void TreeSetUpdater::implValidateTree(ElementTree const& aElementTree)
 }
 //-----------------------------------------------------------------------------
 
-UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
+com::sun::star::uno::Any ValueSetUpdater::implValidateValue(com::sun::star::uno::Any const& aValue)
 {
-    UnoType const aThisType = m_aTemplate->getInstanceType();
+    com::sun::star::uno::Type const aThisType = m_aTemplate->getInstanceType();
 
     OSL_ENSURE( aThisType.getTypeClass() == uno::TypeClass_ANY || isPossibleValueType(aThisType),
                 "Invalid element type for value set" );
 
-    UnoAny aRet;
+    com::sun::star::uno::Any aRet;
     if (aValue.hasValue())
     {
-        UnoType const aValType = aValue.getValueType();
+        com::sun::star::uno::Type const aValType = aValue.getValueType();
 
         if (aValType.getTypeClass() == uno::TypeClass_INTERFACE)
             throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - cannot replace value by complex tree in Set update");
@@ -655,9 +400,9 @@ UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
 }
 //-----------------------------------------------------------------------------
 
-UnoAny ValueSetUpdater::implValidateValue(ElementNodeRef const& aElementTree, UnoAny const& aValue)
+com::sun::star::uno::Any ValueSetUpdater::implValidateValue(rtl::Reference< Tree > const& aElementTree, com::sun::star::uno::Any const& aValue)
 {
-    node::Attributes aAttributes = aElementTree.getAttributes(aElementTree.getRootNode());
+    node::Attributes aAttributes = aElementTree->getAttributes(aElementTree->getRootNode());
     // Here we assume writable == removable/replaceable
     if (aAttributes.isReadonly())
         throw ConstraintViolation( "Set Update: Existing element is read-only !" );
@@ -672,9 +417,9 @@ UnoAny ValueSetUpdater::implValidateValue(ElementNodeRef const& aElementTree, Un
 }
 //-----------------------------------------------------------------------------
 
-NodeChange TreeSetUpdater::validateInsertElement (Name const& aName, ElementTree const& aNewElement)
+NodeChange TreeSetUpdater::validateInsertElement (rtl::OUString const& aName, rtl::Reference< ElementTree > const& aNewElement)
 {
-    view::ViewTreeAccess aParentView = m_aParentTree.getView();
+    view::ViewTreeAccess aParentView(m_aParentTree.get());
 
     SetEntry anEntry = aParentView.findElement(aParentView.toSetNode(m_aSetNode),aName);
     if (anEntry.isValid())
@@ -682,7 +427,7 @@ NodeChange TreeSetUpdater::validateInsertElement (Name const& aName, ElementTree
 
     implValidateTree(aNewElement);
 
-    std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertTreeImpl(aNewElement->makeExtendedName(aName), aNewElement.get()) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertImpl(aNewElement->makeExtendedName(aName), aNewElement) );
 
     pChange->setTarget(aParentView.makeNode(m_aSetNode));
 
@@ -690,19 +435,19 @@ NodeChange TreeSetUpdater::validateInsertElement (Name const& aName, ElementTree
 }
 //-----------------------------------------------------------------------------
 
-NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny const& aNewValue)
+NodeChange ValueSetUpdater::validateInsertElement (rtl::OUString const& aName, com::sun::star::uno::Any const& aNewValue)
 {
-    view::ViewTreeAccess aParentView = m_aParentTree.getView();
+    view::ViewTreeAccess aParentView(m_aParentTree.get());
 
     SetEntry anEntry = aParentView.findElement(aParentView.toSetNode(m_aSetNode),aName);
     if (anEntry.isValid())
         throw Exception("INTERNAL ERROR: Set Update: Element to be inserted already exists");
 
-    UnoAny aValidValue = implValidateValue(aNewValue);
+    com::sun::star::uno::Any aValidValue = implValidateValue(aNewValue);
 
-    ElementTreeHolder aNewElement = makeValueElement(aName, aValidValue,true);
+    rtl::Reference<ElementTree> aNewElement = makeValueElement(aName, aValidValue,true);
 
-    std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertValueImpl(aNewElement->makeExtendedName(aName), aNewElement) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertImpl(aNewElement->makeExtendedName(aName), aNewElement) );
 
     pChange->setTarget(aParentView.makeNode(m_aSetNode));
 
@@ -710,32 +455,32 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 }
 //-----------------------------------------------------------------------------
 
-NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, ElementTree const& aNewElement)
+NodeChange TreeSetUpdater::validateReplaceElement(rtl::Reference< ElementTree > const& aElement, rtl::Reference< ElementTree > const& aNewElement)
 {
     Path::Component aName = implValidateElement(aElement,true);
 
     implValidateTree(aNewElement);
 
-    std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceTreeImpl(aName, aNewElement.get()) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceImpl(aName, aNewElement) );
 
-    pChange->setTarget(m_aParentTree.getView().makeNode(m_aSetNode));
+    pChange->setTarget(view::ViewTreeAccess(m_aParentTree.get()).makeNode(m_aSetNode));
 
     return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, UnoAny const& aNewValue)
+NodeChange ValueSetUpdater::validateReplaceElement(rtl::Reference< ElementTree > const& aElement, com::sun::star::uno::Any const& aNewValue)
 {
     Path::Component aName = implValidateElement(aElement,false);
 
-    ElementNodeRef aElementNode = extractElementNode(aElement);
+    rtl::Reference< Tree > aElementNode = extractElementNode(aElement);
 
-    UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
+    com::sun::star::uno::Any aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    ElementNodeRef aElementTree = aElement.getElementTree().getTree();
+    rtl::Reference< Tree > aElementTree = aElement.get();
 
-    ElementTreeHolder aNewElement;
-    if(aElementTree.getAttributes(aElementTree.getRootNode()).isRemovable())
+    rtl::Reference<ElementTree> aNewElement;
+    if(aElementTree->getAttributes(aElementTree->getRootNode()).isRemovable())
     {
         aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue,true);
     }
@@ -744,34 +489,34 @@ NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, U
         aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue,false);
     }
 
-    std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceValueImpl(aName, aNewElement) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceImpl(aName, aNewElement) );
 
-    pChange->setTarget(m_aParentTree.getView().makeNode(m_aSetNode));
+    pChange->setTarget(view::ViewTreeAccess(m_aParentTree.get()).makeNode(m_aSetNode));
 
     return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
+NodeChange TreeSetUpdater::validateRemoveElement (rtl::Reference< ElementTree > const& aElement)
 {
     Path::Component aName = implValidateElement(aElement,true);
 
-    std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveTreeImpl(aName) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveImpl(aName) );
 
-    pChange->setTarget(m_aParentTree.getView().makeNode(m_aSetNode));
+    pChange->setTarget(view::ViewTreeAccess(m_aParentTree.get()).makeNode(m_aSetNode));
 
     return NodeChange(pChange.release());
 }
 
 //-----------------------------------------------------------------------------
 
-NodeChange ValueSetUpdater::validateRemoveElement (ElementRef const& aElement)
+NodeChange ValueSetUpdater::validateRemoveElement (rtl::Reference< ElementTree > const& aElement)
 {
     Path::Component aName = implValidateElement(aElement,true);
 
-    std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveValueImpl(aName) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveImpl(aName) );
 
-    pChange->setTarget(m_aParentTree.getView().makeNode(m_aSetNode));
+    pChange->setTarget(view::ViewTreeAccess(m_aParentTree.get()).makeNode(m_aSetNode));
 
     return NodeChange(pChange.release());
 }
@@ -791,30 +536,29 @@ NodeChange SetDefaulter::validateSetToDefaultState()
 
         configmgr::configuration::SetElementFactory aTmp(aProvider);
         pChange.reset( new SetResetImpl(aTmp, aDefault) );
-        pChange->setTarget(m_aParentTree.getView().makeNode(m_aSetNode));
+    pChange->setTarget(view::ViewTreeAccess(m_aParentTree.get()).makeNode(m_aSetNode));
     }
     return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-ValueSetUpdater::ElementNodeRef ValueSetUpdater::extractElementNode (ElementRef const& aElement)
+rtl::Reference< Tree > ValueSetUpdater::extractElementNode (rtl::Reference< ElementTree > const& aElement)
 {
-    return aElement.getElementTree().getTree();
+    return aElement.get();
 }
 //-----------------------------------------------------------------------------
 
 #if OSL_DEBUG_LEVEL > 0
-UnoType ElementHelper::getUnoType(ElementTree const& aElement)
+com::sun::star::uno::Type   ElementHelper::getUnoType(rtl::Reference< ElementTree > const& aElement)
 {
-    OSL_PRECOND( aElement.isValid(), "ERROR: Configuration: ElementRef operation requires valid node" );
-    if (!aElement.isValid()) return getVoidCppuType();
+    OSL_PRECOND( aElement.is(), "ERROR: Configuration: ElementTree operation requires valid node" );
 
-    Tree aElementTree = aElement.getTree();
+    rtl::Reference< Tree > aElementTree(aElement.get());
 
-    NodeRef aNode = aElementTree.getRootNode();
+    NodeRef aNode = aElementTree->getRootNode();
     OSL_ASSERT( aNode.isValid() );
 
-    view::ViewTreeAccess aElementView = aElementTree.getView();
+    view::ViewTreeAccess aElementView(aElementTree.get());
 
     if ( aElementView.isValueNode(aNode) )
     {

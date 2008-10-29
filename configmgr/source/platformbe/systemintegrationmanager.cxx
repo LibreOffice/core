@@ -42,7 +42,7 @@ namespace configmgr { namespace backend {
 //==============================================================================
 #define OU2A( oustr ) (rtl::OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr())
 //==============================================================================
-PlatformBackend BackendRef::getBackend(uno::Reference<uno::XComponentContext> const & xContext)
+uno::Reference<backenduno::XSingleLayerStratum> BackendRef::getBackend(uno::Reference<uno::XComponentContext> const & xContext)
 {
     if (!mBackend.is() && mFactory.is())
     try
@@ -71,7 +71,7 @@ void BackendRef::disposeBackend()
 }
 //==============================================================================
 SystemIntegrationManager::SystemIntegrationManager(const uno::Reference<uno::XComponentContext>& xContext)
-: BackendBase(mMutex)
+: cppu::WeakComponentImplHelper4< backenduno::XBackend, backenduno::XBackendChangesNotifier, lang::XInitialization, lang::XServiceInfo>(mMutex)
 , mMutex()
 , mContext(xContext)
 , mPlatformBackends()
@@ -115,7 +115,7 @@ void SystemIntegrationManager::buildLookupTable()
         osl::MutexGuard lock(mMutex);
         while (xEnum->hasMoreElements())
         {
-            BackendFactory xServiceFactory( xEnum->nextElement(),uno::UNO_QUERY);
+            uno::Reference<lang::XSingleComponentFactory> xServiceFactory( xEnum->nextElement(),uno::UNO_QUERY);
             if (xServiceFactory.is())
             {
                 uno::Sequence<rtl::OUString> aKeys = getSupportedComponents(xServiceFactory);
@@ -125,7 +125,7 @@ void SystemIntegrationManager::buildLookupTable()
                     BackendRef aBackendRef(xServiceFactory);
                     //OSL_TRACE("SystemInteg -Adding Factory Backend to map for key %s",
                     //rtl::OUStringToOString(aKeys[i], RTL_TEXTENCODING_ASCII_US).getStr() );
-                    mPlatformBackends.insert( BackendFactoryList::value_type(aKeys[i],aBackendRef));
+                    mPlatformBackends.insert( std::multimap<rtl::OUString, BackendRef>::value_type(aKeys[i],aBackendRef));
                 }
             }
         }
@@ -134,7 +134,7 @@ void SystemIntegrationManager::buildLookupTable()
 //---------------------------------------------------------------------------------------------
 
 uno::Sequence<rtl::OUString>
-SystemIntegrationManager::getSupportedComponents(const BackendFactory& xFactory)
+SystemIntegrationManager::getSupportedComponents(const uno::Reference<lang::XSingleComponentFactory>& xFactory)
 {
     static const rtl::OUString kProperSubkeyName( RTL_CONSTASCII_USTRINGPARAM("/DATA/SupportedComponents")) ;
     static const rtl::OUString kImplKeyPropertyName( RTL_CONSTASCII_USTRINGPARAM("ImplementationKey")) ;
@@ -186,19 +186,16 @@ uno::Reference<backenduno::XUpdateHandler> SAL_CALL
 }
 //------------------------------------------------------------------------------
 
-SystemIntegrationManager::PlatformBackendList SystemIntegrationManager::getSupportingBackends(const rtl::OUString& aComponent)
+std::vector< uno::Reference<backenduno::XSingleLayerStratum> > SystemIntegrationManager::getSupportingBackends(const rtl::OUString& aComponent)
 {
-    typedef BackendFactoryList::iterator BFIter;
-    typedef std::pair<BFIter, BFIter> BFRange;
-
-    PlatformBackendList backends;
+    std::vector< uno::Reference<backenduno::XSingleLayerStratum> > backends;
 
     osl::MutexGuard lock(mMutex);
-    BFRange aRange = mPlatformBackends.equal_range(aComponent);
-    for (BFIter it=aRange.first; it != aRange.second; )
+    std::pair<std::multimap<rtl::OUString, BackendRef>::iterator, std::multimap<rtl::OUString, BackendRef>::iterator> aRange = mPlatformBackends.equal_range(aComponent);
+    for (std::multimap<rtl::OUString, BackendRef>::iterator it=aRange.first; it != aRange.second; )
     {
-        BFIter cur = it++;  // increment here, as erase() may invalidate cur
-        PlatformBackend xBackend = cur->second.getBackend(mContext);
+        std::multimap<rtl::OUString, BackendRef>::iterator cur = it++;  // increment here, as erase() may invalidate cur
+        uno::Reference<backenduno::XSingleLayerStratum> xBackend = cur->second.getBackend(mContext);
         if (xBackend.is())
             backends.push_back(xBackend);
 
@@ -215,17 +212,17 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
                 lang::IllegalArgumentException,
                 uno::RuntimeException)
 {
-    PlatformBackendList const aUniversalBackends = getSupportingBackends(getAllComponentsName());
-    PlatformBackendList const aSpecialBackends  = getSupportingBackends(aComponent);
+    std::vector< uno::Reference<backenduno::XSingleLayerStratum> > const aUniversalBackends = getSupportingBackends(getAllComponentsName());
+    std::vector< uno::Reference<backenduno::XSingleLayerStratum> > const aSpecialBackends  = getSupportingBackends(aComponent);
 
     uno::Sequence< uno::Reference<backenduno::XLayer> > aLayers(aUniversalBackends.size() + aSpecialBackends.size());
 
     uno::Reference<backenduno::XLayer> * pLayer = aLayers.getArray();
 
-    for (PlatformBackendList::size_type i=0 ; i< aUniversalBackends.size(); ++i, ++pLayer)
+    for (std::vector< uno::Reference<backenduno::XSingleLayerStratum> >::size_type i=0 ; i< aUniversalBackends.size(); ++i, ++pLayer)
         *pLayer = aUniversalBackends[i]->getLayer(aComponent, rtl::OUString());
 
-    for (PlatformBackendList::size_type j=0 ; j< aSpecialBackends.size(); ++j, ++pLayer)
+    for (std::vector< uno::Reference<backenduno::XSingleLayerStratum> >::size_type j=0 ; j< aSpecialBackends.size(); ++j, ++pLayer)
         *pLayer = aSpecialBackends[j]->getLayer(aComponent, rtl::OUString());
 
     OSL_ASSERT( aLayers.getConstArray()+aLayers.getLength() == pLayer );
@@ -252,7 +249,7 @@ uno::Reference<backenduno::XUpdateHandler> SAL_CALL
 void SAL_CALL SystemIntegrationManager::disposing()
 {
     osl::MutexGuard lock(mMutex);
-    for (BackendFactoryList::iterator it =  mPlatformBackends.begin(); it != mPlatformBackends.end(); ++it)
+    for (std::multimap<rtl::OUString, BackendRef>::iterator it =  mPlatformBackends.begin(); it != mPlatformBackends.end(); ++it)
         it->second.disposeBackend();
 
     mPlatformBackends.clear();
@@ -322,7 +319,7 @@ void SAL_CALL SystemIntegrationManager::addChangesListener(
 
     //Simply forward listener to platform backend that support listening
     {
-        PlatformBackendList aUniversalBackends = getSupportingBackends(getAllComponentsName());
+        std::vector< uno::Reference<backenduno::XSingleLayerStratum> > aUniversalBackends = getSupportingBackends(getAllComponentsName());
         for (sal_uInt32 i=0; i< aUniversalBackends.size(); i++)
         {
             uno::Reference<backenduno::XBackendChangesNotifier> xBackend( aUniversalBackends[i], uno::UNO_QUERY) ;
@@ -331,7 +328,7 @@ void SAL_CALL SystemIntegrationManager::addChangesListener(
         }
     }
     {
-        PlatformBackendList aSpecialBackends   = getSupportingBackends(aComponent);
+        std::vector< uno::Reference<backenduno::XSingleLayerStratum> > aSpecialBackends   = getSupportingBackends(aComponent);
         for (sal_uInt32 i=0; i< aSpecialBackends.size(); i++)
         {
             uno::Reference<backenduno::XBackendChangesNotifier> xBackend( aSpecialBackends[i], uno::UNO_QUERY) ;
@@ -348,7 +345,7 @@ void SAL_CALL SystemIntegrationManager::removeChangesListener(
 {
     osl::MutexGuard aGuard(mMutex);
     {
-        PlatformBackendList aUniversalBackends = getSupportingBackends(getAllComponentsName());
+        std::vector< uno::Reference<backenduno::XSingleLayerStratum> > aUniversalBackends = getSupportingBackends(getAllComponentsName());
         for (sal_uInt32 i=0; i< aUniversalBackends.size(); i++)
         {
             uno::Reference<backenduno::XBackendChangesNotifier> xBackend( aUniversalBackends[i], uno::UNO_QUERY) ;
@@ -357,7 +354,7 @@ void SAL_CALL SystemIntegrationManager::removeChangesListener(
         }
     }
     {
-        PlatformBackendList aSpecialBackends   = getSupportingBackends(aComponent);
+        std::vector< uno::Reference<backenduno::XSingleLayerStratum> > aSpecialBackends   = getSupportingBackends(aComponent);
         for (sal_uInt32 i=0; i< aSpecialBackends.size(); i++)
         {
             uno::Reference<backenduno::XBackendChangesNotifier> xBackend( aSpecialBackends[i], uno::UNO_QUERY) ;

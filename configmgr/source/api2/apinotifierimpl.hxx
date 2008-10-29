@@ -43,7 +43,6 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
-    using rtl::OUString;
 
     /* implementations of the event notification interfaces
         supported by a node within the configuration tree.
@@ -78,21 +77,21 @@ namespace configmgr
             throw(uno::RuntimeException);
 
         // XPropertySet - VetoableChangeListeners
-        void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XVetoableChangeListener >& xListener, const OUString& sPropertyName )
+        void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XVetoableChangeListener >& xListener, const rtl::OUString& sPropertyName )
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XVetoableChangeListener >& xListener, const OUString& sPropertyName )
+        void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XVetoableChangeListener >& xListener, const rtl::OUString& sPropertyName )
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XPropertySet
-        void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XPropertyChangeListener >& xListener, const OUString& sPropertyName )
+        void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XPropertyChangeListener >& xListener, const rtl::OUString& sPropertyName )
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-         void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XPropertyChangeListener >& xListener, const OUString& sPropertyName )
+         void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< css::beans::XPropertyChangeListener >& xListener, const rtl::OUString& sPropertyName )
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XMultiPropertySet
-        void implAddListener( NodeAccess& rNode, const uno::Reference< css::beans::XPropertiesChangeListener >& xListener, const uno::Sequence< OUString >& sPropertyNames )
+        void implAddListener( NodeAccess& rNode, const uno::Reference< css::beans::XPropertiesChangeListener >& xListener, const uno::Sequence< rtl::OUString >& sPropertyNames )
             throw(uno::RuntimeException);
 
         void implRemoveListener( NodeAccess& rNode, const uno::Reference< css::beans::XPropertiesChangeListener >& xListener )

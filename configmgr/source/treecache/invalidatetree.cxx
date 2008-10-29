@@ -37,7 +37,6 @@
 #include "valuenode.hxx"
 #include "updatehelper.hxx"
 #include "treeactions.hxx"
-#include "treeaccessor.hxx"
 #include "tracer.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -50,8 +49,6 @@
 namespace configmgr
 {
 
-    using namespace com::sun::star::uno;
-    using namespace configuration;
     namespace container = com::sun::star::container;
 // -----------------------------------------------------------------------------
 // ------------------------------- invalidateTree -------------------------------
@@ -60,26 +57,26 @@ namespace configmgr
 namespace backend
 {
 // -----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccess const& _aCachedNode,
+std::auto_ptr<SubtreeChange> createDiffs(sharable::Node * cachedNode,
                                             ISubtree const * _pLoadedSubtree,
-                                            AbsolutePath const& _aAbsoluteSubtreePath)
+                                            configuration::AbsolutePath const& _aAbsoluteSubtreePath)
 {
-    OSL_PRECOND(_aCachedNode.isValid(), "Need an existing node to create a diff");
+    OSL_PRECOND(cachedNode != 0, "Need an existing node to create a diff");
     OSL_PRECOND(_pLoadedSubtree != 0, "Need a result node to create a diff");
     // Create a TreeChangeList with the right name, parentname and ConfigurationProperties
-    std::auto_ptr<SubtreeChange> aNewChange(new SubtreeChange(_aAbsoluteSubtreePath.getLocalName().getName().toString(),
+    std::auto_ptr<SubtreeChange> aNewChange(new SubtreeChange(_aAbsoluteSubtreePath.getLocalName().getName(),
                                                                 node::Attributes()) );
 
-    if (!createUpdateFromDifference(*aNewChange, _aCachedNode, *_pLoadedSubtree))
+    if (!createUpdateFromDifference(*aNewChange, cachedNode, *_pLoadedSubtree))
         aNewChange.reset();
 
     return aNewChange;
 }
 // -----------------------------------------------------------------------------
 #if 0
-std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _aAbsoluteSubtreePath,
+std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( configuration::AbsolutePath const& _aAbsoluteSubtreePath,
                                                      const vos::ORef < OOptions >& _xOptions,
-                                                     sal_Int16 _nMinLevels)  CFG_UNO_THROW_ALL()
+                                                     sal_Int16 _nMinLevels)  SAL_THROW((com::sun::star::uno::Exception))
 {
     TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo*/);
 
@@ -110,11 +107,11 @@ std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _a
 #endif
 // -----------------------------------------------------------------------------
 
-CacheLocation CacheController::refreshComponent(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
+sharable::TreeFragment * CacheController::refreshComponent(ComponentRequest const & _aRequest) SAL_THROW((com::sun::star::uno::Exception))
 {
     if (m_bDisposing) return NULL;
 
-    CacheRef aCache = this->getCacheAlways(_aRequest.getOptions());
+    rtl::Reference<CacheLoadingAccess> aCache = this->getCacheAlways(_aRequest.getOptions());
 
     if (!aCache.is()) return NULL;
 
@@ -122,31 +119,30 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
     ComponentRequest aForcedRequest(_aRequest);
     aForcedRequest.forceReload();
 
-    ComponentResult aLoadedInstance = this->getComponentData(aForcedRequest,false);
-    AbsolutePath aRequestPath = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
+    ResultHolder< ComponentInstance > aLoadedInstance = this->getComponentData(aForcedRequest,false);
+    configuration::AbsolutePath aRequestPath = configuration::AbsolutePath::makeModulePath(_aRequest.getComponentName());
     NodeInstance aNodeInstance(aLoadedInstance.mutableInstance().mutableData(),aRequestPath) ;
-    NodeResult aLoadedNodeInstance(aNodeInstance) ;
+    ResultHolder< NodeInstance > aLoadedNodeInstance(aNodeInstance) ;
 
-    data::TreeAddress aResult = NULL;
+    sharable::TreeFragment * aResult = NULL;
     if (aLoadedNodeInstance.is())
     {
-        Name aModuleName = aLoadedNodeInstance->root().getModuleName();
+        rtl::OUString aModuleName = aLoadedNodeInstance->root().getModuleName();
 
         bool bAcquired = aCache->acquireModule(aModuleName);
-        aResult = CacheLocation( aCache->getTreeAddress(aModuleName) );
+        aResult = (sharable::TreeFragment *)( aCache->getTreeAddress(aModuleName) );
 
         if (bAcquired)
         try
     {
             std::auto_ptr<SubtreeChange> aTreeChanges;
-            data::NodeAddress aRootAddress;
+            sharable::Node * aRootAddress;
 
             {
-                data::TreeAccessor aTreeAccess(aResult);
-                data::NodeAccess aRootNode = aTreeAccess.getRootNode();
+                sharable::Node * rootNode = aResult == 0 ? 0 : aResult->getRootNode();
 
-                aTreeChanges = createDiffs(aRootNode, aLoadedNodeInstance->data().get(), aLoadedNodeInstance->root().location());
-                aRootAddress = aRootNode;
+                aTreeChanges = createDiffs(rootNode, aLoadedNodeInstance->data().get(), aLoadedNodeInstance->root());
+                aRootAddress = rootNode;
             }
 
             if (aTreeChanges.get() != NULL)
@@ -155,7 +151,7 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
         applyUpdateWithAdjustmentToTree(*aTreeChanges, aRootAddress);
 
                 UpdateRequest anUpdateReq(  aTreeChanges.get(),
-                                            aLoadedNodeInstance->root().location(),
+                                            aLoadedNodeInstance->root(),
                                             _aRequest.getOptions()
                                           );
 

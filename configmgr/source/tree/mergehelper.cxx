@@ -33,8 +33,9 @@
 
 #include <stdio.h>
 
+#include "builddata.hxx"
 #include "nodeconverter.hxx"
-#include "treeprovider.hxx"
+#include "treefragment.hxx"
 #include "treenodefactory.hxx"
 #include "treechangefactory.hxx"
 #include "configpath.hxx"
@@ -89,7 +90,7 @@ private:
     bool impl_cleanup(SubtreeChange& _aUpdateTree);
 
     void add(std::auto_ptr<Change> _pChange);
-    void addReplacedNode(data::TreeSegment const & _aReplacedTree);
+    void addReplacedNode(rtl::Reference< data::TreeSegment > const & _aReplacedTree);
     void addReplacedNode(std::auto_ptr<INode> _aReplacedNode);
 };
 
@@ -172,7 +173,7 @@ inline void OCleanupLayerAction::add(std::auto_ptr<Change> _aChange)
 //--------------------------------------------------------------------------
 void OCleanupLayerAction::handle(ValueChange& _rChange)
 {
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     OSL_ENSURE(!_rChange.isToDefault(),"Found change to default in layer being merged");
 
@@ -211,7 +212,7 @@ void OCleanupLayerAction::handle(ValueChange& _rChange)
 //--------------------------------------------------------------------------
 void OCleanupLayerAction::handle(SubtreeChange& _rChange)
 {
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     OSL_ENSURE(!_rChange.isToDefault(),"Found change to default in layer being merged");
 
@@ -232,7 +233,7 @@ void OCleanupLayerAction::handle(SubtreeChange& _rChange)
         if (pTargetTree)
         {
             // generate a new change
-            std::auto_ptr<SubtreeChange> pResult( new SubtreeChange(_rChange, SubtreeChange::NoChildCopy()) );
+            std::auto_ptr<SubtreeChange> pResult( new SubtreeChange(_rChange, treeop::NoChildCopy()) );
 
             // recurse
             if ( adjust(*pResult,_rChange,*pTargetTree,m_aNodeConverter.nodeFactory()) )
@@ -258,7 +259,7 @@ void OCleanupLayerAction::handle(SubtreeChange& _rChange)
 //--------------------------------------------------------------------------
 void OCleanupLayerAction::handle(RemoveNode& _rChange)
 {
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     OSL_ENSURE(!_rChange.isToDefault(),"Found change to default in layer being merged");
 
@@ -296,19 +297,19 @@ void OCleanupLayerAction::addReplacedNode(std::auto_ptr<INode> _aReplacedNode)
 
     OSL_ASSERT(_aReplacedNode.get());
 
-    OUString sTypeName = m_rTargetTree.getElementTemplateName();
+    rtl::OUString sTypeName = m_rTargetTree.getElementTemplateName();
 
-    this->addReplacedNode( data::TreeSegment::createNew(_aReplacedNode,sTypeName) );
+    this->addReplacedNode( data::TreeSegment::create(_aReplacedNode,sTypeName) );
 }
 
 //--------------------------------------------------------------------------
-void OCleanupLayerAction::addReplacedNode(data::TreeSegment const & _aReplacedTree)
+void OCleanupLayerAction::addReplacedNode(rtl::Reference< data::TreeSegment > const & _aReplacedTree)
 {
     OSL_ENSURE(m_rTargetTree.isSetNode(),"Found replaced node for non-set-element in layer being merged");
 
     OSL_ASSERT(_aReplacedTree.is());
 
-    OUString sNodeName = _aReplacedTree.getName().toString();
+    rtl::OUString sNodeName = _aReplacedTree->fragment->getName();
 
     // add the tree to the change list
     std::auto_ptr<AddNode> pResult( new AddNode(_aReplacedTree,sNodeName, false) );
@@ -349,7 +350,7 @@ void MergeLayerToTree::handle(ValueChange& _rChange)
 {
     OSL_ENSURE(!_rChange.isToDefault(),"Layer merge: Found change to default - cleanup broken");
 
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     INode * const pTargetNode = m_rTree.getChild(sNodeName);
 
@@ -372,7 +373,7 @@ void MergeLayerToTree::handle(ValueChange& _rChange)
 
 void MergeLayerToTree::handle(AddNode& _rChange)
 {
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     node::State eNodeState = node::isAdded;
 
@@ -384,12 +385,12 @@ void MergeLayerToTree::handle(AddNode& _rChange)
 
     OSL_ENSURE( !m_rTree.getChild(sNodeName),"Layer merge: Found conflicting data on insert - cleanup broken");
 
-    data::TreeSegment aAddedTree = _rChange.getNewTree();
+    rtl::Reference< data::TreeSegment > aAddedTree = _rChange.getNewTree();
 
-    OSL_ENSURE( aAddedTree.is(),"Layer merge: Found empty data on insert - cleanup broken");
+    OSL_ENSURE(aAddedTree.is(), "Layer merge: Found empty data on insert - cleanup broken");
 
     // clean up the attributes of the added node
-    data::TreeSegment::RawTreeData aAddedData = aAddedTree.cloneData(true);
+    std::auto_ptr<INode> aAddedData(data::convertTree(aAddedTree->fragment, true));
 
     AttributeSetter(eNodeState,false).applyToNode(*aAddedData);
 
@@ -399,7 +400,7 @@ void MergeLayerToTree::handle(AddNode& _rChange)
 
 void MergeLayerToTree::handle(RemoveNode& _rChange)
 {
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     // should have such a node when removing
     OSL_VERIFY( m_rTree.removeChild(sNodeName).get() );
@@ -411,7 +412,7 @@ void MergeLayerToTree::handle(SubtreeChange& _rChange)
 {
     OSL_ENSURE(!_rChange.isToDefault(),"Layer merge: Found change to default - cleanup broken");
 
-    OUString const sNodeName = _rChange.getNodeName();
+    rtl::OUString const sNodeName = _rChange.getNodeName();
 
     INode * const pTargetNode = m_rTree.getChild(sNodeName);
 

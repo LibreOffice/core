@@ -41,23 +41,13 @@ namespace configmgr
     namespace lang  = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
 
-    using ::rtl::OUString;
-
-    using uno::Any;
-    using uno::Type;
-    using uno::Reference;
-    using uno::Sequence;
-
-    using lang::EventObject;
-
-    using beans::PropertyChangeEvent;
 //-----------------------------------------------------------------------------
 //  class PropertiesFilteredNotifier
 //-----------------------------------------------------------------------------
 
 PropertiesFilteredNotifier::PropertiesFilteredNotifier(
-    Reference< beans::XPropertiesChangeListener >const& xTarget,
-    Sequence< OUString > const& aFilterNames
+    uno::Reference< beans::XPropertiesChangeListener >const& xTarget,
+    uno::Sequence< rtl::OUString > const& aFilterNames
 )
 : m_aRefCount()
 , m_xTarget(xTarget)
@@ -86,7 +76,7 @@ void SAL_CALL PropertiesFilteredNotifier::release(  ) throw()
 }
 //-----------------------------------------------------------------------------
 
-uno::Any SAL_CALL PropertiesFilteredNotifier::queryInterface( const Type& aType )
+uno::Any SAL_CALL PropertiesFilteredNotifier::queryInterface( const uno::Type& aType )
     throw(uno::RuntimeException)
 {
     return cppu::queryInterface(aType
@@ -97,7 +87,7 @@ uno::Any SAL_CALL PropertiesFilteredNotifier::queryInterface( const Type& aType 
 }
 //-----------------------------------------------------------------------------
 
-void SAL_CALL PropertiesFilteredNotifier::disposing( const EventObject& Source )
+void SAL_CALL PropertiesFilteredNotifier::disposing( const lang::EventObject& Source )
     throw(uno::RuntimeException)
 {
     if (m_xTarget.is())
@@ -119,7 +109,7 @@ bool PropertiesFilteredNotifier::implAccept(const ::com::sun::star::beans::Prope
 //-----------------------------------------------------------------------------
 
 // private and only used once
-Sequence< PropertyChangeEvent > PropertiesFilteredNotifier::implFilter(const Sequence< PropertyChangeEvent >& evt)  const
+uno::Sequence< beans::PropertyChangeEvent > PropertiesFilteredNotifier::implFilter(const uno::Sequence< beans::PropertyChangeEvent >& evt)  const
 {
     sal_Int32 const nSize = evt.getLength();
     sal_Int32 nAccepted = 0;
@@ -131,7 +121,7 @@ Sequence< PropertyChangeEvent > PropertiesFilteredNotifier::implFilter(const Seq
         return evt;
 
     // create a modified copy
-    Sequence< PropertyChangeEvent > aResult(evt);
+    uno::Sequence< beans::PropertyChangeEvent > aResult(evt);
     for (sal_Int32 nCur = nAccepted+1; nCur<nSize; ++nCur)
     {
         if (implAccept(evt[nCur]))
@@ -146,10 +136,10 @@ Sequence< PropertyChangeEvent > PropertiesFilteredNotifier::implFilter(const Seq
 }
 //-----------------------------------------------------------------------------
 
-void SAL_CALL PropertiesFilteredNotifier::propertiesChange( const Sequence< PropertyChangeEvent >& evt )
+void SAL_CALL PropertiesFilteredNotifier::propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& evt )
     throw(uno::RuntimeException)
 {
-    Sequence< PropertyChangeEvent > aFilteredEvt( implFilter(evt) );
+    uno::Sequence< beans::PropertyChangeEvent > aFilteredEvt( implFilter(evt) );
 
     if (aFilteredEvt.getLength() > 0)
     {

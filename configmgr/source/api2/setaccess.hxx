@@ -46,7 +46,6 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
-    using rtl::OUString;
 
     namespace configapi { class NodeSetInfoAccess; }
 
@@ -74,12 +73,12 @@ namespace configmgr
     public:
     // Interface methods
         // XHierarchicalName
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getHierarchicalName(  )
                 throw(uno::RuntimeException);
 
-        virtual OUString SAL_CALL
-            composeHierarchicalName( const OUString& aRelativeName )
+        virtual rtl::OUString SAL_CALL
+            composeHierarchicalName( const rtl::OUString& aRelativeName )
                 throw(css::lang::IllegalArgumentException, css::lang::NoSupportException,
                         uno::RuntimeException);
 
@@ -94,25 +93,25 @@ namespace configmgr
 
         // XNameAccess
         virtual uno::Any SAL_CALL
-            getByName( const OUString& aName )
+            getByName( const rtl::OUString& aName )
                 throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
                          uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getElementNames(  )
                 throw( uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            hasByName( const OUString& aName )
+            hasByName( const rtl::OUString& aName )
                 throw(uno::RuntimeException);
 
         // XHierarchicalNameAccess
         virtual uno::Any SAL_CALL
-            getByHierarchicalName( const OUString& aName )
+            getByHierarchicalName( const rtl::OUString& aName )
                 throw(css::container::NoSuchElementException, uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            hasByHierarchicalName( const OUString& aName )
+            hasByHierarchicalName( const rtl::OUString& aName )
                 throw(uno::RuntimeException);
 
         // XContainer
@@ -125,8 +124,8 @@ namespace configmgr
                 throw(uno::RuntimeException);
 
         // XExactName
-        virtual OUString SAL_CALL
-            getExactName( const OUString& aApproximateName )
+        virtual rtl::OUString SAL_CALL
+            getExactName( const rtl::OUString& aApproximateName )
                 throw(uno::RuntimeException);
 
         // XProperty
@@ -140,25 +139,25 @@ namespace configmgr
                 throw (uno::RuntimeException);
 
         virtual css::beans::Property SAL_CALL
-            getPropertyByName( const OUString& aName )
+            getPropertyByName( const rtl::OUString& aName )
                 throw (css::beans::UnknownPropertyException, uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            hasPropertyByName( const OUString& Name )
+            hasPropertyByName( const rtl::OUString& name )
                 throw (uno::RuntimeException);
 
         // XTemplateContainer
-        OUString SAL_CALL
+        rtl::OUString SAL_CALL
             getElementTemplateName(  )
                 throw(uno::RuntimeException);
 
         // XStringEscape
-        OUString SAL_CALL
-            escapeString( const OUString& aString )
+        rtl::OUString SAL_CALL
+            escapeString( const rtl::OUString& aString )
                 throw(css::lang::IllegalArgumentException, uno::RuntimeException);
 
-        OUString SAL_CALL
-            unescapeString( const OUString& aEscapedString )
+        rtl::OUString SAL_CALL
+            unescapeString( const rtl::OUString& aEscapedString )
                 throw(css::lang::IllegalArgumentException, uno::RuntimeException);
 
     protected:

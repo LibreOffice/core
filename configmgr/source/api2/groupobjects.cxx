@@ -79,22 +79,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OInnerGroupInfo::getImplementationId( ) throw
 }
 
 
-NodeAccess& OInnerGroupInfo::getNodeAccess()
+configapi::NodeAccess&  OInnerGroupInfo::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeGroupInfoAccess& OInnerGroupInfo::getNode()
+configapi::NodeGroupInfoAccess& OInnerGroupInfo::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeGroupAccess* OInnerGroupInfo::maybeGetUpdateAccess()
+configapi::NodeGroupAccess* OInnerGroupInfo::maybeGetUpdateAccess()
 {
     return 0;
 }
 
-InnerElement& OInnerGroupInfo::getElementClass()
+configapi::InnerElement& OInnerGroupInfo::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -140,22 +140,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OInnerGroupUpdate::getImplementationId( ) thr
 }
 
 
-NodeAccess& OInnerGroupUpdate::getNodeAccess()
+configapi::NodeAccess&  OInnerGroupUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeGroupInfoAccess& OInnerGroupUpdate::getNode()
+configapi::NodeGroupInfoAccess& OInnerGroupUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeGroupAccess*    OInnerGroupUpdate::maybeGetUpdateAccess()
+configapi::NodeGroupAccess* OInnerGroupUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-InnerElement& OInnerGroupUpdate::getElementClass()
+configapi::InnerElement& OInnerGroupUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -201,22 +201,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OSetElementGroupInfo::getImplementationId( ) 
 }
 
 
-NodeAccess& OSetElementGroupInfo::getNodeAccess()
+configapi::NodeAccess&  OSetElementGroupInfo::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeGroupInfoAccess& OSetElementGroupInfo::getNode()
+configapi::NodeGroupInfoAccess& OSetElementGroupInfo::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeGroupAccess* OSetElementGroupInfo::maybeGetUpdateAccess()
+configapi::NodeGroupAccess* OSetElementGroupInfo::maybeGetUpdateAccess()
 {
     return 0;
 }
 
-SetElement& OSetElementGroupInfo::getElementClass()
+configapi::SetElement& OSetElementGroupInfo::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -262,22 +262,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OSetElementGroupUpdate::getImplementationId( 
 }
 
 
-NodeAccess& OSetElementGroupUpdate::getNodeAccess()
+configapi::NodeAccess&  OSetElementGroupUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeGroupInfoAccess& OSetElementGroupUpdate::getNode()
+configapi::NodeGroupInfoAccess& OSetElementGroupUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeGroupAccess* OSetElementGroupUpdate::maybeGetUpdateAccess()
+configapi::NodeGroupAccess* OSetElementGroupUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-SetElement& OSetElementGroupUpdate::getElementClass()
+configapi::SetElement& OSetElementGroupUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -323,22 +323,22 @@ uno::Sequence< sal_Int8 > SAL_CALL ORootElementGroupInfo::getImplementationId( )
 }
 
 
-NodeAccess& ORootElementGroupInfo::getNodeAccess()
+configapi::NodeAccess&  ORootElementGroupInfo::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeGroupInfoAccess& ORootElementGroupInfo::getNode()
+configapi::NodeGroupInfoAccess& ORootElementGroupInfo::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeGroupAccess* ORootElementGroupInfo::maybeGetUpdateAccess()
+configapi::NodeGroupAccess* ORootElementGroupInfo::maybeGetUpdateAccess()
 {
     return 0;
 }
 
-RootElement& ORootElementGroupInfo::getElementClass()
+configapi::RootElement& ORootElementGroupInfo::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -384,22 +384,22 @@ uno::Sequence< sal_Int8 > SAL_CALL ORootElementGroupUpdate::getImplementationId(
 }
 
 
-NodeAccess& ORootElementGroupUpdate::getNodeAccess()
+configapi::NodeAccess&  ORootElementGroupUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeGroupInfoAccess& ORootElementGroupUpdate::getNode()
+configapi::NodeGroupInfoAccess& ORootElementGroupUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeGroupAccess*    ORootElementGroupUpdate::maybeGetUpdateAccess()
+configapi::NodeGroupAccess* ORootElementGroupUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-UpdateRootElement& ORootElementGroupUpdate::getElementClass()
+configapi::UpdateRootElement& ORootElementGroupUpdate::getElementClass()
 {
     return m_aAccessElement;
 }

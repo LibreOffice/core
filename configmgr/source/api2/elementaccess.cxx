@@ -44,57 +44,75 @@ namespace configmgr
 //-----------------------------------------------------------------------------------
 
     namespace uno = com::sun::star::uno;
-    using uno::Reference;
-    using uno::Sequence;
-    using uno::Any;
-    using uno::RuntimeException;
 
 //-----------------------------------------------------------------------------------
 // XInterface (but not method queryInterface)
 //-----------------------------------------------------------------------------------
 
 // acuire doesn't really do anything but forward. OTOH it should always be overridden when release() is
-void SAL_CALL BasicInnerElement ::acquire() throw() { BaseImplHelper::acquire(); }
-void SAL_CALL BasicSetElement   ::acquire() throw() { BaseImplHelper::acquire(); }
-void SAL_CALL BasicRootElement  ::acquire() throw() { BaseImplHelper::acquire(); }
-void SAL_CALL BasicUpdateElement::acquire() throw() { BaseImplHelper::acquire(); }
+void SAL_CALL BasicInnerElement ::acquire() throw() { cppu::WeakImplHelper3< css::container::XChild, css::container::XNamed, css::lang::XServiceInfo >::acquire(); }
+void SAL_CALL BasicSetElement   ::acquire() throw() { cppu::WeakImplHelper6< css::container::XChild, css::container::XNamed, css::lang::XComponent, css::lang::XServiceInfo, css::configuration::XTemplateInstance, css::lang::XUnoTunnel >::acquire(); }
+void SAL_CALL BasicRootElement  ::acquire() throw() { cppu::WeakImplHelper5< css::container::XNamed, css::util::XChangesNotifier, css::lang::XComponent, css::lang::XServiceInfo, css::lang::XLocalizable >::acquire(); }
+void SAL_CALL BasicUpdateElement::acquire() throw() { cppu::WeakImplHelper6< css::container::XNamed, css::util::XChangesNotifier, css::lang::XComponent, css::lang::XServiceInfo, css::lang::XLocalizable, css::util::XChangesBatch >::acquire(); }
 //-----------------------------------------------------------------------------------
-
-// FIXME: this looks highly flaky wrt. weak-refs etc.
-#define LOCKED_RELEASE \
-    bool bLastRef = (1 == m_refCount); \
-    if (bLastRef) \
-    { \
-        UnoApiLock::acquire(); \
-        configapi::implDisposeObject( getNodeAccess(), getElementClass() ); \
-    } \
-    BaseImplHelper::release(); \
-    if (bLastRef) \
-        UnoApiLock::release()
-
-
 
 void SAL_CALL BasicInnerElement::release() throw()
 {
-    LOCKED_RELEASE;
+    // FIXME: this looks highly flaky wrt. weak-refs etc.
+    bool bLastRef = (1 == m_refCount);
+    if (bLastRef)
+    {
+        UnoApiLock::acquire();
+        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
+    }
+    cppu::WeakImplHelper3< css::container::XChild, css::container::XNamed, css::lang::XServiceInfo >::release();
+    if (bLastRef)
+        UnoApiLock::release();
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicSetElement::release() throw()
 {
-    LOCKED_RELEASE;
+    // FIXME: this looks highly flaky wrt. weak-refs etc.
+    bool bLastRef = (1 == m_refCount);
+    if (bLastRef)
+    {
+        UnoApiLock::acquire();
+        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
+    }
+    cppu::WeakImplHelper6< css::container::XChild, css::container::XNamed, css::lang::XComponent, css::lang::XServiceInfo, css::configuration::XTemplateInstance, css::lang::XUnoTunnel >::release();
+    if (bLastRef)
+        UnoApiLock::release();
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicRootElement::release() throw()
 {
-    LOCKED_RELEASE;
+    // FIXME: this looks highly flaky wrt. weak-refs etc.
+    bool bLastRef = (1 == m_refCount);
+    if (bLastRef)
+    {
+        UnoApiLock::acquire();
+        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
+    }
+    cppu::WeakImplHelper5< css::container::XNamed, css::util::XChangesNotifier, css::lang::XComponent, css::lang::XServiceInfo, css::lang::XLocalizable >::release();
+    if (bLastRef)
+        UnoApiLock::release();
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateElement::release() throw()
 {
-    LOCKED_RELEASE;
+    // FIXME: this looks highly flaky wrt. weak-refs etc.
+    bool bLastRef = (1 == m_refCount);
+    if (bLastRef)
+    {
+        UnoApiLock::acquire();
+        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
+    }
+    cppu::WeakImplHelper6< css::container::XNamed, css::util::XChangesNotifier, css::lang::XComponent, css::lang::XServiceInfo, css::lang::XLocalizable, css::util::XChangesBatch >::release();
+    if (bLastRef)
+        UnoApiLock::release();
 }
 //-----------------------------------------------------------------------------------
 
@@ -130,28 +148,28 @@ uno::Sequence<sal_Int8> SAL_CALL BasicUpdateElement::getImplementationId(  ) thr
 // XChild (not for root elements)
 //-----------------------------------------------------------------------------------
 
-Reference< uno::XInterface > SAL_CALL BasicInnerElement::getParent(  ) throw(RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL BasicInnerElement::getParent(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetParent( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-Reference< uno::XInterface > SAL_CALL BasicSetElement::getParent(  ) throw(RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL BasicSetElement::getParent(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetParent( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-void SAL_CALL BasicInnerElement::setParent( const Reference< uno::XInterface >& xParent )
-    throw(css::lang::NoSupportException, RuntimeException)
+void SAL_CALL BasicInnerElement::setParent( const uno::Reference< uno::XInterface >& xParent )
+    throw(css::lang::NoSupportException, uno::RuntimeException)
 {
     configapi::implSetParent( getNodeAccess(), getElementClass(), xParent );
 }
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicSetElement::setParent( const Reference< uno::XInterface >& xParent )
-    throw(css::lang::NoSupportException, RuntimeException)
+void SAL_CALL BasicSetElement::setParent( const uno::Reference< uno::XInterface >& xParent )
+    throw(css::lang::NoSupportException, uno::RuntimeException)
 {
     configapi::implSetParent( getNodeAccess(), getElementClass(), xParent );
 }
@@ -161,50 +179,50 @@ void SAL_CALL BasicSetElement::setParent( const Reference< uno::XInterface >& xP
 // XNamed
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicInnerElement::getName(  ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicInnerElement::getName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicSetElement::getName(  ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicSetElement::getName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicRootElement::getName(  ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicRootElement::getName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicUpdateElement::getName(  ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicUpdateElement::getName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-void SAL_CALL BasicInnerElement::setName( const OUString& aName ) throw(RuntimeException)
+void SAL_CALL BasicInnerElement::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
 {
     configapi::implSetName( getNodeAccess(), getElementClass(), aName );
 }
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicSetElement::setName( const OUString& aName ) throw(RuntimeException)
+void SAL_CALL BasicSetElement::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
 {
     configapi::implSetName( getNodeAccess(), getElementClass(), aName );
 }
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicRootElement::setName( const OUString& aName ) throw(RuntimeException)
+void SAL_CALL BasicRootElement::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
 {
     configapi::implSetName( getNodeAccess(), getElementClass(), aName );
 }
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateElement::setName( const OUString& aName ) throw(RuntimeException)
+void SAL_CALL BasicUpdateElement::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
 {
     configapi::implSetName( getNodeAccess(), getElementClass(), aName );
 }
@@ -214,30 +232,30 @@ void SAL_CALL BasicUpdateElement::setName( const OUString& aName ) throw(Runtime
 // XChangesNotifier
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicRootElement::addChangesListener( const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicRootElement::addChangesListener( const uno::Reference< css::util::XChangesListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implAddListener( getNodeAccess(), xListener );
 }
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateElement::addChangesListener( const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicUpdateElement::addChangesListener( const uno::Reference< css::util::XChangesListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implAddListener( getNodeAccess(), xListener );
 }
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-void SAL_CALL BasicRootElement::removeChangesListener( const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicRootElement::removeChangesListener( const uno::Reference< css::util::XChangesListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implRemoveListener( getNodeAccess(), xListener );
 }
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateElement::removeChangesListener( const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicUpdateElement::removeChangesListener( const uno::Reference< css::util::XChangesListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implRemoveListener( getNodeAccess(), xListener );
 }
@@ -313,75 +331,75 @@ void SAL_CALL BasicUpdateElement::removeEventListener( const uno::Reference< css
 // XServiceInfo
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicInnerElement::getImplementationName(  ) throw(uno::RuntimeException)
+rtl::OUString SAL_CALL BasicInnerElement::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetImplementationName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicSetElement::getImplementationName(  ) throw(uno::RuntimeException)
+rtl::OUString SAL_CALL BasicSetElement::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetImplementationName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicRootElement::getImplementationName(  ) throw(uno::RuntimeException)
+rtl::OUString SAL_CALL BasicRootElement::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetImplementationName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicUpdateElement::getImplementationName(  ) throw(uno::RuntimeException)
+rtl::OUString SAL_CALL BasicUpdateElement::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetImplementationName( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL BasicInnerElement::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL BasicInnerElement::supportsService( const rtl::OUString& ServiceName ) throw(uno::RuntimeException)
 {
     return configapi::implSupportsService( getNodeAccess(), getElementClass(), ServiceName );
 }
 //-----------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL BasicSetElement::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL BasicSetElement::supportsService( const rtl::OUString& ServiceName ) throw(uno::RuntimeException)
 {
     return configapi::implSupportsService( getNodeAccess(), getElementClass(), ServiceName );
 }
 //-----------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL BasicRootElement::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL BasicRootElement::supportsService( const rtl::OUString& ServiceName ) throw(uno::RuntimeException)
 {
     return configapi::implSupportsService( getNodeAccess(), getElementClass(), ServiceName );
 }
 //-----------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL BasicUpdateElement::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL BasicUpdateElement::supportsService( const rtl::OUString& ServiceName ) throw(uno::RuntimeException)
 {
     return configapi::implSupportsService( getNodeAccess(), getElementClass(), ServiceName );
 }
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-uno::Sequence< OUString > SAL_CALL  BasicInnerElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< rtl::OUString > SAL_CALL     BasicInnerElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetSupportedServiceNames( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-uno::Sequence< OUString > SAL_CALL  BasicSetElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< rtl::OUString > SAL_CALL     BasicSetElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetSupportedServiceNames( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-uno::Sequence< OUString > SAL_CALL  BasicRootElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< rtl::OUString > SAL_CALL     BasicRootElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetSupportedServiceNames( getNodeAccess(), getElementClass() );
 }
 //-----------------------------------------------------------------------------------
 
-uno::Sequence< OUString > SAL_CALL  BasicUpdateElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< rtl::OUString > SAL_CALL     BasicUpdateElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetSupportedServiceNames( getNodeAccess(), getElementClass() );
 }
@@ -394,7 +412,7 @@ uno::Sequence< OUString > SAL_CALL  BasicUpdateElement::getSupportedServiceNames
 // XTemplateInstance
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicSetElement::getTemplateName( ) throw(uno::RuntimeException)
+rtl::OUString SAL_CALL BasicSetElement::getTemplateName( ) throw(uno::RuntimeException)
 {
     return configapi::implGetTemplateName( getElementClass() );
 }

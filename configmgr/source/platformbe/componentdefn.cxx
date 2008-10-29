@@ -36,14 +36,11 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif // _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 
-
-using namespace configmgr::backend ;
-
 //==============================================================================
 
-static uno::Reference<uno::XInterface> SAL_CALL createSystemIntegrationManager(
-                   const uno::Reference<uno::XComponentContext>& aContext) {
-    return * new SystemIntegrationManager(aContext) ;
+static com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL createSystemIntegrationManager(
+                   const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& aContext) {
+    return * new configmgr::backend::SystemIntegrationManager(aContext) ;
 }
 //==============================================================================
 
@@ -53,8 +50,8 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 {
     {
         createSystemIntegrationManager,
-        SystemIntegrationManager::getSystemIntegrationManagerName,
-        SystemIntegrationManager::getServiceNames,
+        configmgr::backend::SystemIntegrationManager::getSystemIntegrationManagerName,
+        configmgr::backend::SystemIntegrationManager::getServiceNames,
         cppu::createSingleComponentFactory,
         NULL,
         0

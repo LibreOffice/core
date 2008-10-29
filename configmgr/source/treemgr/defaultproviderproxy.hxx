@@ -35,6 +35,7 @@
 #include "utility.hxx"
 #include "requestoptions.hxx"
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #ifndef INCLUDED_MEMORY
 #include <memory>
@@ -45,9 +46,9 @@ namespace configmgr
 {
 //-----------------------------------------------------------------------------
     class ISubtree;
-    class IConfigDefaultProvider;
     class IDefaultableTreeManager;
     class OOptions;
+    class TreeManager;
 //-----------------------------------------------------------------------------
     namespace configuration
     {
@@ -55,19 +56,19 @@ namespace configmgr
 
         /// provides access to the defaults for a given request
         class DefaultProviderProxy
-        : public configmgr::SimpleReferenceObject
+        : public salhelper::SimpleReferenceObject
         {
             // the data defining a request
             AbsolutePath            m_aBaseLocation;
             RequestOptions          m_aOptions;
 
             // the object(s) that provide the defaults
-            rtl::Reference< IConfigDefaultProvider >    m_xDefaultTreeProvider;
+            rtl::Reference< TreeManager >    m_xDefaultTreeProvider;
             IDefaultableTreeManager *                   m_pDefaultTreeManager;
         public:
             explicit
             DefaultProviderProxy(
-                    rtl::Reference< IConfigDefaultProvider > const & _xDefaultTreeProvider,
+                    rtl::Reference< TreeManager > const & _xDefaultTreeProvider,
                     IDefaultableTreeManager *   _pDefaultTreeManager,
                     AbsolutePath        const&  _aBaseLocation,
                     RequestOptions      const&  _aOptions
@@ -76,10 +77,10 @@ namespace configmgr
             ~DefaultProviderProxy();
 
         /// tries to load a default instance of the specified node (which must be within the request range owned)
-            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
+            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const SAL_THROW((com::sun::star::uno::Exception));
 
             /// tries to load default data into the owned tree - call only outside of any locks
-            bool fetchDefaultData() CFG_UNO_THROW_ALL();
+            bool fetchDefaultData() SAL_THROW((com::sun::star::uno::Exception));
         };
 //-----------------------------------------------------------------------------
     }

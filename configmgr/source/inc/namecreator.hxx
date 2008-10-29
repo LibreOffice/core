@@ -39,37 +39,27 @@ namespace configmgr
     class Change;
     class SubtreeChange;
     // -----------------------------------------------------------------------------
-    using configuration::Name;
-    using configuration::AbsolutePath;
-    using configuration::RelativePath;
-    // -----------------------------------------------------------------------------
 
     class ONameCreator
     {
     public:
-        typedef configuration::Path::Component  FullName;
-        typedef configuration::Path::Rep        PathRep;
-        typedef std::vector< FullName > NameList;
-    public:
         ONameCreator() {}
 
-        void pushName(const FullName &_aName) { m_aNameList.push_back(_aName); }
+        void pushName(const configuration::Path::Component &_aName) { m_aNameList.push_back(_aName); }
         void popName()                       { m_aNameList.pop_back(); }
 
         void clear() { m_aNameList.clear(); }
 
-        static FullName createName(Change const& _rChange, SubtreeChange const* _pParent);
+        static configuration::Path::Component createName(Change const& _rChange, SubtreeChange const* _pParent);
     private:
-        NameList     m_aNameList;
+        std::vector< configuration::Path::Component >     m_aNameList;
     };
 
     template <class PathClass>
     class OPathCreator : public ONameCreator
     {
     public:
-        typedef PathClass PathType;
-    public:
-        OPathCreator() : m_aBasePath( PathRep() ) {}
+        OPathCreator() : m_aBasePath( configuration::Path::Rep() ) {}
         OPathCreator(PathClass const & _aBasePath) : m_aBasePath(_aBasePath) {}
 
         void init(PathClass const & _aBasePath)

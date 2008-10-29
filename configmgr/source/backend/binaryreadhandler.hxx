@@ -70,14 +70,14 @@ namespace configmgr
             rtl::OUString        m_aComponentName;
 
         public:
-            BinaryReadHandler(rtl::OUString const & _aFileURL, rtl::OUString const & _aComponentName, MultiServiceFactory const & _aFactory);
+            BinaryReadHandler(rtl::OUString const & _aFileURL, rtl::OUString const & _aComponentName, uno::Reference<lang::XMultiServiceFactory> const & _aFactory);
             ~BinaryReadHandler();
 
             bool validateHeader(    const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
-                                    const OUString& _aSchemaVersion,
-                                    localehelper::Locale const & aRequestedLocale,
-                                    localehelper::LocaleSequence & outKnownLocales)
+                                    const rtl::OUString& _aSchemaVersion,
+                                    com::sun::star::lang::Locale const & aRequestedLocale,
+                                    std::vector< com::sun::star::lang::Locale > & outKnownLocales)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             std::auto_ptr<ISubtree> readComponentTree()
@@ -96,9 +96,9 @@ namespace configmgr
         private:
             bool verifyFileHeader(  const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
-                                    const OUString& _aSchemaVersion,
-                                    localehelper::Locale const & aRequestedLocale,
-                                    localehelper::LocaleSequence & outKnownLocales);
+                                    const rtl::OUString& _aSchemaVersion,
+                                    com::sun::star::lang::Locale const & aRequestedLocale,
+                                    std::vector< com::sun::star::lang::Locale > & outKnownLocales);
 
             bool isUptodate(const std::vector<rtl::OUString> & _timeStamps)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );

@@ -31,6 +31,8 @@
 #ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #define CONFIGMGR_CONFIGCHANGE_HXX_
 
+#include "rtl/ref.hxx"
+
 #include "configexcept.hxx"
 
 #include <vector>
@@ -40,17 +42,12 @@ namespace configmgr
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-        class Name;
         class AbsolutePath;
         class RelativePath;
         class NodeRef;
         class NodeID;
         class SubNodeID;
         class Tree;
-//-----------------------------------------------------------------------------
-
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
 //-----------------------------------------------------------------------------
 
         class NodeChange;
@@ -95,12 +92,12 @@ namespace configmgr
             NodeChange const& apply() const;
 
             // retrieve the tree where the change is actually taking place
-            Tree getBaseTree() const;
+            rtl::Reference< Tree > getBaseTree() const;
             // retrieve the node where the change is actually taking place
             NodeRef getBaseNode() const;
 
             // retrieve the tree where the change is actually taking place
-            Tree getAffectedTree() const;
+            rtl::Reference< Tree > getAffectedTree() const;
             // retrieve the node where the change is actually taking place
             NodeRef getAffectedNode() const;
             // identify the node where the change is actually taking place
@@ -127,10 +124,6 @@ namespace configmgr
         */
         class NodeChanges
         {
-            typedef std::vector<NodeChange> ChangesList;
-        public:
-            typedef ChangesList::const_iterator Iterator;
-            typedef ChangesList::iterator MutatingIterator;
         public:
             /// Constructs an empty collection of changes
             NodeChanges();
@@ -139,7 +132,7 @@ namespace configmgr
             bool isEmpty() const;
 
             /// retrieves the total count of changes in this collection
-            ChangesList::size_type getCount() const { return m_aChanges.size(); }
+            std::vector<NodeChange>::size_type getCount() const { return m_aChanges.size(); }
 
             /// retrieve information about the changed data, appending to a sequence, returning the count
             sal_uInt32 getChangesInfos(NodeChangesInformation& rInfos) const;
@@ -164,17 +157,17 @@ namespace configmgr
             void add(NodeChanges const& aChanges);
 
             /// returns an STL-style iterator to the first element of the collection
-            Iterator begin() const      { return m_aChanges.begin(); }
-            MutatingIterator begin()    { return m_aChanges.begin(); }
+            std::vector<NodeChange>::const_iterator begin() const       { return m_aChanges.begin(); }
+            std::vector<NodeChange>::iterator begin()   { return m_aChanges.begin(); }
 
             /// returns an STL-style iterator to past the last element of the collection
-            Iterator end() const    { return m_aChanges.end(); }
-            MutatingIterator end()  { return m_aChanges.end(); }
+            std::vector<NodeChange>::const_iterator end() const { return m_aChanges.end(); }
+            std::vector<NodeChange>::iterator end() { return m_aChanges.end(); }
 
         private:
             void implTest() const;
             void implApply() const;
-            ChangesList m_aChanges;
+            std::vector<NodeChange> m_aChanges;
         };
 
     }

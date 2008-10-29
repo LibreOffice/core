@@ -48,28 +48,26 @@ namespace configmgr
 
 namespace
 {
-    typedef uno::Reference< script::XTypeConverter > TypeConverter;
-
     static inline
-    TypeConverter createTCV(BasicParser::Context const & _xContext)
+    uno::Reference< script::XTypeConverter > createTCV(uno::Reference< uno::XComponentContext > const & _xContext)
     {
         OSL_ENSURE(_xContext.is(),"Cannot create Parser without a Context");
 
         static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
 
         uno::Reference< lang::XMultiComponentFactory > xSvcFactory = _xContext->getServiceManager();
-        return TypeConverter::query(xSvcFactory->createInstanceWithContext(k_sTCVService,_xContext));
+        return uno::Reference< script::XTypeConverter >::query(xSvcFactory->createInstanceWithContext(k_sTCVService,_xContext));
     }
 }
 // -----------------------------------------------------------------------------
 
 struct BasicParser::ValueData : ValueConverter
 {
-    OUString    content;
-    OUString    locale;
+    rtl::OUString    content;
+    rtl::OUString    locale;
     bool    isLocalized;
 
-    ValueData(uno::Type const& _aType, TypeConverter const & _xTCV)
+    ValueData(uno::Type const& _aType, uno::Reference< script::XTypeConverter > const & _xTCV)
     : ValueConverter(_aType, _xTCV)
     , content()
     , locale()
@@ -82,17 +80,17 @@ struct BasicParser::ValueData : ValueConverter
         return ValueConverter::convertToAny(this->content);
     }
 
-    OUString toString() const
+    rtl::OUString toString() const
     {
         return this->content;
     }
 
-    uno::Sequence<OUString> toStringList() const
+    uno::Sequence<rtl::OUString> toStringList() const
     {
         return ValueConverter::splitStringList(this->content);
     }
 
-    void setLocalized(OUString const & _aLocale)
+    void setLocalized(rtl::OUString const & _aLocale)
     {
         isLocalized = true;
         locale = _aLocale;
@@ -100,7 +98,7 @@ struct BasicParser::ValueData : ValueConverter
 };
 // -----------------------------------------------------------------------------
 
-BasicParser::BasicParser(Context const & _xContext)
+BasicParser::BasicParser(uno::Reference< uno::XComponentContext > const & _xContext)
 : m_xTypeConverter( createTCV(_xContext) )
 , m_xLocator(NULL)
 , m_aDataParser(Logger(_xContext))
@@ -128,7 +126,7 @@ BasicParser::~BasicParser()
 void BasicParser::dbgUpdateLocation()
 {
 #ifndef DBG_UTIL
-    OUString  dbgPublicId,    dbgSystemId;
+    rtl::OUString  dbgPublicId,    dbgSystemId;
     sal_Int32 dbgLineNo,      dbgColumnNo;
 #endif // OSL_DEBUG_LEVEL
 
@@ -141,7 +139,7 @@ void BasicParser::dbgUpdateLocation()
     }
     else
     {
-        dbgPublicId = dbgSystemId = OUString::createFromAscii("<<<unknown>>>");
+        dbgPublicId = dbgSystemId = rtl::OUString::createFromAscii("<<<unknown>>>");
         dbgLineNo = dbgColumnNo = -1;
     }
 }
@@ -176,7 +174,7 @@ void SAL_CALL BasicParser::endDocument(  ) throw (sax::SAXException, uno::Runtim
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicParser::characters( const OUString& aChars )
+void SAL_CALL BasicParser::characters( const rtl::OUString& aChars )
         throw (sax::SAXException, uno::RuntimeException)
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
@@ -192,7 +190,7 @@ void SAL_CALL BasicParser::characters( const OUString& aChars )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicParser::ignorableWhitespace( const OUString& aWhitespaces )
+void SAL_CALL BasicParser::ignorableWhitespace( const rtl::OUString& aWhitespaces )
         throw (sax::SAXException, uno::RuntimeException)
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
@@ -209,7 +207,7 @@ void SAL_CALL BasicParser::ignorableWhitespace( const OUString& aWhitespaces )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicParser::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
+void SAL_CALL BasicParser::processingInstruction( const rtl::OUString& /*aTarget*/, const rtl::OUString& /*aData*/ )
         throw (sax::SAXException, uno::RuntimeException)
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
@@ -377,7 +375,7 @@ void BasicParser::startValueData(const uno::Reference< sax::XAttributeList >& xA
                 !m_pValueData->isNull(),
                 "Warning: Spurious oor:separator on value that is not a list");
 
-    OUString aLocale;
+    rtl::OUString aLocale;
     if ( getDataParser().getLanguage(xAttribs,aLocale) )
         m_pValueData->setLocalized( aLocale );
 }
@@ -397,7 +395,7 @@ bool BasicParser::isValueDataLocalized()
 }
 // -----------------------------------------------------------------------------
 
-OUString BasicParser::getValueDataLocale()
+rtl::OUString BasicParser::getValueDataLocale()
 {
     OSL_ENSURE(isValueDataLocalized(), "There is no value data or it is not localized");
 
@@ -453,7 +451,7 @@ void BasicParser::endValueData()
 }
 // -----------------------------------------------------------------------------
 
-void BasicParser::startSkipping( const OUString& aName, const uno::Reference< sax::XAttributeList >& /*xAttribs*/ )
+void BasicParser::startSkipping( const rtl::OUString& aName, const uno::Reference< sax::XAttributeList >& /*xAttribs*/ )
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 
@@ -462,7 +460,7 @@ void BasicParser::startSkipping( const OUString& aName, const uno::Reference< sa
 }
 // -----------------------------------------------------------------------------
 
-bool BasicParser::wasSkipping( const OUString& aName )
+bool BasicParser::wasSkipping( const rtl::OUString& aName )
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 
@@ -488,13 +486,13 @@ bool BasicParser::isSkipping( )
 // -----------------------------------------------------------------------------
 
 void BasicParser::raiseParseException( uno::Any const & _aTargetException, sal_Char const * _pMsg )
-        CFG_THROW2 (sax::SAXException, uno::RuntimeException)
+    SAL_THROW((sax::SAXException, uno::RuntimeException))
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 
     if (_pMsg == 0) _pMsg = "Configuration XML Parser: Invalid Data: ";
 
-    OUString sMessage = OUString::createFromAscii(_pMsg);
+    rtl::OUString sMessage = rtl::OUString::createFromAscii(_pMsg);
 
     uno::Exception aEx;
     if (_aTargetException >>= aEx)
@@ -506,21 +504,21 @@ void BasicParser::raiseParseException( uno::Any const & _aTargetException, sal_C
 // -----------------------------------------------------------------------------
 
 void BasicParser::raiseParseException( sal_Char const * _pMsg )
-        CFG_THROW2 (sax::SAXException, uno::RuntimeException)
+    SAL_THROW((sax::SAXException, uno::RuntimeException))
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 
     if (_pMsg == 0) _pMsg = "Configuration XML Parser: Invalid XML";
 
-    OUString const sMessage = OUString::createFromAscii(_pMsg);
+    rtl::OUString const sMessage = rtl::OUString::createFromAscii(_pMsg);
 
     getLogger().error(sMessage,"parse","configuration::xml::BasicParser");
     throw sax::SAXException( sMessage, *this, uno::Any() );
 }
 // -----------------------------------------------------------------------------
 
-void BasicParser::raiseParseException( OUString const & sMessage )
-        CFG_THROW2 (sax::SAXException, uno::RuntimeException)
+void BasicParser::raiseParseException( rtl::OUString const & sMessage )
+    SAL_THROW((sax::SAXException, uno::RuntimeException))
 {
     OSL_DEBUG_ONLY( dbgUpdateLocation() );
 

@@ -56,12 +56,12 @@ namespace configmgr
             rtl::OUString   m_aComponentName;
 
         public:
-            BinaryWriteHandler(rtl::OUString const & _aFileURL, rtl::OUString const & _aComponentName, MultiServiceFactory const & _aFactory);
+            BinaryWriteHandler(rtl::OUString const & _aFileURL, rtl::OUString const & _aComponentName, uno::Reference<lang::XMultiServiceFactory> const & _aFactory);
 
             bool generateHeader(    const uno::Reference<backenduno::XLayer> * pLayers,
                                      sal_Int32 nNumLayers,
-                                    const OUString& aEntity,
-                                    const localehelper::LocaleSequence & aKnownLocales )
+                                    const rtl::OUString& aEntity,
+                                    const std::vector< com::sun::star::lang::Locale > & aKnownLocales )
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeComponentTree(const ISubtree * _pComponentTree)
@@ -77,8 +77,8 @@ namespace configmgr
             virtual void handle(ValueNode const & aValue);
         private:
             void writeFileHeader(   rtl::OUString const & _aSchemaVersion,
-                                    const uno::Sequence<OUString> & aKnownLocales,
-                                    const uno::Sequence<OUString> & aDataLocales  )
+                                    const uno::Sequence<rtl::OUString> & aKnownLocales,
+                                    const uno::Sequence<rtl::OUString> & aDataLocales  )
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeLayerInfoList(uno::Reference<backenduno::XLayer> const * pLayers, sal_Int32 nNumlayers)

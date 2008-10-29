@@ -56,19 +56,6 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
-        typedef uno::XInterface UnoInterface;
-        typedef uno::Reference< uno::XInterface > UnoInterfaceRef;
-        typedef uno::Any UnoAny;
-
-        using uno::Reference;
-        using lang::XUnoTunnel;
-        using configuration::Tree;
-        using configuration::ElementTree;
-        using configuration::TemplateHolder;
-        using configuration::NodeRef;
-        using configuration::NodeID;
-
-//-----------------------------------------------------------------------------
 ObjectRegistry::~ObjectRegistry()
 {
     OSL_ENSURE(m_aMap.empty(),"WARNING: Configuration Object Map: Some Objects were not revoked correctly");
@@ -76,7 +63,7 @@ ObjectRegistry::~ObjectRegistry()
 
 //-----------------------------------------------------------------------------
 
-Factory::Factory(ObjectRegistryHolder pRegistry)
+Factory::Factory(rtl::Reference<ObjectRegistry> pRegistry)
 : m_pRegistry(pRegistry)
 , m_aTunnelID()
 {
@@ -114,12 +101,12 @@ ApiTreeImpl& Factory::getImplementation(NodeElement& rElement)
 //-----------------------------------------------------------------------------
 
 inline
-TemplateHolder Factory::implGetSetElementTemplate(Tree const& aTree, NodeRef const& aNode)
+rtl::Reference<configuration::Template> Factory::implGetSetElementTemplate(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
-    TemplateHolder aRet;
+    rtl::Reference<configuration::Template> aRet;
     if (configuration::isSetNode(aTree,aNode))
     {
-        aRet = configuration::SetElementInfo::extractElementInfo(aTree,aNode);
+        aRet = aTree->extractElementInfo(aNode);
     }
     else if (!configuration::isGroupNode(aTree,aNode))
     {
@@ -130,16 +117,16 @@ TemplateHolder Factory::implGetSetElementTemplate(Tree const& aTree, NodeRef con
 }
 //-----------------------------------------------------------------------------
 inline
-UnoInterfaceRef Factory::implToUno(NodeElement* pElement)
+uno::Reference< uno::XInterface > Factory::implToUno(NodeElement* pElement)
 {
     if ( pElement )
-        return UnoInterfaceRef(pElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+        return uno::Reference< uno::XInterface >(pElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
     else
-        return UnoInterfaceRef();
+        return uno::Reference< uno::XInterface >();
 }
 //-----------------------------------------------------------------------------
 inline
-void Factory::implHaveNewElement(NodeID aNodeID, NodeElement* pElement)
+void Factory::implHaveNewElement(configuration::NodeID aNodeID, NodeElement* pElement)
 {
     OSL_ENSURE(pElement ,"WARNING: New API object could not be created");
 
@@ -151,40 +138,40 @@ void Factory::implHaveNewElement(NodeID aNodeID, NodeElement* pElement)
 }
 //-----------------------------------------------------------------------------
 
-UnoInterfaceRef Factory::makeUnoElement(Tree const& aTree, NodeRef const& aNode)
+uno::Reference< uno::XInterface > Factory::makeUnoElement(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
     return implToUno(makeElement(aTree,aNode));
 }
 //-----------------------------------------------------------------------------
-NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
+NodeElement* Factory::makeElement(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
-    OSL_PRECOND( !aTree.isEmpty() == aNode.isValid(), "ERROR: Configuration: Making element from tree requires valid node");
-    if (aTree.isEmpty())
+    OSL_PRECOND( !configuration::isEmpty(aTree.get()) == aNode.isValid(), "ERROR: Configuration: Making element from tree requires valid node");
+    if (configuration::isEmpty(aTree.get()))
         return 0;
 
-    OSL_PRECOND( aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
+    OSL_PRECOND( aNode.isValid() && aTree->isValidNode(aNode.getOffset()), "ERROR: Configuration: NodeRef does not match Tree");
     OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
 
-    NodeID aNodeID(aTree,aNode);
+    configuration::NodeID aNodeID(aTree,aNode);
     NodeElement* pRet = findElement(aNodeID);
     if (pRet == 0)
     {
-        TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aNode);
+        rtl::Reference<configuration::Template> aTemplate = implGetSetElementTemplate(aTree,aNode);
 
-        if (!aTree.isRootNode(aNode))
+        if (!aTree->isRootNode(aNode))
         {
             pRet = doCreateGroupMember(aTree,aNode,aTemplate.get());
         }
         else
         {
-            ElementTree aElementTree = ElementTree::extract(aTree);
-            if (aElementTree.isValid())
+            rtl::Reference< configuration::ElementTree > aElementTree(dynamic_cast< configuration::ElementTree * >(aTree.get()));
+            if (aElementTree.is())
             {
                 pRet = doCreateSetElement(aElementTree,aTemplate.get());
             }
             else
             {
-                OSL_ENSURE(aTree.getContextTree().isEmpty(),"INTERNAL ERROR: Found tree (not a set element) with a parent tree.");
+                OSL_ENSURE(configuration::isEmpty(aTree->getContextTree()),"INTERNAL ERROR: Found tree (not a set element) with a parent tree.");
                 pRet = doCreateAccessRoot(aTree,aTemplate.get(), vos::ORef< OOptions >());
             }
         }
@@ -194,12 +181,12 @@ NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
 }
 //-----------------------------------------------------------------------------
 
-UnoInterfaceRef Factory::findUnoElement(NodeID const& aNodeID)
+uno::Reference< uno::XInterface > Factory::findUnoElement(configuration::NodeID const& aNodeID)
 {
     return implToUno(findElement(aNodeID));
 }
 //-----------------------------------------------------------------------------
-NodeElement* Factory::findElement(NodeID const& aNodeID)
+NodeElement* Factory::findElement(configuration::NodeID const& aNodeID)
 {
     NodeElement* pReturn = implFind(aNodeID);
     if (pReturn) pReturn->getUnoInstance()->acquire();
@@ -207,32 +194,32 @@ NodeElement* Factory::findElement(NodeID const& aNodeID)
 }
 //-----------------------------------------------------------------------------
 
-void Factory::revokeElement(NodeID const& aNodeID)
+void Factory::revokeElement(configuration::NodeID const& aNodeID)
 {
     if (NodeElement* pElement = implFind(aNodeID))
         doRevokeElement(aNodeID, pElement);
 }
 //-----------------------------------------------------------------------------
 
-TreeElement* Factory::makeAccessRoot(Tree const& aTree, RequestOptions const& _aOptions)
+TreeElement* Factory::makeAccessRoot(rtl::Reference< configuration::Tree > const& aTree, RequestOptions const& _aOptions)
 {
-    OSL_PRECOND( !aTree.isEmpty() , "ERROR: Configuration: Making element from tree requires valid tree");
-    if (aTree.isEmpty()) return 0;
+    OSL_PRECOND( !configuration::isEmpty(aTree.get()) , "ERROR: Configuration: Making element from tree requires valid tree");
+    if (configuration::isEmpty(aTree.get())) return 0;
 
-    OSL_ENSURE(aTree.getContextTree().isEmpty(),"INTERNAL ERROR: Tree with parent tree should not be used for an access root");
-    OSL_ENSURE(!ElementTree::extract(aTree).isValid(),"INTERNAL ERROR: Element Tree should not be used for an access root");
+    OSL_ENSURE(configuration::isEmpty(aTree->getContextTree()),"INTERNAL ERROR: Tree with parent tree should not be used for an access root");
+    OSL_ENSURE(dynamic_cast< configuration::ElementTree * >(aTree.get()) == 0, "INTERNAL ERROR: Element Tree should not be used for an access root");
 
-    NodeRef aRoot = aTree.getRootNode();
+    configuration::NodeRef aRoot = aTree->getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
 
     OSL_PRECOND( configuration::isStructuralNode(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
 
-    NodeID aNodeID(aTree,aRoot);
+    configuration::NodeID aNodeID(aTree,aRoot);
     // must be a tree element if it is a tree root
     TreeElement* pRet = static_cast<TreeElement*>(findElement(aNodeID));
     if (0 == pRet)
     {
-        TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
+        rtl::Reference<configuration::Template> aTemplate = implGetSetElementTemplate(aTree,aRoot);
         vos::ORef<OOptions> xOptions = new OOptions(_aOptions);
         pRet = doCreateAccessRoot(aTree,aTemplate.get(), xOptions);
         implHaveNewElement (aNodeID,pRet);
@@ -241,28 +228,28 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree, RequestOptions const& _a
 }
 //-----------------------------------------------------------------------------
 
-UnoInterfaceRef Factory::makeUnoGroupMember(Tree const& aTree, NodeRef const& aNode)
+uno::Reference< uno::XInterface > Factory::makeUnoGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
     return implToUno(makeGroupMember(aTree,aNode));
 }
 //-----------------------------------------------------------------------------
-NodeElement* Factory::makeGroupMember(Tree const& aTree, NodeRef const& aNode)
+NodeElement* Factory::makeGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
-    OSL_PRECOND( !aTree.isEmpty() , "ERROR: Configuration: Creating an object requires a valid tree");
-    if (aTree.isEmpty()) return 0;
+    OSL_PRECOND( !configuration::isEmpty(aTree.get()) , "ERROR: Configuration: Creating an object requires a valid tree");
+    if (configuration::isEmpty(aTree.get())) return 0;
 
     OSL_PRECOND( aNode.isValid() , "ERROR: Configuration: Creating an object requires a valid node");
-    OSL_PRECOND( aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (!aTree.isValidNode(aNode)) return 0;
+    OSL_PRECOND( aTree->isValidNode(aNode.getOffset()), "ERROR: Configuration: NodeRef does not match Tree");
+    if (!aTree->isValidNode(aNode.getOffset())) return 0;
 
     OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
-    OSL_ENSURE(!aTree.isRootNode(aNode),"INTERNAL ERROR: Root of Tree should not be used for a group member object");
+    OSL_ENSURE(!aTree->isRootNode(aNode),"INTERNAL ERROR: Root of Tree should not be used for a group member object");
 
-    NodeID aNodeID(aTree,aNode);
+    configuration::NodeID aNodeID(aTree,aNode);
     NodeElement* pRet = findElement(aNodeID);
     if (0 == pRet)
     {
-        TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aNode);
+        rtl::Reference<configuration::Template> aTemplate = implGetSetElementTemplate(aTree,aNode);
 
         pRet = doCreateGroupMember(aTree,aNode,aTemplate.get());
 
@@ -274,37 +261,37 @@ NodeElement* Factory::makeGroupMember(Tree const& aTree, NodeRef const& aNode)
 }
 //-----------------------------------------------------------------------------
 
-UnoInterfaceRef Factory::makeUnoSetElement(ElementTree const& aElementTree)
+uno::Reference< uno::XInterface > Factory::makeUnoSetElement(rtl::Reference< configuration::ElementTree > const& aElementTree)
 {
-    UnoInterfaceRef aRet = implToUno(makeSetElement(aElementTree));
-    OSL_ENSURE( uno::Reference<XUnoTunnel>::query(aRet).is(),"ERROR: API set element has no UnoTunnel");
-    OSL_ENSURE( uno::Reference<XUnoTunnel>::query(aRet).is() &&
-                0 != uno::Reference<XUnoTunnel>::query(aRet)->getSomething(doGetElementTunnelID()),
+    uno::Reference< uno::XInterface > aRet = implToUno(makeSetElement(aElementTree));
+    OSL_ENSURE( uno::Reference<lang::XUnoTunnel>::query(aRet).is(),"ERROR: API set element has no UnoTunnel");
+    OSL_ENSURE( uno::Reference<lang::XUnoTunnel>::query(aRet).is() &&
+                0 != uno::Reference<lang::XUnoTunnel>::query(aRet)->getSomething(doGetElementTunnelID()),
                 "ERROR: API set element does not support the right tunnel ID");
 
     return aRet;
 }
 //-----------------------------------------------------------------------------
 
-SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
+SetElement* Factory::makeSetElement(rtl::Reference< configuration::ElementTree > const& aElementTree)
 {
-    OSL_PRECOND( aElementTree.isValid() , "ERROR: Configuration: Making element from tree requires valid tree");
-    if (!aElementTree.isValid()) return 0;
+    OSL_PRECOND( aElementTree.is() , "ERROR: Configuration: Making element from tree requires valid tree");
+    if (!aElementTree.is()) return 0;
 
-    Tree aTree = aElementTree.getTree();
-    OSL_ENSURE(!aTree.isEmpty(),"INTERNAL ERROR: Element Tree has no Tree");
+    rtl::Reference< configuration::Tree > aTree(aElementTree.get());
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()),"INTERNAL ERROR: Element Tree has no Tree");
 
-    NodeRef aRoot = aTree.getRootNode();
+    configuration::NodeRef aRoot = aTree->getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
 
     OSL_ENSURE( configuration::isStructuralNode(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
 
-    NodeID aNodeID(aTree,aRoot);
+    configuration::NodeID aNodeID(aTree,aRoot);
     // must be a set element if it wraps a ElementTree
     SetElement* pRet = static_cast<SetElement*>( findElement(aNodeID) );
     if (0 == pRet)
     {
-        TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
+        rtl::Reference<configuration::Template> aTemplate = implGetSetElementTemplate(aTree,aRoot);
 
         pRet = doCreateSetElement(aElementTree,aTemplate.get());
 
@@ -314,18 +301,18 @@ SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
 }
 //-----------------------------------------------------------------------------
 
-SetElement* Factory::findSetElement(configuration::ElementRef const& aElement)
+SetElement* Factory::findSetElement(rtl::Reference< configuration::ElementTree > const& aElement)
 {
-    OSL_PRECOND( aElement.isValid() , "ERROR: Configuration: Making element from tree requires valid tree");
-    if (!aElement.isValid()) return 0;
+    OSL_PRECOND( aElement.is() , "ERROR: Configuration: Making element from tree requires valid tree");
+    if (!aElement.is()) return 0;
 
-    configuration::TreeRef aTree = aElement.getTreeRef();
-    OSL_ENSURE(!aTree.isEmpty(),"INTERNAL ERROR: Element Tree has no Tree");
+    rtl::Reference< configuration::Tree > aTree(aElement.get());
+    OSL_ENSURE(!isEmpty(aTree.get()),"INTERNAL ERROR: Element Tree has no Tree");
 
-    NodeRef aRoot = aTree.getRootNode();
+    configuration::NodeRef aRoot = aTree->getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
 
-    NodeID aNodeID(aTree,aRoot);
+    configuration::NodeID aNodeID(aTree,aRoot);
     // must be a set element if it wraps a ElementTree
     SetElement* pRet = static_cast<SetElement*>( findElement(aNodeID) );
 
@@ -333,12 +320,11 @@ SetElement* Factory::findSetElement(configuration::ElementRef const& aElement)
 }
 //-----------------------------------------------------------------------------
 
-SetElement* Factory::extractSetElement(UnoAny const& aElement)
+SetElement* Factory::extractSetElement(uno::Any const& aElement)
 {
-    using configuration::ElementTreeImpl;
     SetElement* pTunneledImpl = 0;
 
-    Reference< XUnoTunnel > xElementTunnel;
+    uno::Reference< lang::XUnoTunnel > xElementTunnel;
     if ( aElement.hasValue() && (aElement >>= xElementTunnel) )
     {
         OSL_ASSERT( xElementTunnel.is() );

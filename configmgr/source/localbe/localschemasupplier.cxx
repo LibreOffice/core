@@ -56,7 +56,7 @@ namespace configmgr { namespace localbe {
 
 LocalSchemaSupplier::LocalSchemaSupplier(
         const uno::Reference<uno::XComponentContext>& xContext)
-        : SingleBackendBase(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
+        : cppu::WeakComponentImplHelper3<backend::XVersionedSchemaSupplier, lang::XInitialization, lang::XServiceInfo>(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
 }
 //------------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ void SAL_CALL LocalSchemaSupplier::initialize(
 
     // Setting: schema diretory(ies)
     uno::Any const aSchemaDataSetting = context->getValueByName(kSchemaDataUrl);
-    uno::Sequence< OUString > aSchemas;
+    uno::Sequence< rtl::OUString > aSchemas;
     rtl::OUString schemas;
 
     if (aSchemaDataSetting >>= schemas)
@@ -167,7 +167,7 @@ uno::Reference<backend::XSchema> SAL_CALL
     rtl::OUString subPath = componentToPath(aComponent) ;
 
     osl::File * schemaFile = NULL;
-    OUString errorMessage;
+    rtl::OUString errorMessage;
     bool bInsufficientAccess = false;
     for (sal_Int32 ix = 0; ix < mSchemaDataUrls.getLength(); ++ix)
     {
@@ -175,7 +175,7 @@ uno::Reference<backend::XSchema> SAL_CALL
 
         schemaUrl.append(subPath).append(kSchemaSuffix) ;
 
-        OUString const aFileUrl = schemaUrl.makeStringAndClear();
+        rtl::OUString const aFileUrl = schemaUrl.makeStringAndClear();
 
         std::auto_ptr<osl::File> checkFile( new osl::File(aFileUrl) );
         osl::File::RC rc = checkFile->open(OpenFlag_Read) ;
@@ -252,14 +252,14 @@ static const sal_Char * const kSchemaService =
 static const sal_Char * const kLocalService =
                 "com.sun.star.configuration.backend.LocalSchemaSupplier" ;
 
-static AsciiServiceName kServiceNames [] = {kLocalService, 0, kSchemaService, 0 } ;
+static sal_Char const * kServiceNames [] = {kLocalService, 0, kSchemaService, 0 } ;
 static const ServiceImplementationInfo kServiceInfo = { kImplementation, kServiceNames,kServiceNames+2 } ;
 
 const ServiceRegistrationInfo *getLocalSchemaSupplierServiceInfo()
 { return getRegistrationInfo(&kServiceInfo) ; }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalSchemaSupplier(const CreationContext& xContext) {
+instantiateLocalSchemaSupplier(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalSchemaSupplier(xContext) ;
 }
 //------------------------------------------------------------------------------

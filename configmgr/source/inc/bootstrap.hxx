@@ -75,7 +75,6 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
-    using ::rtl::OUString;
     // -----------------------------------------------------------------------------------
 
     /** Customized ComponentContext for configuration bootstrap data and runtime arguments
@@ -85,10 +84,10 @@ namespace configmgr
     // creation and destruction
     private:
         friend uno::Reference<uno::XInterface> SAL_CALL
-            instantiateBootstrapContext( Context const& xContext );
+            instantiateBootstrapContext( uno::Reference< uno::XComponentContext > const& xContext );
 
         // constructor
-        BootstrapContext(Context const & _xContext);
+        BootstrapContext(uno::Reference< uno::XComponentContext > const & _xContext);
 
         // two-phase construct
         void initialize();
@@ -107,7 +106,6 @@ namespace configmgr
             getSupportedServiceNames(void) throw (uno::RuntimeException) ;
 
 
-        typedef uno::Sequence < beans::NamedValue >             Overrides;
         /** Constructs a Context based on the given arguments and context.
             @param _xContext
                 The base context of this component context.
@@ -115,33 +113,33 @@ namespace configmgr
             @param _aArguments
                 The arguments used to create this component context.
         */
-        static Context createWrapper(Context const & _xContext, Overrides const & _aOverrides);
+        static uno::Reference< uno::XComponentContext > createWrapper(uno::Reference< uno::XComponentContext > const & _xContext, uno::Sequence < beans::NamedValue > const & _aOverrides);
 
         /** Checks, if the given context is a wrapper.
             @param _xContext
                 The context that is checked.
         */
-        static sal_Bool isWrapper(Context const & _xContext);
+        static sal_Bool isWrapper(uno::Reference< uno::XComponentContext > const & _xContext);
 
         /** Retrieves the BootstrapContext for the given non-bootstrap context.
             @param _xContext
                 The context from which the bootstrap context should be retrieved.
 
         */
-        static Context get(Context const & _xContext);
+        static uno::Reference< uno::XComponentContext > get(uno::Reference< uno::XComponentContext > const & _xContext);
 
         /// Destroys this BootstrapContext
         ~BootstrapContext();
 
         // gets the INI that should be used for bootstrap data by default
-        static OUString getDefaultConfigurationBootstrapURL();
+        static rtl::OUString getDefaultConfigurationBootstrapURL();
 
     // interface implementations
     public:
     // XComponentContext
         /** Retrieves a value from this context.
 
-            @param Name
+            @param name
                 The name of the value to retrieve.
                 A prefix of "com.sun.star.configuration.bootstrap." is stripped/ignored
 
@@ -149,29 +147,28 @@ namespace configmgr
                 The requested value, or <VOID/> if the value is not found.
         */
         virtual uno::Any SAL_CALL
-            getValueByName( const OUString& Name )
+            getValueByName( const rtl::OUString& name )
                 throw (uno::RuntimeException);
 
     public: // used by ArgumentHelper
-        static OUString makeContextName (OUString const & _aShortName);
+        static rtl::OUString makeContextName (rtl::OUString const & _aShortName);
 
     private:
-        static OUString makeBootstrapName(OUString const & _aLongName);
+        static rtl::OUString makeBootstrapName(rtl::OUString const & _aLongName);
         uno::Any makeBootstrapException();
     };
 // -----------------------------------------------------------------------------
     class ContextReader
     {
     public:
-        typedef uno::Reference< uno::XComponentContext > Context;
         explicit
-        ContextReader(Context const & context);
+        ContextReader(uno::Reference< uno::XComponentContext > const & context);
 
     // the underlying contexts
         sal_Bool hasBootstrapContext()          const { return m_fullcontext.is(); }
-        Context const & getBootstrapContext()   const { return m_fullcontext; }
-        Context const & getBaseContext()        const { return m_basecontext; }
-        Context const & getBestContext()        const { return m_fullcontext.is() ? m_fullcontext : m_basecontext; }
+        uno::Reference< uno::XComponentContext > const & getBootstrapContext()   const { return m_fullcontext; }
+        uno::Reference< uno::XComponentContext > const & getBaseContext()        const { return m_basecontext; }
+        uno::Reference< uno::XComponentContext > const & getBestContext()        const { return m_fullcontext.is() ? m_fullcontext : m_basecontext; }
 
         uno::Reference< lang::XMultiComponentFactory > getServiceManager() const;
 
@@ -179,7 +176,7 @@ namespace configmgr
             @param _xContext
                 The context that is checked.
         */
-        static bool testAdminService(Context const & context, bool bAdmin);
+        static bool testAdminService(uno::Reference< uno::XComponentContext > const & context, bool bAdmin);
 
     // general settings
         sal_Bool    isUnoBackend() const;
@@ -191,10 +188,10 @@ namespace configmgr
         sal_Bool    hasAsyncSetting() const;
         sal_Bool    hasOfflineSetting() const;
 
-        OUString    getUnoBackendService() const;
-        OUString    getUnoBackendWrapper() const;
+        rtl::OUString    getUnoBackendService() const;
+        rtl::OUString    getUnoBackendWrapper() const;
 
-        OUString    getLocale() const;
+        rtl::OUString   getLocale() const;
         sal_Bool    getAsyncSetting() const;
         sal_Bool    getOfflineSetting() const;
 
@@ -206,23 +203,21 @@ namespace configmgr
         sal_Bool    isBootstrapValid() const;
         uno::Any    getBootstrapError() const;
     private:
-        sal_Bool hasSetting(OUString const & _aSetting) const;
-        sal_Bool getBoolSetting(OUString const & _aSetting, sal_Bool bValue) const;
-        OUString getStringSetting(OUString const & _aSetting, OUString aValue) const;
-        uno::Any getSetting(OUString const & _aSetting) const;
+        sal_Bool hasSetting(rtl::OUString const & _aSetting) const;
+        sal_Bool getBoolSetting(rtl::OUString const & _aSetting, sal_Bool bValue) const;
+        rtl::OUString getStringSetting(rtl::OUString const & _aSetting, rtl::OUString aValue) const;
+        uno::Any getSetting(rtl::OUString const & _aSetting) const;
     private:
-        Context m_basecontext;
-        Context m_fullcontext;
+        uno::Reference< uno::XComponentContext > m_basecontext;
+        uno::Reference< uno::XComponentContext > m_fullcontext;
     };
     //------------------------------------------------------------------------
 
     class ArgumentHelper
     {
     public:
-        typedef uno::Reference< uno::XComponentContext > Context;
-
         explicit
-        ArgumentHelper(Context const & context)
+        ArgumentHelper(uno::Reference< uno::XComponentContext > const & context)
         : m_context(context)
         , m_bHasBackendArguments(false)
         {}
@@ -237,7 +232,7 @@ namespace configmgr
 
         static beans::NamedValue makeAdminServiceOverride(sal_Bool bAdmin);
     private:
-        Context m_context; // context used to strip identical arguments
+        uno::Reference< uno::XComponentContext > m_context; // context used to strip identical arguments
         bool m_bHasBackendArguments;
     };
 // -----------------------------------------------------------------------------------

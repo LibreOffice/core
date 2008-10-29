@@ -31,7 +31,7 @@
 #ifndef CONFIGMGR_TREEITERATORS_HXX_
 #define CONFIGMGR_TREEITERATORS_HXX_
 
-#include "noderef.hxx"
+#include "tree.hxx"
 #include <com/sun/star/beans/Property.hpp>
 #include <rtl/ustring.hxx>
 
@@ -44,8 +44,6 @@
 namespace configmgr
 {
 // .......................................................................
-    using rtl::OUString;
-
     namespace configapi
     {
         // ===================================================================
@@ -53,19 +51,16 @@ namespace configmgr
         // ===================================================================
         class CollectNodeNames :  public configuration::NodeVisitor
         {
-        public:
-            typedef std::vector<OUString> NameList;
-
         protected:
-            NameList    m_aList;
+            std::vector<rtl::OUString>  m_aList;
 
         public:
             CollectNodeNames() { }
 
-            virtual Result handle(configuration::Tree const& aTree, configuration::NodeRef const& aNode); // NodeVisitor
-            virtual Result handle(configuration::Tree const& aTree, configuration::ValueRef const& aNode); // NodeVisitor
+            virtual Result handle(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode); // NodeVisitor
+            virtual Result handle(rtl::Reference< configuration::Tree > const& aTree, configuration::ValueRef const& aNode); // NodeVisitor
 
-            NameList const& list() const { return m_aList; }
+            std::vector<rtl::OUString> const& list() const { return m_aList; }
         };
 
         // ===================================================================
@@ -73,20 +68,16 @@ namespace configmgr
         // ===================================================================
         class CollectPropertyInfo :  public configuration::NodeVisitor
         {
-        public:
-            typedef com::sun::star::beans::Property Property;
-            typedef std::vector<Property> PropertyList;
-
         protected:
-            PropertyList    m_aList;
+            std::vector<com::sun::star::beans::Property>    m_aList;
 
         public:
             CollectPropertyInfo() { }
 
-            virtual Result handle(configuration::Tree const& aTree, configuration::NodeRef const& aNode); // NodeVisitor
-            virtual Result handle(configuration::Tree const& aTree, configuration::ValueRef const& aNode); // NodeVisitor
+            virtual Result handle(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode); // NodeVisitor
+            virtual Result handle(rtl::Reference< configuration::Tree > const& aTree, configuration::ValueRef const& aNode); // NodeVisitor
 
-            PropertyList const& list() const { return m_aList; }
+            std::vector<com::sun::star::beans::Property> const& list() const { return m_aList; }
         };
     }
 // .......................................................................

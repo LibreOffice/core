@@ -42,48 +42,38 @@ namespace configmgr
     //==========================================================================
     namespace uno = com::sun::star::uno;
     namespace lang = com::sun::star::lang;
-    using rtl::OUString;
     //==========================================================================
     //= ProviderWrapper
     //==========================================================================
-    typedef ::cppu::WeakComponentImplHelper2 <  lang::XMultiServiceFactory,
-                                                lang::XServiceInfo
-                                            >   ProviderWrapper_Base;
-
     struct PWMutexHolder { osl::Mutex mutex; }; // ad hoc ...
 
-    class ProviderWrapper : private PWMutexHolder, public ProviderWrapper_Base
+    class ProviderWrapper : private PWMutexHolder, public cppu::WeakComponentImplHelper2< lang::XMultiServiceFactory, lang::XServiceInfo >
     {
-    public:
-        typedef uno::Reference< lang::XMultiServiceFactory > Provider;
-        typedef uno::Sequence< com::sun::star::beans::NamedValue >  NamedValues;
-        typedef uno::Sequence< uno::Any >                           Arguments;
-
     private:
-        Provider    m_xDelegate;
-        Arguments   m_aDefaults;
+        uno::Reference< lang::XMultiServiceFactory >    m_xDelegate;
+        uno::Sequence< uno::Any >   m_aDefaults;
     private:
-        ProviderWrapper(Provider const & xDelegate, NamedValues const & aPresets);
+        ProviderWrapper(uno::Reference< lang::XMultiServiceFactory > const & xDelegate, uno::Sequence< com::sun::star::beans::NamedValue > const & aPresets);
 
     public:
-        static uno::Reference< uno::XInterface > create( uno::Reference< uno::XInterface > xDelegate, NamedValues const & aPresets);
+        static uno::Reference< uno::XInterface > create( uno::Reference< uno::XInterface > xDelegate, uno::Sequence< com::sun::star::beans::NamedValue > const & aPresets);
         ~ProviderWrapper();
 
         /// XMultiServiceFactory
         virtual uno::Reference< uno::XInterface > SAL_CALL
-            createInstance( const OUString& aServiceSpecifier )
+            createInstance( const rtl::OUString& aServiceSpecifier )
                 throw(uno::Exception, uno::RuntimeException);
 
         virtual uno::Reference< uno::XInterface > SAL_CALL
             createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
                 throw(uno::Exception, uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getAvailableServiceNames(  )
                 throw(uno::RuntimeException);
 
         /// XServiceInfo
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getImplementationName(  )
                 throw(uno::RuntimeException);
 
@@ -91,16 +81,16 @@ namespace configmgr
             supportsService( const ::rtl::OUString& ServiceName )
                 throw(uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getSupportedServiceNames(  )
                 throw(uno::RuntimeException);
 
     protected:
         virtual void SAL_CALL disposing();
     private:
-        Provider getDelegate();
+        uno::Reference< lang::XMultiServiceFactory > getDelegate();
         uno::Reference<lang::XServiceInfo> getDelegateInfo();
-        Arguments patchArguments(Arguments const & aArgs) const;
+        uno::Sequence< uno::Any > patchArguments(uno::Sequence< uno::Any > const & aArgs) const;
     };
 
 

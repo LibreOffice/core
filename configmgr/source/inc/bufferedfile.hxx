@@ -32,6 +32,7 @@
 #define CONFIGMGR_BUFFEREDFILE_HXX
 
 #include "utility.hxx"
+#include <boost/utility.hpp>
 #include <osl/file.hxx>
 #include <com/sun/star/io/IOException.hpp>
 
@@ -45,12 +46,10 @@ namespace configmgr
 
     namespace io = com::sun::star::io;
 
-    class BufferedOutputFile : public osl::FileBase, Noncopyable
+    class BufferedOutputFile: private boost::noncopyable, public osl::FileBase
     {
-        typedef std::vector<sal_uInt8> Buffer;
-
         osl::File * m_pFile;
-        Buffer      m_buffer;
+        std::vector<sal_uInt8>      m_buffer;
     public:
         BufferedOutputFile( rtl::OUString const& aFileURL, sal_uInt32 nBufferSizeHint = 0 );
         ~BufferedOutputFile ();

@@ -39,23 +39,13 @@
 
 namespace configmgr
 {
-////////////////////////////////////////////////////////////////////////////////
-    using ::rtl::OUString;
-
 //-----------------------------------------------------------------------------
 
     template < class Key, class Object, class KeyCompare = std::less<Key> >
     class AutoReferenceMap
     {
     public:
-        typedef rtl::Reference<Object>         Ref;
-        typedef std::map<Key,Ref,KeyCompare>   Map;
-
-        typedef Object      object_type;
-        typedef Key         key_type;
-        typedef KeyCompare  key_compare;
-
-        typedef typename Map::value_type value_type;
+        typedef std::map<Key,rtl::Reference<Object>,KeyCompare>   Map;
     public:
         AutoReferenceMap()  {}
         ~AutoReferenceMap() {}
@@ -75,20 +65,20 @@ namespace configmgr
 
 
         bool has(Key const & _aKey) const;
-        Ref get(Key const & _aKey) const;
+        rtl::Reference<Object> get(Key const & _aKey) const;
 
-        Ref insert(Key const & _aKey, Ref const & _anEntry);
-        Ref remove(Key const & _aKey);
+        rtl::Reference<Object> insert(Key const & _aKey, rtl::Reference<Object> const & _anEntry);
+        rtl::Reference<Object> remove(Key const & _aKey);
 
     private:
-        Ref internalGet(Key const & _aKey) const
+        rtl::Reference<Object> internalGet(Key const & _aKey) const
         {
             typename Map::const_iterator it = m_aMap.find(_aKey);
 
-            return it != m_aMap.end() ? it->second : Ref();
+            return it != m_aMap.end() ? it->second : rtl::Reference<Object>();
         }
 
-        Ref internalAdd(Key const & _aKey, Ref const & _aNewRef)
+        rtl::Reference<Object> internalAdd(Key const & _aKey, rtl::Reference<Object> const & _aNewRef)
         {
             return m_aMap[_aKey] = _aNewRef;
         }
@@ -117,9 +107,9 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
     template < class Key, class Object, class KeyCompare >
-    rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::insert(Key const & _aKey, Ref const & _anEntry)
+    rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::insert(Key const & _aKey, rtl::Reference<Object> const & _anEntry)
     {
-        Ref aRef = internalAdd(_aKey,_anEntry);
+        rtl::Reference<Object> aRef = internalAdd(_aKey,_anEntry);
         return aRef;
 
     }
@@ -128,7 +118,7 @@ namespace configmgr
     template < class Key, class Object, class KeyCompare >
     rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::remove(Key const & _aKey)
     {
-        Ref aRef = internalGet(_aKey);
+        rtl::Reference<Object> aRef = internalGet(_aKey);
         internalDrop(_aKey);
         return aRef;
     }

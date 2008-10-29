@@ -53,7 +53,7 @@ namespace configmgr
         namespace backend = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
-AsciiServiceName const aLocalDataImportServices[] =
+sal_Char const * const aLocalDataImportServices[] =
 {
     "com.sun.star.configuration.backend.LocalDataImporter",
     0,
@@ -80,18 +80,18 @@ ServiceInfoHelper LocalDataImportService::getServiceInfo()
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateLocalDataImporter
-( CreationContext const& xContext )
+( uno::Reference< uno::XComponentContext > const& xContext )
 {
     return * new LocalDataImportService( xContext );
 }
 // -----------------------------------------------------------------------------
 
-LocalDataImportService::LocalDataImportService(CreationArg _xContext)
+LocalDataImportService::LocalDataImportService(uno::Reference< uno::XComponentContext > const & _xContext)
 : m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage = OUSTRING("Configuration Importer: Context has no service manager (or interface is missing)");
+        rtl::OUString sMessage = OUSTRING("Configuration Importer: Context has no service manager (or interface is missing)");
         throw lang::NullPointerException(sMessage,NULL);
     }
 }
@@ -108,11 +108,11 @@ namespace
     {
         explicit JobDesc(task::XJob * pJob, const uno::Sequence< beans::NamedValue >& aArguments);
 
-        OUString aLayerDataUrl;
-        OUString aImporterService;
+        rtl::OUString aLayerDataUrl;
+        rtl::OUString aImporterService;
 
-        OUString aComponent;
-        OUString aEntity;
+        rtl::OUString aComponent;
+        rtl::OUString aEntity;
 
         uno::Reference< backend::XLayer > xLayerFilter;
 
@@ -143,7 +143,7 @@ namespace
 
         if (sal_Int32(nCount) != aArguments.getLength())
         {
-            OUString sMessage = OUSTRING("Too many arguments for LocalDataImporter Job");
+            rtl::OUString sMessage = OUSTRING("Too many arguments for LocalDataImporter Job");
             throw lang::IllegalArgumentException(sMessage,pJob,0);
         }
 
@@ -243,7 +243,7 @@ uno::Any SAL_CALL
 {
     JobDesc const aJob(this,Arguments);
 
-    ServiceFactory aFactory = this->getServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > aFactory = this->getServiceFactory();
 
     uno::Reference< backend::XLayer > xLayer = aJob.use_component ?
         LocalSingleBackend::createSimpleLayer(aFactory,aJob.aLayerDataUrl, aJob.aComponent ):
@@ -251,7 +251,7 @@ uno::Any SAL_CALL
 
     if (!xLayer.is())
     {
-        OUString sMessage = OUSTRING("LocalDataImportService - Cannot create layer to import from");
+        rtl::OUString sMessage = OUSTRING("LocalDataImportService - Cannot create layer to import from");
         throw lang::NullPointerException(sMessage,*this);
     }
 
@@ -259,7 +259,7 @@ uno::Any SAL_CALL
     if (xFilterInit.is())
     {
         beans::NamedValue argvalue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Source") ),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Source") ),
             uno::makeAny( xLayer) );
 
         uno::Sequence< uno::Any > args(1);
@@ -296,7 +296,7 @@ uno::Any SAL_CALL
 
     if (!xImporter.is())
     {
-        OUString sMessage = OUSTRING("LocalDataImportService - Cannot create importer service: ") + aJob.aImporterService;
+        rtl::OUString sMessage = OUSTRING("LocalDataImportService - Cannot create importer service: ") + aJob.aImporterService;
         throw lang::NullPointerException(sMessage,*this);
     }
 
@@ -325,7 +325,7 @@ uno::Any SAL_CALL
 
 // XServiceInfo
 
-OUString SAL_CALL
+rtl::OUString SAL_CALL
     LocalDataImportService::getImplementationName(  )
         throw (uno::RuntimeException)
 {
@@ -335,7 +335,7 @@ OUString SAL_CALL
 
 
 sal_Bool SAL_CALL
-    LocalDataImportService::supportsService( const OUString& ServiceName )
+    LocalDataImportService::supportsService( const rtl::OUString& ServiceName )
         throw (uno::RuntimeException)
 {
     return getServiceInfo().supportsService( ServiceName );

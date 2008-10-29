@@ -31,6 +31,12 @@
 #ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #define CONFIGMGR_API_TREEACCESS_HXX_
 
+#include "sal/config.h"
+
+#include "boost/utility.hpp"
+#include "rtl/ref.hxx"
+
+#include "datalock.hxx"
 #include "options.hxx"
 #include "utility.hxx"
 
@@ -43,20 +49,15 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     namespace configuration
     {
-        class Name;
+        class ElementTree;
+        class Template;
         class Tree;
-        class TreeRef;
-        class ElementRef;
-
-        class TemplateInfo;
     }
 //-----------------------------------------------------------------------------
     namespace configapi
     {
 //-----------------------------------------------------------------------------
         namespace uno = com::sun::star::uno;
-        typedef uno::XInterface UnoInterface;
-        typedef uno::Any UnoAny;
 //-----------------------------------------------------------------------------
         class Factory;
         class Notifier;
@@ -71,10 +72,8 @@ namespace configmgr
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
 
         // A common base class for 'element' classes
-        class NodeElement : Noncopyable
+        class NodeElement: private boost::noncopyable
         {
-        public:
-            typedef ServiceImplementationInfo ServiceInfo;
         public:
             virtual ~NodeElement() {}
 
@@ -82,14 +81,14 @@ namespace configmgr
             void checkAlive() const;
 
         // api object handling
-            UnoInterface* getUnoInstance() const
+            uno::XInterface* getUnoInstance() const
             { return doGetUnoInstance(); }
 
-            ServiceInfo const * getServiceInfo() const
+            ServiceImplementationInfo const * getServiceInfo() const
             { return doGetServiceInfo(); }
         private:
-            virtual UnoInterface* doGetUnoInstance() const = 0;
-            virtual ServiceInfo const* doGetServiceInfo() const = 0;
+            virtual uno::XInterface* doGetUnoInstance() const = 0;
+            virtual ServiceImplementationInfo const* doGetServiceInfo() const = 0;
             virtual ApiTreeImpl& getApiTree() const = 0;
 
             friend class Factory;
@@ -109,8 +108,8 @@ namespace configmgr
         {
         public:
         // model access
-            configuration::TreeRef      getTreeRef() const;
-            configuration::Tree         getTree() const;
+            rtl::Reference< configuration::Tree > getTreeRef() const;
+            rtl::Reference< configuration::Tree > getTree() const;
 
         // api object handling
             Factory&                    getFactory();
@@ -129,8 +128,8 @@ namespace configmgr
 
             void haveNewParent(NodeSetInfoAccess* pNewParent);
 
-            configuration::ElementRef       getElementRef() const;
-            configuration::TemplateInfo     getTemplateInfo() const;
+            rtl::Reference< configuration::ElementTree > getElementRef() const;
+            rtl::Reference< configuration::Template > getTemplateInfo() const;
         };
 //-----------------------------------------------------------------------------
 
@@ -150,43 +149,30 @@ namespace configmgr
         public:
             Committer getCommitter();
         };
-//-----------------------------------------------------------------------------
-        /// guards a TreeElement; provides an object (read) lock, ensures object was not disposed
-        // FIXME: bin this ...
-        class TreeReadGuardImpl : Noncopyable
-        {
-            TreeElement&        m_rTree;
-        public:
-            TreeReadGuardImpl(TreeElement& rTree);
-            ~TreeReadGuardImpl() throw ();
-        public:
-            TreeElement&    get() const { return m_rTree; }
-        };
 
     // Thin Wrappers around TreeElements: Provide guarding and convenient access
         /// wraps a TreeElement; provides an object (read) lock, ensures object was not disposed
-        class GuardedTreeElement
-        {
-            UnoApiLock          m_aLock;
-            TreeReadGuardImpl   m_aImpl;
+        class GuardedTreeElement {
+            UnoApiLock m_aLock;
+            TreeElement & m_rTree;
+
         public:
-            GuardedTreeElement(TreeElement& rTree) : m_aImpl(rTree) {}
-        public:
-            TreeElement&    get() const { return m_aImpl.get(); }
+            explicit GuardedTreeElement(TreeElement & rTree): m_rTree(rTree)
+            { rTree.checkAlive(); }
+
+            TreeElement & get() const { return m_rTree; }
         };
 
-        class GuardedRootElement
-        {
-            UnoApiLock          m_aLock;
-            TreeReadGuardImpl   m_aImpl;
-        public:
-            GuardedRootElement(RootElement& rTree);
-        public:
-            RootElement& get() const { return static_cast<RootElement&>(m_aImpl.get()); }
+        class GuardedRootElement {
+            UnoApiLock m_aLock;
+            RootElement & m_rTree;
 
-            configuration::Tree getTree() const;
+        public:
+            explicit GuardedRootElement(RootElement & rTree): m_rTree(rTree)
+            { rTree.checkAlive(); }
+
+            RootElement & get() const { return m_rTree; }
         };
-//-----------------------------------------------------------------------------
     }
 }
 

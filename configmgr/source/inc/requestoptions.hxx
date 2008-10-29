@@ -44,10 +44,6 @@ namespace configmgr
     class RequestOptions
     {
     public:
-        typedef com::sun::star::lang::Locale Locale;
-        typedef rtl::OUString LocaleString;
-        typedef rtl::OUString Entity;
-    public:
         /// Default constructor. Sets options to use defaults.
         RequestOptions()
         : m_sLocale()
@@ -68,11 +64,11 @@ namespace configmgr
         /// @returns the locale to get data for
         bool    isForAllLocales() const;
         /// @returns the locale to get data for - compatibilty version
-        LocaleString  getLocale() const { return getIsoLocale(); }
+        rtl::OUString  getLocale() const { return getIsoLocale(); }
         /// @returns the locale to get data for
-        LocaleString  getIsoLocale() const;
+        rtl::OUString  getIsoLocale() const;
         /// @returns the locale to get data for
-        Locale const & getUnoLocale() const { return m_sLocale; }
+        com::sun::star::lang::Locale const & getUnoLocale() const { return m_sLocale; }
 
         /** @returns
             <TRUE/>,  if an entity is specified, <BR/>
@@ -80,19 +76,19 @@ namespace configmgr
         */
         bool    hasEntity() const { return m_sEntity.getLength() != 0; }
         /// @returns the entity to get data for
-        Entity  getEntity() const { return m_sEntity; }
+        rtl::OUString  getEntity() const { return m_sEntity; }
 
         /// sets the entity to get data for to the given entity
-        void setEntity(Entity const & _sEntity) { m_sEntity = _sEntity; }
+        void setEntity(rtl::OUString const & _sEntity) { m_sEntity = _sEntity; }
         /// resets the entity to get data for to be the session user
-        void clearEntity()   { m_sEntity = Entity(); }
+        void clearEntity()   { m_sEntity = rtl::OUString(); }
 
         /// sets the locale so data is gotten for all locales
         void setAllLocales();
         /// sets the locale to get data for to the given locale
-        void setLocale(Locale const & _aLocale) { m_sLocale = _aLocale; }
+        void setLocale(com::sun::star::lang::Locale const & _aLocale) { m_sLocale = _aLocale; }
         /// sets the locale to get data for to the given locale
-        void setIsoLocale(LocaleString const & _sLocale);
+        void setIsoLocale(rtl::OUString const & _sLocale);
         /// sets a fallback locale, if no locale is set yet
         void ensureLocaleSet();
 
@@ -104,8 +100,8 @@ namespace configmgr
         /// function that defines a weak strict ordering on RequestOptions
         friend sal_Int32 compareRequestOptions(RequestOptions const& lhs, RequestOptions const& rhs);
     private:
-        Locale      m_sLocale;                              /// locale to fetch data for
-        Entity      m_sEntity;                              /// user/group/role to fetch data for
+        com::sun::star::lang::Locale        m_sLocale;                              /// locale to fetch data for
+        rtl::OUString       m_sEntity;                              /// user/group/role to fetch data for
         bool        m_bEnableAsync;                         /// true, if data may be
         bool        m_bReload;                              /// reload into cache from backend
     };

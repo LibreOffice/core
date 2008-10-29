@@ -36,14 +36,11 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif // _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 
-
-using namespace configmgr::backendhelper ;
-
 //==============================================================================
 
-static uno::Reference<uno::XInterface> SAL_CALL createBackendLayerHelper(
-                   const uno::Reference<uno::XComponentContext>& aContext) {
-    return * new BackendLayerHelper(aContext) ;
+static com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL createBackendLayerHelper(
+                   const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& aContext) {
+    return * new configmgr::backendhelper::BackendLayerHelper(aContext) ;
 }
 //==============================================================================
 
@@ -53,8 +50,8 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 {
     {
         createBackendLayerHelper,
-        BackendLayerHelper::getBackendLayerHelperName,
-        BackendLayerHelper::getBackendLayerHelperServiceNames,
+        configmgr::backendhelper::BackendLayerHelper::getBackendLayerHelperName,
+        configmgr::backendhelper::BackendLayerHelper::getBackendLayerHelperServiceNames,
         cppu::createSingleComponentFactory,
         NULL,
         0

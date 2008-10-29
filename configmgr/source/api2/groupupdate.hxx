@@ -71,20 +71,20 @@ namespace configmgr
         { return BasicGroupAccess::hasElements(); }
 
         // XNameAccess forwarding
-        virtual uno::Any SAL_CALL getByName( const OUString& aName )
+        virtual uno::Any SAL_CALL getByName( const rtl::OUString& aName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
          { return BasicGroupAccess::getByName(aName); }
 
-        virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException)
+        virtual uno::Sequence< rtl::OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException)
          { return BasicGroupAccess::getElementNames(); }
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException)
+        virtual sal_Bool SAL_CALL hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
          { return BasicGroupAccess::hasByName(aName); }
 
     // New Interface methods
         // XNameReplace
         virtual void SAL_CALL
-            replaceByName( const OUString& rName, const uno::Any& rElement )
+            replaceByName( const rtl::OUString& rName, const uno::Any& rElement )
                 throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
     protected:

@@ -43,16 +43,14 @@ namespace configmgr
     namespace backend
     {
 
-        using ::rtl::OUString;
         namespace css = com::sun::star;
         namespace util = css::util ;
 
-        using namespace binary;
         // -----------------------------------------------------------------------------
 
         BinaryWriteHandler::BinaryWriteHandler( rtl::OUString const & _aFileURL,
                                                 rtl::OUString const & _aComponentName,
-                                                MultiServiceFactory const & _aFactory)
+                                                uno::Reference<lang::XMultiServiceFactory> const & _aFactory)
         : m_BinaryWriter(_aFileURL,_aFactory)
         , m_aComponentName(_aComponentName)
         {
@@ -60,45 +58,45 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
         static
-        ValueFlags::Type convertTypeToValueType(uno::Type const& _aType)
+        binary::ValueFlags::Type convertTypeToValueType(uno::Type const& _aType)
         {
-            ValueFlags::Type eType = ValueFlags::val_invalid;
+            binary::ValueFlags::Type eType = binary::ValueFlags::val_invalid;
             uno::TypeClass const aClass = _aType.getTypeClass();
             switch(aClass)
             {
             case uno::TypeClass_ANY:
-                eType = ValueFlags::val_any;
+                eType = binary::ValueFlags::val_any;
                 break;
             case uno::TypeClass_BOOLEAN:
-                eType = ValueFlags::val_boolean;
+                eType = binary::ValueFlags::val_boolean;
                 break;
             case uno::TypeClass_SHORT:
-                eType = ValueFlags::val_int16;
+                eType = binary::ValueFlags::val_int16;
                 break;
             case uno::TypeClass_LONG:
-                eType = ValueFlags::val_int32;
+                eType = binary::ValueFlags::val_int32;
                 break;
             case uno::TypeClass_HYPER:
-                eType = ValueFlags::val_int64;
+                eType = binary::ValueFlags::val_int64;
                 break;
             case uno::TypeClass_DOUBLE:
-                eType = ValueFlags::val_double;
+                eType = binary::ValueFlags::val_double;
                 break;
             case uno::TypeClass_STRING:
-                eType = ValueFlags::val_string;
+                eType = binary::ValueFlags::val_string;
                 break;
             case uno::TypeClass_SEQUENCE:
                 if (_aType == SimpleTypeHelper::getBinaryType())
                 {
-                    eType = ValueFlags::val_binary;
+                    eType = binary::ValueFlags::val_binary;
                 }
                 else
                 {
                     uno::Type aType = configmgr::getSequenceElementType(_aType);
                     eType = convertTypeToValueType(aType);
 
-                    OSL_ENSURE(!(eType & ValueFlags::seq), "Binary Writer - Invalid value type: Multiple nesting of sequences");
-                    eType = ValueFlags::Type( eType | ValueFlags::seq );
+                    OSL_ENSURE(!(eType & binary::ValueFlags::seq), "Binary Writer - Invalid value type: Multiple nesting of sequences");
+                    eType = binary::ValueFlags::Type( eType | binary::ValueFlags::seq );
                 }
                 break;
             default:
@@ -177,7 +175,7 @@ namespace configmgr
 
                 CASE_WRITE_SEQUENCE( uno::TypeClass_DOUBLE, double );
 
-                CASE_WRITE_SEQUENCE( uno::TypeClass_STRING, OUString );
+                CASE_WRITE_SEQUENCE( uno::TypeClass_STRING, rtl::OUString );
 
                 CASE_WRITE_SEQUENCE( uno::TypeClass_SEQUENCE, uno::Sequence<sal_Int8> );
 
@@ -235,7 +233,7 @@ namespace configmgr
                 }
                 case uno::TypeClass_STRING:
                 {
-                    OUString aStr;
+                    rtl::OUString aStr;
                     writeFromAny(_rWriter, _aValue, aStr);
                     break;
                 }
@@ -271,12 +269,12 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void BinaryWriteHandler::writeFileHeader(   rtl::OUString const & _aSchemaVersion,
-                                                    const uno::Sequence<OUString> & aKnownLocales,
-                                                    const uno::Sequence<OUString> & aDataLocales  )
+                                                    const uno::Sequence<rtl::OUString> & aKnownLocales,
+                                                    const uno::Sequence<rtl::OUString> & aDataLocales  )
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            m_BinaryWriter.write(CFG_BINARY_MAGIC);
-            m_BinaryWriter.write(CFG_BINARY_VERSION);
+            m_BinaryWriter.write(binary::CFG_BINARY_MAGIC);
+            m_BinaryWriter.write(binary::CFG_BINARY_VERSION);
             m_BinaryWriter.write(_aSchemaVersion);
             writeSequence(m_BinaryWriter,aKnownLocales);
             writeSequence(m_BinaryWriter,aDataLocales);
@@ -315,14 +313,14 @@ namespace configmgr
             {
                 uno::Reference<util::XTimeStamped> xTimeStamp = uno::Reference<util::XTimeStamped>(pLayers[i], uno::UNO_QUERY);
 
-                OUString aTimeStamp = xTimeStamp.is() ? xTimeStamp->getTimestamp() : OUString();
+                rtl::OUString aTimeStamp = xTimeStamp.is() ? xTimeStamp->getTimestamp() : rtl::OUString();
                 m_BinaryWriter.write(aTimeStamp);
             }
 
         }
         // -----------------------------------------------------------------------------
 
-        void BinaryWriteHandler::writeNodeType(NodeType::Type _eType)
+        void BinaryWriteHandler::writeNodeType(binary::NodeType::Type _eType)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             sal_Int8 nValue = static_cast< sal_Int8 >( _eType );
@@ -362,14 +360,14 @@ namespace configmgr
         SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             //write value flags
-            ValueFlags::Type eType = convertTypeToValueType(_aType);
+            binary::ValueFlags::Type eType = convertTypeToValueType(_aType);
             sal_Int8 nValueType = sal_Int8(eType);
 
             bool hasUserValue   = _aUserValue.hasValue();
             bool hasDefault     = _aDefaultValue.hasValue();
 
-            if (!hasUserValue)  nValueType |=  ValueFlags::first_value_NULL;
-            if (!hasDefault)    nValueType |=  ValueFlags::second_value_NULL;
+            if (!hasUserValue)  nValueType |=  binary::ValueFlags::first_value_NULL;
+            if (!hasDefault)    nValueType |=  binary::ValueFlags::second_value_NULL;
 
             m_BinaryWriter.write(nValueType);
             writeAttributes(_aAttributes );
@@ -399,7 +397,7 @@ namespace configmgr
         void BinaryWriteHandler::writeComponentTree(const ISubtree * _pComponentTree)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            this->writeNodeType(NodeType::component);
+            this->writeNodeType(binary::NodeType::component);
             if (_pComponentTree)
             {
                 this->writeTree(*_pComponentTree);
@@ -407,7 +405,7 @@ namespace configmgr
             }
             else
             {
-                this->writeNodeType(NodeType::nodata);
+                this->writeNodeType(binary::NodeType::nodata);
             }
         }
          // -----------------------------------------------------------------------------
@@ -415,7 +413,7 @@ namespace configmgr
         void BinaryWriteHandler::writeTemplatesTree(const ISubtree * _pTemplatesTree)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            this->writeNodeType(NodeType::templates);
+            this->writeNodeType(binary::NodeType::templates);
             if (_pTemplatesTree)
             {
                 this->writeTree(*_pTemplatesTree);
@@ -423,7 +421,7 @@ namespace configmgr
             }
             else
             {
-                this->writeNodeType(NodeType::nodata);
+                this->writeNodeType(binary::NodeType::nodata);
             }
         }
          // -----------------------------------------------------------------------------
@@ -433,7 +431,7 @@ namespace configmgr
         {
             if ( rTree.isSetNode() )
             {
-                this->writeNodeType(NodeType::setnode);
+                this->writeNodeType(binary::NodeType::setnode);
                 this->writeSetNode( rTree.getName(),
                                     rTree.getElementTemplateName(),
                                     rTree.getElementTemplateModule(),
@@ -441,7 +439,7 @@ namespace configmgr
             }
             else
             {
-                this->writeNodeType(NodeType::groupnode);
+                this->writeNodeType(binary::NodeType::groupnode);
                 this->writeGroupNode( rTree.getName(), rTree.getAttributes() );
             }
 
@@ -460,7 +458,7 @@ namespace configmgr
 
         void BinaryWriteHandler::handle(const ValueNode & rValue)
         {
-            this->writeNodeType(NodeType::valuenode);
+            this->writeNodeType(binary::NodeType::valuenode);
 
             this->writeValueNode(   rValue.getName(),
                                     rValue.getAttributes(),
@@ -472,8 +470,8 @@ namespace configmgr
 
         bool BinaryWriteHandler::generateHeader(const uno::Reference<backenduno::XLayer> * pLayers,
                                                  sal_Int32 nNumLayers,
-                                                const OUString& aEntity,
-                                                const localehelper::LocaleSequence & aKnownLocales )
+                                                const rtl::OUString& aEntity,
+                                                const std::vector< com::sun::star::lang::Locale > & aKnownLocales )
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             //Open the writer

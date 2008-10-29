@@ -44,10 +44,10 @@ namespace configmgr
 
         class DirectViewStrategy : public ViewStrategy
         {
-            data::TreeSegment m_aTreeSegment;
+            rtl::Reference< data::TreeSegment > m_aTreeSegment;
         public:
             explicit
-            DirectViewStrategy(data::TreeSegment const & _aTreeSegment)
+            DirectViewStrategy(rtl::Reference< data::TreeSegment > const & _aTreeSegment)
             : m_aTreeSegment(_aTreeSegment)
             {}
 
@@ -60,11 +60,11 @@ namespace configmgr
             virtual node::Attributes doAdjustAttributes(node::Attributes const& _aAttributes) const;
 
             // group member access
-            virtual ValueMemberNode doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const;
+            virtual configuration::ValueMemberNode doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const;
 
             // set element access
-            virtual void doInsertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry);
-            virtual void doRemoveElement(SetNode const& _aNode, Name const& aName);
+            virtual void doInsertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& aNewEntry);
+            virtual void doRemoveElement(SetNode const& _aNode, rtl::OUString const& aName);
 
             virtual NodeFactory& doGetNodeFactory();
 

@@ -31,9 +31,7 @@
 #ifndef CONFIGMGR_API_PROVIDERIMPL_HXX_
 #define CONFIGMGR_API_PROVIDERIMPL_HXX_
 
-#include "treeprovider.hxx"
 #include "defaultprovider.hxx"
-#include "commontypes.hxx" // IInterface
 #include "requestoptions.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -69,16 +67,12 @@ namespace configmgr
     namespace script    = css::script;
     namespace lang      = css::lang;
     namespace beans     = css::beans;
-    using ::rtl::OUString;
 
     class ISubtree;
-    class ITemplateManager;
-    class IConfigDefaultProvider;
+    struct TreeChangeList;
     class TreeManager;
     class ContextReader;
     class OProvider;
-
-    struct IConfigBroadcaster;
 
     namespace configapi
     {
@@ -86,12 +80,12 @@ namespace configmgr
         class ApiProviderInstances;
         class Factory;
     }
+    namespace sharable { union Node; }
 
     // -----------------------------------------------------------------------------
-    class OProviderImpl : public ITreeManager, public IDefaultableTreeManager, public IInterface
+    class OProviderImpl : public IDefaultableTreeManager
     {
         friend class OProvider;
-        friend class OConfigurationProvider;
     public:
         //==========================================================================
         //= FactoryArguments
@@ -117,7 +111,7 @@ namespace configmgr
             };
             static sal_Char const * const asciiArgumentNames[];
 
-            static Argument lookupArgument(OUString const& sArgumentName)   CFG_NOTHROW();
+            static Argument lookupArgument(rtl::OUString const& sArgumentName)   SAL_THROW(());
         public:
             /** extracts arguments from the argument sequence into to the parameter variables
 
@@ -130,94 +124,108 @@ namespace configmgr
                     or if no non-empty node path argument could be extracted,
             */
             static void extractArgs(    const uno::Sequence<uno::Any>& _rArgs,
-                                        OUString&   /* [out] */ _rNodeAccessor,
+                                        rtl::OUString&   /* [out] */ _rNodeAccessor,
                                         sal_Int32&  /* [out] */ _nLevels,
-                                        RequestOptions& /* [in/out] */ xOptions
-                                   ) CFG_THROW1(lang::IllegalArgumentException);
+                                        RequestOptions& /* [in/out] */ xOptions)
+                SAL_THROW((lang::IllegalArgumentException));
 
-            static bool extractOneArgument( OUString const& aName, uno::Any const& aValue,
-                                            OUString&   /* [out] */ _rNodeAccessor,
+            static bool extractOneArgument( rtl::OUString const& aName, uno::Any const& aValue,
+                                            rtl::OUString&  /* [out] */ _rNodeAccessor,
                                             sal_Int32&  /* [out] */ _nLevels,
                                             RequestOptions& /* [in/out] */ xOptions
-                                          ) CFG_NOTHROW();
+                                          ) SAL_THROW(());
 
         };
 
-    public:
-        typedef uno::Reference< uno::XComponentContext >        CreationContext;
-        typedef uno::Reference< script::XTypeConverter >        TypeConverterRef;
     private:
         OProvider*                          m_pProvider;        /// used for ref counting, uno representation
 
-        TypeConverterRef                    m_xTypeConverter;
+        uno::Reference< script::XTypeConverter >                    m_xTypeConverter;
         RequestOptions                      m_aDefaultOptions;
         configapi::ApiProviderInstances*    m_pNewProviders;
         mutable osl::Mutex                  m_aTreeManagerMutex;
         TreeManager*                        m_pTreeManager;     /// the tree cache. Will hold a reference to us as long as it life
 
-        rtl::Reference< TreeManager > maybeGetTreeManager() const CFG_NOTHROW();
-        rtl::Reference< TreeManager > getTreeManager() const CFG_UNO_THROW_RTE();
-        void setTreeManager(TreeManager * pTreeManager) CFG_UNO_THROW_RTE();
-        void clearTreeManager() CFG_NOTHROW();
+        rtl::Reference< TreeManager > maybeGetTreeManager() const SAL_THROW(());
+        rtl::Reference< TreeManager > getTreeManager() const SAL_THROW((com::sun::star::uno::RuntimeException));
+        void setTreeManager(TreeManager * pTreeManager) SAL_THROW((com::sun::star::uno::RuntimeException));
+        void clearTreeManager() SAL_THROW(());
+
+        OProviderImpl(OProvider* _pProvider,
+                                   uno::Reference< uno::XComponentContext > const & xContext);
+
     public:
-        OProviderImpl(OProvider* _pProvider, CreationContext const & _xContext);
-
-
         virtual ~OProviderImpl();
 
-        /// ITreeManager
-        virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  );
-        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
+       /** request that the tree named by a path is added to the collection of managed trees
+            respecting certain options and requiring a specific loading depth.
+            Return a reference to that managed tree.
+            The reference must later be released by calling releaseSubtree with the same path and options.
+        */
+        sharable::Node * requestSubtree(configuration::AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) SAL_THROW((com::sun::star::uno::Exception));
 
-        virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions ) CFG_NOTHROW();
-        virtual void saveAndNotifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
-        virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW();
-        virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_NOTHROW();
+        /// update the managed data according to a changes list - update the changes list accordingly with old values
+        void updateTree(TreeChangeList& aChanges) SAL_THROW((com::sun::star::uno::Exception));
 
-        virtual void refreshAll() CFG_UNO_THROW_ALL(  );
-        virtual void flushAll() CFG_NOTHROW();
-        virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW();
+        // bookkeeping support
+        void releaseSubtree( configuration::AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions ) SAL_THROW(());
+
+        // notification
+        void saveAndNotifyUpdate(TreeChangeList const& aChanges) SAL_THROW((com::sun::star::uno::Exception));
+
+        /** request that the tree named by a path is added to the collection of managed trees
+            respecting certain options and requiring a specific loading depth.
+        */
+        void fetchSubtree(configuration::AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) SAL_THROW(());
+
+        //Refresh all components in the cache
+        void refreshAll() SAL_THROW((com::sun::star::uno::Exception));
+
+        //Flush all components in the cache
+        void flushAll() SAL_THROW(());
+
+        //Enable/Disable Asynchronous write-back to cache
+        void enableAsync(const sal_Bool& bEnableAsync) SAL_THROW(());
 
         /// IDefaultableTreeManager
-        virtual sal_Bool fetchDefaultData(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
-                                          ) CFG_UNO_THROW_ALL(  );
+        virtual sal_Bool fetchDefaultData(configuration::AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
+                                          ) SAL_THROW((com::sun::star::uno::Exception));
 
-        // IInterface
-        virtual void SAL_CALL acquire(  ) throw ();
-        virtual void SAL_CALL release(  ) throw ();
+        void SAL_CALL acquire(  ) throw ();
+        void SAL_CALL release(  ) throw ();
 
         // DefaultProvider access
-        rtl::Reference< IConfigDefaultProvider >  getDefaultProvider() const CFG_UNO_THROW_RTE( );
-
-        // TemplateManager access
-        rtl::Reference< IConfigTemplateManager >  getTemplateProvider() const CFG_UNO_THROW_RTE( );
+        rtl::Reference< TreeManager >  getDefaultProvider() const SAL_THROW((com::sun::star::uno::RuntimeException));
 
     protected:
-        static OUString getErrorMessage(AbsolutePath const& _rAccessor, const RequestOptions& _aOptions);
+        static rtl::OUString getErrorMessage(configuration::AbsolutePath const& _rAccessor, const RequestOptions& _aOptions);
 
-        virtual void SAL_CALL dispose() throw();
+        void SAL_CALL dispose() throw();
     public:
-        void setDefaultLocale( RequestOptions::Locale const & aLocale );
+        void setDefaultLocale( com::sun::star::lang::Locale const & aLocale );
 
         RequestOptions const& getDefaultOptions() const {return m_aDefaultOptions;}
-        TypeConverterRef getTypeConverter() const {return m_xTypeConverter;}
-        IConfigBroadcaster* getNotifier() CFG_NOTHROW();
+        uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xTypeConverter;}
+        TreeManager * getNotifier() SAL_THROW(());
         uno::XInterface*    getProviderInstance();
 
         // actual factory methods
         // the returned object (if any) has to be acquired once)
-        configapi::NodeElement* buildReadAccess( OUString const& _rAccessor, const RequestOptions& _aOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
+        configapi::NodeElement* buildReadAccess( rtl::OUString const& _rAccessor, const RequestOptions& _aOptions, sal_Int32 nMinLevels) SAL_THROW((com::sun::star::uno::Exception));
         // the returned object (if any) has to be acquired once)
-        configapi::NodeElement* buildUpdateAccess(OUString const& _rAccessor, const RequestOptions& _aOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
+        configapi::NodeElement* buildUpdateAccess(rtl::OUString const& _rAccessor, const RequestOptions& _aOptions, sal_Int32 nMinLevels) SAL_THROW((com::sun::star::uno::Exception));
+        // factory methods
+        uno::Reference<uno::XInterface>  createReadAccess( uno::Sequence<uno::Any> const& aArgs) SAL_THROW((com::sun::star::uno::Exception));
+        uno::Reference<uno::XInterface>  createUpdateAccess( uno::Sequence<uno::Any> const& aArgs) SAL_THROW((com::sun::star::uno::Exception));
 
     private:
         bool initSession(const ContextReader& _rSettings);
     private:
         void implInitFromSettings(const ContextReader& _rSettings, bool& rNeedProfile);
-        void implInitFromProfile(data::NodeAccess const& aProfile);
+        void implInitFromProfile(sharable::Node * aProfile);
 
-        virtual void initFromSettings(const ContextReader& _rSettings, bool& rNeedProfile);
-        virtual void initFromProfile(data::NodeAccess const& aProfile);
+        void initFromSettings(const ContextReader& _rSettings, bool& rNeedProfile);
+        void initFromProfile(sharable::Node * aProfile);
     };
 } // namespace configmgr
 

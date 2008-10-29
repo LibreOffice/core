@@ -97,9 +97,9 @@ bool convertNodeChange(NodeChangeData& aData_, RemoveNode const& /*aChange_*/)
 //-----------------------------------------------------------------------------
 
 CollectChanges::CollectChanges( NodeChangesInformation& rTargetList_,
-                TreeImpl& rStartTree_, NodeOffset nStartNode_,
-                TemplateHolder aElementTemplate_,
-                TreeDepth nMaxDepth)
+                Tree& rStartTree_, unsigned int nStartNode_,
+                rtl::Reference<Template> aElementTemplate_,
+                unsigned int nMaxDepth)
 : m_rTargetList(rTargetList_)
 , m_aAccessor()
 , m_aContextTypeName()
@@ -112,7 +112,7 @@ CollectChanges::CollectChanges( NodeChangesInformation& rTargetList_,
 }
 
 //-----------------------------------------------------------------------------
-CollectChanges::CollectChanges( CollectChanges const& rBase, Path::Component const& rChildName, Name const& aSubTypeName_)
+CollectChanges::CollectChanges( CollectChanges const& rBase, Path::Component const& rChildName, rtl::OUString const& aSubTypeName_)
 : m_rTargetList(rBase.m_rTargetList)
 , m_aAccessor(rBase.m_aAccessor.compose(rChildName))
 , m_aContextTypeName(aSubTypeName_)
@@ -127,9 +127,9 @@ CollectChanges::CollectChanges( CollectChanges const& rBase, Path::Component con
 inline
 Path::Component CollectChanges::implGetNodeName(Change const& aChange_) const
 {
-    Name aSimpleNodeName = makeName( aChange_.getNodeName(), Name::NoValidate() );
+    rtl::OUString aSimpleNodeName( aChange_.getNodeName() );
 
-    if (m_aContextTypeName.isEmpty())
+    if (m_aContextTypeName.getLength() == 0)
     {
         OSL_ENSURE(isSimpleName(aSimpleNodeName),"Unexpected: Found non-simple name without a type");
         return Path::wrapSafeName(aSimpleNodeName);
@@ -179,7 +179,7 @@ void CollectChanges::collectFrom(SubtreeChange const& aChanges_)
 {
     if (m_nDepthLeft > 0)
     {
-        Name aSubTypeName = makeName( aChanges_.getElementTemplateName(), Name::NoValidate() );
+        rtl::OUString aSubTypeName( aChanges_.getElementTemplateName() );
 
         CollectChanges aSubcollector( *this, implGetNodeName(aChanges_), aSubTypeName );
 

@@ -36,6 +36,7 @@
 #include "requestoptions.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include "utility.hxx"
 
 #ifndef INCLUDED_MAP
@@ -46,17 +47,11 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    struct ITemplateProvider;
-//-----------------------------------------------------------------------------
-    namespace data { class SetNodeAccess; class TreeSegment; }
+    namespace data { class TreeSegment; }
 //-----------------------------------------------------------------------------
 
     namespace configuration
     {
-//-----------------------------------------------------------------------------
-
-        typedef com::sun::star::uno::Type       UnoType;
-
 //-----------------------------------------------------------------------------
 
 
@@ -66,7 +61,7 @@ namespace configmgr
         struct TemplateName
         {
             //-----------------------------------------------------------------
-            Name aName, aModule;
+            rtl::OUString aName, aModule;
 
             //-----------------------------------------------------------------
             TemplateName()
@@ -74,43 +69,39 @@ namespace configmgr
             , aModule()
             {}
 
-            TemplateName(Name const& aName_)
+            TemplateName(rtl::OUString const& aName_)
             : aName(aName_)
             , aModule()
             {}
 
-            TemplateName(Name const& aName_, Name const& aModule_)
+            TemplateName(rtl::OUString const& aName_, rtl::OUString const& aModule_)
             : aName(aName_)
             , aModule(aModule_)
             {}
 
-            TemplateName(OUString const& sName_, OUString const& sModule_)
-            : aName(    makeName(sName_, Name::NoValidate()) )
-            , aModule(  makeName(sModule_, Name::NoValidate()) )
-            {}
             //-----------------------------------------------------------------
 
             /// compose the path where the template is located
-            OUString makePathString() const
+            rtl::OUString makePathString() const
             {
                 rtl::OUStringBuffer aBuffer;
 
-                if (!aModule.isEmpty())
-                    aBuffer.append( this->aModule.toString() ).append(sal_Unicode('/'));
+                if (aModule.getLength() != 0)
+                    aBuffer.append( this->aModule ).append(sal_Unicode('/'));
 
-                aBuffer.append( this->aName.toString() );
+                aBuffer.append( this->aName );
 
                 return aBuffer.makeStringAndClear();
             }
             //-----------------------------------------------------------------
             bool isEmpty() const
             {
-                return aName.isEmpty();
+                return aName.getLength() == 0;
             }
 
             bool isSimpleTypeName() const;
 
-            UnoType resolveToSimpleType() const;
+            com::sun::star::uno::Type resolveToSimpleType() const;
             //-----------------------------------------------------------------
 
             bool operator<(TemplateName const& aOther) const
@@ -119,12 +110,12 @@ namespace configmgr
             }
 
             //-----------------------------------------------------------------
-            static UnoType resolveSimpleTypeName(Name const& aName);
+            static com::sun::star::uno::Type resolveSimpleTypeName(rtl::OUString const& aName);
             //-----------------------------------------------------------------
 #if OSL_DEBUG_LEVEL > 0
-            static Name makeNativeTypeModuleName();
+            static rtl::OUString makeNativeTypeModuleName();
             //-----------------------------------------------------------------
-            static Name makeLocalizedTypeModuleName();
+            static rtl::OUString makeLocalizedTypeModuleName();
 #endif
             //-----------------------------------------------------------------
         };
@@ -139,41 +130,39 @@ namespace configmgr
         public:
             //-----------------------------------------------------------------
 
-            static UnoType getNoTypeAvailable()
+            static com::sun::star::uno::Type getNoTypeAvailable()
             {
                 return getVoidCppuType();
             }
             //-----------------------------------------------------------------
 
-            static void assignActualType (Template& aTemplate,UnoType const& aType);
+            static void assignActualType (Template& aTemplate,com::sun::star::uno::Type const& aType);
             //-----------------------------------------------------------------
 
-            static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& _aProvider, data::SetNodeAccess const& _aSet);
+            static rtl::Reference<Template> makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& _aProvider, sharable::SetNode * set);
             //-----------------------------------------------------------------
 
-            static TemplateHolder createNew (TemplateName const& aNames,UnoType const& aType);
+            static rtl::Reference<Template> createNew (TemplateName const& aNames,com::sun::star::uno::Type const& aType);
             //-----------------------------------------------------------------
         };
     //-------------------------------------------------------------------------
 
-        typedef std::map<TemplateName, TemplateHolder> TemplateRepository;
+        typedef std::map< TemplateName, rtl::Reference<Template> > TemplateRepository;
     //-------------------------------------------------------------------------
 
         //---------------------------------------------------------------------
         // class TemplateProvider_Impl
         //---------------------------------------------------------------------
 
-        struct TemplateProvider_Impl : configmgr::SimpleReferenceObject
+        struct TemplateProvider_Impl : salhelper::SimpleReferenceObject
         {
-            typedef TemplateProvider::TemplateManagerRef TemplateManagerRef;
+            TemplateProvider_Impl(rtl::Reference< TreeManager > const & xProvider, RequestOptions const& aOptions);
 
-            TemplateProvider_Impl(TemplateManagerRef const & xProvider, RequestOptions const& aOptions);
+            rtl::Reference< data::TreeSegment > instantiate(rtl::Reference<Template> const& aTemplate);
 
-            data::TreeSegment instantiate(TemplateHolder const& aTemplate);
-
-            TemplateHolder makeElementTemplateWithType(TemplateName const& _aNames, data::SetNodeAccess const& _aSet);
+            rtl::Reference<Template> makeElementTemplateWithType(TemplateName const& _aNames, sharable::SetNode * set);
         private:
-            TemplateManagerRef      m_xProvider;
+            rtl::Reference< TreeManager >      m_xProvider;
             RequestOptions          m_aOptions;
 
             TemplateRepository      m_aRepository;

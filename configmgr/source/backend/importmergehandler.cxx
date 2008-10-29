@@ -50,7 +50,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
 ImportMergeHandler::ImportMergeHandler(
-    Backend const & xTargetBackend, Mode mode, OUString const & aEntity, sal_Bool const & bNotify )
+    uno::Reference< backenduno::XBackend > const & xTargetBackend, Mode mode, rtl::OUString const & aEntity, sal_Bool const & bNotify )
 : BasicImportHandler(xTargetBackend,aEntity, bNotify)
 , m_xOutputHandler()
 , m_mode(mode)
@@ -77,7 +77,7 @@ inline void ImportMergeHandler::checkStarted()
 }
 // -----------------------------------------------------------------------------
 
-inline ImportMergeHandler::OutputHandler ImportMergeHandler::getOutputHandler()
+inline uno::Reference< backenduno::XUpdateHandler > ImportMergeHandler::getOutputHandler()
 {
     checkStarted();
     return m_xOutputHandler;
@@ -93,7 +93,7 @@ bool setHandlerProperty(uno::Reference< uno::XInterface > const & xHandler, char
     try
     {
         uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<= beans::NamedValue( OUString::createFromAscii(property), uno::makeAny(value) );
+        aArgs[0] <<= beans::NamedValue( rtl::OUString::createFromAscii(property), uno::makeAny(value) );
         xInitHandler->initialize(aArgs);
         return true;
     }
@@ -114,14 +114,12 @@ bool setHandlerProperty(uno::Reference< uno::XInterface > const & xHandler, char
     return false;
 }
 // -----------------------------------------------------------------------------
-ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
+uno::Reference< backenduno::XUpdateHandler > ImportMergeHandler::createOutputHandler()
 {
-    using rtl::OUStringBuffer;
-
     OSL_PRECOND( hasComponent(), "Trying to create output-handler for Import Merger without setting a component first") ;
-    OUString const aComponentName = this->getComponent();
+    rtl::OUString const aComponentName = this->getComponent();
 
-    OutputHandler xOutputHandler;
+    uno::Reference< backenduno::XUpdateHandler > xOutputHandler;
     try
     {
         xOutputHandler =    hasEntity() ? getBackend()->getUpdateHandler(aComponentName,getEntity())
@@ -129,7 +127,7 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
     }
     catch (lang::NoSupportException & e)
     {
-        OUStringBuffer sMessage;
+        rtl::OUStringBuffer sMessage;
         sMessage.appendAscii("configmgr::backend::ImportHandler: ");
         sMessage.appendAscii("Could not get output handler for component ").append(aComponentName);
         sMessage.appendAscii(": Backend does not support updates - ").append( e.Message );
@@ -138,7 +136,7 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
     }
     catch (lang::IllegalArgumentException & e)
     {
-        OUStringBuffer sMessage;
+        rtl::OUStringBuffer sMessage;
         sMessage.appendAscii("configmgr::backend::ImportHandler: ");
         sMessage.appendAscii("Could not get output handler for component ").append(aComponentName);
         sMessage.appendAscii(" due to a backend exception: ").append( e.Message );
@@ -148,7 +146,7 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
 
     if (!xOutputHandler.is())
     {
-        OUStringBuffer sMessage;
+        rtl::OUStringBuffer sMessage;
         sMessage.appendAscii("configmgr::backend::ImportHandler: ");
         sMessage.appendAscii("Cannot import. ERROR - The backend returns a NULL handler for component ")
                 .append(aComponentName).append( sal_Unicode('.') );
@@ -172,7 +170,7 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
 // XLayerHandler
 
 void SAL_CALL ImportMergeHandler::startLayer(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_xOutputHandler.clear();
 
@@ -181,7 +179,7 @@ void SAL_CALL ImportMergeHandler::startLayer(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::endLayer(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (isStarted())
     try
@@ -190,7 +188,7 @@ void SAL_CALL ImportMergeHandler::endLayer(  )
     }
     catch (lang::IllegalAccessException & iae)
     {
-        OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM("ImportHandler - no write access to layer: "));
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM("ImportHandler - no write access to layer: "));
         throw lang::WrappedTargetException(sMsg.concat(iae.Message),*this,uno::makeAny(iae));
     }
 
@@ -199,8 +197,8 @@ void SAL_CALL ImportMergeHandler::endLayer(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isStarted() && startComponent(aName))
     try
@@ -209,7 +207,7 @@ void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16
     }
     catch (lang::IllegalAccessException & iae)
     {
-        OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM("ImportHandler - no write access to layer: "));
+        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM("ImportHandler - no write access to layer: "));
         throw lang::WrappedTargetException(sMsg.concat(iae.Message),*this,uno::makeAny(iae));
     }
 
@@ -220,36 +218,36 @@ void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplaceNode(aName,aAttributes);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplaceNodeFromTemplate(aName,aAttributes,aTemplate);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::endNode(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->endNode();
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::dropNode( const OUString& aName )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::dropNode( const rtl::OUString& aName )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->removeNode(aName);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     (void) bClear; // avoid warning about unused parameter
     OSL_ENSURE(!bClear,"'clear' operation not supported on import");
@@ -258,35 +256,35 @@ void SAL_CALL ImportMergeHandler::overrideProperty( const OUString& aName, sal_I
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::endProperty(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->endProperty();
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::setPropertyValue( const uno::Any& aValue )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->setPropertyValue(aValue);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString & aLocale )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->setPropertyValueForLocale(aValue,aLocale);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplaceProperty(aName, aAttributes, aType);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplacePropertyWithValue(aName, aAttributes, aValue);
 }

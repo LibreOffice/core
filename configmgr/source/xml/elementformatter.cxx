@@ -73,7 +73,7 @@ void ElementFormatter::reset()
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addAttribute(OUString const & _anAttributeName, OUString const & _aValue)
+void ElementFormatter::addAttribute(rtl::OUString const & _anAttributeName, rtl::OUString const & _aValue)
 {
     OSL_PRECOND(m_xAttributes.is(),"Trying to add an attribute to a non-existing list");
 
@@ -83,7 +83,7 @@ void ElementFormatter::addAttribute(OUString const & _anAttributeName, OUString 
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addAttribute(OUString const & _anAttributeName, bool _bValue)
+void ElementFormatter::addAttribute(rtl::OUString const & _anAttributeName, bool _bValue)
 {
     OSL_PRECOND(m_xAttributes.is(),"Trying to add an attribute to a non-existing list");
 
@@ -95,10 +95,10 @@ void ElementFormatter::addAttribute(OUString const & _anAttributeName, bool _bVa
 
 void ElementFormatter::addNamespaces()
 {
-    static OUString const sNamespaceDecl( RTL_CONSTASCII_USTRINGPARAM("xmlns:") );
+    static rtl::OUString const sNamespaceDecl( RTL_CONSTASCII_USTRINGPARAM("xmlns:") );
 
-    addAttribute( sNamespaceDecl.concat(NS_PREFIX_OOR), static_cast<OUString const &>(NS_URI_OOR));
-    addAttribute( sNamespaceDecl.concat(NS_PREFIX_XS ), static_cast<OUString const &>(NS_URI_XS ));
+    addAttribute( sNamespaceDecl.concat(NS_PREFIX_OOR), static_cast<rtl::OUString const &>(NS_URI_OOR));
+    addAttribute( sNamespaceDecl.concat(NS_PREFIX_XS ), static_cast<rtl::OUString const &>(NS_URI_XS ));
 }
 // -----------------------------------------------------------------------------
 
@@ -134,7 +134,7 @@ void ElementFormatter::prepareSimpleElement(ElementType::Enum _eType)
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addName(OUString const & _aName)
+void ElementFormatter::addName(rtl::OUString const & _aName)
 {
     if (_aName.getLength())
     {
@@ -145,13 +145,13 @@ void ElementFormatter::addName(OUString const & _aName)
             {
                 sal_Int32 nIndex = _aName.lastIndexOf('.');
 
-                OUString aNodeName = _aName.copy(nIndex + 1);
+                rtl::OUString aNodeName = _aName.copy(nIndex + 1);
                 addAttribute(ATTR_NAME, aNodeName);
 
                 OSL_ENSURE(nIndex > 0,"Found component root element without a package part in its name");
                 if (nIndex > 0)
                 {
-                    OUString aPackage = _aName.copy(0, nIndex);
+                    rtl::OUString aPackage = _aName.copy(0, nIndex);
                     addAttribute(ATTR_PACKAGE, aPackage);
                 }
             }
@@ -166,23 +166,21 @@ void ElementFormatter::addName(OUString const & _aName)
 // -----------------------------------------------------------------------------
 
 inline
-void ElementFormatter::maybeAddFlag(FlagsType _eFlags, FlagsType _eSelect, OUString const & _anAttributeName, bool _bValue)
+void ElementFormatter::maybeAddFlag(sal_Int16 _eFlags, sal_Int16 _eSelect, rtl::OUString const & _anAttributeName, bool _bValue)
 {
     if (_eFlags & _eSelect) addAttribute(_anAttributeName,_bValue);
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addNodeFlags(FlagsType _eFlags)
+void ElementFormatter::addNodeFlags(sal_Int16 _eFlags)
 {
-    using namespace ::com::sun::star::configuration::backend;
+    maybeAddFlag(_eFlags,com::sun::star::configuration::backend::SchemaAttribute::REQUIRED,    ATTR_FLAG_NULLABLE, false);
+    maybeAddFlag(_eFlags,com::sun::star::configuration::backend::SchemaAttribute::LOCALIZED,   ATTR_FLAG_LOCALIZED);
+    maybeAddFlag(_eFlags,com::sun::star::configuration::backend::SchemaAttribute::EXTENSIBLE,  ATTR_FLAG_EXTENSIBLE);
 
-    maybeAddFlag(_eFlags,SchemaAttribute::REQUIRED,    ATTR_FLAG_NULLABLE, false);
-    maybeAddFlag(_eFlags,SchemaAttribute::LOCALIZED,   ATTR_FLAG_LOCALIZED);
-    maybeAddFlag(_eFlags,SchemaAttribute::EXTENSIBLE,  ATTR_FLAG_EXTENSIBLE);
-
-    maybeAddFlag(_eFlags,NodeAttribute::FINALIZED, ATTR_FLAG_FINALIZED);
-    maybeAddFlag(_eFlags,NodeAttribute::MANDATORY, ATTR_FLAG_MANDATORY);
-    maybeAddFlag(_eFlags,NodeAttribute::READONLY,  ATTR_FLAG_READONLY);
+    maybeAddFlag(_eFlags,com::sun::star::configuration::backend::NodeAttribute::FINALIZED, ATTR_FLAG_FINALIZED);
+    maybeAddFlag(_eFlags,com::sun::star::configuration::backend::NodeAttribute::MANDATORY, ATTR_FLAG_MANDATORY);
+    maybeAddFlag(_eFlags,com::sun::star::configuration::backend::NodeAttribute::READONLY,  ATTR_FLAG_READONLY);
 }
 // -----------------------------------------------------------------------------
 
@@ -191,12 +189,12 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
     switch (_eOp)
     {
     case Operation::none:       break;
-    case Operation::modify:     break ; //addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_MODIFY));  break;
+    case Operation::modify:     break ; //addAttribute(ATTR_OPERATION, static_cast<rtl::OUString const &>(OPERATION_MODIFY));  break;
     case Operation::clear:      OSL_ENSURE(false,"'clear' operation is not yet supported"); break ;
-                                //addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_CLEAR));  break;
-    case Operation::replace:    addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REPLACE)); break;
-    case Operation::fuse:       addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_FUSE));    break;
-    case Operation::remove:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REMOVE));  break;
+                                //addAttribute(ATTR_OPERATION, static_cast<rtl::OUString const &>(OPERATION_CLEAR));  break;
+    case Operation::replace:    addAttribute(ATTR_OPERATION, static_cast<rtl::OUString const &>(OPERATION_REPLACE)); break;
+    case Operation::fuse:       addAttribute(ATTR_OPERATION, static_cast<rtl::OUString const &>(OPERATION_FUSE));    break;
+    case Operation::remove:     addAttribute(ATTR_OPERATION, static_cast<rtl::OUString const &>(OPERATION_REMOVE));  break;
 
     case Operation::unknown:
         OSL_ENSURE(false, "ElementFormatter: Trying to add attribute for 'unknown' operation");
@@ -208,7 +206,7 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addInstanceType(OUString const & /*_aElementType*/, OUString const & /*_aElementTypeModule*/)
+void ElementFormatter::addInstanceType(rtl::OUString const & /*_aElementType*/, rtl::OUString const & /*_aElementTypeModule*/)
 {
 }
 // -----------------------------------------------------------------------------
@@ -241,10 +239,10 @@ void ElementFormatter::addPropertyValueType(uno::Type const& _aType)
     bool bList = false;
     uno::Type       aSimpleType         = getBasicType(_aType, bList);
     uno::TypeClass  aSimpleTypeClass    = aSimpleType.getTypeClass();
-    OUString        aSimpleTypeName     = toXmlTypeName(aSimpleTypeClass);
+    rtl::OUString        aSimpleTypeName     = toXmlTypeName(aSimpleTypeClass);
 
-    OUString sNsPrefix = (bList || aSimpleTypeClass == uno::TypeClass_ANY) ?
-                         OUString( NS_PREFIX_OOR ) : OUString( NS_PREFIX_XS );
+    rtl::OUString sNsPrefix = (bList || aSimpleTypeClass == uno::TypeClass_ANY) ?
+                         rtl::OUString( NS_PREFIX_OOR ) : rtl::OUString( NS_PREFIX_XS );
 
     rtl::OUStringBuffer aTypeNameBuf(sNsPrefix);
 
@@ -260,7 +258,7 @@ void ElementFormatter::addPropertyValueType(uno::Type const& _aType)
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addLanguage(OUString const & _sLanguage)
+void ElementFormatter::addLanguage(rtl::OUString const & _sLanguage)
 {
     OSL_ENSURE(_sLanguage.getLength(), "ElementFormatter: Trying to add empty language attribute");
     addAttribute(EXT_ATTR_LANGUAGE, _sLanguage);
@@ -273,32 +271,32 @@ void ElementFormatter::addIsNull(bool _bIsNull)
 }
 // -----------------------------------------------------------------------------
 
-void ElementFormatter::addSeparator(OUString const& _sSeparator)
+void ElementFormatter::addSeparator(rtl::OUString const& _sSeparator)
 {
     addAttribute( ATTR_VALUESEPARATOR, _sSeparator);
 }
 // -----------------------------------------------------------------------------
 
-OUString ElementFormatter::getElementTag() const
+rtl::OUString ElementFormatter::getElementTag() const
 {
     switch (m_aElementType)
     {
-    case ElementType::schema:    return OUString( TAG_SCHEMA );
-    case ElementType::layer:     return OUString( TAG_LAYER );
+    case ElementType::schema:    return rtl::OUString( TAG_SCHEMA );
+    case ElementType::layer:     return rtl::OUString( TAG_LAYER );
 
-    case ElementType::component: return OUString( TAG_COMPONENT );
-    case ElementType::templates: return OUString( TAG_TEMPLATES );
+    case ElementType::component: return rtl::OUString( TAG_COMPONENT );
+    case ElementType::templates: return rtl::OUString( TAG_TEMPLATES );
 
-    case ElementType::property:  return OUString( TAG_PROP );
-    case ElementType::node:      return OUString( TAG_NODE );
-    case ElementType::group:     return OUString( TAG_GROUP );
-    case ElementType::set:       return OUString( TAG_SET );
+    case ElementType::property:  return rtl::OUString( TAG_PROP );
+    case ElementType::node:      return rtl::OUString( TAG_NODE );
+    case ElementType::group:     return rtl::OUString( TAG_GROUP );
+    case ElementType::set:       return rtl::OUString( TAG_SET );
 
-    case ElementType::import:    return OUString( TAG_IMPORT );
-    case ElementType::instance:  return OUString( TAG_INSTANCE );
-    case ElementType::item_type: return OUString( TAG_ITEMTYPE );
-    case ElementType::value:     return OUString( TAG_VALUE );
-    case ElementType::uses:      return OUString( TAG_USES );
+    case ElementType::import:    return rtl::OUString( TAG_IMPORT );
+    case ElementType::instance:  return rtl::OUString( TAG_INSTANCE );
+    case ElementType::item_type: return rtl::OUString( TAG_ITEMTYPE );
+    case ElementType::value:     return rtl::OUString( TAG_VALUE );
+    case ElementType::uses:      return rtl::OUString( TAG_USES );
 
     case ElementType::unknown:
         OSL_ENSURE(false, "ElementFormatter: Trying to get Tag for 'unknown' element type");
@@ -310,7 +308,7 @@ OUString ElementFormatter::getElementTag() const
         OSL_ENSURE(false, "ElementFormatter: Trying to get Tag for invalid element type");
         break;
     }
-    return OUString();
+    return rtl::OUString();
 }
 // -----------------------------------------------------------------------------
 

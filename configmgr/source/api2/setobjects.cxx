@@ -76,17 +76,17 @@ uno::Sequence< sal_Int8 > SAL_CALL OInnerSetInfo::getImplementationId( ) throw (
 }
 
 
-NodeAccess& OInnerSetInfo::getNodeAccess()
+configapi::NodeAccess&  OInnerSetInfo::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& OInnerSetInfo::getNode()
+configapi::NodeSetInfoAccess& OInnerSetInfo::getNode()
 {
     return m_aAccessElement;
 }
 
-InnerElement& OInnerSetInfo::getElementClass()
+configapi::InnerElement& OInnerSetInfo::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -129,22 +129,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OInnerTreeSetUpdate::getImplementationId( ) t
 }
 
 
-NodeAccess& OInnerTreeSetUpdate::getNodeAccess()
+configapi::NodeAccess&  OInnerTreeSetUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& OInnerTreeSetUpdate::getNode()
+configapi::NodeSetInfoAccess& OInnerTreeSetUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeTreeSetAccess*  OInnerTreeSetUpdate::maybeGetUpdateAccess()
+configapi::NodeTreeSetAccess*   OInnerTreeSetUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-InnerElement& OInnerTreeSetUpdate::getElementClass()
+configapi::InnerElement& OInnerTreeSetUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -187,22 +187,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OInnerValueSetUpdate::getImplementationId( ) 
 }
 
 
-NodeAccess& OInnerValueSetUpdate::getNodeAccess()
+configapi::NodeAccess&  OInnerValueSetUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& OInnerValueSetUpdate::getNode()
+configapi::NodeSetInfoAccess& OInnerValueSetUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeValueSetAccess* OInnerValueSetUpdate::maybeGetUpdateAccess()
+configapi::NodeValueSetAccess*  OInnerValueSetUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-InnerElement& OInnerValueSetUpdate::getElementClass()
+configapi::InnerElement& OInnerValueSetUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -245,17 +245,17 @@ uno::Sequence< sal_Int8 > SAL_CALL OSetElementSetInfo::getImplementationId( ) th
 }
 
 
-NodeAccess& OSetElementSetInfo::getNodeAccess()
+configapi::NodeAccess&  OSetElementSetInfo::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& OSetElementSetInfo::getNode()
+configapi::NodeSetInfoAccess& OSetElementSetInfo::getNode()
 {
     return m_aAccessElement;
 }
 
-SetElement& OSetElementSetInfo::getElementClass()
+configapi::SetElement& OSetElementSetInfo::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -298,22 +298,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OSetElementTreeSetUpdate::getImplementationId
 }
 
 
-NodeAccess& OSetElementTreeSetUpdate::getNodeAccess()
+configapi::NodeAccess&  OSetElementTreeSetUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& OSetElementTreeSetUpdate::getNode()
+configapi::NodeSetInfoAccess& OSetElementTreeSetUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeTreeSetAccess*  OSetElementTreeSetUpdate::maybeGetUpdateAccess()
+configapi::NodeTreeSetAccess*   OSetElementTreeSetUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-SetElement& OSetElementTreeSetUpdate::getElementClass()
+configapi::SetElement& OSetElementTreeSetUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -356,22 +356,22 @@ uno::Sequence< sal_Int8 > SAL_CALL OSetElementValueSetUpdate::getImplementationI
 }
 
 
-NodeAccess& OSetElementValueSetUpdate::getNodeAccess()
+configapi::NodeAccess&  OSetElementValueSetUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& OSetElementValueSetUpdate::getNode()
+configapi::NodeSetInfoAccess& OSetElementValueSetUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeValueSetAccess* OSetElementValueSetUpdate::maybeGetUpdateAccess()
+configapi::NodeValueSetAccess*  OSetElementValueSetUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-SetElement& OSetElementValueSetUpdate::getElementClass()
+configapi::SetElement& OSetElementValueSetUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -414,17 +414,17 @@ uno::Sequence< sal_Int8 > SAL_CALL ORootElementSetInfo::getImplementationId( ) t
 }
 
 
-NodeAccess& ORootElementSetInfo::getNodeAccess()
+configapi::NodeAccess&  ORootElementSetInfo::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& ORootElementSetInfo::getNode()
+configapi::NodeSetInfoAccess& ORootElementSetInfo::getNode()
 {
     return m_aAccessElement;
 }
 
-RootElement& ORootElementSetInfo::getElementClass()
+configapi::RootElement& ORootElementSetInfo::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -467,22 +467,22 @@ uno::Sequence< sal_Int8 > SAL_CALL ORootElementTreeSetUpdate::getImplementationI
 }
 
 
-NodeAccess& ORootElementTreeSetUpdate::getNodeAccess()
+configapi::NodeAccess&  ORootElementTreeSetUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& ORootElementTreeSetUpdate::getNode()
+configapi::NodeSetInfoAccess& ORootElementTreeSetUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeTreeSetAccess*  ORootElementTreeSetUpdate::maybeGetUpdateAccess()
+configapi::NodeTreeSetAccess*   ORootElementTreeSetUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-UpdateRootElement& ORootElementTreeSetUpdate::getElementClass()
+configapi::UpdateRootElement& ORootElementTreeSetUpdate::getElementClass()
 {
     return m_aAccessElement;
 }
@@ -525,22 +525,22 @@ uno::Sequence< sal_Int8 > SAL_CALL ORootElementValueSetUpdate::getImplementation
 }
 
 
-NodeAccess& ORootElementValueSetUpdate::getNodeAccess()
+configapi::NodeAccess&  ORootElementValueSetUpdate::getNodeAccess()
 {
     return m_aAccessElement;
 }
 
-NodeSetInfoAccess& ORootElementValueSetUpdate::getNode()
+configapi::NodeSetInfoAccess& ORootElementValueSetUpdate::getNode()
 {
     return m_aAccessElement;
 }
 
-NodeValueSetAccess* ORootElementValueSetUpdate::maybeGetUpdateAccess()
+configapi::NodeValueSetAccess*  ORootElementValueSetUpdate::maybeGetUpdateAccess()
 {
     return &m_aAccessElement;
 }
 
-UpdateRootElement& ORootElementValueSetUpdate::getElementClass()
+configapi::UpdateRootElement& ORootElementValueSetUpdate::getElementClass()
 {
     return m_aAccessElement;
 }

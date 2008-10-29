@@ -44,7 +44,7 @@ namespace configmgr
         namespace uno       = ::com::sun::star::uno;
         // -----------------------------------------------------------------------------
 
-        LayerDefaultRemover::LayerDefaultRemover(ResultHandler const & _xResultHandler)
+        LayerDefaultRemover::LayerDefaultRemover(uno::Reference< backenduno::XLayerHandler > const & _xResultHandler)
             :m_xResultHandler(_xResultHandler)
         {
         }
@@ -68,7 +68,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::startLayer(  )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             clearPendingProperty();
             m_xResultHandler->startLayer();
@@ -76,7 +76,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::endLayer(  )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -94,8 +94,8 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -115,16 +115,16 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addOrReplaceNode(aName, aAttributes);
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addOrReplaceNodeFromTemplate(aName,aTemplate,aAttributes);
@@ -132,7 +132,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::endNode(  )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -151,32 +151,32 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::dropNode( const OUString& aName )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::dropNode( const rtl::OUString& aName )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->dropNode(aName);
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addProperty (aName,aAttributes,aType);
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack();
             m_xResultHandler->addPropertyWithValue(aName,aAttributes,aValue);
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -186,7 +186,7 @@ namespace configmgr
             }
             if (aAttributes != 0 || bClear)
             {
-                m_aPropName.Name=OUString();
+                m_aPropName.Name=rtl::OUString();
                 playBackNodeStack();
                 m_xResultHandler->overrideProperty(aName,aAttributes,aType,bClear);
             }
@@ -199,7 +199,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::endProperty(  )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (hasPendingProperty())
             {
@@ -211,15 +211,15 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerDefaultRemover::setPropertyValue( const uno::Any& aValue )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack(true);
             m_xResultHandler->setPropertyValue(aValue);
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerDefaultRemover::setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-            throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        void SAL_CALL LayerDefaultRemover::setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
         {
             playBackNodeStack(true);
             m_xResultHandler->setPropertyValueForLocale(aValue,aLocale);
@@ -242,7 +242,7 @@ namespace configmgr
             }
             if (!m_aNodeStack.empty())
             {
-                for (NodeStack::iterator aIter = m_aNodeStack.begin();
+                for (std::vector<rtl::OUString>::iterator aIter = m_aNodeStack.begin();
                      aIter != m_aNodeStack.end(); aIter++)
                 {
                     m_xResultHandler->overrideNode(*aIter, 0,false);
@@ -263,7 +263,7 @@ namespace configmgr
         void LayerDefaultRemover::raiseMalformedDataException(sal_Char const * pMsg)
         {
             OSL_ASSERT(pMsg);
-            OUString sMsg = OUString::createFromAscii(pMsg);
+            rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
 
             throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
         }

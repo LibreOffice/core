@@ -53,7 +53,7 @@ namespace configmgr { namespace localbe {
 //------------------------------------------------------------------------------
 
 LocalStratumBase::LocalStratumBase(const uno::Reference<uno::XComponentContext>& xContext)
-: LocalStratumImplBase(mMutex)
+: cppu::WeakComponentImplHelper3<lang::XInitialization, backend::XBackendEntities, lang::XServiceInfo>(mMutex)
 , mFactory(xContext->getServiceManager(),uno::UNO_QUERY)
 {
 }
@@ -140,21 +140,21 @@ uno::Reference<backend::XLayer> SAL_CALL
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-OUString SAL_CALL LocalStratumBase::getOwnerEntity()
+rtl::OUString SAL_CALL LocalStratumBase::getOwnerEntity()
     throw (uno::RuntimeException)
 {
     return mStrataDataUrl ;
 }
 //------------------------------------------------------------------------------
 
-OUString SAL_CALL LocalStratumBase::getAdminEntity()
+rtl::OUString SAL_CALL LocalStratumBase::getAdminEntity()
     throw (uno::RuntimeException)
 {
-    return OUString();
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LocalStratumBase::supportsEntity( const OUString& aEntity )
+sal_Bool SAL_CALL LocalStratumBase::supportsEntity( const rtl::OUString& aEntity )
     throw (backend::BackendAccessException, uno::RuntimeException)
 {
     if(mStrataDataUrl.getLength() == 0)
@@ -169,7 +169,7 @@ sal_Bool SAL_CALL LocalStratumBase::supportsEntity( const OUString& aEntity )
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LocalStratumBase::isEqualEntity(const OUString& aEntity, const OUString& aOtherEntity)
+sal_Bool SAL_CALL LocalStratumBase::isEqualEntity(const rtl::OUString& aEntity, const rtl::OUString& aOtherEntity)
     throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (aEntity.getLength() == 0)
@@ -186,10 +186,10 @@ sal_Bool SAL_CALL LocalStratumBase::isEqualEntity(const OUString& aEntity, const
 
         throw lang::IllegalArgumentException(sMsg, *this, 2);
     }
-    OUString aNormalizedEntity(aEntity);
+    rtl::OUString aNormalizedEntity(aEntity);
     normalizeURL(aNormalizedEntity,*this);
 
-    OUString aNormalizedOther(aOtherEntity);
+    rtl::OUString aNormalizedOther(aOtherEntity);
     normalizeURL(aNormalizedOther,*this);
 
     return aNormalizedEntity == aNormalizedOther;

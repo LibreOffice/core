@@ -46,7 +46,6 @@
 
 namespace configmgr
 {
-    using namespace binary;
     // -----------------------------------------------------------------------------
     namespace backend
     {
@@ -58,7 +57,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
         BinaryReadHandler::BinaryReadHandler(rtl::OUString const & _aFileURL,
                                              rtl::OUString const & _aComponentName,
-                                             MultiServiceFactory const & )
+                                             uno::Reference<lang::XMultiServiceFactory> const & )
         : m_BinaryReader(_aFileURL)
         , m_aNodeFactory()
         , m_aComponentName(_aComponentName)
@@ -71,15 +70,15 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         static inline
-        bool isRequestingNoLocale(localehelper::Locale const & aRequestedLocale)
+        bool isRequestingNoLocale(com::sun::star::lang::Locale const & aRequestedLocale)
         {
-            OUString const & aLanguage = aRequestedLocale.Language;
+            rtl::OUString const & aLanguage = aRequestedLocale.Language;
             return aLanguage.getLength() == 0 || localehelper::isDefaultLanguage(aLanguage);
         }
         // -----------------------------------------------------------------------------
 
         static
-        bool supportsLocale(uno::Sequence< OUString > const & aStoredLocales, OUString const & aRequestedLocale)
+        bool supportsLocale(uno::Sequence< rtl::OUString > const & aStoredLocales, rtl::OUString const & aRequestedLocale)
         {
             for (sal_Int32 ix=0; ix<aStoredLocales.getLength(); ++ix)
                 if (aStoredLocales[ix].equalsIgnoreAsciiCase(aRequestedLocale))
@@ -90,7 +89,7 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         static
-        bool supportsAll(uno::Sequence< OUString > const & aStoredLocales, uno::Sequence< OUString > const & aRequestedLocales)
+        bool supportsAll(uno::Sequence< rtl::OUString > const & aStoredLocales, uno::Sequence< rtl::OUString > const & aRequestedLocales)
         {
             for (sal_Int32 jx=0; jx<aRequestedLocales.getLength(); ++jx)
                 if (!supportsLocale(aStoredLocales,aRequestedLocales[jx]))
@@ -102,9 +101,9 @@ namespace configmgr
 
         bool BinaryReadHandler::verifyFileHeader(  const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
-                                    const OUString& _aSchemaVersion,
-                                    localehelper::Locale const & aRequestedLocale,
-                                    localehelper::LocaleSequence & outKnownLocales)
+                                    const rtl::OUString& _aSchemaVersion,
+                                    com::sun::star::lang::Locale const & aRequestedLocale,
+                                    std::vector< com::sun::star::lang::Locale > & outKnownLocales)
         {
             try
             {
@@ -112,7 +111,7 @@ namespace configmgr
                 sal_Int16 nMagic, nVersion;
                 m_BinaryReader.read(nMagic);
                 m_BinaryReader.read(nVersion);
-                if (nMagic !=CFG_BINARY_MAGIC || nVersion != CFG_BINARY_VERSION )
+                if (nMagic !=binary::CFG_BINARY_MAGIC || nVersion != binary::CFG_BINARY_VERSION )
                     return false;
 
                 rtl::OUString aSchemaVersion;
@@ -133,7 +132,7 @@ namespace configmgr
                 else if (!localehelper::designatesAllLocales(aRequestedLocale))
                 {
                     // one particular locale requested
-                    OUString const aIsoLocale = localehelper::makeIsoLocale(aRequestedLocale);
+                    rtl::OUString const aIsoLocale = localehelper::makeIsoLocale(aRequestedLocale);
                     if (!supportsLocale(aKnownLocales,aIsoLocale))
                     {
                         // a locale we didn't load previously
@@ -205,19 +204,19 @@ namespace configmgr
             return true;
         }
         // -----------------------------------------------------------------------------
-        NodeType::Type BinaryReadHandler::readNodeType()
+        binary::NodeType::Type BinaryReadHandler::readNodeType()
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            NodeType::Type eType = NodeType::invalid;
+            binary::NodeType::Type eType = binary::NodeType::invalid;
 
             sal_Int8 nValue;
             m_BinaryReader.read(nValue);
 
             sal_uInt8 const nRightValue( nValue );
-            if ( (nRightValue & NodeType::nodetype_mask) == nRightValue )
-                eType = NodeType::Type(nRightValue);
+            if ( (nRightValue & binary::NodeType::nodetype_mask) == nRightValue )
+                eType = binary::NodeType::Type(nRightValue);
 
-            if (eType == NodeType::invalid)
+            if (eType == binary::NodeType::invalid)
             {
                 OSL_ENSURE(false, "unknown or unhandled node type");
                 throw io::WrongFormatException();
@@ -227,32 +226,32 @@ namespace configmgr
         }
 
         // -----------------------------------------------------------------------------
-        ValueFlags::Type BinaryReadHandler::readValueFlags(bool& bSeq, bool& bHasValue, bool& bHasDefault )
+        binary::ValueFlags::Type BinaryReadHandler::readValueFlags(bool& bSeq, bool& bHasValue, bool& bHasDefault )
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             sal_Int8 nValue;
             m_BinaryReader.read(nValue);
 
             sal_uInt8 const nRightValue( nValue );
-            ValueFlags::Type eType = ValueFlags::Type(nRightValue & ValueFlags::basictype_mask);
-            if ( eType >= ValueFlags::val_invalid)
+            binary::ValueFlags::Type eType = binary::ValueFlags::Type(nRightValue & binary::ValueFlags::basictype_mask);
+            if ( eType >= binary::ValueFlags::val_invalid)
             {
                 OSL_ENSURE(false, "unknown or unhandled value type");
                 throw io::WrongFormatException();
             }
 
 
-            if (nRightValue & ValueFlags::seq)
+            if (nRightValue & binary::ValueFlags::seq)
                 bSeq = true;
             else
                 bSeq = false;
 
-            if (nRightValue & ValueFlags::first_value_NULL)
+            if (nRightValue & binary::ValueFlags::first_value_NULL)
                 bHasValue = false;
             else
                 bHasValue = true;
 
-            if (nRightValue & ValueFlags::second_value_NULL)
+            if (nRightValue & binary::ValueFlags::second_value_NULL)
                 bHasDefault = false;
             else
                 bHasDefault = true;
@@ -321,7 +320,7 @@ namespace configmgr
         }
 
         // -----------------------------------------------------------------------------
-        uno::Type convertValueTypeToType(ValueFlags::Type eBasicValueType, bool bSeq)
+        uno::Type convertValueTypeToType(binary::ValueFlags::Type eBasicValueType, bool bSeq)
         {
            uno::Type aType;
 
@@ -331,28 +330,28 @@ namespace configmgr
                 {
                 // --------------- Simple types ---------------
 
-                case ValueFlags::val_boolean:
+                case binary::ValueFlags::val_boolean:
                     aType = SimpleTypeHelper::getBooleanType();
                     break;
-                case ValueFlags::val_int16:
+                case binary::ValueFlags::val_int16:
                     aType = SimpleTypeHelper::getShortType();
                     break;
-                case ValueFlags::val_int32:
+                case binary::ValueFlags::val_int32:
                     aType = SimpleTypeHelper::getIntType();
                     break;
-                case ValueFlags::val_int64:
+                case binary::ValueFlags::val_int64:
                     aType = SimpleTypeHelper::getLongType();
                     break;
-                case ValueFlags::val_double:
+                case binary::ValueFlags::val_double:
                     aType = SimpleTypeHelper::getDoubleType();
                     break;
-                case ValueFlags::val_string:
+                case binary::ValueFlags::val_string:
                     aType = SimpleTypeHelper::getStringType();
                     break;
-                case ValueFlags::val_binary:
+                case binary::ValueFlags::val_binary:
                     aType = SimpleTypeHelper::getBinaryType();
                     break;
-                case ValueFlags::val_any:
+                case binary::ValueFlags::val_any:
                     aType = SimpleTypeHelper::getAnyType();
                     break;
                 default:
@@ -365,26 +364,26 @@ namespace configmgr
                 // ------------ Sequences ------------
                 switch(eBasicValueType)
                 {
-                case ValueFlags::val_boolean:
+                case binary::ValueFlags::val_boolean:
                     aType = ::getCppuType(static_cast<uno::Sequence<sal_Bool> const*>(0));
                     break;
-                case ValueFlags::val_int16:
+                case binary::ValueFlags::val_int16:
                     aType = ::getCppuType(static_cast<uno::Sequence<sal_Int16> const*>(0));
                     break;
-                case ValueFlags::val_int32:
+                case binary::ValueFlags::val_int32:
                     aType = ::getCppuType(static_cast<uno::Sequence<sal_Int32> const*>(0));
                     break;
-                case ValueFlags::val_int64:
+                case binary::ValueFlags::val_int64:
                     aType = ::getCppuType(static_cast<uno::Sequence<sal_Int64> const*>(0));
                     break;
-                case ValueFlags::val_double:
+                case binary::ValueFlags::val_double:
                     aType = ::getCppuType(static_cast<uno::Sequence<double> const*>(0));
                     break;
-                case ValueFlags::val_string:
+                case binary::ValueFlags::val_string:
                     aType = ::getCppuType(static_cast<uno::Sequence<rtl::OUString> const*>(0));
                     break;
-                case ValueFlags::val_binary:
-                    aType = ::getCppuType(static_cast<uno::Sequence<BinaryReader::Binary> const*>(0));
+                case binary::ValueFlags::val_binary:
+                    aType = ::getCppuType(static_cast<uno::Sequence< uno::Sequence< sal_Int8 > > const*>(0));
                     break;
                 default:
                     OSL_ENSURE(false,"Invalid sequence value type");
@@ -404,7 +403,7 @@ namespace configmgr
             bool bHasValue = false;
             bool bHasDefault = false;
 
-            ValueFlags::Type eBasicType = readValueFlags(bSeq, bHasValue, bHasDefault);
+            binary::ValueFlags::Type eBasicType = readValueFlags(bSeq, bHasValue, bHasDefault);
             readAttributes(_aAttributes);
             readName(_aName);
 
@@ -412,12 +411,12 @@ namespace configmgr
             {
                 switch(eBasicType)
                 {
-                    case ValueFlags::val_any:
+                    case binary::ValueFlags::val_any:
                     {
                         OSL_ENSURE(false,"Node of type Any cannot have value");
                                          throw io::WrongFormatException();
                     }
-                    case ValueFlags::val_string:
+                    case binary::ValueFlags::val_string:
                     {
                         rtl::OUString aStr;
                         if (bHasValue)
@@ -426,7 +425,7 @@ namespace configmgr
                             readAsAny(m_BinaryReader,  _aDefaultValue, _aType, aStr);
                         break;
                     }
-                    case ValueFlags::val_boolean:
+                    case binary::ValueFlags::val_boolean:
                     {
                         sal_Bool nValue;
                         if (bHasValue)
@@ -435,7 +434,7 @@ namespace configmgr
                             readAsAny(m_BinaryReader,_aDefaultValue, _aType, nValue);
                         break;
                     }
-                    case ValueFlags::val_int16:
+                    case binary::ValueFlags::val_int16:
                     {
                         sal_Int16 nValue;
                         if (bHasValue)
@@ -444,7 +443,7 @@ namespace configmgr
                             readAsAny(m_BinaryReader,_aDefaultValue, _aType, nValue);
                         break;
                     }
-                    case ValueFlags::val_int32:
+                    case binary::ValueFlags::val_int32:
                     {
                         sal_Int32 nValue;
                         if (bHasValue)
@@ -453,7 +452,7 @@ namespace configmgr
                             readAsAny(m_BinaryReader,_aDefaultValue, _aType, nValue);
                         break;
                     }
-                    case ValueFlags::val_int64:
+                    case binary::ValueFlags::val_int64:
                     {
                         sal_Int64 nValue;
                         if (bHasValue)
@@ -462,7 +461,7 @@ namespace configmgr
                             readAsAny(m_BinaryReader,_aDefaultValue, _aType, nValue);
                         break;
                     }
-                    case ValueFlags::val_double:
+                    case binary::ValueFlags::val_double:
                     {
                         double nValue;
                         if (bHasValue)
@@ -471,9 +470,9 @@ namespace configmgr
                             readAsAny(m_BinaryReader, _aDefaultValue, _aType, nValue);
                         break;
                     }
-                    case ValueFlags::val_binary:
+                    case binary::ValueFlags::val_binary:
                     {
-                        BinaryReader::Binary aValue;
+                        uno::Sequence< sal_Int8 > aValue;
                         if (bHasValue)
                             readAsAny(m_BinaryReader,_aValue, _aType, aValue);
                         if (bHasDefault)
@@ -508,9 +507,9 @@ namespace configmgr
         std::auto_ptr<ISubtree> BinaryReadHandler::readComponentTree()
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            NodeType::Type eType = this->readNodeType();
+            binary::NodeType::Type eType = this->readNodeType();
 
-            if (eType != NodeType::component)
+            if (eType != binary::NodeType::component)
             {
                 // TODO: search for component tree
                 OSL_ENSURE(false, "binary Cache: unexpected tree type for component data");
@@ -523,9 +522,9 @@ namespace configmgr
         std::auto_ptr<ISubtree> BinaryReadHandler::readTemplatesTree()
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            NodeType::Type eType = this->readNodeType();
+            binary::NodeType::Type eType = this->readNodeType();
 
-            if (eType != NodeType::templates)
+            if (eType != binary::NodeType::templates)
             {
                 // TODO: search for templates tree
                 OSL_ENSURE(false, "binary Cache: unexpected tree type for template data");
@@ -545,23 +544,23 @@ namespace configmgr
             node::Attributes aAttributes;
             const bool not_extensible = false;
 
-            NodeType::Type eType = this->readNodeType();
+            binary::NodeType::Type eType = this->readNodeType();
             switch (eType)
             {
-                case NodeType::groupnode:
+                case binary::NodeType::groupnode:
                 {
                     this->readGroup(aName, aAttributes);
                     pTree  = m_aNodeFactory.createGroup(aName,not_extensible,aAttributes);
                     break;
                 }
-                case NodeType::setnode:
+                case binary::NodeType::setnode:
                 {
                     backenduno::TemplateIdentifier aTemplate;
                     this->readSet(aName, aAttributes,aTemplate.Name, aTemplate.Component);
                     pTree  = m_aNodeFactory.createSet(aName,aTemplate,not_extensible,aAttributes);
                     break;
                 }
-                case NodeType::nodata:
+                case binary::NodeType::nodata:
                     break;
 
                 default:
@@ -576,7 +575,7 @@ namespace configmgr
 
                 //read terminating stop node
                 eType = this->readNodeType();
-                OSL_ENSURE(NodeType::stop == eType, "Missing stop node to mark end of tree");
+                OSL_ENSURE(binary::NodeType::stop == eType, "Missing stop node to mark end of tree");
             }
             return pTree;
         }
@@ -585,9 +584,9 @@ namespace configmgr
     // -----------------------------------------------------------------------------
         bool BinaryReadHandler::validateHeader( const uno::Reference<backenduno::XLayer> * pLayers,
                                                 sal_Int32 nNumLayers,
-                                                const OUString& _aSchemaVersion,
-                                                localehelper::Locale const & aRequestedLocale,
-                                                localehelper::LocaleSequence & outKnownLocales)
+                                                const rtl::OUString& _aSchemaVersion,
+                                                com::sun::star::lang::Locale const & aRequestedLocale,
+                                                std::vector< com::sun::star::lang::Locale > & outKnownLocales)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
 
@@ -599,13 +598,13 @@ namespace configmgr
                 return false;
 
             //Check if layers are uptodate
-            std::vector <OUString> timeStamps(nNumLayers);
+            std::vector <rtl::OUString> timeStamps(nNumLayers);
             for (sal_Int32 i = 0 ; i < nNumLayers ; ++ i)
             {
                 uno::Reference<util::XTimeStamped> xTimeStamp = uno::Reference<util::XTimeStamped>(pLayers[i], uno::UNO_QUERY);
                 if (xTimeStamp.is())
                 {
-                    OUString aTimeStamp = xTimeStamp->getTimestamp();
+                    rtl::OUString aTimeStamp = xTimeStamp->getTimestamp();
                     timeStamps[i] = aTimeStamp;
                 }
             }
@@ -615,15 +614,15 @@ namespace configmgr
         // -----------------------------------------------------------------------------
         void BinaryReadHandler::readChildren(ISubtree & rTree )
         {
-            OSL_ASSERT(!NodeType::stop); // loop stops at stop node
-            while (NodeType::Type eType = this->readNodeType())
+            OSL_ASSERT(!binary::NodeType::stop); // loop stops at stop node
+            while (binary::NodeType::Type eType = this->readNodeType())
             {
                 rtl::OUString aName;
                 node::Attributes aAttributes;
                 const bool not_extensible = false;
                 switch (eType)
                 {
-                    case NodeType::groupnode:
+                    case binary::NodeType::groupnode:
                     {
                         this->readGroup(aName, aAttributes);
 
@@ -638,7 +637,7 @@ namespace configmgr
                         rTree.addChild(base_ptr(pNewNode));
                         break;
                     }
-                    case NodeType::setnode:
+                    case binary::NodeType::setnode:
                     {
                         backenduno::TemplateIdentifier aTemplate;
                         this->readSet(aName, aAttributes,aTemplate.Name, aTemplate.Component);
@@ -654,7 +653,7 @@ namespace configmgr
                         rTree.addChild(base_ptr(pNewSetNode));
                         break;
                     }
-                    case NodeType::valuenode:
+                    case binary::NodeType::valuenode:
                     {
                         uno::Any aValue;
                         uno::Any aDefaultValue;

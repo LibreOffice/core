@@ -31,6 +31,10 @@
 #ifndef CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
 #define CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
 
+#include "sal/config.h"
+
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "request.hxx"
 #include "requesttypes.hxx"
 #include "utility.hxx"
@@ -44,40 +48,15 @@ namespace configmgr
     /** Listener interface for receiving notifications
         about changes to previously requested data
     */
-    struct SAL_NO_VTABLE INodeDataListener : Refcounted
+    struct SAL_NO_VTABLE INodeDataListener
     {
         /** is called to indicate changes within the data being observed.
 
             @param _aOriginalRequest
                 identifies the data that changed
         */
-        virtual void dataChanged(ComponentRequest const & _aOriginalRequest) CFG_NOTHROW() = 0;
+        virtual void dataChanged(ComponentRequest const & _aOriginalRequest) SAL_THROW(()) = 0;
     };
-// ---------------------------------------------------------------------------
-    /// Interface providing access to (merged) data for whole components
-    struct SAL_NO_VTABLE IComponentDataProvider
-    {
-        /** loads merged data for a (complete) tree and returns it as return value.
-
-            @param _aRequest
-                identifies the component to be loaded
-
-            @param __bAddListenter
-                identifies is listener is to be registered to backend
-
-            @returns
-                A valid component instance for the given component.
-
-            @throws com::sun::star::uno::Exception
-                if the node cannot be retrieved.
-                The exact exception being thrown may depend on the underlying backend.
-
-        */
-        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest,
-                                                 bool _bAddListenter)
-            CFG_UNO_THROW_ALL() = 0;
-    };
-
 // ---------------------------------------------------------------------------
 
     /// Interface providing access to template (schema) data
@@ -100,19 +79,21 @@ namespace configmgr
                 if the template cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual TemplateResult getTemplateData(TemplateRequest const & _aRequest)
-            CFG_UNO_THROW_ALL() = 0;
+        virtual ResultHolder< TemplateInstance > getTemplateData(TemplateRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception)) = 0;
     };
 // ---------------------------------------------------------------------------
 
-    /** Interface providing access to (merged) data for individual nodes
-        with optional notification about subsequent changes.
+    /** Composite interface providing full access to merged configuration data
+        from some data store.
 
-        There is no guarantee, that all changes are notified immediately
-        (or even at all).If the provider cannot detect changes
-        it may simply ignore a supplied listener.
-     */
-    struct SAL_NO_VTABLE INodeDataProvider
+        <p> Loading and updating of data is supported.
+            Support for notification depends on the backend.
+        </p>
+    */
+    struct IMergedDataProvider
+    : salhelper::SimpleReferenceObject
+    , ITemplateDataProvider
     {
         /** loads merged data for a (partial) tree and returns it as return value.
 
@@ -126,7 +107,7 @@ namespace configmgr
 
                 <p> Otherwise the listener will be notified of changes.
                     The listener must subsequently be removed by calling
-                    <member>INodeDataProvider::removeRequestListener</member>.
+                    <member>removeRequestListener</member>.
                     The listener must live at least until it is removed.
                 </p>
 
@@ -137,10 +118,10 @@ namespace configmgr
                 if the node cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual ComponentResult getNodeData(ComponentRequest const & _aRequest,
+        virtual ResultHolder< ComponentInstance > getNodeData(ComponentRequest const & _aRequest,
                                             ITemplateDataProvider*   _aTemplateProvider,
                                             INodeDataListener * _pListener = NULL)
-            CFG_UNO_THROW_ALL() = 0;
+            SAL_THROW((com::sun::star::uno::Exception)) = 0;
 
         /** remove a listener registered for a previous request.
             <p>This may also release some open resources for the request.</p>
@@ -152,13 +133,8 @@ namespace configmgr
                 identifies the component associated with the listener
         */
         virtual void removeRequestListener(INodeDataListener * _pListener,
-                                           const ComponentRequest& aRequest) CFG_NOTHROW() = 0;
-    };
-// ---------------------------------------------------------------------------
+                                           const ComponentRequest& aRequest) SAL_THROW(()) = 0;
 
-    /// Interface providing the capability to update node data
-    struct SAL_NO_VTABLE INodeUpdateProvider
-    {
         /** applies an update to the stored data.
 
             @param _anUpdate
@@ -170,13 +146,8 @@ namespace configmgr
                 The exact exception being thrown may depend on the underlying backend.
         */
         virtual void updateNodeData(UpdateRequest const & _anUpdate)
-            CFG_UNO_THROW_ALL() = 0;
-    };
-// ---------------------------------------------------------------------------
+            SAL_THROW((com::sun::star::uno::Exception)) = 0;
 
-    /// Interface providing access to (merged) default data
-    struct SAL_NO_VTABLE IDefaultDataProvider
-    {
         /** loads default data for a (partial) tree and returns it as return value
 
             @param _aRequest
@@ -191,55 +162,8 @@ namespace configmgr
                 if the default cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual NodeResult getDefaultData(NodeRequest const & _aRequest)
-            CFG_UNO_THROW_ALL() = 0;
-    };
-
-// ---------------------------------------------------------------------------
-
-    /// Interface providing access to backend meta-data
-    struct SAL_NO_VTABLE IDataProviderMetaData
-    {
-        /** Queries whether default property values are stripped from
-            a merged result tree or whether they are returned inline.
-
-            @returns
-                <TRUE/>  if default data is stripped from a merged node result, <BR/>
-                <FALSE/> if default data is left in the merged node result
-        */
-        virtual bool isStrippingDefaults() CFG_NOTHROW() = 0;
-    };
-// ---------------------------------------------------------------------------
-
-    /** Composite interface providing simple direct access to (merged) configuration data
-        from some data store.
-
-        <p> Only loading data is supported (no updates or notifications). </p>
-    */
-    struct IDirectDataProvider
-    : Refcounted
-    , IComponentDataProvider
-    , IDefaultDataProvider
-    , ITemplateDataProvider
-    {
-    };
-// ---------------------------------------------------------------------------
-
-    /** Composite interface providing full access to merged configuration data
-        from some data store.
-
-        <p> Loading and updating of data is supported.
-            Support for notification depends on the backend.
-        </p>
-    */
-    struct IMergedDataProvider
-    : Refcounted
-    , INodeDataProvider
-    , INodeUpdateProvider
-    , IDefaultDataProvider
-    , ITemplateDataProvider
-    , IDataProviderMetaData
-    {
+        virtual ResultHolder< NodeInstance > getDefaultData(NodeRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception)) = 0;
     };
 
 // ---------------------------------------------------------------------------

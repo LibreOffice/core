@@ -40,8 +40,8 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
- extern const AsciiServiceName c_aUserAdministrationServices[];
- extern const AsciiServiceName c_aGroupAdministrationServices[];
+ extern sal_Char const * const c_aUserAdministrationServices[];
+ extern sal_Char const * const c_aGroupAdministrationServices[];
 
 //-----------------------------------------------------------------------------
  extern ServiceImplementationInfo const aInnerGroupInfoSI;

@@ -46,7 +46,7 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-ElementUpdate::ElementUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask)
+ElementUpdate::ElementUpdate(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask)
 : NamedUpdate(_aName)
 , m_pParent(_pParent)
 , m_nFlags(_nFlags)
@@ -74,7 +74,7 @@ PropertyUpdate  * ElementUpdate::asPropertyUpdate()
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-NodeUpdate::NodeUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, Op _op)
+NodeUpdate::NodeUpdate(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, Op _op)
 : ElementUpdate(_pParent,_aName,_nFlags, _nFlagsMask)
 , m_aNodes()
 , m_aProperties()
@@ -92,7 +92,7 @@ NodeUpdate * NodeUpdate::asNodeUpdate(bool _bMerged)
 }
 // -----------------------------------------------------------------------------
 
-bool NodeUpdate::addNodeUpdate(ElementUpdateRef const & _aNode)
+bool NodeUpdate::addNodeUpdate(rtl::Reference<ElementUpdate> const & _aNode)
 {
     OSL_PRECOND( _aNode.is(), "ERROR: NodeUpdate: Trying to add NULL node.");
     OSL_PRECOND( _aNode->getParent() == this, "ERROR: NodeUpdate: Node being added has wrong parent.");
@@ -103,7 +103,7 @@ bool NodeUpdate::addNodeUpdate(ElementUpdateRef const & _aNode)
 }
 // -----------------------------------------------------------------------------
 
-bool NodeUpdate::addPropertyUpdate(ElementUpdateRef const & _aProp)
+bool NodeUpdate::addPropertyUpdate(rtl::Reference<ElementUpdate> const & _aProp)
 {
     OSL_PRECOND( _aProp.is(), "ERROR: NodeUpdate: Trying to add NULL property.");
     OSL_PRECOND( _aProp->getParent() == this, "ERROR: NodeUpdate: Property being added has wrong parent.");
@@ -114,7 +114,7 @@ bool NodeUpdate::addPropertyUpdate(ElementUpdateRef const & _aProp)
 }
 // -----------------------------------------------------------------------------
 
-void NodeUpdate::removeNodeByName(OUString const & _aName)
+void NodeUpdate::removeNodeByName(rtl::OUString const & _aName)
 {
     ElementList::iterator it = m_aNodes.find(_aName);
     OSL_ENSURE(it != m_aNodes.end(),
@@ -128,7 +128,7 @@ void NodeUpdate::removeNodeByName(OUString const & _aName)
 }
 // -----------------------------------------------------------------------------
 
-void NodeUpdate::removePropertyByName  (OUString const & _aName)
+void NodeUpdate::removePropertyByName  (rtl::OUString const & _aName)
 {
     ElementList::iterator it = m_aProperties.find(_aName);
     OSL_ENSURE(it != m_aProperties.end(),
@@ -142,35 +142,35 @@ void NodeUpdate::removePropertyByName  (OUString const & _aName)
 }
 // -----------------------------------------------------------------------------
 
-ElementUpdateRef NodeUpdate::getNodeByName(OUString const & _aName) const
+rtl::Reference<ElementUpdate> NodeUpdate::getNodeByName(rtl::OUString const & _aName) const
 {
-    Iterator it = m_aNodes.find(_aName);
+    ElementList::const_iterator it = m_aNodes.find(_aName);
 
-    return it != m_aNodes.end() ? it->second : ElementUpdateRef();
+    return it != m_aNodes.end() ? it->second : rtl::Reference<ElementUpdate>();
 }
 // -----------------------------------------------------------------------------
 
-ElementUpdateRef NodeUpdate::getPropertyByName  (OUString const & _aName) const
+rtl::Reference<ElementUpdate> NodeUpdate::getPropertyByName  (rtl::OUString const & _aName) const
 {
-    Iterator it = m_aProperties.find(_aName);
+    ElementList::const_iterator it = m_aProperties.find(_aName);
 
-    return it != m_aProperties.end() ? it->second : ElementUpdateRef();
+    return it != m_aProperties.end() ? it->second : rtl::Reference<ElementUpdate>();
 }
 // -----------------------------------------------------------------------------
 
 void NodeUpdate::writeChildrenToLayer(backenduno::XLayerHandler * _pLayer)
 {
     OSL_ASSERT(_pLayer);
-    for (Iterator itP = beginProperties(); itP != endProperties(); ++itP)
+    for (ElementList::const_iterator itP = beginProperties(); itP != endProperties(); ++itP)
         itP->second->writeToLayer(_pLayer);
 
-    for (Iterator itN = beginNodes(); itN != endNodes(); ++itN)
+    for (ElementList::const_iterator itN = beginNodes(); itN != endNodes(); ++itN)
         itN->second->writeToLayer(_pLayer);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-NodeModification::NodeModification(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset)
+NodeModification::NodeModification(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset)
 : NodeUpdate(_pParent,_aName,_nFlags, _nFlagsMask, _bReset ? reset : modify)
 {
 }
@@ -192,7 +192,7 @@ void NodeModification::writeToLayer(backenduno::XLayerHandler * _pLayer)
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-NodeReplace::NodeReplace(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags)
+NodeReplace::NodeReplace(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags)
 : NodeUpdate(_pParent,_aName,_nFlags, _nFlags, replace)
 , m_aTemplateName()
 , m_aTemplateComponent()
@@ -200,7 +200,7 @@ NodeReplace::NodeReplace(NodeUpdate * _pParent, OUString const & _aName, sal_Int
 }
 // -----------------------------------------------------------------------------
 
-NodeReplace::NodeReplace(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, OUString const & _aTemplateName, OUString const & _aTemplateComponent)
+NodeReplace::NodeReplace(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateComponent)
 : NodeUpdate(_pParent,_aName,_nFlags, _nFlags, replace)
 , m_aTemplateName(_aTemplateName)
 , m_aTemplateComponent(_aTemplateComponent)
@@ -232,7 +232,7 @@ void NodeReplace::writeToLayer(backenduno::XLayerHandler * _pLayer)
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-NodeDrop::NodeDrop(NodeUpdate * _pParent, OUString const & _aName)
+NodeDrop::NodeDrop(NodeUpdate * _pParent, rtl::OUString const & _aName)
 : ElementUpdate(_pParent,_aName,0,0)
 {
 }
@@ -246,7 +246,7 @@ void NodeDrop::writeToLayer(backenduno::XLayerHandler * _pLayer)
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-PropertyUpdate::PropertyUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType)
+PropertyUpdate::PropertyUpdate(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType)
 : ElementUpdate(_pParent,_aName,_nFlags,_nFlagsMask)
 , m_aValues()
 , m_aType(_aType)
@@ -286,7 +286,7 @@ uno::Any const & PropertyUpdate::getResetMarker()
 }
 // -----------------------------------------------------------------------------
 
-bool PropertyUpdate::setValueFor(OUString const & _aLocale, uno::Any const & _aValueUpdate)
+bool PropertyUpdate::setValueFor(rtl::OUString const & _aLocale, uno::Any const & _aValueUpdate)
 {
     OSL_PRECOND( !isResetMarker(_aValueUpdate), "PropertyUpdate: ERROR: Trying to set a reset marker as regular value" );
 
@@ -307,7 +307,7 @@ bool PropertyUpdate::setValueFor(OUString const & _aLocale, uno::Any const & _aV
 }
 // -----------------------------------------------------------------------------
 
-bool PropertyUpdate::resetValueFor(OUString const & _aLocale)
+bool PropertyUpdate::resetValueFor(rtl::OUString const & _aLocale)
 {
     OSL_ENSURE(m_aValues.find(_aLocale) == m_aValues.end(),
                 "PropertyUpdate: Locale being reset already has a value in this property.");
@@ -316,7 +316,7 @@ bool PropertyUpdate::resetValueFor(OUString const & _aLocale)
 }
 // -----------------------------------------------------------------------------
 
-void PropertyUpdate::removeValueFor(OUString const & _aLocale)
+void PropertyUpdate::removeValueFor(rtl::OUString const & _aLocale)
 {
     OSL_ENSURE(m_aValues.find(_aLocale) != m_aValues.end(),
                 "PropertyUpdate: Locale being removed is not in this node.");
@@ -332,33 +332,33 @@ void PropertyUpdate::finishValue()
 }
 // -----------------------------------------------------------------------------
 
-bool PropertyUpdate::hasValueFor(OUString const & _aLocale) const
+bool PropertyUpdate::hasValueFor(rtl::OUString const & _aLocale) const
 {
-    Iterator it = m_aValues.find(_aLocale);
+    ValueList::const_iterator it = m_aValues.find(_aLocale);
 
     return it != m_aValues.end() && ! isResetMarker(it->second);
 }
 // -----------------------------------------------------------------------------
 
-bool PropertyUpdate::hasResetFor(OUString const & _aLocale) const
+bool PropertyUpdate::hasResetFor(rtl::OUString const & _aLocale) const
 {
-    Iterator it = m_aValues.find(_aLocale);
+    ValueList::const_iterator it = m_aValues.find(_aLocale);
 
     return it != m_aValues.end() && isResetMarker(it->second);
 }
 // -----------------------------------------------------------------------------
 
-bool PropertyUpdate::hasChangeFor(OUString const & _aLocale) const
+bool PropertyUpdate::hasChangeFor(rtl::OUString const & _aLocale) const
 {
-    Iterator it = m_aValues.find(_aLocale);
+    ValueList::const_iterator it = m_aValues.find(_aLocale);
 
     return it != m_aValues.end();
 }
 // -----------------------------------------------------------------------------
 
-uno::Any PropertyUpdate::getValueFor(OUString const & _aLocale) const
+uno::Any PropertyUpdate::getValueFor(rtl::OUString const & _aLocale) const
 {
-    Iterator it = m_aValues.find(_aLocale);
+    ValueList::const_iterator it = m_aValues.find(_aLocale);
 
     OSL_ENSURE(it != m_aValues.end() && !isResetMarker(it->second),
                 "PropertyUpdate: Should not call getValue() unless hasValue() returns true" );
@@ -377,7 +377,7 @@ void PropertyUpdate::writeValueToLayer(backenduno::XLayerHandler * _pLayer, uno:
 }
 // -----------------------------------------------------------------------------
 
-void PropertyUpdate::writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue, OUString const & _aLocale)
+void PropertyUpdate::writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue, rtl::OUString const & _aLocale)
 {
     OSL_ASSERT(_pLayer);
     if (_aLocale == this->primarySlot())
@@ -393,7 +393,7 @@ void PropertyUpdate::writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, u
 void PropertyUpdate::writeValuesToLayer(backenduno::XLayerHandler * _pLayer)
 {
     OSL_ASSERT(_pLayer);
-    for (Iterator itV = beginValues(); itV != endValues(); ++itV)
+    for (ValueList::const_iterator itV = beginValues(); itV != endValues(); ++itV)
         this->writeValueToLayerFor(_pLayer, itV->second, itV->first);
 }
 // -----------------------------------------------------------------------------
@@ -410,7 +410,7 @@ void PropertyUpdate::writeToLayer(backenduno::XLayerHandler * _pLayer)
 // -----------------------------------------------------------------------------
 
 
-PropertyAdd::PropertyAdd(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType)
+PropertyAdd::PropertyAdd(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType)
 : ElementUpdate(_pParent,_aName,_nFlags,_nFlags)
 , m_aValueType(_aType)
 , m_aValue()
@@ -419,7 +419,7 @@ PropertyAdd::PropertyAdd(NodeUpdate * _pParent, OUString const & _aName, sal_Int
 }
 // -----------------------------------------------------------------------------
 
-PropertyAdd::PropertyAdd(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue)
+PropertyAdd::PropertyAdd(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue)
 : ElementUpdate(_pParent,_aName,_nFlags,_nFlags)
 , m_aValueType(_aValue.getValueType())
 , m_aValue(_aValue)
@@ -438,7 +438,7 @@ void PropertyAdd::writeToLayer(backenduno::XLayerHandler * _pLayer)
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-PropertyReset::PropertyReset(NodeUpdate * _pParent, OUString const & _aName)
+PropertyReset::PropertyReset(NodeUpdate * _pParent, rtl::OUString const & _aName)
 : ElementUpdate(_pParent,_aName,0,0)
 {
 }

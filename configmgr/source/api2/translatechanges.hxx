@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
+#include "rtl/ref.hxx"
 
 namespace configmgr
 {
@@ -57,7 +58,6 @@ namespace configmgr
         //class NodeChange;
         //class NodeChanges;
         class Tree;
-        class TreeRef;
         class NodeRef;
         class NodeID;
         class RelativePath;
@@ -75,15 +75,15 @@ namespace configmgr
         // resolve the relative path from a given base node to the changed node
         bool resolveChangeLocation( configuration::RelativePath& aPath,
                                     configuration::NodeChangeLocation const& aChange,
-                                    configuration::Tree const& aBaseTree,
+                                    rtl::Reference< configuration::Tree > const& aBaseTree,
                                     configuration::NodeRef const& aBaseNode);
 
         // change path and base settings to start from the given base tree (root)
         bool rebaseChange(  configuration::NodeChangeLocation& aChange,
-                            configuration::TreeRef const& _aBaseTreeRef);
+                            rtl::Reference< configuration::Tree > const& _aBaseTreeRef);
         // change path and base settings to start from the given base node
         bool rebaseChange(  configuration::NodeChangeLocation& aChange,
-                            configuration::TreeRef const& _aBaseTreeRef,
+                            rtl::Reference< configuration::Tree > const& _aBaseTreeRef,
                             configuration::NodeRef const& aBaseNode);
         // resolve non-uno elements to Uno Objects
         bool resolveUnoObjects(UnoChange& aUnoChange,
@@ -98,12 +98,12 @@ namespace configmgr
         /// fill a change info from a NodeChangeInfo
         void fillChange(util::ElementChange& rChange,
                         configuration::NodeChangeInformation const& aInfo,
-                        configuration::Tree const& aBaseTree,
+                        rtl::Reference< configuration::Tree > const& aBaseTree,
                         Factory& rFactory);
         /// fill a change info from a NodeChangeInfo
         void fillChange(util::ElementChange& rChange,
                         configuration::NodeChangeInformation const& aInfo,
-                        configuration::Tree const& aBaseTree,
+                        rtl::Reference< configuration::Tree > const& aBaseTree,
                         configuration::NodeRef const& aBaseNode,
                         Factory& rFactory);
         /// fill a change info from a NodeChangeInfo (base,path and uno objects are assumed to be resolved already)

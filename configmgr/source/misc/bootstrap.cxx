@@ -70,8 +70,8 @@
 #define SERVERTYPE_PLUGIN_COMPAT            "plugin"
 // ---------------------------------------------------------------------------------------
 
-#define NAME( N ) OUString(RTL_CONSTASCII_USTRINGPARAM(N))
-#define ITEM( N ) OUString(RTL_CONSTASCII_USTRINGPARAM(N))
+#define NAME( N ) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(N))
+#define ITEM( N ) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(N))
 // ---------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ namespace configmgr
     const sal_Char k_BootstrapContextServiceName[]      = "com.sun.star.configuration.bootstrap.BootstrapContext" ;
 
     // -------------------------------------------------------------------------
-    static AsciiServiceName const k_BootstrapContextServiceNames [] =
+    static sal_Char const * const k_BootstrapContextServiceNames [] =
     {
         k_BootstrapContextServiceName,
         0
@@ -121,12 +121,12 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
     uno::Reference<uno::XInterface> SAL_CALL
-        instantiateBootstrapContext( CreationContext const& xTargetContext )
+        instantiateBootstrapContext( uno::Reference< uno::XComponentContext > const& xTargetContext )
     {
-        CreationContext xContext = UnoContextTunnel::recoverContext(xTargetContext);
+        uno::Reference< uno::XComponentContext > xContext = UnoContextTunnel::recoverContext(xTargetContext);
 
         BootstrapContext * pContext = new BootstrapContext(xContext);
-        CreationContext xResult(pContext);
+        uno::Reference< uno::XComponentContext > xResult(pContext);
 
         pContext->initialize();
 
@@ -163,13 +163,13 @@ namespace configmgr
         aSingletonName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SINGLETON_) );
         aSingletonName.appendAscii(pSingletonInfo->singletonName);
 
-        OUString const aServiceName   = OUString::createFromAscii(pSingletonInfo->instantiatedServiceName);
+        rtl::OUString const aServiceName   = rtl::OUString::createFromAscii(pSingletonInfo->instantiatedServiceName);
 
         return cppu::ContextEntry_Init(aSingletonName.makeStringAndClear(), uno::makeAny(aServiceName), true);
     }
 // ---------------------------------------------------------------------------
 
-BootstrapContext::Context BootstrapContext::createWrapper(Context const & _xContext, Overrides const & _aOverrides)
+uno::Reference< uno::XComponentContext > BootstrapContext::createWrapper(uno::Reference< uno::XComponentContext > const & _xContext, uno::Sequence < beans::NamedValue > const & _aOverrides)
 {
     std::vector< cppu::ContextEntry_Init > aContextEntries;
     aContextEntries.reserve(_aOverrides.getLength() + 5);
@@ -194,7 +194,7 @@ BootstrapContext::Context BootstrapContext::createWrapper(Context const & _xCont
 }
 // ---------------------------------------------------------------------------
 
-sal_Bool BootstrapContext::isWrapper(Context const & _xContext)
+sal_Bool BootstrapContext::isWrapper(uno::Reference< uno::XComponentContext > const & _xContext)
 {
     OSL_ASSERT(_xContext.is());
     if (!_xContext.is()) return false;
@@ -211,7 +211,7 @@ sal_Bool BootstrapContext::isWrapper(Context const & _xContext)
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 
-BootstrapContext::BootstrapContext(Context const & _xContext)
+BootstrapContext::BootstrapContext(uno::Reference< uno::XComponentContext > const & _xContext)
 : ComponentContext(_xContext)
 {
 }
@@ -225,7 +225,7 @@ BootstrapContext::~BootstrapContext()
 void BootstrapContext::initialize()
 {
     // get default Bootstrap URL
-    OUString sURL;
+    rtl::OUString sURL;
     uno::Any aExplicitURL;
     if ( this->lookupInContext(aExplicitURL,NAME(CONTEXT_ITEM_PREFIX_ SETTING_INIFILE)) )
     {
@@ -240,9 +240,9 @@ void BootstrapContext::initialize()
 }
 // ---------------------------------------------------------------------------
 
-static OUString getCurrentModuleDirectory() // URL including terminating slash
+static rtl::OUString getCurrentModuleDirectory() // URL including terminating slash
 {
-    OUString aFileURL;
+    rtl::OUString aFileURL;
     if ( !osl::Module::getUrlFromAddress(reinterpret_cast< oslGenericFunction >( &getCurrentModuleDirectory ),aFileURL) )
     {
         OSL_TRACE(false, "Cannot locate current module - using executable instead");
@@ -256,13 +256,13 @@ static OUString getCurrentModuleDirectory() // URL including terminating slash
 }
 // ---------------------------------------------------------------------------------------
 
-OUString BootstrapContext::getDefaultConfigurationBootstrapURL()
+rtl::OUString BootstrapContext::getDefaultConfigurationBootstrapURL()
 {
-    return getCurrentModuleDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM(CONFIGMGR_INIFILE));
+    return getCurrentModuleDirectory() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CONFIGMGR_INIFILE));
 }
 // ---------------------------------------------------------------------------------------
 
-OUString BootstrapContext::makeContextName(OUString const & _aName)
+rtl::OUString BootstrapContext::makeContextName(rtl::OUString const & _aName)
 {
     // check that it isn't long already
     OSL_ENSURE(!_aName.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM(CONTEXT_MODULE_PREFIX_) ),
@@ -272,7 +272,7 @@ OUString BootstrapContext::makeContextName(OUString const & _aName)
 }
 // ---------------------------------------------------------------------------
 
-OUString BootstrapContext::makeBootstrapName(OUString const & _aName)
+rtl::OUString BootstrapContext::makeBootstrapName(rtl::OUString const & _aName)
 {
     // check if already is short
     if (!_aName.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM(CONTEXT_ITEM_PREFIX_) ) )
@@ -286,7 +286,7 @@ OUString BootstrapContext::makeBootstrapName(OUString const & _aName)
 // ---------------------------------------------------------------------------
 
 uno::Any SAL_CALL
-    BootstrapContext::getValueByName( const OUString& aName )
+    BootstrapContext::getValueByName( const rtl::OUString& aName )
         throw (uno::RuntimeException)
 {
     sal_Bool const bOurName = aName.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM(CONTEXT_MODULE_PREFIX_) );
@@ -304,7 +304,7 @@ uno::Any SAL_CALL
     }
     else if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SINGLETON_ A_BootstrapContextSingletonName) ) )
     {
-        return uno::makeAny( Context(this) );
+        return uno::makeAny( uno::Reference< uno::XComponentContext >(this) );
     }
 
     uno::Any aResult;
@@ -325,7 +325,7 @@ uno::Any SAL_CALL
 // class ContextReader
 // ---------------------------------------------------------------------------
 
-    ContextReader::ContextReader(Context const & context)
+    ContextReader::ContextReader(uno::Reference< uno::XComponentContext > const & context)
     : m_basecontext(context)
     , m_fullcontext()
     {
@@ -345,20 +345,20 @@ uno::Any SAL_CALL
     }
 // ---------------------------------------------------------------------------
     inline
-    uno::Any ContextReader::getSetting(OUString const & _aSetting) const
+    uno::Any ContextReader::getSetting(rtl::OUString const & _aSetting) const
     {
         OSL_ASSERT(m_basecontext.is());
         return getBestContext()->getValueByName(_aSetting);
     }
 
     inline
-    sal_Bool ContextReader::hasSetting(OUString const & _aSetting) const
+    sal_Bool ContextReader::hasSetting(rtl::OUString const & _aSetting) const
     {
         return getSetting(_aSetting).hasValue();
     }
 
     inline
-    sal_Bool ContextReader::getBoolSetting(OUString const & _aSetting, sal_Bool bValue = false) const
+    sal_Bool ContextReader::getBoolSetting(rtl::OUString const & _aSetting, sal_Bool bValue = false) const
     {
         uno::Any aValue = getSetting(_aSetting);
         if (!(aValue >>= bValue))
@@ -368,7 +368,7 @@ uno::Any SAL_CALL
     }
 
     inline
-    OUString ContextReader::getStringSetting(OUString const & _aSetting, OUString aValue = OUString()) const
+    rtl::OUString ContextReader::getStringSetting(rtl::OUString const & _aSetting, rtl::OUString aValue = rtl::OUString()) const
     {
         getSetting(_aSetting) >>= aValue;
         return aValue;
@@ -377,9 +377,9 @@ uno::Any SAL_CALL
 
     sal_Bool ContextReader::isUnoBackend() const
     {
-        OUString aSettingName = NAME(BOOTSTRAP_SERVERTYPE_COMPAT);
+        rtl::OUString aSettingName = NAME(BOOTSTRAP_SERVERTYPE_COMPAT);
 
-        OUString aValue;
+        rtl::OUString aValue;
         if (getSetting(aSettingName) >>= aValue)
         {
             return aValue.equalsAscii(SERVERTYPE_UNO_COMPAT);
@@ -414,16 +414,16 @@ uno::Any SAL_CALL
     }
 // ---------------------------------------------------------------------------------------
 
-    OUString    ContextReader::getUnoBackendService() const
+    rtl::OUString    ContextReader::getUnoBackendService() const
     {
         return getStringSetting( NAME(CONTEXT_ITEM_PREFIX_ SETTING_UNOSERVICE) );
     }
-    OUString    ContextReader::getUnoBackendWrapper() const
+    rtl::OUString    ContextReader::getUnoBackendWrapper() const
     {
         return getStringSetting( NAME(CONTEXT_ITEM_PREFIX_ SETTING_UNOWRAPPER) );
     }
 
-    OUString    ContextReader::getLocale() const
+    rtl::OUString   ContextReader::getLocale() const
     {
         return getStringSetting( NAME(CONTEXT_ITEM_PREFIX_ SETTING_LOCALE_NEW) );
     }
@@ -455,7 +455,7 @@ uno::Any SAL_CALL
     }
 // ---------------------------------------------------------------------------------------
 
-    bool ContextReader::testAdminService(Context const & context, bool bAdmin)
+    bool ContextReader::testAdminService(uno::Reference< uno::XComponentContext > const & context, bool bAdmin)
     {
         OSL_ASSERT(context.is());
         if (!context.is()) return false;
@@ -506,7 +506,7 @@ uno::Any SAL_CALL
         // handle old servertype argument and filter the 'plugin' value
         if (rValue.Name.equalsAscii(ARGUMENT_SERVERTYPE_COMPAT))
         {
-            OUString aServertype;
+            rtl::OUString aServertype;
             if (! (rValue.Value >>= aServertype))
                 return false;
 
@@ -563,41 +563,41 @@ namespace {
     };
 // ---------------------------------------------------------------------------------------
     static
-    OUString getFallbackErrorMessage( BootstrapResult _rc )
+    rtl::OUString getFallbackErrorMessage( BootstrapResult _rc )
     {
-        OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("The program cannot start. "));
+        rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("The program cannot start. "));
 
         switch (_rc)
         {
         case MISSING_BOOTSTRAP_FILE:
-            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is missing"));
+            sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is missing"));
             break;
 
         case INCOMPLETE_BOOTSTRAP_FILE:
-            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is invalid"));
+            sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is invalid"));
             break;
 
         case INCOMPLETE_BOOTSTRAP_DATA:
-            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Required bootstrap data is not available"));
+            sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Required bootstrap data is not available"));
             break;
 
         default:
-            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected bootstrap failure"));
+            sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected bootstrap failure"));
             break;
 
         case BOOTSTRAP_DATA_OK:
             break;
         }
-        sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(" (No detailed error message available.)"));
+        sMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (No detailed error message available.)"));
 
         return sMessage;
     }
 // ---------------------------------------------------------------------------------------
 
     static
-    uno::Any impl_makeBootstrapException( BootstrapResult _rc, OUString const& _sMessage, OUString const& _sURL, uno::Reference< uno::XInterface > _xContext )
+    uno::Any impl_makeBootstrapException( BootstrapResult _rc, rtl::OUString const& _sMessage, rtl::OUString const& _sURL, uno::Reference< uno::XInterface > _xContext )
     {
-        OUString sMessage(_sMessage);
+        rtl::OUString sMessage(_sMessage);
         // ensure a message
         if (sMessage.getLength()== 0)
         {
@@ -606,21 +606,19 @@ namespace {
             sMessage = getFallbackErrorMessage(_rc);
         }
 
-        using namespace com::sun::star::configuration;
-
         // raise the error
         switch (_rc)
         {
         case MISSING_BOOTSTRAP_FILE:
-            return uno::makeAny( MissingBootstrapFileException(sMessage, _xContext, _sURL) );
+            return uno::makeAny( com::sun::star::configuration::MissingBootstrapFileException(sMessage, _xContext, _sURL) );
 
         case INCOMPLETE_BOOTSTRAP_FILE:
-            return uno::makeAny( InvalidBootstrapFileException(sMessage, _xContext, _sURL) );
+            return uno::makeAny( com::sun::star::configuration::InvalidBootstrapFileException(sMessage, _xContext, _sURL) );
 
         default: OSL_ENSURE(false, "Undefined BootstrapResult code");
         case INCOMPLETE_BOOTSTRAP_DATA:
         case BOOTSTRAP_FAILURE:
-            return uno::makeAny( CannotLoadConfigurationException(sMessage, _xContext) );
+            return uno::makeAny( com::sun::star::configuration::CannotLoadConfigurationException(sMessage, _xContext) );
 
         case BOOTSTRAP_DATA_OK:
             break;
@@ -631,7 +629,7 @@ namespace {
 
     static
     inline
-    bool urlExists(OUString const& _sURL)
+    bool urlExists(rtl::OUString const& _sURL)
     {
         osl::DirectoryItem aCheck;
         return (osl::DirectoryItem::get(_sURL,aCheck) == osl::DirectoryItem::E_None);
@@ -639,7 +637,7 @@ namespace {
 // ---------------------------------------------------------------------------------------
 
     static
-    OUString buildBootstrapError( sal_Char const* _sWhat, OUString const& _sName, sal_Char const* _sHow)
+    rtl::OUString buildBootstrapError( sal_Char const* _sWhat, rtl::OUString const& _sName, sal_Char const* _sHow)
     {
         rtl::OUStringBuffer sMessage;
 
@@ -652,7 +650,7 @@ namespace {
     }
 // ---------------------------------------------------------------------------------------
 
-    BootstrapResult getBootstrapErrorMessage(BootstrapContext const & aContext, ContextReader const & aSettings, OUString& _rMessage, OUString& _rIniFile )
+    BootstrapResult getBootstrapErrorMessage(BootstrapContext const & aContext, ContextReader const & aSettings, rtl::OUString& _rMessage, rtl::OUString& _rIniFile )
     {
         BootstrapResult eResult = BOOTSTRAP_DATA_OK;
 
@@ -670,7 +668,7 @@ namespace {
         }
         else if (!aSettings.isBootstrapValid() )
         {
-             _rMessage = buildBootstrapError("Needed information to access",OUString::createFromAscii("application"), "configuration data is missing");
+             _rMessage = buildBootstrapError("Needed information to access",rtl::OUString::createFromAscii("application"), "configuration data is missing");
             eResult = INCOMPLETE_BOOTSTRAP_DATA;
         }
 
@@ -685,7 +683,7 @@ uno::Any BootstrapContext::makeBootstrapException()
 
     if (aReader.isBootstrapValid()) return uno::Any();
 
-    OUString sMessage,sURL;
+    rtl::OUString sMessage,sURL;
 
     BootstrapResult rc = getBootstrapErrorMessage(*this,aReader,sMessage,sURL);
 

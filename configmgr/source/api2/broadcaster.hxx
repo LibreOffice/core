@@ -48,11 +48,6 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------------------
     namespace configapi
     {
-        using configuration::NodeChange;
-        using configuration::NodeChanges;
-        using configuration::NodeChangeInformation;
-        using configuration::NodeChangesInformation;
-
         class Notifier;
 
         namespace css = ::com::sun::star;
@@ -63,26 +58,26 @@ namespace configmgr
         {
         public:
             /// construct a broadcaster
-            Broadcaster(Notifier const& aNotifier, NodeChange const& aChange, bool bLocal);
-            Broadcaster(Notifier const& aNotifier, NodeChanges const& aChanges, bool bLocal);
-            Broadcaster(Notifier const& aNotifier, NodeChangeInformation const& aChange, bool bLocal);
-            Broadcaster(Notifier const& aNotifier, NodeChangesInformation const& aChanges, bool bLocal);
+            Broadcaster(Notifier const& aNotifier, configuration::NodeChange const& aChange, bool bLocal);
+            Broadcaster(Notifier const& aNotifier, configuration::NodeChanges const& aChanges, bool bLocal);
+            Broadcaster(Notifier const& aNotifier, configuration::NodeChangeInformation const& aChange, bool bLocal);
+            Broadcaster(Notifier const& aNotifier, configuration::NodeChangesInformation const& aChanges, bool bLocal);
             Broadcaster(Broadcaster const& aOther);
             ~Broadcaster();
 
             /// give all property veto listeners on the affected node a chance to veto
-            void queryConstraints(NodeChange const& aChange) throw(css::beans::PropertyVetoException);
+            void queryConstraints(configuration::NodeChange const& aChange) throw(css::beans::PropertyVetoException);
             /// give all property veto listeners on any of the affected nodes a chance to veto
-            void queryConstraints(NodeChanges const& aChanges, bool bSingleBase = true) throw(css::beans::PropertyVetoException);
+            void queryConstraints(configuration::NodeChanges const& aChanges, bool bSingleBase = true) throw(css::beans::PropertyVetoException);
 
             /// notify all listeners which are affected by this change
-            void notifyListeners(NodeChange const& aChange) throw();
+            void notifyListeners(configuration::NodeChange const& aChange) throw();
             /// notify all listeners which are affected by any of these changes (potentially from many different bases)
-            void notifyListeners(NodeChanges const& aChanges, bool bSingleBase) throw();
+            void notifyListeners(configuration::NodeChanges const& aChanges, bool bSingleBase) throw();
             /// notify all listeners which are affected by this change
-            void notifyListeners(NodeChangeInformation const& aChange) throw();
+            void notifyListeners(configuration::NodeChangeInformation const& aChange) throw();
             /// notify all listeners which are affected by any of these changes (potentially from many different bases)
-            void notifyListeners(NodeChangesInformation const& aChanges, bool bSingleBase = false) throw();
+            void notifyListeners(configuration::NodeChangesInformation const& aChanges, bool bSingleBase = false) throw();
 
             class Impl;
         private:

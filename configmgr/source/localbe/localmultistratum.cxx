@@ -67,7 +67,7 @@ rtl::OUString makeLayerId(rtl::OUString const & aComponent,rtl::OUString const &
 }
 
 LocalMultiStratum::LocalMultiStratum(const uno::Reference<uno::XComponentContext>& xContext)
-: MultiStratumImplBase(xContext)
+: cppu::ImplInheritanceHelper1< LocalStratumBase, backend::XMultiLayerStratum >(xContext)
 {
 }
 //------------------------------------------------------------------------------
@@ -80,53 +80,50 @@ uno::Sequence< rtl::OUString > SAL_CALL
                                      const rtl::OUString& /*aEntity*/ )
         throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    typedef uno::Sequence< rtl::OUString > ResultType;
-
     rtl::OUString const aLayerUrl   = impl_getLayerDataDirectory(getBaseUrl());
     rtl::OUString const aComponentUrl = aLayerUrl + componentToPath(aComponent);
 
-    using namespace osl;
     const sal_uInt32 k_STATUS_FIELDS =  FileStatusMask_Type | FileStatusMask_FileName;
-    Directory aComponentDirectory(aComponentUrl);
-    DirectoryItem aItem;
+    osl::Directory aComponentDirectory(aComponentUrl);
+    osl::DirectoryItem aItem;
     std::vector< rtl::OUString > aResult;
 
-    Directory::RC errcode = aComponentDirectory.open();
+    osl::Directory::RC errcode = aComponentDirectory.open();
     switch (errcode)
     {
-    case Directory::E_NOENT:
-        return ResultType();
+    case osl::Directory::E_NOENT:
+        return uno::Sequence< rtl::OUString >();
 
-    case Directory::E_None:
-        while (Directory::E_None == (errcode=aComponentDirectory.getNextItem(aItem)))
+    case osl::Directory::E_None:
+        while (osl::Directory::E_None == (errcode=aComponentDirectory.getNextItem(aItem)))
         {
-            FileStatus aItemDescriptor( k_STATUS_FIELDS );
+            osl::FileStatus aItemDescriptor( k_STATUS_FIELDS );
             errcode = aItem.getFileStatus(aItemDescriptor);
 
-            if ( errcode != DirectoryItem::E_None )
+            if ( errcode != osl::DirectoryItem::E_None )
             {
-                OSL_ASSERT(errcode != Directory::E_NOENT); // unexpected failure for getFileStatus for existing file
-                if (errcode == Directory::E_NOENT) continue;
+                OSL_ASSERT(errcode != osl::Directory::E_NOENT); // unexpected failure for getFileStatus for existing file
+                if (errcode == osl::Directory::E_NOENT) continue;
 
                 OSL_TRACE("Reading Component Directory - Error (%u) getting status of directory item.\n", unsigned(errcode));
                 break;
             }
 
             OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_Type), "Could not get type of directory item");
-            if (aItemDescriptor.getFileType() != FileStatus::Regular)
+            if (aItemDescriptor.getFileType() != osl::FileStatus::Regular)
                 continue;
 
-            OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_FileName), "Could not get Name of component found");
-            OUString const aFileName = aItemDescriptor.getFileName();
+            OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_FileName), "Could not get name of component found");
+            rtl::OUString const aFileName = aItemDescriptor.getFileName();
             if (!aFileName.endsWithIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(kLocalDataSuffix)))
                 continue;
 
             aResult.push_back( makeLayerId(aComponent,aFileName) );
         }
-        OSL_ASSERT(errcode != Directory::E_None); // Loop postcond
+        OSL_ASSERT(errcode != osl::Directory::E_None); // Loop postcond
 
         // joint error handling with open failure
-        if (errcode != Directory::E_NOENT) // normal loop termination
+        if (errcode != osl::Directory::E_NOENT) // normal loop termination
         {
     default: // if open() truly failed we also go here
             rtl::OUStringBuffer errbuf;
@@ -139,8 +136,8 @@ uno::Sequence< rtl::OUString > SAL_CALL
         }
 
         return aResult.empty()
-            ? ResultType()
-            : ResultType(
+            ? uno::Sequence< rtl::OUString >()
+            : uno::Sequence< rtl::OUString >(
                 &aResult.front(), static_cast<sal_Int32>(aResult.size()));
     }
 }
@@ -218,7 +215,7 @@ void LocalMultiStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
     aLayerUrl   = impl_getLayerDataDirectory(getBaseUrl());
-    aSubLayerUrl = OUString();
+    aSubLayerUrl = rtl::OUString();
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -230,14 +227,14 @@ static const sal_Char * const kBackendService =
 static const sal_Char * const kLocalService =
                 "com.sun.star.configuration.backend.LocalMultiStratum" ;
 
-static AsciiServiceName kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
+static sal_Char const * kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
 static const ServiceImplementationInfo kMultiStratumServiceInfo   = { kMultiStratumImplementation  , kServiceNames, kServiceNames + 2 } ;
 
 const ServiceRegistrationInfo *getLocalMultiStratumServiceInfo()
 { return getRegistrationInfo(&kMultiStratumServiceInfo) ; }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalMultiStratum(const CreationContext& xContext) {
+instantiateLocalMultiStratum(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalMultiStratum(xContext) ;
 }
 

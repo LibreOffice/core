@@ -44,10 +44,8 @@ namespace configmgr
     //------------------------------------------------------------------------------
     bool isValidFileURL (rtl::OUString const& _sFileURL)
     {
-        using osl::File;
-
         rtl::OUString sSystemPath;
-        return _sFileURL.getLength() && (File::E_None == File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
+        return _sFileURL.getLength() && (osl::File::E_None == osl::File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
     }
     //------------------------------------------------------------------------------
     void validateFileURL(const rtl::OUString& _sFileURL, const uno::Reference<uno::XInterface>& pContext)
@@ -95,13 +93,11 @@ namespace configmgr
     // ---------------------------------------------------------------------------------------
     bool implEnsureAbsoluteURL(rtl::OUString & _rsURL) // also strips embedded dots etc.
     {
-        using osl::File;
-
         rtl::OUString sBasePath;
         OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
 
         rtl::OUString sAbsolute;
-        if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
+        if ( osl::File::E_None == osl::File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
         {
             _rsURL = sAbsolute;
             return true;
@@ -115,24 +111,22 @@ namespace configmgr
     // ---------------------------------------------------------------------------------------
     osl::DirectoryItem::RC implNormalizeURL(rtl::OUString & _sURL, osl::DirectoryItem& aDirItem)
     {
-        using namespace osl;
-
         OSL_PRECOND(aDirItem.is(), "Opened DirItem required");
 
         static const sal_uInt32 cFileStatusMask = FileStatusMask_FileURL;
 
-        FileStatus aFileStatus(cFileStatusMask);
+        osl::FileStatus aFileStatus(cFileStatusMask);
 
-        DirectoryItem::RC rc = aDirItem.getFileStatus(aFileStatus);
+        osl::DirectoryItem::RC rc = aDirItem.getFileStatus(aFileStatus);
 
-        if (rc == DirectoryItem::E_None)
+        if (rc == osl::DirectoryItem::E_None)
         {
             rtl::OUString aNormalizedURL = aFileStatus.getFileURL();
 
             if (aNormalizedURL.getLength() != 0)
                 _sURL = aNormalizedURL;
             else
-                rc = DirectoryItem::E_INVAL;
+                rc = osl::DirectoryItem::E_INVAL;
         }
         return rc;
     }
@@ -142,26 +136,23 @@ namespace configmgr
     bool normalizeURL(rtl::OUString & _sURL,  const uno::Reference<uno::XInterface>& pContext, bool bNothrow )
       throw (backend::InsufficientAccessRightsException, backend::BackendAccessException)
     {
-
-        using namespace osl;
-
         if (_sURL.getLength() == 0)
             return false;
 
-        DirectoryItem aDirItem;
+        osl::DirectoryItem aDirItem;
 
-        DirectoryItem::RC rc = DirectoryItem::get(_sURL, aDirItem);
+        osl::DirectoryItem::RC rc = osl::DirectoryItem::get(_sURL, aDirItem);
 
-        if (rc == DirectoryItem::E_None)
+        if (rc == osl::DirectoryItem::E_None)
             rc = implNormalizeURL(_sURL,aDirItem);
 
         switch (rc)
         {
-        case DirectoryItem::E_None:  return true;
+        case osl::DirectoryItem::E_None:  return true;
 
-        case DirectoryItem::E_NOENT: return true;
+        case osl::DirectoryItem::E_NOENT: return true;
 
-        case DirectoryItem::E_ACCES:
+        case osl::DirectoryItem::E_ACCES:
            if (!bNothrow)
            {
                rtl::OUStringBuffer msg;

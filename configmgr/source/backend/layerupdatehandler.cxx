@@ -42,7 +42,7 @@
 #include <com/sun/star/beans/PropertyExistException.hpp>
 
 // -----------------------------------------------------------------------------
-#define OUSTR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ) )
+#define OUSTR( str ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( str ) )
 // -----------------------------------------------------------------------------
 namespace configmgr
 {
@@ -56,14 +56,14 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
-( CreationContext const& xContext )
+( uno::Reference< uno::XComponentContext > const& xContext )
 {
     return * new LayerUpdateHandler( xContext );
 }
 
 // -----------------------------------------------------------------------------
 
-LayerUpdateHandler::LayerUpdateHandler(CreationArg _xContext)
+LayerUpdateHandler::LayerUpdateHandler(uno::Reference< uno::XComponentContext > const & _xContext)
 : UpdateService(_xContext)
 , m_aBuilder()
 {
@@ -90,28 +90,28 @@ void LayerUpdateHandler::checkBuilder(bool _bForProperty)
 
 void LayerUpdateHandler::raiseMalformedDataException(sal_Char const * pMsg)
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
     throw backenduno::MalformedDataException(sMsg,*this,uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raiseNodeChangedBeforeException(sal_Char const * pMsg)
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
     throw backenduno::MalformedDataException(sMsg,*this,uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raisePropChangedBeforeException(sal_Char const * pMsg)
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
     throw backenduno::MalformedDataException(sMsg,*this,uno::Any());
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raisePropExistsException(sal_Char const * pMsg)
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
     com::sun::star::beans::PropertyExistException e(sMsg,*this);
 
     throw backenduno::MalformedDataException(sMsg,*this, uno::makeAny(e));
@@ -121,7 +121,7 @@ void LayerUpdateHandler::raisePropExistsException(sal_Char const * pMsg)
 // XUpdateHandler
 void SAL_CALL
     LayerUpdateHandler::startUpdate(  )
-        throw ( MalformedDataException, lang::IllegalAccessException,
+        throw ( backenduno::MalformedDataException, lang::IllegalAccessException,
                 lang::WrappedTargetException, uno::RuntimeException)
 {
     this->checkSourceLayer();
@@ -132,7 +132,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::endUpdate(  )
-        throw ( MalformedDataException, lang::IllegalAccessException,
+        throw ( backenduno::MalformedDataException, lang::IllegalAccessException,
                 lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
@@ -149,8 +149,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::modifyNode( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::modifyNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -160,8 +160,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -171,8 +171,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplaceNodeFromTemplate( const OUString& aName, sal_Int16 aAttributes, const TemplateIdentifier& aTemplate )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplaceNodeFromTemplate( const rtl::OUString& aName, sal_Int16 aAttributes, const backenduno::TemplateIdentifier& aTemplate )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -183,7 +183,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::endNode(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -199,8 +199,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::removeNode( const OUString& aName )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::removeNode( const rtl::OUString& aName )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -210,8 +210,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler:: modifyProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Type & aType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler:: modifyProperty( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Type & aType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(false);
 
@@ -222,7 +222,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler:: setPropertyValue( const uno::Any& aValue )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -231,8 +231,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler:: setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler:: setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -242,7 +242,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::resetPropertyValue( )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -251,8 +251,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::resetPropertyValueForLocale( const OUString& aLocale )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::resetPropertyValueForLocale( const rtl::OUString& aLocale )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -262,7 +262,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::endProperty(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
 
@@ -271,8 +271,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::resetProperty( const OUString& aName )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::resetProperty( const rtl::OUString& aName )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!m_aBuilder.resetProperty(aName))
         raisePropChangedBeforeException("LayerUpdateHandler: Cannot reset property - property has already been changed.");
@@ -280,8 +280,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplaceProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplaceProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!m_aBuilder.addNullProperty(aName,aAttributes,aType))
         raisePropExistsException("LayerUpdateHandler: Cannot add property - property exists (and has already been changed).");
@@ -289,8 +289,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplacePropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplacePropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!m_aBuilder.addProperty(aName,aAttributes,aValue))
         raisePropExistsException("LayerUpdateHandler: Cannot add property - property exists (and has already been changed).");
@@ -298,8 +298,8 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::removeProperty( const OUString& aName )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    LayerUpdateHandler::removeProperty( const rtl::OUString& aName )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // treat 'remove' as 'reset'. (Note: does not verify that this actually amounts to dropping the property)
     if (!m_aBuilder.resetProperty(aName))

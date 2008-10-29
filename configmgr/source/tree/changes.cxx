@@ -67,7 +67,7 @@ static inline bool isDefaultMode(ValueChange::Mode _eMode)
 static inline bool isLayerChangeMode(ValueChange::Mode _eMode)
 { return (_eMode == ValueChange::setToDefault) || (_eMode == ValueChange::wasDefault); }
 // -----------------------------------------------------------------------------
-ValueChange::ValueChange(OUString const& _rName,
+ValueChange::ValueChange(rtl::OUString const& _rName,
                          const node::Attributes& _rAttributes,
                          Mode _eMode,
                          uno::Any const & aNewValue, uno::Any const & aOldValue)
@@ -110,7 +110,6 @@ namespace tree_changes_internal {
         aActual = aTarget;
     }
 }
-using namespace tree_changes_internal;
 
 // -------------------------------------------------------------------------
 void ValueChange::applyChangeNoRecover(ValueNode& aValue) const
@@ -140,9 +139,7 @@ void ValueChange::applyChangeNoRecover(ValueNode& aValue) const
 //==========================================================================
 //= AddNode
 //==========================================================================
-using data::TreeSegment;
-//------------------------------------------0--------------------------------
-AddNode::AddNode(TreeSegment const & _aAddedTree, OUString const& _rName, bool _bToDefault)
+AddNode::AddNode(rtl::Reference< data::TreeSegment > const & _aAddedTree, rtl::OUString const& _rName, bool _bToDefault)
     :Change(_rName,_bToDefault)
     ,m_aOwnNewNode(_aAddedTree)
     ,m_aOwnOldNode()
@@ -159,8 +156,8 @@ AddNode::~AddNode()
 // -----------------------------------------------------------------------------
 AddNode::AddNode(const AddNode& _aObj)
 : Change(_aObj)
-, m_aOwnNewNode(_aObj.m_aOwnNewNode.cloneSegment())
-, m_aOwnOldNode(_aObj.m_aOwnOldNode.cloneSegment())
+, m_aOwnNewNode(data::TreeSegment::create(_aObj.m_aOwnNewNode))
+, m_aOwnOldNode(data::TreeSegment::create(_aObj.m_aOwnOldNode))
 , m_aInsertedTree(_aObj.m_aInsertedTree)
 , m_bReplacing(_aObj.m_bReplacing)
 {
@@ -173,7 +170,7 @@ std::auto_ptr<Change> AddNode::clone() const
 }
 
 //--------------------------------------------------------------------------
-void AddNode::setInsertedAddress(data::TreeAddress const & _aInsertedTree)
+void AddNode::setInsertedAddress(sharable::TreeFragment * const & _aInsertedTree)
 {
     OSL_ENSURE( m_aInsertedTree == NULL, "AddNode already was applied - inserted a second time ?");
     m_aInsertedTree = _aInsertedTree;
@@ -193,7 +190,7 @@ void AddNode::expectReplacedNode(INode const* pOldNode)
 #endif
 //--------------------------------------------------------------------------
 
-void AddNode::takeReplacedTree(TreeSegment const & _aReplacedTree)
+void AddNode::takeReplacedTree(rtl::Reference< data::TreeSegment > const & _aReplacedTree)
 {
     m_aOwnOldNode   = _aReplacedTree;
 
@@ -204,7 +201,7 @@ void AddNode::takeReplacedTree(TreeSegment const & _aReplacedTree)
 //==========================================================================
 //= RemoveNode
 //==========================================================================
-RemoveNode::RemoveNode(OUString const& _rName, bool _bToDefault)
+RemoveNode::RemoveNode(rtl::OUString const& _rName, bool _bToDefault)
     :Change(_rName,_bToDefault)
     ,m_aOwnOldNode()
 {
@@ -217,7 +214,7 @@ RemoveNode::~RemoveNode()
 // -----------------------------------------------------------------------------
 RemoveNode::RemoveNode(const RemoveNode& _aObj)
 : Change(_aObj)
-, m_aOwnOldNode(_aObj.m_aOwnOldNode.cloneSegment())
+, m_aOwnOldNode(data::TreeSegment::create(_aObj.m_aOwnOldNode))
 {
 }
 
@@ -240,7 +237,7 @@ void RemoveNode::expectRemovedNode(INode const* pOldNode)
 #endif
 //--------------------------------------------------------------------------
 
-void RemoveNode::takeRemovedTree(data::TreeSegment const & _aRemovedTree)
+void RemoveNode::takeRemovedTree(rtl::Reference< data::TreeSegment > const & _aRemovedTree)
 {
     m_aOwnOldNode   = _aRemovedTree;
 }

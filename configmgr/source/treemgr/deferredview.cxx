@@ -40,31 +40,27 @@ namespace configmgr
     namespace view
     {
 //-----------------------------------------------------------------------------
-using configuration::DeferredGroupNodeImpl;
-using configuration::DeferredSetNodeImpl;
-
-//-----------------------------------------------------------------------------
-static inline DeferredGroupNodeImpl* deferredGroupNode(Node const& _aNode)
+static inline configuration::DeferredGroupNodeImpl* deferredGroupNode(Node const& _aNode)
 {
-    return static_cast<DeferredGroupNodeImpl*>(_aNode.get_impl());
+    return static_cast<configuration::DeferredGroupNodeImpl*>(_aNode.get_impl());
 }
 //-----------------------------------------------------------------------------
 
-static inline DeferredGroupNodeImpl* deferredGroupNode(GroupNode const& _aNode)
+static inline configuration::DeferredGroupNodeImpl* deferredGroupNode(GroupNode const& _aNode)
 {
-    return static_cast<DeferredGroupNodeImpl*>(_aNode.get_impl());
+    return static_cast<configuration::DeferredGroupNodeImpl*>(_aNode.get_impl());
 }
 //-----------------------------------------------------------------------------
 
-static inline DeferredSetNodeImpl* deferredSetNode(Node const& _aNode)
+static inline configuration::DeferredSetNodeImpl* deferredSetNode(Node const& _aNode)
 {
-    return static_cast<DeferredSetNodeImpl*>(_aNode.get_impl());
+    return static_cast<configuration::DeferredSetNodeImpl*>(_aNode.get_impl());
 }
 //-----------------------------------------------------------------------------
 
-static inline DeferredSetNodeImpl* deferredSetNode(SetNode const& _aNode)
+static inline configuration::DeferredSetNodeImpl* deferredSetNode(SetNode const& _aNode)
 {
-    return static_cast<DeferredSetNodeImpl*>(_aNode.get_impl());
+    return static_cast<configuration::DeferredSetNodeImpl*>(_aNode.get_impl());
 }
 //-----------------------------------------------------------------------------
 
@@ -72,7 +68,7 @@ static inline void deferredValueNode(Node const& _aNode)
 {
     { (void)_aNode; }
     OSL_ENSURE( _aNode.isValueNode(),"Unknown Node type in deferred view");
-    OSL_ENSURE(_aNode.get_offset() == _aNode.tree().get_impl()->root_(), "TreeImpl: Unexpected node type - non-root value element");
+    OSL_ENSURE(_aNode.get_offset() == configuration::Tree::ROOT, "Tree: Unexpected node type - non-root value element");
 }
 //-----------------------------------------------------------------------------
 
@@ -80,7 +76,7 @@ static void deferredValueNodeChanged(Node const& _aNode)
 {
     { (void)_aNode; }
     OSL_ENSURE( _aNode.isValueNode(),"Unknown Node type in deferred view");
-    OSL_ENSURE(_aNode.get_offset() == _aNode.tree().get_impl()->root_(), "TreeImpl: Unexpected node type - non-root value element");
+    OSL_ENSURE(_aNode.get_offset() == configuration::Tree::ROOT, "Tree: Unexpected node type - non-root value element");
     OSL_ENSURE(!_aNode.isValueNode(),"Value node changes not supported in deferred view");
     throw configuration::Exception("Internal Error: Invalid operation applied to element");
 }
@@ -132,7 +128,7 @@ void DeferredViewStrategy::implCollectChangesIn(Node const& _aNode, configuratio
         {
             GroupNode aGroup(_aNode);
 
-            deferredGroupNode(aGroup)->collectValueChanges( _rChanges, _aNode.tree().get_impl(), _aNode.get_offset());
+            deferredGroupNode(aGroup)->collectValueChanges( _rChanges, _aNode.tree(), _aNode.get_offset());
 
             for( Node aChild = aGroup.getFirstChild();
                  aChild.is();
@@ -148,47 +144,46 @@ void DeferredViewStrategy::implCollectChangesIn(Node const& _aNode, configuratio
 }
 
 //-----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> DeferredViewStrategy::doPreCommitChanges(Tree const& _aTree, configuration::ElementList& _rRemovedElements)
+std::auto_ptr<SubtreeChange> DeferredViewStrategy::doPreCommitChanges(configuration::Tree * tree, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements)
 {
     std::auto_ptr<SubtreeChange> pRet;
-    if (hasChanges(_aTree))
+    if (hasChanges(tree))
     {
-        pRet = implPreCommitChanges(getRootNode(_aTree),_rRemovedElements);
+        pRet = implPreCommitChanges(getRootNode(tree),_rRemovedElements);
         if (pRet.get() != NULL)
         {
-            pRet->setNodeName(getSimpleRootName(_aTree).toString());
+            pRet->setNodeName(getSimpleRootName(tree));
         }
     }
     return pRet;
 }
 
 //-----------------------------------------------------------------------------
-void DeferredViewStrategy::doFailedCommit(Tree const& _aTree, SubtreeChange& rChanges)
+void DeferredViewStrategy::doFailedCommit(configuration::Tree * tree, SubtreeChange& rChanges)
 {
-    implFailedCommit(getRootNode(_aTree),rChanges);
+    implFailedCommit(getRootNode(tree),rChanges);
 }
 
 //-----------------------------------------------------------------------------
-void DeferredViewStrategy::doFinishCommit(Tree const& _aTree, SubtreeChange& rChanges)
+void DeferredViewStrategy::doFinishCommit(configuration::Tree * tree, SubtreeChange& rChanges)
 {
-    implFinishCommit(getRootNode(_aTree),rChanges);
+    implFinishCommit(getRootNode(tree),rChanges);
 }
 
 //-----------------------------------------------------------------------------
-void DeferredViewStrategy::doRevertCommit(Tree const& _aTree, SubtreeChange& rChanges)
+void DeferredViewStrategy::doRevertCommit(configuration::Tree * tree, SubtreeChange& rChanges)
 {
-    implRevertCommit(getRootNode(_aTree),rChanges);
+    implRevertCommit(getRootNode(tree),rChanges);
 }
 
 //-----------------------------------------------------------------------------
-configuration::ValueChangeImpl* DeferredViewStrategy::doAdjustToValueChange(GroupNode const& _aGroupNode, Name const& _aName, ValueChange const& rExternalChange)
+configuration::ValueChangeImpl* DeferredViewStrategy::doAdjustToValueChange(GroupNode const& _aGroupNode, rtl::OUString const& _aName, ValueChange const& rExternalChange)
 {
-    using configuration::ValueChangeImpl;
-    DeferredGroupNodeImpl::MemberChange aChange = deferredGroupNode(_aGroupNode)->findValueChange(_aName);
+    rtl::Reference<configuration::ValueMemberNode::DeferredImpl> aChange = deferredGroupNode(_aGroupNode)->findValueChange(_aName);
 
     if (aChange.is())
     {
-        if (ValueChangeImpl* pValueChange = aChange->adjustToChange(rExternalChange))
+        if (configuration::ValueChangeImpl* pValueChange = aChange->adjustToChange(rExternalChange))
         {
             OSL_ENSURE(aChange->isChange(), "Got an adjusted change from a non-changing value");
 
@@ -213,25 +208,25 @@ node::Attributes DeferredViewStrategy::doAdjustAttributes(node::Attributes const
 }
 
 //-----------------------------------------------------------------------------
-configuration::ValueMemberNode DeferredViewStrategy::doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const
+configuration::ValueMemberNode DeferredViewStrategy::doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const
 {
     return deferredGroupNode(_aNode)->makeValueMember(_aName,_bForUpdate);
 }
 
 //-----------------------------------------------------------------------------
-void DeferredViewStrategy::doInsertElement(SetNode const& _aNode, Name const& aName, configuration::SetEntry const& _aNewEntry)
+void DeferredViewStrategy::doInsertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& _aNewEntry)
 {
     // move to this memory segment
     // should be direct (as any free-floating one)
 
     //implMakeElement(aNewEntry)
-    SetNodeElement aNewElement = implMakeElement(_aNode, _aNewEntry );
+    configuration::ElementTreeData aNewElement = implMakeElement(_aNode, _aNewEntry );
 
     deferredSetNode(_aNode)->insertNewElement(aName, aNewElement);
 }
 
 //-----------------------------------------------------------------------------
-void DeferredViewStrategy::doRemoveElement(SetNode const& _aNode, Name const& aName)
+void DeferredViewStrategy::doRemoveElement(SetNode const& _aNode, rtl::OUString const& aName)
 {
     deferredSetNode(_aNode)->removeOldElement(aName);
 }
@@ -247,7 +242,7 @@ NodeFactory& DeferredViewStrategy::doGetNodeFactory()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-ViewStrategyRef createDeferredChangeStrategy()
+rtl::Reference<ViewStrategy> createDeferredChangeStrategy()
 {
     return new DeferredViewStrategy();
 }
@@ -255,7 +250,7 @@ ViewStrategyRef createDeferredChangeStrategy()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredViewStrategy::implPreCommitChanges(Node const& _aNode, configuration::ElementList& _rRemovedElements)
+std::auto_ptr<SubtreeChange> DeferredViewStrategy::implPreCommitChanges(Node const& _aNode, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements)
 {
     std::auto_ptr<SubtreeChange> aRet;
 
@@ -284,7 +279,7 @@ std::auto_ptr<SubtreeChange> DeferredViewStrategy::implPreCommitChanges(Node con
 
 void DeferredViewStrategy::implFinishCommit(Node const& _aNode, SubtreeChange& rSubtreeChange)
 {
-    OSL_PRECOND( getSimpleNodeName(_aNode).toString() == rSubtreeChange.getNodeName(), "ERROR: Change name does not match node");
+    OSL_PRECOND( getSimpleNodeName(_aNode) == rSubtreeChange.getNodeName(), "ERROR: Change name does not match node");
 
     if (_aNode.isSetNode())
     {
@@ -302,14 +297,14 @@ void DeferredViewStrategy::implFinishCommit(Node const& _aNode, SubtreeChange& r
     else
     {
         deferredValueNode(_aNode);
-        OSL_ENSURE(false, "TreeImpl: Cannot finish commit: Unexpected node type");
+        OSL_ENSURE(false, "Tree: Cannot finish commit: Unexpected node type");
     }
 }
 //-----------------------------------------------------------------------------
 
 void DeferredViewStrategy::implRevertCommit(Node const& _aNode, SubtreeChange& rSubtreeChange)
 {
-    OSL_PRECOND( getSimpleNodeName(_aNode).toString() == rSubtreeChange.getNodeName(), "ERROR: Change name does not match node");
+    OSL_PRECOND( getSimpleNodeName(_aNode) == rSubtreeChange.getNodeName(), "ERROR: Change name does not match node");
 
     if (_aNode.isSetNode())
     {
@@ -327,14 +322,14 @@ void DeferredViewStrategy::implRevertCommit(Node const& _aNode, SubtreeChange& r
     else
     {
         deferredValueNode(_aNode);
-        OSL_ENSURE(false, "TreeImpl: Cannot revert commit: Unexpected node type");
+        OSL_ENSURE(false, "Tree: Cannot revert commit: Unexpected node type");
     }
 }
 //-----------------------------------------------------------------------------
 
 void DeferredViewStrategy::implFailedCommit(Node const& _aNode, SubtreeChange& rSubtreeChange)
 {
-    OSL_PRECOND( getSimpleNodeName(_aNode).toString() == rSubtreeChange.getNodeName(), "ERROR: Change name does not match node");
+    OSL_PRECOND( getSimpleNodeName(_aNode) == rSubtreeChange.getNodeName(), "ERROR: Change name does not match node");
 
     if (_aNode.isSetNode())
     {
@@ -352,12 +347,12 @@ void DeferredViewStrategy::implFailedCommit(Node const& _aNode, SubtreeChange& r
     else
     {
         deferredValueNode(_aNode);
-        OSL_ENSURE(false, "TreeImpl: Cannot handle commit failure: Unexpected node type");
+        OSL_ENSURE(false, "Tree: Cannot handle commit failure: Unexpected node type");
     }
 }
 //-----------------------------------------------------------------------------
 
-void DeferredViewStrategy::implPreCommitSubChanges(GroupNode const & _aGroup, configuration::ElementList& _rRemovedElements, SubtreeChange& _rParentChange)
+void DeferredViewStrategy::implPreCommitSubChanges(GroupNode const & _aGroup, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements, SubtreeChange& _rParentChange)
 {
     for( Node aChild = _aGroup.getFirstChild(); aChild.is(); aChild = _aGroup.getNextChild(aChild) )
     {
@@ -379,17 +374,17 @@ void DeferredViewStrategy::implFinishSubCommitted(GroupNode const & _aGroup, Sub
         it != stop;
         ++it)
     {
-        if ( it->ISA(SubtreeChange) )
+        if (dynamic_cast< SubtreeChange * >(&*it) != 0)
         {
-            Node aChild = _aGroup.findChild( configuration::makeNodeName(it->getNodeName(), Name::NoValidate()) );
+            Node aChild = _aGroup.findChild( it->getNodeName() );
             OSL_ENSURE( aChild.is(), "Changed sub-node not found in tree");
 
             this->implFinishCommit(aChild, static_cast<SubtreeChange&>(*it));
         }
         else
         {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for ínner node; change is ignored");
-            OSL_ENSURE(! _aGroup.findChild( configuration::makeNodeName(it->getNodeName(), Name::NoValidate())).is() ,
+            OSL_ENSURE(dynamic_cast< ValueChange * >(&*it) != 0, "Unexpected change type for inner node; change is ignored");
+            OSL_ENSURE(! _aGroup.findChild(it->getNodeName()).is() ,
                         "Found sub(tree) node where a value was changed");
         }
     }
@@ -404,17 +399,17 @@ void DeferredViewStrategy::implRevertSubCommitted(GroupNode const & _aGroup, Sub
         it != stop;
         ++it)
     {
-        if ( it->ISA(SubtreeChange) )
+        if (dynamic_cast< SubtreeChange * >(&*it) != 0)
         {
-            Node aChild = _aGroup.findChild( configuration::makeNodeName(it->getNodeName(), Name::NoValidate()) );
+            Node aChild = _aGroup.findChild( it->getNodeName() );
             OSL_ENSURE( aChild.is(), "Changed sub-node not found in tree");
 
             this->implRevertCommit(aChild, static_cast<SubtreeChange&>(*it));
         }
         else
         {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for ínner node; change is ignored");
-            OSL_ENSURE(! _aGroup.findChild( configuration::makeNodeName(it->getNodeName(), Name::NoValidate())).is() ,
+            OSL_ENSURE(dynamic_cast< ValueChange * >(&*it) != 0, "Unexpected change type for inner node; change is ignored");
+            OSL_ENSURE(! _aGroup.findChild(it->getNodeName()).is() ,
                         "Found sub(tree) node where a value was changed");
         }
     }
@@ -429,17 +424,17 @@ void DeferredViewStrategy::implFailedSubCommitted(GroupNode const & _aGroup, Sub
         it != stop;
         ++it)
     {
-        if ( it->ISA(SubtreeChange) )
+        if (dynamic_cast< SubtreeChange * >(&*it) != 0)
         {
-            Node aChild = _aGroup.findChild( configuration::makeNodeName(it->getNodeName(), Name::NoValidate()) );
+            Node aChild = _aGroup.findChild( it->getNodeName() );
             OSL_ENSURE( aChild.is(), "Changed sub-node not found in tree");
 
             this->implFailedCommit(aChild, static_cast<SubtreeChange&>(*it));
         }
         else
         {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for ínner node; change is ignored");
-            OSL_ENSURE(! _aGroup.findChild( configuration::makeNodeName(it->getNodeName(), Name::NoValidate())).is() ,
+            OSL_ENSURE(dynamic_cast< ValueChange * >(&*it) != 0, "Unexpected change type for inner node; change is ignored");
+            OSL_ENSURE(! _aGroup.findChild(it->getNodeName()).is() ,
                         "Found sub(tree) node where a value was changed");
         }
     }

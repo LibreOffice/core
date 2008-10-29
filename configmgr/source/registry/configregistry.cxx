@@ -34,9 +34,8 @@
 
 #include "configregistry.hxx"
 #include "cfgregistrykey.hxx"
-#ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
-#endif
+#include "datalock.hxx"
 #include "utility.hxx"
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -56,15 +55,6 @@ namespace configmgr
 {
 //..........................................................................
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::container;
-using namespace ::osl;
-using namespace ::cppu;
-using ::rtl::OUString;
-
 namespace beans = ::com::sun::star::beans;
 
 //==========================================================================
@@ -72,25 +62,25 @@ namespace beans = ::com::sun::star::beans;
 //==========================================================================
     inline
     static
-    OUString makeUniString(char const* c)
+    rtl::OUString makeUniString(char const* c)
     {
-        return OUString::createFromAscii(c);
+        return rtl::OUString::createFromAscii(c);
     }
 
 
     // #99130# Don't export SimpleRegistry service
-    static const AsciiServiceName aExportedConfigRegistryServices[] =
+    static sal_Char const * const aExportedConfigRegistryServices[] =
     {
         "com.sun.star.configuration.ConfigurationRegistry",
         NULL
     };
-    static const AsciiServiceName aAdditionalConfigRegistryServices[] =
+    static sal_Char const * const aAdditionalConfigRegistryServices[] =
     {
         "com.sun.star.registry.SimpleRegistry",
         NULL
     };
 
-    const AsciiServiceName aConfigRegistryImplementationName = "com.sun.star.comp.configuration.OConfigurationRegistry";
+    sal_Char const * const aConfigRegistryImplementationName = "com.sun.star.comp.configuration.OConfigurationRegistry";
 
     const ServiceImplementationInfo OConfigurationRegistry::s_aServiceInfo =
     {
@@ -99,10 +89,10 @@ namespace beans = ::com::sun::star::beans;
         aAdditionalConfigRegistryServices
     };
 
-    Reference< XInterface > SAL_CALL instantiateConfigRegistry(CreationContext const& xContext )
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL instantiateConfigRegistry(uno::Reference< uno::XComponentContext > const& xContext )
     {
         OSL_ASSERT( xContext.is() );
-        Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
+        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), com::sun::star::uno::UNO_QUERY );
         ::cppu::OWeakObject * pNewInstance = new OConfigurationRegistry(xServiceManager);
         return pNewInstance;
     }
@@ -113,7 +103,7 @@ namespace beans = ::com::sun::star::beans;
     }
 
 //--------------------------------------------------------------------------
-OConfigurationRegistry::OConfigurationRegistry(const Reference< XMultiServiceFactory >& _rORB) throw(Exception, RuntimeException)
+OConfigurationRegistry::OConfigurationRegistry(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rORB) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
     :ServiceComponentImpl(&s_aServiceInfo)
     ,m_xORB(_rORB)
 {
@@ -130,32 +120,32 @@ OConfigurationRegistry::OConfigurationRegistry(const Reference< XMultiServiceFac
     if (!m_xConfigurationProvider.is())
     {
         // it's heavily needed ...
-        throw ServiceNotRegisteredException(UNISTRING("Failed to instantiate the mandatory service com.sun.star.configuration.ConfigurationProvider."),
+        throw com::sun::star::lang::ServiceNotRegisteredException(UNISTRING("Failed to instantiate the mandatory service com.sun.star.configuration.ConfigurationProvider."),
             THISREF());
     }
 }
 
 //--------------------------------------------------------------------------
-Any SAL_CALL OConfigurationRegistry::queryInterface( const Type& _rType ) throw(RuntimeException)
+com::sun::star::uno::Any SAL_CALL OConfigurationRegistry::queryInterface( const com::sun::star::uno::Type& _rType ) throw(com::sun::star::uno::RuntimeException)
 {
-    Any aReturn = ServiceComponentImpl::queryInterface(_rType);
+    com::sun::star::uno::Any aReturn = ServiceComponentImpl::queryInterface(_rType);
     if (!aReturn.hasValue())
-        aReturn = OConfigurationRegistry_Base::queryInterface(_rType);
+        aReturn = cppu::ImplHelper2< com::sun::star::registry::XSimpleRegistry, com::sun::star::util::XFlushable >::queryInterface(_rType);
     return aReturn;
 }
 
 //--------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OConfigurationRegistry::getTypes(  ) throw(RuntimeException)
+com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL OConfigurationRegistry::getTypes(  ) throw(com::sun::star::uno::RuntimeException)
 {
     return ::comphelper::concatSequences(
         ServiceComponentImpl::getTypes(),
-        OConfigurationRegistry_Base::getTypes());
+        cppu::ImplHelper2< com::sun::star::registry::XSimpleRegistry,   com::sun::star::util::XFlushable >::getTypes());
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL OConfigurationRegistry::getImplementationId(  ) throw(RuntimeException)
+com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OConfigurationRegistry::getImplementationId(  ) throw(com::sun::star::uno::RuntimeException)
 {
-    static OImplementationId aId;
+    static cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
 
@@ -167,7 +157,7 @@ Sequence< sal_Int8 > SAL_CALL OConfigurationRegistry::getImplementationId(  ) th
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistry::getURL() throw(RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistry::getURL() throw(com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
     return m_sLocation;
@@ -176,14 +166,14 @@ Sequence< sal_Int8 > SAL_CALL OConfigurationRegistry::getImplementationId(  ) th
 //--------------------------------------------------------------------------
 
 // Not guarded !
-void OConfigurationRegistry::implCheckOpen() throw(InvalidRegistryException, RuntimeException)
+void OConfigurationRegistry::implCheckOpen() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     if (!implIsOpen())
-        throw InvalidRegistryException(UNISTRING("The registry is not bound to a configuration node."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The registry is not bound to a configuration node."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bool _bReadOnly, sal_Bool /*_bCreate*/ ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bool _bReadOnly, sal_Bool /*_bCreate*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
 
@@ -193,9 +183,9 @@ void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bo
     ::rtl::OUString sNodePath = getNodePathFromURL(_rURL);
 
     if (!m_xConfigurationProvider.is())
-        throw DisposedException(UNISTRING("invalid object. configuration provider is already disposed."), THISREF());
+        throw com::sun::star::lang::DisposedException(UNISTRING("invalid object. configuration provider is already disposed."), THISREF());
 
-    Reference< XInterface > xNodeAccess;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xNodeAccess;
     try
     {
         char const * const sAccessType = _bReadOnly ?
@@ -207,9 +197,8 @@ void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bo
         aArgValue.Handle = -1;
 
         // currently theres is one parameter: the node path
-        Sequence< Any > aArguments(1);
+        com::sun::star::uno::Sequence< com::sun::star::uno::Any > aArguments(1);
 
-        // Argumenbt: NodePath
         aArgValue.Name = UNISTRING("nodepath");
         aArgValue.Value <<= sNodePath;
 
@@ -218,51 +207,51 @@ void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bo
 
         xNodeAccess = m_xConfigurationProvider->createInstanceWithArguments(UNISTRING(sAccessType), aArguments);
     }
-    catch (RuntimeException&)
+    catch (com::sun::star::uno::RuntimeException&)
     {   // allowed to leave this method
         throw;
     }
-    catch (Exception& e)
+    catch (com::sun::star::uno::Exception& e)
     {   // not allowed to leave this method
         ::rtl::OUString sMessage = UNISTRING("The configuration provider does not supply a registry access for the requested Node.");
         sMessage += UNISTRING(" original error message of the provider : ");
         sMessage += e.Message;
-        throw InvalidRegistryException(sMessage, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
     }
 
-    Reference< XNameAccess > xReadRoot(xNodeAccess, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xReadRoot(xNodeAccess, com::sun::star::uno::UNO_QUERY);
     if (!_bReadOnly)
         m_xUpdateRoot = m_xUpdateRoot.query(xReadRoot);
 
     if (!xReadRoot.is() || (!_bReadOnly && !m_xUpdateRoot.is()))
-        throw InvalidRegistryException(UNISTRING("The object supplied the by configuration provider is invalid."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The object supplied the by configuration provider is invalid."), THISREF());
 
     m_xRootKey = new OConfigurationRegistryKey(xReadRoot, !_bReadOnly, OConfigurationRegistryKey::SubtreeRoot());
     m_xSubtreeRoot = xNodeAccess;
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistry::isValid(  ) throw(RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistry::isValid(  ) throw(com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
     return implIsOpen();
 }
 
 //--------------------------------------------------------------------------
-sal_Bool OConfigurationRegistry::implIsOpen(  ) throw(RuntimeException)
+sal_Bool OConfigurationRegistry::implIsOpen(  ) throw(com::sun::star::uno::RuntimeException)
 {
     return m_xRootKey.is();
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL  OConfigurationRegistry::close(  ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL  OConfigurationRegistry::close(  ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
 
-    Reference< XRegistryKey > xRootKey(m_xRootKey);
+    com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > xRootKey(m_xRootKey);
     m_xRootKey = NULL;
 
-    Reference< XComponent > xRootComponent(m_xSubtreeRoot, UNO_QUERY);
+    com::sun::star::uno::Reference< XComponent > xRootComponent(m_xSubtreeRoot, com::sun::star::uno::UNO_QUERY);
     m_xSubtreeRoot = NULL;
     m_xUpdateRoot = NULL;
 
@@ -291,16 +280,16 @@ void SAL_CALL OConfigurationRegistry::disposing()
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::destroy(  ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistry::destroy(  ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
     implCheckOpen();
 
-    throw InvalidRegistryException(UNISTRING("This registry is a wrapper for a configuration access. It can not be destroyed."), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This registry is a wrapper for a configuration access. It can not be destroyed."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-Reference< XRegistryKey > SAL_CALL OConfigurationRegistry::getRootKey(  ) throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > SAL_CALL OConfigurationRegistry::getRootKey(  ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
     implCheckOpen();
@@ -309,7 +298,7 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistry::getRootKey(  ) throw(
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistry::isReadOnly(  ) throw(InvalidRegistryException, RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistry::isReadOnly(  ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
     implCheckOpen();
@@ -319,17 +308,17 @@ sal_Bool SAL_CALL OConfigurationRegistry::isReadOnly(  ) throw(InvalidRegistryEx
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::mergeKey( const ::rtl::OUString& /*aKeyName*/, const ::rtl::OUString& /*aUrl*/ ) throw(InvalidRegistryException, MergeConflictException, RuntimeException)
+void SAL_CALL OConfigurationRegistry::mergeKey( const ::rtl::OUString& /*aKeyName*/, const ::rtl::OUString& /*aUrl*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::MergeConflictException, com::sun::star::uno::RuntimeException)
 {
     UnoApiLock aLock;
     implCheckOpen();
 
     // not supported. but we can't throw an NoSupportException here ...
-    throw InvalidRegistryException(UNISTRING("You can't merge into this registry. It's just a wrapper for a configuration node, which has a fixed structure which can not be modified"), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("You can't merge into this registry. It's just a wrapper for a configuration node, which has a fixed structure which can not be modified"), THISREF());
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
+void SAL_CALL OConfigurationRegistry::flush(  ) throw(com::sun::star::uno::RuntimeException)
 {
     {
         UnoApiLock aLock;
@@ -339,7 +328,7 @@ void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
             {
                 m_xUpdateRoot->commitChanges();
             }
-            catch (WrappedTargetException& e)
+            catch (com::sun::star::lang::WrappedTargetException& e)
             {   // not allowed to leave this method
 
                 ::rtl::OUString sMessage;
@@ -350,21 +339,21 @@ void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
                 OSL_ENSURE(sal_False, "OConfigurationRegistry::flush : caught an exception, could not flush the data !");
     //          return;
 
-                throw WrappedTargetRuntimeException(sMessage, THISREF(), e.TargetException);
+                throw com::sun::star::lang::WrappedTargetRuntimeException(sMessage, THISREF(), e.TargetException);
             }
         }
     }
 
-    Reference< XFlushListener > const * const pSelector = 0;
-    if (OInterfaceContainerHelper* pContainer = this->rBHelper.getContainer(::getCppuType(pSelector)) )
+    com::sun::star::uno::Reference< com::sun::star::util::XFlushListener > const * const pSelector = 0;
+    if (cppu::OInterfaceContainerHelper* pContainer = this->rBHelper.getContainer(::getCppuType(pSelector)) )
     {
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
-        EventObject aFlushed(THISREF());
+        com::sun::star::lang::EventObject aFlushed(THISREF());
         while (aIter.hasMoreElements())
         try
         {
-            static_cast< XFlushListener* >(aIter.next())->flushed(aFlushed);
+            static_cast< com::sun::star::util::XFlushListener* >(aIter.next())->flushed(aFlushed);
         }
         catch (uno::Exception & )
         {}
@@ -372,13 +361,13 @@ void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::addFlushListener( const Reference< XFlushListener >& _rxListener ) throw(RuntimeException)
+void SAL_CALL OConfigurationRegistry::addFlushListener( const com::sun::star::uno::Reference< com::sun::star::util::XFlushListener >& _rxListener ) throw(com::sun::star::uno::RuntimeException)
 {
     this->rBHelper.addListener(::getCppuType(&_rxListener),_rxListener);
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistry::removeFlushListener( const Reference< XFlushListener >& _rxListener ) throw(RuntimeException)
+void SAL_CALL OConfigurationRegistry::removeFlushListener( const com::sun::star::uno::Reference< com::sun::star::util::XFlushListener >& _rxListener ) throw(com::sun::star::uno::RuntimeException)
 {
     this->rBHelper.removeListener(::getCppuType(&_rxListener),_rxListener);
 }

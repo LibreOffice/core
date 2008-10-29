@@ -45,13 +45,10 @@ namespace configmgr
 //==========================================================================
 //= OConfigurationRegistryKey
 //==========================================================================
-typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::registry::XRegistryKey
-                                >   OConfigurationRegistryKey_Base;
-
 /** wraps the registry-like access to a single node of a configuration sub tree
 */
 class OConfigurationRegistryKey
-        :public OConfigurationRegistryKey_Base
+        :public cppu::WeakImplHelper1< com::sun::star::registry::XRegistryKey >
 {
     sal_Bool        m_bReadOnly;        /// is the key readonly ?
 

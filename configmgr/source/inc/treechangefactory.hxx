@@ -45,39 +45,34 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
 
     //==========================================================================
-    namespace configuration { class Name;}
-
-    //==========================================================================
 
     class OTreeChangeFactory
     {
     public:
-        typedef rtl::OUString Name;
-    public:
         //-----------------------------------------------
         std::auto_ptr<SubtreeChange> createSetNodeChange(
-                                        Name const& _aName,
-                                        Name const& _aTemplateName,
-                                        Name const& _aTemplateModule,
+                                        rtl::OUString const& _aName,
+                                        rtl::OUString const& _aTemplateName,
+                                        rtl::OUString const& _aTemplateModule,
                                         node::Attributes _aAttrs,
                                         bool _bToDefault = false);
         //-----------------------------------------------
 
     //= Set Changes ============================================================
         std::auto_ptr<AddNode>      createAddNodeChange(
-                                        data::TreeSegment const & _aNewTree,
-                                        Name const& _aName,
+            rtl::Reference< data::TreeSegment > const & _aNewTree,
+                                        rtl::OUString const& _aName,
                                         bool _bToDefault = false);
 
         //-----------------------------------------------
         std::auto_ptr<RemoveNode>   createRemoveNodeChange(
-                                        Name const& _aName,
+                                        rtl::OUString const& _aName,
                                         bool _bToDefault = false);
 
     //= special case: Dummy ISubtree ============================================================
         static std::auto_ptr<SubtreeChange> createDummyChange(
-                                                configuration::Name const& _aName,
-                                                configuration::Name const& _aElementTypeName);
+            rtl::OUString const& _aName,
+            rtl::OUString const& _aElementTypeName);
 
     //-----------------------------------------------
     };
@@ -101,10 +96,10 @@ namespace configmgr
     { return std::auto_ptr<Change>(pChange.release()); }
     //==========================================================================
 
-    bool isGenericSetElementType(OUString const& _aElementType);
-    bool isDummySetElementModule(OUString const& _aElementModule);
-    configuration::Name getGenericSetElementType();
-    configuration::Name getDummySetElementModule();
+    bool isGenericSetElementType(rtl::OUString const& _aElementType);
+    bool isDummySetElementModule(rtl::OUString const& _aElementModule);
+    rtl::OUString getGenericSetElementType();
+    rtl::OUString getDummySetElementModule();
     //==========================================================================
 
 } // namespace configmgr

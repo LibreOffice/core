@@ -61,7 +61,7 @@ namespace configmgr
         namespace sax       = ::com::sun::star::xml::sax;
 // -----------------------------------------------------------------------------
 
-LayerParser::LayerParser(Context const & _xContext, uno::Reference< backenduno::XLayerHandler > const & _xHandler)
+LayerParser::LayerParser(uno::Reference< uno::XComponentContext > const & _xContext, uno::Reference< backenduno::XLayerHandler > const & _xHandler)
 : BasicParser(_xContext)
 , m_xHandler(_xHandler)
 , m_bRemoved(false)
@@ -69,7 +69,7 @@ LayerParser::LayerParser(Context const & _xContext, uno::Reference< backenduno::
 {
     if (!m_xHandler.is())
     {
-        OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Cannot create LayerParser: Unexpected NULL Handler"));
+        rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Cannot create LayerParser: Unexpected NULL Handler"));
         throw uno::RuntimeException(sMessage, NULL);
     }
 }
@@ -111,7 +111,7 @@ void SAL_CALL LayerParser::endDocument(  ) throw (sax::SAXException, uno::Runtim
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerParser::startElement( const OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
+void SAL_CALL LayerParser::startElement( const rtl::OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
         throw (sax::SAXException, uno::RuntimeException)
 {
     if ( this->isSkipping() )
@@ -156,7 +156,7 @@ void SAL_CALL LayerParser::startElement( const OUString& aName, const uno::Refer
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerParser::endElement( const OUString& aName )
+void SAL_CALL LayerParser::endElement( const rtl::OUString& aName )
         throw (sax::SAXException, uno::RuntimeException)
 {
     if ( this->wasSkipping(aName) )
@@ -341,7 +341,7 @@ void LayerParser::endValueData()
     }
     else if (this->isValueDataLocalized())
     {
-        OUString aLocale = this->getValueDataLocale();
+        rtl::OUString aLocale = this->getValueDataLocale();
 
         m_xHandler->setPropertyValueForLocale(aValue,aLocale);
     }

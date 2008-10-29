@@ -53,7 +53,6 @@ namespace configmgr
     namespace xml
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace io    = ::com::sun::star::io;
@@ -69,11 +68,8 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > const &    CreationArg;
-            typedef uno::Reference< lang::XMultiServiceFactory >        ServiceFactory;
-
             explicit
-            WriterService(CreationArg _xContext);
+            WriterService(uno::Reference< uno::XComponentContext > const & _xContext);
 
             // XInitialization
             virtual void SAL_CALL
@@ -103,24 +99,19 @@ namespace configmgr
                     throw (uno::RuntimeException);
 
         protected:
-            typedef uno::Reference< sax::XDocumentHandler >         SaxHandler;
-
-            ServiceFactory getServiceFactory() const
+            uno::Reference< lang::XMultiServiceFactory > getServiceFactory() const
             { return m_xServiceFactory; }
 
-            SaxHandler getWriteHandler() throw (uno::RuntimeException);
+            uno::Reference< sax::XDocumentHandler > getWriteHandler() throw (uno::RuntimeException);
         private:
-            ServiceFactory      m_xServiceFactory;
-            SaxHandler          m_xWriter;
+            uno::Reference< lang::XMultiServiceFactory >      m_xServiceFactory;
+            uno::Reference< sax::XDocumentHandler >          m_xWriter;
 
-            SaxHandler createHandler() const throw (uno::RuntimeException);
+            uno::Reference< sax::XDocumentHandler > createHandler() const throw (uno::RuntimeException);
 
             static ServiceInfoHelper getServiceInfo();
         };
 
-// -----------------------------------------------------------------------------
-        typedef WriterService< ::com::sun::star::configuration::backend::XLayerHandler >
-            LayerWriterService_Base;
 // -----------------------------------------------------------------------------
     } // namespace xml
 // -----------------------------------------------------------------------------

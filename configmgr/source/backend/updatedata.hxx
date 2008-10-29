@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include "utility.hxx"
 
 #ifndef INCLUDED_SET
@@ -57,7 +58,6 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno = ::com::sun::star::uno;
         namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
@@ -70,24 +70,22 @@ namespace configmgr
         class PropertyAdd;
         class PropertyReset;
 
-        typedef rtl::Reference<ElementUpdate>   ElementUpdateRef;
-
 // -----------------------------------------------------------------------------
 
-        class NamedUpdate : public configmgr::SimpleReferenceObject
+        class NamedUpdate : public salhelper::SimpleReferenceObject
         {
-            OUString const  m_aName;
+            rtl::OUString const  m_aName;
 
         protected:
             explicit
-            NamedUpdate(OUString const & _aName)
+            NamedUpdate(rtl::OUString const & _aName)
             : m_aName(_aName)
             {}
 
             ~NamedUpdate() {};
 
         public:
-            OUString const & getName() const { return m_aName; }
+            rtl::OUString const & getName() const { return m_aName; }
         };
 // -----------------------------------------------------------------------------
         class ElementUpdate : public NamedUpdate
@@ -96,7 +94,7 @@ namespace configmgr
             sal_Int16       m_nFlags;
             sal_Int16       m_nFlagsMask;
         protected:
-            ElementUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask);
+            ElementUpdate(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask);
 
         public:
             virtual NodeUpdate      * asNodeUpdate(bool _bMerged = false);
@@ -115,31 +113,30 @@ namespace configmgr
 
         class NodeUpdate : public ElementUpdate
         {
-            typedef std::map< OUString, ElementUpdateRef > ElementList;
+            typedef std::map< rtl::OUString, rtl::Reference<ElementUpdate> > ElementList;
         public:
             enum Op { modify, reset, replace };
 
         protected:
-            NodeUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, Op _op);
+            NodeUpdate(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, Op _op);
 
             virtual NodeUpdate * asNodeUpdate(bool _bMerged);
 
         public:
-            bool addNodeUpdate      (ElementUpdateRef const & _aNode);
-            bool addPropertyUpdate  (ElementUpdateRef const & _aProp);
-            void removeNodeByName      (OUString const & _aName);
-            void removePropertyByName  (OUString const & _aName);
+            bool addNodeUpdate      (rtl::Reference<ElementUpdate> const & _aNode);
+            bool addPropertyUpdate  (rtl::Reference<ElementUpdate> const & _aProp);
+            void removeNodeByName      (rtl::OUString const & _aName);
+            void removePropertyByName  (rtl::OUString const & _aName);
 
             Op getOperation() const { return m_op; }
 
-            ElementUpdateRef getNodeByName      (OUString const & _aName) const;
-            ElementUpdateRef getPropertyByName  (OUString const & _aName) const;
+            rtl::Reference<ElementUpdate> getNodeByName      (rtl::OUString const & _aName) const;
+            rtl::Reference<ElementUpdate> getPropertyByName  (rtl::OUString const & _aName) const;
 
-            typedef ElementList::const_iterator Iterator;
-            Iterator beginNodes()       const { return m_aNodes.begin(); }
-            Iterator endNodes()         const { return m_aNodes.end();   };
-            Iterator beginProperties()  const { return m_aProperties.begin(); };
-            Iterator endProperties()    const { return m_aProperties.end();   };
+            ElementList::const_iterator beginNodes()       const { return m_aNodes.begin(); }
+            ElementList::const_iterator endNodes()         const { return m_aNodes.end();   };
+            ElementList::const_iterator beginProperties()  const { return m_aProperties.begin(); };
+            ElementList::const_iterator endProperties()    const { return m_aProperties.end();   };
 
             bool hasChildren() const { return !m_aNodes.empty() || !m_aProperties.empty(); }
 
@@ -155,7 +152,7 @@ namespace configmgr
         class NodeModification : public NodeUpdate
         {
         public:
-            NodeModification(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset);
+            NodeModification(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset);
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         };
 // -----------------------------------------------------------------------------
@@ -163,24 +160,24 @@ namespace configmgr
         class NodeReplace : public NodeUpdate
         {
         public:
-            NodeReplace(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags);
-            NodeReplace(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, OUString const & _aTemplateName, OUString const & _aTemplateComponent);
+            NodeReplace(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags);
+            NodeReplace(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateComponent);
 
             bool hasTemplate() const;
-            OUString getTemplateName()      const { return m_aTemplateName; }
-            OUString getTemplateComponent() const { return m_aTemplateComponent; }
+            rtl::OUString getTemplateName()      const { return m_aTemplateName; }
+            rtl::OUString getTemplateComponent() const { return m_aTemplateComponent; }
 
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         private:
-            OUString m_aTemplateName;
-            OUString m_aTemplateComponent;
+            rtl::OUString m_aTemplateName;
+            rtl::OUString m_aTemplateComponent;
         };
 // -----------------------------------------------------------------------------
 
         class NodeDrop : public ElementUpdate
         {
         public:
-            NodeDrop(NodeUpdate * _pParent, OUString const & _aName);
+            NodeDrop(NodeUpdate * _pParent, rtl::OUString const & _aName);
 
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         };
@@ -188,19 +185,18 @@ namespace configmgr
 
         class PropertyUpdate : public ElementUpdate
         {
-            typedef uno::Any ValueUpdate;
-            typedef std::map< OUString, ValueUpdate > ValueList;
+            typedef std::map< rtl::OUString, uno::Any > ValueList;
 
             ValueList m_aValues;
             uno::Type m_aType;
         public:
-            PropertyUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType);
+            PropertyUpdate(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType);
 
-            bool setValueFor(OUString const & _aLocale, ValueUpdate const & _aValueUpdate);
-            bool resetValueFor(OUString const & _aLocale);
-            void removeValueFor(OUString const & _aLocale);
+            bool setValueFor(rtl::OUString const & _aLocale, uno::Any const & _aValueUpdate);
+            bool resetValueFor(rtl::OUString const & _aLocale);
+            void removeValueFor(rtl::OUString const & _aLocale);
 
-            bool setValue(ValueUpdate const & _aValueUpdate)    { return setValueFor(primarySlot(), _aValueUpdate); }
+            bool setValue(uno::Any const & _aValueUpdate)    { return setValueFor(primarySlot(), _aValueUpdate); }
             bool resetValue()                                   { return resetValueFor(primarySlot()); }
             void removeValue()                                  { removeValueFor(primarySlot()); }
 
@@ -208,28 +204,27 @@ namespace configmgr
 
             uno::Type const & getValueType()    const { return m_aType; }
 
-            bool hasValueFor(OUString const & _aLocale) const;
+            bool hasValueFor(rtl::OUString const & _aLocale) const;
             bool hasValue() const { return hasValueFor(primarySlot()); }
 
-            bool hasResetFor(OUString const & _aLocale) const;
+            bool hasResetFor(rtl::OUString const & _aLocale) const;
             bool hasReset() const { return hasResetFor(primarySlot()); }
 
-            bool hasChangeFor(OUString const & _aLocale) const;
+            bool hasChangeFor(rtl::OUString const & _aLocale) const;
             bool hasChange() const { return hasChangeFor(primarySlot()); }
 
-            ValueUpdate getValueFor(OUString const & _aLocale) const;
-            ValueUpdate getValue() const { return getValueFor(primarySlot()); }
+            uno::Any getValueFor(rtl::OUString const & _aLocale) const;
+            uno::Any getValue() const { return getValueFor(primarySlot()); }
 
-            typedef ValueList::const_iterator Iterator;
-            Iterator beginValues()  const { return m_aValues.begin(); }
-            Iterator endValues()    const { return m_aValues.end(); }
+            ValueList::const_iterator beginValues()  const { return m_aValues.begin(); }
+            ValueList::const_iterator endValues()    const { return m_aValues.end(); }
 
-            void writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, ValueUpdate const & _aValue, OUString const & _aLocale);
-            void writeValueToLayer(backenduno::XLayerHandler * _pLayer, ValueUpdate const & _aValue);
+            void writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue, rtl::OUString const & _aLocale);
+            void writeValueToLayer(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue);
             void writeValuesToLayer(backenduno::XLayerHandler * _pLayer);
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         private:
-            OUString primarySlot() const { return OUString(); }
+            rtl::OUString primarySlot() const { return rtl::OUString(); }
 
             static uno::Any const & getResetMarker();
             static inline bool isResetMarker(uno::Any const & _aValue);
@@ -243,8 +238,8 @@ namespace configmgr
             uno::Type m_aValueType;
             uno::Any  m_aValue;
         public:
-            PropertyAdd(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType);
-            PropertyAdd(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue);
+            PropertyAdd(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType);
+            PropertyAdd(NodeUpdate * _pParent, rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue);
 
             bool hasValue() const { return !! m_aValue.hasValue(); }
             uno::Any  const & getValue()        const { return m_aValue; }
@@ -257,7 +252,7 @@ namespace configmgr
         class PropertyReset : public ElementUpdate
         {
         public:
-            PropertyReset(NodeUpdate * _pParent, OUString const & _aName);
+            PropertyReset(NodeUpdate * _pParent, rtl::OUString const & _aName);
 
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         };

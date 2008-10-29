@@ -98,7 +98,7 @@ BasicCompositeLocalFileLayer::BasicCompositeLocalFileLayer(
 CompositeLocalFileLayer::CompositeLocalFileLayer(
         const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aComponent,
-        const SubLayerFiles& aSublayerDirectories)
+        const std::vector<rtl::OUString>& aSublayerDirectories)
 : BasicCompositeLocalFileLayer(xFactory,rtl::OUString())
 {
     fillSubLayerLists(aSublayerDirectories, aComponent) ;
@@ -109,7 +109,7 @@ FullCompositeLocalFileLayer::FullCompositeLocalFileLayer(
         const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aBaseDir,
         const rtl::OUString& aComponent,
-        const SubLayerFiles& aSublayerDirectories)
+        const std::vector<rtl::OUString>& aSublayerDirectories)
 : BasicCompositeLocalFileLayer(xFactory,aBaseDir + aComponent)
 , mLayerWriter( createLayerWriter() )
 {
@@ -436,7 +436,7 @@ rtl::OUString FullCompositeLocalFileLayer::getTimestamp()
 {
     rtl::OUString sStamp = BasicLocalFileLayer::getTimestamp(getFileUrl());
 #if 0 // thus far composite layers are only manipulated via the main layer
-    for (SubLayerFiles::const_iterator it = mSubLayerFiles.begin();
+    for (std::vector<rtl::OUString>::const_iterator it = mSubLayerFiles.begin();
          it != mSubLayerFiles.end();
          ++it)
     {
@@ -449,14 +449,14 @@ rtl::OUString FullCompositeLocalFileLayer::getTimestamp()
 }
 //------------------------------------------------------------------------------
 
-void BasicCompositeLocalFileLayer::fillSubLayerLists( const SubLayerFiles& aSublayerDirectories,
+void BasicCompositeLocalFileLayer::fillSubLayerLists( const std::vector<rtl::OUString>& aSublayerDirectories,
                                                 const rtl::OUString& aComponent)
 {
-    SubLayerFiles::size_type const nSublayerCount = aSublayerDirectories.size();
+    std::vector<rtl::OUString>::size_type const nSublayerCount = aSublayerDirectories.size();
     mSubLayers.realloc(nSublayerCount);
     mSubLayerFiles.resize(nSublayerCount);
 
-    for (SubLayerFiles::size_type i = 0; i < nSublayerCount; ++i)
+    for (std::vector<rtl::OUString>::size_type i = 0; i < nSublayerCount; ++i)
     {
         mSubLayers[i] = FileHelper::getFileName(aSublayerDirectories[i]);
 
@@ -474,7 +474,7 @@ void BasicCompositeLocalFileLayer::fillSubLayerLists( const SubLayerFiles& aSubl
 //------------------------------------------------------------------------------
 
 static bool findSubLayers(const rtl::OUString& aResDir,
-                          CompositeLocalFileLayer::SubLayerFiles& aSublayerDirectories)
+                          std::vector<rtl::OUString>& aSublayerDirectories)
 {
     if (aResDir.getLength() == 0) return false;
 
@@ -508,7 +508,7 @@ uno::Reference<backend::XLayer> createReadonlyLocalFileLayer(
 {
     uno::Reference<backend::XLayer> xResult;
 
-    CompositeLocalFileLayer::SubLayerFiles aSublayers;
+    std::vector<rtl::OUString> aSublayers;
     if (aBaseDir.getLength() == 0)
     {
         findSubLayers(aResDir,aSublayers);
@@ -537,7 +537,7 @@ uno::Reference<backend::XUpdatableLayer> createUpdatableLocalFileLayer(
 {
     uno::Reference<backend::XUpdatableLayer> xResult;
 
-    CompositeLocalFileLayer::SubLayerFiles aSublayers;
+    std::vector<rtl::OUString> aSublayers;
     if (findSubLayers(aResDir,aSublayers))
     {
         xResult.set( new FullCompositeLocalFileLayer(xFactory,aBaseDir,aComponent,aSublayers) );
@@ -565,12 +565,9 @@ enum
 // cppu::OPropertySetHelper
 cppu::IPropertyArrayHelper * SAL_CALL LayerPropertyHelper::newInfoHelper()
 {
-    using com::sun::star::beans::Property;
-    using namespace com::sun::star::beans::PropertyAttribute;
-
-    Property properties[] =
+    com::sun::star::beans::Property properties[] =
     {
-        Property(PROPNAME("URL"), LAYER_PROPERTY_URL, PROPTYPE(rtl::OUString), READONLY)
+        com::sun::star::beans::Property(PROPNAME("URL"), LAYER_PROPERTY_URL, PROPTYPE(rtl::OUString), com::sun::star::beans::PropertyAttribute::READONLY)
     };
 
     return new cppu::OPropertyArrayHelper(properties, sizeof(properties)/sizeof(properties[0]));

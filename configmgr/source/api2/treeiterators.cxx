@@ -46,23 +46,20 @@ namespace configmgr
 // .......................................................................
     namespace configapi
     {
-        using configuration::Name;
-        using node::Attributes;
-
         // ===================================================================
         // = CollectNodeNames
         // ===================================================================
         // -------------------------------------------------------------------
-        CollectPropertyInfo::Result CollectNodeNames::handle(configuration::Tree const& aTree, configuration::NodeRef const& aNode)
+        CollectPropertyInfo::Result CollectNodeNames::handle(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
         {
-            m_aList.push_back(aTree.getName(aNode).toString());
+            m_aList.push_back(aTree->getSimpleNodeName(aNode.getOffset()));
             return CONTINUE;
         }
 
         // -------------------------------------------------------------------
-        CollectPropertyInfo::Result CollectNodeNames::handle(configuration::Tree const& aTree, configuration::ValueRef const& aNode)
+        CollectPropertyInfo::Result CollectNodeNames::handle(rtl::Reference< configuration::Tree > const&, configuration::ValueRef const& aNode)
         {
-            m_aList.push_back(aTree.getName(aNode).toString());
+            m_aList.push_back(aNode.m_sNodeName);
             return CONTINUE;
         }
 
@@ -70,24 +67,24 @@ namespace configmgr
         // = CollectPropertyInfo
         // ===================================================================
         // -------------------------------------------------------------------
-        CollectNodeNames::Result CollectPropertyInfo::handle(configuration::Tree const& aTree, configuration::NodeRef const& aNode)
+        CollectNodeNames::Result CollectPropertyInfo::handle(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
         {
-            Name        aName       = aTree.getName(aNode);
-            Attributes  aAttributes = aTree.getAttributes(aNode);
+            rtl::OUString aName       = aTree->getSimpleNodeName(aNode.getOffset());
+            node::Attributes    aAttributes = aTree->getAttributes(aNode);
             uno::Type   aApiType    = getUnoInterfaceType();
 
-            m_aList.push_back( helperMakeProperty(aName,aAttributes,aApiType,aTree.hasNodeDefault(aNode)) );
+            m_aList.push_back( helperMakeProperty(aName,aAttributes,aApiType,aTree->hasNodeDefault(aNode)) );
             return CONTINUE;
         }
 
         // -------------------------------------------------------------------
-        CollectNodeNames::Result CollectPropertyInfo::handle(configuration::Tree const& aTree, configuration::ValueRef const& aNode)
+        CollectNodeNames::Result CollectPropertyInfo::handle(rtl::Reference< configuration::Tree > const& aTree, configuration::ValueRef const& aNode)
         {
-            Name        aName       = aTree.getName(aNode);
-            Attributes  aAttributes = aTree.getAttributes(aNode);
-            uno::Type   aApiType    = aTree.getUnoType(aNode);
+            rtl::OUString aName       = aNode.m_sNodeName;
+            node::Attributes    aAttributes = aTree->getAttributes(aNode);
+            uno::Type   aApiType    = aTree->getUnoType(aNode);
 
-            m_aList.push_back( helperMakeProperty(aName,aAttributes,aApiType,aTree.hasNodeDefault(aNode)) );
+            m_aList.push_back( helperMakeProperty(aName,aAttributes,aApiType,aTree->hasNodeDefault(aNode)) );
             return CONTINUE;
         }
 // .......................................................................

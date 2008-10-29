@@ -36,7 +36,6 @@
 #include "subtree.hxx"
 #include "change.hxx"
 #include "treechangelist.hxx"
-#include "treeprovider.hxx"
 
 //#include "treeactions.hxx"
 #include <rtl/string.hxx>
@@ -60,10 +59,6 @@
 #define INCLUDED_SET
 #endif
 #include <algorithm>
-
-using namespace std;
-using namespace rtl;
-using namespace com::sun::star::uno;
 
 namespace configmgr
 {
@@ -92,12 +87,12 @@ namespace configmgr
         }
     };
 
-    ChildList::iterator ChildListSet::find(INode *pNode) const
+    std::vector< INode* >::iterator ChildListSet::find(INode *pNode) const
     {
-        ChildList &rList = const_cast<ChildList &>(m_aChildList);
-        std::pair<ChildList::iterator, ChildList::iterator> aRange;
+        std::vector< INode* > &rList = const_cast<std::vector< INode* > &>(m_aChildList);
+        std::pair<std::vector< INode* >::iterator, std::vector< INode* >::iterator> aRange;
         ltNode aCompare;
-        aRange = equal_range(rList.begin(), rList.end(), pNode, aCompare);
+        aRange = std::equal_range(rList.begin(), rList.end(), pNode, aCompare);
         if (aRange.second - aRange.first == 0)
             return rList.end();
         else
@@ -105,7 +100,7 @@ namespace configmgr
     }
 
     // Keep the list sorted ...
-    std::pair<ChildList::iterator, bool> ChildListSet::insert(INode *pNode)
+    std::pair<std::vector< INode* >::iterator, bool> ChildListSet::insert(INode *pNode)
     {
         // Inserted records are (mostly) already in order
         if (m_aChildList.size() > 0)
@@ -114,25 +109,25 @@ namespace configmgr
                 m_aChildList.back()->getName());
             if (nCmp == 0)
             {
-                return std::pair<ChildList::iterator, bool>(m_aChildList.end(), false);
+                return std::pair<std::vector< INode* >::iterator, bool>(m_aChildList.end(), false);
             }
             else if (nCmp < 0)
             {
-                ChildList::iterator aIns;
+                std::vector< INode* >::iterator aIns;
                 ltNode aCompare;
-                aIns = lower_bound(m_aChildList.begin(), m_aChildList.end(), pNode, aCompare);
+                aIns = std::lower_bound(m_aChildList.begin(), m_aChildList.end(), pNode, aCompare);
                 if (aIns != m_aChildList.end() && pNode->getName().compareTo((*aIns)->getName()) == 0)
-                    return std::pair<ChildList::iterator, bool>(m_aChildList.end(), false);
-                return std::pair<ChildList::iterator, bool>(m_aChildList.insert(aIns, pNode), true);
+                    return std::pair<std::vector< INode* >::iterator, bool>(m_aChildList.end(), false);
+                return std::pair<std::vector< INode* >::iterator, bool>(m_aChildList.insert(aIns, pNode), true);
             }
         }
         // simple append - the common case.
-        return std::pair<ChildList::iterator, bool>(m_aChildList.insert(m_aChildList.end(), pNode), true);
+        return std::pair<std::vector< INode* >::iterator, bool>(m_aChildList.insert(m_aChildList.end(), pNode), true);
     }
 
     INode *ChildListSet::erase(INode *pNode)
     {
-        ChildList::iterator aIter = find(pNode);
+        std::vector< INode* >::iterator aIter = find(pNode);
 
         if (aIter != m_aChildList.end())
         {
@@ -146,7 +141,7 @@ namespace configmgr
 
 // ---------------------------- Node implementation ----------------------------
 
-    INode::INode(OUString const& aName, node::Attributes _aAttr)
+    INode::INode(rtl::OUString const& aName, node::Attributes _aAttr)
           :m_aName(aName)
           ,m_aAttributes(_aAttr){}
     // CopyCTor will be create automatically
@@ -190,7 +185,7 @@ namespace configmgr
     }
 
 // ------------------------- SearchNode implementation -------------------------
-    SearchNode::SearchNode(OUString const& aName)
+    SearchNode::SearchNode(rtl::OUString const& aName)
         :INode(aName, node::Attributes()){}
 
     std::auto_ptr<INode> SearchNode::clone() const {return std::auto_ptr<INode>(new SearchNode(*this));}
@@ -205,8 +200,7 @@ namespace configmgr
     struct OPropagateLevels : public NodeModification
     {
     public:
-        typedef sal_Int16 Level;
-        OPropagateLevels(Level _nParentLevel, Level _nParentDefaultLevel)
+        OPropagateLevels(sal_Int16 _nParentLevel, sal_Int16 _nParentDefaultLevel)
         : m_nLevel          ( childLevel(_nParentLevel) )
         , m_nDefaultLevel   ( childLevel(_nParentDefaultLevel) )
         {
@@ -217,14 +211,14 @@ namespace configmgr
             _rSubtree.setLevels(m_nLevel, m_nDefaultLevel);
         }
 
-        static Level childLevel(Level _nLevel)
+        static sal_Int16 childLevel(sal_Int16 _nLevel)
         {
             OSL_ASSERT(0 > treeop::ALL_LEVELS);
             return (_nLevel > 0) ? _nLevel-1 : _nLevel;
         }
     protected:
-        Level   m_nLevel;
-        Level   m_nDefaultLevel;
+        sal_Int16   m_nLevel;
+        sal_Int16   m_nDefaultLevel;
     };
 
 
@@ -268,25 +262,25 @@ namespace configmgr
         return std::auto_ptr<INode>(new Subtree(*this, treeop::DeepChildCopy()));
     }
 
-    INode* Subtree::doGetChild(OUString const& aName) const
+    INode* Subtree::doGetChild(rtl::OUString const& aName) const
     {
         SearchNode searchObj(aName);
 
-        ChildList::iterator aIter = m_aChildren.find(&searchObj);
+        std::vector< INode* >::iterator aIter = m_aChildren.find(&searchObj);
         return aIter != m_aChildren.end() ? *aIter : NULL;
     }
 
     INode* Subtree::addChild(std::auto_ptr<INode> aNode)    // takes ownership
     {
-        OUString aName = aNode->getName();
-        std::pair<ChildList::iterator, bool> aInserted =
+        rtl::OUString aName = aNode->getName();
+        std::pair<std::vector< INode* >::iterator, bool> aInserted =
             m_aChildren.insert(aNode.get());
         if (aInserted.second)
             aNode.release();
         return *aInserted.first;
     }
 
-    ::std::auto_ptr<INode> Subtree::removeChild(OUString const& aName)
+    ::std::auto_ptr<INode> Subtree::removeChild(rtl::OUString const& aName)
     {
         SearchNode searchObj(aName);
         return ::std::auto_ptr<INode>(m_aChildren.erase(&searchObj));
@@ -295,7 +289,7 @@ namespace configmgr
 
     void Subtree::forEachChild(NodeAction& anAction) const
     {
-        for(ChildList::const_iterator it = m_aChildren.begin();
+        for(std::vector< INode* >::const_iterator it = m_aChildren.begin();
             it != m_aChildren.end();
             ++it)
             (**it).dispatch(anAction);
@@ -303,7 +297,7 @@ namespace configmgr
 
     void Subtree::forEachChild(NodeModification& anAction)
     {
-        ChildList::iterator it = m_aChildren.begin();
+        std::vector< INode* >::iterator it = m_aChildren.begin();
         while( it != m_aChildren.end() )
         {
             // modification-safe iteration
@@ -328,14 +322,14 @@ namespace configmgr
 
         return true;
     }
-    bool ValueNode::setValue(Any const& _aValue)
+    bool ValueNode::setValue(com::sun::star::uno::Any const& _aValue)
     {
         sal_Bool bRet = m_aValuePair.setFirst(_aValue);
         if (bRet) this->markAsDefault(false);
         return !! bRet;
     }
 
-    bool ValueNode::changeDefault(Any const& _aValue)
+    bool ValueNode::changeDefault(com::sun::star::uno::Any const& _aValue)
     {
         return !! m_aValuePair.setSecond(_aValue);
     }

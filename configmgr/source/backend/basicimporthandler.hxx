@@ -43,53 +43,48 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno        = ::com::sun::star::uno;
         namespace lang       = ::com::sun::star::lang;
         namespace backenduno = ::com::sun::star::configuration::backend;
-        using backenduno::MalformedDataException;
-        using backenduno::TemplateIdentifier;
 // -----------------------------------------------------------------------------
 
         class BasicImportHandler : public cppu::WeakImplHelper1< backenduno::XLayerHandler >
         {
         public:
-            typedef uno::Reference< backenduno::XBackend >          Backend;
-
             explicit
             BasicImportHandler(){}
 
-            BasicImportHandler(Backend const & xBackend,OUString const & aEntity = OUString(), const sal_Bool& bNofity= sal_False);
+            BasicImportHandler(uno::Reference< backenduno::XBackend > const & xBackend,rtl::OUString const & aEntity = rtl::OUString(), const sal_Bool& bNofity= sal_False);
             ~BasicImportHandler();
 
         // XLayerHandler subset - call these implementations from your derived class implementations
         protected:
             virtual void SAL_CALL
                 startLayer(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endLayer(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         protected:
             bool hasComponent() const { return m_aComponentName.getLength() != 0; }
             bool hasEntity()    const { return m_aEntity.getLength() != 0; }
 
-            OUString getComponent() const { return m_aComponentName; }
-            OUString getEntity()    const { return m_aEntity; }
-            Backend  getBackend()   const { return m_xBackend; }
+            rtl::OUString getComponent() const { return m_aComponentName; }
+            rtl::OUString getEntity()    const { return m_aEntity; }
+            uno::Reference< backenduno::XBackend >  getBackend()   const { return m_xBackend; }
 
-            bool startComponent( const OUString& aName );
+            bool startComponent( const rtl::OUString& aName );
 
             void raiseMalformedDataException(sal_Char const * pMsg);
             /** If True, notification should be send to backend
             */
             sal_Bool        m_bSendNotification;
         private:
-            Backend const   m_xBackend;
-            OUString        m_aComponentName;
-            OUString const  m_aEntity;
+            uno::Reference< backenduno::XBackend > const   m_xBackend;
+            rtl::OUString        m_aComponentName;
+            rtl::OUString const  m_aEntity;
 
         };
 // -----------------------------------------------------------------------------

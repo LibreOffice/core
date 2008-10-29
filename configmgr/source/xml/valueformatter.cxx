@@ -47,7 +47,6 @@
 namespace configmgr
 {
     namespace uno = com::sun::star::uno;
-    using ::rtl::OUString;
 
     namespace xml
     {
@@ -71,7 +70,7 @@ bool isWhitespaceCharacter( sal_Unicode ch )
 
 static
 inline
-bool isWhitespaceString(OUString const & aStr)
+bool isWhitespaceString(rtl::OUString const & aStr)
 {
     sal_Unicode const * const pBegin = aStr.getStr();
     sal_Unicode const * const pEnd   = pBegin + aStr.getLength();
@@ -87,13 +86,13 @@ bool isWhitespaceString(OUString const & aStr)
 // -----------------------------------------------------------------------------
 
 static
-bool hasWhitespaceString( uno::Sequence< OUString > const & aSeq)
+bool hasWhitespaceString( uno::Sequence< rtl::OUString > const & aSeq)
 {
     // BACK: true, if whitespace Separator is ok, (no whitespace in Strings, no empty strings)
-    OUString const * const pBegin = aSeq.getConstArray();
-    OUString const * const pEnd   = pBegin + aSeq.getLength();
+    rtl::OUString const * const pBegin = aSeq.getConstArray();
+    rtl::OUString const * const pEnd   = pBegin + aSeq.getLength();
 
-    OUString const * const pSpace = std::find_if(pBegin,pEnd,isWhitespaceString);
+    rtl::OUString const * const pSpace = std::find_if(pBegin,pEnd,isWhitespaceString);
 
     return pSpace != pEnd;
 }
@@ -101,24 +100,24 @@ bool hasWhitespaceString( uno::Sequence< OUString > const & aSeq)
 
 struct HasSubString
 {
-    HasSubString(OUString const & _aSubStr)
+    HasSubString(rtl::OUString const & _aSubStr)
     : m_aSubStr(_aSubStr)
     {}
 
-    bool operator()(OUString const & _aStr)
+    bool operator()(rtl::OUString const & _aStr)
     { return _aStr.indexOf(m_aSubStr) >= 0; }
 
-    OUString const m_aSubStr;
+    rtl::OUString const m_aSubStr;
 };
 // -----------------------------------------------------------------------------
 
 static
-bool hasStringWithSubstring(const uno::Sequence< OUString > &aSeq, OUString const & _aSubStr)
+bool hasStringWithSubstring(const uno::Sequence< rtl::OUString > &aSeq, rtl::OUString const & _aSubStr)
 {
-    OUString const * const pBegin = aSeq.getConstArray();
-    OUString const * const pEnd   = pBegin + aSeq.getLength();
+    rtl::OUString const * const pBegin = aSeq.getConstArray();
+    rtl::OUString const * const pEnd   = pBegin + aSeq.getLength();
 
-    OUString const * const pSpace = std::find_if(pBegin,pEnd,HasSubString(_aSubStr));
+    rtl::OUString const * const pSpace = std::find_if(pBegin,pEnd,HasSubString(_aSubStr));
 
     return pSpace != pEnd;
 }
@@ -149,14 +148,14 @@ bool hasEmptySequence(uno::Sequence< uno::Sequence<Element_> > const & aSeqSeq)
 // -----------------------------------------------------------------------------
 
 inline
-bool canUseSeparator(uno::Sequence< OUString > const & aSeq, OUString const & aSeparator)
+bool canUseSeparator(uno::Sequence< rtl::OUString > const & aSeq, rtl::OUString const & aSeparator)
 {
     return ! hasStringWithSubstring(aSeq,aSeparator);
 }
 // -----------------------------------------------------------------------------
 
 inline
-bool canUseWhitespaceSeparator(uno::Sequence< OUString > const & aSeq)
+bool canUseWhitespaceSeparator(uno::Sequence< rtl::OUString > const & aSeq)
 {
     return ! hasWhitespaceString(aSeq);
 }
@@ -172,14 +171,14 @@ bool canUseWhitespaceSeparator(const uno::Sequence< uno::Sequence<Element_> > &a
 
 class Separator
 {
-    OUString m_sValue;
+    rtl::OUString m_sValue;
 public:
     // -----------------------------------------------------------------------------
     Separator() : m_sValue() {}
     // -----------------------------------------------------------------------------
     bool isDefault() const { return m_sValue.getLength() == 0; }
     // -----------------------------------------------------------------------------
-    OUString value() const { return isDefault() ? static_cast<OUString>(SEPARATOR_WHITESPACE) : m_sValue; }
+    rtl::OUString value() const { return isDefault() ? static_cast<rtl::OUString>(SEPARATOR_WHITESPACE) : m_sValue; }
     // -----------------------------------------------------------------------------
 
     bool check(const uno::Sequence<rtl::OUString> &aSeq) const
@@ -205,7 +204,7 @@ public:
     // -----------------------------------------------------------------------------
 };
 // -----------------------------------------------------------------------------
-#define ASCII( STRING_LIT_ ) ( OUString( RTL_CONSTASCII_USTRINGPARAM( STRING_LIT_ ) ) )
+#define ASCII( STRING_LIT_ ) ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STRING_LIT_ ) ) )
 // -----------------------------------------------------------------------------
 static
 Separator createSeparator(const uno::Any& aAny)
@@ -219,7 +218,7 @@ Separator createSeparator(const uno::Any& aAny)
         if (aElementType.getTypeClass() == uno::TypeClass_STRING)
         {
             // only in strings we need to search a separator
-            uno::Sequence<OUString> aSeq;
+            uno::Sequence<rtl::OUString> aSeq;
 
             OSL_VERIFY (aAny >>= aSeq);
 
@@ -284,7 +283,7 @@ void appendHex(rtl::OUStringBuffer& rBuff, sal_uInt8 _nByte)
 
 // -----------------------------------------------------------------------------
 static
-OUString binaryToHex(const uno::Sequence<sal_Int8>& _aBinarySeq)
+rtl::OUString binaryToHex(const uno::Sequence<sal_Int8>& _aBinarySeq)
 {
     sal_Int32 const nLength = _aBinarySeq.getLength();
 
@@ -299,11 +298,9 @@ OUString binaryToHex(const uno::Sequence<sal_Int8>& _aBinarySeq)
     return sHex.makeStringAndClear();;
 }
 // -----------------------------------------------------------------------------
-typedef ValueFormatter::TypeConverter TypeConverter;
-// -----------------------------------------------------------------------------
-OUString formatSimpleValue(uno::Any const & _aValue, TypeConverter const & _xTCV)
+rtl::OUString formatSimpleValue(uno::Any const & _aValue, uno::Reference< script::XTypeConverter > const & _xTCV)
 {
-    OUString sResult;
+    rtl::OUString sResult;
 
     if (_aValue.hasValue())
     {
@@ -328,7 +325,7 @@ OUString formatSimpleValue(uno::Any const & _aValue, TypeConverter const & _xTCV
 
 // -----------------------------------------------------------------------------
 template <class Element_>
-OUString formatSequence(uno::Sequence< Element_ > const& aSequence, OUString const& sSeparator, TypeConverter const & _xTCV)
+rtl::OUString formatSequence(uno::Sequence< Element_ > const& aSequence, rtl::OUString const& sSeparator, uno::Reference< script::XTypeConverter > const & _xTCV)
 {
     rtl::OUStringBuffer aResult;
 
@@ -349,13 +346,13 @@ OUString formatSequence(uno::Sequence< Element_ > const& aSequence, OUString con
 }
 // -----------------------------------------------------------------------------
 // template <> // optimized overload for String
-OUString formatSequence(uno::Sequence< OUString > const& aSequence, OUString const& sSeparator, TypeConverter const & )
+rtl::OUString formatSequence(uno::Sequence< rtl::OUString > const& aSequence, rtl::OUString const& sSeparator, uno::Reference< script::XTypeConverter > const & )
 {
     rtl::OUStringBuffer aResult;
 
     if (sal_Int32 const nLength = aSequence.getLength())
     {
-        OUString const * pSeq = aSequence.getConstArray();
+        rtl::OUString const * pSeq = aSequence.getConstArray();
 
         aResult = pSeq[0];
 
@@ -380,9 +377,9 @@ OUString formatSequence(uno::Sequence< OUString > const& aSequence, OUString con
         aResult = formatSequence(aData,sSeparator,xTCV);                        \
     }   break                                                                   \
 
-OUString formatSequenceValue(uno::Any const& _aValue, OUString const& sSeparator, TypeConverter const & xTCV)
+rtl::OUString formatSequenceValue(uno::Any const& _aValue, rtl::OUString const& sSeparator, uno::Reference< script::XTypeConverter > const & xTCV)
 {
-    OUString aResult;
+    rtl::OUString aResult;
 
     uno::Type aElementType = getSequenceElementType( _aValue.getValueType() );
 
@@ -398,7 +395,7 @@ OUString formatSequenceValue(uno::Any const& _aValue, OUString const& sSeparator
 
     CASE_WRITE_SEQUENCE( uno::TypeClass_DOUBLE, double );
 
-    CASE_WRITE_SEQUENCE( uno::TypeClass_STRING, OUString );
+    CASE_WRITE_SEQUENCE( uno::TypeClass_STRING, rtl::OUString );
 
     CASE_WRITE_SEQUENCE( uno::TypeClass_SEQUENCE, uno::Sequence<sal_Int8> );
 
@@ -439,7 +436,7 @@ void ValueFormatter::makeSeparator()
     }
     else
     {
-        m_sSeparator = OUString();
+        m_sSeparator = rtl::OUString();
         m_bUseSeparator = false;
 
         OSL_POSTCOND( !this->isList(), "ValueFormatter: Could not mark as non-list");
@@ -447,9 +444,9 @@ void ValueFormatter::makeSeparator()
 }
 // -----------------------------------------------------------------------------
 
-OUString ValueFormatter::getContent(TypeConverter const & _xTCV) const
+rtl::OUString ValueFormatter::getContent(uno::Reference< script::XTypeConverter > const & _xTCV) const
 {
-    OUString aResult;
+    rtl::OUString aResult;
     try
     {
         if (this->isList())
@@ -463,7 +460,7 @@ OUString ValueFormatter::getContent(TypeConverter const & _xTCV) const
     }
     catch (script::CannotConvertException& cce)
     {
-        OUString const sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration: Could not convert value to XML representation: "));
+        rtl::OUString const sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration: Could not convert value to XML representation: "));
         throw uno::RuntimeException(sMessage + cce.Message, cce.Context);
     }
 

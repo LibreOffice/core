@@ -41,19 +41,17 @@
 namespace configmgr
 {
     // List sorted by name for binary search
-    typedef std::vector< INode* > ChildList;
-
     class ChildListSet {
-        ChildList m_aChildList;
+        std::vector< INode* > m_aChildList;
 
         ChildListSet(ChildListSet const&);
         ChildListSet& operator=(ChildListSet const& aSet);
     public:
-        ChildList::iterator begin() const { return const_cast<ChildList*>(&m_aChildList)->begin(); }
-        ChildList::iterator end()   const { return const_cast<ChildList*>(&m_aChildList)->end(); }
+        std::vector< INode* >::iterator begin() const { return const_cast<std::vector< INode* >*>(&m_aChildList)->begin(); }
+        std::vector< INode* >::iterator end()   const { return const_cast<std::vector< INode* >*>(&m_aChildList)->end(); }
         INode *erase(INode *pNode);
-        ChildList::iterator find(INode *pNode) const;
-        std::pair<ChildList::iterator, bool> insert(INode *aInsert);
+        std::vector< INode* >::iterator find(INode *pNode) const;
+        std::pair<std::vector< INode* >::iterator, bool> insert(INode *aInsert);
 
         ChildListSet() : m_aChildList(0) {}
         ChildListSet(ChildListSet const&, treeop::DeepChildCopy);
@@ -64,21 +62,19 @@ namespace configmgr
     class Subtree : public ISubtree
     {
         ChildListSet   m_aChildren;
-        virtual INode* doGetChild(OUString const& name) const;
+        virtual INode* doGetChild(rtl::OUString const& name) const;
 
     public:
-        typedef treeop::NoChildCopy NoChildCopy;
-
         Subtree(){}
-        Subtree(const OUString& _rName,
+        Subtree(const rtl::OUString& _rName,
                 const node::Attributes& _rAttrs)
                 :ISubtree(_rName, _rAttrs){};
 
-        Subtree(const ISubtree& _rOther, NoChildCopy)
+        Subtree(const ISubtree& _rOther, treeop::NoChildCopy)
             : ISubtree(_rOther), m_aChildren(){};
 
-        Subtree(const OUString& _rName,
-                const OUString& _rTemplateName, const OUString& _rTemplateModule,
+        Subtree(const rtl::OUString& _rName,
+                const rtl::OUString& _rTemplateName, const rtl::OUString& _rTemplateModule,
                 const node::Attributes& _rAttrs)
                 :ISubtree(_rName, _rTemplateName, _rTemplateModule, _rAttrs){};
 
@@ -86,16 +82,13 @@ namespace configmgr
             : ISubtree(_rOther), m_aChildren(_rOther.m_aChildren,_dc){}
 
         virtual INode* addChild(std::auto_ptr<INode> node); // takes ownership
-        virtual ::std::auto_ptr<INode> removeChild(OUString const& name);
+        virtual ::std::auto_ptr<INode> removeChild(rtl::OUString const& name);
 
         virtual std::auto_ptr<INode> clone() const;
 
 // Iteration support
         virtual void forEachChild(NodeAction& anAction) const;
         virtual void forEachChild(NodeModification& anAction);
-
-        // "rtti"
-        RTTI(Subtree, ISubtree);
     };
 
 
@@ -104,7 +97,7 @@ namespace configmgr
     class SearchNode : public INode
     {
     public:
-        SearchNode(OUString const& aName);
+        SearchNode(rtl::OUString const& aName);
         virtual ~SearchNode();
         virtual std::auto_ptr<INode> clone() const;
 

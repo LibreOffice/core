@@ -47,75 +47,71 @@ namespace configmgr
     namespace backend
     {
         // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
         namespace backenduno    = ::com::sun::star::configuration::backend;
-
-        using backenduno::MalformedDataException;
         // -----------------------------------------------------------------------------
 
         class LayerDefaultRemover : public cppu::WeakImplHelper1<backenduno::XLayerHandler>
         {
         public:
-            typedef uno::Reference< backenduno::XLayerHandler > ResultHandler;
             explicit
-                LayerDefaultRemover(ResultHandler const & _xResultHandler);
+                LayerDefaultRemover(uno::Reference< backenduno::XLayerHandler > const & _xResultHandler);
             virtual ~LayerDefaultRemover();
 
             // XLayerHandler
         public:
             virtual void SAL_CALL
                 startLayer(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endLayer(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endNode(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                dropNode( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                dropNode( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endProperty(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValue( const uno::Any& aValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         private:
             void playBackNodeStack( bool bPlayProperty=false);
@@ -123,12 +119,11 @@ namespace configmgr
             inline bool hasPendingProperty();
             inline void clearPendingProperty();
         private:
-            ResultHandler   m_xResultHandler;
-            typedef std::vector<OUString> NodeStack;
-            NodeStack m_aNodeStack;
+            uno::Reference< backenduno::XLayerHandler > m_xResultHandler;
+            std::vector<rtl::OUString> m_aNodeStack;
             struct PropertyStruct
             {
-                OUString Name;
+                rtl::OUString Name;
                 uno::Type Type;
             }m_aPropName;
         };

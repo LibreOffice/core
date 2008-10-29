@@ -32,6 +32,7 @@
 #include "precompiled_configmgr.hxx"
 
 #include "confsvccomponent.hxx"
+#include "datalock.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
@@ -43,20 +44,20 @@ namespace configmgr {
 
 
     ServiceComponentImpl::ServiceComponentImpl(ServiceImplementationInfo const* aInfo)
-        : ServiceImplBase(UnoApiLock::getLock())
+        : ::cppu::WeakComponentImplHelper1< lang::XServiceInfo >(UnoApiLock::getLock())
         , m_info(aInfo)
     {
     }
 
     void ServiceComponentImpl::disposing()
     {
-        ServiceImplBase::disposing();
+        ::cppu::WeakComponentImplHelper1< lang::XServiceInfo >::disposing();
     }
     void ServiceComponentImpl::checkAlive() throw (uno::RuntimeException)
     {
         checkAlive("Object was disposed");
     }
-    void ServiceComponentImpl::checkAlive(OUString const& sMessage) throw (uno::RuntimeException)
+    void ServiceComponentImpl::checkAlive(rtl::OUString const& sMessage) throw (uno::RuntimeException)
     {
         if (rBHelper.bDisposed)
             throw lang::DisposedException(sMessage, *this);
@@ -80,7 +81,7 @@ namespace configmgr {
     }
 
     // XServiceInfo
-    OUString SAL_CALL ServiceComponentImpl::getImplementationName(  ) throw(uno::RuntimeException)
+    rtl::OUString SAL_CALL ServiceComponentImpl::getImplementationName(  ) throw(uno::RuntimeException)
     {
         return ServiceInfoHelper(m_info).getImplementationName();
     }
@@ -90,7 +91,7 @@ namespace configmgr {
         return ServiceInfoHelper(m_info).supportsService( ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL ServiceComponentImpl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+    uno::Sequence< rtl::OUString > SAL_CALL ServiceComponentImpl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
     {
         return ServiceInfoHelper(m_info).getSupportedServiceNames( );
     }

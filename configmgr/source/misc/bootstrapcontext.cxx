@@ -32,6 +32,7 @@
 #include "precompiled_configmgr.hxx"
 
 #include "bootstrapcontext.hxx"
+#include "datalock.hxx"
 #include <uno/current_context.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -50,19 +51,19 @@ namespace configmgr
 #define A_SERVICEMANAGER "com.sun.star.lang.theServiceManager"
 // ---------------------------------------------------------------------------
 
-#define OUSTR( text )     OUString( RTL_CONSTASCII_USTRINGPARAM( text ) )
+#define OUSTR( text )     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( text ) )
 #define OU2ASCII( str ) ( rtl::OUStringToOString(str,RTL_TEXTENCODING_ASCII_US) .getStr() )
 // ---------------------------------------------------------------------------
 #if 0
 static void testComplete()
 {
-    uno::Reference< uno::XInterface > test = * new ComponentContext(ComponentContext::Context(),ComponentContext::Overrides(),true);
+    uno::Reference< uno::XInterface > test = * new ComponentContext(uno::Reference< uno::XComponentContext >,uno::Sequence < beans::NamedValue >(),true);
 }
 #endif
 // ---------------------------------------------------------------------------
 
-ComponentContext::ComponentContext(Context const & _xContext)
-: ComponentContext_Base(UnoApiLock::getLock())
+ComponentContext::ComponentContext(uno::Reference< uno::XComponentContext > const & _xContext)
+: cppu::WeakComponentImplHelper3 < uno::XComponentContext, uno::XCurrentContext, lang::XServiceInfo >(UnoApiLock::getLock())
 , m_xContext(_xContext)
 , m_hBootstrapData(NULL)
 , m_xServiceManager()
@@ -76,7 +77,7 @@ ComponentContext::~ComponentContext()
 }
 // ---------------------------------------------------------------------------
 
-void ComponentContext::initialize( const OUString& _aURL )
+void ComponentContext::initialize( const rtl::OUString& _aURL )
 {
     UnoApiLock aLock;
 
@@ -110,9 +111,9 @@ void SAL_CALL ComponentContext::disposing()
 }
 // ---------------------------------------------------------------------------
 
-OUString ComponentContext::getBootstrapURL() const
+rtl::OUString ComponentContext::getBootstrapURL() const
 {
-    OUString aResult;
+    rtl::OUString aResult;
 
     UnoApiLock aLock;
 
@@ -137,11 +138,11 @@ uno::Reference< lang::XMultiComponentFactory > SAL_CALL
 
     if (!m_xServiceManager.is())
     {
-        Context xBase = basecontext();
+        uno::Reference< uno::XComponentContext > xBase = basecontext();
         if (!xBase.is())
             throw lang::DisposedException(OUSTR("Parent context has been disposed"),*this);
 
-        ServiceManager xBaseServiceManager = xBase->getServiceManager();
+        uno::Reference< lang::XMultiComponentFactory > xBaseServiceManager = xBase->getServiceManager();
         OSL_ENSURE( xBaseServiceManager.is(), "Base context has no service manager");
 
         if (xBaseServiceManager.is())
@@ -169,7 +170,7 @@ uno::Reference< lang::XMultiComponentFactory > SAL_CALL
 
 // ---------------------------------------------------------------------------
 
-sal_Bool ComponentContext::isPassthrough(Context const & _xContext)
+sal_Bool ComponentContext::isPassthrough(uno::Reference< uno::XComponentContext > const & _xContext)
 {
     OSL_ENSURE(_xContext.is(),"Unexpected NULL context");
     if (!_xContext.is()) return false;
@@ -186,9 +187,9 @@ beans::NamedValue ComponentContext::makePassthroughMarker(sal_Bool bPassthrough)
 }
 // ---------------------------------------------------------------------------
 
-bool ComponentContext::lookupInContext( uno::Any & _rValue, const OUString& _aName ) const
+bool ComponentContext::lookupInContext( uno::Any & _rValue, const rtl::OUString& _aName ) const
 {
-    Context xBase = basecontext();
+    uno::Reference< uno::XComponentContext > xBase = basecontext();
     if (!xBase.is())
         throw lang::DisposedException(OUSTR("Parent context has been disposed"),const_cast<ComponentContext&>(*this));
 
@@ -210,10 +211,10 @@ bool ComponentContext::lookupInContext( uno::Any & _rValue, const OUString& _aNa
 }
 // ---------------------------------------------------------------------------
 
-bool ComponentContext::lookupInBootstrap( uno::Any & _rValue, const OUString& _aName ) const
+bool ComponentContext::lookupInBootstrap( uno::Any & _rValue, const rtl::OUString& _aName ) const
 {
     UnoApiLock aLock;
-    OUString sResult;
+    rtl::OUString sResult;
     if ( rtl_bootstrap_get_from_handle( m_hBootstrapData, _aName.pData, &sResult.pData, 0) )
     {
         _rValue <<= sResult;
@@ -230,27 +231,27 @@ static const char k_TunneledContext[] = "/services/com.sun.star.configuration.bo
 class UnoContextTunnel::Tunnel
 : public ::cppu::WeakImplHelper2< uno::XCurrentContext, lang::XUnoTunnel >
 {
-    Context         m_xTunneledContext;
-    CurrentContext  m_xOldContext;
+    uno::Reference< uno::XComponentContext >         m_xTunneledContext;
+    uno::Reference< uno::XCurrentContext >  m_xOldContext;
     uno::Any        m_aFailure;
 public:
-    Tunnel(Context const & xTunneledContext, CurrentContext const & xOldContext)
+    Tunnel(uno::Reference< uno::XComponentContext > const & xTunneledContext, uno::Reference< uno::XCurrentContext > const & xOldContext)
     : m_xTunneledContext(xTunneledContext)
     , m_xOldContext(xOldContext)
     , m_aFailure()
     {}
 
     virtual uno::Any SAL_CALL
-        getValueByName( const OUString& Name )
+        getValueByName( const rtl::OUString& name )
             throw (uno::RuntimeException)
     {
-        if (Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(k_TunneledContext) ) )
+        if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(k_TunneledContext) ) )
         {
             return uno::makeAny(m_xTunneledContext);
         }
         else if (m_xOldContext.is())
         {
-            return m_xOldContext->getValueByName(Name);
+            return m_xOldContext->getValueByName(name);
         }
         else
         {
@@ -268,7 +269,7 @@ public:
             return 0;
     }
 
-    static uno::Any * getFailure(FailureTunnel const & xTunnel);
+    static uno::Any * getFailure(uno::Reference< lang::XUnoTunnel > const & xTunnel);
 
     static uno::Sequence< sal_Int8 > getTunnelId();
 };
@@ -281,7 +282,7 @@ uno::Sequence< sal_Int8 > UnoContextTunnel::Tunnel::getTunnelId()
 }
 // ---------------------------------------------------------------------------
 
-uno::Any * UnoContextTunnel::Tunnel::getFailure(FailureTunnel const & xTunnel)
+uno::Any * UnoContextTunnel::Tunnel::getFailure(uno::Reference< lang::XUnoTunnel > const & xTunnel)
 {
     if (xTunnel.is())
     {
@@ -307,7 +308,7 @@ UnoContextTunnel::~UnoContextTunnel()
 }
 // ---------------------------------------------------------------------------
 
-void UnoContextTunnel::passthru(Context const & xContext)
+void UnoContextTunnel::passthru(uno::Reference< uno::XComponentContext > const & xContext)
 {
     OSL_ASSERT( xContext.is() );
     if ( ComponentContext::isPassthrough(xContext) )
@@ -321,7 +322,7 @@ void UnoContextTunnel::passthru(Context const & xContext)
 }
 // ---------------------------------------------------------------------------
 
-void UnoContextTunnel::tunnel(Context const & xContext)
+void UnoContextTunnel::tunnel(uno::Reference< uno::XComponentContext > const & xContext)
 {
     Tunnel * pNewTunnel = new Tunnel(xContext,m_xOldContext);
     m_xActiveTunnel = pNewTunnel;
@@ -329,16 +330,16 @@ void UnoContextTunnel::tunnel(Context const & xContext)
 }
 // ---------------------------------------------------------------------------
 
-UnoContextTunnel::Context UnoContextTunnel::recoverContext(Context const & xFallback )
+uno::Reference< uno::XComponentContext > UnoContextTunnel::recoverContext(uno::Reference< uno::XComponentContext > const & xFallback )
 {
     try
     {
-        CurrentContext const xCurrContext = uno::getCurrentContext();
+        uno::Reference< uno::XCurrentContext > const xCurrContext = uno::getCurrentContext();
 
         if (xCurrContext.is())
         {
-            OUString aName(RTL_CONSTASCII_USTRINGPARAM(k_TunneledContext));
-            Context xResult;
+            rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(k_TunneledContext));
+            uno::Reference< uno::XComponentContext > xResult;
             if (xCurrContext->getValueByName(aName) >>= xResult)
             {
                 if (xResult.is())
@@ -383,7 +384,7 @@ bool UnoContextTunnel::tunnelFailure(uno::Any const & aException, bool bRaise)
 {
     OSL_ASSERT( !aException.hasValue() || aException.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
-    FailureTunnel xTunnel( uno::getCurrentContext(), uno::UNO_QUERY );
+    uno::Reference< lang::XUnoTunnel > xTunnel( uno::getCurrentContext(), uno::UNO_QUERY );
 
     if (uno::Any * pFail = Tunnel::getFailure(xTunnel))
     {

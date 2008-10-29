@@ -75,29 +75,29 @@ namespace configmgr
         { return BasicSetAccess::hasElements(); }
 
         // XNameAccess forwarding
-        virtual uno::Any SAL_CALL getByName( const OUString& aName )
+        virtual uno::Any SAL_CALL getByName( const rtl::OUString& aName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
          { return BasicSetAccess::getByName(aName); }
 
-        virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException)
+        virtual uno::Sequence< rtl::OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException)
          { return BasicSetAccess::getElementNames(); }
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException)
+        virtual sal_Bool SAL_CALL hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
          { return BasicSetAccess::hasByName(aName); }
 
     // New Interface methods
         // XNameReplace
         virtual void SAL_CALL
-            replaceByName( const OUString& rName, const uno::Any& rElement )
+            replaceByName( const rtl::OUString& rName, const uno::Any& rElement )
                 throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XNameContainer
         virtual void SAL_CALL
-            insertByName( const OUString& rName, const uno::Any& rElement)
+            insertByName( const rtl::OUString& rName, const uno::Any& rElement)
                 throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         virtual void SAL_CALL
-            removeByName( const OUString& rName )
+            removeByName( const rtl::OUString& rName )
                 throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XPropertyWithState
@@ -159,29 +159,29 @@ namespace configmgr
         { return BasicSetAccess::hasElements(); }
 
         // XNameAccess forwarding
-        virtual uno::Any SAL_CALL getByName( const OUString& aName )
+        virtual uno::Any SAL_CALL getByName( const rtl::OUString& aName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
          { return BasicSetAccess::getByName(aName); }
 
-        virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException)
+        virtual uno::Sequence< rtl::OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException)
          { return BasicSetAccess::getElementNames(); }
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException)
+        virtual sal_Bool SAL_CALL hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
          { return BasicSetAccess::hasByName(aName); }
 
     // New Interface methods
         // XNameReplace
         virtual void SAL_CALL
-            replaceByName( const OUString& rName, const uno::Any& rElement )
+            replaceByName( const rtl::OUString& rName, const uno::Any& rElement )
                 throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XNameContainer
         virtual void SAL_CALL
-            insertByName( const OUString& rName, const uno::Any& rElement)
+            insertByName( const rtl::OUString& rName, const uno::Any& rElement)
                 throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         virtual void SAL_CALL
-            removeByName( const OUString& rName )
+            removeByName( const rtl::OUString& rName )
                 throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XPropertyWithState

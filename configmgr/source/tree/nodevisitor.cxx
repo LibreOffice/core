@@ -28,204 +28,80 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
+#include "sal/config.h"
 
+#include "osl/diagnose.h"
+
+#include "flags.hxx"
 #include "nodevisitor.hxx"
-#include "nodeaccess.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
-#include "setnodeaccess.hxx"
-#include "treeaccessor.hxx"
-#include "valuenode.hxx"
-#include <osl/diagnose.h>
+#include "node.hxx"
+#include "treefragment.hxx"
 
-// -----------------------------------------------------------------------------
+namespace configmgr { namespace data {
 
-namespace configmgr
-{
-// -----------------------------------------------------------------------------
-    namespace data
+NodeVisitor::~NodeVisitor() {}
+
+bool NodeVisitor::visitNode(sharable::Node * node) {
+    switch (node->info.type & data::Type::mask_nodetype) {
+    case data::Type::nodetype_value:
+        return handle(&node->value);
+    case data::Type::nodetype_group:
+        return handle(&node->group);
+    case data::Type::nodetype_set:
+        return handle(&node->set);
+    default:
+        OSL_ASSERT(false);
+        return false;
+    }
+}
+
+bool NodeVisitor::visitChildren(sharable::GroupNode * node) {
+    for (sharable::Node * child = node->getFirstChild(); child != 0;
+         child = node->getNextChild(child))
     {
-// -------------------------------------------------------------------------
-typedef NodeVisitor::Result Result;
-
-// -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    struct NodeVisitor::Dispatcher
-    {
-        NodeVisitor& m_target;
-        Result       m_result;
-
-    Dispatcher(NodeVisitor& _rTarget)
-        : m_target(_rTarget)
-        , m_result(NodeVisitor::CONTINUE)
-            {}
-
-        void applyToNode(sharable::Node const & _aNode);
-        void applyToChildren(sharable::GroupNode const & _aNode);
-
-        Result dispatch(sharable::Node const& _aNode);
-    };
-
-    // -------------------------------------------------------------------------
-    struct SetVisitor::Dispatcher
-    {
-        SetVisitor&  m_target;
-        Result       m_result;
-
-        Dispatcher(SetVisitor& _rTarget)
-        : m_target(_rTarget)
-        , m_result(NodeVisitor::CONTINUE)
-        {}
-
-        void applyToTree(sharable::TreeFragment const & _aElement);
-        void applyToElements(sharable::SetNode const & _aNode);
-
-    Result dispatch(sharable::TreeFragment const & _aElement);
-    };
-
-    // -------------------------------------------------------------------------
-
-    inline
-    Result NodeVisitor::Dispatcher::dispatch(sharable::Node const& _aNode)
-    {
-        using namespace sharable::Type;
-        switch (_aNode.node.info.type & mask_nodetype)
-        {
-        case nodetype_value:
-            return m_target.handle( ValueNodeAccess(&_aNode.value) );
-
-        case nodetype_group:
-            return m_target.handle( GroupNodeAccess(&_aNode.group) );
-
-        case nodetype_set:
-            return m_target.handle( SetNodeAccess(&_aNode.set) );
-
-        default:
-            OSL_ENSURE(false,"NodeVisitor: invalid node type detected"); // invalid node
-            return m_target.handle( NodeAccess(&_aNode) );
+        if (visitNode(child)) {
+            return true;
         }
     }
-    // -------------------------------------------------------------------------
+    return false;
+}
 
-    inline
-    Result SetVisitor::Dispatcher::dispatch(sharable::TreeFragment const& _aElement)
+bool NodeVisitor::handle(sharable::Node *) {
+    return false;
+}
+
+bool NodeVisitor::handle(sharable::ValueNode * node) {
+    return handle(sharable::node(node));
+}
+
+bool NodeVisitor::handle(sharable::GroupNode * node) {
+    return handle(sharable::node(node));
+}
+
+bool NodeVisitor::handle(sharable::SetNode * node) {
+    return handle(sharable::node(node));
+}
+
+SetVisitor::~SetVisitor() {}
+
+bool SetVisitor::visitTree(sharable::TreeFragment * tree) {
+    return handle(tree);
+}
+
+bool SetVisitor::visitElements(sharable::SetNode * node) {
+    for (sharable::TreeFragment * element = node->getFirstElement();
+         element != 0; element = node->getNextElement(element))
     {
-        return m_target.handle
-      (TreeAccessor((sharable::TreeFragment *)(& _aElement )));
+        if (handle(element)) {
+            return true;
+        }
     }
-    // -------------------------------------------------------------------------
-
-    void NodeVisitor::Dispatcher::applyToNode(sharable::Node const & _aNode)
-    {
-        if (m_result != NodeVisitor::DONE)
-            m_result = dispatch(_aNode);
-    }
-    // -------------------------------------------------------------------------
-
-    void SetVisitor::Dispatcher::applyToTree(sharable::TreeFragment const & _aElement)
-    {
-        if (m_result != NodeVisitor::DONE)
-            m_result = dispatch(_aElement);
-    }
-    // -------------------------------------------------------------------------
-
-    void NodeVisitor::Dispatcher::applyToChildren(sharable::GroupNode const & _aNode)
-    {
-        using sharable::Node;
-        for (Node const * pChild = _aNode.getFirstChild();
-                pChild != NULL && m_result != NodeVisitor::DONE;
-                pChild = _aNode.getNextChild(pChild) )
-            m_result = dispatch(*pChild);
-    }
-    // -------------------------------------------------------------------------
-
-    void SetVisitor::Dispatcher::applyToElements(sharable::SetNode const & _aNode)
-    {
-        using sharable::TreeFragment;
-        for (TreeFragment const * pElement = _aNode.getFirstElement();
-                pElement != NULL && m_result != NodeVisitor::DONE;
-                pElement = _aNode.getNextElement(pElement) )
-            m_result = dispatch(*pElement);
-
-    }
-    // -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
-
-Result NodeVisitor::visitNode(NodeAccess const& _aNode)
-{
-    Dispatcher aDispatcher(*this);
-
-    aDispatcher.applyToNode(*static_cast<configmgr::sharable::Node *>(_aNode));
-
-    return aDispatcher.m_result;
+    return false;
 }
-// -------------------------------------------------------------------------
 
-Result SetVisitor::visitTree(TreeAccessor const& _aNode)
-{
-    Dispatcher aDispatcher(*this);
-
-    aDispatcher.applyToTree(*_aNode);
-
-    return aDispatcher.m_result;
+bool SetVisitor::handle(sharable::TreeFragment * tree) {
+    return visitNode(tree->getRootNode());
 }
-// -------------------------------------------------------------------------
 
-Result NodeVisitor::visitChildren(GroupNodeAccess const& _aNode)
-{
-    Dispatcher aDispatcher(*this);
-
-    aDispatcher.applyToChildren(_aNode.data());
-
-    return aDispatcher.m_result;
-}
-// -------------------------------------------------------------------------
-
-Result SetVisitor::visitElements(SetNodeAccess const& _aNode)
-{
-    Dispatcher aDispatcher(*this);
-
-    aDispatcher.applyToElements(_aNode.data());
-
-    return aDispatcher.m_result;
-}
-// -------------------------------------------------------------------------
-
-Result NodeVisitor::handle(NodeAccess const& /*_aNode*/)
-{
-    return CONTINUE;
-}
-// -------------------------------------------------------------------------
-
-Result NodeVisitor::handle(ValueNodeAccess const& _aNode)
-{
-    return handle(NodeAccess(_aNode));
-}
-// -------------------------------------------------------------------------
-
-Result NodeVisitor::handle(GroupNodeAccess const& _aNode)
-{
-    return handle(NodeAccess(_aNode));
-}
-// -------------------------------------------------------------------------
-
-Result NodeVisitor::handle(SetNodeAccess const& _aNode)
-{
-    return handle(NodeAccess(static_cast<const sharable::Node *>(_aNode)));
-}
-// -------------------------------------------------------------------------
-
-Result SetVisitor::handle(TreeAccessor const& _aTree)
-{
-    return NodeVisitor::visitNode(_aTree.getRootNode());
-}
-// -------------------------------------------------------------------------
-
-// -------------------------------------------------------------------------
-    }
-// -----------------------------------------------------------------------------
-} // namespace configmgr
-
-
+} }

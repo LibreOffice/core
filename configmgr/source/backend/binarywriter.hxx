@@ -47,8 +47,6 @@ namespace configmgr
         namespace io   = css::io;
         namespace uno  = css::uno;
         namespace lang = css::lang;
-
-        typedef uno::Reference<lang::XMultiServiceFactory> MultiServiceFactory;
         // -----------------------------------------------------------------------------
 
         class BinaryWriter
@@ -59,7 +57,7 @@ namespace configmgr
             uno::Reference< io::XDataOutputStream > m_xDataOutputStream;
 
         public:
-            BinaryWriter(rtl::OUString const& m_aFilename, MultiServiceFactory const& _rxServiceProvider);
+            BinaryWriter(rtl::OUString const& m_aFilename, uno::Reference<lang::XMultiServiceFactory> const& _rxServiceProvider);
 
             ~BinaryWriter();
             bool open()  SAL_THROW( (io::IOException, uno::RuntimeException) );

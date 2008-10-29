@@ -34,9 +34,9 @@
 #include "logger.hxx"
 
 #define CONFIG_LOGGER_SINGLETON "/singletons/com.sun.star.configuration.theLogger"
-#define OUSTR( lit ) OUString( RTL_CONSTASCII_USTRINGPARAM( lit ) )
+#define OUSTR( lit ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( lit ) )
 #define OU2A( ustr ) rtl::OUStringToOString( ustr, RTL_TEXTENCODING_UTF8 ).getStr()
-#define A2OU( astr ) OUString::createFromAscii( astr )
+#define A2OU( astr ) rtl::OUString::createFromAscii( astr )
 
 static const sal_Char k_unspecifiedClass[] = "configmgr";
 static const sal_Char k_unspecifiedMethod[] = "log-message";
@@ -45,7 +45,7 @@ namespace configmgr
 {
 
 //--------------------------------------------------------------------------
-void Logger::log(Level nLevel, const char * msg, const char * sourceMethod, const char * sourceClass) const
+void Logger::log(sal_Int32 nLevel, const char * msg, const char * sourceMethod, const char * sourceClass) const
 {
     OSL_ASSERT(msg);
     if (!msg) msg = "";
@@ -54,7 +54,7 @@ void Logger::log(Level nLevel, const char * msg, const char * sourceMethod, cons
 }
 
 //--------------------------------------------------------------------------
-void Logger::log(Level nLevel, const OUString & msg, const char * sourceMethod, const char * sourceClass) const
+void Logger::log(sal_Int32 nLevel, const rtl::OUString & msg, const char * sourceMethod, const char * sourceClass) const
 {
     if (!sourceClass) sourceClass = k_unspecifiedClass;
     if (!sourceMethod) sourceMethod = k_unspecifiedMethod;

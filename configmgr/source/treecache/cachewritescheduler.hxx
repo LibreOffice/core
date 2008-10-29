@@ -31,6 +31,7 @@
 #ifndef CONFIGMGR_CACHEWRITESCHEDULER_HXX
 #define CONFIGMGR_CACHEWRITESCHEDULER_HXX
 
+#include "datalock.hxx"
 #include "requestoptions.hxx"
 #include "timestamp.hxx"
 #include "utility.hxx"
@@ -106,7 +107,7 @@ namespace configmgr
             return aBaseTime + aDelay;
         }
     //-------- Control of execution  ------------------------------------------
-        void scheduleWrite(backend::ComponentRequest _aComponent) CFG_UNO_THROW_ALL(  );
+        void scheduleWrite(backend::ComponentRequest _aComponent) SAL_THROW((com::sun::star::uno::Exception));
 
         /// stop pending activities for one set of options (do not discard them)
         bool clearTasks(RequestOptions const& _xOptions);
@@ -119,7 +120,7 @@ namespace configmgr
 
         void runWriter();
         void implStartBefore(TimeStamp const& _aTime);
-        void writeOneTreeFoundByOption(RequestOptions const& _aOption) CFG_UNO_THROW_ALL(  );
+        void writeOneTreeFoundByOption(RequestOptions const& _aOption) SAL_THROW((com::sun::star::uno::Exception));
     };
 } // namespace configmgr
 

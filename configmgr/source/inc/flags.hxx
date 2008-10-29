@@ -87,7 +87,6 @@ namespace configmgr
                 flag_innernode = 0x02 << nodetype_shift_, // 0x80
                 flag_setnode   = 0x01 << nodetype_shift_  // 0x40
             };
-            typedef sal_uInt8 Field;
         }
 
     //-----------------------------------------------------------------------------
@@ -108,7 +107,6 @@ namespace configmgr
                 defaulted   = 0x40, // somewhat redundant with State
                 defaultable = 0x80  // redundant with State (merged || defaulted)
             };
-            typedef sal_uInt8 Field;
         }
     //-----------------------------------------------------------------------------
         // set element or tree state
@@ -129,7 +127,6 @@ namespace configmgr
                 flag_default_avail  = 0x40, // marks this element as containing default values
                 flag_removable      = 0x80  // marks this element as removable
             };
-            typedef sal_uInt8 Field;
         }
     //-----------------------------------------------------------------------------
     }

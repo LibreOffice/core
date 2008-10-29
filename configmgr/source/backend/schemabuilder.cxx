@@ -58,15 +58,15 @@ namespace configmgr
 //#if OSL_DEBUG_LEVEL > 0
 // currently not used in debug builds
 #if 0
-        static void check_if_complete(MergedComponentData & md, SchemaBuilder::Context const & xContext)
+        static void check_if_complete(MergedComponentData & md, uno::Reference< uno::XComponentContext > const & xContext)
         {
             uno::Reference< backenduno::XSchemaHandler >
-                 test(new SchemaBuilder(xContext, OUString(),md,NULL));
+                 test(new SchemaBuilder(xContext, rtl::OUString(),md,NULL));
         }
 #endif
 // -----------------------------------------------------------------------------
 
-SchemaBuilder::SchemaBuilder(Context const & xContext, const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider )
+SchemaBuilder::SchemaBuilder(uno::Reference< uno::XComponentContext > const & xContext, const rtl::OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider )
 : m_aData(rData)
 , m_aContext(xContext)
 //, m_aContext(xContext,static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
@@ -86,7 +86,7 @@ SchemaBuilder::~SchemaBuilder(  )
 // XSchemaHandler
 
 void SAL_CALL SchemaBuilder::startSchema(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!this->isDone())
         m_aContext.raiseMalformedDataException("Schema builder: Unexpected Restart of Schema");
@@ -99,7 +99,7 @@ void SAL_CALL SchemaBuilder::startSchema(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endSchema(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!this->isDone())
         m_aContext.raiseMalformedDataException("Schema builder: Unexpected End of Schema");
@@ -108,19 +108,19 @@ void SAL_CALL SchemaBuilder::endSchema(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::importComponent( const OUString& /*aName*/ )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::importComponent( const rtl::OUString& /*aName*/ )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
 }
 // -----------------------------------------------------------------------------
 
 
-void SAL_CALL SchemaBuilder::startComponent( const OUString& aName )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::startComponent( const rtl::OUString& aName )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (m_aData.hasSchema())
-        m_aContext.raiseElementExistException("Schema builder: The component schema is already loaded", OUString());
+        m_aContext.raiseElementExistException("Schema builder: The component schema is already loaded", rtl::OUString());
 
     m_aContext.startActiveComponent(aName);
 
@@ -134,7 +134,7 @@ void SAL_CALL SchemaBuilder::startComponent( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endComponent( )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -153,8 +153,8 @@ bool SchemaBuilder::isExtensible(sal_Int16 aSchemaAttributes)
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::startGroupTemplate( const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (aTemplate.Component.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
@@ -164,7 +164,7 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
     if (m_aData.hasTemplate(aTemplate.Name))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
 
-    OUString aName = m_aData.getTemplateAccessor(aTemplate);
+    rtl::OUString aName = m_aData.getTemplateAccessor(aTemplate);
     bool bExtensible = isExtensible(aAttributes);
 
     std::auto_ptr<ISubtree> aTemplateTree =
@@ -176,8 +176,8 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::startSetTemplate( const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes, const backenduno::TemplateIdentifier& aItemType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (aTemplate.Component.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
@@ -187,8 +187,8 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
     if (m_aData.hasTemplate(aTemplate.Name))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
 
-    OUString aName = m_aData.getTemplateAccessor(aTemplate);
-    TemplateIdentifier aFullType = m_aContext.completeComponent(aItemType);
+    rtl::OUString aName = m_aData.getTemplateAccessor(aTemplate);
+    backenduno::TemplateIdentifier aFullType = m_aContext.completeComponent(aItemType);
     bool bExtensible = isExtensible(aAttributes);
 
     std::auto_ptr<ISubtree> aTemplateTree =
@@ -201,7 +201,7 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endTemplate( )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -209,8 +209,8 @@ void SAL_CALL SchemaBuilder::endTemplate( )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::startGroup( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::startGroup( const rtl::OUString& aName, sal_Int16 aAttributes )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bExtensible = isExtensible(aAttributes);
 
@@ -222,10 +222,10 @@ void SAL_CALL SchemaBuilder::startGroup( const OUString& aName, sal_Int16 aAttri
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::startSet( const OUString& aName, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::startSet( const rtl::OUString& aName, sal_Int16 aAttributes, const backenduno::TemplateIdentifier& aItemType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    TemplateIdentifier aFullType = m_aContext.completeComponent(aItemType);
+    backenduno::TemplateIdentifier aFullType = m_aContext.completeComponent(aItemType);
     bool bExtensible = isExtensible(aAttributes);
 
     std::auto_ptr<ISubtree> aTree = m_aFactory.createSet(aName,aFullType,bExtensible,getNodeAttributes());
@@ -237,7 +237,7 @@ void SAL_CALL SchemaBuilder::startSet( const OUString& aName, sal_Int16 aAttribu
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endNode( )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -263,8 +263,8 @@ node::Attributes SchemaBuilder::makePropertyAttributes(sal_Int16 aSchemaAttribut
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // TODO: add type validation
     node::Attributes aValueAttributes = makePropertyAttributes(aAttributes);
@@ -286,8 +286,8 @@ void SAL_CALL SchemaBuilder::addProperty( const OUString& aName, sal_Int16 aAttr
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::addPropertyWithDefault( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aDefaultValue )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::addPropertyWithDefault( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aDefaultValue )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // TODO: add parameter validation
     node::Attributes aValueAttributes = makePropertyAttributes(aAttributes);
@@ -315,10 +315,10 @@ void SAL_CALL SchemaBuilder::addPropertyWithDefault( const OUString& aName, sal_
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::addInstance( const OUString& aName, const TemplateIdentifier& aTemplate )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::addInstance( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    TemplateIdentifier aFullType = m_aContext.completeComponent(aTemplate);
+    backenduno::TemplateIdentifier aFullType = m_aContext.completeComponent(aTemplate);
 
     std::auto_ptr<ISubtree> aPlaceHolder =
         m_aFactory.createPlaceHolder(aName,aFullType);
@@ -327,8 +327,8 @@ void SAL_CALL SchemaBuilder::addInstance( const OUString& aName, const TemplateI
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaBuilder::addItemType( const TemplateIdentifier& aItemType )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SchemaBuilder::addItemType( const backenduno::TemplateIdentifier& aItemType )
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if ( m_aContext.getCurrentParent().getElementTemplateName() != aItemType.Name ||
          m_aContext.getCurrentParent().getElementTemplateModule() != m_aContext.getTemplateComponent(aItemType) )
@@ -369,15 +369,12 @@ namespace
 {
     class SubstitutionHelper : NodeModification
     {
-        typedef std::vector< ISubtree const * > TemplateStack;
-        typedef std::vector< OUString >         InstanceList;
-
         MergedComponentData &   m_rData;
         DataBuilderContext      m_aContext;
         ComponentDataFactory    m_aFactory;
 
-        InstanceList            m_aReplacementList;
-        TemplateStack           m_aTemplateStack;
+        std::vector< rtl::OUString >            m_aReplacementList;
+        std::vector< ISubtree const * >           m_aTemplateStack;
     public:
         SubstitutionHelper(DataBuilderContext const & aBaseContext, MergedComponentData & _rData, uno::XInterface * _pContext)
         : m_rData(_rData)
@@ -392,7 +389,7 @@ namespace
         void substituteInNode(ISubtree & _rNode);
         void substituteInList();
 
-        void substitute(OUString const & _aName);
+        void substitute(rtl::OUString const & _aName);
 
         virtual void handle(ValueNode&);
         virtual void handle(ISubtree&);
@@ -436,7 +433,7 @@ namespace
 
     void SubstitutionHelper::substituteInNode(ISubtree & _rNode)
     {
-        InstanceList aSaveInstances;
+        std::vector< rtl::OUString > aSaveInstances;
         aSaveInstances.swap(m_aReplacementList);
 
         // todo: own stack to check against infinite recursion
@@ -454,7 +451,7 @@ namespace
 
     void SubstitutionHelper::substituteInList()
     {
-        for(InstanceList::iterator it = m_aReplacementList.begin();
+        for(std::vector< rtl::OUString >::iterator it = m_aReplacementList.begin();
             it != m_aReplacementList.end(); ++it)
         {
             this->substitute(*it);
@@ -462,7 +459,7 @@ namespace
     }
     // -----------------------------------------------------------------------------
 
-    void SubstitutionHelper::substitute(OUString const & _aName)
+    void SubstitutionHelper::substitute(rtl::OUString const & _aName)
     {
 
         ISubtree & rParent = m_aContext.getCurrentParent();
@@ -473,12 +470,12 @@ namespace
         ISubtree * pReplacedInstance = pReplacedNode->asISubtree();
         OSL_ASSERT( pReplacedInstance != NULL );
 
-        TemplateIdentifier aTemplateName = m_aFactory.getInstanceType(*pReplacedInstance);
+        backenduno::TemplateIdentifier aTemplateName = m_aFactory.getInstanceType(*pReplacedInstance);
         if (aTemplateName.Component == m_aContext.getActiveComponent())
         {
             if (ISubtree const * pTemplate = m_rData.findTemplate(aTemplateName.Name))
             {
-                TemplateStack::iterator beg = m_aTemplateStack.begin(), end = m_aTemplateStack.end();
+                std::vector< ISubtree const * >::iterator beg = m_aTemplateStack.begin(), end = m_aTemplateStack.end();
                 if (std::find(beg,end,pTemplate) != end)
                     m_aContext.raiseMalformedDataException("SchemaBuilder: Could not expand instances: Template is recursive");
 
@@ -505,9 +502,9 @@ namespace
          //Import Template from different component
         else
         {
-             TemplateRequest aTemplateRequest(configuration::makeName(aTemplateName.Name, configuration::Name::NoValidate()),
-                                              configuration::makeName(aTemplateName.Component, configuration::Name::NoValidate()) );
-             TemplateResult aResult = m_aContext.getTemplateData( aTemplateRequest );
+            TemplateRequest aTemplateRequest(aTemplateName.Name,
+                                             aTemplateName.Component );
+             ResultHolder< TemplateInstance > aResult = m_aContext.getTemplateData( aTemplateRequest );
 
              std::auto_ptr<INode> pTemplateInstance = aResult.extractDataAndClear();
              pTemplateInstance->setName(_aName);

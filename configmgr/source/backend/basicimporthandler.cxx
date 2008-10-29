@@ -44,7 +44,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
 BasicImportHandler::BasicImportHandler(
-    Backend const & xBackend,OUString const & aEntity, const sal_Bool&  bNotify)
+    uno::Reference< backenduno::XBackend > const & xBackend,rtl::OUString const & aEntity, const sal_Bool&  bNotify)
 : m_bSendNotification(bNotify)
 , m_xBackend(xBackend)
 , m_aComponentName()
@@ -61,15 +61,15 @@ BasicImportHandler::~BasicImportHandler()
 
 void SAL_CALL
     BasicImportHandler::startLayer(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    m_aComponentName = OUString();
+    m_aComponentName = rtl::OUString();
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
     BasicImportHandler::endLayer(  )
-        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if ( m_bSendNotification)
     {
@@ -87,11 +87,11 @@ void SAL_CALL
             OSL_ENSURE(false, "ImportMergeHandler: target backend does not support notifications");
         }
     }
-    m_aComponentName = OUString();
+    m_aComponentName = rtl::OUString();
 }
 // -----------------------------------------------------------------------------
 
-bool BasicImportHandler::startComponent( const OUString& aName )
+bool BasicImportHandler::startComponent( const rtl::OUString& aName )
 {
     if (hasComponent()) return false;
 
@@ -102,9 +102,9 @@ bool BasicImportHandler::startComponent( const OUString& aName )
 
 void BasicImportHandler::raiseMalformedDataException(sal_Char const * pMsg)
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
 
-    throw MalformedDataException(sMsg, *this, uno::Any());
+    throw backenduno::MalformedDataException(sMsg, *this, uno::Any());
 }
 // -----------------------------------------------------------------------------
 

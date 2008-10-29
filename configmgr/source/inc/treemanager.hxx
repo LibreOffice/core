@@ -31,9 +31,11 @@
 #ifndef CONFIGMGR_TREEMANAGER_HXX_
 #define CONFIGMGR_TREEMANAGER_HXX_
 
-#include "treeprovider.hxx"
+#include <memory>
+
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "defaultprovider.hxx"
-#include "cacheddataprovider.hxx"
 #include "confevents.hxx"
 #include "options.hxx"
 #include "autoreferencemap.hxx"
@@ -43,52 +45,49 @@ namespace configmgr
 {
     namespace uno       = ::com::sun::star::uno;
 
+    namespace backend {
+        class CacheController;
+        class ComponentRequest;
+        class UpdateRequest;
+    }
+    namespace sharable {
+        struct TreeFragment;
+        union Node;
+    }
+
     //==========================================================================
     //= TreeManager
     //==========================================================================
     class CacheClientAccess;
     class CacheData;
+    class ConfigChangeBroadcastHelper;
+    class ISubtree;
     //==========================================================================
-    class TreeManager   : public IConfigTreeManager
-                        , public IConfigDefaultProvider
-                        , public IDefaultableTreeManager
-                        , private backend::ICachedDataListener
-                        , private ConfigChangeBroadcaster
-    {
-        typedef CacheClientAccess       Cache;
-        typedef rtl::Reference<Cache>   CacheRef;
-
-        typedef AutoReferenceMap< RequestOptions, Cache, lessRequestOptions>    CacheList;
-        typedef AutoObject< CacheData >                                         TemplateCache;
-
-        typedef backend::ICachedDataProvider BackendCache;
-        typedef rtl::Reference< BackendCache > BackendCacheRef;
+    class TreeManager: public salhelper::SimpleReferenceObject {
+        typedef AutoReferenceMap< RequestOptions, CacheClientAccess, lessRequestOptions>    CacheList;
 
         osl::Mutex          m_aCacheControllerMutex;
-        BackendCacheRef     m_xCacheController;
+        rtl::Reference< backend::CacheController >     m_xCacheController;
 
-        BackendCacheRef maybeGetBackendCache() CFG_NOTHROW( );
-        BackendCacheRef getCacheLoader() CFG_UNO_THROW_RTE( );
-        void disposeBackendCache() CFG_NOTHROW( );
+        rtl::Reference< backend::CacheController > maybeGetBackendCache() SAL_THROW(());
+        rtl::Reference< backend::CacheController > getCacheLoader() SAL_THROW((com::sun::star::uno::RuntimeException));
+        void disposeBackendCache() SAL_THROW(());
 
         CacheList           m_aCacheList; // Map
-        TemplateCache       m_aTemplates;
+        AutoObject< CacheData >     m_aTemplates;
         sal_Bool            m_bEnableAsync;
 
-    protected:
-        // ref counted, that's why no public dtor
-        ~TreeManager();
+        virtual ~TreeManager();
 
     public:
         /** ctor
         */
         explicit
-        TreeManager(BackendCacheRef const & _xBackend);
+        TreeManager(rtl::Reference< backend::CacheController > const & _xBackend);
 
         // disposing the cache before destroying
         void dispose();
 
-        // ITreeManager
         /** requests a node given by it's path. Basicly, this means
             that the node is fetch from the cache when it contains it else it ask the server
             system into it's cache.
@@ -96,75 +95,63 @@ namespace configmgr
             @param          _nMinLevels     indicates how many tree levels under the node determined by <arg>_rSubtreePath</arg>
                                             should be loaded
         */
-        virtual data::NodeAccess requestSubtree(AbsolutePath const& _rSubtreePath,
+        sharable::Node * requestSubtree(configuration::AbsolutePath const& _rSubtreePath,
                                                 RequestOptions const& _aOptions
-                                               ) CFG_UNO_THROW_ALL(  );
+                                               ) SAL_THROW((com::sun::star::uno::Exception));
 
-        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
+        void updateTree(TreeChangeList& aChanges) SAL_THROW((com::sun::star::uno::Exception));
 
-        virtual void saveAndNotifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
+        void saveAndNotifyUpdate(TreeChangeList const& aChanges) SAL_THROW((com::sun::star::uno::Exception));
 
-        virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
-                                    RequestOptions const& _aOptions ) CFG_NOTHROW();
+        void releaseSubtree(configuration::AbsolutePath const& aSubtreePath,
+                                    RequestOptions const& _aOptions ) SAL_THROW(());
 
-        virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW();
-
-        virtual void fetchSubtree(  AbsolutePath const& aSubtreePath,
+        void fetchSubtree(  configuration::AbsolutePath const& aSubtreePath,
                                     RequestOptions const& _xOptions
-                                 ) CFG_NOTHROW();
+                                 ) SAL_THROW(());
 
-        virtual void refreshAll() CFG_UNO_THROW_ALL(  );
-        virtual void flushAll() CFG_NOTHROW();
-        virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW() ;
+        void refreshAll() SAL_THROW((com::sun::star::uno::Exception));
+        void flushAll() SAL_THROW(());
+        void enableAsync(const sal_Bool& bEnableAsync) SAL_THROW(()) ;
 
-        // IDefaultableTreeManager
-        virtual sal_Bool fetchDefaultData(  AbsolutePath const& aSubtreePath,
+        sal_Bool fetchDefaultData(  configuration::AbsolutePath const& aSubtreePath,
                                             RequestOptions const& _aOptions
-                                         ) CFG_UNO_THROW_ALL(  );
+                                         ) SAL_THROW((com::sun::star::uno::Exception));
 
-        // IDefaultProvider
-        virtual std::auto_ptr<ISubtree> requestDefaultData(AbsolutePath const& aSubtreePath,
+        std::auto_ptr<ISubtree> requestDefaultData(configuration::AbsolutePath const& aSubtreePath,
                                                             const RequestOptions& _aOptions
-                                                          ) CFG_UNO_THROW_ALL(  );
-        // ITemplateManager
-        virtual data::TreeAccessor requestTemplate( Name const& aName, Name const& aModule
-                                                  ) CFG_UNO_THROW_ALL(  );
+                                                          ) SAL_THROW((com::sun::star::uno::Exception));
 
-        IConfigBroadcaster* getBroadcaster() { return this; }
-
+        sharable::TreeFragment * requestTemplate( rtl::OUString const& aName, rtl::OUString const& aModule
+                                                  ) SAL_THROW((com::sun::star::uno::Exception));
 
     // implementation interfaces
-        void refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath,
-                            const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  );
+        void refreshSubtree(const configuration::AbsolutePath &_aAbsoluteSubtreePath,
+                            const RequestOptions& _aOptions) SAL_THROW((com::sun::star::uno::Exception));
 
+        void addListener(configuration::AbsolutePath const& aName, const RequestOptions& _aOptions, rtl::Reference<INodeListener> const& pListener);
+        void removeListener(const RequestOptions& _aOptions, rtl::Reference<INodeListener> const& pListener);
 
+        void disposing(backend::CacheController & _rProvider)   SAL_THROW(());
+        void componentCreated(backend::ComponentRequest const & _aComponent) SAL_THROW(());
+        void componentChanged(backend::UpdateRequest  const & _anUpdate)     SAL_THROW(());
 
     private:
         CacheData & getTemplates() { return * m_aTemplates.get(); }
 
-        AbsolutePath encodeTemplateLocation(const Name& _rLogicalTemplateName, const Name &_rModule);
-
-        void fireChanges(TreeChangeList const& aChangeTree, sal_Bool _bError);
+        configuration::AbsolutePath encodeTemplateLocation(rtl::OUString const & _rLogicalTemplateName, rtl::OUString const &_rModule);
 
     private:
-        CacheRef getCacheAlways(RequestOptions const & _aOptions);
+        rtl::Reference<CacheClientAccess> getCacheAlways(RequestOptions const & _aOptions);
 
         // disposing
         void disposeAll();
-        void disposeOne(RequestOptions const & _aOptions);
-        void disposeUser(RequestOptions const & _aUserOptions);
-        void implDisposeOne(CacheRef const & _aCache, RequestOptions const & _aOptions);
 
-        // ConfigChangeBroadcaster
-        virtual ConfigChangeBroadcastHelper* getBroadcastHelper(RequestOptions const& _aOptions, bool bCreate);
+        void fireChanges(TreeChangeList const& _aChanges, sal_Bool _bError);
+        ConfigChangeBroadcastHelper* getBroadcastHelper(RequestOptions const& _aOptions, bool bCreate);
+        void disposeBroadcastHelper(ConfigChangeBroadcastHelper* pHelper);
 
-        // former INotifyListener
         void nodeUpdated(TreeChangeList& _rChanges);
-
-        // ICachedDataListener
-        virtual void disposing(backend::ICachedDataProvider & _rProvider)   CFG_NOTHROW();
-        virtual void componentCreated(backend::ComponentRequest const & _aComponent) CFG_NOTHROW();
-        virtual void componentChanged(backend::UpdateRequest  const & _anUpdate)     CFG_NOTHROW();
     };
 
 }

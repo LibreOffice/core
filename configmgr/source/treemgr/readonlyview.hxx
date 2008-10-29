@@ -57,11 +57,11 @@ namespace configmgr
             virtual node::Attributes doAdjustAttributes(node::Attributes const& _aAttributes) const;
 
             // group member access
-            virtual ValueMemberNode doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const;
+            virtual configuration::ValueMemberNode doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const;
 
             // set element access
-            virtual void doInsertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry);
-            virtual void doRemoveElement(SetNode const& _aNode, Name const& aName);
+            virtual void doInsertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& aNewEntry);
+            virtual void doRemoveElement(SetNode const& _aNode, rtl::OUString const& aName);
 
             virtual NodeFactory& doGetNodeFactory();
         private:

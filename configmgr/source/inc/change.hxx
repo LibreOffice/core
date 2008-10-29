@@ -121,8 +121,6 @@ namespace configmgr
         virtual void dispatch(ChangeTreeAction& anAction) const = 0;
         virtual void dispatch(ChangeTreeModification& anAction) = 0;
 
-        // some kind of simple rtti
-        RTTI_BASE(Change);
         virtual std::auto_ptr<Change> clone() const = 0;
 
     private:
@@ -177,9 +175,6 @@ namespace configmgr
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(ChangeTreeModification& anAction) { anAction.handle(*this); }
 
-        // "rtti"
-        RTTI(ValueChange, Change);
-
         friend class ApplyValueChange;
     };
 
@@ -188,9 +183,9 @@ namespace configmgr
     //==========================================================================
     class AddNode : public Change
     {
-        data::TreeSegment   m_aOwnNewNode;
-        data::TreeSegment   m_aOwnOldNode;
-        data::TreeAddress   m_aInsertedTree;
+        rtl::Reference< data::TreeSegment > m_aOwnNewNode;
+        rtl::Reference< data::TreeSegment > m_aOwnOldNode;
+        sharable::TreeFragment *    m_aInsertedTree;
         bool                m_bReplacing;
 
     private:
@@ -199,7 +194,7 @@ namespace configmgr
         // needed for clone()
         AddNode(AddNode const&);
     public:
-        AddNode(data::TreeSegment const & _aAddedTree, rtl::OUString const& _rName, bool _bToDefault);
+        AddNode(rtl::Reference< data::TreeSegment > const & _aAddedTree, rtl::OUString const& _rName, bool _bToDefault);
         ~AddNode();
 
         virtual std::auto_ptr<Change> clone() const;
@@ -217,17 +212,17 @@ namespace configmgr
             In this case all calls to this method will return nonsense. This case can be detected by testing
             whether <method>getAddedNode</method> returns NULL.
         */
-        data::TreeAddress   getInsertedTree()   const { return m_aInsertedTree; }
+        sharable::TreeFragment *   getInsertedTree()    const { return m_aInsertedTree; }
 
         /** returns the node this change represents; The Node object is owned by this change until
             <method>releaseAddedNode</method> is called.<BR>
             After ownership is lost this method returns NULL.
         */
-        data::TreeSegment::TreeDataPtr getNewTreeData() const  { return m_aOwnNewNode.getTreeData(); }
+        sharable::TreeFragment const * getNewTreeData() const  { return m_aOwnNewNode.is() ? m_aOwnNewNode->fragment : 0; }
 
         /** returns the node the change represents. .
         */
-        data::TreeSegment         getNewTree() const   { return m_aOwnNewNode; }
+        rtl::Reference< data::TreeSegment > getNewTree() const   { return m_aOwnNewNode; }
 
         /** returns the node the change represents, and releases ownership of it. This means that
             afterwards <method>getAddedNode</method> will return NULL. This change object keeps a reference
@@ -237,29 +232,26 @@ namespace configmgr
 
         /** .
         */
-        void setInsertedAddress(data::TreeAddress const & _aInsertedAddress);
+        void setInsertedAddress(sharable::TreeFragment * const & _aInsertedAddress);
 
 
         /** returns the node this change replaces, ihe Node object is owned by this change.
             After ownership is lost this method returns NULL.
         */
-        data::TreeSegment::TreeDataPtr getReplacedTreeData() const  { return m_aOwnOldNode.getTreeData(); }
+        sharable::TreeFragment const * getReplacedTreeData() const  { return m_aOwnOldNode.is() ? m_aOwnOldNode->fragment : 0; }
 
         /** returns the node the change replaces.
         */
-        data::TreeSegment     getReplacedTree() const   { return m_aOwnOldNode; }
+        rtl::Reference< data::TreeSegment > getReplacedTree() const { return m_aOwnOldNode; }
 
         /** forgets about the node the change replaces
         */
         void clearReplacedTree() { m_aOwnOldNode.clear(); }
 
-        void takeReplacedTree(data::TreeSegment const& _aTree);
+        void takeReplacedTree(rtl::Reference< data::TreeSegment > const& _aTree);
 
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(ChangeTreeModification& anAction) { anAction.handle(*this); }
-
-        // "rtti"
-        RTTI(AddNode, Change);
     };
 
     //==========================================================================
@@ -268,7 +260,7 @@ namespace configmgr
     class RemoveNode : public Change
     {
     protected:
-        data::TreeSegment               m_aOwnOldNode;
+        rtl::Reference< data::TreeSegment > m_aOwnOldNode;
         bool                            m_bIsToDefault;
 
     private:
@@ -288,19 +280,16 @@ namespace configmgr
         /** returns the node this change removes, ihe Node object is owned by this change.
             After ownership is lost this method returns NULL.
         */
-        data::TreeSegment::TreeDataPtr getRemovedTreeData() const { return m_aOwnOldNode.getTreeData(); }
+        sharable::TreeFragment const * getRemovedTreeData() const { return m_aOwnOldNode.is() ? m_aOwnOldNode->fragment : 0; }
         /** returns the node the change removes.
         */
-        data::TreeSegment getRemovedTree()          const   { return m_aOwnOldNode; }
+        rtl::Reference< data::TreeSegment > getRemovedTree()            const   { return m_aOwnOldNode; }
 
         /** forgets about the node the change removes, returning the previous setting with ownership
         */
         void clearRemovedTree() { m_aOwnOldNode.clear(); }
 
-        void takeRemovedTree(data::TreeSegment const & _aTree);
-
-        // "rtti"
-        RTTI(RemoveNode, Change);
+        void takeRemovedTree(rtl::Reference< data::TreeSegment > const & _aTree);
     };
 
     //==========================================================================
@@ -332,10 +321,6 @@ namespace configmgr
 
         friend class MutatingChildIterator;
     public:
-        /// A parameter for disabling copying of children
-        typedef treeop::NoChildCopy NoChildCopy;
-        typedef treeop::DeepChildCopy DeepChildCopy;
-
         SubtreeChange(const rtl::OUString& _rName,
                       const node::Attributes& _rAttr,
                       bool _bToDefault = false)
@@ -367,7 +352,7 @@ namespace configmgr
             m_aAttributes.markAsDefault(_bToDefault);
         }
 
-        SubtreeChange(const SubtreeChange& _rChange, NoChildCopy)
+        SubtreeChange(const SubtreeChange& _rChange, treeop::NoChildCopy)
         : Change(_rChange)
         , m_sTemplateName(_rChange.getElementTemplateName())
         , m_sTemplateModule(_rChange.getElementTemplateModule())
@@ -376,7 +361,7 @@ namespace configmgr
 
         ~SubtreeChange();
 
-        SubtreeChange(const SubtreeChange&, DeepChildCopy);
+        SubtreeChange(const SubtreeChange&, treeop::DeepChildCopy);
 
         virtual std::auto_ptr<Change> clone() const;
 
@@ -409,9 +394,6 @@ namespace configmgr
 
         void forEachChange(ChangeTreeAction& _anAction) const;
         void forEachChange(ChangeTreeModification& _anAction);
-
-        // "rtti"
-        RTTI(SubtreeChange, Change);
 
     private:
         virtual Change* doGetChild(rtl::OUString const& _rName) const;
@@ -459,11 +441,10 @@ namespace configmgr
     class SubtreeChange::MutatingChildIterator
     {
     protected:
-        typedef SubtreeChange::Children::iterator Base;
-        Base m_aBaseIter;
+        SubtreeChange::Children::iterator m_aBaseIter;
 
         friend class SubtreeChange;
-        MutatingChildIterator(Base aBase) : m_aBaseIter(aBase) {};
+        MutatingChildIterator(SubtreeChange::Children::iterator aBase) : m_aBaseIter(aBase) {};
 
     public:
         Change& current() const { return *m_aBaseIter->second; }
@@ -498,8 +479,6 @@ namespace configmgr
     public:
         SubtreeChangeReferrer(const SubtreeChange& _rSource);
         ~SubtreeChangeReferrer();
-
-        RTTI(SubtreeChangeReferrer, SubtreeChange);
     };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -64,17 +64,17 @@ namespace configmgr
 template <class BackendInterface>
 struct ParserServiceTraits;
 // -----------------------------------------------------------------------------
-static inline void clear(OUString & _rs) { _rs = OUString(); }
+static inline void clear(rtl::OUString & _rs) { _rs = rtl::OUString(); }
 
 // -----------------------------------------------------------------------------
 template <class BackendInterface>
-ParserService<BackendInterface>::ParserService(CreationArg _xContext)
+ParserService<BackendInterface>::ParserService(uno::Reference< uno::XComponentContext > const & _xContext)
 : m_xContext(_xContext)
 , m_aInputSource()
 {
     if (!m_xContext.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: NULL Context"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: NULL Context"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }
@@ -99,13 +99,13 @@ void SAL_CALL
             break;
 
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Parser"
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Parser"
                                                             "- InputSource or XInputStream expected"));
             throw lang::IllegalArgumentException(sMessage,*this,1);
         }
     default:
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Parser"));
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Parser"));
             throw lang::IllegalArgumentException(sMessage,*this,0);
         }
     }
@@ -175,17 +175,15 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
 {
     OSL_PRECOND( _xHandler.is(), "ParserService: No SAX handler to parse to");
 
-    typedef uno::Reference< sax::XParser > SaxParser;
-
     rtl::OUString const k_sSaxParserService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"));
 
     uno::Reference< lang::XMultiComponentFactory > xServiceFactory = m_xContext->getServiceManager();
 
-    SaxParser xParser = SaxParser::query( xServiceFactory->createInstanceWithContext(k_sSaxParserService,m_xContext) );
+    uno::Reference< sax::XParser > xParser = uno::Reference< sax::XParser >::query( xServiceFactory->createInstanceWithContext(k_sSaxParserService,m_xContext) );
 
     if (!xParser.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: Cannot create SAX Parser"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: Cannot create SAX Parser"));
         throw uno::RuntimeException(sMessage,*this);
     }
 
@@ -201,7 +199,7 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
     catch (sax::SAXException & e)
     {
         uno::Any aWrapped = e.WrappedException.hasValue() ? e.WrappedException : uno::makeAny( e );
-        OUString sSAXMessage = e.Message;
+        rtl::OUString sSAXMessage = e.Message;
 
         // Expatwrap SAX service doubly wraps its errors ??
         sax::SAXException eInner;
@@ -235,7 +233,7 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-AsciiServiceName const aSchemaParserServices[] =
+sal_Char const * const aSchemaParserServices[] =
 {
     "com.sun.star.configuration.backend.xml.SchemaParser",
     0
@@ -247,7 +245,7 @@ const ServiceImplementationInfo aSchemaParserSI =
     0
 };
 // -----------------------------------------------------------------------------
-AsciiServiceName const aLayerParserServices[] =
+sal_Char const * const aLayerParserServices[] =
 {
     "com.sun.star.configuration.backend.xml.LayerParser",
     0
@@ -263,8 +261,6 @@ const ServiceImplementationInfo aLayerParserSI =
 template <>
 struct ParserServiceTraits< backenduno::XSchema >
 {
-    typedef backenduno::XSchemaHandler Handler;
-
     static ServiceImplementationInfo const * getServiceInfo()
     { return & aSchemaParserSI; }
 };
@@ -272,64 +268,54 @@ struct ParserServiceTraits< backenduno::XSchema >
 template <>
 struct ParserServiceTraits< backenduno::XLayer >
 {
-    typedef backenduno::XLayerHandler Handler;
-
     static ServiceImplementationInfo const * getServiceInfo()
     { return & aLayerParserSI; }
 };
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-typedef ParserService< backenduno::XSchema > SchemaParserService_Base;
-
-class SchemaParserService : public SchemaParserService_Base
+class SchemaParserService : public ParserService< backenduno::XSchema >
 {
 public:
-    typedef SchemaParser::HandlerRef HandlerArg;
-
-    SchemaParserService(CreationArg _xContext)
-    : SchemaParserService_Base(_xContext)
+    SchemaParserService(uno::Reference< uno::XComponentContext > const & _xContext)
+    : ParserService< backenduno::XSchema >(_xContext)
     {
     }
 
-    virtual void SAL_CALL readSchema( HandlerArg const & aHandler )
+    virtual void SAL_CALL readSchema( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
         throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                lang::NullPointerException, uno::RuntimeException);
 
-    virtual void SAL_CALL readComponent( HandlerArg const & aHandler )
+    virtual void SAL_CALL readComponent( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
         throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                lang::NullPointerException, uno::RuntimeException);
 
-    virtual void SAL_CALL readTemplates( HandlerArg const & aHandler )
+    virtual void SAL_CALL readTemplates( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
         throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                lang::NullPointerException, uno::RuntimeException);
 };
 // -----------------------------------------------------------------------------
 
-typedef ParserService< backenduno::XLayer > LayerParserService_Base;
-
-class LayerParserService : public LayerParserService_Base
+class LayerParserService : public ParserService< backenduno::XLayer >
 {
 public:
-    typedef LayerParser::HandlerRef HandlerArg;
-
-    LayerParserService(CreationArg _xContext)
-    : LayerParserService_Base(_xContext)
+    LayerParserService(uno::Reference< uno::XComponentContext > const & _xContext)
+    : ParserService< backenduno::XLayer >(_xContext)
     {
     }
 
-    virtual void SAL_CALL readData( HandlerArg const & aHandler )
+    virtual void SAL_CALL readData( uno::Reference< backenduno::XLayerHandler > const & aHandler )
         throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                lang::NullPointerException, uno::RuntimeException);
 };
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser( CreationContext const& xContext )
+uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser( uno::Reference< uno::XComponentContext > const& xContext )
 {
     return * new SchemaParserService(xContext);
 }
-uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser( CreationContext const& xContext )
+uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser( uno::Reference< uno::XComponentContext > const& xContext )
 {
     return * new LayerParserService(xContext);
 }
@@ -340,11 +326,11 @@ const ServiceRegistrationInfo* getLayerParserServiceInfo()
 { return getRegistrationInfo(& aLayerParserSI); }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-static OUString nullHandlerMessage(char const * where)
+static rtl::OUString nullHandlerMessage(char const * where)
 {
     OSL_ASSERT(where);
-    OUString msg = OUString::createFromAscii(where);
-    return msg.concat(OUString::createFromAscii(": Error - NULL handler passed."));
+    rtl::OUString msg = rtl::OUString::createFromAscii(where);
+    return msg.concat(rtl::OUString::createFromAscii(": Error - NULL handler passed."));
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL SchemaParserService::readSchema( uno::Reference< backenduno::XSchemaHandler > const & aHandler )
@@ -354,7 +340,7 @@ void SAL_CALL SchemaParserService::readSchema( uno::Reference< backenduno::XSche
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readSchema"),*this);
 
-    SaxHandler xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectAll);
+    uno::Reference< sax::XDocumentHandler > xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectAll);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
@@ -365,7 +351,7 @@ void SAL_CALL SchemaParserService::readComponent( uno::Reference< backenduno::XS
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readComponent"),*this);
 
-    SaxHandler xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectComponent);
+    uno::Reference< sax::XDocumentHandler > xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectComponent);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
@@ -376,7 +362,7 @@ void SAL_CALL SchemaParserService::readTemplates( uno::Reference< backenduno::XS
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readTemplates"),*this);
 
-    SaxHandler xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectTemplates);
+    uno::Reference< sax::XDocumentHandler > xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectTemplates);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
@@ -387,7 +373,7 @@ void SAL_CALL LayerParserService::readData( uno::Reference< backenduno::XLayerHa
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("LayerParserService::readData"),*this);
 
-    SaxHandler xHandler = new LayerParser(this->getContext(),aHandler);
+    uno::Reference< sax::XDocumentHandler > xHandler = new LayerParser(this->getContext(),aHandler);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------

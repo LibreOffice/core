@@ -31,11 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
-#include "types.hxx"
 #include "node.hxx"
 #include "anydata.hxx"
 #include "treefragment.hxx"
 #include "attributes.hxx"
+#include "utility.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -51,14 +51,9 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-//        Name            name;
-  //          Offset          parent; // always counts backwards
-    //        Flags::Field    flags;
-      //      Type ::Field    type;   // contains discriminator for union
-
 rtl::OUString NodeInfo::getName() const
 {
-    return readName(this->name);
+    return rtl::OUString(this->name);
 }
 //-----------------------------------------------------------------------------
 
@@ -66,15 +61,15 @@ configmgr::node::Attributes NodeInfo::getNodeInfoAttributes() const
 {
     configmgr::node::Attributes aResult;
 
-    bool help = !!(flags & Flags::readonly);
-    aResult.setAccess( help,!!(flags & Flags::finalized) );
-//    aResult.setAccess( !!(flags & Flags::readonly),!!(flags & Flags::finalized) );
+    bool help = !!(flags & data::Flags::readonly);
+    aResult.setAccess( help,!!(flags & data::Flags::finalized) );
+//    aResult.setAccess( !!(flags & data::Flags::readonly),!!(flags & data::Flags::finalized) );
 
-    aResult.setNullable(!!(flags & Flags::nullable));
-    aResult.setLocalized(!!(flags & Flags::localized));
+    aResult.setNullable(!!(flags & data::Flags::nullable));
+    aResult.setLocalized(!!(flags & data::Flags::localized));
 
-    configmgr::node::State state = (flags & Flags::defaulted)   ? configmgr::node::isDefault :
-                        (flags & Flags::defaultable) ? configmgr::node::isMerged  :
+    configmgr::node::State state = (flags & data::Flags::defaulted)   ? configmgr::node::isDefault :
+                        (flags & data::Flags::defaultable) ? configmgr::node::isMerged  :
                                                        configmgr::node::isReplaced;
     aResult.setState(state);
 
@@ -84,13 +79,13 @@ configmgr::node::Attributes NodeInfo::getNodeInfoAttributes() const
 
 bool NodeInfo::isDefault() const
 {
-    return !!(this->flags & Flags::defaulted);
+    return !!(this->flags & data::Flags::defaulted);
 }
 //-----------------------------------------------------------------------------
 
 bool NodeInfo::isLocalized() const
 {
-    return !!(this->flags & Flags::localized);
+    return !!(this->flags & data::Flags::localized);
 }
 //-----------------------------------------------------------------------------
 
@@ -98,11 +93,11 @@ void NodeInfo::markAsDefault(bool bDefault)
 {
     if (bDefault)
     {
-        OSL_ENSURE(flags & Flags::defaultable,"Marking a non-defaultable node as default");
-        this->flags |= Flags::defaulted;
+        OSL_ENSURE(flags & data::Flags::defaultable,"Marking a non-defaultable node as default");
+        this->flags |= data::Flags::defaulted;
     }
     else
-        this->flags &= ~Flags::defaulted;
+        this->flags &= ~data::Flags::defaulted;
 }
 //-----------------------------------------------------------------------------
 
@@ -126,22 +121,15 @@ bool GroupNode::hasDefaultsAvailable() const
 }
 //-----------------------------------------------------------------------------
 
-Node * GroupNode::getFirstChild()
+Node * GroupNode::getFirstChild()  const
 {
     OSL_ENSURE(numDescendants, "Groups MUST have at least one child");
-    return node(this) + 1;
-}
-//-----------------------------------------------------------------------------
-
-Node const * GroupNode::getFirstChild()  const
-{
-    OSL_ENSURE(numDescendants, "Groups MUST have at least one child");
-    return node(this) + 1;
+    return const_cast< Node * >(node(this) + 1);
 }
 //-----------------------------------------------------------------------------
 
 static
-Offset implGetNextChildOffset(GroupNode const * _pParent, Node const * _pChild)
+sal_uInt16 implGetNextChildOffset(GroupNode const * _pParent, Node const * _pChild)
 {
     OSL_PRECOND(_pChild, "getNextChild: previous child must not be NULL");
     OSL_PRECOND(_pChild->getParentNode() == node(_pParent), "getNextChild: not a child of this node");
@@ -151,15 +139,15 @@ Offset implGetNextChildOffset(GroupNode const * _pParent, Node const * _pChild)
                 "getNextChild: child out of descendants range");
 
     // offset to child's next sibling
-    Offset next = 1;
+    sal_uInt16 next = 1;
     if ( _pChild->isGroup())
     {
         next = next + _pChild->group.numDescendants;
     }
 
-    if (_pChild->node.info.parent + next > _pParent->numDescendants)
+    if (_pChild->info.parent + next > _pParent->numDescendants)
     {
-        OSL_ENSURE(_pChild->node.info.parent + next == _pParent->numDescendants+1, "Next child candidate should match next sibling here");
+        OSL_ENSURE(_pChild->info.parent + next == _pParent->numDescendants+1, "Next child candidate should match next sibling here");
         return 0;
     }
 
@@ -168,71 +156,67 @@ Offset implGetNextChildOffset(GroupNode const * _pParent, Node const * _pChild)
 }
 //-----------------------------------------------------------------------------
 
-Node * GroupNode::getNextChild(Node * _pChild)
+Node * GroupNode::getNextChild(Node * _pChild) const
 {
-    if (Offset next = implGetNextChildOffset(this, _pChild))
+    if (sal_uInt16 next = implGetNextChildOffset(this, _pChild))
         return _pChild + next;
 
     else
         return NULL;
 }
-//-----------------------------------------------------------------------------
 
-Node const * GroupNode::getNextChild(Node const * _pChild) const
-{
-    if (Offset next = implGetNextChildOffset(this, _pChild))
-        return _pChild + next;
-
-    else
-        return NULL;
+Node * GroupNode::getChild(rtl::OUString const & name) const {
+    for (Node * child = getFirstChild(); child != 0;
+         child = getNextChild(child))
+    {
+        if (child->isNamed(name)) {
+            return child;
+        }
+    }
+    return 0;
 }
-//-----------------------------------------------------------------------------
 
-bool SetNode::isLocalizedValue() const
-{
-    return info.isLocalized();
-}
 //-----------------------------------------------------------------------------
 
 // TODO: optimize this - keep a list of such structs ....
 struct SetNodeTemplateData
 {
-    Name name;
-    Name module;
+    rtl_uString * name;
+    rtl_uString * module;
 };
 //-----------------------------------------------------------------------------
 static inline
-SetNodeTemplateData * readTemplateData(SetElementAddress _aTemplateData)
+SetNodeTemplateData * readTemplateData(sal_uInt8 * _aTemplateData)
 {
     return reinterpret_cast<SetNodeTemplateData *>( _aTemplateData );
 }
 //-----------------------------------------------------------------------------
 
-SetElementAddress SetNode::allocTemplateData(const rtl::OUString &rName,
+sal_uInt8 * SetNode::allocTemplateData(const rtl::OUString &rName,
                                    const rtl::OUString &rModule)
 {
     SetNodeTemplateData * pData = new SetNodeTemplateData();
 
     OSL_ENSURE(pData, "Creating template data: unexpected NULL data");
 
-    pData->name   = allocName(rName);
-    pData->module = allocName(rModule);
+    pData->name   = acquireString(rName);
+    pData->module = acquireString(rModule);
 
-    return reinterpret_cast<SetElementAddress>( pData );
+    return reinterpret_cast<sal_uInt8 *>( pData );
 }
 
-SetElementAddress SetNode::copyTemplateData(SetElementAddress _aTemplateData)
+sal_uInt8 * SetNode::copyTemplateData(sal_uInt8 * _aTemplateData)
 {
     SetNodeTemplateData const * pData = readTemplateData(_aTemplateData);
 
     OSL_ENSURE(pData, "Copying template data: unexpected NULL data");
 
-    return allocTemplateData(readName(pData->name), readName(pData->module));
+    return allocTemplateData(rtl::OUString(pData->name), rtl::OUString(pData->module));
 }
 
 //-----------------------------------------------------------------------------
 
-void SetNode::releaseTemplateData(SetElementAddress _aTemplateData)
+void SetNode::releaseTemplateData(sal_uInt8 * _aTemplateData)
 {
     if (!_aTemplateData) return;
 
@@ -240,8 +224,8 @@ void SetNode::releaseTemplateData(SetElementAddress _aTemplateData)
 
     OSL_ENSURE(pData, "Freeing template data: unexpected NULL data");
 
-    freeName(pData->name);
-    freeName(pData->module);
+    rtl_uString_release(pData->name);
+    rtl_uString_release(pData->module);
 
     delete pData;
 }
@@ -254,7 +238,7 @@ rtl::OUString SetNode::getElementTemplateName() const
 
     OSL_ENSURE(pData, "ERROR: No template data found for set");
 
-    return readName(pData->name);
+    return rtl::OUString(pData->name);
 }
 //-----------------------------------------------------------------------------
 
@@ -264,24 +248,24 @@ rtl::OUString SetNode::getElementTemplateModule() const
 
     OSL_ENSURE(pData, "ERROR: No template data found for set");
 
-    return readName(pData->module);
+    return rtl::OUString(pData->module);
 }
 //-----------------------------------------------------------------------------
 
 static inline
-TreeFragment const * implGetFragmentFromList(List _aListEntry)
+TreeFragment * implGetFragmentFromList(TreeFragment * _aListEntry)
 {
-    return reinterpret_cast<TreeFragment const *>(_aListEntry);
+    return reinterpret_cast<TreeFragment *>(_aListEntry);
 }
 //-----------------------------------------------------------------------------
 
-TreeFragment const  * SetNode::getFirstElement() const
+TreeFragment * SetNode::getFirstElement() const
 {
     return implGetFragmentFromList(this->elements);
 }
 //-----------------------------------------------------------------------------
 
-TreeFragment const  * SetNode::getNextElement(TreeFragment const * _pElement) const
+TreeFragment * SetNode::getNextElement(TreeFragment * _pElement) const
 {
     OSL_PRECOND(_pElement, "getNextElement: previous element must not be NULL");
     OSL_PRECOND(_pElement->header.parent == (Node *)this,
@@ -289,13 +273,47 @@ TreeFragment const  * SetNode::getNextElement(TreeFragment const * _pElement) co
 
     return implGetFragmentFromList(_pElement->header.next);
 }
+
+TreeFragment * SetNode::getElement(rtl::OUString const & name) const {
+    for (TreeFragment * element = getFirstElement(); element != 0;
+         element = getNextElement(element))
+    {
+        if (element->isNamed(name)) {
+            return element;
+        }
+    }
+    return 0;
+}
+
+void SetNode::addElement(TreeFragment * newElement) {
+    OSL_ASSERT(newElement != 0);
+    newElement->header.next = elements;
+    newElement->header.parent = node(this);
+    elements = newElement;
+}
+
+TreeFragment * SetNode::removeElement(rtl::OUString const & name) {
+    for (TreeFragment ** link = &elements; *link != 0;
+         link = &(*link)->header.next)
+    {
+        if ((*link)->isNamed(name)) {
+            TreeFragment * removed = *link;
+            *link = removed->header.next;
+            removed->header.next = 0;
+            removed->header.parent = 0;
+            return removed;
+        }
+    }
+    return 0;
+}
+
 //-----------------------------------------------------------------------------
 
 bool ValueNode::isNull() const
 {
-    Flags::Type availmask = (info.flags & Flags::defaulted) ?
-                                Flags::defaultAvailable :
-                                Flags::valueAvailable;
+    data::Flags::Type availmask = (info.flags & data::Flags::defaulted) ?
+                                data::Flags::defaultAvailable :
+                                data::Flags::valueAvailable;
 
     return !(info.flags & availmask);
 }
@@ -303,22 +321,22 @@ bool ValueNode::isNull() const
 
 bool ValueNode::hasUsableDefault() const
 {
-    return (info.flags & Flags::defaultable) &&
-           (info.flags & (Flags::defaultAvailable| Flags::nullable));
+    return (info.flags & data::Flags::defaultable) &&
+           (info.flags & (data::Flags::defaultAvailable| data::Flags::nullable));
 }
 //-----------------------------------------------------------------------------
 
-uno::Type ValueNode::getValueType() const
+com::sun::star::uno::Type ValueNode::getValueType() const
 {
-    AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
+    sal_uInt8 aType = sal_uInt8( info.type & data::Type::mask_valuetype );
 
     return getUnoType(aType);
 }
 //-----------------------------------------------------------------------------
 
-uno::Any ValueNode::getValue() const
+com::sun::star::uno::Any ValueNode::getValue() const
 {
-    if (info.flags & Flags::defaulted)
+    if (info.flags & data::Flags::defaulted)
         return getDefaultValue();
 
     else
@@ -326,36 +344,93 @@ uno::Any ValueNode::getValue() const
 }
 //-----------------------------------------------------------------------------
 
-uno::Any ValueNode::getUserValue() const
+com::sun::star::uno::Any ValueNode::getUserValue() const
 {
-    if (info.flags & Flags::valueAvailable)
+    if (info.flags & data::Flags::valueAvailable)
     {
-        AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
+        sal_uInt8 aType = sal_uInt8( info.type & data::Type::mask_valuetype );
 
         return readData(aType,this->value);
     }
     else
-        return uno::Any();
+        return com::sun::star::uno::Any();
 }
 //-----------------------------------------------------------------------------
 
-uno::Any ValueNode::getDefaultValue() const
+com::sun::star::uno::Any ValueNode::getDefaultValue() const
 {
-    if (info.flags & Flags::defaultAvailable)
+    if (info.flags & data::Flags::defaultAvailable)
     {
-        AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
+        sal_uInt8 aType = sal_uInt8( info.type & data::Type::mask_valuetype );
 
         return readData(aType,this->defaultValue);
     }
     else
-        return uno::Any();
+        return com::sun::star::uno::Any();
 }
+
+void ValueNode::setValue(com::sun::star::uno::Any const & newValue) {
+    releaseValue();
+    if (newValue.hasValue()) {
+        sal_uInt8 type = adaptType(newValue);
+        value = allocData(type, newValue);
+        info.flags |= data::Flags::valueAvailable;
+    }
+    info.flags &= ~data::Flags::defaulted;
+}
+
+void ValueNode::setToDefault() {
+    OSL_ASSERT(hasUsableDefault());
+    releaseValue();
+    info.flags |= data::Flags::defaulted;
+}
+
+void ValueNode::changeDefault(com::sun::star::uno::Any const & newDefault) {
+    sal_uInt8 type = static_cast< sal_uInt8 >(
+        info.type & data::Type::mask_valuetype);
+    if (info.flags & data::Flags::defaultAvailable) {
+        OSL_ASSERT(type != data::Type::value_any);
+        freeData(type, defaultValue);
+        defaultValue.data = 0;
+        info.flags &= ~data::Flags::defaultAvailable;
+    }
+    if (newDefault.hasValue()) {
+        type = adaptType(newDefault);
+        defaultValue = allocData(type, newDefault);
+        info.flags |= data::Flags::defaultAvailable;
+    }
+}
+
+void ValueNode::releaseValue() {
+    if ((info.flags & data::Flags::valueAvailable) != 0) {
+        sal_uInt8 type = static_cast< sal_uInt8 >(
+            info.type & data::Type::mask_valuetype);
+        OSL_ASSERT(type != data::Type::value_any);
+        freeData(type, value);
+        value.data = 0;
+        info.flags &= ~data::Flags::valueAvailable;
+    }
+}
+
+sal_uInt8 ValueNode::adaptType(com::sun::star::uno::Any const & newValue) {
+    sal_uInt8 newType = getTypeCode(newValue.getValueType());
+    OSL_ASSERT(newType != data::Type::value_any);
+    sal_uInt8 type = static_cast< sal_uInt8 >(
+        info.type & data::Type::mask_valuetype);
+    if (type == data::Type::value_any) {
+        type = static_cast< sal_uInt8 >(newType & data::Type::mask_valuetype);
+        info.type = (info.type & ~data::Type::mask_valuetype) | type;
+    }
+    OSL_ASSERT(newType == type);
+    return type;
+}
+
 //-----------------------------------------------------------------------------
 
 bool Node::isNamed(rtl::OUString const & _aName) const
 {
     rtl_uString *pCmpData = _aName.pData;
-    rtl_uString *pNodeData = node.info.name;
+    rtl_uString *pNodeData = info.name;
 
     // Creating an OUString does rather expensive interlocking here.
     if (pCmpData == pNodeData)
@@ -371,7 +446,7 @@ bool Node::isNamed(rtl::OUString const & _aName) const
 
 rtl::OUString Node::getName() const
 {
-    return node.info.getName();
+    return info.getName();
 }
 //-----------------------------------------------------------------------------
 
@@ -383,39 +458,39 @@ configmgr::node::Attributes Node::getAttributes() const
     }
     else
     {
-        return node.info.getNodeInfoAttributes();
+        return info.getNodeInfoAttributes();
     }
 }
 //-----------------------------------------------------------------------------
 
 bool Node::isDefault() const
 {
-    return node.info.isDefault();
+    return info.isDefault();
 }
 //-----------------------------------------------------------------------------
 
 bool Node::isFragmentRoot() const
 {
-    return ! node.info.parent;
+    return !info.parent;
 }
 #if OSL_DEBUG_LEVEL > 0
 //-----------------------------------------------------------------------------
 Node * Node::getParentNode()
 {
-    return node.info.parent ? this - node.info.parent : NULL;
+    return info.parent ? this - info.parent : NULL;
 }
 //-----------------------------------------------------------------------------
 
 Node const * Node::getParentNode() const
 {
-    return node.info.parent ? this - node.info.parent : NULL;
+    return info.parent ? this - info.parent : NULL;
 }
 #endif
 //-----------------------------------------------------------------------------
-static Offset getFragmentIndex(Node const * pNode)
+static sal_uInt16 getFragmentIndex(Node const * pNode)
 {
-    Offset result = 0;
-    while (Offset step = pNode->node.info.parent)
+    sal_uInt16 result = 0;
+    while (sal_uInt16 step = pNode->info.parent)
     {
         result = result + step;
         pNode  -= step;
@@ -441,6 +516,18 @@ TreeFragment const * Node::getTreeFragment() const
     void const * pFrag = static_cast<char const*>(pRoot) - offsetof(TreeFragment,nodes);
 
     return static_cast<TreeFragment const *>(pFrag);
+}
+
+Node * Node::getSubnode(rtl::OUString const & name) {
+    if (isGroup()) {
+        return group.getChild(name);
+    } else if (isSet()) {
+        TreeFragment * element = set.getElement(name);
+        return element == 0 ? 0 : element->getRootNode();
+    } else {
+        OSL_ASSERT(false);
+        return 0;
+    }
 }
 
 //-----------------------------------------------------------------------------

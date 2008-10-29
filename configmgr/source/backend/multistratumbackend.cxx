@@ -98,10 +98,8 @@ bool checkOptionalArg(rtl::OUString& aArg)
         }
     }
 //------------------------------------------------------------------------------
-typedef std::pair<rtl::OUString, rtl::OUString> ServiceInfo;
-typedef std::vector<ServiceInfo> ServiceInfoList;
 void parseStrataInfo(const rtl::OUString aServiceList,
-                     ServiceInfoList& aServiceInfoList,
+                     std::vector< std::pair<rtl::OUString, rtl::OUString> >& aServiceInfoList,
                      const uno::Reference<uno::XInterface>& pContext)
 {
     sal_Int32 nNextToken =0;
@@ -109,7 +107,7 @@ void parseStrataInfo(const rtl::OUString aServiceList,
 
     do
     {
-        OUString aServiceName =aServiceList.getToken(0, ':',nNextToken);
+        rtl::OUString aServiceName =aServiceList.getToken(0, ':',nNextToken);
         if((nNextToken ==-1)||(aServiceName.getLength()==0))
         {
              throw backenduno::BackendSetupException(
@@ -117,9 +115,9 @@ void parseStrataInfo(const rtl::OUString aServiceList,
                         "Malformed Strata Service specified")),
                         pContext, uno::Any()) ;
         }
-        OUString aServiceData = aServiceList.getToken(0, ';',nNextToken);
+        rtl::OUString aServiceData = aServiceList.getToken(0, ';',nNextToken);
 
-        ServiceInfo aServiceInfo(aServiceName,aServiceData);
+        std::pair<rtl::OUString, rtl::OUString> aServiceInfo(aServiceName,aServiceData);
         aServiceInfoList.push_back(aServiceInfo);
     }
     while (nNextToken >= 0 && nNextToken < nLength ) ;
@@ -127,7 +125,7 @@ void parseStrataInfo(const rtl::OUString aServiceList,
 //------------------------------------------------------------------------------
 MultiStratumBackend::MultiStratumBackend(
         const uno::Reference<uno::XComponentContext>& xContext)
-        : BackendBase(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY_THROW)
+        : cppu::WeakComponentImplHelper7< backenduno::XBackend, backenduno::XBackendEntities, backenduno::XVersionedSchemaSupplier, backenduno::XBackendChangesNotifier, backenduno::XBackendChangesListener, lang::XInitialization, lang::XServiceInfo >(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY_THROW)
           ,mListenerList()
 {
 
@@ -189,7 +187,7 @@ void SAL_CALL MultiStratumBackend::initialize(
         if (bAdminMode)
         {
             // find given entity
-            OUString sDefaultEntity;
+            rtl::OUString sDefaultEntity;
             if ( (context->getValueByName(kEntity) >>= sDefaultEntity) && sDefaultEntity.getLength() )
             {
                 for (sal_uInt32 i = 0; i < mBackendStrata.size(); i++)
@@ -235,16 +233,15 @@ void SAL_CALL MultiStratumBackend::initialize(
 
 }
 //------------------------------------------------------------------------------
-typedef uno::Reference<backenduno::XSchemaSupplier> SchemaSupplier;
 void  MultiStratumBackend::initializeSchemaSupplier(const uno::Reference<uno::XComponentContext>& aContext)
 {
 
-    OUString aServiceName;
+    rtl::OUString aServiceName;
 
     aContext->getValueByName(kSchemaServiceParam) >>= aServiceName;
     uno::Sequence< uno::Any > aInitArgs( 1 );
     aInitArgs[0] <<= aContext;
-    mSchemaSupplier = SchemaSupplier::query(mFactory->createInstanceWithArguments(aServiceName,aInitArgs)) ;
+    mSchemaSupplier = uno::Reference<backenduno::XSchemaSupplier>::query(mFactory->createInstanceWithArguments(aServiceName,aInitArgs)) ;
     if (!mSchemaSupplier.is())
     {
          throw backenduno::BackendSetupException(
@@ -258,18 +255,16 @@ void  MultiStratumBackend::initializeSchemaSupplier(const uno::Reference<uno::XC
 static
 bool approveRecovery(const backenduno::StratumCreationException & aError)
 {
-    using namespace apihelper;
-    typedef SimpleInteractionRequest::Continuation Choice;
-    Choice const k_supported_choices = CONTINUATION_APPROVE ; //| CONTINUATION_DISAPPROVE;
+    sal_uInt32 const k_supported_choices = apihelper::CONTINUATION_APPROVE ; //| apihelper::CONTINUATION_DISAPPROVE;
 
-    Choice chosen = CONTINUATION_UNKNOWN;
+    sal_uInt32 chosen = apihelper::CONTINUATION_UNKNOWN;
 
-    ConfigurationInteractionHandler handler;
+    apihelper::ConfigurationInteractionHandler handler;
     try {
         uno::Reference< css::task::XInteractionHandler > h(handler.get());
         if (h.is()) {
-            rtl::Reference< SimpleInteractionRequest > req(
-                new SimpleInteractionRequest(
+            rtl::Reference< apihelper::SimpleInteractionRequest > req(
+                new apihelper::SimpleInteractionRequest(
                     uno::makeAny(aError), k_supported_choices));
             h->handle(req.get());
             chosen = req->getResponse();
@@ -280,9 +275,9 @@ bool approveRecovery(const backenduno::StratumCreationException & aError)
 
     switch (chosen)
     {
-    case CONTINUATION_APPROVE:      return true;
-    case CONTINUATION_DISAPPROVE:   return false;
-    case CONTINUATION_UNKNOWN:      break;
+    case apihelper::CONTINUATION_APPROVE:      return true;
+    case apihelper::CONTINUATION_DISAPPROVE:   return false;
+    case apihelper::CONTINUATION_UNKNOWN:      break;
 
     default: OSL_ENSURE(false,"Unsolicited continuation chosen"); break;
     }
@@ -293,7 +288,7 @@ bool approveRecovery(const backenduno::StratumCreationException & aError)
 void MultiStratumBackend::initializeBackendStrata(const uno::Reference<uno::XComponentContext>& aContext)
 {
 
-    OUString sStrata;
+    rtl::OUString sStrata;
     //Get Strata
     aContext->getValueByName(kStrataServiceParam) >>= sStrata;
     if(sStrata.getLength()==0)
@@ -306,14 +301,14 @@ void MultiStratumBackend::initializeBackendStrata(const uno::Reference<uno::XCom
     }
 
     //need to parse the Strata to extract service names and data location
-    ServiceInfoList aServiceInfoList;
+    std::vector< std::pair<rtl::OUString, rtl::OUString> > aServiceInfoList;
     parseStrataInfo(sStrata,aServiceInfoList,*this);
 
-    for (ServiceInfoList::const_iterator it = aServiceInfoList.begin(); it != aServiceInfoList.end(); ++it)
+    for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::const_iterator it = aServiceInfoList.begin(); it != aServiceInfoList.end(); ++it)
     {
         uno::Sequence< uno::Any > aInitArgs( 1 );
-        OUString sServiceName = it->first;
-        const OUString& sServiceData = it->second;
+        rtl::OUString sServiceName = it->first;
+        const rtl::OUString& sServiceData = it->second;
         aInitArgs[0] <<= sServiceData;
         uno::Reference <uno::XInterface> xBackend;
         bool bOptional = checkOptionalArg(sServiceName);
@@ -327,8 +322,8 @@ void MultiStratumBackend::initializeBackendStrata(const uno::Reference<uno::XCom
             if(!bOptional)
             {
                 static const sal_Char sErrContext[] = "MultiStratumBackend: Could not create Backend Stratum Service: ";
-                OUString const sContext(RTL_CONSTASCII_USTRINGPARAM(sErrContext));
-                OUString const sMessage = sContext.concat(exception.Message);
+                rtl::OUString const sContext(RTL_CONSTASCII_USTRINGPARAM(sErrContext));
+                rtl::OUString const sMessage = sContext.concat(exception.Message);
 
                 backenduno::StratumCreationException error(sMessage,*this,
                                                             ::cppu::getCaughtException(),
@@ -355,7 +350,7 @@ rtl::OUString SAL_CALL
     {
         return mOwnerEntity;
     }
-    return OUString();
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -373,10 +368,10 @@ rtl::OUString SAL_CALL
         }
         else
         {
-            return OUString();
+            return rtl::OUString();
         }
     }
-    return OUString();
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -388,7 +383,7 @@ sal_Bool SAL_CALL
     osl::MutexGuard aGuard(mMutex);
     if (checkOkState())
     {
-        for (BackendStrata::const_iterator it =  mBackendStrata.begin(); it !=  mBackendStrata.end(); ++it)
+        for (std::vector< uno::Reference <uno::XInterface> >::const_iterator it =  mBackendStrata.begin(); it !=  mBackendStrata.end(); ++it)
         {
             uno::Reference< backenduno::XBackendEntities > xEntities( *it, uno::UNO_QUERY );
             if (xEntities.is())
@@ -433,7 +428,7 @@ sal_Bool SAL_CALL
 
     if (checkOkState())
     {
-        for (BackendStrata::const_iterator it =  mBackendStrata.begin(); it !=  mBackendStrata.end(); ++it)
+        for (std::vector< uno::Reference <uno::XInterface> >::const_iterator it =  mBackendStrata.begin(); it !=  mBackendStrata.end(); ++it)
         {
             uno::Reference< backenduno::XBackendEntities > xEntities( *it, uno::UNO_QUERY );
             if (xEntities.is())
@@ -535,7 +530,7 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
 sal_Int32 MultiStratumBackend::findSupportingStratum(const rtl::OUString& aEntity)
 {
     sal_Int32 nNumLayers = mBackendStrata.size();
-    for (BackendStrata::reverse_iterator it = mBackendStrata.rbegin(); it != mBackendStrata.rend(); ++it)
+    for (std::vector< uno::Reference <uno::XInterface> >::reverse_iterator it = mBackendStrata.rbegin(); it != mBackendStrata.rend(); ++it)
     {
         uno::Reference< backenduno::XBackendEntities > xEntities( *it, uno::UNO_QUERY );
         if (xEntities.is())
@@ -554,14 +549,13 @@ sal_Int32 MultiStratumBackend::findSupportingStratum(const rtl::OUString& aEntit
                                          *this, 0) ;
 }
 //------------------------------------------------------------------------------
-typedef std::vector<uno::Reference<backenduno::XLayer> > BackendLayers;
 uno::Sequence<uno::Reference<backenduno::XLayer> >
     MultiStratumBackend::searchSupportingStrata(sal_Int32 nNumLayers,
                                                 rtl::OUString aEntity,
                                                 const rtl::OUString& aComponent)
 {
     uno::Sequence<uno::Reference<backenduno::XLayer> > aLayers;
-    BackendLayers aBackendLayers;
+    std::vector<uno::Reference<backenduno::XLayer> > aBackendLayers;
     for (sal_Int32 i = 0 ; i < nNumLayers ; ++ i)
     {
         uno::Sequence<uno::Reference<backenduno::XLayer> > aMultiLayers;
@@ -616,7 +610,7 @@ uno::Sequence<uno::Reference<backenduno::XLayer> >
                     mBackendStrata[i], uno::UNO_REF_QUERY_THROW) ;
                 if (xSingleLayerStratum.is())
                 {
-                    uno::Reference<backenduno::XLayer> xLayer = xSingleLayerStratum->getLayer( aComponent, OUString());
+                    uno::Reference<backenduno::XLayer> xLayer = xSingleLayerStratum->getLayer( aComponent, rtl::OUString());
                     //Could be an empty layer
                     if (xLayer.is())
                     {
@@ -658,7 +652,7 @@ uno::Reference<backenduno::XUpdateHandler> SAL_CALL
     {
 
         sal_Int32 nNumSupportedLayers = mBackendStrata.size();
-        OUString aUsedEntity;
+        rtl::OUString aUsedEntity;
 
         if(aEntity != mOwnerEntity)
         {
@@ -765,7 +759,7 @@ void SAL_CALL MultiStratumBackend::disposing()
     }
     if (!mBackendStrata.empty())
     {
-        for (BackendStrata::const_iterator it =  mBackendStrata.begin(); it !=  mBackendStrata.end(); ++it)
+        for (std::vector< uno::Reference <uno::XInterface> >::const_iterator it =  mBackendStrata.begin(); it !=  mBackendStrata.end(); ++it)
         {
             uno::Reference<  lang::XComponent> xComp( *it, uno::UNO_QUERY );
             if (xComp.is())
@@ -789,7 +783,7 @@ static const sal_Char * const kBackendService = "com.sun.star.configuration.back
 static const sal_Char * const kImplementation =
                 "com.sun.star.comp.configuration.backend.MultiStratumBackend" ;
 
-static const AsciiServiceName kServiceNames [] =
+static sal_Char const * const kServiceNames [] =
 {
     kBackendService,
     0
@@ -807,7 +801,7 @@ const ServiceRegistrationInfo *getMultiStratumBackendServiceInfo()
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-    instantiateMultiStratumBackend(const CreationContext& xContext)
+    instantiateMultiStratumBackend(const uno::Reference< uno::XComponentContext >& xContext)
 {
     return *new MultiStratumBackend(xContext) ;
 }
@@ -917,7 +911,7 @@ void MultiStratumBackend::notifyListeners(const backenduno::ComponentChangeEvent
 {
     //fire off notification to all registered listeners for specific Component
     ListenerList::const_iterator aIter;
-    OUString aComponentName = aEvent.Component;
+    rtl::OUString aComponentName = aEvent.Component;
     if (mListenerList.empty())
     {
         OSL_TRACE("MultiStratumBackend: notifyListeners: no listeners registered for component %s",

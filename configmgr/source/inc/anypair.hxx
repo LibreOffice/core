@@ -12,12 +12,6 @@ namespace configmgr
     namespace lang = css::lang;
 
     //==========================================================================
-    //= Basic (POD) data structure for representing a single value in an AnyPair
-    //==========================================================================
-
-    typedef const void * cfgmgr_AnyPair_Data;
-
-    //==========================================================================
     //= flags for handling the state of an Anypair
     //==========================================================================
     enum {
@@ -25,7 +19,6 @@ namespace configmgr
         cfgmgr_SELECT_SECOND = 0x02,
         cfgmgr_SELECT_BOTH = cfgmgr_SELECT_FIRST | cfgmgr_SELECT_SECOND
     };
-    typedef sal_uInt8 cfgmgr_SelectorType;
 
     //==========================================================================
     //= data structure for descriptive data for an AnyPair
@@ -33,10 +26,10 @@ namespace configmgr
     struct cfgmgr_AnyPair_Desc
     {
         typelib_TypeDescriptionReference *  pType;
-        cfgmgr_SelectorType nState;
+        sal_uInt8 nState;
     };
 
-    inline bool cfgmgr_AnyPair_isNull(cfgmgr_AnyPair_Desc const* _pDesc, cfgmgr_SelectorType nSelect)
+    inline bool cfgmgr_AnyPair_isNull(cfgmgr_AnyPair_Desc const* _pDesc, sal_uInt8 nSelect)
     { return (_pDesc->nState & nSelect) == 0; }
 
     inline bool cfgmgr_AnyPair_isEmpty(cfgmgr_AnyPair_Desc const* _pDesc)
@@ -48,12 +41,9 @@ namespace configmgr
 
     struct cfgmgr_AnyPair
     {
-        typedef cfgmgr_AnyPair_Data  Data;
-        typedef cfgmgr_AnyPair_Desc  Desc;
-
-        Desc                desc;
-        cfgmgr_AnyPair_Data first;
-        cfgmgr_AnyPair_Data second;
+        cfgmgr_AnyPair_Desc                desc;
+        const void * first;
+        const void * second;
     };
 
 // -----------------------------------------------------------------------------
@@ -101,7 +91,7 @@ namespace configmgr
 
         bool hasValue(SelectMember _select = SELECT_BOTH)  const
         {
-            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, (cfgmgr_SelectorType)_select);
+            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, (sal_uInt8)_select);
         }
         bool hasFirst()  const
         {

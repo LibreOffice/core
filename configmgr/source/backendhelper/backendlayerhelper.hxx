@@ -46,15 +46,12 @@ namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 //------------------------------------------------------------------------------
 
-typedef cppu::WeakComponentImplHelper2<backend::XLayerContentDescriber,
-                                       lang::XServiceInfo> BackendBase ;
-
 /**
   *  Implements the LayerContentDescriber service.
   *  Describes a set of configuration data to an XLayerHandler
   *  Object
   */
-class BackendLayerHelper : public BackendBase {
+class BackendLayerHelper : public cppu::WeakComponentImplHelper2<backend::XLayerContentDescriber, lang::XServiceInfo> {
 public :
     /**
      Service constructor from a service factory.
@@ -139,8 +136,7 @@ public:
     IOONode* getChild(const rtl::OUString& aChildName);
 
 private:
-    typedef std::vector<IOONode*> ChildList;
-    ChildList mChildList;
+    std::vector<IOONode*> mChildList;
 };
 //------------------------------------------------------------------------------
 class OOProperty :public IOONode

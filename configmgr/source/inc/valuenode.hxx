@@ -35,7 +35,6 @@
 #include "anypair.hxx"
 #include <com/sun/star/uno/Any.h>
 #include <rtl/ustring.hxx>
-#include "rttimacros.hxx"
 
 #include <string.h>
 #ifndef INCLUDED_MEMORY
@@ -52,8 +51,6 @@ namespace configmgr
     class INode;
     class ISubtree;
     class ValueNode;
-
-    using rtl::OUString;
 
     // helper (tag) class
     namespace treeop { struct NoChildCopy {}; struct DeepChildCopy {}; enum { ALL_LEVELS = -1 }; }
@@ -84,7 +81,7 @@ namespace configmgr
 
     class INode
     {
-        OUString          m_aName;
+        rtl::OUString          m_aName;
         node::Attributes  m_aAttributes;
 
     protected:
@@ -96,14 +93,14 @@ namespace configmgr
         }
     public:
         explicit
-        INode(OUString const& aName, node::Attributes);
+        INode(rtl::OUString const& aName, node::Attributes);
 
         virtual ~INode();
 
         virtual std::auto_ptr<INode> clone() const = 0;
     public:
 
-        const OUString& getName() const { return m_aName; }
+        const rtl::OUString& getName() const { return m_aName; }
         node::Attributes getAttributes() const { return m_aAttributes; }
 
         bool isDefault()   const { return m_aAttributes.isDefault(); }
@@ -117,7 +114,7 @@ namespace configmgr
 
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence
-        void setName(const OUString& _rNewName) { m_aName = _rNewName; }
+        void setName(const rtl::OUString& _rNewName) { m_aName = _rNewName; }
 
         virtual ValueNode* asValueNode();
         virtual ValueNode const* asValueNode() const;
@@ -127,9 +124,6 @@ namespace configmgr
         // double dispatch support
         virtual void dispatch(NodeAction&) const = 0;
         virtual void dispatch(NodeModification&) = 0;
-
-        // "rtti"
-        RTTI_BASE(INode);
     };
 
 // -----------------------------------------------------------------------------
@@ -141,11 +135,11 @@ namespace configmgr
     {
         sal_Int16       m_nLevel;                   /// determines if everything is read
         sal_Int16       m_nDefaultLevels;           /// determines if defaults are read
-        OUString        m_sId;
-        OUString        m_sTemplateName;            /// path of the template for child instantiation
-        OUString        m_sTemplateModule;          /// module of the template for child instantiation
+        rtl::OUString       m_sId;
+        rtl::OUString       m_sTemplateName;            /// path of the template for child instantiation
+        rtl::OUString       m_sTemplateModule;          /// module of the template for child instantiation
 
-        virtual INode* doGetChild(OUString const& name) const = 0;
+        virtual INode* doGetChild(rtl::OUString const& name) const = 0;
 
     protected:
         ISubtree():m_nLevel(0){}
@@ -178,8 +172,8 @@ namespace configmgr
             ,m_sTemplateName(_rTemplateName)
             ,m_sTemplateModule(_rTemplateModule){}
 
-        INode* getChild(OUString const& name)               { return doGetChild(name); }
-        INode const* getChild(OUString const& name) const   { return doGetChild(name); }
+        INode* getChild(rtl::OUString const& name)              { return doGetChild(name); }
+        INode const* getChild(rtl::OUString const& name) const  { return doGetChild(name); }
 
         ISubtree* asISubtree();
         ISubtree const* asISubtree() const;
@@ -192,11 +186,11 @@ namespace configmgr
 
         bool isSetNode() const { return m_sTemplateName.getLength() != 0; }
 
-        void makeSetNode(OUString const& _sTemplateName, OUString const& _sTemplateModule)
+        void makeSetNode(rtl::OUString const& _sTemplateName, rtl::OUString const& _sTemplateModule)
         { m_sTemplateName = _sTemplateName; m_sTemplateModule = _sTemplateModule; }
 
-        OUString const& getElementTemplateName()   const { return m_sTemplateName; }
-        OUString const& getElementTemplateModule() const { return m_sTemplateModule; }
+        rtl::OUString const& getElementTemplateName()   const { return m_sTemplateName; }
+        rtl::OUString const& getElementTemplateModule() const { return m_sTemplateModule; }
 
         virtual INode* addChild(std::auto_ptr<INode> node) =0;                      // takes ownership
         virtual ::std::auto_ptr<INode> removeChild(rtl::OUString const& name) =0;   // releases ownership
@@ -208,9 +202,6 @@ namespace configmgr
         // double dispatch support
         virtual void dispatch(NodeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(NodeModification& anAction) { anAction.handle(*this); }
-
-        // "rtti"
-        RTTI(ISubtree, INode);
     };
 
     //==========================================================================
@@ -229,22 +220,22 @@ namespace configmgr
         //explicit ValueNode(node::Attributes _aAttrs):INode(_aAttrs){}
 
         /*
-        ValueNode(OUString const& aName, node::Attributes _aAttrs)
+        ValueNode(rtl::OUString const& aName, node::Attributes _aAttrs)
         : INode(aName, _aAttrs)
         , m_aValuePair()
         {}
         */
-        ValueNode(OUString const& aName,uno::Type const& aType, node::Attributes _aAttrs)
+        ValueNode(rtl::OUString const& aName,uno::Type const& aType, node::Attributes _aAttrs)
         : INode(aName, _aAttrs)
         , m_aValuePair(aType)
         {
         }
-        ValueNode(OUString const& aName,uno::Any const& anAny, node::Attributes _aAttrs)
+        ValueNode(rtl::OUString const& aName,uno::Any const& anAny, node::Attributes _aAttrs)
         : INode(aName, _aAttrs)
         , m_aValuePair(anAny, selectMember(_aAttrs.isDefault()))
         {
         }
-        ValueNode(OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, node::Attributes _aAttrs)
+        ValueNode(rtl::OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, node::Attributes _aAttrs)
         : INode(aName, _aAttrs)
         , m_aValuePair(anAny, aDefault)
         {
@@ -276,8 +267,6 @@ namespace configmgr
         virtual void dispatch(NodeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(NodeModification& anAction) { anAction.handle(*this); }
 
-        // "rtti"
-        RTTI(ValueNode, INode);
     private:
         static AnyPair::SelectMember selectValue() { return AnyPair::SELECT_FIRST; }
         static AnyPair::SelectMember selectDeflt() { return AnyPair::SELECT_SECOND; }

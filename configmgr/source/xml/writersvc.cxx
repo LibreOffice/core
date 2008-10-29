@@ -59,17 +59,17 @@ namespace configmgr
 template <class BackendInterface>
 struct WriterServiceTraits;
 // -----------------------------------------------------------------------------
-static inline void clear(OUString & _rs) { _rs = OUString(); }
+static inline void clear(rtl::OUString & _rs) { _rs = rtl::OUString(); }
 
 // -----------------------------------------------------------------------------
 template <class BackendInterface>
-WriterService<BackendInterface>::WriterService(CreationArg _xContext)
+WriterService<BackendInterface>::WriterService(uno::Reference< uno::XComponentContext > const & _xContext)
 : m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 , m_xWriter()
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration XML Writer: Context has no service manager"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration XML Writer: Context has no service manager"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }
@@ -101,13 +101,13 @@ void SAL_CALL
                 break;
             }
 
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration XML Writer"
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration XML Writer"
                                                             "- SAX XDocumentHandler or XOutputStream expected"));
             throw lang::IllegalArgumentException(sMessage,*this,1);
         }
     default:
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Parser"));
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Parser"));
             throw lang::IllegalArgumentException(sMessage,*this,0);
         }
     }
@@ -163,12 +163,12 @@ void SAL_CALL
     }
     else
     {
-        SaxHandler xNewHandler = this->createHandler();
+        uno::Reference< sax::XDocumentHandler > xNewHandler = this->createHandler();
 
         xDS.set( xNewHandler, uno::UNO_QUERY );
         if (!xDS.is())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration XML Writer: Cannot set output stream to sax.Writer - missing interface XActiveDataSource."));
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration XML Writer: Cannot set output stream to sax.Writer - missing interface XActiveDataSource."));
             throw uno::RuntimeException(sMessage,*this);
         }
         xDS->setOutputStream(aStream);
@@ -209,7 +209,7 @@ uno::Reference< sax::XDocumentHandler > WriterService<BackendInterface>::createH
     {
         static rtl::OUString const k_sSaxWriterSvc( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") );
 
-        return SaxHandler::query( getServiceFactory()->createInstance(k_sSaxWriterSvc) );
+        return uno::Reference< sax::XDocumentHandler >::query( getServiceFactory()->createInstance(k_sSaxWriterSvc) );
     }
     catch (uno::RuntimeException& ) { throw; }
     catch (uno::Exception& e)
@@ -221,7 +221,7 @@ uno::Reference< sax::XDocumentHandler > WriterService<BackendInterface>::createH
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-AsciiServiceName const aLayerWriterServices[] =
+sal_Char const * const aLayerWriterServices[] =
 {
     "com.sun.star.configuration.backend.xml.LayerWriter",
     0
@@ -238,8 +238,6 @@ const ServiceImplementationInfo aLayerWriterSI =
 template <>
 struct WriterServiceTraits< backenduno::XLayerHandler >
 {
-    typedef backenduno::XLayerHandler Handler;
-
     static ServiceImplementationInfo const * getServiceInfo()
     { return & aLayerWriterSI; }
 };

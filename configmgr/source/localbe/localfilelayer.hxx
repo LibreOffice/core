@@ -138,7 +138,7 @@ protected:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
             throw (uno::Exception);
 
-    using apihelper::PropertySetHelper::getFastPropertyValue;
+    using PropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const;
 
 };
@@ -273,8 +273,6 @@ private :
   */
 class BasicCompositeLocalFileLayer : public BasicLocalFileLayer
 {
-public:
-    typedef std::vector<rtl::OUString> SubLayerFiles;
 protected:
     /**
       Constructor providing the base directory and the
@@ -308,13 +306,13 @@ protected:
       @param aResDir    resource directory containing potential sublayers
       @param aComponent component subpath
       */
-    void fillSubLayerLists(const SubLayerFiles& aSublayerDirectories,
+    void fillSubLayerLists(const std::vector<rtl::OUString>& aSublayerDirectories,
                            const rtl::OUString& aComponent) ;
 private :
     /** List of available sublayers... */
     uno::Sequence<rtl::OUString> mSubLayers ;
     /** .. and the corresponding file URLs. */
-    SubLayerFiles mSubLayerFiles ;
+    std::vector<rtl::OUString> mSubLayerFiles ;
 
 };
 
@@ -347,7 +345,7 @@ public :
     CompositeLocalFileLayer(
             const uno::Reference<lang::XMultiServiceFactory>& xFactory,
             const rtl::OUString& aComponent,
-            const SubLayerFiles& aSublayerDirectories) ;
+            const std::vector<rtl::OUString>& aSublayerDirectories) ;
     /** Destructor */
     ~CompositeLocalFileLayer(void) ;
     // XLayer
@@ -409,7 +407,7 @@ public :
             const uno::Reference<lang::XMultiServiceFactory>& xFactory,
             const rtl::OUString& aBaseDir,
             const rtl::OUString& aComponent,
-            const SubLayerFiles& aSublayerDirectories) ;
+            const std::vector<rtl::OUString>& aSublayerDirectories) ;
     /** Destructor */
     ~FullCompositeLocalFileLayer(void) ;
     // XLayer

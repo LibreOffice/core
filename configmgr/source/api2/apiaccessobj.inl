@@ -43,7 +43,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-OInnerElement<NodeClass>::OInnerElement(UnoInterface*   pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode)
+OInnerElement<NodeClass>::OInnerElement(uno::XInterface*    pUnoThis,ApiTreeImpl& rTree, configuration::NodeRef const& aNode)
 : m_pUnoThis(pUnoThis)
 , m_rTree(rTree)
 , m_aNode(aNode)
@@ -60,7 +60,7 @@ OInnerElement<NodeClass>::~OInnerElement()
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-NodeRef OInnerElement<NodeClass>::doGetNode() const
+configuration::NodeRef OInnerElement<NodeClass>::doGetNode() const
 {
     return m_aNode;
 }
@@ -74,7 +74,7 @@ ApiTreeImpl& OInnerElement<NodeClass>::getApiTree() const
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-UnoInterface* OInnerElement<NodeClass>::doGetUnoInstance() const
+uno::XInterface* OInnerElement<NodeClass>::doGetUnoInstance() const
 {
     return m_pUnoThis;
 }
@@ -99,9 +99,9 @@ ServiceImplementationInfo const* OInnerElement<NodeClass>::getStaticServiceInfo(
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-NodeRef OSetElement<NodeClass>::doGetNode() const
+configuration::NodeRef OSetElement<NodeClass>::doGetNode() const
 {
-    return m_aTree.getTree().getRootNode();
+    return m_aTree.getTree()->getRootNode();
 }
 //-----------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ ApiTreeImpl& OSetElement<NodeClass>::getApiTree() const
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-UnoInterface* OSetElement<NodeClass>::doGetUnoInstance() const
+uno::XInterface* OSetElement<NodeClass>::doGetUnoInstance() const
 {
     return m_aTree.getUnoInstance();
 }
@@ -138,9 +138,9 @@ ServiceImplementationInfo const* OSetElement<NodeClass>::getStaticServiceInfo()
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-NodeRef OReadRootElement<NodeClass>::doGetNode() const
+configuration::NodeRef OReadRootElement<NodeClass>::doGetNode() const
 {
-    return m_aRootTree.getApiTree().getTree().getRootNode();
+    return m_aRootTree.getApiTree().getTree()->getRootNode();
 }
 //-----------------------------------------------------------------------------
 
@@ -159,7 +159,7 @@ ApiRootTreeImpl& OReadRootElement<NodeClass>::getRootTree()
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-UnoInterface* OReadRootElement<NodeClass>::doGetUnoInstance() const
+uno::XInterface* OReadRootElement<NodeClass>::doGetUnoInstance() const
 {
     return m_aRootTree.getApiTree().getUnoInstance();
 }
@@ -184,9 +184,9 @@ ServiceImplementationInfo const* OReadRootElement<NodeClass>::getStaticServiceIn
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-NodeRef OUpdateRootElement<NodeClass>::doGetNode() const
+configuration::NodeRef OUpdateRootElement<NodeClass>::doGetNode() const
 {
-    return m_aRootTree.getApiTree().getTree().getRootNode();
+    return m_aRootTree.getApiTree().getTree()->getRootNode();
 }
 //-----------------------------------------------------------------------------
 
@@ -205,7 +205,7 @@ ApiRootTreeImpl& OUpdateRootElement<NodeClass>::getRootTree()
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
-UnoInterface* OUpdateRootElement<NodeClass>::doGetUnoInstance() const
+uno::XInterface* OUpdateRootElement<NodeClass>::doGetUnoInstance() const
 {
     return m_aRootTree.getApiTree().getUnoInstance();
 }

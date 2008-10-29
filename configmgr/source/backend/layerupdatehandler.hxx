@@ -31,6 +31,10 @@
 #ifndef CONFIGMGR_BACKEND_LAYERUPDATEHANDLER_HXX
 #define CONFIGMGR_BACKEND_LAYERUPDATEHANDLER_HXX
 
+#include "sal/config.h"
+
+#include "boost/utility.hpp"
+
 #include "updatesvc.hxx"
 #include "layerupdatebuilder.hxx"
 #include "utility.hxx"
@@ -43,94 +47,90 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
         namespace backenduno = ::com::sun::star::configuration::backend;
-
-        using backenduno::TemplateIdentifier;
-        using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
         class LayerUpdateBuilder;
 
-        class LayerUpdateHandler : public UpdateService , Noncopyable
+        class LayerUpdateHandler: private boost::noncopyable, public UpdateService
         {
         public:
             explicit
-            LayerUpdateHandler(CreationArg _xContext);
+            LayerUpdateHandler(uno::Reference< uno::XComponentContext > const & _xContext);
 
             ~LayerUpdateHandler();
 
             // XUpdateHandler
             virtual void SAL_CALL
                 startUpdate(  )
-                    throw ( MalformedDataException, lang::IllegalAccessException,
+                    throw ( backenduno::MalformedDataException, lang::IllegalAccessException,
                             lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endUpdate(  )
-                    throw ( MalformedDataException, lang::IllegalAccessException,
+                    throw ( backenduno::MalformedDataException, lang::IllegalAccessException,
                             lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                modifyNode( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                modifyNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNodeFromTemplate( const OUString& aName, sal_Int16 aAttributes, const TemplateIdentifier& aTemplate )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceNodeFromTemplate( const rtl::OUString& aName, sal_Int16 aAttributes, const backenduno::TemplateIdentifier& aTemplate )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endNode(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                removeNode( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                removeNode( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                modifyProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Type& aType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                modifyProperty( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Type& aType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValue( const uno::Any& aValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 resetPropertyValue( )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                resetPropertyValueForLocale( const OUString& aLocale )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                resetPropertyValueForLocale( const rtl::OUString& aLocale )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endProperty(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                resetProperty( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                resetProperty( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplacePropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplacePropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                removeProperty( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                removeProperty( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         private:
             LayerUpdateBuilder & getUpdateBuilder();

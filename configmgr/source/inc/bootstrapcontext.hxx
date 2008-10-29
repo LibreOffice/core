@@ -48,7 +48,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 // -----------------------------------------------------------------------------
 #define SINGLETON_ "/singletons/"
-#define SINGLETON( NAME ) OUString( RTL_CONSTASCII_USTRINGPARAM( SINGLETON_ NAME ) )
+#define SINGLETON( NAME ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SINGLETON_ NAME ) )
 // -----------------------------------------------------------------------------
 namespace configmgr
 {
@@ -56,21 +56,11 @@ namespace configmgr
     namespace uno   = ::com::sun::star::uno;
     namespace lang  = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
-    using ::rtl::OUString;
 // -----------------------------------------------------------------------------
-    typedef ::cppu::WeakComponentImplHelper3 <
-                    uno::XComponentContext,
-                    uno::XCurrentContext,
-                    lang::XServiceInfo
-                > ComponentContext_Base;
     /** Base class for customized ComponentContext using bootstrap data and overrides
     */
-    class ComponentContext : public ComponentContext_Base
+    class ComponentContext : public cppu::WeakComponentImplHelper3 < uno::XComponentContext, uno::XCurrentContext, lang::XServiceInfo >
     {
-    public:
-        typedef uno::Reference< uno::XComponentContext >        Context;
-        typedef uno::Reference< lang::XMultiComponentFactory >  ServiceManager;
-
     // creation and destruction
     public:
         /** Constructs a ComponentContext based on the given overrides and context.
@@ -85,22 +75,22 @@ namespace configmgr
                 These values take precedence over values from the base context or bootstrap data.
         */
         explicit
-        ComponentContext(Context const & _xContext);
+        ComponentContext(uno::Reference< uno::XComponentContext > const & _xContext);
 
         /// Destroys this BootstrapContext
         ~ComponentContext();
 
         // gets the INI in use for getting bootstrap data
-        OUString getBootstrapURL() const;
+        rtl::OUString getBootstrapURL() const;
 
-        static sal_Bool isPassthrough(Context const & _xContext);
+        static sal_Bool isPassthrough(uno::Reference< uno::XComponentContext > const & _xContext);
 
         static beans::NamedValue makePassthroughMarker(sal_Bool bPassthrough = true);
     // interface implementations
     public:
 
     // XComponentContext only
-        virtual ServiceManager SAL_CALL
+        virtual uno::Reference< lang::XMultiComponentFactory > SAL_CALL
             getServiceManager(  )
                 throw (uno::RuntimeException);
 
@@ -110,41 +100,37 @@ namespace configmgr
 
     protected:
         // two phase construct - also initialized the bootstrap data
-        void initialize(const OUString& _aBootstrapURL);
+        void initialize(const rtl::OUString& _aBootstrapURL);
 
-        bool lookupInContext  ( uno::Any & _rValue, const OUString& _aName ) const;
-        bool lookupInBootstrap( uno::Any & _rValue, const OUString& _aName ) const;
+        bool lookupInContext  ( uno::Any & _rValue, const rtl::OUString& _aName ) const;
+        bool lookupInBootstrap( uno::Any & _rValue, const rtl::OUString& _aName ) const;
 
-        Context const & basecontext() const { return m_xContext; }
+        uno::Reference< uno::XComponentContext > const & basecontext() const { return m_xContext; }
 
     private:
         /// The context that most requests are delegated to
-        Context             m_xContext;
+        uno::Reference< uno::XComponentContext >             m_xContext;
         /// The bootstrap data consulted as fallback
         rtlBootstrapHandle  m_hBootstrapData;
         /// The service manager associated with this context
-        ServiceManager      m_xServiceManager;
+        uno::Reference< lang::XMultiComponentFactory >      m_xServiceManager;
     };
 // -----------------------------------------------------------------------------
 
     class UnoContextTunnel
     {
     public:
-        typedef uno::Reference< uno::XCurrentContext >  CurrentContext;
-        typedef uno::Reference< lang::XUnoTunnel >      FailureTunnel;
-        typedef uno::Reference< uno::XComponentContext > Context;
-    public:
         UnoContextTunnel();
         ~UnoContextTunnel();
-        void tunnel(Context const & xContext);
-        void passthru(Context const & xContext);
+        void tunnel(uno::Reference< uno::XComponentContext > const & xContext);
+        void passthru(uno::Reference< uno::XComponentContext > const & xContext);
         uno::Any recoverFailure(bool bRaise); // true, if there is a failure
 
-        static Context recoverContext(Context const & xFallback = Context());
+        static uno::Reference< uno::XComponentContext > recoverContext(uno::Reference< uno::XComponentContext > const & xFallback = uno::Reference< uno::XComponentContext >());
         static bool tunnelFailure(uno::Any const & aException, bool bRaise = false);
     private:
-        CurrentContext  m_xOldContext;
-        FailureTunnel   m_xActiveTunnel;
+        uno::Reference< uno::XCurrentContext >  m_xOldContext;
+        uno::Reference< lang::XUnoTunnel >   m_xActiveTunnel;
         class Tunnel;
     };
 // -----------------------------------------------------------------------------

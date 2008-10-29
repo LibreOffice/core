@@ -41,7 +41,6 @@ namespace configmgr
     namespace uno = com::sun::star::uno;
     namespace logging = com::sun::star::util::logging;
     namespace LogLevel = logging::LogLevel;
-    using rtl::OUString;
 
     /// class providing access to a log output sink in the context
     class Logger
@@ -59,49 +58,47 @@ namespace configmgr
         : m_xLogger( getUnoLoggerFromContext(xContext) )
         {}
 
-        typedef sal_Int32 Level;
-
-        Level level() const
+        sal_Int32 level() const
         { return m_xLogger.is() ? m_xLogger->getLevel() : LogLevel::OFF; }
 
-        bool isLogging(Level nLogLevel) const
+        bool isLogging(sal_Int32 nLogLevel) const
         { return m_xLogger.is() && m_xLogger->isLoggable(nLogLevel); }
 
         /// log output to the logger
-        void log(Level nLevel, const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const;
-        void log(Level nLevel, const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const;
+        void log(sal_Int32 nLevel, const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const;
+        void log(sal_Int32 nLevel, const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const;
 
-        void error(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void error(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::SEVERE, msg, sourceMethod, sourceClass); }
         void error(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::SEVERE, msg, sourceMethod, sourceClass); }
 
-        void warning(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void warning(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::WARNING, msg, sourceMethod, sourceClass); }
         void warning(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::WARNING, msg, sourceMethod, sourceClass); }
 
-        void info(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void info(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::INFO, msg, sourceMethod, sourceClass); }
         void info(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::INFO, msg, sourceMethod, sourceClass); }
 
-        void config(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void config(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::CONFIG, msg, sourceMethod, sourceClass); }
         void config(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::CONFIG, msg, sourceMethod, sourceClass); }
 
-        void fine(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void fine(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::FINE, msg, sourceMethod, sourceClass); }
         void fine(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::FINE, msg, sourceMethod, sourceClass); }
 
-        void finer(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void finer(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::FINER, msg, sourceMethod, sourceClass); }
         void finer(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::FINER, msg, sourceMethod, sourceClass); }
 
-        void finest(const OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
+        void finest(const rtl::OUString & msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::FINEST, msg, sourceMethod, sourceClass); }
         void finest(const char * msg, const char * sourceMethod = 0, const char * sourceClass = 0) const
         { log( LogLevel::FINEST, msg, sourceMethod, sourceClass); }

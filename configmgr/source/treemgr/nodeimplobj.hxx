@@ -31,6 +31,10 @@
 #ifndef CONFIGMGR_NODEIMPLOBJECTS_HXX_
 #define CONFIGMGR_NODEIMPLOBJECTS_HXX_
 
+#include "sal/config.h"
+
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "node.hxx"
 #include "nodeimpl.hxx"
 #include "groupnodeimpl.hxx"
@@ -55,38 +59,34 @@ namespace configmgr
 // Value Nodes
 //-----------------------------------------------------------------------------
 
-        class ValueMemberNode::DeferredImpl : public configmgr::SimpleReferenceObject
+        class ValueMemberNode::DeferredImpl : public salhelper::SimpleReferenceObject
         {
-            data::ValueNodeAddress m_aValueRef;
+            sharable::ValueNode * m_valueNode;
 
-            UnoAny      m_aNewValue;
+            com::sun::star::uno::Any      m_aNewValue;
             bool        m_bToDefault;
             bool        m_bChange;
         public:
-            explicit DeferredImpl(data::ValueNodeAccess const& _aValueNode);
+            explicit DeferredImpl(sharable::ValueNode * valueNode);
 
             /// does this wrap a change
             bool isChange() const   { return m_bChange; }
 
-            /// retrieve the underlying (original) node location
-            data::ValueNodeAddress getOriginalNodeAddress() const
-                { return m_aValueRef; }
-
             /// retrieve the underlying (original) node
-            data::ValueNodeAccess getOriginalNode() const
-        { return data::ValueNodeAccess(m_aValueRef); }
+            sharable::ValueNode * getOriginalNode() const
+            { return m_valueNode; }
 
             /// Does this node change to default
             bool isToDefault()      const { return m_bToDefault; }
 
             /// retrieve the current value of this node
-            UnoAny  getNewValue()   const { return m_aNewValue; }
+            com::sun::star::uno::Any    getNewValue()   const { return m_aNewValue; }
 
             /// Set this node to a new value
-            void    setValue(UnoAny const& aNewValue, data::ValueNodeAccess const& _aOriginalNode);
+            void    setValue(com::sun::star::uno::Any const& aNewValue, sharable::ValueNode * originalNode);
 
             /// Set this node to assume its default value
-            void    setValueToDefault(data::ValueNodeAccess const& _aOriginalNode);
+            void    setValueToDefault(sharable::ValueNode * originalNode);
 
         public:
             // commit protocol
@@ -99,7 +99,7 @@ namespace configmgr
             ValueChangeImpl* adjustToChange(ValueChange const& rExternalChange);
 
             // notification protocol
-            void adjustToChange(NodeChangesInformation& rLocalChange, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nParentPos, Name const& aName);
+            void adjustToChange(NodeChangesInformation& rLocalChange, ValueChange const& rExternalChange, Tree& rParentTree, unsigned int nParentPos, rtl::OUString const& aName);
         };
 //-----------------------------------------------------------------------------
 
@@ -113,9 +113,9 @@ namespace configmgr
         {
         public:
             explicit
-            DeferredGroupNodeImpl(data::GroupNodeAddress const& _aNodeRef);
+            DeferredGroupNodeImpl(sharable::GroupNode * const& _aNodeRef);
             explicit
-            DeferredGroupNodeImpl(data::GroupNodeAddress const& _aNewAddress, GroupNodeImpl& rOriginal);
+            DeferredGroupNodeImpl(sharable::GroupNode * const& _aNewAddress, GroupNodeImpl& rOriginal);
 
             ~DeferredGroupNodeImpl();
 
@@ -126,21 +126,20 @@ namespace configmgr
             void revertCommit(SubtreeChange& rChange);
             void failedCommit(SubtreeChange& rChange);
 
-            void collectValueChanges(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
+            void collectValueChanges(NodeChanges& rChanges, Tree* pParent, unsigned int nNode) const;
 
         public:
         // data access
             bool hasChanges() const;
             void markChanged();
 
-            typedef ValueMemberNode::DeferredImplRef MemberChange;
-            MemberChange findValueChange(Name const& aName);
+            rtl::Reference<ValueMemberNode::DeferredImpl> findValueChange(rtl::OUString const& aName);
 
             using GroupNodeImpl::makeValueMember;
-            ValueMemberNode makeValueMember(Name const& _aName, bool _bForUpdate);
+            ValueMemberNode makeValueMember(rtl::OUString const& _aName, bool _bForUpdate);
 
         private:
-            typedef std::map< Name, MemberChange > MemberChanges;
+            typedef std::map< rtl::OUString, rtl::Reference<ValueMemberNode::DeferredImpl> > MemberChanges;
 
             MemberChanges    m_aChanges;
         };
@@ -153,7 +152,7 @@ namespace configmgr
         {
         public:
             explicit
-            DeferredSetNodeImpl(data::SetNodeAddress const& _aNodeRef, Template* pTemplate);
+            DeferredSetNodeImpl(sharable::SetNode * const& _aNodeRef, Template* pTemplate);
 
         public:
             bool hasChanges() const;
@@ -161,32 +160,32 @@ namespace configmgr
             void collectElementChanges(NodeChanges& rChanges) const;
 
         public:
-            std::auto_ptr<SubtreeChange> preCommitChanges(ElementList& _rRemovedElements);
+            std::auto_ptr<SubtreeChange> preCommitChanges(std::vector< rtl::Reference<ElementTree> >& _rRemovedElements);
             void failedCommit(SubtreeChange& rChanges);
             void finishCommit(SubtreeChange& rChanges);
             void revertCommit(SubtreeChange& rChanges);
 
-            void insertNewElement(Name const& aName, Element const& aNewElement);
-            void removeOldElement(Name const& aName);
+            void insertNewElement(rtl::OUString const& aName, ElementTreeData const& aNewElement);
+            void removeOldElement(rtl::OUString const& aName);
         // Base Overrideables
         private:
         // NodeImpl implementation
             virtual bool                   doIsEmpty() const;
-            virtual ElementTreeImpl*       doFindElement(Name const& aName) ;
+            virtual ElementTree*       doFindElement(rtl::OUString const& aName) ;
             virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
 
             virtual void doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
 
-            virtual SetElementChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
-            virtual SetElementChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
+            virtual SetElementChangeImpl* doAdjustToAddedElement(rtl::OUString const& aName, AddNode const& aAddNodeChange, ElementTreeData const & aNewElement);
+            virtual SetElementChangeImpl* doAdjustToRemovedElement(rtl::OUString const& aName, RemoveNode const& aRemoveNodeChange);
 
-            virtual SetElementChangeImpl* doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
+            virtual SetElementChangeImpl* doAdjustChangedElement(NodeChangesInformation& rLocalChanges, rtl::OUString const& aName, Change const& aChange);
 
             virtual void doTransferElements(ElementSet& rReplacement);
 
         // Implementation
         private:
-            void rebuildElement(Name const& aName, Element const& _aElement);
+            void rebuildElement(rtl::OUString const& aName, ElementTreeData const& _aElement);
 
         private:
             ElementSet m_aChangedData;

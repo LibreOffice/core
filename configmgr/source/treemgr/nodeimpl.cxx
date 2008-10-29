@@ -34,11 +34,8 @@
 #include "nodeimpl.hxx"
 #include "valuenodeimpl.hxx"
 #include "groupnodeimpl.hxx"
-#include "nodeaccess.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
 #include "nodevisitor.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
 #include "nodechangeinfo.hxx"
@@ -57,22 +54,16 @@ namespace configmgr
 // class GroupNodeImpl
 //-----------------------------------------------------------------------------
 
-data::GroupNodeAccess GroupNodeImpl::getDataAccess() const
+sharable::GroupNode * GroupNodeImpl::getDataAccess() const
 {
-    using namespace data;
-
-    NodeAccess aNodeAccess = getOriginalNodeAccess();
-    OSL_ASSERT(GroupNodeAccess::isInstance(aNodeAccess));
-
-    GroupNodeAccess aGroupAccess(aNodeAccess);
-    OSL_ASSERT(aGroupAccess.isValid());
-
-    return aGroupAccess;
+    sharable::Node * node = getOriginalNodeAccess();
+    OSL_ASSERT(node != 0 && node->isGroup());
+    return &node->group;
 }
 //-----------------------------------------------------------------------------
 
-GroupNodeImpl::GroupNodeImpl(data::GroupNodeAddress _pNodeRef)
-    : NodeImpl(reinterpret_cast<data::NodeAddress>(_pNodeRef))
+GroupNodeImpl::GroupNodeImpl(sharable::GroupNode * _pNodeRef)
+    : NodeImpl(reinterpret_cast<sharable::Node *>(_pNodeRef))
     , m_pCache( NULL )
 {
 }
@@ -80,138 +71,69 @@ GroupNodeImpl::GroupNodeImpl(data::GroupNodeAddress _pNodeRef)
 
 bool GroupNodeImpl::areValueDefaultsAvailable() const
 {
-    data::GroupNodeAccess aGroupAccess = getDataAccess();
-
-    return aGroupAccess.data().hasDefaultsAvailable();
+    return getDataAccess()->hasDefaultsAvailable();
 }
 //-----------------------------------------------------------------------------
 
-ValueMemberNode GroupNodeImpl::makeValueMember(data::ValueNodeAccess const& _aNodeAccess)
+ValueMemberNode GroupNodeImpl::makeValueMember(sharable::ValueNode * node)
 {
-    return ValueMemberNode(_aNodeAccess);
+    return ValueMemberNode(node);
 }
 //-----------------------------------------------------------------------------
 
-data::ValueNodeAccess GroupNodeImpl::getOriginalValueNode(Name const& _aName) const
+sharable::ValueNode * GroupNodeImpl::getOriginalValueNode(rtl::OUString const& _aName) const
 {
-    OSL_ENSURE( !_aName.isEmpty(), "Cannot get nameless child value");
+    OSL_ENSURE( _aName.getLength() != 0, "Cannot get nameless child value");
 
-    using namespace data;
-
-    data::GroupNodeAccess aAccess = this->getDataAccess();
-    const rtl::OUString &rName = _aName.toString();
-
-/*
-    fprintf (stderr, "GroupNodeImpl::GetOriginalValueNode %p '%s' ", this,
-             rtl::OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
-    fprintf (stderr, "cache '%s'\n",
-             m_pCache ? rtl::OUStringToOString(m_pCache->getName(),
-                                               RTL_TEXTENCODING_UTF8).getStr()
-             : "<null>");
-*/
+    sharable::GroupNode * group = getDataAccess();
 
     if (m_pCache)
     {
-        if (m_pCache->isNamed(rName))
-            return ValueNodeAccess( (ValueNodeAddress) m_pCache );
+        if (m_pCache->isNamed(_aName))
+            return m_pCache->valueData();
 
-        sharable::GroupNode & aNode = aAccess.data();
-        m_pCache = aNode.getNextChild(m_pCache);
+        m_pCache = group->getNextChild(m_pCache);
 
-        if (m_pCache && m_pCache->isNamed(rName))
-            return ValueNodeAccess( (ValueNodeAddress) m_pCache );
+        if (m_pCache && m_pCache->isNamed(_aName))
+            return m_pCache->valueData();
         m_pCache = NULL;
     }
 
-    NodeAccess aChild = aAccess.getChildNode(_aName);
-    m_pCache = aChild;
+    sharable::Node * child = group->getChild(_aName);
+    m_pCache = child;
 
     // to do: investigate cache lifecycle more deeply.
 
-    return ValueNodeAccess(aChild);
+    return child == 0 ? 0 : child->valueData();
 }
 
 //-----------------------------------------------------------------------------
 // class ValueElementNodeImpl
 //-----------------------------------------------------------------------------
 
-data::ValueNodeAccess ValueElementNodeImpl::getDataAccess() const
+sharable::ValueNode * ValueElementNodeImpl::getDataAccess() const
 {
-    using namespace data;
-
-    NodeAccess aNodeAccess = getOriginalNodeAccess();
-    OSL_ASSERT(ValueNodeAccess::isInstance(aNodeAccess));
-
-    ValueNodeAccess aValueAccess(aNodeAccess);
-    OSL_ASSERT(aValueAccess.isValid());
-
-    return aValueAccess;
+    sharable::Node * node = getOriginalNodeAccess();
+    OSL_ASSERT(node != 0 && node->isValue());
+    return &node->value;
 }
 //-----------------------------------------------------------------------------
 
-ValueElementNodeImpl::ValueElementNodeImpl(data::ValueNodeAddress const& _aNodeRef)
-    : NodeImpl(reinterpret_cast<data::NodeAddress>(_aNodeRef))
+ValueElementNodeImpl::ValueElementNodeImpl(sharable::ValueNode * const& _aNodeRef)
+    : NodeImpl(reinterpret_cast<sharable::Node *>(_aNodeRef))
 {
 }
 //-----------------------------------------------------------------------------
 
-UnoAny  ValueElementNodeImpl::getValue() const
+com::sun::star::uno::Any    ValueElementNodeImpl::getValue() const
 {
-    return getDataAccess().getValue();
+    return getDataAccess()->getValue();
 }
 //-----------------------------------------------------------------------------
 
-UnoType ValueElementNodeImpl::getValueType() const
+com::sun::star::uno::Type   ValueElementNodeImpl::getValueType() const
 {
-    return getDataAccess().getValueType();
-}
-//-----------------------------------------------------------------------------
-
-namespace
-{
-    struct AbstractNodeCast : data::NodeVisitor
-    {
-           virtual Result handle( data::ValueNodeAccess const& /*rNode*/)
-           {
-               throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
-           }
-           virtual Result handle( data::GroupNodeAccess const& /*rNode*/)
-           {
-               throw Exception( "INTERNAL ERROR: Node is not a group node. Cast failing." );
-           }
-           virtual Result handle( data::SetNodeAccess const& /*rNode*/)
-           {
-               return CONTINUE;
-           }
-        protected:
-            using NodeVisitor::handle;
-    };
-
-    template <class NodeType>
-    class NodeCast : AbstractNodeCast
-    {
-    public:
-        typedef typename NodeType::DataAccess DataNodeType;
-
-        NodeCast(NodeImpl& rOriginalNode)
-        : m_pNode(0)
-        {
-            if (this->visitNode(rOriginalNode.getOriginalNodeAccess()) == DONE)
-                m_pNode = static_cast<NodeType*>(&rOriginalNode);
-        }
-
-        NodeType& get() const
-        {
-            OSL_ENSURE(m_pNode,"INTERNAL ERROR: Node not set after Cast." );
-            return *m_pNode;
-        }
-
-        operator NodeType& () const { return get(); }
-        private:
-        virtual Result handle( DataNodeType& ) { return DONE; }
-
-        NodeType* m_pNode;
-    };
+    return getDataAccess()->getValueType();
 }
 //-----------------------------------------------------------------------------
     }

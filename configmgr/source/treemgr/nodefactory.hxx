@@ -35,25 +35,19 @@
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-    namespace data
-    {
-        class ValueNodeAccess;
-        class GroupNodeAccess;
-        class SetNodeAccess;
-    }
-//-----------------------------------------------------------------------------
-
     namespace configuration
     {
         class NodeImpl;
         class Template;
     }
+    namespace sharable {
+        struct GroupNode;
+        struct SetNode;
+        struct ValueNode;
+    }
 //-----------------------------------------------------------------------------
     namespace view
     {
-        typedef rtl::Reference<configuration::NodeImpl> NodeImplRef;
-
 //-----------------------------------------------------------------------------
 
 // Creating Specific types of nodes
@@ -61,9 +55,9 @@ namespace configmgr
 
         struct NodeFactory
         {
-            virtual NodeImplRef makeValueNode(data::ValueNodeAccess const& _aNodeAccess) = 0;
-            virtual NodeImplRef makeGroupNode(data::GroupNodeAccess const& _aNodeAccess) = 0;
-            virtual NodeImplRef makeSetNode(data::SetNodeAccess const& _aNodeAccess, configuration::Template* pTemplate) = 0;
+            virtual rtl::Reference<configuration::NodeImpl> makeValueNode(sharable::ValueNode * node) = 0;
+            virtual rtl::Reference<configuration::NodeImpl> makeGroupNode(sharable::GroupNode * node) = 0;
+            virtual rtl::Reference<configuration::NodeImpl> makeSetNode(sharable::SetNode * node, configuration::Template* pTemplate) = 0;
         };
     }
 //-----------------------------------------------------------------------------

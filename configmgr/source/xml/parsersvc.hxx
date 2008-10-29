@@ -46,7 +46,6 @@ namespace configmgr
     namespace xml
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace io    = ::com::sun::star::io;
@@ -62,10 +61,8 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > const & CreationArg;
-
             explicit
-            ParserService(CreationArg _xContext);
+            ParserService(uno::Reference< uno::XComponentContext > const & _xContext);
 
             // XInitialization
             virtual void SAL_CALL
@@ -95,17 +92,14 @@ namespace configmgr
                     throw (uno::RuntimeException);
 
         protected:
-            typedef uno::Reference< sax::XDocumentHandler >         SaxHandler;
-            typedef uno::Reference< uno::XComponentContext >        Context;
-
-            Context getContext() const
+            uno::Reference< uno::XComponentContext > getContext() const
             { return m_xContext; }
 
-            void parse(SaxHandler const & _xHandler);
+            void parse(uno::Reference< sax::XDocumentHandler > const & _xHandler);
             // throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         private:
-            Context   m_xContext;
+            uno::Reference< uno::XComponentContext >   m_xContext;
             sax::InputSource m_aInputSource;
 
             static ServiceInfoHelper getServiceInfo();

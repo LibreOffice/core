@@ -83,7 +83,7 @@ bool LayerUpdateBuilder::init()
     if (m_pCurrentNode) return false;
 
     LayerUpdate & update = data();
-    m_pCurrentNode = new NodeModification(NULL, OUString(), 0, 0, false);
+    m_pCurrentNode = new NodeModification(NULL, rtl::OUString(), 0, 0, false);
     update.setContextNode(m_pCurrentNode);
 
     OSL_ENSURE(m_pCurrentProp == NULL, "LayerUpdateBuilder: Internal error: got a current property for a new context");
@@ -92,12 +92,12 @@ bool LayerUpdateBuilder::init()
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::modifyNode(OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset)
+bool LayerUpdateBuilder::modifyNode(rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     NodeUpdate * pNewNode = new NodeModification(m_pCurrentNode,_aName,_nFlags,_nFlagsMask,_bReset);
-    ElementUpdateRef xNewNode(pNewNode);
+    rtl::Reference<ElementUpdate> xNewNode(pNewNode);
 
     if (!m_pCurrentNode->addNodeUpdate(xNewNode))
         return false;
@@ -107,7 +107,7 @@ bool LayerUpdateBuilder::modifyNode(OUString const & _aName, sal_Int16 _nFlags, 
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::replaceNode(OUString const & _aName, sal_Int16 _nFlags, backenduno::TemplateIdentifier const * _pTemplate)
+bool LayerUpdateBuilder::replaceNode(rtl::OUString const & _aName, sal_Int16 _nFlags, backenduno::TemplateIdentifier const * _pTemplate)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
@@ -115,7 +115,7 @@ bool LayerUpdateBuilder::replaceNode(OUString const & _aName, sal_Int16 _nFlags,
         new NodeReplace(m_pCurrentNode,_aName,_nFlags,_pTemplate->Name,_pTemplate->Component) :
         new NodeReplace(m_pCurrentNode,_aName,_nFlags);
 
-    ElementUpdateRef xNewNode(pNewNode);
+    rtl::Reference<ElementUpdate> xNewNode(pNewNode);
 
     if (!m_pCurrentNode->addNodeUpdate(xNewNode))
         return false;
@@ -136,13 +136,13 @@ bool LayerUpdateBuilder::finishNode()
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::removeNode(OUString const & _aName)
+bool LayerUpdateBuilder::removeNode(rtl::OUString const & _aName)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     NodeDrop * pNewNode = new NodeDrop(m_pCurrentNode,_aName);
 
-    ElementUpdateRef xNewNode(pNewNode);
+    rtl::Reference<ElementUpdate> xNewNode(pNewNode);
 
     if (!m_pCurrentNode->addNodeUpdate(xNewNode))
         return false;
@@ -151,12 +151,12 @@ bool LayerUpdateBuilder::removeNode(OUString const & _aName)
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::modifyProperty(OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType)
+bool LayerUpdateBuilder::modifyProperty(rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     PropertyUpdate * pNewProp = new PropertyUpdate(m_pCurrentNode,_aName,_nFlags,_nFlagsMask,_aType);
-    ElementUpdateRef xNewProp(pNewProp);
+    rtl::Reference<ElementUpdate> xNewProp(pNewProp);
 
     if (!m_pCurrentNode->addPropertyUpdate(xNewProp))
         return false;
@@ -174,7 +174,7 @@ bool LayerUpdateBuilder::setPropertyValue(uno::Any const & _aValue)
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::setPropertyValueForLocale(uno::Any const & _aValue, OUString const & _aLocale)
+bool LayerUpdateBuilder::setPropertyValueForLocale(uno::Any const & _aValue, rtl::OUString const & _aLocale)
 {
     OSL_PRECOND(m_pCurrentProp, "LayerUpdateBuilder: Illegal state for property operation");
 
@@ -190,7 +190,7 @@ bool LayerUpdateBuilder::resetPropertyValue()
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::resetPropertyValueForLocale(OUString const & _aLocale)
+bool LayerUpdateBuilder::resetPropertyValueForLocale(rtl::OUString const & _aLocale)
 {
     OSL_PRECOND(m_pCurrentProp, "LayerUpdateBuilder: Illegal state for property operation");
 
@@ -211,13 +211,13 @@ bool LayerUpdateBuilder::finishProperty()
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::addNullProperty(OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType)
+bool LayerUpdateBuilder::addNullProperty(rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     PropertyAdd * pNewProp = new PropertyAdd(m_pCurrentNode,_aName,_nFlags,_aType);
 
-    ElementUpdateRef xNewProp(pNewProp);
+    rtl::Reference<ElementUpdate> xNewProp(pNewProp);
 
     if (!m_pCurrentNode->addPropertyUpdate(xNewProp))
         return false;
@@ -226,13 +226,13 @@ bool LayerUpdateBuilder::addNullProperty(OUString const & _aName, sal_Int16 _nFl
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::addProperty(OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue)
+bool LayerUpdateBuilder::addProperty(rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     PropertyAdd * pNewProp = new PropertyAdd(m_pCurrentNode,_aName,_nFlags,_aValue);
 
-    ElementUpdateRef xNewProp(pNewProp);
+    rtl::Reference<ElementUpdate> xNewProp(pNewProp);
 
     if (!m_pCurrentNode->addPropertyUpdate(xNewProp))
         return false;
@@ -241,13 +241,13 @@ bool LayerUpdateBuilder::addProperty(OUString const & _aName, sal_Int16 _nFlags,
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::resetProperty(OUString const & _aName)
+bool LayerUpdateBuilder::resetProperty(rtl::OUString const & _aName)
 {
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     PropertyReset * pNewProp = new PropertyReset(m_pCurrentNode,_aName);
 
-    ElementUpdateRef xNewProp(pNewProp);
+    rtl::Reference<ElementUpdate> xNewProp(pNewProp);
 
     if (!m_pCurrentNode->addPropertyUpdate(xNewProp))
         return false;

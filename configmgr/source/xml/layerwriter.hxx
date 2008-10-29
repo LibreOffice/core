@@ -55,11 +55,11 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
 
-        class LayerWriter : public LayerWriterService_Base
+        class LayerWriter : public WriterService< ::com::sun::star::configuration::backend::XLayerHandler >
         {
         public:
             explicit
-                LayerWriter(CreationArg _xContext);
+                LayerWriter(uno::Reference< uno::XComponentContext > const & _xContext);
             virtual ~LayerWriter();
 
             // XLayerHandler
@@ -75,17 +75,17 @@ namespace configmgr
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
+                addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+                addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
@@ -95,22 +95,22 @@ namespace configmgr
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                dropNode( const OUString& aName )
+                dropNode( const rtl::OUString& aName )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+                overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+                addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+                addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
@@ -125,7 +125,7 @@ namespace configmgr
                            uno::RuntimeException);
 
             virtual void SAL_CALL
-                setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+                setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString& aLocale )
                     throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                            uno::RuntimeException);
 
@@ -139,7 +139,7 @@ namespace configmgr
             void endElement();
 
             void writeValue(uno::Any const & _aValue);
-            void writeValue(uno::Any const & _aValue, OUString const & _aLocale);
+            void writeValue(uno::Any const & _aValue, rtl::OUString const & _aLocale);
 
             void outputValue(uno::Any const & _aValue);
 
@@ -150,9 +150,8 @@ namespace configmgr
                 rtl::OUString const & name, sal_Int16 attributes);
 
         private:
-            typedef Stack< OUString > TagStack;
             uno::Reference< com::sun::star::script::XTypeConverter > m_xTCV;
-            TagStack            m_aTagStack;
+            Stack< rtl::OUString >            m_aTagStack;
             ElementFormatter    m_aFormatter;
             uno::Type           m_aPropertyType;
             bool                m_bInProperty;

@@ -34,17 +34,17 @@
 #include "cachedata.hxx"
 #include "timestamp.hxx"
 #include "utility.hxx"
+#include <boost/utility.hpp>
 #include <osl/mutex.hxx>
 #ifndef _CONFIGMGR_UTILITY_HXX_
 #include <utility.hxx>
 #endif
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace configmgr
 {
 ////////////////////////////////////////////////////////////////////////////////
-    using ::rtl::OUString;
-
     class ConfigChangeBroadcastHelper;
     namespace backend
     {
@@ -52,7 +52,7 @@ namespace configmgr
     }
 //-----------------------------------------------------------------------------
 
-    class CacheClientAccess : public configmgr::SimpleReferenceObject, Noncopyable
+    class CacheClientAccess: private boost::noncopyable, public salhelper::SimpleReferenceObject
     {
     private:
         CacheData   m_aData;
@@ -72,88 +72,86 @@ namespace configmgr
         ConfigChangeBroadcastHelper * releaseBroadcaster();
 
         // attach a module with a given name
-        void attachModule(data::TreeAddress _aLocation, CacheLine::Name const & _aModule);
+        void attachModule(sharable::TreeFragment * _aLocation, rtl::OUString const & _aModule);
         /// check if the given module exists already (and is not empty)
-        bool hasModule(const CacheLine::Path& _aLocation);
+        bool hasModule(const configuration::AbsolutePath& _aLocation);
         /// checks if the given module exists and has defaults available
-        bool hasModuleDefaults(CacheLine::Path const & _aLocation);
+        bool hasModuleDefaults(configuration::AbsolutePath const & _aLocation);
 
         /// retrieve the subtree at _aPath (maybe if it has the requested defaults) and clientAcquire() it
-        data::NodeAddress acquireNode(CacheLine::Path const& _aPath);
+        sharable::Node * acquireNode(configuration::AbsolutePath const& _aPath);
 
         /** add or merge the given subtree at the given location,
             return <TRUE/> if the tree has defaults then
         */
-        bool insertDefaults( backend::NodeInstance const & _aDefaultData ) CFG_UNO_THROW_RTE(  );
+        bool insertDefaults( backend::NodeInstance const & _aDefaultData ) SAL_THROW((com::sun::star::uno::RuntimeException));
 
         /// clientRelease() the tree at aComponentName, and return the resulting reference count
-        oslInterlockedCount releaseNode( CacheLine::Path const& _aPath );
+        oslInterlockedCount releaseNode( configuration::AbsolutePath const& _aPath );
 
         /// retrieve the given subtree without changing its ref count
-        data::NodeAddress   findInnerNode(CacheLine::Path const& _aPath );
+        sharable::Node *    findInnerNode(configuration::AbsolutePath const& _aPath );
 
         /// merge the given change list into this tree - reflects old data to _aUpdate
-        void applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( );
+        void applyUpdate(backend::UpdateInstance & _aUpdate) SAL_THROW((com::sun::star::uno::RuntimeException));
     };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    class CacheLoadingAccess : public configmgr::SimpleReferenceObject, Noncopyable
+    class CacheLoadingAccess: private boost::noncopyable, public salhelper::SimpleReferenceObject
     {
     public:
-        typedef std::vector< CacheLineRef >  DisposeList;
         friend class backend::CacheController;
     private:
         friend class CacheDisposeScheduler;
-        typedef std::map< CacheLine::Name, TimeStamp > DeadModuleList;
 
         ExtendedCacheData   m_aData;
-        DeadModuleList      m_aDeadModules;         /// list of nodes which are registered for throwing away
+        std::map< rtl::OUString, TimeStamp >        m_aDeadModules;         /// list of nodes which are registered for throwing away
     public:
         explicit
         CacheLoadingAccess();
         ~CacheLoadingAccess();
 
         /// gets a tree address for the given module if it exists
-        data::TreeAddress getTreeAddress(CacheLine::Name const & _aModule);
+        sharable::TreeFragment * getTreeAddress(rtl::OUString const & _aModule);
 
         /// return TRUE if there is no data (left) in this object's cache data
         bool isEmpty();
 
         // create a module with a given name
-        void createModule(CacheLine::Name const & _aModule);
+        void createModule(rtl::OUString const & _aModule);
         /// check if the given module exists already (and is not empty)
-        bool hasModule(CacheLine::Name const & _aLocation);
+        bool hasModule(rtl::OUString const & _aLocation);
         /// retrieve the subtree at aComponentName and clientAcquire() it, true if succeeded
-        bool acquireModule(CacheLine::Name const & _aModule);
+        bool acquireModule(rtl::OUString const & _aModule);
 
         /// clientRelease() the tree at aComponentName, and return the resulting reference count
-        oslInterlockedCount releaseModule( CacheLine::Name const & _aModule );
+        oslInterlockedCount releaseModule( rtl::OUString const & _aModule );
 
         /// collect the modules that can be disposed now (i.e. released after _rLimitReleaseTime)
-        TimeStamp collectDisposeList(CacheLoadingAccess::DisposeList & _rList,
+        TimeStamp collectDisposeList(std::vector< rtl::Reference<CacheLine> > & _rList,
                                         TimeStamp const & _aLimitTime,
                                         TimeInterval const & _aDelay);
 
         /// clear the contained tree, return all remaining modules
-        void clearData( DisposeList& _rDisposeList) CFG_NOTHROW();
+        void clearData( std::vector< rtl::Reference<CacheLine> >& _rDisposeList) SAL_THROW(());
 
     // stuff that is particular for CacheLoadingAccess
         /** add the given subtree at the given location,
             return the tree that is then pertinent and clientAcquire() it once
         */
-        data::TreeAddress addComponentData( backend::ComponentInstance const & _aComponentInstance,
+        sharable::TreeFragment * addComponentData( backend::ComponentInstance const & _aComponentInstance,
                                             bool _bIncludesDefaults
-                                           ) CFG_UNO_THROW_RTE();
+                                           ) SAL_THROW((com::sun::star::uno::RuntimeException));
 
         /// merge the given change list into the pending change list of this tree
-        void addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  );
+        void addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) SAL_THROW((com::sun::star::uno::RuntimeException));
         /// retrieve accumulated pending changes
-        std::auto_ptr<SubtreeChange> releasePendingChanges(CacheLine::Name const& _aModule);
+        std::auto_ptr<SubtreeChange> releasePendingChanges(rtl::OUString const& _aModule);
 
         /// find the modules having pending changes
-        bool findPendingChangedModules( ExtendedCacheData::PendingModuleList & _rPendingList );
+        bool findPendingChangedModules( std::vector< rtl::OUString > & _rPendingList );
     };
 
 

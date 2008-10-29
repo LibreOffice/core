@@ -52,7 +52,6 @@ namespace configmgr
     {
         class NodeChange;
         class NodeChanges;
-        class Tree;
         class NodeRef;
         class NodeID;
     }
@@ -60,34 +59,22 @@ namespace configmgr
 
     namespace configapi
     {
-        using configuration::Tree;
-        using configuration::TreeRef;
-        using configuration::Name;
-        using configuration::AbsolutePath;
-        using configuration::RelativePath;
-        using configuration::NodeRef;
-        using configuration::NodeID;
-        using configuration::NodeChangeInformation;
-        using configuration::NodeChangeData;
-        using configuration::NodeChangeLocation;
 // ---------------------------------------------------------------------------------------------------
     //interpreting NodeChanges
 // resolve the relative path from a given base to the changed node
-bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
+bool resolveChangeLocation(configuration::RelativePath& aPath, configuration::NodeChangeLocation const& aChange, rtl::Reference< configuration::Tree > const& aBaseTree, configuration::NodeRef const& aBaseNode)
 {
     OSL_ENSURE(aChange.isValidLocation(), "Trying to resolve against change location that wasn't set up properly");
 
     namespace Path = configuration::Path;
 
-    typedef Path::Iterator Iter;
+    rtl::Reference< configuration::Tree > aChangeBaseTree = aChange.getBaseTree();
 
-    Tree aChangeBaseTree = aChange.getBaseTree();
+    configuration::AbsolutePath aOuterBasePath      = aBaseTree->getAbsolutePath(aBaseNode);
+    configuration::AbsolutePath aChangeBasePath = aChangeBaseTree->getAbsolutePath(aChange.getBaseNode());
 
-    AbsolutePath aOuterBasePath     = aBaseTree.getAbsolutePath(aBaseNode);
-    AbsolutePath aChangeBasePath    = aChangeBaseTree.getAbsolutePath(aChange.getBaseNode());
-
-    Iter aChangeIt = aChangeBasePath.begin(),   aChangeEnd = aChangeBasePath.end();
-    Iter aOuterIt  = aOuterBasePath.begin(),    aOuterEnd  = aOuterBasePath.end();
+    std::vector<configuration::Path::Component>::const_reverse_iterator aChangeIt = aChangeBasePath.begin(),    aChangeEnd = aChangeBasePath.end();
+    std::vector<configuration::Path::Component>::const_reverse_iterator aOuterIt  = aOuterBasePath.begin(), aOuterEnd  = aOuterBasePath.end();
 
     // First by resolve the base node pathes
     while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
@@ -102,7 +89,7 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
     {
         Path::Rep aRemaining(aChangeIt, aChangeEnd);
 
-        aPath = RelativePath(aRemaining).compose(aChange.getAccessor());
+        aPath = configuration::RelativePath(aRemaining).compose(aChange.getAccessor());
     }
     else if (aOuterIt == aOuterEnd) // exact match outside
     {
@@ -110,7 +97,7 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
     }
     else //(aChangeIt == aChangeEnd) but outer left
     {
-        RelativePath aAccessor = aChange.getAccessor();
+        configuration::RelativePath aAccessor = aChange.getAccessor();
         aChangeIt   = aAccessor.begin();
         aChangeEnd  = aAccessor.end();
 
@@ -126,7 +113,7 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
         {
             Path::Rep aRemaining(aChangeIt, aChangeEnd);
 
-            aPath = RelativePath( aRemaining );
+            aPath = configuration::RelativePath( aRemaining );
         }
     }
 
@@ -136,17 +123,17 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
 
 // ---------------------------------------------------------------------------------------------------
 // change path and base settings to start from the given base
-bool rebaseChange(NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef)
+bool rebaseChange(configuration::NodeChangeLocation& aChange, rtl::Reference< configuration::Tree > const& _aBaseTreeRef)
 {
-    return rebaseChange(aChange,_aBaseTreeRef,_aBaseTreeRef.getRootNode());
+    return rebaseChange(aChange,_aBaseTreeRef,_aBaseTreeRef->getRootNode());
 }
-bool rebaseChange(NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef, NodeRef const& aBaseNode)
+bool rebaseChange(configuration::NodeChangeLocation& aChange, rtl::Reference< configuration::Tree > const& _aBaseTreeRef, configuration::NodeRef const& aBaseNode)
 {
     OSL_ENSURE(aChange.isValidLocation(), "Trying to rebase change location that wasn't set up properly");
 
-    Tree aBaseTree(_aBaseTreeRef);
+    rtl::Reference< configuration::Tree > aBaseTree(_aBaseTreeRef);
 
-    RelativePath aNewPath;
+    configuration::RelativePath aNewPath;
     if (resolveChangeLocation(aNewPath,aChange,aBaseTree,aBaseNode))
     {
         aChange.setBase( aBaseTree, aBaseNode);
@@ -158,7 +145,7 @@ bool rebaseChange(NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef, Nod
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects
-bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
+bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeData const& aChange,
                        Factory& rFactory)
 {
     if (aChange.isSetChange())
@@ -176,11 +163,11 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
         }
 
         //Check if complex or simple type
-        Tree aTree = aChange.isRemoveSetChange()?
+        rtl::Reference< configuration::Tree > aTree = aChange.isRemoveSetChange()?
             aChange.getOldElementTree():
             aChange.getNewElementTree();
 
-        NodeRef aNodeRef = aTree.getRootNode();
+        configuration::NodeRef aNodeRef = aTree->getRootNode();
 
         if (configuration::isStructuralNode(aTree, aNodeRef))
         {
@@ -198,9 +185,9 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
 
             if (aChange.isReplaceSetChange() )
             {
-                Tree aOldTree = aChange.getOldElementTree();
+                rtl::Reference< configuration::Tree > aOldTree = aChange.getOldElementTree();
 
-                aNodeRef = aOldTree.getRootNode();
+                aNodeRef = aOldTree->getRootNode();
                 OSL_ENSURE(!configuration::isStructuralNode(aOldTree, aNodeRef), "resolveUnoObject types mismatch");
                 aUnoChange.oldValue =  configuration::getSimpleElementValue(aOldTree, aNodeRef);
             }
@@ -221,7 +208,7 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects inplace
-bool resolveToUno(NodeChangeData& aChange, Factory& rFactory)
+bool resolveToUno(configuration::NodeChangeData& aChange, Factory& rFactory)
 {
     struct UnoChange aUnoChange;
     if (resolveUnoObjects(aUnoChange,aChange, rFactory))
@@ -236,14 +223,14 @@ bool resolveToUno(NodeChangeData& aChange, Factory& rFactory)
 // ---------------------------------------------------------------------------------------------------
 
 /// fill a change info from a NodeChangeInfo
-void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo, Tree const& aBaseTree, Factory& rFactory)
+void fillChange(util::ElementChange& rChange, configuration::NodeChangeInformation const& aInfo, rtl::Reference< configuration::Tree > const& aBaseTree, Factory& rFactory)
 {
-    fillChange(rChange,aInfo,aBaseTree,aBaseTree.getRootNode(),rFactory);
+    fillChange(rChange,aInfo,aBaseTree,aBaseTree->getRootNode(),rFactory);
 }
 /// fill a change info from a NodeChangeInfo
-void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo, Tree const& aBaseTree, NodeRef const& aBaseNode, Factory& rFactory)
+void fillChange(util::ElementChange& rChange, configuration::NodeChangeInformation const& aInfo, rtl::Reference< configuration::Tree > const& aBaseTree, configuration::NodeRef const& aBaseNode, Factory& rFactory)
 {
-    RelativePath aRelativePath;
+    configuration::RelativePath aRelativePath;
     if (!resolveChangeLocation(aRelativePath, aInfo.location, aBaseTree, aBaseNode))
         OSL_ENSURE(false, "WARNING: Change is not part of the given Tree");
 
@@ -258,7 +245,7 @@ void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a change info from a NodeChangeInfo (base,path and uno objects are assumed to be resolved already)
-void fillChangeFromResolved(util::ElementChange& rChange, NodeChangeInformation const& aInfo)
+void fillChangeFromResolved(util::ElementChange& rChange, configuration::NodeChangeInformation const& aInfo)
 {
     rChange.Accessor        <<= aInfo.location.getAccessor().toString();
     rChange.Element         = aInfo.change.unoData.newValue;
@@ -266,9 +253,9 @@ void fillChangeFromResolved(util::ElementChange& rChange, NodeChangeInformation 
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
-bool fillEventDataFromResolved(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo)
+bool fillEventDataFromResolved(container::ContainerEvent& rEvent, configuration::NodeChangeInformation const& aInfo)
 {
-    rEvent.Accessor         <<= aInfo.location.getAccessor().getLocalName().getName().toString();
+    rEvent.Accessor         <<= aInfo.location.getAccessor().getLocalName().getName();
     rEvent.Element          = aInfo.change.unoData.newValue;
     rEvent.ReplacedElement  = aInfo.change.unoData.oldValue;
 
@@ -276,12 +263,12 @@ bool fillEventDataFromResolved(container::ContainerEvent& rEvent, NodeChangeInfo
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already)
-bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, NodeChangeInformation const& aInfo, bool bMore)
+bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, configuration::NodeChangeInformation const& aInfo, bool bMore)
 {
     if (!aInfo.isValueChange())
         return false;
 
-    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName().toString();
+    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName();
 
     rEvent.NewValue         = aInfo.change.unoData.newValue;
     rEvent.OldValue         = aInfo.change.unoData.oldValue;

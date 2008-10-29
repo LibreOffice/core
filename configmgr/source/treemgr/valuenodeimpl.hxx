@@ -37,17 +37,8 @@ namespace configmgr
 {
     class ValueChange;
 
-    namespace data
-    {
-        class GroupNodeAccess;
-        class ValueNodeAccess;
-    }
-//-----------------------------------------------------------------------------
-
     namespace configuration
     {
-    typedef com::sun::star::uno::Any UnoAny;
-    typedef com::sun::star::uno::Type UnoType;
 //-----------------------------------------------------------------------------
 // Another types of node
 //-----------------------------------------------------------------------------
@@ -59,19 +50,18 @@ namespace configmgr
     class ValueElementNodeImpl : public NodeImpl
     {
     public:
-            explicit ValueElementNodeImpl(data::ValueNodeAddress const& _aNodeRef) ;
+            explicit ValueElementNodeImpl(sharable::ValueNode * const& _aNodeRef) ;
 
     // the following delegate directly to the original node
     public:
         /// Does this node assume its default value
         /// retrieve the current value of this node
-        UnoAny  getValue() const;
+        com::sun::star::uno::Any    getValue() const;
 
         /// get the type of this value
-        UnoType getValueType()  const;
+        com::sun::star::uno::Type   getValueType()  const;
 
-        typedef data::ValueNodeAccess DataAccess;
-            DataAccess getDataAccess() const;
+        sharable::ValueNode * getDataAccess() const;
     };
 
     // domain-specific 'dynamic_cast' replacement

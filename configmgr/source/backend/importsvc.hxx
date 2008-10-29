@@ -48,7 +48,6 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace backenduno = ::com::sun::star::configuration::backend;
@@ -61,10 +60,8 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > const & CreationArg;
-
             explicit
-            ImportService(CreationArg _xContext, ServiceInfoHelper const & aSvcInfo);
+            ImportService(uno::Reference< uno::XComponentContext > const & _xContext, ServiceInfoHelper const & aSvcInfo);
             ~ImportService();
 
             // XInitialization
@@ -73,15 +70,15 @@ namespace configmgr
                     throw (uno::Exception, uno::RuntimeException);
 
             // XServiceInfo
-            virtual OUString SAL_CALL
+            virtual rtl::OUString SAL_CALL
                 getImplementationName(  )
                     throw (uno::RuntimeException);
 
             virtual sal_Bool SAL_CALL
-                supportsService( const OUString& ServiceName )
+                supportsService( const rtl::OUString& ServiceName )
                     throw (uno::RuntimeException);
 
-            virtual uno::Sequence< OUString > SAL_CALL
+            virtual uno::Sequence< rtl::OUString > SAL_CALL
                 getSupportedServiceNames(  )
                     throw (uno::RuntimeException);
 
@@ -101,31 +98,26 @@ namespace configmgr
                         lang::NullPointerException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                importLayerForEntity( const uno::Reference< backenduno::XLayer >& aLayer, const OUString& aEntity )
+                importLayerForEntity( const uno::Reference< backenduno::XLayer >& aLayer, const rtl::OUString& aEntity )
                     throw ( backenduno::MalformedDataException,
                             lang::WrappedTargetException, lang::IllegalArgumentException,
                             lang::NullPointerException, uno::RuntimeException);
         protected:
-            typedef uno::Reference< uno::XComponentContext >        Context;
-            typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
-            typedef uno::Reference< backenduno::XBackend >          Backend;
-            typedef uno::Reference< backenduno::XLayerHandler >     InputHandler;
+            uno::Reference< backenduno::XBackend > createDefaultBackend() const;
 
-            Backend createDefaultBackend() const;
+            //uno::Reference< lang::XMultiServiceFactory > getServiceFactory() const
 
-            //ServiceFactory getServiceFactory() const
-
-            virtual sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);
-             /** Notify Backend of import */
+            virtual sal_Bool setImplementationProperty( rtl::OUString const & aName, uno::Any const & aValue);
+             /** Notify backend of import */
             sal_Bool        m_bSendNotification;
         private:
             // is pure virtual to allow different import services
-            virtual InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity = OUString()) = 0;
+            virtual uno::Reference< backenduno::XLayerHandler > createImportHandler(uno::Reference< backenduno::XBackend > const & xBackend, rtl::OUString const & aEntity = rtl::OUString()) = 0;
 
         private:
             osl::Mutex      m_aMutex;
-            Context         m_xContext;
-            Backend         m_xDestinationBackend;
+            uno::Reference< uno::XComponentContext >         m_xContext;
+            uno::Reference< backenduno::XBackend >         m_xDestinationBackend;
 
 
             ServiceInfoHelper m_aServiceInfo;
@@ -137,19 +129,19 @@ namespace configmgr
         class MergeImportService : public ImportService
         {
         public:
-            explicit MergeImportService(CreationArg _xContext);
+            explicit MergeImportService(uno::Reference< uno::XComponentContext > const & _xContext);
         private:
-            InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity);
+            uno::Reference< backenduno::XLayerHandler > createImportHandler(uno::Reference< backenduno::XBackend > const & xBackend, rtl::OUString const & aEntity);
         };
 // -----------------------------------------------------------------------------
 
         class CopyImportService : public ImportService
         {
         public:
-            explicit CopyImportService(CreationArg _xContext);
+            explicit CopyImportService(uno::Reference< uno::XComponentContext > const & _xContext);
         private:
-            InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity);
-            sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);
+            uno::Reference< backenduno::XLayerHandler > createImportHandler(uno::Reference< backenduno::XBackend > const & xBackend, rtl::OUString const & aEntity);
+            sal_Bool setImplementationProperty( rtl::OUString const & aName, uno::Any const & aValue);
         private:
             sal_Bool m_bOverwrite;
         };
