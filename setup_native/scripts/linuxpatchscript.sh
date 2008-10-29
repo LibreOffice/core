@@ -11,11 +11,12 @@ fi
 echo
 echo "Searching for the PRODUCTNAMEPLACEHOLDER installation ..."
 
-RPMNAME=`rpm -qa | grep PRODUCTNAMEPLACEHOLDER-core01`
+RPMNAME=`rpm -qa | grep SEARCHPACKAGENAMEPLACEHOLDER`
 
 if [ "x$RPMNAME" != "x" ]
 then
   PRODUCTINSTALLLOCATION="`rpm --query --queryformat "%{INSTALLPREFIX}" $RPMNAME`"
+  FULLPRODUCTINSTALLLOCATION="${PRODUCTINSTALLLOCATION}/PRODUCTDIRECTORYNAME"
 else
   echo "PRODUCTNAMEPLACEHOLDER is not installed"
   exit 1
@@ -23,7 +24,7 @@ fi
 
 # Last chance to exit ..
 echo
-read -p "Patching the installation in ${PRODUCTINSTALLLOCATION}. Continue (y/n) ? " -n 1 reply leftover
+read -p "Patching the installation in ${FULLPRODUCTINSTALLLOCATION}. Continue (y/n) ? " -n 1 reply leftover
 echo
 [ "$reply" == "y" ] || exit 1
 
@@ -39,21 +40,8 @@ do
 done
 
 # Save UserInstallation value
-BOOTSTRAPRC="${PRODUCTINSTALLLOCATION}/program/bootstraprc"
+BOOTSTRAPRC="${FULLPRODUCTINSTALLLOCATION}/program/bootstraprc"
 USERINST=`grep UserInstallation ${BOOTSTRAPRC}`
-
-# Check, if searchtoolbar extension rpm is available
-SEARCHTOOLBARRPM=`ls $BASEDIR/RPMS/*.rpm | grep searchtoolbar`
-
-if [ "x$SEARCHTOOLBARRPM" != "x" ]; then
-  # Check, that $RPMLIST does not contain search toolbar rpm (then it is already installed)
-  SEARCHTOOLBARINSTALLED=`grep searchtoolbar ${RPMLIST}`
-
-  if [ "x$SEARCHTOOLBARINSTALLED" == "x" ]; then
-    # Install the search toolbar rpm
-    RPMLIST="$RPMLIST $SEARCHTOOLBARRPM"
-  fi
-fi
 
 # Check, if kde-integration rpm is available
 KDERPM=`ls $BASEDIR/RPMS/*.rpm | grep kde-integration`
@@ -71,26 +59,6 @@ fi
 echo
 rpm --upgrade -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST
 echo
-
-# Check, if online update rpm is available
-ONLINEUPDATERPM=`ls $BASEDIR/RPMS/*.rpm | grep onlineupdate`
-
-if [ "x$ONLINEUPDATERPM" != "x" ]; then
-  # Check, that $RPMLIST does not contain online update rpm (then it is already installed)
-  ONLINEPDATEINSTALLED=`grep onlineupdate ${RPMLIST}`
-
-  if [ "x$ONLINEPDATEINSTALLED" == "x" ]; then
-    # Ask user, if online update shall be installed
-    echo
-    read -p "Do you want to install the new online update feature (y/n) ? " -n 1 reply leftover
-    echo
-
-    if [ "$reply" == "y" ]; then
-      # Install the online update rpm
-      rpm --install -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $ONLINEUPDATERPM
-    fi
-  fi
-fi
 
 # Some RPM versions have problems with -U and --prefix
 if [ ! -f ${BOOTSTRAPRC} ]; then

@@ -313,13 +313,19 @@ install_linux_rpm()
     java_runtime=$tempdir/$javahome/bin/java
 
     # Make symbolic links to all TrueType font files installed in the system
-    # to avoid garbles for Japanese
-    language=`printenv LANG | cut -c 1-5`
-    if [ x$language = "xja_JP" ]; then
+    # to avoid garbles for Japanese, Korean or Chinese
+    language=`printenv LANG | cut -c 1-3`
+    if [ x$language = "xja_" -o x$language = "xko_" -o x$language = "xzh_" ]; then
         font_fallback_dir=$javahome/lib/fonts/fallback
         echo "Making symbolic links to TrueType font files into $font_fallback_dir."
         mkdir -p $font_fallback_dir
         ttf_files=`locate "*.ttf" | xargs`
+        if [ x$ttf_files = "x" ]; then
+            ttf_files=`find /usr/share/fonts/ -name "*ttf"`
+            if [ x$ttf_files = "x" ]; then
+                ttf_files=`find /usr/X11R6/lib/ -name "*ttf"`
+            fi
+        fi
         ln -s $ttf_files $font_fallback_dir
     fi
 
