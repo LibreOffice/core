@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoomslideritem.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,9 @@ TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
 
 #define ZOOMSLIDER_PARAM_CURRENTZOOM    "Columns"
 #define ZOOMSLIDER_PARAM_SNAPPINGPOINTS "SnappingPoints"
-#define ZOOMSLIDER_PARAMS           2
+#define ZOOMSLIDER_PARAM_MINZOOM        "MinValue"
+#define ZOOMSLIDER_PARAM_MAXZOOM        "MaxValue"
+#define ZOOMSLIDER_PARAMS           4
 
 // -----------------------------------------------------------------------
 
@@ -53,8 +55,10 @@ SvxZoomSliderItem::SvxZoomSliderItem( USHORT nCurrentZoom, USHORT nMinZoom, USHO
 // -----------------------------------------------------------------------
 
 SvxZoomSliderItem::SvxZoomSliderItem( const SvxZoomSliderItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
-    maValues( rOrig.maValues )
+: SfxUInt16Item( rOrig.Which(), rOrig.GetValue() )
+, maValues( rOrig.maValues )
+, mnMinZoom( rOrig.mnMinZoom )
+, mnMaxZoom( rOrig.mnMaxZoom )
 {
 }
 
@@ -103,8 +107,10 @@ int SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxZoomSliderItem& rItem = (SvxZoomSliderItem&)rAttr;
 
-    return ( GetValue() == rItem.GetValue()     &&
-             maValues == rItem.maValues );
+    return ( (GetValue() == rItem.GetValue())   &&
+             (maValues == rItem.maValues ) &&
+             (mnMinZoom == rItem.mnMinZoom) &&
+             (mnMaxZoom == rItem.mnMaxZoom) );
 }
 
 sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
@@ -119,6 +125,10 @@ sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
             aSeq[0].Value <<= sal_Int32( GetValue() );
             aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ));
             aSeq[1].Value <<= maValues;
+            aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MINZOOM ) );
+            aSeq[2].Value <<= (sal_Int32)mnMinZoom;
+            aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MAXZOOM ) );
+            aSeq[3].Value <<= (sal_Int32)mnMaxZoom;
             rVal <<= aSeq;
         }
         break;
@@ -152,6 +162,7 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
 
                 sal_Bool  bAllConverted( sal_True );
                 sal_Int16 nConvertedCount( 0 );
+                sal_Int32 nMinZoom( 0 ), nMaxZoom( 0 );
 
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                 {
@@ -165,12 +176,25 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                         bAllConverted &= ( aSeq[i].Value >>= aValues );
                         ++nConvertedCount;
                     }
+                    else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MINZOOM ) )
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nMinZoom );
+                        ++nConvertedCount;
+                    }
+                    else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MAXZOOM ) )
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nMaxZoom );
+                        ++nConvertedCount;
+                    }
                 }
 
                 if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                 {
                     SetValue( (UINT16)nCurrentZoom );
                     maValues = aValues;
+                    mnMinZoom = sal::static_int_cast< USHORT >( nMinZoom );
+                    mnMaxZoom = sal::static_int_cast< USHORT >( nMaxZoom );
+
                     return sal_True;
                 }
             }
