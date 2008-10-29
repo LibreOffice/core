@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.298.4.4 $
+ * $Revision: 1.303.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1093,6 +1093,16 @@ End
 #endif
 #endif
 #endif
+
+#if defined(QUARTZ)
+File gid_File_Lib_AppleRemote
+    Name = LIBNAME(AppleRemote);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+End
+#endif
+
 #if defined(QUARTZ)
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
