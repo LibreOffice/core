@@ -288,6 +288,12 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUTDIR2INC)"!=""
 .IF "$(OUT2BIN)"!=""
     $(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(BIN)
+.IF "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
+    @noop $(foreach,j,$(foreach,k,$(OUT2BIN) \
+        $(shell -ls -1 $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$k | $(GREP) .dll)) \
+        $(shell @$(IFEXIST) $(j).manifest $(THEN) mt.exe \
+        -manifest $(j).manifest -outputresource:$(BIN)$/$(j:f)$(EMQ);2 $(FI)))
+.ENDIF          # "$(GUI)$(COM)$(COMEX)"=="WNTMSC12"
 .ENDIF			# "$(OUT2BIN)"!=""
 .IF "$(OUT2CLASS)"!=""
     $(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(CLASSDIR)
