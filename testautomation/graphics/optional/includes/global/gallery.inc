@@ -283,50 +283,51 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
     Kontext
     Active.SetPage TabAllgemeinGallery
     Kontext "TabAllgemeinGallery"
-        NeuesThema.SetText "TT-theme"
-        sleep (1)
-        printlog "  - named the new theme 'TT-theme' on the general-page"
-        printlog "  - insert all files out of '[gTestToolpath]\global\input\graf_inp' in the files-page"
-        '/// +Activate <i>Files</i> tabpage
-        Kontext
-        Active.SetPage TabDateien
-        Kontext "TabDateien"
-            printlog "     - click 'add' without a selected file => insert-graphic-dialog has to be be visible"
-            '/// +Click on <i>Add</i> (If no file is selected the <i>Graphic-Insert</i> dialog has to be be opened -> close it)
-            Hinzufuegen.Click
-            sleep (1)
-            Kontext "GrafikEinfuegenDlg"
-                GrafikEinfuegenDlg.Cancel
-                sleep (1)
-                printlog "     - click 'find files' to insert the path for graphics"
-                '///+Click on <i>Find Files</i> => <i>select-path</i> dialog will be visible
-        Kontext "TabDateien"
-            Suche.Click
-            sleep (1)
-            '/// +Insert [gTesttoolPath]/input/global/graf_inp as path-name as click on <i>Select</i>
-        Kontext "OeffnenDlg"
-            Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
-            sleep (1)
-            Auswaehlen.Click
-            sleep (2)
-            '/// +Click on <i>Add</i> for some graphics
-            printlog "     - 'add' one by one"
-        Kontext "TabDateien"
-        DateiListe.Select 1
-        WaitSlot(1000)
-        Hinzufuegen.Click
-        sleep (1)
-        DateiListe.Select 1
-        Hinzufuegen.Click
-        sleep (1)
-        '/// +Click on <i>Add all</i> for rest of the graphics
-        '/// +<ul><li>apply-dialog -> cancel</li></ul>
-        '/// +click on <i>Add all</i> for rest of the graphics
-        printlog "     - 'add all' for the rest of the files"
-        DateiListe.Select 1
-        HinzufuegenAlle.Click
-        printlog "     - apply-dialog -> cancel"
-        Kontext "ApplyGallery"
+    NeuesThema.SetText "TT-theme"
+    sleep (1)
+    printlog "  - named the new theme 'TT-theme' on the general-page"
+    printlog "  - insert all files out of '[gTestToolpath]\global\input\graf_inp' in the files-page"
+    '/// +Activate <i>Files</i> tabpage
+    Kontext
+    Active.SetPage TabDateien
+    Kontext "TabDateien"
+    printlog "     - click 'add' without a selected file => insert-graphic-dialog has to be be visible"
+    '/// +Click on <i>Add</i> (If no file is selected the <i>Graphic-Insert</i> dialog has to be be opened -> close it)
+    Hinzufuegen.Click
+    sleep (1)
+    Kontext "GrafikEinfuegenDlg"
+    GrafikEinfuegenDlg.Cancel
+    sleep (1)
+    printlog "     - click 'find files' to insert the path for graphics"
+    '///+Click on <i>Find Files</i> => <i>select-path</i> dialog will be visible
+    Kontext "TabDateien"
+    Suche.Click
+    sleep (1)
+    '/// +Insert [gTesttoolPath]/input/global/graf_inp as path-name as click on <i>Select</i>
+    Kontext "OeffnenDlg"
+    Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
+    sleep (1)
+    Auswaehlen.Click
+    sleep (10)
+    '/// +Click on <i>Add</i> for some graphics
+    printlog "     - 'add' one by one"
+    Kontext "TabDateien"
+    DateiListe.Select 1
+    WaitSlot(1000)
+    Hinzufuegen.Click
+    sleep (1)
+    DateiListe.Select 1
+    Hinzufuegen.Click
+    sleep (1)
+    '/// +Click on <i>Add all</i> for rest of the graphics
+    '/// +<ul><li>apply-dialog -> cancel</li></ul>
+    '/// +click on <i>Add all</i> for rest of the graphics
+    printlog "     - 'add all' for the rest of the files"
+    DateiListe.Select 1
+    HinzufuegenAlle.Click
+    sleep (10)
+    printlog "     - apply-dialog -> cancel"
+    Kontext "ApplyGallery"
             for j=1 to 100
                 if ApplyGallery.Exists then
                     try
@@ -421,7 +422,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                             Kontext "OeffnenDlg"
                                 Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
                                 Auswaehlen.Click
-                                sleep (3)
+                                sleep (10)
                         Kontext "TabDateien"
                             DateiListe.Select 1
                             Hinzufuegen.Click
@@ -431,7 +432,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                             printlog "     - messagebox -> no"
                     Kontext "Gallery"
                         Gallerys.Select "New TT-theme"
-                        sleep (3)
+                        sleep (10)
                         Gallerys.OpenContextMenu
                         sleep (3)
                         hMenuSelectNr (2)

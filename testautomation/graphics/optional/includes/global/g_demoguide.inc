@@ -203,7 +203,7 @@ testcase t_Interoperability
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<END>"
         sleep (1)
-        sTemplatename = DocumentImpress.StatusGetText (7)
+        sTemplatename = DocumentImpress.StatusGetText (6)
         printlog "    Background = " & sTemplatename     'Debugcode
     
     printlog "Choose a masterpage from right pane"
@@ -224,8 +224,8 @@ testcase t_Interoperability
     sleep (5)
     printlog "    Verify that the background has changed"
     Kontext "DocumentImpress"
-    printlog "    Background is " & DocumentImpress.StatusGetText (7)     'Debugcode
-    if DocumentImpress.StatusGetText (7) = sTemplatename then
+    printlog "    Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
+    if DocumentImpress.StatusGetText (6) = sTemplatename then
             warnlog "The background is not changed"
         else printlog "    Background has been changed"
     endif
@@ -237,9 +237,9 @@ testcase t_Interoperability
     AvailableForUsePreview.TypeKeys "<HOME> <RETURN>"
     sleep (5)
     Kontext "DocumentImpress"
-    if DocumentImpress.StatusGetText (7) = sTemplatename then
+    if DocumentImpress.StatusGetText (6) = sTemplatename then
             printlog "    The background has been set back to default"
-        else warnlog "The background is " & DocumentImpress.StatusGetText (7) & " but should be: " & sTemplatename
+        else warnlog "The background is " & DocumentImpress.StatusGetText (6) & " but should be: " & sTemplatename
     endif
     
     '///Resort slides
