@@ -2221,6 +2221,12 @@ void Edit::Command( const CommandEvent& rCEvt )
             SetCursorRect();
         }
     }
+    else if ( rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE )
+    {
+        const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
+        Selection aSelection( pData->GetStart(), pData->GetEnd() );
+        SetSelection(aSelection);
+    }
     else
         Control::Command( rCEvt );
 }
@@ -2980,4 +2986,17 @@ ImplSubEdit::ImplSubEdit( Edit* pParent, WinBits nStyle ) :
 void ImplSubEdit::Modify()
 {
     GetParent()->Modify();
+}
+
+XubString Edit::GetSurroundingText() const
+{
+  if ( mpSubEdit )
+    return mpSubEdit->GetSurroundingText();
+  else
+    return maText;
+}
+
+Selection Edit::GetSurroundingTextSelection() const
+{
+  return GetSelection();
 }

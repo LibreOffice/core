@@ -1129,6 +1129,9 @@ public:
     /* mark Window for deletion in top of event queue
     */
     void doLazyDelete();
+
+    virtual XubString GetSurroundingText() const;
+    virtual Selection GetSurroundingTextSelection() const;
 };
 
 

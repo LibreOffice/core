@@ -106,7 +106,10 @@ class ImplFontSelectData;
 #define SALEVENT_INPUTLANGUAGECHANGE    ((USHORT)40)
 #define SALEVENT_SHOWDIALOG             ((USHORT)41)
 #define SALEVENT_MENUBUTTONCOMMAND      ((USHORT)42)
-#define SALEVENT_COUNT                  ((USHORT)42)
+#define SALEVENT_SURROUNDINGTEXTREQUEST ((USHORT)43)
+#define SALEVENT_SURROUNDINGTEXTSELECTIONCHANGE ((USHORT)44)
+#define SALEVENT_STARTRECONVERSION      ((USHORT)45)
+#define SALEVENT_COUNT                  ((USHORT)45)
 
 // MOUSELEAVE must send, when the pointer leave the client area and
 // the mouse is not captured
@@ -222,6 +225,29 @@ struct SalExtTextInputPosEvent
 struct SalInputContextChangeEvent
 {
     LanguageType    meLanguage;     // Neue Sprache
+};
+
+#endif // __cplusplus
+
+#ifdef __cplusplus
+
+// SURROUNDINGTEXTREQUEST
+struct SalSurroundingTextRequestEvent
+{
+    UniString       maText;         // Text
+    ULONG           mnStart;        // The beggining index of selected range
+    ULONG           mnEnd;          // The end index of selected range
+};
+
+#endif // __cplusplus
+
+#ifdef __cplusplus
+
+// SURROUNDINGTEXTSELECTIONCHANGE
+struct SalSurroundingTextSelectionChangeEvent
+{
+    ULONG           mnStart;        // The beggining index of selected range
+    ULONG           mnEnd;          // The end index of selected range
 };
 
 #endif // __cplusplus

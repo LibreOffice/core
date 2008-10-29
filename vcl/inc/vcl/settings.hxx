@@ -382,6 +382,8 @@ private:
     Color                           maWindowColor;
     Color                           maWindowTextColor;
     Color                           maWorkspaceColor;
+    Color                           maActiveTabColor;
+    Color                           maInactiveTabColor;
     Font                            maAppFont;
     Font                            maHelpFont;
     Font                            maTitleFont;
@@ -708,6 +710,15 @@ public:
                                         { CopyData(); mpData->maMonoColor = rColor; }
     const Color&                    GetMonoColor() const
                                         { return mpData->maMonoColor; }
+
+    void                            SetActiveTabColor( const Color& rColor )
+                                        { CopyData(); mpData->maActiveTabColor = rColor; }
+    const Color&                    GetActiveTabColor() const
+                                        { return mpData->maActiveTabColor; }
+    void                            SetInactiveTabColor( const Color& rColor )
+                                        { CopyData(); mpData->maInactiveTabColor = rColor; }
+    const Color&                    GetInactiveTabColor() const
+                                        { return mpData->maInactiveTabColor; }
 
     void                            SetHighContrastMode( BOOL bHighContrast )
                                         { CopyData(); mpData->mnHighContrast = bHighContrast; }

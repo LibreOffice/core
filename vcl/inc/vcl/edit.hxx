@@ -245,6 +245,9 @@ public:
 
     static PopupMenu*   CreatePopupMenu();
     static void         DeletePopupMenu( PopupMenu* pMenu );
+
+    virtual XubString GetSurroundingText() const;
+    virtual Selection GetSurroundingTextSelection() const;
 };
 
 inline ULONG Edit::IsUpdateDataEnabled() const

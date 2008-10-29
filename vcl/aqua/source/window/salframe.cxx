@@ -1091,6 +1091,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aBackgroundColor = Color( 0xEC, 0xEC, 0xEC );
     aStyleSettings.Set3DColors( aBackgroundColor );
     aStyleSettings.SetFaceColor( aBackgroundColor );
+    aStyleSettings.SetInactiveTabColor( aBackgroundColor );
 
     // [FIXME] Dialog Color is the one to modify to complete Aqua Theme on windows
     aStyleSettings.SetDialogColor( aBackgroundColor );

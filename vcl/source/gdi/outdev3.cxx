@@ -7173,7 +7173,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     long        nMnemonicX = 0;
     long        nMnemonicY = 0;
     long        nMnemonicWidth = 0;
-    if ( nStyle & TEXT_DRAW_MNEMONIC )
+    if ( (nStyle & TEXT_DRAW_MNEMONIC) && nLen > 1 )
     {
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
         if ( nMnemonicPos != STRING_NOTFOUND )

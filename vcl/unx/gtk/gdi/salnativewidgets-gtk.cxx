@@ -3263,6 +3263,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gdk_color_free (link_color);
     }
 
+    // Tab colors
+    aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
+    Color aSelectedBackColor = getColor( pStyle->bg[GTK_STATE_ACTIVE] );
+    aStyleSet.SetInactiveTabColor( aSelectedBackColor );
+
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( TRUE );
     // menu colors
@@ -3702,7 +3707,7 @@ static void NWEnsureGTKSpinButton( int nScreen )
 {
     if ( !gWidgetData[nScreen].gSpinButtonWidget )
     {
-        GtkAdjustment *adj = GTK_ADJUSTMENT( gtk_adjustment_new(0, 0, 2, 1, 1, 1) );
+        GtkAdjustment *adj = GTK_ADJUSTMENT( gtk_adjustment_new(0, 0, 1, 1, 1, 0) );
         gWidgetData[nScreen].gSpinButtonWidget = gtk_spin_button_new( adj, 1, 2 );
 
         //Setting non-editable means it doesn't blink, so there's no timeouts

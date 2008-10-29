@@ -9827,3 +9827,13 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     pDev->Pop();
 }
 
+XubString Window::GetSurroundingText() const
+{
+  return XubString::EmptyString();
+}
+
+Selection Window::GetSurroundingTextSelection() const
+{
+  return Selection( 0, 0 );
+}
+

@@ -1919,6 +1919,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetFieldColor( aBase );
     aStyleSettings.SetHelpColor( aBase );
     aStyleSettings.SetWindowColor( aBase );
+    aStyleSettings.SetActiveTabColor( aBase );
 
     // Buttons
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
@@ -1933,6 +1934,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Background
     aStyleSettings.Set3DColors( aBack );
     aStyleSettings.SetFaceColor( aBack );
+    aStyleSettings.SetInactiveTabColor( aBack );
     aStyleSettings.SetDialogColor( aBack );
     if( aBack == COL_LIGHTGRAY )
         aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
