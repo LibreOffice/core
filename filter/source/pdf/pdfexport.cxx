@@ -64,9 +64,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -706,11 +708,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
             }
 
+            //get model
+            Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
             {
 //---> i56629 Relative link stuff
 //set the base URL of the file:
-//get model
-                Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
 //then base URL
                 aContext.BaseURL = xModel->getURL();
 //relative link option is private to PDF Export filter and limited to local filesystem only
@@ -831,6 +833,29 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aSelection <<= mxSrcDoc;
                 }
                 sal_Bool        bSecondPassForImpressNotes = sal_False;
+                bool bReChangeToNormalView = false;
+                  ::rtl::OUString sShowOnlineLayout( RTL_CONSTASCII_USTRINGPARAM( "ShowOnlineLayout"));
+                  uno::Reference< beans::XPropertySet > xViewProperties;
+
+                if ( aCreator.EqualsAscii( "Writer" ) )
+                {
+                    //i92835 if Writer is in web layout mode this has to be switched to normal view and back to web view in the end
+                    try
+                    {
+                        Reference< view::XViewSettingsSupplier > xVSettingsSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+                        xViewProperties =  xVSettingsSupplier->getViewSettings();
+                        xViewProperties->getPropertyValue( sShowOnlineLayout ) >>= bReChangeToNormalView;
+                        if( bReChangeToNormalView )
+                        {
+                            xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( false ) );
+                        }
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+
+                }
+
                 const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
                 const Range     aRange( 1, nPageCount );
                 MultiSelection  aMultiSelection;
@@ -888,7 +913,18 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aErrors = pPDFWriter->GetErrors();
                 }
                 pOut->SetExtOutDevData( NULL );
+                if( bReChangeToNormalView )
+                {
+                    try
+                    {
+                        xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( true ) );
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
             }
+
             delete pPDFExtOutDevData;
             delete pPDFWriter;
         }
