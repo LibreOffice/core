@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdevt.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -339,6 +339,11 @@ class VCL_DLLPUBLIC CommandDialogData
 #define MEDIA_COMMAND_VOLUME_DOWN            ((sal_Int16)15)// Lower the volume.
 #define MEDIA_COMMAND_VOLUME_MUTE            ((sal_Int16)16)// Mute the volume.
 #define MEDIA_COMMAND_VOLUME_UP              ((sal_Int16)17)// Raise the volume.
+#define MEDIA_COMMAND_MENU                   ((sal_Int16)18)// Button Menu pressed.
+#define MEDIA_COMMAND_MENU_HOLD              ((sal_Int16)19)// Button Menu (long) pressed.
+#define MEDIA_COMMAND_PLAY_HOLD              ((sal_Int16)20)// Button Play (long) pressed.
+#define MEDIA_COMMAND_NEXTTRACK_HOLD         ((sal_Int16)21)// Button Right holding pressed.
+#define MEDIA_COMMAND_PREVIOUSTRACK_HOLD     ((sal_Int16)22)// Button Left holding pressed.
 
 
 // ------------------------------

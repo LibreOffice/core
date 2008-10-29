@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.54.28.1 $
+ * $Revision: 1.53.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,8 +56,11 @@
 #include "vclnsapp.h"
 
 #include "premac.h"
+#include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
+#import "apple_remote/RemoteMainController.h"
 #include "postmac.h"
+
 
 using namespace std;
 
@@ -67,7 +70,6 @@ static BOOL* gpbInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
-
 // -----------------------------------------------------------------------
 
 class AquaDelayedSettingsChanged : public Timer
@@ -174,6 +176,21 @@ static void initNSApp()
 
     // get System Version and store the value in GetSalData()->mnSystemVersion
     [NSApp getSystemVersionMajor: (unsigned int *)major minor:(unsigned int *)minor bugFix:(unsigned int *)bugFix ];
+
+// -----------------------------------------------------------------------------------------------------------------
+     // Initialize Apple Remote
+    GetSalData()->mpMainController = [[MainController alloc] init];
+
+    [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
+                                           selector: @selector(applicationWillBecomeActive:)
+                                           name: @"AppleRemoteWillBecomeActive"
+                                           object: nil ];
+
+    [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
+                                           selector: @selector(applicationWillResignActive:)
+                                           name: @"AppleRemoteWillResignActive"
+                                           object: nil ];
+// -----------------------------------------------------------------------------------------------------------------
 
     if( AquaSalInstance::isOnCommandLine( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "-enableautomation" ) ) ) )
     {

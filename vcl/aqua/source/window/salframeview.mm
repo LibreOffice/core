@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.13 $
+ * $Revision: 1.12.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -456,10 +456,7 @@ private:
         NSPoint aPt = [NSEvent mouseLocation];
         NSRect aFrameRect = [pDispatchFrame->getWindow() frame];
         
-        if( aPt.x < aFrameRect.origin.x ||
-            aPt.y < aFrameRect.origin.y ||
-            aPt.x >= aFrameRect.origin.x + aFrameRect.size.width ||
-            aPt.y >= aFrameRect.origin.y + aFrameRect.size.height )
+	if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
             // no, it is not
             // now we need to find the one it may be in

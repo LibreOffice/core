@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclnsapp.h,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,8 @@
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
 -(void)getSystemVersionMajor:(unsigned *)major minor:(unsigned *)minor bugFix:(unsigned *)bugFix;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
+-(void)applicationWillBecomeActive:(NSNotification *)aNotification;
+-(void)applicationWillResignActive:(NSNotification *)aNotification;
 @end
-
 
 #endif

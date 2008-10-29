@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.22.64.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 #include <cstdio>
 #include <cstdarg>
 
+#include "apple_remote/RemoteMainController.h"
 
 class AquaSalInstance;
 class SalObject;
@@ -103,6 +104,7 @@ struct SalData
 
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
     SInt32                                        mnSystemVersion;          // Store System Version
+    MainController*                               mpMainController;         // Apple Remote
     bool                                          mbIsTestTool;
 
     SalData();

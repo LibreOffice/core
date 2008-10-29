@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.112.22.2 $
+# $Revision: 1.111.36.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -184,7 +184,10 @@ SHL1STDLIBS+=\
 SHL1USE_EXPORTS=name
 
 .IF "$(GUIBASE)"=="aqua"
-SHL1STDLIBS+=$(BASEBMPLIB)
+SHL1STDLIBS+= \
+    $(BASEBMPLIB) \
+    -lAppleRemote$(DLLPOSTFIX)
+
 SHL1STDLIBS+= \
              -framework QTKit
 LIB1FILES+= \
