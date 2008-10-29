@@ -43,15 +43,9 @@ ENABLE_EXCEPTIONS=true
 # --- Files --------------------------------------------------------
 
 OBJFILES=   $(OBJ)$/bmp.obj			\
-            $(OBJ)$/bmpgui.obj		\
             $(OBJ)$/bmpcore.obj		\
             $(OBJ)$/g2g.obj			\
             $(OBJ)$/bmpsum.obj
-
-SRC1FILES=bmp.src
-SRS1NAME=bmp
-RES1TARGET=bmp
-SRS1FILES=$(SRS)$/bmp.srs
 
 # --- APP1TARGET ---------------------------------------------------
 
