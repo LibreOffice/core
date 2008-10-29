@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterController.sdi,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.70.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,6 +188,12 @@ interface SlideSorterView
         ExecMethod = ExecStatusBar ;
         StateMethod = GetStatusBarState ;
     ]
+    SID_ATTR_ZOOMSLIDER // status()
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
+
     SID_RELOAD // ole : no, status : ?
     [
         GroupId = GID_DOCUMENT ;

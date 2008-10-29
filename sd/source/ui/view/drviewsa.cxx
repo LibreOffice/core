@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviewsa.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.49.70.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/docfile.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <svtools/eitem.hxx>
 
 #ifndef _SVX_DIALOGS_HRC
@@ -678,6 +679,40 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             pZoomItem->SetValueSet( nZoomValues );
             rSet.Put( *pZoomItem );
             delete pZoomItem;
+        }
+    }
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
+    {
+        rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
+        if (GetDocSh()->IsUIActive() || (xSlideshow.is() && xSlideshow->isRunning()) || !GetActiveWindow() )
+        {
+            rSet.DisableItem( SID_ATTR_ZOOMSLIDER );
+        }
+        else
+        {
+            sd::Window * pActiveWindow = GetActiveWindow();
+            SvxZoomSliderItem aZoomItem( (UINT16) pActiveWindow->GetZoom(), (USHORT)pActiveWindow->GetMinZoom(), (USHORT)pActiveWindow->GetMaxZoom() ) ;
+
+            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+            if( pPageView )
+            {
+                Point aPagePos(0, 0);
+                Size aPageSize = pPageView->GetPage()->GetSize();
+
+                aPagePos.X() += aPageSize.Width()  / 2;
+                aPageSize.Width() = (long) (aPageSize.Width() * 1.03);
+
+                aPagePos.Y() += aPageSize.Height() / 2;
+                aPageSize.Height() = (long) (aPageSize.Height() * 1.03);
+                aPagePos.Y() -= aPageSize.Height() / 2;
+
+                aPagePos.X() -= aPageSize.Width()  / 2;
+
+                Rectangle aFullPageZoomRect( aPagePos, aPageSize );
+                aZoomItem.AddSnappingPoint( pActiveWindow->GetZoomForRect( aFullPageZoomRect ) );
+            }
+            aZoomItem.AddSnappingPoint(100);
+            rSet.Put( aZoomItem );
         }
     }
 

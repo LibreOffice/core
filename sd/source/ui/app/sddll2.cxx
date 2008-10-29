@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sddll2.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,7 @@
 #include <svx/linectrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/zoomctrl.hxx>
+#include <svx/zoomsliderctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/fntctl.hxx>
@@ -194,6 +195,7 @@ void SdDLL::RegisterControllers()
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     //SvxInsertStatusBarControl::RegisterControl(0, pModd);
+    SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
     // MenuControls fuer PopupMenu
     SvxFontMenuControl::RegisterControl( SID_ATTR_CHAR_FONT, pMod );

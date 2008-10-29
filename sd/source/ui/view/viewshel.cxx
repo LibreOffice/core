@@ -735,6 +735,8 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
                         SetZoom( nNewZoom );
                         Invalidate( SID_ATTR_ZOOM );
+                        Invalidate( SID_ATTR_ZOOMSLIDER );
+
                         bDone = TRUE;
                     }
                 }

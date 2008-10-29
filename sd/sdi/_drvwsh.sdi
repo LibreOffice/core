@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _drvwsh.sdi,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,6 +122,11 @@ interface DrawView
     ]
      // Menue-Messages fuer temporaere Funktionen mit Dialog
     SID_ATTR_ZOOM // ole : no, status : no
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_ATTR_ZOOMSLIDER // status()
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetStatusBarState ;

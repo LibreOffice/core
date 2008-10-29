@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typemap.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,8 @@
 #include <svx/boxitem.hxx>
 #include <svx/bolnitem.hxx>
 #include "sdattr.hxx"
+#include <svx/zoomslideritem.hxx>
+
 #include <svx/xftstit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlineit0.hxx>

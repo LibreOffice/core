@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvs2.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,7 @@
 #include "ViewShellBase.hxx"
 #include "sdabstdlg.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include "DrawViewShell.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -113,6 +114,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                         SetZoom( (long) ( ( const SvxZoomItem& ) pArgs->
                                             Get( SID_ATTR_ZOOM ) ).GetValue() );
                         Invalidate( SID_ATTR_ZOOM );
+                        Invalidate( SID_ATTR_ZOOMSLIDER );
                         break;
                     default:
                         break;
@@ -127,6 +129,31 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             Cancel();
         }
         break;
+
+        case SID_ATTR_ZOOMSLIDER:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+
+            if (pArgs && pArgs->Count () == 1 )
+            {
+                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, FALSE);
+                if (CHECK_RANGE (5, pScale->GetValue (), 3000))
+                {
+                    SetZoom (pScale->GetValue ());
+
+                    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                    rBindings.Invalidate( SID_ATTR_ZOOM );
+                    rBindings.Invalidate( SID_ZOOM_IN );
+                    rBindings.Invalidate( SID_ZOOM_OUT );
+                    rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
+
+                }
+            }
+
+            Cancel();
+            rReq.Done ();
+            break;
+        }
 
         case SID_ZOOM_OUT:
         {
@@ -143,6 +170,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                                              GetActiveWindow()->GetOutputSizePixel()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
+            Invalidate( SID_ATTR_ZOOMSLIDER );
             Cancel();
             rReq.Done();
         }
@@ -157,6 +185,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ZOOM_OUT);
             Invalidate( SID_ZOOM_IN );
+            Invalidate( SID_ATTR_ZOOMSLIDER );
             Cancel();
             rReq.Done();
         }

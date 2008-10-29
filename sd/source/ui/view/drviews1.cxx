@@ -296,6 +296,7 @@ void DrawViewShell::SetZoom( long nZoom )
     mbZoomOnPage = FALSE;
     ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
 /*************************************************************************
@@ -308,8 +309,8 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
 {
     ViewShell::SetZoomRect( rZoomRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
-
 
 /*************************************************************************
 |*
