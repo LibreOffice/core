@@ -2072,3 +2072,16 @@ BOOL SfxViewShell::Escape()
 {
     return GetViewFrame()->GetBindings().Execute( SID_TERMINATE_INPLACEACTIVATION );
 }
+
+Reference< view::XRenderable > SfxViewShell::GetRenderable()
+{
+    Reference< view::XRenderable >xRender;
+    SfxObjectShell* pObj = GetObjectShell();
+    if( pObj )
+    {
+        Reference< frame::XModel > xModel( pObj->GetModel() );
+        if( xModel.is() )
+        xRender = Reference< view::XRenderable >( xModel, UNO_QUERY );
+    }
+    return xRender;
+}

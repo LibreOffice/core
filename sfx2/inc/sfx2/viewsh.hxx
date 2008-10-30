@@ -35,6 +35,7 @@
 #include "sal/types.h"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <svtools/lstner.hxx>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
@@ -286,6 +287,11 @@ public:
     /** forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
     */
     void                        SetCurrentDocument() const;
+
+    /** get an XRenderable instance that can render this docuement
+    */
+    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+
 
     virtual void                MarginChanged();
     const Size&                 GetMargin() const;
