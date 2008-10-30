@@ -60,7 +60,10 @@ CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER -DVIGRA_WITHOUT_NESTED_TEMPLATE_P
 # SunStudio 12 (-m64 and -m32 modes): three test cases of the unit tests fail 
 # if compiled with default -xalias_level (and optimization level -xO3)
 .IF "$(OS)"=="SOLARIS"
+# For Sun Studio 8 this switch does not work: compilation fails on bitmapdevice.cxx
+.IF "$(CCNUMVER)"!="00050005"
 CDEFS+=-xalias_level=compatible
+.ENDIF
 .ENDIF
 
 # --- Common ----------------------------------------------------------
