@@ -41,7 +41,12 @@
 
 #include "rtl/ustrbuf.hxx"
 
+#include "com/sun/star/awt/Size.hpp"
+
 using namespace vcl;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId )
@@ -193,12 +198,23 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     // setup modify hdl
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
+    // setup optional UI options set by application
+    setupOptionalUI();
+
+    // set change handler for UI options
+    maPListener->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
+
     // setup dependencies
     checkControlDependencies();
 }
 
 PrintDialog::~PrintDialog()
 {
+    while( ! maControls.empty() )
+    {
+        delete maControls.front();
+        maControls.pop_front();
+    }
 }
 
 bool PrintDialog::isPrintToFile()
@@ -228,6 +244,177 @@ MultiSelection PrintDialog::getPageSelection()
     }
     DBG_ERROR( "NYI: Selection" );
     return MultiSelection();
+}
+
+void PrintDialog::setupOptionalUI()
+{
+    Window* pCurParent = 0;
+    long nCurY = 0;
+    USHORT nOptPageId = 9;
+    MapMode aFontMapMode( MAP_APPFONT );
+
+    Size aTabSize = maTabCtrl.GetSizePixel();
+    const Sequence< PropertyValue >& rOptions( maPListener->getUIOptions() );
+    for( int i = 0; i < rOptions.getLength(); i++ )
+    {
+        Sequence< beans::PropertyValue > aOptProp;
+        rOptions[i].Value >>= aOptProp;
+
+        // extract ui element
+        bool bEnabled = true;
+        rtl::OUString aCtrlType;
+        rtl::OUString aText;
+        rtl::OUString aPropertyName;
+        Sequence< rtl::OUString > aChoices;
+
+        for( int n = 0; n < aOptProp.getLength(); n++ )
+        {
+            const beans::PropertyValue& rEntry( aOptProp[ n ] );
+            if( rEntry.Name.equalsAscii( "Text" ) )
+            {
+                rEntry.Value >>= aText;
+            }
+            else if( rEntry.Name.equalsAscii( "ControlType" ) )
+            {
+                rEntry.Value >>= aCtrlType;
+            }
+            else if( rEntry.Name.equalsAscii( "Choices" ) )
+            {
+                rEntry.Value >>= aChoices;
+            }
+            else if( rEntry.Name.equalsAscii( "Property" ) )
+            {
+                PropertyValue aVal;
+                rEntry.Value >>= aVal;
+                aPropertyName = aVal.Name;
+            }
+            else if( rEntry.Name.equalsAscii( "Enabled" ) )
+            {
+                sal_Bool bValue = sal_True;
+                rEntry.Value >>= bValue;
+                bEnabled = bValue;
+            }
+        }
+        if( aCtrlType.equalsAscii( "Group" ) ||
+            aCtrlType.equalsAscii( "Radio" ) ||
+            aCtrlType.equalsAscii( "List" )  ||
+            aCtrlType.equalsAscii( "Bool" ) )
+        {
+            if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
+            {
+                // add new tab page
+                TabPage* pNewGroup = new TabPage( &maTabCtrl );
+                maControls.push_front( pNewGroup );
+                pCurParent = pNewGroup;
+                nCurY = 5;
+                pNewGroup->SetText( aText );
+                maTabCtrl.InsertPage( ++nOptPageId, aText );
+                maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
+            }
+
+            if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
+            {
+                // add a check box
+                CheckBox* pNewBox = new CheckBox( pCurParent );
+                maControls.push_front( pNewBox );
+                pNewBox->SetText( aText );
+
+                // FIXME: measure text
+                pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
+                                          pNewBox->LogicToPixel( Size( 100, 10 ), aFontMapMode ) );
+                nCurY += 15;
+
+                pNewBox->Show();
+                sal_Bool bVal = sal_False;
+                PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                if( pVal )
+                    pVal->Value >>= bVal;
+                pNewBox->Check( bVal );
+                pNewBox->Enable( maPListener->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
+
+                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
+            }
+            else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
+            {
+                long nXPos = 5;
+
+                if( aText.getLength() )
+                {
+                    // add a FixedText:
+                    FixedText* pHeading = new FixedText( pCurParent );
+                    maControls.push_front( pHeading );
+                    pHeading->SetText( aText );
+                    Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
+                    aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
+                    pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
+                                               aPixelSize );
+                    pHeading->Show();
+
+                    nXPos = 15;
+                    nCurY += 12;
+                }
+
+                // iterate options
+                rtl::OUString aSelectVal;
+                PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                if( pVal )
+                    pVal->Value >>= aSelectVal;
+                for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+                {
+                    RadioButton* pBtn = new RadioButton( pCurParent, m == 0 ? WB_GROUP : 0 );
+                    maControls.push_front( pBtn );
+                    pBtn->SetText( aChoices[m] );
+                    pBtn->Check( aChoices[m] == aSelectVal );
+                    Size aPixelSize( pBtn->LogicToPixel( Size( 10 + nXPos, 12 ), aFontMapMode ) );
+                    aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
+                    pBtn->SetPosSizePixel( pBtn->LogicToPixel( Point( 15, nCurY ), aFontMapMode ),
+                                           aPixelSize );
+                    pBtn->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pBtn->Show();
+                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pBtn ) );
+                    nCurY += 12;
+                }
+            }
+            else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
+            {
+                // add a FixedText:
+                FixedText* pHeading = new FixedText( pCurParent );
+                maControls.push_front( pHeading );
+                pHeading->SetText( aText );
+                Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
+                aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
+                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
+                                           aPixelSize );
+                pHeading->Show();
+                nCurY += 12;
+
+                ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
+                maControls.push_front( pList );
+                aPixelSize = Size( pList->LogicToPixel( Size( 25, 12 ), aFontMapMode ) );
+                aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
+                pList->SetPosSizePixel( pList->LogicToPixel( Point( 15, nCurY ), aFontMapMode),
+                                        aPixelSize );
+                pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                pList->Show();
+
+                // iterate options
+                for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+                {
+                    pList->InsertEntry( aChoices[m] );
+                }
+                rtl::OUString aSelectVal;
+                PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                if( pVal )
+                    pVal->Value >>= aSelectVal;
+                pList->SelectEntry( aSelectVal );
+                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
+            }
+        }
+        else
+        {
+            DBG_ERROR( "Unsupported UI option" );
+        }
+    }
 }
 
 void PrintDialog::checkControlDependencies()
@@ -303,21 +490,23 @@ void PrintDialog::preparePreview()
 
 
     const MapMode aMapMode( MAP_100TH_MM );
-    Size aPageSize;
-    JobSetup aPageSetup( aPrt->GetJobSetup() );
-    maPListener->getPageParameters( mnCurPage, aPageSetup, aPageSize );
-    ImplUpdateJobSetupPaper( aPageSetup ); // fill in physical paper size
-    Size aPaperSize( aPageSetup.ImplGetConstData()->mnPaperWidth,
-                     aPageSetup.ImplGetConstData()->mnPaperHeight );
-    if( aPageSetup.ImplGetConstData()->meOrientation == ORIENTATION_LANDSCAPE )
+    aPrt->Push();
+    aPrt->SetMapMode( aMapMode );
+
+    Size aPageSize( aPrt->GetPaperSize() );
+    Sequence< PropertyValue > aPageParms( maPListener->getPageParameters( mnCurPage ) );
+    for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        aPaperSize.Width() = aPageSetup.ImplGetConstData()->mnPaperHeight;
-        aPaperSize.Height() = aPageSetup.ImplGetConstData()->mnPaperWidth;
+        if( aPageParms[ nProperty ].Name.equalsIgnoreAsciiCaseAscii( "PageSize" ) )
+        {
+            awt::Size aSize;
+            aPageParms[ nProperty ].Value >>= aSize;
+            aPageSize.Width() = aSize.Width;
+            aPageSize.Height() = aSize.Height;
+        }
     }
 
-    aPrt->Push();
     aPrt->EnableOutput( FALSE );
-    aPrt->SetMapMode( aMapMode );
 
     GDIMetaFile aMtf;
     aMtf.SetPrefSize( aPageSize );
@@ -334,20 +523,20 @@ void PrintDialog::preparePreview()
     Point aPreviewPos = maPreviewSpace.TopLeft();
     const long nW = maPreviewSpace.GetSize().Width();
     const long nH = maPreviewSpace.GetSize().Height();
-    if( aPaperSize.Width() > aPaperSize.Height() )
+    if( aPageSize.Width() > aPageSize.Height() )
     {
-        aPreviewSize = Size( nW, nW * aPaperSize.Height() / aPaperSize.Width() );
+        aPreviewSize = Size( nW, nW * aPageSize.Height() / aPageSize.Width() );
         aPreviewPos.Y() += (maPreviewSpace.GetHeight() - aPreviewSize.Height())/2;
     }
     else
     {
-        aPreviewSize = Size( nH * aPaperSize.Width() / aPaperSize.Height(), nH );
+        aPreviewSize = Size( nH * aPageSize.Width() / aPageSize.Height(), nH );
         aPreviewPos.X() += (maPreviewSpace.GetWidth() - aPreviewSize.Width())/2;
     }
     maPreviewWindow.SetPosSizePixel( aPreviewPos, aPreviewSize );
     const Size aLogicSize( maPreviewWindow.PixelToLogic( maPreviewWindow.GetSizePixel(), MapMode( MAP_100TH_MM ) ) );
-    aMtf.Scale( double(aLogicSize.Width())/double(aPaperSize.Width()),
-                double(aLogicSize.Height())/double(aPaperSize.Height()) );
+    aMtf.Scale( double(aLogicSize.Width())/double(aPageSize.Width()),
+                double(aLogicSize.Height())/double(aPageSize.Height()) );
     maPreviewWindow.setPreview( aMtf );
 }
 
@@ -402,4 +591,22 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, EMPTYARG )
     checkControlDependencies();
     return 0;
 }
+
+IMPL_LINK( PrintDialog, UIOptionsChanged, void*, i_pOption )
+{
+    PropertyValue* pVal = maPListener->getValue( *reinterpret_cast< rtl::OUString* >(i_pOption) );
+    if( pVal )
+    {
+        std::pair< std::multimap< rtl::OUString, Window* >::iterator,
+                   std::multimap< rtl::OUString, Window* >::iterator > aWindows =
+            maPropertyToWindowMap.equal_range( pVal->Name );
+        for( std::multimap< rtl::OUString, Window* >::const_iterator it =
+             aWindows.first; it != aWindows.second; ++it )
+        {
+            it->second->Enable( maPListener->isUIOptionEnabled( pVal->Name ) );
+        }
+    }
+    return 0;
+}
+
 

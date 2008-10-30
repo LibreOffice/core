@@ -49,7 +49,7 @@
 #include "tools/multisel.hxx"
 
 #include <boost/shared_ptr.hpp>
-
+#include <map>
 
 namespace vcl
 {
@@ -129,16 +129,22 @@ namespace vcl
         sal_Int32                               mnCachedPages;
         Rectangle                               maPreviewSpace;
 
+        std::list< Window* >                    maControls;
+        std::map< Window*, rtl::OUString >      maControlToPropertyMap;
+        std::multimap< rtl::OUString, Window* > maPropertyToWindowMap;
+
         void preparePreview();
         void setPreviewText( sal_Int32 );
         void updatePrinterText();
         void checkControlDependencies();
+        void setupOptionalUI();
 
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ScrollEndHdl, ScrollBar* );
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
+        DECL_LINK( UIOptionsChanged, void* );
     public:
         PrintDialog( Window*, const boost::shared_ptr< PrinterListener >& );
         virtual ~PrintDialog();

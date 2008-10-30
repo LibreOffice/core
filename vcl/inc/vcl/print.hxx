@@ -41,7 +41,7 @@
 #include "tools/stream.hxx"
 #include "tools/multisel.hxx"
 
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -438,15 +438,13 @@ public:
 
     */
     static void PrintJob( const boost::shared_ptr<vcl::PrinterListener>& i_pListener,
-                          const JobSetup& i_rInitSetup,
-                          const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& i_xJobOptions
+                          const JobSetup& i_rInitSetup
                           );
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
     static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterListener>& i_pListener,
-                                             const JobSetup& i_rInitSetup,
-                                             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& i_xJobOptions
+                                             const JobSetup& i_rInitSetup
                                              );
 };
 
@@ -462,8 +460,32 @@ public:
     virtual ~PrinterListener();
 
     const boost::shared_ptr<Printer>& getPrinter() const;
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& getJobParameters() const;
     const MultiSelection& getPageSelection() const;
+
+    /* for implementations: get current job properties as changed by e.g. print dialog
+       this gets the current set of properties initially told to Printer::PrintJob
+
+       For convenience a second sequence will be merged in to get a combined sequence.
+       In case of duplicate property names, the value of i_MergeList wins.
+    */
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
+        getJobProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rMergeList ) const;
+
+    /* get the PorpertyValue of a Property
+    */
+    com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName );
+
+    /* return the currently active UI options. These are the same passed to setUIOptions.
+    */
+    const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& getUIOptions() const;
+    /* set possible UI options. should only be done once before passing the PrinterListener
+       to Printer::PrintJob
+    */
+    void setUIOptions( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
+    /* enable/disable an option; this can be used to implement dialog logic.
+    */
+    void enableUIOption( const rtl::OUString& rPropName, bool bEnable );
+    bool isUIOptionEnabled( const rtl::OUString& rPropName ) const;
 
     virtual int  getPageCount() const = 0; // must be overloaded by the app
     /* get the page parameters, namely the jobsetup that should be active for the page
@@ -473,17 +495,17 @@ public:
        possibly adjusting the page size to fit. That means the page size can be different from
        the paper size.
     */
-    virtual void getPageParameters( int i_nPage, JobSetup& o_rPageSetup, Size& o_rPageSize ) const = 0; // must be overloaded by the app, return page size in 1/100th mm
+    // must be overloaded by the app, return page size in 1/100th mm
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const = 0;
     virtual void printPage( int i_nPage ) const = 0; // must be overloaded by the app
-    virtual void setListeners();  // optionally set listeners on mxJobParameters
     virtual void jobFinished();   // optionally release resources bound to the job
 
     void printFilteredPage( int i_nPage );
 
     // implementation details, not usable outsid vcl
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
-    void SAL_DLLPRIVATE setJobParameters( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& );
     void SAL_DLLPRIVATE setPageSelection( const MultiSelection& );
+    void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
 };
 
 }

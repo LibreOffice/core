@@ -46,18 +46,28 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/awt/Size.hpp"
 #include "comphelper/processfactory.hxx"
+
+#include <hash_map>
+#include <hash_set>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 using namespace vcl;
 
 class vcl::ImplPrinterListenerData
 {
 public:
-    boost::shared_ptr<Printer>                                                  mpPrinter;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >       mxJobParameters;
-    MultiSelection                                                              maSelection;
+
+    boost::shared_ptr<Printer>                                  mpPrinter;
+    MultiSelection                                              maSelection;
+    Sequence< PropertyValue >                                   maUIOptions;
+    std::vector< PropertyValue >                                maUIProperties;
+    std::vector< bool >                                         maUIPropertyEnabled;
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >   maPropertyToIndex;
+    Link                                                        maOptionChangeHdl;
 };
 
 PrinterListener::PrinterListener()
@@ -126,13 +136,11 @@ struct PrintJobAsync
 {
     boost::shared_ptr<PrinterListener>  mpListener;
     JobSetup                            maInitSetup;
-    Reference< beans::XPropertySet >    mxJobOptions;
 
     PrintJobAsync( const boost::shared_ptr<PrinterListener>& i_pListener,
-                   const JobSetup& i_rInitSetup,
-                   const Reference< beans::XPropertySet >& i_xJobOptions
+                   const JobSetup& i_rInitSetup
                    )
-    : mpListener( i_pListener ), maInitSetup( i_rInitSetup ), mxJobOptions( i_xJobOptions )
+    : mpListener( i_pListener ), maInitSetup( i_rInitSetup )
     {}
 
     DECL_LINK( ExecJob, void* );
@@ -140,7 +148,7 @@ struct PrintJobAsync
 
 IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
 {
-    Printer::ImplPrintJob( mpListener, maInitSetup, mxJobOptions );
+    Printer::ImplPrintJob( mpListener, maInitSetup );
 
     // clean up, do not access members after this
     delete this;
@@ -149,17 +157,15 @@ IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
 }
 
 void Printer::PrintJob( const boost::shared_ptr<PrinterListener>& i_pListener,
-                        const JobSetup& i_rInitSetup,
-                        const Reference< beans::XPropertySet >& i_xJobOptions
+                        const JobSetup& i_rInitSetup
                         )
 {
-    PrintJobAsync* pAsync = new PrintJobAsync( i_pListener, i_rInitSetup, i_xJobOptions );
+    PrintJobAsync* pAsync = new PrintJobAsync( i_pListener, i_rInitSetup );
     Application::PostUserEvent( LINK( pAsync, PrintJobAsync, ExecJob ) );
 }
 
 void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListener,
-                            const JobSetup& i_rInitSetup,
-                            const Reference< beans::XPropertySet >& /*i_xJobOptions*/
+                            const JobSetup& i_rInitSetup
                             )
 {
     // setup printer
@@ -333,11 +339,6 @@ const boost::shared_ptr<Printer>& PrinterListener::getPrinter() const
     return mpImplData->mpPrinter;
 }
 
-const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& PrinterListener::getJobParameters() const
-{
-    return mpImplData->mxJobParameters;
-}
-
 const MultiSelection& PrinterListener::getPageSelection() const
 {
     return mpImplData->maSelection;
@@ -348,28 +349,43 @@ void PrinterListener::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
     mpImplData->mpPrinter = i_rPrinter;
 }
 
-void PrinterListener::setJobParameters( const Reference< beans::XPropertySet >& i_pParams )
-{
-    mpImplData->mxJobParameters = i_pParams;
-}
-
 void PrinterListener::setPageSelection( const MultiSelection& i_rSel )
 {
     mpImplData->maSelection = i_rSel;
 }
 
+static void modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
+{
+    for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
+    {
+        if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        {
+            Size aPageSize;
+            awt::Size aSize;
+            i_rProps[ nProperty].Value >>= aSize;
+            aPageSize.Width() = aSize.Width;
+            aPageSize.Height() = aSize.Height;
+
+            Size aCurSize( pPrinter->GetPaperSize() );
+            if( aPageSize != aCurSize )
+                pPrinter->SetPaperSizeUser( aPageSize );
+        }
+    }
+}
+
 void PrinterListener::printFilteredPage( int i_nPage )
 {
     // get page parameters
-    JobSetup aPageSetup;
-    Size aPageSize;
-    getPageParameters( i_nPage, aPageSetup, aPageSize );
+    Sequence< PropertyValue > aPageParm( getPageParameters( i_nPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
 
-
     mpImplData->mpPrinter->Push();
-    mpImplData->mpPrinter->EnableOutput( FALSE );
     mpImplData->mpPrinter->SetMapMode( aMapMode );
+
+    // modify job setup if necessary
+    modifyJobSetup( mpImplData->mpPrinter.get(), aPageParm );
+
+    mpImplData->mpPrinter->EnableOutput( FALSE );
 
     GDIMetaFile aMtf;
     aMtf.Record( mpImplData->mpPrinter.get() );
@@ -383,8 +399,6 @@ void PrinterListener::printFilteredPage( int i_nPage )
     // FIXME: do transparency filtering here when vcl92 is integrated
 
     mpImplData->mpPrinter->EnableOutput( TRUE );
-    if( aPageSetup != mpImplData->mpPrinter->GetJobSetup() ) // set new setup if changed
-        mpImplData->mpPrinter->SetJobSetup( aPageSetup );
 
     // actually print the page
     mpImplData->mpPrinter->StartPage();
@@ -398,11 +412,108 @@ void PrinterListener::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->EndPage();
 }
 
-void PrinterListener::setListeners()
+void PrinterListener::jobFinished()
 {
 }
 
-void PrinterListener::jobFinished()
+Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
+    std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
+    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size();
+    for( int i = 0; i < i_rMergeList.getLength(); i++ )
+        aMergeSet.insert( i_rMergeList[i].Name );
+
+    Sequence< PropertyValue > aResult( nResultLen );
+    for( int i = 0; i < i_rMergeList.getLength(); i++ )
+        aResult[i] = i_rMergeList[i];
+    int nCur = i_rMergeList.getLength();
+    for( size_t i = 0; i < mpImplData->maUIProperties.size(); i++ )
+    {
+        if( aMergeSet.find( mpImplData->maUIProperties[i].Name ) == aMergeSet.end() )
+            aResult[nCur++] = mpImplData->maUIProperties[i];
+    }
+    aResult.realloc( nCur );
+    return aResult;
+}
+
+const Sequence< beans::PropertyValue >& PrinterListener::getUIOptions() const
+{
+    return mpImplData->maUIOptions;
+}
+
+com::sun::star::beans::PropertyValue* PrinterListener::getValue( const rtl::OUString& i_rProperty )
+{
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+        mpImplData->maPropertyToIndex.find( i_rProperty );
+    return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
+}
+
+void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
+{
+    DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
+
+    mpImplData->maUIOptions = i_rOptions;
+    mpImplData->maUIProperties.clear();
+    mpImplData->maPropertyToIndex.clear();
+    mpImplData->maUIPropertyEnabled.clear();
+
+    for( int i = 0; i < i_rOptions.getLength(); i++ )
+    {
+        Sequence< beans::PropertyValue > aOptProp;
+        i_rOptions[i].Value >>= aOptProp;
+        bool bIsEnabled = true;
+        bool bHaveProperty = false;
+        for( int n = 0; n < aOptProp.getLength(); n++ )
+        {
+            const beans::PropertyValue& rEntry( aOptProp[ n ] );
+            if( rEntry.Name.equalsAscii( "Property" ) )
+            {
+                PropertyValue aVal;
+                rEntry.Value >>= aVal;
+                DBG_ASSERT( mpImplData->maPropertyToIndex.find( aVal.Name )
+                            == mpImplData->maPropertyToIndex.end(), "duplicate property entry" );
+                mpImplData->maPropertyToIndex[ aVal.Name ] = i;
+                mpImplData->maUIProperties.push_back( aVal );
+                bHaveProperty = true;
+            }
+            else if( rEntry.Name.equalsAscii( "Enabled" ) )
+            {
+                sal_Bool bValue = sal_True;
+                rEntry.Value >>= bValue;
+                bIsEnabled = bValue;
+            }
+        }
+        if( bHaveProperty )
+            mpImplData->maUIPropertyEnabled.push_back( bIsEnabled );
+    }
+}
+
+void PrinterListener::enableUIOption( const rtl::OUString& i_rProperty, bool i_bEnable )
+{
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+        mpImplData->maPropertyToIndex.find( i_rProperty );
+    if( it != mpImplData->maPropertyToIndex.end() )
+    {
+        // call handler only for actual changes
+        if( ( mpImplData->maUIPropertyEnabled[ it->second ] && ! i_bEnable ) ||
+            ( ! mpImplData->maUIPropertyEnabled[ it->second ] && i_bEnable ) )
+        {
+            mpImplData->maUIPropertyEnabled[ it->second ] = i_bEnable;
+            rtl::OUString aPropName( i_rProperty );
+            mpImplData->maOptionChangeHdl.Call( &aPropName );
+        }
+    }
+}
+
+bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
+{
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+        mpImplData->maPropertyToIndex.find( i_rProperty );
+    return it != mpImplData->maPropertyToIndex.end() ? mpImplData->maUIPropertyEnabled[it->second] : false;
+}
+
+void PrinterListener::setOptionChangeHdl( const Link& i_rHdl )
+{
+    mpImplData->maOptionChangeHdl = i_rHdl;
 }
 
