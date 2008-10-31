@@ -660,7 +660,7 @@ void DeferredSetNodeImpl::finishCommit(SubtreeChange& rChanges)
 
                 aRemovedTree = addNode->getReplacedTree();
                 OSL_ASSERT( addNode->isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( addNode->isReplacing() == aRemovedTree.is() );
+                OSL_ASSERT( addNode->isReplacing() == (bool) aRemovedTree.is() );
 
                 if (aOriginal.isValid())
                     SetNodeImpl::replaceElement(aElementName,*pNewElement);
@@ -827,7 +827,7 @@ void DeferredSetNodeImpl::failedCommit(SubtreeChange& rChanges)
 
                 aRemovedTree = addNode->getReplacedTree();
                 OSL_ASSERT( addNode->isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( addNode->isReplacing() == aRemovedTree.is() );
+                OSL_ASSERT( addNode->isReplacing() == (bool) aRemovedTree.is() );
 
                 if (addNode->wasInserted())
                 { // it has been integrated into the master tree
