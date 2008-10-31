@@ -2912,9 +2912,12 @@ BOOL GtkSalGraphics::NWPaintGTKListNode(
         return FALSE;
 
     GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
-    gtk_draw_expander( gWidgetData[m_nScreen].gTreeView->style,
+    gtk_paint_expander( gWidgetData[m_nScreen].gTreeView->style,
                         pixDrawable,
                         stateType,
+                        NULL,
+                        gWidgetData[m_nScreen].gTreeView,
+                        "treeview",
                         w/2, h/2,
                         eStyle );
 
