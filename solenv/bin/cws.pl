@@ -1041,11 +1041,19 @@ sub relink_workspace {
         print_error("Can't chdir() to directory '$linkdir': $!.", 44);
     }
     foreach(@ooo_top_level_dirs) {
+        # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
+        if ( ! -d "../ooo/$_" ) {
+            next;
+        }
         if ( !symlink("../ooo/$_", $_) ) {
             print_error("Can't symlink directory '../ooo/$_ -> '$_': $!.", 44);
         }
     }
     foreach(@so_top_level_dirs) {
+        # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
+        if ( ! -d "../sun/$_" ) {
+            next;
+        }
         if ( !symlink("../sun/$_", $_) ) {
             print_error("Can't symlink directory '../sun/$_ -> '$_': $!.", 44);
         }
@@ -1102,6 +1110,52 @@ sub update_solver
         }
      }
 }
+
+sub write_rebase_configuration
+{
+    my $workspace = shift;
+    my $cwsname   = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    my $rebase_config = "$workspace/REBASE.CONFIG_DONT_DELETE";
+
+    open(REBASE, ">$rebase_config") or print_error("Can't open file '$rebase_config' for writing: $!", 98);
+    print REBASE "CWS-TOOLING: do not delete this file, it's needed for 'cws rebase -C'\n";
+    print REBASE "CWS: $cwsname\n";
+    print REBASE "New MWS: $master\n";
+    print REBASE "New milestone: $milestone\n";
+    close(REBASE);
+}
+
+sub read_rebase_configuration
+{
+    my $workspace = shift;
+
+    my $rebase_config = "$workspace/REBASE.CONFIG_DONT_DELETE";
+
+    my $master;
+    my $milestone;
+
+    open(REBASE, "<$rebase_config") or print_error("Can't open file '$rebase_config' for reading: $!", 98);
+    while(<REBASE>) {
+        if ( /New MWS: (\w+)/ ) {
+            $master = $1;
+        }
+        if ( /New milestone: (\w+)/ ) {
+            $milestone = $1;
+        }
+    }
+    close(REBASE);
+
+    if ( !defined($master) || !defined($milestone) ) {
+        print_error("File '$rebase_config' seems to be garbled. Can't continue.", 98)
+    }
+
+    return ($master, $milestone);
+}
+
+
 
 # Executes the help command.
 sub do_help
@@ -1441,8 +1495,6 @@ sub do_rebase
         do_help(['rebase']);
     }
 
-    print_error("The rebase command has not seen enough testing yet, and will be available in DEV300 m35\nIf you feel brave, comment out this line in cws.pl and go ahead anyway\nBe sure to report any problems to hr\@openoffice.org", 99);
-
     my $new_masterws;
     my $new_milestone;
     my $cws = get_cws_from_environment();
@@ -1455,6 +1507,7 @@ sub do_rebase
 
     if ( exists($options_ref->{'commit'}) ) {
         $commit_phase=1;
+        ($new_masterws, $new_milestone) = read_rebase_configuration($workspace);
     }
     elsif( exists($options_ref->{'milestone'}) ) {
         $milestone = $options_ref->{'milestone'};
@@ -1560,17 +1613,21 @@ sub do_rebase
     if ( $commit_phase ) {
         # commit
         print_message("... committing merged changes to workspace '$workspace'.");
-        my $ooo_short_url = get_short_url($ooo_master_url);
+        my $ooo_short_url = get_short_url($ooo_svn_server, $ooo_master_url);
         my $commit_message = "CWS-TOOLING: rebase CWS " . $cws->child() . " to $ooo_short_url (milestone: " . $new_masterws . ":$new_milestone)";
         svn_commit($ooo_path, $commit_message);
         if ( $so_setup ) {
-            my $so_short_url = get_short_url($so_master_url);
+            my $so_short_url = get_short_url($so_svn_server, $so_master_url);
             $commit_message = "CWS-TOOLING: rebase CWS " . $cws->child() . " to $so_short_url (milestone: " . $new_masterws . ":$new_milestone)";
             svn_commit($so_path, $commit_message);
         }
         if ( $so_setup) {
             print_message("... relinking workspace\n");
             relink_workspace("$workspace/$new_masterws/src.$new_milestone");
+            if ( !unlink("$workspace/REBASE.CONFIG_DONT_DELETE") ) {
+                print_error("Can't unlink '$workspace/REBASE.CONFIG_DONT_DELETE': $!", 0);
+            }
+
         }
 
         print_message("... updating EIS database\n");
@@ -1584,6 +1641,8 @@ sub do_rebase
         if ( $so_setup ) {
             svn_merge($so_milestone_url, $so_path);
         }
+        # write out the rebase configuration to store new milestone and master information
+        write_rebase_configuration($workspace, $cwsname, $new_masterws, $new_milestone);
     }
 }
 
@@ -2119,7 +2178,7 @@ sub svn_commit
     }
 
     my $log_file = "$wc/REBASE.LOG";
-    my @result = execute_svn_command($log_file, 'commit', "-m $commit_message", $wc);
+    my @result = execute_svn_command($log_file, 'commit', "-m '$commit_message'", $wc);
     return @result;
 }
 
