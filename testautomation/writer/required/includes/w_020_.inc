@@ -56,6 +56,9 @@ end sub
 '-----------------------------------------------------------
 
 testcase t_TB_Insert
+   qaErrorLog "#158646# - Inserting Indexes causes crash."
+   goto endsub
+   
     printlog "- Toolbox ( normal ) : All within Insert"
 
     Call hNewDocument

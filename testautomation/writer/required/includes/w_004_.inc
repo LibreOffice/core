@@ -471,26 +471,25 @@ endcase
 '-----------------------------------------------------------
 
 testcase tInsertNote
-     dim sNoteText as String
-      PrintLog "- Insert / Note"
-  
-      Call hNewDocument
+    dim sNoteText as String
+    PrintLog "- Insert / Note"
 
-      printlog " Insert / Note"
-      InsertNoteWriter
-      Kontext "DocumentWriter"
-      sNoteText = "Testnote inserted by testtool !"
-      Call wTypeKeys (sNoteText)
+    Call hNewDocument
 
-      Call wNavigatorAuswahl( 11, 1 )
-      Kontext "NavigatorWriter"
-      if Auswahlliste.Gettext <> sNoteText then
-          warnlog ("Note was not inserted correctly (Focus problem?")
-      end if
-      printlog " Check if note exists"
+    printlog " Insert / Note"
+    InsertNoteWriter
+    Kontext "DocumentWriter"
+    sNoteText = "Testnote inserted by testtool !"
+    Call wTypeKeys (sNoteText)
 
-      printlog " Close active document"
-      Call hCloseDocument
+    Call wNavigatorAuswahl( 11, 1 )
+    Kontext "NavigatorWriter"
+    if Auswahlliste.Gettext <> sNoteText then
+        warnlog ("Note was not inserted correctly (Focus problem?")
+    end if
+
+    printlog " Close active document"
+    Call hCloseDocument
 
 endcase
 
@@ -590,6 +589,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tInsertIndexesEntry
+   qaErrorLog "#158646# - Insert Indexes Entry causes crash."
+   goto endsub
+   
     PrintLog "- Insert / Indexes / Entry"
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb!"

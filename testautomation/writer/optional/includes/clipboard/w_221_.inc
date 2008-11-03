@@ -50,6 +50,10 @@ end sub
 
 
 testcase DrawToHTMLScrollingText
+  QaErrorLog "#i95309# - DrawToHTMLScrollingText outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -95,13 +99,19 @@ testcase DrawToHTMLScrollingText
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLGroupedObject
+  QaErrorLog "#i95309# - DrawToHTMLGroupedObject outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+  
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -147,13 +157,19 @@ testcase DrawToHTMLGroupedObject
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTML3D
+  QaErrorLog "#i95309# - DrawToHTML3D outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -199,13 +215,19 @@ testcase DrawToHTML3D
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLFontwork
+  QaErrorLog "#i95309# - DrawToHTMLFontwork outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -251,13 +273,19 @@ testcase DrawToHTMLFontwork
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLBullets
+  QaErrorLog "#i95309# - DrawToHTMLBullets outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -303,13 +331,19 @@ testcase DrawToHTMLBullets
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLDimensionLines
+  QaErrorLog "#i95309# - DrawToHTMLDimensionLines outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -356,13 +390,19 @@ testcase DrawToHTMLDimensionLines
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLConnectors
+  QaErrorLog "#i95309# - DrawToHTMLConnectors outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -409,7 +449,9 @@ testcase DrawToHTMLConnectors
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 

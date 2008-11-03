@@ -38,6 +38,10 @@
 '\******************************************************************************
 
 testcase func_LoadSaveGeneral_1
+
+    warnlog( "#i95523# - cannot access custom tabpage on document info dialog" )
+    goto endsub
+    
   Dim bSave as boolean, bPromptSave as boolean
   Dim sSaveTime as String
   Dim sFilename, sFilebak as String

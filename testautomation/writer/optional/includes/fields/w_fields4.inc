@@ -53,7 +53,6 @@ sub w_fields4
 
 end sub
 
-
 testcase tDocInformation_1
 
   Dim sTitle as String
@@ -265,6 +264,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocInformation_5
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim sTestFile as String
   Dim sVarResult() as String

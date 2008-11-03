@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*                                                                **
-'* owner : helge.delfs@sun.com                                    **
+'* owner : fredrik.haegg@sun.com                                    **
 '*                                                                **
 '* short description : Description of file                        **
 '*                                                                **
@@ -59,7 +59,6 @@
 ' #1 wOpenContextMenu
 '*                                                                **
 '\******************************************************************
-
 
 sub InTabelleKontrollieren
    Call wTypeKeys ("<Home>")
@@ -164,6 +163,11 @@ sub AufSortierungPruefen(i as integer)
    Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Right><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 1.Column/1.Row incorrect"
    if i <> 1 then
     Call wTypeKeys "<Mod1 Right>", 3
@@ -178,6 +182,11 @@ sub AufSortierungPruefen(i as integer)
    Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Home><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 1.Column/2.Row incorrect"
    if i <> 1 then
     Call wTypeKeys "<Mod1 Right>", 3
@@ -187,6 +196,11 @@ sub AufSortierungPruefen(i as integer)
    Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Right><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "DDD" then Warnlog "Entry in 2.Column/2.Row incorrect"
    Call wTypeKeys "<Down><Home>"
    if i <> 1 then
@@ -197,6 +211,11 @@ sub AufSortierungPruefen(i as integer)
    Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Right><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 4.Column/3.Row incorrect"
 end sub
 
@@ -207,10 +226,20 @@ sub AbSortierungPruefen(i as integer)
    Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Right><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 1.Column/1.Row incorrect"
    Call wTypeKeys "<Down><Shift Mod1 Left>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Home><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 1.Column/2.Row incorrect"
    if i <> 1 then
     Call wTypeKeys "<Mod1 Right>" , 4
@@ -220,12 +249,23 @@ sub AbSortierungPruefen(i as integer)
    Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<MOD1 Left>", 2
+       Call wTypeKeys "<Shift MOD1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "BBB" then Warnlog "Entry in 2.Column/2.Row incorrect"
    Call wTypeKeys "<Left><Up>"
    Call wTypeKeys "<Right>"
    Call wTypeKeys "<Shift Mod1 Left>"
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Right><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "EEE" then Warnlog "Entry in 2.Column/1.Row incorrect"
    if i <> 1 then
     Call wTypeKeys "<Mod1 Right>", 6
@@ -238,6 +278,11 @@ sub AbSortierungPruefen(i as integer)
    end if
    Wait 100
    EditCopy
+   if GetClipboardText = Trennzeichen then
+       QaErrorLog "#i94661# - Marked the Separator-Sign, correcting now."
+       Call wTypeKeys "<Right><Shift Mod1 Right>"
+       EditCopy
+   end if
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 2.Column/1.Row incorrect"
 end sub
 
@@ -295,7 +340,7 @@ sub TrennzeichenSetzen ( Trennstring as String )
         Case ";"
             RegularExpressions.Check
             SearchFor.SetText "\t"
-    
+
         Case "|"
             RegularExpressions.Check
             SearchFor.SetText "\t"
@@ -593,7 +638,7 @@ sub sNavigatorInBrauchbarenZustand
        next j
    end if
 
-Wait 500
+    Wait 500
     Auswahlliste.Select 2
     Auswahlliste.TypeKeys "+"
     Inhaltsansicht.Click
@@ -652,11 +697,11 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
 				Case "WRITER"
 					Kontext "DocumentWriter"
 					Call DocumentWriter.OpenContextMenu true
-	
+
 				Case "MASTERDOC"
 					Kontext "DocumentMasterDoc"
 					Call DocumentMasterDoc.OpenContextMenu true
-	
+
 			end select
 		else
 			Select Case gApplication
@@ -669,5 +714,5 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
 					Call DocumentMasterDoc.OpenContextMenu
 			end select
 		end if
-	end if		
+	end if
 end sub

@@ -36,7 +36,6 @@
 '*
 '\***********************************************************************
 
-
 global TBOstringLocale(30) as string
 global WriterFilterExtension(10) as string
 
@@ -51,11 +50,12 @@ sub main
     use "writer\optional\includes\number\w_205_.inc"
     use "writer\optional\includes\number\w_205a_.inc"
 	use "writer\optional\includes\number\w_206_.inc"
-	use "writer\optional\includes\number\w_207_.inc"    
+	use "writer\optional\includes\number\w_207_.inc"
 
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
 
     WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+
     Call hStatusIn("writer","w_numbering.bas","Writer Numbering test")
     Printlog ""
     Printlog "----------------------------------------------------------"

@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_undo_history_1
 
 	' a < 20 characters long string
@@ -59,7 +58,6 @@ testcase tUndoHistory1
 	Call wTypeKeys "If20CharactersThere"
 	'/// string in Undo list has to be: Typing: If20CharactersThere
 	Call CheckUndoStringInUndoList ( 1, "'If20Char...rsThere'" )
-    Call wTypeKeys "<ESCAPE>"
     
 	'/// <U><B>CHECK: Overwrite</B></U>
 	printlog "- OVERWRITE"
@@ -70,13 +68,11 @@ testcase tUndoHistory1
 	'/// write a < 20 characters long string: IsThatDifferent4You
 	Call wTypeKeys "IsThatDifferent4You"
 	'/// string in Undo list has to be: Overwrite: IsThatDifferent4You
-	Call CheckUndoStringInUndoList ( 2, "'IsThatDifferent4You'" )	
-
+	Call CheckUndoStringInUndoList ( 2, "'IsThatDifferent4You'" )
+    
 	'/// CloseDocument
 	Call hCloseDocument
-
 endcase
-
 
 testcase tUndoHistory2
 
@@ -88,7 +84,7 @@ testcase tUndoHistory2
 	Call wTypeKeys "If20CharactersThere"
 	'/// Select text
 	Call wTypeKeys "<Shift Home>"
-	'/// Edit / Find and Replace 	
+	'/// Edit / Find and Replace
 	EditSearchAndReplace
 	Kontext "FindAndReplace"
 	'/// Type 'ThisReplacementText' in 'Replace with' field
@@ -114,7 +110,6 @@ testcase tUndoHistory2
 
 	'/// Close document
 	Call hCloseDocument
-	
 endcase
 
 
@@ -128,7 +123,7 @@ testcase tUndoHistory3
 	'/// Insert the dummy text and point cursor at the top of the document
 	Call wBlindtextEinfuegen
 	Call wTypeKeys "<Mod1 Home>"
-	'/// Edit / Find and Replace 	
+	'/// Edit / Find and Replace
 	EditSearchAndReplace
 	Kontext "FindAndReplace"
 	'/// Type 'and' in 'Search for' field
@@ -144,22 +139,20 @@ testcase tUndoHistory3
 	end if
 	Kontext "FindAndReplace"
 	FindAndReplace.Close
-	
+
 	Kontext "DocumentWriter"
 	'/// string in Undo list has to be: Replace: '14 occurences of and'
 	Call CheckUndoStringInUndoList ( 5, "14 occurences of 'and'" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// <U><B>CHECK: Delete</B></U>
 	'///  Backspace 4 times to delete characters
 	Call wTypeKeys "<Backspace>", 4
 	'/// string in Undo list has to be: Delete: '###'
 	printlog "- DELETE"
-	Call CheckUndoStringInUndoList ( 4, "' ###'" )
+	Call CheckUndoStringInUndoList ( 11, "' ###'" )
 
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -187,7 +180,6 @@ testcase tUndoHistory4
 	
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -214,6 +206,5 @@ testcase tUndoHistory5
 	Call CheckUndoStringInUndoList ( 7, "Convert text -> table" )
 	
 	'/// Close document
-	Call hCloseDocument	
-
+	Call hCloseDocument
 endcase

@@ -346,6 +346,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_80
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -399,6 +401,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_81
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -452,6 +456,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_82
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -505,6 +511,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_83
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -568,6 +576,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_84
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -631,6 +641,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_85
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile       as String
     Dim iVerticalTop    as Integer

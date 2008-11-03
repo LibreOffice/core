@@ -44,7 +44,7 @@ sub main
 
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool6.inc"
-	
+
     use "writer\optional\includes\option\wh_o_1.inc"
     use "writer\optional\includes\option\wh_o_2.inc"
     use "writer\optional\includes\option\wh_o_3.inc"
@@ -52,11 +52,10 @@ sub main
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartTime )
     printlog Chr(13) + "******* HTML - Options - Test *******"
 
-
     Call hNewDocument
     mUnit = fSetMeasurementToCM()                 ' Set measurement unit to cm
     Call hCloseDocument
-    
+
     Call hStatusIn("writer","ww_opt.bas","HTML Optiontest")
     Call wh_o_1          'Content / Layout / Grid /
     Call wh_o_2          'Defaultfont / Print / Table

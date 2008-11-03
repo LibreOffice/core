@@ -97,9 +97,10 @@ testcase HTMLToCALCText
    Call hCloseDocument
    goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document " 
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -154,7 +155,9 @@ testcase HTMLToCALCField
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -206,7 +209,9 @@ testcase HTMLToCALCTable
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -260,7 +265,9 @@ testcase HTMLToCALCGraphicLinked
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -315,7 +322,9 @@ testcase HTMLToCALCControl
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -373,5 +382,7 @@ testcase HTMLToCALCFloatingFrame
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

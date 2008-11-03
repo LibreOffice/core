@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Functional-Tests for Tools-Options-Writer-DefaultFont, Print, Table
 '*
 '\***********************************************************************
 
@@ -55,6 +55,9 @@ end sub
 '------------------------------------------------------------------------------
 
 testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
+QaErrorLog "#i94557# - Testcase outcommented due to bug"
+goto endsub
+
     Dim bCheckboxes(1) as boolean    ' Checkbox states
     Dim iListBox(5) as integer         ' ListBox
     Dim sListBox(5) as String
@@ -381,7 +384,6 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     if ( ListeGroesse.GetSelText           <> sInitFontSize(3) ) then WarnLog "List fontsize           not init font!"
     if ( BeschriftungGroesse.GetSelText    <> sInitFontSize(4) ) then WarnLog "Caption fontsize    not init font!"
     if ( VerzeichnisGroesse.GetSelText     <> sInitFontSize(5) ) then WarnLog "Index fontsize     not init font!"
-
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
@@ -983,5 +985,4 @@ testcase tToolsOptionsWriterTable1
 	Do Until GetDocumentCount = 0
     	Call hCloseDocument
 	Loop
-
 endcase

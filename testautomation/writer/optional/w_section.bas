@@ -42,7 +42,7 @@ global gSeperator , gMeasurementUnit , gDefaultSectionName as String
 sub main
     Dim StartZeit
     StartZeit = Now()
-    
+
     use "writer\tools\includes\w_tools.inc"
 	use "writer\tools\includes\w_tool7.inc"
     use "writer\optional\includes\section\w_section_1.inc"
@@ -50,18 +50,18 @@ sub main
     use "writer\optional\includes\section\w_section_3.inc"
     use "writer\optional\includes\section\w_section_4.inc"
     use "writer\optional\includes\section\w_section_tools.inc"
-    
+
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
     printlog Chr(13) + "******* Writer - Section - Test *******"
-    
+
     Call hStatusIn ( "writer" , "w_section.bas" , "Section" )
-    
+
     'Software Configuration:
     'Getting the decimal seperator from global function
     gSeperator = GetDecimalSeperator()
     'Setting the measurement unit to centimeters.
     gMeasurementUnit = fSetMeasurementToCM()
-    
+
     Select case iSprache
         case 01   : gDefaultSectionName = "Section"    '(English USA)
         case 31   : gDefaultSectionName = "Bereik"    '(Dutch) 
@@ -79,18 +79,18 @@ sub main
         case else : QAErrorLog "The test does not support the language " + iSprache
         exit sub
     end select
-    
+
     Call w_section_1
     Call w_section_2
     Call w_section_3
     Call w_section_4
-    
+
     Call hStatusOut
-    
+
     Printlog Chr(13) + "End of Level1 - Test :"
     Printlog "Duration: "+ WieLange ( StartZeit )
     Printlog "Date: " +  Date + "    Time: " + Time
-    
+
 end sub
 
 sub LoadIncludeFiles

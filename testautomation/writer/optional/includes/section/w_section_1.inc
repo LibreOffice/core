@@ -382,7 +382,7 @@ testcase tInsertSection_5
     '/// - Check if the link document contains no sections"
     printlog "       - Check if the link document contains no sections"
     
-    DateiVerknuepfung.Settext ConvertPath(gTesttoolpath + "writer\optional\input\bt.sxw")
+    DateiVerknuepfung.Settext ConvertPath(gTesttoolpath + "writer\optional\input\section\bt.sxw")
     
     if Bereich.GetItemCount <> 0 then warnlog "Should NO entry in the section listbox"
     TabBereiche.Cancel
@@ -497,7 +497,7 @@ testcase tInsertSection_5
     Kontext "TabBereiche"
     Verknuepfung.Check
     
-    DateiVerknuepfung.Settext ConvertPath(gTesttoolpath + "writer\optional\input\bt.sxw")
+    DateiVerknuepfung.Settext ConvertPath(gTesttoolpath + "writer\optional\input\section\bt.sxw")
     TabBereiche.OK
     sleep 4
     
@@ -516,7 +516,7 @@ testcase tInsertSection_5
     
     Auswaehlen.Click   
     Kontext "OeffnenDlg"
-    Dateiname.Settext ConvertPath(gTesttoolpath + "writer\optional\input\bt.sxw")
+    Dateiname.Settext ConvertPath(gTesttoolpath + "writer\optional\input\section\bt.sxw")
     Auswaehlen.Click
     sleep 4
     

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner :  helge.delfs@sun.com
+'* owner :  fredrik.haegg@sun.com
 '*
 '* short description : Functions mostly used for fields 
 '*
@@ -46,7 +46,6 @@
 ' #0 fGetDate1
 '*
 '\***********************************************************************
-
 
 function fSetLocale(sLocaleSetting as String)  as String
 
@@ -147,7 +146,7 @@ function fGetType(sType as String)  as String
           select case iSprache
               case 1:      	fGetType = "Date"
               case 7:		fGetTYpe = "Дата"
-              case 31:     	fGetType = "Datum"      
+              case 31:     	fGetType = "Datum"
               case 33:     	fGetType = "Date"
               case 34:     	fGetType = "Fecha"
               case 36:     	fGetType = "Dátum"
@@ -299,7 +298,6 @@ function fGetFieldContent( ) as String
   TabHyperlinkZeichen.Cancel
 
 end function
-
 
 '----------------------------------------------------
 
@@ -463,6 +461,6 @@ function fConvertBacklashToSlash (sTest) as String
 		s3$ = s3$ + s2$ + "/"
 	loop until s1$=""
 	fConvertBacklashToSlash = s3$ + s1$
-	
+
 end function
 

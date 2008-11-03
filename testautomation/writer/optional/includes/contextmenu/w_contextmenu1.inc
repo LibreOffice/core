@@ -36,8 +36,6 @@
 '*
 '\***********************************************************************
 
-
-
 sub w_contextmenu1
 
 	Call tPickSimpleText
@@ -51,6 +49,9 @@ end sub
 ' -----------------------------------------------------------------------------
 
 testcase tPickSimpleText
+    QaErrorLog "tPickSimpleText outcommented due to problam."
+    goto endsub
+
 	Dim SetThisFontSize as string
     Dim GetThisFontSize as string
 	printlog "Open context menu on unselected text"
@@ -70,8 +71,7 @@ testcase tPickSimpleText
 	Call wTypeKeys "<Mod1 Left>", 3
 	Call wTypeKeys "<Right>"
 	Call wTypeKeys "<Shift F8>"
-	Call DocumentWriter.MouseMove 36, 38
-	Call wOpenContextMenu(true)
+	Call wTypeKeys "<Shift F10>"
     printlog "   Change font size for word 'This'"
 	try
 		Call hMenuSelectNr(3)
@@ -138,8 +138,8 @@ testcase tPickSimpleTextMultiselection
 	Call wTypeKeys "<Mod1 Left>", 3
 	Call wTypeKeys "<Mod1 Shift Right>"
 	Call wTypeKeys "<Shift F8>"
-	Call DocumentWriter.MouseMove 32, 38
-	Call wOpenContextMenu(true)
+	Call wTypeKeys "<Shift F10>"
+
 	Printlog "   Change font size"
 	try
 		Call hMenuSelectNr(3)
@@ -206,7 +206,7 @@ testcase tPickGraphic
 	
 	printlog "   Select 'ImageMap' in context menu"
 	try
-		Call hMenuSelectNr(7)
+	        CALL hMenuFindSelect (".uno:ImageMapDialog", true, 9, true)   'Find "ImageMap" and call the slot.
 		wait 500
 	catch
 		Warnlog "Unable to open context menu"
@@ -215,12 +215,12 @@ testcase tPickGraphic
 	endcatch
 	Printlog "   The graphic has to be selected and the context menu has to show graphics related commands"
 	Kontext "ImageMapEditor"
-	if Not ImageMapEditor.Exists then
+	if Not ImageMapEditor.Exists(3) then
 		Warnlog "Unfortunately not the context menu from graphics has been used!"
 		Kontext
 		try
 			Active.Setpage TabFont
-			Kontext "TabFont"	
+			Kontext "TabFont"
 			TabFont.Cancel
 		catch
 		endcatch
@@ -230,7 +230,7 @@ testcase tPickGraphic
 		if Active.Exists then
 			if Active.GetRT = 304 then Active.No
 		end if
-	end if	
+	end if
 
 	Kontext "DocumentWriter"
 	try
@@ -251,7 +251,7 @@ endcase
 
 testcase tPickHyperlink
 
-	printlog "   Context menu on hyperlinks"
+    printlog "   Context menu on hyperlinks"
     printlog "   Open a new text document"
 	Call hNewDocument
     printlog "   Set zoom to 100%"
@@ -261,19 +261,14 @@ testcase tPickHyperlink
     printlog "   Insert a hyperlink in document"
 	Call wTypeKeys "www.sun.com"
 	Call wTypeKeys " "
+	Call wTypeKeys "<HOME>"
 
     printlog "   Open context menu on hyperlink"
-	Call DocumentWriter.MouseMove 30, 38
-	Call wOpenContextMenu(true)
+        Call wTypeKeys "<SHIFT F10>"
     printlog "   Last entry in menu has to be 'Open hyperlink' ...."
-	if MenuGetItemCount = 12 then
-		Warnlog "Missing menu entry for hyperlinks to open"
-	else
-		if MenuGetItemCount = 13 then Call hMenuSelectNr(13)
-	end if
-
+        CALL hMenuFindSelect (10955, true, 17, true)   'Find "Hyperlink-dialog" and call the slot. 
     printlog "   Close text document"
-	Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 
@@ -290,21 +285,25 @@ testcase tPickDrawingObjects
 	SetClipBoard = ""
     printlog "   Insert 2 drawing objects (rectangle)"
 
-    Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 40, 40 )
-	Sleep 2
-    Call wZeichenobjektEinfuegen ( "Rechteck", 30, 45, 40, 55 )
-
+    Call wZeichenobjektEinfuegen ( "Rechteck", 35, 40, 52, 52 )
+    Call wTypeKeys "<Escape>"
+    Sleep 1
+    Call wZeichenobjektEinfuegen ( "Rechteck", 35, 35, 50, 50 )
+    Call wTypeKeys "<Escape>"
+    Sleep 1
     printlog "   Select both objects"
-    Call wObjektSelektieren ( 25, 25, 60, 60 )
-
+        Call wObjektSelektieren ( 32, 32, 60, 60 )
+    Sleep 1
+    
     printlog "   Open context menu on 1. drawing object"
-	Call DocumentWriter.MouseMove 35, 35
+	Call DocumentWriter.MouseMove 51, 51
 	Call wOpenContextMenu(true)
     printlog "   Normally 'copy' is last menu entry"
-	Call hMenuSelectNr(12)
+        CALL hMenuFindSelect (5711, true, 15, true)   'Find "Copy" and call the slot.
+	'Call hMenuSelectNr(12)
 
     printlog "   Both drawing objects have to leave selected"
-	try
+    try
         FormatGroupGroup
         Sleep 1
 	catch
@@ -312,6 +311,6 @@ testcase tPickDrawingObjects
     endcatch
 
     printlog "   Close text document"
-	Call hCloseDocument
+    Call hCloseDocument
 
 endcase

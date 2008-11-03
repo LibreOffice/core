@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description :  Required-Testcases for the File-menu.
 '*
 '\***********************************************************************
 
@@ -1174,7 +1174,7 @@ testcase tFileSendCreateAutoabstract
     try
         EditCopy
         WaitSlot(1000)
-        if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"        
+        if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
     catch
         QAErrorlog "Empty autoabstract created"
     endcatch

@@ -48,14 +48,14 @@ sub main
    use "writer\optional\includes\tools\tools1.inc"
    use "writer\optional\includes\tools\tools2.inc"
    use "writer\optional\includes\CJKCTLDependency\CJKCTLDependency1.inc"
-   
+
    printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
    printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 
    Call hStatusIn ( "writer", "w_CJKCTLDependency.bas" , "CJK Dependency test" )
 
    printlog Chr(13) + "      - Test CJK support dependency"
-      
+
       Call tCJKDependency_1
       Call tCJKDependency_2
       Call tCJKDependency_3
@@ -68,13 +68,13 @@ sub main
       Call tCTLDependency_2
       Call tCTLDependency_3
       Call tCTLDependency_4
-            
+
       gApplication = "HTMLDOKUMENT"
       Call tCTLDependency_5
       Call tCTLDependency_6
       Call tCTLDependency_7
       Call tCTLDependency_8
-             
+
    Call hStatusOut
 
    Printlog Chr(13) + "End of Level 1 Test - CJK/CTL Dependency"

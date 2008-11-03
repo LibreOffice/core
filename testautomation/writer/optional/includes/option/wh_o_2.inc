@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Functional-Tests for Tools - Options - Html - Print & Table
 '*
 '\***********************************************************************
 
@@ -45,15 +45,8 @@ sub wh_o_2
 
 end sub
 
-
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLPrint
-    '/ Print                     ///'
-    '/ -----                     ///'
-    '/ tToolsOptionsHTMLPrint    ///'
-    '/ normal                         ///'
-    '/ Function:  ///'
-    '/                                ///'
 
     dim irgendwas(12) as boolean    ' Checkbox states
     dim iListBox(1) as integer         ' ListBox
@@ -525,6 +518,7 @@ testcase tToolsOptionsHTMLTable1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

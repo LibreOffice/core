@@ -42,9 +42,9 @@ global gSeperator , gMeasurementUnit as String
 sub main
 
     Dim StartZeit
-    
+
     StartZeit = Now()
-    
+
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool3.inc"
     use "writer\tools\includes\w_tool6.inc"
@@ -55,11 +55,11 @@ sub main
     use "writer\optional\includes\textframes\w_textframes3.inc"
     use "writer\optional\includes\textframes\w_textframes4.inc"
     use "writer\optional\includes\textframes\w_textframes5.inc"
-    
+
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
     printlog Chr(13) + "******* Writer - Level 1 - Test *******"
-    
-    Call hStatusIn ( "writer", "w_textframes.bas","Writer Level1-Test" )   
+
+    Call hStatusIn ( "writer", "w_textframes.bas","Writer Level1-Test" )
     'Reading the decimal seperator from global routine in tools1.inc.
     gSeperator = GetDecimalSeperator()
     'Setting the measurementunit to 'cm'
@@ -67,21 +67,21 @@ sub main
     'Sets all writer-options to default
     Call wOptionenUndo ( "Alle" )    
     printlog Chr(13) + "      - Test of TextFrame function -"
-    Call w_textframes1        
-    
+    Call w_textframes1
+
     printlog Chr(13) + "      - Test of linked TextFrame -"
-    Call w_textframes2            
-    
+    Call w_textframes2
+
     printlog Chr(13) + "      - Test of MS-Interoperability -"
     Call w_textframes3
     Call w_textframes4
     Call w_textframes5
     Call hStatusOut
-    
+
     Printlog Chr(13) + "End of Level 1 Test (Textframes):"
     Printlog "Duration: "+ WieLange ( StartZeit )
     Printlog "Date: " +  Date + "    Time: " + Time
-    
+
 end sub
 
 sub LoadIncludeFiles

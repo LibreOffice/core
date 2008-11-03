@@ -38,7 +38,7 @@
 '\***********************************************************************
 
 sub w_205_
-	
+
     Call tNumberingBullets_1
     Call tFormatNumberingBullets
     Call tFormatNumberingPosition
@@ -48,7 +48,7 @@ sub w_205_
 end sub
 
 testcase tNumberingBullets_1
-	
+
     printlog "Turn several selected paragraphs into numbered list"
 	'/// Open a new text document
     Call hNewDocument()
@@ -57,7 +57,7 @@ testcase tNumberingBullets_1
     Call wBlindTextEinfuegen()
     Call wBlindTextEinfuegen()
     '/// Select all inserted text 
-    Call wDokSchreiben "<shift mod1 home>"
+    call wTypeKeys "<shift mod1 home>"
 
     '/// Choose 'Numbering' on 'Objectbar'
     Kontext "TextObjectbar"
@@ -140,7 +140,7 @@ testcase tFormatNumberingBullets
 		Kontext "TabBullet"
 		Auswahl.TypeKeys "<Right>", i
 		TabBullet.OK
-		Call wDokSchreiben "Bullet <Return><Return>"
+		call wTypeKeys "Bullet <Return><Return>"
 	next i
 	
 	printlog "  - All Numbering entries"
@@ -152,7 +152,7 @@ testcase tFormatNumberingBullets
 		Kontext "TabNumerierungsart"
 		Auswahl.TypeKeys "<Right>", i
 		TabNumerierungsart.OK
-		Call wDokSchreiben "Nummerierungsart <Return><Return>"
+		call wTypeKeys "Nummerierungsart <Return><Return>"
 		Sleep 1
 	next i
 	
@@ -165,7 +165,7 @@ testcase tFormatNumberingBullets
 		Kontext "TabGliederung"
 		Auswahl.TypeKeys "<Right>", i
 		TabGliederung.OK
-		Call wDokSchreiben "Gliederung <Return><Return>"
+		call wTypeKeys "Gliederung <Return><Return>"
 		Sleep 1
 	next i
 	
@@ -179,7 +179,7 @@ testcase tFormatNumberingBullets
 		wait 500
 		Auswahl.TypeKeys "<Right>", i
 		TabGrafiken.OK
-		Call wDokSchreiben "Grafik <Return><Return>"
+		call wTypeKeys "Grafik <Return><Return>"
 		Sleep 1
 	next i
 	
@@ -259,19 +259,19 @@ testcase tFormatNumberingPosition
 
     printlog "  - write down numbering"
     '/// write down the numbering ///
-    Call wDokSchreiben "Nummerierung 1. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 2. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 3. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 4. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 5. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 6. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 7. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 8. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung 9. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Nummerierung  10. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Immer noch 10. Ebene<Return>"
-    Call wDokSchreiben "<Return><Return>Ende der Nummerierung"
-    Call wDokSchreiben "<Up>", 5
+    call wTypeKeys "Nummerierung 1. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 2. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 3. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 4. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 5. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 6. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 7. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 8. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung 9. Ebene<Return>"
+    call wTypeKeys "<Tab>Nummerierung  10. Ebene<Return>"
+    call wTypeKeys "<Tab>Immer noch 10. Ebene<Return>"
+    call wTypeKeys "<Return><Return>Ende der Nummerierung"
+    call wTypeKeys "<Up>", 5
 
     printlog "  - check numbering-position"
     '/// reopen Format / NumberingBullets and check settings made ///
@@ -448,19 +448,19 @@ testcase tFormatNumberingOptions
 
     printlog "  - write down numbering"
     '/// write down numbering ///
-    Call wDokSchreiben "Hallo 1. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 2. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 3. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 4. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 5. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 6. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 7. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 8. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 9. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Hallo 10. Ebene<Return>"
-    Call wDokSchreiben "<Tab>Immer noch 10. Ebene<Return>"
-    Call wDokSchreiben "<Return><Return>Ende der Numerierung"
-    Call wDokSchreiben "<Up>", 5
+    call wTypeKeys "Hallo 1. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 2. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 3. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 4. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 5. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 6. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 7. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 8. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 9. Ebene<Return>"
+    call wTypeKeys "<Tab>Hallo 10. Ebene<Return>"
+    call wTypeKeys "<Tab>Immer noch 10. Ebene<Return>"
+    call wTypeKeys "<Return><Return>Ende der Numerierung"
+    call wTypeKeys "<Up>", 5
 
     FormatNumberingBullets
     Kontext
@@ -507,10 +507,10 @@ testcase tFormatNumberingOptions
     Sleep 2
     Call hFileOpen ( gOfficePath + "user\work\format6." & WriterFilterExtension(0) )
     For i = 1 to 15
-        Call wDokSchreiben "<Up>"
+        call wTypeKeys "<Up>"
         Wait 500
     next i
-    Call wDokSchreiben "<Home>"
+    call wTypeKeys "<Home>"
 
     '/// check settings in Format / Numbering Bullets ///
     FormatNumberingBullets
@@ -685,19 +685,19 @@ testcase tFormatNumberingAll
 	
 	printlog "  - create numbering and check them"
 	'/// create numbering and check it ///
-	Call wDokSchreiben "Hallo 1. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 2. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 3. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 4. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 5. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 6. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 7. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 8. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 9. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Hallo 10. Ebene<Return>"
-	Call wDokSchreiben "<Tab>Immer noch 10. Ebene<Return>"
-	Call wDokSchreiben "<Return><Return>Ende der Numerierung"
-	Call wDokSchreiben "<Up>", 5
+	call wTypeKeys "Hallo 1. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 2. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 3. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 4. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 5. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 6. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 7. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 8. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 9. Ebene<Return>"
+	call wTypeKeys "<Tab>Hallo 10. Ebene<Return>"
+	call wTypeKeys "<Tab>Immer noch 10. Ebene<Return>"
+	call wTypeKeys "<Return><Return>Ende der Numerierung"
+	call wTypeKeys "<Up>", 5
 	
 	FormatNumberingBullets
 	'/// reopen dialog and check settings ///

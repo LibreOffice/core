@@ -57,7 +57,6 @@ sub main
     printlog "Duration : " +  Wielange ( Start )
 end sub
 
-
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"

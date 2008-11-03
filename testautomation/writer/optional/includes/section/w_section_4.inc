@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Functional-Test for Section.
 '*
 '************************************************************************
 '*
@@ -953,8 +953,8 @@ testcase tParagraphSection_2
     Registerhaltigkeit.UnCheck
     TabEinzuegeUndAbstaende.OK
     
-    Call WDokSchreiben "<Down>"
-    Call WDokSchreiben "<RETURN>"
+    call wTypeKeys "<Down>"
+    call wTypeKeys "<RETURN>"
     
     '/// insert second paragraph , and do some configurations which is different from the first one
     wBlindtextEinfuegen
@@ -1071,7 +1071,7 @@ testcase tParagraphSection_3
     right1    =  "0" + gSeperator + "2" 
     top1      =  "0" + gSeperator + "3" 
     bottom1   =  "0" + gSeperator + "4" 
-    distance1 =  "5" + gSeperator + "2" 
+    distance1 =  "4" + gSeperator + "2" 
     
     Links.SetText  left1
     Rechts.SetText right1
@@ -1099,7 +1099,7 @@ testcase tParagraphSection_3
     synchronisieren.Check
     
     left2     =  "0" + gSeperator + "6" 
-    distance2 =  "5" + gSeperator + "7" 
+    distance2 =  "4" + gSeperator + "7" 
     
     Links.SetText  left2
     
@@ -1350,6 +1350,11 @@ testcase tScenarioSection_2
       Warnlog "- No messagebox asking for the actualizationing of the master document !"
    end if
    Sleep 1
+
+   Kontext "Active"
+   if Active.Exists(5) then
+       Active.Yes
+   end if
 
    Kontext "Navigator"
    if Navigator.Exists then

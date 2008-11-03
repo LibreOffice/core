@@ -41,7 +41,7 @@ sub w_009_
 
     Call tHelpTip
     Call tHelpExtendedTips
-    Call tHelpAboutStarOffice   
+    Call tHelpAboutStarOffice
 
 end sub
 

@@ -41,7 +41,6 @@
 '*
 '\***********************************************************************
 
-
 testcase tEditUndoRedo
     '/// Edit / Undo - Redo ///
     PrintLog "- Edit / Undo - Redo"
@@ -148,7 +147,7 @@ endcase
 
 testcase tEditUndoTOX
 	Dim CompareThis as string, Compare1 as string, Compare2 as string, Compare3 as string
-	Dim CompareWith1 as string, CompareWith2 as string,MenuEntryEnabled as boolean
+	Dim CompareWith1 as string, CompareWith2 as string, MenuEntryEnabled as boolean
 	' Strings depends on the language so this testcase has to be adapted for all languages
 	Select Case iSprache
 		Case 1:	Compare1 = "Undo: "
@@ -195,7 +194,7 @@ testcase tEditUndoTOX
 				Warnlog "Edit / Undo entry is wrong: " & CompareThis
 				else
 					printlog " - Menu Edit / Undo is ok"
-				end if		
+				end if
 		else
 			QAErrorLog "Use this string in this testcase: " & CompareThis
 			Call hCloseDocument
@@ -206,7 +205,7 @@ testcase tEditUndoTOX
 	end if
 	
 	Kontext "DocumentWriter"
-	DocumentWriter.TypeKeys "<Up><Home>" 
+	DocumentWriter.TypeKeys "<Up><Home>"
 	Wait 500
 	'/// Check if Undo dropdown-Icon shows:	'Insert index'
 	Select Case CheckUndoEntry ( 1, Compare2 )
@@ -214,7 +213,7 @@ testcase tEditUndoTOX
 		Case 1:	Warnlog " - Entry in Undo-dropdown is wrong!"
 		Case 2:	printlog " - Entry in Undo-dropdown is ok!"
 	end select
-		
+	
 	'/// Update index with context menu entry: Update index"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
@@ -231,14 +230,14 @@ testcase tEditUndoTOX
 		MenuEntryEnabled = False
 	endcatch
 	if MenuEntryEnabled = True then
-		CompareThis = hhEntferneTilde(MenuGetItemText(Menugetitemid(1))) 
+		CompareThis = hhEntferneTilde(MenuGetItemText(Menugetitemid(1)))
 		Call MenuSelect(0)
 		if CompareWith1 > "" then
 			if CompareThis <> CompareWith1 then
 				Warnlog "Edit / Undo entry is wrong: " & CompareThis
 				else
 					printlog " - Menu Edit / Undo is ok"
-				end if		
+				end if
 		else
 			QAErrorLog "Use this string in this testcase: " & CompareThis
 			Call hCloseDocument
@@ -281,7 +280,7 @@ testcase tEditUndoTOX
 				Warnlog "Edit / Undo entry is wrong: " & CompareThis
 				else
 					printlog " - Menu Edit / Undo is ok"
-				end if		
+				end if
 		else
 			QAErrorLog "Use this string in this testcase: " & CompareThis
 			Call hCloseDocument
@@ -292,20 +291,20 @@ testcase tEditUndoTOX
 	end if
 	
 	Kontext "DocumentWriter"
-	DocumentWriter.TypeKeys "<Up><Home>" 
+	DocumentWriter.TypeKeys "<Up><Home>"
 	Wait 500
 	'/// Check if Undo dropdown-Icon shows: 'Remove index' after deleting index
 	Select Case CheckUndoEntry ( 1, Compare3 )
 		Case 0:	Warnlog " - Undo-dropdown is disabled!"
 		Case 1:	Warnlog " - Entry in Undo-dropdown is wrong!"
 		Case 2:	printlog " - Entry in Undo-dropdown is ok!"
-	end select	
+	end select
 	
 	printlog "Working undo"
 	'/// Edit / Undo 1 time -> Index should be restored
 	EditUndo
 	Sleep 1
-	Call wNavigatorAuswahl ( 10, 1 )		
+	Call wNavigatorAuswahl ( 10, 1 )
 	wait 500
 	InsertIndexes
 
@@ -318,7 +317,7 @@ testcase tEditUndoTOX
 		Call hCloseDocument
 		goto endsub
 	endcatch
-	
+
     Kontext "TabVerzeichnisseVerzeichnis"	
 	if Verzeichnistitel.Gettext = "MyUndoRedoIndex" then
 		printlog " - Index has been restored"
@@ -329,14 +328,14 @@ testcase tEditUndoTOX
 			Case 1:	Warnlog " - Entry in Undo-dropdown is wrong!"
 			Case 2:	printlog " - Entry in Undo-dropdown is ok!"
 		end select
-		
+
 		'/// Check if Redo dropdown-Icon shows: 'Remove index' after deleting index
 		Select Case CheckRedoEntry ( 1, Compare3 )
 			Case 0:	Warnlog " - Redo-dropdown is disabled!"
 			Case 1:	Warnlog " - Entry in Redo-dropdown is wrong!"
 			Case 2:	printlog " - Entry in Redo-dropdown is ok!"
 		end select
-	
+
 		'/// Edit / Undo one more time 
 		'/// Check if Undo dropdown-Icon is disabled
 		Select Case CheckUndoEntry ( 1, Compare2 )
@@ -344,21 +343,18 @@ testcase tEditUndoTOX
 			Case 1:	Warnlog " - Entry in Undo-dropdown is enabled!"
 			Case 2:	Warnlog " - Entry in Undo-dropdown is enabled!"
 		end select
-		
+
 		'/// Check if Redo dropdown-Icon shows: 'Insert index' after Undo 2 times
 		Select Case CheckRedoEntry ( 1, Compare2 )
 			Case 0:	Warnlog " - Redo-dropdown is disabled!"
 			Case 1:	Warnlog " - Entry in Redo-dropdown is wrong!"
 			Case 2:	printlog " - Entry in Redo-dropdown is ok!"
 		end select
-	
+
 	else
 		Warnlog "Index has not been removed!"
 		TabVerzeichnisseVerzeichnis.Cancel
 	end if
-	
-	
-	
-	Call hCloseDocument
 
+	Call hCloseDocument
 endcase

@@ -87,7 +87,9 @@ testcase WriterToWriterText
         Warnlog "Writer To Writer -> 'Text' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -127,7 +129,9 @@ testcase WriterToWriterField
         Warnlog "Writer To Writer -> 'Field' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -167,7 +171,9 @@ testcase WriterToWriterTable
         Warnlog "Writer To Writer -> 'Table' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -207,7 +213,9 @@ testcase WriterToWriterFrame
         Warnlog "Writer To Writer -> 'Frame' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -247,7 +255,9 @@ testcase WriterToWriterDrawingObject
        Warnlog "Writer To Writer -> 'Drawing Object' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -287,7 +297,9 @@ testcase WriterToWriterGraphicLinked
         Warnlog "Writer To Writer -> 'Linked Graphic' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -327,7 +339,9 @@ testcase WriterToWriterGraphicEmbedded
         Warnlog "Writer To Writer -> 'Embedded Graphic' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -367,7 +381,9 @@ testcase WriterToWriterOLEObject
         Warnlog "Writer To Writer -> 'OLE object' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -407,7 +423,9 @@ testcase WriterToWriterControl
         Warnlog "Writer To Writer -> 'Control' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------

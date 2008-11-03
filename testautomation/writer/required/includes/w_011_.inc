@@ -78,8 +78,8 @@ testcase tGraphicFilters
         Warnlog "Unable to tear off 'Filter'-Toolbar" 
         Call hCloseDocument
         goto endsub
-    endcatch    
-        
+    endcatch
+
     Kontext "GraphicFilterBar"
     try
         GraphicFilterBar.Move ( 20, 20 )
@@ -134,7 +134,8 @@ testcase tGraphicFilters
     else
         Warnlog "-  'Remove Noise' is disabled!"
     end if
-    
+    sleep (1)
+
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
@@ -520,7 +521,7 @@ testcase tZOText
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
-        
+
     Call hNewDocument
     '/// Open new document ///
     
@@ -536,7 +537,6 @@ testcase tZOText
     if DrawTextObjectBar.Exists = false then
         Call hToolbarSelect("TextObject", true)
     end if
-
     
     printlog "  - Font Size"
     '/// For font size select 9th entry ///
@@ -556,7 +556,7 @@ testcase tZOText
         Warnlog "Unable to select font in object bar"
     endcatch
     Schriftart.TypeKeys "<Return>"
-    Wait 500    
+    Wait 500
     
     printlog "  - Bold"
     '/// Click 'Bold' in object bar ///
@@ -750,7 +750,7 @@ testcase tZOVerticalText
     endcatch
     
     printlog "  - Format:Paragraph"
-    Sleep 3    
+    Sleep 3
     
     try
         '/// Click 'Textdirection:Left To Right' in Objectbar ///

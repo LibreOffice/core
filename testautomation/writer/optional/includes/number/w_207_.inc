@@ -44,28 +44,25 @@ sub w_207_
 
 end sub
 
+'------------------------------------------------------------------------------------------------------------------------
+
 testcase tToolsNumbering12
    QaErrorLog "Testcase outcommented due to incompability with new Filtername-behaviour."
    goto endsub
 
     printlog "Import / Export Regression Test"
-    '/// Import / Export Regression-Test    
+    '/// Import / Export Regression-Test
     Dim DocFileList( 30 ) as String, sCurrentFilter as string
     Dim sSourcePath as String, sCurrentFilterExt as string
-    Dim i, j, k, x as Integer, ExportFileName as string
+    Dim i as Integer
+    Dim k as Integer
+    Dim x as Integer
+    Dim ExportFileName as string
 
-    For j = 1 to 2
-        ReDim DocFileList( 30 ) as String    
-        Select Case j
-            Case 1
-                '/// load all documents from  "sun_writer\\optional\\input\\number\\"
-                sSourcePath = ConvertPath ( gTesttoolPath + "sun_writer\optional\input\number\" )
-                GetFileList ( sSourcePath, "*.*", DocFileList() )
-            Case 2
-                '/// load all documents from  "sun_writer\\optional\\input\\number\\"
-                sSourcePath = ConvertPath ( gTesttoolPath + "writer\optional\input\number\regression\" )
-                GetFileList ( sSourcePath, "*.*", DocFileList() )
-        end select
+    ReDim DocFileList( 30 ) as String
+    '/// load all documents from  "sun_writer\\optional\\input\\number\\"
+    sSourcePath = ConvertPath ( gTesttoolPath + "writer\optional\input\number\regression\" )
+    GetFileList ( sSourcePath, "*.*", DocFileList() )
 
         x = ListCount ( DocFileList() )
         for i = 1 to x
@@ -88,14 +85,13 @@ testcase tToolsNumbering12
 				'/// open file
 				sleep 2
 				Call hFileOpen ( DocFileList(i) )
-                Call sMakeReadOnlyDocumentEditable
 				
 				Kontext "Filterauswahl"
 				if Filterauswahl.Exists then
 					Warnlog "  - Filter Selection dialog is up !"
 					Filterauswahl.Cancel
 					Call hCloseDocument
-				endif
+				end if
 				Sleep 5
 				Kontext "AsciiFilterOptionen"
 				if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
@@ -104,7 +100,7 @@ testcase tToolsNumbering12
 				Kontext "SecurityWarning"
 				if SecurityWarning.Exists then
 					SecurityWarning.Cancel
-				endif
+				end if
 	
 				'/// check if loaded
 				if GetDocumentCount >= 1 then
@@ -115,7 +111,6 @@ testcase tToolsNumbering12
 					Call hCloseDocument
 					printlog "  - load previous saved document"
 					Call hFileOpen ( ExportFileName )
-                    Call sMakeReadOnlyDocumentEditable
 					Sleep (2)
 					printlog "  - close document"
 					Call hCloseDocument
@@ -125,22 +120,21 @@ testcase tToolsNumbering12
 			next k
             Sleep 2
         next i
-    next j
-    
+
 endcase
 
+'------------------------------------------------------------------------------------------------------------------------
 
 testcase tToolsNumbering13
-    
+
     Dim i as integer, iCounter as integer
     '/// #i73790 Regression testing 
     '/// This testcase loads a Worddocument that lost all formattings 
     printlog "#i73790 regression testing"
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
-    Call sMakeReadOnlyDocumentEditable
     '/// Document has Heading1-Heading3 formatted, be sure it is
-    Call wDokSchreiben ("<Mod1 Home>")
+    call wTypeKeys ("<Mod1 Home>")
     '/// Point cursor to top of document with <STRG HOME>
     Select Case iSprache
 		case 01 : iCounter = 2
@@ -163,16 +157,16 @@ testcase tToolsNumbering13
 		case else : iCounter = 2
 	end select
 	For i = 1 to 3
-        Call wDokSchreiben ("<Shift End>")
+        call wTypeKeys ("<Shift End>")
         '/// Select first to third entry and check it i formatted with 'Heading1','Heading2','Heading3'
         Kontext "Textobjectbar"
         if Vorlage.GetSelIndex <> ( i + iCounter ) then
             Warnlog "Heading " & i & " not " & ( i + iCounter ) & " but " & Vorlage.GetSelIndex
-        endif
-        Call wDokSchreiben ( "<Home>" )
-        Call wDokSchreiben ( "<Down>" )
+        end if
+        call wTypeKeys ( "<Home>" )
+        call wTypeKeys ( "<Down>" )
     next i
-    
+
     Call hCloseDocument
 
 endcase

@@ -61,11 +61,11 @@ testcase tDropDownLB_1
 
     Dim iType as Integer
     iType = 2
-       
+
     PrintLog "- Check 'Input List'"
-    
+
     Call hNewDocument
-    
+
     PrintLog "- Insert/Field/Other/ Functions"
     PrintLog "- Check if 'Input List' exists in Type area"
     Call fInsertFieldsOther("TabFunktionen")
@@ -75,7 +75,7 @@ testcase tDropDownLB_1
         Warnlog "Maybe wrong type selected in list. Not 'Input list'"
     end if
     TabFunktionen.Close
-    
+
     Call hCloseDocument
 
 endcase
@@ -1054,6 +1054,7 @@ testcase tDropDownLB_17
     else
         warnlog "Not all entrys in field correctly imported!"
     end if
+
     FeldbefehlBearbeitenFunktionen.Cancel
     
     PrintLog "- Set focus in front of third line"
@@ -1081,6 +1082,7 @@ testcase tDropDownLB_17
     else
         warnlog "Not all entrys in field correctly imported!"
     end if
+
     FeldbefehlBearbeitenFunktionen.Cancel
     
     Call hCloseDocument ' <- close word document

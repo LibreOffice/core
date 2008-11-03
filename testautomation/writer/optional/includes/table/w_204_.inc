@@ -87,19 +87,19 @@ testcase tTableOption
                 warnlog "'Number format recognition' should be disabled => 114166 "
             catch
             endcatch
-        else 
+        else
             warnlog "'Number format recognition' should be checked => 114166 "    
-        end if        
+        end if
         if Zahlenformaterkennung.IsChecked then   
             try
                 Zahlenformaterkennung.UnCheck
                 warnlog "'Alignment' should be disabled => 114166 "
-            catch                 
+            catch
             endcatch
         else
             warnlog "'Alignment' should be checked => 114166 "
-        end if    
-    end if        
+        end if
+    end if
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Cancel
 
@@ -498,8 +498,8 @@ testcase tTableNumberFormat
     printlog "Checking numberformater"
     '///+ - Currency    
     printlog "  - Currency"
-    Call wDokSchreiben(fLocaleString("LocaleCurrencyValue"))
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys(fLocaleString("LocaleCurrencyValue"))
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 5) then
@@ -528,8 +528,8 @@ testcase tTableNumberFormat
     
     '///+ - Unknown currency
     printlog "  - Unknown currency"
-    Call wDokSchreiben("10.78 §")
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys("10.78 §")
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -559,8 +559,8 @@ testcase tTableNumberFormat
     
     '///+ - Date
     printlog "  - Date"
-    Call wDokSchreiben(fLocaleString("LocaleDateValue"))
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys(fLocaleString("LocaleDateValue"))
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -590,8 +590,8 @@ testcase tTableNumberFormat
     
     '///+ - Time
     printlog "  - Time"
-    Call wDokSchreiben(fLocaleString("LocaleTimeInput"))
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys(fLocaleString("LocaleTimeInput"))
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -621,8 +621,8 @@ testcase tTableNumberFormat
     
     '///+ - Percent
     printlog "  - Percent"
-    Call wDokSchreiben(fLocaleString("LocalePercentValue"))
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys(fLocaleString("LocalePercentValue"))
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -652,8 +652,8 @@ testcase tTableNumberFormat
     
     '///+ - Scientific
     printlog "  - Scientific"
-    Call wDokSchreiben(fLocaleString("LocaleScientificValue"))
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys(fLocaleString("LocaleScientificValue"))
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -683,8 +683,8 @@ testcase tTableNumberFormat
     
     '///+ - Fraction
     printlog "  - Fraction"
-    Call wDokSchreiben("58 11/4")
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys("58 11/4")
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -714,8 +714,8 @@ testcase tTableNumberFormat
     
     '///+ - Boolean
     printlog "  - Boolean"
-    Call wDokSchreiben(fLocaleString("LocaleBooleanValue"))
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys(fLocaleString("LocaleBooleanValue"))
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -752,8 +752,8 @@ testcase tTableNumberFormat
     
     '///+ - String
     printlog "  - String"
-    Call wDokSchreiben("testtext")
-    Call wDokSchreiben "<Tab><shift tab>"
+    call wTypeKeys("testtext")
+    call wTypeKeys "<Tab><shift tab>"
     FormatNumberFormat
 
     Kontext "Zahlenformat"
@@ -863,7 +863,7 @@ testcase tTableDelete
         EditCopy
         Warnlog "Maybe no columns have been inserted!"
     catch
-        Call wTypeKeys "<Mod1 Right>", 2
+        Call wTypeKeys "<Right>", 2
         Call wTypeKeys "<Shift End>"
         try
             EditCopy
@@ -879,7 +879,7 @@ testcase tTableDelete
     Call wTypeKeys "<mod1 home>", 2  ' delete hole table
     Call wTypeKeys "<Mod1 A>"
     try
-        EditCut
+        Call wTypeKeys "<MOD1 SHIFT DELETE>" 'EditCut
         Call wTypeKeys "<return>"
     catch
         Warnlog "Unable to delete table!"

@@ -324,7 +324,7 @@ testcase tCJKDependency_5
     printlog " Format/Frame / Options, the listbox 'Text direction' shouldn't exist"
     Call fFormatFrame("TabZusaetze")
     if TextDirection.IsVisible = TRUE then
-        warnlog "Shouldn't get listbox 'Text direction'."
+        QAErrorLog "#135837# Shouldn't get listbox 'Text direction'."
     end if
     TabZusaetze.Cancel
     

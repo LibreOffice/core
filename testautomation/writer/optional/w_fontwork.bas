@@ -42,7 +42,7 @@ sub main
     Dim StartZeit
     StartZeit = Now()
 
-    use "writer\tools\includes\w_tools.inc"    
+    use "writer\tools\includes\w_tools.inc"
     use "writer\optional\includes\fontwork\w_fontwork1.inc"
 
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )

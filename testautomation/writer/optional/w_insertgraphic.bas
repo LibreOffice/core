@@ -31,19 +31,20 @@
 '*
 '/************************************************************************
 '*
-'* owner :  helge.delfs@sun.com
+'* owner :  fredrik.haegg@sun.com
 '*
 '* short description : Test of Graphic function 
 '*
 '\*******************************************************************
 
-global gSeperator , gMeasurementUnit as String
+global gSeperator as String
+global gMeasurementUnit as String
 
 sub main
 	Dim StartZeit
-	
+
 	StartZeit = Now()
-	
+
 	use "writer\tools\includes\w_tools.inc"
 	use "writer\tools\includes\w_tool3.inc"
 	use "writer\tools\includes\w_tool7.inc"
@@ -54,20 +55,20 @@ sub main
 	use "writer\optional\includes\insertgraphic\w_insertgraphic3.inc"
 	use "writer\optional\includes\insertgraphic\w_insertgraphic4.inc"
 	use "writer\optional\includes\insertgraphic\w_insertgraphic5.inc"
-	
+
 	printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
 	printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 	printlog Chr(13) + "      - Test of Graphic function -"
-	
+
 	Call hStatusIn ( "writer", "w_insertgraphic.bas" , "Graphic" )
 	Call wOptionenUndo("AutoCaption")
-	
+
     'Software Configuration:
     'Getting the decimal seperator from global function
     gSeperator = GetDecimalSeperator()
     'Setting the measurement unit to centimeters.
     gMeasurementUnit = fSetMeasurementToCM()
-	
+
 	Call tInsertGraphic_X
     Call tInsertGraphic_1
 	Call tInsertGraphic_2
@@ -118,13 +119,13 @@ sub main
 	Call tInsertGraphic_47
 	Call tInsertGraphic_48
 	Call tInsertGraphic_49
-	
+
 	Call hStatusOut
-	
+
 	Printlog Chr(13) + "End of Level 1 Test (Insert Graphic):"
 	Printlog "Duration: "+ WieLange ( StartZeit )
 	Printlog "Date: " +  Date + "    Time: " + Time
-	
+
 end sub
 
 sub LoadIncludeFiles
@@ -133,4 +134,3 @@ sub LoadIncludeFiles
     Call GetUseFiles
     gApplication = "Writer"
 end sub
-

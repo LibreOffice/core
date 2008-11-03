@@ -56,9 +56,8 @@ sub w_fields3
     Call tInsertBookmark_3       'Insert Bookmark - Reference
     Call tInsertBookmark_4       'Insert Bookmark - Above/Below
     Call tInsertBookmark_5       'Insert Bookmark - As Page Style
-    
-end sub    
 
+end sub
 
 testcase tFieldsReferences
 
@@ -355,6 +354,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertReference_4
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim  sReference      as String
   Dim  sAbove , sBelow as String
@@ -403,7 +404,7 @@ testcase tInsertReference_4
    Sleep 2
    Call wTypeKeys "<Shift Home>"
 
-   if fGetFieldContent() <> sAbove then
+   if fGetFieldContent() <> sAbove then 'Check systemlanguage / Office-Language - if other than 01 then ignore/QaErrorLog!
        Warnlog "Should get " & sAbove & " but get " & fGetFieldContent()
    end if
 
@@ -698,9 +699,9 @@ testcase tInsertBookmark_1
   '/// Insert/Cross-reference , choose "Bookmarks" and "Page"
    InsertReferenceField
    Kontext "TabReferenzen"
-     Feldtyp.Select 3
+     Feldtyp.Select 5
      Sleep 1
-     Auswahl.Select  sBookmark
+     Auswahl.Select sBookmark
      Sleep 1
      Formatliste.Select 1
      Sleep 1
@@ -755,9 +756,9 @@ testcase tInsertBookmark_2
   '/// Insert/Cross-reference , choose "Bookmarks" and "Chapter"
    InsertReferenceField
    Kontext "TabReferenzen"
-     Feldtyp.Select 3
+     Feldtyp.Select 5
      Sleep 1
-     Auswahl.Select  sBookmark
+     Auswahl.Select sBookmark
      Sleep 1
      Formatliste.Select 2
      Sleep 1
@@ -813,9 +814,9 @@ testcase tInsertBookmark_3
   '/// Insert/Cross-reference , choose "Bookmark" and "Reference"
    InsertReferenceField
    Kontext "TabReferenzen"
-     Feldtyp.Select 3
+     Feldtyp.Select 5
      Sleep 1
-     Auswahl.Select  sBookmark
+     Auswahl.Select sBookmark
      Sleep 1
      Formatliste.Select 3
      Sleep 1
@@ -838,6 +839,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertBookmark_4
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim  sBookmark       as String
   Dim  sAbove , sBelow as String
@@ -870,9 +873,9 @@ testcase tInsertBookmark_4
   '/// Insert/Cross-reference , choose "Bookmarks" and "above/below"
    InsertReferenceField
    Kontext "TabReferenzen"
-     Feldtyp.Select 3
+     Feldtyp.Select 5
      Sleep 1
-     Auswahl.Select  sBookmark
+     Auswahl.Select sBookmark
      Sleep 1
      Formatliste.Select 4
      Sleep 1
@@ -893,9 +896,9 @@ testcase tInsertBookmark_4
   '/// Insert/Cross-reference , choose "Bookmark" and "above/below"
    InsertReferenceField
    Kontext "TabReferenzen"
-     Feldtyp.Select 3
+     Feldtyp.Select 5
      Sleep 1
-     Auswahl.Select  sBookmark
+     Auswahl.Select sBookmark
      Sleep 1
      Formatliste.Select 4
      Sleep 1
@@ -953,9 +956,9 @@ testcase tInsertBookmark_5
   '/// Insert/Cross-reference , choose "Bookmark" and "As Page Style"
    InsertReferenceField
    Kontext "TabReferenzen"
-     Feldtyp.Select 3
+     Feldtyp.Select 5
      Sleep 1
-     Auswahl.Select  sBookmark
+     Auswahl.Select sBookmark
      Sleep 1
      Formatliste.Select 5
      Sleep 1
@@ -976,5 +979,4 @@ testcase tInsertBookmark_5
 endcase
 
 '-----------------------------------------------------------------
-
 

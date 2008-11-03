@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_007_
     printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
 
@@ -55,7 +54,6 @@ sub w_007_
     Call tToolsSort
     Call tToolsCalculate
     Call tToolsUpdate
-    Call tToolsCustomize						'global\required\inc
     Call tToolsOptionsTest
     Call tToolsHangulHanjaConversion
     Call tToolsChineseTranslation
@@ -114,6 +112,7 @@ testcase tToolsSpellcheck
     end select
 
     ToolsSpellcheckWriter
+
     printlog " Tools / Spellcheck / Check"
     WaitSlot (500)
     Kontext "Active"
@@ -145,7 +144,7 @@ testcase tToolsSpellcheck
     DialogTest ( TabLinguistik )
     printlog " Step through all options in list and if 'Edit' is enabled click 'Edit'"
     for i = 1 to 12
-        kontext "TabLinguistik"    
+        kontext "TabLinguistik"
         Optionen.TypeKeys "<Down>"
         if OptionenBearbeiten.IsEnabled then
             OptionenBearbeiten.Click
@@ -169,9 +168,9 @@ testcase tToolsSpellcheck
         if Bearbeiten.IsEnabled = true then
             IsWriteable = true
             exit for
-        end if    
+        end if
     next i
-    
+
     if IsWriteable = true then
         Bearbeiten.Click
         printlog " Click 'Edit' in 'Options dialog'"

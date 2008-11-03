@@ -61,6 +61,8 @@ end sub
 '---------------------------------------------------
 
 testcase tTextframes_33
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     printlog "- Test attribute 'AutoSize' in linked frames"
     '/// Test attribute 'AutoSize' in linked frames
@@ -189,6 +191,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_35
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim iNoLink , iLink  as Integer
     
@@ -248,6 +252,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_36
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile , sTestText  as  String
     Dim iNoLink   , iLink      as  Integer
@@ -333,6 +339,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_37
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile , sTestText  as  String
     Dim iNoLink   , iLink      as  Integer
@@ -392,6 +400,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_38
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile , sTestText  as  String
     Dim iNoLink   , iLink      as  Integer
@@ -449,6 +459,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_39
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sHorizontalBy1    , sVerticalBy1     as String
     Dim sHorizontalBy2    , sVerticalBy2     as String
@@ -532,6 +544,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_40
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sHorizontalBy as String
     
@@ -589,6 +603,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_41
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim  iLink , iNolink as  Integer
     
@@ -833,9 +849,9 @@ testcase tTextframes_45
     Call fFormatFrame("TabZusaetze")
     if NextLink.GetSelIndex  <> iNoLink then Warnlog "There should be no link between 2 frames!"
     TabZusaetze.Cancel
+    Wait 500
     
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------------
@@ -894,9 +910,9 @@ testcase tTextframes_46
     Call fFormatFrame("TabZusaetze")
     if NextLink.GetSelIndex  <> iNoLink then Warnlog "Shouldn't link to 2nd frame ! "
     TabZusaetze.Cancel
-    
-    Call hCloseDocument
+    Wait 500
 
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------------

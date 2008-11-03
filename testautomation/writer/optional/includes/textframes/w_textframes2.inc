@@ -56,11 +56,13 @@ sub w_textframes2
     Call tTextframes_31         'Frame should be non-editable in read-only documents
     Call tTextframes_32         'Test input text into frame in read-only document when checking "Editable in read-only document"
 
-end sub    
+end sub
 
 '---------------------------------------------------
 
 testcase tTextframes_17
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestText
     
@@ -101,6 +103,8 @@ endcase
 '---------------------------------------------------
 
 testcase tTextframes_18
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestText
     
@@ -845,6 +849,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_28
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sFrameName1 as String
     Dim sFrameName2 as String
@@ -1085,6 +1091,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_32
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile as String
     Dim sText as String

@@ -132,7 +132,7 @@ sub main
     Call tParagraphBorder6
 
     Call hStatusOut
-    
+
     Printlog Chr(13) + "End of Level 1 Test (Format page):"
     Printlog "Duration: "+ WieLange ( StartZeit )
     Printlog "Date: " +  Date + "    Time: " + Time

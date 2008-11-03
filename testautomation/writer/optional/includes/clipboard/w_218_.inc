@@ -97,9 +97,10 @@ testcase HTMLToDRAWText
    Call hCloseDocument
    goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -159,8 +160,9 @@ testcase HTMLToDRAWField
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -215,7 +217,9 @@ testcase HTMLToDRAWTable
      goto endsub
    end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -269,7 +273,9 @@ testcase HTMLToDRAWGraphicLinked
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -324,7 +330,9 @@ testcase HTMLToDRAWControl
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -384,5 +392,7 @@ testcase HTMLToDRAWFloatingFrame
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description :  tools/functions for the Section-testing
 '*
 '************************************************************************
 '*
@@ -47,7 +47,6 @@
 ' #1 fMultiSelection
 '*
 '\***********************************************************************
-
 
 '******************************************************
 '* insert a section with name SectionName            **

@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Spellcheck-Testing. Functional-Test.
 '*
 '\***********************************************************************
 

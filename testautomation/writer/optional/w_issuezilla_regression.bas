@@ -45,17 +45,17 @@ sub main
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool4.inc"
     use "writer\optional\includes\regression\issuezilla\w_issuezilla_regression.inc"
-                                        
+
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
     printlog Chr(13) + "******* Writer - Regression - Test *******"
-    
-    Call hStatusIn ( "writer", "w_issuezilla_regression.bas" , "Writer Regression-Test" )    
+
+    Call hStatusIn ( "writer", "w_issuezilla_regression.bas" , "Writer Regression-Test" )
     printLog Chr(13) + "Avoid regression"
-    
+
     Call w_issuezilla_regression
-    
+
     Call hStatusOut
-    
+
     Printlog Chr(13) + "End of Regression Test"
 
 end sub

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 1
 '*

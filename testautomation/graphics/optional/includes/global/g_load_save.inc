@@ -202,16 +202,17 @@ testcase tFileProperties
    Thema.SetText "Documentproperties"
    Schluesselworte.SetText "None"
 
-   Kontext
-   active.SetPage TabBenutzer
-   Kontext "TabBenutzer"
-   Info2.SetText "Thorsten Peters"
+   'Deactivating this part because of #i95523#:
+   'Kontext
+   'active.SetPage TabBenutzer
+   'Kontext "TabBenutzer"
+   'Info2.SetText "Thorsten Peters"
 
-   Infofelder.Click
-   Kontext "InfonamenBearbeiten"
-   Namen2.SetText "Name"
-   InfonamenBearbeiten.OK
-   sleep 2
+   'Infofelder.Click
+   'Kontext "InfonamenBearbeiten"
+   'Namen2.SetText "Name"
+   'InfonamenBearbeiten.OK
+   'sleep 2
    Kontext
    active.SetPage TabInternet
    Kontext "TabInternet"
@@ -245,16 +246,17 @@ testcase tFileProperties
    if Thema.GetText <> "Documentproperties" then Warnlog "Description / Thema is wrong"
    if Schluesselworte.GetText <> "None" then Warnlog "Description / Keywords is wrong"
 
-   Kontext
-   active.SetPage TabBenutzer
-   Kontext "TabBenutzer"
-   if Info2.GetText <> "Thorsten Peters" then Warnlog "User Defined / Info2 is wrong"
+   'Deactivating this part because of #i95523#:
+   'Kontext
+   'active.SetPage TabBenutzer
+   'Kontext "TabBenutzer"
+   'if Info2.GetText <> "Thorsten Peters" then Warnlog "User Defined / Info2 is wrong"
 
-   Infofelder.Click
-   sleep 2
-   Kontext "InfonamenBearbeiten"
-   if Namen2.GetText <> "Name" then Warnlog "Edit Field Names / Info2 is wrong"
-   InfonamenBearbeiten.OK
+   'Infofelder.Click
+   'sleep 2
+   'Kontext "InfonamenBearbeiten"
+   'if Namen2.GetText <> "Name" then Warnlog "Edit Field Names / Info2 is wrong"
+   'InfonamenBearbeiten.OK
 
    Kontext
    active.SetPage TabInternet

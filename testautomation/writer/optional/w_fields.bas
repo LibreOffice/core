@@ -61,8 +61,6 @@ sub main
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
     printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 
-
-
     Call hStatusIn ( "writer", "w_fields.bas" , "Fields" )
 
     'Software Configuration:
@@ -82,7 +80,7 @@ sub main
     Call w_fields5                  
     printlog Chr(13) + " --- Test Fields - Functions ---"
     Call w_fields6
-    printlog Chr(13) + " --- Test Fields - L10N ---"    
+    printlog Chr(13) + " --- Test Fields - L10N ---"
     Call w_fields7
 
     Call hStatusOut

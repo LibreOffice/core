@@ -983,7 +983,7 @@ testcase tFormatWrapArea
     catch
         Warnlog "Format / Wrap / First paragraph is disabled!"
     endcatch
-    WaitSlot (1000)
+    sleep (2)
     try
         printlog " Format / Wrap / Edit"
         FormatWrapEdit

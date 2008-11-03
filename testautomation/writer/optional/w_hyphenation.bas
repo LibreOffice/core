@@ -40,13 +40,13 @@
 sub main
 
     use "writer\tools\includes\w_tools.inc"
-    use "writer\tools\includes\w_tool4.inc"    
+    use "writer\tools\includes\w_tool4.inc"
     use "writer\optional\includes\hyphenation\w_hyphenation.inc"
 
     printlog Chr(13) + "******* Writer - Hyphenation - Test *******"
 
     Call hStatusIn ( "writer" , "w_hyphenation.bas" )
-    Call wEnableHyphenation(true)    
+    Call wEnableHyphenation(true)
     Call tHyphenation_1            'Test Hyphenation  using ctrl and "-"
     Call tHyphenation_2            'Test Hyphenation  using Tools/Hyphenation ,test like fol-lowing
     Call tHyphenation_3            'Test Hyphenation  using Tools/Hyphenation ,test like follow-ing

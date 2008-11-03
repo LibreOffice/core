@@ -45,8 +45,6 @@
 '*
 '\***********************************************************************
 
-
-
 sub w_sorting
 
     Call tToolsSort1                         ' Text in one Column and 1 Key
@@ -240,7 +238,7 @@ endcase
 ' *******************************************************************
 
 testcase tToolsSort3
-    Dim i as Integer : Dim Trennzeichen as String
+    Dim i as Integer
     PrintLog "- Tools / Sorting text in several lines"
     for i=1 to 3
         select case i

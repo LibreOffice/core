@@ -48,11 +48,10 @@ sub w_fields5
     Call tVariables_7        'Number range
     Call tVariables_8        'Input field
     Call tVariables_9        'User field
-    'Call tVariables_10       'DDE field - manual
-    'Call tVariables_11       'DDE field - automatic
-    
-end sub
+    Call tVariables_10       'DDE field - manual
+    Call tVariables_11       'DDE field - automatic
 
+end sub
 
 testcase tVariables_1
 
@@ -76,9 +75,9 @@ testcase tVariables_1
                    "This is a test!" , _
                    "1"               , _
                    "1"               , _
-                   "1.00"            , _
+                   "1" & gSeperator & "00"            , _
                    "1"               , _
-                   "1.00"            , _
+                   "1" & gSeperator & "00"            , _
                   )
   j = UBound(sResult)
 
@@ -130,7 +129,7 @@ testcase tVariables_2
   Dim i as Integer
   Dim j as Integer
 
-  sValue  = "1234.567"
+  sValue  = "1234,567"
 
   sName   = Array( _
                    "myTest1" , _
@@ -141,12 +140,12 @@ testcase tVariables_2
                    "myTest6" , _
                   )
   sResult = Array( _
-                   "1234.567" , _
-                   "1234.57"  , _
+                   "1234,567" , _
+                   "1234,57"  , _
                    "1235"     , _
-                   "1234.57"  , _
-                   "1,235"    , _
-                   "1,234.57" , _
+                   "1234,57"  , _
+                   "1.235"    , _
+                   "1.234,57" , _
                   )
   j = UBound(sResult)
 
@@ -191,6 +190,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariables_3
+    qaerrorlog "#i94596# - tVariables_3 outcommented due to bug."
+    exit sub
 
   Dim sName     as String
   Dim sValue    as String
@@ -201,7 +202,7 @@ testcase tVariables_3
 
   sName   = "myTest"
   sValue  = "1234.567"
-
+  
   iFormat = Array( 8,         10          , 52         , 55       , 56)
   sResult = Array( _
                    "123456.70%"  , _
@@ -216,7 +217,9 @@ testcase tVariables_3
  '/// <b> Set format as 'Additional formats...' </b>
 
   Call hNewDocument
-
+  CALL GetLanguageText (01)
+  mUnit = fSetMeasurementToCM()                 ' Set measurement unit to cm
+  
   '/// Insert/Fields/Other/Variables / Select "set Variable" ,
   '/// Set Name and Value(number) , then choose format as 'Additional formats...'
   '/// In the number format dialog , select 'All' in Category
@@ -244,7 +247,7 @@ testcase tVariables_3
            Call wTypeKeys "<Shift Left>"
            sleep 1
            if fGetFieldContent() <> sResult(i) then
-               Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
+	           Warnlog i & ": Should get " & sResult(i) & " but get " & fGetFieldContent()
            end if
          Kontext "TabVariablen"
      next i
@@ -659,6 +662,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariables_10
+    qaerrorlog "#i93906# - tVariables_10 outcommented due to a problem with copying field-contents outside the office."
+    goto endsub
 
   Dim sDDEFile as String
   Dim sContent as String
@@ -750,6 +755,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariables_11
+    qaerrorlog "#i93906# - tVariables_10 outcommented due to a problem with copying field-contents outside the office."
+    goto endsub
 
   Dim sDDEFile as String
   Dim sContent as String

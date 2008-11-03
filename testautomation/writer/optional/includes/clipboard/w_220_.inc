@@ -102,9 +102,10 @@ testcase HTMLToHTMLText
         Call hCloseDocument
         goto endsub
     end if
-    Call hCloseDocument
     printlog "  Close active document "
-    
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -159,8 +160,9 @@ testcase HTMLToHTMLField
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -215,7 +217,9 @@ testcase HTMLToHTMLTable
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -269,7 +273,9 @@ testcase HTMLToHTMLGraphicLinked
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -324,7 +330,9 @@ testcase HTMLToHTMLControl
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -384,5 +392,7 @@ testcase HTMLToHTMLFloatingFrame
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

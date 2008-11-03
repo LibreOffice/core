@@ -97,9 +97,10 @@ testcase HTMLToIMPRESSText
    Call hCloseDocument
    goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -154,8 +155,9 @@ testcase HTMLToIMPRESSField
      goto endsub
     end if
   printlog "  Close active document "
-  Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -210,7 +212,9 @@ testcase HTMLToIMPRESSTable
      goto endsub
    end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -264,7 +268,9 @@ testcase HTMLToIMPRESSGraphicLinked
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -319,7 +325,9 @@ testcase HTMLToIMPRESSControl
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -379,5 +387,7 @@ testcase HTMLToIMPRESSFloatingFrame
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

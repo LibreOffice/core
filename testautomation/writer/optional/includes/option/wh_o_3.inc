@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Funcitonal-Test for Tools -Options - HTML - Cursor.
 '*
 '\***********************************************************************
 
@@ -316,11 +316,11 @@ testcase tToolsOptionsHTMLCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-  printlog ("'/// - SO quit - start ///")
+    printlog ("'/// - SO quit - start ///")
 
- wOfficeRestart
+    call wOfficeRestart
 
-  printlog ("'/// - checking states ///")
+    printlog ("'/// - checking states ///")
     ToolsOptions
     hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
 
@@ -333,7 +333,7 @@ testcase tToolsOptionsHTMLCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-  printlog ("'/// - all UnCheck -> o ///")
+    printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
     hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
 

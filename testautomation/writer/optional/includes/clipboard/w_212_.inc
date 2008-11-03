@@ -99,9 +99,10 @@ testcase WriterToImpressText
     else
         Warnlog "Writer To Impress -> 'Text' failed !"
     end if
-    Call hCloseDocument
     printlog " Close active document "
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -153,8 +154,9 @@ testcase WriterToImpressField
         Warnlog "Writer To Impress -> 'Field' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -206,7 +208,9 @@ testcase WriterToImpressTable
         Warnlog "Writer To Impress -> 'Table' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -258,7 +262,9 @@ testcase WriterToImpressFrame
         Warnlog "Writer To Impress -> 'Frame' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -310,7 +316,9 @@ testcase WriterToImpressDrawingObject
         Warnlog "Writer To Impress -> 'Drawing Object' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -362,7 +370,9 @@ testcase WriterToImpressGraphicLinked
         Warnlog "Writer To Impress -> 'Linked Graphic' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -414,7 +424,9 @@ testcase WriterToImpressGraphicEmbedded
         Warnlog "Writer To Impress -> 'Embedded Graphic' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -466,7 +478,9 @@ testcase WriterToImpressOLEObject
         Warnlog "Writer To Impress -> 'OLE object' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -518,5 +532,7 @@ testcase WriterToImpressControl
         Warnlog "Writer To Impress -> 'Control' failed !"
     end if
     printlog " Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

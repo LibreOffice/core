@@ -546,7 +546,7 @@ testcase tEditAutotext_4
         if wDeleteAutotextCategory("AAAAAA") = false then Warnlog "Unable to delete category"
         Kontext "Autotext"
         AutoText.Close
-        Call hCloseDocument 
+        Call hCloseDocument
         goto endsub
     end if
 
@@ -598,7 +598,7 @@ testcase tEditAutotext_4
             Warnlog "After denying the 'Deletemessage' the categorie has been deleted!"
         else
             Kontext "Autotext"
-            Bereiche.Click 
+            Bereiche.Click
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then

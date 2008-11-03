@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Test the AutoCorrect/AutoFormat/Word tools
 '*
@@ -40,7 +40,6 @@
 ' #0 fPositionAndSize
 '*
 '\***********************************************************************
-
 
 function fPositionAndSize(Options as string)
 '/// Open Format/Position and Size diglog with Options.
@@ -73,4 +72,3 @@ function fFormatLine(Options as string)
 end function
 
 '-------------------------------------------------------------------------
-

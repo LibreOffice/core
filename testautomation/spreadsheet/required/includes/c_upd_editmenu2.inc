@@ -458,7 +458,14 @@ testcase tEditLinks
     call hCloseDocument
     '/// Load testfile ' spreadsheet/required/input/linkclient.ods ' and allow update
     printlog " Load testfile ' spreadsheet/required/input/linkclient.ods ' and allow update"
-    Call hFileOpen ( ConvertPath ( gTesttoolPath + "spreadsheet\required\input\linkclient.ods"), true)
+    Call hFileOpen ( ConvertPath ( gTesttoolPath + "spreadsheet\required\input\linkclient.ods"))
+	printlog " Confirm Update Links dialog with YES"
+	Kontext
+	If Active.Exists then
+		Active.Yes
+	else
+		warnlog "No dialog for updating links exists"
+	end if
     '/// Open 'Edit – Links' dialog
     printlog " Open 'Edit – Links' dialog"
     EditLinksCalc

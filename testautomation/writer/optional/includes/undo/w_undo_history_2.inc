@@ -52,14 +52,11 @@ sub w_undo_history_2
 	Call tUndoHistory15		' Fields (Insert/Modify / Delete)
 	Call tUndoHistory16		' Special Character (Insert/ Delete)
 	Call tUndoHistory17		' Styles (Apply/Modify/Find&Replace/Promote/Demote)
-	
-	
+
 end sub
 
-
-
 testcase tUndoHistory6
-	
+
 	'/// <B>Typing & overwrite a > 20 characters long string</B>
 	'/// new document
 	Call hNewDocument
@@ -69,7 +66,6 @@ testcase tUndoHistory6
 	Call wTypeKeys ( "ThisSentenceHasMoreThan20Characters" )
 	'/// string in Undo list has to be: Typing: ThisSente...aracters
 	Call CheckUndoStringInUndoList ( 1, "'ThisSent...racters'" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// <U><B>CHECK: Overwrite</B></U>
 	printlog "- OVERWRITE"
@@ -131,7 +127,7 @@ testcase tUndoHistory8
 
 	'/// <B>Delete a multi-selection</B>
 	printlog "- Delete a multi-selection"
-	'/// new Document	
+	'/// new Document
 	Call hNewDocument
 	'/// write down: the deletion of a multi-selection
 	Call wTypeKeys ( "the deletion of a multi-selection" )
@@ -166,8 +162,6 @@ testcase tUndoHistory9
 	Call wTypeKeys ( "<Return>" )
 	'///  string in Undo-list has to be: "New paragraph"
 	Call CheckUndoStringInUndoList ( 8, "New Paragraph" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- Delete Paragraph"
 	'/// press Backspace to delete paragraph
 	Call wTypeKeys ( "<Backspace>" )
@@ -176,7 +170,6 @@ testcase tUndoHistory9
 
 	'/// close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -215,7 +208,6 @@ testcase tUndoHistory10
 	next i
 	'/// close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -274,12 +266,11 @@ testcase tUndoHistory11
 		Call hCloseDocument
 		goto endsub
 	end if
-	
+
 	'///  string in Undo-list has to be: "Reject change: Insert 'this is a test'")
 	Call CheckUndoStringInUndoList ( 10, "Reject" )
 
 	Call hCloseDocument
-
 endcase
 
 
@@ -303,7 +294,6 @@ testcase tUndoHistory12
 
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -321,17 +311,18 @@ testcase tUndoHistory13
 	FormatColumn.Ok
 	'/// Insert a column break (Strg+Shift+Return)
 	Call wTypeKeys ( "<Mod1 Shift Return>" )
+	printlog "Insert a column break"
 	'///  string in Undo-list has to be: "Insert column break") 
 	Call CheckUndoStringInUndoList ( 10, "InsertColumnBreak" )
 
 	'/// Delete a column break (Strg+Shift+Return+Backspace)
+	printlog "Delete a column break"
 	Call wTypeKeys ( "<Mod1 Shift Return><Backspace>" )
 	'///  string in Undo-list has to be: "Delete column break") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteColumnBreak" )
 
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -344,13 +335,13 @@ testcase tUndoHistory14
 	'/// Format / Columns
 	InsertManualBreak
 	Kontext "UmbruchEinfuegen"
-	'/// Insert a page break
+	printlog "Insert a page break"
 	Seitenumbruch.Check
 	UmbruchEinfuegen.Ok
 	'///  string in Undo-list has to be: "Insert page break") 
 	Call CheckUndoStringInUndoList ( 10, "InsertPageBreak" )
 
-	'/// Delete a page break
+	printlog "Delete a page break"
 	InsertManualBreak
 	Kontext "UmbruchEinfuegen"
 	'/// Insert a page break
@@ -360,10 +351,8 @@ testcase tUndoHistory14
 	'///  string in Undo-list has to be: "Delete page break") 
 	Call CheckUndoStringInUndoList ( 10, "DeletePageBreak" )
 
-	'/// Close document	
+	'/// Close document
 	Call hCloseDocument
-	
-
 endcase
 
 
@@ -397,7 +386,6 @@ testcase tUndoHistory15
 
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -422,15 +410,14 @@ testcase tUndoHistory16
 	Call CheckUndoStringInUndoList ( 10, "DeleteSpecialCharacter" )
 
 	'/// Close document
-	Call hCloseDocument	
-
+	Call hCloseDocument
 endcase
 
 
 testcase tUndoHistory17
 	Dim i as integer, StyleText as string, UndoText as string
 	Dim NewStyle as string
-	
+
 	'/// <B>Styles (Apply/Modify/Find&Replace/Promote/Demote)</B>
 	printlog "- Styles (Apply)"
 	'/// new document
@@ -466,8 +453,8 @@ testcase tUndoHistory17
 	'/// Edit / Search and Replace
 	EditSearchAndReplace
 	kontext "FindAndReplace"
-	if SearchForStyles.IsVisible = False then More.Click
-    SearchForStyles.Check
+        if SearchForStyles.IsVisible = False then More.Click
+        SearchForStyles.Check
 	Sleep 1
 	ReplaceWithStyle.Select 4
 	wait 500
@@ -475,6 +462,8 @@ testcase tUndoHistory17
 	NewStyle = ReplaceWithStyle.GetSelText
 	Select Case iSprache
 		Case 01: StyleText = "Replace style: AUndoHistory -> " & NewStyle
+                Case 34: StyleText = "Reemplazar estilo: AUndoHistory -> " & NewStyle
+	        Case 86: StyleText = "替换样式: AUndoHistory -> " & NewStyle
 		Case else: QAErrorlog "Please adapt test for this language"
 	end select
 	wait 500
@@ -492,7 +481,7 @@ testcase tUndoHistory17
 	SearchForStyles.UnCheck
 	FindAndReplace.Close
 
-	'///  string in Undo-list has to be: "Replace Styles: 'AUndoHistory -> ...") 
+	'///  string in Undo-list has to be: "Replace Styles: 'AUndoHistory -> ...")
 	Kontext "StandardBar"
 	try
 		Undo.OpenMenu
@@ -522,8 +511,8 @@ testcase tUndoHistory17
 	Kontext "NavigatorWriter"
 	'/// Select Promote in Navigator
 	try
-		Hoch.Click
-		'///  string in Undo-list has to be: "Demote Outline") 
+		Senken.Click
+		'///  string in Undo-list has to be: "Demote Outline")
 		Call CheckUndoStringInUndoList ( 10, "DemoteOutline" )
 	catch
 		Warnlog "Unable to demote outline"
@@ -539,8 +528,7 @@ testcase tUndoHistory17
 	catch
 		Warnlog "Unable to promote outline"
 	endcatch
-	
+
 	'/// CloseDocument
 	Call hCloseDocument
-	
 endcase

@@ -6,11 +6,11 @@
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: w_imp_bin.bas,v $
+'* $RCSfile: w_loadsave.bas,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.1.2.1 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 20:00:33 $
+'* last change: $Author: fredrikh $ $Date: 2008/10/07 15:50:16 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -33,48 +33,34 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description : Load all files types in standard installation and save with bin-filters (5.0)
+'* short description : Checks the file-export/import through API-Filters
 '*
 '\***********************************************************************
 
 sub main
-
     Dim Start
-    Dim ImportFilterDatei as String
-    Dim sCurrentFilter as string
-    Dim sCurrentFilterExt as string
+    Dim ExportFilterDatei as String
     Dim PrevMacroSetting as integer
-    
+
     use "writer\tools\includes\w_tools.inc"
-    use "writer\tools\includes\w_tool4.inc"
-	use "writer\tools\includes\w_tool6.inc"
-    use "writer\optional\includes\w_import.inc"
+    use "writer\tools\includes\w_tool6.inc"
+    use "writer\optional\includes\loadsave\w_loadsave.inc"
 
     Start = Now()
 
-    sCurrentFilter = "StarWriter 3.0 - 5.0"
-    sCurrentFilterExt = ".sdw"            
-    
     PrevMacroSetting = hSetMacroSecurity(1)
-    Call hStatusIn("writer","w_imp_bin.bas")
-    if iSprache = 46 then
-        QAErrorlog "#137214#AutoSpellCheck in Swedish Text is extremly slow"
-        Call wEnableAutoSpellcheck(false)
-    endif
-    Call wImportWithFilter ( sCurrentFilter, sCurrentFilterExt )
-    Call wImportWithoutFilter ( sCurrentFilter, sCurrentFilterExt )
-    if iSprache = 46 then 
-        Call wEnableAutoSpellcheck(true)
-    endif
+    Call hStatusIn ( "writer", "w_loadsave.bas")
+
+    Call tExportAllReadableFormatsIntoODF
+    Call tExportAllReadableFormatsIntoThemselves
+    Call tExportTop5FormatsIntoTop5
+
     Call hStatusOut
     Call hSetMacroSecurity(PrevMacroSetting)
-    Printlog Chr(13) + "Duration :" + Wielange ( Start )
 
+    Printlog Chr(13) + "Duration : " + Wielange ( Start )
 end sub
 
-' ********************************************
-' ** - Call Start properties
-' ********************************************
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"

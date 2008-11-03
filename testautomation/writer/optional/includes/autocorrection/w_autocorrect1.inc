@@ -88,7 +88,8 @@ end sub
 testcase tReplaceDashes_1
 
    Dim testWord as string, testResult as String
-   Dim i, j  as Integer
+   Dim i as Integer
+   Dim j as Integer
 
    printLog "Replace dashes test"
   '/// Replace dashes test
@@ -103,14 +104,14 @@ testcase tReplaceDashes_1
 
    For i = 1 to 6
        Select Case i
-            Case 1 : testWord = "Bla - Bla"         : testResult = "Bla – Bla"            
-            Case 2 : testWord = "Bla--Bla"          : testResult = "Bla—Bla"          
+            Case 1 : testWord = "Bla - Bla"         : testResult = "Bla – Bla"
+            Case 2 : testWord = "Bla--Bla"          : testResult = "Bla—Bla"
             Case 3 : testWord = "Helen and --Tom"   : testResult = "Helen and –Tom"
             Case 4 : testWord = "(Bla--Bla)"        : testResult = "(Bla—Bla)"
             Case 5 : testWord = "[Bla--Bla]"        : testResult = "[Bla—Bla]"
             Case 6 : testWord = "{Bla--Bla}"        : testResult = "{Bla—Bla}"
-        end select                  
-        
+        end select
+
         printlog "- Replace dashes " & testword & " => " & testResult
         Call wTypeKeys testWord
         Call wTypeKeys " "
@@ -165,7 +166,7 @@ testcase tToolsAutocorrectOptions_1
     
     Call wTypeKeys "<DELETE>"
     
-    '/// M:Y  T:N    
+    '/// M:Y  T:N
     Call fAutocorrectOptions("UseReplacementTable")
     
     Call wTypeKeys "Aabbcc"
@@ -188,7 +189,7 @@ testcase tToolsAutocorrectOptions_1
     
     Call wTypeKeys "<DELETE>"
     
-    '/// M:N  T:Y   
+    '/// M:N  T:Y
     Call fAutocorrectOptions("UseReplacementTable")
     
     Call wTypeKeys "Aabbcc"
@@ -249,8 +250,10 @@ endcase
 
 testcase tToolsAutocorrectOptions_2
 
-   Dim testContent , hopeResult                              as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
 
   printLog "Test 'Correct TWo INitial CApital'  "
   '/// Test 'Correct TWo INitial CApital'
@@ -345,8 +348,10 @@ endcase
 
 testcase tToolsAutocorrectOptions_3
 
-   Dim testContent , hopeResult as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
 
   printLog "Test 'Capitalize first letter of every setence'"
   '/// Test 'Capitalize first letter of every setence'
@@ -436,9 +441,12 @@ endcase
 
 testcase tToolsAutocorrectOptions_4_1
 
-   Dim testContent , hopeResult                              as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
-   Dim getStyle , hopeStyle                                  as String
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
+   Dim getStyle as String
+   Dim hopeStyle as String
 
   printLog "Test 'Automatic bold and underline' --- bold  "
   '/// Test 'Automatic bold'
@@ -652,9 +660,12 @@ endcase
 
 testcase tToolsAutocorrectOptions_4_2
 
-   Dim testContent , hopeResult                              as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
-   Dim getUnderlineStatus , hopeUnderlineStatus              as Integer  ' 1 = without  , 2 = single
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
+   Dim getUnderlineStatus as Integer
+   Dim hopeUnderlineStatus as Integer  ' 1 = without  , 2 = single
 
   printLog "Test 'Automatic bold and underline' --- underline  "
   '/// Test 'Automatic underline'
@@ -807,8 +818,10 @@ endcase
 
 testcase tToolsAutocorrectOptions_5
 
-   Dim testContent , hopeResult                              as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
 
   printLog "URL Recognition"
   '/// URL Recognition
@@ -908,7 +921,7 @@ endcase
 
 testcase tToolsAutocorrectOptions_6
 
-   Dim testContent   as String
+   Dim testContent as String
 
   printLog "Replace 1st ... with 1^st..."
   '/// Replace 1st ... with 1^st...
@@ -997,8 +1010,10 @@ endcase
 
 testcase tToolsAutocorrectOptions_7
 
-   Dim testContent , hopeResult as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
 
   printLog "Replace 1/2 ... with ½ ... "
   '/// Replace 1/2 ... with ½ ...
@@ -1092,8 +1107,10 @@ endcase
 
 testcase tToolsAutocorrectOptions_8
 
-   Dim testContent , hopeResult as String
-   Dim hopeResultBeforeAutoformat, hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResult as String
+   Dim hopeResultBeforeAutoformat
+   Dim hopeResultAfterAutoformat as String
 
   printLog "Replace dashes"
   '/// Replace dashes
@@ -1186,7 +1203,8 @@ endcase
 
 testcase tToolsAutocorrectOptions_11
 
-   Dim testContent , hopeResult as String
+   Dim testContent as String
+   Dim hopeResult as String
 
   printLog "Ignore double spaces"
   '/// Ignore double spaces
@@ -1226,8 +1244,9 @@ endcase
 
 testcase tToolsAutocorrectOptions_12
 
-  Dim firstLine                as String
-  Dim testContent , hopeResult as String
+  Dim firstLine as String
+  Dim testContent as String
+  Dim hopeResult as String
 
   printLog "Apply numbering"
   '/// Apply numbering
@@ -1275,10 +1294,12 @@ endcase
 
 testcase tToolsAutocorrectOptions_13
 
-  Dim testList()                   as String
-  Dim testContent   , hopeResult   as String
-  Dim i , j                        as Integer
-  Dim bottom                       as String
+  Dim testList() as String
+  Dim testContent as String
+  Dim hopeResult as String
+  Dim i as String
+  Dim j as Integer
+  Dim bottom as String
 
   bottom = "0" + gSeperator + "10" + gMeasurementUnit
 
@@ -1353,7 +1374,8 @@ endcase
 
 testcase tToolsAutocorrectOptions_14
 
-   Dim testContent , hopeResult as String
+   Dim testContent as String
+   Dim hopeResult as String
 
   printLog "Create Table"
   '/// Create Table
@@ -1405,9 +1427,10 @@ endcase
 
 testcase tToolsAutocorrectOptions_16
 
-   Dim testContent1 ,testContent2     as String
-   Dim hopeResultAfterAutoformat1     as String
-   Dim hopeResultAfterAutoformat2     as String
+   Dim testContent1 as String
+   Dim testContent2 as String
+   Dim hopeResultAfterAutoformat1 as String
+   Dim hopeResultAfterAutoformat2 as String
 
    testContent1                 = "ABCD1234"
    testContent2                 = "EFGH5678"
@@ -1479,8 +1502,9 @@ endcase
 
 testcase tToolsAutocorrectOptions_18
 
-   Dim testContent                                            as String
-   Dim hopeResultBeforeAutoformat , hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
 
   printLog "Replace bullets with •"
   '/// Replace bullets with •
@@ -1549,8 +1573,9 @@ endcase
 
 testcase tToolsAutocorrectOptions_19
 
-   Dim testContent                                            as String
-   Dim hopeResultBeforeAutoformat , hopeResultAfterAutoformat as String
+   Dim testContent as String
+   Dim hopeResultBeforeAutoformat as String
+   Dim hopeResultAfterAutoformat as String
 
   printLog "Replace standard quotes with custom quotes"
   '/// Replace standard quotes with custom quotes

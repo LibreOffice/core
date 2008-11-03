@@ -84,8 +84,6 @@ testcase tHHConversion_1
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -132,8 +130,6 @@ testcase tHHConversion_2
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check hanja only .
@@ -173,6 +169,7 @@ testcase tHHConversion_3
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\hangulhanjaonversion\KoreanToChinese.sxw")
   sResult = "漢字(한자)入力(입력)은該當(해당)하入力(입력)하中文信息"
 
+
   printlog "- Hanja(Hangul) (Korean -> Chinese)"
   '/// <b> Test Hanja(Hangul) - Simple convert from Hangul into Hanja </b>
 
@@ -181,8 +178,6 @@ testcase tHHConversion_3
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hanja(Hangul)
@@ -232,8 +227,6 @@ testcase tHHConversion_4
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hanja(Hangul).
@@ -274,6 +267,7 @@ testcase tHHConversion_5
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\hangulhanjaonversion\KoreanToChinese.sxw")
   sResult    = "한자(漢字)입력(入力)은해당(該當)하입력(入力)하中文信息"
 
+
   printlog "- Hangul(Hanja) (Korean -> Chinese)"
   '/// <b> Test Hangul(Hanja) - Simple convert from Hangul into Hanja </b>
 
@@ -282,8 +276,6 @@ testcase tHHConversion_5
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hangul(Hanja) ,
@@ -324,6 +316,8 @@ testcase tHHConversion_6
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\hangulhanjaonversion\ChineseToKorean.sxw")
   sResult = "상산하(上山下)乡황하(黄河)长강(江)력은해당(該當)"
 
+
+
   printlog "- Hangul(Hanja) (Chinese -> Korean)"
   '/// <b> Test Hangul(Hanja) - Simple convert from Hanja into Hangul </b>
 
@@ -332,8 +326,6 @@ testcase tHHConversion_6
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hangul(Hanja),
@@ -384,8 +376,6 @@ testcase tHHConversion_7
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Above Hangul' ,
@@ -443,8 +433,6 @@ testcase tHHConversion_8
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Above Hangul' ,
@@ -502,8 +490,6 @@ testcase tHHConversion_9
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Below Hangul' ,
@@ -561,8 +547,6 @@ testcase tHHConversion_10
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Below Hangul' ,
@@ -620,8 +604,6 @@ testcase tHHConversion_11
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Above Hanja' ,
@@ -679,8 +661,6 @@ testcase tHHConversion_12
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Above Hanja' ,
@@ -738,8 +718,6 @@ testcase tHHConversion_13
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Below Hanja' ,
@@ -797,8 +775,6 @@ testcase tHHConversion_14
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Below Hanja' ,
@@ -851,8 +827,6 @@ testcase tHHConversion_15
   '/// Open a test file , which includes some Korean chacters .
   '/// + Set focus before Korean character
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -898,8 +872,6 @@ testcase tHHConversion_16
   '/// Open a test file , which includes some Chinese chacters .
   '/// + Set focus before Chinese character
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -948,8 +920,6 @@ testcase tHHConversion_17
 
   '/// Open a test file , which includes some Korean chacters .
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Ignore ,
@@ -998,8 +968,6 @@ testcase tHHConversion_18
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Always Ignore ,
@@ -1031,8 +999,6 @@ testcase tHHConversion_18
 
   '/// Reopen the test file
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -1056,7 +1022,7 @@ testcase tHHConversion_18
    Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
-       QAErrorlog "Should get " & sResult & " but get " & GetClipboardText
+       QAErrorlog "#i39308# Should get " & sResult & " but get " & GetClipboardText
    end if
 
   Call hCloseDocument
@@ -1081,8 +1047,6 @@ testcase tHHConversion_19
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Always Ignore ,
@@ -1106,8 +1070,6 @@ testcase tHHConversion_19
   Call hNewDocument
   '/// Reopen the test file
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , 山下 should be selcted

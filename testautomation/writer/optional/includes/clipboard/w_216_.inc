@@ -53,10 +53,11 @@ testcase HTMLToWRITERText
 Warnlog "#i91928# - HTMLToWRITERText outcommented due to bug."
 goto endsub
 
-    if lcase(gPlatform) = "x86" and Val(mid$(gMinor, 2, Len(gMinor))) <= 129  then
-        QAErrorlog "#125780#Stacktrace ID: 251397"
-        goto endsub
-    end if    
+'    if lcase(gPlatform) = "x86" and Val(mid$(gMinor, 2, Len(gMinor))) <= 129  then
+'        QAErrorlog "#125780#Stacktrace ID: 251397"
+'        goto endsub
+'    end if
+
     gApplication = "HTMLDOKUMENT"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "

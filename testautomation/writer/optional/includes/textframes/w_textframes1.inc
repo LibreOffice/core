@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_textframes1
 
     Call tTextframes_1         'Test Insert Frame with four ways
