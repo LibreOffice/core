@@ -174,6 +174,8 @@ OUT2BIN= \
 .ELSE
 .IF "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=^
+.ELSE
+BUILD_ACTION_SEP=;
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
