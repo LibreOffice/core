@@ -472,7 +472,7 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
                 rEntry.Value >>= aVal;
                 DBG_ASSERT( mpImplData->maPropertyToIndex.find( aVal.Name )
                             == mpImplData->maPropertyToIndex.end(), "duplicate property entry" );
-                mpImplData->maPropertyToIndex[ aVal.Name ] = i;
+                mpImplData->maPropertyToIndex[ aVal.Name ] = mpImplData->maUIProperties.size();
                 mpImplData->maUIProperties.push_back( aVal );
                 bHaveProperty = true;
             }
@@ -509,7 +509,7 @@ bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) cons
 {
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
-    return it != mpImplData->maPropertyToIndex.end() ? mpImplData->maUIPropertyEnabled[it->second] : false;
+    return ((it != mpImplData->maPropertyToIndex.end()) ? mpImplData->maUIPropertyEnabled[it->second] : false);
 }
 
 void PrinterListener::setOptionChangeHdl( const Link& i_rHdl )

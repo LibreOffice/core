@@ -138,6 +138,7 @@ namespace vcl
         void updatePrinterText();
         void checkControlDependencies();
         void setupOptionalUI();
+        com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ScrollEndHdl, ScrollBar* );
@@ -145,6 +146,11 @@ namespace vcl
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
         DECL_LINK( UIOptionsChanged, void* );
+
+        DECL_LINK( UIOption_CheckHdl, CheckBox* );
+        DECL_LINK( UIOption_RadioHdl, RadioButton* );
+        DECL_LINK( UIOption_SelectHdl, ListBox* );
+
     public:
         PrintDialog( Window*, const boost::shared_ptr< PrinterListener >& );
         virtual ~PrintDialog();
