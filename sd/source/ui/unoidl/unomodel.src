@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: printdialog.src,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "unomodel.hrc"
+
+Resource STR_IMPRESS_PRINT_UI_OPTIONS
+{
+    String STR_IMPRESS_PRINT_UI_PRINT_CONTENT
+    {
+        Text [ en-US ] = "Print Content";
+    };
+    String STR_IMPRESS_PRINT_UI_CONTENT
+    {
+        Text [ en-US ] = "Content";
+    };
+    StringArray STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Slides" ; > ;
+            < "Handouts" ; > ;
+            < "Notes" ; > ;
+            < "Outline" ; > ;
+        };
+    };
+    String STR_IMPRESS_PRINT_UI_SLIDESPERPAGE
+    {
+        Text [ en-US ] = "Slides per page" ;
+    };
+    StringArray STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "6" ; > ;
+            < "9" ; > ;
+        };
+    };
+    String STR_IMPRESS_PRINT_UI_ORDER
+    {
+        Text [ en-US ] = "Order" ;
+    };
+    StringArray STR_IMPRESS_PRINT_UI_ORDER_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Horizontal" ; > ;
+            < "Vertical" ; > ;
+        };
+    };
+    String STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
+    {
+        Text [ en-US ] = "Include content";
+    };
+    String STR_IMPRESS_PRINT_UI_DRAWING
+    {
+        Text [ en-US ] = "Drawing";
+    };
+    String STR_IMPRESS_PRINT_UI_NOTES
+    {
+        Text [ en-US ] = "Notes";
+    };
+    String STR_IMPRESS_PRINT_UI_HANDOUTS
+    {
+        Text [ en-US ] = "Handouts";
+    };
+    String STR_IMPRESS_PRINT_UI_OUTLINE
+    {
+        Text [ en-US ] = "Outline";
+    };
+};
