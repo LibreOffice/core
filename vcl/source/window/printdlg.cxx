@@ -297,6 +297,7 @@ void PrintDialog::setupOptionalUI()
         }
 
         if( aCtrlType.equalsAscii( "Group" ) ||
+            aCtrlType.equalsAscii( "Subgroup" ) ||
             aCtrlType.equalsAscii( "Radio" ) ||
             aCtrlType.equalsAscii( "List" )  ||
             aCtrlType.equalsAscii( "Bool" ) )
@@ -313,7 +314,21 @@ void PrintDialog::setupOptionalUI()
                 maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
             }
 
-            if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
+            if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
+            {
+                FixedLine* pNewSub = new FixedLine( pCurParent );
+                maControls.push_front( pNewSub );
+                pNewSub->SetText( aText );
+                nCurY += 4;
+                Size aPixelSize( aTabSize );
+                aPixelSize.Width() /= 2;
+                aPixelSize.Height() = pCurParent->GetTextHeight() + 4;
+                pNewSub->SetPosSizePixel( pNewSub->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
+                                          aPixelSize );
+                pNewSub->Show();
+                nCurY += 12;
+            }
+            else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
                 // add a check box
                 CheckBox* pNewBox = new CheckBox( pCurParent );
@@ -323,7 +338,7 @@ void PrintDialog::setupOptionalUI()
                 // FIXME: measure text
                 pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
                                           pNewBox->LogicToPixel( Size( 100, 10 ), aFontMapMode ) );
-                nCurY += 15;
+                nCurY += 12;
 
                 pNewBox->Show();
                 sal_Bool bVal = sal_False;
@@ -407,11 +422,19 @@ void PrintDialog::setupOptionalUI()
                     pVal->Value >>= aSelectVal;
                 pList->SelectEntry( aSelectVal );
 
+                aPixelSize = Size( pList->LogicToPixel( Size( 25, 12 ), aFontMapMode ) );
+                aPixelSize.Width() = nMaxTextWidth;
+                aPixelSize.Height() *= aChoices.getLength() > 15 ? 15 : aChoices.getLength();
+
                 Point aListPos;
+                bool bDoAlign = false;
                 if( nMaxTextWidth + aPixelSize.Width() < aTabSize.Width() - 10 )
                 {
                     aListPos      = pHeading->GetPosPixel();
                     aListPos.X() += pHeading->GetSizePixel().Width() + 5;
+
+                    // align heading and list box
+                    bDoAlign = true;
                 }
                 else
                 {
@@ -419,14 +442,20 @@ void PrintDialog::setupOptionalUI()
                     aListPos = pCurParent->LogicToPixel( Point( 15, nCurY ), aFontMapMode );
                 }
 
-                aPixelSize = Size( pList->LogicToPixel( Size( 25, 12 ), aFontMapMode ) );
-                aPixelSize.Width() = nMaxTextWidth;
-                aPixelSize.Height() *= aChoices.getLength() > 15 ? 15 : aChoices.getLength();
                 pList->SetPosSizePixel( aListPos, aPixelSize );
                 pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                 pList->Show();
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
+                nCurY += 16;
+
+                if( bDoAlign )
+                {
+                    Point aPos = pHeading->GetPosPixel();
+                    Size aSize = pHeading->GetSizePixel();
+                    aPos.Y() += (pList->GetSizePixel().Height() - aSize.Height())/2;
+                    pHeading->SetPosSizePixel( aPos, aSize );
+                }
             }
         }
         else
