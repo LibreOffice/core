@@ -197,7 +197,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
                 pListener->getPrinter()->SetPrintFile( aFile );
             }
             aSel = aDlg.getPageSelection();
-            pListener->getPrinter()->SetCopyCount( aDlg.getCopyCount(), aDlg.isCollate() );
+            pListener->getPrinter()->SetCopyCount( static_cast<USHORT>(aDlg.getCopyCount()), aDlg.isCollate() );
         }
         catch( std::bad_alloc& )
         {
