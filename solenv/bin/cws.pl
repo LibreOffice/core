@@ -1306,7 +1306,7 @@ sub do_create
         $is_migration = 1;
     }
 
-    my $master   = $args_ref->[0];
+    my $master   = uc $args_ref->[0];
     my $cws_name = $args_ref->[1];
 
     if (!is_master($master)) {
@@ -1631,7 +1631,13 @@ sub do_rebase
         }
 
         print_message("... updating EIS database\n");
-        $cws->set_master_and_milestone($new_masterws, $new_milestone);
+        my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
+        if ( $$push_return[0] ne $new_masterws) {
+            print_error("Couldn't push new master '$new_masterws' to database", 0);
+        }
+        if ( $$push_return[1] ne $new_milestone) {
+            print_error("Couldn't push new milestone '$new_milestone' to database", 0);
+        }
     }
     else {
         # merge

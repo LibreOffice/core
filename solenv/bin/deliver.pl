@@ -827,8 +827,18 @@ sub copy_if_newer
         {
             $rc = unlink($to); # YD OS/2 can't rename if $to exists!
         }
-        $rc = rename($temp_file, $to);
-        if ( $rc ) {
+        # Ugly hack: on windows file locking(?) sometimes prevents renaming.
+        # Until we've found and fixed the real reason try it repeatedly :-(
+        my $try = 0;
+        my $maxtries = 1;
+        $maxtries = 5 if ( $^O eq 'MSWin32' );
+        my $success = 0;
+        while ( $try < $maxtries && ! $success ) {
+            sleep $try;
+            $try ++;
+            $success = rename($temp_file, $to);
+        }
+        if ( $success ) {
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
@@ -847,6 +857,9 @@ sub copy_if_newer
                 }
                 system("macosx-create-bundle", "$to=$from.app") if ( -d "$from.app" );
                 system("ranlib", "$to" ) if ( $to =~ /\.a/ );
+            }
+            if ( $try > 1 ) {
+                print_warning("File '$to' temporarily locked. Dependency bug?");
             }
             return 1;
         }
