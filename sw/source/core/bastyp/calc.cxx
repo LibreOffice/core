@@ -38,7 +38,7 @@
 #endif
 #include <cstdlib>
 #include <climits>
-#include <cmath>
+// #include <cmath>
 #include <cfloat>
 #include <hintids.hxx>
 #include <rtl/math.hxx>
