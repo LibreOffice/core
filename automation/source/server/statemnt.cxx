@@ -91,16 +91,7 @@
 #include <svtools/svtdata.hxx>
 #include <tools/time.hxx>
 #include <svtools/stringtransfer.hxx>
-#ifndef _PRINT_HXX //autogen
-#include <vcl/print.hxx>
-#endif
-#ifndef _PRNDLG_HXX //autogen
-#include <vcl/prndlg.hxx>
-#endif
 #include <tools/stream.hxx>
-#ifndef _SV_DRAG_HXX //autogen
-//#include <vcl/drag.hxx>
-#endif
 #include <tools/fsys.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/ttprops.hxx>
