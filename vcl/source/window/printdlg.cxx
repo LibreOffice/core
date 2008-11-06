@@ -224,7 +224,7 @@ bool PrintDialog::isPrintToFile()
 
 int PrintDialog::getCopyCount()
 {
-    return maJobPage.maCopyCountField.GetValue();
+    return static_cast<int>(maJobPage.maCopyCountField.GetValue());
 }
 
 bool PrintDialog::isCollate()
