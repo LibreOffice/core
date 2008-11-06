@@ -35,7 +35,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#include <math.h>
+// #include <math.h>
 
 #ifndef _FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
 #include <services/layoutmanager.hxx>
