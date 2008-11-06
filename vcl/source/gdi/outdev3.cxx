@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <cmath>
 #include <cstring>
 #include <i18npool/mslangid.hxx>
 

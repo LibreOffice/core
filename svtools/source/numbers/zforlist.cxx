@@ -33,7 +33,7 @@
 #ifndef GCC
 #endif
 
-#include <math.h>
+// #include <math.h>
 #include <tools/debug.hxx>
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
