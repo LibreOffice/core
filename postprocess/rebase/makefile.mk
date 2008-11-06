@@ -45,9 +45,9 @@ EXCLUDELIST=no_rebase.txt
 LOGFILE=$(MISC)$/rebase_log.txt
 IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll
 
-ALLTAR : $(BASEADDRESSES)
+ALLTAR : REBASE
 
-$(BASEADDRESSES) .PHONY :
+REBASE .PHONY : $(BASEADDRESSES)
 .IF "$(GUI)"=="WNT"
 .IF "$(product)"=="full"
     $(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
@@ -58,4 +58,6 @@ $(BASEADDRESSES) .PHONY :
     @echo Nothing to do, 'rebase' is windows only.
 .ENDIF
 
+$(BASEADDRESSES) : coffbase.txt
+    $(COPY) coffbase.txt $@
 
