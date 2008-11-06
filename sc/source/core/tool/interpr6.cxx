@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <math.h>
+// #include <math.h>
 
 #include <tools/debug.hxx>
 #include "interpre.hxx"

@@ -34,7 +34,7 @@
 #define SCF_INCL_DUMPER (OSL_DEBUG_LEVEL > 0) && 0
 
 #include <map>
-#include <math.h>
+// #include <math.h>
 #include "ftools.hxx"
 
 #if SCF_INCL_DUMPER

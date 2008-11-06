@@ -33,7 +33,7 @@
 
 //------------------------------------------------------------------
 
-#include <math.h>
+// #include <math.h>
 #include <rangelst.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
