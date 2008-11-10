@@ -444,6 +444,10 @@ AC_ARG_WITH(liblayout-jar,
 [  --with-liblayout-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBLAYOUT_JAR="$withval"
 ])
+AC_ARG_WITH(libloader-jar,
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLOADER_JAR="$withval"
+])
 AC_ARG_WITH(libformula-jar,
 [  --with-libformula-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBFORMULA_JAR="$withval"
@@ -3657,15 +3661,34 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
         AC_MSG_RESULT([external])
         SYSTEM_LUCENE=YES
         if test -z $LUCENE_CORE_JAR; then
-               LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
-        fi
-        AC_CHECK_FILE($LUCENE_CORE_JAR, [],
+          AC_CHECK_FILE(/usr/share/java/lucene-core-2.3.jar, 
+            [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/lucene.jar, 
+                [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
+                [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($LUCENE_CORE_JAR, [],
                [AC_MSG_ERROR(lucene-core.jar not found.)], [])
-        if test -z $LUCENE_ANALYZERS_JAR; then
-               LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar
         fi
-        AC_CHECK_FILE($LUCENE_ANALYZERS_JAR, [],
-               [AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
+
+        if test -z $LUCENE_ANALYZERS_JAR; then
+          AC_CHECK_FILE(/usr/share/java/lucene-analyzers-2.3.jar, 
+            [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/lucene-contrib/lucene-analyzers.jar, 
+                [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-contrib/lucene-analyzers.jar ],
+                [ AC_MSG_ERROR(lucene-analyzers.jar replacement not found.)]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($LUCENE_CORE_JAR, [],
+               [ AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
+        fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LUCENE=NO
@@ -5195,6 +5218,9 @@ if test  "$test_gtk" = "yes"; then
 
       AC_MSG_CHECKING([whether to enable GIO support])
       if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
+          if test "$ENABLE_GNOMEVFS" = "TRUE" ; then
+             AC_MSG_ERROR([please use --enable-gio only together with --disable-gnome-vfs.])
+          fi
           ENABLE_GIO="TRUE"
           AC_MSG_RESULT([yes])
           PKG_CHECK_MODULES( GIO, gio-2.0 )
@@ -5357,23 +5383,33 @@ if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAV
 	if test -z "$COMMONS_CODEC_JAR"; then
 		COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
 	fi
-        AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
-               [AC_MSG_ERROR(commons-codec.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
+        [AC_MSG_ERROR(commons-codec.jar not found.)], [])
 	if test -z "$COMMONS_LANG_JAR"; then
 		COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
 	fi
-        AC_CHECK_FILE($COMMONS_LANG_JAR, [],
-               [AC_MSG_ERROR(commons-lang.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_LANG_JAR, [],
+        [AC_MSG_ERROR(commons-lang.jar not found.)], [])
 	if test -z "$COMMONS_HTTPCLIENT_JAR"; then
 		COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
 	fi
-        AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
-               [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
-	if test -z "$COMMONS_LOGGING_JAR"; then
-		COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
-	fi
-        AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
-               [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
+        [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
+
+   if test -z $COMMONS_LOGGING_JAR; then
+     AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar, 
+       [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],
+       [
+         AC_CHECK_FILE(/usr/share/java/commons-logging.jar, 
+           [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
+           [AC_MSG_ERROR(commons-logging.jar replacement not found.)]
+         )
+       ]
+     )
+   else
+     AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
+          [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+   fi
   else
 	AC_MSG_RESULT([internal])
   	SYSTEM_APACHE_COMMONS=NO
@@ -5417,62 +5453,163 @@ if test -n "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WI
   AC_MSG_CHECKING([which jfreereport libs to use])
   if test "$with_system_jfreereport" == "yes"; then
    	SYSTEM_JFREEREPORT=YES
-  	AC_MSG_RESULT([external])
-        if test -z $JCOMMON_JAR; then
-               JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar
-        fi
+  	   AC_MSG_RESULT([external])
+      if test -z $JCOMMON_JAR; then
+        AC_CHECK_FILE(/usr/share/java/jcommon-1.0.10.jar, 
+          [ JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/jcommon.jar, 
+              [ JCOMMON_JAR=/usr/share/java/jcommon.jar ],
+              [AC_MSG_ERROR(jcommon.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($JCOMMON_JAR, [],
-               [AC_MSG_ERROR(jcommon.jar not found.)], [])
-        if test -z $SAC_JAR; then
-               SAC_JAR=/usr/share/java/sac.jar
-        fi
-        AC_CHECK_FILE($SAC_JAR, [],
-               [AC_MSG_ERROR(sac.jar not found.)], [])
-        if test -z $LIBXML_JAR; then
-               LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar
-        fi
+             [AC_MSG_ERROR(jcommon.jar not found.)], [])
+      fi
+
+      if test -z $SAC_JAR; then
+             SAC_JAR=/usr/share/java/sac.jar
+      fi
+      AC_CHECK_FILE($SAC_JAR, [],
+             [AC_MSG_ERROR(sac.jar not found.)], [])
+
+      if test -z $LIBXML_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libxml-0.9.9.jar, 
+          [ LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libxml.jar, 
+              [ LIBXML_JAR=/usr/share/java/libxml.jar ],
+              [AC_MSG_ERROR(libxml.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBXML_JAR, [],
-               [AC_MSG_ERROR(libxml.jar not found.)], [])
-        if test -z $FLUTE_JAR; then
-               FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar
-        fi
+             [AC_MSG_ERROR(libxml.jar not found.)], [])
+      fi
+
+      if test -z $FLUTE_JAR; then
+        AC_CHECK_FILE(/usr/share/java/flute-1.3-jfree-20061107.jar, 
+          [ FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/flute.jar, 
+              [ FLUTE_JAR=/usr/share/java/flute.jar ],
+              [ AC_MSG_ERROR(flute-1.3-jfree.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($FLUTE_JAR, [],
-               [AC_MSG_ERROR(flute-1.3-jfree.jar not found.)], [])
-        if test -z $JFREEREPORT_JAR; then
-               JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar
-        fi
+             [AC_MSG_ERROR(flute-1.3-jfree.jar not found.)], [])
+      fi
+
+      if test -z $JFREEREPORT_JAR; then
+        AC_CHECK_FILE(/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar, 
+          [ JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/pentaho-reporting-flow-engine.jar, 
+              [ JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine.jar ],
+              [AC_MSG_ERROR(jfreereport.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($JFREEREPORT_JAR, [],
-               [AC_MSG_ERROR(jfreereport.jar not found.)], [])
-        if test -z $LIBLAYOUT_JAR; then
-               LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar
-        fi
+             [AC_MSG_ERROR(jfreereport.jar not found.)], [])
+      fi
+
+      if test -z $LIBLAYOUT_JAR; then
+        AC_CHECK_FILE(/usr/share/java/liblayout-0.2.8.jar, 
+          [ LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/liblayout.jar, 
+              [ LIBLAYOUT_JAR=/usr/share/java/liblayout.jar ],
+              [AC_MSG_ERROR(liblayout.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBLAYOUT_JAR, [],
-               [AC_MSG_ERROR(liblayout.jar not found.)], [])
-        if test -z $LIBLOADER_JAR; then
-               LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar
-        fi
+             [AC_MSG_ERROR(liblayout.jar not found.)], [])
+      fi
+
+      if test -z $LIBLOADER_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libloader-0.3.6.jar, 
+          [ LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libloader.jar, 
+              [ LIBLOADER_JAR=/usr/share/java/libloader.jar ],
+              [AC_MSG_ERROR(libloader.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBLOADER_JAR, [],
-               [AC_MSG_ERROR(libloader.jar not found.)], [])
-        if test -z $LIBFORMULA_JAR; then
-               LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar
-        fi
+             [AC_MSG_ERROR(libloader.jar not found.)], [])
+      fi
+
+      if test -z $LIBFORMULA_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libformula-0.1.14.jar, 
+          [ LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libformula.jar, 
+              [ LIBFORMULA_JAR=/usr/share/java/libformula.jar ],
+              [AC_MSG_ERROR(libformula.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBFORMULA_JAR, [],
-               [AC_MSG_ERROR(libformula.jar not found.)], [])
-        if test -z $LIBREPOSITORY_JAR; then
-               LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar
-        fi
+             [AC_MSG_ERROR(libformula.jar not found.)], [])
+      fi
+
+      if test -z $LIBREPOSITORY_JAR; then
+        AC_CHECK_FILE(/usr/share/java/librepository-0.1.4.jar, 
+          [ LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/librepository.jar, 
+              [ LIBREPOSITORY_JAR=/usr/share/java/librepository.jar ],
+              [AC_MSG_ERROR(librepository.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBREPOSITORY_JAR, [],
-               [AC_MSG_ERROR(librepository.jar not found.)], [])
-        if test -z $LIBFONTS_JAR; then
-               LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar
-        fi
+             [AC_MSG_ERROR(librepository.jar not found.)], [])
+      fi
+
+      if test -z $LIBFONTS_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libfonts-0.3.3.jar, 
+          [ LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libfonts.jar, 
+              [ LIBFONTS_JAR=/usr/share/java/libfonts.jar ],
+              [AC_MSG_ERROR(libfonts.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBFONTS_JAR, [],
-               [AC_MSG_ERROR(libfonts.jar not found.)], [])
-        if test -z $JCOMMON_SERIALIZER_JAR; then
-               JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar
-        fi
+             [AC_MSG_ERROR(libfonts.jar not found.)], [])
+      fi
+
+      if test -z $JCOMMON_SERIALIZER_JAR; then
+        AC_CHECK_FILE(/usr/share/java/jcommon-serializer-0.2.0.jar, 
+          [ JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/jcommon-serializer.jar, 
+              [ JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer.jar ],
+              [AC_MSG_ERROR(jcommon-serializer.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($JCOMMON_SERIALIZER_JAR, [],
-               [AC_MSG_ERROR(jcommon-serializer.jar not found.)], [])
+             [AC_MSG_ERROR(jcommon-serializer.jar not found.)], [])
+      fi
+
   else
      AC_MSG_RESULT([internal])
      SYSTEM_JFREEREPORT=NO
