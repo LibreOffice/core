@@ -62,6 +62,7 @@ SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salvd.obj             \
             $(SLO)$/salprn.obj            \
             $(SLO)$/aquaprintview.obj     \
+            $(SLO)$/aquaprintaccessoryview.obj     \
             $(SLO)$/salbmp.obj
 
 .IF "$(ENABLE_CAIRO)" == "TRUE"

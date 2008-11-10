@@ -35,7 +35,8 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
-class ImplQPrinter;
+#include "vcl/print.hxx"
+
 class AquaSalInfoPrinter;
 namespace vcl { class PrinterListener; }
 
@@ -49,6 +50,12 @@ namespace vcl { class PrinterListener; }
 -(NSRect)rectForPage: (int)page;
 -(NSPoint)locationOfPrintRect: (NSRect)aRect;
 -(void)drawRect: (NSRect)rect;
+@end
+
+@interface AquaPrintAccessoryView : NSObject
+{
+}
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener;
 @end
 
 
