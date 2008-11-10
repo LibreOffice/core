@@ -538,7 +538,7 @@ void SvIconView::EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
 void SvIconView::EditItemText( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
     const Selection& rSel )
 {
-    DBG_ASSERT(pEntry&&pItem,"EditItemText:Params?")
+    DBG_ASSERT(pEntry&&pItem,"EditItemText:Params?");
     pCurEdEntry = pEntry;
     pCurEdItem = pItem;
     Rectangle aRect( pImp->CalcTextRect( pEntry, (SvLBoxString*)pItem,0,TRUE ));

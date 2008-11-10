@@ -72,7 +72,7 @@ void SfxUndoAction::SetLinked( BOOL bIsLinked )
 SfxUndoAction::~SfxUndoAction()
 {
     DBG_DTOR(SfxUndoAction, 0);
-    DBG_ASSERT( !IsLinked(), "Gelinkte Action geloescht" )
+    DBG_ASSERT( !IsLinked(), "Gelinkte Action geloescht" );
 }
 
 

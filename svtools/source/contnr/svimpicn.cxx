@@ -1029,7 +1029,7 @@ void SvImpIconView::EntrySelected( SvLBoxEntry* pEntry, BOOL bSelect )
         pEntry != pCursor )
     {
         SetCursor( pEntry );
-        DBG_ASSERT(pView->GetSelectionCount()==1,"selection count?")
+        DBG_ASSERT(pView->GetSelectionCount()==1,"selection count?");
     }
     // bei Gummibandselektion ist uns das zu teuer
     if( !(nFlags & F_RUBBERING ))
@@ -2301,7 +2301,7 @@ SvLBoxEntry* SvImpIconView::GetPrevEntry( const Point& rDocPos, SvLBoxEntry* pCu
 Point SvImpIconView::GetEntryPosition( SvLBoxEntry* pEntry )
 {
     SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
-    DBG_ASSERT(pViewData,"Entry not in model")
+    DBG_ASSERT(pViewData,"Entry not in model");
     return pViewData->aRect.TopLeft();
 }
 
@@ -2309,7 +2309,7 @@ const Rectangle& SvImpIconView::GetBoundingRect( SvLBoxEntry* pEntry, SvIcnVwDat
 {
     if( !pViewData )
         pViewData = ICNVIEWDATA(pEntry);
-    DBG_ASSERT(pViewData,"Entry not in model")
+    DBG_ASSERT(pViewData,"Entry not in model");
     if( !IsBoundingRectValid( pViewData->aRect ))
         FindBoundingRect( pEntry, pViewData );
     return pViewData->aRect;
@@ -2430,8 +2430,8 @@ Rectangle SvImpIconView::CalcTextRect( SvLBoxEntry* pEntry,
 long SvImpIconView::CalcBoundingWidth( SvLBoxEntry* pEntry,
     const SvIcnVwDataEntry* pViewData ) const
 {
-    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP),"No Bitmaps")
-    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING),"No Text")
+    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP),"No Bitmaps");
+    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING),"No Text");
     long nStringWidth = GetItemSize( pView, pEntry, pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING),pViewData).Width();
     nStringWidth += 2*LROFFS_TEXT;
     long nBmpWidth = pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP)->GetSize(pView,pEntry).Width();
@@ -2460,8 +2460,8 @@ long SvImpIconView::CalcBoundingWidth( SvLBoxEntry* pEntry,
 long SvImpIconView::CalcBoundingHeight( SvLBoxEntry* pEntry,
     const SvIcnVwDataEntry* pViewData ) const
 {
-    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP),"No Bitmaps")
-    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING),"No Text")
+    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP),"No Bitmaps");
+    DBG_ASSERT(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING),"No Text");
     long nStringHeight = GetItemSize(pView,pEntry,pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING),pViewData).Height();
     long nBmpHeight = pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP)->GetSize(pView,pEntry).Height();
     long nHeight = 0;
@@ -3785,7 +3785,7 @@ void SvImpIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
         SvLBoxEntry* pEntry = (SvLBoxEntry*)(pZOrderList->GetObject(nPos ));
 
         SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
-        DBG_ASSERT(pViewData,"Entry not in model")
+        DBG_ASSERT(pViewData,"Entry not in model");
         if( !IsBoundingRectValid( pViewData->aRect ))
             FindBoundingRect( pEntry, pViewData );
         const Rectangle& rBoundRect = pViewData->aRect;

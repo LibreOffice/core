@@ -1032,7 +1032,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         delete pBitmap;
     }
 #else
-    DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" )
+    DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
     // if source and target are identical then copyBits() paints onto the target context though
@@ -1082,7 +1082,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
         delete pBitmap;
     }
 #else
-    DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" )
+    DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
     // copyArea() always works on the target context though
@@ -1190,7 +1190,7 @@ void AquaSalGraphics::drawMask( const SalTwoRect* pPosAry, const SalBitmap& rSal
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" )
+    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
 
     ApplyXorContext();
 

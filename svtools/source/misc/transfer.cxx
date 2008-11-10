@@ -1790,11 +1790,11 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                     if( !nLen && aString.GetChar( 0 ) != '0' )
                     {
-                        DBG_WARNING( "SOLK: 1. len=0" )
+                        DBG_WARNING( "SOLK: 1. len=0" );
                     }
                     if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 3 )
                     {
-                        DBG_WARNING( "SOLK: 1. illegal start or wrong len" )
+                        DBG_WARNING( "SOLK: 1. illegal start or wrong len" );
                     }
                     aURL = aString.Copy( nStart + 1, nLen );
 
@@ -1804,11 +1804,11 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                     if( !nLen && aString.GetChar( 0 ) != '0' )
                     {
-                        DBG_WARNING( "SOLK: 2. len=0" )
+                        DBG_WARNING( "SOLK: 2. len=0" );
                     }
                     if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 1 )
                     {
-                        DBG_WARNING( "SOLK: 2. illegal start or wrong len" )
+                        DBG_WARNING( "SOLK: 2. illegal start or wrong len" );
                     }
                     aDesc = aString.Copy( nStart+1, nLen );
 

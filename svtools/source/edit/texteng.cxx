@@ -634,8 +634,8 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     CursorMoved( aStartPaM.GetPara() ); // nur damit neu eingestellte Attribute verschwinden...
     CursorMoved( aEndPaM.GetPara() );   // nur damit neu eingestellte Attribute verschwinden...
 
-    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "Index im Wald in ImpDeleteText" )
-    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "Index im Wald in ImpDeleteText" )
+    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "Index im Wald in ImpDeleteText" );
+    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "Index im Wald in ImpDeleteText" );
 
     ULONG nStartNode = aStartPaM.GetPara();
     ULONG nEndNode = aEndPaM.GetPara();

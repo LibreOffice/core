@@ -172,7 +172,7 @@ BOOL SotObject::ShouldDelete()
     for( i = pAggList->Count() -1; i > 0; i-- )
     {
         // Referenzen aufloesen
-        DBG_ASSERT( !pAggList->GetObject( i ).bMainObj, "main object reference is opened" )
+        DBG_ASSERT( !pAggList->GetObject( i ).bMainObj, "main object reference is opened" );
         RemoveInterface( i );
     }
     delete pAggList;
@@ -220,9 +220,9 @@ void SotObject::RemoveInterface( ULONG nPos )
     SvAggregate & rAgg = pAggList->GetObject( nPos );
     if( !rAgg.bFactory )
     {
-        DBG_ASSERT( rAgg.pObj->pAggList, "no aggregation list" )
+        DBG_ASSERT( rAgg.pObj->pAggList, "no aggregation list" );
         DBG_ASSERT( rAgg.pObj->pAggList->GetObject( 0 ).pObj == this,
-                        "not owner of aggregated object" )
+                        "not owner of aggregated object" );
         // sich selbst als Cast-Verwalter austragen
         rAgg.pObj->pAggList->GetObject( 0 ) = SvAggregate();
         // Referenz aufloesen
@@ -239,8 +239,8 @@ void SotObject::RemoveInterface( ULONG nPos )
 *************************************************************************/
 void SotObject::RemoveInterface( SotObject * pObjP )
 {
-    DBG_ASSERT( pObjP, "null pointer" )
-    DBG_ASSERT( pAggList, "no aggregation list" )
+    DBG_ASSERT( pObjP, "null pointer" );
+    DBG_ASSERT( pAggList, "no aggregation list" );
     ULONG i;
     for( i = 0; i < pAggList->Count(); i++ )
     {
@@ -248,7 +248,7 @@ void SotObject::RemoveInterface( SotObject * pObjP )
         if( !rAgg.bFactory && pObjP == rAgg.pObj )
             RemoveInterface( i );
     }
-    DBG_ASSERT( i < pAggList->Count(), "object not found" )
+    DBG_ASSERT( i < pAggList->Count(), "object not found" );
 }
 
 /*************************************************************************
@@ -264,7 +264,7 @@ void SotObject::AddInterface( SotObject * pObjP )
 
     // sich selbst als Typecast-Verwalter eintragen
     SvAggregateMemberList & rAList = pObjP->GetAggList();
-    DBG_ASSERT( !rAList.GetObject( 0 ).bMainObj, "try to aggregate twice" )
+    DBG_ASSERT( !rAList.GetObject( 0 ).bMainObj, "try to aggregate twice" );
     rAList[ 0 ] = SvAggregate( this, TRUE );
 }
 
@@ -316,7 +316,7 @@ void * SotObject::DownAggCast( const SotFactory * pFact )
 
                     // sich selbst als Typecast-Verwalter eintragen
                     SvAggregateMemberList & rAList = rAgg.pObj->GetAggList();
-                    DBG_ASSERT( !rAList.GetObject( 0 ).bMainObj, "try to aggregate twice" )
+                    DBG_ASSERT( !rAList.GetObject( 0 ).bMainObj, "try to aggregate twice" );
                     rAList[ 0 ] = SvAggregate( this, TRUE );
                 }
             }

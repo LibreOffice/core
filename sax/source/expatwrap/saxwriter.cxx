@@ -1030,9 +1030,9 @@ sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence )
     sal_Int32 nLength =-1;
     if (mp_SaxWriterHelper)
     {
-        if( m_bForceLineBreak ||
-            m_bAllowLineBreak &&
-            ((nFirstLineBreakOccurence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT) )
+        if ( m_bForceLineBreak ||
+            (m_bAllowLineBreak &&
+            ((nFirstLineBreakOccurence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT)) )
             nLength = m_nLevel;
     }
     m_bForceLineBreak = sal_False;

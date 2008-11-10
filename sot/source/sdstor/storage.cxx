@@ -123,7 +123,7 @@ SotStorageStream::SotStorageStream( const String & rName, StreamMode nMode,
     else
         bIsWritable = FALSE;
 
-    DBG_ASSERT( !nStorageMode,"StorageModes ignored" )
+    DBG_ASSERT( !nStorageMode,"StorageModes ignored" );
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
@@ -395,7 +395,7 @@ BOOL SotStorageStream::SetProperty( const String& rName, const ::com::sun::star:
     }
     else
     {
-        DBG_ERROR("Not implemented!")
+        DBG_ERROR("Not implemented!");
         return FALSE;
     }
 }
@@ -409,7 +409,7 @@ BOOL SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::
     }
     else
     {
-        DBG_ERROR("Not implemented!")
+        DBG_ERROR("Not implemented!");
         return FALSE;
     }
 }
@@ -423,7 +423,7 @@ BOOL SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::
     }
     else
     {
-        DBG_ERROR("Not implemented!")
+        DBG_ERROR("Not implemented!");
         return ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >();
     }
 }
@@ -746,7 +746,7 @@ void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
     }
     else
     {
-        DBG_ERROR("Not implemented!")
+        DBG_ERROR("Not implemented!");
     }
 }
 
@@ -941,7 +941,7 @@ const String & SotStorage::GetName() const
 {
     if( !m_aName.Len() )
     {
-        DBG_ASSERT( Owner(), "must be owner" )
+        DBG_ASSERT( Owner(), "must be owner" );
         if( m_pOwnStg )
             ((SotStorage *)this)->m_aName = m_pOwnStg->GetName();
     }
@@ -979,7 +979,7 @@ void SotStorage::SetClass( const SvGlobalName & rName,
                           ULONG nOriginalClipFormat,
                           const String & rUserTypeName )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         m_pOwnStg->SetClass( rName, nOriginalClipFormat, rUserTypeName );
     else
@@ -990,7 +990,7 @@ void SotStorage::SetConvertClass( const SvGlobalName & rName,
                                  ULONG nOriginalClipFormat,
                                  const String & rUserTypeName )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         m_pOwnStg->SetConvertClass( rName, nOriginalClipFormat, rUserTypeName );
     else
@@ -1008,7 +1008,7 @@ void SotStorage::SetConvertClass( const SvGlobalName & rName,
 SvGlobalName SotStorage::GetClassName()
 {
     SvGlobalName aGN;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         aGN = m_pOwnStg->GetClassName();
     else
@@ -1019,7 +1019,7 @@ SvGlobalName SotStorage::GetClassName()
 ULONG SotStorage::GetFormat()
 {
     ULONG nFormat = 0;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         nFormat = m_pOwnStg->GetFormat();
     else
@@ -1030,7 +1030,7 @@ ULONG SotStorage::GetFormat()
 String SotStorage::GetUserName()
 {
     String aName;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         aName = m_pOwnStg->GetUserName();
     else
@@ -1040,7 +1040,7 @@ String SotStorage::GetUserName()
 
 BOOL SotStorage::ShouldConvert()
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         return m_pOwnStg->ShouldConvert();
     else
@@ -1055,7 +1055,7 @@ BOOL SotStorage::ShouldConvert()
 *************************************************************************/
 void SotStorage::FillInfoList( SvStorageInfoList * pFillList ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         m_pOwnStg->FillInfoList( pFillList );
 }
@@ -1067,8 +1067,8 @@ void SotStorage::FillInfoList( SvStorageInfoList * pFillList ) const
 *************************************************************************/
 BOOL SotStorage::CopyTo( SotStorage * pDestStg )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
-    DBG_ASSERT( pDestStg->Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
+    DBG_ASSERT( pDestStg->Owner(), "must be owner" );
     if( m_pOwnStg && pDestStg->m_pOwnStg )
     {
         m_pOwnStg->CopyTo( pDestStg->m_pOwnStg );
@@ -1088,7 +1088,7 @@ BOOL SotStorage::CopyTo( SotStorage * pDestStg )
 *************************************************************************/
 BOOL SotStorage::Commit()
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         if( !m_pOwnStg->Commit() )
@@ -1106,7 +1106,7 @@ BOOL SotStorage::Commit()
 *************************************************************************/
 BOOL SotStorage::Revert()
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         if( !m_pOwnStg->Revert() )
@@ -1126,9 +1126,9 @@ SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, 
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
-    DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
+    DBG_ASSERT( !nStorageMode, "StorageModes ignored" );
     SotStorageStream * pStm = NULL;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         // volle Ole-Patches einschalten
@@ -1153,9 +1153,9 @@ SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
-    DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
+    DBG_ASSERT( !nStorageMode, "StorageModes ignored" );
     SotStorageStream * pStm = NULL;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         // volle Ole-Patches einschalten
@@ -1186,7 +1186,7 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
                                         StorageMode nStorageMode )
 {
     SotStorage * pStor = NULL;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
@@ -1213,7 +1213,7 @@ SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
                                         StorageMode nStorageMode )
 {
     SotStorage * pStor = NULL;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
@@ -1234,7 +1234,7 @@ SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
                                         StorageMode nStorageMode )
 {
     SotStorage * pStor = NULL;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
@@ -1259,7 +1259,7 @@ SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
 *************************************************************************/
 BOOL SotStorage::IsStorage( const String & rEleName ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     // ein bisschen schneller
     if( m_pOwnStg )
         return m_pOwnStg->IsStorage( rEleName );
@@ -1268,7 +1268,7 @@ BOOL SotStorage::IsStorage( const String & rEleName ) const
 
 BOOL SotStorage::IsStream( const String & rEleName ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     // ein bisschen schneller
     if( m_pOwnStg )
         return m_pOwnStg->IsStream( rEleName );
@@ -1277,7 +1277,7 @@ BOOL SotStorage::IsStream( const String & rEleName ) const
 
 BOOL SotStorage::IsContained( const String & rEleName ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     // ein bisschen schneller
     if( m_pOwnStg )
         return m_pOwnStg->IsContained( rEleName );
@@ -1291,7 +1291,7 @@ BOOL SotStorage::IsContained( const String & rEleName ) const
 *************************************************************************/
 BOOL SotStorage::Remove( const String & rEleName )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         m_pOwnStg->Remove( rEleName );
@@ -1309,7 +1309,7 @@ BOOL SotStorage::Remove( const String & rEleName )
 *************************************************************************/
 BOOL SotStorage::Rename( const String & rEleName, const String & rNewName )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         m_pOwnStg->Rename( rEleName, rNewName );
@@ -1328,8 +1328,8 @@ BOOL SotStorage::Rename( const String & rEleName, const String & rNewName )
 BOOL SotStorage::CopyTo( const String & rEleName,
                         SotStorage * pNewSt, const String & rNewName )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
-    DBG_ASSERT( pNewSt->Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
+    DBG_ASSERT( pNewSt->Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         m_pOwnStg->CopyTo( rEleName, pNewSt->m_pOwnStg, rNewName );
@@ -1349,8 +1349,8 @@ BOOL SotStorage::CopyTo( const String & rEleName,
 BOOL SotStorage::MoveTo( const String & rEleName,
                         SotStorage * pNewSt, const String & rNewName )
 {
-    DBG_ASSERT( Owner(), "must be owner" )
-    DBG_ASSERT( pNewSt->Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
+    DBG_ASSERT( pNewSt->Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         m_pOwnStg->MoveTo( rEleName, pNewSt->m_pOwnStg, rNewName );
@@ -1365,7 +1365,7 @@ BOOL SotStorage::MoveTo( const String & rEleName,
 const SvStream* SotStorage::GetSvStream()
 {
     const SvStream* pResult = 0;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         pResult = m_pOwnStg->GetSvStream();
     return pResult;
@@ -1374,7 +1374,7 @@ const SvStream* SotStorage::GetSvStream()
 SvStream* SotStorage::GetTargetSvStream() const
 {
     SvStream* pResult = 0;
-    DBG_ASSERT( Owner(), "must be owner" )
+    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         pResult = (SvStream*)(m_pOwnStg->GetSvStream());
     return pResult;
@@ -1399,7 +1399,7 @@ BOOL SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::
     }
     else
     {
-        DBG_WARNING("W1:Not implemented!")
+        DBG_WARNING("W1:Not implemented!");
         return FALSE;
     }
 }
@@ -1422,7 +1422,7 @@ BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
     }
     else
     {
-        DBG_WARNING("W1:Not implemented!")
+        DBG_WARNING("W1:Not implemented!");
         return FALSE;
     }
 }
@@ -1436,7 +1436,7 @@ BOOL SotStorage::GetProperty( const String& rEleName, const String& rName, ::com
     }
     else
     {
-        DBG_WARNING("W1:Not implemented!")
+        DBG_WARNING("W1:Not implemented!");
         return FALSE;
     }
 }

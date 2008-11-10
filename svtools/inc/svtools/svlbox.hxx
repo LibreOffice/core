@@ -655,8 +655,8 @@ inline SvViewDataItem* SvLBox::GetViewDataItem( SvListEntry* pEntry,
 {
     SvViewDataEntry* pEntryData =
         (SvViewDataEntry*)SvListView::GetViewData(pEntry);
-    DBG_ASSERT(pEntryData,"Entry not in View")
-    DBG_ASSERT(pEntryData->pItemData,"No ItemData")
+    DBG_ASSERT(pEntryData,"Entry not in View");
+    DBG_ASSERT(pEntryData->pItemData,"No ItemData");
     USHORT nItemPos = ((SvLBoxEntry*)pEntry)->GetPos( pItem );
     return (pEntryData->pItemData+nItemPos);
 }

@@ -432,55 +432,55 @@ SvtCJKOptions::~SvtCJKOptions()
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsCJKFontEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsCJKFontEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsVerticalTextEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsVerticalTextEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsAsianTypographyEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsAsianTypographyEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsJapaneseFindEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsJapaneseFindEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsRubyEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsRubyEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsChangeCaseMapEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsChangeCaseMapEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsDoubleLinesEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsDoubleLinesEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsEmphasisMarksEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsEmphasisMarksEnabled();
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtCJKOptions::IsVerticalCallOutEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsVerticalCallOutEnabled();
 }
 /*-- 20.04.01 14:32:04---------------------------------------------------
@@ -488,7 +488,7 @@ sal_Bool SvtCJKOptions::IsVerticalCallOutEnabled() const
   -----------------------------------------------------------------------*/
 void        SvtCJKOptions::SetAll(sal_Bool bSet)
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     pCJKOptions->SetAll(bSet);
 }
 /*-- 20.04.01 14:32:06---------------------------------------------------
@@ -496,7 +496,7 @@ void        SvtCJKOptions::SetAll(sal_Bool bSet)
   -----------------------------------------------------------------------*/
 sal_Bool    SvtCJKOptions::IsAnyEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsAnyEnabled();
 }
 /*-- 13.02.2003 12:11---------------------------------------------------
@@ -504,7 +504,7 @@ sal_Bool    SvtCJKOptions::IsAnyEnabled() const
   -----------------------------------------------------------------------*/
 sal_Bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsReadOnly(eOption);
 }
 

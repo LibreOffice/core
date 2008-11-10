@@ -272,6 +272,7 @@ Parameter ** ParameterList::find(ByteString const & rAttribute,
         if (eCompare == COMPARE_GREATER)
             break;
         else if (eCompare == COMPARE_EQUAL)
+        {
             if (nSection > (*p)->m_nSection)
                 break;
             else if (nSection == (*p)->m_nSection)
@@ -279,6 +280,7 @@ Parameter ** ParameterList::find(ByteString const & rAttribute,
                 rPresent = true;
                 return p;
             }
+        }
     }
     rPresent = false;
     return p;
@@ -877,7 +879,7 @@ bool INetMIME::scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
         if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
             return false;
     }
-    if (nTheValue == 0 && (p == rBegin || !bLeadingZeroes && p - rBegin != 1))
+    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
         return false;
     rBegin = p;
     rValue = sal_uInt32(nTheValue);
@@ -901,7 +903,7 @@ bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
         if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
             return false;
     }
-    if (nTheValue == 0 && (p == rBegin || !bLeadingZeroes && p - rBegin != 1))
+    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
         return false;
     rBegin = p;
     rValue = sal_uInt32(nTheValue);
@@ -925,7 +927,7 @@ bool INetMIME::scanUnsignedHex(const sal_Char *& rBegin,
         if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
             return false;
     }
-    if (nTheValue == 0 && (p == rBegin || !bLeadingZeroes && p - rBegin != 1))
+    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
         return false;
     rBegin = p;
     rValue = sal_uInt32(nTheValue);
@@ -949,7 +951,7 @@ bool INetMIME::scanUnsignedHex(const sal_Unicode *& rBegin,
         if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
             return false;
     }
-    if (nTheValue == 0 && (p == rBegin || !bLeadingZeroes && p - rBegin != 1))
+    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
         return false;
     rBegin = p;
     rValue = sal_uInt32(nTheValue);
@@ -1004,6 +1006,7 @@ const sal_Char * INetMIME::scanQuotedBlock(const sal_Char * pBegin,
                     case '\\':
                         ++rLength;
                         if (pBegin != pEnd)
+                        {
                             if (startsWithLineBreak(pBegin, pEnd)
                                 && (pEnd - pBegin < 3
                                     || !isWhiteSpace(pBegin[2])))
@@ -1014,6 +1017,7 @@ const sal_Char * INetMIME::scanQuotedBlock(const sal_Char * pBegin,
                             }
                             else
                                 ++pBegin;
+                        }
                         break;
 
                     default:
@@ -1075,6 +1079,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                     case '\\':
                         ++rLength;
                         if (pBegin != pEnd)
+                        {
                             if (startsWithLineBreak(pBegin, pEnd)
                                 && (pEnd - pBegin < 3
                                     || !isWhiteSpace(pBegin[2])))
@@ -1085,6 +1090,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                             }
                             else
                                 ++pBegin;
+                        }
                         break;
 
                     default:
@@ -2141,29 +2147,29 @@ void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
         rSink << sal_Char(nChar);
     else if (nChar < 0x800)
         rSink << sal_Char(nChar >> 6 | 0xC0)
-              << sal_Char(nChar & 0x3F | 0x80);
+              << sal_Char((nChar & 0x3F) | 0x80);
     else if (nChar < 0x10000)
         rSink << sal_Char(nChar >> 12 | 0xE0)
-              << sal_Char(nChar >> 6 & 0x3F | 0x80)
-              << sal_Char(nChar & 0x3F | 0x80);
+              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
+              << sal_Char((nChar & 0x3F) | 0x80);
     else if (nChar < 0x200000)
         rSink << sal_Char(nChar >> 18 | 0xF0)
-              << sal_Char(nChar >> 12 & 0x3F | 0x80)
-              << sal_Char(nChar >> 6 & 0x3F | 0x80)
-              << sal_Char(nChar & 0x3F | 0x80);
+              << sal_Char((nChar >> 12 & 0x3F) | 0x80)
+              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
+              << sal_Char((nChar & 0x3F) | 0x80);
     else if (nChar < 0x4000000)
         rSink << sal_Char(nChar >> 24 | 0xF8)
-              << sal_Char(nChar >> 18 & 0x3F | 0x80)
-              << sal_Char(nChar >> 12 & 0x3F | 0x80)
-              << sal_Char(nChar >> 6 & 0x3F | 0x80)
-              << sal_Char(nChar & 0x3F | 0x80);
+              << sal_Char((nChar >> 18 & 0x3F) | 0x80)
+              << sal_Char((nChar >> 12 & 0x3F) | 0x80)
+              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
+              << sal_Char((nChar & 0x3F) | 0x80);
     else
         rSink << sal_Char(nChar >> 30 | 0xFC)
-              << sal_Char(nChar >> 24 & 0x3F | 0x80)
-              << sal_Char(nChar >> 18 & 0x3F | 0x80)
-              << sal_Char(nChar >> 12 & 0x3F | 0x80)
-              << sal_Char(nChar >> 6 & 0x3F | 0x80)
-              << sal_Char(nChar & 0x3F | 0x80);
+              << sal_Char((nChar >> 24 & 0x3F) | 0x80)
+              << sal_Char((nChar >> 18 & 0x3F) | 0x80)
+              << sal_Char((nChar >> 12 & 0x3F) | 0x80)
+              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
+              << sal_Char((nChar & 0x3F) | 0x80);
 }
 
 //============================================================================
@@ -2673,11 +2679,11 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                                     || *pLookAhead == '[' :
                                                     *pLookAhead == '.'
                                                     || *pLookAhead == '@'
-                                                    || *pLookAhead == '>'
+                                                    || (*pLookAhead == '>'
                                                        && eType
                                                     >= HEADER_FIELD_MESSAGE_ID
                                                        && eBrackets
-                                                         == BRACKETS_OPENING))
+                                                         == BRACKETS_OPENING)))
                                         {
                                             bModify = true;
                                             pBodyPtr = pLookAhead;
@@ -3025,7 +3031,7 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
 
     for (; nCount-- > 0; ++p)
         if ((static_cast< unsigned char >(*p) & 0xC0) == 0x80)
-            nUCS4 = nUCS4 << 6 | static_cast< unsigned char >(*p) & 0x3F;
+            nUCS4 = (nUCS4 << 6) | (static_cast< unsigned char >(*p) & 0x3F);
         else
             return false;
 
@@ -3177,9 +3183,11 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
             bool bEncodingB = false;
             if (bEncodedWord)
+            {
                 if (q == pEnd)
                     bEncodedWord = false;
                 else
+                {
                     switch (*q++)
                     {
                         case 'B':
@@ -3196,12 +3204,16 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                             bEncodedWord = false;
                             break;
                     }
+                }
+            }
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '?';
 
             ByteString sText;
             if (bEncodedWord)
+            {
                 if (bEncodingB)
+                {
                     for (bool bDone = false; !bDone;)
                     {
                         if (pEnd - q < 4)
@@ -3259,6 +3271,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                             }
                         }
                     }
+                }
                 else
                 {
                     const sal_Char * pEncodedTextBegin = q;
@@ -3333,6 +3346,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                             }
                         }
                 }
+            }
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '=';
 
@@ -4180,40 +4194,40 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                             else if (nUTF32 < 0x800)
                             {
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 >> 6
+                                                              (nUTF32 >> 6)
                                                                   | 0xC0);
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 & 0x3F
+                                                              (nUTF32 & 0x3F)
                                                                   | 0x80);
                             }
                             else if (nUTF32 < 0x10000)
                             {
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 >> 12
+                                                              (nUTF32 >> 12)
                                                                   | 0xE0);
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 >> 6
-                                                                      & 0x3F
+                                                              ((nUTF32 >> 6)
+                                                                      & 0x3F)
                                                                   | 0x80);
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 & 0x3F
+                                                              (nUTF32 & 0x3F)
                                                                   | 0x80);
                             }
                             else
                             {
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 >> 18
+                                                              (nUTF32 >> 18)
                                                                   | 0xF0);
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 >> 12
-                                                                      & 0x3F
+                                                              ((nUTF32 >> 12)
+                                                                      & 0x3F)
                                                                   | 0x80);
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 >> 6
-                                                                      & 0x3F
+                                                              ((nUTF32 >> 6)
+                                                                      & 0x3F)
                                                                   | 0x80);
                                 INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32 & 0x3F
+                                                              (nUTF32 & 0x3F)
                                                                   | 0x80);
                             }
                         }

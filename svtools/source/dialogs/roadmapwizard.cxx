@@ -337,7 +337,7 @@ namespace svt
         if ( aActivePathPos != m_pImpl->aPaths.end() )
         {
             DBG_ASSERT( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) > nCurrentStatePathIndex,
-                "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" )
+                "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
         }
 #endif
 

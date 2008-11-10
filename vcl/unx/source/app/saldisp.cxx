@@ -236,7 +236,7 @@ static BOOL sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
     XFree( pInfos );
 
     DBG_ASSERT( rVI.visualid == nVID,
-                "sal_GetVisualInfo: could not get correct visual by visualId" )
+                "sal_GetVisualInfo: could not get correct visual by visualId" );
     return TRUE;
 }
 
@@ -632,7 +632,7 @@ fd
 , SalX11Display *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
-              "wrong fd in DisplayHasEvent" )
+              "wrong fd in DisplayHasEvent" );
   vos::IMutex* pSalInstYieldMutex   =
       GetSalData()->m_pInstance->GetYieldMutex();
   ::vos::OGuard aGuard( *pSalInstYieldMutex );

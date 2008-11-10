@@ -300,7 +300,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // SV bei den Tools anmelden
     InitTools();
 
-    DBG_ASSERT( !pSVData->maAppData.mxMSF.is(), "VCL service factory already set" )
+    DBG_ASSERT( !pSVData->maAppData.mxMSF.is(), "VCL service factory already set" );
     pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken

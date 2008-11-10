@@ -795,7 +795,7 @@ bool ATSLayout::InitGIA() const
             continue;
 
         DBG_ASSERT( !(rALR.flags & kATSGlyphInfoTerminatorGlyph),
-            "ATSLayout::InitGIA(): terminator glyph not marked as deleted!" )
+            "ATSLayout::InitGIA(): terminator glyph not marked as deleted!" );
 
         // store details of the visible glyphs
         nLeftPos = rALR.realPos;

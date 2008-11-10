@@ -636,7 +636,7 @@ void SvLBoxEntry::EnableChildsOnDemand( BOOL bEnable )
 void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, USHORT nPos )
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
-    DBG_ASSERT(pNewItem,"ReplaceItem:No Item")
+    DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
     SvLBoxItem* pOld = GetItem( nPos );
     if ( pOld )
     {
@@ -939,7 +939,7 @@ BOOL SvLBox::NotifyMoving(
 #endif
 {
     DBG_CHKTHIS(SvLBox,0);
-    DBG_ASSERT(pEntry,"NotifyMoving:SoureEntry?")
+    DBG_ASSERT(pEntry,"NotifyMoving:SoureEntry?");
     if( !pTarget )
     {
         rpNewParent = 0;
@@ -976,7 +976,7 @@ BOOL SvLBox::NotifyCopying(
     DBG_CHKTHIS(SvLBox,0);
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
     /*
-    DBG_ASSERT(pEntry,"NotifyCopying:SourceEntry?")
+    DBG_ASSERT(pEntry,"NotifyCopying:SourceEntry?");
     if( !pTarget )
     {
         rpNewParent = 0;
@@ -1176,7 +1176,7 @@ SvLBox* SvLBox::GetTargetView() const
 void SvLBox::RequestingChilds( SvLBoxEntry*  )
 {
     DBG_CHKTHIS(SvLBox,0);
-    DBG_ERROR("Child-Request-Hdl not implemented!")
+    DBG_ERROR("Child-Request-Hdl not implemented!");
 }
 
 void SvLBox::RecalcViewData()

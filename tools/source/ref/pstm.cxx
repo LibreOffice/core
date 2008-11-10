@@ -45,7 +45,7 @@ void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
 #ifdef DBG_UTIL
     SvCreateInstancePersist p;
     p = Get( nClassId );
-    DBG_ASSERT( !p || p == pFunc, "register class with same id" )
+    DBG_ASSERT( !p || p == pFunc, "register class with same id" );
 #endif
     aAssocTable.insert(Map::value_type(nClassId, pFunc));
 }
@@ -135,7 +135,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
     if( (nVer & ~PERSIST_LIST_DBGUTIL) != PERSIST_LIST_VER )
     {
         rStm.SetError( SVSTREAM_GENERALERROR );
-        DBG_ERROR( "persist list, false version" )
+        DBG_ERROR( "persist list, false version" );
     }
 
     UINT32 nObjLen(0), nObjPos(0);
@@ -158,7 +158,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
                 aStr += ByteString::CreateFromInt32( (long)(rStm.Tell() - nObjPos) );
                 aStr += ", should = ";
                 aStr += ByteString::CreateFromInt64(nObjLen);
-                DBG_ERROR( aStr.GetBuffer() )
+                DBG_ERROR( aStr.GetBuffer() );
             }
 #endif
     return rStm;
@@ -189,7 +189,7 @@ SvPersistStream::SvPersistStream
     pStream (siehe <SvPersistStream::SetStream>).
 */
 {
-    DBG_ASSERT( nStartIdx != 0, "zero index not allowed" )
+    DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
     bIsWritable = TRUE;
     if( pStm )
     {
@@ -307,7 +307,7 @@ USHORT SvPersistStream::IsA() const
 void SvPersistStream::ResetError()
 {
     SvStream::ResetError();
-    DBG_ASSERT( pStm, "stream not set" )
+    DBG_ASSERT( pStm, "stream not set" );
     pStm->ResetError();
 }
 
@@ -316,7 +316,7 @@ void SvPersistStream::ResetError()
 *************************************************************************/
 ULONG SvPersistStream::GetData( void* pData, ULONG nSize )
 {
-    DBG_ASSERT( pStm, "stream not set" )
+    DBG_ASSERT( pStm, "stream not set" );
     ULONG nRet = pStm->Read( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
@@ -327,7 +327,7 @@ ULONG SvPersistStream::GetData( void* pData, ULONG nSize )
 *************************************************************************/
 ULONG SvPersistStream::PutData( const void* pData, ULONG nSize )
 {
-    DBG_ASSERT( pStm, "stream not set" )
+    DBG_ASSERT( pStm, "stream not set" );
     ULONG nRet = pStm->Write( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
@@ -338,7 +338,7 @@ ULONG SvPersistStream::PutData( const void* pData, ULONG nSize )
 *************************************************************************/
 ULONG SvPersistStream::SeekPos( ULONG nPos )
 {
-    DBG_ASSERT( pStm, "stream not set" )
+    DBG_ASSERT( pStm, "stream not set" );
     ULONG nRet = pStm->Seek( nPos );
     SetError( pStm->GetError() );
     return nRet;
@@ -442,14 +442,14 @@ UINT32 SvPersistStream::ReadCompressed
         if( nMask & 0x0F )
         {
             rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            DBG_ERROR( "format error" )
+            DBG_ERROR( "format error" );
         }
         rStm >> nRet;
     }
     else
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "format error" )
+        DBG_ERROR( "format error" );
     }
     return nRet;
 }
@@ -743,7 +743,7 @@ UINT32 SvPersistStream::ReadObj
     if( P_VER < (nHdr & P_VER_MASK) )
     {
         SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "false version" )
+        DBG_ERROR( "false version" );
     }
 
     if( !(nHdr & P_ID_0) && GetError() == SVSTREAM_OK )
@@ -751,7 +751,7 @@ UINT32 SvPersistStream::ReadObj
         if( P_OBJ & nHdr )
         { // read object, nId nur bei P_DBGUTIL gesetzt
             DBG_ASSERT( !(nHdr & P_DBGUTIL) || NULL == aPUIdx.Get( nId ),
-                        "object already exist" )
+                        "object already exist" );
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
 
             UINT32 nObjLen(0), nObjPos(0);
@@ -779,7 +779,7 @@ UINT32 SvPersistStream::ReadObj
                 // um den gleichen Zustand, wie nach dem Speichern herzustellen
                 aPTable.Insert( (ULONG)rpObj, (void *)nNewId );
                 DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
-                            "read write id conflict: not the same" )
+                            "read write id conflict: not the same" );
             }
             // und dann Laden
             rpObj->Load( *this );
@@ -790,7 +790,7 @@ UINT32 SvPersistStream::ReadObj
                 aStr += ByteString::CreateFromInt32( (long)(Tell() - nObjPos) );
                 aStr += ", should = ";
                 aStr += ByteString::CreateFromInt32( nObjLen );
-                DBG_ERROR( aStr.GetBuffer() )
+                DBG_ERROR( aStr.GetBuffer() );
             }
 #endif
             rpObj->RestoreNoDelete();
@@ -799,8 +799,8 @@ UINT32 SvPersistStream::ReadObj
         else
         {
             rpObj = GetObject( nId );
-            DBG_ASSERT( rpObj != NULL, "object does not exist" )
-            DBG_ASSERT( rpObj->GetClassId() == nClassId, "class mismatch" )
+            DBG_ASSERT( rpObj != NULL, "object does not exist" );
+            DBG_ASSERT( rpObj->GetClassId() == nClassId, "class mismatch" );
         }
     }
     return nId;

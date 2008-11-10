@@ -2026,6 +2026,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
             if( pOldFallback != m_pResImpl )
                 ResMgrContainer::get().freeResMgr( pOldFallback );
             if( pFallback )
+            {
                 // handle possible recursion
                 if( pFallback->aLocale.Language != m_pResImpl->aLocale.Language ||
                     pFallback->aLocale.Country  != m_pResImpl->aLocale.Country  ||
@@ -2038,6 +2039,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
                     ResMgrContainer::get().freeResMgr( pFallback );
                     pFallback = NULL;
                 }
+            }
         }
         if( ! pResHandle )
             // no exception handling, this would require the locking of the solar mutex which isn't allowed within this class

@@ -694,13 +694,13 @@ inline bool INetMIME::isDigit(sal_uInt32 nChar)
 // static
 inline bool INetMIME::isCanonicHexDigit(sal_uInt32 nChar)
 {
-    return isDigit(nChar) || nChar >= 'A' && nChar <= 'F';
+    return isDigit(nChar) || (nChar >= 'A' && nChar <= 'F');
 }
 
 // static
 inline bool INetMIME::isHexDigit(sal_uInt32 nChar)
 {
-    return isCanonicHexDigit(nChar) || nChar >= 'a' && nChar <= 'f';
+    return isCanonicHexDigit(nChar) || (nChar >= 'a' && nChar <= 'f');
 }
 
 // static
@@ -790,8 +790,8 @@ inline sal_uInt32 INetMIME::toUTF32(sal_Unicode cHighSurrogate,
     DBG_ASSERT(isHighSurrogate(cHighSurrogate)
                && isLowSurrogate(cLowSurrogate),
                "INetMIME::toUTF32(): Bad chars");
-    return (sal_uInt32(cHighSurrogate) & 0x3FF) << 10
-               | sal_uInt32(cLowSurrogate) & 0x3FF;
+    return ((sal_uInt32(cHighSurrogate) & 0x3FF) << 10)
+               | (sal_uInt32(cLowSurrogate) & 0x3FF);
 }
 
 // static
@@ -930,8 +930,8 @@ inline sal_Unicode * INetMIME::putUTF32Character(sal_Unicode * pBuffer,
     else
     {
         nUTF32 -= 0x10000;
-        *pBuffer++ = sal_Unicode(0xD800 | nUTF32 >> 10);
-        *pBuffer++ = sal_Unicode(0xDC00 | nUTF32 & 0x3FF);
+        *pBuffer++ = sal_Unicode(0xD800 | (nUTF32 >> 10));
+        *pBuffer++ = sal_Unicode(0xDC00 | (nUTF32 & 0x3FF));
     }
     return pBuffer;
 }

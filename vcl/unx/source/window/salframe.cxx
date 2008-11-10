@@ -3907,7 +3907,7 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
     DBG_ASSERT( actual_type = pEvent->atom
                 && 32 == actual_format
                 &&  2 == nitems
-                &&  0 == bytes_after, "HandleStateEvent" )
+                &&  0 == bytes_after, "HandleStateEvent" );
 
     if( *(unsigned long*)prop == NormalState )
         nShowState_ = SHOWSTATE_NORMAL;

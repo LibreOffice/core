@@ -166,7 +166,7 @@ void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
 
-    DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" )
+    DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
 
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;

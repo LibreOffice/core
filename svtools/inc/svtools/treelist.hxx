@@ -398,30 +398,30 @@ public:
 
 inline BOOL SvListView::IsExpanded( SvListEntry* pEntry ) const
 {
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry")
+    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table")
+    DBG_ASSERT(pData,"Entry not in Table");
     return pData->IsExpanded();
 }
 inline BOOL SvListView::IsSelected( SvListEntry* pEntry ) const
 {
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry")
+    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table")
+    DBG_ASSERT(pData,"Entry not in Table");
     return pData->IsSelected();
 }
 inline BOOL SvListView::HasEntryFocus( SvListEntry* pEntry ) const
 {
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry")
+    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table")
+    DBG_ASSERT(pData,"Entry not in Table");
     return pData->HasFocus();
 }
 inline void SvListView::SetEntryFocus( SvListEntry* pEntry, BOOL bFocus ) const
 {
-    DBG_ASSERT(pEntry,"SetEntryFocus:No Entry")
+    DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
-    DBG_ASSERT(pData,"Entry not in Table")
+    DBG_ASSERT(pData,"Entry not in Table");
     pData->SetFocus(bFocus);
 }
 
@@ -431,7 +431,7 @@ inline SvViewData* SvListView::GetViewData( SvListEntry* pEntry ) const
     return (SvViewData*)aDataTable.Get( (ULONG)pEntry );
 #else
     SvViewData* pResult = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
-    DBG_ASSERT(pResult,"Entry not in model or wrong view")
+    DBG_ASSERT(pResult,"Entry not in model or wrong view");
     return pResult;
 #endif
 }

@@ -808,10 +808,12 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 sal_Int32 n = rtl_ustr_indexOfChar_WithLength(
                     p1, pEnd - p1, '\\');
                 sal_Unicode const * pe = n == -1 ? pEnd : p1 + n;
-                if (parseHostOrNetBiosName(
+                if (
+                    parseHostOrNetBiosName(
                         p1, pe, bOctets, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
                         true, NULL) ||
-                    scanDomain(p1, pe) > 0 && p1 == pe)
+                    (scanDomain(p1, pe) > 0 && p1 == pe)
+                   )
                 {
                     m_eScheme = INET_PROT_FILE; // 7th
                     eMechanism = ENCODE_ALL;
@@ -1020,12 +1022,16 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
                         sal_Unicode const * p1 = pPos + 2;
-                        if (p1 == pEnd || *p1 == nFragmentDelimiter
-                            || *p1 == '/'
-                            || (scanDomain(p1, pEnd) > 0
-                                    || scanIPv6reference(p1, pEnd))
-                               && (p1 == pEnd || *p1 == nFragmentDelimiter
-                                   || *p1 == '/'))
+                        if (
+                             p1 == pEnd || *p1 == nFragmentDelimiter || *p1 == '/' ||
+                             (
+                               (
+                                 scanDomain(p1, pEnd) > 0 ||
+                                 scanIPv6reference(p1, pEnd)
+                               ) &&
+                               (p1 == pEnd || *p1 == nFragmentDelimiter || *p1 == '/')
+                             )
+                           )
                         {
                             aSynAbsURIRef.
                                 appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
@@ -1096,10 +1102,12 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         {
                             ++pe;
                         }
-                        if (parseHostOrNetBiosName(
+                        if (
+                             parseHostOrNetBiosName(
                                 p1, pe, bOctets, ENCODE_ALL,
                                 RTL_TEXTENCODING_DONTKNOW, true, NULL) ||
-                            scanDomain(p1, pe) > 0 && p1 == pe)
+                             (scanDomain(p1, pe) > 0 && p1 == pe)
+                           )
                         {
                             aSynAbsURIRef.
                                 appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
@@ -1261,6 +1269,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                                              cEscapePrefix, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
+                {
                     if (nUTF32 == ':' && bSupportsPassword)
                     {
                         bHasAuth = true;
@@ -1278,12 +1287,14 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         bHasAuth = true;
                         break;
                     }
+                }
                 appendUCS4(aSynUser, nUTF32, eEscapeType, bOctets, ePart,
                            cEscapePrefix, eCharset, false);
             }
             m_aUser.set(aSynAbsURIRef, aSynUser.makeStringAndClear(),
                 aSynAbsURIRef.getLength());
             if (bHasAuth)
+            {
                 if (bSupportsPassword)
                 {
                     aSynAbsURIRef.append(sal_Unicode(':'));
@@ -1324,6 +1335,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     m_aAuth.set(aSynAbsURIRef, aSynAuth.makeStringAndClear(),
                         aSynAbsURIRef.getLength());
                 }
+            }
             if (pHostPortBegin)
                 aSynAbsURIRef.append(sal_Unicode('@'));
         }
@@ -1604,6 +1616,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     bool bSameDoc = true;
 
     if (getSchemeInfo().m_bAuthority)
+    {
         if (pEnd - p >= 2 && p[0] == '/' && p[1] == '/')
         {
             aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
@@ -1617,6 +1630,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                     = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
                                eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
+                {
                     if (nUTF32 == nSegmentDelimiter)
                         break;
                     else if (nUTF32 == nFragmentDelimiter)
@@ -1624,6 +1638,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                         eState = STATE_FRAGMENT;
                         break;
                     }
+                }
                 appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets,
                            PART_VISIBLE, cEscapePrefix, eCharset, true);
             }
@@ -1635,8 +1650,10 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                                      + aAuthority.getBegin(),
                                  aAuthority.getLength());
         }
+    }
 
     if (eState == STATE_AUTH)
+    {
         if (p == pEnd)
             eState = STATE_DONE;
         else if (*p == nFragmentDelimiter)
@@ -1655,6 +1672,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
             eState = STATE_REL_PATH;
             bSameDoc = false;
         }
+    }
 
     if (eState == STATE_ABS_PATH)
     {
@@ -1667,6 +1685,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                 = getUTF32(p, pEnd, bOctets, cEscapePrefix, eMechanism,
                            eCharset, eEscapeType);
             if (eEscapeType == ESCAPE_NO)
+            {
                 if (nUTF32 == nFragmentDelimiter)
                 {
                     eState = STATE_FRAGMENT;
@@ -1674,6 +1693,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                 }
                 else if (nUTF32 == nSegmentDelimiter)
                     nUTF32 = '/';
+            }
             appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, bOctets, ePart,
                        cEscapePrefix, eCharset, true);
         }
@@ -1710,6 +1730,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
         while (p != pEnd && *p != nQueryDelimiter && *p != nFragmentDelimiter)
         {
             if (*p == '.')
+            {
                 if (pEnd - p == 1
                     || p[1] == nSegmentDelimiter
                     || p[1] == nQueryDelimiter
@@ -1743,6 +1764,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                         "INetURLObject::convertRelToAbs(): Bad base path");
                     continue;
                 }
+            }
 
             while (p != pEnd
                    && *p != nSegmentDelimiter
@@ -1942,19 +1964,27 @@ bool INetURLObject::convertAbsToRel(rtl::OUString const & rTheAbsURIRef,
     // with <1*rseg> (i.e., it could be mistaken for an absolute URL starting
     // with a scheme part), then the new relative URL is prefixed with "./":
     if (aSynRelURIRef.getLength() == 0)
+    {
         if (pSubjectPathEnd - pSubjectPathBegin >= nMatch + 2
             && pSubjectPathBegin[nMatch] == '/'
             && pSubjectPathBegin[nMatch + 1] == '/')
+        {
             aSynRelURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("./"));
+        }
         else
+        {
             for (sal_Unicode const * p = pSubjectPathBegin + nMatch;
                  p != pSubjectPathEnd && *p != '/'; ++p)
+            {
                 if (mustEncode(*p, PART_REL_SEGMENT_EXTRA))
                 {
                     aSynRelURIRef.
                         appendAscii(RTL_CONSTASCII_STRINGPARAM("./"));
                     break;
                 }
+            }
+        }
+    }
 
     // The remainder of the subject path, starting at nMatch, is appended to
     // the new relative URL:
@@ -2211,9 +2241,14 @@ bool INetURLObject::setUser(rtl::OUString const & rTheUser,
                             bool bOctets, EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
-    if (!getSchemeInfo().m_bUser
-        || m_eScheme == INET_PROT_IMAP && rTheUser.getLength() == 0)
+    if (
+         !getSchemeInfo().m_bUser ||
+         (m_eScheme == INET_PROT_IMAP && rTheUser.getLength() == 0)
+       )
+    {
         return false;
+    }
+
     rtl::OUString aNewUser(encodeText(rTheUser, bOctets,
                                   m_eScheme == INET_PROT_IMAP ?
                                       PART_IMAP_ACHAR :
@@ -2766,6 +2801,7 @@ bool INetURLObject::parseHostOrNetBiosName(
     {
         sal_Unicode const * p = pBegin;
         if (!parseHost(p, pEnd, aTheCanonic) || p != pEnd)
+        {
             if (bNetBiosName)
             {
                 rtl::OUStringBuffer buf;
@@ -2808,6 +2844,7 @@ bool INetURLObject::parseHostOrNetBiosName(
             }
             else
                 return false;
+        }
     }
     if (pCanonic != NULL) {
         *pCanonic = aTheCanonic;
@@ -2961,6 +2998,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                              '%', eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
+                {
                     if (nUTF32 == nSegmentDelimiter
                         || nUTF32 == nAltSegmentDelimiter)
                     {
@@ -2980,6 +3018,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                         aTheSynPath.append(sal_Unicode(':'));
                         continue;
                     }
+                }
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_PCHAR, '%', eCharset, true);
             }
@@ -3299,10 +3338,12 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INET_PROT_VND_SUN_STAR_ODMA:
             if (pPos < pEnd)
+            {
                 if (*pPos == '/')
                     ++pPos;
                 else
                     return false;
+            }
             aTheSynPath.append(sal_Unicode('/'));
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
@@ -3484,8 +3525,9 @@ bool INetURLObject::insertName(rtl::OUString const & rTheName, bool bOctets,
     else if (nIndex == 0)
     {
         pPrefixEnd = pPathBegin;
-        bInsertSlash = pPathBegin < pPathEnd && *pPathBegin != '/' ||
-            pPathBegin == pPathEnd && bAppendFinalSlash;
+        bInsertSlash =
+            (pPathBegin < pPathEnd && *pPathBegin != '/') ||
+            (pPathBegin == pPathEnd && bAppendFinalSlash);
         pSuffixBegin =
             (pPathEnd - pPathBegin == 1 && *pPathBegin == '/' &&
              !bAppendFinalSlash && bIgnoreFinalSlash)
@@ -3503,11 +3545,11 @@ bool INetURLObject::insertName(rtl::OUString const & rTheName, bool bOctets,
          while (nIndex-- > 0)
             for (;;)
             {
-                if (bSkip) {
+                if (bSkip)
                     ++pPrefixEnd;
-                }
                 bSkip = true;
                 if (pPrefixEnd >= pEnd)
+                {
                     if (nIndex == 0)
                     {
                         bInsertSlash = bAppendFinalSlash;
@@ -3515,6 +3557,7 @@ bool INetURLObject::insertName(rtl::OUString const & rTheName, bool bOctets,
                     }
                     else
                         return false;
+                }
                 if (*pPrefixEnd == '/')
                 {
                     pSuffixBegin = pPrefixEnd;
@@ -3729,11 +3772,19 @@ rtl::OUString INetURLObject::decode(sal_Unicode const * pBegin,
                 break;
 
             case ESCAPE_UTF32:
-                if (INetMIME::isUSASCII(nUTF32)
-                    && (eMechanism == DECODE_TO_IURI
-                        || eMechanism == DECODE_UNAMBIGUOUS
-                           && mustEncode(nUTF32, PART_UNAMBIGUOUS)))
+                if (
+                     INetMIME::isUSASCII(nUTF32) &&
+                     (
+                       eMechanism == DECODE_TO_IURI ||
+                       (
+                         eMechanism == DECODE_UNAMBIGUOUS &&
+                         mustEncode(nUTF32, PART_UNAMBIGUOUS)
+                       )
+                     )
+                   )
+                {
                     appendEscape(aResult, cEscapePrefix, nUTF32);
+                }
                 else
                     aResult.append(sal_Unicode(nUTF32));
                 break;
@@ -4081,6 +4132,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             return false;
         }
         if (rThePassword.getLength() != 0)
+        {
             if (getSchemeInfo().m_bPassword)
             {
                 m_aAbsURIRef.append(sal_Unicode(':'));
@@ -4098,6 +4150,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 setInvalid();
                 return false;
             }
+        }
         if (bUserInfo && getSchemeInfo().m_bHost)
             m_aAbsURIRef.append(sal_Unicode('@'));
         if (getSchemeInfo().m_bHost)
@@ -4903,9 +4956,9 @@ rtl::OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                  && m_aHost.getLength() > 0 ?
                      FSYS_VOS :
                  hasDosVolume(eStyle)
-                 || (eStyle & FSYS_DOS) != 0
+                 || ((eStyle & FSYS_DOS) != 0
                     && m_aHost.isPresent()
-                    && m_aHost.getLength() > 0 ?
+                    && m_aHost.getLength() > 0) ?
                      FSYS_DOS :
                  eStyle & FSYS_UNX
                  && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?
@@ -5050,37 +5103,37 @@ void INetURLObject::appendUCS4Escape(rtl::OUStringBuffer & rTheText,
     else if (nUCS4 < 0x800)
     {
         appendEscape(rTheText, cEscapePrefix, nUCS4 >> 6 | 0xC0);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 & 0x3F | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
     }
     else if (nUCS4 < 0x10000)
     {
         appendEscape(rTheText, cEscapePrefix, nUCS4 >> 12 | 0xE0);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 6 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 & 0x3F | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
     }
     else if (nUCS4 < 0x200000)
     {
         appendEscape(rTheText, cEscapePrefix, nUCS4 >> 18 | 0xF0);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 12 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 6 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 & 0x3F | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 12 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
     }
     else if (nUCS4 < 0x4000000)
     {
         appendEscape(rTheText, cEscapePrefix, nUCS4 >> 24 | 0xF8);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 18 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 12 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 6 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 & 0x3F | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 18 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 12 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
     }
     else
     {
         appendEscape(rTheText, cEscapePrefix, nUCS4 >> 30 | 0xFC);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 24 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 18 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 12 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 >> 6 & 0x3F | 0x80);
-        appendEscape(rTheText, cEscapePrefix, nUCS4 & 0x3F | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 24 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 18 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 12 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 >> 6 & 0x3F) | 0x80);
+        appendEscape(rTheText, cEscapePrefix, (nUCS4 & 0x3F) | 0x80);
     }
 }
 
@@ -5313,6 +5366,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
 
             case STATE_LABEL:
                 if (p != pEnd)
+                {
                     if (INetMIME::isAlphanumeric(*p))
                         break;
                     else if (*p == '.')
@@ -5326,11 +5380,13 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
                         eState = STATE_HYPHEN;
                         break;
                     }
+                }
                 rBegin = p;
                 return nLabels;
 
             case STATE_HYPHEN:
                 if (p != pEnd)
+                {
                     if (INetMIME::isAlphanumeric(*p))
                     {
                         eState = STATE_LABEL;
@@ -5338,6 +5394,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
                     }
                     else if (*p == '-')
                         break;
+                }
                 if (bEager)
                     return 0;
                 rBegin = pLastAlphanumeric;
@@ -5353,7 +5410,7 @@ bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
     if (rBegin != pEnd && *rBegin == '[') {
         sal_Unicode const * p = rBegin + 1;
         //TODO: check for valid IPv6address (RFC 2373):
-        while (p != pEnd && INetMIME::isHexDigit(*p) || *p == ':' || *p == '.')
+        while (p != pEnd && (INetMIME::isHexDigit(*p) || *p == ':' || *p == '.'))
         {
             ++p;
         }

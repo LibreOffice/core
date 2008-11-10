@@ -1294,7 +1294,7 @@ BOOL UCBStorageStream_Impl::Revert()
     // if an OLEStorage is created on this stream, no "revert" is neccessary because OLEStorages do nothing on "Revert" !
     if ( m_bCommited )
     {
-        DBG_ERROR("Revert while commit is in progress!" )
+        DBG_ERROR("Revert while commit is in progress!" );
         return FALSE;                   //  ???
     }
 
@@ -1442,7 +1442,7 @@ ULONG UCBStorageStream::Write( const void* pData, ULONG nSize )
     // mba: does occur in writer !
     if ( pImp->m_bCommited )
     {
-        DBG_ERROR("Writing while commit is in progress!" )
+        DBG_ERROR("Writing while commit is in progress!" );
         return 0;
     }
 */
@@ -1475,7 +1475,7 @@ BOOL UCBStorageStream::SetSize( ULONG nNewSize )
 /*
     if ( pImp->m_bCommited )
     {
-        DBG_ERROR("Changing stream size while commit is in progress!" )
+        DBG_ERROR("Changing stream size while commit is in progress!" );
         return FALSE;
     }
 */
