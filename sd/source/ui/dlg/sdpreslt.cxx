@@ -141,7 +141,7 @@ void SdPresLayoutDlg::Reset()
         if (*((String*)mpLayoutNames->GetObject(nName)) == maName)
             break;
     }
-    DBG_ASSERT(nName < mnLayoutCount, "Layout nicht gefunden")
+    DBG_ASSERT(nName < mnLayoutCount, "Layout nicht gefunden");
 
     maVS.SelectItem((USHORT)nName + 1);  // Inizes des ValueSets beginnen bei 1
 

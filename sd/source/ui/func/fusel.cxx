@@ -144,7 +144,6 @@ void FuSelection::DoExecute( SfxRequest& rReq )
 
 FuSelection::~FuSelection()
 {
-    HPUX_DTOR_BUG;
     mpView->UnmarkAllPoints();
     mpView->ResetCreationActive();
 

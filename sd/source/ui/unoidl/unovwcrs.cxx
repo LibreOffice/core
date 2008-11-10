@@ -109,63 +109,63 @@ SdXTextViewCursor::~SdXTextViewCursor() throw()
 
 sal_Bool SdXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return sal_True;
 }
 
 void SdXTextViewCursor::setVisible(sal_Bool ) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 awt::Point SdXTextViewCursor::getPosition(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return awt::Point();
 }
 
 void SdXTextViewCursor::collapseToStart(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 void SdXTextViewCursor::collapseToEnd(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 sal_Bool SdXTextViewCursor::isCollapsed(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return sal_True;
 
 }
 
 sal_Bool SdXTextViewCursor::goLeft(sal_Int16 , sal_Bool ) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return sal_False;
 }
 
 sal_Bool SdXTextViewCursor::goRight(sal_Int16, sal_Bool ) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return sal_False;
 }
 
 void SdXTextViewCursor::gotoRange(const uno::Reference< text::XTextRange > &, sal_Bool ) throw (::com::sun::star::uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 void SdXTextViewCursor::gotoStart(sal_Bool ) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 void SdXTextViewCursor::gotoEnd(sal_Bool ) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 sal_Bool SdXTextViewCursor::screenDown(void) throw( uno::RuntimeException )
@@ -182,31 +182,31 @@ sal_Bool SdXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
 
 uno::Reference< text::XText >  SdXTextViewCursor::getText(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return uno::Reference< text::XText > ();
 }
 
 uno::Reference< text::XTextRange >  SdXTextViewCursor::getStart(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return uno::Reference< text::XTextRange > ();
 }
 
 uno::Reference< text::XTextRange >  SdXTextViewCursor::getEnd(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return uno::Reference< text::XTextRange > ();
 }
 
 OUString SdXTextViewCursor::getString(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return OUString();
 }
 
 void SdXTextViewCursor::setString(const OUString& ) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
