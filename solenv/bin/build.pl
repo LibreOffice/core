@@ -52,9 +52,11 @@
         $in_so_env++;
     };
     if (defined $ENV{CWS_WORK_STAMP}) {
-        require Cws; import Cws;
-        require CwsConfig; import CwsConfig;
-        require CvsModule; import CvsModule;
+        eval {
+            require Cws; import Cws;
+            require CwsConfig; import CwsConfig;
+            require CvsModule; import CvsModule;
+        };
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
     };
