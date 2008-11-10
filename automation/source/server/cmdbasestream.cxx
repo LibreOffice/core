@@ -258,22 +258,22 @@ void CmdBaseStream::Write( comm_BOOL bBool )
 void CmdBaseStream::Read ( comm_String* &pString )
 {
     (void) pString; /* avoid warning about unused parameter */
-    DBG_ERROR("Read ( comm_String* &pString ) Not Implemented")
+    DBG_ERROR("Read ( comm_String* &pString ) Not Implemented");
 }
 void CmdBaseStream::Read ( SmartId* &pId )
 {
     (void) pId; /* avoid warning about unused parameter */
-    DBG_ERROR("Read ( SmartId* &pId ) Not Implemented")
+    DBG_ERROR("Read ( SmartId* &pId ) Not Implemented");
 }
 
 void CmdBaseStream::Write( comm_String *pString )
 {
     (void) pString; /* avoid warning about unused parameter */
-    DBG_ERROR("Write( comm_String *pString ) Not Implemented")
+    DBG_ERROR("Write( comm_String *pString ) Not Implemented");
 }
 void CmdBaseStream::Write( SmartId* pId )
 {
     (void) pId; /* avoid warning about unused parameter */
-    DBG_ERROR("Write( SmartId* pId ) Not Implemented")
+    DBG_ERROR("Write( SmartId* pId ) Not Implemented");
 }
 

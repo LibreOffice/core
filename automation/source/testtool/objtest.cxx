@@ -603,7 +603,7 @@ void TestToolObj::InitTestToolObj()
     }
     else
     {
-        DBG_ERROR("Testtool: Could not replace Wait method")
+        DBG_ERROR("Testtool: Could not replace Wait method");
     }
 
     MAKE_TT_KEYWORD( "Kontext", SbxCLASS_METHOD, SbxNULL, ID_Kontext );
@@ -1035,7 +1035,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     aUId = SmartId( aLongname );
                 else
                 {
-                    DBG_ERROR("Unknown URL schema")
+                    DBG_ERROR("Unknown URL schema");
                 }
             }
 
@@ -1320,7 +1320,7 @@ void TestToolObj::BeginBlock()
     if ( IsError() )
         return;
 
-    DBG_ASSERT(!IsBlock,"BeginBlock innerhalb eines Blockes")
+    DBG_ASSERT(!IsBlock,"BeginBlock innerhalb eines Blockes");
     In->Reset(nSequence);
     IsBlock = TRUE;
 }
@@ -1330,7 +1330,7 @@ void TestToolObj::SendViaSocket()
 {
     if ( !pCommunicationManager )
     {
-        DBG_ERROR("Kein CommunicationManager vorhanden!!")
+        DBG_ERROR("Kein CommunicationManager vorhanden!!");
         return;
     }
 
@@ -1416,7 +1416,7 @@ void TestToolObj::EndBlock()
     }
     else
     {
-        DBG_ERROR("EndBlock au�erhalb eines Blockes")
+        DBG_ERROR("EndBlock au�erhalb eines Blockes");
     }
 }
 

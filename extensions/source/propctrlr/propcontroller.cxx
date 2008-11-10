@@ -1419,7 +1419,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !")
+            DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !");
         }
 
         m_sCommittingProperty = ::rtl::OUString();

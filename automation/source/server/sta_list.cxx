@@ -192,7 +192,7 @@ void StatementList::SendProfile( String aText )
 
 void StatementList::QueStatement(StatementList *pAfterThis)
 {
-    DBG_ASSERT(!bStatementInQue,"QueStatement für bereits eingetragenes Statement -> Abgebrochen")
+    DBG_ASSERT(!bStatementInQue,"QueStatement für bereits eingetragenes Statement -> Abgebrochen");
     if ( bStatementInQue )
         return;
 
@@ -301,7 +301,7 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
             pBase = Application::GetFocusWindow();
             if ( pBase )
             {
-                DBG_ASSERT( WinPtrValid( pBase ), "GetFocusWindow is no valid WindowPointer" )
+                DBG_ASSERT( WinPtrValid( pBase ), "GetFocusWindow is no valid WindowPointer" );
                 Window *pPParent = pBase;
                 while ( pPParent->GET_REAL_PARENT() )
                     pPParent = pPParent->GET_REAL_PARENT();
@@ -751,7 +751,7 @@ Window* StatementList::GetAnyActive( BOOL MaybeBase )
 
 void StatementList::SetFirstDocFrame( Window* pWin )
 {
-    DBG_ASSERT( IsDocFrame( pWin ), "Non Document Frame set as first Document Frame" )
+    DBG_ASSERT( IsDocFrame( pWin ), "Non Document Frame set as first Document Frame" );
     pFirstDocFrame = pWin;
 }
 

@@ -254,36 +254,39 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
            if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
            {
                sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
-                              if (!sPath.match(aSystemPrefix, nStartIndex))
-                                      continue;
+               if (!sPath.match(aSystemPrefix, nStartIndex))
+                   continue;
+               rtl::OUString sChunk = sPath.copy(0, sPath.getLength() - aSystemSuffix.getLength());
                sal_Int32 nIndex = nStartIndex + aSystemPrefix.getLength();
-               rtl::OUString sLang = sPath.getToken( 0, '_', nIndex );
-               rtl::OUString sRegion = sPath.copy( nIndex, sPath.getLength() - nIndex - aSystemSuffix.getLength());
-                              if (!sLang.getLength() || !sRegion.getLength())
-                                      continue;
+               rtl::OUString sLang = sChunk.getToken( 0, '_', nIndex );
+               if (!sLang.getLength())
+                   continue;
+               rtl::OUString sRegion;
+               if (nIndex != -1);
+                   sRegion = sChunk.copy( nIndex, sChunk.getLength() - nIndex );
 
-                              // Thus we first get the language of the dictionary
-                              LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
+               // Thus we first get the language of the dictionary
+               LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
                   sLang, sRegion );
 
-                              if (aDicLangInUse.count( nLang ) == 0)
-                              {
-                                      // remember the new language in use
-                                      aDicLangInUse.insert( nLang );
+               if (aDicLangInUse.count( nLang ) == 0)
+               {
+                   // remember the new language in use
+                   aDicLangInUse.insert( nLang );
 
-                                      // add the dictionary to the resulting vector
-                                      SvtLinguConfigDictionaryEntry aDicEntry;
-                                      aDicEntry.aLocations.realloc(1);
-                                      aDicEntry.aLocaleNames.realloc(1);
-                                      rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
-                      aDicEntry.aLocations[0]   = sPath;
-                                      aDicEntry.aFormatName     = aFormatName;
-                                      aDicEntry.aLocaleNames[0] = aLocaleName;
-                                      aRes.push_back( aDicEntry );
-                              }
+                   // add the dictionary to the resulting vector
+                   SvtLinguConfigDictionaryEntry aDicEntry;
+                   aDicEntry.aLocations.realloc(1);
+                   aDicEntry.aLocaleNames.realloc(1);
+                   rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
+                   aDicEntry.aLocations[0] = sPath;
+                   aDicEntry.aFormatName = aFormatName;
+                   aDicEntry.aLocaleNames[0] = aLocaleName;
+                   aRes.push_back( aDicEntry );
+               }
            }
        }
-      }
+    }
 
 #endif
 
@@ -317,16 +320,20 @@ void MergeNewStyleDicsAndOldStyleDics(
         sal_Int32 nOldStyleDics = aIt2->aLocaleNames.getLength();
 
         // old style dics should only have one language listed...
-        DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!")
+        DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
         if (nOldStyleDics > 0)
         {
             LanguageType nLang = MsLangId::convertIsoStringToLanguage( aIt2->aLocaleNames[0] );
 
+            if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
+            {
+                DBG_ERROR( "old style dictionary with invalid language found!" );
+                continue;
+            }
+
             // language not yet added?
             if (aNewStyleLanguages.count( nLang ) == 0)
-            {
                 rNewStyleDics.push_back( *aIt2 );
-            }
         }
         else
         {

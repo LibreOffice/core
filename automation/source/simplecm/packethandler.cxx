@@ -84,7 +84,7 @@ unsigned char PacketHandler::CalcCheckByte( comm_UINT32 nBytes )
 
 comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 {
-    DBG_ASSERT( !pData, "pData should be NULL -> memory leak" )
+    DBG_ASSERT( !pData, "pData should be NULL -> memory leak" );
 
     nLen = 0;
     pData = NULL;

@@ -98,7 +98,7 @@ void RetStream::Write( SbxValue &aValue )
 
 void RetStream::Write( SmartId* pId )
 {
-    DBG_ASSERT( !pId->HasString() || !pId->HasNumeric(), "SmartId contains Number and String. using String only." )
+    DBG_ASSERT( !pId->HasString() || !pId->HasNumeric(), "SmartId contains Number and String. using String only." );
     if ( pId->HasString() )
     {
         String aTmp( pId->GetStr() );

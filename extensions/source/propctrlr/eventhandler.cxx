@@ -781,7 +781,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "EventHandler::getSupportedProperties: caught an exception !" )
+                DBG_ERROR( "EventHandler::getSupportedProperties: caught an exception !" );
             }
         }
 
