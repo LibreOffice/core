@@ -230,7 +230,7 @@ ScDPInitState::~ScDPInitState()
 
 void ScDPInitState::AddMember( long nSourceIndex, const ScDPItemData& rName )
 {
-    DBG_ASSERT( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" )
+    DBG_ASSERT( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" );
     if ( nCount < SC_DAPI_MAXFIELDS )
     {
         pIndex[nCount] = nSourceIndex;
@@ -241,7 +241,7 @@ void ScDPInitState::AddMember( long nSourceIndex, const ScDPItemData& rName )
 
 void ScDPInitState::RemoveMember()
 {
-    DBG_ASSERT( nCount > 0, "RemoveColIndex without index" )
+    DBG_ASSERT( nCount > 0, "RemoveColIndex without index" );
     if ( nCount > 0 )
         --nCount;
 }
@@ -316,7 +316,7 @@ ScDPRunningTotalState::~ScDPRunningTotalState()
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
-    DBG_ASSERT( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" )
+    DBG_ASSERT( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" );
     if ( nColIndexPos < SC_DAPI_MAXFIELDS )
     {
         pColVisible[nColIndexPos] = nVisible;
@@ -329,7 +329,7 @@ void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 {
-    DBG_ASSERT( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" )
+    DBG_ASSERT( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" );
     if ( nRowIndexPos < SC_DAPI_MAXFIELDS )
     {
         pRowVisible[nRowIndexPos] = nVisible;
@@ -342,7 +342,7 @@ void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::RemoveColIndex()
 {
-    DBG_ASSERT( nColIndexPos > 0, "RemoveColIndex without index" )
+    DBG_ASSERT( nColIndexPos > 0, "RemoveColIndex without index" );
     if ( nColIndexPos > 0 )
     {
         --nColIndexPos;
@@ -353,7 +353,7 @@ void ScDPRunningTotalState::RemoveColIndex()
 
 void ScDPRunningTotalState::RemoveRowIndex()
 {
-    DBG_ASSERT( nRowIndexPos > 0, "RemoveRowIndex without index" )
+    DBG_ASSERT( nRowIndexPos > 0, "RemoveRowIndex without index" );
     if ( nRowIndexPos > 0 )
     {
         --nRowIndexPos;

@@ -946,7 +946,7 @@ void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
     }
     if (!pDimIndex)
     {
-        DBG_ERROR("invalid orientation")
+        DBG_ERROR("invalid orientation");
         return;
     }
 

@@ -378,7 +378,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
 
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 {
-    DBG_ASSERT(aRowDefaultStyle != aCellStyles.end(), "no row default style")
+    DBG_ASSERT(aRowDefaultStyle != aCellStyles.end(), "no row default style");
     if (!aRowDefaultStyle->sStyleName.getLength())
     {
         SCCOL nStartCol(rRange.aStart.Col());
@@ -391,7 +391,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             {
                 if (aPrevItr != aColDefaultStyles[i])
                 {
-                    DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style")
+                    DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style");
                     ScRange aRange(rRange);
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
@@ -461,7 +461,7 @@ void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, con
     (void)nColumn;  // avoid warning in product version
     DBG_ASSERT(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
-    DBG_ASSERT(aItr != aCellStyles.end(), "no column default style")
+    DBG_ASSERT(aItr != aCellStyles.end(), "no column default style");
     aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
     for (sal_Int32 i = 0; i < nRepeat; ++i)
         aColDefaultStyles.push_back(aItr);

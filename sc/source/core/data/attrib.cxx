@@ -268,7 +268,7 @@ BOOL ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_4 :
             rVal <<= (sal_Bool ) bHidePrint; break;
         default:
-            DBG_ERROR("Wrong MemberID!")
+            DBG_ERROR("Wrong MemberID!");
             return FALSE;
     }
 

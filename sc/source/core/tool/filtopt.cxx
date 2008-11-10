@@ -82,12 +82,12 @@ ScFilterOptions::ScFilterOptions() :
     Sequence<Any> aValues = GetProperties(aNames);
 //  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -117,7 +117,7 @@ void ScFilterOptions::Commit()
 
 void ScFilterOptions::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
-    DBG_ERROR("properties have been changed")
+    DBG_ERROR("properties have been changed");
 }
 
 

@@ -323,7 +323,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
 
 void ScUnoAddInCollection::Initialize()
 {
-    DBG_ASSERT( !bInitialized, "Initialize twice?" )
+    DBG_ASSERT( !bInitialized, "Initialize twice?" );
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );

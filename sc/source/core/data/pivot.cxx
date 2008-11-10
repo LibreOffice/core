@@ -432,7 +432,7 @@ BOOL ScPivot::Load( SvStream& /* rStream */, ScMultipleReadHeader& rHdr )
         rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
         rStream.ReadByteString( aTag,  rStream.GetStreamCharSet() );
 
-        DBG_ASSERT(!pColNames, "Spaltennamen schon gesetzt?")
+        DBG_ASSERT(!pColNames, "Spaltennamen schon gesetzt?");
         rStream >> nColNameCount;
         if (nColNameCount)
         {
@@ -1412,7 +1412,7 @@ void ScPivot::CreateFieldData()
                 //  Daten eintragen
                 if ((nCIndex < nDataColCount) && (nRIndex < nDataRowCount))
                 {
-                    DBG_ASSERT(ppDataArr[nRIndex][nCIndex].nIndex == i, "falsch init.")
+                    DBG_ASSERT(ppDataArr[nRIndex][nCIndex].nIndex == i, "falsch init.");
 
                     ppDataArr[nRIndex][nCIndex].nIndex = i;
                     aAdr.SetCol( aDataArr[i].nCol );

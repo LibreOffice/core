@@ -322,7 +322,7 @@ uno::Reference<XAccessible> ScNotesChilds::GetAt(const awt::Point& rPoint) const
 
 sal_Int8 ScNotesChilds::CompareCell(const ScAddress& aCell1, const ScAddress& aCell2)
 {
-    DBG_ASSERT(aCell1.Tab() == aCell2.Tab(), "the notes should be on the same table")
+    DBG_ASSERT(aCell1.Tab() == aCell2.Tab(), "the notes should be on the same table");
     sal_Int8 nResult(0);
     if (aCell1 != aCell2)
     {
@@ -1189,7 +1189,7 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
                             break;
                             default:
                             {
-                                DBG_ERRORFILE("I don't know this layer.")
+                                DBG_ERRORFILE("I don't know this layer.");
                             }
                             break;
                         }
@@ -1266,7 +1266,7 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
                     break;
                     default:
                     {
-                        DBG_ERRORFILE("I don't know this layer.")
+                        DBG_ERRORFILE("I don't know this layer.");
                     }
                     break;
                 }
@@ -1341,7 +1341,7 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
             break;
             default:
             {
-                DBG_ERRORFILE("I don't know this layer.")
+                DBG_ERRORFILE("I don't know this layer.");
             }
             break;
         }

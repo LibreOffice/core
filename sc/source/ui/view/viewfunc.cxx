@@ -1833,7 +1833,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     aFuncMark.SetMarking(FALSE);        // for MarkToMulti
     aFuncMark.MarkToSimple();           // before bMulti test below
 
-    DBG_ASSERT( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" )
+    DBG_ASSERT( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
 
     ScDocument* pUndoDoc = NULL;
     BOOL bMulti = !bSimple && aFuncMark.IsMultiMarked();
