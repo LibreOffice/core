@@ -185,7 +185,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         else
         {
             SwView *pView = GetView();
-            DBG_ASSERT(pView, "no view found")
+            DBG_ASSERT(pView, "no view found");
             if(!pView)
                 return;
             SwWrtShell &rSh = pView->GetWrtShell();
@@ -334,7 +334,7 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     else
     {
         SwView *pView = GetView();
-        DBG_ASSERT(pView, "no view found")
+        DBG_ASSERT(pView, "no view found");
         if(!pView)
             return;
         SwWrtShell &rSh = pView->GetWrtShell();

@@ -602,7 +602,7 @@ void  SwSendMailDialog::SendMails()
 {
     if(!m_pConfigItem)
     {
-        DBG_ERROR("config item not set")
+        DBG_ERROR("config item not set");
         return;
     }
     String sErrorMessage;
@@ -617,7 +617,7 @@ void  SwSendMailDialog::SendMails()
     LeaveWait();
     if(!bIsLoggedIn)
     {
-        DBG_ERROR("create error message")
+        DBG_ERROR("create error message");
         return;
     }
     m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));

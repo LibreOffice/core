@@ -106,7 +106,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         }
         catch( const uno::Exception& )
         {
-            DBG_ERROR("exception while creating AutoText storage")
+            DBG_ERROR("exception while creating AutoText storage");
         }
     }
     InitBlockMode ( refStg );
@@ -209,7 +209,7 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
 
 ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const String& )
 {
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" )
+    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
     String aOldName (aNames[ nIdx ]->aPackageName);
@@ -260,7 +260,7 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     String sDestShortName( GetPackageName (nIndex) );
     USHORT nIdx = 0;
 
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" )
+    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return ERR_SWG_WRITE_ERROR;
 
@@ -324,7 +324,7 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
 
 ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
 {
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" )
+    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
     GetIndex ( rShort );

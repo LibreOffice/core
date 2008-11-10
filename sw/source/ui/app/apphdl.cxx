@@ -338,7 +338,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     }
 
     m_pView = ::GetActiveView(); // not owner!
-    DBG_ASSERT(m_pView, "no current view?")
+    DBG_ASSERT(m_pView, "no current view?");
     if(m_pView)
     {
         // keep self alive until done.

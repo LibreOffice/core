@@ -177,7 +177,7 @@ SwView* SwModule::GetFirstView()
 
 SwView* SwModule::GetNextView(SwView* pView)
 {
-    DBG_ASSERT(PTR_CAST(SwView, pView),"keine SwView uebergeben")
+    DBG_ASSERT(PTR_CAST(SwView, pView),"keine SwView uebergeben");
     const TypeId aTypeId = TYPE(SwView);
     SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
     return pNView;

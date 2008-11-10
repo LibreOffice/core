@@ -1111,7 +1111,7 @@ void SAL_CALL SwXTextView::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
@@ -1120,7 +1120,7 @@ void SAL_CALL SwXTextView::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
@@ -1129,7 +1129,7 @@ void SAL_CALL SwXTextView::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
@@ -1138,7 +1138,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 /* -----------------------------06.04.00 11:07--------------------------------
@@ -1221,7 +1221,7 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return sal_True;
 }
 /*-- 17.12.98 09:36:25---------------------------------------------------
@@ -1230,7 +1230,7 @@ sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 09:36:26---------------------------------------------------
 

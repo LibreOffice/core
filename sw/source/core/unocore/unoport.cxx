@@ -802,28 +802,28 @@ void SwXTextPortion::addPropertyChangeListener(
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextPortion::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextPortion::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextPortion::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 08.03.99 09:41:43---------------------------------------------------
 
@@ -914,7 +914,7 @@ OUString SwXTextPortion::getPresentation(sal_Bool /*bShowCommand*/) throw( uno::
     if(pUnoCrsr && 0 != (pFmt = GetFldFmt()))
     {
         const SwField* pField = pFmt->GetFld();
-        DBG_ERROR("bShowCommand auswerten!")
+        DBG_ERROR("bShowCommand auswerten!");
         sRet = pField->Expand();
     }
     return sRet;

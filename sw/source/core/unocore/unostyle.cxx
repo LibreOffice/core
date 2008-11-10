@@ -1702,7 +1702,7 @@ struct SwStyleBase_Impl
     sal_Bool HasItemSet() {return mxNewBase.is();}
     SfxItemSet& GetItemSet()
         {
-            DBG_ASSERT(mxNewBase.is(), "no SwDocStyleSheet available")
+            DBG_ASSERT(mxNewBase.is(), "no SwDocStyleSheet available");
             if(!pItemSet)
                 pItemSet = new SfxItemSet(mxNewBase->GetItemSet());
             return *pItemSet;
@@ -2301,7 +2301,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
             {
                 const SwNumRule* pRule = rBase.mxNewBase->GetNumRule();
-                DBG_ASSERT(pRule, "Wo ist die NumRule?")
+                DBG_ASSERT(pRule, "Wo ist die NumRule?");
                 uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule);
                 aRet.setValue(&xRules, ::getCppuType((uno::Reference<container::XIndexReplace>*)0));
             }
@@ -2619,7 +2619,7 @@ void SwXStyle::addPropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 08:26:54---------------------------------------------------
 
@@ -2628,7 +2628,7 @@ void SwXStyle::removePropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 08:26:54---------------------------------------------------
 
@@ -2637,7 +2637,7 @@ void SwXStyle::addVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 08:26:54---------------------------------------------------
 
@@ -2646,7 +2646,7 @@ void SwXStyle::removeVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 /*-- 08.03.99 10:50:26---------------------------------------------------
@@ -2787,7 +2787,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "Where is the style?")
+        DBG_ASSERT(pBase, "Where is the style?");
 
         if(pBase)
         {
@@ -2860,7 +2860,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style, you fiend!?")
+        DBG_ASSERT(pBase, "where is the style, you fiend!?");
 
         if(pBase)
         {
@@ -2990,7 +2990,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
         {
             pBasePool->SetSearchMask(eFamily);
             SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-            DBG_ASSERT(pBase, "Doesn't seem to be a style!")
+            DBG_ASSERT(pBase, "Doesn't seem to be a style!");
 
             if(pBase)
             {

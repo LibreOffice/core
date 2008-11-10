@@ -2400,7 +2400,7 @@ void SwHTMLParser::NewSelect()
     }
 
     uno::Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
-    DBG_ASSERT(xFComp.is(), "keine FormComponent?")
+    DBG_ASSERT(xFComp.is(), "keine FormComponent?");
 
     uno::Reference< beans::XPropertySet >  xPropSet( xFComp, UNO_QUERY );
 

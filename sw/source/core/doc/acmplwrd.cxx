@@ -278,7 +278,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 #ifdef DBG_UTIL
     ULONG nStrings = SwAutoCompleteString::GetElementCount();
     ULONG nClients = SwAutoCompleteClient::GetElementCount();
-    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch")
+    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
 #endif
 }
 
@@ -454,7 +454,7 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         {
             aWordLst.Remove( nPos - 1 );
             USHORT nLRUPos = aLRULst.GetPos( (void*)pCurrent );
-            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" )
+            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" );
             aLRULst.Remove( nLRUPos );
             delete pCurrent;
         }

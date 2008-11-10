@@ -1092,7 +1092,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                                             rSh.GetDefault(RES_PARATR_TABSTOP);
 
-                DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?")
+                DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?");
                 long nDefTabDist = ::GetTabDist(rDefTabs);
                 pHRuler->SetDefTabDist( nDefTabDist );
                 pVRuler->SetDefTabDist( nDefTabDist );

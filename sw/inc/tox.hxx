@@ -751,7 +751,7 @@ inline void SwTOXBase::SetTemplateName(const String& rName)
 //  ASSERT(GetTOXType()->GetType() == TOX_USER, "Falscher Feldtyp");
 //  ASSERT(aData.pTemplateName, "pTemplateName == 0");
 //  (*aData.pTemplateName) = rName;
-    DBG_WARNING("SwTOXBase::SetTemplateName obsolete")
+    DBG_WARNING("SwTOXBase::SetTemplateName obsolete");
     aStyleNames[0] = rName;
 
 }

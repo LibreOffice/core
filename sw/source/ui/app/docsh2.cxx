@@ -947,7 +947,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 #ifdef DBG_UTIL
                 {
                     BOOL bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
-                    DBG_ASSERT(bWeb == TRUE, "SourceView nur in der WebDocShell")
+                    DBG_ASSERT(bWeb == TRUE, "SourceView nur in der WebDocShell");
                 }
 #endif
                 // die SourceView ist fuer die SwWebDocShell die 1
@@ -1371,7 +1371,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         catch(Exception& )
                         {
-                            DBG_ERROR("control acces failed")
+                            DBG_ERROR("control acces failed");
                         }
 
                         xFP->setTitle( SW_RESSTR( nStrId ));
@@ -1452,7 +1452,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pItem ))
             {
-                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item")
+                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item");
                 USHORT nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
                 //ueber Views iterieren und den State an den FormShells setzen
 
@@ -1808,7 +1808,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     if( aMed.IsStorage() )
     {
-        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?")
+        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?");
         pRead =  ReadXML;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!

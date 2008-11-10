@@ -314,7 +314,7 @@ BOOL SwCrsrShell::SelTblBox()
     // table box start node, right?
     SwFrm *pFrm = GetCurrFrm();
     DBG_ASSERT( !pFrm->IsInTab() == !(pStartNode != NULL),
-                "Schroedinger's table: We're in a box, and also we aren't." )
+                "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
 
     if( pStartNode == NULL )

@@ -1279,7 +1279,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
     {
         const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (USHORT)nCnt );
-        DBG_ASSERT(pEntryData, "no entry data available")
+        DBG_ASSERT(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
             aSortAlgorithmLB.SelectEntryPos( (USHORT)nCnt );
@@ -1396,7 +1396,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
     rDesc.SetLanguage(aLanguageLB.GetSelectLanguage());
     const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData(
                                             aSortAlgorithmLB.GetSelectEntryPos() );
-    DBG_ASSERT(pEntryData, "no entry data available")
+    DBG_ASSERT(pEntryData, "no entry data available");
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
 }
@@ -1673,7 +1673,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
  --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     switch((long)pBox->GetEntryData( pBox->GetSelectEntryPos() ))
     {
         case AREA_DOCUMENT  : break;
@@ -1938,7 +1938,7 @@ public:
     void SetLinkEnd()
         {
             DBG_ASSERT(TOKEN_LINK_START == aFormToken.eTokenType,
-                                    "call SetLinkEnd for link start only!")
+                                    "call SetLinkEnd for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_END;
             aFormToken.sText.AssignAscii(SwForm::aFormLinkEnd);
             SetText(aFormToken.sText);
@@ -1946,7 +1946,7 @@ public:
     void SetLinkStart()
         {
             DBG_ASSERT(TOKEN_LINK_END == aFormToken.eTokenType,
-                                    "call SetLinkStart for link start only!")
+                                    "call SetLinkStart for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_START;
             aFormToken.sText.AssignAscii(SwForm::aFormLinkStt);
             SetText(aFormToken.sText);
@@ -2588,7 +2588,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     else
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled")
+        DBG_ASSERT(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
         if( WINDOW_EDIT != pCtrl->GetType() )
         {
             //fill it into the ListBox
@@ -2735,7 +2735,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
                 sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*) nSearch );
-                DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?")
+                DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 aAuthFieldsLB.RemoveEntry(nLstBoxPos);
             }
 
@@ -2915,7 +2915,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     if(sEntry == sNoCharStyle)
         sEntry.Erase();
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl, "no active control?")
+    DBG_ASSERT(pCtrl, "no active control?");
     if(pCtrl)
     {
         if(WINDOW_EDIT == pCtrl->GetType())
@@ -2936,7 +2936,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(pCtrl, "no active control?")
+        DBG_ASSERT(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
             ((SwTOXButton*)pCtrl)->SetChapterInfo(nPos);
 
@@ -2950,7 +2950,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
     const sal_uInt16 nLevel = static_cast<BYTE>(pField->GetValue());
 
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl, "no active control?")
+    DBG_ASSERT(pCtrl, "no active control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         ((SwTOXButton*)pCtrl)->SetOutlineLevel(nLevel);
 
@@ -2965,7 +2965,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(pCtrl, "no active control?")
+        DBG_ASSERT(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         {
            ((SwTOXButton*)pCtrl)->SetEntryNumberFormat(nPos);//i89791
@@ -2983,7 +2983,7 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
     Control* pCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
-                "no active style::TabStop control?")
+                "no active style::TabStop control?");
     if( pCtrl && WINDOW_EDIT != pCtrl->GetType() )
     {
         ((SwTOXButton*)pCtrl)->SetTabPosition( static_cast< SwTwips >(
@@ -3000,7 +3000,7 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
     Control* pCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
-                "no active style::TabStop control?")
+                "no active style::TabStop control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
     {
         sal_Unicode cSet;
@@ -3023,7 +3023,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
     Control* pCurCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(WINDOW_EDIT != pCurCtrl->GetType() &&
             ((SwTOXButton*)pCurCtrl)->GetFormToken().eTokenType == TOKEN_TAB_STOP,
-            "no style::TabStop selected!")
+            "no style::TabStop selected!");
 
     const SwFormToken& rToken = ((SwTOXButton*)pCurCtrl)->GetFormToken();
     sal_Bool bChecked = pBox->IsChecked();
@@ -3167,7 +3167,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
             if(TOKEN_TEXT == aToken.eTokenType)
             {
-                DBG_ASSERT(!bLastWasText, "text following text is invalid")
+                DBG_ASSERT(!bLastWasText, "text following text is invalid");
                 Control* pCtrl = InsertItem(aToken.sText, aToken);
                 bLastWasText = sal_True;
                 if(!GetActiveControl())
@@ -3304,7 +3304,7 @@ void    SwTokenWindow::InsertAtSelection(
             const String& rText,
             const SwFormToken& rToken)
 {
-    DBG_ASSERT(pActiveCtrl, "no active control!")
+    DBG_ASSERT(pActiveCtrl, "no active control!");
     if(!pActiveCtrl)
         return;
     SwFormToken aToInsertToken(rToken);
@@ -3391,7 +3391,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPostLinkStartFound)
         {
-            DBG_ASSERT(pExchange, "no control to exchange?")
+            DBG_ASSERT(pExchange, "no control to exchange?");
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkEnd();
@@ -3401,7 +3401,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPreEndLinkFound)
         {
-            DBG_ASSERT(pExchange, "no control to exchange?")
+            DBG_ASSERT(pExchange, "no control to exchange?");
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkStart();

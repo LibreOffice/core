@@ -969,7 +969,7 @@ void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
     }
     if( aMemberIter == aControls.end() )
     {
-        DBG_ERROR( "Window not found?" )
+        DBG_ERROR( "Window not found?" );
         return;
     }
 

@@ -636,7 +636,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
                 {
                     SvLBoxEntry* pChild = DoesBlockExist(aTitle, aShortName);
-                    DBG_ASSERT(pChild, "Eintrag nicht gefunden!")
+                    DBG_ASSERT(pChild, "Eintrag nicht gefunden!");
                     SvLBoxEntry* pParent = aCategoryBox.GetParent(pChild);
                     aCategoryBox.Select(pParent);
 

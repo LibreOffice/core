@@ -110,7 +110,7 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
     aSearchItem.SetBackward(m_aBackwardsCB.IsChecked());
 
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists")
+    DBG_ASSERT(pTargetView, "no target view exists");
     if(pTargetView)
     {
         pTargetView->GetViewFrame()->GetDispatcher()->Execute(

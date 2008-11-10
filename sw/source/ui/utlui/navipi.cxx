@@ -1277,7 +1277,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
         {
             aContentTree.Clear();
             pContentView = PTR_CAST(SwView, pFrame->GetViewShell());
-            DBG_ASSERT(pContentView, "keine SwView")
+            DBG_ASSERT(pContentView, "keine SwView");
             if(pContentView)
                 pContentWrtShell = pContentView->GetWrtShellPtr();
             else

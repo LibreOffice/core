@@ -238,7 +238,7 @@ static sal_uInt16 nBCTitleNo = 0;
         }
 
         const SfxItemSet *pArgs = rReq.GetArgs();
-        DBG_ASSERT( pArgs, "no arguments in SfxRequest")
+        DBG_ASSERT( pArgs, "no arguments in SfxRequest");
         const SfxPoolItem* pFrameItem = 0;
         if(pArgs)
             pArgs->GetItemState(SID_DOCFRAME, FALSE, &pFrameItem);

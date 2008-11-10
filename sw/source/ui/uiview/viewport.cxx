@@ -143,7 +143,7 @@ void SwView::InvalidateRulerPos()
 
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?")
+    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?");
     pHRuler->ForceUpdate();
     pVRuler->ForceUpdate();
 }
@@ -870,7 +870,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
             rToFill.Left() = nWidth;
     }
 
-    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?")
+    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?");
     if ( pHRuler->IsVisible() )
         rToFill.Top() = pHRuler->GetSizePixel().Height();
 

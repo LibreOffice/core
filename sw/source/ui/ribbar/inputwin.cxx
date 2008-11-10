@@ -193,7 +193,7 @@ void SwInputWindow::ShowWin()
         pView->GetHLineal().SetActive( FALSE );
         pView->GetVLineal().SetActive( FALSE );
 
-        DBG_ASSERT(pWrtShell, "Keine WrtShell!")
+        DBG_ASSERT(pWrtShell, "Keine WrtShell!");
         // Cursor in Tabelle
         bIsTable = pWrtShell->IsCrsrInTbl() ? TRUE : FALSE;
 

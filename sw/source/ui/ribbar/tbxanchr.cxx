@@ -144,7 +144,7 @@ void  SwTbxAnchor::Click()
     }
     if(!pActiveView)
     {
-        DBG_ERROR("No active view could be found")
+        DBG_ERROR("No active view could be found");
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();

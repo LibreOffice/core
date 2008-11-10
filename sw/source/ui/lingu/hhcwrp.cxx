@@ -327,7 +327,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
 
                     // set selection to sub string to be replaced in original text
                     xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
-                    DBG_ASSERT( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" )
+                    DBG_ASSERT( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
                     rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
                     rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
 #ifdef DEBUG

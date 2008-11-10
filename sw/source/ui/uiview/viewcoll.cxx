@@ -58,7 +58,7 @@ void SwView::ExecColl(SfxRequest &rReq)
     {
         case FN_SET_PAGE:
         {
-            DBG_ASSERT(!this, "Not implemented")
+            DBG_ASSERT(!this, "Not implemented");
         }
         break;
         case FN_SET_PAGE_STYLE:

@@ -293,7 +293,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     sal_Bool bNoConfigValues = sal_True;
     if(aValues.getLength() == aNames.getLength())
     {

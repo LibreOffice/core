@@ -131,7 +131,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 
     DBG_ASSERT(nEnd == -1 || (nStart <= nEnd &&
         nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len()),
-            "start or end value invalid!")
+            "start or end value invalid!");
     //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // AM ZEICHEN gebunden sind
     ::CollectFrameAtNode( *this, pUnoCrsr->GetPoint()->nNode,
@@ -607,7 +607,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
         if(aBkmArr.size() && (*aBkmArr.begin())->getIndex() < nMovePos)
         {
             DBG_ASSERT((*aBkmArr.begin())->getIndex() > nCurrentIndex,
-                "forgotten bookmark(s)")
+                "forgotten bookmark(s)");
             nMovePos = (sal_uInt16)(*aBkmArr.begin())->getIndex();
         }
         // break up portions for redlines
@@ -836,7 +836,7 @@ void SwXTextPortionEnumeration::CreatePortions()
             pUnoCrsr->DeleteMark();
         DBG_ASSERT(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
             nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len(),
-                "Incorrect start position"  )
+                "Incorrect start position"  );
         pUnoCrsr->Right((xub_StrLen)nStartPos,CRSR_SKIP_CHARS,FALSE,FALSE);
     }
     if(pUnoCrsr /*&& !bAtEnd*/)
@@ -990,7 +990,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                             else
                             {
                                 DBG_ASSERT(nNextIndex > nCurrentIndex || nNextIndex == nEndPos,
-                                    "wrong move index")
+                                    "wrong move index");
                                 pUnoCrsr->Right((sal_uInt16)(nNextIndex - nCurrentIndex),CRSR_SKIP_CHARS,FALSE,FALSE);
                             }
                         }
@@ -1075,7 +1075,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                 }
                 else
                 {
-                    DBG_ERROR("kein TextNode - was nun?")
+                    DBG_ERROR("kein TextNode - was nun?");
                 }
             }
             if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())

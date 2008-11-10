@@ -234,7 +234,7 @@ public:
 
     // wenn ein SwXText attached wird, wird das Doc gesetzt
     void                    SetDoc(SwDoc* pDc)
-                                {DBG_ASSERT(!pDoc || !pDc, "Doc schon gesetzt?")
+                                {DBG_ASSERT(!pDoc || !pDc, "Doc schon gesetzt?");
                                     pDoc = pDc;
                                     bObjectValid = 0 != pDc;
                                 }

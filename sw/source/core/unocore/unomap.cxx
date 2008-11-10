@@ -597,7 +597,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
 
 const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
 {
-    DBG_ASSERT(nPropertyId < PROPERTY_MAP_END, "Id ?" )
+    DBG_ASSERT(nPropertyId < PROPERTY_MAP_END, "Id ?" );
     if( !aMapArr[ nPropertyId ] )
     {
         switch(nPropertyId)

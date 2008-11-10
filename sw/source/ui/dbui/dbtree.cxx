@@ -196,7 +196,7 @@ BOOL SwDBTreeList_Impl::HasContext()
             if(xContainer.is())
                 xContainer->addContainerListener( this );
         }
-        DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
+        DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
     }
     return xDBContext.is();
 }
@@ -371,7 +371,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        DBG_ASSERT(xTbls->hasByName(sTableName), "table not available anymore?")
+                        DBG_ASSERT(xTbls->hasByName(sTableName), "table not available anymore?");
                         try
                         {
                             Any aTable = xTbls->getByName(sTableName);
@@ -389,7 +389,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                        DBG_ASSERT(xQueries->hasByName(sTableName), "table not available anymore?")
+                        DBG_ASSERT(xQueries->hasByName(sTableName), "table not available anymore?");
                         try
                         {
                             Any aQuery = xQueries->getByName(sTableName);

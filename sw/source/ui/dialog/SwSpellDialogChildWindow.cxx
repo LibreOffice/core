@@ -383,7 +383,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
         {
             DBG_ASSERT(m_pSpellState->m_bDrawingsSpelled &&
                         m_pSpellState->m_bOtherSpelled && m_pSpellState->m_bBodySpelled,
-                        "not all parts of the document are already spelled")
+                        "not all parts of the document are already spelled");
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
@@ -434,7 +434,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
 void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rChanged)
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
-    DBG_ASSERT(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume")
+    DBG_ASSERT(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume");
     if(pWrtShell && !m_pSpellState->m_bInitialCall)
     {
         ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
@@ -571,7 +571,7 @@ void SwSpellDialogChildWindow::GetFocus()
                     else
                     {
                         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-                        DBG_ASSERT(pOLV, "no OutlinerView in SwSpellDialogChildWindow::GetFocus()")
+                        DBG_ASSERT(pOLV, "no OutlinerView in SwSpellDialogChildWindow::GetFocus()");
                         if(!pOLV || !m_pSpellState->m_aESelection.IsEqual(pOLV->GetSelection()))
                             bInvalidate = true;
                     }
@@ -627,7 +627,7 @@ void SwSpellDialogChildWindow::LoseFocus()
                 SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
                 m_pSpellState->m_pOutliner = pOutliner;
                 OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-                DBG_ASSERT(pOutliner && pOLV, "no Outliner/OutlinerView in SwSpellDialogChildWindow::LoseFocus()")
+                DBG_ASSERT(pOutliner && pOLV, "no Outliner/OutlinerView in SwSpellDialogChildWindow::LoseFocus()");
                 if(pOLV)
                 {
                     m_pSpellState->m_aESelection = pOLV->GetSelection();
@@ -687,7 +687,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
         case SHELL_MODE_TABLE_TEXT:
         case SHELL_MODE_TABLE_LIST_TEXT:
         case SHELL_MODE_DRAWTEXT:
-            DBG_ERROR("text already active in SwSpellDialogChildWindow::MakeTextSelection_Impl()")
+            DBG_ERROR("text already active in SwSpellDialogChildWindow::MakeTextSelection_Impl()");
         break;
 
         case SHELL_MODE_FRAME:
@@ -873,7 +873,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellP
     bool bRet = false;
     SdrView*     pSdrView = rSh.GetDrawView();
     SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : 0;
-    DBG_ASSERT(pOutliner, "No Outliner in SwSpellDialogChildWindow::SpellDrawText_Impl")
+    DBG_ASSERT(pOutliner, "No Outliner in SwSpellDialogChildWindow::SpellDrawText_Impl");
     if(pOutliner)
     {
         bRet = pOutliner->SpellSentence(pSdrView->GetTextEditOutlinerView()->GetEditView(), rPortions, m_bIsGrammarCheckingOn);
@@ -899,7 +899,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellP
   -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::LockFocusNotification(bool bLock)
 {
-    DBG_ASSERT(m_pSpellState->m_bLockFocus != bLock, "invalid locking - no change of state")
+    DBG_ASSERT(m_pSpellState->m_bLockFocus != bLock, "invalid locking - no change of state");
     m_pSpellState->m_bLockFocus = bLock;
 }
 

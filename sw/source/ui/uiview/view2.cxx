@@ -387,7 +387,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
     catch(Exception& )
     {
-        DBG_ERROR("control acces failed")
+        DBG_ERROR("control acces failed");
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
@@ -418,7 +418,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 try
                 {
                     Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+                    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                     bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
                     Any aTemplateValue = xCtrlAcc->getValue(
                         ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
@@ -429,7 +429,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 }
                 catch(Exception& )
                 {
-                    DBG_ERROR("control acces failed")
+                    DBG_ERROR("control acces failed");
                 }
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -453,7 +453,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             else
             {
                 Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+                DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                 bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
                 Any aTemplateValue = xCtrlAcc->getValue(
                     ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,

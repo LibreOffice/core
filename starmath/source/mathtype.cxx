@@ -744,7 +744,7 @@ int MathType::Parse(SotStorage *pStor)
     //the end of the formula with ENDs (0)'s
     ULONG nEnd = pS->Tell();
     DBG_ASSERT(nEnd == pS->Seek(STREAM_SEEK_TO_END),
-        "Possibly unfully parsed formula")
+        "Possibly unfully parsed formula");
 #   endif
 #endif
     return nRet;
@@ -1877,7 +1877,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                     *pS >> nTabType;
                     *pS >> nTabOffset;
                 }
-                DBG_ASSERT(FALSE,"Not seen in the wild Equation Ruler Field")
+                DBG_ASSERT(FALSE,"Not seen in the wild Equation Ruler Field");
                 break;
             case FONT:
                 {
@@ -2878,7 +2878,7 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     *pS >> rSelector;
     *pS >> rVariation;
     *pS >> nOption;
-    DBG_ASSERT(rSelector < 48,"Selector out of range")
+    DBG_ASSERT(rSelector < 48,"Selector out of range");
     if ((rSelector >= 21) && (rSelector <=26))
     {
         DBG_ASSERT(nOption < 2,"Option out of range");
@@ -2993,7 +2993,7 @@ void MathType::HandleEmblishments()
             APPEND(rRet," breve ");
             break;
         default:
-            DBG_ASSERT(nEmbel < 21,"Embel out of range")
+            DBG_ASSERT(nEmbel < 21,"Embel out of range");
             break;
         }
         if (nVersion < 3)

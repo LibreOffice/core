@@ -257,7 +257,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
 
 void SwIndexMarkDlg::InitControls()
 {
-    DBG_ASSERT(pSh && pTOXMgr, "Shell nicht da?")
+    DBG_ASSERT(pSh && pTOXMgr, "Shell nicht da?");
     // Inhalts-Verzeichnis
     const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT, 0);
     ASSERT(pType, "Kein Verzeichnistyp !!");
@@ -904,7 +904,7 @@ IMPL_LINK( SwIndexMarkDlg, DelHdl, Button *, EMPTYARG )
 
 void SwIndexMarkDlg::UpdateDialog()
 {
-    DBG_ASSERT(pSh && pTOXMgr, "Shell nicht da?")
+    DBG_ASSERT(pSh && pTOXMgr, "Shell nicht da?");
     SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
     ASSERT(pMark, "Keine aktuelle Markierung");
     if(!pMark)
@@ -1125,7 +1125,7 @@ SfxModelessDialog(_pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled(
 {
     FreeResource();
       SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-      DBG_ASSERT(pWrtShell, "No shell?")
+      DBG_ASSERT(pWrtShell, "No shell?");
       aDlg.ReInitDlg(*pWrtShell);
     Initialize(pInfo);
 }
@@ -1422,8 +1422,8 @@ IMPL_LINK( SwAuthMarkDlg, InsertHdl, PushButton *, EMPTYARG )
     if(pSh)
     {
         sal_Bool bDifferent = sal_False;
-        DBG_ASSERT(m_sFields[AUTH_FIELD_IDENTIFIER].Len() , "No Id is set!")
-        DBG_ASSERT(m_sFields[AUTH_FIELD_AUTHORITY_TYPE].Len() , "No authority type is set!")
+        DBG_ASSERT(m_sFields[AUTH_FIELD_IDENTIFIER].Len() , "No Id is set!");
+        DBG_ASSERT(m_sFields[AUTH_FIELD_AUTHORITY_TYPE].Len() , "No authority type is set!");
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
@@ -1506,7 +1506,7 @@ IMPL_LINK(SwAuthMarkDlg, CreateEntryHdl, PushButton*, pButton)
         {
             DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND ==
                         aEntryLB.GetEntryPos(m_sFields[AUTH_FIELD_IDENTIFIER]),
-                        "entry exists!")
+                        "entry exists!");
             aEntryLB.InsertEntry(m_sFields[AUTH_FIELD_IDENTIFIER]);
             aEntryLB.SelectEntry(m_sFields[AUTH_FIELD_IDENTIFIER]);
         }
@@ -1628,7 +1628,7 @@ IMPL_LINK(SwAuthMarkDlg, IsEntryAllowedHdl, Edit*, pEdit)
  --------------------------------------------------*/
 void SwAuthMarkDlg::InitControls()
 {
-    DBG_ASSERT(pSh, "Shell nicht da?")
+    DBG_ASSERT(pSh, "Shell nicht da?");
     SwField* pField = pSh->GetCurFld();
     ASSERT(bNewEntry || pField, "Keine aktuelle Markierung");
     if(bNewEntry)
@@ -1645,7 +1645,7 @@ void SwAuthMarkDlg::InitControls()
     const SwAuthEntry* pEntry = ((SwAuthorityFieldType*)pField->GetTyp())->
             GetEntryByHandle(((SwAuthorityField*)pField)->GetHandle());
 
-    DBG_ASSERT(pEntry, "No authority entry found")
+    DBG_ASSERT(pEntry, "No authority entry found");
     if(!pEntry)
         return;
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
@@ -1838,12 +1838,12 @@ String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
     String sRet;
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
-        DBG_ASSERT(pTypeListBox, "No ListBox")
+        DBG_ASSERT(pTypeListBox, "No ListBox");
         sRet = String::CreateFromInt32(pTypeListBox->GetSelectEntryPos());
     }
     else if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
     {
-        DBG_ASSERT(pIdentifierBox, "No ComboBox")
+        DBG_ASSERT(pIdentifierBox, "No ComboBox");
         sRet = pIdentifierBox->GetText();
     }
     else
@@ -1924,7 +1924,7 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
     FreeResource();
     Initialize(pInfo);
     SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-    DBG_ASSERT(pWrtShell, "No shell?")
+    DBG_ASSERT(pWrtShell, "No shell?");
     aDlg.ReInitDlg(*pWrtShell);
 }
 /* -----------------06.10.99 10:27-------------------

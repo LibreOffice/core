@@ -172,7 +172,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
  ---------------------------------------------------------------------------*/
 void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException)
 {
-    DBG_ERROR("disposing")
+    DBG_ERROR("disposing");
 }
 /*------------------------------------------------------------------------
  Beschreibung:

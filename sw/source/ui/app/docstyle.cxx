@@ -1863,7 +1863,7 @@ const SwNumRule * SwDocStyleSheet::GetNumRule()
 
 void SwDocStyleSheet::SetNumRule(const SwNumRule& rRule)
 {
-    DBG_ASSERT(pNumRule, "Wo ist die NumRule")
+    DBG_ASSERT(pNumRule, "Wo ist die NumRule");
     rDoc.ChgNumRuleFmts( rRule );
 }
 

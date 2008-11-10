@@ -274,7 +274,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
         sOldFileURL += SwGlossaries::GetExtension();
         BOOL bExist = FStatHelper::IsDocument( sOldFileURL );
-        DBG_ASSERT(bExist, "Gruppe existiert nicht!")
+        DBG_ASSERT(bExist, "Gruppe existiert nicht!");
         if(bExist)
         {
             sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
@@ -290,7 +290,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 sTempNewFilePath += INET_PATH_TOKEN;
                 sTempNewFilePath += sNewFileName ;
                 bExist = FStatHelper::IsDocument( sTempNewFilePath );
-                DBG_ASSERT(!bExist, "Gruppe existiert bereits!")
+                DBG_ASSERT(!bExist, "Gruppe existiert bereits!");
                 if(!bExist)
                 {
                     BOOL bCopyCompleted = SWUnoHelper::UCB_CopyFile(

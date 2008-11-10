@@ -133,7 +133,7 @@ SwStdFontConfig::SwStdFontConfig() :
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -321,7 +321,7 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eL
   -----------------------------------------------------------------------*/
 void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
 {
-    DBG_ASSERT( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()")
+    DBG_ASSERT( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()");
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)
     {
         SvtLinguOptions aLinguOpt;
@@ -350,7 +350,7 @@ void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
   -----------------------------------------------------------------------*/
 sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang )
 {
-    DBG_ASSERT(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()")
+    DBG_ASSERT(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()");
     sal_Int32 nRet = nDefaultFontHeight[nFont + FONT_PER_GROUP * nScriptType];
     if(nRet <= 0)
         return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);

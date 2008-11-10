@@ -610,7 +610,7 @@ uno::Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Ru
         pParentText = reinterpret_cast< SwXText *>(
                 sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXText::getUnoTunnelId()) ));
     }
-    DBG_ASSERT(pParentText, "parent is not a SwXText")
+    DBG_ASSERT(pParentText, "parent is not a SwXText");
 
     SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pUnoCrsr->GetPoint());
     if(pUnoCrsr->HasMark())
@@ -1378,7 +1378,7 @@ uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeExceptio
         {
             // jetzt noch alle Faelle finden, die nicht abgedeckt sind
             // (Body, Kopf-/Fusszeilen, Fussnotentext )
-            DBG_WARNING("not implemented")
+            DBG_WARNING("not implemented");
         }
     }
     return xParentText;
@@ -1582,7 +1582,7 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
         }
         if(pUnoCrsr && pDoc == rToFill.GetDoc())
             {
-                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" )
+                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" );
                 bRet = sal_True;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
                 if(pPara)
@@ -1790,7 +1790,7 @@ uno::Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( Run
         pParentText = reinterpret_cast< SwXText * >(
                 sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXText::getUnoTunnelId()) ));
     }
-    DBG_ASSERT(pParentText, "parent is not a SwXText")
+    DBG_ASSERT(pParentText, "parent is not a SwXText");
     CursorType eSetType = RANGE_IN_CELL == eRangePosition ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
     uno::Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
     return xRet;
@@ -1864,7 +1864,7 @@ void SAL_CALL SwXTextRange::addPropertyChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 03.05.00 12:41:48---------------------------------------------------
 
@@ -1873,7 +1873,7 @@ void SAL_CALL SwXTextRange::removePropertyChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 03.05.00 12:41:48---------------------------------------------------
 
@@ -1882,7 +1882,7 @@ void SAL_CALL SwXTextRange::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 03.05.00 12:41:48---------------------------------------------------
 
@@ -1891,7 +1891,7 @@ void SAL_CALL SwXTextRange::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 03.05.00 12:41:48---------------------------------------------------
 
@@ -2168,7 +2168,7 @@ void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
     {
         if( !SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, rCrsr, aText ) )
         {
-            DBG_ASSERT( sal_False, "DocInsertStringSplitCR" )
+            DBG_ASSERT( sal_False, "DocInsertStringSplitCR" );
         }
         SwXTextCursor::SelectPam(rCrsr, sal_True);
         rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS, FALSE, FALSE);

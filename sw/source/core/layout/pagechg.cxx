@@ -1938,7 +1938,7 @@ void SwRootFrm::UnoRemoveAllActions()
             // Recursives calls to <::EndAction()> are not allowed.
             if ( !pSh->IsInEndAction() )
             {
-                DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!")
+                DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!");
                 BOOL bCrsr = pSh->ISA( SwCrsrShell );
                 BOOL bFE = pSh->ISA( SwFEShell );
                 USHORT nRestore = 0;

@@ -137,7 +137,7 @@ BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE ) const
 }
 BOOL SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
 {
-    DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!")
+    DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
     return FALSE;
 }
 
@@ -184,7 +184,7 @@ BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE ) const
 
 BOOL SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
 {
-    DBG_ERROR("ToDo!")
+    DBG_ERROR("ToDo!");
     return FALSE;
 }
 

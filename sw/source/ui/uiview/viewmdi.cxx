@@ -725,7 +725,7 @@ void SwView::SetImageButtonColor(Color& rColor)
  ---------------------------------------------------------------------------*/
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
     pHScrollbar->ExtendedShow(bShow);
 }
 /* -----------------------------2002/06/26 13:57------------------------------
@@ -733,7 +733,7 @@ void SwView::ShowHScrollbar(sal_Bool bShow)
  ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsHScrollbarVisible()const
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
     return pHScrollbar->IsVisible( FALSE ) || pHScrollbar->IsAuto();
 }
 /* -----------------------------2002/06/26 13:57------------------------------
@@ -741,7 +741,7 @@ sal_Bool SwView::IsHScrollbarVisible()const
  ---------------------------------------------------------------------------*/
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
     pVScrollbar->ExtendedShow(bShow);
     pPageUpBtn->Show(bShow);
     pPageDownBtn->Show(bShow);
@@ -752,7 +752,7 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
  ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsVScrollbarVisible()const
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
     return pVScrollbar->IsVisible( FALSE );
 }
 

@@ -192,12 +192,12 @@ public:
 // --- inlines -----------------------------------------------------------
 inline const String&    SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
 {
-    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index")
+    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");
     return aAuthFields[ePos];
 }
 inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const String& rField)
 {
-    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index")
+    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");
     if(AUTH_FIELD_END > ePos)
         aAuthFields[ePos] = rField;
 }

@@ -292,7 +292,7 @@ BOOL SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSource
 
     //Der Index muss hier ermittelt werden, weil rSourceShortName in CopyBlock evtl veraendert wird
     USHORT nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
-    DBG_ASSERT(USHRT_MAX != nDeleteIdx, "Eintrag nicht gefunden")
+    DBG_ASSERT(USHRT_MAX != nDeleteIdx, "Eintrag nicht gefunden");
     ULONG nRet = pSourceGroup->CopyBlock( *pDestGroup, rSourceShortName, rLongName );
     if(!nRet && bMove)
     {

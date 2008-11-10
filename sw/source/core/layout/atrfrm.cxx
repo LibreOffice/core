@@ -1021,7 +1021,7 @@ BOOL SwFmtCol::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        DBG_ERROR("not implemented")
+        DBG_ERROR("not implemented");
     }
     else
     {
@@ -1038,7 +1038,7 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
     sal_Bool bRet = sal_False;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        DBG_ERROR("not implemented")
+        DBG_ERROR("not implemented");
     }
     else
     {

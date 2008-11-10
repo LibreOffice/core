@@ -468,7 +468,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sPrevName);
-                                DBG_ASSERT(pPrevFmt, "No frame found!")
+                                DBG_ASSERT(pPrevFmt, "No frame found!");
                                 if(pPrevFmt)
                                 {
                                     rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
@@ -502,7 +502,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sNextName);
-                                DBG_ASSERT(pNextFmt, "No frame found!")
+                                DBG_ASSERT(pNextFmt, "No frame found!");
                                 if(pNextFmt)
                                 {
                                     rSh.Chain(*(SwFrmFmt*)

@@ -109,7 +109,7 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     }
     catch(uno::RuntimeException&)
     {
-        DBG_ERROR("Name wurde nicht geaendert")
+        DBG_ERROR("Name wurde nicht geaendert");
     }
     EndDialog(RET_OK);
     return 0;

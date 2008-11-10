@@ -370,7 +370,7 @@ USHORT  SwTableFUNC::GetColCount() const
 
 int SwTableFUNC::GetRightSeparator(int nNum) const
 {
-    DBG_ASSERT( nNum < (int)GetColCount() ,"Index out of range")
+    DBG_ASSERT( nNum < (int)GetColCount() ,"Index out of range");
     int i = 0;
     while( nNum >= 0 )
     {

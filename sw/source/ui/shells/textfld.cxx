@@ -262,7 +262,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, FALSE, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
-                    DBG_WARNING("Command is not yet used")
+                    DBG_WARNING("Command is not yet used");
                     sal_Unicode cSeparator = ' ';
                     SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                     bRes = aFldMgr.InsertFld(aData);

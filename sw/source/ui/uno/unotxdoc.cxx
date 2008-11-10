@@ -2282,7 +2282,7 @@ void SwXTextDocument::addPropertyChangeListener(const OUString& /*PropertyName*/
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 10.05.99 13:58:59---------------------------------------------------
 
@@ -2291,7 +2291,7 @@ void SwXTextDocument::removePropertyChangeListener(const OUString& /*PropertyNam
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 10.05.99 13:59:00---------------------------------------------------
 
@@ -2300,7 +2300,7 @@ void SwXTextDocument::addVetoableChangeListener(const OUString& /*PropertyName*/
     const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 10.05.99 13:59:00---------------------------------------------------
 
@@ -2309,7 +2309,7 @@ void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyNam
                         const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /* -----------------25.10.99 10:42-------------------
 
@@ -3414,7 +3414,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
     sal_Bool bRet = sal_False;
     if(pxDoc)
     {
-        DBG_ERROR("not implemented")
+        DBG_ERROR("not implemented");
     }
     else
     {
@@ -3730,7 +3730,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                 xRet = xDrawDefaults;
             break;
 #ifdef DBG_UTIL
-            default: DBG_ERROR("which table?")
+            default: DBG_ERROR("which table?");
 #endif
         }
     }

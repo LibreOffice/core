@@ -1532,7 +1532,7 @@ void SwInsertSectionTabDialog::SetSection(const SwSection& rSect)
 short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
-    DBG_ASSERT(pToInsertSection, "keiner Section?")
+    DBG_ASSERT(pToInsertSection, "keiner Section?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     rWrtSh.InsertSection(*pToInsertSection, pOutputItemSet);
     SfxViewFrame* pViewFrm = rWrtSh.GetView().GetViewFrame();

@@ -187,7 +187,7 @@ int SwBaseNumRules::Load(SvStream &rStream)
     // gleiche VERSION_40A wie das SP2 #55402#
     if(VERSION_40A == nVersion)
     {
-        DBG_ERROR("Version 364 ist nicht eindeutig #55402#")
+        DBG_ERROR("Version 364 ist nicht eindeutig #55402#");
     }
     else if( VERSION_30B == nVersion || VERSION_31B == nVersion ||
              ACT_NUM_VERSION >= nVersion )

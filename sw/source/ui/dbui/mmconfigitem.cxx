@@ -240,7 +240,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == rNames.getLength())
     {
         for(int nProp = 0; nProp < rNames.getLength(); nProp++)
@@ -466,7 +466,7 @@ void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
             }
             else
             {
-                DBG_ERROR("parse error in address block or greeting line")
+                DBG_ERROR("parse error in address block or greeting line");
             }
         }
         else
@@ -1009,7 +1009,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception caught in xResultSet->SetFilter()")
+                    DBG_ERROR("exception caught in xResultSet->SetFilter()");
                 }
                 xRowSet->execute();
                 m_pImpl->xResultSet = xRowSet.get();
@@ -1019,7 +1019,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         }
         catch(Exception& )
         {
-            DBG_ERROR("exception caught in: SwMailMergeConfigItem::GetResultSet() ")
+            DBG_ERROR("exception caught in: SwMailMergeConfigItem::GetResultSet() ");
         }
     }
     return m_pImpl->xResultSet;
@@ -1063,7 +1063,7 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
             }
             catch(Exception&)
             {
-                DBG_ERROR("exception caught in SwMailMergeConfigItem::SetFilter()")
+                DBG_ERROR("exception caught in SwMailMergeConfigItem::SetFilter()");
             }
         }
     }
@@ -1865,7 +1865,7 @@ void SwMailMergeConfigItem::AddMergedDocument(SwDocMergeInfo& rInfo)
   -----------------------------------------------------------------------*/
 SwDocMergeInfo& SwMailMergeConfigItem::GetDocumentMergeInfo(sal_uInt32 nDocument)
 {
-    DBG_ASSERT(m_pImpl->aMergeInfos.size() > nDocument,"invalid document index")
+    DBG_ASSERT(m_pImpl->aMergeInfos.size() > nDocument,"invalid document index");
     return m_pImpl->aMergeInfos[nDocument];
 }
 /*-- 14.06.2004 11:46:26---------------------------------------------------

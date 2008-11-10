@@ -588,7 +588,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
 //          Neutral: [database.sNameColumn]
             DBG_ASSERT(sGenderColumn.Len() && rFemaleGenderValue.getLength(),
-                    "gender settings not available - how to form the condition?")
+                    "gender settings not available - how to form the condition?");
             //column used as lastname
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
                 eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
@@ -698,7 +698,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     //put the cursor to the start of the paragraph
     rShell.SttPara();
 
-    DBG_ASSERT(0 == rShell.GetTableFmt(), "What to do with a table here?")
+    DBG_ASSERT(0 == rShell.GetTableFmt(), "What to do with a table here?");
 }
 /*-- 10.05.2004 09:34:25---------------------------------------------------
 

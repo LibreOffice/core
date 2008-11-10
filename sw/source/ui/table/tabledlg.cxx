@@ -226,7 +226,7 @@ void  SwFormatTablePage::Init()
 
 IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 {
-    DBG_ASSERT(pTblData, "Tabellendaten nicht da?")
+    DBG_ASSERT(pTblData, "Tabellendaten nicht da?");
     BOOL bIsChecked = pBtn->IsChecked();
     sal_Int64 nLeft  = aLeftMF.DenormalizePercent(aLeftMF.GetValue(FUNIT_TWIP ));
     sal_Int64 nRight = aRightMF.DenormalizePercent(aRightMF.GetValue(FUNIT_TWIP ));
@@ -672,7 +672,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 ------------------------------------------------------------------------*/
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
-    DBG_ASSERT(pTblData, "Tabellendaten nicht da?")
+    DBG_ASSERT(pTblData, "Tabellendaten nicht da?");
     if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP ))
     {
         SwTwips nCurWidth = text::HoriOrientation::FULL != pTblData->GetAlign() ?
@@ -1129,7 +1129,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
                     nDiff = 0;
                     SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
                 }
-                DBG_ASSERT(nDiff >= 0, "nDiff < 0 kann hier nicht sein!")
+                DBG_ASSERT(nDiff >= 0, "nDiff < 0 kann hier nicht sein!");
             }
         }
     }
@@ -1137,7 +1137,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
     {
 //      Differenz wird ueber die Tabellenbreite ausgeglichen,
 //      andere Spalten bleiben unveraendert
-        DBG_ASSERT(nDiff <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" )
+        DBG_ASSERT(nDiff <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" );
         SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
         {
@@ -1153,7 +1153,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
     {
 //      Alle Spalten werden proportional mitveraendert, die Tabellenbreite wird
 //      entsprechend angepasst
-        DBG_ASSERT(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" )
+        DBG_ASSERT(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" );
         long nAdd = nDiff;
         if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
         {
@@ -1350,7 +1350,7 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
         i++;
     }
     SwTwips nReturn = pTblData->GetColumns()[i].nWidth;
-    DBG_ASSERT(i < nNoOfCols, "Array index out of range")
+    DBG_ASSERT(i < nNoOfCols, "Array index out of range");
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         nReturn += pTblData->GetColumns()[++i].nWidth;
 
@@ -1369,7 +1369,7 @@ void SwTableColumnPage::SetVisibleWidth(USHORT nPos, SwTwips nNewWidth)
             nPos--;
         i++;
     }
-    DBG_ASSERT(i < nNoOfCols, "Array index out of range")
+    DBG_ASSERT(i < nNoOfCols, "Array index out of range");
     pTblData->GetColumns()[i].nWidth = nNewWidth;
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         pTblData->GetColumns()[++i].nWidth = 0;

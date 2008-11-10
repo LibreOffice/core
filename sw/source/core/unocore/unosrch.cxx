@@ -606,28 +606,28 @@ SET_UINT16:
   -----------------------------------------------------------------------*/
 void SwXTextSearch::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextSearch::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextSearch::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 

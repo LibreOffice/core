@@ -761,7 +761,7 @@ void ViewShell::LayoutIdle()
         // #125243# there are lots of stacktraces indicating that Imp() returns NULL
         // this ViewShell seems to be invalid - but it's not clear why
         // this return is only a workaround!
-        DBG_ASSERT(Imp(), "ViewShell already deleted?")
+        DBG_ASSERT(Imp(), "ViewShell already deleted?");
         if(!Imp())
             return;
         SwLayIdle aIdle( GetLayout(), Imp() );
@@ -2446,7 +2446,7 @@ void ViewShell::UISizeNotify()
 
 void    ViewShell::SetRestoreActions(USHORT nSet)
 {
-    DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?")
+    DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
     Imp()->SetRestoreActions(nSet);
 }
 USHORT  ViewShell::GetRestoreActions() const

@@ -975,7 +975,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
     if(aAutoWidthBox.IsChecked())
     {
         USHORT nMaxGap = pColMgr->GetActualSize() - nCols * MINLAY;
-        DBG_ASSERT(nCols, "Abstand kann nicht ohne Spalten eingestellt werden")
+        DBG_ASSERT(nCols, "Abstand kann nicht ohne Spalten eingestellt werden");
         nMaxGap /= nCols - 1;
         if(nActValue > nMaxGap)
         {

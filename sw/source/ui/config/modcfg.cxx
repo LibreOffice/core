@@ -94,7 +94,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
 {
     if(bHTML)
     {
-        DBG_ERROR("no caption option in sw/web!")
+        DBG_ERROR("no caption option in sw/web!");
         return 0;
     }
     else
@@ -121,7 +121,7 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
 
     if(bHTML)
     {
-        DBG_ERROR("no caption option in sw/web!")
+        DBG_ERROR("no caption option in sw/web!");
     }
     else if (pOpt)
     {
@@ -394,7 +394,7 @@ void SwRevisionConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -941,7 +941,7 @@ void SwInsertConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         InsCaptionOpt* pWriterTableOpt = 0;
@@ -1238,7 +1238,7 @@ void SwTableConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -1356,7 +1356,7 @@ void SwMiscConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         OUString sTmp;

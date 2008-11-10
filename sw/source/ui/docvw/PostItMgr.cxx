@@ -726,13 +726,13 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 {
     if ( mPages[aPage-1]->mList->empty() )
     {
-        DBG_ERROR("Notes SidePane painted but no rects and page lists calculated!")
+        DBG_ERROR("Notes SidePane painted but no rects and page lists calculated!");
         return false;
     }
 
     SwPostItItem_iterator aItem = mPages[aPage-1]->mList->end();
     --aItem;
-    DBG_ASSERT ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen")
+    DBG_ASSERT ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
     if ((*aItem)->pPostIt)
     {
         const long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;

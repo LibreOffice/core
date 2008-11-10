@@ -717,7 +717,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
             }
             else
             {
-                DBG_ERROR("wo soll die Breite denn herkommen?")
+                DBG_ERROR("wo soll die Breite denn herkommen?");
             }
             const SvxLRSpaceItem& rLRSpace = pFmt->GetLRSpace();
             nWidth -= (rLRSpace.GetRight() + rLRSpace.GetLeft());

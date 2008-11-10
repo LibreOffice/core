@@ -159,7 +159,7 @@ SfxUndoManager* SwAnnotationShell::GetUndoManager()
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() )
     {
-        DBG_ASSERT(pPostItMgr,"PostItMgr::Layout(): We are looping forever")
+        DBG_ASSERT(pPostItMgr,"PostItMgr::Layout(): We are looping forever");
         return 0;
     }
     return &pPostItMgr->GetActivePostIt()->Engine()->GetUndoManager();

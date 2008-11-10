@@ -1011,7 +1011,7 @@ sal_Bool    SwXText::CheckForOwnMember(
     const OTextCursorHelper* pCursor)
         throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    DBG_ASSERT((!pRange || !pCursor) && (pRange || pCursor), "only one pointer will be checked" )
+    DBG_ASSERT((!pRange || !pCursor) && (pRange || pCursor), "only one pointer will be checked" );
     uno::Reference<text::XTextCursor> xOwnCursor = createCursor();
 
     uno::Reference<lang::XUnoTunnel> xTunnel( xOwnCursor, uno::UNO_QUERY);
@@ -1021,7 +1021,7 @@ sal_Bool    SwXText::CheckForOwnMember(
         pOwnCursor = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId()) ));
     }
-    DBG_ASSERT(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ")
+    DBG_ASSERT(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
     const SwStartNode* pOwnStartNode = pOwnCursor->GetPaM()->GetNode()->StartOfSectionNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch(eCrsrType)
@@ -1126,7 +1126,7 @@ sal_Int16 SwXText::ComparePositions(
                         nCompare = -1;
                     else
                     {
-                        DBG_ASSERT(*pStart1 == *pStart2, "SwPositions should be equal here")
+                        DBG_ASSERT(*pStart1 == *pStart2, "SwPositions should be equal here");
                         nCompare = 0;
                     }
                 }
@@ -2102,7 +2102,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                         else
                         {
                             //find the cell that
-                            DBG_ASSERT(aMergedCells.size(), "the first merged cell is missing")
+                            DBG_ASSERT(aMergedCells.size(), "the first merged cell is missing");
                             if( aMergedCells.size() )
                             {
                                 std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
@@ -2122,7 +2122,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                                     ++aMergedIter;
                                 }
 #if OSL_DEBUG_LEVEL > 1
-                                DBG_ASSERT( bDbgFound, "couldn't find first vertically merged cell" )
+                                DBG_ASSERT( bDbgFound, "couldn't find first vertically merged cell" );
 #endif
                             }
                         }

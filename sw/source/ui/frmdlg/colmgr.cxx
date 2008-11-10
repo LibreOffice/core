@@ -83,7 +83,7 @@ USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
         nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" )
+        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         const SwColumns& rCols = aFmtCol.GetColumns();
         nRet = rCols.GetObject(nPos)->GetRight() + rCols.GetObject(nPos + 1)->GetLeft();
     }
@@ -101,7 +101,7 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
         aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" )
+        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
         USHORT nGutterWidth2 = nGutterWidth / 2;
         rCols.GetObject(nPos)->SetRight(nGutterWidth2);

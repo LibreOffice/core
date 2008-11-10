@@ -241,7 +241,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     {
         if(!AddNode(OUString(), rManufacturer))
         {
-            DBG_ERROR("New configuration node could not be created")
+            DBG_ERROR("New configuration node could not be created");
             return ;
         }
         else

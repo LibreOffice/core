@@ -2323,7 +2323,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             }
 #ifdef DBG_UTIL
             else
-                DBG_ERROR("Bibliography entries cannot be found here")
+                DBG_ERROR("Bibliography entries cannot be found here");
 #endif
         }
         if(*pNew < *pOld)

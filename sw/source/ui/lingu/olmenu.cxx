@@ -712,7 +712,7 @@ void SwSpellPopup::Execute( USHORT nId )
                     }
                     break;
                     case MN_INSERT:
-                        DBG_ERROR("geht noch nicht!")
+                        DBG_ERROR("geht noch nicht!");
                     break;
                     case MN_LANGUAGE_WORD:
                     case MN_LANGUAGE_PARA:

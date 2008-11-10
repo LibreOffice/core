@@ -383,7 +383,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                             }
                             catch(const Exception& )
                             {
-                                DBG_ERROR("illegal number format key")
+                                DBG_ERROR("illegal number format key");
                             }
                         }
                     }
@@ -1235,7 +1235,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 #endif
                 )
                 {
-                    DBG_ERROR(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer())
+                    DBG_ERROR(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
                 }
             }
 

@@ -154,7 +154,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     //Sonderfall Align per Menue
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
-        DBG_ASSERT(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem erwartet")
+        DBG_ASSERT(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem erwartet");
         nSlotId = nSlotId + ((const SfxEnumItem*)pItem)->GetValue();
         nSlotId++;
     }
@@ -656,7 +656,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection")
+    DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const String sCurrentName = pObj->GetName();
     String sNewName;

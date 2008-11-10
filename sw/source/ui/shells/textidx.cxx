@@ -171,7 +171,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         {
             SwWrtShell& rSh = GetShell();
             const SwTOXBase* pBase = rSh.GetCurTOX();
-            DBG_ASSERT(pBase, "no TOXBase to remove")
+            DBG_ASSERT(pBase, "no TOXBase to remove");
             if( pBase )
                 rSh.DeleteTOX(*pBase, TRUE);
         }
