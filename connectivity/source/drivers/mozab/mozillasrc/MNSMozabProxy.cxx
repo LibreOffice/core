@@ -267,7 +267,7 @@ void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
 
 NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit(nsILDAPConnection* /*aConn*/, nsresult aStatus )
 {
-    setConnectionStatus( NS_SUCCEEDED( aStatus ) );
+    setConnectionStatus( NS_SUCCEEDED( aStatus ) ? sal_True : sal_False );
     return aStatus;
 }
 

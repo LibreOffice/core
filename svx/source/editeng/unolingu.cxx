@@ -249,7 +249,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         DBG_ASSERT( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
 
         uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        DBG_ASSERT( xLngSvcMgr.is(), "service manager missing")
+        DBG_ASSERT( xLngSvcMgr.is(), "service manager missing");
         if (!xLngSvcMgr.is())
             return;
 

@@ -2242,7 +2242,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
 EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, BYTE nMode, BYTE nDelMode )
 {
-    DBG_ASSERT( !EditSelection( rSel ).DbgIsBuggy( aEditDoc ), "Index im Wald in DeleteLeftOrRight" )
+    DBG_ASSERT( !EditSelection( rSel ).DbgIsBuggy( aEditDoc ), "Index im Wald in DeleteLeftOrRight" );
 
     if ( rSel.HasRange() )  // dann nur Sel. loeschen
         return ImpDeleteSelection( rSel );
@@ -2337,8 +2337,8 @@ EditPaM ImpEditEngine::ImpDeleteSelection( EditSelection aSel )
     CursorMoved( aStartPaM.GetNode() ); // nur damit neu eingestellte Attribute verschwinden...
     CursorMoved( aEndPaM.GetNode() );   // nur damit neu eingestellte Attribute verschwinden...
 
-    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" )
-    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" )
+    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" );
+    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" );
 
     USHORT nStartNode = aEditDoc.GetPos( aStartPaM.GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aEndPaM.GetNode() );

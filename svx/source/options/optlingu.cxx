@@ -297,7 +297,7 @@ void lcl_SetCheckButton( SvLBoxEntry* pEntry, BOOL bCheck )
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
 
-    DBG_ASSERT(pItem,"SetCheckButton:Item not found")
+    DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
         if (bCheck)
@@ -732,7 +732,7 @@ void lcl_MergeDisplayArray(
             {
                 DBG_ASSERT( !pEntry->xSpell.is() &&
                             pEntry->sSpellImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sSpellImplName = rToAdd.sSpellImplName;
                 pEntry->xSpell = rToAdd.xSpell;
             }
@@ -740,7 +740,7 @@ void lcl_MergeDisplayArray(
             {
                 DBG_ASSERT( !pEntry->xHyph.is() &&
                             pEntry->sHyphImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sHyphImplName = rToAdd.sHyphImplName;
                 pEntry->xHyph = rToAdd.xHyph;
             }
@@ -748,7 +748,7 @@ void lcl_MergeDisplayArray(
             {
                 DBG_ASSERT( !pEntry->xThes.is() &&
                             pEntry->sThesImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sThesImplName = rToAdd.sThesImplName;
                 pEntry->xThes = rToAdd.xThes;
             }
@@ -769,7 +769,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     uno::Reference < XInterface > xI = xMSF->createInstance(
         C2U( "com.sun.star.linguistic2.LinguServiceManager" ) );
     xLinguSrvcMgr = uno::Reference<XLinguServiceManager>(xI, UNO_QUERY);
-    DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!")
+    DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!");
     if(xLinguSrvcMgr.is())
     {
         Locale aCurrentLocale;

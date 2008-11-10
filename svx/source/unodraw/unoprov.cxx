@@ -955,7 +955,7 @@ void SvxUnoPropertyMapProvider::Sort(USHORT nId)
 
 SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
 {
-    DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" )
+    DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" );
     if(!aMapArr[nPropertyId]) {
         switch(nPropertyId) {
             case SVXMAP_SHAPE: aMapArr[SVXMAP_SHAPE]=ImplGetSvxShapePropertyMap(); break;

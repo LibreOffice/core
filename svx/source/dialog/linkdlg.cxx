@@ -176,9 +176,9 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
             {
                 pEntry = i == 0 ? pSvTabListBox->FirstSelected() :
                                     pSvTabListBox->NextSelected(pEntry);
-                DBG_ASSERT(pEntry, "Wo ist der Entry?")
+                DBG_ASSERT(pEntry, "Wo ist der Entry?");
                 pLink = (SvBaseLink*)pEntry->GetUserData();
-                DBG_ASSERT(pLink, "Wo ist der Link?")
+                DBG_ASSERT(pLink, "Wo ist der Link?");
                 if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
                     pSvTabListBox->Select( pEntry, FALSE );
 
@@ -343,7 +343,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
 /*
 IMPL_LINK_INLINE_START( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
 {
-    DBG_ASSERT( !this, "Open noch nicht impl." )
+    DBG_ASSERT( !this, "Open noch nicht impl." );
     return 0;
 }
 IMPL_LINK_INLINE_END( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
@@ -379,9 +379,9 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                 pEntry = i==0 ?
                         Links().FirstSelected() :
                             Links().NextSelected( pEntry );
-                DBG_ASSERT(pEntry,"Wo ist der Entry")
+                DBG_ASSERT(pEntry,"Wo ist der Entry");
                 pLink = (SvBaseLink*)pEntry->GetUserData();
-                DBG_ASSERT(pLink,"Wo ist der Link")
+                DBG_ASSERT(pLink,"Wo ist der Link");
                 pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
                 INetURLObject aUrl_(sFile);
                 INetURLObject aUrl2(aPath, INET_PROT_FILE);

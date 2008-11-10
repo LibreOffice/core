@@ -74,8 +74,7 @@ class SalGtkPicker
         static rtl::OString unicodetouri(const rtl::OUString &rURL);
 };
 
-//Run the Gtk Dialog in the "Main Thread" for us to avoid threading conflict and
-//report back to this thread. Watch for any "new windows" created while we're
+//Run the Gtk Dialog. Watch for any "new windows" created while we're
 //executing and consider that a CANCEL event to avoid e.g. "file cannot be opened"
 //modal dialogs and this one getting locked if some other API call causes this
 //to happen while we're opened waiting for user input, e.g.
@@ -84,9 +83,7 @@ class RunDialog :
     public cppu::WeakComponentImplHelper1< ::com::sun::star::awt::XTopWindowListener >
 {
 private:
-    bool mbFinished;
     osl::Mutex maLock;
-    gint mnStatus;
     GtkWidget *mpDialog;
     GdkWindow *mpCreatedParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit>  mxToolkit;
@@ -112,8 +109,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException) {}
 public:
     RunDialog(GtkWidget *pDialog, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > &rToolkit);
-    gint runandwaitforresult();
-    void run();
+    gint run();
     void cancel();
     ~RunDialog();
 };

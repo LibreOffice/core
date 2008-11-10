@@ -166,7 +166,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     nsCOMPtr<nsIEventQueueService> eventQService(
                 do_GetService(NS_EVENTQUEUESERVICE_CONTRACTID, &rv));
     if (NS_FAILED(rv))
-      return NS_SUCCEEDED( rv );
+      return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
 
     eventQService->CreateThreadEventQueue();
 

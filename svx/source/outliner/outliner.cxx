@@ -147,7 +147,7 @@ Paragraph* Outliner::Insert(const XubString& rText, ULONG nAbsPos, sal_Int16 nDe
         pEditEngine->SetUpdateMode( bUpdate );
     }
     bFirstParaIsEmpty = FALSE;
-    DBG_ASSERT(pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(),"SetText failed")
+    DBG_ASSERT(pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(),"SetText failed");
     return pPara;
 }
 
@@ -393,7 +393,7 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
 void Outliner::SetText( const XubString& rText, Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    DBG_ASSERT(pPara,"SetText:No Para")
+    DBG_ASSERT(pPara,"SetText:No Para");
 
     BOOL bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( FALSE );
@@ -470,7 +470,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
         }
     }
 
-    DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!")
+    DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!");
     bFirstParaIsEmpty = FALSE;
     ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
@@ -597,8 +597,8 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
 
-    DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed")
-    DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed")
+    DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed");
+    DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed");
 }
 
 void Outliner::AddText( const OutlinerParaObject& rPObj )
@@ -629,7 +629,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
         pPara = new Paragraph( rPObj.pParagraphDataArr[ n ] );
         pParaList->Insert( pPara, LIST_APPEND );
         USHORT nP = sal::static_int_cast< USHORT >(nPara+n);
-        DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync")
+        DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");
         ImplInitDepth( nP, pPara->GetDepth(), FALSE );
     }
     DBG_ASSERT( pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(), "SetText: OutOfSync" );
@@ -1409,7 +1409,7 @@ void Outliner::DepthChangedHdl()
 ULONG Outliner::GetAbsPos( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    DBG_ASSERT(pPara,"GetAbsPos:No Para")
+    DBG_ASSERT(pPara,"GetAbsPos:No Para");
     return pParaList->GetAbsPos( pPara );
 }
 

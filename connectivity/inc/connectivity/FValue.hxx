@@ -255,8 +255,8 @@ namespace connectivity
         ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
 
         operator sal_Bool() const   {   return isNull() ? sal_False : getBool();    }
-        operator sal_Int8() const   {   return isNull() ? 0         : getInt8();    }
-        operator sal_Int16() const  {   return isNull() ? 0         : getInt16();   }
+        operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8(); }
+        operator sal_Int16() const  {   return isNull() ? static_cast<sal_Int16>(0) : getInt16();   }
         operator sal_Int32() const  {   return isNull() ? 0         : getInt32();   }
         operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
         operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
@@ -301,10 +301,10 @@ namespace connectivity
         }
 
         sal_Bool    isBound() const                     { return m_bBound;      }
-        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound;   }
+        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? true : false; }
 
         sal_Bool    isModified() const                  { return m_bModified;   }
-        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod;  }
+        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? true : false;   }
 
         sal_Bool    isSigned() const                    { return m_bSigned; }
         void        setSigned(sal_Bool _bMod=sal_True);

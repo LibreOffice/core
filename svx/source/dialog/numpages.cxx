@@ -141,7 +141,7 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
     Reference < XInterface > xI = xMSF->createInstance(
         ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
     Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-    DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+    DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
 
     return xRet;
 }
@@ -392,7 +392,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -412,7 +412,7 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         bPreset = FALSE;
         bModified = TRUE;
         USHORT nIdx = pExamplesVS->GetSelectItemId() - 1;
-        DBG_ASSERT(aNumSettingsArr.Count() > nIdx, "wrong index")
+        DBG_ASSERT(aNumSettingsArr.Count() > nIdx, "wrong index");
         if(aNumSettingsArr.Count() <= nIdx)
             return 0;
         SvxNumSettings_ImplPtr _pSet = aNumSettingsArr.GetObject(nIdx);
@@ -583,7 +583,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -813,7 +813,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -1118,7 +1118,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -1550,7 +1550,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -3451,7 +3451,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 

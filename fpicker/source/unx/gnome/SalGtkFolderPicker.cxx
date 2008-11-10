@@ -176,9 +176,9 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     uno::Reference< awt::XExtendedToolkit > xToolkit(
         m_xServiceMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY);
 
-    RunDialog* pRunInMain = new RunDialog(m_pDialog, xToolkit);
-    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunInMain);
-    gint nStatus = pRunInMain->runandwaitforresult();
+    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
+    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
+    gint nStatus = pRunDialog->run();
     switch( nStatus )
     {
         case GTK_RESPONSE_ACCEPT:

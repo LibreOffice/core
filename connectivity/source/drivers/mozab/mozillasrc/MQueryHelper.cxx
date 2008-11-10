@@ -390,7 +390,7 @@ MQueryHelper::getResultCount() const
     else
     {
         OSL_TRACE( "\tOUT MQueryHelper::getResultCount() = %d\n", m_aResults.size() );
-        return m_aResults.size();
+        return static_cast<sal_Int32>(m_aResults.size());
     }
 }
 
@@ -400,7 +400,7 @@ sal_uInt32
 MQueryHelper::getRealCount() const
 {
     OSL_TRACE( "IN/OUT MQueryHelper::getRealCount() = %d\n", m_aResults.size() );
-    return m_aResults.size();
+    return static_cast<sal_Int32>(m_aResults.size());
 }
 
 // -------------------------------------------------------------------------
@@ -996,6 +996,6 @@ sal_Int32           MQueryHelper::createNewCard()
     nsCOMPtr <nsIAbCard> card = do_CreateInstance(NS_ABCARDPROPERTY_CONTRACTID, &rv);
     //set default values
       getCardValues(card);
-    return   m_aResults.size();
+    return static_cast<sal_Int32>(m_aResults.size());
 }
 

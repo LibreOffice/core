@@ -260,8 +260,8 @@ IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
 
 void SvBaseLink::SetObjType( USHORT nObjTypeP )
 {
-    DBG_ASSERT( nObjType != OBJECT_CLIENT_DDE, "type already set" )
-    DBG_ASSERT( !xObj.Is(), "object exist" )
+    DBG_ASSERT( nObjType != OBJECT_CLIENT_DDE, "type already set" );
+    DBG_ASSERT( !xObj.Is(), "object exist" );
 
     nObjType = nObjTypeP;
 }
@@ -299,7 +299,7 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
     DBG_ASSERT( (nObjType & OBJECT_CLIENT_SO &&
                 pImplData->ClientType.bIntrnlLnk) ||
                 nObjType == OBJECT_CLIENT_GRF,
-                "no intern link" )
+                "no intern link" );
     xObj = pObj;
 }
 
@@ -425,7 +425,7 @@ void SvBaseLink::_GetRealObject( BOOL bConnect)
     if( !pImpl->m_pLinkMgr )
         return;
 
-    DBG_ASSERT( !xObj.Is(), "object already exist" )
+    DBG_ASSERT( !xObj.Is(), "object already exist" );
 
     if( OBJECT_CLIENT_DDE == nObjType )
     {

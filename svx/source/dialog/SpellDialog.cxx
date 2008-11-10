@@ -1374,7 +1374,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             bool bIsErrorActive = pErrorAttr && pErrorAttr->GetStart() == m_nErrorStart ||
                     pErrorAttrLeft && pErrorAttrLeft->GetStart() == m_nErrorStart;
 
-            DBG_ASSERT(nSelectionType != INVALID, "selection type not set!")
+            DBG_ASSERT(nSelectionType != INVALID, "selection type not set!");
 
             const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
             bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
@@ -1453,7 +1453,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             }
             if(nAction == ACTION_EXPAND)
             {
-                DBG_ASSERT(pErrorAttrLeft || pErrorAttr, "where is the error")
+                DBG_ASSERT(pErrorAttrLeft || pErrorAttr, "where is the error");
                 //text has been added on the right and only the 'error attribute has to be corrected
                 if(pErrorAttrLeft)
                 {
@@ -1649,7 +1649,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     ExtTextEngine* pTextEngine = GetTextEngine();
     pTextEngine->UndoActionStart( TEXTUNDO_INSERT );
     const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
-    DBG_ASSERT(pErrorAttrib, "no error attribute found")
+    DBG_ASSERT(pErrorAttrib, "no error attribute found");
 //  Reference <XSpellAlternatives> xAlternatives;
     const SpellErrorDescription* pSpellErrorDescription = 0;
     if(pErrorAttrib)
@@ -1741,7 +1741,7 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
 {
     TextPaM aCursor(0, m_nErrorStart);
     DBG_ASSERT(static_cast<const SpellErrorAttrib*>(
-            GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?")
+            GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?");
 
     ::rtl::OUString aWord;
     lang::Locale    aLocale;
@@ -1866,7 +1866,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             //start should always be Null
             eLang = aStart->eLanguage;
             USHORT nStart = aStart->nPosition;
-            DBG_ASSERT(!nStart, "invalid start position - language attribute missing?")
+            DBG_ASSERT(!nStart, "invalid start position - language attribute missing?");
             ++aStart;
 
             while(aStart != aBreakPositions.end())
@@ -1917,7 +1917,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 void SentenceEditWindow_Impl::Undo()
 {
     SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
-    DBG_ASSERT(GetUndoActionCount(), "no undo actions available" )
+    DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
     bool bSaveUndoEdit = IsUndoEditMode();
@@ -1985,7 +1985,7 @@ void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
   -----------------------------------------------------------------------*/
 void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 {
-    DBG_ASSERT(!bSet || m_bIsUndoEditMode != bSet, "SetUndoEditMode with equal values?")
+    DBG_ASSERT(!bSet || m_bIsUndoEditMode != bSet, "SetUndoEditMode with equal values?");
     m_bIsUndoEditMode = bSet;
     //disable all buttons except the Change
     SpellDialog* pSpellDialog = GetSpellDialog();

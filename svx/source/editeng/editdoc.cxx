@@ -640,8 +640,8 @@ BOOL EditSelection::IsInvalid() const
 
 BOOL EditSelection::Adjust( const ContentList& rNodes )
 {
-    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in Adjust(1)" )
-    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in Adjust(2)" )
+    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in Adjust(1)" );
+    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in Adjust(2)" );
 
     ContentNode* pStartNode = aStartPaM.GetNode();
     ContentNode* pEndNode = aEndPaM.GetNode();
@@ -649,8 +649,8 @@ BOOL EditSelection::Adjust( const ContentList& rNodes )
     USHORT nStartNode = rNodes.GetPos( pStartNode );
     USHORT nEndNode = rNodes.GetPos( pEndNode );
 
-    DBG_ASSERT( nStartNode != USHRT_MAX, "Node im Wald in Adjust(1)" )
-    DBG_ASSERT( nEndNode != USHRT_MAX, "Node im Wald in Adjust(2)" )
+    DBG_ASSERT( nStartNode != USHRT_MAX, "Node im Wald in Adjust(1)" );
+    DBG_ASSERT( nEndNode != USHRT_MAX, "Node im Wald in Adjust(2)" );
 
     BOOL bSwap = FALSE;
     if ( nStartNode > nEndNode )

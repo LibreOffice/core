@@ -303,7 +303,7 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                 }
             }
         }
-        DBG_ASSERT(nIdx != STRING_NOTFOUND, "no usable hyphenation position")
+        DBG_ASSERT(nIdx != STRING_NOTFOUND, "no usable hyphenation position");
 
         // remove not usable hyphens from string
         nPos = nIdx == STRING_NOTFOUND ? 0 : nIdx + 1;

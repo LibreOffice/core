@@ -468,7 +468,7 @@ String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
     }
     catch( Exception& )
     {
-        DBG_ERRORFILE( "DbRegistrationOptionsPage::EditLocationHdl: exception from folder picker" )
+        DBG_ERRORFILE( "DbRegistrationOptionsPage::EditLocationHdl: exception from folder picker" );
     }
 
     return String();

@@ -41,7 +41,9 @@
 #include <rtl/ustring.hxx>
 
 ::rtl::OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
+#ifndef MINIMAL_PROFILEDISCOVER
 ::rtl::OUString getRegistryFileName(::com::sun::star::mozilla::MozillaProductType product);
+#endif
 
 #endif
 

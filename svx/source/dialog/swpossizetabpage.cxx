@@ -1874,7 +1874,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
     m_pSdrView = pSdrView;
     if(!m_pSdrView)
     {
-        DBG_ERROR("No SdrView* set")
+        DBG_ERROR("No SdrView* set");
         return;
     }
 
@@ -1942,7 +1942,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
             ( (SdrTextObj*) pObj )->HasText() )
         {
-            DBG_ERROR("AutoWidth/AutoHeight should be enabled")
+            DBG_ERROR("AutoWidth/AutoHeight should be enabled");
         }
     }
     else

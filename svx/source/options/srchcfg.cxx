@@ -240,7 +240,7 @@ sal_uInt16 SvxSearchConfig::Count()
  ---------------------------------------------------------------------------*/
 const SvxSearchEngineData&  SvxSearchConfig::GetData(sal_uInt16 nPos)
 {
-    DBG_ASSERT(nPos < pImpl->aEngineArr.Count(), "wrong array index")
+    DBG_ASSERT(nPos < pImpl->aEngineArr.Count(), "wrong array index");
     return *pImpl->aEngineArr[nPos];
 }
 /* -----------------------------19.03.01 10:38--------------------------------

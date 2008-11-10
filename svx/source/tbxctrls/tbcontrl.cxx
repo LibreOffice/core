@@ -1821,7 +1821,7 @@ struct SvxStyleToolBoxControl::Impl
         }
         catch(const uno::Exception& )
         {
-            DBG_ERROR("error while initializing style names")
+            DBG_ERROR("error while initializing style names");
         }
     }
 };
@@ -2127,7 +2127,7 @@ void SvxStyleToolBoxControl::Update()
 
         if ( !pItem )
         {
-            DBG_WARNING( "Unknown Family" ) // can happen
+            DBG_WARNING( "Unknown Family" ); // can happen
         }
     }
     else if ( pPool != pStyleSheetPool )

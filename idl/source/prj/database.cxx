@@ -174,7 +174,7 @@ BOOL SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
 *************************************************************************/
 void SvIdlDataBase::Load( SvStream & rStm )
 {
-    DBG_ASSERT( aTypeList.Count() == 0, "type list already initialized" )
+    DBG_ASSERT( aTypeList.Count() == 0, "type list already initialized" );
     SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
 
     USHORT  nVersion = 0;
@@ -574,7 +574,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                 // Ist genau dieser Typ
                 return pType;
 
-            DBG_ASSERT( aTmpTypeList.First(), "mindestens ein Element" )
+            DBG_ASSERT( aTmpTypeList.First(), "mindestens ein Element" );
             SvMetaTypeRef xType = new SvMetaType( pType->GetName(), 'h', "dummy" );
             xType->SetRef( pType );
             xType->SetIn( bIn );
@@ -778,7 +778,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 
     WriteError( "error", ByteString( aFileName, RTL_TEXTENCODING_UTF8 ), aErrorText, nRow, nColumn );
 
-    DBG_ASSERT( pTok, "token must be found" )
+    DBG_ASSERT( pTok, "token must be found" );
     if( !pTok )
         return;
 

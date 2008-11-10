@@ -991,7 +991,7 @@ IMPL_LINK( SvxSearchTabPage, DeleteSearchHdl_Impl, PushButton *, EMPTYARG)
 {
     aChangePB.Enable(FALSE);     //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     USHORT nPos = aSearchLB.GetSelectEntryPos();
-    DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!")
+    DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!");
     aSearchConfig.RemoveData(aSearchLB.GetSelectEntry());
     aSearchLB.RemoveEntry(nPos);
     aSearchLB.SelectEntryPos(0);
@@ -1012,7 +1012,7 @@ IMPL_LINK( SvxSearchTabPage, SearchEntryHdl_Impl, ListBox*, pBox )
             return 0;
 
         const SvxSearchEngineData* pData = aSearchConfig.GetData(sSelection);
-        DBG_ASSERT(pData, "SearchEngine not available")
+        DBG_ASSERT(pData, "SearchEngine not available");
         if(pData)
         {
             aSearchNameED.SetText(sSelection);

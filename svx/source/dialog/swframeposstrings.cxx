@@ -72,7 +72,7 @@ SvxSwFramePosString::~SvxSwFramePosString()
   -----------------------------------------------------------------------*/
 const String& SvxSwFramePosString::GetString(StringId eId)
 {
-    DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId")
+    DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
     if(!(eId >= 0 && eId < STR_MAX))
         eId = LEFT;
     return pImpl->aStrings[eId];

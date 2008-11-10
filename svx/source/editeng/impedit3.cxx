@@ -2107,7 +2107,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT n
                  ( 0x629 == cCh || 0x62D == cCh || 0x62F == cCh ||
                    0x627 == cCh || 0x644 == cCh || 0x643 == cCh ) )
             {
-                DBG_ASSERT( 0 != cPrevCh, "No previous character" )
+                DBG_ASSERT( 0 != cPrevCh, "No previous character" );
 
                 // check if character is connectable to previous character,
                 if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
@@ -2121,7 +2121,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT n
             // before media Bah
             if ( nIdx && nIdx + 1 < aWord.Len() && 0x628 == cCh )
             {
-                DBG_ASSERT( 0 != cPrevCh, "No previous character" )
+                DBG_ASSERT( 0 != cPrevCh, "No previous character" );
 
                 // check if next character is Reh, Yeh or Alef Maksura
                 xub_Unicode cNextCh = aWord.GetChar( nIdx + 1 );
@@ -2140,7 +2140,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT n
             if ( nIdx && nIdx + 1 == aWord.Len() &&
                  0x60C <= cCh && 0x6FE >= cCh )
             {
-                DBG_ASSERT( 0 != cPrevCh, "No previous character" )
+                DBG_ASSERT( 0 != cPrevCh, "No previous character" );
 
                 // check if character is connectable to previous character,
                 if ( lcl_ConnectToPrev( cCh, cPrevCh ) )

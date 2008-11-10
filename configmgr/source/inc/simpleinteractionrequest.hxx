@@ -74,7 +74,7 @@ namespace apihelper {
         * @return the continuation choosen by an interaction handler or
         *         CONTINUATION_UNKNOWN, if the request was not (yet) handled.
         */
-        const sal_uInt32 getResponse() const;
+        sal_uInt32 getResponse() const;
     };
 
 /** These are the constants that can be passed to the constructor of class

@@ -87,7 +87,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     USHORT nVer;
 
     rStm >> nVer; // Version
-    DBG_ASSERT( (nVer & ~IDL_WRITE_MASK) == MODULE_VER, "false version" )
+    DBG_ASSERT( (nVer & ~IDL_WRITE_MASK) == MODULE_VER, "false version" );
 
     rStm >> aClassList;
     rStm >> aTypeList;
@@ -103,7 +103,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     rStm >> nCmpLen;
 #ifdef IDL_COMPILER
     DBG_ASSERT( (nVer & IDL_WRITE_MASK) == IDL_WRITE_COMPILER,
-                "no idl compiler format" )
+                "no idl compiler format" );
     rStm >> aBeginName;
     rStm >> aEndName;
     rStm >> aNextName;

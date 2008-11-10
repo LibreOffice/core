@@ -306,7 +306,7 @@ void BasicApp::Main( )
 //  Install filter for OSLAsserts
     DbgPrintMsgBox = DbgGetPrintMsgBox();
     DbgSetPrintTestTool( DBG_TestToolDebugMessageFilter );
-    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
+    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL );
 
     if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
         DBG_ERROR("osl_setDebugMessageFunc returns non NULL pointer");

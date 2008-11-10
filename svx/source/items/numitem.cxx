@@ -86,7 +86,7 @@ SvxNumberType::SvxNumberType(sal_Int16 nType) :
             Reference < XInterface > xI = xMSF->createInstance(
                 ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
             Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-            DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+            DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
             xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
         }
         catch(Exception& )
@@ -960,7 +960,7 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
  * --------------------------------------------------*/
 const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
 {
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
     if( nLevel < SVX_MAX_NUM )
         return aFmtsSet[nLevel] ? aFmts[nLevel] : 0;
     else
@@ -977,7 +977,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
          pStdOutlineNumFmt = new SvxNumberFormat(SVX_NUM_NUMBER_NONE);
     }
 
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
 
     return ( ( nLevel < SVX_MAX_NUM ) && aFmts[nLevel] ) ?
             *aFmts[nLevel] :  eNumberingType == SVX_RULETYPE_NUMBERING ?
@@ -989,7 +989,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
  * --------------------------------------------------*/
 void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsValid )
 {
-    DBG_ASSERT(i < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(i < SVX_MAX_NUM, "falsches Level" );
 
     if( (i < SVX_MAX_NUM) && (!aFmtsSet[i] || !(rNumFmt == *Get( i ))) )
     {
@@ -1004,7 +1004,7 @@ void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsVal
  * --------------------------------------------------*/
 void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
 {
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
 
     if( nLevel < SVX_MAX_NUM )
     {

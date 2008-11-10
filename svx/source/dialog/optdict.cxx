@@ -602,7 +602,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
     if(pBtn == &aDeletePB)
     {
-        DBG_ASSERT(pEntry, "keine Eintrag selektiert")
+        DBG_ASSERT(pEntry, "keine Eintrag selektiert");
         String aStr;
 
         aWordED.SetText(aStr);

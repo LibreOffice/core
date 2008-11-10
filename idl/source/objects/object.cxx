@@ -65,7 +65,7 @@ void SvClassElement::Load( SvPersistStream & rStm )
     if( nMask >= 0x08 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aAutomation;
@@ -124,7 +124,7 @@ void SvMetaClass::Load( SvPersistStream & rStm )
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aAttrList;
@@ -597,7 +597,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         case WRITE_ODL:
         {
-            DBG_ERROR( "Not supported anymore!" )
+            DBG_ERROR( "Not supported anymore!" );
 /*
             // Schreibt die Attribute
             SvMetaName::Write( rBase, rOutStm, nTab, nT, nA );
@@ -635,7 +635,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         case WRITE_C_SOURCE:
         case WRITE_C_HEADER:
         {
-            DBG_ERROR( "Not supported anymore!" )
+            DBG_ERROR( "Not supported anymore!" );
 /*
             StringList aSuperList;
             if( nT == WRITE_C_SOURCE )

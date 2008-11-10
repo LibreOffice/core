@@ -384,7 +384,7 @@ void SvxRubyDialog::Activate()
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception in style access")
+                    DBG_ERROR("exception in style access");
                 }
                 if(sCharStyleSelect.Len())
                     aCharStyleLB.SelectEntry(sCharStyleSelect);
@@ -443,7 +443,7 @@ void SvxRubyDialog::GetText()
             aEditArr[i + 1]->GetText() != aEditArr[i + 1]->GetSavedValue()))
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
-            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" )
+            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
             SetModified(TRUE);
             Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
             PropertyValue* pProps = rProps.getArray();
@@ -591,7 +591,7 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception caught")
+            DBG_ERROR("Exception caught");
         }
     }
     return 0;

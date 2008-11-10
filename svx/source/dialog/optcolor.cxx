@@ -1018,7 +1018,7 @@ ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
  ---------------------------------------------------------------------------*/
 void ColorConfigCtrl_Impl::Update()
 {
-    DBG_ASSERT(pColorConfig, "Configuration not set" )
+    DBG_ASSERT(pColorConfig, "Configuration not set" );
     sal_Int32 i;
     for( i = 0; i < ColorConfigEntryCount; i++ )
     {
@@ -1237,7 +1237,7 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
 {
-    DBG_ASSERT(pColorConfig, "Configuration not set" )
+    DBG_ASSERT(pColorConfig, "Configuration not set" );
 
     for( sal_Int32 i = 0; i < ColorConfigEntryCount; i++ )
     {
@@ -1258,7 +1258,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
 {
-    DBG_ASSERT(pColorConfig, "Configuration not set" )
+    DBG_ASSERT(pColorConfig, "Configuration not set" );
     sal_Int32 i = 0;
     for( ; i < ColorConfigEntryCount; i++ )
     {
@@ -1514,7 +1514,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     }
     else
     {
-        DBG_ASSERT(aColorSchemeLB.GetEntryCount() > 1, "don't delete the last scheme")
+        DBG_ASSERT(aColorSchemeLB.GetEntryCount() > 1, "don't delete the last scheme");
         QueryBox aQuery(pButton, SVX_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
         aQuery.SetText(String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
         if(RET_YES == aQuery.Execute())

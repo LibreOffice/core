@@ -346,11 +346,11 @@ void Impl_OlePres::Write( SvStream & rStm )
         // Immer auf 1/100 mm, bis Mtf-Loesung gefunden
         // Annahme (keine Skalierung, keine Org-Verschiebung)
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
-                    "X-Skalierung im Mtf" )
+                    "X-Skalierung im Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
-                    "Y-Skalierung im Mtf" )
+                    "Y-Skalierung im Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
-                    "Origin-Verschiebung im Mtf" )
+                    "Origin-Verschiebung im Mtf" );
         MapUnit nMU = pMtf->GetPrefMapMode().GetMapUnit();
         if( MAP_100TH_MM != nMU )
         {
@@ -367,7 +367,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     else
     {
-        DBG_ERROR( "unknown format" )
+        DBG_ERROR( "unknown format" );
     }
     ULONG nEndPos = rStm.Tell();
     rStm.Seek( nPos );

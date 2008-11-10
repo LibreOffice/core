@@ -648,7 +648,7 @@ void OutlinerView::Indent( short nDiff )
                 // Absatz gesucht und aufgeplustert.
 #ifdef DBG_UTIL
                 Paragraph* _pPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
-                DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!")
+                DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!");
 #endif
                 Paragraph* pPrev= pOwner->pParaList->GetParagraph( aSel.nStartPara-1 );
 

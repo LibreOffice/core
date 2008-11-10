@@ -927,7 +927,7 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, USHORT nCol
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
-    DBG_ASSERT(pItem,"SetCheckButton:Item not found")
+    DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
         switch( eState )
@@ -956,7 +956,7 @@ SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, US
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
-    DBG_ASSERT(pItem,"GetChButnState:Item not found")
+    DBG_ASSERT(pItem,"GetChButnState:Item not found");
 
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
@@ -1446,7 +1446,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     SvLBoxEntry* _pEntry = aReplaceTLB.FirstSelected();
     if(pBtn == &aDeleteReplacePB)
     {
-        DBG_ASSERT(_pEntry, "keine Eintrag selektiert")
+        DBG_ASSERT(_pEntry, "keine Eintrag selektiert");
         if(_pEntry)
         {
             aReplaceTLB.GetModel()->Remove(_pEntry);

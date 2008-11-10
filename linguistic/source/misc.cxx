@@ -105,7 +105,7 @@ LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang )
  */
 rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
 {
-    DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" )
+    DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" );
     static INT16 nLastLanguage = LANGUAGE_NONE;
 
     // set default value for unknown languages

@@ -701,7 +701,7 @@ BOOL DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicE
 
         if (bAddEntry)
         {
-            DBG_ASSERT(!bNeedEntries, "lng : entries still not loaded")
+            DBG_ASSERT(!bNeedEntries, "lng : entries still not loaded");
 
             if (nCount >= aEntries.getLength())
                 aEntries.realloc( Max(2 * nCount, nCount + 32) );
@@ -951,7 +951,7 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
             // entry to be removed
             uno::Reference< XDictionaryEntry >
                     xDicEntry( aEntries.getConstArray()[ nPos ] );
-            DBG_ASSERT(xDicEntry.is(), "lng : dictionary entry is NULL")
+            DBG_ASSERT(xDicEntry.is(), "lng : dictionary entry is NULL");
 
             nCount--;
 

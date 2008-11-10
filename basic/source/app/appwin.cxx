@@ -623,7 +623,7 @@ BOOL AppWin::Close()
 // uncomment to avoid compiler warning
 //      break;
     default:
-        DBG_ERROR("Not Implemented in AppWin::Close")
+        DBG_ERROR("Not Implemented in AppWin::Close");
         return FALSE;
     }
 }

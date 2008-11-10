@@ -564,7 +564,7 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
         pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( TRUE );
         SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
         pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( FALSE );
-        DBG_ASSERT( !( !bWasError && SbxBase::IsError()), "Error generated while retrieving Variable data for viewing" )
+        DBG_ASSERT( !( !bWasError && SbxBase::IsError()), "Error generated while retrieving Variable data for viewing" );
         if ( !bWasError && SbxBase::IsError() )
             SbxBase::ResetError();
 

@@ -1348,7 +1348,7 @@ const uno::Reference< container::XIndexContainer >&
                 xFormPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
                 uno::Reference< form::XForm > xForm( xCreate, uno::UNO_QUERY );
-                DBG_ASSERT(xForm.is(), "keine Form?")
+                DBG_ASSERT(xForm.is(), "keine Form?");
 
                 uno::Reference< container::XIndexContainer > xForms( xNameCont,
                     uno::UNO_QUERY );

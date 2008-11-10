@@ -229,7 +229,7 @@ BOOL SvMetaAttribute::GetReadOnlyDoc() const
 BOOL SvMetaAttribute::IsMethod() const
 {
     SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" )
+    DBG_ASSERT( pType, "no type for attribute" );
     return pType->GetType() == TYPE_METHOD;
 }
 
@@ -253,7 +253,7 @@ ByteString SvMetaAttribute::GetMangleName( BOOL ) const
 void SvMetaAttribute::FillSbxObject( SbxInfo * pInfo, USHORT nSbxFlags )
 {
     SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" )
+    DBG_ASSERT( pType, "no type for attribute" );
     if( !nSbxFlags )
     { // Flags koennen vom Aufrufer ueberschrieben werden
         if( pType->GetOut() )
@@ -266,7 +266,7 @@ void SvMetaAttribute::FillSbxObject( SbxInfo * pInfo, USHORT nSbxFlags )
             nSbxFlags |= SBX_READ;
     }
     SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" )
+    DBG_ASSERT( pBaseType, "no base type for attribute" );
     if( pBaseType->GetType() == TYPE_STRUCT )
     {
         const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
@@ -296,9 +296,9 @@ void SvMetaAttribute::FillSbxObject( SvIdlDataBase & rBase,
     if( bVariable && IsVariable() )
     {
         SvMetaType * pType = GetType();
-        DBG_ASSERT( pType, "no type for attribute" )
+        DBG_ASSERT( pType, "no type for attribute" );
         SvMetaType * pBaseType = pType->GetBaseType();
-        DBG_ASSERT( pBaseType, "no base type for attribute" )
+        DBG_ASSERT( pBaseType, "no base type for attribute" );
 
         if( pBaseType->GetType() == TYPE_STRUCT )
         {
@@ -522,9 +522,9 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
                                     WriteType nT )
 {
     SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" )
+    DBG_ASSERT( pType, "no type for attribute" );
     SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" )
+    DBG_ASSERT( pBaseType, "no base type for attribute" );
 
     if( nT == WRITE_ODL || nT == WRITE_DOCU
        || nT == WRITE_C_HEADER || nT == WRITE_C_SOURCE )
@@ -797,9 +797,9 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         bVariable = IsVariable();
 
     SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" )
+    DBG_ASSERT( pType, "no type for attribute" );
     SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" )
+    DBG_ASSERT( pBaseType, "no base type for attribute" );
     int nBType = pBaseType->GetType();
 
     if( nT == WRITE_ODL )
@@ -976,9 +976,9 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 ULONG SvMetaAttribute::MakeSfx( ByteString * pAttrArray )
 {
     SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" )
+    DBG_ASSERT( pType, "no type for attribute" );
     SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" )
+    DBG_ASSERT( pBaseType, "no base type for attribute" );
     if( pBaseType->GetType() == TYPE_STRUCT )
         return pBaseType->MakeSfx( pAttrArray );
     else
@@ -1183,8 +1183,8 @@ SvMetaType * SvMetaType::GetBaseType() const
 *************************************************************************/
 SvMetaType * SvMetaType::GetReturnType() const
 {
-    DBG_ASSERT( GetType() == TYPE_METHOD, "no method" )
-    DBG_ASSERT( GetRef(), "no return type" )
+    DBG_ASSERT( GetType() == TYPE_METHOD, "no method" );
+    DBG_ASSERT( GetRef(), "no return type" );
     return (SvMetaType *)GetRef();
 }
 
@@ -1285,7 +1285,7 @@ void SvMetaType::SetCall0( int e )
     else
     {
         DBG_ASSERT( nType == TYPE_POINTER || nType == TYPE_BASE,
-                    "set no base type to pointer" )
+                    "set no base type to pointer" );
         SetType( TYPE_POINTER );
     }
 }
@@ -1319,7 +1319,7 @@ void SvMetaType::SetCall1( int e )
     else
     {
         DBG_ASSERT( nType == TYPE_POINTER || nType == TYPE_BASE,
-                    "set no base type to pointer" )
+                    "set no base type to pointer" );
         SetType( TYPE_POINTER );
     }
 }
@@ -2071,7 +2071,7 @@ void SvMetaType::WriteMethodArgs
 
                     default:
                     {
-                        DBG_ASSERT( FALSE, "WriteType not implemented" )
+                        DBG_ASSERT( FALSE, "WriteType not implemented" );
                     }
                 }
                 pAttr = pAttrList->Next();
@@ -2150,7 +2150,7 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
         {
 
             SvMetaType * pBaseType = GetBaseType();
-            DBG_ASSERT( pBaseType, "no base type for attribute" )
+            DBG_ASSERT( pBaseType, "no base type for attribute" );
 
             if( pBaseType->GetType() == TYPE_METHOD )
                 pBaseType->GetReturnType()->WriteTypePrefix(
@@ -2181,7 +2181,7 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
         {
 
             SvMetaType * pBaseType = GetBaseType();
-            DBG_ASSERT( pBaseType, "no base type for attribute" )
+            DBG_ASSERT( pBaseType, "no base type for attribute" );
 
             if( pBaseType->GetType() == TYPE_METHOD )
             {
@@ -2201,7 +2201,7 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
 
         default:
         {
-            DBG_ASSERT( FALSE, "WriteType not implemented" )
+            DBG_ASSERT( FALSE, "WriteType not implemented" );
         }
     }
 }
@@ -2337,7 +2337,7 @@ void SvMetaEnumValue::Load( SvPersistStream & rStm )
     if( nMask >= 0x02 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm.ReadByteString( aEnumValue );
@@ -2425,7 +2425,7 @@ void SvMetaTypeEnum::Load( SvPersistStream & rStm )
     if( nMask >= 0x04 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aEnumValueList;

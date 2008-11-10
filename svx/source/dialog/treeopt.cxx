@@ -1101,7 +1101,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
     SvLBoxEntry* pParent = pBox->GetParent(pEntry);
     pBox->EndSelection();
 
-    DBG_ASSERT(!bInSelectHdl_Impl, "Timeout handler called twice")
+    DBG_ASSERT(!bInSelectHdl_Impl, "Timeout handler called twice");
     if(bInSelectHdl_Impl || pCurrentPageEntry == pEntry)
         return 0;
     //#111938# lock the SelectHdl_Impl to prevent multiple executes
@@ -1242,7 +1242,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 rColPage.Construct();
             }
 
-            DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created")
+            DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
             if ( pPageInfo->m_pPage )
             {
                 SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );

@@ -207,7 +207,7 @@ void SvMetaName::Load( SvPersistStream & rStm )
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 )  rStm >> aName;
@@ -570,7 +570,7 @@ void SvMetaReference::Load( SvPersistStream & rStm )
     if( nMask >= 0x2 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 )
@@ -620,7 +620,7 @@ void SvMetaExtern::Load( SvPersistStream & rStm )
     if( nMask >= 0x20 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" )
+        DBG_ERROR( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> pModule;
@@ -656,7 +656,7 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
 *************************************************************************/
 SvMetaModule * SvMetaExtern::GetModule() const
 {
-    DBG_ASSERT( pModule != NULL, "module not set" )
+    DBG_ASSERT( pModule != NULL, "module not set" );
     return pModule;
 }
 

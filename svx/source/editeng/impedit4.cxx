@@ -1945,7 +1945,7 @@ void ImpEditEngine::EndSpelling()
   -----------------------------------------------------------------------*/
 void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
-    DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?")
+    DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");
     pSpellInfo = new SpellInfo;
     pSpellInfo->bMultipleDoc = bMultipleDoc;
     rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
@@ -2178,7 +2178,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::Spell
 {
 #ifdef SVX_LIGHT
 #else
-    DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized")
+    DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
     if(pSpellInfo)
     {
         UndoActionStart( EDITUNDO_INSERT );

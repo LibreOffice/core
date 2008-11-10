@@ -399,7 +399,7 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 
 void SdXMLNumberStylesExporter::exportTimeStyle( SdXMLExport& rExport, sal_Int32 nStyle )
 {
-    DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount), "Unknown time style!" )
+    DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount), "Unknown time style!" );
     if( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount) )
         SdXMLExportStyle( rExport, aSdXMLFixedTimeFormats[ nStyle ] );
 }

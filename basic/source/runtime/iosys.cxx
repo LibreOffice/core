@@ -638,7 +638,7 @@ void    UCBStream::SetSize( ULONG nSize )
 {
     (void)nSize;
 
-    DBG_ERROR( "not allowed to call from basic" )
+    DBG_ERROR( "not allowed to call from basic" );
     SetError( ERRCODE_IO_GENERAL );
 }
 

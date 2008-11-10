@@ -1504,7 +1504,7 @@ long SvxRuler::GetLeftFrameMargin() const
 {
     // #126721# for some unknown reason the current column is set to 0xffff
     DBG_ASSERT(!pColumnItem || pColumnItem->GetActColumn() < pColumnItem->Count(),
-                    "issue #126721# - invalid current column!")
+                    "issue #126721# - invalid current column!");
     long nLeft =
         pColumnItem && pColumnItem->Count() && pColumnItem->GetActColumn() < pColumnItem->Count() ?
         (*pColumnItem)[pColumnItem->GetActColumn()].nStart : 0;

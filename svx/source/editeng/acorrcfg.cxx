@@ -146,7 +146,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
     if(bInit)
         EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         long nFlags = 0;        // default alles aus
@@ -417,7 +417,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
     if(bInit)
         EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         SvxSwAutoFmtFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();

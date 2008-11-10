@@ -1388,7 +1388,7 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
 #ifndef PRODUCT
     else
     {
-        DBG_ERROR("speichern einer leeren Liste?")
+        DBG_ERROR("speichern einer leeren Liste?");
     }
 #endif
 }
@@ -1404,7 +1404,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
 #ifndef PRODUCT
     else
     {
-        DBG_ERROR("speichern einer leeren Liste?")
+        DBG_ERROR("speichern einer leeren Liste?");
     }
 #endif
 }
@@ -1424,7 +1424,7 @@ BOOL SvxAutoCorrect::AddCplSttException( const String& rNew,
     {
         pLists = pLangTable->Seek(ULONG(LANGUAGE_DONTKNOW));
     }
-    DBG_ASSERT(pLists, "keine Autokorrekturdatei")
+    DBG_ASSERT(pLists, "keine Autokorrekturdatei");
     return pLists->AddToCplSttExceptList(rNew);
 }
 
@@ -1441,7 +1441,7 @@ BOOL SvxAutoCorrect::AddWrtSttException( const String& rNew,
     else if(pLangTable->IsKeyValid(ULONG(LANGUAGE_DONTKNOW))||
             CreateLanguageFile(LANGUAGE_DONTKNOW, TRUE))
         pLists = pLangTable->Seek(ULONG(LANGUAGE_DONTKNOW));
-    DBG_ASSERT(pLists, "keine Autokorrekturdatei")
+    DBG_ASSERT(pLists, "keine Autokorrekturdatei");
     return pLists->AddToWrdSttExceptList(rNew);
 }
 
@@ -1524,7 +1524,7 @@ BOOL SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
 
 BOOL SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, BOOL bNewFile )
 {
-    DBG_ASSERT(!pLangTable->IsKeyValid(ULONG(eLang)), "Sprache ist bereits vorhanden")
+    DBG_ASSERT(!pLangTable->IsKeyValid(ULONG(eLang)), "Sprache ist bereits vorhanden");
 
     String sUserDirFile( GetAutoCorrFileName( eLang, TRUE, FALSE )),
            sShareDirFile( sUserDirFile );

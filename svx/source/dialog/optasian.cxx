@@ -123,7 +123,7 @@ sal_Bool    SvxAsianLayoutPage_Impl::hasForbiddenCharacters(LanguageType eLang)
 SvxForbiddenChars_Impl* SvxAsianLayoutPage_Impl::getForbiddenCharacters(LanguageType eLang)
 {
     SvxForbiddenChars_Impl* pImp = aChangedLanguagesTbl.Get(eLang);
-    DBG_ASSERT(pImp, "language not available")
+    DBG_ASSERT(pImp, "language not available");
     if(pImp)
         return pImp;
     return 0;
@@ -251,7 +251,7 @@ BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
         }
         catch(Exception&)
         {
-            DBG_ERROR("exception in XForbiddenCharacters")
+            DBG_ERROR("exception in XForbiddenCharacters");
         }
     }
     eLastUsedLanguageTypeForForbiddenCharacters = aLanguageLB.GetSelectLanguage();
@@ -389,7 +389,7 @@ IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, EMPTYARG )
             }
             catch(Exception&)
             {
-                DBG_ERROR("exception in XForbiddenCharacters")
+                DBG_ERROR("exception in XForbiddenCharacters");
             }
         }
     }
@@ -458,7 +458,7 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
         }
         catch(Exception&)
         {
-            DBG_ERROR("exception in XForbiddenCharacters")
+            DBG_ERROR("exception in XForbiddenCharacters");
         }
     }
     pImpl->aConfig.SetStartEndChars( aLocale, bEnable ? &sStart : 0, bEnable ? &sEnd : 0);

@@ -1325,8 +1325,10 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
-#if !(defined(MACOSX) && defined(QUARTZ))
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
+//On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
+//primordial thread as the ucb gnome-vfs2 provider was initialized in.
+#ifdef WNT
     if ( mbSystemPicker )
     {
         PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );

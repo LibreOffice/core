@@ -526,7 +526,7 @@ const FrameBorder& FrameSelectorImpl::GetBorder( FrameBorderType eBorder ) const
     size_t nIndex = GetIndexFromFrameBorderType( eBorder );
     if( nIndex < maAllBorders.size() )
         return *maAllBorders[ nIndex ];
-    DBG_ERRORFILE( "svx::FrameSelectorImpl::GetBorder - unknown border type" )
+    DBG_ERRORFILE( "svx::FrameSelectorImpl::GetBorder - unknown border type" );
     return maTop;
 }
 
