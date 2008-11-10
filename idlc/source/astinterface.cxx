@@ -304,7 +304,7 @@ void AstInterface::checkInheritedInterfaceClashes(
                 return;
 
             case INTERFACE_DIRECT_MANDATORY:
-                if (direct || !optional && !mainOptional) {
+                if (direct || (!optional && !mainOptional)) {
                     doubleDeclarations.interfaces.push_back(ifc);
                 }
                 return;
