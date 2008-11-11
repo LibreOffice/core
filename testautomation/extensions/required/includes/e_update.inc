@@ -47,7 +47,10 @@ testcase tExtensionManagerResources()
     
     dim bUserIsAdmin as boolean  : bUserIsAdmin = hCheckForAdministratorPermissions()
     dim iBreakCounter as integer : iBreakCounter = 0
+    dim iFilterItems as integer 
+    
     const MAX_ITERATIONS = 50
+    const FILTER_ITEMS = 9    ' This is the number of filters/extension types we know
 
     printlog( "Ressource test for the Extension Manager UI" )
     ToolsPackageManager
@@ -74,6 +77,14 @@ testcase tExtensionManagerResources()
 
         kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 1 ) ) then
+            iFilterItems = DateiTyp.getItemCount
+            if ( iFilterItems <> FILTER_ITEMS ) then
+                warnlog( "The file type filter list is incorrect" )
+                printlog( "Expected: " & FILTER_ITEMS )
+                printlog( "Found...: " & iFilterItems )
+            else
+                printlog( "The number of filters in Add Extensions Dialog is ok" )
+            endif
             Oeffnendlg.cancel()
         else
             warnlog( "File Open dialog did not open" )
