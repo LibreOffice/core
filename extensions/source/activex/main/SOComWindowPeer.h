@@ -33,6 +33,7 @@ class SOComWindowPeer :
     HWND m_hwnd;
 public:
     SOComWindowPeer() : m_hwnd( NULL ) {}
+    virtual ~SOComWindowPeer() { }
 
 BEGIN_COM_MAP(SOComWindowPeer)
     COM_INTERFACE_ENTRY(IDispatch)

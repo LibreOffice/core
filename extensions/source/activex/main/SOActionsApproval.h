@@ -33,6 +33,7 @@ class SOActionsApproval :
 {
 public:
     SOActionsApproval() {}
+    virtual ~SOActionsApproval() {}
 
 BEGIN_COM_MAP(SOActionsApproval)
     COM_INTERFACE_ENTRY(IDispatch)
