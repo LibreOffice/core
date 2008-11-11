@@ -41,14 +41,16 @@ testcase tExtensionFileOpen
 
     printlog( "Install an extension via File Open - new with CWS oxtsysint01" )
     
+    dim cString as string
+    
     if ( gBuild < 9305 ) then
         printlog( "No testing for builds prior to 9305"
         goto endsub
     endif
 
-    const EXTENSION_NAME = "ShortLicense.oxt"
+    const EXTENSION_NAME = "locationtest.oxt"
     dim cPath as string 
-        cPath = gTesttoolPath & "extensions/optional/input/simpleLicense/" & EXTENSION_NAME
+        cPath = gTesttoolPath & "extensions/optional/input/path_to_extension/" & EXTENSION_NAME
         
     hFileOpen( cPath )
     
@@ -61,14 +63,43 @@ testcase tExtensionFileOpen
         warnlog( "Extension installation message missing" )
     endif
     
-    kontext "ExtensionSoftwareLicenseAgreement"
-    if ( ExtensionSoftwareLicenseAgreement.exists( 2 ) ) then
-        printlog( "License found. Accepting" )
-        accept.click()
-    else
-        warnlog ( "License dialog is missing" )
-    endif
+    hExtensionRemoveGUI( EXTENSION_NAME )    
 
+    printlog( "Verify that the Add Extension Dialog remembers the last used path..." )
+    hExtensionAddGUI( cPath, "" )
+    
+    printlog( "Reopen Extension Manager UI, click Add.. and check the directory" )
+    ToolsPackageManager
+    kontext "PackageManager"
+    if ( PackageManager.exists( 3 ) ) then
+        Add.click()
+        Kontext "OeffnenDlg"
+        if ( OeffnenDlg.exists( 2 ) ) then
+            if ( Dateiauswahl.getItemCount() <> 1 ) then
+                warnlog( "There should be exactly one item visible in the File Picker" )
+            else
+                DateiAuswahl.select( 1 )
+                cString = DateiAuswahl.getSelText()
+                if ( cString <> EXTENSION_NAME ) then
+                    warnlog( "Incorrect extension listed. Please check path and filename" )
+                    printlog( "Expected: " & EXTENSION_NAME )
+                    printlog( "Found...: " & cString )
+                    printlog( "Issues: #i67122, #i92234" )
+                else
+                    printlog( "Found correct extension, the dialog remembers the path" )
+                endif
+            endif
+            kontext "OeffnenDlg"
+            OeffnenDlg.cancel()
+        else
+            warnlog( "Could not access Add Extensions Dialog" )
+        endif
+        kontext "PackageManager"
+        PackageManager.close()
+    else
+        warnlog( "Could not open Extension Manager GUI" )
+    endif
+        
     hExtensionRemoveGUI( EXTENSION_NAME )    
     
 endcase
