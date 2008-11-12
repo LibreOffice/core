@@ -1205,7 +1205,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         if( error )
         {
             m_nCustomCSSDocLength = 0;
-            m_pCustomCSSDoc = new char[ 0 ];
+            m_pCustomCSSDoc = new char[ 1 ]; // Initialize with 1 to avoid gcc compiler warning
         }
     }
 
@@ -1275,7 +1275,7 @@ void Databases::setActiveText( const rtl::OUString& Module,
     else
     {
         *byteCount = 0;
-        *buffer = new char[0];
+        *buffer = new char[1]; // Initialize with 1 to avoid compiler warnings
         if( !bFoundAsEmpty )
             m_aEmptyActiveTextSet.insert( id );
     }

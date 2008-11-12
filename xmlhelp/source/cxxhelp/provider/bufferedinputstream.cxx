@@ -60,7 +60,7 @@ Reference<XInputStream> chelp::turnToSeekable(const Reference<XInputStream>& xIn
 BufferedInputStream::BufferedInputStream(const Reference<XInputStream>& xInputStream)
     : m_nBufferLocation(0),
       m_nBufferSize(0),
-      m_pBuffer(new sal_Int8[0])
+      m_pBuffer(new sal_Int8[1]) // Initialize with one to avoid gcc compiler warnings
 {
     try
     {

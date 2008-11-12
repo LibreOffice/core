@@ -1590,7 +1590,7 @@ void SAL_CALL Cell::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue )
 }
 
 // -----------------------------------------------------------------------------
-
+// TODO: Refactor this method!
 Any SAL_CALL Cell::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     switch( nHandle )
@@ -1599,6 +1599,7 @@ Any SAL_CALL Cell::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPrope
     default:
         throw UnknownPropertyException();
     }
+    throw new UnknownPropertyException();
 }
 
 // -----------------------------------------------------------------------------

@@ -881,7 +881,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 bool isRoot )
     : len( 0 ),
       pos( 0 ),
-      buffer( new char[0] )
+      buffer( new char[1] ) // Initializing with one element to avoid gcc compiler warning
 {
     if( isRoot )
     {
