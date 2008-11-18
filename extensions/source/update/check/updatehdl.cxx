@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatehdl.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -475,6 +475,7 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
 void SAL_CALL UpdateHandler::queryTermination( const lang::EventObject& )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
+    setVisible( false );
 }
 
 //------------------------------------------------------------------------------
