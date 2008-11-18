@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace deployment { class XPackageManager; }
+    namespace task { class XInteractionRequest; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -119,6 +120,9 @@ private:
 
     rtl::Reference< Thread > m_thread;
 };
+
+void handleInteractionRequest( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext,
+                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > & xRequest );
 
 }
 

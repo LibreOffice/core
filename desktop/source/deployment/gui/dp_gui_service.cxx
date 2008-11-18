@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_service.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,13 +197,14 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
 void ServiceImpl::setDialogTitle( OUString const & title )
     throw (RuntimeException)
 {
-    if (::dp_gui::DialogImpl::s_dialog.is()) {
+    if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
+    {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
-        ::dp_gui::DialogImpl::get(
-            m_xComponentContext,
-            m_parent ? *m_parent : Reference<awt::XWindow>(),
-            m_extensionURL ? *m_extensionURL : OUString(),
-            m_view ? *m_view : OUString() )->SetText( title );
+        ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
+            ::dp_gui::TheExtensionManager::get( m_xComponentContext,
+                                                m_parent ? *m_parent : Reference<awt::XWindow>(),
+                                                m_extensionURL ? *m_extensionURL : OUString() ) );
+        dialog->SetText( title );
     }
     else
         m_initialTitle = title;

@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.hxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.4.74.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,7 @@ class ExtMgrDialog : public ModelessDialog
     CancelButton         m_aCancelBtn;
     const String         m_sAddPackages;
     String               m_sProgressText;
+    String               m_sLastFolderURL;
     ::osl::Mutex         m_aMutex;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;
@@ -80,7 +81,7 @@ class ExtMgrDialog : public ModelessDialog
     bool                 m_bEnableWarning;
     bool                 m_bDisableWarning;
     bool                 m_bDeleteWarning;
-    bool                 m_bHasSharedExtensions;
+    bool                 m_bIsBusy;
     long                 m_nProgress;
     Timer                m_aTimeoutTimer;
     TheExtensionManager *m_pManager;
@@ -96,7 +97,7 @@ class ExtMgrDialog : public ModelessDialog
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
     DECL_DLLPRIVATE_LINK( TimeOutHdl, Timer* );
-    DECL_DLLPRIVATE_LINK( startProgress, ::osl::Condition * );
+    DECL_DLLPRIVATE_LINK( startProgress, void * );
 
 public:
                     ExtMgrDialog( Window * pParent, TheExtensionManager *pManager );
@@ -117,6 +118,8 @@ public:
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+
+    bool            isBusy() { return m_bIsBusy; }
 
     void            showProgress( bool bStart );
     void            updateProgress( const ::rtl::OUString &rText,

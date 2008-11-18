@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.20.30.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,11 +50,8 @@ DLLPRE =
 
 SLOFILES = \
         $(SLO)$/dp_gui_service.obj \
-        $(SLO)$/dp_gui_dialog.obj \
         $(SLO)$/dp_gui_dialog2.obj \
         $(SLO)$/dp_gui_theextmgr.obj \
-        $(SLO)$/dp_gui_treelb.obj \
-        $(SLO)$/dp_gui_cmdenv.obj \
         $(SLO)$/license_dialog.obj \
         $(SLO)$/dp_gui_dependencydialog.obj \
         $(SLO)$/dp_gui_thread.obj \
@@ -63,7 +60,6 @@ SLOFILES = \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
         $(SLO)$/dp_gui_system.obj \
-        $(SLO)$/dp_gui_addextensionqueue.obj \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
 
