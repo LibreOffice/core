@@ -69,7 +69,6 @@ namespace sdr
 
         // ViewContact part
         sdr::contact::ViewContact& GetViewContact() const;
-        void FlushViewContact() const;
 
         // this method is called form the destructor of the referenced page.
         // do all necessary action to forget the page. It is not necessary to call

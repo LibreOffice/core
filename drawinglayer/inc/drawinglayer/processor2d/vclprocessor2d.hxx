@@ -54,6 +54,7 @@ namespace drawinglayer { namespace primitive2d {
     class PolyPolygonColorPrimitive2D;
     class MetafilePrimitive2D;
     class MaskPrimitive2D;
+    class UnifiedAlphaPrimitive2D;
     class AlphaPrimitive2D;
     class TransformPrimitive2D;
     class MarkerArrayPrimitive2D;
@@ -103,6 +104,7 @@ namespace drawinglayer
             void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
             void RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
+            void RenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rTransCandidate);
             void RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate);
             void RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
             void RenderPagePreviewPrimitive2D(const primitive2d::PagePreviewPrimitive2D& rPagePreviewCandidate);
@@ -114,10 +116,6 @@ namespace drawinglayer
             // DrawMode adaption support
             void adaptLineToFillDrawMode() const;
             void adaptTextToFillDrawMode() const;
-
-            /////////////////////////////////////////////////////////////////////////////
-            // FormControl support
-            basegfx::B2DPoint PositionAndSizeControl(const primitive2d::ControlPrimitive2D& rControlPrimitive2D);
 
         public:
             // constructor/destructor

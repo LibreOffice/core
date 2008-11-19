@@ -403,24 +403,34 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     SdrHdl* pH=NULL;
     Point aPnt;
     SdrHdlKind eKind=HDL_MOVE;
-    switch (nHdlNum) {
-        case 0: {
-            long a=GetEckenradius();
-            long b=Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
-            if (a>b) a=b;
-            if (a<0) a=0;
-            aPnt=aRect.TopLeft();
-            aPnt.X()+=a;
-            eKind=HDL_CIRC;
-        } break; // Eckenradius
-        case 1: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break; // Oben links
-        case 2: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break; // Oben
-        case 3: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break; // Oben rechts
-        case 4: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break; // Links
-        case 5: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break; // Rechts
-        case 6: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break; // Unten links
-        case 7: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break; // Unten
-        case 8: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break; // Unten rechts
+    if( IsTextFrame() && !nHdlNum )
+    {
+        pH=new ImpTextframeHdl(aRect);
+        pH->SetObj((SdrObject*)this);
+        pH->SetDrehWink(aGeo.nDrehWink);
+        return pH;
+    }
+    else
+    {
+        switch (nHdlNum) {
+            case 0: {
+                long a=GetEckenradius();
+                long b=Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
+                if (a>b) a=b;
+                if (a<0) a=0;
+                aPnt=aRect.TopLeft();
+                aPnt.X()+=a;
+                eKind=HDL_CIRC;
+            } break; // Eckenradius
+            case 1: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break; // Oben links
+            case 2: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break; // Oben
+            case 3: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break; // Oben rechts
+            case 4: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break; // Links
+            case 5: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break; // Rechts
+            case 6: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break; // Unten links
+            case 7: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break; // Unten
+            case 8: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break; // Unten rechts
+        }
     }
     if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);

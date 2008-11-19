@@ -559,9 +559,9 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
     ViewContactOfUnoControl* pVC = NULL;
     if ( impl_getViewContact( pVC ) )
     {
-        // FlushViewContact() removes all existing VOCs. This is always allowed
-        // since they will be re-created on demand (and with the changed model)
-        FlushViewContact();
+        // flushViewObjectContacts() removes all existing VOCs for the local DrawHierarchy. This
+        // is always allowed since they will be re-created on demand (and with the changed model)
+        GetViewContact().flushViewObjectContacts(true);
     }
 }
 

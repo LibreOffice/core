@@ -82,6 +82,9 @@ namespace sdr
             // A ViewObjectContact was deleted and shall be forgotten.
             void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
+            // internal tooling to delete VOCs
+            void deleteAllVOCs();
+
         protected:
             // Interface to allow derivates to travel over the registered VOC's
             sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
@@ -100,6 +103,9 @@ namespace sdr
             // This means it's always an error when the default implementation is called and thus gets
             // asserted there
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+            // method for flushing View Independent Primitive2DSequence for VOC implementations
+            void flushViewIndependentPrimitive2DSequence() { mxViewIndependentPrimitive2DSequence.realloc(0); }
 
             // basic constructor. Since this is a base class only, it shall
             // never be called directly
@@ -152,6 +158,12 @@ namespace sdr
 
             // add Gluepoints (if available)
             virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
+
+            // delete all existing VOCs including DrawHierarchy which will invalidate all
+            // visualisations, too. Used mostly at object removal from DrawHierarchy to
+            // delete all existing VOCs by purpose, but can also be used for other purposes.
+            // It is always possible to delete the VOCs, these are re-created on demand
+            void flushViewObjectContacts(bool bWithHierarchy = true);
         };
     } // end of namespace contact
 } // end of namespace sdr

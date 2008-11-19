@@ -634,32 +634,49 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 } break;
 
                 default:
-                {   // SDRDRAG_MOVE
-                    if ( ( eDragHdl == HDL_MOVE ) && !IsMoveAllowed() )
+                {
+                    // SDRDRAG_MOVE
+                    if((eDragHdl == HDL_MOVE) && !IsMoveAllowed())
+                    {
                         return FALSE;
-                    else if ( eDragHdl==HDL_GLUE )
+                    }
+                    else if(eDragHdl == HDL_GLUE)
+                    {
                         pDragBla = new SdrDragMove(*this);
+                    }
                     else
                     {
-                        if ( bFramDrag )
+                        if(bFramDrag)
                         {
-                            if ( eDragHdl == HDL_MOVE )
+                            if(eDragHdl == HDL_MOVE)
+                            {
                                 pDragBla=new SdrDragMove(*this);
+                            }
                             else
                             {
-                                if (!IsResizeAllowed(TRUE)) return FALSE;
-                                pDragBla=new SdrDragResize(*this);
+                                if(!IsResizeAllowed(TRUE))
+                                {
+                                    return FALSE;
+                                }
+
+                                pDragBla = new SdrDragResize(*this);
                             }
                         }
                         else
                         {
-                            if ( ( eDragHdl == HDL_MOVE ) && ( GetMarkedObjectCount() == 1 )
-                                && GetMarkedObjectByIndex( 0 )->ISA( SdrObjCustomShape ) )
+                            if((eDragHdl == HDL_MOVE) && (GetMarkedObjectCount() == 1) && GetMarkedObjectByIndex(0)->ISA(SdrObjCustomShape))
+                            {
                                 pDragBla = new SdrDragMove( *this );
+                            }
+                            else if((eDragHdl == HDL_POLY) && (!IsMoveAllowed() || !IsResizeAllowed()))
+                            {
+                                // #i77187# do not allow move of polygon points if object is move or size protected
+                                return FALSE;
+                            }
                             else
                             {
-                                bDragSpecial=TRUE;
-                                pDragBla=new SdrDragObjOwn(*this);
+                                bDragSpecial = TRUE;
+                                pDragBla = new SdrDragObjOwn(*this);
                             }
                         }
                     }

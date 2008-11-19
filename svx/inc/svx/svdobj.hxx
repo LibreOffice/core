@@ -430,7 +430,6 @@ private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;
-    void FlushViewContact() const;
 
     // DrawContact support: Methods for handling Object changes
     void ActionChanged() const;

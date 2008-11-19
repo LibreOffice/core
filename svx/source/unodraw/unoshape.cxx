@@ -3221,17 +3221,15 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     {
         return getPropertyValue( aPropertyName );
     }
-    else
-    {
-        // Default aus ItemPool holen
-        if(!mpModel->GetItemPool().IsWhich(pMap->nWID))
-            throw beans::UnknownPropertyException();
 
-        SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
-        aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
+    // Default aus ItemPool holen
+    if(!mpModel->GetItemPool().IsWhich(pMap->nWID))
+        throw beans::UnknownPropertyException();
 
-        return GetAnyForItem( aSet, pMap );
-    }
+    SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
+    aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
+
+    return GetAnyForItem( aSet, pMap );
 }
 
 // XMultiPropertyStates

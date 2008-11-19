@@ -54,6 +54,7 @@ SLOFILES=\
         $(SLO)$/overlaytriangle.obj				\
         $(SLO)$/overlaycrosshair.obj			\
         $(SLO)$/overlayhelpline.obj				\
+        $(SLO)$/overlayhatchrect.obj			\
         $(SLO)$/overlayrollingrectangle.obj		\
         $(SLO)$/overlaypolypolygon.obj			\
         $(SLO)$/overlaysdrobject.obj			\

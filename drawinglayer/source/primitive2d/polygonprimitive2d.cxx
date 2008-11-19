@@ -42,6 +42,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -75,10 +76,26 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B2DRange PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
+            // this is a hairline, thus the line width is view-dependent. Get range of polygon
+            // as base size
+            basegfx::B2DRange aRetval(getB2DPolygon().getB2DRange());
+
+            if(!aRetval.isEmpty())
+            {
+                // Calculate view-dependent hairline width
+                const basegfx::B2DVector aDiscreteSize(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+                const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
+
+                if(basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+                {
+                    aRetval.grow(fDiscreteHalfLineWidth);
+                }
+            }
+
             // return range
-            return basegfx::tools::getRange(getB2DPolygon());
+            return aRetval;
         }
 
         // provide unique ID
@@ -273,28 +290,44 @@ namespace drawinglayer
 
         basegfx::B2DRange PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
+            basegfx::B2DRange aRetval;
+
             if(getLineAttribute().getWidth())
             {
                 if(basegfx::B2DLINEJOIN_MITER == getLineAttribute().getLineJoin())
                 {
                     // if line is mitered, use parent call since mitered line
                     // geometry may use more space than the geometry grown by half line width
-                    return BasePrimitive2D::getB2DRange(rViewInformation);
+                    aRetval = BasePrimitive2D::getB2DRange(rViewInformation);
                 }
                 else
                 {
                     // for all other B2DLINEJOIN_* get the range from the base geometry
                     // and expand by half the line width
-                    basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolygon()));
-                    aRetval.grow(getLineAttribute().getWidth() / 2.0);
-                    return aRetval;
+                    aRetval = getB2DPolygon().getB2DRange();
+                    aRetval.grow(getLineAttribute().getWidth() * 0.5);
                 }
             }
             else
             {
-                // range of polygon is adequate
-                return basegfx::tools::getRange(getB2DPolygon());
+                // this is a hairline, thus the line width is view-dependent. Get range of polygon
+                // as base size
+                aRetval = getB2DPolygon().getB2DRange();
+
+                if(!aRetval.isEmpty())
+                {
+                    // Calculate view-dependent hairline width
+                    const basegfx::B2DVector aDiscreteSize(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+                    const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
+
+                    if(basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+                    {
+                        aRetval.grow(fDiscreteHalfLineWidth);
+                    }
+                }
             }
+
+            return aRetval;
         }
 
         // provide unique ID
@@ -396,15 +429,15 @@ namespace drawinglayer
             basegfx::B2DRange aRetval(PolygonStrokePrimitive2D::getB2DRange(rViewInformation));
 
             // if WaveHeight, grow by it
-            if(!basegfx::fTools::equalZero(getWaveHeight()))
+            if(basegfx::fTools::more(getWaveHeight(), 0.0))
             {
                 aRetval.grow(getWaveHeight());
             }
 
             // if line width, grow by it
-            if(!basegfx::fTools::equalZero(getLineAttribute().getWidth()))
+            if(basegfx::fTools::more(getLineAttribute().getWidth(), 0.0))
             {
-                aRetval.grow(getLineAttribute().getWidth());
+                aRetval.grow(getLineAttribute().getWidth() * 0.5);
             }
 
             return aRetval;

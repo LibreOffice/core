@@ -99,6 +99,9 @@ namespace sdr
             // This method will not handle included hierarchies and not check geometric visibility.
             virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
+            // method for flushing Primitive2DSequence for VOC implementations
+            void flushPrimitive2DSequence() { mxPrimitive2DSequence.realloc(0); }
+
         public:
             // basic constructor.
             ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact);

@@ -2346,50 +2346,52 @@ Pointer SdrPathObj::GetCreatePointer() const
 
 void SdrPathObj::NbcMove(const Size& rSiz)
 {
-    SdrTextObj::NbcMove(rSiz);
-
     basegfx::B2DHomMatrix aTrans;
     aTrans.translate(rSiz.Width(), rSiz.Height());
     maPathPolygon.transform(aTrans);
+
+    // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
+    SdrTextObj::NbcMove(rSiz);
 }
 
 void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    SdrTextObj::NbcResize(rRef,xFact,yFact);
-
     basegfx::B2DHomMatrix aTrans;
     aTrans.translate(-rRef.X(), -rRef.Y());
     aTrans.scale(double(xFact), double(yFact));
     aTrans.translate(rRef.X(), rRef.Y());
     maPathPolygon.transform(aTrans);
+
+    // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
+    SdrTextObj::NbcResize(rRef,xFact,yFact);
 }
 
 void SdrPathObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    SdrTextObj::NbcRotate(rRef,nWink,sn,cs);
-
     basegfx::B2DHomMatrix aTrans;
     aTrans.translate(-rRef.X(), -rRef.Y());
     aTrans.rotate(-nWink * nPi180); // Thank JOE, the angles are defined mirrored to the mathematical meanings
     aTrans.translate(rRef.X(), rRef.Y());
     maPathPolygon.transform(aTrans);
+
+    // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
+    SdrTextObj::NbcRotate(rRef,nWink,sn,cs);
 }
 
 void SdrPathObj::NbcShear(const Point& rRefPnt, long nAngle, double fTan, FASTBOOL bVShear)
 {
-    SdrTextObj::NbcShear(rRefPnt,nAngle,fTan,bVShear);
-
     basegfx::B2DHomMatrix aTrans;
     aTrans.translate(-rRefPnt.X(), -rRefPnt.Y());
     aTrans.shearX(-fTan); // Thank JOE, the angles are defined mirrored to the mathematical meanings
     aTrans.translate(rRefPnt.X(), rRefPnt.Y());
     maPathPolygon.transform(aTrans);
+
+    // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
+    SdrTextObj::NbcShear(rRefPnt,nAngle,fTan,bVShear);
 }
 
 void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
 {
-    SdrTextObj::NbcMirror(rRefPnt1,rRefPnt2);
-
     basegfx::B2DHomMatrix aTrans;
     const double fDiffX(rRefPnt2.X() - rRefPnt1.X());
     const double fDiffY(rRefPnt2.Y() - rRefPnt1.Y());
@@ -2403,13 +2405,19 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
 
     // #97538# Do Joe's special handling for lines when mirroring, too
     ImpForceKind();
+
+    // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
+    SdrTextObj::NbcMirror(rRefPnt1,rRefPnt2);
 }
 
 void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
-    if (aGeo.nDrehWink==0) {
-        rRect=GetSnapRect();
-    } else {
+    if(!aGeo.nDrehWink)
+    {
+        rRect = GetSnapRect();
+    }
+    else
+    {
         XPolyPolygon aXPP(GetPathPoly());
         RotateXPoly(aXPP,Point(),-aGeo.nSin,aGeo.nCos);
         rRect=aXPP.GetBoundRect();

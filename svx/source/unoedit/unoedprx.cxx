@@ -811,8 +811,8 @@ Rectangle SvxAccessibleTextAdapter::GetParaBounds( USHORT nPara ) const
 
         return aRect;
     }
-    else
-        return mrTextForwarder->GetParaBounds( nPara );
+
+    return mrTextForwarder->GetParaBounds( nPara );
 }
 
 MapMode SvxAccessibleTextAdapter::GetMapMode() const

@@ -61,6 +61,7 @@ SLOFILES= \
         $(SLO)$/gridprimitive2d.obj				\
         $(SLO)$/groupprimitive2d.obj			\
         $(SLO)$/helplineprimitive2d.obj			\
+        $(SLO)$/hittestprimitive2d.obj			\
         $(SLO)$/markerarrayprimitive2d.obj		\
         $(SLO)$/pointarrayprimitive2d.obj		\
         $(SLO)$/maskprimitive2d.obj				\

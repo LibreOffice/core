@@ -31,7 +31,7 @@
 #ifndef SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 #define SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 
-#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/uno/Reference.hxx>
@@ -59,7 +59,7 @@ namespace sdr { namespace contact {
     //= ViewObjectContactOfUnoControl
     //====================================================================
     class ViewObjectContactOfUnoControl_Impl;
-    class SVX_DLLPRIVATE ViewObjectContactOfUnoControl : public ViewObjectContact
+    class SVX_DLLPRIVATE ViewObjectContactOfUnoControl : public ViewObjectContactOfSdrObj
     {
     protected:
         ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >    m_pImpl;
@@ -100,6 +100,14 @@ namespace sdr { namespace contact {
         /** positions the control for subsequent paint operations
         */
         void    positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const;
+
+        /** callback from impl class to react on changes of properties form the XControlModel
+        */
+        void propertyChange();
+
+        /** React on changes of the object of this ViewContact
+        */
+        virtual void ActionChanged();
 
     protected:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );

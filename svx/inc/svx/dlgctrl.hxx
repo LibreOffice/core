@@ -430,33 +430,60 @@ public:
                     BOOL bStart = TRUE );
 };
 
+//////////////////////////////////////////////////////////////////////////////
+
+class SdrObject;
+class SdrModel;
+
+class SvxPreviewBase : public Control
+{
+private:
+    SdrModel*                                       mpModel;
+    VirtualDevice*                                  mpBufferDevice;
+
+protected:
+    void InitSettings(bool bForeground, bool bBackground);
+
+    // prepare buffered paint
+    void LocalPrePaint();
+
+    // end and output buffered paint
+    void LocalPostPaint();
+
+public:
+    SvxPreviewBase( Window* pParent, const ResId& rResId );
+    virtual ~SvxPreviewBase();
+
+    // change support
+    virtual void StateChanged(StateChangedType nStateChange);
+    virtual void DataChanged(const DataChangedEvent& rDCEvt);
+
+    // dada read access
+    SdrModel& getModel() const { return *mpModel; }
+    OutputDevice& getBufferDevice() const { return *mpBufferDevice; }
+};
+
 /*************************************************************************
 |*
 |* SvxLinePreview
 |*
 \************************************************************************/
 
-class SdrObject;
-class SdrModel;
-
-class SVX_DLLPUBLIC SvxXLinePreview : public Control
+class SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
 {
 private:
     SdrObject*                                      mpLineObjA;
     SdrObject*                                      mpLineObjB;
     SdrObject*                                      mpLineObjC;
-    SdrModel*                                       mpModel;
 
     //#58425# Symbole auf einer Linie (z.B. StarChart)
     Graphic*                                        mpGraphic;
     sal_Bool                                        mbWithSymbol;
     Size                                            maSymbolSize;
 
-    SVX_DLLPRIVATE void InitSettings( BOOL bForeground, BOOL bBackground );
-
 public:
     SvxXLinePreview( Window* pParent, const ResId& rResId );
-    ~SvxXLinePreview();
+    virtual ~SvxXLinePreview();
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
 
@@ -465,8 +492,6 @@ public:
     void ResizeSymbol( const Size& s );
 
     virtual void Paint( const Rectangle& rRect );
-    virtual void StateChanged( StateChangedType nStateChange );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*************************************************************************
@@ -475,23 +500,18 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxXRectPreview : public Control
+class SVX_DLLPUBLIC SvxXRectPreview : public SvxPreviewBase
 {
 private:
     SdrObject*                                      mpRectangleObject;
-    SdrModel*                                       mpModel;
-
-    SVX_DLLPRIVATE void InitSettings(bool bForeground, bool bBackground);
 
 public:
     SvxXRectPreview( Window* pParent, const ResId& rResId );
-    ~SvxXRectPreview();
+    virtual ~SvxXRectPreview();
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*************************************************************************
@@ -500,26 +520,21 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxXShadowPreview : public Control
+class SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
 {
 private:
     SdrObject*                                      mpRectangleObject;
     SdrObject*                                      mpRectangleShadow;
-    SdrModel*                                       mpModel;
-
-    SVX_DLLPRIVATE void InitSettings(bool bForeground, bool bBackground);
 
 public:
     SvxXShadowPreview( Window* pParent, const ResId& rResId );
-    ~SvxXShadowPreview();
+    virtual ~SvxXShadowPreview();
 
     void SetRectangleAttributes(const SfxItemSet& rItemSet);
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 #endif // _SVX_DLG_CTRL_HXX

@@ -73,6 +73,9 @@ namespace drawinglayer
                 const ::std::vector< double >& rDotDashArray, double fFullDotDashLen);
             ~SdrLineAttribute();
 
+            // constructor to create a line attribute for a colored hairline
+            SdrLineAttribute(const basegfx::BColor& rColor);
+
             // compare operator
             bool operator==(const SdrLineAttribute& rCandidate) const;
 

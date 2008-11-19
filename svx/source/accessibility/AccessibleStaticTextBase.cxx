@@ -722,8 +722,8 @@ namespace accessibility
         // #104481# Return the empty string for 'no selection'
         if( nStart < 0 || nEnd < 0 )
             return ::rtl::OUString();
-        else
-            return getTextRange( nStart, nEnd );
+
+        return getTextRange( nStart, nEnd );
     }
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionStart() throw (uno::RuntimeException)

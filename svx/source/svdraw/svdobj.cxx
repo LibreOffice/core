@@ -365,15 +365,6 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
     return *mpViewContact;
 }
 
-void SdrObject::FlushViewContact() const
-{
-    if(mpViewContact)
-    {
-        delete mpViewContact;
-        ((SdrObject*)this)->mpViewContact = 0;
-    }
-}
-
 // DrawContact support: Methods for handling Object changes
 void SdrObject::ActionChanged() const
 {
@@ -2637,23 +2628,23 @@ void SdrObject::SetInserted(sal_Bool bIns)
 
 void SdrObject::SetMoveProtect(sal_Bool bProt)
 {
-    bMovProt = bProt;
-    SetChanged();
-
-    if(IsInserted() && pModel)
+    if(IsMoveProtect() != bProt)
     {
-        SdrHint aHint(*this);
-        pModel->Broadcast(aHint);
+        // #i77187# secured and simplified
+        bMovProt = bProt;
+        SetChanged();
+        BroadcastObjectChange();
     }
 }
 
 void SdrObject::SetResizeProtect(sal_Bool bProt)
 {
-    bSizProt=bProt;
-    SetChanged();
-    if (IsInserted() && pModel!=NULL) {
-        SdrHint aHint(*this);
-        pModel->Broadcast(aHint);
+    if(IsResizeProtect() != bProt)
+    {
+        // #i77187# secured and simplified
+        bSizProt = bProt;
+        SetChanged();
+        BroadcastObjectChange();
     }
 }
 

@@ -68,6 +68,10 @@ namespace drawinglayer
         {
             maContent.SetOutputSizePixel(maDestPixel.GetSize(), false);
 
+            // #i93485# assert when copying from window to VDev is used
+            OSL_ENSURE(rOutDev.GetOutDevType() != OUTDEV_WINDOW,
+                "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
+
             const bool bWasEnabledSrc(rOutDev.IsMapModeEnabled());
             rOutDev.EnableMapMode(false);
             maContent.DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), rOutDev);

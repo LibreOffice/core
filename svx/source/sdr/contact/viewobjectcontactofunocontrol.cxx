@@ -1347,7 +1347,9 @@ namespace sdr { namespace contact {
 
         // a generic property changed. If we're in design mode, we need to repaint the control
         if ( impl_isControlDesignMode_nothrow() )
-            m_pAntiImpl->GetObjectContact().InvalidatePartOfView( m_pAntiImpl->getObjectRange() );
+        {
+            m_pAntiImpl->propertyChange();
+        }
     }
 
     //--------------------------------------------------------------------
@@ -1477,7 +1479,7 @@ namespace sdr { namespace contact {
     DBG_NAME( ViewObjectContactOfUnoControl )
     //--------------------------------------------------------------------
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
-        :ViewObjectContact( _rObjectContact, _rViewContact )
+        :ViewObjectContactOfSdrObj( _rObjectContact, _rViewContact )
         ,m_pImpl( new ViewObjectContactOfUnoControl_Impl( this ) )
     {
         DBG_CTOR( ViewObjectContactOfUnoControl, NULL );
@@ -1569,6 +1571,14 @@ namespace sdr { namespace contact {
     {
         VOCGuard aGuard( *m_pImpl );
         m_pImpl->setControlDesignMode( _bDesignMode );
+
+        if(!_bDesignMode)
+        {
+            // when live mode is switched on, a refresh is needed. The edit mode visualisation
+            // needs to be repainted and the now used VCL-Window needs to be positioned and
+            // sized. Both is done from the repant refresh.
+            const_cast< ViewObjectContactOfUnoControl* >(this)->ActionChanged();
+        }
     }
 
     //--------------------------------------------------------------------
@@ -1581,36 +1591,10 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
     {
-        // current vsiualisation call. This is necessary to actually incarnate, position and size
-        // a control which is represented as VCL-ChildWindow. This mechanism is placed here ATM for
-        // convenience but may be placed to the View completely later:
-        //
-        // Let the OC (ObjectContact) aka View have a Pre-Run through the draw hierarchy and handle
-        // necessary changes at xShapes which ARE controls. This needs to be done in Preparation of a
-        // Paint.
-        //
-        // There is also the possibility to create a ControlPrimitiveRenderer which may be used as
-        // paint-pre-run and records/handles all ControlPrimitives he finds.
-        //
-        // To test the possibility that the renderer does the positioning and sizing i added a
-        // static flag here which will force a xControl to exist as a VCL Child window and it will
-        // be added to the Primitive. There is an analog flag in the VCL pixel renderer in drawinglayer
-        // to position and size he control there (look for bDoSizeAndPositionControlsA)
-        static bool bDoSizeAndPositionControlsA(true);
-
-        if(bDoSizeAndPositionControlsA)
-        {
-            if(rDisplayInfo.GetControlLayerProcessingActive())
-            {
-                positionControlForPaint(rDisplayInfo);
-            }
-        }
-        else
-        {
-            // force control here to make it a VCL ChildWindow. Will be fetched
-            // and used below by getExistentControl()
-            m_pImpl->ensureControl();
-        }
+        // force control here to make it a VCL ChildWindow. Will be fetched
+        // and used below by getExistentControl()
+        m_pImpl->ensureControl();
+        m_pImpl->positionControlForPaint(rDisplayInfo);
 
         // get needed data
         const ViewContactOfUnoControl& rViewContactOfUnoControl(static_cast< const ViewContactOfUnoControl& >(GetViewContact()));
@@ -1647,6 +1631,42 @@ namespace sdr { namespace contact {
             // handing over a XControl. If not even a XControlModel exists, it will
             // create the SdrObject fallback visualisation
             return rViewContactOfUnoControl.getViewIndependentPrimitive2DSequence();
+        }
+    }
+
+    void ViewObjectContactOfUnoControl::propertyChange()
+    {
+        // graphical invalidate at all views
+        ActionChanged();
+
+        // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
+        // since e.g. background color has changed and existing decompositions are evtl. no
+        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
+        // since it only has a uno reference to the XControlModel
+        flushPrimitive2DSequence();
+    }
+
+    void ViewObjectContactOfUnoControl::ActionChanged()
+    {
+        // call parent
+        ViewObjectContactOfSdrObj::ActionChanged();
+        const ControlHolder& rControl(m_pImpl->getExistentControl());
+
+        if(rControl.is() && !rControl.isDesignMode())
+        {
+            // #i93180# if layer visibility has changed and control is in live mode, it is necessary
+            // to correct visibility to make those control vanish on SdrObject LayerID changes
+            const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+
+            if(pSdrPageView)
+            {
+                const bool bIsLayerVisible(pSdrPageView->GetVisibleLayers().IsSet(getSdrObject().GetLayer()));
+
+                if(rControl.isVisible() != bIsLayerVisible)
+                {
+                    rControl.setVisible(bIsLayerVisible);
+                }
+            }
         }
     }
 

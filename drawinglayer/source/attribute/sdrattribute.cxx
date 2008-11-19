@@ -58,6 +58,16 @@ namespace drawinglayer
         {
         }
 
+        SdrLineAttribute::SdrLineAttribute(const basegfx::BColor& rColor)
+        :   meJoin(basegfx::B2DLINEJOIN_NONE),
+            mfWidth(0.0),
+            mfTransparence(0.0),
+            maColor(rColor),
+            maDotDashArray(),
+            mfFullDotDashLen(0.0)
+        {
+        }
+
         SdrLineAttribute::~SdrLineAttribute()
         {
         }

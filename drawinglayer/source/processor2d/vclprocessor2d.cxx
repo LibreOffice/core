@@ -56,6 +56,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vclhelperbufferdevice.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
 #include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
@@ -64,6 +65,7 @@
 #include <svtools/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <tools/diagnose_ex.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -94,6 +96,7 @@ namespace drawinglayer
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::UNO_QUERY;
         using ::com::sun::star::uno::UNO_QUERY_THROW;
+        using ::com::sun::star::uno::Exception;
         using ::com::sun::star::awt::XView;
         using ::com::sun::star::awt::XGraphics;
         using ::com::sun::star::awt::XWindow;
@@ -712,6 +715,52 @@ namespace drawinglayer
             }
         }
 
+        // unified sub-transparence. Draw to VDev first.
+        void VclProcessor2D::RenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rTransCandidate)
+        {
+            static bool bForceToDecomposition(false);
+
+            if(rTransCandidate.getChildren().hasElements())
+            {
+                if(bForceToDecomposition)
+                {
+                    // use decomposition
+                    process(rTransCandidate.get2DDecomposition(getViewInformation2D()));
+                }
+                else
+                {
+                    if(0.0 == rTransCandidate.getAlpha())
+                    {
+                        // no transparence used, so just use the content
+                        process(rTransCandidate.getChildren());
+                    }
+                    else if(rTransCandidate.getAlpha() > 0.0 && rTransCandidate.getAlpha() < 1.0)
+                    {
+                        // alpha is in visible range
+                        basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
+                        aRange.transform(maCurrentTransformation);
+                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+
+                        if(aBufferDevice.isVisible())
+                        {
+                            // remember last OutDev and set to content
+                            OutputDevice* pLastOutputDevice = mpOutputDevice;
+                            mpOutputDevice = &aBufferDevice.getContent();
+
+                            // paint content to it
+                            process(rTransCandidate.getChildren());
+
+                            // back to old OutDev
+                            mpOutputDevice = pLastOutputDevice;
+
+                            // dump buffer to outdev using given alpha
+                            aBufferDevice.paint(rTransCandidate.getAlpha());
+                        }
+                    }
+                }
+            }
+        }
+
         // sub-transparence group. Draw to VDev first.
         void VclProcessor2D::RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate)
         {
@@ -1098,32 +1147,6 @@ namespace drawinglayer
 
                 mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
             }
-        }
-
-        basegfx::B2DPoint VclProcessor2D::PositionAndSizeControl(const primitive2d::ControlPrimitive2D& rControlPrimitive2D)
-        {
-            // prepare output for given device
-            Reference< XGraphics > xGraphics(mpOutputDevice->CreateUnoGraphics());
-            Reference< XView > xControlView(rControlPrimitive2D.getXControl(), UNO_QUERY_THROW);
-            xControlView->setGraphics(xGraphics);
-
-            // set position and size (in pixel)
-            const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation * rControlPrimitive2D.getTransform());
-            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
-            Reference< XWindow > xControlWindow(rControlPrimitive2D.getXControl(), UNO_QUERY);
-
-            if(xControlWindow.is())
-            {
-                const basegfx::B2DPoint aBottomRightPixel(aObjectToPixel * basegfx::B2DPoint(1.0, 1.0));
-
-                xControlWindow->setPosSize(
-                    basegfx::fround(aTopLeftPixel.getX()), basegfx::fround(aTopLeftPixel.getY()),
-                    basegfx::fround(aBottomRightPixel.getX() - aTopLeftPixel.getX()),
-                    basegfx::fround(aBottomRightPixel.getY() - aTopLeftPixel.getY()),
-                    POSSIZE);
-            }
-
-            return aTopLeftPixel;
         }
 
         //////////////////////////////////////////////////////////////////////////////

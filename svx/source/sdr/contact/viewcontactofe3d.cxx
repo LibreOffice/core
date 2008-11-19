@@ -211,14 +211,7 @@ namespace sdr
 
             if(bFallbackToCreateAsLineForTest)
             {
-                ::std::vector< double > aEmptyVector;
-                return new drawinglayer::attribute::SdrLineAttribute(
-                    basegfx::B2DLINEJOIN_NONE,
-                    0.0,
-                    0.0,
-                    rBColor,
-                    aEmptyVector,
-                    0.0);
+                return new drawinglayer::attribute::SdrLineAttribute(rBColor);
             }
             else
             {

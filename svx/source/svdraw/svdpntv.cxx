@@ -228,7 +228,6 @@ void SdrPaintView::ImpClearVars()
     bPageVisible=TRUE;
     bPageBorderVisible=TRUE;
     bBordVisible=TRUE;
-    bBordVisibleOnlyLeftRight=FALSE;
     bGridVisible=TRUE;
     bGridFront  =FALSE;
     bHlplVisible=TRUE;
