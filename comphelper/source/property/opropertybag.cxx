@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opropertybag.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,8 +176,10 @@ namespace comphelper
     void OPropertyBag::setModifiedImpl(::sal_Bool bModified,
             bool bIgnoreRuntimeExceptionsWhileFiring)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        m_isModified = bModified;
+        { // do not lock mutex while notifying (#i93514#) to prevent deadlock
+            ::osl::MutexGuard aGuard( m_aMutex );
+            m_isModified = bModified;
+        }
         if (bModified) {
             try {
                 Reference<XInterface> xThis(*this);

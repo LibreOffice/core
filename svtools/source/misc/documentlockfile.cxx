@@ -8,7 +8,7 @@
  *
  * $RCSfile: documentlockfile.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,26 +184,24 @@ uno::Sequence< ::rtl::OUString > DocumentLockFile::ParseEntry( const uno::Sequen
         if ( o_nCurPos >= aBuffer.getLength() )
             throw io::WrongFormatException();
 
-        if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' )
+        if ( bEscape )
+        {
+            if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' || aBuffer[o_nCurPos] == '\\' )
+                aResult.append( (sal_Char)aBuffer[o_nCurPos] );
+            else
+                throw io::WrongFormatException();
+
+            bEscape = sal_False;
+            o_nCurPos++;
+        }
+        else if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' )
             bHaveName = sal_True;
         else
         {
-            if ( bEscape )
-            {
-                if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' || aBuffer[o_nCurPos] == '\\' )
-                    aResult.append( (sal_Char)aBuffer[o_nCurPos] );
-                else
-                    throw io::WrongFormatException();
-
-                bEscape = sal_False;
-            }
+            if ( aBuffer[o_nCurPos] == '\\' )
+                bEscape = sal_True;
             else
-            {
-                if ( aBuffer[o_nCurPos] == '\\' )
-                    bEscape = sal_True;
-                else
-                    aResult.append( (sal_Char)aBuffer[o_nCurPos] );
-            }
+                aResult.append( (sal_Char)aBuffer[o_nCurPos] );
 
             o_nCurPos++;
         }

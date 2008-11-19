@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediadescriptor.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -827,7 +827,12 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
             if( bLockFile && aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
                 bReadOnly = sal_True;
             else
+            {
+                sal_Bool bRequestReadOnly = bReadOnly;
                 aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bReadOnly;
+                if ( bReadOnly && !bRequestReadOnly && bModeRequestedExplicitly )
+                        return sal_False; // the document is explicitly requested with WRITEABLE mode
+            }
         }
         catch(const css::uno::RuntimeException&)
             { throw; }

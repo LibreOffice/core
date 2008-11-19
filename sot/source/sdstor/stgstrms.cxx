@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stgstrms.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -823,6 +823,9 @@ void* StgDataStrm::GetPtr( INT32 Pos, BOOL bForce, BOOL bDirty )
 
 INT32 StgDataStrm::Read( void* pBuf, INT32 n )
 {
+    if ( n < 0 )
+        return 0;
+
     if( ( nPos + n ) > nSize )
         n = nSize - nPos;
     INT32 nDone = 0;

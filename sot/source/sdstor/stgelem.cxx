@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stgelem.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,12 +158,18 @@ BOOL StgHeader::Store( StgIo& rIo )
     return BOOL( !bDirty );
 }
 
-// Perform thorough checks also on unknown variables
+static bool lcl_wontoverflow(short shift)
+{
+    return shift >= 0 && shift < (short)sizeof(short) * 8 - 1;
+}
 
+// Perform thorough checks also on unknown variables
 BOOL StgHeader::Check()
 {
     return BOOL( memcmp( cSignature, cStgSignature, 8 ) == 0
-            &&   (short) ( nVersion >> 16 ) == 3 );
+            && (short) ( nVersion >> 16 ) == 3 )
+            && lcl_wontoverflow(nPageSize)
+            && lcl_wontoverflow(nDataPageSize);
 }
 
 INT32 StgHeader::GetFATPage( short n ) const

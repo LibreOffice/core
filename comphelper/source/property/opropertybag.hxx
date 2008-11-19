@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opropertybag.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -77,7 +77,7 @@ namespace comphelper
     //====================================================================
     typedef ::cppu::WeakAggImplHelper5  <   ::com::sun::star::beans::XPropertyContainer
                                         ,   ::com::sun::star::beans::XPropertyAccess
-                                        ,   ::com::sun::star::util::XModifyBroadcaster
+                                        ,   ::com::sun::star::util::XModifiable
                                         ,   ::com::sun::star::lang::XServiceInfo
                                         ,   ::com::sun::star::lang::XInitialization
                                         >   OPropertyBag_Base;
