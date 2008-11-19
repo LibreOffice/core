@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: glshell.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.236.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/frame/XTitle.hpp>
 
 #include <tools/list.hxx>
 #include <svtools/eitem.hxx>
@@ -78,6 +79,7 @@
 #include <swslots.hxx>
 #endif
 
+using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE( SwGlosDocShell, SwDocShell, SW_RES(0) )
 {
@@ -340,6 +342,15 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         }
 
         xDocSh->SetTitle( aDocTitle );
+        try
+        {
+            // set the UI-title
+            uno::Reference< frame::XTitle > xTitle( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
+            xTitle->setTitle( aDocTitle );
+        }
+        catch( uno::Exception& )
+        {}
+
         xDocSh->GetDoc()->DoUndo( bDoesUndo );
         xDocSh->GetDoc()->ResetModified();
         if ( bShow )
