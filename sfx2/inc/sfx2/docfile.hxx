@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -312,7 +312,6 @@ public:
     SAL_DLLPRIVATE void Cancel_Impl();
     SAL_DLLPRIVATE void SetPhysicalName_Impl(const String& rName);
     SAL_DLLPRIVATE void MoveTempTo_Impl( SfxMedium* pMedium );
-    SAL_DLLPRIVATE void MoveStorageTo_Impl( SfxMedium* pMedium );
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( sal_Bool bDisposeStorage );
     SAL_DLLPRIVATE sal_Bool WillDisposeStorageOnClose_Impl();
 

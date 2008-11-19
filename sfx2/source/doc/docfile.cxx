@@ -1559,7 +1559,12 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
         nStorOpenMode = nStorOpen;
 
         if( !bDontClose )
-            Close();
+        {
+            if ( pImp->xStorage.is() )
+                CloseStorage();
+
+            CloseStreams_Impl();
+        }
     }
 
     bDirect     = bDirectP;
@@ -1691,7 +1696,11 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 
     if( !eError || (eError & ERRCODE_WARNING_MASK) )
     {
-        Close();
+        if ( pImp->xStorage.is() )
+            CloseStorage();
+
+        CloseStreams_Impl();
+
         ::ucbhelper::Content aTempCont;
         if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aTempCont ) )
         {
@@ -1872,7 +1881,10 @@ void SfxMedium::Transfer_Impl()
              if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
             {
                 // write directly to the stream
-                Close();
+                if ( pImp->xStorage.is() )
+                    CloseStorage();
+
+                CloseStreams_Impl();
 
                 INetURLObject aSource( aNameURL );
                 ::ucbhelper::Content aTempCont;
@@ -1993,7 +2005,11 @@ void SfxMedium::Transfer_Impl()
                     xStor->Commit();
 
                     // take new unpacked storage as own storage
-                    Close();
+                    if ( pImp->xStorage.is() )
+                        CloseStorage();
+
+                    CloseStreams_Impl();
+
                     DELETEZ( pImp->pTempFile );
                     ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aName );
                     SetStorage_Impl( xStor );
@@ -2055,7 +2071,11 @@ void SfxMedium::Transfer_Impl()
             if ( !eError || (eError & ERRCODE_WARNING_MASK) )
             {
                 // free resources, otherwise the transfer may fail
-                Close();
+                if ( pImp->xStorage.is() )
+                    CloseStorage();
+
+                CloseStreams_Impl();
+
                 // don't create content before Close(), because if the storage was opened in direct mode, it will be flushed
                 // in Close() and this leads to a transfer command executed in the package, which currently is implemented as
                 // remove+move in the file FCP. The "remove" is notified to the ::ucbhelper::Content, that clears its URL and its
@@ -2360,13 +2380,7 @@ void SfxMedium::GetMedium_Impl()
                 sal_Bool bReadOnly = sal_False;
                 aMedium[comphelper::MediaDescriptor::PROP_READONLY()] >>= bReadOnly;
                 if ( bReadOnly )
-                {
-                    SFX_ITEMSET_ARG( GetItemSet(), pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
-                    BOOL bForceWritable = ( pROItem && !pROItem->GetValue() );
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-                    if( bForceWritable )
-                        SetError( ERRCODE_IO_ACCESSDENIED );
-                }
 
                 //TODO/MBA: what happens if property is not there?!
                 GetContent();
@@ -2894,26 +2908,6 @@ void SfxMedium::SetPhysicalName_Impl( const String& rNameP )
 }
 
 //----------------------------------------------------------------
-void SfxMedium::MoveStorageTo_Impl( SfxMedium* pMedium )
-{
-    if ( pMedium && pMedium != this && pImp->xStorage.is() )
-    {
-        if( pMedium->pImp->pTempFile )
-        {
-            pMedium->pImp->pTempFile->EnableKillingFile( sal_True );
-            delete pMedium->pImp->pTempFile;
-            pMedium->pImp->pTempFile = NULL;
-        }
-
-        pMedium->Close();
-        pMedium->aName = aName;
-        pMedium->pImp->xStorage = pImp->xStorage;
-
-        CanDisposeStorage_Impl( sal_False );
-    }
-}
-
-//----------------------------------------------------------------
 void SfxMedium::MoveTempTo_Impl( SfxMedium* pMedium )
 {
     if ( pMedium && pMedium != this && pImp->pTempFile )
@@ -2996,6 +2990,7 @@ void SfxMedium::CompleteReOpen()
     {
         pTmpFile->EnableKillingFile( sal_True );
         delete pTmpFile;
+
     }
 
     pImp->bUseInteractionHandler = bUseInteractionHandler;

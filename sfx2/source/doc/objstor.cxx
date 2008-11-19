@@ -649,10 +649,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     EnableSetModified( sal_False );
 
+    pMedium->LockOrigFileOnDemand( sal_True );
     if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
-        pMedium->LockOrigFileOnDemand( sal_True );
-
         uno::Reference< embed::XStorage > xStorage;
         if ( pMedium->GetError() == ERRCODE_NONE )
             xStorage = pMedium->GetStorage();
@@ -1301,9 +1300,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
         return sal_False;
 
+    rMedium.LockOrigFileOnDemand( sal_False );
     if ( bStorageBasedTarget )
     {
-        rMedium.LockOrigFileOnDemand( sal_False );
         if ( rMedium.GetErrorCode() )
             return sal_False;
 

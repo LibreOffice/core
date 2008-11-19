@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objmisc.cxx,v $
- * $Revision: 1.102 $
+ * $Revision: 1.102.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -535,7 +535,23 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
         sal_Bool bOldValue = HasSharedXMLFlagSet();
         SetSharedXMLFlag( bShared );
 
-        if ( bSave )
+        ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        sal_Bool bRemoveEntryOnError = sal_False;
+        if ( bResult && bShared )
+        {
+            try
+            {
+                ::svt::ShareControlFile aControlFile( aOrigURL );
+                aControlFile.InsertOwnEntry();
+                bRemoveEntryOnError = sal_True;
+            }
+            catch( uno::Exception& )
+            {
+                bResult = sal_False;
+            }
+        }
+
+        if ( bResult && bSave )
         {
             SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( this );
 
@@ -553,17 +569,6 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
             // TODO/LATER: Is it possible that the following calls fail?
             if ( bShared )
             {
-                ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-                try
-                {
-                    ::svt::ShareControlFile aControlFile( aOrigURL );
-                    aControlFile.InsertOwnEntry();
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO/LATER: in future the switching should not happen and an error should be shown
-                }
-
                 pImp->m_aSharedFileURL = aOrigURL;
                 GetMedium()->SwitchDocumentToTempFile();
             }
@@ -578,6 +583,7 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 
                 try
                 {
+                    // aOrigURL can not be used since it contains an old value
                     ::svt::ShareControlFile aControlFile( GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                     aControlFile.RemoveFile();
                 }
@@ -589,6 +595,17 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
         else
         {
             // the saving has failed!
+            if ( bRemoveEntryOnError )
+            {
+                try
+                {
+                    ::svt::ShareControlFile aControlFile( aOrigURL );
+                    aControlFile.RemoveEntry();
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
             SetSharedXMLFlag( bOldValue );
         }
     }

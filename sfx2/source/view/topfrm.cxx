@@ -73,7 +73,6 @@
 #include <unotools/bootstrap.hxx>
 
 #include <sfxresid.hxx>
-#include <../appl/app.hrc>
 
 // wg. pTopFrames
 #include "appdata.hxx"
@@ -1087,14 +1086,6 @@ String SfxTopViewFrame::UpdateTitle()
     pImp->aFactoryName = String::CreateFromAscii( rFact.GetShortName() );
 
     String aTitle = SfxViewFrame::UpdateTitle();
-
-    // xmlsec05, check with SFX team
-    if ( GetObjectShell()->GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
-    {
-        aTitle += String::CreateFromAscii( " " );
-        aTitle += String( SfxResId( RID_XMLSEC_DOCUMENTSIGNED ) );
-        aTitle += String::CreateFromAscii( " " );
-    }
 
     ::rtl::OUString aProductName;
     ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;

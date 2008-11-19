@@ -3585,10 +3585,21 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
     ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
     if ( m_pData->m_pObjectShell )
     {
+        SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+        if ( pMedium )
+        {
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+            if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
+                aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
+        }
+
         if ( m_pData->m_pObjectShell->IsReadOnlyUI() || m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly() )
             aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
+
+        if ( m_pData->m_pObjectShell->GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+            aResult += String( SfxResId( RID_XMLSEC_DOCUMENTSIGNED ) );
     }
 
     return aResult;

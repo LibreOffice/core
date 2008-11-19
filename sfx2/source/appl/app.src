@@ -1100,7 +1100,7 @@ InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 
 String RID_XMLSEC_DOCUMENTSIGNED
 {
-    Text [ en-US ] = "(Signed)" ;
+    Text [ en-US ] = " (Signed)" ;
 };
 
 Image IMG_MISSING_1
