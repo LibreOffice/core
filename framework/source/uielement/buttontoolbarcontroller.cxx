@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: buttontoolbarcontroller.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@
 #include <vcl/bitmap.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/miscopt.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -288,11 +288,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aArgs[0].Value  = makeAny( KeyModifier );
 
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ButtonToolbarController"));
-                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-            }
+                UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )

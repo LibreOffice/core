@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tbxitem.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.70.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,6 +113,7 @@
 #include "imagemgr.hxx"
 
 #include <comphelper/uieventslogger.hxx>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 //using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -462,15 +463,7 @@ void SfxToolBoxControl::Dispatch(
 
         Reference < XDispatch > xDispatch = rProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )
-        {
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("SfxToolBoxControl"));
-                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-            }
             xDispatch->dispatch( aTargetURL, aArgs );
-        }
     }
 }
 
@@ -491,7 +484,28 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
 
         Reference < XDispatch > xDispatch = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )
+        {
+            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            {
+                ::rtl::OUString sAppName;
+                try
+                {
+                    static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
+                        ::comphelper::getProcessServiceFactory();
+                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
+                        xServiceManager->createInstance(our_aModuleManagerName)
+                        , ::com::sun::star::uno::UNO_QUERY_THROW);
+                    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
+                        getFrameInterface(), UNO_QUERY_THROW);
+                    sAppName = xModuleManager->identify(xFrame);
+                } catch(::com::sun::star::uno::Exception&) {}
+                Sequence<PropertyValue> source;
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
+            }
             xDispatch->dispatch( aTargetURL, aArgs );
+        }
     }
 }
 

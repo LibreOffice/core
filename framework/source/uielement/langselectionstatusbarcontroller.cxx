@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langselectionstatusbarcontroller.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,7 @@
 #include <com/sun/star/awt/Command.hpp>
 #include <svtools/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -395,11 +395,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
         {
             uno::Sequence< beans::PropertyValue > aPV;
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                uno::Sequence<beans::PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("LangSelectionStatusbarController"));
-                ::comphelper::UiEventsLogger::logDispatch(aURL, source);
-            }
+                UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aURL, aPV);
             xDispatch->dispatch( aURL, aPV);
         }
     }

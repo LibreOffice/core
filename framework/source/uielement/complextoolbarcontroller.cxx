@@ -65,7 +65,7 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -159,6 +159,12 @@ throw ( RuntimeException )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            UiEventLogHelper(::rtl::OUString::createFromAscii("ComplexToolbarController")).log(
+                m_xServiceManager,
+                m_xFrame,
+                aTargetURL,
+                aArgs);
         Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
@@ -240,12 +246,6 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteI
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        {
-            Sequence<PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ComplexToolbarController"));
-            ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
-        }
        // Asynchronous execution as this can lead to our own destruction!
        // Framework can recycle our current frame and the layout manager disposes all user interface
        // elements if a component gets detached from its frame!

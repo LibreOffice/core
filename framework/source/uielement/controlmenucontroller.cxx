@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: controlmenucontroller.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,7 @@
 #include <tools/rcid.h>
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 // Copied from svx
 // Function-Id's
@@ -333,7 +333,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
                     break;
             }
 
-            if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
+          if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
                 nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
 
@@ -385,11 +385,7 @@ void SAL_CALL ControlMenuController::select( const css::awt::MenuEvent& rEvent )
             {
                 Reference< XDispatch > xDispatch = pIter->second;
                 if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                {
-                    Sequence<css::beans::PropertyValue> source;
-                    ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ControlMenuController"));
-                    ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-                }
+                    UiEventLogHelper(::rtl::OUString::createFromAscii("ControlMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
                 if ( xDispatch.is() )
                     xDispatch->dispatch( aTargetURL, aArgs );
             }
