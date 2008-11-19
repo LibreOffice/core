@@ -151,14 +151,14 @@ testcase tAutomaticControlFocus2
    	sleep(1)
 	'/// insert three Text Boxes
     printlog "insert three Text Boxes"
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
 	sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
 	sleep(2)
     fSetControlProperty("Edit","DefaultValue","tt_control1")
 	
-	call hDrawingWithSelection  ( 35, 40, 55, 50 )
+	call hDrawingWithSelection  ( 50, 40, 60, 50 )
 	sleep(2)
     ' open and close the form property browser to get the focus
 	Kontext "FormControls"
@@ -180,7 +180,7 @@ testcase tAutomaticControlFocus2
 
     sleep(1)
     
-    call hDrawingWithSelection  ( 10, 60, 20, 70 )
+    call hDrawingWithSelection  ( 50, 60, 60, 70 )
 	sleep(2)
     ' open and close the form property browser to get the focus
     Kontext "FormControls"
@@ -594,7 +594,7 @@ testcase tTabStop
    	sleep(1)
 	'/// insert one Text Box
     printlog "insert one Text Box"    
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
 	sleep(2)
 	
     '/// open the control propery browser
@@ -613,7 +613,7 @@ testcase tTabStop
     
 	'/// insert again one Text Box
     printlog "insert again one Text Box"
-	call hDrawingWithSelection  ( 20, 40, 30, 50 )
+	call hDrawingWithSelection  ( 50, 40, 60, 50 )
 	
     sleep(2)    
 	
@@ -637,7 +637,7 @@ testcase tTabStop
 
     '/// insert again one Text Box
     printlog "insert again one Text Box"    
-    call hDrawingWithSelection  ( 20, 60, 30, 70 )
+    call hDrawingWithSelection  ( 50, 60, 60, 70 )
 	
     sleep(2)
     
@@ -718,7 +718,7 @@ testcase tActivationOrder
         
     '/// insert one Text Box
     printlog "insert one Text Box"
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
 	sleep(2)
     
     '/// open the control property browser
@@ -744,7 +744,7 @@ testcase tActivationOrder
     
     '/// insert one Text Box
     printlog "insert one Text Box"
-	call hDrawingWithSelection  ( 20, 40, 30, 50 )
+	call hDrawingWithSelection  ( 50, 40, 60, 50 )
 	sleep(2)
     
     '/// open the control property browser
@@ -767,7 +767,7 @@ testcase tActivationOrder
     
     '/// insert one Text Box
     printlog "insert one Text Box"
-    call hDrawingWithSelection  ( 20, 60, 30, 70 )
+    call hDrawingWithSelection  ( 50, 60, 60, 70 )
 	sleep(2)
     
     '/// open the control property browser
@@ -980,7 +980,7 @@ testcase tAddFields
         sleep(1)
     '/// insert three Text Boxes
     printlog "insert three Text Boxes"
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
 	sleep(2)
 	Kontext "FormControls"
 	    FormProperties.Click

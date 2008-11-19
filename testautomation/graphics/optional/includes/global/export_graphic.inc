@@ -59,7 +59,7 @@ testcase tEPS
     sFilter = "EPS - Encapsulated PostScript (.eps)"
     sExt = ".eps"
 
-    open the document
+   printlog "open the document"
    hFileOpen ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
 
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
@@ -150,7 +150,7 @@ testcase tPCT
    sFilter = "PCT - Mac Pict (.pct;.pict)"
    sExt = ".pct"
 
-   printlog " open the document
+   printlog "open the document"
    sDocument = ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
    hFileOpen sDocument
 
@@ -547,10 +547,10 @@ testcase tGIF
    sFilter = "GIF - Graphics Interchange Format (.gif)"
    sExt = ".gif"
 
-   printlog "Open the document"
+   printlog "open the document"
    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
 
-   printlog " save it ///'
+   printlog "save it"
    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
       Kontext "GIFOptionen"
       if GIFOptionen.Exists (2) then

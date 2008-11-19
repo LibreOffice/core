@@ -70,7 +70,7 @@ testcase tSpinButton
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         sleep(1)    
-        call addControl ( "SpinButton", 20, 20, 30, 30 )
+        call addControl ( "SpinButton", 50, 20, 60, 30 )
         sleep(2)
     '/// open the control property browser
 	call fOpenControlPropertyBrowser
@@ -135,11 +135,11 @@ testcase tScrollBar
     Kontext "DocumentWriter"       
         DocumentWriter.TypeKeys "tt_doc" , true
         sleep(1)       	
-   	    call addControl("ScrollBar", 20, 20, 30, 30 )        
-    '/// open the control property browser
-	    Kontext "FormControls"
-        ControlProperties.Click
-        sleep (1)
+   	    call addControl("ScrollBar", 50, 20, 60, 30 )        
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser	    
+        
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -228,11 +228,11 @@ testcase tImageButton
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-	call addControl("ImageButton", 20, 20, 30, 30 )
+	call addControl("ImageButton", 50, 20, 60, 30 )
         
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+	printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+    
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -292,11 +292,11 @@ testcase tImageControl
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
     
-    call addControl("ImageControl", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("ImageControl", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -344,11 +344,11 @@ testcase tFileControl
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-    call addControl("FileControl", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("FileControl", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -397,11 +397,11 @@ testcase tDateField
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-    call addControl("DateField", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("DateField", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -477,11 +477,11 @@ testcase tTimeField
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-    call addControl("TimeField", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("TimeField", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -536,11 +536,11 @@ testcase tNumericField
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-    call addControl("NumericField", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("NumericField", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -604,11 +604,11 @@ testcase tCurrencyField
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
     
-    call addControl("CurrencyField", 20, 20, 30, 30 )
-	    
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("CurrencyField", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -668,11 +668,11 @@ testcase tPatternField
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
     
-    call addControl("PatternField", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("PatternField", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -731,11 +731,11 @@ testcase tGroupBox
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-    addControl("GroupBox", 20, 20, 30, 30 )
-    
-	Kontext "FormControls"
-	    ControlProperties.Click    
-        sleep (1)
+    addControl("GroupBox", 50, 20, 60, 30 )
+     
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
     '/// set properties: Label, Character set
@@ -792,11 +792,11 @@ testcase tTableControl
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
         
-    call addControl("Grid", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("Grid", 50, 20, 60, 30 )
+     
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)
@@ -854,11 +854,11 @@ testcase tNavigationBar
     Kontext "DocumentWriter"       
 	    DocumentWriter.TypeKeys "tt_doc" , true
     
-    call addControl("NavigationBar", 20, 20, 30, 30 )
-        
-	Kontext "FormControls"
-	    ControlProperties.Click
-        sleep (1)
+    call addControl("NavigationBar", 50, 20, 60, 30 )
+    
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
     Kontext "ControlPropertiesTabControl"   
         ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
         sleep(2)

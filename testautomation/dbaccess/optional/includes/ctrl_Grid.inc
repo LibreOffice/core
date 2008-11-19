@@ -63,7 +63,7 @@ testcase tCreateGridControlColumn
     Kontext "MoreControls"
         Grid.Click
         sleep(4)
-        call hDrawingWithSelection ( 10, 40, 40, 60 )
+        call hDrawingWithSelection ( 40, 20, 60, 40 )
         sleep(2)
     '/// cancel the autopilot if exist
     printlog "cancel the autopilot if exist"
@@ -146,7 +146,7 @@ testcase tDeleteGridControlColumn
     Kontext "MoreControls"
         Grid.Click
         sleep(4)        
-        call hDrawingWithSelection ( 10, 40, 40, 60 )
+        call hDrawingWithSelection ( 40, 20, 60, 40 )
         sleep(2)
     '/// cancel the autopilot if exist
     printlog "cancel the autopilot if exist"
@@ -261,7 +261,7 @@ testcase tReplaceGridControlColumn
     '/// insert a grid control
     printlog "insert a grid control"
         printlog "insert a grid control"        
-        call hDrawingWithSelection ( 10, 40, 40, 60 )
+        call hDrawingWithSelection ( 40, 20, 60, 40 )
         sleep(2)
     '/// cancel the autopilot if exist
     printlog "cancel the autopilot if exist"
@@ -370,7 +370,7 @@ testcase tShowHideGridControlColumn
     
     '/// insert a grid control
     printlog "insert a grid control"    
-    call hDrawingWithSelection ( 10, 40, 40, 60 )
+    call hDrawingWithSelection ( 40, 20, 60, 40 )
     sleep(2)
 
     '/// cancel the autopilot if exist

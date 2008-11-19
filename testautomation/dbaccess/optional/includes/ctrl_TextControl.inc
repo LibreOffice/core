@@ -61,7 +61,7 @@ testcase tTextControl
    	sleep(1)      
 	'/// insert a text box
     printlog "insert a text box"                    
-    call hDrawingWithSelection ( 50, 50, 70, 70 )    
+    call hDrawingWithSelection ( 50, 20, 60, 30 )    
     sleep(1)    
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -124,7 +124,7 @@ testcase tRichTextControl
    	sleep(1)      
 	'/// insert a text box
     printlog "insert a text box"                    
-    call hDrawingWithSelection ( 50, 50, 70, 70 )    
+    call hDrawingWithSelection ( 50, 20, 60, 30 )    
     sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -162,7 +162,7 @@ testcase tRichTextControl
     Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "<MOD1 F5>" , true
         sleep(1)
-        DocumentWriter.TypeKeys "<SHIFT END>" , true
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)
@@ -211,7 +211,7 @@ testcase tRichTextControlDraw
     sleep(1)  	
    	Edit.Click
    	sleep(1) 
-    call hDrawingWithSelection ( 50, 50, 70, 70 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
     sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -222,6 +222,10 @@ testcase tRichTextControlDraw
     '/// turn off the design view
     printlog "turn off the design view"
 
+    printlog "close control property browser"    
+    Kontext "ControlPropertiesDialog"
+        ControlPropertiesDialog.close
+    
     call hToolbarSelect("FormControls",true)
 
   	Kontext "FormControls"  
@@ -232,6 +236,8 @@ testcase tRichTextControlDraw
         sleep(1)
         DocumentDraw.TypeKeys "<MOD1 F5>" , true
         sleep(1)
+	DocumentDraw.TypeKeys "<MOD1 F5>" , true
+	sleep(1)
         DocumentDraw.TypeKeys "this is a blind text" , true        
         sleep(1)
         DocumentDraw.TypeKeys "<SHIFT MOD1 LEFT>" ,2, true        
@@ -249,7 +255,9 @@ testcase tRichTextControlDraw
     Kontext "DocumentDraw"
         DocumentDraw.TypeKeys "<MOD1 F5>" , true
         sleep(1)
-        DocumentDraw.TypeKeys "<SHIFT END>" , true
+	DocumentDraw.TypeKeys "<MOD1 F5>" , true
+        sleep(1)
+        DocumentDraw.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentDraw.TypeKeys "<MOD1 C>" , true
         sleep(1)
