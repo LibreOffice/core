@@ -89,7 +89,8 @@ namespace rptui
         USHORT                              m_nCurrentPosition;
         USHORT                              m_eActObj;
         BOOL                                m_bFirstDraw;
-        Size                                m_aGridSize;
+        Size                                m_aGridSizeCoarse;
+        Size                                m_aGridSizeFine;
         BOOL                                m_bGridVisible;
         BOOL                                m_bGridSnap;
         BOOL                                m_bDeleted;
@@ -188,7 +189,9 @@ namespace rptui
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
-        inline Size     getGridSize() const { return m_aGridSize; }
+        inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
+        inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
+
         inline BOOL     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);

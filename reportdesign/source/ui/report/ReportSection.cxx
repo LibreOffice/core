@@ -204,18 +204,28 @@ void OReportSection::fill()
 
     m_pView = new OSectionView( m_pModel.get(), this, m_pParent->getViewsWindow()->getView() );
 
+    // #i93597# tell SdrPage that only left and right page border is defined
+    // instead of the full rectangle definition
+    m_pPage->setPageBorderOnlyLeftRight(true);
+
     // without the following call, no grid is painted
     m_pView->ShowSdrPage( m_pPage );
 
     m_pView->SetMoveSnapOnlyTopLeft( TRUE );
     ODesignView* pDesignView = m_pParent->getViewsWindow()->getView()->getReportView();
 
-    Size aGridSize = pDesignView->getGridSize();
-    m_pView->SetGridCoarse( aGridSize );
-    Fraction aX(aGridSize.A());
-    Fraction aY(aGridSize.B());
-    m_pView->SetSnapGridWidth(aX,aY);
-    //m_pView->SetSnapGrid( pDesignView->getGridSize() );
+    // #i93595# Adapted grid to a more coarse grid and subdivisions for better visualisation. This
+    // is only for visualisation and has nothing to do with the actual snap
+    const Size aGridSizeCoarse(pDesignView->getGridSizeCoarse());
+    const Size aGridSizeFine(pDesignView->getGridSizeFine());
+    m_pView->SetGridCoarse(aGridSizeCoarse);
+    m_pView->SetGridFine(aGridSizeFine);
+
+    // #i93595# set snap grid width to snap to all existing subdivisions
+    const Fraction aX(aGridSizeFine.A());
+    const Fraction aY(aGridSizeFine.B());
+    m_pView->SetSnapGridWidth(aX, aY);
+
     m_pView->SetGridSnap( pDesignView->isGridSnap() );
     m_pView->SetGridFront( FALSE );
     m_pView->SetDragStripes( TRUE );

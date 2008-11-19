@@ -57,7 +57,6 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);
-    SetBordVisibleOnlyLeftRight();
     SetBordVisible();
     SetQuickTextEditMode(FALSE);
 }
