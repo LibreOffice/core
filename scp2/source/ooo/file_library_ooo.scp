@@ -258,7 +258,7 @@ End
 #endif
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dba, dba)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sdbt, sdbt)
 
@@ -266,7 +266,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbmm, dbmm)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 
@@ -285,7 +285,7 @@ File gid_File_Lib_Dbpool
   #endif
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbt, dbtools )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbt, dbtools )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbaxml, dbaxml )
 
@@ -1164,7 +1164,7 @@ End
 File gid_File_Lib_Res
     Name = LIBNAME(res);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1455,7 +1455,7 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Utl , utl)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Uui, uui )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Uui, uui )
 
 STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 

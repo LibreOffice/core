@@ -536,7 +536,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE);
+    Styles = (PACKED,DONT_OVERWRITE,PATCH);
 End
 
 #endif
@@ -2067,7 +2067,7 @@ End
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "offapi.rdb";
 End
 
@@ -2669,7 +2669,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
+    Styles = (PACKED, STARREGISTRY, PATCH);
     NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
     JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
