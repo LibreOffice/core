@@ -7,7 +7,7 @@
  *
  * $RCSfile: uieventslogger.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ namespace comphelper
         public:
             static sal_Bool isEnabled();
             static sal_Int32 getSessionLogEventCount();
-            static void appendDispatchOrigin( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& args, const ::rtl::OUString& origin);
+            static void appendDispatchOrigin( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& args, const ::rtl::OUString& originapp, const ::rtl::OUString& originwidget);
             static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> purgeDispatchOrigin(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& args);
             static void logDispatch(const ::com::sun::star::util::URL& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& args);
             static void logVcl(const ::rtl::OUString& parent_id, sal_Int32 window_type, const ::rtl::OUString& id, const ::rtl::OUString& method, const ::rtl::OUString& param);
