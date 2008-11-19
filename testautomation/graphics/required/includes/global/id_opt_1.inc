@@ -756,6 +756,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
          goto endsub
       endif
    endif
+   sleep (8)
    if uCase(gApplication) = "IMPRESS" then
       Kontext "DocumentImpress"
    else

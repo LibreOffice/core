@@ -743,18 +743,15 @@ testcase tmFileProperties
    Kontext "TabDokumentInfo"
    Call DialogTest ( TabDokumentInfo )
 
-   Kontext
-    try
-        active.SetPage TabBenutzer
-        Kontext "TabBenutzer"
-        Call DialogTest ( TabBenutzer )
-        Infofelder.Click
-        Kontext "InfonamenBearbeiten"
-        Call DialogTest (InfonamenBearbeiten)
-        InfonamenBearbeiten.Cancel
-   catch
-   qaerrorlog "#i95251#:File/Properties: TabPage Custom Properties has no entry in hid.lst"
-   endcatch
+   qaerrorlog "#i95523#"
+   'Kontext
+   'active.SetPage TabBenutzer
+   'Kontext "TabBenutzer"
+   'Call DialogTest ( TabBenutzer )
+   'Infofelder.Click
+   '   Kontext "InfonamenBearbeiten"
+   '   Call DialogTest (InfonamenBearbeiten)
+   'InfonamenBearbeiten.Cancel
 
    Kontext
    active.SetPage TabInternet

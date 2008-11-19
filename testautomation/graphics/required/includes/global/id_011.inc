@@ -709,6 +709,7 @@ testcase tiGraphicsObjectBar
                 '///  Click on the icon for 'ColorSettings' to open the colorbar ///'
                 ColorSettings.Click
                 Kontext "ColorBar"
+                sleep (2)
 
                 '///  press 'more' and 'less' in field 'Red' on colorbar ///'
                 try
