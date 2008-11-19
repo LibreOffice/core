@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iahndl.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include "com/sun/star/task/InteractionClassification.hpp"
 #include "com/sun/star/task/PasswordRequestMode.hpp"
 #include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
+#include "com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp"
 #include "tools/solar.h"
 #include "tools/errcode.hxx"
 #include "vcl/wintypes.hxx"
@@ -322,6 +323,16 @@ private:
     void
     handleMacroConfirmRequest(
         const ::com::sun::star::task::DocumentMacroConfirmationRequest& _rRequest,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+                    rContinuations
+    )
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleFutureDocumentVersionUpdateRequest(
+        const ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest& _rRequest,
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionContinuation > > const &

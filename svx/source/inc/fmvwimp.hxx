@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.260.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,13 +115,19 @@ protected:
     void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
                         FmXFormController* pParent = NULL);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
-    void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
+    void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
     void dispose();
     Window* getWindow() const {return m_pWindow;}
 };
 
 typedef ::std::vector<FmXPageViewWinRec*> FmWinRecList;
+typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+                    ,   ::comphelper::OInterfaceCompare< ::com::sun::star::form::XForm >
+                    >   SetOfForms;
+typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                    ,   SetOfForms
+                    ,   ::comphelper::OInterfaceCompare< ::com::sun::star::awt::XControlContainer >
+                    >   MapControlContainerToSetOfForms;
 class SdrModel;
 //==================================================================
 // FmXFormView
@@ -151,12 +157,15 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
     FmWinRecList    m_aWinList;             // to be filled in alive mode only
+    MapControlContainerToSetOfForms
+                    m_aNeedTabOrderUpdate;
 
     // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
     SdrMarkList             m_aMark;
     ObjectRemoveListener*   m_pWatchStoredList;
 
-    sal_Bool        m_bFirstActivation  : 1;
+    bool            m_bFirstActivation;
+    bool            m_isTabOrderUpdateSuspended;
 
     FmFormShell* GetFormShell() const;
 
@@ -204,10 +213,21 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
 
     // activation handling
-    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+    inline  bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
             void        onFirstViewActivation( const FmFormModel* _pDocModel );
+
+    /** suspends the calls to activateTabOrder, which normally happen whenever for any ControlContainer of the view,
+        new controls are inserted. Cannot be nested, i.e. you need to call resumeTabOrderUpdate before calling
+        suspendTabOrderUpdate, again.
+    */
+    void    suspendTabOrderUpdate();
+
+    /** resumes calls to activateTabOrder, and also does all pending calls which were collected since the last
+        suspendTabOrderUpdate call.
+    */
+    void    resumeTabOrderUpdate();
 
 private:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );

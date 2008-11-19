@@ -157,6 +157,13 @@ public:
 
     virtual void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
     virtual void RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
+
+    // the following is a hack, only to be used on the 3.0.1 branch, to prevent becoming
+    // incompatible there
+    // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
+    void    onBeginCompleteRedraw();
+    void    onEndCompleteRedraw();
+
 private:
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
     SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);

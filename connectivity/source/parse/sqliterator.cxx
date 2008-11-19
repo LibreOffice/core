@@ -516,18 +516,25 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
         {
             getQualified_join( _rTables, pTableRef->getChild(6 - pTableRef->count()), rTableRange );
         }
-        else if ( pTableRef->count() == 3 ) // subquery range_variable op_column_commalist
+        else if ( pTableRef->count() == 3 ) // subquery range_variable op_column_commalist || '(' joined_table ')'
         {
             const OSQLParseNode* pSubQuery = pTableRef->getChild(0);
-            OSL_ENSURE( pSubQuery->count() == 3, "sub queries should have 3 children!" );
-            const OSQLParseNode* pQueryExpression = pSubQuery->getChild(1);
-            if ( SQL_ISRULE( pQueryExpression, select_statement ) )
+            if ( pSubQuery->isToken() )
             {
-                getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
+                getQualified_join( _rTables, pTableRef->getChild(1), rTableRange );
             }
             else
             {
-                OSL_ENSURE( false, "OSQLParseTreeIterator::getTableNode: subquery which is no select_statement: not yet implemented!" );
+                OSL_ENSURE( pSubQuery->count() == 3, "sub queries should have 3 children!" );
+                const OSQLParseNode* pQueryExpression = pSubQuery->getChild(1);
+                if ( SQL_ISRULE( pQueryExpression, select_statement ) )
+                {
+                    getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
+                }
+                else
+                {
+                    OSL_ENSURE( false, "OSQLParseTreeIterator::getTableNode: subquery which is no select_statement: not yet implemented!" );
+                }
             }
         }
         else if ( pTableRef->count() == 2 ) // table_node table_primary_as_range_column

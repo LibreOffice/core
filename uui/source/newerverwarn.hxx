@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newerverwarn.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,16 +27,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SFX2_NEWERVERSIONWARNING_HXX
-#define _SFX2_NEWERVERSIONWARNING_HXX
+#ifndef _NEWERVERSIONWARNING_HXX
+#define _NEWERVERSIONWARNING_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <vcl/dialog.hxx>
 
-namespace sfx2
+#define RET_ASK_LATER   short( 100 )
+
+namespace uui
 {
-    class NewerVersionWarningDialog : public SfxModalDialog
+    class NewerVersionWarningDialog : public ModalDialog
     {
     private:
         FixedImage      m_aImage;
@@ -53,10 +55,10 @@ namespace sfx2
         void            InitButtonWidth();
 
     public:
-        NewerVersionWarningDialog( Window* pParent, const ::rtl::OUString& rVersion );
+        NewerVersionWarningDialog( Window* pParent, const ::rtl::OUString& rVersion, ResMgr& rResMgr );
         ~NewerVersionWarningDialog();
     };
-} // namespace sfx2
+} // namespace uui
 
-#endif // #ifndef _SFX2_NEWERVERSIONWARNING_HXX
+#endif // #ifndef _NEWERVERSIONWARNING_HXX
 

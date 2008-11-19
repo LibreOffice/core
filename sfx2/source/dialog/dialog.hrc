@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialog.hrc,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,6 @@
 //#define TP_CONFIG_OBJECTBAR             ( RC_DIALOG_BEGIN + 31)
 //#define TP_CONFIG_EVENT                 ( RC_DIALOG_BEGIN + 32)
 //#define DLG_CONFIG                      ( RC_DIALOG_BEGIN + 23)
-
-#define RID_DLG_NEWER_VERSION_WARNING   ( RC_DIALOG_BEGIN + 21)
 
 #define IBX_MNUCFG_ALREADY_INCLUDED     ( RC_DIALOG_BEGIN + 24)
 #define QBX_MNUCFG_UNDEFINED_FUNCTIONS  ( RC_DIALOG_BEGIN + 25)

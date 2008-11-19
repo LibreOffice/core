@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ids.hrc,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,7 @@
 #define STR_OPENLOCKED_OPENREADONLY_BTN (RID_UUI_START + 33)
 #define STR_OPENLOCKED_OPENCOPY_BTN (RID_UUI_START + 34)
 #define STR_OPENLOCKED_UNKNOWNUSER (RID_UUI_START + 35)
+#define RID_DLG_NEWER_VERSION_WARNING (RID_UUI_START + 36)
 
 #define ERRCODE_UUI_IO_ABORT (ERRCODE_AREA_UUI + 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED (ERRCODE_AREA_UUI + 1)
@@ -157,6 +158,7 @@
 #define HID_DLG_UNKNOWNAUTH_UUI (HID_UUI_START+7)
 #define HID_DLG_SSLWARN_UUI (HID_UUI_START+8)
 #define HID_XMLSECDLG_MACROWARN (HID_UUI_START+9)
+#define HID_DLG_NEWERVERSIONWARNING (HID_UUI_START+10)
 
 // HID_UUI_END (aka HID_CHAOS_NEW_DATABASE) is reserved in
 // sfx2/util/hidother.src

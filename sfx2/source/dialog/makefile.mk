@@ -50,8 +50,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/partwnd.obj         \
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
-        $(SLO)$/dinfdlg.obj         \
-        $(SLO)$/newerverwarn.obj
+        $(SLO)$/dinfdlg.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -95,8 +94,7 @@ SRC1FILES =\
         templdlg.src		\
         versdlg.src			\
         printopt.src        \
-        srchdlg.src         \
-        newerverwarn.src
+        srchdlg.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"

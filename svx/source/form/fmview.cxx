@@ -597,6 +597,19 @@ void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::
         pImpl->removeWindow( xCC );
     }
 }
+
+// -----------------------------------------------------------------------------
+void FmFormView::onBeginCompleteRedraw()
+{
+    pImpl->suspendTabOrderUpdate();
+}
+
+// -----------------------------------------------------------------------------
+void FmFormView::onEndCompleteRedraw()
+{
+    pImpl->resumeTabOrderUpdate();
+}
+
 // -----------------------------------------------------------------------------
 BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {

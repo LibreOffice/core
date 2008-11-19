@@ -366,15 +366,15 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
 }
 
 //------------------------------------------------------------------------
-void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
-                                       const Reference< XControlContainer >& /*_rxCC*/ )
+void FmXPageViewWinRec::updateTabOrder( const Reference< XForm >& _rxForm )
 {
+    OSL_PRECOND( _rxForm.is(), "FmXPageViewWinRec::updateTabOrder: illegal argument!" );
+    if ( !_rxForm.is() )
+        return;
+
     try
     {
-        Reference< XFormComponent > xControlModel( xControl->getModel(), UNO_QUERY_THROW );
-        Reference< XForm > xForm( xControlModel->getParent(), UNO_QUERY_THROW );
-
-        Reference< XTabController > xTabCtrl( getController( xForm ), UNO_QUERY );
+        Reference< XTabController > xTabCtrl( getController( _rxForm ).get() );
         if ( xTabCtrl.is() )
         {   // if there already is a TabController for this form, then delegate the "updateTabOrder" request
             xTabCtrl->activateTabOrder();
@@ -384,7 +384,7 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
 
             // if it's a sub form, then we must ensure there exist TabControllers
             // for all its ancestors, too
-            Reference< XForm > xParentForm( xForm->getParent(), UNO_QUERY );
+            Reference< XForm > xParentForm( _rxForm->getParent(), UNO_QUERY );
             FmXFormController* pFormController = NULL;
             // there is a parent form -> look for the respective controller
             if ( xParentForm.is() )
@@ -396,7 +396,7 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
                 pFormController = reinterpret_cast< FmXFormController* >( xTunnel->getSomething( FmXFormController::getUnoTunnelImplementationId() ) );
             }
 
-            setController( xForm, pFormController );
+            setController( _rxForm, pFormController );
         }
     }
     catch( const Exception& )
@@ -415,7 +415,8 @@ FmXFormView::FmXFormView(const Reference< XMultiServiceFactory >&   _xORB,
     ,m_nErrorMessageEvent( 0 )
     ,m_nAutoFocusEvent( 0 )
     ,m_pWatchStoredList( NULL )
-    ,m_bFirstActivation( sal_True )
+    ,m_bFirstActivation( true )
+    ,m_isTabOrderUpdateSuspended( false )
 {
 }
 
@@ -487,18 +488,30 @@ void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( Run
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
-    Reference< XControlContainer > xCC( evt.Source, UNO_QUERY );
-    if( xCC.is() )
+    try
     {
-        FmWinRecList::iterator i = findWindow( xCC );
+        Reference< XControlContainer > xControlContainer( evt.Source, UNO_QUERY_THROW );
+        Reference< XControl > xControl( evt.Element, UNO_QUERY_THROW );
+        Reference< XFormComponent > xControlModel( xControl->getModel(), UNO_QUERY_THROW );
+        Reference< XForm > xForm( xControlModel->getParent(), UNO_QUERY_THROW );
 
-        if ( i != m_aWinList.end() )
+        if ( m_isTabOrderUpdateSuspended )
         {
-            Reference< XControl >  xControl;
-            evt.Element >>= xControl;
-            if( xControl.is() )
-                (*i)->updateTabOrder( xControl, xCC );
+            // remember the container and the control, so we can update the tab order on resumeTabOrderUpdate
+            m_aNeedTabOrderUpdate[ xControlContainer ].insert( xForm );
         }
+        else
+        {
+            FmWinRecList::iterator pos = findWindow( xControlContainer );
+            if ( pos != m_aWinList.end() )
+            {
+                (*pos)->updateTabOrder( xForm );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -604,6 +617,40 @@ void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 {
     if ( _pDocModel && _pDocModel->GetAutoControlFocus() )
         m_nAutoFocusEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::suspendTabOrderUpdate()
+{
+    OSL_ENSURE( !m_isTabOrderUpdateSuspended, "FmXFormView::suspendTabOrderUpdate: nesting not allowed!" );
+    m_isTabOrderUpdateSuspended = true;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::resumeTabOrderUpdate()
+{
+    OSL_ENSURE( m_isTabOrderUpdateSuspended, "FmXFormView::resumeTabOrderUpdate: not suspended!" );
+    m_isTabOrderUpdateSuspended = false;
+
+    // update the tab orders for all components which were collected since the suspendTabOrderUpdate call.
+    for (   MapControlContainerToSetOfForms::const_iterator container = m_aNeedTabOrderUpdate.begin();
+            container != m_aNeedTabOrderUpdate.end();
+            ++container
+        )
+    {
+        FmWinRecList::iterator pos = findWindow( container->first );
+        if ( pos == m_aWinList.end() )
+            continue;
+
+        for (   SetOfForms::const_iterator form = container->second.begin();
+                form != container->second.end();
+                ++form
+            )
+        {
+            (*pos)->updateTabOrder( *form );
+        }
+    }
+    m_aNeedTabOrderUpdate.clear();
 }
 
 //------------------------------------------------------------------------------
