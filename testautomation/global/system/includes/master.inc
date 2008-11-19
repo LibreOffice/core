@@ -412,6 +412,10 @@ sub hStartTheOffice (optional sProfPath as String, optional sProfParameter as St
             end if
             Kontext "TabFirstStartOnlineUpdate"
             if TabFirstStartOnlineUpdate.Exists(1) then
+	        try
+		    checkForUpdates.uncheck
+		catch
+		endcatch
                 Kontext "WelcomeDialog"
                 '///+<li>If the next tabpage will be visible clicking on 'Next'-button.</li>
                 NextBtn.Click
@@ -801,7 +805,7 @@ sub mMakeGeneralOptionsAPI
             'printlog    "**  Help/Tips                     : " & bHelpTip           
         end if
         xViewRoot.dispose()
-    
+
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")
         '///+<li>If the temp-path does not exist it will be created. 
@@ -845,6 +849,7 @@ sub mMakeGeneralOptionsAPI
         end if
         '///Check which 'Macro Security Level' is set and put it into <i>gMacroSecurityLevel</i> variable. 
         gMacroSecurityLevel = fGetSetMacroSecurityUNO()
+
     catch
         ExceptLog
         MsgBox (sFileFunction + "The test did not start correctly or the application has been crashed." & Chr(13) & _

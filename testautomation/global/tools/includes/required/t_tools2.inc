@@ -851,15 +851,15 @@ function FindBuildID as String
         else
             sPlatformProgramPath = "program"
         end if        
-        sfile = convertPath(gNetzOfficePath & sPlatformProgramPath & "/version")
+        sfile = convertPath(gOfficeBasisPath & "program/version")
         if gPlatGroup = "unx" then
             sFile = sFile + "rc"
             if (dir(sFile) <> "") then
                 sTemp = getIniValue(sFile, "Version", "buildid")
                 gMajor = getIniValue(sFile, "Version", "ProductSource")
             else
-                sfile = convertPath(gNetzOfficePath & sPlatformProgramPath & "/bootstraprc")
-                sTemp = getIniValue(sFile, "Bootstrap", "buildid")
+                sfile = convertPath(gNetzOfficePath & sPlatformProgramPath & "/versionrc")
+                sTemp = getIniValue(sFile, "Version", "buildid")
             end if
         else
             sFile = sFile + ".ini"
@@ -867,8 +867,8 @@ function FindBuildID as String
                 sTemp = getIniValue(sFile, "Version", "buildid")
                 gMajor = getIniValue(sFile, "Version", "ProductSource")
             else
-                sfile = convertPath(gNetzOfficePath & sPlatformProgramPath & "/bootstrap.ini")
-                sTemp = getIniValue(sFile, "Bootstrap", "buildid")
+                sfile = convertPath(gNetzOfficePath & sPlatformProgramPath & "/version.ini")
+                sTemp = getIniValue(sFile, "Version", "buildid")
             end if
         end if
    end if
