@@ -1020,43 +1020,45 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
     ApplyXorContext();
     pSrc->ApplyXorContext();
 
-#if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
-    SalBitmap* pBitmap = pSrc->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
-
-    if( pBitmap )
-    {
-        SalTwoRect aPosAry( *pPosAry );
-        aPosAry.mnSrcX = 0;
-        aPosAry.mnSrcY = 0;
-        drawBitmap( &aPosAry, *pBitmap );
-        delete pBitmap;
-    }
-#else
     DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
 
-    // in XOR mode the drawing context is redirected to the XOR mask
-    // if source and target are identical then copyBits() paints onto the target context though
-    CGContextRef xCopyContext = mrContext;
-    if( mpXorEmulation && mpXorEmulation->IsEnabled() )
-        if( pSrcGraphics == this )
-            xCopyContext = mpXorEmulation->GetTargetContext();
-
-    CGContextSaveGState( xCopyContext );
-    const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
-    CGContextClipToRect( xCopyContext, aDstRect );
-
-    // draw at new destination
-    // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
-    if( pSrc->IsFlipped() )
-        { CGContextTranslateCTM( xCopyContext, 0, +mnHeight ); CGContextScaleCTM( xCopyContext, +1, -1 ); }
-    // TODO: pSrc->size() != this->size()
     const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
     if( !mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth ) // workaround a Quartz crasher
-        ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
-    CGContextRestoreGState( xCopyContext );
-    // mark the destination rectangle as updated
-       RefreshRect( aDstRect );
-#endif
+    {
+        // in XOR mode the drawing context is redirected to the XOR mask
+        // if source and target are identical then copyBits() paints onto the target context though
+        CGContextRef xCopyContext = mrContext;
+        if( mpXorEmulation && mpXorEmulation->IsEnabled() )
+            if( pSrcGraphics == this )
+                xCopyContext = mpXorEmulation->GetTargetContext();
+
+        CGContextSaveGState( xCopyContext );
+        const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
+        CGContextClipToRect( xCopyContext, aDstRect );
+
+        // draw at new destination
+        // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
+        if( pSrc->IsFlipped() )
+            { CGContextTranslateCTM( xCopyContext, 0, +mnHeight ); CGContextScaleCTM( xCopyContext, +1, -1 ); }
+        // TODO: pSrc->size() != this->size()
+            ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
+        CGContextRestoreGState( xCopyContext );
+        // mark the destination rectangle as updated
+           RefreshRect( aDstRect );
+    }
+    else
+    {
+        SalBitmap* pBitmap = pSrc->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+
+        if( pBitmap )
+        {
+            SalTwoRect aPosAry( *pPosAry );
+            aPosAry.mnSrcX = 0;
+            aPosAry.mnSrcY = 0;
+            drawBitmap( &aPosAry, *pBitmap );
+            delete pBitmap;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------

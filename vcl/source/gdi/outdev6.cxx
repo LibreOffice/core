@@ -166,6 +166,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     DBG_TRACE( "OutputDevice::DrawTransparent(B2D&,transparency)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
+fprintf(stderr,"OD::DT( fT=%f, bAA=%d)\n",fTransparency,mnAntialiasing);//##############
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolyPoly.count())
         return;
@@ -189,7 +190,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     {
 #ifdef UNX
         // b2dpolygon support not implemented yet on non-UNX platforms
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
         aB2DPP.transform( aTransform );
 

@@ -2714,7 +2714,7 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
     {
 #ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
         aB2DPP.transform( aTransform );
         if( mpGraphics->DrawPolyPolygon( aB2DPP, 0.0, this ) )
@@ -2776,7 +2776,7 @@ void OutputDevice::DrawPolyLine(
     if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
     {
 #ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         // transform the line width
         ::basegfx::B2DVector aB2DLineWidth;
         if( fLineWidth == 0.0 ) // hairline?
