@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.159 $
+ * $Revision: 1.159.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1050,6 +1050,7 @@ private:
     bool bIgnoreText;       // z.B. fuer FieldVanish
     int  nInTable;          // wird gerade eine Tabelle eingelesen
     bool bWasTabRowEnd;     // Tabelle : Row End Mark
+    bool bWasTabCellEnd;    // table: Cell End Mark
 
     bool bShdTxtCol;        // Textfarbe indirekt gesetzt ( Hintergrund sw )
     bool bCharShdTxtCol;    // Textfarbe indirekt gesetzt ( Zeichenhintergrund sw )
@@ -1096,6 +1097,8 @@ private:
 
     int nIdctHint;
     bool bBidi;
+    bool bReadTable;
+    boost::shared_ptr<SwPaM> mpTableEndPaM;
 
 //---------------------------------------------
 
@@ -1496,6 +1499,7 @@ public:     // eigentlich private, geht aber leider nur public
 
 
     void Read_TabRowEnd(        USHORT, const BYTE* pData, short nLen );
+    void Read_TabCellEnd(        USHORT, const BYTE* pData, short nLen );
     static bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
     void Read_Shade(            USHORT, const BYTE* pData, short nLen );
     void Read_ANLevelNo(        USHORT, const BYTE* pData, short nLen );

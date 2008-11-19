@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.188 $
+ * $Revision: 1.188.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6037,7 +6037,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x9410, 0},                                 //undocumented
         {0x703A, 0},                                 //undocumented
         {0x303B, 0},                                 //undocumented
-        {0x244B, 0},                                 //undocumented, must be
+        {0x244B, &SwWW8ImplReader::Read_TabCellEnd}, //undocumented, must be
                                                      //subtable "sprmPFInTable"
         {0x244C, &SwWW8ImplReader::Read_TabRowEnd},  //undocumented, must be
                                                      // subtable "sprmPFTtp"

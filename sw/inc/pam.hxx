@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pam.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.172.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,6 +250,8 @@ public:
 
     BOOL ContainsPosition(const SwPosition & rPos)
     { return *Start() <= rPos && rPos <= *End(); }
+
+    static BOOL Overlap(const SwPaM & a, const SwPaM & b);
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 

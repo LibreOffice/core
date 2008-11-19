@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8atr.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.113.40.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3436,13 +3436,17 @@ void SwWW8Writer::WriteCellEnd()
         pMagicTable->Append(Fc2Cp(nOffset),0x122);
 }
 
-void SwWW8Writer::WriteRowEnd()
+void SwWW8Writer::WriteRowEnd(sal_uInt32 nDepth)
 {
-    WriteChar( (BYTE)0x07 );
+    if (nDepth == 1)
+        WriteChar( (BYTE)0x07 );
+    else if (nDepth > 1)
+        WriteChar( (BYTE)0x0d );
+
     //Technically in a word document this is a different value for a row ends
     //that are not row ends directly after a cell with a graphic. But it
     //doesn't seem to make a difference
-    pMagicTable->Append(Fc2Cp(Strm().Tell()),0x1B6);
+    //pMagicTable->Append(Fc2Cp(Strm().Tell()),0x1B6);
 }
 
 static Writer& OutWW8_SwFmtPageDesc(Writer& rWrt, const SfxPoolItem& rHt)

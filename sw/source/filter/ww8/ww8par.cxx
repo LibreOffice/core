@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.199 $
+ * $Revision: 1.199.12.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +140,11 @@
 #include <svtools/itemiter.hxx>  //SfxItemIter
 
 #include <stdio.h>
+
+#ifdef DEBUG
+#include <iostream>
+#include <dbgoutsw.hxx>
+#endif
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
@@ -2228,6 +2233,9 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     }
     if (bStartTab)
     {
+        WW8PLCFxSave1 aSave;
+        pPlcxMan->GetPap()->Save( aSave );
+
         if (bAnl)                           // Nummerierung ueber Zellengrenzen
             StopAllAnl();                   // fuehrt zu Absturz -> keine Anls
                                             // in Tabellen
@@ -2243,6 +2251,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         // nach StartTable ist ein ReSync noetig ( eigentlich nur, falls die
         // Tabelle ueber eine FKP-Grenze geht
         rbReSync = true;
+        pPlcxMan->GetPap()->Restore( aSave );
     }
     return bTableRowEnd;
 }
@@ -2512,6 +2521,10 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
     const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
     if (rAddString.Len())
     {
+#ifdef DEBUG
+        ::std::clog << "<addTextToParagraph>" << dbg_out(rAddString)
+        << "</addTextToParagraph>" << ::std::endl;
+#endif
         if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
         {
             rDoc.Insert (*pPaM, rAddString, true);
@@ -2535,7 +2548,10 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
                 rDoc.Insert (*pPaM, rAddString, true);
             }
         }
+
+        bReadTable = false;
     }
+
     return true;
 }
 
@@ -2757,7 +2773,15 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                         bRet = false;
                     }
                 }
+                else if (bWasTabCellEnd)
+                {
+                    TabCellEnd();
+                    bRet = false;
+                }
             }
+
+            bWasTabCellEnd = false;
+
             break;              // line end
         case 0x5:               // Annotation reference
         case 0x13:
@@ -3194,7 +3218,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     mbNewDoc(bNewDoc),
     nDropCap(0),
     nIdctHint(0),
-    bBidi(false)
+    bBidi(false),
+    bReadTable(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -3225,7 +3250,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     nInTable=0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bTxbxFlySection
                = bHasBorder = bSymbol = bIgnoreText
-               = bWasTabRowEnd = false;
+               = bWasTabRowEnd = bWasTabCellEnd = false;
     bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
                = bIsHeader = bIsFooter = bIsUnicode = bCpxStyle = bStyNormal =
                  bWWBugNormal  = false;

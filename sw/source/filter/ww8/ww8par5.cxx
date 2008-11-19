@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par5.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.110.40.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -428,6 +428,7 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
 {
     rName = rOrg;
     rName.SearchAndReplaceAllAscii( "\\\\", String( '\\' ));
+    rName.SearchAndReplaceAllAscii( "%20", String( ' ' ));
 
     // ggfs. anhaengende Anfuehrungszeichen entfernen
     if( rName.Len() &&  '"' == rName.GetChar( rName.Len()-1 ))

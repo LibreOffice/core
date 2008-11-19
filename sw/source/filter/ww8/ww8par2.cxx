@@ -32,7 +32,6 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
@@ -2528,6 +2527,7 @@ void WW8TabDesc::UseSwTable()
     aDup.Insert(*pIo->pPaM->GetPoint());
 
     pIo->bWasTabRowEnd = false;
+    pIo->bWasTabCellEnd = false;
 }
 
 void WW8TabDesc::MergeCells()
@@ -2710,6 +2710,7 @@ void WW8TabDesc::FinishSwTable()
     aDup.Insert(*pIo->pPaM->GetPoint());
 
     pIo->bWasTabRowEnd = false;
+    pIo->bWasTabCellEnd = false;
 
     pIo->maInsertedTables.InsertTable(*pTblNd, *pIo->pPaM);
 
@@ -3440,11 +3441,11 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 "how could we be in a local apo and have no apo");
         }
 
-        if ( !maTableStack.empty() && !InEqualApo(nNewInTable) )
+        if ( eAnchor == FLY_AUTO_CNTNT && !maTableStack.empty() && !InEqualApo(nNewInTable) )
         {
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
-                RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+                                RES_FRMATR_BEGIN, RES_FRMATR_END-1);
             // --> OD 2005-01-26 #i33818# - anchor the Writer fly frame for
             // the nested table at-character.
             // --> OD 2005-03-21 #i45301#
@@ -3452,9 +3453,9 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             aAnchor.SetAnchor( pTableDesc->pParentPos );
             aItemSet.Put( aAnchor );
             pTableDesc->pFlyFmt = rDoc.MakeFlySection( eAnchor,
-                pTableDesc->pParentPos, &aItemSet);
+                                                      pTableDesc->pParentPos, &aItemSet);
             ASSERT( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == eAnchor,
-                    "Not the anchor type requested!" );
+                   "Not the anchor type requested!" );
             // <--
             MoveInsideFly(pTableDesc->pFlyFmt);
         }
@@ -3510,8 +3511,28 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 void SwWW8ImplReader::TabCellEnd()
 {
     if (nInTable && pTableDesc)
+    {
         pTableDesc->TableCellEnd();
+
+        if (bReadTable &&  pWFlyPara == NULL && mpTableEndPaM.get() != NULL &&
+            ! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
+        {
+            if (mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode())
+            {
+                rDoc.DelFullPara(*mpTableEndPaM);
+            }
+        }
+    }
+
     bFirstPara = true;    // We have come to the end of a cell so FirstPara flag
+    bReadTable = false;
+    mpTableEndPaM.reset();
+}
+
+void SwWW8ImplReader::Read_TabCellEnd( USHORT, const BYTE* pData, short nLen)
+{
+    if( ( nLen > 0 ) && ( *pData == 1 ) )
+        bWasTabCellEnd = true;
 }
 
 void SwWW8ImplReader::Read_TabRowEnd( USHORT, const BYTE* pData, short nLen )   // Sprm25
@@ -3557,6 +3578,9 @@ void SwWW8ImplReader::StopTable()
         maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
             static_cast<sal_Int32>(maTableStack.size())));
     }
+
+    bReadTable = true;
+    mpTableEndPaM.reset(new SwPaM(*pPaM));
 }
 
 // GetTableLeft() wird fuer absatzgebundene Grafikobjekte in Tabellen

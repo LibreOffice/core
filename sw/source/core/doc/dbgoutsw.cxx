@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbgoutsw.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -540,51 +540,54 @@ String lcl_dbg_out(const SwNode & rNode)
 {
     String aTmpStr;
 
-    aTmpStr += String("[ Idx: ", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String("<node ", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String("index =\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
+    aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
 #ifndef PRODUCT
-    aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetSerial());
-    aTmpStr += String(")", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 #endif
 
-    aTmpStr += String(" ", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String(" pointer=\"", RTL_TEXTENCODING_ASCII_US);
 
     char aBuffer[128];
     sprintf(aBuffer, "%p", &rNode);
     aTmpStr += String(aBuffer, RTL_TEXTENCODING_ASCII_US);
 
+    aTmpStr += String("\">", RTL_TEXTENCODING_ASCII_US);
+
     const SwTxtNode * pTxtNode = rNode.GetTxtNode();
 
-    if (rNode.IsStartNode())
-        aTmpStr += String(" Start", RTL_TEXTENCODING_ASCII_US);
-    else if (rNode.IsEndNode())
-        aTmpStr += String(" End", RTL_TEXTENCODING_ASCII_US);
-    else if (rNode.IsTxtNode())
+    if (rNode.IsTxtNode())
     {
         const SfxItemSet * pAttrSet = pTxtNode->GetpSwAttrSet();
 
-        aTmpStr += String(" Txt ", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += String("<txt>", RTL_TEXTENCODING_ASCII_US);
         aTmpStr += pTxtNode->GetTxt().Copy(0, 10);
+        aTmpStr += String("</txt>", RTL_TEXTENCODING_ASCII_US);
 
         if (rNode.IsTableNode())
-            aTmpStr += String(" Tbl", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<tbl/>", RTL_TEXTENCODING_ASCII_US);
 
-        aTmpStr += String(" olvl:", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += String("<outlinelevel>", RTL_TEXTENCODING_ASCII_US);
         aTmpStr += String::CreateFromInt32(pTxtNode->GetOutlineLevel());
+        aTmpStr += String("</outlinelevel>", RTL_TEXTENCODING_ASCII_US);
 
         const SwNumRule * pNumRule = pTxtNode->GetNumRule();
 
         if (pNumRule != NULL)
         {
-            aTmpStr += String(" Num: ", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<number>", RTL_TEXTENCODING_ASCII_US);
             if ( pTxtNode->GetNum() )
             {
                 aTmpStr += lcl_dbg_out(*(pTxtNode->GetNum()));
             }
+            aTmpStr += String("</number>", RTL_TEXTENCODING_ASCII_US);
 
-            aTmpStr += String(" Rule: ", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<rule>", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += pNumRule->GetName();
 
             const SfxPoolItem * pItem = NULL;
@@ -600,26 +603,28 @@ String lcl_dbg_out(const SwNode & rNode)
             }
 
             const SwNumFmt * pNumFmt = NULL;
+            aTmpStr += String("</rule>", RTL_TEXTENCODING_ASCII_US);
 
             if (pTxtNode->GetActualListLevel() > 0)
                 pNumFmt = pNumRule->GetNumFmt( static_cast< USHORT >(pTxtNode->GetActualListLevel()) );
 
             if (pNumFmt)
             {
-                aTmpStr += String(" NumFmt: ", RTL_TEXTENCODING_ASCII_US);
+                aTmpStr += String("<numformat>", RTL_TEXTENCODING_ASCII_US);
                 aTmpStr +=
                     lcl_dbg_out_NumType(pNumFmt->GetNumberingType());
+                aTmpStr += String("</numformat>", RTL_TEXTENCODING_ASCII_US);
             }
         }
 
         if (pTxtNode->IsCountedInList())
-            aTmpStr += String(" counted", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<counted/>", RTL_TEXTENCODING_ASCII_US);
 
         SwFmtColl * pColl = pTxtNode->GetFmtColl();
 
         if (pColl)
         {
-            aTmpStr += String(" Coll: ", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<coll>", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += pColl->GetName();
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
@@ -637,27 +642,35 @@ String lcl_dbg_out(const SwNode & rNode)
                 aTmpStr += sNumruleName;
             }
             aTmpStr += String(")", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("</coll>", RTL_TEXTENCODING_ASCII_US);
         }
 
         SwFmtColl * pCColl = pTxtNode->GetCondFmtColl();
 
         if (pCColl)
         {
-            aTmpStr += String(" CCOll: ", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<ccoll>", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += pCColl->GetName();
+            aTmpStr += String("</ccoll>", RTL_TEXTENCODING_ASCII_US);
         }
 
-        aTmpStr += String(", Frms: ", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += String("<frms>", RTL_TEXTENCODING_ASCII_US);
         aTmpStr += lcl_AnchoredFrames(rNode);
+        aTmpStr += String("</frms>", RTL_TEXTENCODING_ASCII_US);
 
         if (bDbgOutPrintAttrSet)
         {
-            aTmpStr += String(" Attrs: ", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += String("<attrs>", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += lcl_dbg_out(pTxtNode->GetSwAttrSet());
+            aTmpStr += String("</attrs>", RTL_TEXTENCODING_ASCII_US);
         }
     }
+    else if (rNode.IsStartNode())
+        aTmpStr += String("<start/>", RTL_TEXTENCODING_ASCII_US);
+    else if (rNode.IsEndNode())
+        aTmpStr += String("<end/>", RTL_TEXTENCODING_ASCII_US);
 
-    aTmpStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String("</node>", RTL_TEXTENCODING_ASCII_US);
 
     return aTmpStr;
 }
@@ -705,15 +718,23 @@ BOOL lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
 
 String lcl_dbg_out(SwNodes & rNodes)
 {
-    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
+    String aStr("<nodes>", RTL_TEXTENCODING_ASCII_US);
 
     for (ULONG i = 0; i < rNodes.Count(); i++)
     {
-        aStr += lcl_dbg_out(*rNodes[i]);
+        SwNode * pNode = rNodes[i];
+
+        if (pNode->IsEndNode())
+            aStr += String("</nodes>\n", RTL_TEXTENCODING_ASCII_US);
+
+        aStr += lcl_dbg_out(*pNode);
         aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
+
+        if (pNode->IsStartNode())
+            aStr += String("<nodes>", RTL_TEXTENCODING_ASCII_US);
     }
 
-    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
+    aStr += String("</nodes>\n", RTL_TEXTENCODING_ASCII_US);
 
     return aStr;
 }
