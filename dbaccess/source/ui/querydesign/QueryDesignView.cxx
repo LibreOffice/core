@@ -641,15 +641,11 @@ namespace
         }
         else if(pEntryTabTo == pEntryConn->GetDestWin())
         {
-            ::rtl::OUString aTmpJoin('(');
-            (aTmpJoin += aJoin) += ::rtl::OUString(')');
-            aJoin = BuildJoin(_xConnection,aTmpJoin,pEntryTabTo,pEntryConnData);
+            aJoin = BuildJoin(_xConnection,aJoin,pEntryTabTo,pEntryConnData);
         }
         else if(pEntryTabTo == pEntryConn->GetSourceWin())
         {
-            ::rtl::OUString aTmpJoin('(');
-            (aTmpJoin += aJoin) += ::rtl::OUString(')');
-            aJoin = BuildJoin(_xConnection,pEntryTabTo,aTmpJoin,pEntryConnData);
+            aJoin = BuildJoin(_xConnection,pEntryTabTo,aJoin,pEntryConnData);
         }
 
         pEntryConn->SetVisited(sal_True);
@@ -1912,6 +1908,11 @@ namespace
         sal_Bool bRet = sal_True;
         if (SQL_ISRULE(_pNode,qualified_join))
             pJoinNode = _pNode;
+        else if (SQL_ISRULE(_pNode,table_ref)
+                &&  _pNode->count() == 3
+                &&  SQL_ISPUNCTUATION(_pNode->getChild(0),"(")
+                &&  SQL_ISPUNCTUATION(_pNode->getChild(2),")") ) // '(' joined_table ')'
+            pJoinNode = _pNode->getChild(1);
         else if (! ( SQL_ISRULE(_pNode, table_ref) && _pNode->count() == 2) ) // table_node table_primary_as_range_column
             bRet = sal_False;
 

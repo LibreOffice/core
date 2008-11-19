@@ -65,6 +65,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -72,6 +73,9 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
+#include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
+#include <com/sun/star/task/InteractionClassification.hpp>
+#include <com/sun/star/task/XInteractionAskLater.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errcode.hxx>
@@ -81,6 +85,8 @@
 
 #include <algorithm>
 #include <functional>
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -370,6 +376,21 @@ void ODatabaseDocument::impl_import_throw( const ::comphelper::NamedValueCollect
     Reference< XStatusIndicator > xStatusIndicator;
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterArgs );
 
+    /** property map for import info set */
+    comphelper::PropertyMapEntry aExportInfoMap[] =
+    {
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rResource.getOrDefault("URL",::rtl::OUString())));
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
+
+    const sal_Int32 nCount = aFilterArgs.getLength();
+    aFilterArgs.realloc(nCount + 1);
+    aFilterArgs[nCount] <<= xInfoSet;
+
     Reference< XImporter > xImporter(
         m_pImpl->m_aContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
         UNO_QUERY_THROW );
@@ -510,6 +531,36 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 
     // check/adjust our macro mode.
     m_pImpl->checkMacrosOnLoading();
+
+    // If we encounter a document which already contains macros in the document storage (instead of
+    // macros in the form's/report's storages), then this has been written by a newer version of OOo (>=3.1).
+    // In this case, warn the user, too.
+    if ( m_pImpl->hasMacroStorages() )
+    {
+        ::comphelper::NamedValueCollection aArgs( m_pImpl->m_aArgs );
+        Reference< XInteractionHandler > xInteraction;
+        xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
+        if ( xInteraction.is() )
+        {
+            FutureDocumentVersionProductUpdateRequest aUpdateRequest;
+            aUpdateRequest.Classification = InteractionClassification_QUERY;
+            aUpdateRequest.DocumentURL = getURL();
+
+            ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest = new ::comphelper::OInteractionRequest( makeAny( aUpdateRequest ) );
+            pRequest->addContinuation( new ::comphelper::OInteractionApprove );
+            pRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
+            pRequest->addContinuation( new ::comphelper::OInteraction< XInteractionAskLater >() );
+
+            try
+            {
+                xInteraction->handle( pRequest.get() );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------

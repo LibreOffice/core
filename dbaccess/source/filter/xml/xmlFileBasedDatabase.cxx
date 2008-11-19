@@ -58,6 +58,7 @@
 #include <tools/diagnose_ex.h>
 #endif
 #include <comphelper/sequence.hxx>
+#include <svtools/filenotation.hxx>
 #include "dsntypes.hxx"
 namespace dbaxml
 {
@@ -95,7 +96,11 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
             case XML_TOK_DB_HREF:
-                sLocation = sValue;
+                {
+                    sLocation = ::svt::OFileNotation(rImport.GetAbsoluteReference(sValue)).get( ::svt::OFileNotation::N_SYSTEM );
+                    if ( sLocation.getLength() == 0 )
+                        sLocation = sValue;
+                }
                 break;
             case XML_TOK_MEDIA_TYPE:
                 sMediaType = sValue;

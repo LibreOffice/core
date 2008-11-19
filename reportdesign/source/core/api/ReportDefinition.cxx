@@ -1496,9 +1496,9 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             OSL_ENSURE(0,"Exception Caught: Could not commit report storage!");
             throw io::IOException();
         }
-        if ( xStatusIndicator.is() )
-            setModified(sal_False);
 
+        if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
+            setModified(sal_False);
     }
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

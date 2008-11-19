@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DatabaseDataProvider.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
@@ -71,7 +72,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     m_aParameterManager( m_aMutex, uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
     m_aFilterManager( uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
     m_xContext(context),
-    m_CommandType(0),
+    m_CommandType(sdb::CommandType::COMMAND), // #i94114
     m_RowLimit(0),
     m_EscapeProcessing(sal_True),
     m_ApplyFilter(sal_False)
