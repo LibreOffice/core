@@ -150,72 +150,93 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
         }
     }
 
-    IPolyPolygonEditorController* pIPPEC = 0;
-    if( mpView->GetMarkedObjectList().GetMarkCount() )
-        pIPPEC = mpView;
-    else
-        pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
+    if(!mpView->IsMoveAllowed() || !mpView->IsResizeAllowed())
+    {
+        // #i77187# if object is move and/or size protected, do not allow point editing at all
+        rSet.DisableItem(SID_BEZIER_MOVE);
+        rSet.DisableItem(SID_BEZIER_INSERT);
 
-    if ( !pIPPEC || !pIPPEC->IsRipUpAtMarkedPointsPossible())
-    {
-        rSet.DisableItem(SID_BEZIER_CUTLINE);
-    }
-    if (!pIPPEC || !pIPPEC->IsDeleteMarkedPointsPossible())
-    {
         rSet.DisableItem(SID_BEZIER_DELETE);
-    }
-    if (!pIPPEC || !pIPPEC->IsSetMarkedSegmentsKindPossible())
-    {
+        rSet.DisableItem(SID_BEZIER_CUTLINE);
         rSet.DisableItem(SID_BEZIER_CONVERT);
-    }
-    else
-    {
-        SdrPathSegmentKind eSegm = pIPPEC->GetMarkedSegmentsKind();
-        switch (eSegm)
-        {
-            case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-            case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,FALSE)); break; // Button reingedrueckt = Kurve
-            case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,TRUE));  break;
-            default: break;
-        }
-    }
-    if (!pIPPEC || !pIPPEC->IsSetMarkedPointsSmoothPossible())
-    {
+
         rSet.DisableItem(SID_BEZIER_EDGE);
         rSet.DisableItem(SID_BEZIER_SMOOTH);
         rSet.DisableItem(SID_BEZIER_SYMMTR);
-    }
-    else
-    {
-        SdrPathSmoothKind eSmooth = pIPPEC->GetMarkedPointsSmooth();
-        switch (eSmooth)
-        {
-            case SDRPATHSMOOTH_DONTCARE  : break;
-            case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  TRUE)); break;
-            case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,TRUE)); break;
-            case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,TRUE)); break;
-        }
-    }
-    if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
-    {
-        rSet.DisableItem(SID_BEZIER_CLOSE);
-    }
-    else
-    {
-        SdrObjClosedKind eClose = pIPPEC->GetMarkedObjectsClosedState();
-        switch (eClose)
-        {
-            case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
-            case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,FALSE)); break;
-            case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,TRUE)); break;
-            default: break;
-        }
-    }
 
-    if(pIPPEC == mpView)
-        rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, mpView->IsEliminatePolyPoints()));
+        rSet.DisableItem(SID_BEZIER_CLOSE);
+
+        rSet.DisableItem(SID_BEZIER_ELIMINATE_POINTS);
+    }
     else
-        rSet.DisableItem( SID_BEZIER_ELIMINATE_POINTS ); // only works for views
+    {
+        IPolyPolygonEditorController* pIPPEC = 0;
+        if( mpView->GetMarkedObjectList().GetMarkCount() )
+            pIPPEC = mpView;
+        else
+            pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
+
+        if ( !pIPPEC || !pIPPEC->IsRipUpAtMarkedPointsPossible())
+        {
+            rSet.DisableItem(SID_BEZIER_CUTLINE);
+        }
+        if (!pIPPEC || !pIPPEC->IsDeleteMarkedPointsPossible())
+        {
+            rSet.DisableItem(SID_BEZIER_DELETE);
+        }
+        if (!pIPPEC || !pIPPEC->IsSetMarkedSegmentsKindPossible())
+        {
+            rSet.DisableItem(SID_BEZIER_CONVERT);
+        }
+        else
+        {
+            SdrPathSegmentKind eSegm = pIPPEC->GetMarkedSegmentsKind();
+            switch (eSegm)
+            {
+                case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
+                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,FALSE)); break; // Button reingedrueckt = Kurve
+                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,TRUE));  break;
+                default: break;
+            }
+        }
+        if (!pIPPEC || !pIPPEC->IsSetMarkedPointsSmoothPossible())
+        {
+            rSet.DisableItem(SID_BEZIER_EDGE);
+            rSet.DisableItem(SID_BEZIER_SMOOTH);
+            rSet.DisableItem(SID_BEZIER_SYMMTR);
+        }
+        else
+        {
+            SdrPathSmoothKind eSmooth = pIPPEC->GetMarkedPointsSmooth();
+            switch (eSmooth)
+            {
+                case SDRPATHSMOOTH_DONTCARE  : break;
+                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  TRUE)); break;
+                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,TRUE)); break;
+                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,TRUE)); break;
+            }
+        }
+        if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
+        {
+            rSet.DisableItem(SID_BEZIER_CLOSE);
+        }
+        else
+        {
+            SdrObjClosedKind eClose = pIPPEC->GetMarkedObjectsClosedState();
+            switch (eClose)
+            {
+                case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
+                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,FALSE)); break;
+                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,TRUE)); break;
+                default: break;
+            }
+        }
+
+        if(pIPPEC == mpView)
+            rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, mpView->IsEliminatePolyPoints()));
+        else
+            rSet.DisableItem( SID_BEZIER_ELIMINATE_POINTS ); // only works for views
+    }
 }
 
 

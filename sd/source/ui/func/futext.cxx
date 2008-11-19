@@ -1039,7 +1039,9 @@ void FuText::Activate()
 {
     mpView->SetQuickTextEditMode(mpViewShell->GetFrameView()->IsQuickEdit());
 
-    mpView->SetHitTolerancePixel( 4 * HITPIX );
+    // #i89661# it's no longer necessary to make it so big here, it's fine tuned
+    // for text objects in SdrMarkView::ImpCheckObjHit
+    mpView->SetHitTolerancePixel( 2 * HITPIX );
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
