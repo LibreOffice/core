@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.23.130.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +47,7 @@ IDLFILES=\
     DocumentPasswordRequest.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
+    FutureDocumentVersionProductUpdateRequest.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
     JobExecutor.idl\
@@ -62,6 +63,7 @@ IDLFILES=\
     UserRecord.idl\
     XAsyncJob.idl\
     XInteractionApprove.idl\
+    XInteractionAskLater.idl\
     XInteractionDisapprove.idl\
     XInteractionPassword.idl\
     XJob.idl\
