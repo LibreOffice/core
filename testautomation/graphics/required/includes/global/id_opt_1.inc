@@ -470,6 +470,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
    dim irgendwas(10) as boolean
    dim sMetricField(7) as string      ' MetricField
    dim sTempMetricField(7) as string
+   dim iTry as integer ' some increment variable
 
     if lCase(gApplication = "IMPRESS") then 
         ExtensionString = "odp"
@@ -748,7 +749,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
    if Bearbeiten.GetState(2) <> 1 then
       Bearbeiten.Click '0 = not pressed. 1 = pressed.
       Kontext
-      if Active.Exists(1) then
+      if Active.Exists() then
       	 Active.Yes
       else
          warnlog "No messagebox after making document editable? - Test canceled here"
@@ -761,9 +762,17 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
       Kontext "DocumentDraw"
    endif
    printlog "select grafik element"
-   EditSelectAll
+   for iTry = 1 to 20 
+        try
+            EditSelectAll
+            printlog "EditSelectAll ready after " & iTry/10 & " seconds"
+            exit for
+        catch
+            wait( 100 )
+        endcatch
+    next iTry
 
-   sleep 1
+   
     ContextPositionAndSize
     Kontext
     active.setpage TabPositionAndSize
@@ -781,8 +790,15 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
    hTypeKeys "<Mod2 Right>"
 
    printlog "check if @ (1,1) Current-Measure-Unit :-)"
-   EditSelectAll
-   sleep (3)
+   for iTry = 1 to 20 
+        try
+            EditSelectAll
+            printlog "EditSelectAll ready after " & iTry/10 & " seconds"
+            exit for
+        catch
+            wait( 100 )
+        endcatch
+    next iTry
    try
       ContextPositionAndSize
    catch
