@@ -526,15 +526,23 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SFX_EVENT_LOADFINISHED:
                 {
-                    if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() )
+                    // the readonly documents should not be opened in shared mode
+                    if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() && !IsReadOnly() )
                     {
-                        SwitchToShared( sal_True, sal_False );
-
-                        ScViewData* pViewData = GetViewData();
-                        ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : NULL );
-                        if ( pTabView )
+                        if ( SwitchToShared( sal_True, sal_False ) )
                         {
-                            pTabView->UpdateLayerLocks();
+                            ScViewData* pViewData = GetViewData();
+                            ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : NULL );
+                            if ( pTabView )
+                            {
+                                pTabView->UpdateLayerLocks();
+                            }
+                        }
+                        else
+                        {
+                            // switching to shared mode has failed, the document should be opened readonly
+                            // TODO/LATER: And error message should be shown here probably
+                            SetReadOnlyUI( sal_True );
                         }
                     }
                 }
@@ -564,6 +572,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
                     {
+                        bool bSuccess = false;
                         bool bRetry = true;
                         while ( bRetry )
                         {
@@ -586,6 +595,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                                 // #i87870# check if shared status was disabled and enabled again
                                 bool bOwnEntry = false;
+                                bool bEntriesNotAccessible = false;
                                 try
                                 {
                                     ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
@@ -593,6 +603,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 }
                                 catch ( uno::Exception& )
                                 {
+                                    bEntriesNotAccessible = true;
                                 }
 
                                 if ( bShared && bOwnEntry )
@@ -604,6 +615,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         xCloseable->close( sal_True );
 
                                         String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        bool bNoLockAccess = false;
                                         try
                                         {
                                             ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
@@ -622,14 +634,24 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         }
                                         catch ( uno::Exception& )
                                         {
+                                            bNoLockAccess = true;
                                         }
-                                        String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
-                                        aMessage.SearchAndReplaceAscii( "%1", aUserName );
 
-                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
-                                        if ( aBox.Execute() == RET_RETRY )
+                                        if ( bNoLockAccess )
                                         {
-                                            bRetry = true;
+                                            // TODO/LATER: in future an error regarding impossibility to open file for writing could be shown
+                                            ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+                                        }
+                                        else
+                                        {
+                                            String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
+                                            aMessage.SearchAndReplaceAscii( "%1", aUserName );
+
+                                            WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
+                                            if ( aBox.Execute() == RET_RETRY )
+                                            {
+                                                bRetry = true;
+                                            }
                                         }
                                     }
                                     else
@@ -685,19 +707,30 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             }
                                         }
 
+                                        bSuccess = true;
                                         GetUndoManager()->Clear();
                                     }
                                 }
                                 else
                                 {
                                     xCloseable->close( sal_True );
-                                    WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
-                                        ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
-                                    aBox.Execute();
-                                    SfxBindings* pBindings = GetViewBindings();
-                                    if ( pBindings )
+
+                                    if ( bEntriesNotAccessible )
                                     {
-                                        pBindings->ExecuteSynchron( SID_SAVEASDOC );
+                                        // TODO/LATER: in future an error regarding impossibility to write to share control file could be shown
+                                        ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+                                    }
+                                    else
+                                    {
+                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                            ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
+                                        aBox.Execute();
+
+                                        SfxBindings* pBindings = GetViewBindings();
+                                        if ( pBindings )
+                                        {
+                                            pBindings->ExecuteSynchron( SID_SAVEASDOC );
+                                        }
                                     }
                                 }
                             }
@@ -716,6 +749,9 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 }
                             }
                         }
+
+                        if ( !bSuccess )
+                            SetError( ERRCODE_IO_ABORT ); // this error code will produce no error message, but will break the further saving process
                     }
                 }
                 break;
