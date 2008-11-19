@@ -49,6 +49,10 @@ class SwFlyDrawObj : public SdrObject
 {
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
+    // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
+    // is called when RecalcBoundRect() is used
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
 public:
     TYPEINFO();
 

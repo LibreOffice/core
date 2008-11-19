@@ -69,17 +69,9 @@ using namespace ::com::sun::star;
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 // AW: For VCOfDrawVirtObj and stuff
-#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -99,6 +91,44 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+namespace sdr
+{
+    namespace contact
+    {
+        // #i95264# currently needed since createViewIndependentPrimitive2DSequence()
+        // is called when RecalcBoundRect() is used. There should currently no VOCs being
+        // constructed since it gets not visualized (instead the corresponding SwVirtFlyDrawObj's
+        // referencing this one are visualized).
+        class VCOfSwFlyDrawObj : public ViewContactOfSdrObj
+        {
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            // basic constructor, used from SdrObject.
+            VCOfSwFlyDrawObj(SwFlyDrawObj& rObj)
+            :   ViewContactOfSdrObj(rObj)
+            {
+            }
+            virtual ~VCOfSwFlyDrawObj();
+        };
+
+        drawinglayer::primitive2d::Primitive2DSequence VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        {
+            // currently gets not visualized, return empty sequence
+            return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        VCOfSwFlyDrawObj::~VCOfSwFlyDrawObj()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
     // --> OD 2004-11-22 #117958# - create default properties
@@ -106,7 +136,12 @@ sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
     // <--
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
+{
+    // #i95264# needs an own VC since createViewIndependentPrimitive2DSequence()
+    // is called when RecalcBoundRect() is used
+    return new sdr::contact::VCOfSwFlyDrawObj(*this);
+}
 
 SwFlyDrawObj::SwFlyDrawObj()
 {
