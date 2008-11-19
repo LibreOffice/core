@@ -32,6 +32,7 @@ package com.sun.star.report;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdb.XParametersSupplier;
@@ -43,6 +44,7 @@ import com.sun.star.sdbc.XResultSetMetaData;
 import com.sun.star.sdbc.XResultSetMetaDataSupplier;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
+import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
@@ -81,6 +83,9 @@ public class SDBCReportData implements DataSource
                 parameters = xSuppParams.getParameters();
             }
 
+            final XColumnsSupplier columnsSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, rowSet);
+            final XNameAccess columns = columnsSup.getColumns();
+            final String[] columnNamesList = columns.getElementNames();
             final XResultSetMetaDataSupplier sup = (XResultSetMetaDataSupplier) UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, rowSet);
             final XResultSetMetaData resultSetMetaData = sup.getMetaData();
 
@@ -96,7 +101,7 @@ public class SDBCReportData implements DataSource
             {
                 if (i < firstParameterIndex)
                 {
-                    columnNames[i - 1] = resultSetMetaData.getColumnName(i);
+                    columnNames[i - 1] = columnNamesList[i - 1];// resultSetMetaData.getColumnName(i);
                     columnTypes[i - 1] = resultSetMetaData.getColumnType(i);
                 }
                 else
