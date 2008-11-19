@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWizard.java,v $
- * $Revision: 1.76 $
+ * $Revision: 1.76.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,7 +199,9 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 String aTableName = CurDBCommandFieldSelection.getSelectedCommandName();
                 // set all selected field names, DB Table name
                 // CurReportDocument.getRecordParser().initializeFieldColumns(aSelectedFieldNames, aTableName);
-                CurReportDocument.initializeFieldColumns(com.sun.star.sdb.CommandType.TABLE, aTableName, aSelectedFieldNames);
+                int nType = CurDBCommandFieldSelection.getSelectedCommandType();
+                // nType = com.sun.star.sdb.CommandType.TABLE;
+                CurReportDocument.initializeFieldColumns(nType, aTableName, aSelectedFieldNames);
                 // CurReportDocument.initializeFieldColumns(aSelectedFieldNames, aSelectedCommandName);
                 // CurReportDocument.getRecordParser().setAllIncludedFieldNames(false);
                 if (CurDBCommandFieldSelection.isModified())
