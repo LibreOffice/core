@@ -178,10 +178,15 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
                     // for now the file should be reopened to have read/write access
                     aMedia.remove( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) ) );
                     aMedia >>= Descriptor;
-                    try {
+                    try
+                    {
                         if ( xInStream.is() )
                             xInStream->closeInput();
-                    } catch( Exception& ) {}
+                    }
+                    catch( Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
                 }
 
                 return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
