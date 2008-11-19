@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntcache.cxx,v $
- * $Revision: 1.98 $
+ * $Revision: 1.98.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1275,7 +1275,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // For text grid refactor
     // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
     //
-    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() )
+    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
+         SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
 
@@ -2127,7 +2128,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     }
 
     //for textgrid refactor
-    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont())
+    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+         SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -2401,7 +2403,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     //for textgrid refactor
     if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
-        rInf.GetFont() )
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -2666,7 +2668,8 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     }
 
     //for text grid enhancement
-    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() )
+    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+         SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )

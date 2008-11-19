@@ -486,8 +486,19 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     MSHORT nNeed = 1; // frueher: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow
-    if ( ! pMaster->GetIndPrev() && pMaster->GetThisLines() <= nNeed )
-        return sal_False;
+    // --> FME 2008-09-16 #i91421#
+    if ( !pMaster->GetIndPrev() )
+    {
+        ULONG nLines = pMaster->GetThisLines();
+        if(nLines == 0 && pMaster->HasPara())
+        {
+            const SwParaPortion *pMasterPara = pMaster->GetPara();
+            if(pMasterPara && pMasterPara->GetNext())
+                nLines = 2;
+        }
+        if( nLines <= nNeed )
+            return sal_False;
+    }
 
     pMaster->Prepare( PREP_WIDOWS, (void*)&nNeed );
     return sal_True;

@@ -102,6 +102,13 @@ ModelessDialog DLG_PRINTMONITOR
         CENTER = TRUE ;
         Text [ en-US ] = "is being saved to" ;
     };
+    FixedText FT_SAVING
+    {
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+        Text [ en-US ] = "is being saved to" ;
+    };
     FixedText FT_PRINTER
     {
         Pos = MAP_APPFONT ( 6, 28 ) ;
@@ -123,6 +130,10 @@ ModelessDialog DLG_PRINTMONITOR
     String STR_EMAILMON
     {
         Text [ en-US ] = "Send-Monitor";
+    };
+    String STR_SAVEMON
+    {
+        Text [ en-US ] = "Save-Monitor";
     };
     String STR_SAVEMON
     {

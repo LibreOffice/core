@@ -1642,10 +1642,14 @@ static Writer& OutSwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-// --> OD 2005-06-08 #i43956# - add optional parameter <_pLinkStr>
+// --> OD 2005-06-08 #i43956# - add optional parameter <pLinkStr>
 // It's needed to write the hyperlink data for a certain cross-reference
 // - it contains the name of the link target, which is a bookmark.
-static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c, String* _pLinkStr = 0L )
+// --> OD 2008-08-14 #158418# - add optional parameter <bIncludeEmptyPicLocation>
+// It is needed to write an empty picture location for page number field separators
+static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c,
+                               String* pLinkStr = 0L,
+                               bool bIncludeEmptyPicLocation = false )
 {
     WW8Bytes aItems;
     rWrt.GetCurrentItems(aItems);
@@ -1658,8 +1662,18 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c, String* _pLinkStr = 0L
 
     rWrt.WriteChar(c);
 
+    // --> OD 2008-08-14 #158418#
+    // store empty sprmCPicLocation for field separator
+    if ( bIncludeEmptyPicLocation &&
+         ( c == 0x13 || c == 0x14 || c == 0x15 ) )
+    {
+        SwWW8Writer::InsUInt16( aItems, 0x6a03 );
+        SwWW8Writer::InsUInt32( aItems, 0x00000000 );
+    }
+    // <--
+
     // --> OD 2005-06-08 #i43956# - write hyperlink data and attributes
-    if ( rWrt.bWrtWW8 && c == 0x01 && _pLinkStr)
+    if ( rWrt.bWrtWW8 && c == 0x01 && pLinkStr )
     {
         // write hyperlink data to data stream
         SvStream& rStrm = *rWrt.pDataStrm;
@@ -1681,9 +1695,9 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c, String* _pLinkStr = 0L
         };
         rStrm.Write( aFixHeader, nFixHdrLen );
         // write reference string including length+1
-        UINT32 nStrLen( _pLinkStr->Len() + 1 );
+        UINT32 nStrLen( pLinkStr->Len() + 1 );
         SwWW8Writer::WriteLong( rStrm, nStrLen );
-        SwWW8Writer::WriteString16( rStrm, *(_pLinkStr), false );
+        SwWW8Writer::WriteString16( rStrm, *(pLinkStr), false );
         // write additional two NULL Bytes
         SwWW8Writer::WriteLong( rStrm, 0 );
         // write length of hyperlink data
@@ -1754,6 +1768,9 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
             return;
     }
 
+    // --> OD 2008-08-14 #158418#
+    const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
+    // <--
     if (WRITEFIELD_START & nMode)
     {
         BYTE aFld13[2] = { 0x13, 0x00 };  // will change
@@ -1762,7 +1779,9 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
             aFld13[0] |= 0x80;
         aFld13[1] = static_cast< BYTE >(eFldType);  // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
-        InsertSpecialChar( *this, 0x13 );
+        // --> OD 2008-08-14 #158418#
+        InsertSpecialChar( *this, 0x13, 0, bIncludeEmptyPicLocation );
+        // <--
     }
     if (WRITEFIELD_CMD_START & nMode)
     {
@@ -1820,7 +1839,9 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     {
         static const BYTE aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
-        InsertSpecialChar( *this, 0x14 );
+        // --> OD 2008-08-14 #158418#
+        InsertSpecialChar( *this, 0x14, 0, bIncludeEmptyPicLocation );
+        // <--
     }
     if (WRITEFIELD_END & nMode)
     {
@@ -1879,7 +1900,9 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
         }
 
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
-        InsertSpecialChar( *this, 0x15 );
+        // --> OD 2008-08-14 #158418#
+        InsertSpecialChar( *this, 0x15, 0, bIncludeEmptyPicLocation );
+        // <--
     }
 }
 

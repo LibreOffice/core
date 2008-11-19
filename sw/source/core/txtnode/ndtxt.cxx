@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.86.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4314,7 +4314,7 @@ namespace {
 
         private:
             SwTxtNode& mrTxtNode;
-            bool mbListStyleReset;
+            bool mbListStyleOrIdReset;
             bool mbUpdateListLevel;
             bool mbUpdateListRestart;
             bool mbUpdateListCount;
@@ -4324,7 +4324,7 @@ namespace {
                                                         const USHORT nWhich1,
                                                         const USHORT nWhich2 )
         : mrTxtNode( rTxtNode ),
-          mbListStyleReset( false ),
+          mbListStyleOrIdReset( false ),
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
           mbUpdateListCount( false )
@@ -4336,12 +4336,15 @@ namespace {
             if ( nWhich1 <= RES_PARATR_NUMRULE && RES_PARATR_NUMRULE <= nWhich2 )
             {
                 bRemoveFromList = mrTxtNode.GetNumRule() != 0;
-                mbListStyleReset = true;
+                mbListStyleOrIdReset = true;
             }
             else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
                     mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET;
+                // --> OD 2008-10-20 #i92898#
+                mbListStyleOrIdReset = true;
+                // <--
             }
 
             if ( !bRemoveFromList )
@@ -4370,12 +4373,15 @@ namespace {
             if ( nWhich1 == RES_PARATR_NUMRULE )
             {
                 bRemoveFromList = mrTxtNode.GetNumRule() != 0;
-                mbListStyleReset = true;
+                mbListStyleOrIdReset = true;
             }
             else if ( nWhich1 == RES_PARATR_LIST_ID )
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
                     mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET;
+                // --> OD 2008-10-20 #i92898#
+                mbListStyleOrIdReset = true;
+                // <--
             }
 
             if ( !bRemoveFromList )
@@ -4405,7 +4411,7 @@ namespace {
     HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
                                                         const SvUShorts& rWhichArr )
         : mrTxtNode( rTxtNode ),
-          mbListStyleReset( false ),
+          mbListStyleOrIdReset( false ),
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
           mbUpdateListCount( false )
@@ -4420,13 +4426,16 @@ namespace {
                 {
                     bRemoveFromList = bRemoveFromList ||
                                       mrTxtNode.GetNumRule() != 0;
-                    mbListStyleReset = true;
+                    mbListStyleOrIdReset = true;
                 }
                 else if ( rWhichArr[ n ] == RES_PARATR_LIST_ID )
                 {
                     bRemoveFromList = bRemoveFromList ||
                         ( mrTxtNode.GetpSwAttrSet() &&
                           mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET );
+                    // --> OD 2008-10-20 #i92898#
+                    mbListStyleOrIdReset = true;
+                    // <--
                 }
 
                 if ( !bRemoveFromList )
@@ -4459,12 +4468,12 @@ namespace {
 
     HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode )
         : mrTxtNode( rTxtNode ),
-          mbListStyleReset( false ),
+          mbListStyleOrIdReset( false ),
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
           mbUpdateListCount( false )
     {
-        mbListStyleReset = true;
+        mbListStyleOrIdReset = true;
         if ( rTxtNode.IsInList() )
         {
             rTxtNode.RemoveFromList();
@@ -4473,10 +4482,10 @@ namespace {
 
     HandleResetAttrAtTxtNode::~HandleResetAttrAtTxtNode()
     {
-        if ( mbListStyleReset && !mrTxtNode.IsInList() )
+        if ( mbListStyleOrIdReset && !mrTxtNode.IsInList() )
         {
-            // check, if via reset of list style, the paragraph now has
-            // a list style applied via its paragraph style.
+            // check, if in spite of the reset of the list style or the list id
+            // the paragraph still has to be added to a list.
             if ( mrTxtNode.GetNumRule() &&
                  mrTxtNode.GetListId().Len() > 0 )
             {

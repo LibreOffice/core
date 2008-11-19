@@ -279,11 +279,12 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
 
     aGrid.SetGridType(eType);
 
-    //Seems to force this behaviour in word ?
+    // seem to not add external leading in word, or the character would run across
+    // two line in some cases.
     if (eType != GRID_NONE)
-        rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, true);
+        rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
 
-    //force to set document as standard page mode
+   //force to set document as standard page mode
     sal_Bool bSquaredMode = sal_False;
     rDoc.SetDefaultPageMode( bSquaredMode );
     aGrid.SetSquaredMode( bSquaredMode );

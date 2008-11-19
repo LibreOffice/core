@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabsh.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <svx/colritem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/numinf.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
 #include <svtools/zformat.hxx>
 #include <sfx2/bindings.hxx>
@@ -580,9 +581,16 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 {ASSERT( !this, "Wo ist das Box-Item?" )}
 
+            //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
             if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, TRUE, &pBoxItem) == SFX_ITEM_SET)
                 aInfo = *(SvxBoxInfoItem*)pBoxItem;
+            else if( pArgs->GetItemState(SDRATTR_TABLE_BORDER_INNER, TRUE, &pBoxItem) == SFX_ITEM_SET )
+            {
+                aInfo = *(SvxBoxInfoItem*)pBoxItem;
+                aInfo.SetWhich(SID_ATTR_BORDER_INNER);
+            }
+
             aInfo.SetTable( TRUE );
             aInfo.SetValid( VALID_DISABLE, FALSE );
 

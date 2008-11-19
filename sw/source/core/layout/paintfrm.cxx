@@ -2775,8 +2775,28 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     //Ggf. eine Action ausloesen um klare Verhaeltnisse zu schaffen.
     //Durch diesen Kunstgriff kann in allen Paints davon ausgegangen werden,
     //das alle Werte gueltigt sind - keine Probleme, keine Sonderbehandlung(en).
-    if ( !pSh->IsInEndAction() && !pSh->IsPaintInProgress() &&
-         (!pSh->Imp()->IsAction() || !pSh->Imp()->GetLayAction().IsActionInProgress() ) )
+    // --> OD 2008-10-07 #i92745#
+    // Extend check on certain states of the 'current' <ViewShell> instance to
+    // all existing <ViewShell> instances.
+//    if ( !pSh->IsInEndAction() && !pSh->IsPaintInProgress() &&
+//         (!pSh->Imp()->IsAction() || !pSh->Imp()->GetLayAction().IsActionInProgress() ) )
+    bool bPerformLayoutAction( true );
+    {
+        ViewShell* pTmpViewShell = pSh;
+        do {
+            if ( pTmpViewShell->IsInEndAction() ||
+                 pTmpViewShell->IsPaintInProgress() ||
+                 ( pTmpViewShell->Imp()->IsAction() &&
+                   pTmpViewShell->Imp()->GetLayAction().IsActionInProgress() ) )
+            {
+                bPerformLayoutAction = false;
+            }
+
+            pTmpViewShell = static_cast<ViewShell*>(pTmpViewShell->GetNext());
+        } while ( bPerformLayoutAction && pTmpViewShell != pSh );
+    }
+    if ( bPerformLayoutAction )
+    // <--
     {
         ((SwRootFrm*)this)->ResetTurbo();
         SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );

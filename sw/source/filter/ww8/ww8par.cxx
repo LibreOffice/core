@@ -1843,8 +1843,12 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
     }
     else
     {
-        nWhichItems =
-            rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+        // --> OD 2008-08-06 #150965#
+        // Always read title page header/footer data - it could be used by following sections
+//        nWhichItems =
+//            rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+        nWhichItems = ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST );
+        // <--
         pPD = rSection.mpTitlePage;
     }
 
@@ -3416,7 +3420,10 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     mySegIter &rStart, bool bIgnoreCols)
 {
     SwFmtPageDesc aEmpty;
-    if (rIter->HasTitlePage())
+    // --> OD 2008-08-06 #150965#
+    // Always read title page header/footer data - it could be used by following sections
+//    if (rIter->HasTitlePage())
+    // <--
     {
         if (IsNewDoc() && rIter == rStart)
         {
