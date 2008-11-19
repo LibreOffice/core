@@ -227,8 +227,6 @@ testcase tAssignComponent
 'End Sub
     '/// close Basic IDE by calling File->Close///'
     hCloseDocument()
-    '/// close opened document///'
-    hCloseDocument()
 endcase
 
 testcase tAssignComponentFunction
@@ -288,7 +286,7 @@ testcase tAssignComponentFunction
                 'Select the macro
                 ScriptList.select(a)
                 'Start the macro by pressing the button 'run'
-                qaErrorLog ("#i68892# The test can't go on, because no help ids are useable in BASIC right now.")
+                qaErrorLog ("The test can't go on, because resetapplication fails and no help ids are useable in BASIC right now. issues: i54266 and i68892")
                 ScriptSelector.cancel
                 'ScriptSelector.ok
         '       sleep... at least 60 seconds

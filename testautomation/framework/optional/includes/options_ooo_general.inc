@@ -116,18 +116,16 @@ testcase tOOoGeneral
        FilePrint
        Kontext "DruckenDLG"
        if DruckenDLG.exists(5) then
-           if gPlatform <> "osx" then
-              Eigenschaften.click
-              kontext
-              active.setPage TabSPAPaper
-              Kontext "TabSPAPaper"
-              if TabSPAPaper.exists (5) then
-                  TabSPAPaper.OK
-                  sleep 5
-              else
-                  qaErrorlog "Properties of Printer didn't come up."
-              endif
-            end if
+            Eigenschaften.click
+            kontext
+            active.setPage TabSPAPaper
+            Kontext "TabSPAPaper"
+            if TabSPAPaper.exists (5) then
+                TabSPAPaper.OK
+                sleep 5
+            else
+                qaErrorlog "Properties of Printer didn't come up."
+            endif
             Kontext "DruckenDLG"
             DruckenDLG.OK
             ' check state
