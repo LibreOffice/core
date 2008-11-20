@@ -533,6 +533,9 @@ sub change_patchmetadata_table
     my $windowspatchlevel = 0;
     if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
 
+    my $displayaddon = "";
+    if ( $allvariables->{'PATCHDISPLAYADDON'} ) { $displayaddon = $allvariables->{'PATCHDISPLAYADDON'}; }
+
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
     {
         $displaynamevalue = $base . " Product Update " . $windowspatchlevel;
@@ -540,8 +543,8 @@ sub change_patchmetadata_table
     }
     else
     {
-        $displaynamevalue = $base . " Hotfix " . " Build: " . $installer::globals::buildid;
-        $descriptionvalue = $base . " Hotfix " . " Build: " . $installer::globals::buildid;
+        $displaynamevalue = $base . " Hotfix " . $displayaddon . " Build: " . $installer::globals::buildid;
+        $descriptionvalue = $base . " Hotfix " . $displayaddon . " Build: " . $installer::globals::buildid;
     }
 
     for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
@@ -717,6 +720,8 @@ sub get_patchsequence
     my $vendornumber = 0;
     if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
     $patchsequence = $packageversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
+
+    if ( $allvariables->{'PATCHSEQUENCE'} ) { $patchsequence = $allvariables->{'PATCHSEQUENCE'}; }
 
     return $patchsequence;
 }
