@@ -2209,6 +2209,20 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 rSet.Put( SfxUInt16Item( nWhich,
                     aDocument.GetDocOptions().GetYear2000() ) );
             break;
+
+            case SID_SHARE_DOC:
+                {
+                    if ( IsReadOnly() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            default:
+                {
+                }
+                break;
         }
 
         nWhich = aIter.NextWhich();

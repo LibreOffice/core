@@ -1896,6 +1896,7 @@ xub_StrLen ScCompiler::NextSymbol()
                     eState = ssStop;
             }
         }
+Label_MaskStateMachine:
         switch (eState)
         {
             case ssGetChar :
@@ -1925,6 +1926,11 @@ xub_StrLen ScCompiler::NextSymbol()
                             pSrc--;
                             eState = ssStop;
                         }
+                    }
+                    else
+                    {
+                        nMask &= ~SC_COMPILER_C_ODF_LABEL_OP;
+                        goto Label_MaskStateMachine;
                     }
                 }
                 else if( nMask & SC_COMPILER_C_CHAR )
@@ -4885,28 +4891,25 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
         if (!bRelRef && t->GetType() == svDoubleRef)
             bRelRef = rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() ||
                 rRef.Ref2.IsTabRel();
-        bool bUpdate;
-        if (bSharedFormula)
+        bool bUpdate = !rRef.Ref1.IsColRel() || !rRef.Ref1.IsRowRel() ||
+            !rRef.Ref1.IsTabRel();
+        if (!bUpdate && t->GetType() == svDoubleRef)
+            bUpdate = !rRef.Ref2.IsColRel() || !rRef.Ref2.IsRowRel() ||
+                !rRef.Ref2.IsTabRel();
+        if (!bSharedFormula)
         {
-            bUpdate = !rRef.Ref1.IsColRel() || !rRef.Ref1.IsRowRel() ||
-                !rRef.Ref1.IsTabRel();
-            if (bUpdate)
-                rRef.Ref1.CalcAbsIfRel( aPos);
-            if (t->GetType() == svDoubleRef)
-            {
-                if (!bUpdate)
-                    bUpdate = !rRef.Ref2.IsColRel() || !rRef.Ref2.IsRowRel() ||
-                        !rRef.Ref2.IsTabRel();
-                if (bUpdate)
-                    rRef.Ref2.CalcAbsIfRel( aPos);
-            }
-        }
-        else
-        {
-            bUpdate = !bRelRef;
+            // We cannot update names with sheet-relative references, they may
+            // be used on other sheets as well and the resulting reference
+            // would be wrong. This is a dilemma if col/row would need to be
+            // updated for the current usage.
+            // TODO: seems the only way out of this would be to not allow
+            // relative sheet references and have sheet-local names that can be
+            // copied along with sheets.
+            bUpdate = bUpdate && !rRef.Ref1.IsTabRel() && !rRef.Ref2.IsTabRel();
         }
         if (bUpdate)
         {
+            rRef.CalcAbsIfRel( aPos);
             if (ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos, r,
                         nDx, nDy, nDz, rRef, ScRefUpdate::ABSOLUTE)
                     != UR_NOTHING )

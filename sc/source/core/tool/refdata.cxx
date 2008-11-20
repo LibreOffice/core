@@ -335,7 +335,20 @@ ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress 
         lcl_adjustInOrder( aRef, Ref2, false);
         if (bInherit3Dtemp)
             Ref2.SetFlag3D( false);
+        aRef = rRef;
+        aRef.CalcAbsIfRel( rPos);
     }
+    // In Ref2 use absolute/relative addressing from non-extended parts if
+    // equal and therefor not adjusted.
+    // A$5:A5 => A$5:A$5:A5 => A$5:A5, and not A$5:A$5
+    // A$6:$A5 => A$6:A$6:$A5 => A5:$A$6
+    if (Ref2.nCol == aRef.nCol)
+        Ref2.SetColRel( aRef.IsColRel());
+    if (Ref2.nRow == aRef.nRow)
+        Ref2.SetRowRel( aRef.IsRowRel());
+    if (Ref2.nTab == aRef.nTab)
+        Ref2.SetTabRel( aRef.IsTabRel());
+    Ref2.CalcRelFromAbs( rPos);
     // Force 3D if necessary. References to other sheets always.
     if (Ref1.nTab != rPos.Tab())
         Ref1.SetFlag3D( true);
@@ -344,7 +357,7 @@ ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress 
         Ref2.SetFlag3D( true);
     // Merge Flag3D to Ref2 in case there was nothing to inherit and/or range
     // wasn't extended as in A5:A5:Sheet1.A5 if on Sheet1.
-    if (!Ref1.IsFlag3D() && !Ref2.IsFlag3D() && rRef.IsFlag3D())
+    if (rRef.IsFlag3D())
         Ref2.SetFlag3D( true);
     return *this;
 }

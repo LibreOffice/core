@@ -59,6 +59,7 @@
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include "docuno.hxx"
@@ -1647,9 +1648,13 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         //  alles was ich nicht kenn, werf ich der SvxFmMSFactory an den Hals,
         //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
 
+        try
         {
             xRet.set(SvxFmMSFactory::createInstance(aServiceSpecifier));
             // extra block to force deletion of the temporary before ScShapeObj ctor (setDelegator)
+        }
+        catch ( lang::ServiceNotRegisteredException & )
+        {
         }
 
         //  #96117# if the drawing factory created a shape, a ScShapeObj has to be used
@@ -1998,8 +2003,14 @@ void SAL_CALL ScTableSheetsObj::copyByName( const rtl::OUString& aName,
             bDone = pDocShell->MoveTable( nSource, nDestination, TRUE, TRUE );
             if (bDone)
             {
+                // #i92477# any index past the last sheet means "append" in MoveTable
+                SCTAB nResultTab = static_cast<SCTAB>(nDestination);
+                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();    // count after copying
+                if (nResultTab >= nTabCount)
+                    nResultTab = nTabCount - 1;
+
                 ScDocFunc aFunc(*pDocShell);
-                bDone = aFunc.RenameTable( nDestination, aNewStr, TRUE, TRUE );
+                bDone = aFunc.RenameTable( nResultTab, aNewStr, TRUE, TRUE );
             }
         }
     }
