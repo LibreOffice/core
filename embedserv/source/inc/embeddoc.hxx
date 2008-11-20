@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embeddoc.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 
 #include "common.h"
 #include <oleidl.h>
+#include <objidl.h>
 
 #include <hash_map>
 #include <com/sun/star/uno/Reference.h>
@@ -61,7 +62,8 @@ class EmbedDocument_Impl
       public IOleObject,
       public IOleInPlaceObject,
       public IPersistFile,
-      public IDispatch
+      public IDispatch,
+      public IExternalConnection
 {
 protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -150,6 +152,10 @@ public:
     STDMETHOD(GetIDsOfNames) ( REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgDispId );
     STDMETHOD(Invoke) ( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr );
 
+    /* IExternalConnection methods */
+    virtual DWORD STDMETHODCALLTYPE AddConnection( DWORD extconn, DWORD reserved);
+    virtual DWORD STDMETHODCALLTYPE ReleaseConnection( DWORD extconn, DWORD reserved, BOOL fLastReleaseCloses);
+
     // c++ - methods
 
     void notify( bool bDataChanged = true );
@@ -157,6 +163,9 @@ public:
     HRESULT ShowObject();
     GUID GetGUID() const { return m_guid; }
     HRESULT OLENotifyClosing();
+
+    void Deactivate();
+    HRESULT OLENotifyDeactivation();
 
 protected:
     oslInterlockedCount                 m_refCount;

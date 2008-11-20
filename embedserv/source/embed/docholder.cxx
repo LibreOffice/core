@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docholder.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include "intercept.hxx"
 #include "syswinwrapper.hxx"
 #include "iipaobj.hxx"
+
 #include "common.h"
 #include <Windows.h>
 #include <com/sun/star/lang/SystemDependent.hpp>
@@ -455,8 +456,8 @@ HRESULT DocumentHolder::InPlaceActivate(
         if ( m_xOleAccess.is() )
         {
             LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
-            if ( aDocLock.m_pEmbedDocument )
-                aDocLock.m_pEmbedDocument->ShowObject();
+            if ( aDocLock.GetEmbedDocument() )
+                aDocLock.GetEmbedDocument()->ShowObject();
         }
 
         // setTitle(m_aDocumentNamePart);
@@ -469,6 +470,7 @@ HRESULT DocumentHolder::InPlaceActivate(
     {
         hr = ERROR;
     }
+
     return hr;
 }
 
@@ -509,8 +511,8 @@ void DocumentHolder::InPlaceDeactivate(void)
     if ( m_xOleAccess.is() )
     {
         LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
-        if ( aDocLock.m_pEmbedDocument )
-            aDocLock.m_pEmbedDocument->SaveObject();
+        if ( aDocLock.GetEmbedDocument() )
+            aDocLock.GetEmbedDocument()->SaveObject();
     }
 
     return;
@@ -953,7 +955,7 @@ void DocumentHolder::resizeWin( const SIZEL& rNewSize )
     if ( m_xOleAccess.is() )
         aDocLock = m_xOleAccess->GetEmbedDocument();
 
-    if ( m_xFrame.is() && aDocLock.m_pEmbedDocument )
+    if ( m_xFrame.is() && aDocLock.GetEmbedDocument() )
     {
         uno::Reference< awt::XWindow > xWindow(
             m_xFrame->getContainerWindow(), uno::UNO_QUERY );
@@ -1529,8 +1531,8 @@ DocumentHolder::notifyClosing(
         m_xFrame = uno::Reference< frame::XFrame >();
 
         LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
-        if ( aDocLock.m_pEmbedDocument )
-            aDocLock.m_pEmbedDocument->OLENotifyClosing();
+        if ( aDocLock.GetEmbedDocument() )
+            aDocLock.GetEmbedDocument()->OLENotifyClosing();
     }
     else if( m_xFrame.is() && m_xFrame == aSource.Source )
         m_xFrame = uno::Reference< frame::XFrame >();
@@ -1570,8 +1572,8 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
     if ( m_xOleAccess.is() )
     {
         LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
-        if ( aDocLock.m_pEmbedDocument )
-            aDocLock.m_pEmbedDocument->notify();
+        if ( aDocLock.GetEmbedDocument() )
+            aDocLock.GetEmbedDocument()->notify();
     }
 }
 
