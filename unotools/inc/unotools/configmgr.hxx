@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configmgr.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,8 @@ namespace utl
             ConfigMgr_Impl*     pMgrImpl;
 
             static  ConfigManager*  pConfigManager;
+            static void getBasisAboutBoxProductVersion( rtl::OUString& rVersion );
+
         public:
             ConfigManager();
             ConfigManager(com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xConfigProvider);
