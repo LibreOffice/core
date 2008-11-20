@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.18.112.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -75,7 +75,7 @@ $(BIN)$/install: install_$(OS:l).sh
 
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
-    $(RPM) --define "_builddir $(shell @cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(BIN)" -bb $<
+    $(RPM) --define "_builddir $(shell @cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(shell @cd $(BIN) && pwd)" -bb $<
 
 $(BIN)$/install: $(FAKEDB)
 
