@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_dependencies.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.156.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,13 +59,14 @@ namespace css = ::com::sun::star;
 static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
-bool satisfiesMinimalVersion(::rtl::OUString const & version) {
-    ::rtl::OUString v(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
-            ":Version:OOOBaseVersion}"));
-    ::rtl::Bootstrap::expandMacros(v);
-    return ::dp_misc::compareVersions(version, v) != ::dp_misc::GREATER;
+#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+
+bool satisfiesMinimalVersion( ::rtl::OUString const & version )
+{
+    ::rtl::OUString aBaseVersion( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}" ) );
+    ::rtl::Bootstrap::expandMacros( aBaseVersion );
+
+    return ::dp_misc::compareVersions(version, aBaseVersion) != ::dp_misc::GREATER;
 };
 
 }
