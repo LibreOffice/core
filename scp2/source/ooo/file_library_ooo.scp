@@ -1453,7 +1453,7 @@ File gid_File_Lib_Hyph
     Dir = gid_Dir_Program;
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Utl , utl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Utl , utl)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Uui, uui )
 
@@ -1630,9 +1630,9 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Updchkui , updchk )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Updchkui , updchk )
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updatefeed , updatefeed.uno )
 
 #ifdef WNT
 File gid_File_Lib_Onlinecheck
