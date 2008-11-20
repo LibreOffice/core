@@ -541,6 +541,16 @@ void Desktop::DeInit()
 
 BOOL Desktop::QueryExit()
 {
+    try
+    {
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+    }
+    catch ( RuntimeException& )
+    {
+    }
+
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
     Reference< ::com::sun::star::frame::XDesktop >
@@ -563,7 +573,19 @@ BOOL Desktop::QueryExit()
         Any a;
         a <<= (sal_Bool)sal_False;
         xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
-    } else {
+    }
+    else
+    {
+        try
+        {
+            // it is no problem to call DisableOfficeIPCThread() more than once
+            // it also looks to be threadsafe
+            OfficeIPCThread::DisableOfficeIPCThread();
+        }
+        catch ( RuntimeException& )
+        {
+        }
+
         if (m_pLockfile != NULL) m_pLockfile->clean();
     }
 

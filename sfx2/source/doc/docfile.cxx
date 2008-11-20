@@ -1029,15 +1029,13 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading )
     {
         // the special file locking should be used only for file URLs
 
-        SFX_ITEMSET_ARG( GetItemSet(), pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
-
         // no locking is necessary on loading if the document is explicitly opened as copy
         SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
         bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
 
         try
         {
-            if ( !bResult && ( !pReadOnlyItem || !pReadOnlyItem->GetValue() ) )
+            if ( !bResult && !IsReadOnly() )
             {
                 ::svt::DocumentLockFile aLockFile( aLogicName );
                 bResult = aLockFile.CreateOwnLockFile();
@@ -1134,6 +1132,8 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading )
         {
             // the error should be set in case it is storing process
             // or the document has been opened for editing explicitly
+
+            SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
             if ( !bLoading || pReadOnlyItem && !pReadOnlyItem->GetValue() )
                 SetError( ERRCODE_IO_ACCESSDENIED );
             else

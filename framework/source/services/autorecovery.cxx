@@ -2968,6 +2968,14 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 {
     LOG_RECOVERY("AutoRecovery::implts_doSessionSave()")
 
+    // try to make sure next time office will be started user wont be
+    // notified about any other might be running office instance
+    // remove ".lock" file from disc !
+    // it is done as a first action for session save since Gnome sessions
+    // do not provide enough time for shutdown, and the dialog looks to be
+    // confusing for the user
+    AutoRecovery::st_impl_removeLockFile();
+
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
@@ -3010,11 +3018,6 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
-
-    // try to make sure next time office will be started user wont be
-    // notified about any other might be running office instance
-    // remove ".lock" file from disc !
-    AutoRecovery::st_impl_removeLockFile();
 }
 
 //-----------------------------------------------
