@@ -147,6 +147,12 @@ testcase t_macros()
     hTestActive( "i86265-2", 1 )
     
     printlog( "" )
+    printlog( " ---------- i92329 ------------ " )
+    hInsertMacroFromFile( "i92329" )
+    hIDERunMacro()
+    hTestActive( "Return an Array" , 1 )
+    
+    printlog( "" )
     printlog( " ---------- MessageBoxes ------------ " )
     hInsertMacroFromFile( "MessageBoxes" )
     hIDERunMacro()
