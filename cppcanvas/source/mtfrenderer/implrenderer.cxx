@@ -700,6 +700,8 @@ namespace cppcanvas
                                     break;
 
                                 case GRADIENT_AXIAL:
+                                    // vcl considers center color as start color
+                                    ::std::swap(aColors[0],aColors[1]);
                                     aTexture.Gradient = xFactory->createAxialHorizontalGradient( aColors,
                                                                                                  aStops );
                                     break;
