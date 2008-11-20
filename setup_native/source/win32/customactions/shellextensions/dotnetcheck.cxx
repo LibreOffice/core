@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dotnetcheck.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,6 +154,43 @@ extern "C" UINT __stdcall DotNetCheck(MSIHANDLE handle) {
     // string myText3 = TEXT("DOTNET_SUFFICIENT: ") + result;
     // MessageBox(NULL, myText3.c_str(), "DEBUG", MB_OK);
 
+
+    return ERROR_SUCCESS;
+}
+
+extern "C" UINT __stdcall ShowProperties(MSIHANDLE handle)
+{
+    string property = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    string myText = TEXT("INSTALLLOCATION: ") + property;
+    MessageBox(NULL, myText.c_str(), "INSTALLLOCATION", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("UREINSTALLLOCATION"));
+    myText = TEXT("UREINSTALLLOCATION: ") + property;
+    MessageBox(NULL, myText.c_str(), "UREINSTALLLOCATION", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
+    myText = TEXT("BASISINSTALLLOCATION: ") + property;
+    MessageBox(NULL, myText.c_str(), "BASISINSTALLLOCATION", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
+    myText = TEXT("OFFICEINSTALLLOCATION: ") + property;
+    MessageBox(NULL, myText.c_str(), "OFFICEINSTALLLOCATION", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("Installed"));
+    myText = TEXT("Installed: ") + property;
+    MessageBox(NULL, myText.c_str(), "Installed", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("PATCH"));
+    myText = TEXT("PATCH: ") + property;
+    MessageBox(NULL, myText.c_str(), "PATCH", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("REMOVE"));
+    myText = TEXT("REMOVE: ") + property;
+    MessageBox(NULL, myText.c_str(), "REMOVE", MB_OK);
+
+    property = GetMsiProperty(handle, TEXT("ALLUSERS"));
+    myText = TEXT("ALLUSERS: ") + property;
+    MessageBox(NULL, myText.c_str(), "ALLUSERS", MB_OK);
 
     return ERROR_SUCCESS;
 }

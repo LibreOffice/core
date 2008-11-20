@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: migrateinstallpath.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,28 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
             MsiSetProperty(handle, TEXT("OFFICEINSTALLLOCATION"), sInstDir.c_str());
             // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_CURRENT_USER", MB_OK );
         }
+
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("BASISINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+            MsiSetProperty(handle, TEXT("BASISINSTALLLOCATION"), sInstDir.c_str());
+            // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_CURRENT_USER", MB_OK );
+        }
+
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("UREINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+            MsiSetProperty(handle, TEXT("UREINSTALLLOCATION"), sInstDir.c_str());
+            // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_CURRENT_USER", MB_OK );
+        }
+
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());
+            // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_CURRENT_USER", MB_OK );
+        }
+
         RegCloseKey( hKey );
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
@@ -110,6 +132,28 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
             MsiSetProperty(handle, TEXT("OFFICEINSTALLLOCATION"), sInstDir.c_str());
             // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_LOCAL_MACHINE", MB_OK );
         }
+
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("BASISINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+            MsiSetProperty(handle, TEXT("BASISINSTALLLOCATION"), sInstDir.c_str());
+            // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_LOCAL_MACHINE", MB_OK );
+        }
+
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("UREINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+            MsiSetProperty(handle, TEXT("UREINSTALLLOCATION"), sInstDir.c_str());
+            // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_LOCAL_MACHINE", MB_OK );
+        }
+
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());
+            // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_LOCAL_MACHINE", MB_OK );
+        }
+
         RegCloseKey( hKey );
     }
 
