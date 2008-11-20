@@ -421,7 +421,14 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
 
 #if defined(WNT) && !defined(DISABLE_ATL)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Emser , emser)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Emser, emser )
+
+File gid_File_Lib_Inprocserv
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+    Name = "inprocserv.dll";
+End
 
 #endif
 
@@ -602,7 +609,7 @@ STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1487,7 +1494,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xof , xof)
 File gid_File_Lib_Xo
     Name = LIBNAME(xo);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End

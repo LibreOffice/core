@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_math.scp,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,8 @@ RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Inprochand
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\InprocHandler32";
-    Value = "ole32.dll";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Insertable
@@ -201,7 +202,8 @@ RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Inprochand
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\InprocHandler32";
-    Value = "ole32.dll";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Insertable

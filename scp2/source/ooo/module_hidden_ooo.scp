@@ -376,6 +376,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dnd,
 	gid_File_Lib_Dtrans,
 	gid_File_Lib_Emser,
+	gid_File_Lib_Inprocserv,
 	gid_File_Lib_Fop,
 	gid_File_Lib_Fps,
 	gid_File_Lib_Ftransl,
