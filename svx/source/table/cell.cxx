@@ -677,6 +677,7 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
     SdrText::SetOutlinerParaObject( pTextObject );
+    maSelection.nStartPara = 0xffff;
 }
 
 // -----------------------------------------------------------------------------
@@ -1679,6 +1680,7 @@ Reference< XTextRange > SAL_CALL Cell::getEnd(  ) throw (RuntimeException)
 
 OUString SAL_CALL Cell::getString(  ) throw (RuntimeException)
 {
+    maSelection.nStartPara = 0xffff;
     return SvxUnoTextBase::getString();
 }
 

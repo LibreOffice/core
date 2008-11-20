@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablemodel.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.264.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,6 +175,9 @@ private:
 
     TableRowRef getRow( sal_Int32 nRow ) const throw (::com::sun::star::lang::IndexOutOfBoundsException);
     TableColumnRef getColumn( sal_Int32 nColumn ) const throw (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    void updateRows();
+    void updateColumns();
 
     RowVector       maRows;
     ColumnVector    maColumns;

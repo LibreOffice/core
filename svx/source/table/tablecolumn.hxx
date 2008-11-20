@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablecolumn.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.264.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@ typedef ::cppu::ImplInheritanceHelper2< ::comphelper::FastPropertySet, ::com::su
 class TableColumn : public TableColumnBase
 {
     friend class TableColumnUndo;
+    friend class TableModel;
 public:
     TableColumn( const TableModelRef& xTableModel, sal_Int32 nColumn );
     virtual ~TableColumn();

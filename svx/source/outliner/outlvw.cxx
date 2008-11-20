@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlvw.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.150.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1200,6 +1200,37 @@ void OutlinerView::ToggleBullets()
 
     pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
+
+void OutlinerView::EnableBullets()
+{
+    pOwner->UndoActionStart( OLUNDO_DEPTH );
+
+    ESelection aSel( pEditView->GetSelection() );
+    aSel.Adjust();
+
+    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
+    pOwner->pEditEngine->SetUpdateMode( FALSE );
+
+    for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+    {
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
+
+        if( pPara && (pOwner->GetDepth(nPara) == -1) )
+        {
+            pOwner->SetDepth( pPara, 0 );
+        }
+    }
+
+    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount()-1);
+    pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
+
+    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+
+    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+}
+
 
 void OutlinerView::RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs )
 {

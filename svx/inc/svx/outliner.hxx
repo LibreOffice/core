@@ -396,6 +396,11 @@ public:
     */
     void        ToggleBullets();
 
+    /** enables numbering for the selected paragraphs that are not enabled and ignore all selected
+        paragraphs that already have numbering enabled.
+    */
+    void        EnableBullets();
+
     BOOL        IsCursorAtWrongSpelledWord( BOOL bMarkIfWrong = FALSE );
     BOOL        IsWrongSpelledWordAtPos( const Point& rPosPixel, BOOL bMarkIfWrong = FALSE );
     void        SpellIgnoreWord();
