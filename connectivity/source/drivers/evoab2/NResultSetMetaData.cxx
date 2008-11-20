@@ -66,7 +66,7 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQ
                 guint nFieldNumber = findEvoabField(aFieldName);
                 if (nFieldNumber == (guint)-1)
                 {
-                    :.connectivity::SharedResource aResource;
+                    connectivity::SharedResources aResource;
                     const ::rtl::OUString sError( aResource.getResourceStringWithSubstitution(
                             STR_INVALID_COLUMNNAME,
                             "$columnname$", aFieldName
