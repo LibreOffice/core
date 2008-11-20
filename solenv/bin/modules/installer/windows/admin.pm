@@ -431,7 +431,7 @@ sub copy_files_into_directory_structure
 
             if ( ! $copyreturn) # only logging problems
             {
-                my $infoline = "ERROR: Could not copy $source to $dest\n";
+                my $infoline = "ERROR: Could not copy $sourcefile to $destfile (insufficient disc space for $destfile ?)\n";
                 $returnvalue = 0;
                 push(@installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program($infoline, "copy_files_into_directory_structure");

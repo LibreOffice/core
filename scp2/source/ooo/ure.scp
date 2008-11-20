@@ -1183,14 +1183,6 @@ ProfileItem gid_Ure_Profileitem_Version_Buildid
     Value = "<buildid>";
 End
 
-ProfileItem gid_Ure_Profileitem_Version_Productpatch
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "ProductPatch";
-    Value = "<productupdate>";
-End
-
 ProfileItem gid_Ure_Profileitem_Version_Productsource
     ProfileID = gid_Profile_Version_Ini_Ure;
     ModuleID = gid_Module_Root_Ure_Hidden;

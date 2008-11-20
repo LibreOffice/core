@@ -2564,6 +2564,7 @@ sub create_new_directory_structure
         {
             installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/$machine");
         }
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/x86_64");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");

@@ -8,7 +8,7 @@
 #
 # $RCSfile: languagepack.pm,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.16.226.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -332,6 +332,57 @@ sub put_productname_into_script
     }
 }
 
+##################################################################
+# Including the full product name into the script template
+# (name and version)
+##################################################################
+
+sub put_fullproductname_into_script
+{
+    my ($scriptfile, $variableshashref) = @_;
+
+    my $productname = $variableshashref->{'PRODUCTNAME'};
+    my $productversion = "";
+    if ( $variableshashref->{'PRODUCTVERSION'} ) { $productversion = $variableshashref->{'PRODUCTVERSION'}; };
+    my $fullproductname = $productname . " " . $productversion;
+
+    my $infoline = "Adding full productname \"$fullproductname\" into language pack script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        ${$scriptfile}[$i] =~ s/FULLPRODUCTNAMELONGPLACEHOLDER/$fullproductname/;
+    }
+}
+
+##################################################################
+# Including the name of the search package (-core01)
+# into the script template
+##################################################################
+
+sub put_searchpackage_into_script
+{
+    my ($scriptfile, $variableshashref) = @_;
+
+    my $basispackageprefix = $variableshashref->{'BASISPACKAGEPREFIX'};
+    my $basispackageversion = $variableshashref->{'OOOBASEVERSION'};
+
+    if ( $installer::globals::issolarisbuild ) { $basispackageversion =~ s/\.//g; } # "3.0" -> "30"
+
+    my $infoline = "Adding basis package prefix $basispackageprefix into language pack script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    $infoline = "Adding basis package version $basispackageversion into language pack script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        ${$scriptfile}[$i] =~ s/BASISPACKAGEPREFIXPLACEHOLDER/$basispackageprefix/;
+        ${$scriptfile}[$i] =~ s/OOOBASEVERSIONPLACEHOLDER/$basispackageversion/;
+    }
+
+}
+
 #########################################################
 # Including the linenumber into the script template
 #########################################################
@@ -491,6 +542,12 @@ sub build_installer_for_languagepack
 
     # add product name into script template
     put_productname_into_script($scriptfile, $allvariableshashref);
+
+    # add product name into script template
+    put_fullproductname_into_script($scriptfile, $allvariableshashref);
+
+    # add product name into script template
+    put_searchpackage_into_script($scriptfile, $allvariableshashref);
 
     # replace linenumber in script template
     put_linenumber_into_script($scriptfile, $licensefile, $allnames);

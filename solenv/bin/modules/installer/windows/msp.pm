@@ -503,12 +503,17 @@ sub change_patchmetadata_table
     my $manufacturer_set = 0;
     my $displayname_set = 0;
     my $description_set = 0;
+    my $allowremoval_set = 0;
 
     my $defaultcompany = "";
 
     my $classificationstring = "Classification";
     my $classificationvalue = "Hotfix";
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 )) { $classificationvalue = "ServicePack"; }
+
+    my $allowremovalstring = "AllowRemoval";
+    my $allowremovalvalue = "1";
+    if (( exists($allvariables->{'MSPALLOWREMOVAL'}) ) && ( $allvariables->{'MSPALLOWREMOVAL'} == 0 )) { $allowremovalvalue = 0; }
 
     my $timestring = "CreationTimeUTC";
     # Syntax: 8/8/2008 11:55
@@ -536,6 +541,9 @@ sub change_patchmetadata_table
     my $displayaddon = "";
     if ( $allvariables->{'PATCHDISPLAYADDON'} ) { $displayaddon = $allvariables->{'PATCHDISPLAYADDON'}; }
 
+    my $displayaddon = "";
+    if ( $allvariables->{'PATCHDISPLAYADDON'} ) { $displayaddon = $allvariables->{'PATCHDISPLAYADDON'}; }
+
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
     {
         $displaynamevalue = $base . " Product Update " . $windowspatchlevel;
@@ -559,6 +567,12 @@ sub change_patchmetadata_table
             {
                 ${$filecontent}[$i] = "$company\t$property\t$classificationvalue\n";
                 $classification_set = 1;
+            }
+
+            if ( $property eq $allowremovalstring )
+            {
+                ${$filecontent}[$i] = "$company\t$property\t$allowremovalvalue\n";
+                $allowremoval_set = 1;
             }
 
             if ( $property eq $timestring )
@@ -598,6 +612,12 @@ sub change_patchmetadata_table
     if ( ! $classification_set )
     {
         my $line = "$defaultcompany\t$classificationstring\t$classificationvalue\n";
+        push(@newcontent, $line);
+    }
+
+    if ( ! $allowremoval_set )
+    {
+        my $line = "$defaultcompany\t$classificationstring\t$allowremovalvalue\n";
         push(@newcontent, $line);
     }
 

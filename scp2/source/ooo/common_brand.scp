@@ -899,15 +899,6 @@ ProfileItem gid_Brand_Profileitem_Version_Buildid
     Value = "<buildid>";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_Productpatch
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 6;
-    Key = "ProductPatch";
-    Value = "<productupdate>";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Productsource
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

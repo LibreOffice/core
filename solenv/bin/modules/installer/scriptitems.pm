@@ -726,11 +726,6 @@ sub replace_setup_variables
     if ( $hashref->{'USERDIRPRODUCTVERSION'} ) { $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'}; }
     my $productkey = $productname . " " . $productversion;
 
-    # string "Product Update X"
-
-    my $productupdatestring = "";
-    if ( $hashref->{'WINDOWSPATCHLEVEL'} ) { $productupdatestring = "(Product Update $hashref->{'WINDOWSPATCHLEVEL'})"; }
-
     # string $buildid, which is used to replace the setup variable <buildid>
 
     my $localminor = "flat";
@@ -767,7 +762,6 @@ sub replace_setup_variables
         $value =~ s/\<productminor\>/$localminor/;
         $value =~ s/\<productbuildid\>/$installer::globals::buildid/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;
-        $value =~ s/\<productupdate\>/$productupdatestring/;
         $value =~ s/\<updateid\>/$updateid/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
 
