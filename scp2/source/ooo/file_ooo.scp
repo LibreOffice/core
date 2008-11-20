@@ -166,7 +166,7 @@ File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif

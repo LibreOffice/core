@@ -1048,7 +1048,7 @@ End
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 
 #ifndef WITHOUT_MOZILLA
-STD_UNO_LIB_FILE( gid_File_Lib_Pl , pl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pl , pl)
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Preload, preload)
