@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winmgr.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,20 +31,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#include <vcl/svapp.hxx>
-#include <tools/fsys.hxx>
-#include <osl/mutex.hxx>
+#include "vcl/svapp.hxx"
+#include "tools/fsys.hxx"
+#include "tools/urlobj.hxx"
+#include "osl/mutex.hxx"
 
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
+#include "rtl/string.hxx"
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
 
-#include <plugin/impl.hxx>
+#include "plugin/impl.hxx"
 
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-    #include <tools/prewin.h>
+    #include "tools/prewin.h"
 
     #include <windows.h>
     #include <string.h>
@@ -53,7 +54,7 @@
     #include <winbase.h>
     #include <objbase.h>
 
-    #include <tools/postwin.h>
+    #include "tools/postwin.h"
 
 #pragma warning (pop)
 
@@ -236,6 +237,52 @@ static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
     }
 }
 //__________________________________________________________________________________________________
+static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
+{
+    TCHAR value[MAX_PATH];
+    DWORD dwType, size = sizeof(value);
+
+    size = sizeof(value);
+    if (::RegQueryValueEx(
+        hKey, _T("Path"), NULL, &dwType,
+        (LPBYTE)value, &size ) == ERROR_SUCCESS &&
+        (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
+    {
+        OUString aUPath( OStringToOUString( value, RTL_TEXTENCODING_MS_1252 ) );
+        INetURLObject aURL( aUPath );
+        OString aName( OUStringToOString( aURL.GetName().toAsciiLowerCase(), RTL_TEXTENCODING_MS_1252 ) );
+
+        // no netscape default plugin anymore...
+        // and no double plugin dlls
+        if ( !aName.equals( "npnul32.dll" ) &&
+             ! aName.equals( "npnrvp.dll" ) &&
+             rPlugins.find( aName ) == rPlugins.end())
+        {
+            rPlugins[ aName ] = aUPath;
+#if OSL_DEBUG_LEVEL > 1
+            logPlugin( aUPath );
+#endif
+        }
+    }
+}
+static void add_MozillaPlugin( HKEY hKey, PluginLocationMap & rPlugins )
+{
+    TCHAR keyName[MAX_PATH];
+    DWORD dwIndex = 0, size = sizeof (keyName);
+
+    while (::RegEnumKeyEx( hKey, dwIndex, keyName, &size, NULL, NULL, NULL, NULL ) == ERROR_SUCCESS)
+    {
+        size = sizeof (keyName);
+        HKEY hSubKey;
+        if (::RegOpenKeyEx( hKey, keyName, 0, KEY_READ, &hSubKey ) == ERROR_SUCCESS)
+        {
+            add_MozPlugin( hSubKey, rPlugins );
+            ::RegCloseKey( hSubKey );
+        }
+        ++dwIndex;
+    }
+}
+//__________________________________________________________________________________________________
 static void add_NS_Plugins( PluginLocationMap & rPlugins )
 {
     HKEY hKey;
@@ -253,6 +300,14 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
         0, KEY_READ, &hKey ) == ERROR_SUCCESS)
     {
         add_NS_lookupRecursive( hKey, rPlugins );
+        ::RegCloseKey( hKey );
+    }
+    // Mozilla - plugins
+    if (::RegOpenKeyEx(
+        HKEY_LOCAL_MACHINE, _T("Software\\MozillaPlugins"),
+        0, KEY_READ, &hKey ) == ERROR_SUCCESS)
+    {
+        add_MozillaPlugin( hKey, rPlugins );
         ::RegCloseKey( hKey );
     }
 }

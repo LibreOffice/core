@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.15.90.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,6 +33,7 @@ PRJ=..$/..$/..
 PRJNAME=extensions
 TARGET=plunx
 TARGETTYPE=CUI
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  ..$/util$/makefile.pmk
 
@@ -55,6 +56,12 @@ CDEFS+=-DOJI
 
 .IF "$(DISABLE_XAW)" == "TRUE"
 CDEFS+=-DDISABLE_XAW
+.ENDIF
+
+.IF "$(ENABLE_GTK)" == "TRUE"
+CDEFS+=-DENABLE_GTK
+PKGCONFIG_MODULES=gtk+-2.0 gthread-2.0
+.INCLUDE : pkg_config.mk
 .ENDIF
 
 SLOFILES=\
@@ -88,6 +95,19 @@ APP1STDLIBS+= -lXt -lXext -lX11
 APP1STDLIBS+= -lXt -lXext -lX11 -ldl
 .ENDIF
 .ENDIF
+
+.IF "$(ENABLE_GTK)" == "TRUE"
+# libs for gtk plugin
+APP1STDLIBS+=$(PKGCONFIG_LIBS:s/ -lpangoxft-1.0//)
+# hack for faked SO environment
+.IF "$(PKGCONFIG_ROOT)"!=""
+.IF "$(OS)" == "SOLARIS"
+# don't ask, it's ugly
+DIRECT :=-z nodefs $(DIRECT)
+.ENDIF
+.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
+.ENDIF
+    
 
 APP1DEF=	$(MISC)$/$(TARGET).def
 

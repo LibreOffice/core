@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: npwrap.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.90.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include <errno.h>
 #include <dlfcn.h>
 #include <unistd.h>
+#include <sys/poll.h>
 #include <fcntl.h>
 #include <signal.h>
 
@@ -46,6 +47,7 @@ PluginConnector* pConnector = NULL;
 int         nAppArguments = 0;
 char**      pAppArguments = NULL;
 Display*    pAppDisplay = NULL;
+Display*    pXtAppDisplay = NULL;
 
 extern oslModule pPluginLib;
 extern NPError (*pNP_Shutdown)();
@@ -72,6 +74,7 @@ extern "C"
         return 0;
     }
 
+    #ifndef ENABLE_GTK
     static void ThreadEventHandler( XtPointer /*client_data*/, int* /*source*/, XtInputId* id )
     {
         char buf[256];
@@ -99,6 +102,7 @@ extern "C"
             }
         }
     }
+    #endif
 }
 
 
@@ -129,16 +133,17 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
         XtNheight, 200,
           (char *)NULL );
     XtRealizeWidget( shell );
+    XtRealizeWidget( newWidget );
 
     medDebug( 1, "Reparenting new widget %x to %x\n", XtWindow( newWidget ), aParentWindow );
-    XReparentWindow( pAppDisplay,
+    XReparentWindow( pXtAppDisplay,
                      XtWindow( shell ),
                      aParentWindow,
                      0, 0 );
     XtMapWidget( shell );
     XtMapWidget( newWidget );
-    XRaiseWindow( pAppDisplay, XtWindow( shell ) );
-    XSync( pAppDisplay, False );
+    XRaiseWindow( pXtAppDisplay, XtWindow( shell ) );
+    XSync( pXtAppDisplay, False );
 
     return newWidget;
 }
@@ -146,12 +151,12 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
 void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
 {
     XLIB_String n, c;
-    XtGetApplicationNameAndClass(pAppDisplay, &n, &c);
+    XtGetApplicationNameAndClass(pXtAppDisplay, &n, &c);
 
     Widget newShell =
         XtVaAppCreateShell( "pane", c,
                             topLevelShellWidgetClass,
-                            pAppDisplay,
+                            pXtAppDisplay,
                             XtNwidth, 200,
                             XtNheight, 200,
                             XtNoverrideRedirect, True,
@@ -175,7 +180,7 @@ static oslModule LoadModule( const char* pPath )
     oslModule pLib = osl_loadModule( sFileURL.pData, SAL_LOADMODULE_LAZY );
     if( ! pLib )
     {
-        medDebug( 1, "could not open %s\n", pPath );
+        medDebug( 1, "could not open %s: %s\n", pPath, dlerror() );
     }
     return pLib;
 }
@@ -190,7 +195,7 @@ static void CheckPlugin( const char* pPath )
     if( pNP_GetMIMEDescription )
         printf( "%s\n", pNP_GetMIMEDescription() );
     else
-        medDebug( 1, "could not symbol NP_GetMIMEDescription\n" );
+        medDebug( 1, "could not get symbol NP_GetMIMEDescription %s\n", dlerror() );
 
     osl_unloadModule( pLib );
 }
@@ -221,6 +226,88 @@ static void signal_handler( int nSig )
     _exit(nSig);
 }
 
+#ifdef ENABLE_GTK
+
+static gboolean noClosure( gpointer )
+{
+    return TRUE;
+}
+
+// Xt events
+static gboolean prepareXtEvent( GSource*, gint* )
+{
+    int nMask = XtAppPending( app_context );
+    return (nMask & XtIMAll) != 0;
+}
+
+static gboolean checkXtEvent( GSource* )
+{
+    int nMask = XtAppPending( app_context );
+    return (nMask & XtIMAll) != 0;
+}
+
+static gboolean dispatchXtEvent( GSource*, GSourceFunc, gpointer )
+{
+    XtAppProcessEvent( app_context, XtIMAll );
+    return TRUE;
+}
+
+static GSourceFuncs aXtEventFuncs =
+{
+  prepareXtEvent,
+  checkXtEvent,
+  dispatchXtEvent,
+  NULL,
+  noClosure,
+  NULL
+};
+
+static gboolean prepareWakeupEvent( GSource*, gint* )
+{
+    struct pollfd aPoll = { wakeup_fd[0], POLLIN, 0 };
+    poll( &aPoll, 1, 0 );
+    return (aPoll.revents & POLLIN ) != 0;
+}
+
+static gboolean checkWakeupEvent( GSource* pSource )
+{
+    gint nDum = 0;
+    return prepareWakeupEvent( pSource, &nDum );
+}
+
+static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
+{
+    char buf[256];
+    // clear pipe
+    int len, nLast = -1;
+
+    while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
+        nLast = len-1;
+    if( ( nLast == -1  || buf[nLast] != 'x' ) && pConnector )
+        pConnector->CallWorkHandler();
+    else
+    {
+        XtAppSetExitFlag( app_context );
+        bPluginAppQuit = true;
+
+        delete pConnector;
+        pConnector = NULL;
+    }
+
+    return TRUE;
+}
+
+static GSourceFuncs aWakeupEventFuncs = {
+  prepareWakeupEvent,
+  checkWakeupEvent,
+  dispatchWakeupEvent,
+  NULL,
+  noClosure,
+  NULL
+};
+
+#endif // GTK
+
 }
 
 int main( int argc, char **argv)
@@ -241,7 +328,7 @@ int main( int argc, char **argv)
         pBaseName--;
     LoadAdditionalLibs( pBaseName );
 
-    if( argc < 3 )
+    if( argc == 2 )
     {
         CheckPlugin(argv[1]);
         exit(0);
@@ -290,36 +377,62 @@ int main( int argc, char **argv)
     }
     int nSocket = atol( argv[1] );
 
+    #ifdef ENABLE_GTK
+    g_thread_init(NULL);
+    gtk_init(&argc, &argv);
+    #endif
+
      pConnector = new PluginConnector( nSocket );
      pConnector->SetConnectionLostHdl( Link( NULL, GlobalConnectionLostHdl ) );
 
     XtSetLanguageProc( NULL, NULL, NULL );
 
-    topLevel = XtVaOpenApplication(
-        &app_context,       /* Application context */
-        "SOPlugin",         /* Application class */
-        NULL, 0,            /* command line option list */
-        &argc, argv,        /* command line args */
-        NULL,               /* for missing app-defaults file */
-        topLevelShellWidgetClass,
-        XtNoverrideRedirect, True,
-        (char *)NULL);      /* terminate varargs list */
-    pAppDisplay = XtDisplay( topLevel );
+    XtToolkitInitialize();
+    app_context = XtCreateApplicationContext();
+    pXtAppDisplay = XtOpenDisplay( app_context, NULL, "SOPlugin", "SOPlugin", NULL, 0, &argc, argv );
 
+
+    #ifdef ENABLE_GTK
+    // integrate Xt events into GTK event loop
+    GPollFD aXtPollDesc, aWakeupPollDesc;
+
+    GSource* pXTSource = g_source_new( &aXtEventFuncs, sizeof(GSource) );
+    if( !pXTSource )
+    {
+        medDebug( 1, "could not get Xt GSource" );
+        return 1;
+    }
+
+    g_source_set_priority( pXTSource, GDK_PRIORITY_EVENTS );
+    g_source_set_can_recurse( pXTSource, TRUE );
+    g_source_attach( pXTSource, NULL );
+    aXtPollDesc.fd = ConnectionNumber( pXtAppDisplay );
+    aXtPollDesc.events = G_IO_IN;
+    aXtPollDesc.revents = 0;
+    g_source_add_poll( pXTSource, &aXtPollDesc );
+
+    // Initialize wakeup events listener
+    GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
+    if ( pWakeupSource == NULL )
+    {
+        medDebug( 1, "could not get wakeup source" );
+        return 1;
+    }
+    g_source_set_priority( pWakeupSource, GDK_PRIORITY_EVENTS);
+    g_source_attach( pWakeupSource, NULL );
+    aWakeupPollDesc.fd = wakeup_fd[0];
+    aWakeupPollDesc.events = G_IO_IN;
+    aWakeupPollDesc.revents = 0;
+    g_source_add_poll( pWakeupSource, &aWakeupPollDesc );
+
+    pAppDisplay = gdk_x11_display_get_xdisplay( gdk_display_get_default() );
+    #else
+    pAppDisplay = pXtAppDisplay;
     XtAppAddInput( app_context,
                    wakeup_fd[0],
                    (XtPointer)XtInputReadMask,
                    ThreadEventHandler, NULL );
-
-    /*
-     *  Create windows for widgets and map them.
-     */
-    int nWindow;
-    sscanf( argv[3], "%d", &nWindow );
-    char pText[1024];
-    sprintf( pText, "starting plugin %s ...", pAppArguments[2] );
-    topBox = createSubWidget( pText, topLevel, (XLIB_Window)nWindow );
-
+    #endif
 
      // send that we are ready to go
     MediatorMessage* pMessage =
@@ -351,7 +464,11 @@ int main( int argc, char **argv)
     // of XtAppMainLoop
     do
     {
+        #ifdef ENABLE_GTK
+        g_main_context_iteration( NULL, TRUE );
+        #else
         XtAppProcessEvent( app_context, XtIMAll );
+        #endif
     } while( ! XtAppGetExitFlag( app_context ) && ! bPluginAppQuit );
 
     medDebug( 1, "left plugin app main loop\n" );

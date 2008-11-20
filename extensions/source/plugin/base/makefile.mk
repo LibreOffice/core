@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.14.90.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,11 @@ CDEFS+=-DDISABLE_XAW
 OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ENDIF  # "$(GUIBASE)"=="aqua"
+
+.IF "$(GUIBASE)" == "unx" && "$(ENABLE_GTK)" == "TRUE"
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE : pkg_config.mk
+.ENDIF
 
 SLOFILES=		\
                 $(SLO)$/plctrl.obj		\

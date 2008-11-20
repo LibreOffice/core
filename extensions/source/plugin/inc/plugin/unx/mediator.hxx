@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediator.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <vos/pipe.hxx>
 #include <vos/mutex.hxx>
@@ -42,6 +41,8 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
+
+#include <vector>
 
 struct MediatorMessage
 {
@@ -83,8 +84,6 @@ struct MediatorMessage
     void    Rewind() { m_pRun = NULL; }
 };
 
-DECLARE_LIST( MediatorMessageList, MediatorMessage* )
-
 class MediatorListener;
 
 class Mediator
@@ -93,7 +92,7 @@ class Mediator
 protected:
     int                                 m_nSocket;
 
-    MediatorMessageList                 m_aMessageQueue;
+    std::vector<MediatorMessage*>       m_aMessageQueue;
     NAMESPACE_VOS(OMutex)               m_aQueueMutex;
     NAMESPACE_VOS(OMutex)               m_aSendMutex;
     // only one thread can send a message at any given time

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unxmgr.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,6 +175,57 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
     return nDescriptions > 0;
 }
 
+static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDescription* >& rDescriptions )
+{
+    rtl::OStringBuffer aPath( 1024 );
+    aPath.append( rPath );
+    aPath.append( "/pluginreg.dat" );
+    FILE* fp = fopen( aPath.getStr(), "r" );
+    if( fp )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "parsing %s\n", aPath.getStr() );
+#endif
+        char aLine[1024];
+        while( fgets( aLine, sizeof( aLine ), fp ) )
+        {
+            int nLineLen = strlen( aLine );
+            int nDotPos;
+            for( nDotPos = nLineLen-1; nDotPos > 0 && aLine[nDotPos] != ':'; nDotPos-- )
+                ;
+            if( aLine[0] == '/' && aLine[nDotPos] == ':' && aLine[nDotPos+1] == '$' )
+                CheckPlugin( ByteString( aLine, nDotPos ), rDescriptions );
+        }
+        fclose( fp );
+    }
+
+    // check subdirectories
+    long aBuffer[ sizeof( struct dirent ) + _PC_NAME_MAX +1 ];
+
+    DIR* pDIR = opendir( rPath.getStr() );
+    struct dirent* pDirEnt = NULL;
+    struct stat aStat;
+    while( pDIR && ! readdir_r( pDIR, (struct dirent*)aBuffer, &pDirEnt ) && pDirEnt )
+    {
+        char* pBaseName = ((struct dirent*)aBuffer)->d_name;
+        if( rtl_str_compare( ".", pBaseName ) && rtl_str_compare( "..", pBaseName ) )
+        {
+            rtl::OStringBuffer aBuf( 1024 );
+            aBuf.append( rPath );
+            aBuf.append( '/' );
+            aBuf.append( pBaseName );
+
+            if( ! stat( aBuf.getStr(), &aStat ) )
+            {
+                if( S_ISDIR( aStat.st_mode ) )
+                    CheckPluginRegistryFiles( aBuf.makeStringAndClear(), rDescriptions );
+            }
+        }
+    }
+    if( pDIR )
+        closedir( pDIR );
+}
+
 Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
 {
     static Sequence<PluginDescription> aDescriptions;
@@ -240,26 +291,10 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
         }
 
         // try ~/.mozilla/pluginreg.dat
-        ByteString aMozPluginreg( pHome );
-        aMozPluginreg.Append( "/.mozilla/pluginreg.dat" );
-        FILE* fp = fopen( aMozPluginreg.GetBuffer(), "r" );
-        if( fp )
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "parsing %s\n", aMozPluginreg.GetBuffer() );
-#endif
-            char aLine[1024];
-            while( fgets( aLine, sizeof( aLine ), fp ) )
-            {
-                int nLineLen = strlen( aLine );
-                int nDotPos;
-                for( nDotPos = nLineLen-1; nDotPos > 0 && aLine[nDotPos] != ':'; nDotPos-- )
-                    ;
-                if( aLine[0] == '/' && aLine[nDotPos] == ':' && aLine[nDotPos+1] == '$' )
-                    CheckPlugin( ByteString( aLine, nDotPos ), aPlugins );
-            }
-            fclose( fp );
-        }
+        rtl::OStringBuffer aBuf(256);
+        aBuf.append( pHome );
+        aBuf.append( "/.mozilla" );
+        CheckPluginRegistryFiles( aBuf.makeStringAndClear(), aPlugins );
 
         // create return value
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
