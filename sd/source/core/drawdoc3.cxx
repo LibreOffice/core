@@ -1976,5 +1976,19 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
                FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
                FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
 {
+    sal_uInt16 nMasterPageCount = GetMasterPageCount();
     SdrModel::Merge( rSourceModel, nFirstPageNum, nLastPageNum, nDestPos, bMergeMasterPages, bAllMasterPages, bUndo, bTreadSourceAsConst );
+
+    // add style family for each new master page
+    for( sal_uInt16 nMaster = nMasterPageCount; nMaster < GetMasterPageCount(); nMaster++ )
+    {
+        SdPage* pPage = static_cast< SdPage* >( GetMasterPage( nMaster ) );
+        if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
+        {
+            // new master page created, add its style family
+            SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
+            if( pStylePool )
+                pStylePool->AddStyleFamily( pPage );
+        }
+    }
 }

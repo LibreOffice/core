@@ -266,6 +266,10 @@ public:
     void                InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
     void                DeletePage(USHORT nPgNum);
     SdrPage*            RemovePage(USHORT nPgNum);
+
+    virtual void     InsertMasterPage(SdrPage* pPage, USHORT nPos=0xFFFF);
+    virtual SdrPage* RemoveMasterPage(USHORT nPgNum);
+
     void                RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
     SD_DLLPUBLIC void   SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
                                       SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);

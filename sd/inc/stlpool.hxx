@@ -61,6 +61,7 @@ typedef ::cppu::ImplInheritanceHelper4< SfxStyleSheetPool,
 
 class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
 {
+    friend class SdDrawDocument;
 public:
                         SdStyleSheetPool(SfxItemPool const& rPool, SdDrawDocument* pDocument);
 
@@ -134,8 +135,6 @@ protected:
 
     using  SfxStyleSheetPool::Create;
     virtual ~SdStyleSheetPool();
-
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void AddStyleFamily( const SdPage* pPage );
     void RemoveStyleFamily( const SdPage* pPage );

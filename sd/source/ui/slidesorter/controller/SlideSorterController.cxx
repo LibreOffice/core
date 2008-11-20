@@ -467,7 +467,14 @@ bool SlideSorterController::Command (
             }
             mbIsContextMenuOpen = false;
             if (pPage == NULL)
+            {
+                // Select slide before the insertion indicator before it is
+                // hidden, so that a pending slide insertion slot finds the
+                // right place to insert a new slide.
+                mpPageSelector->SelectPage(
+                    mrView.GetOverlay().GetInsertionIndicatorOverlay().GetInsertionPageIndex()-1);
                 mrView.GetOverlay().GetInsertionIndicatorOverlay().Hide();
+            }
             bEventHasBeenHandled = true;
         }
         break;

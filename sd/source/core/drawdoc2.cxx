@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc2.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -362,6 +362,34 @@ SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
     UpdatePageObjectsInNotes(nPgNum);
 
     return pPage;
+}
+
+// Warning: This is not called for new master pages created from SdrModel::Merge,
+// you also have to modify code in SdDrawDocument::Merge!
+void SdDrawDocument::InsertMasterPage(SdrPage* pPage, USHORT nPos )
+{
+    FmFormModel::InsertMasterPage( pPage, nPos );
+    if( pPage && pPage->IsMasterPage() && (static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD) )
+    {
+        // new master page created, add its style family
+        SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
+        if( pStylePool )
+            pStylePool->AddStyleFamily( static_cast<SdPage*>(pPage) );
+    }
+}
+
+SdrPage* SdDrawDocument::RemoveMasterPage(USHORT nPgNum)
+{
+    SdPage* pPage = static_cast<SdPage*>(GetMasterPage(nPgNum ));
+    if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
+    {
+        // master page removed, remove its style family
+        SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
+        if( pStylePool )
+            pStylePool->RemoveStyleFamily( pPage );
+    }
+
+    return FmFormModel::RemoveMasterPage(nPgNum);
 }
 
 /*************************************************************************

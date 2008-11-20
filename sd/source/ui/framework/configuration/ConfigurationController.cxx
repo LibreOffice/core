@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConfigurationController.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -305,7 +305,11 @@ void SAL_CALL ConfigurationController::unlock (void)
     throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    ThrowIfDisposed();
+
+    // Allow unlocking while the ConfigurationController is being disposed
+    // (but not when that is done and the controller is disposed.)
+    if (rBHelper.bDisposed)
+        ThrowIfDisposed();
 
     OSL_ASSERT(mpImplementation->mnLockCount>0);
     --mpImplementation->mnLockCount;

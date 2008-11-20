@@ -237,7 +237,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 
                 bool bState = false;
                 const sal_Int16 nDepth = mrOutliner.GetDepth( nPara );
-                if( (nDepth != -1) && getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) && !bState )
+                if( (nDepth != -1) && (!getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) || !bState) )
                 {
                     // disable bullet if text::enable-bullet="false" is found
                     if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
@@ -257,7 +257,10 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                             while(nWhich)
                             {
                                 if(SFX_ITEM_SET != aParaSet.GetItemState(nWhich, true))
+                                {
                                     aParaSet.Put(rStyleSet.Get(nWhich));
+                                    bItemChange = true;
+                                }
 
                                 nWhich = aIter.NextWhich();
                             }

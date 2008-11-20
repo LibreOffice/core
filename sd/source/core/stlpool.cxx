@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,7 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
         for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
             AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PK_STANDARD) );
 
-        StartListening( *mpDoc );
+//      StartListening( *mpDoc );
     }
 }
 
@@ -674,6 +674,8 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
 {
+    String aHelpFile;
+
     sal_uInt32 nCount = rSourcePool.aStyles.size();
 
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > > aNewStyles;
@@ -696,6 +698,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                 if( aParent.Len() )
                     aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, String >( xNewSheet, aParent ) );
 
+                xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
                 xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
             }
         }
@@ -732,6 +735,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 
     List* pNameList = CreateLayoutSheetNames(rLayoutName);
 
+    String sEmpty;
     String* pName = (String*)pNameList->First();
     while (pName)
     {
@@ -744,6 +748,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
             {
                 // falls einer mit Methusalem-Doks. ankommt
                 SfxStyleSheetBase& rNewSheet = Make(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+                rNewSheet.SetHelpId( sEmpty, pSourceSheet->GetHelpId( sEmpty ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
             }
@@ -1210,30 +1215,6 @@ Font SdStyleSheetPool::GetBulletFont() const
 
 // --------------------------------------------------------------------
 
-void SdStyleSheetPool::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
-    if( pSdrHint && pSdrHint->GetKind() == HINT_PAGEORDERCHG )
-    {
-        const SdPage* pPage = static_cast< const SdPage* >( pSdrHint->GetPage() );
-        if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
-        {
-            if( pPage->IsInserted() )
-            {
-                // new master page created, add its style family
-                AddStyleFamily( pPage );
-            }
-            else
-            {
-                // master page removed, remove its style family
-                RemoveStyleFamily( pPage );
-            }
-        }
-    }
-}
-
-// --------------------------------------------------------------------
-
 void SdStyleSheetPool::AddStyleFamily( const SdPage* pPage )
 {
     rtl::Reference< SfxStyleSheetPool > xPool( this );
@@ -1452,7 +1433,7 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
         {
         }
 
-        EndListening( *mpDoc );
+//      EndListening( *mpDoc );
         mpDoc = 0;
     }
 }
