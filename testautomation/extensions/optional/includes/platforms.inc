@@ -83,7 +83,7 @@ testcase tExtensionPlatforms
         printlog( "Current extension: " & cCurrentExtensionFile )
         iStatus = hExtensionAddGUI( cCurrentExtensionPath, "InstallForUser, NoLicense, NoUpdate, Verbose" )
         
-        if ( iStatus > 0 ) then
+        if ( iStatus >= 0 ) then
         
             kontext "Active"
             if ( Active.exists( 2 ) ) then
