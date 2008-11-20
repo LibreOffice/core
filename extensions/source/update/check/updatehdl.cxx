@@ -38,6 +38,7 @@
 #include "osl/thread.hxx"
 #include "osl/file.hxx"
 #include "rtl/ustring.hxx"
+#include "rtl/bootstrap.hxx"
 
 #include "com/sun/star/uno/Sequence.h"
 
@@ -631,9 +632,6 @@ rtl::OUString UpdateHandler::loadString( const uno::Reference< resource::XResour
         sString = UNISTRING("Missing ") + sKey;
     }
 
-    searchAndReplaceAll( sString, UNISTRING( "%PRODUCTNAME" ), msProductName );
-    searchAndReplaceAll( sString, UNISTRING( "%PRODUCTVERSION" ), msProductVersion );
-
     return sString;
 }
 
@@ -684,12 +682,13 @@ void UpdateHandler::loadStrings()
 
     if ( !xBundle.is() ) return;
 
-    getProductName();
-
     msChecking      = loadString( xBundle, RID_UPDATE_STR_CHECKING );
     msCheckingError = loadString( xBundle, RID_UPDATE_STR_CHECKING_ERR );
     msNoUpdFound    = loadString( xBundle, RID_UPDATE_STR_NO_UPD_FOUND );
+
     msUpdFound      = loadString( xBundle, RID_UPDATE_STR_UPD_FOUND );
+    setFullVersion( msUpdFound );
+
     msDlgTitle      = loadString( xBundle, RID_UPDATE_STR_DLG_TITLE );
     msDownloadPause = loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_PAUSE );
     msDownloadError = loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_ERR );
@@ -835,7 +834,7 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > & r
 }
 
 //--------------------------------------------------------------------
-void UpdateHandler::getProductName()
+void UpdateHandler::setFullVersion( rtl::OUString& rString )
 {
     if( !mxContext.is() )
         throw uno::RuntimeException( UNISTRING( "getProductName: empty component context" ), *this );
@@ -861,10 +860,55 @@ void UpdateHandler::getProductName()
                                                                          aArgumentList );
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfigAccess, uno::UNO_QUERY_THROW );
-    rtl::OUString aProductName;
 
-    xNameAccess->getByName(UNISTRING("ooName")) >>= msProductName;
-    xNameAccess->getByName(UNISTRING("ooSetupVersion")) >>= msProductVersion;
+    rtl::OUString aProductVersion;
+    rtl::OUString aProductFullVersion;
+
+    xNameAccess->getByName(UNISTRING("ooSetupVersion")) >>= aProductVersion;
+    aProductFullVersion = aProductVersion;
+
+    sal_Int32 nVerIndex = rString.indexOf( aProductVersion );
+    if ( nVerIndex != -1 )
+    {
+        rtl::OUString aPackageVersion = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
+        rtl::Bootstrap::expandMacros( aPackageVersion );
+
+        if ( aPackageVersion.getLength() )
+        {
+            sal_Int32 nTokIndex = 0;
+            rtl::OUString aVersionMinor = aPackageVersion.getToken( 1, '.', nTokIndex );
+            rtl::OUString aVersionMicro;
+
+            if ( nTokIndex > 0 )
+                aVersionMicro = aPackageVersion.getToken( 0, '.', nTokIndex );
+
+            if ( aVersionMinor.getLength() == 0 )
+                aVersionMinor = UNISTRING( "0" );
+            if ( aVersionMicro.getLength() == 0 )
+                aVersionMicro = UNISTRING( "0" );
+
+            sal_Int32 nIndex = aProductFullVersion.indexOf( '.' );
+            if ( nIndex == -1 )
+            {
+                aProductFullVersion += UNISTRING( "." );
+                aProductFullVersion += aVersionMinor;
+            }
+            else
+            {
+                nIndex = aProductFullVersion.indexOf( '.', nIndex+1 );
+            }
+            if ( nIndex == -1 )
+            {
+                aProductFullVersion += UNISTRING( "." );
+                aProductFullVersion += aVersionMicro;
+            }
+            else
+            {
+                aProductFullVersion = aProductFullVersion.replaceAt( nIndex+1, aProductFullVersion.getLength()-nIndex-1, aVersionMicro );
+            }
+        }
+        rString = rString.replaceAt( nVerIndex, aProductVersion.getLength(), aProductFullVersion );
+    }
 }
 
 //--------------------------------------------------------------------
