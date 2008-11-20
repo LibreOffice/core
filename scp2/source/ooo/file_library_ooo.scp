@@ -641,7 +641,7 @@ STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
