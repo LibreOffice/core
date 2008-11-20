@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventatt.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,7 +566,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
     OSL_TRACE("About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = getModelFromBasic( pStartedBasic ) ;
-    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pBasic, xModel );
+    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pStartedBasic, xModel );
 
     Sequence< Any > aArgs( 4 );
     aArgs[ 0 ] <<= xModel;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ActiveMSPList.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,12 +97,19 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
     Reference< document::XScriptInvocationContext > xScriptContext( aContext, UNO_QUERY );
     if ( xScriptContext.is() )
     {
-        // the component supports executing scripts embedded in a - possibly foreign document.
-        // Check whether this other document its the component itself.
-        if ( !xModel.is() || ( xModel != xScriptContext->getScriptContainer() ) )
+        try
         {
-            msp = getMSPFromInvocationContext( xScriptContext );
-            return msp;
+            // the component supports executing scripts embedded in a - possibly foreign document.
+            // Check whether this other document its the component itself.
+            if ( !xModel.is() || ( xModel != xScriptContext->getScriptContainer() ) )
+            {
+                msp = getMSPFromInvocationContext( xScriptContext );
+                return msp;
+            }
+        }
+        catch( const lang::IllegalArgumentException& )
+        {
+            xModel.set( Reference< frame::XModel >() );
         }
     }
 

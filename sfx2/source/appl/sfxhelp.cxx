@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxhelp.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.82.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -782,11 +782,20 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     INetProtocol nProtocol = aParser.GetProtocol();
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
-        // #90162 Accept anything that is not invalid as help id, as both
+        // #i90162 Accept anything that is not invalid as help id, as both
         // uno: URLs used as commands/help ids in the Office and the scheme
         // used in extension help ids (e.g. com.foocorp.foo-ext:FooDialogButton)
         // are accepted as INET_PROT_UNO respectively INET_PROT_GENERIC
-        if ( nProtocol != INET_PROT_NOT_VALID )
+        bool bAcceptAsURL = ( nProtocol != INET_PROT_NOT_VALID );
+
+        // #i94891 As in some extensions help ids like foo.bar.dummy without
+        // any : have been used that worked before the fix of #i90162 (see
+        // above) strings containing . will be also accepted to avoid brea-
+        // king the help of existing extensions.
+        if( !bAcceptAsURL )
+            bAcceptAsURL = ( rURL.Search( '.' ) != STRING_NOTFOUND );
+
+        if ( bAcceptAsURL )
         {
             aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( ) );
         }
