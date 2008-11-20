@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,8 +63,6 @@
 
 #define BOOTSTRAP_ITEM_SHAREDIR             "SharedDataDir"
 #define BOOTSTRAP_ITEM_USERDIR              "UserDataDir"
-
-#define BOOTSTRAP_ITEM_PRODUCT_PATCH_LEVEL  "ProductPatch"
 
 #define BOOTSTRAP_DEFAULT_BASEINSTALL       "$SYSBINDIR/.."
 
@@ -678,21 +676,6 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
          // read buildid from bootstrap.ini (bootstraprc)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
     return sBuildId;
-}
-// ---------------------------------------------------------------------------------------
-
-OUString Bootstrap::getProductPatchLevel(OUString const& _sDefault)
-{
-    OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_PATCH_LEVEL));
-
-    // pb: #127910# ProductPatch key has moved from bootstrap[rc|.ini] to version[rc|.ini]
-    OUString sPPLevel;
-    // read ProductPatchLevel from version[rc|.ini], if it doesn't exist or ProductPatchLevel is empty
-    if ( data().getVersionValue( csBuildIdItem, sPPLevel, _sDefault ) != sal_True ||
-         sPPLevel.getLength() == 0 )
-         // read ProductPatchLevel from bootstrap[rc|.ini]
-        sPPLevel = data().getBootstrapValue( csBuildIdItem, _sDefault );
-    return sPPLevel;
 }
 // ---------------------------------------------------------------------------------------
 
