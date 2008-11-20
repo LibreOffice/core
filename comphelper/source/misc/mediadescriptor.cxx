@@ -524,18 +524,15 @@ sal_Bool MediaDescriptor::addInputStream_Impl( sal_Bool bLockFile )
             return impl_openStreamWithPostData( xPostData );
         }
 
-        // b) is there a reference to a file which is just being salvaged?
-        ::rtl::OUString sFileURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_SALVAGEDFILE(), ::rtl::OUString());
-        // c) finally, the last resort is the URL property
-        if ( !sFileURL.getLength() )
-            sFileURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
-        if (!sFileURL.getLength())
+        // b) ... or we must get it from the given URL
+        ::rtl::OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
+        if (!sURL.getLength())
             throw css::uno::Exception(
                     ::rtl::OUString::createFromAscii("Found no URL."),
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
-        ::rtl::OUString sNormalizedURL = impl_normalizeURL( sFileURL );
+        ::rtl::OUString sNormalizedURL = impl_normalizeURL( sURL );
         return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
 #if OSL_DEBUG_LEVEL>0
