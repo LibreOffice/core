@@ -1197,7 +1197,7 @@ STD_LIB_FILE( gid_File_Lib_Sax , sax)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Oox , oox)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sb , sb)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sb , sb)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Scn, scn)
 
@@ -1214,7 +1214,7 @@ File gid_File_Lib_Scriptframe
   #endif
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, UNO_COMPONENT);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sd , sd)
