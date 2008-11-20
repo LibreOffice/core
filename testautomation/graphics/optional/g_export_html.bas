@@ -63,6 +63,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
+    use "global\tools\includes\optional\t_ui_filters.inc"
     Call GetUseFiles
     gApplication = "Impress"
 end sub

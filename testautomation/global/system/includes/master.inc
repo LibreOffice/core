@@ -100,7 +100,7 @@ sub GetUseFiles
         printlog "**  Quickstarter disabled         : " & bQuickstarterStatus      
     printlog    "----------------------------------------------------------------------------------------------------"
     printlog    ""
-    Call GetDefaultFilternames            '///+<li><b>GetDefaultFilternames</b>: Get the correct <u>default names for filters</u> for each application</li></ul>
+
     if (NOT gSamePC) then
         gTestToolPath = gRemotePath
     end if

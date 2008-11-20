@@ -91,15 +91,6 @@ Global gAccessibility as Boolean    '///+ gAccessibility => If an accessibility 
 Global gProductName as string        '///+ gProductName => Name of the product (StarOffice, OpenOffice.org, ...)
 Global gMacroSecurityLevel as integer'///+ gMacroSecurityLevel => Macro Security Level (0: Low ... 3: Very High) 
 
-'/// - global filternames for default filters
-global gWriterFilter as String      '///+ gWriterFilter    => default-filter-name for Writer
-global gCalcFilter as String        '///+ gCalcFilter      => default-filter-name for Calc
-global gImpressFilter as String     '///+ gImpressFilter   => default-filter-name for Impress
-global gMasterDocFilter as String   '///+ gMasterDocFilter => default-filter-name for MasterDoc
-global gMathFilter as String        '///+ gMathFilter      => default-filter-name for Math
-global gDrawFilter as String        '///+ gDrawFilter      => default-filter-name for Draw
-global gHTMLFilter as String        '///+ gHTMLFilter      => default-filter-name for HTML
-
 '/// - global OLE-objectnames
 global gOLEWriter as String         '///+ gOLEWriter       => OLE-object-name for Writer
 global gOLECalc as String           '///+ gOLECalc         => OLE-object-name for Calc
@@ -220,15 +211,6 @@ sub OnlyForDocuGVariables
 '///<i>bAsianLan</i>: If the office-language is an asian language (81, 82, 86, 88)</i>: TRUE
 '///<i>gLanguage</i>: The languagename for office language
 '///<i>gMacroSecurityLevel</i>: Macro Security Level (0: Low ... 3: Very High) 
-
-'///<b>Global filternames for default filters</b>
-'///<i>gWriterFilter</i>: Default-filter-name for Writer
-'///<i>gCalcFilter</i>: Default-filter-name for Calc
-'///<i>gImpressFilter</i>: Default-filter-name for Impress
-'///<i>gMasterDocFilter</i>: Default-filter-name for MasterDoc
-'///<i>gMathFilter</i>: Default-filter-name for Math
-'///<i>gDrawFilter</i>: Default-filter-name for Draw
-'///<i>gHTMLFilter</i>: Default-filter-name for HTML
 
 '///<b>global OLE-objectnames</b>
 '///<i>gOLEWriter</i>: OLE-object-name for Writer

@@ -54,6 +54,7 @@ end sub
 
 sub LoadIncludeFiles   
    use "dbaccess/tools/dbinit.inc"   
+   use "global\tools\includes\optional\t_ui_filters.inc"
    Call sDBInit
    Call GetUseFiles
    gApplication   = "WRITER"
