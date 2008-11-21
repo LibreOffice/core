@@ -6653,7 +6653,7 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
             aInfo.nTxBxComp = ( aInfo.nTxBxComp & 0xFFFF0000 ) +
                               nDrawingContainerId;
             DBG_ASSERT( (aInfo.nTxBxComp & 0x0000FFFF) == nDrawingContainerId,
-                        "<SvxMSDffManager::GetShapeContainerData(..)> - internal drawing container Id could not be correctly merged into DFF_msofbtClientTextbox value." )
+                        "<SvxMSDffManager::GetShapeContainerData(..)> - internal drawing container Id could not be correctly merged into DFF_msofbtClientTextbox value." );
             // <--
         }
         else
