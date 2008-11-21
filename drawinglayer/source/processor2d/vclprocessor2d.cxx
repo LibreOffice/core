@@ -739,7 +739,7 @@ namespace drawinglayer
                         // alpha is in visible range
                         basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
                         aRange.transform(maCurrentTransformation);
-                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
                         if(aBufferDevice.isVisible())
                         {
