@@ -66,7 +66,7 @@
 #include <tools/urlobj.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <dispatch/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
