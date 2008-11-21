@@ -433,7 +433,9 @@ End
 #endif
 
 #ifdef UNX
+#ifndef ENABLE_EVOAB2
 STD_UNO_LIB_FILE( gid_File_Lib_Evoab_1 , evoab)
+#endif
 
 #ifdef ENABLE_KAB
 
