@@ -117,6 +117,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     long            m_nFromToFTPos;
     long            m_nFromToNFPos;
     long            m_nRBOffset;
+
     bool            m_bCancelSaving;
 
     SwMailMergeWizard*  m_pWizard;
@@ -140,7 +141,6 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK(SendDocumentsHdl_Impl, PushButton*);
     DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
     DECL_LINK(SaveCancelHdl_Impl, Button*);
-
 protected:
         virtual bool    canAdvance() const;
         virtual void    ActivatePage();

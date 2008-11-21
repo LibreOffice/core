@@ -1016,14 +1016,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
     }
     return 0;
 }
-/*-- 17.07.2008 08:09:06---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-IMPL_LINK(SwMailMergeOutputPage, SaveCancelHdl_Impl, Button*, EMPTYARG )
-{
-    m_bCancelSaving = true;
-    return 0;
-}
 /*-- 17.05.2004 13:51:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1111,10 +1103,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 }
                 pFilter = aIter.Next();
             }
-            String sStat(SW_RES(STR_STATSTR_LETTER));
-            sStat += ' ';
-            sStat += String::CreateFromInt32( nDoc );
-            aSaveMonitor.aPrintInfo.SetText(sStat);
 
         }
         break;

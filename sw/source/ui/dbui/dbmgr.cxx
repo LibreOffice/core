@@ -506,12 +506,6 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
                 // the printer dialog does not come up
                 aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDesc.bPrintAsync ));
             }
-            else
-            {
-                rView.GetDocShell()->GetMedium()->GetItemSet()->Put( SfxBoolItem( SID_HIDDEN, sal_False ));
-            }
-
-
             // convert PropertyValues
             const beans::PropertyValue* pPrintOptions = rMergeDesc.aPrintOptions.getConstArray();
             for( sal_Int32 nOption = 0; nOption < rMergeDesc.aPrintOptions.getLength(); ++nOption)
@@ -2901,8 +2895,6 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             else
             {
                 SfxObjectShellRef xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
-                //the value 22 is used in the PrintMonitor for unknown reasons
-                xWorkDocSh->SetTitle( xDocShell->GetTitle( 22 ) );
                 SfxMedium* pWorkMed = new SfxMedium( sTempURL, STREAM_STD_READ, TRUE );
                 pWorkMed->SetFilter( pSfxFlt );
                 if( xWorkDocSh->DoLoad(pWorkMed) )
