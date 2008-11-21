@@ -537,7 +537,7 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
     // In this case, warn the user, too.
     if ( m_pImpl->hasMacroStorages() )
     {
-        ::comphelper::NamedValueCollection aArgs( m_pImpl->m_aArgs );
+        ::comphelper::NamedValueCollection aArgs( m_pImpl->getResource() );
         Reference< XInteractionHandler > xInteraction;
         xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
         if ( xInteraction.is() )
