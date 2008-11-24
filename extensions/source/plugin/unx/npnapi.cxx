@@ -686,7 +686,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     {
                         medDebug( 1, "creating gtk plug and socket\n" );
 
-                        pInst->pGtkWindow = gtk_plug_new((GdkNativeWindow)pWindow->window);
+                        pInst->pGtkWindow = gtk_plug_new((GdkNativeWindow)reinterpret_cast<sal_uIntPtr>(pWindow->window));
                         gtk_widget_show( pInst->pGtkWindow );
                         pInst->pGtkWidget = gtk_socket_new();
                         gtk_widget_show( pInst->pGtkWidget );
