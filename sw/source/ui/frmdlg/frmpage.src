@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpage.src,v $
- * $Revision: 1.67 $
+ * $Revision: 1.67.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -330,8 +330,8 @@ TabPage TP_FRM_STD
     };
     PushButton BT_REALSIZE
     {
-        Pos = MAP_APPFONT ( 55 , 86 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 35 , 86 ) ;
+        Size = MAP_APPFONT ( 70 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "~Original Size" ;

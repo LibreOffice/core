@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gloshdl.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -647,10 +647,10 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
             }
             else
             {
-                String aTmp( SW_RES(STR_NOGLOS1));
-                aTmp += aShortName;
-                aTmp += SW_RESSTR(STR_NOGLOS2);
+                String aTmp( SW_RES(STR_NOGLOS));
+                aTmp.SearchAndReplaceAscii("%1", aShortName);
                 InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
+
             }
         }
 

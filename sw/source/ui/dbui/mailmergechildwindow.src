@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmergechildwindow.src,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,7 +251,7 @@ ModalDialog DLG_MM_SENDWARNING
         Pos = MAP_APPFONT ( 40 , 6 ) ;
         Size = MAP_APPFONT ( 170 , 30 ) ;
         WordBreak = TRUE;
-        Text[ en-US ] = "The following error occured:";
+        Text[ en-US ] = "The following error occurred:";
     };
     FixedText   FT_DETAILS
     {

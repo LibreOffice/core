@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: utlui.src,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
     };
     String STR_AUTOFMTREDL_TYPO+1
     {
-        Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
+        Text [ en-US ] = "Replace \"standard\" quotes with %1 \bcustom%2 quotes" ;
     };
     String STR_AUTOFMTREDL_USER_STYLE+1
     {
