@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.30 $
+# $Revision: 1.30.168.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,6 +61,7 @@ SLOFILES =  \
         $(SLO)$/callform.obj \
         $(SLO)$/cellform.obj \
         $(SLO)$/cellkeytranslator.obj \
+        $(SLO)$/charthelper.obj \
         $(SLO)$/chartarr.obj \
         $(SLO)$/chartpos.obj \
         $(SLO)$/chartlis.obj \

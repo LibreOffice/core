@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.19.72.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -103,7 +103,8 @@ SLOFILES=   	\
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
-                $(SLO)$/RangeEdit.obj
+                $(SLO)$/RangeEdit.obj \
+                $(SLO)$/TextDirectionListBox.obj
 
 # --- Resources ---------------------------------------------------------------
 

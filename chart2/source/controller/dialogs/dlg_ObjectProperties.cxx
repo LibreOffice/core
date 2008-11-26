@@ -64,19 +64,15 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <svtools/intitem.hxx>
+#include <svtools/languageoptions.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-
 
 #include <svx/drawitem.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/flstitem.hxx>
 #include <svx/tabline.hxx>
 
@@ -399,6 +395,11 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
+            if( SvtLanguageOptions().IsCTLFontEnabled() )
+                /*  When rotation is supported for equation text boxes, use
+                    SchAlignmentTabPage::Create here. The special
+                    SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
+                AddTabPage(TP_ALIGNMENT, String(SchResId(STR_PAGE_ALIGNMENT)), SchAlignmentTabPage::CreateWithoutRotation, NULL);
             break;
     }
 

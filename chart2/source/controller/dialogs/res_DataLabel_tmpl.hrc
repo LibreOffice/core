@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_DataLabel_tmpl.hrc,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,6 +120,21 @@ ListBox LB_LABEL_PLACEMENT \
     DropDown=TRUE; \
     DDExtraWidth = TRUE ; \
     WORKAROUND          \
+}; \
+FixedText FT_LABEL_TEXTDIR \
+{ \
+    Pos = MAP_APPFONT ( xpos , ypos+120 ) ; \
+    Size = MAP_APPFONT ( 64 , 8 ) ; \
+    Text [ en-US ] = "Te~xt direction" ; \
+}; \
+ListBox LB_LABEL_TEXTDIR \
+{ \
+    HelpID = HID_SCH_TEXTDIRECTION; \
+    Pos = MAP_APPFONT ( xpos+66 , ypos+118 ) ; \
+    Size = MAP_APPFONT ( 170 , 100 ) ; \
+    Border = TRUE; \
+    TabStop = TRUE; \
+    DropDown = TRUE; \
 };
 
 #endif

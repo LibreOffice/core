@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_LegendPosition_tmpl.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,5 +76,8 @@ RadioButton RBT_BOTTOM \
     Text [ en-US ] = "~Bottom" ; \
     TabStop = TRUE ; \
 };
+
+// height of RESOURCE_LEGENDPOSITION - don't forget to update when this is changed
+#define RESOURCE_LEGENDPOSITION_HEIGHT 52
 
 #endif

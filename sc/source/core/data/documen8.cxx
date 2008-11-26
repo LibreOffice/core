@@ -93,6 +93,7 @@
 #include "printopt.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
+#include "charthelper.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -252,6 +253,13 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth( rStyleSheet.GetName() );
+
+                if( SvtLanguageOptions().IsCTLFontEnabled() )
+                {
+                    const SfxPoolItem *pItem = NULL;
+                    if( rChanges.GetItemState(ATTR_WRITINGDIR, TRUE, &pItem ) == SFX_ITEM_SET )
+                        ScChartHelper::DoUpdateAllCharts( this );
+                }
             }
             break;
 

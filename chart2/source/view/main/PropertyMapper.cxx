@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMapper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,6 +243,8 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharWeightAsian" ),         C2U("CharWeightAsian") )
         ( C2U( "CharWeightComplex" ),       C2U("CharWeightComplex") )
         ( C2U( "CharWordMode" ),            C2U("CharWordMode") )
+
+        ( C2U( "WritingMode" ),             C2U("WritingMode") )
 
 //      ( C2U( "RubyText" ),                C2U("RubyText") )
 //      ( C2U( "RubyAdjust" ),              C2U("RubyAdjust") )

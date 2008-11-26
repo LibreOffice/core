@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterProperties.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -454,6 +455,14 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // Writing Mode left to right vs right to left
+    rOutProperties.push_back(
+        Property( C2U( "WritingMode" ),
+                  PROP_WRITING_MODE,
+                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)), /*com::sun::star::text::WritingMode2*/
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void CharacterProperties::AddDefaultsToMap(
@@ -530,6 +539,8 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_FAMILY, sal_Int16(aFontCTL.GetFamily()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_SET, sal_Int16(aFontCTL.GetCharSet()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, sal_Int16(aFontCTL.GetPitch()) );
+
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_WRITING_MODE, sal_Int16( com::sun::star::text::WritingMode2::PAGE ) );
 }
 
 bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )

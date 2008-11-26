@@ -1,13 +1,13 @@
 /*************************************************************************
- *
+*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: res_DataLabel_IDs.hrc,v $
- * $Revision: 1.5.72.1 $
+ * $RCSfile: TextDirectionListBox.hxx,v $
+ * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,19 +26,27 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+************************************************************************/
 
-#define CB_VALUE_AS_NUMBER 1
-#define CB_VALUE_AS_PERCENTAGE 2
-#define CB_CATEGORY 3
-#define CB_SYMBOL 4
+#ifndef CHART2_TEXTDIRECTIONLISTBOX_HXX
+#define CHART2_TEXTDIRECTIONLISTBOX_HXX
 
-#define PB_NUMBERFORMAT 20
-#define PB_PERCENT_NUMBERFORMAT 21
+#include <svx/frmdirlbox.hxx>
 
-#define FT_LABEL_PLACEMENT 2
-#define LB_LABEL_PLACEMENT 2
+class Window;
 
-#define FT_LABEL_TEXTDIR    31
-#define LB_LABEL_TEXTDIR    32
+namespace chart
+{
+
+class TextDirectionListBox : public svx::FrameDirectionListBox
+{
+public:
+    explicit            TextDirectionListBox( Window* pParent, const ResId& rResId,
+                            Window* pWindow1 = 0, Window* pWindow2 = 0 );
+    virtual             ~TextDirectionListBox();
+};
+
+} //namespace chart
+
+#endif
 

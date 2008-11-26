@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: res_DataLabel_IDs.hrc,v $
- * $Revision: 1.5.72.1 $
+ * $RCSfile: charthelper.hxx,v $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,17 +28,21 @@
  *
  ************************************************************************/
 
-#define CB_VALUE_AS_NUMBER 1
-#define CB_VALUE_AS_PERCENTAGE 2
-#define CB_CATEGORY 3
-#define CB_SYMBOL 4
+#ifndef SC_CHARTHELPER_HXX
+#define SC_CHARTHELPER_HXX
 
-#define PB_NUMBERFORMAT 20
-#define PB_PERCENT_NUMBERFORMAT 21
+#include <tools/solar.h>
 
-#define FT_LABEL_PLACEMENT 2
-#define LB_LABEL_PLACEMENT 2
+class ScDocument;
+class ScAddress;
 
-#define FT_LABEL_TEXTDIR    31
-#define LB_LABEL_TEXTDIR    32
+/** Use this to handle charts in a calc document
+*/
+class ScChartHelper
+{
+public:
+    static USHORT DoUpdateAllCharts( ScDocument* pDoc );
+    static USHORT DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc ); //use this to replace ScDBFunc::DoUpdateCharts in future
+};
 
+#endif

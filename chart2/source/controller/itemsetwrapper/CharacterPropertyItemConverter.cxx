@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterPropertyItemConverter.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,8 @@ namespace
         IPM_MAP_ENTRY( EE_CHAR_RELIEF, "CharRelief", 0 )
         IPM_MAP_ENTRY( EE_CHAR_OUTLINE, "CharContoured", 0 )
         IPM_MAP_ENTRY( EE_CHAR_EMPHASISMARK, "CharEmphasis", 0 )
+
+        IPM_MAP_ENTRY( EE_PARA_WRITINGDIR, "WritingMode", 0 )
 
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CJK, "CharHeightAsian", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CTL, "CharHeightComplex", 0 )

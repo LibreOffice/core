@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TabPages.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,10 @@
 //see attrib.hrc in old chart
 
 //#define TP_LEGEND_POS 900
-#define GRP_LEGEND 1
+#define GRP_LEGEND                  1
+#define FL_LEGEND_TEXTORIENT        2
+#define FT_LEGEND_TEXTDIR           3
+#define LB_LEGEND_TEXTDIR           4
 
 //#define TP_DATA_DESCR 901
 
@@ -60,6 +63,8 @@
 #define CTR_DUMMY               6034
 #define FT_DUMMY                6035
 #define FL_ALIGN                6037
+#define FT_TEXTDIR              6038
+#define LB_TEXTDIR              6039
 
 /*
 //Symbol-Tabpage (zum Teil sehr Aehnlich der SVX_AREA_TABPAGE) (obsolete)
@@ -122,6 +127,9 @@
 #define RB_AXIS_LABEL_AUTOORDER         17
 
 #define FL_SEPARATOR                    18
+
+#define FT_AXIS_TEXTDIR                 19
+#define LB_AXIS_TEXTDIR                 20
 
 //#define TP_SCALE_Y          903
 

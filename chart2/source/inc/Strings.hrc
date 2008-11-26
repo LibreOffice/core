@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Strings.hrc,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
-//next is 277
+//next is 281
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -320,6 +320,12 @@
 #define STR_ROW_LABEL                       (RID_APP_START + 263)
 
 #define STR_DATA_EDITOR_INCORRECT_INPUT     (RID_APP_START + 269)
+
+// frame direction ------------------------------------------------------------
+
+#define STR_TEXT_DIRECTION_LTR              (RID_APP_START + 278)
+#define STR_TEXT_DIRECTION_RTL              (RID_APP_START + 279)
+#define STR_TEXT_DIRECTION_SUPER            (RID_APP_START + 280)
 
 //-----------------------------------------------------------------------------
 /*

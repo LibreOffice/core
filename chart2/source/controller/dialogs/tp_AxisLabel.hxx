@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_AxisLabel.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +31,12 @@
 #define _CHART2_TP_AXISLABEL_HXX
 
 #include <sfx2/tabdlg.hxx>
-// header for CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/wrapfield.hxx>
 #include <svx/orienthelper.hxx>
+#include "TextDirectionListBox.hxx"
 
 //.............................................................................
 namespace chart
@@ -71,6 +69,9 @@ private:
     svx::WrapField      aNfRotate;
     TriStateBox         aCbStacked;
     svx::OrientationHelper aOrientHlp;
+
+    FixedText               m_aFtTextDirection;
+    TextDirectionListBox    m_aLbTextDirection;
 
     BOOL                m_bShowStaggeringControls;
 

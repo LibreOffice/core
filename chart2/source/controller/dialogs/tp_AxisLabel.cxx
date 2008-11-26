@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_AxisLabel.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,8 @@
 
 // header for SfxInt32Item
 #include <svtools/intitem.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/frmdiritem.hxx>
 
 //.............................................................................
 namespace chart
@@ -69,7 +71,10 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
         aFtRotate( this, SchResId( FT_AXIS_LABEL_DEGREES ) ),
         aNfRotate( this, SchResId( NF_AXIS_LABEL_ORIENT ) ),
         aCbStacked( this, SchResId( PB_AXIS_LABEL_TEXTSTACKED ) ),
-        aOrientHlp( this, aCtrlDial, aNfRotate, aCbStacked ),
+        aOrientHlp( aCtrlDial, aNfRotate, aCbStacked ),
+
+        m_aFtTextDirection( this, SchResId( FT_AXIS_TEXTDIR ) ),
+        m_aLbTextDirection( this, SchResId( LB_AXIS_TEXTDIR ), &m_aFtTextDirection ),
 
         m_bShowStaggeringControls( true ),
 
@@ -149,6 +154,9 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     if( aCbShowDescription.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, aCbShowDescription.IsChecked() ) );
 
+    if( m_aLbTextDirection.GetSelectEntryCount() > 0 )
+        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLbTextDirection.GetSelectEntryValue() ) );
+
     return TRUE;
 }
 
@@ -201,6 +209,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
         aOrientHlp.SetStackedState( m_bInitialStacking ? STATE_CHECK : STATE_NOCHECK );
     else
         aOrientHlp.SetStackedState( STATE_DONTKNOW );
+
+    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+        m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
     // Text overlap ----------
     aState = rInAttrs.GetItemState( SCHATTR_TEXT_OVERLAP, FALSE, &pPoolItem );
@@ -304,6 +315,9 @@ IMPL_LINK ( SchAxisLabelTabPage, ToggleShowLabel, void *, EMPTYARG )
     aFlTextFlow.Enable( bEnable );
     aCbTextOverlap.Enable( bEnable );
     aCbTextBreak.Enable( bEnable );
+
+    m_aFtTextDirection.Enable( bEnable );
+    m_aLbTextDirection.Enable( bEnable );
 
     return 0L;
 }

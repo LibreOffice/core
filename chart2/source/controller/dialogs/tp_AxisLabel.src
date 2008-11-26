@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_AxisLabel.src,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ TabPage TP_AXIS_LABEL
         Pos = MAP_APPFONT ( 6 , 91  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
 
-        Text [ en-US ] = "Rotate text" ;
+        Text [ en-US ] = "Text orientation" ;
     };
         Control CT_AXIS_LABEL_DIAL
         {
@@ -64,15 +64,12 @@ TabPage TP_AXIS_LABEL
             Pos     = MAP_APPFONT ( 139 , 105  ) ;
             Size    = MAP_APPFONT ( 115 , 10 ) ;
             TabStop = TRUE ;
-// DR: TODO - after OOo 2.0 - enable localized strings
-//            Text [ de ] = "~Senkrecht gestapelt";
             Text [ en-US ] = "Ve~rtically stacked";
         };
         FixedText FT_AXIS_LABEL_DEGREES
         {
             Pos = MAP_APPFONT ( 93 , 122  ) ;
             Size = MAP_APPFONT ( 60 , 8 ) ;
-
             Text [ en-US ] = "~Degrees" ;
     };
     NumericField NF_AXIS_LABEL_ORIENT
@@ -173,42 +170,20 @@ TabPage TP_AXIS_LABEL
 
             Text [ en-US ] = "A~utomatic" ;
     };
+
+    FixedText FT_AXIS_TEXTDIR
+    {
+        Pos = MAP_APPFONT ( 12 , 156 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "Te~xt direction" ;
+    };
+    ListBox LB_AXIS_TEXTDIR
+    {
+        Pos = MAP_APPFONT ( 78 , 154 ) ;
+        Size = MAP_APPFONT ( 170 , 100 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_LegendPosition.src,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,4 +44,25 @@ TabPage TP_LEGEND_POS
         Text [ en-US ] = "Position" ;
     };
     RESOURCE_LEGENDPOSITION( 12, 14 )
+
+    FixedLine FL_LEGEND_TEXTORIENT
+    {
+        Pos = MAP_APPFONT ( 6 , 14 + RESOURCE_LEGENDPOSITION_HEIGHT + 6 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Text orientation" ;
+    };
+    FixedText FT_LEGEND_TEXTDIR
+    {
+        Pos = MAP_APPFONT ( 12 , 14 + RESOURCE_LEGENDPOSITION_HEIGHT + 19 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "Te~xt direction" ;
+    };
+    ListBox LB_LEGEND_TEXTDIR
+    {
+        Pos = MAP_APPFONT ( 78 , 14 + RESOURCE_LEGENDPOSITION_HEIGHT + 17 ) ;
+        Size = MAP_APPFONT ( 170 , 100 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
 };

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_DataLabel.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,17 +49,15 @@
 #include <svtools/stritem.hxx>
 //SfxIntegerListItem
 #include <svtools/ilstitem.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/frmdiritem.hxx>
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 // header for SvNumberFormatter
 #include <svtools/zforlist.hxx>
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 
 //.............................................................................
@@ -114,7 +112,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, USHORT nWhichId, Che
 
 }//end anonymous namespace
 
-DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAttrs )
+DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAttrs, bool bShowTextDirectionListBox )
     : m_aCBNumber(pWindow, SchResId(CB_VALUE_AS_NUMBER)),
     m_aPB_NumberFormatForValue(pWindow, SchResId(PB_NUMBERFORMAT)),
     m_aCBPercent(pWindow, SchResId(CB_VALUE_AS_PERCENTAGE)),
@@ -124,6 +122,8 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_aSeparatorResources(pWindow),
     m_aFT_LabelPlacement(pWindow, SchResId(FT_LABEL_PLACEMENT)),
     m_aLB_LabelPlacement(pWindow, SchResId(LB_LABEL_PLACEMENT)),
+    m_aFT_TextDirection(pWindow, SchResId(FT_LABEL_TEXTDIR)),
+    m_aLB_TextDirection(pWindow, SchResId(LB_LABEL_TEXTDIR), &m_aFT_TextDirection),
     m_pNumberFormatter(0),
     m_bNumberFormatMixedState(true),
     m_bPercentFormatMixedState(true),
@@ -191,6 +191,18 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     aPos.X() = m_aFT_LabelPlacement.GetPosPixel().X();
     aPos.Y() += nYDiff;
     m_aFT_LabelPlacement.SetPosPixel(aPos);
+
+    // hide "text direction" listbox is specified by caller
+    if( !bShowTextDirectionListBox )
+    {
+        m_aFT_TextDirection.Hide();
+        m_aLB_TextDirection.Hide();
+    }
+    // move "text direction" listbox down below "label placement" listbox
+    long nNewY = m_aLB_LabelPlacement.GetPosPixel().Y() + m_aLB_LabelPlacement.GetSizePixel().Height() + aControlDistance.Height();
+    nYDiff = nNewY - m_aLB_TextDirection.GetPosPixel().Y();
+    m_aFT_TextDirection.SetPosPixel( m_aFT_TextDirection.GetPosPixel() + Point( 0, nYDiff ) );
+    m_aLB_TextDirection.SetPosPixel( m_aLB_TextDirection.GetPosPixel() + Point( 0, nYDiff ) );
 
     m_aPB_NumberFormatForValue.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
     m_aPB_NumberFormatForPercent.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
@@ -283,6 +295,9 @@ void DataLabelResources::EnableControls()
         if( m_aCBCategory.IsChecked() )
             ++nNumberOfCheckedLabelParts;
         m_aSeparatorResources.Enable( nNumberOfCheckedLabelParts > 1 );
+        bool bEnableTextDir = nNumberOfCheckedLabelParts > 0;
+        m_aFT_TextDirection.Enable( bEnableTextDir );
+        m_aLB_TextDirection.Enable( bEnableTextDir );
         bool bEnablePlacement = nNumberOfCheckedLabelParts > 0 && m_aLB_LabelPlacement.GetEntryCount()>1;
         m_aFT_LabelPlacement.Enable( bEnablePlacement );
         m_aLB_LabelPlacement.Enable( bEnablePlacement );
@@ -326,6 +341,9 @@ BOOL DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
         rOutAttrs.Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
     }
 
+    if( m_aLB_TextDirection.GetSelectEntryCount() > 0 )
+        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLB_TextDirection.GetSelectEntryValue() ) );
+
     return TRUE;
 }
 
@@ -363,6 +381,8 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     else
         m_aLB_LabelPlacement.SetNoSelection();
 
+    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+        m_aLB_TextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
     EnableControls();
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_DataLabel.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *

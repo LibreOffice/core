@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterProperties.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,6 +120,8 @@ public:
         PROP_CHAR_COMPLEX_WEIGHT,
         PROP_CHAR_COMPLEX_POSTURE,
         PROP_CHAR_COMPLEX_LOCALE,
+
+        PROP_WRITING_MODE,
 
         // don't use
         FAST_PROPERTY_ID_END_CHAR_PROP
