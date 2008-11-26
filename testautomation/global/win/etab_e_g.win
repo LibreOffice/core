@@ -188,7 +188,9 @@ Super svx:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_HIGHPOS
  AngleKnob                    HID_SCH_ALIGNMENT_CTR_DIAL
  AngleText                    HID_SCH_ALIGNMENT_DEGREES
  VerticallyStacked            HID_SCH_ALIGNMENT_STACKED
- 
+ TextDirection                HID_SCH_TEXTDIRECTION_TITLE
+ TextDirection2               HID_SCH_TEXTDIRECTION_EQUATION
+
 *TabFormatChartLine HID_LINE_LINE
  Style               svx:ListBox:RID_SVXPAGE_LINE:LB_LINE_STYLE
  Color               svx:ListBox:RID_SVXPAGE_LINE:LB_COLOR

@@ -51,6 +51,7 @@ sub main
     use "chart2\required\includes\ch2_wizard.inc"
     use "chart2\required\includes\ch2_file.inc"
     use "chart2\required\includes\ch2_view.inc"
+    use "chart2\required\includes\ch2_insert_ctl.inc"
     use "chart2\required\includes\ch2_insert.inc"
     use "chart2\required\includes\ch2_format.inc"
     use "chart2\required\includes\ch2_format1.inc"
@@ -92,7 +93,14 @@ sub main
         call tInsertTrendLines
         call tInsertMeanValueLines
         call tInsertYErrorBars
-        call tInsertSpecialCharacter        
+        call tInsertSpecialCharacter
+        printLog Chr(13) + "-------- Chart2 CTL Features  ----------"
+        call tTitleTextDirection
+        call tLegendTextDirection
+        call tXAxisTextDirection
+        call tDataSeriesTextDirection
+        call tEquationTextDirection
+        call tDataPointTextDirection
         printlog Chr(13) + "---------  Chart2 Format Menu  ---------"
         call tFormatObjectProperties
         call tFormatObjectPropertiesPieChart
