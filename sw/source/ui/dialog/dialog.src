@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialog.src,v $
- * $Revision: 1.30.240.1 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +43,16 @@ String STR_LINKEDIT_TEXT
     /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen bearbeiten : Verkn³pfungen bearbeiten */
     Text [ en-US ] = "Edit links" ;
 };
-String STR_PATH_NOT_FOUND
+String STR_PATH_NOT_FOUND1
 {
-    Text [ en-US ] = "The directory '%1' does not exist." ;
+    /* ### ACHTUNG: Neuer Text in Resource? Das Verzeichnis ' : Das Verzeichnis '' */
+    Text [ en-US ] = "The directory '" ;
+};
+String STR_PATH_NOT_FOUND2
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ' existiert nicht. : '' existiert nicht. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' existiert nicht. : '' existiert nicht. */
+    Text [ en-US ] = "' does not exist." ;
 };
 String STR_FLT_SGV
 {

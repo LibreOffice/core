@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dochdl.src,v $
- * $Revision: 1.48.240.1 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +33,15 @@
 #include "globals.hrc"
 
 
-String STR_NOGLOS
+String STR_NOGLOS1
 {
-    Text [ en-US ] = "AutoText for Shortcut '%1' not found." ;
+    Text [ en-US ] = "AutoText for Shortcut '" ;
 };
+String STR_NOGLOS2
+{
+    Text [ en-US ] = "' not found." ;
+};
+
 String STR_NO_TABLE
 {
     Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";

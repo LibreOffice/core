@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: convert.src,v $
- * $Revision: 1.29.240.1 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     {
         Pos = MAP_APPFONT ( 125 , 113 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text [ en-US ] = "The first %POSITION_OF_CONTROL rows" ;
+        Text [ en-US ] = "The first%POSITION_OF_CONTROLrows" ;
     };
     NumericField NF_REPEAT_HEADER
     {
