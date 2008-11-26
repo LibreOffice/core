@@ -44,3 +44,11 @@ dbaccess.SbaXGridControl::com::sun::star::awt::XView
 
 ### i90359 ###
 dbaccess.ODatabaseSource::com::sun::star::sdb::DataSource
+
+### i95611 ###
+dbaccess.SbaXGridControl
+# -> disabled in dbaccess.sce
+
+### i95691 ###
+dbaccess.ORowSet::com::sun::star::sdbc::XRowUpdate
+dbaccess.ORowSet::com::sun::star::sdbc::XRow
