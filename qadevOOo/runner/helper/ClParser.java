@@ -106,6 +106,24 @@ public class ClParser {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-ini")) {
                 iniFile = args[i + 1];
+                break;
+            }
+        }
+
+        return iniFile;
+    }
+
+    /*
+     * This method returns the path to a Configuration file <br>
+     * if defined as command line parameter, an empty String elsewhere
+     */
+    public String getRunnerIniPath(String[] args) {
+        String iniFile = "";
+
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-runnerini")) {
+                iniFile = args[i + 1];
+                break;
             }
         }
 

@@ -301,18 +301,18 @@ public class ProcessHandler {
      * @param commands
      * @param log
      * @param workDir
-     * @param shortWait If this parameter is ture the <CODE>mTimeOut</CODE> is set to 3000 ms, else it is set to
+     * @param shortWait If this parameter is ture the <CODE>mTimeOut</CODE> is set to 5000 ms, else it is set to
      *        half of time out from parameter timeout.
      * @param param the TestParameters
      * @see lib.TestParameters
      * @see helper.OfficeWatcher
      */
-    public ProcessHandler(String[] commands, PrintWriter log, File workDir, boolean shortWait, TestParameters param) {
+    public ProcessHandler(String[] commands, PrintWriter log, File workDir, int shortWait, TestParameters param) {
         this(null, log, workDir, null, 0);
         this.cmdLineArray = commands;
         this.param = param;
-        if (shortWait) {
-            this.mTimeOut = 5000;
+        if (shortWait != 0) {
+            this.mTimeOut = shortWait;
         } else {
             this.mTimeOut = (long) (param.getInt(PropertyName.TIME_OUT) / 1.3);
         }

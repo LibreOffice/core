@@ -101,6 +101,16 @@ public class RunnerService implements XJob, XServiceInfo,
         //parse ConfigFile
         ini.getIniParameters(param);
 
+
+        //parse the commandline arguments if an runnerprops-parameter is given
+        String runnerIniFile = cli.getRunnerIniPath(arguments);
+
+        //initialize cfgParser with ini-path
+        CfgParser runnerIni = new CfgParser(runnerIniFile);
+
+        //parse ConfigFile
+        runnerIni.getIniParameters(param);
+
         //parse the commandline arguments
         cli.getCommandLineParameter(param,arguments);
 

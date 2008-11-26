@@ -48,6 +48,7 @@ public class BuildEnvTools {
     private final boolean mDebug;
     private final String mPlatform;
     private final String mShell;
+    private boolean mCygwin;
 
     /**
      * This constructor creates an instance of BuildEncTools. It is verifying for all neccesarry
@@ -98,6 +99,8 @@ public class BuildEnvTools {
             error = true;
         }
 
+        mCygwin = (param.getBool(PropertyName.CYGWIN));
+
         if (error) {
             throw new ParameterNotFoundException(msg);
         }
@@ -111,7 +114,7 @@ public class BuildEnvTools {
      * @return the processHandler of the commands
      * @see helper.ProcessHandler
      */
-    public ProcessHandler runCommandsInEnvironmentShell(String[] commands, File workDir, boolean shortWait) {
+    public ProcessHandler runCommandsInEnvironmentShell(String[] commands, File workDir, int shortWait) {
 
         final String[] cmdLines = getCmdLinesWithCommand(commands);
         final ProcessHandler pHdl = new ProcessHandler(cmdLines, (PrintWriter) log, workDir, shortWait, param);
@@ -125,14 +128,13 @@ public class BuildEnvTools {
 
         if (sSrcRoot == null) {
             String[] cmdLines = null;
-
-            if (mPlatform.equals(PropertyName.WNTMSCI)) {
+            if (mPlatform.equals(PropertyName.WNTMSCI) && ! mCygwin) {
                 cmdLines = new String[]{mShell, "/C", "echo SRC_ROOT=%SRC_ROOT"};
             } else {
-                cmdLines = new String[]{mShell, "-c ", "echo \"SRC_ROOT=$SRC_ROOT\""};
+                cmdLines = new String[]{mShell, "--login ", "-c ", "echo \"SRC_ROOT=$SRC_ROOT\""};
             }
 
-            final ProcessHandler procHdl = new ProcessHandler(cmdLines, (PrintWriter) log, null, true, param);
+            final ProcessHandler procHdl = new ProcessHandler(cmdLines, (PrintWriter) log, null, 5000, param);
             procHdl.runCommand();
 
             if (mDebug) {
@@ -162,7 +164,7 @@ public class BuildEnvTools {
 
         String seperator = "";
         if (mPlatform.equals(PropertyName.WNTMSCI)) {
-            seperator = "^";
+            seperator = mCygwin ? ";" : "^";
         } else {
             seperator = ";";
         }
@@ -175,10 +177,17 @@ public class BuildEnvTools {
             command += commands[i];
         }
 
-        if (mPlatform.equals(PropertyName.WNTMSCI)) {
+        if (mPlatform.equals(PropertyName.WNTMSCI)){
+            if (mCygwin){
+                String srcRoot = (String) param.get(PropertyName.SRC_ROOT);
+                String envSet = "export cyg_src_root=`cygpath '" + srcRoot.replaceAll("\\\\", "\\\\\\\\")+ "'`; source $cyg_src_root/winenv.set.sh;";
+                command = envSet + command;
+                cmdLines = new String[]{mShell, "--login", "-c", "\"" + command + "\""};
+            } else {
             cmdLines = new String[]{mShell, "/C", "\"" + command + "\""};
+            }
         } else {
-            cmdLines = new String[]{mShell, "-c ", command};
+            cmdLines = new String[]{mShell, "-c", command};
         }
         return cmdLines;
     }

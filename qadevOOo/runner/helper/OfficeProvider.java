@@ -30,6 +30,7 @@
 package helper;
 
 //import com.sun.star.bridge.UnoUrlResolver;
+import com.sun.star.beans.XFastPropertySet;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
@@ -413,6 +414,16 @@ public class OfficeProvider implements AppProvider {
         boolean result = true;
 
         if (msf != null) {
+
+            // disable QuickStarter
+            try {
+                Object quickStarter = msf.createInstance("com.sun.star.office.Quickstart");
+                XFastPropertySet fps = (XFastPropertySet) UnoRuntime.queryInterface(XFastPropertySet.class, quickStarter);
+                fps.setFastPropertyValue(0, false);
+            } catch (com.sun.star.uno.Exception ex) {
+                dbg("ERROR: Could not disable QuickStarter: " + ex.toString());
+            }
+
             try {
                 desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
                     msf.createInstance(

@@ -110,6 +110,16 @@ public class Runner
         //parse ConfigFile
         ini.getIniParameters(param);
 
+
+        //parse the commandline arguments if an runnerprops-parameter is given
+        String runnerIniFile = cli.getRunnerIniPath(args);
+
+        //initialize cfgParser with ini-path
+        CfgParser runnerIni = new CfgParser(runnerIniFile);
+
+        //parse ConfigFile
+        runnerIni.getIniParameters(param);
+
         //parse the commandline arguments
         // TODO: no right error message, if no parameter given!
         cli.getCommandLineParameter(param,args);
