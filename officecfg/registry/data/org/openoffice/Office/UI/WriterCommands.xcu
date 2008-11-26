@@ -51,7 +51,7 @@
             </node>
             <node oor:name=".uno:InsertGraphicRuler" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Hori~zontal Rule...</value>
+                    <value xml:lang="en-US">Hori~zontal Ruler...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetAnchorAtChar" oor:op="replace">
@@ -1118,10 +1118,10 @@
             </node>
             <node oor:name=".uno:EntireRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Select Row</value>
+                    <value xml:lang="en-US">Select Rows</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">~Row</value>
+                    <value xml:lang="en-US">~Rows</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1129,7 +1129,7 @@
             </node>
             <node oor:name=".uno:EntireCell" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">C~ell</value>
+                    <value xml:lang="en-US">C~ells</value>
                 </prop>
             </node>
             <node oor:name=".uno:GoUp" oor:op="replace">
@@ -1142,7 +1142,7 @@
                     <value xml:lang="en-US">Select Column</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">~Column</value>
+                    <value xml:lang="en-US">~Columns</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
