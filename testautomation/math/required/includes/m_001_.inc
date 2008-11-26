@@ -274,11 +274,6 @@ wend
          '/// close document ///'
          hCloseDocument
       end if
-         hNewDocument
-         kontext "selectionmath"
-         if selectionmath.exists then
-         selectionmath.close
-         endif
 endcase
 
 testcase tmFileReload

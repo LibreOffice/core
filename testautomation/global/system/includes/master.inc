@@ -806,6 +806,19 @@ sub mMakeGeneralOptionsAPI
         end if
         xViewRoot.dispose()
 
+        '///+ <li>Disable automatic check for updates
+        aPropertyValue(0).Value="/org.openoffice.Office.Jobs/Jobs/Job['UpdateCheck']/Arguments"
+        xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+        xViewRoot.replaceByName("AutoCheckEnabled", false)
+        xViewRoot.commitChanges()
+        ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
+        ' This call to ask for pending changes is just to convince me;
+        if xViewRoot.hasPendingChanges() then
+            qaErrorLog(sFileFunction+"Changes still pending...: AutoCheckEnabled")
+            ' At this point there is no needed to think about what to do, if it doesn't work.
+        end if
+        xViewRoot.dispose()
+
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")
         '///+<li>If the temp-path does not exist it will be created. 

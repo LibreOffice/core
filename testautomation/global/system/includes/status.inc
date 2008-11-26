@@ -443,28 +443,37 @@ gTestName="" '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     endif
 
     ' delete files
-    'if (bError=FALSE) then 
-    if (FALSE) then 
-        for j = 1 to 4
-            sOutFileTemp = sOutFile+j+".txt"
-            for i=1 to 20
+    if (bError=FALSE) then 
+            sOutFileTemp = sOutFile+"1.txt"
                 try
                     if (dir(sOutFileTemp) <> "") then
                             kill ( sOutFileTemp )
                     end if
                 catch
-                    Sleep (2)
-                    printlog "catched " + j + " " + i
                 endcatch
-            next i
             if (dir (sOutFileTemp) <> "") then 
                 warnlog "File wasn't deleted: " + sOutFileTemp
             endif
-        next j
-       sOutFileTemp = sOutFile+"4.htm"
-       if (dir(sOutFileTemp) <> "") then
-           kill ( sOutFileTemp )
-       end if
+    endif
+    sOutFileTemp = sOutFile+"3.txt"
+	try
+	    if (dir(sOutFileTemp) <> "") then
+		    kill ( sOutFileTemp )
+	    end if
+	catch
+	endcatch
+    if (dir (sOutFileTemp) <> "") then 
+	warnlog "File wasn't deleted: " + sOutFileTemp
+    endif
+    sOutFileTemp = sOutFile+"4.htm"
+	try
+	    if (dir(sOutFileTemp) <> "") then
+		    kill ( sOutFileTemp )
+	    end if
+	catch
+	endcatch
+    if (dir (sOutFileTemp) <> "") then 
+	warnlog "File wasn't deleted: " + sOutFileTemp
     endif
     ListAllDelete (glsStatusPage())   ' delete the list, because if you want to use hStatusIn twice or more
 end sub
@@ -528,8 +537,12 @@ function getWebPage (sPath as string, sResult as String, sPlat as String, sHost 
         iShellReturn = 99
     endcatch
         ' when using internal httpSend, iShellReturn contains http status numbers: 200 means: ok
-        if (iShellReturn <> 200) then 
+        if (iShellReturn = 99) then 
+            printlog "Writing status to database with internal httpsend command failed: " + iShellReturn + chr(13) + sHost+sPage + chr(13) + sResult
+        else 
+	  if (iShellReturn <> 200) then 
             warnlog "Writing status to database with internal httpsend command failed: " + iShellReturn + chr(13) + sHost+sPage
+          endif
         endif
 end function
 

@@ -808,29 +808,35 @@ sub sGetCrashreporterValues as boolean
             gConnectionType = "MANUALPROXY"
         end if
     
-        '/// <i>gProxyServer</i> should be the proxy server which is needed to send
-        '///+ the crashreporter data via the net.
-        gProxyServer = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyServer" )
-        'Verifying that a proxy server has been entered if
-        'gUseProxy has been set to TRUE.
-        if gUseProxy = TRUE AND gProxyServer = "" then 
-            warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-                    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyServer=' (empty). Please correct it!"
-            sGetCrashreporterValues = FALSE
-        else
-            sGetCrashreporterValues = TRUE
-        end if
+	if gUseProxy then
+		'/// <i>gProxyServer</i> should be the proxy server which is needed to send
+		'///+ the crashreporter data via the net.
+		gProxyServer = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyServer" )
+		'Verifying that a proxy server has been entered if
+		'gUseProxy has been set to TRUE.
+		if gUseProxy = TRUE AND gProxyServer = "" then 
+		    warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
+			    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyServer=' (empty). Please correct it!"
+		    sGetCrashreporterValues = FALSE
+		else
+		    sGetCrashreporterValues = TRUE
+		end if
 
-        '/// <i>gProxyPort</i> should be the proxy server port which is needed to send
-        '///+ the crashreporter data via the net.
-        gProxyPort = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyPort" )
-        'Verifying that a proxy server port has been entered if
-        'gUseProxy has been set to TRUE.
-        if gUseProxy = TRUE AND gProxyPort = "" then 
-            sGetCrashreporterValues = FALSE
-            warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-                    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyPort=' (empty). Please correct it!"       
-        end if
+		'/// <i>gProxyPort</i> should be the proxy server port which is needed to send
+		'///+ the crashreporter data via the net.
+		gProxyPort = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyPort" )
+		'Verifying that a proxy server port has been entered if
+		'gUseProxy has been set to TRUE.
+		if gUseProxy = TRUE AND gProxyPort = "" then 
+		    sGetCrashreporterValues = FALSE
+		    warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
+			    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyPort=' (empty). Please correct it!"       
+		end if
+	else
+	   ' to workaround issue i94779 set server and port to empty in case of direkt access
+	   gProxyServer = ""
+	   gProxyPort = ""
+	endif
         
         '/// <i>gAllowContact</i> should be TRUE or FALSE
         gAllowContact = GetIniValue ( gTesttoolIni, "Crashreporter" , "AllowContact" )

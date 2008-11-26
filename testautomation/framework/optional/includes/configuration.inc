@@ -92,6 +92,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
     dim i87951 as string
     dim i87952 as string
     dim i92080 as string
+    dim i96322 as string
     
     i60617 = ".uno:ContinueNumbering"
     i43969 = ".uno:MacroOrganizer"
@@ -103,6 +104,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i87951 = ".uno:DeleteAllNotes.uno:DeleteAuthor.uno:DeleteNote.uno:HideAllNotes.uno:HideAuthor.uno:HideNote"
 	i87952 = ".uno:InsertApplet"
 	i92080 = ".uno:SaveGraphic"
+	i96322 = ".uno:ActivateStyleApply"
     
     '/// open application ///'
     Call hNewDocument
@@ -134,60 +136,52 @@ testcase tToolsCustomizeKeyboardFunction(lList())
                     ' translators use ':'-> check if ' ' follows or CHR$ < 128
                     ' asc() returns 16 bit values in an integer -> sign is affected :-( -> use abs(asc())
                     if (((mid(sTemp2,d+1,1)<>" ")AND(abs(asc(mid(sTemp2,d+1,1)))<128)) AND (abs(asc(mid(sTemp2,d-1,1)))<128))then
-                    
                         listAppend(lList(),sTemp2)
                         bErrorFound = false
-                        
                         if (inStr(i60617,sTemp2)>0) then
                             qaErrorLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-                        
                         if (inStr(sTemp2,i64346)>0) then
                             qaErrorLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-                        
                         if (inStr(i43969,sTemp2)>0) then
                             qaErrorLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-                        
                         if (inStr(i80850,sTemp2)>0) then
                             qaErrorLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-                        
                         if (inStr(i84982,sTemp2)>0) then
                             qaErrorLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-                        
                         if (inStr(i84983,sTemp2)>0) then
                             qaErrorLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-
                         if (inStr(i87950,sTemp2)>0) then
                             qaErrorLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-
                         if (inStr(i87951,sTemp2)>0) then
                             qaErrorLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-
                         if (inStr(i87952,sTemp2)>0) then
                             qaErrorLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-
                         if (inStr(i92080,sTemp2)>0) then
                             qaErrorLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
-
+                        if (inStr(i96322,sTemp2)>0) then
+                            qaErrorLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            bErrorFound = true
+                        endif
                         if ( not bErrorFound ) then
                              warnlog "("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                         endif

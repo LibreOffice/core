@@ -95,6 +95,11 @@ testcase tQuickInsertGraphNotAsLink
                      goto skipformat
                  endif
         
+                 if (i = 4) AND (gPlatform="osx") then
+                     warnlog("#168829# crash on MacOS X on loading ball.eps")
+                     goto skipformat
+                 endif
+
         Kontext "GrafikEinfuegenDlg"
         if GrafikEinfuegenDlg.NotExists then
             InsertGraphicsFromFile

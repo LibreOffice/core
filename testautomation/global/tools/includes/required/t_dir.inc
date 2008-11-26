@@ -206,7 +206,7 @@ function GetDirList ( sPath$, sMatch$ ,lsFile() as String ) as integer
    Count% = 0
    
    do until Len(Verzeichnis) = 0
-      if Verzeichnis <> "." AND Verzeichnis <> ".." then
+      if Verzeichnis <> "." AND Verzeichnis <> ".." AND Lcase(Verzeichnis) <> ".svn" then
          lsFile(0) = Val(lsFile(0)) + 1
          lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
          Count% = Count% + 1
