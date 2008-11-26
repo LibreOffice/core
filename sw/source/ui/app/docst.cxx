@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docst.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,8 @@
 #include <svtools/macitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/languageoptions.hxx>
+#include <svx/eeitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>
@@ -74,6 +76,7 @@
 #include "frmmgr.hxx"       //SwFrmValid
 #include "swevent.hxx"
 #include "edtwin.hxx"
+#include "unochart.hxx"
 
 #include "app.hrc"
 #include <fmtui.hrc>
@@ -712,6 +715,13 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                     aTmpSet.ClearItem( RES_BACKGROUND );
                 }
                 xTmp->SetItemSet( aTmpSet );
+
+                if( SFX_STYLE_FAMILY_PAGE == nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
+                {
+                    const SfxPoolItem *pItem = NULL;
+                    if( aTmpSet.GetItemState( GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, FALSE ) , TRUE, &pItem ) == SFX_ITEM_SET )
+                        SwChartHelper::DoUpdateAllCharts( pDoc );
+                }
             }
             if(SFX_STYLE_FAMILY_PAGE == nFamily)
                 pView->InvalidateRulerPos();
