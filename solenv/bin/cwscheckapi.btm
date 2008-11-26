@@ -130,10 +130,9 @@ ENDIFF
 
 SET KILLCOMMAND="%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.bin^%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.exe"
 
-SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\"  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=%USERNAME%;urp;'
+SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\"  -nofirststartwizard -norestore -nocrashreport -nolockcheck -enableautomation -accept=pipe,name=%USERNAME%;urp;'
 SET PARAM=%PARAM% -cs pipe,name=%USERNAME%
 SET PARAM=%PARAM% -NoOffice true
-SET PARAM=%PARAM% -OOO_EnvSet setsolar
 SET PARAM=%PARAM% -SRC_ROOT %SRC_ROOT%
 SET PARAM=%PARAM% -COMP_ENV %OUTPATH%
 SET PARAM=%PARAM% -Shell %COMSPEC%

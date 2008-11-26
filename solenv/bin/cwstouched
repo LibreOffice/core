@@ -1,0 +1,9 @@
+#!/bin/bash
+PYTHONPATH=${SOLARVERSION}/${OUTPATH}${PROEXT}/lib${UPDMINOREXT}/python
+
+if [ x${CWSCHECKAPI_LD_LIBRARY_PATH}x != xx ]; then
+    export LD_LIBRARY_PATH=$CWSCHECKAPI_LD_LIBRARY_PATH
+fi
+export PYTHONPATH
+
+${SOLARVERSION}/${OUTPATH}${PROEXT}/bin${UPDMINOREXT}/python -x $SOLARENV/bin/cwstouched.py

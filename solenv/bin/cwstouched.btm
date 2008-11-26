@@ -1,0 +1,3 @@
+@echo off
+set PYTHONPATH=%SOLARVERSION%\%OUTPATH%%PROEXT%\lib.%UPDMINOR%\python
+python %SOLARENV%\bin\cwstouched.py
