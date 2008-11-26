@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: orienthelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.274.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,15 +49,13 @@ struct OrientationHelper_Impl
     typedef std::pair< Window*, TriState >  WindowPair;
     typedef std::vector< WindowPair >       WindowVec;
 
-    OrientationHelper&  mrParent;
-    WindowVec           maWinVec;
-    svx::DialControl&   mrCtrlDial;
+    DialControl&        mrCtrlDial;
     CheckBox&           mrCbStacked;
+    WindowVec           maWinVec;
+    bool                mbEnabled;
+    bool                mbVisible;
 
-    explicit            OrientationHelper_Impl(
-                            OrientationHelper& rParent,
-                            svx::DialControl& rCtrlDial,
-                            CheckBox& rCbStacked );
+    explicit            OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked );
 
     void                AddDependentWindow( Window& rWindow, TriState eDisableIfStacked );
 
@@ -71,11 +69,11 @@ struct OrientationHelper_Impl
 
 // ----------------------------------------------------------------------------
 
-OrientationHelper_Impl::OrientationHelper_Impl(
-        OrientationHelper& rParent, svx::DialControl& rCtrlDial, CheckBox& rCbStacked ) :
-    mrParent( rParent ),
+OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
     mrCtrlDial( rCtrlDial ),
-    mrCbStacked( rCbStacked )
+    mrCbStacked( rCbStacked ),
+    mbEnabled( rCtrlDial.IsEnabled() ),
+    mbVisible( rCtrlDial.IsVisible() )
 {
     maWinVec.push_back( WindowPair( &mrCtrlDial, STATE_CHECK ) );
     maWinVec.push_back( WindowPair( &mrCbStacked, STATE_DONTKNOW ) );
@@ -96,7 +94,6 @@ void OrientationHelper_Impl::EnableDependentWindows()
 
 void OrientationHelper_Impl::EnableWindow( Window& rWindow, TriState eDisableIfStacked )
 {
-    bool bEnabled = mrParent.IsEnabled();
     bool bDisableOnStacked = false;
     switch( eDisableIfStacked )
     {
@@ -106,14 +103,13 @@ void OrientationHelper_Impl::EnableWindow( Window& rWindow, TriState eDisableIfS
         case STATE_NOCHECK: bDisableOnStacked = (mrCbStacked.GetState() != STATE_CHECK);    break;
         default: ;//prevent warning
     }
-    rWindow.Enable( bEnabled && !bDisableOnStacked );
+    rWindow.Enable( mbEnabled && !bDisableOnStacked );
 }
 
 void OrientationHelper_Impl::ShowDependentWindows()
 {
-    bool bVisible = mrParent.IsVisible();
     for( WindowVec::iterator aIt = maWinVec.begin(), aEnd = maWinVec.end(); aIt != aEnd; ++aIt )
-        aIt->first->Show( bVisible );
+        aIt->first->Show( mbVisible );
 }
 
 IMPL_LINK( OrientationHelper_Impl, ClickHdl, void*, EMPTYARG )
@@ -124,40 +120,40 @@ IMPL_LINK( OrientationHelper_Impl, ClickHdl, void*, EMPTYARG )
 
 // ============================================================================
 
-OrientationHelper::OrientationHelper(
-        Window* pParent, svx::DialControl& rCtrlDial, CheckBox& rCbStacked ) :
-    Window( pParent ),
-    mpImpl( new OrientationHelper_Impl( *this, rCtrlDial, rCbStacked ) )
+OrientationHelper::OrientationHelper( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
+    mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
 {
     mpImpl->EnableDependentWindows();
+    mpImpl->ShowDependentWindows();
 }
 
-OrientationHelper::OrientationHelper(
-        Window* pParent,
-        svx::DialControl& rCtrlDial, NumericField& rNfRotation, CheckBox& rCbStacked ) :
-    Window( pParent ),
-    mpImpl( new OrientationHelper_Impl( *this, rCtrlDial, rCbStacked ) )
+OrientationHelper::OrientationHelper( DialControl& rCtrlDial, NumericField& rNfRotation, CheckBox& rCbStacked ) :
+    mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
 {
-    mpImpl->mrCtrlDial.SetLinkedField( &rNfRotation );
+    rCtrlDial.SetLinkedField( &rNfRotation );
     mpImpl->EnableDependentWindows();
+    mpImpl->ShowDependentWindows();
 }
 
 OrientationHelper::~OrientationHelper()
 {
 }
 
-void OrientationHelper::StateChanged( StateChangedType nStateChange )
-{
-    if( nStateChange == STATE_CHANGE_ENABLE )
-        mpImpl->EnableDependentWindows();
-    if( nStateChange == STATE_CHANGE_VISIBLE )
-        mpImpl->ShowDependentWindows();
-    Window::StateChanged( nStateChange );
-}
-
 void OrientationHelper::AddDependentWindow( Window& rWindow, TriState eDisableIfStacked )
 {
     mpImpl->AddDependentWindow( rWindow, eDisableIfStacked );
+}
+
+void OrientationHelper::Enable( bool bEnable )
+{
+    mpImpl->mbEnabled = bEnable;
+    mpImpl->EnableDependentWindows();
+}
+
+void OrientationHelper::Show( bool bShow )
+{
+    mpImpl->mbVisible = bShow;
+    mpImpl->ShowDependentWindows();
 }
 
 void OrientationHelper::SetStackedState( TriState eState )

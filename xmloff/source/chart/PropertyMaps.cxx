@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMaps.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.56.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -464,6 +464,12 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
     // give an empty model. It is only used for numbering rules that don't exist in chart
     uno::Reference< frame::XModel > xEmptyModel;
     ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel, mrImport ));
+
+    //#i14365# save and load writing-mode for chart elements
+    //The property TextWritingMode is mapped wrongly in the underlying draw mapper, but for draw it is necessary
+    //We remove that property here only for chart thus the chart can use the correct mapping from the writer paragraph settings (attribute 'writing-mode' <-> property 'WritingMode')
+    sal_Int32 nUnwantedWrongEntry = maPropMapper->FindEntryIndex( "TextWritingMode", XML_NAMESPACE_STYLE, GetXMLToken(XML_WRITING_MODE) );
+    maPropMapper->RemoveEntry(nUnwantedWrongEntry);
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents
