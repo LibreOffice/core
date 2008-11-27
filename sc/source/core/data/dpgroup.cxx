@@ -49,6 +49,7 @@
 #include "dpcachetable.hxx"
 #include "dptabsrc.hxx"
 #include "dptabres.hxx"
+#include "dpobject.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -86,7 +87,7 @@ public:
     ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
                         const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo);
 
-    virtual bool match(const ScDPCacheTable::Cell &rCell) const;
+    virtual bool match(const ScDPCacheCell &rCell) const;
 
 private:
     ScDPGroupDateFilter(); // disabled
@@ -110,7 +111,7 @@ ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart
 //          mfMatchValue, mnDatePart);
 }
 
-bool ScDPGroupDateFilter::match(const ScDPCacheTable::Cell& rCell) const
+bool ScDPGroupDateFilter::match(const ScDPCacheCell& rCell) const
 {
     using namespace ::com::sun::star::sheet;
     using ::rtl::math::approxFloor;
@@ -977,6 +978,7 @@ String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bo
 }
 
 ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDocument ) :
+    ScDPTableData(pDocument),
     pSourceData( pSource ),
     pDoc( pDocument )
 {
@@ -1136,7 +1138,7 @@ void ScDPGroupTableData::CreateCacheTable()
     pSourceData->CreateCacheTable();
 }
 
-void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria) const
+void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria)
 {
     typedef hash_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
@@ -1225,7 +1227,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
 
                     ScDPCacheTable::Criterion aCri;
                     aCri.mnFieldIndex = nSrcDim;
-                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter);
+                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter(GetSharedString()));
                     ScDPCacheTable::GroupFilter* pGrpFilter =
                         static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
 
@@ -1315,28 +1317,6 @@ void ScDPGroupTableData::CopyFields(const vector<long>& rFieldDims, vector<long>
         else
             rNewFieldDims.push_back(rFieldDims[i]);
     }
-}
-
-long* ScDPGroupTableData::CopyFields( const long* pSourceDims, long nCount )
-{
-    if (!nCount)
-        return NULL;
-
-    long nGroupedColumns = aGroups.size();
-
-    long* pNew = new long[nCount];
-    for (long i=0; i<nCount; i++)
-        if ( pSourceDims[i] >= nSourceCount )
-        {
-            if ( pSourceDims[i] == nSourceCount + nGroupedColumns )
-                pNew[i] = nSourceCount;         // data layout in source
-            else
-                pNew[i] = aGroups[pSourceDims[i] - nSourceCount].GetSourceDim();  // original dimension
-        }
-        else
-            pNew[i] = pSourceDims[i];
-
-    return pNew;    // must be deleted by caller
 }
 
 void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, const long* pDims )

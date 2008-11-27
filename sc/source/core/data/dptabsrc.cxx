@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <stdio.h>
+
 
 
 // INCLUDE ---------------------------------------------------------------
@@ -68,6 +68,7 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <unotools/collatorwrapper.hxx>
@@ -81,6 +82,7 @@ using ::std::hash_map;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 
 // -----------------------------------------------------------------------
 
@@ -422,6 +424,15 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     throw (uno::RuntimeException)
 {
     long nColumnCount = GetData()->GetColumnCount();
+    ScSimpleSharedString& rSharedString = GetData()->GetSharedString();
+
+    typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
+    FieldNameMapType aFieldNames;
+    for (long i = 0; i < nColumnCount; ++i)
+    {
+        aFieldNames.insert(
+            FieldNameMapType::value_type(GetData()->getDimensionName(i), i));
+    }
 
     // collect ScDPItemData for each filtered column
     vector<ScDPCacheTable::Criterion> aFilterCriteria;
@@ -443,14 +454,20 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                     ScDPItemData aItem;
                     pMembers->getByIndex(nIndex)->FillItemData( aItem );
                     aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
-                    sal_Int32 nMatchStrId = ScSharedString::getStringId(aItem.aString);
+                    sal_Int32 nMatchStrId = rSharedString.getStringId(aItem.aString);
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(nMatchStrId, aItem.fValue, aItem.bHasValue) );
+                        new ScDPCacheTable::SingleFilter(rSharedString, nMatchStrId, aItem.fValue, aItem.bHasValue) );
                 }
             }
         }
     }
+
+    // Take into account the visibilities of field members.
+    ScDPResultVisibilityData aResVisData(rSharedString, this);
+    pRowResRoot->FillVisibilityData(aResVisData);
+    pColResRoot->FillVisibilityData(aResVisData);
+    aResVisData.fillFieldFilters(aFilterCriteria);
 
     Sequence< Sequence<Any> > aTabData;
     pData->GetDrillDownData(aFilterCriteria, aTabData);
@@ -834,6 +851,8 @@ void ScDPSource::CreateRes_Impl()
         else
         {
             {
+                ScSimpleSharedString& rSharedString = GetData()->GetSharedString();
+
                 // filter table by page dimensions.
                 vector<ScDPCacheTable::Criterion> aCriteria;
                 for (i = 0; i < nPageDimCount; ++i)
@@ -847,9 +866,9 @@ void ScDPSource::CreateRes_Impl()
                     aCriteria.push_back(ScDPCacheTable::Criterion());
                     ScDPCacheTable::Criterion& r = aCriteria.back();
                     r.mnFieldIndex = static_cast<sal_Int32>(nField);
-                    sal_Int32 nStrId = ScSharedString::getStringId(rData.aString);
+                    sal_Int32 nStrId = rSharedString.getStringId(rData.aString);
                     r.mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(nStrId, rData.fValue, rData.bHasValue));
+                        new ScDPCacheTable::SingleFilter(rSharedString, nStrId, rData.fValue, rData.bHasValue));
                 }
                 if (!aCriteria.empty())
                     pData->FilterCacheTable(aCriteria);

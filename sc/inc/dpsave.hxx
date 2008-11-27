@@ -45,7 +45,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldLayoutInfo;
 } } } }
 
-class SvStream;
 class ScDPDimensionSaveData;
 
 // --------------------------------------------------------------------
@@ -64,7 +63,6 @@ private:
 public:
                             ScDPSaveMember(const String& rName);
                             ScDPSaveMember(const ScDPSaveMember& r);
-                            ScDPSaveMember(SvStream& rStream);
                             ~ScDPSaveMember();
 
     BOOL                    operator== ( const ScDPSaveMember& r ) const;
@@ -82,8 +80,6 @@ public:
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xMember,
                                             sal_Int32 nPosition );
-
-    void                    Store( SvStream& rStream ) const;
 };
 
 
@@ -116,7 +112,6 @@ private:
 public:
                             ScDPSaveDimension(const String& rName, BOOL bDataLayout);
                             ScDPSaveDimension(const ScDPSaveDimension& r);
-                            ScDPSaveDimension(SvStream& rStream);
                             ~ScDPSaveDimension();
 
     BOOL                    operator== ( const ScDPSaveDimension& r ) const;
@@ -170,8 +165,6 @@ public:
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xDim );
-
-    void                    Store( SvStream& rStream ) const;
 };
 
 

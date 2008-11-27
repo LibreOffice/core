@@ -43,7 +43,6 @@
 #include "global.hxx"
 
 #include <tools/debug.hxx>
-#include <tools/stream.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
@@ -124,24 +123,6 @@ ScDPSaveMember::ScDPSaveMember(const ScDPSaveMember& r) :
     nVisibleMode( r.nVisibleMode ),
     nShowDetailsMode( r.nShowDetailsMode )
 {
-}
-
-ScDPSaveMember::ScDPSaveMember(SvStream& rStream)
-{
-    rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
-    rStream >> nVisibleMode;
-    rStream >> nShowDetailsMode;
-
-    lcl_SkipExtra( rStream );       // reads at least 1 USHORT
-}
-
-void ScDPSaveMember::Store( SvStream& rStream ) const
-{
-    rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
-    rStream << nVisibleMode;
-    rStream << nShowDetailsMode;
-
-    rStream << (USHORT) 0;  // nExtra
 }
 
 ScDPSaveMember::~ScDPSaveMember()
@@ -292,80 +273,6 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
         pSelectedPage = new String( *(r.pSelectedPage) );
     else
         pSelectedPage = NULL;
-}
-
-ScDPSaveDimension::ScDPSaveDimension(SvStream& rStream)
-{
-    long i;
-
-    rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
-    rStream >> bIsDataLayout;
-
-    rStream >> bDupFlag;
-
-    rStream >> nOrientation;
-    rStream >> nFunction;           // enum GeneralFunction
-    rStream >> nUsedHierarchy;
-
-    rStream >> nShowEmptyMode;      //! at level
-
-    rStream >> bSubTotalDefault;    //! at level
-    rStream >> nSubTotalCount;
-    if (nSubTotalCount)
-    {
-        pSubTotalFuncs = new USHORT[nSubTotalCount];
-        for (i=0; i<nSubTotalCount; i++)
-            rStream >> pSubTotalFuncs[i];
-    }
-    else
-        pSubTotalFuncs = NULL;
-
-    lcl_SkipExtra( rStream );       // reads at least 1 USHORT
-
-    long nNewCount;
-    rStream >> nNewCount;
-    for (i=0; i<nNewCount; i++)
-    {
-        ScDPSaveMember* pNew = new ScDPSaveMember( rStream );
-        maMemberHash[pNew->GetName()] = pNew;
-        maMemberList.push_back( pNew );
-    }
-    pReferenceValue = NULL;
-    pSortInfo = NULL;
-    pAutoShowInfo = NULL;
-    pLayoutInfo = NULL;
-    pLayoutName = NULL;
-    pSelectedPage = NULL;
-}
-
-void ScDPSaveDimension::Store( SvStream& rStream ) const
-{
-    long i;
-
-    rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
-    rStream << bIsDataLayout;
-
-    rStream << bDupFlag;
-
-    rStream << nOrientation;
-    rStream << nFunction;           // enum GeneralFunction
-    rStream << nUsedHierarchy;
-
-    rStream << nShowEmptyMode;      //! at level
-
-    //! subtotals at level
-    rStream << bSubTotalDefault;
-    long nSubCnt = pSubTotalFuncs ? nSubTotalCount : 0;
-    rStream << nSubCnt;
-    for (i=0; i<nSubCnt; i++)
-        rStream << pSubTotalFuncs[i];
-
-    rStream << (USHORT) 0;  // nExtra
-
-    long nCount = maMemberHash.size();
-    rStream << nCount;
-    for (MemberList::const_iterator iter=maMemberList.begin(); iter != maMemberList.end() ; iter++)
-        (*iter)->Store( rStream );
 }
 
 ScDPSaveDimension::~ScDPSaveDimension()

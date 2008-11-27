@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpobject.hxx,v $
- * $Revision: 1.14.30.5 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,10 +57,8 @@ class ScDPSaveData;
 class ScDPOutput;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
-#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
 class ScPivotCollection;
-#endif
 struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
@@ -186,9 +184,8 @@ public:
 
     BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
     BOOL                FillLabelData(ScPivotParam& rParam);
-#if OLD_PIVOT_IMPLEMENTATION
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
-#endif
+
     BOOL                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
     BOOL                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
 
@@ -242,11 +239,39 @@ public:
                             PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
 };
 
+// ============================================================================
+
+struct ScDPCacheCell
+{
+    sal_Int32   mnStrId;
+    sal_uInt8   mnType;
+    double      mfValue;
+    bool        mbNumeric;
+
+    ScDPCacheCell();
+    ScDPCacheCell(const ScDPCacheCell& r);
+    ~ScDPCacheCell();
+};
+
+// ============================================================================
 
 class ScDPCollection : public Collection
 {
 private:
     ScDocument* pDoc;
+    ScSimpleSharedString maSharedString;
+
+    struct CacheCellHash
+    {
+        size_t operator()(const ScDPCacheCell* pCell) const;
+    };
+    struct CacheCellEqual
+    {
+        bool operator()(const ScDPCacheCell* p1, const ScDPCacheCell* p2) const;
+    };
+    typedef ::std::hash_set<ScDPCacheCell*, CacheCellHash, CacheCellEqual> CacheCellPoolType;
+
+    CacheCellPoolType maCacheCellPool;
 
 public:
                 ScDPCollection(ScDocument* pDocument);
@@ -267,7 +292,11 @@ public:
     void        WriteRefsTo( ScDPCollection& r ) const;
 
     String      CreateNewName( USHORT nMin = 1 ) const;
-//UNUSED2008-05  void       EnsureNames();
+
+    ScSimpleSharedString& GetSharedString();
+
+    ScDPCacheCell* getCacheCellFromPool(const ScDPCacheCell& rCell);
+    void clearCacheCellPool();
 };
 
 

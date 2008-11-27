@@ -58,6 +58,8 @@
 #include "globstr.hrc"
 #include "dpcachetable.hxx"
 #include "dptabres.hxx"
+#include "document.hxx"
+#include "dpobject.hxx"
 
 using namespace com::sun::star;
 
@@ -91,17 +93,21 @@ public:
 
     ScDPCacheTable      aCacheTable;
 
-    ScDatabaseDPData_Impl() {}
+    ScDatabaseDPData_Impl(ScDPCollection* p) :
+        aCacheTable(p)
+    {
+    }
 };
 
 // -----------------------------------------------------------------------
 
 ScDatabaseDPData::ScDatabaseDPData(
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr,
-    const ScImportSourceDesc& rImport )
+    ScDocument* pDoc,
+    const ScImportSourceDesc& rImport ) :
+    ScDPTableData(pDoc)
 {
-    pImpl = new ScDatabaseDPData_Impl;
-    pImpl->xServiceManager = xSMgr;
+    pImpl = new ScDatabaseDPData_Impl(pDoc->GetDPCollection());
+    pImpl->xServiceManager = pDoc->GetServiceManager();
     pImpl->aDesc = rImport;
     pImpl->nColCount = 0;
     pImpl->pTypes = NULL;

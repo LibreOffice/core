@@ -615,11 +615,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if ( pDPObject )
                     {
                         const ScPivotItem* pPItem = (const ScPivotItem*)pItem;
-                        pTabViewShell->MakePivotTable(
-                                            pPItem->GetData(),
-                                            pPItem->GetDestRange(),
-                                            pPItem->IsNewSheet(),
-                                            *pDPObject );
+                        bool bSuccess = pTabViewShell->MakePivotTable(
+                            pPItem->GetData(), pPItem->GetDestRange(), pPItem->IsNewSheet(), *pDPObject );
+                        SfxBoolItem aRet(0, bSuccess);
+                        rReq.SetReturnValue(aRet);
                     }
                     rReq.Done();
                 }
@@ -710,7 +709,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         {
                             //! use database ranges (select before type dialog?)
                             ScRange aRange;
-                            if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+                            ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
+                            if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
                             {
                                 BOOL bOK = TRUE;
                                 if ( pDoc->HasSubTotalCells( aRange ) )

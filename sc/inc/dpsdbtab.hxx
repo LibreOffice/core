@@ -33,17 +33,13 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
-    }
-}}}
 #include "dptabdat.hxx"
 
 #include <vector>
 #include <set>
 
 class ScDPCacheTable;
+class ScDocument;
 
 // --------------------------------------------------------------------
 //
@@ -74,10 +70,7 @@ private:
     BOOL            OpenDatabase();
 
 public:
-                    ScDatabaseDPData(
-                        ::com::sun::star::uno::Reference<
-                            ::com::sun::star::lang::XMultiServiceFactory > xSMgr,
-                        const ScImportSourceDesc& rImport );
+                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport);
     virtual         ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();

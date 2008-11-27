@@ -793,7 +793,8 @@ BOOL ScViewData::IsMultiMarked()
     // and taking filtered in simple area marks into account.
 
     ScRange aDummy;
-    return GetSimpleArea( aDummy) != SC_MARK_SIMPLE;
+    ScMarkType eType = GetSimpleArea(aDummy);
+    return (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE;
 }
 
 void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )

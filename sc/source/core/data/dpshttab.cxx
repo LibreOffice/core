@@ -44,6 +44,7 @@
 #include "collect.hxx"
 #include "cell.hxx"
 #include "dpcachetable.hxx"
+#include "dpobject.hxx"
 #include "globstr.hrc"
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -74,17 +75,19 @@ public:
 
     ScDPCacheTable  aCacheTable;
 
-    ScSheetDPData_Impl() :
-        pSpecial(NULL)
+    ScSheetDPData_Impl(ScDPCollection* p) :
+        pSpecial(NULL),
+        aCacheTable(p)
     {
     }
 };
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc )
+ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc ) :
+    ScDPTableData(pD)
 {
-    pImpl = new ScSheetDPData_Impl;
+    pImpl = new ScSheetDPData_Impl(pD->GetDPCollection());
     pImpl->pDoc = pD;
     pImpl->aRange = rDesc.aSourceRange;
     pImpl->aQuery = rDesc.aQueryParam;

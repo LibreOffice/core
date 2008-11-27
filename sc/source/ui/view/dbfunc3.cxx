@@ -579,7 +579,7 @@ String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
     return aName;
 }
 
-void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
+bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                 const ScDPObject& rSource, BOOL bApi )
 {
     //  #70096# error message if no fields are set
@@ -588,7 +588,7 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     if ( rData.IsEmpty() && !bApi )
     {
         ErrorMessage(STR_PIVOT_NODATA);
-        return;
+        return false;
     }
 
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
@@ -652,7 +652,7 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     BOOL bAllowMove = ( pDPObj != NULL );   // allow re-positioning when editing existing table
 
     ScDBDocFunc aFunc( *pDocSh );
-    aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE, bAllowMove );
+    bool bSuccess = aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE, bAllowMove );
 
     CursorPosChanged();     // shells may be switched
 
@@ -661,6 +661,8 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         pDocSh->PostPaintExtras();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     }
+
+    return bSuccess;
 }
 
 void ScDBFunc::DeletePivotTable()
@@ -1733,6 +1735,13 @@ void ScDBFunc::SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName 
 
 void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet::DataPilotFieldFilter>& rFilters )
 {
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    if (pDoc->GetDocumentShell()->IsReadOnly())
+    {
+        ErrorMessage(STR_READONLYERR);
+        return;
+    }
+
     Reference<sheet::XDimensionsSupplier> xDimSupplier = rDPObj.GetSource();
     Reference<container::XNameAccess> xDims = xDimSupplier->getDimensions();
     Reference<sheet::XDrillDownDataSupplier> xDDSupplier(xDimSupplier, UNO_QUERY);
@@ -1747,7 +1756,6 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     sal_Int32 nColSize = aTabData[0].getLength();
 
-    ScDocument* pDoc = GetViewData()->GetDocument();
     SCTAB nNewTab = GetViewData()->GetTabNo();
 
     auto_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));

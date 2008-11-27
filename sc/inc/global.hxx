@@ -38,6 +38,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 
+#include <hash_map>
+
 class ImageList;
 class Bitmap;
 class SfxItemSet;
@@ -881,6 +883,46 @@ struct ScConsolidateParam
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
+};
+
+// -----------------------------------------------------------------------
+
+class ScSimpleSharedString
+{
+public:
+    static const sal_Int32 EMPTY = 0;
+
+    ScSimpleSharedString();
+    ScSimpleSharedString(const ScSimpleSharedString& r);
+    ~ScSimpleSharedString();
+
+    const String*    getString(sal_Int32 nId);
+    sal_Int32        getStringId(const String& aStr);
+    sal_Int32        insertString(const String& aStr);
+
+private:
+
+    /** internal shared string table implementation */
+    class StringTable
+    {
+    public:
+        sal_Int32 insertString(const String& aStr);
+        sal_Int32 getStringId(const String& aStr);
+        const String* getString(sal_Int32 nId) const;
+
+        StringTable();
+        StringTable(const StringTable& r);
+        ~StringTable();
+
+    private:
+        typedef ::std::hash_map< String, sal_Int32, ScStringHashCode, ::std::equal_to< String > > SharedStrMap;
+
+        ::std::vector<String> maSharedStrings;
+        SharedStrMap maSharedStringIds;
+        sal_Int32 mnStrCount;
+    };
+
+    StringTable maStringTable;
 };
 
 // -----------------------------------------------------------------------

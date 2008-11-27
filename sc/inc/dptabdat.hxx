@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class TypedStrCollection;
+class ScSimpleSharedString;
 
 // -----------------------------------------------------------------------
 
@@ -112,6 +113,7 @@ class ScDPDimension;
 class ScDPLevel;
 class ScDPInitState;
 class ScDPResultMember;
+class ScDocument;
 
 class ScDPTableData
 {
@@ -120,6 +122,7 @@ class ScDPTableData
     long    nLastHier;
     long    nLastLevel;
     long    nLastRet;
+    ScSimpleSharedString& mrSharedString;
 
 public:
 
@@ -146,7 +149,7 @@ public:
         CalcInfo();
     };
 
-                ScDPTableData();
+                ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
@@ -165,11 +168,11 @@ public:
 
     virtual bool                    IsRepeatIfEmpty();
 
-    virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria);
+    virtual void                    CreateCacheTable() = 0;
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria) = 0;
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
-    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) = 0;
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) = 0;
     virtual const ScDPCacheTable&   GetCacheTable() const = 0;
 
                                     // overloaded in ScDPGroupTableData:
@@ -180,6 +183,8 @@ public:
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
     virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
+
+    ScSimpleSharedString&           GetSharedString();
 
 protected:
     /** This structure stores vector arrays that hold intermediate data for

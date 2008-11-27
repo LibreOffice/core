@@ -86,7 +86,7 @@ public:
 
     void            Consolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
 
-    void            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
+    bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
     void            RecalcPivotTable();

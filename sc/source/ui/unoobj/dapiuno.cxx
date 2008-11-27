@@ -962,6 +962,9 @@ ScDataPilotTableObj::~ScDataPilotTableObj()
 uno::Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
+    // since we manually do resolve the query for XDataPilotTable2
+    // we also need to do the same for XDataPilotTable
+    SC_QUERYINTERFACE( sheet::XDataPilotTable )
     SC_QUERYINTERFACE( sheet::XDataPilotTable2 )
 
     return ScDataPilotDescriptorBase::queryInterface( rType );

@@ -190,13 +190,12 @@ class ScDPGroupTableData : public ScDPTableData
 
     void        FillGroupValues( ScDPItemData* pItemData, long nCount, const long* pDims );
     void        CopyFields(const ::std::vector<long>& rFieldDims, ::std::vector<long>& rNewFieldDims);
-    long*       CopyFields( const long* pSourceDims, long nCount );
 
     bool        IsNumGroupDimension( long nDimension ) const;
     void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
                                     bool& rNonInteger, sal_Unicode& rDecimal );
 
-    void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria) const;
+    void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria);
 
 public:
                 // takes ownership of pSource

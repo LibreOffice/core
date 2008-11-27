@@ -31,14 +31,15 @@
 #ifndef SC_DPTABRES_HXX
 #define SC_DPTABRES_HXX
 
-#include <vector>
 #include <svtools/svarray.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
+#include "dpcachetable.hxx"
 #include <hash_map>
+#include <hash_set>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -50,10 +51,12 @@ class ScAddress;
 class ScDocument;
 class ScDPSource;
 class ScDPDimension;
+class ScDPDimensions;
 class ScDPLevel;
 class ScDPMember;
 class ScDPAggData;
 class ScDPResultMember;
+class ScDPResultVisibilityData;
 
 struct ScDPValueData;
 struct ScDPItemData;
@@ -370,6 +373,8 @@ public:
     const ScDPLevel*                GetParentLevel() const          { return pParentLevel; }    //! Ref
 
     ScDPAggData*        GetColTotal( long nMeasure ) const;
+
+    void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
 };
 
 class ScDPDataMember
@@ -538,6 +543,8 @@ public:
     long                GetAutoCount() const    { return nAutoCount; }
 
     ScDPResultDimension* GetFirstChildDimension() const;
+
+    void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
 };
 
 class ScDPDataDimension
@@ -578,6 +585,34 @@ public:
 
     long                GetMemberCount() const;
     ScDPDataMember*     GetMember(long n) const;
+};
+
+// ----------------------------------------------------------------------------
+
+/**
+ * This class collects visible members of each dimension and uses that
+ * information to create filtering criteria (e.g. for drill-down data).
+ */
+class ScDPResultVisibilityData
+{
+public:
+    ScDPResultVisibilityData(ScSimpleSharedString& rSharedString, ScDPSource* pSource);
+    ~ScDPResultVisibilityData();
+
+    void addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem);
+    void fillFieldFilters(::std::vector<ScDPCacheTable::Criterion>& rFilters) const;
+
+private:
+    struct MemberHash
+    {
+        size_t operator()(const ScDPItemData& r) const;
+    };
+    typedef ::std::hash_set<ScDPItemData, MemberHash> VisibleMemberType;
+    typedef ::std::hash_map<String, VisibleMemberType, ScStringHashCode> DimMemberType;
+    DimMemberType maDimensions;
+
+    ScSimpleSharedString& mrSharedString;
+    ScDPSource* mpSource;
 };
 
 #endif
