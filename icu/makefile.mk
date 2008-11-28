@@ -179,6 +179,7 @@ BUILD_ACTION_SEP=;
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
+
 # Activating the debug mechanism produces incompatible libraries, you'd have
 # at least to relink all modules that are directly using ICU. Note that library
 # names get a 'd' appended and you'd have to edit the solenv/inc/libs.mk
