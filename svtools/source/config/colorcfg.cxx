@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colorcfg.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +186,14 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/BASICString")    ,  sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICOperator")  ,  sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICKeyword")   ,  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  sal_False }
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLIdentifier"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLNumber"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLString"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLOperator"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLKeyword"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLParameter"),  sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  sal_False }
     };
     int nIndex = 0;
     OUString sColor = C2U(cColor);
@@ -530,7 +537,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0xc0c0c0, // WRITERFIELDSHADIN
         0xc0c0c0, // WRITERIDXSHADINGS
         0, // WRITERDIRECTCURSOR
-          COL_GREEN,  //WRITERSCRIPTINDICATOR
+        COL_GREEN,  //WRITERSCRIPTINDICATOR
         0xc0c0c0, //WRITERSECTIONBOUNDARIES
         COL_BLUE, //WRITERPAGEBREAKS,
         COL_LIGHTBLUE, // HTMLSGML
@@ -555,6 +562,13 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, // BASICOPERATOR  ,
         COL_BLUE, // BASICKEYWORD   ,
         COL_RED, //BASICERROR
+        0xF84E4E, // SQLIDENTIFIER
+        0xCC66CC, // SQLNUMBER
+        0x7CDB8C, // SQLSTRING
+        COL_BLACK, // SQLOPERATOR
+        0x0000FF, // SQLKEYWORD
+        0x259D9D, // SQLPARAMTER
+        COL_GRAY,// SQLCOMMENT
     };
     Color aRet;
     switch(eEntry)

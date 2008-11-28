@@ -154,6 +154,8 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
 ..\inc\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
 ..\inc\svtools\svmedit.hxx %_DEST%\inc%_EXT%\svtools\svmedit.hxx
+..\inc\svtools\editsyntaxhighlighter.hxx %_DEST%\inc%_EXT%\svtools\editsyntaxhighlighter.hxx
+..\inc\svtools\syntaxhighlight.hxx %_DEST%\inc%_EXT%\svtools\syntaxhighlight.hxx
 ..\inc\svtools\svmedit2.hxx %_DEST%\inc%_EXT%\svtools\svmedit2.hxx
 ..\inc\svtools\svstdarr.hxx %_DEST%\inc%_EXT%\svtools\svstdarr.hxx
 ..\inc\svtools\metitem.hxx %_DEST%\inc%_EXT%\svtools\metitem.hxx

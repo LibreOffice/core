@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colorcfg.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,13 @@ enum ColorConfigEntry
     BASICOPERATOR  ,
     BASICKEYWORD   ,
     BASICERROR   ,
+    SQLIDENTIFIER,
+    SQLNUMBER,
+    SQLSTRING,
+    SQLOPERATOR,
+    SQLKEYWORD,
+    SQLPARAMETER,
+    SQLCOMMENT,
     ColorConfigEntryCount
 };
 /* -----------------------------22.03.2002 15:36------------------------------

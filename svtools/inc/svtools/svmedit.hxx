@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svmedit.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.108.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,12 @@
 #ifndef _SVEDIT_HXX
 #define _SVEDIT_HXX
 
-#include "svtools/svtdllapi.h"
 #include <vcl/wintypes.hxx>
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
+
+#include <svtools/syntaxhighlight.hxx>
+#include <svtools/svtdllapi.h>
+#include <svtools/colorcfg.hxx>
 
 class ImpSvMEdit;
 class Timer;
@@ -58,7 +59,7 @@ protected:
     DECL_LINK(      ImpUpdateDataHdl, Timer* );
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
-    long            PreNotify( NotifyEvent& rNEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
     long            Notify( NotifyEvent& rNEvt );
     void            ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     WinBits         ImplInitStyle( WinBits nStyle );
@@ -151,6 +152,5 @@ inline ULONG MultiLineEdit::IsUpdateDataEnabled() const
 {
     return pUpdateDataTimer ? pUpdateDataTimer->GetTimeout() : 0;
 }
-
 
 #endif
