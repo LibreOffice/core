@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elements.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -485,10 +485,7 @@ void NodeJava::write() const
 
         xmlNode * nodeEnabled = pathObj->nodesetval->nodeTab[0];
         xmlSetNsProp(nodeEnabled, nsXsi, (xmlChar*) "nil",(xmlChar*) "false");
-
-        rtl::OString osUserCP =
-            rtl::OUStringToOString(*m_userClassPath, osl_getThreadTextEncoding());
-        xmlNodeSetContent(nodeEnabled,(xmlChar*) osUserCP.getStr());
+        xmlNodeSetContent(nodeEnabled,(xmlChar*) CXmlCharPtr(*m_userClassPath));
     }
 
     //set <javaInfo> element
@@ -1016,55 +1013,41 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the vendor element
-    rtl::OString osVendor = rtl::OUStringToOString(
-        sVendor, osl_getThreadTextEncoding());
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "vendor",
-                    (xmlChar*) osVendor.getStr());
+                    CXmlCharPtr(sVendor));
     //add a new line for better readability
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the location element
-    rtl::OString osLocation = rtl::OUStringToOString(
-        sLocation, osl_getThreadTextEncoding());
-
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "location",
-                    (xmlChar*) osLocation.getStr());
+                    CXmlCharPtr(sLocation));
     //add a new line for better readability
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the version element
-    rtl::OString osVersion = rtl::OUStringToOString(
-        sVersion, osl_getThreadTextEncoding());
-
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "version",
-                    (xmlChar*) osVersion.getStr());
+                    CXmlCharPtr(sVersion));
     //add a new line for better readability
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the features element
-    rtl::OUString usFeatures = rtl::OUString::valueOf(
+    rtl::OUString sFeatures = rtl::OUString::valueOf(
         (sal_Int64)nFeatures, 16);
-    rtl::OString sFeatures = rtl::OUStringToOString(
-        usFeatures, osl_getThreadTextEncoding());
-
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "features",
-                    (xmlChar*) sFeatures.getStr());
+                    CXmlCharPtr(sFeatures));
     //add a new line for better readability
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
 
     //Create the requirements element
-    rtl::OUString usRequirements = rtl::OUString::valueOf(
+    rtl::OUString sRequirements = rtl::OUString::valueOf(
         (sal_Int64) nRequirements, 16);
-    rtl::OString sRequirements = rtl::OUStringToOString(
-        usRequirements, osl_getThreadTextEncoding());
-
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "requirements",
-                    (xmlChar*) sRequirements.getStr());
+                    CXmlCharPtr(sRequirements));
     //add a new line for better readability
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
