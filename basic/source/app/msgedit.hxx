@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msgedit.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,9 @@
 #define _MSGEDIT_HXX
 
 #include <svtools/svtreebx.hxx>
-
-#include "dataedit.hxx"
 #include <basic/testtool.hxx>
+#include "dataedit.hxx"
+
 class BasicFrame;
 class AppError;
 
