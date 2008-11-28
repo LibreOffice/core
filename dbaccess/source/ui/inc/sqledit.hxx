@@ -1,13 +1,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqledit.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,26 +30,32 @@
 #ifndef DBAUI_SQLEDIT_HXX
 #define DBAUI_SQLEDIT_HXX
 
-#ifndef _SVEDIT_HXX
-#include <svtools/svmedit.hxx>
-#endif
+#include <svtools/editsyntaxhighlighter.hxx>
+#include <svtools/lstner.hxx>
+#include <svtools/colorcfg.hxx>
+#include <svtools/sourceviewconfig.hxx>
 
 namespace dbaui
 {
     class OQueryTextView;
-    class OSqlEdit : public MultiLineEdit
+    class OSqlEdit : public MultiLineEditSyntaxHighlight, SfxListener
     {
     private:
-        Timer   m_timerInvalidate;
-        Timer   m_timerUndoActionCreation;
-        Link    m_lnkTextModifyHdl;
-        String  m_strOrigText;      // wird beim Undo wiederhergestellt
-        OQueryTextView* m_pView;
-        BOOL    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
-        BOOL    m_bStopTimer;
+        Timer                   m_timerInvalidate;
+        Timer                   m_timerUndoActionCreation;
+        Link                    m_lnkTextModifyHdl;
+        String                  m_strOrigText;      // wird beim Undo wiederhergestellt
+        OQueryTextView*         m_pView;
+        BOOL                    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
+        BOOL                    m_bStopTimer;
+        svt::SourceViewConfig   m_SourceViewConfig;
+        svtools::ColorConfig    m_ColorConfig;
 
         DECL_LINK(OnUndoActionTimer, void*);
         DECL_LINK(OnInvalidateTimer, void*);
+
+    private: 
+        void            ImplSetFont();
 
     protected:
         virtual void KeyInput( const KeyEvent& rKEvt );
@@ -63,7 +69,7 @@ namespace dbaui
 
         // Edit overridables
         virtual void SetText(const String& rNewText);
-        using MultiLineEdit::SetText;
+        using MultiLineEditSyntaxHighlight::SetText;
 
         // own functionality
         BOOL IsInAccelAct();
@@ -75,6 +81,9 @@ namespace dbaui
 
         void stopTimer();
         void startTimer();
+
+        virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        using MultiLineEditSyntaxHighlight::Notify;
     };
 }
 
