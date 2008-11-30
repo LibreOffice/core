@@ -40,6 +40,13 @@ PRJINC=..$/..$/..
 PRJNAME=connectivity
 TARGET=mozbootstrap
 
+.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
+all: 
+    @echo "		Not building the mozabsrc stuff in OpenOffice.org build"
+    @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
+    @echo "         see http://bugzilla.mozilla.org/show_bug.cgi?id=135137"
+.ENDIF
+
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
