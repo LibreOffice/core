@@ -1,5 +1,4 @@
-lcairo	cairo	: soltools NULL
+lcairo	cairo	: zlib soltools NULL
 lcairo	cairo			    usr1	-	all	lcairo_mkout NULL
 lcairo	cairo\pixman		    nmake	-	all	lcairo_pixman NULL
 lcairo	cairo\cairo		    nmake	-	all	lcairo_cairo lcairo_pixman NULL
-lcairo	cairo\zipped		    nmake	-	all	lcairo_zipped lcairo_cairo NULL

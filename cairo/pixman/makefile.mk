@@ -33,6 +33,7 @@ PRJ=..
 
 PRJNAME=cairo
 TARGET=so_pixman
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -42,30 +43,28 @@ TARGET=so_pixman
 all:
         @echo "Nothing to do (Cairo not enabled)."
 
-.ELIF "$(SYSTEM_CAIRO)" == "YES"
+.ELIF "$(BUILD_PIXMAN)" == ""
 all:
-    @echo "Nothing to do, using system cairo."
-
-.ELIF "$(BUILD_CAIRO)" == ""
-all:
-       @echo "Not building cairo from source, prebuilt binaries will be used."
+       @echo "Not building pixman."
 
 .ENDIF
 
 # --- Files --------------------------------------------------------
 
-PIXMANVERSION=0.10.0
+PIXMANVERSION=0.12.0
 
 TARFILE_NAME=pixman-$(PIXMANVERSION)
+PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
 
 # Note: we are building static pixman library to avoid linking problems.
+# However, for Unix dynamic library must be used (especially due to 64bit issues)
 
 .IF "$(OS)"=="WNT"
 # --------- Windows -------------------------------------------------
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(cairo_CFLAGS) -D_MT" LDFLAGS="$(cairo_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(pixman_CFLAGS) -D_MT" LDFLAGS="$(pixman_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -74,13 +73,8 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 .ELSE   # WNT, not GCC
-CONFIGURE_DIR=win32
-CONFIGURE_ACTION=cscript configure.js
-.IF "$(debug)"!=""
-CONFIGURE_FLAGS+=debug=yes
-.ENDIF
-BUILD_ACTION=nmake
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=pixman
+BUILD_ACTION=$(GNUMAKE) -f Makefile.win32
 .ENDIF
 
 .ELIF "$(GUIBASE)"=="aqua"
@@ -103,7 +97,7 @@ LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 
 .IF "$(SYSBASE)"!=""
-cairo_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external $(EXTRA_CFLAGS)
+pixman_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external $(EXTRA_CFLAGS)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
 LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
 .ENDIF
@@ -112,12 +106,14 @@ LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ld
 .EXPORT: LDFLAGS
 
 .IF "$(COMNAME)"=="sunpro5"
-cairo_CFLAGS+=-xc99=none
+pixman_CFLAGS+=-xc99=none
 .ENDIF
+
+pixman_CFLAGS+=-fPIC
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no CFLAGS="$(cairo_CFLAGS)"
+CONFIGURE_FLAGS=--enable-static=no --enable-shared=yes CFLAGS="$(pixman_CFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -136,11 +132,10 @@ OUT2LIB+=pixman$/.libs$/libpixman-1.a
 .IF "$(COM)"=="GCC"
 OUT2LIB+=pixman$/.libs$/*.a
 .ELSE
-OUT2LIB+=win32$/bin.msvc$/*.lib
-OUT2BIN+=win32$/bin.msvc$/*.dll
+OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
 .ELSE
-OUT2LIB+=pixman$/.libs$/libpixman-1.a
+OUT2LIB+=pixman$/.libs$/libpixman-1.so
 .ENDIF
 
 # --- Targets ------------------------------------------------------
