@@ -588,6 +588,26 @@ End
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
+
+#if (defined(ENABLE_CAIRO) && ! defined (SYSTEM_CAIRO))
+
+File gid_File_Lib_Cairo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT3(libcairo,.2,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(libcairo,UNXSUFFIX,.2));
+    #endif
+  #elif defined(WNT)
+    Name = "cairo.dll";
+  #endif
+End
+
+#endif
+
 STD_UNO_LIB_FILE( gid_File_Lib_Frm , frm)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fsstorage, fsstorage.uno )
