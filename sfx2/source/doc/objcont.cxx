@@ -514,9 +514,15 @@ void SfxObjectShell::UpdateTime_Impl(
     }
 
     pImp->nTime = aNow;
-    i_xDocProps->setEditingDuration(
-        aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
-    i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
+    try {
+        i_xDocProps->setEditingDuration(
+            aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
+        i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
+    }
+    catch (lang::IllegalArgumentException &)
+    {
+        // ignore overflow
+    }
 }
 
 //--------------------------------------------------------------------

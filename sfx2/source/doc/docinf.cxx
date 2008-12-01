@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docinf.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.54.174.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,8 +117,11 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
             i_xDocProps->setPrintDate( aInvalid );
 
         if( xGlobSect->GetStringValue( aStrValue, PROPID_REVNUMBER ) )
-            i_xDocProps->setEditingCycles(
-                static_cast< sal_Int16 >( aStrValue.ToInt32() ) );
+        {
+            sal_Int16 nRevision = static_cast< sal_Int16 >( aStrValue.ToInt32() );
+            if ( nRevision > 0 )
+                i_xDocProps->setEditingCycles( nRevision );
+        }
 
         if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_EDITTIME ) )
         {
@@ -126,11 +129,18 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
             aDateTime.Year  -= 1601;
             aDateTime.Month -= 1;
             aDateTime.Day   -= 1;
-            i_xDocProps->setEditingDuration(
-                aDateTime.Day     * 60*60*24 +
-                aDateTime.Hours   * 60*60    +
-                aDateTime.Minutes * 60       +
-                aDateTime.Seconds            );
+            try
+            {
+                i_xDocProps->setEditingDuration(
+                    aDateTime.Day     * 60*60*24 +
+                    aDateTime.Hours   * 60*60    +
+                    aDateTime.Minutes * 60       +
+                    aDateTime.Seconds            );
+            }
+            catch (lang::IllegalArgumentException &)
+            {
+                // ignore
+            }
         }
     }
 
