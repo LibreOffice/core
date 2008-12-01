@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.10.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +56,8 @@ IDLFILES= \
     XGraphic.idl \
     XGraphicProvider.idl \
     XGraphicRenderer.idl \
+    XGraphicObject.idl \
+    GraphicObject.idl \
     XGraphicTransformer.idl
     
 # --- Targets ------------------------------------------------------

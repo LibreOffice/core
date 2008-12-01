@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.50 $
+# $Revision: 1.50.20.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -109,6 +109,7 @@ IDLFILES=\
     GradientStyle.idl\
     ImageAlign.idl\
     ImagePosition.idl\
+    ImageScaleMode.idl\
     ImageStatus.idl\
     InputEvent.idl\
     InvalidateStyle.idl\
