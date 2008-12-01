@@ -126,6 +126,13 @@ namespace comphelper
             );
 
         aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
+        bool AllowEmptyPropertyName(false);
+        aArguments.get_ensureType( "AllowEmptyPropertyName",
+            AllowEmptyPropertyName );
+        if (AllowEmptyPropertyName) {
+            m_aDynamicProperties.setAllowEmptyPropertyName(
+                AllowEmptyPropertyName);
+        }
     }
 
     //--------------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertybag.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,12 +62,20 @@ namespace comphelper
         PropertyBag();
         virtual ~PropertyBag();
 
+        /** allow adding property with empty string as name
+            (by default, such names are rejected with IllegalActionException).
+            @param i_isAllowed
+                iff true, empty property name will be allowed
+         */
+        void setAllowEmptyPropertyName(bool i_isAllowed = true);
+
         /** adds a property to the bag
 
             The type of the property is determined from its initial value (<code>_rInitialValue</code>).
 
             @param _rName
-                the name of the new property. Must not be empty.
+                the name of the new property. Must not be empty unless
+                explicitly allowed with setAllowEmptyPropertyName.
             @param _nHandle
                 the handle of the new property
             @param _nAttributes
