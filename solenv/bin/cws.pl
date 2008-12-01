@@ -1513,6 +1513,7 @@ sub do_rebase
         print_error("At least one of the options -m (--milestone) or -C (--commit) are required.", 0 );
         do_help(['rebase']);
     }
+#    print_error("The rebase command has not seen enough testing yet, and will be available in DEV300 m35\nIf you feel brave, comment out this line in cws.pl and go ahead anyway\nBe sure to report any problems to hr\@openoffice.org", 99);
 
     my $new_masterws;
     my $new_milestone;
