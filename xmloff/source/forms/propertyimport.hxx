@@ -143,10 +143,21 @@ namespace xmloff
         */
         void        enableTrackAttributes() { m_bTrackAttributes = sal_True; }
 
-        void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
-        { m_aValues.push_back(_rProp); }
-        void implPushBackGenericPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
-        { m_aGenericValues.push_back(_rProp); }
+        inline void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
+        {
+            m_aValues.push_back(_rProp);
+        }
+
+        inline void implPushBackPropertyValue( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rValue )
+        {
+            m_aValues.push_back( ::com::sun::star::beans::PropertyValue(
+                _rName, -1, _rValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) );
+        }
+
+        inline void implPushBackGenericPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
+        {
+            m_aGenericValues.push_back(_rProp);
+        }
     };
     SV_DECL_IMPL_REF( OPropertyImport )
 

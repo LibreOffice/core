@@ -42,14 +42,6 @@ class FmFormView;
 class FmXForms;
 class FmFormObj: public SdrUnoObj
 {
-    friend class FmForm;
-    friend class FmFormPage;
-    friend class FmFormPageImpl;
-    friend class FmFormObjFactory;
-    friend class FmXUndoEnvironment;
-    friend class SvxFmDrawPage;
-    friend class SvxFmMSFactory;
-
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
@@ -70,17 +62,23 @@ class FmFormObj: public SdrUnoObj
                             // only to be used for comparison with the current ref device!
 
 public:
-    TYPEINFO();
-
-protected:
     FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
     FmFormObj(sal_Int32 _nType);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& GetParent() const {return m_xParent;}
-    void  SetObjEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xForm, sal_Int32 nIdx = -1,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts= ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >());
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& GetEvents() const {return aEvts;}
-    sal_Int32 GetPos() const { return m_nPos; }
+    TYPEINFO();
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>&
+        GetOriginalParent() const { return m_xParent; }
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >&
+        GetOriginalEvents() const { return aEvts; }
+    sal_Int32
+        GetOriginalIndex() const { return m_nPos; }
+
+    void SetObjEnv(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xForm,
+            const sal_Int32 nIdx,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts );
+    void ClearObjEnv();
 
 public:
     virtual ~FmFormObj();
@@ -98,18 +96,32 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> _rTopLevelDestContainer);
 
+    /** returns the FmFormObj behind the given SdrObject
+
+        In case the SdrObject *is* an FmFormObject, this is a simple cast. In case the SdrObject
+        is a virtual object whose referenced object is an FmFormObj, then this referenced
+        object is returned. In all other cases, NULL is returned.
+    */
+    static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
+    static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
+
     /** returns the type of this form object. See fmglob.hxx
     */
     sal_Int32   getType() const;
 
 protected:
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-
-    DECL_LINK(OnCreate, void* );
+    virtual FASTBOOL    EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
+    virtual void        BrkCreate( SdrDragStat& rStat );
 
     // #i70852# overload Layer interface to force to FormColtrol layer
     virtual SdrLayerID GetLayer() const;
     virtual void NbcSetLayer(SdrLayerID nLayer);
+
+private:
+    /** isolates the control model from its form component hierarchy, i.e. removes it from
+        its parent.
+    */
+    void    impl_isolateControlModel_nothrow();
 };
 
 

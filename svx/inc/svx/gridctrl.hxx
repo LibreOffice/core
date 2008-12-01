@@ -50,9 +50,6 @@
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"
 
-extern XubString INVALIDTEXT;
-extern XubString OBJECTTEXT;
-
 class DbGridControl;
 class CursorWrapper;
 

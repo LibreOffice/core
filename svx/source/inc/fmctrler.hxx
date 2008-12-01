@@ -33,6 +33,7 @@
 #include "fmtools.hxx"
 #include "formcontrolling.hxx"
 #include "sqlparserclient.hxx"
+#include "delayedevent.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XControl.hpp>
@@ -96,12 +97,15 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <cppuhelper/compbase12.hxx>
-#include <cppuhelper/implbase12.hxx>
-#include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
+
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_31)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_31
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 31
+#include <comphelper/implbase_var.hxx>
+#endif
 
 struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , sal_Bool>
 {
@@ -125,50 +129,45 @@ namespace svxform
     class ControlBorderManager;
 }
 
-typedef ::cppu::WeakAggComponentImplHelper12<   ::com::sun::star::form::XFormController
-                                            ,   ::com::sun::star::container::XChild
-                                            ,   ::com::sun::star::container::XIndexAccess
-                                            ,   ::com::sun::star::container::XEnumerationAccess
-                                            ,   ::com::sun::star::awt::XFocusListener
-                                            ,   ::com::sun::star::form::XLoadListener
-                                            ,   ::com::sun::star::beans::XPropertyChangeListener
-                                            ,   ::com::sun::star::awt::XTextListener
-                                            ,   ::com::sun::star::awt::XItemListener
-                                            ,   ::com::sun::star::container::XContainerListener
-                                            ,   ::com::sun::star::util::XModifyListener
-                                            ,   ::com::sun::star::util::XModifyBroadcaster
-                                            >   FmXFormController_BASE1;
-
-typedef ::cppu::ImplHelper12<   ::com::sun::star::util::XModeSelector
-                            ,   ::com::sun::star::form::XConfirmDeleteListener
-                            ,   ::com::sun::star::form::XConfirmDeleteBroadcaster
-                            ,   ::com::sun::star::sdb::XSQLErrorListener
-                            ,   ::com::sun::star::sdb::XSQLErrorBroadcaster
-                            ,   ::com::sun::star::sdbc::XRowSetListener
-                            ,   ::com::sun::star::sdb::XRowSetApproveListener
-                            ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
-                            ,   ::com::sun::star::form::XDatabaseParameterListener
-                            ,   ::com::sun::star::form::XDatabaseParameterBroadcaster
-                            ,   ::com::sun::star::lang::XServiceInfo
-                            ,   ::com::sun::star::form::XResetListener
-                            >   FmXFormController_BASE2;
-
-typedef ::cppu::ImplHelper7<    ::com::sun::star::lang::XUnoTunnel
-                           ,    ::com::sun::star::frame::XDispatch
-                           ,    ::com::sun::star::awt::XMouseListener
-                           ,    ::com::sun::star::form::validation::XFormComponentValidityListener
-                           ,    ::com::sun::star::task::XInteractionHandler
-                           ,    ::com::sun::star::lang::XInitialization
-                           ,    ::com::sun::star::form::XGridControlListener
-                           >    FmXFormController_BASE3;
+typedef ::comphelper::WeakComponentImplHelper31 <   ::com::sun::star::form::XFormController
+                                                ,   ::com::sun::star::container::XChild
+                                                ,   ::com::sun::star::container::XIndexAccess
+                                                ,   ::com::sun::star::container::XEnumerationAccess
+                                                ,   ::com::sun::star::awt::XFocusListener
+                                                ,   ::com::sun::star::form::XLoadListener
+                                                ,   ::com::sun::star::beans::XPropertyChangeListener
+                                                ,   ::com::sun::star::awt::XTextListener
+                                                ,   ::com::sun::star::awt::XItemListener
+                                                ,   ::com::sun::star::container::XContainerListener
+                                                ,   ::com::sun::star::util::XModifyListener
+                                                ,   ::com::sun::star::util::XModifyBroadcaster
+                                                ,   ::com::sun::star::util::XModeSelector
+                                                ,   ::com::sun::star::form::XConfirmDeleteListener
+                                                ,   ::com::sun::star::form::XConfirmDeleteBroadcaster
+                                                ,   ::com::sun::star::sdb::XSQLErrorListener
+                                                ,   ::com::sun::star::sdb::XSQLErrorBroadcaster
+                                                ,   ::com::sun::star::sdbc::XRowSetListener
+                                                ,   ::com::sun::star::sdb::XRowSetApproveListener
+                                                ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                                ,   ::com::sun::star::form::XDatabaseParameterListener
+                                                ,   ::com::sun::star::form::XDatabaseParameterBroadcaster
+                                                ,   ::com::sun::star::lang::XServiceInfo
+                                                ,   ::com::sun::star::form::XResetListener
+                                                ,   ::com::sun::star::lang::XUnoTunnel
+                                                ,   ::com::sun::star::frame::XDispatch
+                                                ,   ::com::sun::star::awt::XMouseListener
+                                                ,   ::com::sun::star::form::validation::XFormComponentValidityListener
+                                                ,   ::com::sun::star::task::XInteractionHandler
+                                                ,   ::com::sun::star::lang::XInitialization
+                                                ,   ::com::sun::star::form::XGridControlListener
+                                                >   FmXFormController_BASE;
 
 //==================================================================
 // FmXFormController
 //==================================================================
+class ColumnInfoCache;
 class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
-                                        ,public FmXFormController_BASE1
-                                        ,public FmXFormController_BASE2
-                                        ,public FmXFormController_BASE3
+                                        ,public FmXFormController_BASE
                                         ,public ::cppu::OPropertySetHelper
                                         ,public FmDispatchInterceptor
                                         ,public ::comphelper::OAggregationArrayUsageHelper< FmXFormController >
@@ -219,24 +218,29 @@ class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
 
     ::rtl::OUString             m_aMode;
 
-    ULONG                       m_nLoadEvent;
-    ULONG                       m_nToggleEvent;
+    ::svxform::DelayedEvent     m_aLoadEvent;
+    ::svxform::DelayedEvent     m_aToggleEvent;
+    ::svxform::DelayedEvent     m_aActivationEvent;
+    ::svxform::DelayedEvent     m_aDeactivationEvent;
+
+    ::std::auto_ptr< ColumnInfoCache >
+                                m_pColumnInfoCache;
 
     sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)
 
-    sal_Bool                    m_bCurrentRecordModified : 1;
-    sal_Bool                    m_bCurrentRecordNew : 1;
-    sal_Bool                    m_bLocked           : 1;
-    sal_Bool                    m_bDBConnection  : 1;   // Focuslistener nur fuer Datenbankformulare
-    sal_Bool                    m_bCycle             : 1;
-    sal_Bool                    m_bCanInsert         : 1;
-    sal_Bool                    m_bCanUpdate         : 1;
-    sal_Bool                    m_bCommitLock    : 1;   // lock the committing of controls see focusGained
-    sal_Bool                    m_bModified      : 1;   // ist der Inhalt eines Controls modifiziert ?
-    sal_Bool                    m_bControlsSorted : 1;
-    sal_Bool                    m_bFiltering : 1;
-    sal_Bool                    m_bAttachEvents : 1;
-    sal_Bool                    m_bDetachEvents : 1;
+    sal_Bool                    m_bCurrentRecordModified    : 1;
+    sal_Bool                    m_bCurrentRecordNew         : 1;
+    sal_Bool                    m_bLocked                   : 1;
+    sal_Bool                    m_bDBConnection             : 1;    // Focuslistener nur fuer Datenbankformulare
+    sal_Bool                    m_bCycle                    : 1;
+    sal_Bool                    m_bCanInsert                : 1;
+    sal_Bool                    m_bCanUpdate                : 1;
+    sal_Bool                    m_bCommitLock               : 1;    // lock the committing of controls see focusGained
+    sal_Bool                    m_bModified                 : 1;    // ist der Inhalt eines Controls modifiziert ?
+    sal_Bool                    m_bControlsSorted           : 1;
+    sal_Bool                    m_bFiltering                : 1;
+    sal_Bool                    m_bAttachEvents             : 1;
+    sal_Bool                    m_bDetachEvents             : 1;
     sal_Bool                    m_bAttemptedHandlerCreation : 1;
 
     // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
@@ -257,10 +261,8 @@ public:
                       FmFormView* _pView = NULL, Window* _pWindow = NULL );
     ~FmXFormController();
 
-    // UNO Anbindung
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
-            { return FmXFormController_BASE1::queryInterface( type ); }
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+// XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
@@ -551,8 +553,9 @@ protected:
     */
     void    implInvalidateCurrentControlDependentFeatures();
 
+    bool    impl_isDisposed_nofail() const { return FmXFormController_BASE::rBHelper.bDisposed; }
+
     void onModify( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
-    void onActivate();
 
     sal_Bool isLocked() const {return m_bLocked;}
     sal_Bool determineLockState() const;
@@ -602,6 +605,8 @@ protected:
     DECL_LINK( OnInvalidateFeatures, void* );
     DECL_LINK( OnLoad, void* );
     DECL_LINK( OnToggleAutoFields, void* );
+    DECL_LINK( OnActivated, void* );
+    DECL_LINK( OnDeactivated, void* );
 };
 
 

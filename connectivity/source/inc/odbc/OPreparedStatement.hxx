@@ -92,7 +92,7 @@ namespace connectivity
             void FreeParams();
             void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
             void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
-                                                        sal_Int32 length,sal_Int32 SQLtype,sal_Int32 streamType) throw(::com::sun::star::sdbc::SQLException);
+                                                        sal_Int32 length,sal_Int32 SQLtype) throw(::com::sun::star::sdbc::SQLException);
             sal_Int32 getParamLength (  sal_Int32 index);
             sal_Int8* getLengthBuf (sal_Int32 index);
             sal_Int8* getDataBuf (sal_Int32 index);

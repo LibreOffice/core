@@ -103,12 +103,12 @@ namespace xmloff
         // add our style family to the export context's style pool
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper( getControlStylePropertyMap(), m_xPropertyHandlerFactory.getBodyPtr() );
-        m_xExportMapper = new OFormExportPropertyMapper( xStylePropertiesMapper.getBodyPtr() );
+        m_xStyleExportMapper = new OFormComponentStyleExportMapper( xStylePropertiesMapper.getBodyPtr() );
 
         // our style family
         m_rContext.GetAutoStylePool()->AddFamily(
             XML_STYLE_FAMILY_CONTROL_ID, token::GetXMLToken(token::XML_PARAGRAPH),
-            m_xExportMapper.getBodyPtr(),
+            m_xStyleExportMapper.getBodyPtr(),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_PREFIX) )
         );
 
@@ -188,7 +188,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport_Impl::getStylePropertyMapper()
     {
-        return m_xExportMapper;
+        return m_xStyleExportMapper;
     }
 
     //---------------------------------------------------------------------
@@ -641,7 +641,7 @@ namespace xmloff
                 // determine a number style, if needed
                 xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
                 // get the styles of the column
-                ::std::vector< XMLPropertyState > aPropertyStates = m_xExportMapper->Filter( xColumnProperties );
+                ::std::vector< XMLPropertyState > aPropertyStates = m_xStyleExportMapper->Filter( xColumnProperties );
 
                 // care for the number format, additionally
                 ::rtl::OUString sColumnNumberStyle;
@@ -650,7 +650,7 @@ namespace xmloff
 
                 if ( sColumnNumberStyle.getLength() )
                 {   // the column indeed has a formatting
-                    sal_Int32 nStyleMapIndex = m_xExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
+                    sal_Int32 nStyleMapIndex = m_xStyleExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
                         // TODO: move this to the ctor
                     OSL_ENSURE ( -1 != nStyleMapIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 

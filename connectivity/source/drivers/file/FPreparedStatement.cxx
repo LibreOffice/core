@@ -366,7 +366,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
         ::dbtools::throwFunctionSequenceException(*this);
 
     Sequence<sal_Int8> aSeq;
-    x->readSomeBytes(aSeq,length);
+    x->readBytes(aSeq,length);
     setParameter(parameterIndex,aSeq);
 }
 // -------------------------------------------------------------------------

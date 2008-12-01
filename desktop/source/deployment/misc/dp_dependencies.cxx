@@ -59,15 +59,18 @@ namespace css = ::com::sun::star;
 static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+::dp_misc::Order compareWithVersion(::rtl::OUString const & version) {
+    ::rtl::OUString v(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
+            ":Version:OOOPackageVersion}"));
+    ::rtl::Bootstrap::expandMacros(v);
+    return ::dp_misc::compareVersions(v, version);
+}
 
-bool satisfiesMinimalVersion( ::rtl::OUString const & version )
-{
-    ::rtl::OUString aBaseVersion( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}" ) );
-    ::rtl::Bootstrap::expandMacros( aBaseVersion );
-
-    return ::dp_misc::compareVersions(version, aBaseVersion) != ::dp_misc::GREATER;
-};
+bool satisfiesMinimalVersion(::rtl::OUString const & version) {
+    return compareWithVersion(version) != ::dp_misc::LESS;
+}
 
 }
 
@@ -88,9 +91,6 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
         css::uno::Reference< css::xml::dom::XElement > e(
             deps->item(i), css::uno::UNO_QUERY_THROW);
         bool sat = false;
-        // Currently, the only satisfied dependency is OpenOffice.org-minimal-
-        // version with a value of the current OOo release or less (the actual
-        // version string has to be updated here for every OOo release):
         if (e->getNamespaceURI().equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
             && e->getTagName().equalsAsciiL(
@@ -99,6 +99,17 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
             sat = satisfiesMinimalVersion(
                 e->getAttribute(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+        } else if (e->getNamespaceURI().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+                   && e->getTagName().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(
+                           "OpenOffice.org-maximal-version")))
+        {
+            sat =
+                compareWithVersion(
+                    e->getAttribute(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))))
+                != ::dp_misc::GREATER;
         } else if (e->hasAttributeNS(
                        ::rtl::OUString(
                            RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),

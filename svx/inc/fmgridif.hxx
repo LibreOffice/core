@@ -30,6 +30,8 @@
 #ifndef _SVX_FMGRIDIF_HXX
 #define _SVX_FMGRIDIF_HXX
 
+#include "svx/svxdllapi.h"
+
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -49,11 +51,12 @@
 #include <com/sun/star/util/XModeSelector.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+
+#include <vcl/wintypes.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase10.hxx>
-#include "svx/svxdllapi.h"
 
 #if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19)
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19

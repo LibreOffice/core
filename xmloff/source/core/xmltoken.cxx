@@ -3052,6 +3052,10 @@ namespace xmloff { namespace token {
         TOKEN( "urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0",   XML_N_FIELD ),
         TOKEN( "field",         XML_NP_FIELD ),
 
+        TOKEN( "image-scale",           XML_IMAGE_SCALE  ),
+        TOKEN( "isotropic",             XML_ISOTROPIC  ),
+        TOKEN( "anisotropic",           XML_ANISOTROPIC ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

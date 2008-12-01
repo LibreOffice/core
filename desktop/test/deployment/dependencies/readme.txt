@@ -8,7 +8,7 @@
 #
 # $RCSfile: readme.txt,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.134.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,16 @@ versionempty.oxt contains an empty value attribute and versionnone.oxt lacks the
 value attribute; neither is allowed by the spec, but the current implementation
 treats both as pre OOo 2.1 versions (and the extensions should thus install in
 OOo 2.1 or later).
+
+maxversion30.oxt contains a maximal version dependency on OOo 3.0 (and should
+thus only install in OOo 3.0 or earlier, back to OOo 2.3, thanks to the
+additionally specified OpenOffice.org-minimal-version attribute).
+maxversion10000.oxt contains a maximal version dependency on the hypothetical
+OOo version 10000 (and should thus install in any OOo version 3.1 or later;
+OpenOffice.org-maximal-version was introduced in OOo 3.1, and no OpenOffice.org-
+minimal-version attribute is specified).  bad-minmaxversion.oxt contains a
+minimal version dependency on OOo 3.2 and a maximal version dependency on
+OOo 3.1 (and should thus not install in any OOo version).
 
 minattr22.oxt contains a (hypothetical, most probably never satisfied)
 UNSATISFIED dependency with an OpenOffice.org-minimal-version attribute of

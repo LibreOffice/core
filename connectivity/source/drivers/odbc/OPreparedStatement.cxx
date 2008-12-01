@@ -62,10 +62,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-int OBoundParam::ASCII   = 1;
-int OBoundParam::UNICODE = 2;
-int OBoundParam::BINARY  = 3;
-
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
@@ -201,7 +197,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
             // If the parameter index is -1, there is no
             // more data required
 
-            if (*paramIndex == -1)
+            if ( !paramIndex || ( *paramIndex == -1 ) )
                 needData = sal_False;
             else
             {
@@ -580,13 +576,13 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    setStream (parameterIndex, x, length, DataType::LONGVARCHAR,OBoundParam::ASCII);
+    setStream (parameterIndex, x, length, DataType::LONGVARCHAR);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    setStream (parameterIndex, x, length, DataType::LONGVARBINARY,OBoundParam::BINARY);
+    setStream (parameterIndex, x, length, DataType::LONGVARBINARY);
 }
 // -------------------------------------------------------------------------
 
@@ -759,13 +755,8 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
         return;
     }
 
-    // We'll transfer up to maxLen at a time
-    sal_Int32   maxLen = MAX_PUT_DATA_LENGTH;
-    sal_Int32   bufLen;
-    sal_Int32   realLen;
-    //  sal_Int8*   buf = new sal_Int8[maxLen];
-    Sequence< sal_Int8 > buf(maxLen);
-    sal_Bool    endOfStream = sal_False;
+    // We'll transfer up to MAX_PUT_DATA_LENGTH at a time
+    Sequence< sal_Int8 > buf( MAX_PUT_DATA_LENGTH );
 
     // Get the information about the input stream
 
@@ -776,78 +767,35 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
         const ::rtl::OUString sError( aResources.getResourceString(STR_NO_INPUTSTREAM));
         throw SQLException (sError, *this,::rtl::OUString(),0,Any());
     }
-    sal_Int32 inputStreamLen = boundParams[index - 1].getInputStreamLen ();
-    sal_Int32 inputStreamType = boundParams[index - 1].getStreamType ();
+
+    sal_Int32 maxBytesLeft = boundParams[index - 1].getInputStreamLen ();
 
     // Loop while more data from the input stream
+    sal_Int32 haveRead = 0;
     try
     {
 
-        while (!endOfStream)
+        do
         {
+            sal_Int32 toReadThisRound = ::std::min( MAX_PUT_DATA_LENGTH, maxBytesLeft );
 
             // Read some data from the input stream
-            bufLen = inputStream->readBytes(buf,maxLen);
+            haveRead = inputStream->readBytes( buf, toReadThisRound );
+            OSL_ENSURE( haveRead == buf.getLength(), "OPreparedStatement::putParamData: inconsistency!" );
 
-            // -1 as the number of bytes read indicates that
-            // there is no more data in the input stream
-
-            if (bufLen == -1)
-            {
-
-                // Sanity check to ensure that all the data we said we
-                // had was read.  If not, raise an exception
-
-                if (inputStreamLen != 0)
-                {
-                    ::connectivity::SharedResources aResources;
-                    const ::rtl::OUString sError( aResources.getResourceString(STR_INPUTSTREAM_WRONG_LEN));
-                    throw SQLException (sError, *this,::rtl::OUString(),0,Any());
-                }
-                endOfStream = sal_True;
+            if ( !haveRead )
+                // no more data in the stream - the given stream length was a maximum which could not be
+                // fulfilled by the stream
                 break;
-            }
-
-            // If we got more bytes than necessary, truncate
-            // the buffer by re-setting the buffer length.  Also,
-            // indicate that we don't need to read any more.
-
-            if (bufLen > inputStreamLen)
-            {
-                bufLen = inputStreamLen;
-                endOfStream = sal_True;
-            }
-
-            realLen = bufLen;
-
-            // For UNICODE streams, strip off the high sal_Int8 and set the
-            // number of actual bytes present.  It is assumed that
-            // there are 2 bytes present for every UNICODE character - if
-            // not, then that's not our problem
-
-            if (inputStreamType == OBoundParam::UNICODE)
-            {
-                realLen = bufLen / 2;
-
-                for (sal_Int32 ii = 0; ii < realLen; ii++)
-                    buf[ii] = buf[(ii * 2) + 1];
-            }
 
             // Put the data
-            OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+            OSL_ENSURE( m_aStatementHandle, "OPreparedStatement::putParamData: StatementHandle is null!" );
+            N3SQLPutData ( m_aStatementHandle, buf.getArray(), buf.getLength() );
 
-            N3SQLPutData (m_aStatementHandle, buf.getArray(), realLen);
-
-            // Decrement the number of bytes still needed
-
-            inputStreamLen -= bufLen;
-
-
-            // If there is no more data to be read, exit loop
-
-            if (inputStreamLen == 0)
-                endOfStream = sal_True;
+            // decrement the number of bytes still needed
+            maxBytesLeft -= haveRead;
         }
+        while ( maxBytesLeft > 0 );
     }
     catch (const IOException& ex)
     {
@@ -891,8 +839,7 @@ void OPreparedStatement::setStream (
                                     sal_Int32 ParameterIndex,
                                     const Reference< XInputStream>& x,
                                     sal_Int32 length,
-                                    sal_Int32 SQLtype,
-                                    sal_Int32 streamType)
+                                    sal_Int32 SQLtype)
                                     throw(SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -935,12 +882,7 @@ void OPreparedStatement::setStream (
                         (SDWORD*)lenBuf);
 
     // Save the input stream
-
     boundParams[ParameterIndex - 1].setInputStream (x, length);
-
-    // Set the stream type
-
-    boundParams[ParameterIndex - 1].setStreamType (streamType);
 }
 // -------------------------------------------------------------------------
 

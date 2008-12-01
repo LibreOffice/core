@@ -33,6 +33,7 @@ package connectivity.tools;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.XStorable;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -45,12 +46,15 @@ import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.IOException;
+import com.sun.star.sdb.XDocumentDataSource;
 import java.io.File;
 
 import com.sun.star.util.CloseVetoException;
+import helper.URLHelper;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.io.File;
 
 /**
  *
@@ -69,29 +73,51 @@ public class HsqlDatabase
     // the default connection
     XConnection             m_connection;
 
-    /** Creates a new instance of HsqlDatabase */
+    // --------------------------------------------------------------------------------------------------------
     public HsqlDatabase( XMultiServiceFactory orb ) throws Exception
     {
         m_orb = orb;
         createDBDocument();
     }
 
+    // --------------------------------------------------------------------------------------------------------
+    public HsqlDatabase( XMultiServiceFactory orb, String _existingDocumentURL ) throws Exception
+    {
+        m_orb = orb;
+        createDBDocument( _existingDocumentURL );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void createDBDocument( String _docURL ) throws Exception
+    {
+        m_databaseDocumentFile = _docURL;
+
+        XNameAccess dbContext = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+            m_orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
+        XDocumentDataSource dataSource = (XDocumentDataSource)UnoRuntime.queryInterface( XDocumentDataSource.class,
+            dbContext.getByName( _docURL ) );
+
+        m_databaseDocument = dataSource.getDatabaseDocument();
+        m_dataSource = new DataSource( m_orb, m_databaseDocument.getDataSource() );
+    }
+
+    /** creates an empty database document in a temporary location
+     */
     private void createDBDocument() throws Exception
     {
-        m_databaseDocumentFile = new String();
-        String str = File.createTempFile("testdb",".odb").getCanonicalPath();
-        str = str.replaceAll(" ","%20");
-        str = "file:///" +str;
-        m_databaseDocumentFile = str.replace('\\','/');
+        File documentFile = File.createTempFile("testdb",".odb");
+        documentFile.deleteOnExit();
+        m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath( documentFile );
 
         m_databaseDocument = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(
             XOfficeDatabaseDocument.class, m_orb.createInstance( "com.sun.star.sdb.OfficeDatabaseDocument" ) );
         m_dataSource = new DataSource( m_orb, m_databaseDocument.getDataSource() );
+
         XPropertySet dsProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_databaseDocument.getDataSource() );
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");
 
         XStorable storable = (XStorable)UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
-        storable.storeAsURL(m_databaseDocumentFile,new PropertyValue[]{});
+        storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[]{} );
     }
 
     /** returns a connection to the database
@@ -151,8 +177,8 @@ public class HsqlDatabase
         m_connection = null;
 
         // close document
-        com.sun.star.util.XCloseable closeDoc = (com.sun.star.util.XCloseable)UnoRuntime.queryInterface( XCloseable.class,
-            m_databaseDocument );
+        com.sun.star.util.XCloseable closeDoc = (com.sun.star.util.XCloseable)UnoRuntime.queryInterface(
+            com.sun.star.util.XCloseable.class, m_databaseDocument );
         if ( closeDoc != null )
         {
             try
@@ -188,7 +214,7 @@ public class HsqlDatabase
 
     /** returns the underlying database document
     */
-    XOfficeDatabaseDocument getDatabaseDocument()
+    public XOfficeDatabaseDocument getDatabaseDocument()
     {
         return m_databaseDocument;
     }

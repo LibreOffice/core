@@ -142,7 +142,7 @@ namespace
 
             if ( bCanAccess )
             {
-                // here we have two contents which's URLs differ by case only.
+                // here we have two contents whose URLs differ by case only.
                 // Now let's check if both really refer to the same object ....
                 Reference< XContent > xContent1 = aContent1.get();
                 Reference< XContent > xContent2 = aContent2.get();

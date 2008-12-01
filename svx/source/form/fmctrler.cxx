@@ -119,8 +119,225 @@ using namespace ::connectivity;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 
+//==============================================================================
+// ColumnInfo
+//==============================================================================
+struct ColumnInfo
+{
+    // information about the column itself
+    Reference< XColumn >    xColumn;
+    sal_Int32               nNullable;
+    sal_Bool                bAutoIncrement;
+    ::rtl::OUString         sName;
+
+    // information about the control(s) bound to this column
+
+    /// the first control which is bound to the given column, and which requires input
+    Reference< XControl >   xFirstControlWithInputRequired;
+    /** the first grid control which contains a column which is bound to the given database column, and requires
+        input
+    */
+    Reference< XGrid >      xFirstGridWithInputRequiredColumn;
+    /** if xFirstControlWithInputRequired is a grid control, then nRequiredGridColumn specifies the position
+        of the grid column which is actually bound
+    */
+    sal_Int32               nRequiredGridColumn;
+
+    ColumnInfo()
+        :xColumn()
+        ,nNullable( ColumnValue::NULLABLE_UNKNOWN )
+        ,bAutoIncrement( sal_False )
+        ,sName()
+        ,xFirstControlWithInputRequired()
+        ,xFirstGridWithInputRequiredColumn()
+        ,nRequiredGridColumn( -1 )
+    {
+    }
+};
+
+//==============================================================================
+//= ColumnInfoCache
+//==============================================================================
+class ColumnInfoCache
+{
+public:
+    ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier );
+
+    const size_t        getColumnCount() const { return m_aColumns.size(); }
+    const ColumnInfo&   getColumnInfo( size_t _pos );
+
+    bool    controlsInitialized() const { return m_bControlsInitialized; }
+    void    initializeControls( const Sequence< Reference< XControl > >& _rControls );
+    void    deinitializeControls();
+
+private:
+    typedef ::std::vector< ColumnInfo > ColumnInfos;
+    ColumnInfos                         m_aColumns;
+    bool                                m_bControlsInitialized;
+};
+
+//------------------------------------------------------------------------------
+ColumnInfoCache::ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier )
+    :m_aColumns()
+    ,m_bControlsInitialized( false )
+{
+    try
+    {
+        m_aColumns.clear();
+
+        Reference< XColumnsSupplier > xSupplyCols( _rxColSupplier, UNO_SET_THROW );
+        Reference< XIndexAccess > xColumns( xSupplyCols->getColumns(), UNO_QUERY_THROW );
+        sal_Int32 nColumnCount = xColumns->getCount();
+        m_aColumns.reserve( nColumnCount );
+
+        Reference< XPropertySet >   xColumnProps;
+        for ( sal_Int32 i = 0; i < nColumnCount; ++i )
+        {
+            ColumnInfo aColInfo;
+            aColInfo.xColumn.set( xColumns->getByIndex(i), UNO_QUERY_THROW );
+
+            xColumnProps.set( aColInfo.xColumn, UNO_QUERY_THROW );
+            OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_ISNULLABLE ) >>= aColInfo.nNullable );
+            OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_AUTOINCREMENT ) >>= aColInfo.bAutoIncrement );
+            OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_NAME ) >>= aColInfo.sName );
+
+            m_aColumns.push_back( aColInfo );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    bool lcl_isBoundTo( const Reference< XPropertySet >& _rxControlModel, const Reference< XInterface >& _rxNormDBField )
+    {
+        Reference< XInterface > xNormBoundField( _rxControlModel->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY );
+        return ( xNormBoundField.get() == _rxNormDBField.get() );
+    }
+
+    bool lcl_isInputRequired( const Reference< XPropertySet >& _rxControlModel )
+    {
+        sal_Bool bInputRequired = sal_True;
+        OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_INPUT_REQUIRED ) >>= bInputRequired );
+        return ( bInputRequired != sal_False );
+    }
+    void lcl_resetColumnControlInfo( ColumnInfo& _rColInfo )
+    {
+        _rColInfo.xFirstControlWithInputRequired.clear();
+        _rColInfo.xFirstGridWithInputRequiredColumn.clear();
+        _rColInfo.nRequiredGridColumn = -1;
+    }
+}
+
+//------------------------------------------------------------------------------
+void ColumnInfoCache::deinitializeControls()
+{
+    for (   ColumnInfos::iterator col = m_aColumns.begin();
+            col != m_aColumns.end();
+            ++col
+        )
+    {
+        lcl_resetColumnControlInfo( *col );
+    }
+}
+
+//------------------------------------------------------------------------------
+void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > >& _rControls )
+{
+    try
+    {
+        // for every of our known columns, find the controls which are bound to this column
+        for (   ColumnInfos::iterator col = m_aColumns.begin();
+                col != m_aColumns.end();
+                ++col
+            )
+        {
+            OSL_ENSURE( !col->xFirstControlWithInputRequired.is() && !col->xFirstGridWithInputRequiredColumn.is()
+                && ( col->nRequiredGridColumn == -1 ), "ColumnInfoCache::initializeControls: called me twice?" );
+
+            lcl_resetColumnControlInfo( *col );
+
+            Reference< XInterface > xNormColumn( col->xColumn, UNO_QUERY_THROW );
+
+            const Reference< XControl >* pControl( _rControls.getConstArray() );
+            const Reference< XControl >* pControlEnd( pControl + _rControls.getLength() );
+            for ( ; pControl != pControlEnd; ++pControl )
+            {
+                if ( !pControl->is() )
+                    continue;
+
+                Reference< XPropertySet > xModel( (*pControl)->getModel(), UNO_QUERY_THROW );
+                Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
+
+                // special handling for grid controls
+                Reference< XGrid > xGrid( *pControl, UNO_QUERY );
+                if ( xGrid.is() )
+                {
+                    Reference< XIndexAccess > xGridColAccess( xModel, UNO_QUERY_THROW );
+                    sal_Int32 gridColCount = xGridColAccess->getCount();
+                    sal_Int32 gridCol = 0;
+                    for ( gridCol = 0; gridCol < gridColCount; ++gridCol )
+                    {
+                        Reference< XPropertySet > xGridColumnModel( xGridColAccess->getByIndex( gridCol ), UNO_QUERY_THROW );
+
+                        if  (   !lcl_isBoundTo( xGridColumnModel, xNormColumn )
+                            ||  !lcl_isInputRequired( xGridColumnModel )
+                            )
+                            continue;   // with next grid column
+
+                        break;
+                    }
+
+                    if ( gridCol < gridColCount )
+                    {
+                        // found a grid column which is bound to the given
+                        col->xFirstGridWithInputRequiredColumn = xGrid;
+                        col->nRequiredGridColumn = gridCol;
+                        break;
+                    }
+
+                    continue;   // with next control
+                }
+
+                if  (   !xModelPSI->hasPropertyByName( FM_PROP_BOUNDFIELD )
+                    ||  !lcl_isBoundTo( xModel, xNormColumn )
+                    ||  !lcl_isInputRequired( xModel )
+                    )
+                    continue;   // with next control
+
+                break;
+            }
+
+            if ( pControl == pControlEnd )
+                // did not find a control which is bound to this particular column, and for which the input is required
+                continue;   // with next DB column
+
+            col->xFirstControlWithInputRequired = *pControl;
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    m_bControlsInitialized = true;
+}
+
+//------------------------------------------------------------------------------
+const ColumnInfo& ColumnInfoCache::getColumnInfo( size_t _pos )
+{
+    if ( _pos >= m_aColumns.size() )
+        throw IndexOutOfBoundsException();
+
+    return m_aColumns[ _pos ];
+}
+
 //==================================================================
-// FmXAutoControl
+// OParameterContinuation
 //==================================================================
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
@@ -258,8 +475,8 @@ DBG_NAME( FmXFormController )
 //------------------------------------------------------------------
 FmXFormController::FmXFormController(const Reference< XMultiServiceFactory > & _rxORB,
                                      FmFormView* _pView, Window* _pWindow )
-                  :FmXFormController_BASE1(m_aMutex)
-                  ,OPropertySetHelper(FmXFormController_BASE1::rBHelper)
+                  :FmXFormController_BASE( m_aMutex )
+                  ,OPropertySetHelper( FmXFormController_BASE::rBHelper )
                   ,OSQLParserClient(_rxORB)
                   ,m_xORB(_rxORB)
                   ,m_aActivateListeners(m_aMutex)
@@ -273,8 +490,10 @@ FmXFormController::FmXFormController(const Reference< XMultiServiceFactory > & _
                   ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_aControllerFeatures( _rxORB, this )
                   ,m_aMode(getDataModeIdentifier())
-                  ,m_nLoadEvent( 0 )
-                  ,m_nToggleEvent(0)
+                  ,m_aLoadEvent( LINK( this, FmXFormController, OnLoad ) )
+                  ,m_aToggleEvent( LINK( this, FmXFormController, OnToggleAutoFields ) )
+                  ,m_aActivationEvent( LINK( this, FmXFormController, OnActivated ) )
+                  ,m_aDeactivationEvent( LINK( this, FmXFormController, OnDeactivated ) )
                   ,m_nCurrentFilterPosition(0)
                   ,m_bCurrentRecordModified(sal_False)
                   ,m_bCurrentRecordNew(sal_False)
@@ -321,11 +540,11 @@ FmXFormController::~FmXFormController()
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if( m_nLoadEvent )
-            Application::RemoveUserEvent( m_nLoadEvent );
 
-        if ( m_nToggleEvent )
-            Application::RemoveUserEvent( m_nToggleEvent );
+        m_aLoadEvent.CancelPendingCall();
+        m_aToggleEvent.CancelPendingCall();
+        m_aActivationEvent.CancelPendingCall();
+        m_aDeactivationEvent.CancelPendingCall();
 
         if ( m_aTabActivationTimer.IsActive() )
             m_aTabActivationTimer.Stop();
@@ -349,29 +568,64 @@ FmXFormController::~FmXFormController()
 }
 
 // -----------------------------------------------------------------------------
-using namespace ::cppu;
-using namespace ::osl;
-
 void SAL_CALL FmXFormController::acquire() throw ()
 {
-    FmXFormController_BASE1::acquire();
+    FmXFormController_BASE::acquire();
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormController::release() throw ()
 {
-    FmXFormController_BASE1::release();
+    FmXFormController_BASE::release();
 }
+
+//------------------------------------------------------------------
+Any SAL_CALL FmXFormController::queryInterface( const Type& _rType ) throw(RuntimeException)
+{
+    Any aRet = FmXFormController_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = m_xAggregate->queryAggregation( _rType );
+    return aRet;
+}
+
+//------------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL FmXFormController::getImplementationId() throw( RuntimeException )
+{
+    static ::cppu::OImplementationId* pId = NULL;
+    if  ( !pId )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pId )
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL FmXFormController::getTypes(  ) throw(RuntimeException)
+{
+    return comphelper::concatSequences(
+        FmXFormController_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
+}
+
 // -----------------------------------------------------------------------------
 // XUnoTunnel
 Sequence< sal_Int8 > FmXFormController::getUnoTunnelImplementationId()
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
+    static ::cppu::OImplementationId * pId = NULL;
+    if ( !pId )
     {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pId )
         {
-            static OImplementationId aId;
+            static ::cppu::OImplementationId aId;
             pId = &aId;
         }
     }
@@ -392,46 +646,6 @@ sal_Int64 SAL_CALL FmXFormController::getSomething(Sequence<sal_Int8> const& rId
         return reinterpret_cast< sal_Int64 >( this );
 
     return sal_Int64();
-}
-
-//------------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL FmXFormController::getImplementationId() throw( RuntimeException )
-{
-    static ::cppu::OImplementationId* pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-//------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL FmXFormController::getTypes(  ) throw(RuntimeException)
-{
-    return comphelper::concatSequences(FmXFormController_BASE1::getTypes(),FmXFormController_BASE2::getTypes(),FmXFormController_BASE3::getTypes());
-}
-//------------------------------------------------------------------
-Any SAL_CALL FmXFormController::queryAggregation( const Type& _rType ) throw(RuntimeException)
-{
-    Any aRet = FmXFormController_BASE1::queryAggregation(_rType);
-    if(!aRet.hasValue())
-    {
-        aRet = OPropertySetHelper::queryInterface(_rType);
-        if(!aRet.hasValue())
-        {
-            aRet = FmXFormController_BASE2::queryInterface(_rType);
-            if(!aRet.hasValue())
-                aRet = FmXFormController_BASE3::queryInterface(_rType);
-        }
-    }
-    if(aRet.hasValue())
-        return aRet;
-    return m_xAggregate->queryAggregation(_rType);
 }
 
 // XServiceInfo
@@ -840,7 +1054,7 @@ namespace
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if ( evt.PropertyName == FM_PROP_BOUNDFIELD )
     {
         Reference<XPropertySet> xOldBound;
@@ -881,13 +1095,8 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
                     stopListening();
             }
 
-            if (bNewChanged)
-            {
-                if (m_nToggleEvent)
-                    Application::RemoveUserEvent( m_nToggleEvent );
-                m_nToggleEvent = Application::PostUserEvent( LINK(this, FmXFormController,
-                                                        OnToggleAutoFields) );
-            }
+            if ( bNewChanged )
+                m_aToggleEvent.Call();
 
             if (!m_bCurrentRecordModified)
                 m_bModified = sal_False;
@@ -973,7 +1182,7 @@ bool FmXFormController::replaceControl( const Reference< XControl >& _rxExistent
 //------------------------------------------------------------------------------
 void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
 
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
@@ -1046,11 +1255,8 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormController, OnToggleAutoFields, void*, EMPTYARG)
 {
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-        m_nToggleEvent = 0;
-    }
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
+
     toggleAutoFields(m_bCurrentRecordNew);
     return 1L;
 }
@@ -1059,7 +1265,7 @@ IMPL_LINK(FmXFormController, OnToggleAutoFields, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::textChanged(const TextEvent& e) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if (m_bFiltering)
     {
         Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
@@ -1094,7 +1300,7 @@ void SAL_CALL FmXFormController::textChanged(const TextEvent& e) throw( RuntimeE
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::itemStateChanged(const ItemEvent& rEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if (!m_bModified)
         onModify( rEvent.Source );
 }
@@ -1103,14 +1309,14 @@ void SAL_CALL FmXFormController::itemStateChanged(const ItemEvent& rEvent) throw
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addModifyListener(const Reference< XModifyListener > & l) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aModifyListeners.addInterface( l );
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::removeModifyListener(const Reference< XModifyListener > & l) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aModifyListeners.removeInterface( l );
 }
 
@@ -1118,7 +1324,7 @@ void FmXFormController::removeModifyListener(const Reference< XModifyListener > 
 //------------------------------------------------------------------------------
 void FmXFormController::modified(const EventObject& rEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if (!m_bModified)
         onModify( rEvent.Source );
 }
@@ -1126,7 +1332,7 @@ void FmXFormController::modified(const EventObject& rEvent) throw( RuntimeExcept
 //------------------------------------------------------------------------------
 void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if (!m_bModified)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1152,7 +1358,7 @@ void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
 //------------------------------------------------------------------------------
 sal_Bool FmXFormController::determineLockState() const
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // a.) in filter mode we are always locked
     // b.) if we have no valid model or our model (a result set) is not alive -> we're locked
     // c.) if we are inserting everything is OK and we are not locked
@@ -1171,7 +1377,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
 {
     TRACE_RANGE( "FmXFormController::focusGained" );
 
-    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController::focusGained: Object already disposed!" );
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XControl >  xControl(e.Source, UNO_QUERY);
 
@@ -1192,10 +1398,13 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
         // c.) and it must be different from the new focus owning control or
         // d.) the focus is moving around (so we have only one control)
 
-        if ((m_bModified || m_bFiltering) &&
-            m_xCurrentControl.is() &&
-            ((xControl.get() != m_xCurrentControl.get()) ||
-             ((e.FocusFlags & FocusChangeReason::AROUND) && (m_bCycle || m_bFiltering)))
+        if  (   ( m_bModified || m_bFiltering )
+            &&  m_xCurrentControl.is()
+            &&  (   ( xControl.get() != m_xCurrentControl.get() )
+                ||  (   ( e.FocusFlags & FocusChangeReason::AROUND )
+                    &&  ( m_bCycle || m_bFiltering )
+                    )
+                )
             )
         {
             // check the old control if the content is ok
@@ -1259,12 +1468,19 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
     sal_Bool bActivated = !m_xActiveControl.is() && xControl.is();
 
     m_xActiveControl  = xControl;
+
     implSetCurrentControl( xControl );
+    OSL_POSTCOND( m_xCurrentControl.is(), "implSetCurrentControl did nonsense!" );
 
-    DBG_ASSERT(m_xCurrentControl.is(), "Kein CurrentControl selektiert");
+    if ( bActivated )
+    {
+        // (asynchronously) call activation handlers
+        m_aActivationEvent.Call();
 
-    if (bActivated)
-        onActivate();
+        // call modify listeners
+        if ( m_bModified )
+            m_aModifyListeners.notifyEach( &XModifyListener::modified, EventObject( *this ) );
+    }
 
     // invalidate all features which depend on the currently focused control
     if ( m_bDBConnection && !m_bFiltering && m_pView )
@@ -1285,23 +1501,29 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::onActivate()
+IMPL_LINK( FmXFormController, OnActivated, void*, /**/ )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    // benachrichtigen, dass form activiert
-    EventObject aEvt;
-    aEvt.Source = *this;
-    m_aActivateListeners.notifyEach( &XFormControllerListener::formActivated, aEvt );
+    EventObject aEvent;
+    aEvent.Source = *this;
+    m_aActivateListeners.notifyEach( &XFormControllerListener::formActivated, aEvent );
 
-    // verschicken ob modified
-    if (m_bModified)
-        m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
+    return 0L;
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK( FmXFormController, OnDeactivated, void*, /**/ )
+{
+    EventObject aEvent;
+    aEvent.Source = *this;
+    m_aActivateListeners.notifyEach( &XFormControllerListener::formDeactivated, aEvent );
+
+    return 0L;
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
 {
-    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed, "FmXFormController::focusLost: Object already disposed!" );
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     m_pControlBorderManager->focusLost( e.Source );
 
@@ -1311,9 +1533,7 @@ void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
     if (!xNextControl.is())
     {
         m_xActiveControl = NULL;
-        EventObject aEvt;
-        aEvt.Source = *this;
-        m_aActivateListeners.notifyEach( &XFormControllerListener::formDeactivated, aEvt );
+        m_aDeactivationEvent.Call();
     }
 }
 
@@ -1356,7 +1576,7 @@ void SAL_CALL FmXFormController::componentValidityChanged( const EventObject& _r
 //--------------------------------------------------------------------
 void FmXFormController::setModel(const Reference< XTabControllerModel > & Model) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::setModel : invalid aggregate !");
 
@@ -1461,7 +1681,7 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
 //------------------------------------------------------------------------------
 Reference< XTabControllerModel >  FmXFormController::getModel() throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::getModel : invalid aggregate !");
     if (!m_xTabController.is())
         return Reference< XTabControllerModel > ();
@@ -1471,7 +1691,7 @@ Reference< XTabControllerModel >  FmXFormController::getModel() throw( RuntimeEx
 //------------------------------------------------------------------------------
 void FmXFormController::addToEventAttacher(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     OSL_ENSURE( xControl.is(), "FmXFormController::addToEventAttacher: invalid control - how did you reach this?" );
     if ( !xControl.is() )
         return; /* throw IllegalArgumentException(); */
@@ -1499,7 +1719,7 @@ void FmXFormController::addToEventAttacher(const Reference< XControl > & xContro
 //------------------------------------------------------------------------------
 void FmXFormController::removeFromEventAttacher(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     OSL_ENSURE( xControl.is(), "FmXFormController::removeFromEventAttacher: invalid control - how did you reach this?" );
     if ( !xControl.is() )
         return; /* throw IllegalArgumentException(); */
@@ -1527,7 +1747,7 @@ void FmXFormController::removeFromEventAttacher(const Reference< XControl > & xC
 //------------------------------------------------------------------------------
 void FmXFormController::setContainer(const Reference< XControlContainer > & xContainer) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Reference< XTabControllerModel >  xTabModel(getModel());
     DBG_ASSERT(xTabModel.is() || !xContainer.is(), "No Model defined");
         // if we have a new container we need a model
@@ -1616,7 +1836,7 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
 Reference< XControlContainer >  FmXFormController::getContainer() throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::getContainer : invalid aggregate !");
     if (!m_xTabController.is())
         return Reference< XControlContainer > ();
@@ -1626,7 +1846,7 @@ Reference< XControlContainer >  FmXFormController::getContainer() throw( Runtime
 //------------------------------------------------------------------------------
 Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_bControlsSorted)
     {
@@ -1665,7 +1885,7 @@ Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( Ru
 //------------------------------------------------------------------------------
 void FmXFormController::autoTabOrder() throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::autoTabOrder : invalid aggregate !");
     if (m_xTabController.is())
@@ -1675,7 +1895,7 @@ void FmXFormController::autoTabOrder() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXFormController::activateTabOrder() throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::activateTabOrder : invalid aggregate !");
     if (m_xTabController.is())
@@ -1685,7 +1905,7 @@ void FmXFormController::activateTabOrder() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXFormController::setControlLock(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     sal_Bool bLocked = isLocked();
 
     // es wird gelockt
@@ -1738,7 +1958,7 @@ void FmXFormController::setControlLock(const Reference< XControl > & xControl)
 //------------------------------------------------------------------------------
 void FmXFormController::setLocks()
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // alle Controls, die mit einer Datenquelle verbunden sind locken/unlocken
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
@@ -1781,7 +2001,7 @@ namespace
 //------------------------------------------------------------------------------
 void FmXFormController::startControlModifyListening(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController::startControlModifyListening: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     bool bModifyListening = lcl_shouldListenForModifications( xControl, this );
 
@@ -1830,7 +2050,7 @@ void FmXFormController::startControlModifyListening(const Reference< XControl > 
 //------------------------------------------------------------------------------
 void FmXFormController::stopControlModifyListening(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     bool bModifyListening = lcl_shouldListenForModifications( xControl, NULL );
 
@@ -1878,7 +2098,7 @@ void FmXFormController::stopControlModifyListening(const Reference< XControl > &
 //------------------------------------------------------------------------------
 void FmXFormController::startListening()
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bModified  = sal_False;
 
     // jetzt anmelden bei gebundenen feldern
@@ -1891,7 +2111,7 @@ void FmXFormController::startListening()
 //------------------------------------------------------------------------------
 void FmXFormController::stopListening()
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bModified  = sal_False;
 
     // jetzt anmelden bei gebundenen feldern
@@ -1905,7 +2125,7 @@ void FmXFormController::stopListening()
 //------------------------------------------------------------------------------
 Reference< XControl >  FmXFormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,sal_Bool _bRemove,sal_Bool _bOverWrite) const
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
 
     Reference< XControl >* pControls = _rControls.getArray();
@@ -2019,10 +2239,13 @@ void FmXFormController::implSetCurrentControl( const Reference< XControl >& _rxC
 //------------------------------------------------------------------------------
 void FmXFormController::insertControl(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bControlsSorted = sal_False;
     m_aControls.realloc(m_aControls.getLength() + 1);
     m_aControls.getArray()[m_aControls.getLength() - 1] = xControl;
+
+    if ( m_pColumnInfoCache.get() )
+        m_pColumnInfoCache->deinitializeControls();
 
     implControlInserted( xControl, m_bAttachEvents );
 
@@ -2036,7 +2259,7 @@ void FmXFormController::insertControl(const Reference< XControl > & xControl)
 //------------------------------------------------------------------------------
 void FmXFormController::removeControl(const Reference< XControl > & xControl)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
     while ( pControls != pControlsEnd )
@@ -2068,7 +2291,7 @@ void FmXFormController::loaded(const EventObject& rEvent) throw( RuntimeExceptio
 {
     OSL_ENSURE( rEvent.Source == m_xModelAsIndex, "FmXFormController::loaded: where did this come from?" );
 
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XRowSet >  xForm(rEvent.Source, UNO_QUERY);
     // do we have a connected data source
@@ -2092,10 +2315,7 @@ void FmXFormController::loaded(const EventObject& rEvent) throw( RuntimeExceptio
             // set the locks for the current controls
             if (getContainer().is())
             {
-                if (m_nLoadEvent)
-                    Application::RemoveUserEvent( m_nLoadEvent );
-                m_nLoadEvent = Application::PostUserEvent( LINK(this, FmXFormController,
-                                            OnLoad) );
+                m_aLoadEvent.Call();
             }
         }
         else
@@ -2116,6 +2336,9 @@ void FmXFormController::loaded(const EventObject& rEvent) throw( RuntimeExceptio
         m_bLocked = sal_False;
     }
 
+    Reference< XColumnsSupplier > xFormColumns( xForm, UNO_QUERY );
+    m_pColumnInfoCache.reset( xFormColumns.is() ? new ColumnInfoCache( xFormColumns ) : NULL );
+
     updateAllDispatchers();
 }
 
@@ -2135,8 +2358,7 @@ void FmXFormController::updateAllDispatchers() const
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormController, OnLoad, void*, EMPTYARG)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    m_nLoadEvent = 0;
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bLocked = determineLockState();
 
     setLocks();
@@ -2154,49 +2376,42 @@ IMPL_LINK(FmXFormController, OnLoad, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void FmXFormController::unloaded(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     updateAllDispatchers();
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::reloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     // do the same like in unloading
     // just one exception toggle the auto values
-    if (m_nToggleEvent)
-    {
-        Application::RemoveUserEvent( m_nToggleEvent );
-        m_nToggleEvent = 0;
-    }
+    m_aToggleEvent.CancelPendingCall();
     unload();
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::reloaded(const EventObject& aEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     loaded(aEvent);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::unloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     unload();
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::unload() throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (m_nLoadEvent)
-    {
-        Application::RemoveUserEvent( m_nLoadEvent );
-        m_nLoadEvent = 0;
-    }
+
+    m_aLoadEvent.CancelPendingCall();
 
     // be sure not to have autofields
     if (m_bCurrentRecordNew)
@@ -2215,6 +2430,8 @@ void FmXFormController::unload() throw( RuntimeException )
     m_bDBConnection = sal_False;
     m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
     m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = sal_False;
+
+    m_pColumnInfoCache.reset( NULL );
 }
 
 // -----------------------------------------------------------------------------
@@ -2300,7 +2517,7 @@ void FmXFormController::stopFormListening( const Reference< XPropertySet >& _rxF
 //------------------------------------------------------------------------------
 void FmXFormController::cursorMoved(const EventObject& /*event*/) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // toggle the locking ?
     if (m_bLocked != determineLockState())
     {
@@ -2333,7 +2550,7 @@ void FmXFormController::rowSetChanged(const EventObject& /*event*/) throw( Runti
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Reference< XControl >  xControl;
     evt.Element >>= xControl;
     if (!xControl.is())
@@ -2394,7 +2611,7 @@ void SAL_CALL FmXFormController::elementReplaced(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XControl >  xControl;
@@ -2421,7 +2638,7 @@ void SAL_CALL FmXFormController::elementRemoved(const ContainerEvent& evt) throw
 //------------------------------------------------------------------------------
 Reference< XControl >  FmXFormController::isInList(const Reference< XWindowPeer > & xPeer) const
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     const Reference< XControl >* pControls = m_aControls.getConstArray();
 
     sal_uInt32 nCtrls = m_aControls.getLength();
@@ -2440,7 +2657,7 @@ Reference< XControl >  FmXFormController::isInList(const Reference< XWindowPeer 
 //------------------------------------------------------------------------------
 void FmXFormController::activateFirst() throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::activateFirst : invalid aggregate !");
     if (m_xTabController.is())
@@ -2450,7 +2667,7 @@ void FmXFormController::activateFirst() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXFormController::activateLast() throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::activateLast : invalid aggregate !");
     if (m_xTabController.is())
@@ -2469,21 +2686,21 @@ Reference< XControl> SAL_CALL FmXFormController::getCurrentControl(void) throw( 
 void SAL_CALL FmXFormController::addActivateListener(const Reference< XFormControllerListener > & l) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aActivateListeners.addInterface(l);
 }
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeActivateListener(const Reference< XFormControllerListener > & l) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aActivateListeners.removeInterface(l);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // create the composer
     Reference< XRowSet > xForm(m_xModelAsIndex, UNO_QUERY);
     Reference< XConnection > xConnection(OStaticDataAccessTools().getRowSetConnection(xForm));
@@ -2659,7 +2876,7 @@ void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 //------------------------------------------------------------------------------
 void FmXFormController::startFiltering()
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     OStaticDataAccessTools aStaticTools;
     Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
@@ -2818,7 +3035,7 @@ void FmXFormController::startFiltering()
 //------------------------------------------------------------------------------
 void FmXFormController::stopFiltering()
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if ( !m_bFiltering ) // #104693# OJ
     {   // nothing to do
         return;
@@ -2912,7 +3129,7 @@ void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExc
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if (!supportsMode(Mode))
         throw NoSupportException();
 
@@ -2939,14 +3156,14 @@ void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExc
 ::rtl::OUString SAL_CALL FmXFormController::getMode(void) throw( RuntimeException )
 {
 ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     return m_aMode;
 }
 
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL FmXFormController::getSupportedModes(void) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     static Sequence< ::rtl::OUString > aModes;
     if (!aModes.getLength())
     {
@@ -2961,7 +3178,7 @@ Sequence< ::rtl::OUString > SAL_CALL FmXFormController::getSupportedModes(void) 
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::supportsMode(const ::rtl::OUString& Mode) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Sequence< ::rtl::OUString > aModes(getSupportedModes());
     const ::rtl::OUString* pModes = aModes.getConstArray();
     for (sal_Int32 i = aModes.getLength(); i > 0; )
@@ -2975,7 +3192,7 @@ sal_Bool SAL_CALL FmXFormController::supportsMode(const ::rtl::OUString& Mode) t
 //------------------------------------------------------------------------------
 Window* FmXFormController::getDialogParentWindow()
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Window* pParent = m_pWindow;
     if ( !pParent )
     {
@@ -3126,8 +3343,9 @@ namespace
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEvent) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
     sal_Bool bValid = sal_True;
     if (aIter.hasMoreElements())
@@ -3150,7 +3368,9 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEv
     Reference< XControlModel > xInvalidModel;
     if ( !checkFormComponentValidity( sInvalidityExplanation, xInvalidModel ) )
     {
-        displayErrorSetFocus( sInvalidityExplanation, locateControl( xInvalidModel ), getDialogParentWindow() );
+        Reference< XControl > xControl( locateControl( xInvalidModel ) );
+        aGuard.clear();
+        displayErrorSetFocus( sInvalidityExplanation, xControl, getDialogParentWindow() );
         return false;
     }
 
@@ -3158,63 +3378,43 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEv
     if ( !lcl_shouldValidateRequiredFields_nothrow( _rEvent.Source ) )
         return sal_True;
 
+    OSL_ENSURE( m_pColumnInfoCache.get(), "FmXFormController::approveRowChange: no column infos!" );
+    if ( !m_pColumnInfoCache.get() )
+        return sal_True;
+
     try
     {
-        Reference< XColumnsSupplier > xSupplyCols( _rEvent.Source, UNO_QUERY_THROW );
-        Reference< XEnumerationAccess > xEnumAccess( xSupplyCols->getColumns(), UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumAccess->createEnumeration(), UNO_QUERY_THROW );
+        if ( !m_pColumnInfoCache->controlsInitialized() )
+            m_pColumnInfoCache->initializeControls( getControls() );
 
-        Reference< XPropertySet >  xFieldSet;
-        while ( xEnumeration->hasMoreElements() )
+        size_t colCount = m_pColumnInfoCache->getColumnCount();
+        for ( size_t col = 0; col < colCount; ++col )
         {
-            xEnumeration->nextElement() >>= xFieldSet;
-            Reference< XColumn > xColumn( xFieldSet, UNO_QUERY);
-            if ( !xColumn.is() )
-            {
-                DBG_ERROR( "FmXFormController::approveRowChange: invalid field !" );
-                continue;
-            }
-
-            sal_Bool bRequired = ::comphelper::getINT32( xFieldSet->getPropertyValue( FM_PROP_ISNULLABLE ) ) == ColumnValue::NO_NULLS;
-            if ( !bRequired )
+            const ColumnInfo& rColInfo = m_pColumnInfoCache->getColumnInfo( col );
+            if ( rColInfo.nNullable != ColumnValue::NO_NULLS )
                 continue;
 
-            sal_Bool bAutoIncrement = ::comphelper::getBOOL( xFieldSet->getPropertyValue( FM_PROP_AUTOINCREMENT ) );
-            if ( bAutoIncrement )
+            if ( rColInfo.bAutoIncrement )
                 continue;
 
-            ::rtl::OUString aFieldName( ::comphelper::getString( xFieldSet->getPropertyValue( FM_PROP_NAME ) ) );
+            if ( !rColInfo.xFirstControlWithInputRequired.is() && !rColInfo.xFirstGridWithInputRequiredColumn.is() )
+                continue;
 
             // TODO: in case of binary fields, this "getString" below is extremely expensive
-            if ( !xColumn->getString().getLength() && xColumn->wasNull() )
-            {
-                Sequence< Reference< XControl > > aControls( getControls() );
-                sal_Int32 nLength = aControls.getLength();
-                sal_Int32 i(0);
-                const Reference< XControl > * pControls = aControls.getConstArray();
-                for (; i < nLength; i++)
-                {
-                    if (pControls[i].is())
-                    {
-                        Reference< XPropertySet >  xModel(pControls[i]->getModel(), UNO_QUERY);
-                        if (xModel.is())
-                        {
-                            if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xModel))
-                            {
-                                ::rtl::OUString aName = ::comphelper::getString(xModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
-                                if (aName == aFieldName)    // Control gefunden
-                                    break;
-                            }
-                        }
-                    }
-                }
+            if ( rColInfo.xColumn->getString().getLength() || !rColInfo.xColumn->wasNull() )
+                continue;
 
-                String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
-                sMessage.SearchAndReplace( '#', aFieldName.getStr() );
-                displayErrorSetFocus( sMessage, ( i < nLength ) ? pControls[i] : Reference< XControl >(), getDialogParentWindow() );
+            String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
+            sMessage.SearchAndReplace( '#', rColInfo.sName );
 
-                return sal_False;
-            }
+            // the control to focus
+            Reference< XControl > xControl( rColInfo.xFirstControlWithInputRequired );
+            if ( !xControl.is() )
+                xControl.set( rColInfo.xFirstGridWithInputRequiredColumn, UNO_QUERY );
+
+            aGuard.clear();
+            displayErrorSetFocus( sMessage, rColInfo.xFirstControlWithInputRequired, getDialogParentWindow() );
+            return sal_False;
         }
     }
     catch( const Exception& )
@@ -3229,7 +3429,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEv
 sal_Bool SAL_CALL FmXFormController::approveCursorMove(const EventObject& event) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
     {
@@ -3245,7 +3445,7 @@ sal_Bool SAL_CALL FmXFormController::approveCursorMove(const EventObject& event)
 sal_Bool SAL_CALL FmXFormController::approveRowSetChange(const EventObject& event) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
     {
@@ -3262,7 +3462,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowSetChange(const EventObject& even
 void SAL_CALL FmXFormController::addRowSetApproveListener(const Reference< XRowSetApproveListener > & _rxListener) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aRowSetApproveListeners.addInterface(_rxListener);
 }
 
@@ -3270,7 +3470,7 @@ void SAL_CALL FmXFormController::addRowSetApproveListener(const Reference< XRowS
 void SAL_CALL FmXFormController::removeRowSetApproveListener(const Reference< XRowSetApproveListener > & _rxListener) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aRowSetApproveListeners.removeInterface(_rxListener);
 }
 
@@ -3278,8 +3478,8 @@ void SAL_CALL FmXFormController::removeRowSetApproveListener(const Reference< XR
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::errorOccured(const SQLErrorEvent& aEvent) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aErrorListeners);
     if (aIter.hasMoreElements())
@@ -3290,7 +3490,8 @@ void SAL_CALL FmXFormController::errorOccured(const SQLErrorEvent& aEvent) throw
     }
     else
     {
-        displayException(aEvent);
+        aGuard.clear();
+        displayException( aEvent );
     }
 }
 
@@ -3299,7 +3500,7 @@ void SAL_CALL FmXFormController::errorOccured(const SQLErrorEvent& aEvent) throw
 void SAL_CALL FmXFormController::addSQLErrorListener(const Reference< XSQLErrorListener > & aListener) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aErrorListeners.addInterface(aListener);
 }
 
@@ -3307,7 +3508,7 @@ void SAL_CALL FmXFormController::addSQLErrorListener(const Reference< XSQLErrorL
 void SAL_CALL FmXFormController::removeSQLErrorListener(const Reference< XSQLErrorListener > & aListener) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aErrorListeners.removeInterface(aListener);
 }
 
@@ -3315,14 +3516,14 @@ void SAL_CALL FmXFormController::removeSQLErrorListener(const Reference< XSQLErr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addDatabaseParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
-    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed, "FmXFormController::addDatabaseParameterListener: Object already disposed!" );
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aParameterListeners.addInterface(aListener);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeDatabaseParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
-    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed, "FmXFormController::removeDatabaseParameterListener: Object already disposed!" );
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aParameterListeners.removeInterface(aListener);
 }
 
@@ -3343,7 +3544,7 @@ void SAL_CALL FmXFormController::removeParameterListener(const Reference< XDatab
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEvent& aEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
     if (aIter.hasMoreElements())
@@ -3422,14 +3623,14 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEve
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addConfirmDeleteListener(const Reference< XConfirmDeleteListener > & aListener) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aDeleteListeners.addInterface(aListener);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeConfirmDeleteListener(const Reference< XConfirmDeleteListener > & aListener) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aDeleteListeners.removeInterface(aListener);
 }
 
@@ -3437,7 +3638,7 @@ void SAL_CALL FmXFormController::removeConfirmDeleteListener(const Reference< XC
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::confirmDelete(const RowChangeEvent& aEvent) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aDeleteListeners);
     if (aIter.hasMoreElements())
@@ -3484,7 +3685,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 /*_nId*/, const URL& aURL
                                             const ::rtl::OUString& /*aTargetFrameName*/, sal_Int32 /*nSearchFlags*/)
                                             throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Reference< XDispatch >  xReturn;
     // dispatches handled by ourself
     if  (   ( aURL.Complete == FMURL_CONFIRM_DELETION )
@@ -3576,7 +3777,7 @@ void SAL_CALL FmXFormController::removeStatusListener( const Reference< XStatusL
 //------------------------------------------------------------------------------
 Reference< XDispatchProviderInterceptor >  FmXFormController::createInterceptor(const Reference< XDispatchProviderInterception > & _xInterception)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 #ifdef DBG_UTIL
     // check if we already have a interceptor for the given object
     for (   ConstInterceptorsIterator aIter = m_aControlDispatchInterceptors.begin();
@@ -3624,7 +3825,7 @@ void SAL_CALL FmXFormController::handle( const Reference< XInteractionRequest >&
 //------------------------------------------------------------------------------
 void FmXFormController::deleteInterceptor(const Reference< XDispatchProviderInterception > & _xInterception)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // search the interceptor responsible for the given object
     InterceptorsIterator aIter;
     for (   aIter = m_aControlDispatchInterceptors.begin();

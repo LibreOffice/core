@@ -177,6 +177,8 @@ namespace xmloff
             OAttributeMetaData::getSpecialAttributeName( SCA_TOGGLE ), PROPERTY_TOGGLE, sal_False );
         m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName( SCA_FOCUS_ON_CLICK ), PROPERTY_FOCUS_ON_CLICK, sal_True );
+        m_aAttributeMetaData.addBooleanProperty(
+            OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ), PROPERTY_INPUT_REQUIRED, sal_False );
 
         // the int16 attributes
         m_aAttributeMetaData.addInt16Property(

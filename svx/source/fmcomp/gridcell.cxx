@@ -94,6 +94,10 @@ using ::com::sun::star::util::XNumberFormatter;
 
 using ::com::sun::star::util::XNumberFormatter;
 
+String INVALIDTEXT     = String::CreateFromAscii("###");
+String OBJECTTEXT      = String::CreateFromAscii("<OBJECT>");
+    // TODO: resource
+
 //==================================================================
 //= helper
 //==================================================================
@@ -1596,17 +1600,22 @@ void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
 
     try
     {
-        Reference< XPropertySet > xModel( m_rColumn.getModel() );
+        Reference< XPropertySet > xModel( m_rColumn.getModel(), UNO_SET_THROW );
+
         sal_Int16 nStyle = awt::VisualEffect::LOOK3D;
-        if ( xModel.is() )
-            xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle;
+        OSL_VERIFY( xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle );
 
         setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
         setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
+
+        sal_Bool bTristate = sal_True;
+        OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
+        static_cast< CheckBoxControl* >( m_pWindow )->GetBox().EnableTriState( bTristate );
+        static_cast< CheckBoxControl* >( m_pPainter )->GetBox().EnableTriState( bTristate );
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "DbCheckBox::Init: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     DbCellControl::Init( rParent, xCursor );

@@ -73,12 +73,8 @@
 #include "fmservs.hxx"
 #include "sdbdatacolumn.hxx"
 
-#define CURSORPOSITION_UNKNOWN -2
-
 #define HANDLE_ID   0
 
-String INVALIDTEXT  = String::CreateFromAscii("###");
-String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 #include <comphelper/stl_types.hxx>
 #include <comphelper/property.hxx>
 #include "trace.hxx"
@@ -1522,7 +1518,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "DbGridControl::setDataSource: caught an exception while checking the privileges!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         sal_Bool bPermanentCursor = IsPermanentCursorEnabled();
@@ -2020,12 +2016,22 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
 sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
     DBG_CHKTHIS( DbGridControl, NULL );
-    if (m_pDataCursor &&
-        m_nCurrentPos != nNewRow &&
-        !SetCurrent(nNewRow))
+
+    DeactivateCell( sal_False );
+
+    if  (   m_pDataCursor
+        &&  ( m_nCurrentPos != nNewRow )
+        && !SetCurrent( nNewRow )
+        )
+    {
+        ActivateCell();
+        return sal_False;
+    }
+
+    if ( !DbGridControl_Base::CursorMoving( nNewRow, nNewCol ) )
         return sal_False;
 
-    return DbGridControl_Base::CursorMoving(nNewRow, nNewCol);
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -2103,15 +2109,9 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
             return sal_False;
         }
     }
-    catch(com::sun::star::sdbc::SQLException& )
+    catch ( const Exception& )
     {
-        DBG_ERROR("DbGridControl::SetCurrent : caught an exception !");
-        EndCursorAction();
-        return sal_False;
-    }
-    catch (Exception)
-    {
-        DBG_ERROR("DbGridControl::SetCurrent : caught an exception !");
+        DBG_UNHANDLED_EXCEPTION();
         EndCursorAction();
         return sal_False;
     }
@@ -2544,7 +2544,7 @@ void DbGridControl::MoveToNext()
         }
         catch(SQLException &)
         {
-            DBG_ERROR("DbGridControl::MoveToNext: SQLException caught");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if(!bOk)
@@ -3138,6 +3138,7 @@ void DbGridControl::Undo()
         }
         catch(Exception&)
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         EndCursorAction();

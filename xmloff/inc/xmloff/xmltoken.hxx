@@ -3050,6 +3050,10 @@ namespace xmloff { namespace token {
         XML_N_FIELD,
         XML_NP_FIELD,
 
+        XML_IMAGE_SCALE,
+        XML_ISOTROPIC,
+        XML_ANISOTROPIC,
+
         XML_TOKEN_END
     };
 

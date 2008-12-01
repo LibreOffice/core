@@ -44,7 +44,7 @@ all:
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunnerLight.jar
 # Do not use $/ with the $(FIND) command as for W32-4nt this leads to a backslash
 # in a posix command. In this special case use / instead of $/
 .IF "$(GUI)"=="OS2"

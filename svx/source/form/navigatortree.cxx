@@ -37,21 +37,16 @@
 #include <svx/svdpagv.hxx>
 #include "svditer.hxx"
 
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
-#ifndef _SVX_FMEXPL_HRC
 #include "fmexpl.hrc"
-#endif
 #include "fmexpl.hxx"
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 #include "fmitems.hxx"
+#include "fmobj.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -112,23 +107,20 @@ namespace svxform
         SdrObjListIter aIter( *_pPage );
         while ( aIter.IsMore() )
         {
-            // get the shape
-            SdrObject* pShape = aIter.Next();
+            SdrObject* pSdrObject = aIter.Next();
+            FmFormObj* pFormObject = FmFormObj::GetFormObject( pSdrObject );
+            if ( !pFormObject )
+                continue;
 
-            // is it a UNO control shape?
-            if ( pShape->IsUnoObj() )
-            {
-                Reference< XInterface > xNormalizedModel;
-                xNormalizedModel = xNormalizedModel.query( ( static_cast< SdrUnoObj* >( pShape )->GetUnoControlModel() ) );
-                    // note that this is normalized (i.e. queried for XInterface explicitly)
+            Reference< XInterface > xNormalizedModel( pFormObject->GetUnoControlModel(), UNO_QUERY );
+                // note that this is normalized (i.e. queried for XInterface explicitly)
 
 #ifdef DBG_UTIL
-                ::std::pair< MapModelToShape::iterator, bool > aPos =
+            ::std::pair< MapModelToShape::iterator, bool > aPos =
 #endif
-                _rMapping.insert( ModelShapePair( xNormalizedModel, pShape ) );
-                DBG_ASSERT( aPos.second, "collectShapeModelMapping: model was already existent!" );
-                    // if this asserts, this would mean we have 2 shapes pointing to the same model
-            }
+            _rMapping.insert( ModelShapePair( xNormalizedModel, pSdrObject ) );
+            DBG_ASSERT( aPos.second, "collectShapeModelMapping: model was already existent!" );
+                // if this asserts, this would mean we have 2 shapes pointing to the same model
         }
     }
 
@@ -2183,46 +2175,35 @@ namespace svxform
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
         SdrPage*        pPage           = pPageView->GetPage();
 
-        SdrObjListIter  aIter( *pPage );
-        while( aIter.IsMore() )
+        SdrObjListIter aIter( *pPage );
+        while ( aIter.IsMore() )
         {
-            SdrObject* pObj = aIter.Next();
+            SdrObject* pSdrObject = aIter.Next();
+            FmFormObj* pFormObject = FmFormObj::GetFormObject( pSdrObject );
+            if ( !pFormObject )
+                continue;
 
-            //////////////////////////////////////////////////////////////////////
-            // Es interessieren nur Uno-Objekte
-            if( pObj->IsUnoObj() )
+            Reference< XInterface > xControlModel( pFormObject->GetUnoControlModel() );
+            if ( xControlModel != xFormComponent )
+                continue;
+
+            // mark the object
+            if ( bMark != pFormView->IsObjMarked( pSdrObject ) )
+                // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
+                pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
+
+            if ( !bMarkHandles || !bMark )
+                continue;
+
+            // make the mark visible
+            ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
+            for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
             {
-                Reference< XInterface >  xControlModel(((SdrUnoObj*)pObj)->GetUnoControlModel());
-
-                //////////////////////////////////////////////////////////////////////
-                // Ist dieses Objekt ein XFormComponent?
-                Reference< XFormComponent >  xFormViewControl(xControlModel, UNO_QUERY);
-                if( !xFormViewControl.is() )
-                    return;
-
-                if (xFormViewControl == xFormComponent )
+                SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
+                OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+                if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
                 {
-                    // Objekt markieren
-                    if (bMark != pFormView->IsObjMarked(pObj))
-                        // der Writer mag das leider nicht, wenn schon markierte Objekte noch mal markiert werden ...
-                        pFormView->MarkObj( pObj, pPageView, !bMark, sal_False );
-
-                    // Markierung in allen Fenstern in den sichtbaren Bereich verschieben
-                    if( bMarkHandles && bMark)
-                    {
-                        ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
-
-                        for(sal_uInt32 a(0L); a < pFormView->PaintWindowCount(); a++)
-                        {
-                            SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow(a);
-                            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-
-                            if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
-                            {
-                                pFormView->MakeVisible(aMarkRect, (Window&)rOutDev);
-                            }
-                        }
-                    }
+                    pFormView->MakeVisible( aMarkRect, (Window&)rOutDev );
                 }
             }
         }

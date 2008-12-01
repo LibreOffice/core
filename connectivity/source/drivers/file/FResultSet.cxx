@@ -778,7 +778,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
         ::dbtools::throwFunctionSequenceException(*this);
 
     Sequence<sal_Int8> aSeq;
-    x->readSomeBytes(aSeq,length);
+    x->readBytes(aSeq,length);
     updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------

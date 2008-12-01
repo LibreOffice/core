@@ -30,43 +30,39 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
+
+#include "fmgridif.hxx"
+#include "fmprop.hrc"
+#include "fmservs.hxx"
+#include "fmtools.hxx"
+#include "fmurl.hxx"
+#include "formcontrolfactory.hxx"
+#include "gridcell.hxx"
+#include "sdbdatacolumn.hxx"
+#include "svx/fmgridcl.hxx"
+#include "svx/svxids.hrc"
+
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "fmtools.hxx"
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-#include "fmservs.hxx"
-#include "fmgridif.hxx"
-#include <svx/fmgridcl.hxx>
-#include "gridcell.hxx"
-#include "fmurl.hxx"
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-
-#ifndef _TOOLKIT_UNOHLP_HXX
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/types.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include "sdbdatacolumn.hxx"
 
 using namespace ::svxform;
 using namespace ::com::sun::star::container;
@@ -1837,7 +1833,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     if (::comphelper::getBOOL(aHidden))
         pGrid->HideColumn(pCol->GetId());
 
-    initializeTextFieldLineEnds( xNewColumn, m_xServiceFactory );
+    FormControlFactory( m_xServiceFactory ).initializeTextFieldLineEnds( xNewColumn );
 }
 
 //------------------------------------------------------------------------------

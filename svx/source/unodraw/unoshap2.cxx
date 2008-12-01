@@ -714,6 +714,7 @@ SvxShapeControlPropertyMapping[] =
     { MAP_CHAR_LEN("ControlBorder"), MAP_CHAR_LEN("Border") },
     { MAP_CHAR_LEN("ControlBorderColor"), MAP_CHAR_LEN("BorderColor") },
     { MAP_CHAR_LEN("ControlTextEmphasis"),  MAP_CHAR_LEN("FontEmphasisMark") },
+    { MAP_CHAR_LEN("ImageScaleMode"),  MAP_CHAR_LEN("ScaleMode") },
     { NULL,0, NULL, 0 }
 };
 

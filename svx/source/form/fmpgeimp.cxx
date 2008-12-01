@@ -53,11 +53,10 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <tools/resid.hxx>
+#include <tools/diagnose_ex.h>
 #include "svditer.hxx"
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include <tools/shl.hxx>
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
@@ -93,6 +92,10 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
                ,m_bAttemptedFormCreation( false )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
+
+    OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: I'm pretty sure the below code isn't valid anymore ..." );
+    // streaming of form/controls is not a supported operation anymore, in that it is not guaranteed
+    // that really everything is copied. XCloneable should be used instead.
 
     // copy it by streaming
     // creating a pipe
@@ -183,15 +186,17 @@ FmFormPageImpl::~FmFormPageImpl()
 }
 
 //------------------------------------------------------------------------------
-void FmFormPageImpl::validateCurForm()
+bool FmFormPageImpl::validateCurForm()
 {
     if ( !xCurrentForm.is() )
-        return;
+        return false;
 
     Reference< XChild > xAsChild( xCurrentForm, UNO_QUERY );
     DBG_ASSERT( xAsChild.is(), "FmFormPageImpl::validateCurForm: a form which is no child??" );
     if ( !xAsChild.is() || !xAsChild->getParent().is() )
         xCurrentForm.clear();
+
+    return xCurrentForm.is();
 }
 
 //------------------------------------------------------------------------------
@@ -201,102 +206,86 @@ void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xFor
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
+Reference< XForm >  FmFormPageImpl::getDefaultForm()
 {
-    Reference< ::com::sun::star::form::XForm >  xForm;
+    Reference< XForm > xForm;
 
-    try
+    Reference< XNameContainer > xForms( getForms() );
+
+    // by default, we use our "current form"
+    if ( !validateCurForm() )
     {
-        Reference< XNameContainer > xForms( getForms() );
-
-        validateCurForm();
-
-        // wenn noch kein TargetForm gefunden, dann aktuelle oder Default
-        if (!xCurrentForm.is())
+        // check whether there is a "standard" form
+        if ( xForms->hasElements() )
         {
-            if (xForms->hasElements())
-            {
-                // suche die Standardform
-                ::rtl::OUString ustrStdFormName = ::rtl::OUString(String(SVX_RES(RID_STR_STDFORMNAME)));
+            // suche die Standardform
+            ::rtl::OUString sStandardFormname = String( SVX_RES( RID_STR_STDFORMNAME ) );
 
-                if (xForms->hasByName(ustrStdFormName))
-                {
-                    try
-                    {
-                        xForms->getByName(ustrStdFormName) >>= xForm;
-                    }
-                    catch(::com::sun::star::container::NoSuchElementException &)
-                    {
-                        DBG_ERROR("NoSuchElementException occured!");
-                    }
-                    catch(::com::sun::star::lang::WrappedTargetException &)
-                    {
-                        DBG_ERROR("WrappedTargetException occured!");
-                    }
-
-                }
-
-                // gibt es denn ueberhaupt eine
-                if (!xForm.is())
-                {
-                    Reference< ::com::sun::star::container::XIndexAccess >  xGetFirst(xForms, UNO_QUERY);
-                    DBG_ASSERT(xGetFirst.is(), "FmFormPageImpl::getDefaultForm : no IndexAccess on my form container !");
-                        // wenn das anspringt, muesste man sich die Namen des NameContainers geben lassen und dann das Objekt fuer den
-                        // ersten Namen erfragen ... aber normalerweise sollte die FOrms-Sammlung auch einen IndexAccess haben
-                    xGetFirst->getByIndex(0) >>= xForm;
-                }
-            }
-        }
-        else
-            xForm = xCurrentForm;
-
-        // keine gefunden dann standard erzeugen
-        if (!xForm.is())
-        {
-
-            SdrModel* pModel = pPage->GetModel();
-            XubString aStr(SVX_RES(RID_STR_FORM));
-            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace('#', aStr);
-            pModel->BegUndo(aUndoStr);
-
-            xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
-            // a form should always have the command type table as default
-            Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
             try
             {
-                xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
+                if ( xForms->hasByName( sStandardFormname ) )
+                    xForm.set( xForms->getByName( sStandardFormname ), UNO_QUERY_THROW );
+                else
+                {
+                    Reference< XIndexAccess > xFormsByIndex( xForms, UNO_QUERY_THROW );
+                    xForm.set( xFormsByIndex->getByIndex(0), UNO_QUERY_THROW );
+                }
             }
-            catch(Exception&)
+            catch( const Exception& )
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
+        }
+    }
+    else
+    {
+        xForm = xCurrentForm;
+    }
 
-            ::rtl::OUString aName = String(SVX_RES(RID_STR_STDFORMNAME));
-            xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
+    // did not find an existing suitable form -> create a new one
+    if ( !xForm.is() )
+    {
+        SdrModel* pModel = pPage->GetModel();
+        XubString aStr(SVX_RES(RID_STR_FORM));
+        XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+        aUndoStr.SearchAndReplace('#', aStr);
+        pModel->BegUndo(aUndoStr);
 
+        try
+        {
+            xForm.set( ::comphelper::getProcessServiceFactory()->createInstance( FM_SUN_COMPONENT_FORM ), UNO_QUERY );
 
-            Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, UNO_QUERY);
+            // a form should always have the command type table as default
+            Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
+            xFormProps->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny( sal_Int32( CommandType::TABLE ) ) );
+
+            // and the "Standard" name
+            ::rtl::OUString sName = String( SVX_RES( RID_STR_STDFORMNAME ) );
+            xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
+
+            Reference< XIndexContainer > xContainer( xForms, UNO_QUERY );
             pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
                                                        FmUndoContainerAction::Inserted,
                                                        xContainer,
                                                        xForm,
                                                        xContainer->getCount()));
-            xForms->insertByName(aName, makeAny(xForm));
+            xForms->insertByName( sName, makeAny( xForm ) );
             xCurrentForm = xForm;
-            pModel->EndUndo();
         }
-    }
-    catch( const Exception& )
-    {
-        DBG_ERROR( "FmFormPageImpl::getDefaultForm: caught an exception!" );
-        xForm.clear();
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            xForm.clear();
+        }
+
+        pModel->EndUndo();
     }
 
     return xForm;
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponentHierarchy(
+Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy(
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
     const ::rtl::OUString& rDBTitle, const ::rtl::OUString& rCursorSource, sal_Int32 nCommandType )
 {
@@ -317,7 +306,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
         xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
         Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
-        DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::placeInFormComponentHierarchy : no index access for my forms collection !");
+        DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::findPlaceInFormComponentHierarchy : no index access for my forms collection !");
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
         {
@@ -381,8 +370,6 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
     }
 
     xForm = getDefaultForm();
-    // eindeutigen Namen fuer die Componente setzen
-    setUniqueName(rContent, xForm);
     return xForm;
 }
 
@@ -469,7 +456,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< ::com::sun::star::form::XFormComponent > & xFormComponent, const Reference< ::com::sun::star::form::XForm > & xControls)
+::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
     ::rtl::OUString sName;
     Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
@@ -490,31 +477,6 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             if (!sName.getLength() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
                 xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
-            }
-
-            //////////////////////////////////////////////////////////////
-            // Labels anpassen
-            UniString aLabel = sDefaultName;
-            sal_uInt16 nResId = 0;
-
-            switch (nClassId)
-            {
-                case ::com::sun::star::form::FormComponentType::COMMANDBUTTON:  nResId = RID_STR_PROPTITLE_PUSHBUTTON;      break;
-                case ::com::sun::star::form::FormComponentType::RADIOBUTTON:    nResId = RID_STR_PROPTITLE_RADIOBUTTON;     break;
-                case ::com::sun::star::form::FormComponentType::CHECKBOX:       nResId = RID_STR_PROPTITLE_CHECKBOX;        break;
-                case ::com::sun::star::form::FormComponentType::GROUPBOX:       nResId = RID_STR_PROPTITLE_GROUPBOX;        break;
-                case ::com::sun::star::form::FormComponentType::FIXEDTEXT:      nResId = RID_STR_PROPTITLE_FIXEDTEXT;       break;
-            }
-
-            if (nResId)
-            {
-                ::rtl::OUString aText;
-                xSet->getPropertyValue( FM_PROP_LABEL ) >>= aText;
-                if (!aText.getLength())
-                {
-                    aLabel.SearchAndReplace( getDefaultName( nClassId, xSI ), ::rtl::OUString(String(SVX_RES(nResId)) ));
-                    xSet->setPropertyValue( FM_PROP_LABEL, makeAny(::rtl::OUString(aLabel)) );
-                }
             }
 
             sName = sDefaultName;

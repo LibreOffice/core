@@ -45,6 +45,7 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <vcl/wintypes.hxx>     // for check states
 #include <xmloff/xmltoken.hxx>
 
@@ -321,6 +322,21 @@ namespace xmloff
                     rReturn = aImageAlignMap;
                 }
                 break;
+
+                case epImageScaleMode:
+                {
+                    static const SvXMLEnumMapEntry aScaleModeMap[] =
+                    {
+                        { XML_BACKGROUND_NO_REPEAT, ImageScaleMode::None },
+                        { XML_REPEAT,               ImageScaleMode::None },  // repeating the image is not supported
+                        { XML_STRETCH,              ImageScaleMode::Anisotropic },
+                        { XML_SCALE,                ImageScaleMode::Isotropic },
+                        { XML_TOKEN_INVALID,        ImageScaleMode::None }
+                    };
+                    rReturn = aScaleModeMap;
+                }
+                break;
+
                 case KNOWN_ENUM_PROPERTIES:
                     break;
             }

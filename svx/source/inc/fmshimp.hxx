@@ -547,6 +547,10 @@ private:
     */
     void    impl_updateCurrentForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxNewCurForm );
 
+    /** adds or removes ourself as XEventListener at m_xActiveController
+    */
+    void    impl_switchActiveControllerListening( const bool _bListen );
+
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling
 

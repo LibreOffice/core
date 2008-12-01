@@ -157,26 +157,6 @@ namespace connectivity
             }
 
             //--------------------------------------------------------------------
-            // setStreamType
-            // Sets the input stream type used to register an OUT parameter
-            //--------------------------------------------------------------------
-
-            void setStreamType (sal_Int32 type)
-            {
-                streamType = type;
-            }
-
-            //--------------------------------------------------------------------
-            // getStreamType
-            // Gets the input stream type used to register an OUT parameter
-            //--------------------------------------------------------------------
-
-            sal_Int32 getStreamType ()
-            {
-                return streamType;
-            }
-
-            //--------------------------------------------------------------------
             // setOutputParameter
             // Sets the flag indicating if this is an OUTPUT parameter
             //--------------------------------------------------------------------
@@ -220,10 +200,6 @@ namespace connectivity
             sal_Int32 sqlType;                          // Java SQL type used to
                                                             // register an OUT parameter
 
-            sal_Int32 streamType;                  // Input stream type
-                                        // (ASCII, BINARY, UNICODE)
-
-
             sal_Bool outputParameter;   // true for OUTPUT parameters
 
 
@@ -235,11 +211,6 @@ namespace connectivity
             sal_Int32 pC2;
             sal_Int32 pS1;
             sal_Int32 pS2;// reserved for strings(UTFChars)
-
-        public:
-            static int ASCII;
-            static int UNICODE;
-            static int BINARY;
         };
     }
 }

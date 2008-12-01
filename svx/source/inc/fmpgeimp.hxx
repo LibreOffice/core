@@ -66,10 +66,6 @@ DECLARE_LIST(FmObjectList, FmFormObj*)
 
 class SVX_DLLPRIVATE FmFormPageImpl
 {
-    friend class FmFormPage;
-    friend class FmFormObj;
-    friend class FmXFormShell;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  m_xForms;
     FmFormPage*     pPage;
@@ -79,26 +75,24 @@ class SVX_DLLPRIVATE FmFormPageImpl
     bool            m_bAttemptedFormCreation;
 
 protected:
+    void Init();
+
+public:
     FmFormPageImpl(FmFormPage* _pPage);
     FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl);
     ~FmFormPageImpl();
 
-    void Init();
-
-public:
     //  nur wichtig fuer den DesignMode
     void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> getDefaultForm();
 
-    /** inserts a form component into the form component hierarchy
+    /** finds a place in the form component hierarchy where to insert the given component
 
-        If the given component does not yet belong into the form hierarchy, a suitable place for
-        it is found, using <member>findFormForDataSource</member>, if possible.
-
-        If no sutiable form is found, a new one is created, and also inserted into the
-        hierarchy.
+        Note that no actual insertion happens, this is the responsibility of the caller (as
+        the caller might decide on a suitable place where in the returned container the insertion
+        should happen).
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> placeInFormComponentHierarchy(
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> findPlaceInFormComponentHierarchy(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rContent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(),
         const ::rtl::OUString& rDBTitle = ::rtl::OUString(),
@@ -110,6 +104,8 @@ public:
     inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
     inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
 
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& getForms( bool _bForceCreate = true );
+
     void        SetFormsCreationHdl( const Link& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
     const Link& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }
 
@@ -117,8 +113,6 @@ protected:
     // lesen und schreiben der Objecte
     void write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& OutStream) const;
     void read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& InStream);
-
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& getForms( bool _bForceCreate = true );
 
     void fillList(FmObjectList& rList, const SdrObjList& rObjList, sal_Bool bConnected) const;
 
@@ -155,9 +149,12 @@ private:
 
         If <member>xCurrentForm</member> is not valid anymore, it is reset to <NULL/>.
 
+        @return
+            <TRUE/> if and only if xCurrentForm is valid.
+
         @since #i40086#
     */
-    void    validateCurForm();
+    bool    validateCurForm();
 
 public:
 

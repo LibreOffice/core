@@ -223,18 +223,21 @@ void FmFormModel::MovePage( USHORT nPgNum, USHORT nNewPos )
 \************************************************************************/
 SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 {
-    FmFormPage* pPage = (FmFormPage*)SdrModel::RemovePage(nPgNum);
+    FmFormPage* pToBeRemovedPage = dynamic_cast< FmFormPage* >( GetPage( nPgNum ) );
+    OSL_ENSURE( pToBeRemovedPage, "FmFormModel::RemovePage: *which page*?" );
 
 #ifndef SVX_LIGHT
-    if (pPage)
+    if ( pToBeRemovedPage )
     {
-        Reference< XNameContainer > xForms( pPage->GetForms( false ) );
+        Reference< XNameContainer > xForms( pToBeRemovedPage->GetForms( false ) );
         if ( xForms.is() )
             m_pImpl->pUndoEnv->RemoveForms( xForms );
     }
 #endif
 
-    return pPage;
+    FmFormPage* pRemovedPage = (FmFormPage*)SdrModel::RemovePage(nPgNum);
+    OSL_ENSURE( pRemovedPage == pToBeRemovedPage, "FmFormModel::RemovePage: inconsistency!" );
+    return pRemovedPage;
 }
 
 /*************************************************************************

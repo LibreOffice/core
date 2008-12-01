@@ -84,7 +84,7 @@ namespace xmloff
 
         // style handling
         ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
-        ::vos::ORef< SvXMLExportPropertyMapper >    m_xExportMapper;
+        ::vos::ORef< SvXMLExportPropertyMapper >    m_xStyleExportMapper;
 
         // we need our own number formats supplier:
         // Controls which have a number formats do not work with the formats supplier of the document they reside
@@ -100,7 +100,7 @@ namespace xmloff
         // add this format to the global (document) formats supplier.
         // In case of an export we could do some cleanup afterwards, but in case of an import, there is no such
         // chance, as (if other user-defined formats exist in the document as well) we can't distinguish
-        // between user-defined formats really beeded for the doc (i.e. in a calc cell) and formats only added
+        // between user-defined formats really needed for the doc (i.e. in a calc cell) and formats only added
         // to the supplier because the controls needed it.
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >
                                                     m_xControlNumberFormats;
