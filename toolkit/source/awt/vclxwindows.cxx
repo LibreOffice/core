@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <comphelper/processfactory.hxx>
 
 #ifndef _SV_BUTTON_HXX
@@ -69,6 +70,7 @@ using ::com::sun::star::graphic::XGraphic;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt::VisualEffect;
+namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
 {
@@ -663,6 +665,7 @@ void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_IMAGEURL,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SCALEIMAGE,
+                     BASEPROPERTY_IMAGE_SCALE_MODE,
                      BASEPROPERTY_TABSTOP,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
@@ -716,22 +719,34 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     ::vos::OGuard aGuard( GetMutex() );
 
     ImageControl* pImageControl = (ImageControl*)GetWindow();
-    if ( pImageControl )
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_IMAGE_SCALE_MODE:
         {
-            case BASEPROPERTY_SCALEIMAGE:
+            sal_Int16 nScaleMode( ImageScaleMode::Anisotropic );
+            if ( pImageControl && ( Value >>= nScaleMode ) )
             {
-                sal_Bool b = sal_Bool();
-                if ( Value >>= b )
-                     pImageControl->SetScaleImage( b );
+                pImageControl->SetScaleMode( nScaleMode );
             }
-            break;
-            default:
-                VCLXImageConsumer::setProperty( PropertyName, Value );
-                break;
         }
+        break;
+
+        case BASEPROPERTY_SCALEIMAGE:
+        {
+            // this is for compatibility only, nowadays, the ImageScaleMode property should be used
+            sal_Bool bScaleImage = sal_False;
+            if ( pImageControl && ( Value >>= bScaleImage ) )
+            {
+                pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::Anisotropic : ImageScaleMode::None );
+            }
+        }
+        break;
+
+        default:
+            VCLXImageConsumer::setProperty( PropertyName, Value );
+            break;
     }
 }
 
@@ -741,18 +756,21 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
 
     ::com::sun::star::uno::Any aProp;
     ImageControl* pImageControl = (ImageControl*)GetWindow();
-    if ( pImageControl )
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_SCALEIMAGE:
-                 aProp <<= (sal_Bool)pImageControl->IsScaleImage();
-                break;
-            default:
-                aProp = VCLXImageConsumer::getProperty( PropertyName );
-                break;
-        }
+        case BASEPROPERTY_IMAGE_SCALE_MODE:
+            aProp <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::Anisotropic );
+            break;
+
+        case BASEPROPERTY_SCALEIMAGE:
+            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::None ) ? sal_True : sal_False;
+            break;
+
+        default:
+            aProp = VCLXImageConsumer::getProperty( PropertyName );
+            break;
     }
     return aProp;
 }

@@ -37,7 +37,9 @@
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 
 #include <toolkit/controls/formattedcontrol.hxx>
@@ -576,11 +578,21 @@ uno::Any ImageProducerControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) co
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
-namespace
-{
-    uno::Reference< graphic::XGraphic > lcl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+    uno::Reference< graphic::XGraphic > ImageProducerControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
     {
         uno::Reference< graphic::XGraphic > xGraphic;
+
+        if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
+        {
+            // graphic manager uniqueid
+            rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
+            // get the DefaultContext
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            mxGrfObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
+        }
+        else // linked
+            mxGrfObj = NULL; // release the GraphicObject
+
         if ( !_rURL.getLength() )
             return xGraphic;
 
@@ -603,7 +615,6 @@ namespace
 
         return xGraphic;
     }
-}
 
 void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
@@ -621,7 +632,7 @@ void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_I
                 mbAdjustingGraphic = true;
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( lcl_getGraphicFromURL_nothrow( sImageURL ) ) );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -942,6 +953,7 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(
 //  class UnoControlImageControlModel
 //  ----------------------------------------------------
 UnoControlImageControlModel::UnoControlImageControlModel()
+    :mbAdjustingImageScaleMode( false )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXImageControl );
 }
@@ -955,6 +967,9 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
         return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControl ) );
+
+    if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
+        return makeAny( awt::ImageScaleMode::Anisotropic );
 
     return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -975,6 +990,44 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception)
+{
+    ImageProducerControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+
+    // ScaleImage is an older (and less powerful) version of ScaleMode, but keep both in sync as far as possible
+    try
+    {
+        switch ( _nHandle )
+        {
+        case BASEPROPERTY_IMAGE_SCALE_MODE:
+            if ( !mbAdjustingImageScaleMode && ImplHasProperty( BASEPROPERTY_SCALEIMAGE ) )
+            {
+                mbAdjustingImageScaleMode = true;
+                sal_Int16 nScaleMode( awt::ImageScaleMode::Anisotropic );
+                OSL_VERIFY( _rValue >>= nScaleMode );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_SCALEIMAGE ), uno::makeAny( sal_Bool( nScaleMode != awt::ImageScaleMode::None ) ) );
+                mbAdjustingImageScaleMode = false;
+            }
+            break;
+        case BASEPROPERTY_SCALEIMAGE:
+            if ( !mbAdjustingImageScaleMode && ImplHasProperty( BASEPROPERTY_IMAGE_SCALE_MODE ) )
+            {
+                mbAdjustingImageScaleMode = true;
+                sal_Bool bScale = sal_True;
+                OSL_VERIFY( _rValue >>= bScale );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ), uno::makeAny( bScale ? awt::ImageScaleMode::Anisotropic : awt::ImageScaleMode::None ) );
+                mbAdjustingImageScaleMode = false;
+            }
+            break;
+        }
+    }
+    catch( const Exception& )
+    {
+        mbAdjustingImageScaleMode = false;
+        throw;
+    }
 }
 
 //  ----------------------------------------------------

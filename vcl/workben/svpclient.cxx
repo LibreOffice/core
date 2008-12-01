@@ -30,6 +30,7 @@
 
 #include <sal/main.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -141,7 +142,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aSvpBitmaps.Show();
 
     m_aImage.SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
-    m_aImage.SetScaleImage( FALSE );
+    m_aImage.SetScaleMode( com::sun::star::awt::ImageScaleMode::None );
     m_aImage.Show();
 
     m_aQuitButton.SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );

@@ -152,7 +152,7 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUStrin
     PropertyDataHash::iterator aIter = maMap.find( rName );
 
     if ( maMap.end() == aIter )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( rName, *this );
 
     PropertyInfo *pInfo = (*aIter).second->mpInfo;
     Property aProperty;

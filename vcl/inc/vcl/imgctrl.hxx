@@ -45,13 +45,14 @@ class VCL_DLLPUBLIC ImageControl : public FixedImage
 private:
     BitmapEx        maBmp;
     BitmapEx        maBmpHC;
-    BOOL            mbScaleImage;
+    ::sal_Int16     mnScaleMode;
 
 public:
                     ImageControl( Window* pParent, WinBits nStyle = 0 );
 
-    void            SetScaleImage( BOOL bScale );
-    BOOL            IsScaleImage() const;
+    // set/get the scale mode. This is one of the css.awt.ImageScaleMode constants
+    void            SetScaleMode( const ::sal_Int16 _nMode );
+    ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
     virtual void    Resize();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );

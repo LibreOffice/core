@@ -343,9 +343,13 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
 
     if ( !sScheme.equalsAscii("default") )
     {
-        ::rtl::OUString sBaseDefault(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes/default"));
-        aComponentNames = GetPropertyNames(sBaseDefault);
-        FillComponentColors(aComponentNames,aDisplayNameMap);
+        ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("default"));
+        if ( ExistsScheme(sDefault) )
+        {
+            ::rtl::OUString sBaseDefault(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes/default"));
+            aComponentNames = GetPropertyNames(sBaseDefault);
+            FillComponentColors(aComponentNames,aDisplayNameMap);
+        }
     } // if ( !sScheme.equalsAscii("default") )
     if ( !bFound && sScheme.getLength() )
     {

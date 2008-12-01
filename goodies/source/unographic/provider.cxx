@@ -54,11 +54,14 @@
 
 #include "descriptor.hxx"
 #include "graphic.hxx"
+#include "grfmgr.hxx"
 #include "provider.hxx"
 
 using namespace com::sun::star;
 
 namespace unographic {
+
+#define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
 
 // -------------------
 // - GraphicProvider -
@@ -158,6 +161,24 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 }
 
 // ------------------------------------------------------------------------------
+
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const ::rtl::OUString& rResourceURL ) const
+{
+    uno::Reference< ::graphic::XGraphic >   xRet;
+    if( rResourceURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+    {
+        // graphic manager url
+        String aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
+        ByteString aUniqueID( aTmpStr, RTL_TEXTENCODING_UTF8 );
+        GraphicObject aGrafObj( aUniqueID );
+        // I don't call aGrafObj.GetXGraphic because it will call us back
+        // into implLoadMemory ( with "private:memorygraphic" test )
+        ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
+        pUnoGraphic->init( aGrafObj.GetGraphic() );
+        xRet = pUnoGraphic;
+    }
+    return xRet;
+}
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const ::rtl::OUString& rResourceURL ) const
 {
@@ -382,9 +403,10 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
     else if( aURL.getLength() )
     {
         uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
-
         if( !xGraphic.is() )
             xGraphic = implLoadResource( aURL );
+        if( !xGraphic.is() )
+            xGraphic = implLoadGraphicObject( aURL );
 
         if ( !xGraphic.is() )
             xGraphic = implLoadRepositoryImage( aURL );
@@ -453,6 +475,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     else if( aPath.Len() )
     {
         xRet = implLoadMemory( aPath );
+
+        if( !xRet.is() )
+            xRet = implLoadGraphicObject( aPath );
 
         if( !xRet.is() )
             xRet = implLoadResource( aPath );

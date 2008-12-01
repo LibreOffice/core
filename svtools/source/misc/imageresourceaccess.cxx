@@ -51,6 +51,8 @@ namespace svt
 {
 //........................................................................
 
+#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
+
     using namespace ::utl;
     using namespace ::comphelper;
     using namespace ::com::sun::star::io;
@@ -137,17 +139,17 @@ namespace svt
     }
 
     //====================================================================
-    //= ImageResourceAccess
+    //= GraphicAccess
     //====================================================================
     //--------------------------------------------------------------------
-    bool ImageResourceAccess::isImageResourceURL( const ::rtl::OUString& _rURL )
+    bool GraphicAccess::isSupportedURL( const ::rtl::OUString& _rURL )
     {
         ::rtl::OUString sIndicator( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ) );
-        return _rURL.indexOf( sIndicator ) == 0;
+        return ( ( _rURL.indexOf( sIndicator ) == 0 ) || ( _rURL.compareToAscii( GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( GRAPHOBJ_URLPREFIX ) ) == 0 ) );
     }
 
     //--------------------------------------------------------------------
-    SvStream* ImageResourceAccess::getImageStream( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rImageResourceURL )
+    SvStream* GraphicAccess::getImageStream( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rImageResourceURL )
     {
         SvStream* pReturn = NULL;
 
@@ -157,7 +159,7 @@ namespace svt
             Reference< XGraphicProvider > xProvider;
             if ( _rxORB.is() )
                 xProvider = xProvider.query( _rxORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ) );
-            OSL_ENSURE( xProvider.is(), "ImageResourceAccess::getImageStream: could not create a graphic provider!" );
+            OSL_ENSURE( xProvider.is(), "GraphicAccess::getImageStream: could not create a graphic provider!" );
 
             if ( !xProvider.is() )
                 return pReturn;
@@ -167,7 +169,7 @@ namespace svt
             aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
             aMediaProperties[0].Value <<= _rImageResourceURL;
             Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
-            OSL_ENSURE( xGraphic.is(), "ImageResourceAccess::getImageStream: the provider did not give us a graphic object!" );
+            OSL_ENSURE( xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!" );
             if ( !xGraphic.is() )
                 return pReturn;
 
@@ -190,14 +192,14 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ImageResourceAccess::getImageStream: caught an exception!" );
+            OSL_ENSURE( sal_False, "GraphicAccess::getImageStream: caught an exception!" );
         }
 
         return pReturn;
     }
 
     //--------------------------------------------------------------------
-    Reference< XInputStream > ImageResourceAccess::getImageXStream( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rImageResourceURL )
+    Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rImageResourceURL )
     {
         return new OSeekableInputStreamWrapper( getImageStream( _rxORB, _rImageResourceURL ), sal_True );   // take ownership
     }

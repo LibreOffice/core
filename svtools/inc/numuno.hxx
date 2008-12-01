@@ -38,6 +38,11 @@
 class SvNumberFormatter;
 class SvNumFmtSuppl_Impl;
 
+namespace comphelper
+{
+    class SharedMutex;
+}
+
 //------------------------------------------------------------------
 
 //  SvNumberFormatterServiceObj must be registered as service somewhere
@@ -88,6 +93,8 @@ public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static SvNumberFormatsSupplierObj* getImplementation( const com::sun::star::uno::Reference<
                                     com::sun::star::util::XNumberFormatsSupplier> xObj );
+
+    ::comphelper::SharedMutex&  getSharedMutex() const;
 };
 
 #endif // #ifndef _NUMUNO_HXX

@@ -134,7 +134,7 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const ::rtl::OUStri
         else if ( xInfo->hasPropertyByName(aPropertyName) )
             m_aListener.addInterface(aPropertyName,xListener);
         else
-            throw UnknownPropertyException();
+            throw UnknownPropertyException( aPropertyName, *this );
     }
 }
 
@@ -158,7 +158,7 @@ void SAL_CALL GenericPropertySet::removePropertyChangeListener( const ::rtl::OUS
         else if ( xInfo->hasPropertyByName(aPropertyName) )
             m_aListener.removeInterface(aPropertyName,xListener);
         else
-            throw UnknownPropertyException();
+            throw UnknownPropertyException( aPropertyName, *this );
     }
 }
 

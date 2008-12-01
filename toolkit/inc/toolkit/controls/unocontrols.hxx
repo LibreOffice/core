@@ -54,6 +54,7 @@
 #include <com/sun/star/awt/XCurrencyField.hpp>
 #include <com/sun/star/awt/XPatternField.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -66,6 +67,9 @@
 #include <comphelper/uno3.hxx>
 
 #include <list>
+
+#define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
+#define UNO_NAME_GRAPHOBJ_URLPKGPREFIX                  "vnd.sun.star.Package:"
 
 
 //  ----------------------------------------------------
@@ -220,6 +224,8 @@ private:
     bool                                                                                    mbAdjustingImagePosition;
     bool                                                                                    mbAdjustingGraphic;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
 protected:
     ImageProducerControlModel() : mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
     ImageProducerControlModel( const ImageProducerControlModel& _rSource ) : com::sun::star::awt::XImageProducer(), UnoControlModel( _rSource ), mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
@@ -346,6 +352,8 @@ public:
 //  ----------------------------------------------------
 class UnoControlImageControlModel : public ImageProducerControlModel
 {
+private:
+    bool    mbAdjustingImageScaleMode;
 
 protected:
     ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
@@ -353,7 +361,7 @@ protected:
 
 public:
                                     UnoControlImageControlModel();
-                                    UnoControlImageControlModel( const UnoControlImageControlModel& rModel ) : ImageProducerControlModel( rModel ) {;}
+                                    UnoControlImageControlModel( const UnoControlImageControlModel& rModel ) : ImageProducerControlModel( rModel ), mbAdjustingImageScaleMode( false ) { }
 
     UnoControlModel*    Clone() const { return new UnoControlImageControlModel( *this ); }
 
@@ -365,6 +373,9 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlImageControlModel, ImageProducerControlModel, szServiceName2_UnoControlImageControlModel )
+
+    // ::cppu::OPropertySetHelper
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 };
 
 //  ----------------------------------------------------

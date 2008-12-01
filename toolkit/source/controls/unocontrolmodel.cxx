@@ -308,7 +308,6 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_REPEAT_DELAY:         aDefault <<= (sal_Int32)  50;   break;    // 50 milliseconds
             case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
-
             case BASEPROPERTY_AUTOHSCROLL:
             case BASEPROPERTY_AUTOVSCROLL:
             case BASEPROPERTY_MOVEABLE:

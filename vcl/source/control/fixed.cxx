@@ -230,7 +230,7 @@ USHORT FixedText::ImplGetTextStyle( WinBits nWinStyle )
     if ( nWinStyle & WB_WORDBREAK )
     {
         nTextStyle |= TEXT_DRAW_WORDBREAK;
-        if ( nWinStyle & WB_HYPHENATION )
+        if ( (nWinStyle & WB_HYPHENATION ) == WB_HYPHENATION )
             nTextStyle |= TEXT_DRAW_WORDBREAK_HYPHENATION;
     }
     if ( nWinStyle & WB_NOLABEL )

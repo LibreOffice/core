@@ -8,7 +8,7 @@
  *
  * $RCSfile: formpdfexport.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -374,8 +374,10 @@ namespace toolkitform
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
                         sal_Int32 nBoderColor = COL_TRANSPARENT;
-                        xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBoderColor;
-                        _rpDescriptor->BorderColor = Color( nBoderColor );
+                        if ( xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBoderColor )
+                            _rpDescriptor->BorderColor = Color( nBoderColor );
+                        else
+                            _rpDescriptor->BorderColor = Color( COL_BLACK );
                     }
                 }
             }

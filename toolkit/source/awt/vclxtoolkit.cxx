@@ -146,6 +146,27 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
         bMessBox = sal_True;
     }
 
+    bool bDecoratedWindow = false;
+    if  (   bMessBox
+        ||  ( nCompType == WINDOW_DIALOG )
+        ||  ( nCompType == WINDOW_MODELESSDIALOG )
+        ||  ( nCompType == WINDOW_MODALDIALOG )
+        ||  ( nCompType == WINDOW_SYSTEMDIALOG )
+        ||  ( nCompType == WINDOW_PATHDIALOG )
+        ||  ( nCompType == WINDOW_FILEDIALOG )
+        ||  ( nCompType == WINDOW_PRINTERSETUPDIALOG )
+        ||  ( nCompType == WINDOW_PRINTDIALOG )
+        ||  ( nCompType == WINDOW_COLORDIALOG )
+        ||  ( nCompType == WINDOW_FONTDIALOG )
+        ||  ( nCompType == WINDOW_DOCKINGWINDOW )
+        ||  ( nCompType == WINDOW_TABDIALOG )
+        ||  ( nCompType == WINDOW_BUTTONDIALOG )
+        ||  ( nCompType == WINDOW_SYSTEMCHILDWINDOW )
+        )
+    {
+        bDecoratedWindow = true;
+    }
+
     if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::BORDER )
         nWinBits |= WB_BORDER;
     if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::NOBORDER )
@@ -216,15 +237,18 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
     }
 
 
-    if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::NODECORATION )
+    if ( bDecoratedWindow )
     {
-        // No decoration removes several window attributes and must
-        // set WB_NOBODER!
-        nWinBits &= ~WB_BORDER;
-        nWinBits &= ~WB_SIZEABLE;
-        nWinBits &= ~WB_MOVEABLE;
-        nWinBits &= ~WB_CLOSEABLE;
-        nWinBits |= WB_NOBORDER;
+        if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::NODECORATION )
+        {
+            // No decoration removes several window attributes and must
+            // set WB_NOBORDER!
+            nWinBits &= ~WB_BORDER;
+            nWinBits &= ~WB_SIZEABLE;
+            nWinBits &= ~WB_MOVEABLE;
+            nWinBits &= ~WB_CLOSEABLE;
+            nWinBits |= WB_NOBORDER;
+        }
     }
 
     return nWinBits;

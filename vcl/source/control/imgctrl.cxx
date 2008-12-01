@@ -30,42 +30,61 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <vcl/event.hxx>
 #include <vcl/imgctrl.hxx>
+
+#include <com/sun/star/awt/ImageScaleMode.hdl>
+
+namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 // -----------------------------------------------------------------------
 
 ImageControl::ImageControl( Window* pParent, WinBits nStyle ) :
     FixedImage( pParent, nStyle )
 {
-    mbScaleImage = TRUE;
+    mnScaleMode = ImageScaleMode::Anisotropic;
 }
 
 // -----------------------------------------------------------------------
 
-void ImageControl::SetScaleImage( BOOL bScale )
+void ImageControl::SetScaleMode( const ::sal_Int16 _nMode )
 {
-    if ( bScale != mbScaleImage )
+    if ( _nMode != mnScaleMode )
     {
-        mbScaleImage = bScale;
+        mnScaleMode = _nMode;
         Invalidate();
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImageControl::IsScaleImage() const
-{
-    // Make inline when changing member from dummy...
-    return mbScaleImage;
-}
-
-
-// -----------------------------------------------------------------------
-
 void ImageControl::Resize()
 {
     Invalidate();
+}
+
+// -----------------------------------------------------------------------
+namespace
+{
+    static Size lcl_calcPaintSize( const Rectangle& _rPaintRect, const Size& _rBitmapSize )
+    {
+        const Size aPaintSize = _rPaintRect.GetSize();
+
+        const double nRatioX = 1.0 * aPaintSize.Width() / _rBitmapSize.Width();
+        const double nRatioY = 1.0 * aPaintSize.Height() / _rBitmapSize.Height();
+        const double nRatioMin = ::std::min( nRatioX, nRatioY );
+
+        return Size( long( _rBitmapSize.Width() * nRatioMin ), long( _rBitmapSize.Height() * nRatioMin ) );
+    }
+
+    static Point lcl_centerWithin( const Rectangle& _rArea, const Size& _rObjectSize )
+    {
+        Point aPos( _rArea.TopLeft() );
+        aPos.X() += ( _rArea.GetWidth() - _rObjectSize.Width() ) / 2;
+        aPos.Y() += ( _rArea.GetHeight() - _rObjectSize.Height() ) / 2;
+        return aPos;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -84,42 +103,82 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
         //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
+    const Rectangle& rPaintRect = rUDEvt.GetRect();
+    const Size&      rBitmapSize = maBmp.GetSizePixel();
+
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
         // only images support IMAGE_DRAW_COLORTRANSFORM
         Image aImage( maBmp );
         if ( !!aImage )
         {
-            if ( mbScaleImage )
-                rUDEvt.GetDevice()->DrawImage( rUDEvt.GetRect().TopLeft(),
-                                                rUDEvt.GetRect().GetSize(),
-                                                aImage, nStyle );
-            else
+            switch ( mnScaleMode )
             {
-                // Center...
-                Point aPos( rUDEvt.GetRect().TopLeft() );
-                aPos.X() += ( rUDEvt.GetRect().GetWidth() - maBmp.GetSizePixel().Width() ) / 2;
-                aPos.Y() += ( rUDEvt.GetRect().GetHeight() - maBmp.GetSizePixel().Height() ) / 2;
-                rUDEvt.GetDevice()->DrawImage( aPos, aImage, nStyle );
+            case ImageScaleMode::None:
+            {
+                rUDEvt.GetDevice()->DrawImage(
+                    lcl_centerWithin( rPaintRect, rBitmapSize ), aImage, nStyle );
             }
+            break;
+
+            case ImageScaleMode::Isotropic:
+            {
+                const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
+                rUDEvt.GetDevice()->DrawImage(
+                    lcl_centerWithin( rPaintRect, aPaintSize ),
+                    aPaintSize,
+                    aImage, nStyle );
+            }
+            break;
+
+            case ImageScaleMode::Anisotropic:
+            {
+                rUDEvt.GetDevice()->DrawImage(
+                    rPaintRect.TopLeft(),
+                    rPaintRect.GetSize(),
+                    aImage, nStyle );
+            }
+            break;
+
+            default:
+                OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+                break;
+
+            }   // switch ( mnScaleMode )
         }
     }
     else
     {
-        if ( mbScaleImage )
+        switch ( mnScaleMode )
+        {
+        case ImageScaleMode::None:
+        {
+            maBmp.Draw( rUDEvt.GetDevice(), lcl_centerWithin( rPaintRect, rBitmapSize ) );
+        }
+        break;
+
+        case ImageScaleMode::Isotropic:
+        {
+            const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
+            maBmp.Draw( rUDEvt.GetDevice(),
+                        lcl_centerWithin( rPaintRect, aPaintSize ),
+                        aPaintSize );
+        }
+        break;
+
+        case ImageScaleMode::Anisotropic:
         {
             maBmp.Draw( rUDEvt.GetDevice(),
-                        rUDEvt.GetRect().TopLeft(),
-                        rUDEvt.GetRect().GetSize() );
+                        rPaintRect.TopLeft(),
+                        rPaintRect.GetSize() );
         }
-        else
-        {
-            // Center...
-            Point aPos( rUDEvt.GetRect().TopLeft() );
-            aPos.X() += ( rUDEvt.GetRect().GetWidth() - maBmp.GetSizePixel().Width() ) / 2;
-            aPos.Y() += ( rUDEvt.GetRect().GetHeight() - maBmp.GetSizePixel().Height() ) / 2;
-            maBmp.Draw( rUDEvt.GetDevice(), aPos );
-        }
+        break;
+
+        default:
+                OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+            break;
+
+        }   // switch ( mnScaleMode )
     }
 }
 

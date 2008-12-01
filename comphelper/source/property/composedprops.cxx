@@ -225,7 +225,7 @@ namespace comphelper
         }
         else
         {
-            throw UnknownPropertyException(::rtl::OUString(), static_cast< XPropertySet* >(this));
+            throw UnknownPropertyException(  _rPropertyName, *this  );
         }
 
         return eState;
@@ -335,7 +335,7 @@ namespace comphelper
                 return *pProps;
         }
 
-        throw UnknownPropertyException(::rtl::OUString(), static_cast< XPropertySetInfo* >(this));
+        throw UnknownPropertyException( _rName, *this  );
     }
 
     //------------------------------------------------------------------------------

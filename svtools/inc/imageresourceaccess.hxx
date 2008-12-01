@@ -45,22 +45,23 @@ namespace svt
 //........................................................................
 
     //====================================================================
-    //= ImageResourceAccess
+    //= GraphicAccess
     //====================================================================
     /** helper class for obtaining streams (which also can be used with the ImageProducer)
         from a resource
     */
-    class ImageResourceAccess
+    class GraphicAccess
     {
     private:
-        ImageResourceAccess();    // never implemented
+        GraphicAccess();    // never implemented
 
     public:
         /** determines whether the given URL denotes an image within a resource
+         ( or an image specified by a vnd.sun.star.GraphicObject scheme URL )
         */
-        SVT_DLLPUBLIC static  bool        isImageResourceURL( const ::rtl::OUString& _rURL );
+        SVT_DLLPUBLIC static  bool        isSupportedURL( const ::rtl::OUString& _rURL );
 
-        /** for a given URL of an image within a resource, this method retrieves
+        /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
             an SvStream for this image.
 
             This method works for arbitrary URLs denoting an image, since the
@@ -74,7 +75,7 @@ namespace svt
                     const ::rtl::OUString& _rImageResourceURL
                 );
 
-        /** for a given URL of an image within a resource, this method retrieves
+        /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
             an <type scope="com::sun::star::io">XInputStream</type> for this image.
         */
         SVT_DLLPUBLIC static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >

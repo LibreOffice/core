@@ -39,6 +39,8 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <comphelper/sharedmutex.hxx>
+#include <rtl/ref.hxx>
 
 class SvNumberformat;
 class SvNumberFormatter;
@@ -53,7 +55,8 @@ class SvNumberFormatterServiceObj : public cppu::WeakImplHelper3<
                                         com::sun::star::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj* pSupplier;
+    ::rtl::Reference< SvNumberFormatsSupplierObj >  xSupplier;
+    mutable ::comphelper::SharedMutex               m_aMutex;
 
 public:
                         SvNumberFormatterServiceObj();
@@ -116,11 +119,11 @@ class SvNumberFormatsObj : public cppu::WeakImplHelper3<
                                         com::sun::star::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj* pSupplier;
+    SvNumberFormatsSupplierObj&         rSupplier;
+    mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-                    SvNumberFormatsObj();
-                    SvNumberFormatsObj(SvNumberFormatsSupplierObj* pParent);
+                    SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex& _rMutex);
     virtual         ~SvNumberFormatsObj();
 
 
@@ -170,6 +173,9 @@ public:
                             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                             throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    SvNumberFormatsObj();   // never implemented
 };
 
 
@@ -179,11 +185,12 @@ class SvNumberFormatObj : public cppu::WeakImplHelper3<
                                         com::sun::star::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj* pSupplier;
-    ULONG                       nKey;
+    SvNumberFormatsSupplierObj&         rSupplier;
+    ULONG                               nKey;
+    mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-                    SvNumberFormatObj(SvNumberFormatsSupplierObj* pParent, ULONG nK);
+    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, ULONG nK, const ::comphelper::SharedMutex& _rMutex );
     virtual         ~SvNumberFormatObj();
 
                             // XPropertySet
@@ -253,10 +260,11 @@ class SvNumberFormatSettingsObj : public cppu::WeakImplHelper2<
                                         com::sun::star::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj* pSupplier;
+    SvNumberFormatsSupplierObj&         rSupplier;
+    mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-                    SvNumberFormatSettingsObj(SvNumberFormatsSupplierObj* pParent);
+                    SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex);
     virtual         ~SvNumberFormatSettingsObj();
 
 

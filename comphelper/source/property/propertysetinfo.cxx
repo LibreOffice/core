@@ -151,7 +151,7 @@ Property PropertyMapImpl::getPropertyByName( const OUString& aName ) throw( Unkn
     PropertyMap::iterator aIter = maPropertyMap.find( aName );
 
     if( maPropertyMap.end() == aIter )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( aName, NULL );
 
     PropertyMapEntry* pEntry = (*aIter).second;
 

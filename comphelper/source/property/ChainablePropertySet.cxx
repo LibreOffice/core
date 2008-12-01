@@ -88,7 +88,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
     if( aIter == mpInfo->maMap.end())
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
 
     _preSetValues();
     _setSingleValue( *((*aIter).second), rValue );
@@ -106,7 +106,7 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
     if( aIter == mpInfo->maMap.end())
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
 
     Any aAny;
     _preGetValues ();
@@ -166,7 +166,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException();
+                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
 
             _setSingleValue ( *((*aIter).second), *pAny );
         }
@@ -199,7 +199,7 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException();
+                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
 
             _getSingleValue ( *((*aIter).second), *pAny );
         }
@@ -233,7 +233,7 @@ PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const ::rtl::OUSt
 {
     PropertyInfoHash::const_iterator aIter =  mpInfo->maMap.find( PropertyName );
     if( aIter == mpInfo->maMap.end())
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
     PropertyState aState;
 
@@ -261,7 +261,7 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException();
+                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
 
             _getPropertyState ( *((*aIter).second), *pState );
         }
@@ -276,7 +276,7 @@ void SAL_CALL ChainablePropertySet::setPropertyToDefault( const ::rtl::OUString&
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
     if( aIter == mpInfo->maMap.end())
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
     _setPropertyToDefault( *((*aIter).second) );
 }
 
@@ -286,7 +286,7 @@ Any SAL_CALL ChainablePropertySet::getPropertyDefault( const ::rtl::OUString& rP
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
     if( aIter == mpInfo->maMap.end())
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
     return _getPropertyDefault( *((*aIter).second) );
 }
 

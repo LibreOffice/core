@@ -38,11 +38,13 @@
 #include "renderer.hxx"
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include "comphelper/servicedecl.hxx"
 
 using namespace com::sun::star;
+namespace sdecl = comphelper::service_decl;
 
 namespace unographic {
-
+extern sdecl::ServiceDecl const serviceDecl;
 // --------------------
 // - *_createInstance -
 // --------------------
@@ -72,7 +74,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char*
 // - component_writeInfo -
 // -----------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
 {
     sal_Bool bRet = sal_False;
 
@@ -106,6 +108,9 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
             for( i = 0; i < aServices.getLength(); i++ )
                 xNewKey->createKey( aServices.getConstArray()[ i ] );
 
+               if ( !component_writeInfoHelper( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl ) )
+                return false;
+
             bRet = true;
         }
         catch (registry::InvalidRegistryException &)
@@ -121,7 +126,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
+extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
     void * pRet = 0;
 
@@ -153,7 +158,11 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
             pRet = xFactory.get();
         }
     }
+    else
+    {
+        pRet =  component_getFactoryHelper( pImplName, reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
 
+    }
     return pRet;
 }
 

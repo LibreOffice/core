@@ -118,7 +118,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue( const ::rtl::OUString& aPrope
     aEntries[0] = mp->find( aPropertyName );
 
     if( NULL == aEntries[0] )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( aPropertyName, static_cast< XPropertySet* >( this ) );
 
     aEntries[1] = NULL;
 
@@ -131,7 +131,7 @@ Any SAL_CALL PropertySetHelper::getPropertyValue( const ::rtl::OUString& Propert
     aEntries[0] = mp->find( PropertyName );
 
     if( NULL == aEntries[0] )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
     aEntries[1] = NULL;
 
@@ -189,7 +189,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< ::rtl::OUStr
         delete[] pEntries;
 
         if( bUnknown )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
     }
 }
 
@@ -221,7 +221,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< :
         delete[] pEntries;
 
         if( bUnknown )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
     }
 
     return aValues;
@@ -249,7 +249,7 @@ PropertyState SAL_CALL PropertySetHelper::getPropertyState( const ::rtl::OUStrin
 
     aEntries[0] = mp->find( PropertyName );
     if( aEntries[0] == NULL )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
     aEntries[1] = NULL;
 
@@ -288,7 +288,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
         delete[] pEntries;
 
         if( bUnknown )
-            throw UnknownPropertyException();
+            throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
     }
 
     return aStates;
@@ -298,7 +298,7 @@ void SAL_CALL PropertySetHelper::setPropertyToDefault( const ::rtl::OUString& Pr
 {
     PropertyMapEntry *pEntry  = mp->find( PropertyName );
     if( NULL == pEntry )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
     _setPropertyToDefault( pEntry );
 }
@@ -307,7 +307,7 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const ::rtl::OUString& aProp
 {
     PropertyMapEntry* pEntry = mp->find( aPropertyName );
     if( NULL == pEntry )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( aPropertyName, static_cast< XPropertySet* >( this ) );
 
     return _getPropertyDefault( pEntry );
 }
