@@ -945,14 +945,14 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
 // -----------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::setIdentifier( const ::rtl::OUString& _Identifier ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( getMutex() );
     m_sModuleIdentifier = _Identifier;
 }
 
 // -----------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_sModuleIdentifier;
 }
 
@@ -1219,7 +1219,7 @@ void SbaXDataBrowserController::disposing()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( getMutex() );
 
     SbaXDataBrowserController_Base::frameAction( aEvent );
 

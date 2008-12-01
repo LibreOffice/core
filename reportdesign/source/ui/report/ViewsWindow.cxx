@@ -189,7 +189,6 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
     SetPaintTransparent(TRUE);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-    EnableMapMode();
     StartListening(m_aColorConfig);
     ImplInitSettings();
 }
@@ -251,11 +250,12 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
             pSectionWindow->getStartMarker().Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT );
         }
     } // for (;aIter != aEnd ; ++aIter,++nPos)
-    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-    aStartWith *= GetMapMode().GetScaleX();
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    aStartWidth *= GetMapMode().GetScaleX();
     Size aOut = GetOutputSizePixel();
-    aOut.Width() = aStartWith;
+    aOut.Width() = aStartWidth;
     aOut = PixelToLogic(aOut);
+    m_pParent->notifySizeChanged();
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
     Invalidate(aRect,INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
@@ -264,18 +264,18 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
 void OViewsWindow::Resize()
 {
     Window::Resize();
-    if ( m_aSections.empty() )
-        return;
-
-    const Point aOffset = m_pParent->getScrollOffset();
-    Point aStartPoint(0,aOffset.Y());
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
-    for (USHORT nPos=0;aIter != aEnd ; ++aIter,++nPos)
+    if ( !m_aSections.empty() )
     {
-        const ::boost::shared_ptr<OSectionWindow> pSectionWindow = (*aIter);
-        impl_resizeSectionWindow(*pSectionWindow.get(),aStartPoint,true);
-    } // for (;aIter != aEnd ; ++aIter)
+        const Point aOffset(m_pParent->getThumbPos());
+        Point aStartPoint(0,-aOffset.Y());
+        TSectionsMap::iterator aIter = m_aSections.begin();
+        TSectionsMap::iterator aEnd = m_aSections.end();
+        for (USHORT nPos=0;aIter != aEnd ; ++aIter,++nPos)
+        {
+            const ::boost::shared_ptr<OSectionWindow> pSectionWindow = (*aIter);
+            impl_resizeSectionWindow(*pSectionWindow.get(),aStartPoint,true);
+        } // for (;aIter != aEnd ; ++aIter)
+    }
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::Paint( const Rectangle& rRect )
@@ -283,13 +283,13 @@ void OViewsWindow::Paint( const Rectangle& rRect )
     Window::Paint( rRect );
 
     Size aOut = GetOutputSizePixel();
-    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-    aStartWith *= GetMapMode().GetScaleX();
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    aStartWidth *= GetMapMode().GetScaleX();
 
-    aOut.Width() -= (long)aStartWith;
+    aOut.Width() -= (long)aStartWidth;
     aOut = PixelToLogic(aOut);
 
-    Rectangle aRect(PixelToLogic(Point(aStartWith,0)),aOut);
+    Rectangle aRect(PixelToLogic(Point(aStartWidth,0)),aOut);
     Wallpaper aWall( m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor );
     DrawWallpaper(aRect,aWall);
 }
@@ -317,7 +317,6 @@ void OViewsWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,USHORT _nPosition)
 {
     ::boost::shared_ptr<OSectionWindow> pSectionWindow( new OSectionWindow(this,_xSection,_sColorEntry) );
-
     m_aSections.insert(getIteratorAtPos(_nPosition) , TSectionsMap::value_type(pSectionWindow));
     m_pParent->setMarked(&pSectionWindow->getReportSection().getSectionView(),m_aSections.size() == 1);
 
@@ -361,7 +360,6 @@ sal_Int32 OViewsWindow::getTotalHeight() const
     {
         nHeight += (*aIter)->GetSizePixel().Height();
     }
-
     return nHeight;
 }
 //----------------------------------------------------------------------------
@@ -1735,53 +1733,59 @@ void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& 
     }
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::zoom(const sal_Int16 _nZoom)
+void OViewsWindow::zoom(const Fraction& _aZoom)
 {
-    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-    aStartWith *= GetMapMode().GetScaleX();
+    const MapMode& aMapMode = GetMapMode();
 
-    setZoomFactor(_nZoom,*this);
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    if ( _aZoom < aMapMode.GetScaleX() )
+        aStartWidth *= aMapMode.GetScaleX();
+    else
+        aStartWidth *= _aZoom;
+
+    setZoomFactor(_aZoom,*this);
 
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
     {
-        (*aIter)->zoom(_nZoom);
+        (*aIter)->zoom(_aZoom);
     } // for (;aIter != aEnd ; ++aIter)
 
     Resize();
 
     Size aOut = GetOutputSizePixel();
-    aOut.Width() = aStartWith;
+    aOut.Width() = aStartWidth;
     aOut = PixelToLogic(aOut);
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
     Invalidate(aRect,/*INVALIDATE_NOERASE | */INVALIDATE_NOCHILDREN /*| INVALIDATE_TRANSPARENT*/);
 }
 //----------------------------------------------------------------------------
-void OViewsWindow::scrollChildren(long _nDeltaX, long _nDeltaY)
+void OViewsWindow::scrollChildren(const Point& _aThumbPos)
 {
-    const Size aDelta( PixelToLogic(Size(_nDeltaX,_nDeltaY)) );
-    if ( _nDeltaY )
+    const Point aPos(PixelToLogic(_aThumbPos));
     {
-        MapMode aMap = GetMapMode();
-        Point aOrg = aMap.GetOrigin();
-        aMap.SetOrigin( Point(aOrg.X() , aOrg.Y() - _nDeltaY));
-        SetMapMode( aMap );
-        OWindowPositionCorrector aCorrector(this,0,-_nDeltaY);
-        Scroll(0,-aDelta.Height(),SCROLL_CHILDREN);
+        MapMode aMapMode = GetMapMode();
+        const Point aOld = aMapMode.GetOrigin();
+        aMapMode.SetOrigin(m_pParent->GetMapMode().GetOrigin());
+
+        const Point aPosY(m_pParent->PixelToLogic(_aThumbPos,aMapMode));
+
+        aMapMode.SetOrigin( Point(aOld.X() , - aPosY.Y()));
+        SetMapMode( aMapMode );
+        //OWindowPositionCorrector aCorrector(this,0,-( aOld.Y() + aPosY.Y()));
+        Scroll(0, -( aOld.Y() + aPosY.Y()),SCROLL_CHILDREN);
+        Resize();
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
     }
 
-    if ( _nDeltaX )
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aEnd = m_aSections.end();
+    for (;aIter != aEnd ; ++aIter)
     {
-        TSectionsMap::iterator aIter = m_aSections.begin();
-        TSectionsMap::iterator aEnd = m_aSections.end();
-        for (;aIter != aEnd ; ++aIter)
-        {
-            (*aIter)->scrollChildren(_nDeltaX);
-        } // for (;aIter != aEnd ; ++aIter)
-    }
+        (*aIter)->scrollChildren(aPos.X());
+    } // for (;aIter != aEnd ; ++aIter)
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const

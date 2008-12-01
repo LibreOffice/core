@@ -353,9 +353,9 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const sal_Int16 _nZoom);
+        void zoom(const Fraction& _aZoom);
 
-        void scrollChildren(long nDeltaX, long nDeltaY);
+        void scrollChildren(const Point& _aThumbPos);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.

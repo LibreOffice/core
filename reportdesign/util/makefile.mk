@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.21.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,6 +36,13 @@ TARGET2=$(TARGET)ui
 # USE_DEFFILE=TRUE
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
+
+EXTENSION_VERSION_BASE=1.0.9
+.IF "$(PRODUCT)" != ""
+    EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
+.ELSE
+    EXTENSION_VERSION=$(EXTENSION_VERSION_BASE).$(BUILD)
+.ENDIF
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
@@ -202,8 +209,12 @@ DEF3NAME=$(SHL3TARGET)
 
 .IF "$(SOLAR_JAVA)"!=""
 
-XMLFILES = $(EXTENSIONDIR)$/description.xml \
-            $(EXTENSIONDIR)$/META-INF$/manifest.xml
+XMLFILES =  $(EXTENSIONDIR)$/META-INF$/manifest.xml
+
+# DESCRIPTION_SRC is the source file which is copied into the extension
+# It is defaulted to "descriptio.xml", but we want to pre-process it, so we use an intermediate
+# file
+DESCRIPTION_SRC = $(MISC)$/description.xml
 
 COMPONENT_MERGED_XCU= \
             $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Setup.xcu \
@@ -223,6 +234,10 @@ COMPONENT_MERGED_XCU= \
 
 COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
+    
+COMPONENT_IMAGES= \
+    $(EXTENSIONDIR)$/images$/em42.png \
+    $(EXTENSIONDIR)$/images$/em42_hc.png
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \
@@ -254,7 +269,7 @@ COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP) $(COMPONENT_IMAGES)
 
 # --- Targets ----------------------------------
 
@@ -316,6 +331,10 @@ $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
+$(EXTENSIONDIR)$/images$/%.png : $(PRJ)$/images$/%.png
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
 $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICENSE.html
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
@@ -323,6 +342,9 @@ $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADM
 $(COMPONENT_HELP) : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+$(DESCRIPTION_SRC): description.xml
+    $(TYPE) description.xml | $(SED) s/#VERSION#/$(EXTENSION_VERSION)/> $@
 
 .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk

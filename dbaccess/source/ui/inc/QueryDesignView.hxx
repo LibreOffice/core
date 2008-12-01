@@ -153,7 +153,18 @@ namespace dbaui
         void stopTimer();
         void startTimer();
         void reset();
-        sal_Bool InitFromParseNode();
+
+        /** initializes the view from the current parser / parse iterator of the controller
+
+            @param _pErrorInfo
+                When not <NULL/>, the instance pointed to by this parameter takes the error
+                which happened during the initialization.
+                If it is not <NULL/>, then any such error will be displayed, using the controller's
+                showError method.
+
+            @return <TRUE/> if and only if the initialization was successful
+        */
+        bool    initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,

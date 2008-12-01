@@ -82,8 +82,6 @@ namespace dbaui
     {
         try
         {
-            ::osl::MutexGuard aGuard(m_aEntryMutex);
-
             ::rtl::OUString aName = GetEntryText( _pApplyTo );
             ::rtl::OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
 
@@ -218,10 +216,11 @@ namespace dbaui
         return NULL != pTransfer;
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK(SbaTableQueryBrowser, OnCopyEntry, SvLBoxEntry*, _pEntry)
+    IMPL_LINK(SbaTableQueryBrowser, OnCopyEntry, void*, /*NOTINTERESIN*/)
     {
-        if( isEntryCopyAllowed(_pEntry) )
-            copyEntry(_pEntry);
+        SvLBoxEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
+        if( isEntryCopyAllowed( pSelected ) )
+            copyEntry( pSelected );
         return 0;
     }
     // -----------------------------------------------------------------------------
@@ -246,8 +245,7 @@ namespace dbaui
     {
         m_nAsyncDrop = 0;
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        ::osl::MutexGuard aGuard(m_aMutex);
-
+        ::osl::MutexGuard aGuard( getMutex() );
 
         if ( m_aAsyncDrop.nType == E_TABLE )
         {

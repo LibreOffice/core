@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.80.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,8 @@ EXCEPTIONSFILES=\
             $(SLO)$/AppDetailPageHelper.obj	\
             $(SLO)$/AppSwapWindow.obj		\
             $(SLO)$/AppTitleWindow.obj		\
-            $(SLO)$/AppView.obj
+            $(SLO)$/AppView.obj             \
+            $(SLO)$/subcomponentmanager.obj
             
 
 SLOFILES =\

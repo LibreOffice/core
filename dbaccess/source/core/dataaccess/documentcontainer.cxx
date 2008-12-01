@@ -148,7 +148,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
                                     , sal_Bool _bFormsContainer
                                     )
     :ODefinitionContainer(_xORB,_xParentContainer,_pImpl)
-    ,OPropertyStateContainer(m_aBHelper)
+    ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_bFormsContainer(_bFormsContainer)
 {
     DBG_CTOR(ODocumentContainer, NULL);
@@ -162,7 +162,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
 ODocumentContainer::~ODocumentContainer()
 {
     DBG_DTOR(ODocumentContainer, NULL);
-    if ( !m_aBHelper.bInDispose && !m_aBHelper.bDisposed )
+    if ( !OContentHelper::rBHelper.bInDispose && !OContentHelper::rBHelper.bDisposed )
     {
         acquire();
         dispose();

@@ -141,7 +141,7 @@ namespace dbaui
 
     public:
         OModuleClient                   m_aModuleClient;
-        Any                             m_aCurrentError; // contains the current error which can be set through IEnvironment
+        ::dbtools::SQLExceptionInfo     m_aCurrentError; // contains the current error which can be set through IEnvironment
 
         // <properties>
         SharedConnection                m_xConnection;
@@ -337,7 +337,7 @@ namespace dbaui
         // now really reconnect ...
         if ( bReConnect )
         {
-            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), sal_True ), SharedConnection::TakeOwnership );
+            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), NULL ), SharedConnection::TakeOwnership );
             m_pImpl->m_aSdbMetaData.reset( m_pImpl->m_xConnection );
         }
 
@@ -408,61 +408,38 @@ namespace dbaui
         else
             OSingleDocumentController_Base::disposing( _rSource );
     }
+
     //--------------------------------------------------------------------
-    namespace
+    void OSingleDocumentController::appendError( const ::rtl::OUString& _rErrorMessage, const ::dbtools::StandardSQLState _eSQLState,
+            const sal_Int32 _nErrorCode )
     {
-        void concatSQLExceptions(Any& _rChainLeft, const Any& _rChainRight)
-        {
-            if (!_rChainLeft.hasValue())
-                _rChainLeft = _rChainRight;
-            else
-            {
-                // to travel the chain by reference (and not by value), we need the getValue ...
-                // looks like a hack, but the meaning of getValue is documented, and it's the only chance for reference-traveling ....
-
-                DBG_ASSERT(::dbtools::SQLExceptionInfo(_rChainLeft).isValid(), "concatSQLExceptions: invalid warnings chain (this will crash)!");
-
-                const SQLException* pChainTravel = static_cast<const SQLException*>(_rChainLeft.getValue());
-                ::dbtools::SQLExceptionIteratorHelper aReferenceIterHelper(*pChainTravel);
-                while (aReferenceIterHelper.hasMoreElements())
-                    pChainTravel = aReferenceIterHelper.next();
-
-                // reached the end of the chain, and pChainTravel points to the last element
-                const_cast<SQLException*>(pChainTravel)->NextException = _rChainRight;
-            }
-        }
-
+        m_pImpl->m_aCurrentError.append( ::dbtools::SQLExceptionInfo::SQL_EXCEPTION, _rErrorMessage, getStandardSQLStateAscii( _eSQLState ),
+            _nErrorCode );
     }
     //--------------------------------------------------------------------
-    /** appends an error in the current environment.
-        @param  _aException
-            contains a description of the error or the error directly
-    */
-    void OSingleDocumentController::appendError(const SQLException& _aException)
-    {
-        concatSQLExceptions(m_pImpl->m_aCurrentError,makeAny(_aException));
-    }
-    //--------------------------------------------------------------------
-    /** clears the error state.
-    */
     void OSingleDocumentController::clearError()
     {
-        m_pImpl->m_aCurrentError = Any();
+        m_pImpl->m_aCurrentError = ::dbtools::SQLExceptionInfo();
     }
-    //--------------------------------------------------------------------
-    /** set the current error in the given parameter.
-        @param  _rException
-            will contain the current error
-    */
-    void OSingleDocumentController::getError(SQLException& _rException ) const
-    {
-        m_pImpl->m_aCurrentError >>= _rException;
-    }
+
     //--------------------------------------------------------------------
     sal_Bool OSingleDocumentController::hasError() const
     {
-        return m_pImpl->m_aCurrentError.hasValue();
+        return m_pImpl->m_aCurrentError.isValid();
     }
+
+    //--------------------------------------------------------------------
+    const ::dbtools::SQLExceptionInfo& OSingleDocumentController::getError() const
+    {
+        return m_pImpl->m_aCurrentError;
+    }
+
+    //--------------------------------------------------------------------
+    void OSingleDocumentController::displayError()
+    {
+        showError( m_pImpl->m_aCurrentError );
+    }
+
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OSingleDocumentController::suspend(sal_Bool bSuspend) throw( RuntimeException )
     {
@@ -690,7 +667,7 @@ namespace dbaui
     ::rtl::OUString SAL_CALL OSingleDocumentController::getTitle()
         throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard( getMutex() );
         if ( m_bExternalTitle )
             return impl_getTitleHelper_throw()->getTitle ();
 
@@ -721,7 +698,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     Reference< XEmbeddedScripts > SAL_CALL OSingleDocumentController::getScriptContainer() throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::MutexGuard aGuard( getMutex() );
         if ( !m_pImpl->documentHasScriptSupport() )
             return NULL;
 

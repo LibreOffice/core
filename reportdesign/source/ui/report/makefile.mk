@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +56,6 @@ SLOFILES =\
             $(SLO)$/dlgedclip.obj				\
             $(SLO)$/ReportWindow.obj			\
             $(SLO)$/DesignView.obj				\
-            $(SLO)$/InsertFunctions.obj			\
             $(SLO)$/propbrw.obj
 
 

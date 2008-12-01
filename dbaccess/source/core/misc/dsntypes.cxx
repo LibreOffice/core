@@ -36,11 +36,7 @@
 #include <unotools/confignode.hxx>
 #include <tools/rc.hxx>
 #include <tools/debug.hxx>
-// --- needed because of the solar mutex
-#include <vos/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/file.hxx>
-// ---
 #include "dbastrings.hrc"
 #include "core_resource.hxx"
 #include "core_resource.hrc"
@@ -127,7 +123,6 @@ ODsnTypeCollection::ODsnTypeCollection()
 :m_nLivingIterators(0)
 #endif
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_CTOR(ODsnTypeCollection,NULL);
     ODataSourceTypeStringListResource aTypes(RSC_DATASOURCE_TYPES);
     aTypes.fill(m_aDsnPrefixes);

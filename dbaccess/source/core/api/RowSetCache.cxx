@@ -575,7 +575,7 @@ void ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< :
 
     Sequence<sal_Int8> aSeq;
     if(x.is())
-        x->readSomeBytes(aSeq,length);
+        x->readBytes(aSeq,length);
     updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
@@ -586,7 +586,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
 
     Sequence<sal_Int8> aSeq;
     if(x.is())
-        x->readSomeBytes(aSeq,length);
+        x->readBytes(aSeq,length);
 
     updateValue(columnIndex,aSeq);
 }

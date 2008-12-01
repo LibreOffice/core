@@ -1082,13 +1082,11 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
         rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(),SDRINSERT_ADDMARK);
 }
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-void setZoomFactor(const sal_Int16 _nZoom,Window& _rWindow)
+void setZoomFactor(const Fraction& _aZoom,Window& _rWindow)
 {
-    Fraction aZoom(_nZoom,100);
     MapMode aMapMode( _rWindow.GetMapMode() );
-    aMapMode.SetScaleX(aZoom);
-    aMapMode.SetScaleY(aZoom);
+    aMapMode.SetScaleX(_aZoom);
+    aMapMode.SetScaleY(_aZoom);
     _rWindow.SetMapMode(aMapMode);
 }
 // -----------------------------------------------------------------------------

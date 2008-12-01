@@ -91,6 +91,9 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
 #endif
@@ -132,7 +135,8 @@ namespace dbaui
     }
 
     //---------------------------------------------------------------------
-    Reference< XConnection > ODatasourceConnector::connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bShowError) const
+    Reference< XConnection > ODatasourceConnector::connect( const ::rtl::OUString& _rDataSourceName,
+        ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
     {
         Reference< XConnection > xConnection;
 
@@ -142,28 +146,24 @@ namespace dbaui
 
         // get the data source
         Reference< XDataSource > xDatasource(
-            getDataSourceByName_displayError( _rDataSourceName, m_pErrorMessageParent, m_xORB, _bShowError ),
+            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xORB, _pErrorInfo ),
             UNO_QUERY
         );
+
         if ( xDatasource.is() )
-            xConnection = connect( xDatasource, _bShowError );
+            xConnection = connect( xDatasource, _pErrorInfo );
         return xConnection;
     }
 
     //---------------------------------------------------------------------
-    Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource, sal_Bool _bShowError) const
+    Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource,
+        ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
     {
         Reference< XConnection > xConnection;
 
-        OSL_ENSURE(isValid(), "ODatasourceConnector::connect: invalid object!");
-        if (!isValid())
+        OSL_ENSURE( isValid() && _xDataSource.is(), "ODatasourceConnector::connect: invalid object or argument!" );
+        if ( !isValid() || !_xDataSource.is() )
             return xConnection;
-
-        if (!_xDataSource.is())
-        {
-            OSL_ENSURE(sal_False,   "ODatasourceConnector::connect: could not retrieve the data source!");
-            return xConnection;
-        }
 
         // get user/password
         ::rtl::OUString sPassword, sUser;
@@ -177,7 +177,7 @@ namespace dbaui
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "ODatasourceConnector::connect: error while retrieving data source properties!");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         // try to connect
@@ -210,19 +210,44 @@ namespace dbaui
                 xConnection = _xDataSource->getConnection(sUser, sPassword);
             }
         }
-        catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
-        catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
-        catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
+        catch( const SQLException& )
+        {
+            aInfo = ::cppu::getCaughtException();
+        }
         catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        if ( !_bShowError )
-            return xConnection;
+        if ( !aInfo.isValid() )
+        {
+            // there was no error during connecting, but perhaps a warning?
+            Reference< XWarningsSupplier > xConnectionWarnings( xConnection, UNO_QUERY );
+            if ( xConnectionWarnings.is() )
+            {
+                try
+                {
+                    Any aWarnings( xConnectionWarnings->getWarnings() );
+                    if ( aWarnings.hasValue() )
+                    {
+                        String sMessage( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
+                        sMessage.SearchAndReplaceAscii( "$buttontext$", Button::GetStandardText( BUTTON_MORE ) );
+                        sMessage = OutputDevice::GetNonMnemonicString( sMessage );
 
-        // was there and error?
-        if ( aInfo.isValid() )
+                        SQLWarning aContext;
+                        aContext.Message = sMessage;
+                        aContext.NextException = aWarnings;
+                        aInfo = aContext;
+                    }
+                    xConnectionWarnings->clearWarnings();
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+            }
+        }
+        else
         {
             if ( m_sContextInformation.getLength() )
             {
@@ -232,37 +257,20 @@ namespace dbaui
 
                 aInfo = aError;
             }
-
-            showError(aInfo, m_pErrorMessageParent, m_xORB);
-            return xConnection;
         }
 
-        // was there a warning?
-        Reference< XWarningsSupplier > xConnectionWarnings( xConnection, UNO_QUERY );
-        if ( xConnectionWarnings.is() )
+        // was there an error?
+        if ( aInfo.isValid() )
         {
-            try
+            if ( _pErrorInfo )
             {
-                Any aWarnings( xConnectionWarnings->getWarnings() );
-                if ( aWarnings.hasValue() )
-                {
-                    String sMessage( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
-                    sMessage.SearchAndReplaceAscii( "$buttontext$", Button::GetStandardText( BUTTON_MORE ) );
-                    sMessage = OutputDevice::GetNonMnemonicString( sMessage );
-
-                    SQLContext aContext;
-                    aContext.Message = sMessage;
-                    aContext.NextException = aWarnings;
-                    showError( SQLExceptionInfo( aContext ), m_pErrorMessageParent, m_xORB );
-                }
-                xConnectionWarnings->clearWarnings();
+                *_pErrorInfo = aInfo;
             }
-            catch( const Exception& )
+            else
             {
-                DBG_UNHANDLED_EXCEPTION();
+                showError( aInfo, m_pErrorMessageParent, m_xORB );
             }
         }
-
         return xConnection;
     }
 

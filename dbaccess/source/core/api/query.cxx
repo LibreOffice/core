@@ -138,7 +138,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XMultiServiceFactory >& _xORB)
     :OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
     ,OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(m_aBHelper,sal_True)
+    ,ODataSettings(OContentHelper::rBHelper,sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
     ,m_pColumnMediator( NULL )

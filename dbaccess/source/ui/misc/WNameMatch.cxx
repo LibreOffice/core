@@ -282,7 +282,7 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OWizNameMatching, TableListClickHdl, SvTreeListBox *, /*pListBox*/ )
+IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
 {
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if(pEntry)
@@ -316,7 +316,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, SvTreeListBox *, /*pListBox*/ )
     return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox *, /*pListBox*/ )
+IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/ )
 {
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if(pEntry)

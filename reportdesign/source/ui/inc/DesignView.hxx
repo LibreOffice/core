@@ -34,23 +34,28 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
-#include <vcl/split.hxx>
-#include <vcl/scrbar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
+
 #include <vcl/timer.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/splitwin.hxx>
+#include <vcl/split.hxx>
+#include <vcl/scrbar.hxx>
+
 #include <svtools/hint.hxx>
 #include <svtools/brdcst.hxx>
-#include <comphelper/stl_types.hxx>
-#include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>
 #include <boost/shared_ptr.hpp>
 #include <svx/svdedtv.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/splitwin.hxx>
-#include <MarkedSection.hxx>
+#include <svx/zoomitem.hxx>
+
+#include <comphelper/stl_types.hxx>
+
+#include "ReportDefines.hxx"
+#include "MarkedSection.hxx"
 #include "ScrollHelper.hxx"
 
 class KeyEvent;
@@ -276,12 +281,17 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void            zoom(const sal_Int16 _nZoom);
+        void            zoom(const Fraction& _aZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
+
+        /** calculates the zoom factor.
+            @param  _eType  which kind of zoom is needed
+        */
+        sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 //==================================================================
 }   //rptui

@@ -221,6 +221,7 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#include "subcomponentmanager.hxx"
 
 //........................................................................
 namespace dbaui
@@ -263,7 +264,11 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                 sal_Int32 nResult = RET_YES;
                 if ( bConfirm )
                     nResult = ::dbaui::askForUserAction(getView(),STR_TITLE_CONFIRM_DELETION ,STR_QUERY_DELETE_TABLE,_rList.size() > 1 && (aIter+1) != _rList.end(),sTableName);
-                if ( (RET_YES == nResult) || (RET_ALL == nResult) )
+
+                bool bUserConfirmedDelete =
+                            ( RET_YES == nResult )
+                        ||  ( RET_ALL == nResult );
+                if ( bUserConfirmedDelete && m_pSubComponentManager->closeSubFrames( sTableName, E_TABLE ) )
                 {
                     SQLExceptionInfo aErrorInfo;
                     try
@@ -286,7 +291,6 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                                 }
                             }
                         }
-                        impl_deActivateSubFrame_throw(sTableName,E_TABLE);
                     }
                     catch(SQLContext& e) { aErrorInfo = e; }
                     catch(SQLWarning& e) { aErrorInfo = e; }
@@ -370,8 +374,13 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
             bool bSuccess = false;
 
-            if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
-                 ( eResult == svtools::QUERYDELETE_YES ) )
+            bool bUserConfirmedDelete =
+                        ( eResult == svtools::QUERYDELETE_ALL )
+                    ||  ( eResult == svtools::QUERYDELETE_YES );
+
+            if  (   bUserConfirmedDelete
+                &&  (   ( _eType == E_QUERY ) ? m_pSubComponentManager->closeSubFrames( *aThisRound, _eType ) : true )
+                )
             {
                 try
                 {
@@ -379,9 +388,6 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                         xHierarchyName->removeByHierarchicalName( *aThisRound );
                     else
                         xNames->removeByName( *aThisRound );
-
-                    if ( _eType == E_QUERY )
-                        impl_deActivateSubFrame_throw(*aThisRound,_eType);
 
                     bSuccess = true;
 
@@ -438,7 +444,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 void OApplicationController::deleteEntries()
 {
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getContainer() )
     {
@@ -465,10 +471,10 @@ void OApplicationController::deleteEntries()
     }
 }
 // -----------------------------------------------------------------------------
-const SharedConnection& OApplicationController::ensureConnection()
+const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     if ( !m_xDataSourceConnection.is() )
     {
@@ -476,13 +482,34 @@ const SharedConnection& OApplicationController::ensureConnection()
         String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
         sConnectingContext.SearchAndReplaceAscii("$name$", getStrippedDatabaseName());
 
-        m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, sal_True ) );
+        m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, _pErrorInfo ) );
         if ( m_xDataSourceConnection.is() )
-            m_xMetaData = m_xDataSourceConnection->getMetaData();
-
-        // otherwise we got a loop when connecting to db throws an error
-//      if ( !m_xDataSourceConnection.is() )
-//          getContainer()->clearSelection();
+        {
+            SQLExceptionInfo aError;
+            try
+            {
+                m_xMetaData = m_xDataSourceConnection->getMetaData();
+            }
+            catch( const SQLException& )
+            {
+                aError = ::cppu::getCaughtException();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            if ( aError.isValid() )
+            {
+                if ( _pErrorInfo )
+                {
+                    *_pErrorInfo = aError;
+                }
+                else
+                {
+                    showError( aError );
+                }
+            }
+        }
     }
     return m_xDataSourceConnection;
 }
@@ -502,8 +529,9 @@ sal_Bool OApplicationController::isConnectionReadOnly() const
         {
             bIsConnectionReadOnly = m_xMetaData->isReadOnly();
         }
-        catch(SQLException&)
+        catch(const SQLException&)
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     // TODO check configuration
@@ -562,7 +590,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
 void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames) const
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     OSL_ENSURE(getContainer(),"View isn't valid! -> GPF");
 
@@ -595,7 +623,7 @@ TransferableHelper* OApplicationController::copyObject()
     try
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard( getMutex() );
 
         ElementType eType = getContainer()->getElementType();
         TransferableHelper* pData = NULL;
@@ -634,7 +662,7 @@ TransferableHelper* OApplicationController::copyObject()
                 if ( xElements.is() && !aList.empty() )
                 {
                     Reference< XContent> xContent(xElements->getByHierarchicalName(*aList.begin()),UNO_QUERY);
-                    pData = new OComponentTransferable(m_sDatabaseName,xContent);
+                    pData = new OComponentTransferable( getDatabaseName(), xContent );
                 }
             }
             break;
@@ -714,7 +742,8 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     try
                     {
                         // the concrete query
-                        Reference<XQueryDefinitionsSupplier> xSourceQuerySup(getDataSourceByName_displayError( sDataSourceName, getView(), getORB(), true ),UNO_QUERY);
+                        Reference< XDataSource > xDataSource( getDataSourceByName( sDataSourceName, getView(), getORB(), NULL ) );
+                        Reference< XQueryDefinitionsSupplier > xSourceQuerySup( xDataSource, UNO_QUERY );
                         if ( xSourceQuerySup.is() )
                             xQueries.set(xSourceQuerySup->getQueryDefinitions(),UNO_QUERY);
 
@@ -865,7 +894,7 @@ sal_Bool OApplicationController::isTableFormat()  const
 sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
 {
     // first get the dest connection
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     SharedConnection xConnection( ensureConnection() );
     if ( !xConnection.is() )
@@ -878,7 +907,7 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     m_nAsyncDrop = 0;
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
 
     if ( m_aAsyncDrop.nType == E_TABLE )

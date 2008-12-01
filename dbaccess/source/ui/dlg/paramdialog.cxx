@@ -67,6 +67,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#include <tools/diagnose_ex.h>
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
 #endif
@@ -163,7 +164,7 @@ DBG_NAME(OParameterDialog)
         }
         catch(Exception&)
         {
-            DBG_ERROR("OParameterDialog::OParameterDialog : soemthing went wrong while retrieving the parameters !");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
 
@@ -254,6 +255,7 @@ DBG_NAME(OParameterDialog)
                     }
                     catch(Exception&)
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
 
                     String sMessage;
@@ -314,6 +316,7 @@ DBG_NAME(OParameterDialog)
                 }
                 catch(Exception&)
                 {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
 
             }

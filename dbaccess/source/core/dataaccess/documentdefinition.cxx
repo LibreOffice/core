@@ -545,7 +545,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
                                          ,const Reference<XConnection>& _xConnection
                                          )
                                          :OContentHelper(_xORB,_rxContainer,_pImpl)
-    ,OPropertyStateContainer(m_aBHelper)
+    ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_pInterceptor(NULL)
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(sal_False)
@@ -562,7 +562,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
 ODocumentDefinition::~ODocumentDefinition()
 {
     DBG_DTOR(ODocumentDefinition, NULL);
-    if ( !m_aBHelper.bInDispose && !m_aBHelper.bDisposed )
+    if ( !OContentHelper::rBHelper.bInDispose && !OContentHelper::rBHelper.bDisposed )
     {
         acquire();
         dispose();

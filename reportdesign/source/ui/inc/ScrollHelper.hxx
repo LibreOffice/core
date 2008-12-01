@@ -66,7 +66,6 @@ namespace rptui
         ScrollBar           m_aVScroll;
         ScrollBarBox        m_aCornerWin;       // window in the bottom right corner
         Size                m_aTotalPixelSize;
-        Point               m_aPixOffset;       // offset to virtual window (pixel)
         ODesignView*        m_pParent;
         OReportWindow       m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
@@ -76,7 +75,6 @@ namespace rptui
         Size ResizeScrollBars();
         void ImplInitSettings();
         void impl_initScrollBar( ScrollBar& _rScrollBar ) const;
-        void impl_scrollContent( long nDeltaX, long nDeltaY );
 
         OScrollWindowHelper(OScrollWindowHelper&);
         void operator =(OScrollWindowHelper&);
@@ -95,7 +93,7 @@ namespace rptui
         */
         void                    initialize();
 
-        inline Point            getScrollOffset() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
+        inline Point            getThumbPos() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
         inline const OReportWindow& getReportWindow() const { return m_aReportWindow; }
         void                    setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
@@ -218,12 +216,17 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const sal_Int16 _nZoom);
+        void zoom(const Fraction& _aZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
+
+        /** calculates the zoom factor.
+            @param  _eType  which kind of zoom is needed
+        */
+        sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 }
 #endif // RPTUI_SCROLLHELPER_HXX

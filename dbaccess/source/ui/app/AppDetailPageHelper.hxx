@@ -196,14 +196,12 @@ namespace dbaui
         DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC );
 
         DECL_LINK( OnEntryDoubleClick,          SvTreeListBox* );
-        DECL_LINK( OnDeSelectHdl,               SvTreeListBox* );
+        DECL_LINK( OnEntrySelChange,            void* );
 
-        DECL_LINK( OnEntrySelectHdl,            SvLBoxEntry* );
-
-        DECL_LINK( OnCutEntry,                  SvLBoxEntry* );
-        DECL_LINK( OnCopyEntry,                 SvLBoxEntry* );
-        DECL_LINK( OnPasteEntry,                SvLBoxEntry* );
-        DECL_LINK( OnDeleteEntry,               SvLBoxEntry* );
+        DECL_LINK( OnCutEntry,                  void* );
+        DECL_LINK( OnCopyEntry,                 void* );
+        DECL_LINK( OnPasteEntry,                void* );
+        DECL_LINK( OnDeleteEntry,               void* );
 
         DECL_LINK(PreviewChangeHdl, void*);
         // click a TB slot

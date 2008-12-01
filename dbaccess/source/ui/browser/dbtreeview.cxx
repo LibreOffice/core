@@ -114,9 +114,9 @@ void DBTreeView::setModel(SvLBoxTreeList* _pTreeModel)
 }
 
 // -------------------------------------------------------------------------
-void DBTreeView::setSelectHdl(const Link& _rHdl)
+void DBTreeView::setSelChangeHdl( const Link& _rHdl )
 {
-    m_pTreeListBox->SetSelectHdl(_rHdl);
+    m_pTreeListBox->SetSelChangeHdl( _rHdl );
 }
 // -----------------------------------------------------------------------------
 void DBTreeView::GetFocus()

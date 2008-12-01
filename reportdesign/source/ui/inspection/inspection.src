@@ -59,6 +59,11 @@ String RID_STR_FORCENEWPAGE_CONST
 {
     Text [ en-US ] = "None;Before Section;After Section;Before & After Section" ;
 };
+String RID_STR_NONE
+{
+    Text [ en-US ] = "None";
+};
+
 String RID_STR_NEWROWORCOL
 {
     Text [ en-US ] = "New Row Or Column" ;

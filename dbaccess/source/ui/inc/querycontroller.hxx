@@ -196,7 +196,7 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-    protected:
+    private:
         virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -207,7 +207,13 @@ namespace dbaui
         virtual void reset();
         virtual void impl_initialize();
 
-        void        resetImpl();
+        void    impl_reset();
+        /// tells the user that we needed to switch to SQL view automatically
+        void    impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails );
+
+        /** switches to the graphical or SQL view mode, as determined by m_bGraphicalDesign
+        */
+        bool    impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
         /// sets m_sStatement, and notifies our respective property change listeners
         void    setStatement_fireEvent( const ::rtl::OUString& _rNewStatement, bool _bFireStatementChange = true );
@@ -217,6 +223,7 @@ namespace dbaui
         // OJoinController overridables
         virtual bool allowViews() const;
         virtual bool allowQueries() const;
+
     private:
         DECL_LINK( OnExecuteAddTable, void* );
     };

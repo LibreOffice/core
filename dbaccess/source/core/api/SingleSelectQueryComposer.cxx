@@ -1548,6 +1548,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     ::rtl::OUString sColumnExp = aSQL.makeStringAndClear();
                     getBoleanComparisonPredicate( sColumnExp, bValue, m_nBoolCompareMode, aSQL );
                 }
+                break;
             default:
                 aSQL.append( STR_EQUAL );
                 aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );

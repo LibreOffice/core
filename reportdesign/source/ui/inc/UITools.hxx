@@ -166,10 +166,10 @@ namespace rptui
     Rectangle getRectangleFromControl(SdrObject* pControl);
 
     /** sets the map mode at the window
-        @param  _nZoom      in percentage
+        @param  _aZoom      the zoom scale
         @param  _rWindow    where to set the map mode
     */
-    void setZoomFactor(const sal_Int16 _nZoom,Window& _rWindow);
+    void setZoomFactor(const Fraction& _aZoom,Window& _rWindow);
 }
 #endif //RPTUI_UITOOLS_HXX
 

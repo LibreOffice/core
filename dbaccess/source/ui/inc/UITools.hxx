@@ -200,15 +200,15 @@ namespace dbaui
             the window to use as parent for error messages
         @param _rxORB
             a service factory to use for components to be created
-        @param _bDisplayError
-            determines whether the method should display an error, when it happens, or simply absorb it
+        @param _pErrorInfo
+            takes the error info in case of failure. If <NULL/>, the error is displayed to the user.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >
-        getDataSourceByName_displayError(
+        getDataSourceByName(
                 const ::rtl::OUString& _rDataSourceName,
                 Window* _pErrorMessageParent,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB,
-                bool _bDisplayError
+                ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
 
     /** returns either the model when data source is given as parameter,

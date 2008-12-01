@@ -132,7 +132,7 @@ namespace dbaccess
                                                             ::comphelper::UStringHash,
                                                             ::comphelper::UStringEqual
                                                         > PropertyChangeListenerContainer;
-    typedef ::comphelper::OMutexAndBroadcastHelper  OContentHelper_MBASE;
+    typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
     typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::ucb::XContent
                                                 ,   ::com::sun::star::ucb::XCommandProcessor
                                                 ,   ::com::sun::star::lang::XServiceInfo
@@ -165,7 +165,6 @@ namespace dbaccess
         const ::connectivity::SQLError          m_aErrorHelper;
         TContentPtr                             m_pImpl;
         sal_uInt32                              m_nCommandId;
-
 
         // helper
         virtual void SAL_CALL disposing();

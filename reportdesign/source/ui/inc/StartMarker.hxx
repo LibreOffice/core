@@ -87,7 +87,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void            zoom(const sal_Int16 _nZoom);
+        void            zoom(const Fraction& _aZoom);
     };
 }
 #endif // RPTUI_STARTMARKER_HXX

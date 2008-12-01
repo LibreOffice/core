@@ -71,37 +71,23 @@ namespace dbaui
             @param  _pEntry
                 the selected entry
         */
-        virtual void onEntrySelect(SvLBoxEntry* _pEntry) = 0;
+        virtual void onSelectionChanged() = 0;
 
-        /** called when an entry in a tree view has been de-selected
-            @param  _pTree
-                The tree list box.
+        /** called when a "Cut" command is executed in a tree view
         */
-        virtual void onEntryDeSelect(SvTreeListBox& _rTree) = 0;
+        virtual void onCutEntry() = 0;
 
-        /** called when a "Cut" command is executed for a tree view entry
-            @param  _pEntry
-                The entry which was cutted.
+        /** called when a "Copy" command is executed in a tree view
         */
-        virtual void onCutEntry(SvLBoxEntry* _pEntry) = 0;
+        virtual void onCopyEntry() = 0;
 
-        /** called when a "Copy" command is executed for a tree view entry
-            @param  _pEntry
-                The entry which was cutted.
+        /** called when a "Paste" command is executed in a tree view
         */
-        virtual void onCopyEntry(SvLBoxEntry* _pEntry) = 0;
+        virtual void onPasteEntry() = 0;
 
-        /** called when a "Paste" command is executed for a tree view entry
-            @param  _pEntry
-                The entry which was cutted.
+        /** called when a "Delete" command is executed in a tree view
         */
-        virtual void onPasteEntry(SvLBoxEntry* _pEntry) = 0;
-
-        /** called when a "Delete" command is executed for a tree view entry
-            @param  _pEntry
-                The entry which was cutted.
-        */
-        virtual void onDeleteEntry(SvLBoxEntry* _pEntry) = 0;
+        virtual void onDeleteEntry() = 0;
 
         /// called when the preview mode was changed
         virtual void previewChanged( sal_Int32 _nMode ) = 0;

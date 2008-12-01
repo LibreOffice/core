@@ -45,7 +45,6 @@
 #include <svtools/smplhint.hxx>
 
 #define CORNER_SPACE     5
-#define TEXT_WIDTH      10
 
 //=====================================================================
 namespace rptui
@@ -64,7 +63,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
 : OColorListener(_pParent,_sColorEntry)
 ,m_aVRuler(this,WB_VERT)
 ,m_aText(this,WB_HYPHENATION)
-,m_aImage(this,WB_LEFT|WB_TOP)
+,m_aImage(this,WB_LEFT|WB_TOP|WB_SCALE)
 ,m_pParent(_pParent)
 ,m_bShowRuler(sal_True)
 {
@@ -177,7 +176,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     const Size aOutputSize = GetOutputSizePixel();
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
-    Rectangle aRect(m_aImage.GetPosPixel(),m_aImage.GetImage().GetSizePixel());
+    Rectangle aRect(m_aImage.GetPosPixel(),m_aImage.GetSizePixel());
     if ( rMEvt.GetClicks() == 2 || aRect.IsInside( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
@@ -237,25 +236,25 @@ void OStartMarker::Resize()
     const long nOutputWidth  = aOutputSize.Width();
     const long nOutputHeight = aOutputSize.Height();
 
+    const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
+    const Point aRulerPos(nOutputWidth - nVRulerWidth,0);
+    m_aVRuler.SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
+
     Size aImageSize = m_aImage.GetImage().GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
     aImageSize.Width() = long(aImageSize.Width() * (double)rMapMode.GetScaleX());
     aImageSize.Height() = long(aImageSize.Height() * (double)rMapMode.GetScaleY());
-    const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
-    const Point aRulerPos(nOutputWidth - nVRulerWidth/* - 5*/,0);
+
     Fraction aExtraWidth(long(REPORT_EXTRA_SPACE));
     aExtraWidth *= rMapMode.GetScaleX();
 
     Point aPos(aImageSize.Width() + (long)(aExtraWidth + aExtraWidth), aExtraWidth);
-
-    m_aText.SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText.GetTextHeight())).Height())));
+    const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText.GetTextHeight())).Height());
+    m_aText.SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
     aPos.X() = aExtraWidth;
     aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
-    m_aImage.SetPosSizePixel(aPos,aImageSize);/*Size(aImageSize.Width() + (long)aExtraWidth,aImageSize.Height() + (long)aExtraWidth));*/
-    //m_aImage.SetPosPixel(aPos);
-
-    m_aVRuler.SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
+    m_aImage.SetPosSizePixel(aPos,aImageSize);
 }
 // -----------------------------------------------------------------------------
 void OStartMarker::setTitle(const String& _sTitle)
@@ -314,13 +313,11 @@ void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
     showRuler(_bCollapsed);
 }
 // -----------------------------------------------------------------------
-void OStartMarker::zoom(const sal_Int16 _nZoom)
+void OStartMarker::zoom(const Fraction& _aZoom)
 {
-    setZoomFactor(_nZoom,*this);
-    m_aVRuler.SetZoom(Fraction(_nZoom,100));
-    // setZoomFactor(_nZoom,m_aVRuler);
-    setZoomFactor(_nZoom,m_aText);
-    setZoomFactor(_nZoom,m_aImage);
+    setZoomFactor(_aZoom,*this);
+    m_aVRuler.SetZoom(_aZoom);
+    setZoomFactor(_aZoom,m_aText);
     Resize();
     Invalidate();
 }

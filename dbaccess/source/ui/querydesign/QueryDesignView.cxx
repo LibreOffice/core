@@ -440,13 +440,13 @@ namespace
             eErrorCode = eColumnNotFound;
             String sError(ModuleRes(STR_QRY_COLUMN_NOT_FOUND));
             sError.SearchAndReplaceAscii("$name$",aColumnName);
-            _pView->getController().appendError(SQLException(sError,NULL,getStandardSQLState( SQL_GENERAL_ERROR ),1000,Any()));
+            _pView->getController().appendError( sError );
 
             try
             {
                 Reference<XDatabaseMetaData> xMeta = _pView->getController().getConnection()->getMetaData();
                 if ( xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() )
-                    _pView->getController().appendError(SQLException(String(ModuleRes(STR_QRY_CHECK_CASESENSITIVE)),NULL,getStandardSQLState( SQL_GENERAL_ERROR ),1000,Any()));
+                    _pView->getController().appendError( String( ModuleRes( STR_QRY_CHECK_CASESENSITIVE ) ) );
             }
             catch(Exception&)
             {
@@ -715,7 +715,7 @@ namespace
                    pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
             {
                 String sError(ModuleRes(STR_QRY_JOIN_COLUMN_COMPARE));
-                _pView->getController().appendError(SQLException(sError,NULL,getStandardSQLState( SQL_GENERAL_ERROR ),1000,Any()));
+                _pView->getController().appendError( sError );
                 return eIllegalJoin;
             }
 
@@ -1364,6 +1364,9 @@ namespace
             pNodeTmp = pNode->getChild(1);
             ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
             pNodeTmp = pNode->getChild(1);
+            // compress sort the criteria @see http://www.openoffice.org/issues/show_bug.cgi?id=24079
+            OSQLParseNode::compress(pNodeTmp);
+            pNodeTmp = pNode->getChild(1);
 
             // first extract the inner joins conditions
             GetInnerJoinCriteria(_pView,pNodeTmp);
@@ -1533,7 +1536,7 @@ namespace
             {
                 eErrorCode = eNoColumnInLike;
                 String sError(ModuleRes(STR_QRY_LIKE_LEFT_NO_COLUMN));
-                _pView->getController().appendError(SQLException(sError,NULL,getStandardSQLState( SQL_GENERAL_ERROR ),1000,Any()));
+                _pView->getController().appendError( sError );
             }
         }
         else if(    SQL_ISRULEOR2(pCondition,test_for_null,in_predicate)
@@ -2546,8 +2549,9 @@ namespace
         }
         return eErrorCode;
     }
+
     //------------------------------------------------------------------------------
-    void showParseError(IEnvironment& _rEnvironment,SqlParseError _eErrorCode)
+    String getParseErrorMessage( SqlParseError _eErrorCode )
     {
         USHORT nResId;
         switch(_eErrorCode)
@@ -2592,12 +2596,9 @@ namespace
                 nResId = STR_QRY_SYNTAX;
                 break;
         }
-        //  ErrorBox( _pWindow, ModuleRes( nResId ) ).Execute();
-        ModuleRes aRes(nResId);
-        String sError(aRes);
-        _rEnvironment.appendError(SQLException(sError,NULL,getStandardSQLState( SQL_GENERAL_ERROR ),1000,Any()));
+        ;
+        return String( ModuleRes( nResId ) );
     }
-    // -----------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -3030,12 +3031,10 @@ sal_Bool OQueryDesignView::checkStatement()
         aSqlCmd += sOrder;
     else
     {
-        if ( !m_rController.hasError() ) // fill generell error string
-            showParseError(m_rController,eErrorCode);
+        if ( !m_rController.hasError() )
+            m_rController.appendError( getParseErrorMessage( eErrorCode ) );
 
-        SQLException aError;
-        m_rController.getError(aError);
-        m_rController.showError(aError);
+        m_rController.displayError();
     }
 
     if ( xConnection.is() )
@@ -3228,25 +3227,33 @@ void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
     m_pSelectionBox->SetNoneVisbleRow(_nRows);
 }
 // -----------------------------------------------------------------------------
-sal_Bool OQueryDesignView::InitFromParseNode()
+bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     SqlParseError eErrorCode = eNativeMode;
     m_rController.clearError();
+
     try
     {
-        if ( (eErrorCode = InitFromParseNodeImpl(this,m_pSelectionBox)) != eOk )
-        {
-            if ( !m_rController.hasError() ) // fill generell error string
-                showParseError(m_rController,eErrorCode);
+        eErrorCode = InitFromParseNodeImpl( this, m_pSelectionBox );
 
-            SQLException aError;
-            m_rController.getError(aError);
-            m_rController.showError(aError);
+        if ( eErrorCode != eOk )
+        {
+            if ( !m_rController.hasError() )
+                m_rController.appendError( getParseErrorMessage( eErrorCode ) );
+
+            if ( _pErrorInfo )
+            {
+                *_pErrorInfo = m_rController.getError();
+            }
+            else
+            {
+                m_rController.displayError();
+            }
         }
     }
-    catch(Exception&)
+    catch ( const Exception& )
     {
-        OSL_ENSURE(0,"Can not fill query view!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return eErrorCode == eOk;
 }

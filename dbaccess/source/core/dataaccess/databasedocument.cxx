@@ -40,10 +40,15 @@
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
 
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/numberedcollection.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/property.hxx>
-
 #include <svtools/saveopt.hxx>
+
+#include <framework/titlehelper.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XExporter.hpp>
@@ -378,12 +383,12 @@ void ODatabaseDocument::impl_import_throw( const ::comphelper::NamedValueCollect
 
     /** property map for import info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
-    {
+     {
         { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { NULL, 0, 0, NULL, 0, 0 }
-    };
-    uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+          { NULL, 0, 0, NULL, 0, 0 }
+     };
+     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rResource.getOrDefault("URL",::rtl::OUString())));
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
 
@@ -392,8 +397,8 @@ void ODatabaseDocument::impl_import_throw( const ::comphelper::NamedValueCollect
     aFilterArgs[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
-        m_pImpl->m_aContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
-        UNO_QUERY_THROW );
+    m_pImpl->m_aContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
+     UNO_QUERY_THROW );
 
     Reference< XComponent > xComponent( *this, UNO_QUERY_THROW );
     xImporter->setTargetDocument( xComponent );
@@ -446,6 +451,14 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
     impl_reset_nothrow();
 
     ::comphelper::NamedValueCollection aResource( _Arguments );
+    if ( aResource.has( "FileName" ) && !aResource.has( "URL" ) )
+        // FileName is the compatibility name for URL, so we might have clients passing
+        // a FileName only. However, some of our code works with the URL only, so ensure
+        // we have one.
+        aResource.put( "URL", aResource.get( "FileName" ) );
+    if ( aResource.has( "URL" ) && !aResource.has( "FileName" ) )
+        // similar ... just in case there is legacy code which expects a FileName only
+        aResource.put( "FileName", aResource.get( "URL" ) );
 
     // now that somebody (perhaps) told us an macro execution mode, remember it as
     // ImposedMacroExecMode
@@ -1146,13 +1159,13 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
     }
     catch ( const Exception& )
     {
-        ::osl::MutexGuard aGuard( m_xMutex->getMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
         m_bClosing = false;
         throw;
     }
 
     // SYNCHRONIZED ->
-    ::osl::MutexGuard aGuard( m_xMutex->getMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
     m_bClosing = false;
     // <- SYNCHRONIZED
 }
@@ -1261,14 +1274,18 @@ void ODatabaseDocument::writeStorage( const Reference< XStorage >& _rxTargetStor
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(aSaveOpt.IsPrettyPrinting()));
+    if ( aSaveOpt.IsSaveRelFSys() )
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rMediaDescriptor.getOrDefault("URL",::rtl::OUString())));
+
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
@@ -1380,7 +1397,7 @@ void ODatabaseDocument::disposing()
     m_aStorageListeners.disposeAndClear( aDisposeEvent );
 
     // SYNCHRONIZED ->
-    ::osl::MutexGuard aGuard( m_xMutex->getMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon

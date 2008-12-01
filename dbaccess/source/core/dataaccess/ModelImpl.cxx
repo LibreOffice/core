@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,33 +101,6 @@ namespace css = ::com::sun::star;
 namespace dbaccess
 {
 //........................................................................
-
-//========================================================================
-//= SharedMutex
-//========================================================================
-//------------------------------------------------------------------------
-SharedMutex::SharedMutex()
-    :m_refCount( 0 )
-{
-}
-
-//------------------------------------------------------------------------
-SharedMutex::~SharedMutex()
-{
-}
-
-//------------------------------------------------------------------------
-void SAL_CALL SharedMutex::acquire()
-{
-    osl_incrementInterlockedCount( &m_refCount );
-}
-
-//------------------------------------------------------------------------
-void SAL_CALL SharedMutex::release()
-{
-    if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
-        delete this;
-}
 
 //============================================================
 //= VosMutexFacade
@@ -342,7 +315,8 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             :m_xModel()
             ,m_xDataSource()
             ,m_pStorageAccess( NULL )
-            ,m_aMutexFacade( m_xMutex->getMutex() )
+            ,m_aMutex()
+            ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
             ,m_aStorages()
             ,m_aMacroMode( *this )
@@ -381,7 +355,8 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             :m_xModel()
             ,m_xDataSource()
             ,m_pStorageAccess( NULL )
-            ,m_aMutexFacade( m_xMutex->getMutex() )
+            ,m_aMutex()
+            ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
             ,m_aStorages()
             ,m_aMacroMode( *this )
@@ -1139,7 +1114,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
         AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
-
+        
         AsciiPropertyValue( NULL, Any() )
     };
     return aKnownSettings;
@@ -1266,13 +1241,15 @@ namespace
 
         if ( xModify.is() && _bListen )
         {
-            // the listener from sfx2 uses SolarMutex internally
             _inout_rListener = new ::sfx2::DocumentStorageModifyListener( _rDocument, _rMutex );
             xModify->addModifyListener( _inout_rListener.get() );
         }
     }
+}
 
-    // -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+namespace
+{
     static void lcl_rebaseScriptStorage_throw( const Reference< XStorageBasedLibraryContainer >& _rxContainer,
         const Reference< XStorage >& _rxNewRootStorage )
     {
@@ -1322,13 +1299,16 @@ void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation,
                 m_pDBContext->registerPrivate( _rDocumentURL, this );
         }
 
-        // if we do not have a name, yet (i.e. are not registered at the database context),
-        // then use the URL as name
-        if ( !m_sName.getLength() )
+        if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
+            ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
+            )
         {
             INetURLObject aURL( _rDocumentURL );
             if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            {
                 m_sName = _rDocumentURL;
+                // TODO: our data source must broadcast the change of the Name property
+            }
         }
     }
 
@@ -1457,7 +1437,7 @@ void ODatabaseModelImpl::storageIsModified()
 // -----------------------------------------------------------------------------
 ModelDependentComponent::ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model )
     :m_pImpl( _model )
-    ,m_xMutex( _model->getSharedMutex() )
+    ,m_aMutex( _model->getSharedMutex() )
 {
 }
 

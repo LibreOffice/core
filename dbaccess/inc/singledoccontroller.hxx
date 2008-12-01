@@ -136,25 +136,29 @@ namespace dbaui
 
         // IEnvironment
         /** appends an error in the current environment.
-            @param  _aException
-                contains a description of the error or the error directly
         */
-        virtual void appendError(const ::com::sun::star::sdbc::SQLException& _aException);
+        virtual void appendError(
+                        const ::rtl::OUString& _rErrorMessage,
+                        const ::dbtools::StandardSQLState _eSQLState = ::dbtools::SQL_GENERAL_ERROR,
+                        const sal_Int32 _nErrorCode = 1000
+                     );
 
         /** clears the error state.
         */
         virtual void clearError();
 
-        /** set the current error in the given parameter.
-            @param  _rException
-                will contain the current error
-        */
-        virtual void getError(::com::sun::star::sdbc::SQLException& _rException ) const;
-
         /** @return
                 <TRUE/> when an error was set otherwise <FALSE/>
         */
         virtual sal_Bool hasError() const;
+
+        /** returns the current error
+        */
+        virtual const ::dbtools::SQLExceptionInfo& getError() const;
+
+        /** displays the current error, or does nothing if there is no current error
+        */
+        virtual void displayError();
 
         /** shows an info box with the string conntection lost.
         */

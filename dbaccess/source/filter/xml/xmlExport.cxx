@@ -103,6 +103,8 @@
 #ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #endif
+#include <svtools/filenotation.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace dbaxml
 {
@@ -615,7 +617,8 @@ void ODBExport::exportConnectionData()
         {
             SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
             {
-                AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,m_aTypeCollection.cutPrefix(sValue));
+                ::svt::OFileNotation aTransformer( m_aTypeCollection.cutPrefix(sValue) );
+                AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(aTransformer.get( ::svt::OFileNotation::N_URL )));
                 AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(eType));
                 try
                 {
@@ -995,59 +998,67 @@ void ODBExport::exportFilter(XPropertySet* _xProp
 // -----------------------------------------------------------------------------
 void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 {
-    if ( _xColSup.is() )
+    OSL_PRECOND( _xColSup.is(), "ODBExport::exportColumns: invalid columns supplier!" );
+    if ( !_xColSup.is() )
+        return;
+
+    try
     {
-        Reference<XNameAccess> xNameAccess = _xColSup->getColumns();
-        if ( xNameAccess.is() && xNameAccess->hasElements() )
+        Reference<XNameAccess> xNameAccess( _xColSup->getColumns(), UNO_SET_THROW );
+        if ( !xNameAccess->hasElements() )
+            return;
+
+        SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
+        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        for( ; pIter != pEnd ; ++pIter)
         {
-            SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
-            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-            const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
-            for( ; pIter != pEnd ; ++pIter)
+            Reference<XPropertySet> xProp(xNameAccess->getByName(*pIter),UNO_QUERY);
+            if ( xProp.is() )
             {
-                Reference<XPropertySet> xProp(xNameAccess->getByName(*pIter),UNO_QUERY);
-                if ( xProp.is() )
+                SvXMLAttributeList* pAtt = new SvXMLAttributeList;
+                Reference<XAttributeList> xAtt = pAtt;
+                exportStyleName(xProp.get(),*pAtt);
+
+                sal_Bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));
+
+                ::rtl::OUString sValue;
+                xProp->getPropertyValue(PROPERTY_HELPTEXT) >>= sValue;
+                Any aColumnDefault;
+                aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
+
+                if ( bHidden || sValue.getLength() || aColumnDefault.hasValue() || pAtt->getLength() )
                 {
-                    SvXMLAttributeList* pAtt = new SvXMLAttributeList;
-                    Reference<XAttributeList> xAtt = pAtt;
-                    exportStyleName(xProp.get(),*pAtt);
+                    AddAttribute(XML_NAMESPACE_DB, XML_NAME,*pIter);
+                    if ( bHidden )
+                        AddAttribute(XML_NAMESPACE_DB, XML_VISIBLE,XML_FALSE);
 
-                    sal_Bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));
+                    if ( sValue.getLength() )
+                        AddAttribute(XML_NAMESPACE_DB, XML_HELP_MESSAGE,sValue);
 
-                    ::rtl::OUString sValue;
-                    xProp->getPropertyValue(PROPERTY_HELPTEXT) >>= sValue;
-                    Any aColumnDefault;
-                    aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
-
-                    if ( bHidden || sValue.getLength() || aColumnDefault.hasValue() || pAtt->getLength() )
+                    if ( aColumnDefault.hasValue() )
                     {
-                        AddAttribute(XML_NAMESPACE_DB, XML_NAME,*pIter);
-                        if ( bHidden )
-                            AddAttribute(XML_NAMESPACE_DB, XML_VISIBLE,XML_FALSE);
-
-                        if ( sValue.getLength() )
-                            AddAttribute(XML_NAMESPACE_DB, XML_HELP_MESSAGE,sValue);
-
-                        if ( aColumnDefault.hasValue() )
-                        {
-                            ::rtl::OUStringBuffer sColumnDefaultString,sType;
-                            SvXMLUnitConverter::convertAny( sColumnDefaultString, sType, aColumnDefault );
-                            AddAttribute(XML_NAMESPACE_DB, XML_TYPE_NAME,sType.makeStringAndClear());
-                            AddAttribute(XML_NAMESPACE_DB, XML_DEFAULT_VALUE,sColumnDefaultString.makeStringAndClear());
-                        }
-
-                        if ( pAtt->getLength() )
-                            AddAttributeList(xAtt);
+                        ::rtl::OUStringBuffer sColumnDefaultString,sType;
+                        SvXMLUnitConverter::convertAny( sColumnDefaultString, sType, aColumnDefault );
+                        AddAttribute(XML_NAMESPACE_DB, XML_TYPE_NAME,sType.makeStringAndClear());
+                        AddAttribute(XML_NAMESPACE_DB, XML_DEFAULT_VALUE,sColumnDefaultString.makeStringAndClear());
                     }
 
-                    if ( GetAttrList().getLength() )
-                    {
-                        SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COLUMN, sal_True, sal_True);
-                    }
+                    if ( pAtt->getLength() )
+                        AddAttributeList(xAtt);
+                }
+
+                if ( GetAttrList().getLength() )
+                {
+                    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COLUMN, sal_True, sal_True);
                 }
             }
         }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1137,20 +1148,22 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                 pExportHelper[i].second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( pExportHelper[i].second.second, aPropertyStates )));
         }
 
-        Reference< XNameAccess > xCollection = xSup->getColumns();
+        Reference< XNameAccess > xCollection;
         try
         {
+            xCollection.set( xSup->getColumns(), UNO_SET_THROW );
             awt::FontDescriptor aFont;
             _xProp->getPropertyValue(PROPERTY_FONT) >>= aFont;
             GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
+
+            m_aCurrentPropertyStates = m_xCellExportHelper->Filter(_xProp);
+            ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
+            exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
         }
         catch(Exception&)
         {
-            // not interested in
+            DBG_UNHANDLED_EXCEPTION();
         }
-        m_aCurrentPropertyStates = m_xCellExportHelper->Filter(_xProp);
-        ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
-        exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
         m_aCurrentPropertyStates.clear();
     }
     else

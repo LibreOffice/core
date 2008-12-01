@@ -296,6 +296,7 @@ namespace rptui
                 PROPERTY_EFFECTIVEMIN,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HideInactiveSelection")),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitAction")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputRequired")),
                 PROPERTY_EMPTY_IS_NULL,
                 PROPERTY_FILTERPROPOSAL
                 ,PROPERTY_POSITIONX

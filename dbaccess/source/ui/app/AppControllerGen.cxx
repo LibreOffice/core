@@ -40,6 +40,7 @@
 #include "defaultobjectnamecheck.hxx"
 #include "dlgsave.hxx"
 #include "UITools.hxx"
+#include "subcomponentmanager.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
@@ -216,7 +217,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
     try
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard( getMutex() );
         WaitObject aWO(getView());
 
         Sequence< Any > aArgs(3);
@@ -306,7 +307,7 @@ void OApplicationController::openDirectSQLDialog()
 void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( evt.PropertyName == PROPERTY_USER )
     {
         m_bNeedToReconnect = sal_True;
@@ -347,7 +348,7 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
 // -----------------------------------------------------------------------------
 Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
     return xDataSource;
 }
@@ -355,7 +356,7 @@ Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw 
 // -----------------------------------------------------------------------------
 Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow() throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     Reference< XFrame > xFrame( getFrame(), UNO_QUERY_THROW );
     Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
     return xWindow;
@@ -364,133 +365,46 @@ Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow()
 // -----------------------------------------------------------------------------
 Sequence< Reference< XComponent > > SAL_CALL OApplicationController::getSubComponents() throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    Sequence< Reference< XComponent > > aComponents( m_aDocuments.size() );
-    ::std::transform( m_aDocuments.begin(), m_aDocuments.end(), aComponents.getArray(), ::std::select1st< TDocuments::value_type >() );
-    return aComponents;
+    return m_pSubComponentManager->getSubComponents();
 }
 
 // -----------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.getTyped();
 }
 
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.is();
 }
 
 // -----------------------------------------------------------------------------
-::sal_Bool SAL_CALL OApplicationController::connect(  ) throw (RuntimeException)
+void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    ensureConnection();
-    return isConnected();
-}
-
-// -----------------------------------------------------------------------------
-namespace
-{
-    static Reference< XController > lcl_getController( const OApplicationController::TDocuments::iterator& _docPos )
+    SQLExceptionInfo aError;
+    SharedConnection xConnection = ensureConnection( &aError );
+    if ( !xConnection.is() )
     {
-        Reference< XController > xController;
+        if ( aError.isValid() )
+            aError.doThrow();
 
-        Reference< XComponent > xComponent( _docPos->first );
-        Reference< XModel > xModel( xComponent, UNO_QUERY );
-        if ( xModel.is() )
-            xController = xModel->getCurrentController();
-        else
-        {
-            xController.set( xComponent, UNO_QUERY );
-            if ( !xController.is() )
-            {
-                Reference<XFrame> xFrame( xComponent, UNO_QUERY );
-                if ( xFrame.is() )
-                    xController = xFrame->getController();
-            }
-        }
-        return xController;
+        // no particular error, but nonetheless could not connect -> throw a generic exception
+        String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+        sConnectingContext.SearchAndReplaceAscii( "$name$", getStrippedDatabaseName() );
+        ::dbtools::throwGenericSQLException( sConnectingContext, *this );
     }
 }
 
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    try
-    {
-        typedef ::std::vector< Reference< XComponent > > ComponentArray;
-        ComponentArray aClosedComponents;
-
-        TDocuments aDocuments( m_aDocuments );
-        for (   TDocuments::iterator doc = aDocuments.begin();
-                doc != aDocuments.end();
-                ++doc
-            )
-        {
-            Reference< XController > xController( lcl_getController( doc ) );
-            OSL_ENSURE( xController.is(), "OApplicationController::closeSubComponents: did not find the sub controller!" );
-
-            // suspend the controller in the document
-            if  (   !xController.is()
-                ||  !xController->suspend( sal_True )
-                )
-                // break complete operation, no sense in continueing
-                break;
-
-            // revoke event listener
-            Reference< XComponent > xDocument = doc->first;
-            if ( xDocument.is() )
-                xDocument->removeEventListener( static_cast< XFrameActionListener* >( this ) );
-
-            bool bClosedSubDoc = false;
-            try
-            {
-                Reference< XCloseable > xCloseable( xController->getFrame(), UNO_QUERY_THROW );
-                xCloseable->close( sal_True );
-                bClosedSubDoc = true;
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-
-            if ( !bClosedSubDoc )
-                // no sense in continueing with the other docs
-                break;
-
-            aClosedComponents.push_back( doc->first );
-        }
-
-        // now remove all the components which we could successfully close
-        // (this might be none, or all, or something inbetween) from m_aDocuments
-        for (   ComponentArray::const_iterator comp = aClosedComponents.begin();
-                comp != aClosedComponents.end();
-                ++comp
-            )
-        {
-            TDocuments::iterator pos = m_aDocuments.find( *comp );
-            OSL_ENSURE( pos != m_aDocuments.end(),
-                "OApplicationController::closeSubComponents: closed a component which doesn't exist anymore!" );
-            if ( pos !=m_aDocuments.end() )
-                m_aDocuments.erase( pos );
-        }
-    }
-    catch ( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-
-    return m_aDocuments.empty();
+    return m_pSubComponentManager->closeSubComponents();
 }
+
 
 // -----------------------------------------------------------------------------
 namespace
@@ -569,7 +483,7 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
     const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( _ObjectType, _ObjectName );
 
@@ -601,7 +515,7 @@ void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Refer
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     if ( m_xDataSource.is() && !isDataSourceReadOnly() )
     {
@@ -645,7 +559,7 @@ void OApplicationController::askToReconnect()
     {
         m_bNeedToReconnect = sal_False;
         sal_Bool bClear = sal_True;
-        if ( !m_aDocuments.empty() )
+        if ( !m_pSubComponentManager->empty() )
         {
             QueryBox aQry(getView(), ModuleRes(APP_CLOSEDOCUMENTS));
             switch (aQry.Execute())
@@ -671,27 +585,52 @@ void OApplicationController::askToReconnect()
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationController::getStrippedDatabaseName() const
+::rtl::OUString OApplicationController::getDatabaseName() const
 {
-    return ::dbaui::getStrippedDatabaseName(m_xDataSource,m_sDatabaseName);
+    ::rtl::OUString sDatabaseName;
+    try
+    {
+        if ( m_xDataSource.is() )
+        {
+            OSL_VERIFY( m_xDataSource->getPropertyValue( PROPERTY_NAME ) >>= sDatabaseName );
+        }
+    }
+    catch ( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return sDatabaseName;
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::addDocumentListener(const Reference< XComponent >& _xDocument,const Reference< XComponent >& _xDefintion)
+::rtl::OUString OApplicationController::getStrippedDatabaseName() const
 {
-    if ( _xDocument.is() )
+    ::rtl::OUString sDatabaseName;
+    return ::dbaui::getStrippedDatabaseName( m_xDataSource, sDatabaseName );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::onDocumentOpened( const ::rtl::OUString& _rName, const sal_Int32 _nType,
+        const ElementOpenMode _eMode, const Reference< XComponent >& _xDocument, const Reference< XComponent >& _rxDefinition )
+{
+    OSL_PRECOND( _xDocument.is(), "OApplicationController::onDocumentOpened: illegal document!" );
+    if ( !_xDocument.is() )
+        return;
+
+    try
     {
-        try
+        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _xDocument );
+
+        if ( _rxDefinition.is() )
         {
-            m_aDocuments[_xDocument] = _xDefintion;
-            _xDocument->addEventListener(static_cast<XFrameActionListener*>(this));
-            Reference<XPropertySet> xProp(_xDefintion,UNO_QUERY_THROW);
-            if ( xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
-                xProp->addPropertyChangeListener(PROPERTY_NAME,static_cast<XPropertyChangeListener*>(this));
+            Reference< XPropertySet > xProp( _rxDefinition, UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xPSI( xProp->getPropertySetInfo(), UNO_SET_THROW );
+            xProp->addPropertyChangeListener( PROPERTY_NAME, static_cast< XPropertyChangeListener* >( this ) );
         }
-        catch(Exception&)
-        {
-        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------

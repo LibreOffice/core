@@ -586,7 +586,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
 {
     ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument.get() );
 
-    ::osl::MutexGuard aGuard( rModelImpl.m_xMutex->getMutex() );
+    ::osl::MutexGuard aGuard( rModelImpl.m_aMutex );
     if ( rModelImpl.m_pImpl.is() )
         rModelImpl.m_pImpl->m_sName = _rNewName;
 }
@@ -1201,7 +1201,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         ::rtl::OUString sServerName( m_pImpl->m_sName );
         INetURLObject aURLCheck( sServerName );
         if ( aURLCheck.GetProtocol() != INET_PROT_NOT_VALID )
-            sServerName = aURLCheck.getName();
+            sServerName = aURLCheck.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
 
         // the request
         AuthenticationRequest aRequest;

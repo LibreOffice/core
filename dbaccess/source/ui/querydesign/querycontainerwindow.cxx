@@ -120,9 +120,9 @@ namespace dbaui
         }
     }
     // -----------------------------------------------------------------------------
-    sal_Bool OQueryContainerWindow::switchView()
+    bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
     {
-        return m_pViewSwitch->switchView();
+        return m_pViewSwitch->switchView( _pErrorInfo );
     }
 
     // -----------------------------------------------------------------------------

@@ -884,7 +884,7 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     {
         Sequence<sal_Int8> aSeq;
         if(x.is())
-            x->readSomeBytes(aSeq,length);
+            x->readBytes(aSeq,length);
         updateValue(columnIndex,aSeq);
         aOldValue = (*(*m_aCurrentRow))[columnIndex];
         (*(*m_aCurrentRow))[columnIndex] = aSeq;

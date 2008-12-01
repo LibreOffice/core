@@ -1649,6 +1649,13 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, USHORT& _nColu
             getFields()[nOldPosition - 1] = pEntry;
 
         ColumnMoved(pEntry->GetColumnId(),FALSE);
+    } // if ( pEntry->GetColumnId() != nColumnId )
+
+    if ( pEntry->GetFunctionType() & (FKT_AGGREGATE) )
+    {
+        String sFunctionName = pEntry->GetFunction();
+        if ( GetFunctionName(sal_uInt32(-1),sFunctionName) )
+            pEntry->SetFunction(sFunctionName);
     }
 
     // Neuzeichnen
@@ -2293,6 +2300,36 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
             break;
         case SQL_TOKEN_SUM:
             rFkt = m_pFunctionCell->GetEntry(5);
+            break;
+        case SQL_TOKEN_EVERY:
+            rFkt = m_pFunctionCell->GetEntry(6);
+            break;
+        case SQL_TOKEN_ANY:
+            rFkt = m_pFunctionCell->GetEntry(7);
+            break;
+        case SQL_TOKEN_SOME:
+            rFkt = m_pFunctionCell->GetEntry(8);
+            break;
+        case SQL_TOKEN_STDDEV_POP:
+            rFkt = m_pFunctionCell->GetEntry(9);
+            break;
+        case SQL_TOKEN_STDDEV_SAMP:
+            rFkt = m_pFunctionCell->GetEntry(10);
+            break;
+        case SQL_TOKEN_VAR_SAMP:
+            rFkt = m_pFunctionCell->GetEntry(11);
+            break;
+        case SQL_TOKEN_VAR_POP:
+            rFkt = m_pFunctionCell->GetEntry(12);
+            break;
+        case SQL_TOKEN_COLLECT:
+            rFkt = m_pFunctionCell->GetEntry(13);
+            break;
+        case SQL_TOKEN_FUSION:
+            rFkt = m_pFunctionCell->GetEntry(14);
+            break;
+        case SQL_TOKEN_INTERSECTION:
+            rFkt = m_pFunctionCell->GetEntry(15);
             break;
         default:
             {

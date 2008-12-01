@@ -63,6 +63,9 @@
 
 #include <connectivity/dbtools.hxx>
 
+#include <vcl/lineinfo.hxx>
+#include "ColorChanger.hxx"
+
 #include <svtools/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
@@ -101,7 +104,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-    EnableMapMode();
 
     try
     {
@@ -114,7 +116,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));
     m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getViewsWindow()->getView()->getReportView()->getController().getORB() */ ) );
-    Show();
 }
 //------------------------------------------------------------------------------
 OReportSection::~OReportSection()
@@ -140,6 +141,8 @@ OReportSection::~OReportSection()
 //------------------------------------------------------------------------------
 void OReportSection::Paint( const Rectangle& rRect )
 {
+    Window::Paint(rRect);
+
     if ( m_pView )
     {
          // repaint, get PageView and prepare Region
@@ -169,9 +172,7 @@ void OReportSection::Paint( const Rectangle& rRect )
             pPgView->GetView().EndDrawLayers(*pTargetPaintWindow);
         }
 
-
-        const Region aReg(rRect);
-        m_pView->CompleteRedraw(this,aReg);
+        m_pView->CompleteRedraw(this,aPaintRectRegion);
     }
 }
 //------------------------------------------------------------------------------
@@ -246,7 +247,18 @@ void OReportSection::fill()
     m_pView->SetDesignMode( TRUE );
 
     m_pView->StartListening( *m_pModel  );
-    Resize();
+    /*Resize();*/
+    if ( m_xSection.is() && m_pPage && m_pView )
+    {
+        uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
+        m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
+        const Size aPageSize = m_pPage->GetSize();
+        const sal_Int32 nWorkAreaLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
+        const sal_Int32 nWorkAreaRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
+        m_pView->SetWorkArea( Rectangle( Point( nWorkAreaLeftMargin, 0), Size(aPageSize.Width() - nWorkAreaLeftMargin - nWorkAreaRightMargin,aPageSize.Height()) ) );
+    } // if ( m_xSection.is() && m_pPage && m_pView )
+
+    //SetBackground( Wallpaper( COL_BLUE ));
 }
 // -----------------------------------------------------------------------------
 void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce)

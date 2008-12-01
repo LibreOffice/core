@@ -113,11 +113,12 @@ namespace dbaui
         ::rtl::OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
         void setStatement( const ::rtl::OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 
-        void initialize()                                                   { m_pViewSwitch->initialize(); }
-        void SaveUIConfig()                                                 { m_pViewSwitch->SaveUIConfig(); }
-        void reset()                                                        { m_pViewSwitch->reset(); }
+        void    initialize()                                                { m_pViewSwitch->initialize(); }
+        void    SaveUIConfig()                                              { m_pViewSwitch->SaveUIConfig(); }
+        bool    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { return m_pViewSwitch->reset( _pErrorInfo ); }
 
-        sal_Bool switchView();
+        bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+
         virtual void GetFocus();
 
     protected:

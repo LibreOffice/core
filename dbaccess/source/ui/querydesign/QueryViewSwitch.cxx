@@ -208,40 +208,44 @@ OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OQueryViewSwitch::switchView()
+bool OQueryViewSwitch::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     sal_Bool bRet = sal_True;
     sal_Bool bGraphicalDesign = static_cast<OQueryController&>(m_pDesignView->getController()).isGraphicalDesign();
 
     OAddTableDlg* pAddTabDialog( getAddTableDialog() );
 
-    if ( !bGraphicalDesign ) // we have to hide the add table dialog
-    {
-        m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
-        if ( m_bAddTableDialogWasVisible )
-            pAddTabDialog->Hide();
-    }
-
     OQueryContainerWindow* pContainer = getContainer();
     if ( !bGraphicalDesign )
     {
+        // hide the "Add Table" dialog
+        m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
+        if ( m_bAddTableDialogWasVisible )
+            pAddTabDialog->Hide();
+
+        // tell the views they're in/active
         m_pDesignView->stopTimer();
         m_pTextView->getSqlEdit()->startTimer();
 
+        // set the most recent statement at the text view
         m_pTextView->clear();
         m_pTextView->setStatement(static_cast<OQueryController&>(m_pDesignView->getController()).getStatement());
     }
     else
     {
-        ::rtl::OUString sOldStatement = static_cast<OQueryController&>(m_pDesignView->getController()).getStatement();
-        // we have to stop the sqledit from our textview
+        // tell the text view it's inactive now
         m_pTextView->getSqlEdit()->stopTimer();
 
+        ::rtl::OUString sOldStatement = static_cast<OQueryController&>(m_pDesignView->getController()).getStatement();
+
+        // update the "Add Table" dialog
         if ( pAddTabDialog )
             pAddTabDialog->Update();
-        bRet = m_pDesignView->InitFromParseNode();
 
-        // only show the view when the data is inserted
+        // initialize the design view
+        bRet = m_pDesignView->initByParseIterator( _pErrorInfo );
+
+        // tell the design view it's active now
         m_pDesignView->startTimer();
     }
 
@@ -299,11 +303,16 @@ Reference< XMultiServiceFactory > OQueryViewSwitch::getORB() const
     return m_pDesignView->getORB();
 }
 // -----------------------------------------------------------------------------
-void OQueryViewSwitch::reset()
+bool OQueryViewSwitch::reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     m_pDesignView->reset();
-    if ( m_pDesignView->InitFromParseNode() )
-        switchView();
+    if ( !m_pDesignView->initByParseIterator( _pErrorInfo ) )
+        return false;
+
+    if ( switchView( _pErrorInfo ) )
+        return false;
+
+    return true;
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::setNoneVisbleRow(sal_Int32 _nRows)

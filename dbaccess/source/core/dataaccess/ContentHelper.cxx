@@ -667,6 +667,7 @@ void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParentContainer = _xParent;
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
