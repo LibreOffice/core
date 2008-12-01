@@ -369,10 +369,10 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     // adjust frame rect when necessary
     USHORT nArrangeIndex;
     Point position = pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex );
-    if( position.nB < rRect.nTop ) {
+    if( position.Y() < rRect.nTop ) {
         displayPopupFrame.origin.y += ( lineHeight*drawnItems );
     }
-    if( position.nA < rRect.nLeft ) {
+    if( position.X() < rRect.nLeft ) {
         displayPopupFrame.origin.x -= popupFrame.size.width;
     }
 

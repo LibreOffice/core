@@ -93,32 +93,29 @@ Image::Image( const ResId& rResId ) :
             pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
 
-        if( !aBmpEx.IsEmpty() )
+        if( nObjMask & RSC_IMAGE_MASKBITMAP )
         {
-            if( nObjMask & RSC_IMAGE_MASKBITMAP )
+            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
             {
-                if( aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
-                {
-                    const Bitmap aMaskBitmap( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
-                    aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
-                }
-
-                pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+                const Bitmap aMaskBitmap( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
+                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
             }
 
-            if( nObjMask & RSC_IMAGE_MASKCOLOR )
-            {
-                if( aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
-                {
-                    const Color aMaskColor( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
-                    aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
-                }
-
-                pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
-            }
-
-            ImplInit( aBmpEx );
+            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
+
+        if( nObjMask & RSC_IMAGE_MASKCOLOR )
+        {
+            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
+            {
+                const Color aMaskColor( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
+                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
+            }
+
+            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+        }
+        if( ! aBmpEx.IsEmpty() )
+            ImplInit( aBmpEx );
     }
 }
 

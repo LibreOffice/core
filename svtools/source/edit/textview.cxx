@@ -1163,13 +1163,10 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     uno::Any aData = xDataObj->getTransferData( aFlavor );
                     ::rtl::OUString aText;
                     aData >>= aText;
-
-                    bool bWasTruncated = ImplTruncateNewText( aText );
-
-                    String aStr( aText );
-                    aStr.ConvertLineEnd( LINEEND_LF );
-
-                    InsertText( aText, FALSE );
+                    bool bWasTruncated = false;
+                    if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
+                        bWasTruncated = ImplTruncateNewText( aText );
+                    InsertNewText( aText, FALSE );
                     mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
 
                     if( bWasTruncated )
@@ -1288,6 +1285,55 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
 
 void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 {
+    InsertNewText( rStr, bSelect );
+}
+
+void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
+{
+//  HideSelection();
+    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+
+    /* #i87633#
+    break inserted text into chunks that fit into the underlying String
+    based API (which has a maximum length of 65534 elements
+
+    note: this will of course still cause problems for lines longer than those
+    65534 elements, but those cases will hopefully be few.
+    In the long run someone should switch the TextEngine to OUString instead of String
+    */
+    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nPos = 0;
+    while( nLen )
+    {
+        sal_Int32 nChunkLen = nLen > 65534 ? 65534 : nLen;
+        String aChunk( rStr.copy( nPos, nChunkLen ) );
+
+        TextSelection aNewSel( mpImpl->maSelection );
+
+        TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, aChunk );
+
+        if ( bSelect )
+        {
+            aNewSel.Justify();
+            aNewSel.GetEnd() = aPaM;
+        }
+        else
+        {
+            aNewSel = aPaM;
+        }
+
+        ImpSetSelection( aNewSel );
+        nLen -= nChunkLen;
+        nPos += nChunkLen;
+    }
+    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+
+    mpImpl->mpTextEngine->FormatAndUpdate( this );
+}
+
+/*
+void TextView::InsertText( const XubString& rStr, BOOL bSelect )
+{
 //  HideSelection();
 
     TextSelection aNewSel( mpImpl->maSelection );
@@ -1310,6 +1356,7 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 
     mpImpl->mpTextEngine->FormatAndUpdate( this );
 }
+*/
 
 // OLD
 TextPaM TextView::CursorLeft( const TextPaM& rPaM, BOOL bWordMode )
@@ -1922,20 +1969,22 @@ bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
     }
 
     ULONG nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
-    if( nMaxLen == 0 )   // 0 means unlimited
-        nMaxLen = 65534; // limit to string api
-    ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
-
-    sal_uInt32 nNewLen = rNewText.getLength();
-    if ( nCurLen + nNewLen > nMaxLen )
+    // 0 means unlimited, there is just the String API limit handled above
+    if( nMaxLen != 0 )
     {
-        // see how much text will be replaced
-        ULONG nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
-        if ( nCurLen + nNewLen - nSelLen > nMaxLen )
+        ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
+
+        sal_uInt32 nNewLen = rNewText.getLength();
+        if ( nCurLen + nNewLen > nMaxLen )
         {
-            sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
-            rNewText = rNewText.copy( 0, nTruncatedLen );
-            bTruncated = true;
+            // see how much text will be replaced
+            ULONG nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
+            if ( nCurLen + nNewLen - nSelLen > nMaxLen )
+            {
+                sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
+                rNewText = rNewText.copy( 0, nTruncatedLen );
+                bTruncated = true;
+            }
         }
     }
     return bTruncated;

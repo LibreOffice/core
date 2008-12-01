@@ -1153,7 +1153,13 @@ private:
     return 0;
 }
 
+#ifdef MAC_OS_X_VERSION_10_5
+/* build target 10.5 or greater */
+- (NSInteger)conversationIdentifier
+#else
+/* build target 10.4 */ 
 - (long)conversationIdentifier
+#endif
 {
     return (long)self;
 }

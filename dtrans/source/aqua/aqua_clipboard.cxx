@@ -191,28 +191,30 @@ Reference<XTransferable> SAL_CALL AquaClipboard::getContents() throw(RuntimeExce
 
 
 void SAL_CALL AquaClipboard::setContents(const Reference<XTransferable>& xTransferable,
-                                         const Reference<XClipboardOwner>& xClipboardOwner)
-  throw( RuntimeException )
+    const Reference<XClipboardOwner>& xClipboardOwner)
+        throw( RuntimeException )
 {
-  ClearableMutexGuard aGuard(m_aMutex);
+    ClearableMutexGuard aGuard(m_aMutex);
 
-  Reference<XClipboardOwner> oldOwner(mXClipboardOwner);
-  mXClipboardOwner = xClipboardOwner;
+    Reference<XClipboardOwner> oldOwner(mXClipboardOwner);
+    mXClipboardOwner = xClipboardOwner;
 
-  Reference<XTransferable> oldContent(mXClipboardContent);
-  mXClipboardContent = xTransferable;
+    Reference<XTransferable> oldContent(mXClipboardContent);
+    mXClipboardContent = xTransferable;
 
-  NSArray* types = mpDataFlavorMapper->flavorSequenceToTypesArray(mXClipboardContent->getTransferDataFlavors());
-  mPasteboardChangeCount = [mPasteboard declareTypes: types owner: mEventListener];
+    NSArray* types = mXClipboardContent.is() ?
+        mpDataFlavorMapper->flavorSequenceToTypesArray(mXClipboardContent->getTransferDataFlavors()) :
+        [NSArray array];
+    mPasteboardChangeCount = [mPasteboard declareTypes: types owner: mEventListener];
 
-  // if we are already the owner of the clipboard
-  // then fire lost ownership event
-  if (oldOwner.is())
+    // if we are already the owner of the clipboard
+    // then fire lost ownership event
+    if (oldOwner.is())
     {
-      fireLostClipboardOwnershipEvent(oldOwner, oldContent);
+        fireLostClipboardOwnershipEvent(oldOwner, oldContent);
     }
 
-  fireClipboardChangedEvent();
+    fireClipboardChangedEvent();
 }
 
 

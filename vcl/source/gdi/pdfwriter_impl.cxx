@@ -4091,19 +4091,27 @@ we check in the following sequence:
             sal_Int32   nSetGoToRMode = 0;
             sal_Bool    bTargetHasPDFExtension = sal_False;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
+            sal_Bool    bIsUNCPath = sal_False;
 // check if the protocol is a known one, or if there is no protocol at all (on target only)
 // if there is no protocol, make the target relative to the current document directory
 // getting the needed URL information from the current document path
             if( eTargetProtocol == INET_PROT_NOT_VALID )
             {
-                INetURLObject aNewBase( aDocumentURL );//duplicate document URL
-                aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
-                                          //target document
-                aNewBase.insertName( rLink.m_aURL );
-                aTargetURL = aNewBase;//reassign the new target URL
+                if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.compareToAscii( "\\\\\\\\", 4 ) == 0)
+                {
+                    bIsUNCPath = sal_True;
+                }
+                else
+                {
+                    INetURLObject aNewBase( aDocumentURL );//duplicate document URL
+                    aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
+                                              //target document
+                    aNewBase.insertName( rLink.m_aURL );
+                    aTargetURL = aNewBase;//reassign the new target URL
 //recompute the target protocol, with the new URL
 //normal URL processing resumes
-                eTargetProtocol = aTargetURL.GetProtocol();
+                    eTargetProtocol = aTargetURL.GetProtocol();
+                }
             }
 
             rtl::OUString aFileExtension = aTargetURL.GetFileExtension();
@@ -4141,21 +4149,30 @@ we check in the following sequence:
             INetProtocol eBaseProtocol = aDocumentURL.GetProtocol();
 //queue the string common to all types of actions
             aLine.append( "/A<</Type/Action/S");
-            sal_Int32 nSetRelative = 0;
+            if( bIsUNCPath ) // handle Win UNC paths
+            {
+                aLine.append( "/Launch/Win<</F" );
+                // INetURLObject is not good with UNC paths, use original path
+                appendLiteralStringEncrypt(  rLink.m_aURL, rLink.m_nObject, aLine );
+                aLine.append( ">>" );
+            }
+            else
+            {
+                sal_Int32 nSetRelative = 0;
 //check if relative file link is requested and if the protocol is 'file://'
-            if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
-                nSetRelative++;
+                if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
+                    nSetRelative++;
 
-            rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
-            if( nSetGoToRMode == 0 )
-                switch( m_aContext.DefaultLinkAction )
-                {
-                default:
-                case PDFWriter::URIAction :
-                case PDFWriter::URIActionDestination :
-                    aLine.append( "/URI/URI" );
-                    break;
-                case PDFWriter::LaunchAction:
+                rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
+                if( nSetGoToRMode == 0 )
+                    switch( m_aContext.DefaultLinkAction )
+                    {
+                    default:
+                    case PDFWriter::URIAction :
+                    case PDFWriter::URIActionDestination :
+                        aLine.append( "/URI/URI" );
+                        break;
+                    case PDFWriter::LaunchAction:
 // now:
 // if a launch action is requested and the hyperlink target has a fragment
 // and the target file does not have a pdf extension, or it's not a 'file:://' protocol
@@ -4163,50 +4180,51 @@ we check in the following sequence:
 // This code will permit the correct opening of application on web pages, the one that
 // normally have fragments (but I may be wrong...)
 // and will force the use of URI when the protocol is not file://
-                    if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
-                                    eTargetProtocol != INET_PROT_FILE )
-                        aLine.append( "/URI/URI" );
-                    else
-                        aLine.append( "/Launch/F" );
-                    break;
-                }
+                        if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
+                                        eTargetProtocol != INET_PROT_FILE )
+                            aLine.append( "/URI/URI" );
+                        else
+                            aLine.append( "/Launch/F" );
+                        break;
+                    }
 //fragment are encoded in the same way as in the named destination processing
-            rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
-            if( nSetGoToRMode )
-            {//add the fragment
-                aLine.append("/GoToR");
-                aLine.append("/F");
-                appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
-                                                                                     INetURLObject::WAS_ENCODED,
-                                                                                     INetURLObject::DECODE_WITH_CHARSET ) :
-                                                               aURLNoMark, rLink.m_nObject, aLine );
-                if( aFragment.getLength() > 0 )
-                {
-                    aLine.append("/D/");
-                    appendDestinationName( aFragment , aLine );
+                rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
+                if( nSetGoToRMode )
+                {//add the fragment
+                    aLine.append("/GoToR");
+                    aLine.append("/F");
+                    appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
+                                                                                         INetURLObject::WAS_ENCODED,
+                                                                                         INetURLObject::DECODE_WITH_CHARSET ) :
+                                                                   aURLNoMark, rLink.m_nObject, aLine );
+                    if( aFragment.getLength() > 0 )
+                    {
+                        aLine.append("/D/");
+                        appendDestinationName( aFragment , aLine );
+                    }
                 }
-            }
-            else
-            {
+                else
+                {
 // change the fragment to accomodate the bookmark (only if the file extension is PDF and
 // the requested action is of the correct type)
-                if(m_aContext.DefaultLinkAction == PDFWriter::URIActionDestination &&
-                           bTargetHasPDFExtension && aFragment.getLength() > 0 )
-                {
-                    OStringBuffer aLineLoc( 1024 );
-                    appendDestinationName( aFragment , aLineLoc );
+                    if(m_aContext.DefaultLinkAction == PDFWriter::URIActionDestination &&
+                               bTargetHasPDFExtension && aFragment.getLength() > 0 )
+                    {
+                        OStringBuffer aLineLoc( 1024 );
+                        appendDestinationName( aFragment , aLineLoc );
 //substitute the fragment
-                    aTargetURL.SetMark( aLineLoc.getStr() );
-                }
-                rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
+                        aTargetURL.SetMark( aLineLoc.getStr() );
+                    }
+                    rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
 // check if we have a URL available, if the string is empty, set it as the original one
 //                 if( aURL.getLength() == 0 )
 //                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
 //                 else
-                    appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL ) :
-                                                               aURL , rLink.m_nObject, aLine );
-            }
+                        appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL ) :
+                                                                   aURL , rLink.m_nObject, aLine );
+                }
 //<--- i56629
+            }
             aLine.append( ">>\n" );
         }
         if( rLink.m_nStructParent > 0 )
@@ -5196,6 +5214,8 @@ bool PDFWriterImpl::emitCatalog()
     sal_Int32 nStructureDict = 0;
     if(m_aStructure.size() > 1)
     {
+///check if dummy structure containers are needed
+        addInternalStructureContainer(m_aStructure[0]);
         nStructureDict = m_aStructure[0].m_nObject = createObject();
         emitStructure( m_aStructure[ 0 ] );
     }
@@ -9021,7 +9041,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             aLine.append( "[ /Indexed/DeviceRGB " );
             aLine.append( (sal_Int32)(pAccess->GetPaletteEntryCount()-1) );
-            aLine.append( " <\n" );
+            aLine.append( "\n<" );
             if( m_aContext.Encrypt )
             {
                 enableStringEncryption( rObject.m_nObject );
@@ -9046,14 +9066,10 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                         appendHex(m_pEncryptionBuffer[nChar++], aLine );
                         appendHex(m_pEncryptionBuffer[nChar++], aLine );
                         appendHex(m_pEncryptionBuffer[nChar++], aLine );
-                        if( (i+1) & 15 )
-                            aLine.append( ' ' );
-                        else
-                            aLine.append( "\n" );
                     }
                 }
             }
-            else //no encryption requested
+            else //no encryption requested (PDF/A-1a program flow drops here)
             {
                 for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
                 {
@@ -9061,13 +9077,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                     appendHex( rColor.GetRed(), aLine );
                     appendHex( rColor.GetGreen(), aLine );
                     appendHex( rColor.GetBlue(), aLine );
-                    if( (i+1) & 15 )
-                        aLine.append( ' ' );
-                    else
-                        aLine.append( "\n" );
                 }
             }
-            aLine.append( "> ]\n" );
+            aLine.append( ">\n]\n" );
         }
     }
     else
@@ -10500,6 +10512,108 @@ void PDFWriterImpl::endStructureElement()
         emitComment( aLine.getStr() );
 #endif
 }
+
+//---> i94258
+/*
+ * This function adds an internal structure list container to overcome the 8191 elements array limitation
+ * in kids element emission.
+ * Recursive function
+ *
+ */
+void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
+{
+    if( rEle.m_eType == PDFWriter::NonStructElement &&
+        rEle.m_nOwnElement != rEle.m_nParentElement )
+        return;
+
+    for( std::list< sal_Int32 >::const_iterator it = rEle.m_aChildren.begin(); it != rEle.m_aChildren.end(); ++it )
+    {
+        if( *it > 0 && *it < sal_Int32(m_aStructure.size()) )
+        {
+            PDFStructureElement& rChild = m_aStructure[ *it ];
+            if( rChild.m_eType != PDFWriter::NonStructElement )
+            {
+                //triggered when a child of the rEle element is found
+                if( rChild.m_nParentElement == rEle.m_nOwnElement )
+                    addInternalStructureContainer( rChild );//examine the child
+                else
+                {
+                    DBG_ERROR( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
+#if OSL_DEBUG_LEVEL > 1
+                    fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
+#endif
+                }
+            }
+        }
+        else
+        {
+            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
+#endif
+        }
+    }
+
+    if( rEle.m_nOwnElement != rEle.m_nParentElement )
+    {
+        if( !rEle.m_aKids.empty() )
+        {
+            if( rEle.m_aKids.size() > ncMaxPDFArraySize ) {
+                //then we need to add the containers for the kids elements
+                // a list to be used for the new kid element
+                std::list< PDFStructureElementKid > aNewKids;
+                std::list< sal_Int32 > aNewChildren;
+
+                // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
+                OStringBuffer aNameBuf( "Div" );
+                OString aAliasName( aNameBuf.makeStringAndClear() );
+                m_aRoleMap[ aAliasName ] = getStructureTag( PDFWriter::Division );
+
+                while( rEle.m_aKids.size() > ncMaxPDFArraySize )
+                {
+                    sal_Int32 nCurrentStructElement = rEle.m_nOwnElement;
+                    sal_Int32 nNewId = sal_Int32(m_aStructure.size());
+                    m_aStructure.push_back( PDFStructureElement() );
+                    PDFStructureElement& rEleNew = m_aStructure.back();
+                    rEleNew.m_aAlias            = aAliasName;
+                    rEleNew.m_eType             = PDFWriter::Division; // a new Div type container
+                    rEleNew.m_nOwnElement       = nNewId;
+                    rEleNew.m_nParentElement    = nCurrentStructElement;
+                    //inherit the same page as the first child to be reparented
+                    rEleNew.m_nFirstPageObject  = m_aStructure[ rEle.m_aChildren.front() ].m_nFirstPageObject;
+                    rEleNew.m_nObject           = createObject();//assign a PDF object number
+                    //add the object to the kid list of the parent
+                    aNewKids.push_back( PDFStructureElementKid( rEleNew.m_nObject ) );
+                    aNewChildren.push_back( nNewId );
+
+                    std::list< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );
+                    std::list< PDFStructureElementKid >::iterator aKidEndIt( rEle.m_aKids.begin() );
+                    advance( aChildEndIt, ncMaxPDFArraySize );
+                    advance( aKidEndIt, ncMaxPDFArraySize );
+
+                    rEleNew.m_aKids.splice( rEleNew.m_aKids.begin(),
+                                            rEle.m_aKids,
+                                            rEle.m_aKids.begin(),
+                                            aKidEndIt );
+                    rEleNew.m_aChildren.splice( rEleNew.m_aChildren.begin(),
+                                                rEle.m_aChildren,
+                                                rEle.m_aChildren.begin(),
+                                                aChildEndIt );
+                    // set the kid's new parent
+                    for( std::list< sal_Int32 >::const_iterator it = rEleNew.m_aChildren.begin();
+                         it != rEleNew.m_aChildren.end(); ++it )
+                    {
+                        m_aStructure[ *it ].m_nParentElement = nNewId;
+                    }
+                }
+                //finally add the new kids resulting from the container added
+                rEle.m_aKids.insert( rEle.m_aKids.begin(), aNewKids.begin(), aNewKids.end() );
+                rEle.m_aChildren.insert( rEle.m_aChildren.begin(), aNewChildren.begin(), aNewChildren.end() );
+            }
+        }
+    }
+}
+//<--- i94258
 
 bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
 {

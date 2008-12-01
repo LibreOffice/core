@@ -840,16 +840,18 @@ void Edit::ShowTruncationWarning( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen ) const
+bool Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen ) const
 {
+    bool bWasTruncated = false;
     const sal_uInt32 nMaxLen = mnMaxTextLen < 65534 ? mnMaxTextLen : 65534;
     sal_uInt32 nLenAfter = static_cast<sal_uInt32>(maText.Len()) + rStr.getLength() - nSelectionLen;
     if ( nLenAfter > nMaxLen )
     {
         sal_uInt32 nErasePos = nMaxLen - static_cast<sal_uInt32>(maText.Len()) + nSelectionLen;
         rStr = rStr.copy( 0, nErasePos );
-        ShowTruncationWarning( const_cast<Edit*>(this) );
+        bWasTruncated = true;
     }
+    return bWasTruncated;
 }
 
 // -----------------------------------------------------------------------
@@ -1410,7 +1412,8 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
                 ::rtl::OUString aText;
                 aData >>= aText;
-                ImplTruncateToMaxLen( aText, maSelection.Len() );
+                if( ImplTruncateToMaxLen( aText, maSelection.Len() ) )
+                    ShowTruncationWarning( const_cast<Edit*>(this) );
                 ReplaceSelected( aText );
             }
             catch( const ::com::sun::star::uno::Exception& )

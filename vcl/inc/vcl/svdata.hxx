@@ -223,7 +223,8 @@ struct ImplSVWinData
     Window*                 mpExtTextInputWin;  // Window, which is in ExtTextInput
     Window*                 mpTrackWin;         // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;       // tracking timer
-    ImageList*              mpMsgBoxImgList;    // ImageList for MessageBoxen
+    ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
+    ImageList*              mpMsgBoxHCImgList;  // ImageList for MessageBox (high contrast mode)
     Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     USHORT                  mnTrackFlags;       // tracking flags
     USHORT                  mnAutoScrollFlags;  // auto scroll flags

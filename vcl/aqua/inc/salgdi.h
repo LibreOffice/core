@@ -102,6 +102,7 @@ protected:
     CGLayerRef                              mxLayer;    // Quartz graphics layer
     CGContextRef                            mrContext;  // Quartz drawing context
     class XorEmulation*                     mpXorEmulation;
+    int                                     mnXorMode; // 0: off 1: on 2: invert only
     int                                     mnWidth;
     int                                     mnHeight;
     int                                     mnBitmapDepth;  // zero unless bitmap
@@ -264,7 +265,7 @@ public:
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor );
     // enable/disable XOR drawing
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool bInvertOnly );
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     // set fill color for raster operations

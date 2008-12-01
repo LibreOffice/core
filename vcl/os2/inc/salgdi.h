@@ -137,7 +137,7 @@ public:
     BOOL                    mbVirDev;           // is VirDev
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
-    BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
+    bool                    mbXORMode;          // _every_ output with RasterOp XOR
     ULONG                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     ImplOs2FontData*            mpOs2FontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplOs2FontEntry*           mpOs2FontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
@@ -242,7 +242,7 @@ public:
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor );
     // enable/disable XOR drawing
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool );
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     // set fill color for raster operations

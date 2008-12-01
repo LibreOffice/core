@@ -344,7 +344,7 @@ void Os2SalGraphics::SetFillColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::SetXORMode( BOOL bSet )
+void Os2SalGraphics::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
     LONG nMixMode = bSet ? FM_XOR : FM_OVERPAINT;

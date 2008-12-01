@@ -52,13 +52,12 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdata.hxx>
 #include <vcl/print.hxx>
-#ifndef _VCL_IMPLNCVT_HXX
 #include <implncvt.hxx>
-#endif
 #include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/sallayout.hxx>
+#include "basegfx/polygon/b2dpolygon.hxx"
 
 //#define USE_NEW_RTL_IMPLEMENTATION
 
@@ -245,6 +244,89 @@ void SalGraphics::mirror( Rectangle& rRect, const OutputDevice *pOutDev, bool bB
     rRect.Move( x - x_org, 0 );
 }
 
+basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *i_pOutDev, bool i_bBack ) const
+{
+    long w;
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = i_pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
+
+    DBG_ASSERT( w, "missing graphics width" );
+
+    basegfx::B2DPoint aRet( i_rPoint );
+    if( w )
+    {
+        if( i_pOutDev && !i_pOutDev->IsRTLEnabled() )
+        {
+            OutputDevice *pOutDevRef = (OutputDevice*)i_pOutDev;
+            // mirror this window back
+            double devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+            if( i_bBack )
+                aRet.setX( i_rPoint.getX() - devX + pOutDevRef->GetOutOffXPixel() );
+            else
+                aRet.setX( devX + (i_rPoint.getX() - pOutDevRef->GetOutOffXPixel()) );
+        }
+        else
+            aRet.setX( w-1-i_rPoint.getX() );
+    }
+    return aRet;
+}
+
+basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *i_pOutDev, bool i_bBack ) const
+{
+    long w;
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = i_pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
+
+    DBG_ASSERT( w, "missing graphics width" );
+
+    basegfx::B2DPolygon aRet;
+    if( w )
+    {
+        sal_Int32 nPoints = i_rPoly.count();
+        for( sal_Int32 i = 0; i < nPoints; i++ )
+        {
+            aRet.append( mirror( i_rPoly.getB2DPoint( i ), i_pOutDev, i_bBack ) );
+            if( i_rPoly.isPrevControlPointUsed( i ) )
+                aRet.setPrevControlPoint( i, mirror( i_rPoly.getPrevControlPoint( i ), i_pOutDev, i_bBack ) );
+            if( i_rPoly.isNextControlPointUsed( i ) )
+                aRet.setNextControlPoint( i, mirror( i_rPoly.getNextControlPoint( i ), i_pOutDev, i_bBack ) );
+        }
+        aRet.setClosed( i_rPoly.isClosed() );
+        aRet.flip();
+    }
+    else
+        aRet = i_rPoly;
+    return aRet;
+}
+
+basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *i_pOutDev, bool i_bBack ) const
+{
+    long w;
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = i_pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
+
+    DBG_ASSERT( w, "missing graphics width" );
+
+    basegfx::B2DPolyPolygon aRet;
+    if( w )
+    {
+        sal_Int32 nPoly = i_rPoly.count();
+        for( sal_Int32 i = 0; i < nPoly; i++ )
+            aRet.append( mirror( i_rPoly.getB2DPolygon( i ), i_pOutDev, i_bBack ) );
+        aRet.setClosed( i_rPoly.isClosed() );
+        aRet.flip();
+    }
+    else
+        aRet = i_rPoly;
+    return aRet;
+}
+
 // ----------------------------------------------------------------------------
 
 BOOL    SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
@@ -299,6 +381,7 @@ bool SalGraphics::drawPolyLine(
 {
     return false;
 }
+
 void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
@@ -311,7 +394,8 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry, const Out
     else
         drawPolyLine( nPoints, pPtAry );
 }
-void    SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
@@ -323,7 +407,8 @@ void    SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const O
     else
         drawPolygon( nPoints, pPtAry );
 }
-void    SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
@@ -346,38 +431,95 @@ void    SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
     else
         drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
-bool SalGraphics::DrawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency, const OutputDevice* )
+
+bool SalGraphics::DrawPolyPolygon( const ::basegfx::B2DPolyPolygon& i_rPolyPolygon, double i_fTransparency, const OutputDevice* i_pOutDev )
 {
-    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygon - no mirroring implemented");
-    return drawPolyPolygon( rPolyPolygon, fTransparency );
+    bool bRet = false;
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        basegfx::B2DPolyPolygon aMirror( mirror( i_rPolyPolygon, i_pOutDev ) );
+        bRet = drawPolyPolygon( aMirror, i_fTransparency );
+    }
+    else
+        bRet = drawPolyPolygon( i_rPolyPolygon, i_fTransparency );
+    return bRet;
 }
+
 bool SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/)
 {
     return false;
 }
-sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
+
+sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* pOutDev )
 {
-    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyLineBezier - no mirroring implemented");
-    return drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
-}
-sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
-{
-    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolygonBezier - no mirroring implemented");
-    return drawPolygonBezier( nPoints, pPtAry, pFlgAry );
-}
-sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                                   const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice* )
-{
-    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygonBezier - no mirroring implemented");
-    return drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
+    sal_Bool bResult = sal_False;
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        SalPoint* pPtAry2 = new SalPoint[nPoints];
+        BOOL bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
+        bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2 : pPtAry, pFlgAry );
+        delete [] pPtAry2;
+    }
+    else
+        bResult = drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
+    return bResult;
 }
 
-bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& rPolygon,
-    const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
-    const OutputDevice* )
+sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* pOutDev )
 {
-    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolygon for B2D - no mirroring implemented");
-    return drawPolyLine( rPolygon, rLineWidth, eLineJoin );
+    sal_Bool bResult = sal_False;
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        SalPoint* pPtAry2 = new SalPoint[nPoints];
+        BOOL bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
+        bResult = drawPolygonBezier( nPoints, bCopied ? pPtAry2 : pPtAry, pFlgAry );
+        delete [] pPtAry2;
+    }
+    else
+        bResult = drawPolygonBezier( nPoints, pPtAry, pFlgAry );
+    return bResult;
+}
+
+sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,
+                                                   const SalPoint* const* i_pPtAry, const BYTE* const* i_pFlgAry, const OutputDevice* i_pOutDev )
+{
+    sal_Bool bRet = sal_False;
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        // TODO: optimize, reduce new/delete calls
+        SalPoint **pPtAry2 = new SalPoint*[i_nPoly];
+        ULONG i;
+        for(i=0; i<i_nPoly; i++)
+        {
+            ULONG nPoints = i_pPoints[i];
+            pPtAry2[i] = new SalPoint[ nPoints ];
+            mirror( nPoints, i_pPtAry[i], pPtAry2[i], i_pOutDev );
+        }
+
+        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, (PCONSTSALPOINT*)pPtAry2, i_pFlgAry );
+
+        for(i=0; i<i_nPoly; i++)
+            delete [] pPtAry2[i];
+        delete [] pPtAry2;
+    }
+    else
+        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, i_pPtAry, i_pFlgAry );
+    return bRet;
+}
+
+bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon,
+    const ::basegfx::B2DVector& i_rLineWidth, basegfx::B2DLineJoin i_eLineJoin,
+    const OutputDevice* i_pOutDev )
+{
+    bool bRet = false;
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
+        bRet = drawPolyLine( aMirror, i_rLineWidth, i_eLineJoin );
+    }
+    else
+        bRet = drawPolyLine( i_rPolygon, i_rLineWidth, i_eLineJoin );
+    return bRet;
 }
 
 void    SalGraphics::CopyArea( long nDestX, long nDestY,

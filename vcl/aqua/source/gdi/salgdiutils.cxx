@@ -143,6 +143,8 @@ void AquaSalGraphics::SetState()
     CGContextSetFillColor( mrContext, maFillColor.AsArray() );
     CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
     CGContextSetShouldAntialias( mrContext, false );
+    if( mnXorMode == 2 )
+        CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
 }
 
 // ----------------------------------------------------------------------

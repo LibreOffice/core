@@ -267,6 +267,7 @@ AquaSalGraphics::AquaSalGraphics()
     , mxLayer( NULL )
     , mrContext( NULL )
     , mpXorEmulation( NULL )
+    , mnXorMode( 0 )
     , mnWidth( 0 )
     , mnHeight( 0 )
     , mnBitmapDepth( 0 )
@@ -2212,11 +2213,25 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::SetXORMode( BOOL bSet )
+void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
     // return early if XOR mode remains unchanged
     if( mbPrinter )
         return;
+
+    if( ! bSet && mnXorMode == 2 )
+    {
+        CGContextSetBlendMode( mrContext, kCGBlendModeNormal );
+        mnXorMode = 0;
+        return;
+    }
+    else if( bSet && bInvertOnly && mnXorMode == 0)
+    {
+        CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
+        mnXorMode = 2;
+        return;
+    }
+
     if( (mpXorEmulation == NULL) && !bSet )
         return;
     if( (mpXorEmulation != NULL) && (bSet == mpXorEmulation->IsEnabled()) )
@@ -2236,12 +2251,14 @@ void AquaSalGraphics::SetXORMode( BOOL bSet )
     {
         mpXorEmulation->Enable();
         mrContext = mpXorEmulation->GetMaskContext();
+        mnXorMode = 1;
     }
     else
     {
         mpXorEmulation->UpdateTarget();
         mpXorEmulation->Disable();
         mrContext = mpXorEmulation->GetTargetContext();
+        mnXorMode = 0;
     }
 }
 

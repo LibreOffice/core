@@ -720,7 +720,7 @@ void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::SetXORMode( BOOL bSet )
+void X11SalGraphics::SetXORMode( bool bSet, bool )
 {
     if( !bXORMode_ == bSet )
     {

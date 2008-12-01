@@ -410,6 +410,11 @@ void DeInitVCL()
         delete pSVData->maWinData.mpMsgBoxImgList;
         pSVData->maWinData.mpMsgBoxImgList = NULL;
     }
+    if ( pSVData->maWinData.mpMsgBoxHCImgList )
+    {
+        delete pSVData->maWinData.mpMsgBoxHCImgList;
+        pSVData->maWinData.mpMsgBoxHCImgList = NULL;
+    }
     if ( pSVData->maCtrlData.mpCheckImgList )
     {
         delete pSVData->maCtrlData.mpCheckImgList;

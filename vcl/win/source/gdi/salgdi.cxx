@@ -1189,7 +1189,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::SetXORMode( BOOL bSet )
+void WinSalGraphics::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
     ::SetROP2( mhDC, bSet ? R2_XORPEN : R2_COPYPEN );

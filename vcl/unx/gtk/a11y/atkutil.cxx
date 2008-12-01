@@ -640,6 +640,8 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     case VCLEVENT_OBJECT_DYING:
+        g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow() );
+        // fallthrough intentional !
     case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
         handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;

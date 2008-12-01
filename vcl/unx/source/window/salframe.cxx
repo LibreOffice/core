@@ -996,7 +996,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
         {
             const String& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
             if( rWM.EqualsAscii( "KWin" ) )         // assume KDE is running
-                iconSize = 16;
+                iconSize = 48;
             static bool bGnomeIconSize = false;
             static bool bGnomeChecked = false;
             if( ! bGnomeChecked )
@@ -1018,7 +1018,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
                     XFree( pProps );
             }
             if( bGnomeIconSize )
-                iconSize = 20;
+                iconSize = 48;
         }
 
         XWMHints Hints;

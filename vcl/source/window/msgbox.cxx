@@ -58,15 +58,17 @@ static void ImplInitMsgBoxImageList()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maWinData.mpMsgBoxImgList )
     {
-        BitmapEx aBmpEx;
         ResMgr* pResMgr = ImplGetResMgr();
         pSVData->maWinData.mpMsgBoxImgList = new ImageList(4);
+        pSVData->maWinData.mpMsgBoxHCImgList = new ImageList(4);
         if( pResMgr )
         {
             Color aNonAlphaMask( 0xC0, 0xC0, 0xC0 );
             pSVData->maWinData.mpMsgBoxImgList->InsertFromHorizontalBitmap
                 ( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ), 4, &aNonAlphaMask );
-    }
+            pSVData->maWinData.mpMsgBoxHCImgList->InsertFromHorizontalBitmap
+                ( ResId( SV_RESID_BITMAP_MSGBOX_HC, *pResMgr ), 4, &aNonAlphaMask );
+        }
     }
 }
 
@@ -498,7 +500,8 @@ void InfoBox::ImplInitInfoBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( InfoBox::GetStandardImage() );
+    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+                InfoBox::GetStandardImageHC() : InfoBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_INFO)+1;
 }
 
@@ -524,6 +527,14 @@ Image InfoBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
+}
+
+// -----------------------------------------------------------------------
+
+Image InfoBox::GetStandardImageHC()
+{
+    ImplInitMsgBoxImageList();
+    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 4 );
 }
 
 // -----------------------------------------------------------------------
@@ -580,7 +591,8 @@ void ErrorBox::ImplInitErrorBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( ErrorBox::GetStandardImage() );
+    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+        ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_ERROR)+1;
 }
 
@@ -611,13 +623,22 @@ Image ErrorBox::GetStandardImage()
 
 // -----------------------------------------------------------------------
 
+Image ErrorBox::GetStandardImageHC()
+{
+    ImplInitMsgBoxImageList();
+    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 1 );
+}
+
+// -----------------------------------------------------------------------
+
 void QueryBox::ImplInitQueryBoxData()
 {
     // Default Text is the display title from the application
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_QUERY)+1;
 }
 
@@ -653,6 +674,16 @@ Image QueryBox::GetStandardImage()
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 2 );
 }
+
+// -----------------------------------------------------------------------
+
+Image QueryBox::GetStandardImageHC()
+{
+    ImplInitMsgBoxImageList();
+    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 2 );
+}
+
+// -----------------------------------------------------------------------
 
 Size MessBox::GetOptimalSize(WindowSizeType eType) const
 {

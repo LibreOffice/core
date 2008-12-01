@@ -766,7 +766,7 @@ int OutputDevice::ImplGetGraphics() const
 
     if ( mpGraphics )
     {
-        mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp) );
+        mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
         return TRUE;
     }
 
@@ -1970,7 +1970,7 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mbInitLineColor = mbInitFillColor = TRUE;
 
         if( mpGraphics || ImplGetGraphics() )
-            mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp) );
+            mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
     }
 
     if( mpAlphaVDev )

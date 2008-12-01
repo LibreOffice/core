@@ -474,7 +474,7 @@ public:
         sal_Int32                                           m_nParentElement; // index into structure vector
         sal_Int32                                           m_nFirstPageObject;
         bool                                                m_bOpenMCSeq;
-        std::list< sal_Int32 >                              m_aChildren; // indices into strucure vector
+        std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
         std::list< PDFStructureElementKid >                 m_aKids;
         PDFStructAttributes                                 m_aAttributes;
         Rectangle                                           m_aBBox;
@@ -949,6 +949,12 @@ i12626
     // puts the attribute objects of a structure element into the returned string,
     // helper for emitStructure
     rtl::OString emitStructureAttributes( PDFStructureElement& rEle );
+    //--->i94258
+    // the maximum array elements allowed for PDF array object
+    static const sal_uInt32 ncMaxPDFArraySize = 8191;
+    //check if internal dummy container are needed in the structure elements
+    void addInternalStructureContainer( PDFStructureElement& rEle );
+    //<---i94258
     // writes document structure
     sal_Int32 emitStructure( PDFStructureElement& rEle );
     // writes structure parent tree

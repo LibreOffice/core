@@ -165,7 +165,7 @@ public:
     BOOL                    mbVirDev;           // is VirDev
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
-    BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
+    bool                    mbXORMode;          // _every_ output with RasterOp XOR
 
     HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
@@ -263,7 +263,7 @@ public:
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor );
     // enable/disable XOR drawing
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool );
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     // set fill color for raster operations

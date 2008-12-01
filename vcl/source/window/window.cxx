@@ -100,6 +100,8 @@
 #include "vcl/pdfextoutdevdata.hxx"
 #include "vcl/lazydelete.hxx"
 
+#include <set>
+
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -380,10 +382,25 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if( defFontheight > maxFontheight )
         defFontheight = maxFontheight;
 
-    // if the UI is korean, always use 9pt
+    // if the UI is korean, chinese or another locale
+    // where the system font size is kown to be often too small to
+    // generate readable fonts enforce a minimum font size of 9 points
+    bool bBrokenLangFontHeight = false;
+    static const LanguageType eBrokenSystemFontSizeLanguages[] =
+    { LANGUAGE_KOREAN, LANGUAGE_KOREAN_JOHAB,
+      LANGUAGE_CHINESE_HONGKONG, LANGUAGE_CHINESE_MACAU, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_SINGAPORE, LANGUAGE_CHINESE_TRADITIONAL
+    };
+    static std::set< LanguageType > aBrokenSystemFontSizeLanguagesSet(
+        eBrokenSystemFontSizeLanguages,
+        eBrokenSystemFontSizeLanguages +
+        (sizeof(eBrokenSystemFontSizeLanguages)/sizeof(eBrokenSystemFontSizeLanguages[0]))
+        );
     LanguageType aLang = Application::GetSettings().GetUILanguage();
-    if( aLang == LANGUAGE_KOREAN || aLang == LANGUAGE_KOREAN_JOHAB )
+    if( aBrokenSystemFontSizeLanguagesSet.find( aLang ) != aBrokenSystemFontSizeLanguagesSet.end() )
+    {
         defFontheight = Max(9, defFontheight);
+        bBrokenLangFontHeight = true;
+    }
 
     // i22098, toolfont will be scaled differently to avoid bloated rulers and status bars for big fonts
     int toolfontheight = defFontheight;
@@ -393,18 +410,28 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     aFont = aStyleSettings.GetAppFont();
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetAppFont( aFont );
-    //aFont = aStyleSettings.GetHelpFont();
-    //aFont.SetHeight( defFontheight );
-    //aStyleSettings.SetHelpFont( aFont );
     aFont = aStyleSettings.GetTitleFont();
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetTitleFont( aFont );
     aFont = aStyleSettings.GetFloatTitleFont();
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetFloatTitleFont( aFont );
-    //aFont = aStyleSettings.GetMenuFont();
-    //aFont.SetHeight( defFontheight );
-    //aStyleSettings.SetMenuFont( aFont );
+    // keep menu and help font size from system unless in broken locale size
+    if( bBrokenLangFontHeight )
+    {
+        aFont = aStyleSettings.GetMenuFont();
+        if( aFont.GetHeight() < defFontheight )
+        {
+            aFont.SetHeight( defFontheight );
+            aStyleSettings.SetMenuFont( aFont );
+        }
+        aFont = aStyleSettings.GetHelpFont();
+        if( aFont.GetHeight() < defFontheight )
+        {
+            aFont.SetHeight( defFontheight );
+            aStyleSettings.SetHelpFont( aFont );
+        }
+    }
 
     // use different height for toolfont
     aFont = aStyleSettings.GetToolFont();

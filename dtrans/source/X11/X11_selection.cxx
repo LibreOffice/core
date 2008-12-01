@@ -2073,10 +2073,14 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 #endif
     ::std::hash_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.selection );
-    if( ( rNotify.requestor == m_aWindow || rNotify.requestor == m_aCurrentDropWindow )     &&
-        it != m_aSelections.end()           &&
-        ( it->second->m_eState == Selection::WaitingForResponse ) ||
-        ( it->second->m_eState == Selection::WaitingForData ) )
+    if (
+        (rNotify.requestor == m_aWindow || rNotify.requestor == m_aCurrentDropWindow) &&
+        it != m_aSelections.end() &&
+        (
+         (it->second->m_eState == Selection::WaitingForResponse) ||
+         (it->second->m_eState == Selection::WaitingForData)
+        )
+       )
     {
         bHandled = true;
         if( it->second->m_aRequestedType == m_nMULTIPLEAtom )
