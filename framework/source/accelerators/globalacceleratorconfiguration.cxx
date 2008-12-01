@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: globalacceleratorconfiguration.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.244.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,24 +37,22 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 #include <services.h>
 
 //_______________________________________________
 // interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 
 //_______________________________________________
 // other includes
 #include <vcl/svapp.hxx>
-
-#ifndef _COMPHELPER_LOCALE_HXX
 #include <comphelper/locale.hxx>
-#endif
+#include <comphelper/configurationhelper.hxx>
 
 //_______________________________________________
 // const
@@ -64,12 +62,14 @@ namespace framework
 
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
-DEFINE_XINTERFACE_1(GlobalAcceleratorConfiguration           ,
-                    AcceleratorConfiguration                 ,
-                    DIRECT_INTERFACE(css::lang::XServiceInfo))
-DEFINE_XTYPEPROVIDER_1_WITH_BASECLASS(GlobalAcceleratorConfiguration,
-                                      AcceleratorConfiguration      ,
-                                      css::lang::XServiceInfo       )
+DEFINE_XINTERFACE_2(GlobalAcceleratorConfiguration           ,
+                    XCUBasedAcceleratorConfiguration                 ,
+                    DIRECT_INTERFACE(css::lang::XServiceInfo),
+                    DIRECT_INTERFACE(css::lang::XInitialization))
+DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(GlobalAcceleratorConfiguration,
+                                      XCUBasedAcceleratorConfiguration      ,
+                                      css::lang::XServiceInfo       ,
+                                      css::lang::XInitialization)
 
 DEFINE_XSERVICEINFO_MULTISERVICE(GlobalAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                              ,
@@ -89,14 +89,19 @@ DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
 
 //-----------------------------------------------
 GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
-    : AcceleratorConfiguration(xSMGR)
+    : XCUBasedAcceleratorConfiguration(xSMGR)
 {
 }
 
 //-----------------------------------------------
 GlobalAcceleratorConfiguration::~GlobalAcceleratorConfiguration()
 {
-    m_aPresetHandler.removeStorageListener(this);
+}
+
+void SAL_CALL GlobalAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& /*lArguments*/)
+    throw(css::uno::Exception       ,
+          css::uno::RuntimeException)
+{
 }
 
 //-----------------------------------------------
@@ -105,30 +110,16 @@ void GlobalAcceleratorConfiguration::impl_ts_fillCache()
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
-    ::comphelper::Locale aLocale = impl_ts_getLocale();
+    ::comphelper::Locale aLocale = ::comphelper::Locale(m_sLocale);
 
     // May be there exists no accelerator config? Handle it gracefully :-)
     try
     {
-        // Note: The used preset class is threadsafe by itself ... and live if we live!
-        // We do not need any mutex here.
+        m_sGlobalOrModules = CFG_ENTRY_GLOBAL;
+        XCUBasedAcceleratorConfiguration::reload();
 
-        // open the folder, where the configuration exists
-        m_aPresetHandler.connectToResource(
-            PresetHandler::E_GLOBAL,
-            PresetHandler::RESOURCETYPE_ACCELERATOR(),
-            ::rtl::OUString(),
-            css::uno::Reference< css::embed::XStorage >(),
-            aLocale);
-
-        // check if the user already has a current configuration
-        // if not - se the default preset as new current one.
-        // means: copy "share/default.xml" => "user/current.xml"
-        if (!m_aPresetHandler.existsTarget(PresetHandler::TARGET_CURRENT()))
-            m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
-
-        AcceleratorConfiguration::reload();
-        m_aPresetHandler.addStorageListener(this);
+        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }

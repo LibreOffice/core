@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentacceleratorconfiguration.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.9.244.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,18 @@
 #include "precompiled_framework.hxx"
 #include <accelerators/documentacceleratorconfiguration.hxx>
 
+#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
+#include <xml/acceleratorconfigurationreader.hxx>
+#endif
+
+#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
+#include <xml/acceleratorconfigurationwriter.hxx>
+#endif
+
+#ifndef __FRAMEWORK_XML_SAXNAMESPACEFILTER_HXX_
+#include <xml/saxnamespacefilter.hxx>
+#endif
+
 //_______________________________________________
 // own includes
 #include <threadhelp/readguard.hxx>
@@ -44,6 +56,30 @@
 
 //_______________________________________________
 // interface includes
+
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
+#include <com/sun/star/xml/sax/XParser.hpp>
+#endif
 
 //_______________________________________________
 // other includes
@@ -61,13 +97,13 @@ namespace framework
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 DEFINE_XINTERFACE_2(DocumentAcceleratorConfiguration                   ,
-                    AcceleratorConfiguration                           ,
+                    XMLBasedAcceleratorConfiguration                           ,
                     DIRECT_INTERFACE(css::lang::XServiceInfo)          ,
                     DIRECT_INTERFACE(css::lang::XInitialization))
 //                    DIRECT_INTERFACE(css::ui::XUIConfigurationStorage))
 
 DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration ,
-                                      AcceleratorConfiguration         ,
+                                      XMLBasedAcceleratorConfiguration         ,
                                       css::lang::XServiceInfo          ,
                                       css::lang::XInitialization)
 //                                      css::ui::XUIConfigurationStorage)
@@ -89,7 +125,7 @@ DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
 
 //-----------------------------------------------
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
-    : AcceleratorConfiguration(xSMGR)
+    : XMLBasedAcceleratorConfiguration(xSMGR)
 {
 }
 
@@ -182,20 +218,20 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
             xDocumentRoot,
             aLocale);
 
-        AcceleratorConfiguration::reload();
+        DocumentAcceleratorConfiguration::reload();
         m_aPresetHandler.addStorageListener(this);
     }
     /*
 
-        Sometimes the configuration seams to be corrupted ..
-        So it would be nice if we dont crash the office then .-)
-        #121559#
+    Sometimes the configuration seams to be corrupted ..
+    So it would be nice if we dont crash the office then .-)
+    #121559#
 
     catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    { throw exRun; }
     */
     catch(const css::uno::Exception&)
-        {}
+    {}
 }
 
 //-----------------------------------------------

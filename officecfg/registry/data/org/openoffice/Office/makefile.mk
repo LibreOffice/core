@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.19.112.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +40,7 @@ PACKAGE=org.openoffice.Office
 # --- Targets ------------------------------------------------------
 
 XCUFILES= \
+    Accelerators.xcu \
     Calc.xcu \
     Canvas.xcu \
     Common.xcu \
@@ -97,6 +98,7 @@ MODULEFILES= \
 
 
 LOCALIZEDFILES= \
+    Accelerators.xcu \
     Common.xcu \
     SFX.xcu \
     DataAccess.xcu \

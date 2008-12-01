@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18.112.3 $
+# $Revision: 1.1.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,57 +28,23 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..$/..$/..$/..
 
-PRJNAME=officecfg
-TARGET=schema_ooOffice
-PACKAGE=org.openoffice.Office
+PRJ = ..$/..$/..$/..
+TARGET  = AcceleratorsConfigurationTest
+PRJNAME = framework
+PACKAGE = complex$/accelerators$/helper
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
 
-# --- Targets ------------------------------------------------------
 
-XCSFILES= \
-    Accelerators.xcs \
-    Addons.xcs \
-    Calc.xcs \
-    CalcAddIns.xcs \
-    Canvas.xcs \
-    Chart.xcs \
-    Commands.xcs \
-    Common.xcs \
-    Compatibility.xcs \
-    DataAccess.xcs \
-    Draw.xcs \
-    Events.xcs \
-    Embedding.xcs \
-    ExtensionManager.xcs \
-    Impress.xcs \
-    Java.xcs \
-    Jobs.xcs \
-    Labels.xcs \
-    Linguistic.xcs \
-    Logging.xcs \
-    Math.xcs \
-    OptionsDialog.xcs \
-    ProtocolHandler.xcs \
-    SFX.xcs \
-    Substitution.xcs \
-    TableWizard.xcs \
-    UI.xcs \
-    Views.xcs \
-    Writer.xcs \
-    WriterWeb.xcs \
-    Scripting.xcs \
-    Security.xcs \
-    WebWizard.xcs \
-    Recovery.xcs \
-    FormWizard.xcs \
-    ExtendedColorScheme.xcs \
-    TypeDetection.xcs \
-    TabBrowse.xcs \
-    Paths.xcs
+#----- compile .java files -----------------------------------------
+
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
+                  Generator.jar OOoRunner.jar
+JAVAFILES       = KeyMapping.java
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+
+MAXLINELENGTH = 100000
 
 .INCLUDE :  target.mk
-

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentacceleratorconfiguration.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.7.300.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +35,10 @@
 // own includes
 
 #include <accelerators/acceleratorconfiguration.hxx>
+#include <accelerators/istoragelistener.hxx>
 #include <accelerators/presethandler.hxx>
 
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
-#include <macros/interface.hxx>
-#endif
+#include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
@@ -62,7 +61,7 @@ namespace framework
     implements a read/write access to a document
     based accelerator configuration.
  */
-class DocumentAcceleratorConfiguration : public AcceleratorConfiguration
+class DocumentAcceleratorConfiguration : public XMLBasedAcceleratorConfiguration
                                        , public css::lang::XServiceInfo
                                        , public css::lang::XInitialization
 //                                       , public css::ui::XUIConfigurationStorage

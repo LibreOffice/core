@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: globalacceleratorconfiguration.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.4.300.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,10 @@
 //__________________________________________
 // interface includes
 
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
 //__________________________________________
 // other includes
 
@@ -60,8 +64,9 @@ namespace framework
     implements a read/write access to the global
     accelerator configuration.
  */
-class GlobalAcceleratorConfiguration : public AcceleratorConfiguration
+class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
                                      , public css::lang::XServiceInfo
+                                     , public css::lang::XInitialization
 {
     //______________________________________
     // interface
@@ -85,10 +90,17 @@ class GlobalAcceleratorConfiguration : public AcceleratorConfiguration
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
+        // XInitialization
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+            throw (css::uno::Exception       ,
+            css::uno::RuntimeException);
+
     //______________________________________
     // helper
 
     private:
+
+        ::rtl::OUString m_sLocale;
 
         //----------------------------------
         /** read all data into the cache. */
