@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavcontent.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,8 +88,10 @@ class Content : public ::ucbhelper::ContentImplHelper,
     rtl::OUString     m_aEscapedTitle;
     ResourceType      m_eResourceType;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
-      sal_Bool        m_bTransient;
-    sal_Bool          m_bCollection;
+      bool            m_bTransient;
+    bool              m_bCollection;
+    bool              m_bDidGetOrHead;
+    std::vector< rtl::OUString > m_aFailedPropNames;
 
 private:
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >

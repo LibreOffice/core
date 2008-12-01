@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DAVResourceAccess.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1065,7 +1065,8 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
     // --> tkr #67048# copy & paste images doesn't display.
     // if we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
-        if (errorCount < 3)
+        // retry up to three times, if not a client-side error.
+        if ( ( e.getStatus() < 400 || e.getStatus() > 499 ) && errorCount < 3)
         {
             return sal_True;
         }
