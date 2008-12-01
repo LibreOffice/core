@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docprophandler.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -521,7 +521,15 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         break;
 
                     case XML_revision|NMSP_COREPR:
-                        m_xDocProp->setEditingCycles( (sal_Int16)aChars.toInt32() );
+                        try
+                        {
+                            m_xDocProp->setEditingCycles(
+                                static_cast<sal_Int16>(aChars.toInt32()) );
+                        }
+                        catch (lang::IllegalArgumentException &)
+                        {
+                            // ignore
+                        }
                         break;
 
                     case XML_subject|NMSP_DC:
@@ -549,7 +557,14 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         break;
 
                     case XML_TotalTime|NMSP_EXTPR:
-                        m_xDocProp->setEditingDuration( aChars.toInt32() );
+                        try
+                        {
+                            m_xDocProp->setEditingDuration( aChars.toInt32() );
+                        }
+                        catch (lang::IllegalArgumentException &)
+                        {
+                            // ignore
+                        }
                         break;
 
                     case XML_Characters|NMSP_EXTPR:
