@@ -168,9 +168,9 @@ public:
     void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
     bool                CheckContext();
-    void                UpdateWindow( NSRect& rRect ); // delivered in NSView coordinates
+    void                UpdateWindow( NSRect& ); // delivered in NSView coordinates
     void                RefreshRect( const CGRect& );
-    void                RefreshRect( const NSRect& rRect );
+    void                RefreshRect( const NSRect& );
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
@@ -387,6 +387,11 @@ private:
 // --- some trivial inlines
 
 inline void AquaSalGraphics::RefreshRect( const CGRect& rRect )
+{
+    RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
+}
+
+inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }

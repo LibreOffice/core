@@ -1753,7 +1753,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( rtl::OStringBuffer& rInSt
         appendLiteralString( (const sal_Char*)m_pEncryptionBuffer, nChars, rOutBuffer );
     }
     else
-        rOutBuffer.append( rInString.getStr(), nChars );
+        appendLiteralString( rInString.getStr(), nChars , rOutBuffer );
     rOutBuffer.append( ")" );
 }
 
@@ -10129,27 +10129,6 @@ sal_Int32 PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
     return 0;
 }
 
-static OUString escapeStringLiteral( const OUString& rStr )
-{
-    OUStringBuffer aBuf( rStr.getLength()*2 );
-    const sal_Unicode* pUni = rStr.getStr();
-    int nLen = rStr.getLength();
-    for( ; nLen; nLen--, pUni++ )
-    {
-        switch( *pUni )
-        {
-            case sal_Unicode(')'):
-            case sal_Unicode('('):
-            case sal_Unicode('\\'):
-                aBuf.append( sal_Unicode( '\\' ) );
-            default:
-                aBuf.append( *pUni );
-                break;
-        }
-    }
-    return aBuf.makeStringAndClear();
-}
-
 sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
     if( nLinkId < 0 || nLinkId >= (sal_Int32)m_aLinks.size() )
@@ -10175,7 +10154,7 @@ sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
     if (m_xTrans.is())
         m_xTrans->parseStrict( aURL );
 
-    m_aLinks[ nLinkId ].m_aURL  = escapeStringLiteral( aURL.Complete );
+    m_aLinks[ nLinkId ].m_aURL  = aURL.Complete;
 
     return 0;
 }
