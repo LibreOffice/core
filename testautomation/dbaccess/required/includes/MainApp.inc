@@ -378,13 +378,13 @@ testcase tMainMenuBar
         end if
         call hMenuClose()
 
-        '/// check if there are 9 items in the tools menu.
-        printlog "check if there are 9 items in the tools menu."        
+        '/// check if there are 10 items in the tools menu.
+        printlog "check if there are 10 items in the tools menu."        
         Insight.UseMenu 
         hMenuSelectNr(5)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 9) then
-            warnlog "There should 9 items in the tools menu but there are " + iCount + " items."
+        if (iCount <> 10) then
+            warnlog "There should 10 items in the tools menu but there are " + iCount + " items."
         end if
         call hMenuClose()
         
@@ -392,7 +392,7 @@ testcase tMainMenuBar
         printlog "check if there are 4 items in the TOOLS/MACRO menu."        
         Insight.UseMenu 
         hMenuSelectNr(5)
-        hMenuSelectNr(5)        
+        hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
         if (iCount <> 4) then
             warnlog "There should 4 items in the TOOLS/MACRO menu but there are " + iCount + " items."

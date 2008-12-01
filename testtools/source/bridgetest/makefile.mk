@@ -148,15 +148,15 @@ test:
     
 $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
-    $(GNUCOPY) -p $? $@
+    $(GNUCOPY) $? $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
 $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
-    $(GNUCOPY) -p $? $@
+    $(GNUCOPY) $? $@
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
-    $(GNUCOPY) -p $? $@
+    $(GNUCOPY) $? $@
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server

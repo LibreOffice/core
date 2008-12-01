@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: controltools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.1.68.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:45 $
+'* last change: $Author: msc $ $Date: 2008/10/28 07:52:48 $
 '*
 '* This file is part of OpenOffice.org.
 '*

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ctrl_Several1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.1.68.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:41 $
+'* last change: $Author: msc $ $Date: 2008/10/07 09:51:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*

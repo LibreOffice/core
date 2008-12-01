@@ -351,9 +351,8 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 //                GlobalLogWriter.get().println("3");
 
                 XDatabaseDocumentUI aDBDocUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
-                boolean isDummy = aDBDocUI.isConnected();
-                boolean blah = isDummy;
-                boolean isConnect = aDBDocUI.connect();
+                aDBDocUI.connect();
+                boolean isConnect = aDBDocUI.isConnected();
                 if (isConnect)
                 {
                     GlobalLogWriter.println("Connection is true");
