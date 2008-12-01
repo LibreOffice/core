@@ -33,6 +33,7 @@
 #include "clickableimage.hxx"
 #include "controlfeatureinterception.hxx"
 #include "urltransformer.hxx"
+#include "componenttools.hxx"
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -52,7 +53,7 @@
 #include "services.hxx"
 #include <comphelper/container.hxx>
 #include <comphelper/listenernotification.hxx>
-
+#include <svtools/imageresourceaccess.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
 //.........................................................................
@@ -166,25 +167,6 @@ namespace frm
         }
 
         OControl::disposing();
-    }
-
-    //------------------------------------------------------------------------------
-    Reference< XModel >  OClickableImageBaseControl::getXModel(const InterfaceRef& xIface) const
-    {
-        Reference< XModel >  xModel(xIface, UNO_QUERY);
-        if (xModel.is())
-            return xModel;
-        else
-        {
-            Reference<XChild>  xChild(xIface, UNO_QUERY);
-            if (xChild.is())
-            {
-                InterfaceRef  xParent = xChild->getParent();
-                return getXModel(xParent);
-            }
-            else
-                return NULL;
-        }
     }
 
     //------------------------------------------------------------------------------
@@ -705,15 +687,20 @@ namespace frm
     void OClickableImageBaseModel::StartProduction()
     {
         ImageProducer *pImgProd = GetImageProducer();
+        // grab the ImageURL
+        rtl::OUString sURL;
+        getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ) ) >>= sURL;
         if (!m_pMedium)
         {
-            // caution: the medium may be NULL if somebody gave us a invalid URL to work with
-            // 11/24/2000 - 79667 - FS
-            pImgProd->SetImage(String());
+            if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )
+                pImgProd->SetImage( sURL );
+            else
+                // caution: the medium may be NULL if somebody gave us a invalid URL to work with
+                // 11/24/2000 - 79667 - FS
+                pImgProd->SetImage(String());
             m_bDownloading = sal_False;
             return;
         }
-
         if (m_pMedium->GetErrorCode()==0)
         {
             SvStream* pStream = m_pMedium->GetInStream();
@@ -749,8 +736,8 @@ namespace frm
             // we treat an invalid URL like we would treat no URL
             return;
 
-        if (rURL.getLength())
-        {
+        if (rURL.getLength() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
+       {
             if (m_pMedium)
                 delete m_pMedium;
 
@@ -860,6 +847,8 @@ namespace frm
         }
         else
         {
+            if ( ::svt::GraphicAccess::isSupportedURL( rURL )  )
+                GetImageProducer()->SetImage( rURL );
             GetImageProducer()->startProduction();
         }
     }

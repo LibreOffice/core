@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.common;
+ ************************************************************************/
+package com.sun.star.wizards.common;
 
 import java.util.*;
 
@@ -40,12 +41,13 @@ import org.w3c.dom.*;
  *
  * @author  rpiterman
  */
-public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
+public class ConfigSet implements ConfigNode, XMLProvider, ListModel
+{
+
     private Class childClass;
     private Map childrenMap = new HashMap();
     private List childrenList = new Vector();
     public Object root;
-
     /**
      * After reading the configuration set items,
      * the ConfigSet checks this field.
@@ -55,111 +57,150 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * to avoid this "deletion" of nulls.
      */
     protected boolean noNulls = true;
-
     /** Utility field used by event firing mechanism. */
     private javax.swing.event.EventListenerList listenerList = null;
 
-    public ConfigSet(Class childType) {
+    public ConfigSet(Class childType)
+    {
         childClass = childType;
     }
 
-    public void add(String name, Object child) {
+    public void add(String name, Object child)
+    {
         childrenMap.put(name, child);
-        try {
+        try
+        {
             int i = ((Indexable) child).getIndex();
             int oldSize = getSize();
             while (getSize() <= i)
+            {
                 childrenList.add(null);
+            }
             childrenList.set(i, child);
             if (oldSize > i)
+            {
                 oldSize = i;
+            }
             fireListDataListenerIntervalAdded(oldSize, i);
-        } catch (ClassCastException cce) {
+        }
+        catch (ClassCastException cce)
+        {
             childrenList.add(child);
             fireListDataListenerIntervalAdded(getSize() - 1, getSize() - 1);
         }
     }
 
-    public void add(int i, Object o) {
+    public void add(int i, Object o)
+    {
         int name = i;
         while (getElement("" + name) != null)
+        {
             name++;
-
+        }
         childrenMap.put("" + name, o);
         childrenList.add(i, o);
 
         fireListDataListenerIntervalAdded(i, i);
     }
 
-    protected Object createChild() throws InstantiationException, IllegalAccessException {
+    protected Object createChild() throws InstantiationException, IllegalAccessException
+    {
         return childClass.newInstance();
     }
 
-    public void writeConfiguration(Object configView, Object param) {
+    public void writeConfiguration(Object configView, Object param)
+    {
         Object[] names = childrenMap.keySet().toArray();
 
-        if (ConfigNode.class.isAssignableFrom(childClass)) {
+        if (ConfigNode.class.isAssignableFrom(childClass))
+        {
             //first I remove all the children from the configuration.
             String children[] = Configuration.getChildrenNames(configView);
-            for (int i = 0; i<children.length; i++)
-                try {
-                    Configuration.removeNode(configView,children[i]);
+            for (int i = 0; i < children.length; i++)
+            {
+                try
+                {
+                    Configuration.removeNode(configView, children[i]);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     ex.printStackTrace();
-                }
-
-            // and add them new.
-            for (int i = 0; i < names.length; i++) {
-                try {
+                }            // and add them new.
+            }
+            for (int i = 0; i < names.length; i++)
+            {
+                try
+                {
                     ConfigNode child = (ConfigNode) getElement(names[i]);
                     Object childView = Configuration.addConfigNode(configView, (String) names[i]);
                     child.writeConfiguration(childView, param);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     ex.printStackTrace();
                 }
             }
         }
         //for a set of primitive / String type.
         else
+        {
             throw new IllegalArgumentException("Unable to write primitive sets to configuration (not implemented)");
-
+        }
     }
 
-    public void readConfiguration(Object configurationView, Object param) {
+    public void readConfiguration(Object configurationView, Object param)
+    {
         String[] names = Configuration.getChildrenNames(configurationView);
 
-        if (ConfigNode.class.isAssignableFrom(childClass)) {
+        if (ConfigNode.class.isAssignableFrom(childClass))
+        {
 
-            for (int i = 0; i < names.length; i++) {
-                try {
+            for (int i = 0; i < names.length; i++)
+            {
+                try
+                {
                     ConfigNode child = (ConfigNode) createChild();
                     child.setRoot(root);
                     child.readConfiguration(Configuration.getNode(names[i], configurationView), param);
                     add(names[i], child);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     ex.printStackTrace();
                 }
             }
             //remove any nulls from the list
             if (noNulls)
+            {
                 for (int i = 0; i < childrenList.size(); i++)
+                {
                     if (childrenList.get(i) == null)
+                    {
                         childrenList.remove(i--);
+                    }
+                }
+            }
         }
         //for a set of primitive / String type.
         else
-            for (int i = 0; i < names.length; i++) {
-                try {
+        {
+            for (int i = 0; i < names.length; i++)
+            {
+                try
+                {
                     Object child = Configuration.getNode(names[i], configurationView);
                     add(names[i], child);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     ex.printStackTrace();
                 }
             }
+        }
     }
 
-    public void remove(Object obj) {
+    public void remove(Object obj)
+    {
         Object key = getKey(obj);
         childrenMap.remove(key);
         int i = childrenList.indexOf(obj);
@@ -167,62 +208,81 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
         fireListDataListenerIntervalRemoved(i, i);
     }
 
-    public void remove(int i) {
+    public void remove(int i)
+    {
         Object o = getElementAt(i);
         remove(o);
     }
 
-    public void clear() {
+    public void clear()
+    {
         childrenMap.clear();
         childrenList.clear();
     }
 
-    public void update(int i) {
+    public void update(int i)
+    {
         fireListDataListenerContentsChanged(i, i);
     }
 
-    public Node createDOM(Node parent) {
+    public Node createDOM(Node parent)
+    {
 
         Object[] items = items();
 
-        for (int i = 0; i < items.length; i++) {
+        for (int i = 0; i < items.length; i++)
+        {
             Object item = items[i];
             if (item instanceof XMLProvider)
-                 ((XMLProvider) item).createDOM(parent);
-
+            {
+                ((XMLProvider) item).createDOM(parent);
+            }
         }
         return parent;
     }
 
-    public Object[] items() {
+    public Object[] items()
+    {
         return childrenList.toArray();
     }
 
-    public Object getKey(Object object) {
-        for (Iterator i = childrenMap.entrySet().iterator(); i.hasNext();) {
+    public Object getKey(Object object)
+    {
+        for (Iterator i = childrenMap.entrySet().iterator(); i.hasNext();)
+        {
 
             Map.Entry me = (Map.Entry) i.next();
             if (me.getValue() == object)
+            {
                 return me.getKey();
-
+            }
         }
         return null;
     }
 
-    public Object getKey(int i) {
+    public Object getKey(int i)
+    {
         int c = 0;
-        while (i > -1) {
+        while (i > -1)
+        {
             if (getElementAt(c) != null)
+            {
                 i--;
+            }
             c++;
         }
         if (c == 0)
+        {
             return null;
+        }
         else
+        {
             return getKey(getElementAt(c - 1));
+        }
     }
 
-    public void setRoot(Object newRoot) {
+    public void setRoot(Object newRoot)
+    {
         root = newRoot;
     }
 
@@ -230,8 +290,10 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * @param listener The listener to register.
      *
      */
-    public synchronized void addListDataListener(javax.swing.event.ListDataListener listener) {
-        if (listenerList == null) {
+    public synchronized void addListDataListener(javax.swing.event.ListDataListener listener)
+    {
+        if (listenerList == null)
+        {
             listenerList = new javax.swing.event.EventListenerList();
         }
         listenerList.add(javax.swing.event.ListDataListener.class, listener);
@@ -241,7 +303,8 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * @param listener The listener to remove.
      *
      */
-    public synchronized void removeListDataListener(javax.swing.event.ListDataListener listener) {
+    public synchronized void removeListDataListener(javax.swing.event.ListDataListener listener)
+    {
         listenerList.remove(javax.swing.event.ListDataListener.class, listener);
     }
 
@@ -250,13 +313,18 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * @param event The event to be fired
      *
      */
-    private void fireListDataListenerIntervalAdded(int i0, int i1) {
+    private void fireListDataListenerIntervalAdded(int i0, int i1)
+    {
         ListDataEvent event = new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, i0, i1);
         if (listenerList == null)
+        {
             return;
+        }
         Object[] listeners = listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == javax.swing.event.ListDataListener.class) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2)
+        {
+            if (listeners[i] == javax.swing.event.ListDataListener.class)
+            {
                 ((javax.swing.event.ListDataListener) listeners[i + 1]).intervalAdded(event);
             }
         }
@@ -267,13 +335,18 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * @param event The event to be fired
      *
      */
-    private void fireListDataListenerIntervalRemoved(int i0, int i1) {
+    private void fireListDataListenerIntervalRemoved(int i0, int i1)
+    {
         ListDataEvent event = new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, i0, i1);
         if (listenerList == null)
+        {
             return;
+        }
         Object[] listeners = listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == javax.swing.event.ListDataListener.class) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2)
+        {
+            if (listeners[i] == javax.swing.event.ListDataListener.class)
+            {
                 ((javax.swing.event.ListDataListener) listeners[i + 1]).intervalRemoved(event);
             }
         }
@@ -284,35 +357,45 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * @param event The event to be fired
      *
      */
-    private void fireListDataListenerContentsChanged(int i0, int i1) {
+    private void fireListDataListenerContentsChanged(int i0, int i1)
+    {
         ListDataEvent event = new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, i0, i1);
         if (listenerList == null)
+        {
             return;
+        }
         Object[] listeners = listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == javax.swing.event.ListDataListener.class) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2)
+        {
+            if (listeners[i] == javax.swing.event.ListDataListener.class)
+            {
                 ((javax.swing.event.ListDataListener) listeners[i + 1]).contentsChanged(event);
             }
         }
     }
 
-    public Object getElementAt(int i) {
+    public Object getElementAt(int i)
+    {
         return childrenList.get(i);
     }
 
-    public Object getElement(Object o) {
+    public Object getElement(Object o)
+    {
         return childrenMap.get(o);
     }
 
-    public int getSize() {
+    public int getSize()
+    {
         return childrenList.size();
     }
 
-    public Set keys() {
+    public Set keys()
+    {
         return childrenMap.keySet();
     }
 
-    public int getIndexOf(Object item) {
+    public int getIndexOf(Object item)
+    {
         return childrenList.indexOf(item);
     }
 
@@ -325,7 +408,8 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
      * @param confView
      * @param memebrName
      */
-    public void reindexSet(Object confView, String memberName, String indexPropertyName) throws Exception {
+    public void reindexSet(Object confView, String memberName, String indexPropertyName) throws Exception
+    {
         /*
          * First I read all memebrs of the set,
          * except the one that should be number 0
@@ -336,29 +420,36 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel {
         Object member = null;
         int index = 0;
         for (int i = 0; i < names.length; i++)
-            if (!names[i].equals(memberName)) {
+        {
+            if (!names[i].equals(memberName))
+            {
                 member = Configuration.getConfigurationNode(names[i], confView);
                 index = Configuration.getInt(indexPropertyName, member);
                 while (index >= v.size())
+                {
                     v.add(null);
+                }
                 v.setElementAt(member, index);
 
             }
         /**
          * Now I reindex them
          */
-
+        }
         index = 1;
-        for (int i = 0; i < v.size(); i++) {
+        for (int i = 0; i < v.size(); i++)
+        {
             member = v.get(i);
             if (member != null)
+            {
                 Configuration.set(index++, indexPropertyName, member);
+            }
         }
 
     }
 
-    public void sort(Comparator comparator) {
+    public void sort(Comparator comparator)
+    {
         Collections.sort(this.childrenList, comparator);
     }
-
 }

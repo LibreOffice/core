@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.common;
+ ************************************************************************/
+package com.sun.star.wizards.common;
 
 import java.util.Date;
 
@@ -61,109 +62,126 @@ import com.sun.star.i18n.KParseType;
 import com.sun.star.i18n.ParseResult;
 import com.sun.star.i18n.XCharacterClassification;
 
-public class Desktop {
+public class Desktop
+{
 
     /** Creates a new instance of Desktop */
-    public Desktop() {
+    public Desktop()
+    {
     }
 
-    public static XDesktop getDesktop(XMultiServiceFactory xMSF) {
+    public static XDesktop getDesktop(XMultiServiceFactory xMSF)
+    {
         com.sun.star.uno.XInterface xInterface = null;
         XDesktop xDesktop = null;
-        if (xMSF != null) {
-            try {
+        if (xMSF != null)
+        {
+            try
+            {
                 xInterface = (com.sun.star.uno.XInterface) xMSF.createInstance("com.sun.star.frame.Desktop");
                 xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 exception.printStackTrace(System.out);
             }
-        } else
+        }
+        else
+        {
             System.out.println("Can't create a desktop. null pointer !");
+        }
         return xDesktop;
     }
 
-    public static XFrame getActiveFrame(XMultiServiceFactory xMSF) {
+    public static XFrame getActiveFrame(XMultiServiceFactory xMSF)
+    {
         XDesktop xDesktop = getDesktop(xMSF);
         XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
         XFrame xFrame = xFrameSuppl.getActiveFrame();
         return xFrame;
     }
 
-
-
-    public static XComponent getActiveComponent(XMultiServiceFactory _xMSF){
+    public static XComponent getActiveComponent(XMultiServiceFactory _xMSF)
+    {
         XFrame xFrame = getActiveFrame(_xMSF);
         return (XComponent) UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
     }
 
-
-    public static XTextDocument getActiveTextDocument(XMultiServiceFactory _xMSF){
+    public static XTextDocument getActiveTextDocument(XMultiServiceFactory _xMSF)
+    {
         XComponent xComponent = getActiveComponent(_xMSF);
         return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
     }
 
-
-    public static XSpreadsheetDocument getActiveSpreadsheetDocument(XMultiServiceFactory _xMSF){
+    public static XSpreadsheetDocument getActiveSpreadsheetDocument(XMultiServiceFactory _xMSF)
+    {
         XComponent xComponent = getActiveComponent(_xMSF);
         return (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
     }
 
-
-    public static XDispatch getDispatcher(XMultiServiceFactory xMSF, XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL) {
-        try {
+    public static XDispatch getDispatcher(XMultiServiceFactory xMSF, XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
+    {
+        try
+        {
             com.sun.star.util.URL[] oURLArray = new com.sun.star.util.URL[1];
             oURLArray[0] = oURL;
             XDispatchProvider xDispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
             XDispatch xDispatch = xDispatchProvider.queryDispatch(oURLArray[0], _stargetframe, FrameSearchFlag.ALL); // "_self"
             return xDispatch;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
         return null;
     }
 
-    public static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL){
-        try {
+    public static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL)
+    {
+        try
+        {
             Object oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer");
             XURLTransformer xTransformer = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
             com.sun.star.util.URL[] oURL = new com.sun.star.util.URL[1];
             oURL[0] = new com.sun.star.util.URL();
             oURL[0].Complete = _sURL;
             xTransformer.parseStrict(oURL);
-        return oURL[0];
-        } catch (Exception e) {
+            return oURL[0];
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
         return null;
     }
 
-
-    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe) {
+    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe)
+    {
         com.sun.star.util.URL oURL = getDispatchURL(xMSF, sURL);
         XDispatch xDispatch = getDispatcher(xMSF, xFrame, _stargetframe, oURL);
         dispatchURL(xDispatch, oURL);
     }
 
-
-    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame) {
+    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame)
+    {
         dispatchURL(xMSF, sURL, xFrame, "");
     }
 
-    public static void dispatchURL(XDispatch _xDispatch, com.sun.star.util.URL oURL ) {
+    public static void dispatchURL(XDispatch _xDispatch, com.sun.star.util.URL oURL)
+    {
         PropertyValue[] oArg = new PropertyValue[0];
         _xDispatch.dispatch(oURL, oArg);
     }
 
-
-
-    public static XMultiComponentFactory getMultiComponentFactory() throws com.sun.star.uno.Exception, RuntimeException, java.lang.Exception{
+    public static XMultiComponentFactory getMultiComponentFactory() throws com.sun.star.uno.Exception, RuntimeException, java.lang.Exception
+    {
         XComponentContext xcomponentcontext = Bootstrap.createInitialComponentContext(null);
         // initial serviceManager
         return xcomponentcontext.getServiceManager();
     }
 
-
-    public static XMultiServiceFactory connect(String connectStr) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception {
+    public static XMultiServiceFactory connect(String connectStr) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception
+    {
         XComponentContext xcomponentcontext = null;
         XMultiComponentFactory xMultiComponentFactory = getMultiComponentFactory();
         // create a connector, so that it can contact the office
@@ -172,7 +190,8 @@ public class Desktop {
         Object rInitialObject = urlResolver.resolve(connectStr);
         XNamingService rName = (XNamingService) UnoRuntime.queryInterface(XNamingService.class, rInitialObject);
         XMultiServiceFactory xMSF = null;
-        if (rName != null) {
+        if (rName != null)
+        {
             System.err.println("got the remote naming service !");
             Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager");
             xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
@@ -180,72 +199,84 @@ public class Desktop {
         return (xMSF);
     }
 
-
-    public static String getIncrementSuffix(XNameAccess xElementContainer, String ElementName) {
+    public static String getIncrementSuffix(XNameAccess xElementContainer, String ElementName)
+    {
         boolean bElementexists = true;
         int i = 1;
         String sIncSuffix = "";
         String BaseName = ElementName;
-        while (bElementexists == true) {
+        while (bElementexists == true)
+        {
             bElementexists = xElementContainer.hasByName(ElementName);
-            if (bElementexists == true) {
+            if (bElementexists == true)
+            {
                 i += 1;
                 ElementName = BaseName + Integer.toString(i);
             }
         }
         if (i > 1)
+        {
             sIncSuffix = Integer.toString(i);
+        }
         return sIncSuffix;
     }
 
-
-    public static String getIncrementSuffix(XHierarchicalNameAccess xElementContainer, String ElementName) {
+    public static String getIncrementSuffix(XHierarchicalNameAccess xElementContainer, String ElementName)
+    {
         boolean bElementexists = true;
         int i = 1;
         String sIncSuffix = "";
         String BaseName = ElementName;
-        while (bElementexists == true) {
+        while (bElementexists == true)
+        {
             bElementexists = xElementContainer.hasByHierarchicalName(ElementName);
-            if (bElementexists == true) {
+            if (bElementexists == true)
+            {
                 i += 1;
                 ElementName = BaseName + Integer.toString(i);
             }
         }
         if (i > 1)
+        {
             sIncSuffix = Integer.toString(i);
+        }
         return sIncSuffix;
     }
 
+    public static int checkforfirstSpecialCharacter(XMultiServiceFactory _xMSF, String _sString, Locale _aLocale)
+    {
+        try
+        {
+            int nStartFlags = com.sun.star.i18n.KParseTokens.ANY_LETTER_OR_NUMBER + com.sun.star.i18n.KParseTokens.ASC_UNDERSCORE;
+            int nContFlags = nStartFlags;
+            Object ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification");
+            XCharacterClassification xCharacterClassification = (XCharacterClassification) UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
+            ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, "", nContFlags, " ");
+            return aResult.EndPos;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return -1;
+        }
+    }
 
-
-    public static int checkforfirstSpecialCharacter(XMultiServiceFactory _xMSF, String  _sString, Locale _aLocale){
-    try {
-        int nStartFlags = com.sun.star.i18n.KParseTokens.ANY_LETTER_OR_NUMBER + com.sun.star.i18n.KParseTokens.ASC_UNDERSCORE;
-        int nContFlags = nStartFlags;
-        Object ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification");
-        XCharacterClassification xCharacterClassification = (XCharacterClassification) UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
-        ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, "", nContFlags, " ");
-        return aResult.EndPos;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return -1;
-    }}
-
-
-    public static String removeSpecialCharacters(XMultiServiceFactory _xMSF, Locale _aLocale, String _sname){
+    public static String removeSpecialCharacters(XMultiServiceFactory _xMSF, Locale _aLocale, String _sname)
+    {
         String snewname = _sname;
         int i = 0;
-        while(i < snewname.length()){
+        while (i < snewname.length())
+        {
             i = Desktop.checkforfirstSpecialCharacter(_xMSF, snewname, _aLocale);
-            if (i < snewname.length()){
-                String sspecialchar = snewname.substring(i,i+1);
+            if (i < snewname.length())
+            {
+                String sspecialchar = snewname.substring(i, i + 1);
                 snewname = JavaTools.replaceSubString(snewname, "", sspecialchar);
             }
         }
         return snewname;
     }
 
-
     /**
      * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
      * suffix to make it unique
@@ -253,8 +284,8 @@ public class Desktop {
      * @param sElementName
      * @return a unique Name ready to be added to the container.
      */
-
-    public static String getUniqueName(XNameAccess xElementContainer, String sElementName) {
+    public static String getUniqueName(XNameAccess xElementContainer, String sElementName)
+    {
         String sIncSuffix = getIncrementSuffix(xElementContainer, sElementName);
         return sElementName + sIncSuffix;
     }
@@ -266,12 +297,11 @@ public class Desktop {
      * @param sElementName
      * @return a unique Name ready to be added to the container.
      */
-
-    public static String getUniqueName(XHierarchicalNameAccess xElementContainer, String sElementName) {
+    public static String getUniqueName(XHierarchicalNameAccess xElementContainer, String sElementName)
+    {
         String sIncSuffix = getIncrementSuffix(xElementContainer, sElementName);
         return sElementName + sIncSuffix;
     }
-
 
     /**
      * Checks if the passed Element Name already exists in the list If yes it appends a
@@ -281,24 +311,32 @@ public class Desktop {
      * @param _sSuffixSeparator
      * @return a unique Name not being in the passed list.
      */
-    public static String getUniqueName(String[] _slist, String _sElementName, String _sSuffixSeparator) {
+    public static String getUniqueName(String[] _slist, String _sElementName, String _sSuffixSeparator)
+    {
         int a = 2;
         String scompname = _sElementName;
         boolean bElementexists = true;
         if (_slist == null)
+        {
             return _sElementName;
+        }
         if (_slist.length == 0)
+        {
             return _sElementName;
-        while (bElementexists == true) {
-            for (int i = 0; i < _slist.length; i++){
+        }
+        while (bElementexists == true)
+        {
+            for (int i = 0; i < _slist.length; i++)
+            {
                 if (JavaTools.FieldInList(_slist, scompname) == -1)
+                {
                     return scompname;
+                }
             }
             scompname = _sElementName + _sSuffixSeparator + a++;
         }
         return "";
     }
-
 
     /**
      * @deprecated  use Configuration.getConfigurationRoot() with the same parameters instead
@@ -307,8 +345,10 @@ public class Desktop {
      * @param bForUpdate
      * @return
      */
-    public static XInterface getRegistryKeyContent(XMultiServiceFactory xMSF, String KeyName, boolean bForUpdate) {
-        try {
+    public static XInterface getRegistryKeyContent(XMultiServiceFactory xMSF, String KeyName, boolean bForUpdate)
+    {
+        try
+        {
             Object oConfigProvider;
             PropertyValue[] aNodePath = new PropertyValue[1];
             oConfigProvider = xMSF.createInstance("com.sun.star.configuration.ConfigurationProvider");
@@ -317,10 +357,16 @@ public class Desktop {
             aNodePath[0].Value = KeyName;
             XMultiServiceFactory xMSFConfig = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
             if (bForUpdate == true)
+            {
                 return (XInterface) xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", aNodePath);
+            }
             else
+            {
                 return (XInterface) xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aNodePath);
-        } catch (Exception exception) {
+            }
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
@@ -331,22 +377,29 @@ public class Desktop {
      * @author bc93774
      *
      */
-    public class OfficePathRetriever {
+    public class OfficePathRetriever
+    {
+
         public String TemplatePath;
         public String BitmapPath;
         public String UserTemplatePath;
         public String WorkPath;
 
-        public OfficePathRetriever(XMultiServiceFactory xMSF) {
-            try {
+        public OfficePathRetriever(XMultiServiceFactory xMSF)
+        {
+            try
+            {
                 TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
                 UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
                 BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/wizard/bitmap");
                 WorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
-            } catch (NoValidPathException nopathexception) {
+            }
+            catch (NoValidPathException nopathexception)
+            {
             }
         }
     }
+
     public static String getTemplatePath(XMultiServiceFactory _xMSF)
     {
         try
@@ -359,6 +412,7 @@ public class Desktop {
         }
         return "";
     }
+
     public static String getUserTemplatePath(XMultiServiceFactory _xMSF)
     {
         try
@@ -371,6 +425,7 @@ public class Desktop {
         }
         return "";
     }
+
     public static String getBitmapPath(XMultiServiceFactory _xMSF)
     {
         try
@@ -383,6 +438,7 @@ public class Desktop {
         }
         return "";
     }
+
     public static String getWorkPath(XMultiServiceFactory _xMSF)
     {
         try
@@ -396,17 +452,25 @@ public class Desktop {
         return "";
     }
 
-    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) {
+    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
+    {
         Object xPathSubst = null;
-        try {
+        try
+        {
             xPathSubst = xMSF.createInstance("com.sun.star.util.PathSubstitution");
-        } catch (com.sun.star.uno.Exception e) {
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
             e.printStackTrace();
         }
         if (xPathSubst != null)
+        {
             return (XStringSubstitution) UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
+        }
         else
+        {
             return null;
+        }
     }
 
     /**
@@ -426,26 +490,31 @@ public class Desktop {
      * @throws WrappedTargetException
      */
     public static XFrame findAFrame(XMultiServiceFactory xMSF, XFrame myFrame, XFrame desktop)
-        throws NoSuchElementException,
-                WrappedTargetException
+            throws NoSuchElementException,
+            WrappedTargetException
     {
         if (desktop == null)
-            desktop = myFrame;
-
-        // we go up in the tree...
+        {
+            desktop = myFrame;        // we go up in the tree...
+        }
         while (desktop != null && desktop.getComponentWindow() == null)
+        {
             desktop = desktop.findFrame("_parent", FrameSearchFlag.PARENT);
+        }
+        if (desktop == null)
+        {
 
-        if (desktop == null) {
-
-            for (XEnumeration e = Desktop.getDesktop(xMSF).getComponents().createEnumeration(); e.hasMoreElements();) {
+            for (XEnumeration e = Desktop.getDesktop(xMSF).getComponents().createEnumeration(); e.hasMoreElements();)
+            {
 
                 Object comp = ((Any) e.nextElement()).getObject();
                 XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, comp);
                 XFrame xFrame = xModel.getCurrentController().getFrame();
 
                 if (xFrame != null && xFrame.getComponentWindow() != null)
+                {
                     return xFrame;
+                }
             }
         }
         return desktop;

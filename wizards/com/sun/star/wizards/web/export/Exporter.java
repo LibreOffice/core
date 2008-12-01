@@ -26,19 +26,21 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.export;
+ ************************************************************************/
+package com.sun.star.wizards.web.export;
 
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.*;
 
-
 /**
  *
  * @author  rpiterman
  */
-public interface Exporter {
+public interface Exporter
+{
+
     /**
      * This method exports a document with a specified filter.<br/>
      * The method is responsible for exporting the given source document
@@ -55,7 +57,7 @@ public interface Exporter {
      * (call task.advacne(true) ) 3 times, while exporting.
      *
      */
-    public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task) throws IOException;
+    public boolean export(CGDocument source, String targetDirectory, XMultiServiceFactory xmsf, Task task) throws IOException;
 
     public void init(CGExporter exporter);
 }

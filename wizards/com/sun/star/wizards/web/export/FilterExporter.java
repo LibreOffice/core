@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,7 +26,7 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
-************************************************************************/
+ ************************************************************************/
 package com.sun.star.wizards.web.export;
 
 import com.sun.star.io.IOException;
@@ -42,7 +42,8 @@ import com.sun.star.wizards.web.data.CGExporter;
  * An exporter which is configured with a filter name, and
  * uses the specified filter to export documents.
  */
-public class FilterExporter extends AbstractExporter  {
+public class FilterExporter extends AbstractExporter
+{
 
     protected String filterName;
     protected Properties props = new Properties();
@@ -50,26 +51,30 @@ public class FilterExporter extends AbstractExporter  {
     /* (non-Javadoc)
      * @see com.sun.star.wizards.web.export.Exporter#export(java.lang.Object, java.io.File, com.sun.star.wizards.web.data.CGSettings, com.sun.star.lang.XMultiServiceFactory)
      */
-    public boolean export( CGDocument source,  String target, XMultiServiceFactory xmsf, Task task) throws IOException  {
+    public boolean export(CGDocument source, String target, XMultiServiceFactory xmsf, Task task) throws IOException
+    {
 
         boolean result = true;
         Object document = null;
 
-        try {
-          document = openDocument(source,xmsf);
-          task.advance(true);
-          storeToURL(document,target, filterName, props.getProperties());
-          task.advance(true);
+        try
+        {
+            document = openDocument(source, xmsf);
+            task.advance(true);
+            storeToURL(document, target, filterName, props.getProperties());
+            task.advance(true);
 
         }
-        catch (IOException iox) {
+        catch (IOException iox)
+        {
             iox.printStackTrace(System.out);
             result = false;
             throw iox;
         }
-        finally {
-            closeDocument(document,xmsf);
-            calcFileSize(source,target,xmsf);
+        finally
+        {
+            closeDocument(document, xmsf);
+            calcFileSize(source, target, xmsf);
             task.advance(true);
         }
         return result;
@@ -79,9 +84,9 @@ public class FilterExporter extends AbstractExporter  {
     /* (non-Javadoc)
      * @see com.sun.star.wizards.web.export.Exporter#init(com.sun.star.wizards.web.data.CGExporter)
      */
-    public void init(CGExporter exporter_) {
+    public void init(CGExporter exporter_)
+    {
         super.init(exporter_);
-        filterName = getArgument("Filter",exporter_);
+        filterName = getArgument("Filter", exporter_);
     }
-
 }

@@ -52,3 +52,7 @@ String RID_STR_HELP_SECTION_LABEL
 {
     Text [ en-US ] = "Help";
 };
+String RID_EMBED_IMAGE_PLACEHOLDER
+{
+    Text [ en-US ] = "<Embedded-Image>";
+};

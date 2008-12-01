@@ -26,7 +26,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui.event;
+ ************************************************************************/
+package com.sun.star.wizards.ui.event;
+
 import com.sun.star.awt.XControl;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
@@ -48,37 +50,54 @@ import java.util.Hashtable;
  * </list>
  * @author  rpiterman
  */
-public class AbstractListener {
+public class AbstractListener
+{
+
     private Hashtable mHashtable = new Hashtable();
 
     /** Creates a new instance of AbstractListener */
-    public AbstractListener() {
+    public AbstractListener()
+    {
     }
 
-    public void add(String componentName, String eventName, String methodName, Object target) {
-        try {
+    public void add(String componentName, String eventName, String methodName, Object target)
+    {
+        try
+        {
             add(componentName, eventName, new MethodInvocation(methodName, target));
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
 
-    public void add(String componentName, String eventName, MethodInvocation mi) {
+    public void add(String componentName, String eventName, MethodInvocation mi)
+    {
         mHashtable.put(componentName + eventName, mi);
     }
 
-    public MethodInvocation get(String componentName, String eventName) {
+    public MethodInvocation get(String componentName, String eventName)
+    {
         return (MethodInvocation) mHashtable.get(componentName + eventName);
     }
 
-    public Object invoke(String componentName, String eventName, Object param) {
-        try {
+    public Object invoke(String componentName, String eventName, Object param)
+    {
+        try
+        {
             MethodInvocation mi = get(componentName, eventName);
             if (mi != null)
+            {
                 return mi.invoke(param);
+            }
             else
+            {
                 return null;
-        } catch (InvocationTargetException ite) {
+            }
+        }
+        catch (InvocationTargetException ite)
+        {
 
             System.out.println("=======================================================");
             System.out.println("=== Note: An Exception was thrown which should have ===");
@@ -88,10 +107,13 @@ public class AbstractListener {
 
             ite.printStackTrace();
 
-        } catch (IllegalAccessException iae) {
+        }
+        catch (IllegalAccessException iae)
+        {
             iae.printStackTrace();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             System.out.println("=======================================================");
             System.out.println("=== Note: An Exception was thrown which should have ===");
             System.out.println("=== caused a crash. I Catched it. Please report this ==");
@@ -106,7 +128,8 @@ public class AbstractListener {
     /**
      * Rerurns the property "name" of the Object which is the source of the event.
      */
-    public static String getEventSourceName(EventObject eventObject) {
+    public static String getEventSourceName(EventObject eventObject)
+    {
         XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, eventObject.Source);
         return (String) Helper.getUnoPropertyValue(xControl.getModel(), "Name", String.class);
     }

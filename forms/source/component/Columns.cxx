@@ -233,13 +233,6 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
         // Refcount wieder bei NULL
         decrement( m_refCount );
     }
-
-    if ( m_xAggregateSet.is() )
-    {
-        Reference< XPropertySetInfo > xPropInfo = m_xAggregateSet->getPropertySetInfo();
-        if ( xPropInfo.is() && xPropInfo->hasPropertyByName( PROPERTY_TRISTATE ) )
-            m_xAggregateSet->setPropertyValue( PROPERTY_TRISTATE, makeAny( sal_True ) );
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -331,6 +324,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_AUTOCOMPLETE );
     aForbiddenProperties.insert( PROPERTY_BACKGROUNDCOLOR );
     aForbiddenProperties.insert( PROPERTY_BORDER );
+    aForbiddenProperties.insert( PROPERTY_BORDERCOLOR );
     aForbiddenProperties.insert( PROPERTY_ECHO_CHAR );
     aForbiddenProperties.insert( PROPERTY_FILLCOLOR );
     aForbiddenProperties.insert( PROPERTY_FONT );
@@ -356,7 +350,6 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_TABINDEX );
     aForbiddenProperties.insert( PROPERTY_TABSTOP );
     aForbiddenProperties.insert( PROPERTY_TEXTCOLOR );
-    aForbiddenProperties.insert( PROPERTY_TRISTATE );
     aForbiddenProperties.insert( PROPERTY_VSCROLL );
     aForbiddenProperties.insert( PROPERTY_CONTROLLABEL );
     aForbiddenProperties.insert( PROPERTY_RICH_TEXT );

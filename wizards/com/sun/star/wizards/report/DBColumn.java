@@ -27,8 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.report;
+
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertyState;
@@ -53,7 +53,6 @@ import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.wizards.text.TextTableHandler;
 import com.sun.star.wizards.text.TextFieldHandler;
-
 
 public class DBColumn
 {
@@ -80,420 +79,404 @@ public class DBColumn
     TextDocument oTextDocument;
     RecordParser CurDBMetaData;
     RecordTable CurRecordTable;
-    TextTableHandler  oTextTableHandler;
+    TextTableHandler oTextTableHandler;
 
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception
-        {
-            CurRecordTable = new RecordTable(_oTextTableHandler);
-            initializeRecordTableMembers(CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
-        }
+    {
+        CurRecordTable = new RecordTable(_oTextTableHandler);
+        initializeRecordTableMembers(CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
+    }
 
-
-    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i,  boolean _bforce) throws Exception
-        {
-            initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, _bforce);
-        }
-
+    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bforce) throws Exception
+    {
+        initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, _bforce);
+    }
 
     public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception
-        {
-            initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
-        }
-
-
+    {
+        initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
+    }
 
     private void initializeRecordTableMembers(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bForce) throws Exception
+    {
+        this.oTextTableHandler = _oTextTableHandler;
+        this.CurDBMetaData = _CurDBMetaData;
+        this.CurRecordTable = _CurRecordTable;
+        bIsGroupColumn = false;
+        if (CurDBMetaData.RecordFieldColumns != null)
         {
-            this.oTextTableHandler = _oTextTableHandler;
-            this.CurDBMetaData = _CurDBMetaData;
-            this.CurRecordTable = _CurRecordTable;
-            bIsGroupColumn = false;
-            if (CurDBMetaData.RecordFieldColumns != null)
+            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldColumns[i].m_sFieldName);
+        }
+        else
+        {
+            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.getRecordFieldName(i));
+        }
+        if (_bForce)
+        {
+            assignCells(i, true);
+        }
+        else
+        {
+            for (int n = 0; n < CurRecordTable.xTableColumns.getCount(); n++)
             {
-                CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldColumns[i].FieldName);
-            }
-            else
-            {
-                CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.getRecordFieldName(i));
-            }
-            if (_bForce)
-            {
-                assignCells(i, true);
-            }
-            else
-            {
-                for (int n = 0; n < CurRecordTable.xTableColumns.getCount(); n++)
-                {
-                    assignCells(n, false);
-                }
+                assignCells(n, false);
             }
         }
+    }
 
     private boolean assignCells(int _nColumn, boolean _bforce)
+    {
+        try
         {
-            try
+            XCell xCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn, 0);
+            XTextRange xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
+            String CompString = "Column";
+            XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
+            if (isNameCell(xLocCellCursor, CurDBField.m_sFieldName, CompString) || (_bforce))
             {
-                XCell xCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn,0);
-                XTextRange xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
-                String CompString = "Column";
+                xNameCell = xCell;
+                xNameTextCell = xTextCell;
+                xValCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn, 1);
+                xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
+                xValCellCursor = TextDocument.createTextCursor(xValCell);
+                ValColumn = _nColumn;
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+        return false;
+    }
+
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) throws Exception
+    {
+        this.oTextTableHandler = _oTextTableHandler;
+        this.CurDBMetaData = _CurDBMetaData;
+        CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
+        bIsGroupColumn = true;
+        getTableColumns(TableName);
+        xNameCell = OldDBColumn.xNameCell;
+        xNameTextCell = OldDBColumn.xNameTextCell;
+        xValCell = OldDBColumn.xValCell;
+        xValTextCell = OldDBColumn.xValTextCell;
+        xValCellCursor = TextDocument.createTextCursor(xValCell);
+        ValColumn = OldDBColumn.ValColumn;
+        ValRow = OldDBColumn.ValRow;
+        initializeNumberFormat();
+    }
+
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName) throws Exception
+    {
+        this.oTextTableHandler = _oTextTableHandler;
+        this.CurDBMetaData = _CurDBMetaData;
+        CurDBField = CurDBMetaData.getFieldColumnByFieldName(_FieldName);
+        bIsGroupColumn = true;
+        XTextRange xTextCell;
+        XCell xCell;
+        getTableColumns(TableName);
+
+        XTableRows xRows = null;
+        try
+        {
+            xRows = xTextTable.getRows();
+        }
+        catch (java.lang.NullPointerException e)
+        {
+            e.printStackTrace();
+// TODO: handle the nullpointer right
+//                return;
+        }
+        for (int n = 0; n < xTableColumns.getCount(); n++)
+        {
+            for (int m = 0; m < xRows.getCount(); m++)
+            {
+                xCell = xCellRange.getCellByPosition(n, m);
+                xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
+                String CompString = TableName.substring(4);
                 XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
-                if (isNameCell(xLocCellCursor, CurDBField.FieldName, CompString) || (_bforce))
+                if (isNameCell(xLocCellCursor, CurDBField.m_sFieldName, CompString))
                 {
                     xNameCell = xCell;
                     xNameTextCell = xTextCell;
-                    xValCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn,1);
-                    xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
-                    xValCellCursor = TextDocument.createTextCursor(xValCell);
-                    ValColumn = _nColumn;
-                    return true;
                 }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace(System.out);
-            }
-            return false;
-        }
-
-
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) throws Exception
-        {
-            this.oTextTableHandler = _oTextTableHandler;
-            this.CurDBMetaData = _CurDBMetaData;
-            CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
-            bIsGroupColumn = true;
-            getTableColumns(TableName);
-            xNameCell = OldDBColumn.xNameCell;
-            xNameTextCell = OldDBColumn.xNameTextCell;
-            xValCell = OldDBColumn.xValCell;
-            xValTextCell = OldDBColumn.xValTextCell;
-            xValCellCursor = TextDocument.createTextCursor(xValCell);
-            ValColumn = OldDBColumn.ValColumn;
-            ValRow = OldDBColumn.ValRow;
-            initializeNumberFormat();
-        }
-
-
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName) throws Exception
-        {
-            this.oTextTableHandler = _oTextTableHandler;
-            this.CurDBMetaData = _CurDBMetaData;
-            CurDBField = CurDBMetaData.getFieldColumnByFieldName(_FieldName);
-            bIsGroupColumn = true;
-            XTextRange xTextCell;
-            XCell xCell;
-            getTableColumns(TableName);
-
-            XTableRows xRows = null;
-            try
-            {
-                xRows = xTextTable.getRows();
-            }
-            catch (java.lang.NullPointerException e)
-            {
-                e.printStackTrace();
-// TODO: handle the nullpointer right
-//                return;
-            }
-            for (int n = 0; n < xTableColumns.getCount(); n++)
-            {
-                for (int m = 0; m < xRows.getCount(); m++)
-                {
-                    xCell = xCellRange.getCellByPosition(n,m);
-                    xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
-                    String CompString = TableName.substring(4);
-                    XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
-                    if (isNameCell(xLocCellCursor, CurDBField.FieldName, CompString))
-                    {
-                        xNameCell = xCell;
-                        xNameTextCell = xTextCell;
-                    }
-                    else
-                    {   //In Grouping Sections only two cells are allowed ' if (CellString.equals(CurFieldString)){
-                        xValCell = xCell;
-                        xValTextCell = xTextCell;
-                        xValCellCursor = xLocCellCursor;
-                        ValColumn = n;
-                        ValRow = m;
-                        checkforLeftAlignment();
-                    }
+                else
+                {   //In Grouping Sections only two cells are allowed ' if (CellString.equals(CurFieldString)){
+                    xValCell = xCell;
+                    xValTextCell = xTextCell;
+                    xValCellCursor = xLocCellCursor;
+                    ValColumn = n;
+                    ValRow = m;
+                    checkforLeftAlignment();
                 }
             }
         }
+    }
 
-
-    private void  getTableColumns(String TableName)
+    private void getTableColumns(String TableName)
+    {
+        try
         {
-            try
+            XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
+            if (xAllTextTables.hasByName(TableName) == true)
             {
-                XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
-                if (xAllTextTables.hasByName(TableName) == true)
-                {
-                    Object oTextTable = xAllTextTables.getByName(TableName);
-                    xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, oTextTable);
-                    xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTextTable);
-                    xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
-                    xTableColumns = xTextTable.getColumns();
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
+                Object oTextTable = xAllTextTables.getByName(TableName);
+                xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, oTextTable);
+                xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTextTable);
+                xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
+                xTableColumns = xTextTable.getColumns();
             }
         }
-
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public void initializeNumberFormat()
+    {
+        if (CurDBField.isBoolean())
         {
-            if (CurDBField.isBoolean()){
-                NumberFormatter oNumberFormatter = oTextTableHandler.getNumberFormatter();
-                int iLogicalFormatKey = oNumberFormatter.setBooleanReportDisplayNumberFormat();
-                oNumberFormatter.setNumberFormat(xValCell, iLogicalFormatKey, oNumberFormatter);
+            NumberFormatter oNumberFormatter = oTextTableHandler.getNumberFormatter();
+            int iLogicalFormatKey = oNumberFormatter.setBooleanReportDisplayNumberFormat();
+            oNumberFormatter.setNumberFormat(xValCell, iLogicalFormatKey, oNumberFormatter);
+        }
+        else
+        {
+            oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey, CurDBMetaData.getNumberFormatter());
+        }
+        setCellFont();
+    }
+
+    public void insertColumnData(TextFieldHandler oTextFieldHandler, boolean _bIsLandscape)
+    {
+        insertUserFieldToTableCell(oTextFieldHandler);
+        replaceValueCellofTable(_bIsLandscape);
+    }
+
+    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
+    {
+        XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
+        xTextCursor.gotoStart(false);
+        xTextCursor.gotoEnd(true);
+        xTextCursor.setString("");
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.m_sFieldName, CurDBField.getFieldTitle());
+    }
+
+    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell)
+    {
+        XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
+        xTextCursor.gotoStart(false);
+        xTextCursor.gotoEnd(true);
+        xTextCursor.setString("");
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.m_sFieldName, CurDBField.getFieldTitle());
+    }
+
+    public void formatValueCell()
+    {
+        initializeNumberFormat();
+        if (checkforLeftAlignment())
+        {
+            bAlignLeft = true;
+        }
+    }
+
+    private boolean checkforLeftAlignment()
+    {
+        bAlignLeft = ((CurDBField.bIsNumberFormat) && (ValColumn == xTableColumns.getCount() - 1));
+        return bAlignLeft;
+    }
+
+    public void modifyCellContent(XCellRange xCellRange, Object CurGroupValue)
+    {
+        try
+        {
+            xValCell = xCellRange.getCellByPosition(ValColumn, ValRow);
+            xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
+            modifyCellContent(CurGroupValue);
+            if (bAlignLeft)
+            {
+                xValCellCursor = TextDocument.createTextCursor(xValCell);
+                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(com.sun.star.style.ParagraphAdjust.LEFT_value));
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
+
+    public void modifyCellContent(Object CurGroupValue)
+    {
+        double dblValue = 0;
+        try
+        {
+            if (xValCell != null)
+            {
+                if (AnyConverter.isString(CurGroupValue))
+                {
+                    String sValue = AnyConverter.toString(CurGroupValue);
+                    xValTextCell.setString(sValue);
+                }
+                else
+                {
+                    if (AnyConverter.isBoolean(CurGroupValue))
+                    {
+                        dblValue = (double) AnyConverter.toInt(CurGroupValue);
+                    }
+                    if (AnyConverter.isByte(CurGroupValue))
+                    {
+                        dblValue = (double) AnyConverter.toByte(CurGroupValue);
+                    }
+                    else if (AnyConverter.isDouble(CurGroupValue))
+                    {
+                        dblValue = AnyConverter.toDouble(CurGroupValue);
+                    }
+                    else if (AnyConverter.isFloat(CurGroupValue))
+                    {
+                        dblValue = (double) AnyConverter.toFloat(CurGroupValue);
+                    }
+                    else if (AnyConverter.isInt(CurGroupValue))
+                    {
+                        dblValue = (double) AnyConverter.toInt(CurGroupValue);
+                    }
+                    else if (AnyConverter.isLong(CurGroupValue))
+                    {
+                        dblValue = (double) AnyConverter.toLong(CurGroupValue);
+                    }
+                    else if (AnyConverter.isShort(CurGroupValue))
+                    {
+                        dblValue = (double) AnyConverter.toShort(CurGroupValue);
+                    }
+                    xValCell.setValue(dblValue);
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            System.err.println(exception);
+        }
+    }
+    // If the parameter CurGroupValue is null the placeholders are inserted
+    public void replaceValueCellofTable(boolean _bIsLandscape)
+    {
+        try
+        {
+            Object CurGroupValue;
+            if (bIsGroupColumn == false && CurDBField.bIsNumberFormat == false)
+            {
+                CurGroupValue = BlindtextCreator.adjustBlindTextlength(CurDBField.getFieldTitle(), CurDBField.FieldWidth, _bIsLandscape, bIsGroupColumn, CurDBMetaData.getRecordFieldNames());
             }
             else
             {
-                oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey, CurDBMetaData.getNumberFormatter());
+                CurGroupValue = CurDBField.getDefaultValue();
             }
-            setCellFont();
-        }
-
-
-    public void insertColumnData(TextFieldHandler oTextFieldHandler, boolean _bIsLandscape)
-        {
-            insertUserFieldToTableCell(oTextFieldHandler);
-            replaceValueCellofTable(_bIsLandscape);
-        }
-
-
-    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
-        {
-            XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
-            xTextCursor.gotoStart(false);
-            xTextCursor.gotoEnd(true);
-            xTextCursor.setString("");
-            oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
-        }
-
-
-    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell)
-        {
-            XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
-            xTextCursor.gotoStart(false);
-            xTextCursor.gotoEnd(true);
-            xTextCursor.setString("");
-            oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
-        }
-
-
-    public void formatValueCell()
-        {
-            initializeNumberFormat();
-            if (checkforLeftAlignment())
+            modifyCellContent(CurGroupValue);
+            if (bAlignLeft)
             {
-                bAlignLeft = true;
+                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
             }
-        }
 
-    private boolean checkforLeftAlignment()
-        {
-            bAlignLeft = ((CurDBField.bIsNumberFormat) && (ValColumn == xTableColumns.getCount()-1));
-            return bAlignLeft;
-        }
-
-
-    public void modifyCellContent(XCellRange xCellRange, Object CurGroupValue)
-        {
-            try
+            if ((CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN))
             {
-                xValCell = xCellRange.getCellByPosition(ValColumn, ValRow);
-                xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
-                modifyCellContent(CurGroupValue);
-                if (bAlignLeft)
+                CharFontName = "StarSymbol";
+                Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
+                if (bIsGroupColumn == false)
                 {
-                    xValCellCursor = TextDocument.createTextCursor(xValCell);
-                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(com.sun.star.style.ParagraphAdjust.LEFT_value));
+                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.CENTER_value));
                 }
             }
-            catch( Exception exception )
+            else
             {
-                exception.printStackTrace(System.out);
-            }
-        }
-
-
-    public void modifyCellContent(Object CurGroupValue)
-        {
-            double dblValue = 0;
-            try
-            {
-                if (xValCell != null)
+                if (PropertyState == com.sun.star.beans.PropertyState.DEFAULT_VALUE)
                 {
-                    if (AnyConverter.isString(CurGroupValue))
-                    {
-                        String sValue = AnyConverter.toString(CurGroupValue);
-                        xValTextCell.setString(sValue);
-                    }
-                    else
-                    {
-                        if (AnyConverter.isBoolean(CurGroupValue))
-                        {
-                            dblValue = (double) AnyConverter.toInt(CurGroupValue);
-                        }
-                        if (AnyConverter.isByte(CurGroupValue))
-                        {
-                            dblValue = (double) AnyConverter.toByte(CurGroupValue);
-                        }
-                        else if (AnyConverter.isDouble(CurGroupValue))
-                        {
-                            dblValue = AnyConverter.toDouble(CurGroupValue);
-                        }
-                        else if (AnyConverter.isFloat(CurGroupValue))
-                        {
-                            dblValue = (double) AnyConverter.toFloat(CurGroupValue);
-                        }
-                        else if (AnyConverter.isInt(CurGroupValue))
-                        {
-                            dblValue = (double) AnyConverter.toInt(CurGroupValue);
-                        }
-                        else if (AnyConverter.isLong(CurGroupValue))
-                        {
-                            dblValue = (double) AnyConverter.toLong(CurGroupValue);
-                        }
-                        else if (AnyConverter.isShort(CurGroupValue))
-                        {
-                            dblValue = (double) AnyConverter.toShort(CurGroupValue);
-                        }
-                        xValCell.setValue(dblValue);
-                    }
-                }
-            }
-            catch( Exception exception )
-            {
-                System.err.println( exception);
-            }
-        }
-
-
-    // If the parameter CurGroupValue is null the placeholders are inserted
-    public void replaceValueCellofTable(boolean _bIsLandscape)
-        {
-            try
-            {
-                Object CurGroupValue;
-                if (bIsGroupColumn == false && CurDBField.bIsNumberFormat == false)
-                {
-                    CurGroupValue = BlindtextCreator.adjustBlindTextlength(CurDBField.FieldTitle, CurDBField.FieldWidth, _bIsLandscape, bIsGroupColumn, CurDBMetaData.getRecordFieldNames());
+                    XPropertyState xPropState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
+                    xPropState.setPropertyToDefault("CharFontName");
                 }
                 else
                 {
-                    CurGroupValue = CurDBField.getDefaultValue();
-                }
-                modifyCellContent(CurGroupValue);
-                if (bAlignLeft)
-                {
-                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
-                }
-
-                if ((CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN))
-                {
-                    CharFontName = "StarSymbol";
-                    Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
-                    if (bIsGroupColumn == false)
+                    if (PropertyState == com.sun.star.beans.PropertyState.DIRECT_VALUE)
                     {
-                        Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.CENTER_value));
+                        Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
                     }
                 }
-                else
-                {
-                    if (PropertyState == com.sun.star.beans.PropertyState.DEFAULT_VALUE)
-                    {
-                        XPropertyState xPropState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
-                        xPropState.setPropertyToDefault("CharFontName");
-                    }
-                    else
-                    {
-                        if (PropertyState == com.sun.star.beans.PropertyState.DIRECT_VALUE)
-                        {
-                            Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
-                        }
-                    }
-                }
-            }
-            catch(com.sun.star.beans.UnknownPropertyException exception)
-            {
-                exception.printStackTrace(System.out);
             }
         }
-
+        catch (com.sun.star.beans.UnknownPropertyException exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
 
     public void setCellFont()
+    {
+        try
         {
-            try
+            XPropertyState xPropertyState;
+            int FieldType = CurDBField.FieldType;
+            if ((FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN))
             {
-                XPropertyState xPropertyState;
-                int FieldType = CurDBField.FieldType;
-                if ((FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN))
-                {
-                    CharFontName = "StarSymbol";
-                    PropertyState = com.sun.star.beans.PropertyState.DIRECT_VALUE;
-                    xValCellCursor.gotoStart(false);
-                    xValCellCursor.gotoEnd(true);
-                    Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
-                }
-                else
-                {
-                    xPropertyState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
-                    PropertyState = xPropertyState.getPropertyState("CharFontName");
-                    CharFontName = AnyConverter.toString(Helper.getUnoPropertyValue(xValCellCursor, "CharFontName"));
-                }
+                CharFontName = "StarSymbol";
+                PropertyState = com.sun.star.beans.PropertyState.DIRECT_VALUE;
+                xValCellCursor.gotoStart(false);
+                xValCellCursor.gotoEnd(true);
+                Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
             }
-            catch(Exception exception)
+            else
             {
-                exception.printStackTrace(System.out);
+                xPropertyState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
+                PropertyState = xPropertyState.getPropertyState("CharFontName");
+                CharFontName = AnyConverter.toString(Helper.getUnoPropertyValue(xValCellCursor, "CharFontName"));
             }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
     }
 
     private boolean isNameCell(XTextCursor xCellCursor, String CurFieldName, String CompString)
+    {
+        try
         {
-            try
+            xCellCursor.gotoStart(false);
+            XTextRange xTextRange = xCellCursor.getEnd();
+            Object oTextField = Helper.getUnoPropertyValue(xTextRange, "TextField");
+            if (AnyConverter.isVoid(oTextField))
             {
-                xCellCursor.gotoStart(false);
-                XTextRange xTextRange = xCellCursor.getEnd();
-                Object oTextField = Helper.getUnoPropertyValue(xTextRange, "TextField");
-                if (AnyConverter.isVoid(oTextField))
+                return false;
+            }
+            else
+            {
+                XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
+                XPropertySet xMaster = xDependent.getTextFieldMaster();
+                String UserFieldName = (String) xMaster.getPropertyValue("Name");
+                boolean bIsNameCell = false;
+                if ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)))
                 {
-                    return false;
+                    bIsNameCell = true;
                 }
                 else
                 {
-                    XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
-                    XPropertySet xMaster = xDependent.getTextFieldMaster();
-                    String UserFieldName = (String) xMaster.getPropertyValue("Name");
-                    boolean bIsNameCell = false;
-                    if ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)))
+                    // stupid hack, 'Title' is not a real good Table-Cell-Name
+                    // take a look at xmloff/source/text/txtvfldi.txt, there exists 2 '_renamed_' strings
+                    String sLocalCurFieldName = CurFieldName + "_renamed_";
+                    if (UserFieldName.startsWith(sLocalCurFieldName))
                     {
                         bIsNameCell = true;
                     }
-                    else
-                    {
-                        // stupid hack, 'Title' is not a real good Table-Cell-Name
-                        // take a look at xmloff/source/text/txtvfldi.txt, there exists 2 '_renamed_' strings
-                        String sLocalCurFieldName = CurFieldName + "_renamed_";
-                        if (UserFieldName.startsWith(sLocalCurFieldName))
-                        {
-                            bIsNameCell = true;
-                        }
-                    }
-                    return bIsNameCell;
                 }
-            }
-            // Todo: Insert a  resource; Exception should be thrown to the calling routine
-            catch( Exception exception)
-            {
-//      sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
-//      SystemDialog.showMessageBox(oTextTableHandler.xMSFDoc, "ErrorBox", VclWindowPeerAttribute.OK, sMsgInvalidTextField);
-                exception.printStackTrace(System.out);
-                return true;    //most probably this is really the Namecell!!!!
+                return bIsNameCell;
             }
         }
+        // Todo: Insert a  resource; Exception should be thrown to the calling routine
+        catch (Exception exception)
+        {
+//      sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
+//      SystemDialog.showMessageBox(oTextTableHandler.xMSFDoc, "ErrorBox", VclWindowPeerAttribute.OK, sMsgInvalidTextField);
+            exception.printStackTrace(System.out);
+            return true;    //most probably this is really the Namecell!!!!
+        }
+    }
 }

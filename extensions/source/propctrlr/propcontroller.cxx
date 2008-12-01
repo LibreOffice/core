@@ -1384,6 +1384,18 @@ namespace pcr
     {
         try
         {
+            rtl::OUString sPlcHolder = String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) );
+            bool bIsPlaceHolderValue = false;
+
+            if ( rName.equals( PROPERTY_IMAGE_URL ) )
+            {
+                // if the prop value is the PlaceHolder
+                // can ignore it
+                rtl::OUString sVal;
+                _rValue >>= sVal;
+                if ( sVal.equals( sPlcHolder ) )
+                    bIsPlaceHolderValue = true;
+            }
             m_sCommittingProperty = rName;
 
             bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( rName );
@@ -1396,8 +1408,9 @@ namespace pcr
             PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
 
             //////////////////////////////////////////////////////////////////////
-            // set the value
-            handler->setPropertyValue( rName, _rValue );
+            // set the value ( only if it's not a placeholder )
+            if ( !bIsPlaceHolderValue )
+                handler->setPropertyValue( rName, _rValue );
 
             //////////////////////////////////////////////////////////////////////
             // re-retrieve the value
@@ -1739,7 +1752,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertyBrowserController::impl_broadcastPropertyChange_nothrow: caught an exception while calling the handlers!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

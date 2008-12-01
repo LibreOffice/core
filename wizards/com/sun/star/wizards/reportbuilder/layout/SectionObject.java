@@ -9,7 +9,7 @@
  *
  * $RCSfile: SectionObject.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,12 +30,10 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.wizards.common.PropertySetHelper;
-
 
 /**
  *
@@ -43,6 +41,7 @@ import com.sun.star.wizards.common.PropertySetHelper;
  */
 abstract public class SectionObject
 {
+
     Object m_aParentObject; // this could be FixedText or FormattedField or null
     PropertySetHelper m_aPropertySetHelper;
 
@@ -55,6 +54,7 @@ abstract public class SectionObject
     {
         return m_aParentObject;
     }
+
     abstract public FontDescriptor getFontDescriptor();
 
     private PropertySetHelper getPropertySetHelper()
@@ -65,20 +65,24 @@ abstract public class SectionObject
         }
         return m_aPropertySetHelper;
     }
+
     public int getHeight(int _nDefault)
     {
         final int nHeight = getPropertySetHelper().getPropertyValueAsInteger("Height", 500);
         return nHeight;
     }
+
     public float getCharWeight(float _nDefault)
     {
         final float fCharWeight = (float) getPropertySetHelper().getPropertyValueAsDouble("CharWeight", _nDefault);
         return fCharWeight;
     }
+
     public void setFontToBold()
     {
         setPropertyValue("CharWeight", new Float(com.sun.star.awt.FontWeight.BOLD));
     }
+
     public void setPropertyValue(String _sKey, Object _nValue)
     {
         getPropertySetHelper().setPropertyValueDontThrow(_sKey, _nValue);

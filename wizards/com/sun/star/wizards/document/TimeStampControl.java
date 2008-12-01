@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.document;
+ ************************************************************************/
+package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
@@ -45,14 +46,15 @@ import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapeGroup;
 import com.sun.star.drawing.XShapes;
 
+public class TimeStampControl extends DatabaseControl
+{
 
-public class TimeStampControl extends DatabaseControl {
     DatabaseControl oDateControl;
     DatabaseControl oTimeControl;
 //  XShape xGroupShape;
     Resource oResource;
-    String sDateAppendix; // = GetResText(RID_FORM + 4)
-    String sTimeAppendix; // = GetResText(RID_FORM + 5)
+    private String sDateAppendix; // = GetResText(RID_FORM + 4)
+    private String sTimeAppendix; // = GetResText(RID_FORM + 5)
     XShapes xGroupShapes = null;
     double nreldatewidth;
     double nreltimewidth;
@@ -61,91 +63,96 @@ public class TimeStampControl extends DatabaseControl {
     int nDateWidth;
     XShape xShapeGroup;
 
-
-
-    public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint){
-    super(_oFormHandler, "com.sun.star.drawing.ShapeCollection", _aPoint);
+    public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint)
+    {
+        super(_oFormHandler, "com.sun.star.drawing.ShapeCollection", _aPoint);
         oResource = _oResource;
 //      xGroupShape = xShape;
-        oDateControl  = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.DATE, aPoint);
+        oDateControl = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.DATE, aPoint);
         int nDBHeight = oDateControl.getDBHeight();
         nDateWidth = oDateControl.getPreferredWidth();
-        oDateControl.setSize(new Size(nDateWidth , nDBHeight));
+        oDateControl.setSize(new Size(nDateWidth, nDBHeight));
         Point aTimePoint = new Point(aPoint.X + 10 + nDateWidth, aPoint.Y);
         oTimeControl = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.TIME, aTimePoint);
         nTimeWidth = oTimeControl.getPreferredWidth();
-        oTimeControl.setSize(new Size(nTimeWidth,nDBHeight));
+        oTimeControl.setSize(new Size(nTimeWidth, nDBHeight));
         nDBWidth = nDateWidth + nTimeWidth + 10;
         xShapes.add(oDateControl.xShape);
         xShapes.add(oTimeControl.xShape);
         xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
         xShapeGroup = (XShape) UnoRuntime.queryInterface(XShape.class, xShapeGroup);
-        nreldatewidth = 1.0/((double)getSize().Width/(double)nDateWidth);
+        nreldatewidth = 1.0 / ((double) getSize().Width / (double) nDateWidth);
         nreltimewidth = 1.0 - nreldatewidth;
     }
 
-
-    public XPropertySet getControlofGroupShapeByIndex(int _i){
-        try {
-            if (_i < xShapes.getCount()){
+    public XPropertySet getControlofGroupShapeByIndex(int _i)
+    {
+        try
+        {
+            if (_i < xShapes.getCount())
+            {
                 Object oControl = xShapes.getByIndex(_i);
                 XControlShape xControlShape = (XControlShape) UnoRuntime.queryInterface(XControlShape.class, oControl);
                 XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
                 return xPropertySet;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
         return null;
     }
 
-
-
-
-
-    public TimeStampControl(Resource _oResource, GridControl _oGridControl, FieldColumn _curfieldcolumn){
+    public TimeStampControl(Resource _oResource, GridControl _oGridControl, FieldColumn _curfieldcolumn)
+    {
         super(_oGridControl, _curfieldcolumn);
         oResource = _oResource;
         sDateAppendix = oResource.getResText(UIConsts.RID_FORM + 88);
         sTimeAppendix = oResource.getResText(UIConsts.RID_FORM + 89);
-        oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.FieldTitle + " " + sDateAppendix);
-        oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.FieldTitle + " " + sTimeAppendix);
+        oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + " " + sDateAppendix);
+        oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + " " + sTimeAppendix);
     }
 
-    public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception{
+    public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception
+    {
         oDateControl.setPropertyValue(_sPropertyName, _aPropertyValue);
         oTimeControl.setPropertyValue(_sPropertyName, _aPropertyValue);
     }
 
-
-    public int getPreferredWidth(){
+    public int getPreferredWidth()
+    {
         return nDBWidth;
     }
 
+    public void setSize(Size _aSize)
+    {
+        try
+        {
+            int ndatewidth = (int) (nreldatewidth * (double) _aSize.Width);
+            int ntimewidth = (int) (nreltimewidth * (double) _aSize.Width);
+            oDateControl.xShape.setSize(new Size(ndatewidth, _aSize.Height));
+            oTimeControl.xShape.setSize(new Size(ntimewidth, _aSize.Height));
+        }
+        catch (PropertyVetoException e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-    public void setSize(Size _aSize){
-    try {
-        int ndatewidth = (int) (nreldatewidth * (double) _aSize.Width);
-        int ntimewidth = (int) (nreltimewidth * (double) _aSize.Width);
-        oDateControl.xShape.setSize(new Size(ndatewidth, _aSize.Height));
-        oTimeControl.xShape.setSize( new Size(ntimewidth, _aSize.Height));
-    } catch (PropertyVetoException e){
-        e.printStackTrace(System.out);
-    }}
-
-
-    public Size getSize(){
+    public Size getSize()
+    {
         int ncontrolwidth = oDateControl.xShape.getSize().Width + oTimeControl.xShape.getSize().Width;
         return new Size(ncontrolwidth, oDateControl.xShape.getSize().Height);
     }
 
-
-    public Point getPosition(){
+    public Point getPosition()
+    {
         return xShapeGroup.getPosition();
     }
 
-
-    public void setPosition(Point _aPoint){
+    public void setPosition(Point _aPoint)
+    {
         // --> TESTING
         Point aBeforePt = xShapeGroup.getPosition();
         // <--
@@ -155,11 +162,11 @@ public class TimeStampControl extends DatabaseControl {
 //      oTimeControl.xShape.setPosition(atimepoint);
         // --> TESTING
         Point aAfterPt = xShapeGroup.getPosition();
-        // <--
+    // <--
     }
 
-
-    public int getControlType() {
+    public int getControlType()
+    {
         return FormHandler.SODATETIMECONTROL;
     }
 }

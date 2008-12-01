@@ -26,9 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web;
-
-
+ ************************************************************************/
+package com.sun.star.wizards.web;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.Size;
@@ -67,199 +66,220 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  *
  * @author rpiterman
  */
-public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
+public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
+{
 
-  private String[] resources;
+    private String[] resources;
+    private final static int RES_TITLE = 0;
+    private final static int RES_LABEL = 1;
+    private final static int RES_OK = 2;
+    private final static int RES_CANCEL = 3;
+    private final static int RES_HELP = 4;
+    private final static int RES_DESELECT = 5;
+    private final static int RES_OTHER = 6;
+    private final static int RES_COUNTER = 7;    //GUI Components as Class members.
+    private XButton btnOK;
+    private XButton btnCancel;
+    private XButton btnHelp;
+    private XButton btnOther;
+    private XButton btnDeselect;
+    private static final String START = "%START";
+    private static final String END = "%END";
+    private static final String TOTAL = "%TOTAL";
+    protected int cutFilename = 0;
+    protected boolean showDeselectButton = true;
+    protected boolean showOtherButton = true;
+    private XFixedText lblTitle;
+    //Font Descriptors as Class members.
+    private FontDescriptor fontDescriptor1 = new FontDescriptor();
+    protected ImageList il;    //private FileAccess fileAccess;
+    private Object result;
+    private int hid;
 
-  private final static int RES_TITLE = 0;
-  private final static int RES_LABEL = 1;
-  private final static int RES_OK = 2;
-  private final static int RES_CANCEL = 3;
-  private final static int RES_HELP = 4;
-  private final static int RES_DESELECT = 5;
-  private final static int RES_OTHER = 6;
-  private final static int RES_COUNTER = 7;
-
-    //GUI Components as Class members.
-  private XButton btnOK;
-  private XButton btnCancel;
-  private XButton btnHelp;
-  private XButton btnOther;
-  private XButton btnDeselect;
-
-  private static final String START = "%START";
-  private static final String END = "%END";
-  private static final String TOTAL= "%TOTAL";
-
-  protected int cutFilename = 0;
-
-  protected boolean showDeselectButton = true;
-  protected boolean showOtherButton = true;
-
-  private XFixedText lblTitle;
-  //Font Descriptors as Class members.
-  private FontDescriptor fontDescriptor1 = new FontDescriptor();
-
-  protected ImageList il;
-
-  //private FileAccess fileAccess;
-
-  private Object result;
-
-  private int hid;
-
-  /**
-   *
-   * @param xmsf
-   * @param resources_ a string array with the following strings :
-   * dialog title, label text, ok, cancel, help, deselect, other.
-   * <br/> if "deselect" and "other" are not displayed,
-   * the array can also be shorter. but if "other" is displayed
-   * and "deselect" not, both must be there :-(
-   */
-  public ImageListDialog(
-        XMultiServiceFactory xmsf, int hid_, String[] resources_)
-  {
-    super(xmsf);
-    hid = hid_;
-    resources = resources_;
-    il = new ImageList();
-    il.counterRenderer = new ARenderer(resources[RES_COUNTER]);
-  }
-
-  /**
-   * adds the controls to the dialog, depending on
-   * the size of the image list.
-   * This method should be called by subclasses after setting
-   * the il ImageList member properties
-   */
-  protected void build() {
-    //set dialog properties...
-
-    int ilWidth = (il.getImageSize().Width + il.getGap().Width) * il.getCols()+ il.getGap().Width;
-    int ilHeight = (il.getImageSize().Height + il.getGap().Height) * il.getRows()+ il.getGap().Height;
-
-    int dialogWidth = 6 + ilWidth + 6 + 50 + 6;
-    int dialogHeight = 3 + 16 + 3 + ( ilHeight + 8 + 14 ) + 6;
-
-    Helper.setUnoPropertyValues(xDialogModel,
-      new String[] { "Closeable","Height","HelpURL", "Moveable","Name","PositionX","PositionY","Step","Title","Width"},
-      new Object[] { Boolean.TRUE,new Integer(dialogHeight),"HID:" + hid , Boolean.TRUE,"imgDialog",new Integer(59),new Integer(24),INTEGERS[1], resources[RES_TITLE],new Integer(dialogWidth)}
-    );
-    //Set member- FontDescriptors...
-    fontDescriptor1.Weight = 150;
-
-    final String[] PROPNAMES = new String[] {"DefaultButton", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"};
-
-    Integer iButtonsX = new Integer(6 + ilWidth + 6);
-
-    btnOK = insertButton("btnOK", null,
-      PROPNAMES,
-      new Object[] { Boolean.TRUE , INTEGER_14,"HID:" + (hid + 3), resources[RES_OK],"btnOK",iButtonsX,new Integer(22),new Short((short)com.sun.star.awt.PushButtonType.OK_value),new Short((short)7),INTEGER_50}
-    );
-    btnCancel = insertButton("btnCancel", null,
-      PROPNAMES,
-      new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 4),resources[RES_CANCEL],"btnCancel",iButtonsX,new Integer(41),new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value),new Short((short)8),INTEGER_50}
-    );
-    btnHelp = insertButton("btnHelp", null,
-      PROPNAMES,
-      new Object[] { Boolean.FALSE, INTEGER_14,"" ,resources[RES_HELP],"CommandButton3",iButtonsX,new Integer(71),new Short((short)com.sun.star.awt.PushButtonType.HELP_value),new Short((short)9),INTEGER_50}
-    );
-
-    if (showOtherButton) {
-
-      int otherY = 22 + ilHeight - 14 - (showDeselectButton ? 19 : 0);
-
-      btnOther = insertButton("btnOther", "other",
-        PROPNAMES,
-        new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 1), resources[RES_OTHER],"btnOther",iButtonsX, new Integer(otherY),new Short((short)com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short)5),INTEGER_50}
-      );
+    /**
+     *
+     * @param xmsf
+     * @param resources_ a string array with the following strings :
+     * dialog title, label text, ok, cancel, help, deselect, other.
+     * <br/> if "deselect" and "other" are not displayed,
+     * the array can also be shorter. but if "other" is displayed
+     * and "deselect" not, both must be there :-(
+     */
+    public ImageListDialog(
+            XMultiServiceFactory xmsf, int hid_, String[] resources_)
+    {
+        super(xmsf);
+        hid = hid_;
+        resources = resources_;
+        il = new ImageList();
+        il.counterRenderer = new ARenderer(resources[RES_COUNTER]);
     }
 
-    if (showDeselectButton) {
+    /**
+     * adds the controls to the dialog, depending on
+     * the size of the image list.
+     * This method should be called by subclasses after setting
+     * the il ImageList member properties
+     */
+    protected void build()
+    {
+        //set dialog properties...
 
-      int deselectY = 22 + ilHeight - 14;
+        int ilWidth = (il.getImageSize().Width + il.getGap().Width) * il.getCols() + il.getGap().Width;
+        int ilHeight = (il.getImageSize().Height + il.getGap().Height) * il.getRows() + il.getGap().Height;
 
-      btnDeselect = insertButton("btnNoImage", "deselect",
-          PROPNAMES ,
-          new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 2),resources[RES_DESELECT],"btnNoImage", iButtonsX ,new Integer(deselectY),new Short((short)com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short)4),INTEGER_50}
-      );
+        int dialogWidth = 6 + ilWidth + 6 + 50 + 6;
+        int dialogHeight = 3 + 16 + 3 + (ilHeight + 8 + 14) + 6;
+
+        Helper.setUnoPropertyValues(xDialogModel,
+                new String[]
+                {
+                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Step", "Title", "Width"
+                },
+                new Object[]
+                {
+                    Boolean.TRUE, new Integer(dialogHeight), "HID:" + hid, Boolean.TRUE, "imgDialog", new Integer(59), new Integer(24), INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
+                });
+        //Set member- FontDescriptors...
+        fontDescriptor1.Weight = 150;
+
+        final String[] PROPNAMES = new String[]
+        {
+            "DefaultButton", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"
+        };
+
+        Integer iButtonsX = new Integer(6 + ilWidth + 6);
+
+        btnOK = insertButton("btnOK", null,
+                PROPNAMES,
+                new Object[]
+                {
+                    Boolean.TRUE, INTEGER_14, "HID:" + (hid + 3), resources[RES_OK], "btnOK", iButtonsX, new Integer(22), new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
+                });
+        btnCancel = insertButton("btnCancel", null,
+                PROPNAMES,
+                new Object[]
+                {
+                    Boolean.FALSE, INTEGER_14, "HID:" + (hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, new Integer(41), new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
+                });
+        btnHelp = insertButton("btnHelp", null,
+                PROPNAMES,
+                new Object[]
+                {
+                    Boolean.FALSE, INTEGER_14, "", resources[RES_HELP], "CommandButton3", iButtonsX, new Integer(71), new Short((short) com.sun.star.awt.PushButtonType.HELP_value), new Short((short) 9), INTEGER_50
+                });
+
+        if (showOtherButton)
+        {
+
+            int otherY = 22 + ilHeight - 14 - (showDeselectButton ? 19 : 0);
+
+            btnOther = insertButton("btnOther", "other",
+                    PROPNAMES,
+                    new Object[]
+                    {
+                        Boolean.FALSE, INTEGER_14, "HID:" + (hid + 1), resources[RES_OTHER], "btnOther", iButtonsX, new Integer(otherY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 5), INTEGER_50
+                    });
+        }
+
+        if (showDeselectButton)
+        {
+
+            int deselectY = 22 + ilHeight - 14;
+
+            btnDeselect = insertButton("btnNoImage", "deselect",
+                    PROPNAMES,
+                    new Object[]
+                    {
+                        Boolean.FALSE, INTEGER_14, "HID:" + (hid + 2), resources[RES_DESELECT], "btnNoImage", iButtonsX, new Integer(deselectY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 4), INTEGER_50
+                    });
+        }
+
+        il.setStep(new Short((short) 1));
+        il.setPos(new Size(6, 22));
+        il.helpURL = hid + 5;
+        il.tabIndex = 1;
+        il.create(this);
+
+        /*lblContainer = insertLabel("lblContainer",
+        new String[] {"Height", "Name", "PositionX", "PositionY", "TabIndex", "Width"},
+        new Object[] { new Integer(176),"lblContainer",new Integer(6),new Integer(17),new Short((short)5),new Integer(214)}
+        );*/
+
+        lblTitle = insertLabel("lblTitle",
+                new String[]
+                {
+                    "FontDescriptor", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    fontDescriptor1, INTEGERS[8], resources[RES_LABEL], "lblTitle", INTEGERS[6], INTEGERS[6], INTEGERS[1], new Short((short) 4), new Integer(216)
+                });
+
     }
 
-    il.setStep(new Short((short)1));
-    il.setPos(new Size(6,22));
-    il.helpURL = hid + 5;
-    il.tabIndex = 1;
-    il.create(this);
+    /**
+     * is called when the user clicks "none"
+     */
+    public void deselect()
+    {
+        il.setSelected(-1);
+    }
 
-    /*lblContainer = insertLabel("lblContainer",
-      new String[] {"Height", "Name", "PositionX", "PositionY", "TabIndex", "Width"},
-      new Object[] { new Integer(176),"lblContainer",new Integer(6),new Integer(17),new Short((short)5),new Integer(214)}
-    );*/
+    /**
+     * is called when the user clicks "other"
+     *
+     */
+    public void other()
+    {
+    }
 
-    lblTitle = insertLabel("lblTitle",
-      new String[] {"FontDescriptor", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { fontDescriptor1,INTEGERS[8],resources[RES_LABEL],"lblTitle",INTEGERS[6],INTEGERS[6],INTEGERS[1],new Short((short)4),new Integer(216)}
-    );
+    /**
+     * @return the currently elected object.
+     */
+    public Object getSelected()
+    {
+        return il.getSelectedObject();
+    }
 
-  }
+    /**
+     * sets the currently selected object.
+     * @param obj the object (out of the model) to be selected.
+     */
+    public void setSelected(Object obj)
+    {
+        il.setSelected(obj);
+        il.showSelected();
+    }
 
-  /**
-   * is called when the user clicks "none"
-   */
-  public void deselect() {
-    il.setSelected(-1);
-  }
-  /**
-   * is called when the user clicks "other"
-   *
-   */
-  public void other() {
-  }
+    /**
+     * The counter renderer, which uses a template.
+     * The template replaces the Strings "%START", "%END" and
+     * "%TOTAL" with the respective values.
+     * @author rpiterman
+     *
+     */
+    public static class ARenderer implements Renderer
+    {
 
-  /**
-   * @return the currently elected object.
-   */
-  public Object getSelected() {
-    return il.getSelectedObject();
-  }
-
-  /**
-   * sets the currently selected object.
-   * @param obj the object (out of the model) to be selected.
-   */
-  public void setSelected(Object obj) {
-    il.setSelected(obj);
-    il.showSelected();
-  }
-
-  /**
-   * The counter renderer, which uses a template.
-   * The template replaces the Strings "%START", "%END" and
-   * "%TOTAL" with the respective values.
-   * @author rpiterman
-   *
-   */
-  public static class ARenderer implements Renderer {
         String template;
+
         /**
          * @param aTempalte a template for this renderer.
          * The strings %START, %END ,%TOTAL will be replaced
          * with the actual values.
          */
-        public ARenderer(String aTemplate) {
+        public ARenderer(String aTemplate)
+        {
             template = aTemplate;
         }
 
-        public String render(Object counter) {
-            String s = JavaTools.replaceSubString(template, "" +  ((Counter) counter).start , START);
-            s = JavaTools.replaceSubString(s,"" + ((Counter) counter).end, END);
+        public String render(Object counter)
+        {
+            String s = JavaTools.replaceSubString(template, "" + ((Counter) counter).start, START);
+            s = JavaTools.replaceSubString(s, "" + ((Counter) counter).end, END);
             s = JavaTools.replaceSubString(s, "" + ((Counter) counter).max, TOTAL);
             return s;
         }
-
-  }
-
-
-
+    }
 }

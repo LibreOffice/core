@@ -35,37 +35,40 @@ import com.sun.star.wizards.common.JavaTools;
  *
  * @author  bc93774
  */
-public class BlindtextCreator {
+public class BlindtextCreator
+{
 
     public static final String BlindText =
-        "Ut wisi enim ad minim veniam, quis nostrud exerci tation "
-            + "ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor "
-            + "in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at "
-            + "vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore "
-            + "te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy "
-            + "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, "
-            + "quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. "
-            + "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum "
-            + "dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent "
-            + "luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis "
-            + "eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.";
+            "Ut wisi enim ad minim veniam, quis nostrud exerci tation " + "ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor " + "in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at " + "vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore " + "te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy " + "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, " + "quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. " + "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum " + "dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent " + "luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis " + "eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.";
 
-    public static String adjustBlindTextlength(String FieldTitle, int FieldWidth, boolean bIsCurLandscape, boolean bIsGroupTable, String[] _RecordFieldNames) {
+    public static String adjustBlindTextlength(String FieldTitle, int FieldWidth, boolean bIsCurLandscape, boolean bIsGroupTable, String[] _RecordFieldNames)
+    {
         String BlindTextString = "";
         if (bIsGroupTable)
+        {
             return getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+        }
         int MaxFieldCount = getMaxFieldCount(bIsCurLandscape);
-        if (_RecordFieldNames.length <= 2 * MaxFieldCount) {
+        if (_RecordFieldNames.length <= 2 * MaxFieldCount)
+        {
             if (_RecordFieldNames.length <= MaxFieldCount)
+            {
                 BlindTextString = getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+            }
             else
+            {
                 BlindTextString = getBlindTextString(FieldTitle, FieldWidth, (int) (0.5 * FieldWidth));
-        } else
+            }
+        }
+        else
+        {
             BlindTextString = getBlindTextString(FieldTitle, FieldWidth, (int) 1.1 * FieldTitle.length());
+        }
         return BlindTextString;
     }
 
-    public static String getBlindTextString(String FieldTitle, int FieldWidth, int MaxWidth) {
+    public static String getBlindTextString(String FieldTitle, int FieldWidth, int MaxWidth)
+    {
         String[] BlindTextArray = JavaTools.ArrayoutofString(BlindText, " ");
         String PartBlindText = BlindTextArray[0];
         String NewPartBlindText;
@@ -74,28 +77,40 @@ public class BlindtextCreator {
         int Titlelength = (int) 1.1 * FieldTitle.length(); // We assume that the TableHeading is bold
 
         if (Titlelength > PartBlindText.length())
+        {
             MaxHeaderWidth = Titlelength;
+        }
         else
+        {
             MaxHeaderWidth = PartBlindText.length();
+        }
         if (MaxHeaderWidth > MaxWidth)
+        {
             MaxWidth = MaxHeaderWidth;
-
+        }
         int i = 1;
-        do {
+        do
+        {
             NewPartBlindText = PartBlindText + " " + BlindTextArray[i];
-            if (NewPartBlindText.length() < MaxWidth) {
+            if (NewPartBlindText.length() < MaxWidth)
+            {
                 PartBlindText = NewPartBlindText;
                 i += 1;
             }
-        } while (NewPartBlindText.length() < MaxWidth);
+        }
+        while (NewPartBlindText.length() < MaxWidth);
         return PartBlindText;
     }
 
-    private static int getMaxFieldCount(boolean bIsCurLandscape) {
+    private static int getMaxFieldCount(boolean bIsCurLandscape)
+    {
         if (bIsCurLandscape == true)
+        {
             return 5;
+        }
         else
+        {
             return 3;
+        }
     }
-
 }

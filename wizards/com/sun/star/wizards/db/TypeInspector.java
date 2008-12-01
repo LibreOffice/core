@@ -44,8 +44,9 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.JavaTools;
 
+public class TypeInspector
+{
 
-public class TypeInspector{
     private String[] sDataTypeNames;
     private int[] nDataTypeInfos;
     private int[] nPrecisionInfos;
@@ -54,173 +55,231 @@ public class TypeInspector{
     private boolean[] bisAutoIncrementableInfos;
     private int[] nMinScaleInfos;
     private int[] nMaxScaleInfos;
-    private int[] nNumericFallBackList  = new int[]{DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL};
+    private int[] nNumericFallBackList = new int[]
+    {
+        DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
+    };
     final int INVALID = 999999;
     XResultSet xResultSet;
 
-    public class TypeInfo{
+    public class TypeInfo
+    {
+
         public int nDataType;
         public String sDataTypeName;
         public boolean bisAutoIncrementable;
 
-        public TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable){
+        public TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)
+        {
             nDataType = _nDataType;
             sDataTypeName = _sDataTypeName;
             bisAutoIncrementable = _bisAutoIncrementable;
         }
     }
 
-    public TypeInspector(XResultSet _xResultSet){
-    try {
-        xResultSet = _xResultSet;
-        Vector aTypeNameVector = new Vector();
-        Vector aTypeVector = new Vector();
-        Vector aNullableVector = new Vector();
-        Vector aAutoIncrementVector = new Vector();
-        Vector aPrecisionVector = new Vector();
-        Vector aMinScaleVector = new Vector();
-        Vector aMaxScaleVector = new Vector();
-        Vector aSearchableVector = new Vector();
-        Integer[] aIntegerDataTypes = null;
+    public TypeInspector(XResultSet _xResultSet)
+    {
+        try
+        {
+            xResultSet = _xResultSet;
+            Vector aTypeNameVector = new Vector();
+            Vector aTypeVector = new Vector();
+            Vector aNullableVector = new Vector();
+            Vector aAutoIncrementVector = new Vector();
+            Vector aPrecisionVector = new Vector();
+            Vector aMinScaleVector = new Vector();
+            Vector aMaxScaleVector = new Vector();
+            Vector aSearchableVector = new Vector();
+            Integer[] aIntegerDataTypes = null;
 //      XResultSet xResultSet = xDBMetaDagetTypeInfo();
-        XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
-        while (xResultSet.next()){
-            aTypeNameVector.addElement(new String(xRow.getString(1)));
-            aTypeVector.addElement(new Integer(xRow.getShort(2)));
-            aPrecisionVector.addElement(new Integer(xRow.getInt(3)));
-            aNullableVector.addElement(new Integer(xRow.getShort(7)));
-            aSearchableVector.addElement(new Integer(xRow.getShort(9)));
-            aAutoIncrementVector.addElement(new Boolean(xRow.getBoolean(12)));
-            aMinScaleVector.addElement(new Integer(xRow.getShort(14)));
-            aMaxScaleVector.addElement(new Integer(xRow.getShort(15)));
+            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
+            while (xResultSet.next())
+            {
+                aTypeNameVector.addElement(new String(xRow.getString(1)));
+                aTypeVector.addElement(new Integer(xRow.getShort(2)));
+                aPrecisionVector.addElement(new Integer(xRow.getInt(3)));
+                aNullableVector.addElement(new Integer(xRow.getShort(7)));
+                aSearchableVector.addElement(new Integer(xRow.getShort(9)));
+                aAutoIncrementVector.addElement(new Boolean(xRow.getBoolean(12)));
+                aMinScaleVector.addElement(new Integer(xRow.getShort(14)));
+                aMaxScaleVector.addElement(new Integer(xRow.getShort(15)));
 
+            }
+            sDataTypeNames = new String[aTypeNameVector.size()];
+            aTypeNameVector.toArray(sDataTypeNames);
+            nDataTypeInfos = JavaTools.IntegerTointList(aTypeVector);
+            nNullableInfos = JavaTools.IntegerTointList(aNullableVector);
+            nSearchables = JavaTools.IntegerTointList(aSearchableVector);
+            bisAutoIncrementableInfos = JavaTools.BooleanTobooleanList(aAutoIncrementVector);
+            nPrecisionInfos = JavaTools.IntegerTointList(aPrecisionVector);
+            nMinScaleInfos = JavaTools.IntegerTointList(aMinScaleVector);
+            nMaxScaleInfos = JavaTools.IntegerTointList(aMaxScaleVector);
         }
-        sDataTypeNames = new String[aTypeNameVector.size()];
-        aTypeNameVector.toArray(sDataTypeNames);
-        nDataTypeInfos = JavaTools.IntegerTointList(aTypeVector);
-        nNullableInfos = JavaTools.IntegerTointList(aNullableVector);
-        nSearchables = JavaTools.IntegerTointList(aSearchableVector);
-        bisAutoIncrementableInfos = JavaTools.BooleanTobooleanList(aAutoIncrementVector);
-        nPrecisionInfos = JavaTools.IntegerTointList(aPrecisionVector);
-        nMinScaleInfos = JavaTools.IntegerTointList(aMinScaleVector);
-        nMaxScaleInfos = JavaTools.IntegerTointList(aMaxScaleVector);
-    } catch (SQLException e) {
-        e.printStackTrace(System.out);
-    }}
+        catch (SQLException e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
+    public int getScale(XPropertySet _xColPropertySet)
+    {
+        try
+        {
+            int i = getDataTypeIndex(_xColPropertySet, false);
+            int nScale = AnyConverter.toInt(_xColPropertySet.getPropertyValue("Scale"));
+            if (i == -1)
+            {
+                return nScale;
+            }
+            if (nScale > nMaxScaleInfos[i])
+            {
+                return nMaxScaleInfos[i];
+            }
+            else if (nScale < nMinScaleInfos[i])
+            {
+                return nMinScaleInfos[i];
+            }
+            else
+            {
+                return nScale;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return 0;
+        }
+    }
 
-    public int getScale(XPropertySet _xColPropertySet){
-    try {
+    public int getNullability(XPropertySet _xColPropertySet, int _nNullable)
+    {
         int i = getDataTypeIndex(_xColPropertySet, false);
-        int nScale = AnyConverter.toInt(_xColPropertySet.getPropertyValue("Scale"));
         if (i == -1)
-            return nScale;
-        if (nScale > nMaxScaleInfos[i])
-            return nMaxScaleInfos[i];
-        else if (nScale < nMinScaleInfos[i])
-            return nMinScaleInfos[i];
-        else
-            return nScale;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return 0;
-    }}
-
-
-    public int getNullability(XPropertySet _xColPropertySet, int _nNullable){
-        int i = getDataTypeIndex(_xColPropertySet, false);
-        if (i == -1)
+        {
             return ColumnValue.NO_NULLS;
+        }
         int nNullable = _nNullable;
         if (nNullable == ColumnValue.NULLABLE)
+        {
             return nNullableInfos[i];           //probably nullability is not allowed
+        }
         return nNullable;
     }
 
-
-    public int getNullability(XPropertySet _xColPropertySet){
-        try {
+    public int getNullability(XPropertySet _xColPropertySet)
+    {
+        try
+        {
             int i = getDataTypeIndex(_xColPropertySet, false);
             if (i == -1)
+            {
                 return ColumnValue.NO_NULLS;
+            }
             int nNullable = AnyConverter.toInt(_xColPropertySet.getPropertyValue("IsNullable"));
             if (nNullable == ColumnValue.NULLABLE)
+            {
                 return nNullableInfos[i];
+            }
             return nNullable;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
         return ColumnValue.NO_NULLS;
     }
 
-
-    public boolean isColumnOrderable(XPropertySet _xColPropertySet){
+    public boolean isColumnOrderable(XPropertySet _xColPropertySet)
+    {
         int i = getDataTypeIndex(_xColPropertySet, false);
         if (i > -1)
+        {
             return (nSearchables[i] != ColumnSearch.NONE);
+        }
         else
+        {
             return false;
+        }
     }
 
-
-    public int isNullable(XPropertySet _xColPropertySet){
+    public int isNullable(XPropertySet _xColPropertySet)
+    {
         int i = getDataTypeIndex(_xColPropertySet, false);
         if (i > -1)
+        {
             return nNullableInfos[i];
+        }
         else
+        {
             return ColumnValue.NO_NULLS;
+        }
     }
 
-
-    private int getDataTypeIndex(XPropertySet _xColPropertySet, boolean _bCheckNumericAttributes){
-        try {
+    private int getDataTypeIndex(XPropertySet _xColPropertySet, boolean _bCheckNumericAttributes)
+    {
+        try
+        {
             int nPrecision = -1;
             int nScale = -1;
             int nDataType = AnyConverter.toInt(_xColPropertySet.getPropertyValue("Type"));
             String sTypeName = AnyConverter.toString(_xColPropertySet.getPropertyValue("TypeName"));
-            if (_bCheckNumericAttributes){
+            if (_bCheckNumericAttributes)
+            {
                 nPrecision = AnyConverter.toInt(_xColPropertySet.getPropertyValue("Precision"));
                 nScale = AnyConverter.toInt(_xColPropertySet.getPropertyValue("Scale"));
             }
             boolean bleaveloop = false;
             int startindex = 0;
-            while (!bleaveloop){
+            while (!bleaveloop)
+            {
                 int i = JavaTools.FieldInIntTable(nDataTypeInfos, nDataType, startindex);
-                startindex = i+1;
+                startindex = i + 1;
                 bleaveloop = (i < 0);
-                if (!bleaveloop){
-                    if (sTypeName.equals(sDataTypeNames[i])){
-                        if (_bCheckNumericAttributes){
-                            if (nPrecision <= nPrecisionInfos[i]){
-                                if ((nScale >= nMinScaleInfos[i]) && (nScale <= nMinScaleInfos[i])){
+                if (!bleaveloop)
+                {
+                    if (sTypeName.equals(sDataTypeNames[i]))
+                    {
+                        if (_bCheckNumericAttributes)
+                        {
+                            if (nPrecision <= nPrecisionInfos[i])
+                            {
+                                if ((nScale >= nMinScaleInfos[i]) && (nScale <= nMinScaleInfos[i]))
+                                {
                                     return i;
                                 }
                             }
                         }
                         else
+                        {
                             return i;
+                        }
                     }
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
         return -1;
     }
 
-
-    public boolean supportsDataType(int _curDataType){
-        return (JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType)> -1);
+    public boolean supportsDataType(int _curDataType)
+    {
+        return (JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType) > -1);
     }
 
-
-    public int getLastConversionFallbackDataType(){
+    public int getLastConversionFallbackDataType()
+    {
         if (supportsDataType(DataType.VARCHAR))
+        {
             return DataType.VARCHAR;
+        }
         else
+        {
             return DataType.LONGVARCHAR;
+        }
     }
-
 
     /**
      * an empty string is returned when no appropriate Typename can be found
@@ -228,20 +287,21 @@ public class TypeInspector{
      * @param _curDataType
      * @return
      */
-    public String getDefaultTypeName(int _curDataType, Integer precision){
+    public String getDefaultTypeName(int _curDataType, Integer precision)
+    {
         String ret = "";
-        for( int i = 0 ; i < nDataTypeInfos.length ; i ++ )
+        for (int i = 0; i < nDataTypeInfos.length; i++)
         {
-            if( nDataTypeInfos[i] == _curDataType )
+            if (nDataTypeInfos[i] == _curDataType)
             {
 //                 System.out.println( "Desired prec " + precision + ",nPrecisionInfos[i]="+nPrecisionInfos[i] + ",sDataTypeNames[i]="+sDataTypeNames[i] );
 
-                if( precision == null || nPrecisionInfos[i] >= precision.intValue() )
+                if (precision == null || nPrecisionInfos[i] >= precision.intValue())
                 {
                     ret = sDataTypeNames[i]; // this fits best !
                     break;
                 }
-                else if( ret.length() == 0 )
+                else if (ret.length() == 0)
                 {
                     // in case we dont find anything else, we at return a typename
                     // with the correct class
@@ -253,27 +313,32 @@ public class TypeInspector{
         return ret;
     }
 
-
-    public int getDataType(String _sTypeName){
+    public int getDataType(String _sTypeName)
+    {
         int i = JavaTools.FieldInList(sDataTypeNames, _sTypeName);
         if (i > -1)
+        {
             return nDataTypeInfos[i];
+        }
         else
+        {
             return getLastConversionFallbackDataType();
+        }
     }
 
-
-    public int convertDataType(int _curDataType){
+    public int convertDataType(int _curDataType)
+    {
         int retDataType = _curDataType;
-        if (!supportsDataType(_curDataType)){
-            switch(_curDataType)
+        if (!supportsDataType(_curDataType))
+        {
+            switch (_curDataType)
             {
                 case DataType.BIT:
-                        retDataType = convertDataType(DataType.BOOLEAN);
-                        break;
+                    retDataType = convertDataType(DataType.BOOLEAN);
+                    break;
                 case DataType.BOOLEAN:
-                        retDataType = convertDataType(DataType.BIT);
-                        break;
+                    retDataType = convertDataType(DataType.BIT);
+                    break;
                 case DataType.TINYINT:
                     retDataType = convertDataType(DataType.SMALLINT);
                     break;
@@ -303,11 +368,17 @@ public class TypeInspector{
                     break;
                 case DataType.DECIMAL:
                     if (supportsDataType(DataType.DOUBLE))
+                    {
                         retDataType = convertDataType(DataType.DOUBLE);
+                    }
                     else if (supportsDataType(DataType.NUMERIC))
+                    {
                         retDataType = DataType.NUMERIC;
+                    }
                     else
+                    {
                         retDataType = getLastConversionFallbackDataType();
+                    }
                     break;
                 case DataType.VARCHAR:
                     retDataType = getLastConversionFallbackDataType();
@@ -319,34 +390,39 @@ public class TypeInspector{
         return retDataType;
     }
 
-    public int getAutoIncrementIndex(XPropertySet _xColPropertySet){
-    try {
-        boolean bleaveloop = false;
-        int startindex = 0;
-        int curDataType = ((Integer) _xColPropertySet.getPropertyValue("Type")).intValue();
-        while (!bleaveloop){
-            int i = JavaTools.FieldInIntTable(nDataTypeInfos, curDataType, startindex);
-            startindex = i+1;
-            bleaveloop = (i == -1);
-            if (!bleaveloop){
-                if (bisAutoIncrementableInfos[i]){
-                    return nDataTypeInfos[i];
+    public int getAutoIncrementIndex(XPropertySet _xColPropertySet)
+    {
+        try
+        {
+            boolean bleaveloop = false;
+            int startindex = 0;
+            int curDataType = ((Integer) _xColPropertySet.getPropertyValue("Type")).intValue();
+            while (!bleaveloop)
+            {
+                int i = JavaTools.FieldInIntTable(nDataTypeInfos, curDataType, startindex);
+                startindex = i + 1;
+                bleaveloop = (i == -1);
+                if (!bleaveloop)
+                {
+                    if (bisAutoIncrementableInfos[i])
+                    {
+                        return nDataTypeInfos[i];
+                    }
                 }
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }
-    return INVALID;
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+        return INVALID;
 
     }
 
-
-    public boolean isAutoIncrementable(XPropertySet _xColPropertySet){
+    public boolean isAutoIncrementable(XPropertySet _xColPropertySet)
+    {
         return (getAutoIncrementIndex(_xColPropertySet) != INVALID);
     }
-
-
 
     /** finds the first available DataType that can be used as a primary key in a table.
      * @return The first datatype that also supports Autoincrmentation is taken according to the following list:
@@ -364,25 +440,31 @@ public class TypeInspector{
      * on several spots in the class!!
      *
      */
-    public TypeInfo findAutomaticPrimaryKeyType(){
+    public TypeInfo findAutomaticPrimaryKeyType()
+    {
         int nDataType;
-        for (int n = 0; n < this.nNumericFallBackList.length; n++){
+        for (int n = 0; n < this.nNumericFallBackList.length; n++)
+        {
             nDataType = nNumericFallBackList[n];
             boolean bleaveloop = false;
             int startindex = 0;
-            while (!bleaveloop){
+            while (!bleaveloop)
+            {
                 int i = JavaTools.FieldInIntTable(nDataTypeInfos, nDataType, startindex);
                 bleaveloop = (i < 0);
-                if (!bleaveloop){
-                    if (this.bisAutoIncrementableInfos[i] )
+                if (!bleaveloop)
+                {
+                    if (this.bisAutoIncrementableInfos[i])
+                    {
                         return new TypeInfo(nDataType, this.sDataTypeNames[i], true);
-                    startindex = i+1;
+                    }
+                    startindex = i + 1;
                 }
-                startindex = i+1;
+                startindex = i + 1;
             }
         }
         // As Autoincrementation is not supported for any numeric datatype we take the first available numeric Type;
-        nDataType =convertDataType(DataType.INTEGER);
-        return new TypeInfo(nDataType, getDefaultTypeName(nDataType,null), false);
+        nDataType = convertDataType(DataType.INTEGER);
+        return new TypeInfo(nDataType, getDefaultTypeName(nDataType, null), false);
     }
 }

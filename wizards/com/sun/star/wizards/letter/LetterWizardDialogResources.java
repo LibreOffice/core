@@ -1,9 +1,41 @@
+/*
+ ************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: LetterWizardDialogResources.java,v $
+ *
+ * $Revision: 1.7.192.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 package com.sun.star.wizards.letter;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Resource;
 
-public class LetterWizardDialogResources extends Resource {
+public class LetterWizardDialogResources extends Resource
+{
 
     final static String UNIT_NAME = "dbwizres";
     final static String MODULE_NAME = "dbw";
@@ -13,15 +45,12 @@ public class LetterWizardDialogResources extends Resource {
     final static int RID_LETTERWIZARDROADMAP_START = 3100;
     final static int RID_LETTERWIZARDLANGUAGE_START = 3110;
     final static int RID_RID_COMMON_START = 500;
-
     protected String[] RoadmapLabels = new String[7];
     protected String[] SalutationLabels = new String[3];
     protected String[] GreetingLabels = new String[3];
     protected String[] LanguageLabels = new String[16];
-
     String resOverwriteWarning;
     String resTemplateDescription;
-
     String resLetterWizardDialog_title;
     String resLabel9_value;
     String resoptBusinessLetter_value;
@@ -80,7 +109,9 @@ public class LetterWizardDialogResources extends Resource {
     String reslblTitle4_value;
     String reslblTitle5_value;
     String reslblTitle6_value;
-    public LetterWizardDialogResources(XMultiServiceFactory xmsf) {
+
+    public LetterWizardDialogResources(XMultiServiceFactory xmsf)
+    {
         super(xmsf, UNIT_NAME, MODULE_NAME);
 
         resLetterWizardDialog_title = getResText(RID_LETTERWIZARDDIALOG_START + 1);
@@ -148,27 +179,33 @@ public class LetterWizardDialogResources extends Resource {
         loadCommonResources();
     }
 
-    private void loadCommonResources() {
+    private void loadCommonResources()
+    {
         resOverwriteWarning = getResText(RID_RID_COMMON_START + 19);
         resTemplateDescription = getResText(RID_RID_COMMON_START + 20);
     }
 
-    private void loadRoadmapResources() {
-        for (int i = 1; i < 7; i++) {
+    private void loadRoadmapResources()
+    {
+        for (int i = 1; i < 7; i++)
+        {
             RoadmapLabels[i] = getResText(RID_LETTERWIZARDROADMAP_START + i);
         }
     }
 
-    private void loadSalutationResources() {
-        for (int i = 1; i < 4; i++) {
-            SalutationLabels[i-1] = getResText(RID_LETTERWIZARDSALUTATION_START + i);
+    private void loadSalutationResources()
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            SalutationLabels[i - 1] = getResText(RID_LETTERWIZARDSALUTATION_START + i);
         }
     }
 
-    private void loadGreetingResources() {
-        for (int i = 1; i < 4; i++) {
-            GreetingLabels[i-1] = getResText(RID_LETTERWIZARDGREETING_START + i);
+    private void loadGreetingResources()
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            GreetingLabels[i - 1] = getResText(RID_LETTERWIZARDGREETING_START + i);
         }
     }
-
 }

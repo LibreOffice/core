@@ -9,7 +9,7 @@
  *
  * $RCSfile: InBlocksLabelsAbove.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
@@ -45,6 +44,7 @@ import com.sun.star.wizards.ui.*;
  */
 public class InBlocksLabelsAbove extends ColumnarTwoColumns
 {
+
     public InBlocksLabelsAbove(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
         super(_xDefinitionAccess, _aResource);
@@ -85,7 +85,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
 
         final int nUsablePageWidth = getPageWidth() - getLeftPageIndent() - getRightPageIndent() - getLeftGroupIndent(getCountOfGroups());
 
-        int i=0;
+        int i = 0;
         int nCount = aFieldTitleNames.length;
         // int x = 0;
         aRectLabels.Y = 0;
@@ -106,7 +106,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
             // aRectLabels.X += nFieldWidth;
 
             final int nNextX = aRectFields.X + nFieldWidth;
-            if (nNextX > (getPageWidth() - getRightPageIndent()) )
+            if (nNextX > (getPageWidth() - getRightPageIndent()))
             {
                 // all other values are not from interest.
                 break;
@@ -159,6 +159,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
         xSection.setHeight(aRectFields.Y);
         doNotBreakInTable(xSection);
     }
+
     protected void insertDetailFieldTitles()
     {
         // we won't extra field titles

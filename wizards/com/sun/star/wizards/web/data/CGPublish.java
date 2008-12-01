@@ -32,7 +32,6 @@ package com.sun.star.wizards.web.data;
 import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.JavaTools;
 
-
 /**
  *
  * A Class which describes the publishing arguments
@@ -40,13 +39,13 @@ import com.sun.star.wizards.common.JavaTools;
  * Each session can contain different publishers, which are configured
  * through such a CGPublish object.
  */
-public class CGPublish extends ConfigGroup {
+public class CGPublish extends ConfigGroup
+{
 
     public boolean cp_Publish;
     public String cp_URL;
     public String cp_Username;
     public String password;
-
     /**
      * cp_URL is the url given by the user
      * for this publisher. (in UCB URL form)
@@ -55,8 +54,6 @@ public class CGPublish extends ConfigGroup {
      * It is used for example to add ftp username and password, or zip url
      */
     public String url;
-
-
     /**
      * if the user approved overwriting files in this publisher target
      */
@@ -67,28 +64,35 @@ public class CGPublish extends ConfigGroup {
      * a UCB url...
      * @param url
      */
-    public void setURL(String path) {
-        try {
-            this.cp_URL = ((CGSettings)this.root).getFileAccess().getURL(path);
+    public void setURL(String path)
+    {
+        try
+        {
+            this.cp_URL = ((CGSettings) this.root).getFileAccess().getURL(path);
             overwriteApproved = false;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
 
-    public String getURL() {
-        try {
-            return  ((CGSettings)this.root).getFileAccess().getPath(cp_URL, null );
-        } catch (Exception e) {
+    public String getURL()
+    {
+        try
+        {
+            return ((CGSettings) this.root).getFileAccess().getPath(cp_URL, null);
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             return "";
         }
     }
 
-    private String ftpURL() {
+    private String ftpURL()
+    {
         return "ftp://" + cp_Username +
-          ((password!=null && password.length()>0) ? ":" + password : "")
-          + "@" + cp_URL.substring(7);
+                ((password != null && password.length() > 0) ? ":" + password : "") + "@" + cp_URL.substring(7);
     }
 }

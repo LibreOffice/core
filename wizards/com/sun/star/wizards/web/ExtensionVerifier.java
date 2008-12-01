@@ -40,11 +40,14 @@ import com.sun.star.wizards.common.UCB;
  * all the files that do *not* end with xsl.
  *
  */
-public class ExtensionVerifier implements UCB.Verifier {
+public class ExtensionVerifier implements UCB.Verifier
+{
+
     private String extension;
 
-    public ExtensionVerifier(String extension_) {
-        extension="." + extension_;
+    public ExtensionVerifier(String extension_)
+    {
+        extension = "." + extension_;
     }
 
     /**
@@ -52,10 +55,12 @@ public class ExtensionVerifier implements UCB.Verifier {
      * a String which does not end with the
      * given extension.
      */
-    public boolean verify(Object object) {
+    public boolean verify(Object object)
+    {
         if (object instanceof String)
-          return !((String)object).endsWith(extension);
+        {
+            return !((String) object).endsWith(extension);
+        }
         return false;
     }
-
 }

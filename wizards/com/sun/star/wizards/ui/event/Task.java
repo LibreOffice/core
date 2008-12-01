@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui.event;
+ ************************************************************************/
+package com.sun.star.wizards.ui.event;
 
 import java.util.List;
 import java.util.Vector;
@@ -37,120 +38,153 @@ import java.util.Vector;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class Task {
+public class Task
+{
+
     private int successfull = 0;
     private int failed = 0;
-
     private int max = 0;
     private String taskName;
     private List listeners = new Vector();
     private String subtaskName;
 
-
-    public Task(String taskName_ , String subtaskName_, int max_) {
+    public Task(String taskName_, String subtaskName_, int max_)
+    {
         taskName = taskName_;
         subtaskName = subtaskName_;
         max = max_;
     }
 
-    public void start() {
+    public void start()
+    {
         fireTaskStarted();
     }
 
-    public void fail() {
+    public void fail()
+    {
         fireTaskFailed();
     }
 
-    public int getMax() {
+    public int getMax()
+    {
         return max;
     }
 
-    public void setMax(int max_) {
+    public void setMax(int max_)
+    {
         max = max_;
         fireTaskStatusChanged();
     }
 
-    public void advance(boolean success_) {
-        if (success_) successfull++;
-        else failed++;
+    public void advance(boolean success_)
+    {
+        if (success_)
+        {
+            successfull++;
+        }
+        else
+        {
+            failed++;
+        }
         fireTaskStatusChanged();
-        if (failed+successfull == max)
-          fireTaskFinished();
+        if (failed + successfull == max)
+        {
+            fireTaskFinished();
+        }
     }
 
-    public void advance(boolean success_, String nextSubtaskName) {
+    public void advance(boolean success_, String nextSubtaskName)
+    {
         advance(success_);
         setSubtaskName(nextSubtaskName);
     }
 
-
-
-    public int getStatus() {
-        return successfull+failed;
+    public int getStatus()
+    {
+        return successfull + failed;
     }
 
-    public void addTaskListener(TaskListener tl) {
+    public void addTaskListener(TaskListener tl)
+    {
         listeners.add(tl);
     }
 
-    public void removeTaskListener(TaskListener tl) {
+    public void removeTaskListener(TaskListener tl)
+    {
         listeners.remove(tl);
     }
 
-    protected void fireTaskStatusChanged() {
+    protected void fireTaskStatusChanged()
+    {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_STATUS_CHANGED);
 
-        for (int i = 0; i<listeners.size(); i++)
-          ((TaskListener)listeners.get(i)).taskStatusChanged(te);
+        for (int i = 0; i < listeners.size(); i++)
+        {
+            ((TaskListener) listeners.get(i)).taskStatusChanged(te);
+        }
     }
 
-    protected void fireTaskStarted() {
+    protected void fireTaskStarted()
+    {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_STARTED);
 
-        for (int i = 0; i<listeners.size(); i++)
-          ((TaskListener)listeners.get(i)).taskStarted(te);
+        for (int i = 0; i < listeners.size(); i++)
+        {
+            ((TaskListener) listeners.get(i)).taskStarted(te);
+        }
     }
 
-    protected void fireTaskFailed() {
-            TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FAILED);
+    protected void fireTaskFailed()
+    {
+        TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FAILED);
 
-            for (int i = 0; i<listeners.size(); i++)
-              ((TaskListener)listeners.get(i)).taskFinished(te);
+        for (int i = 0; i < listeners.size(); i++)
+        {
+            ((TaskListener) listeners.get(i)).taskFinished(te);
         }
+    }
 
-    protected void fireTaskFinished() {
+    protected void fireTaskFinished()
+    {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FINISHED);
 
-        for (int i = 0; i<listeners.size(); i++)
-          ((TaskListener)listeners.get(i)).taskFinished(te);
+        for (int i = 0; i < listeners.size(); i++)
+        {
+            ((TaskListener) listeners.get(i)).taskFinished(te);
+        }
     }
 
-    protected void fireSubtaskNameChanged() {
+    protected void fireSubtaskNameChanged()
+    {
         TaskEvent te = new TaskEvent(this, TaskEvent.SUBTASK_NAME_CHANGED);
 
-        for (int i = 0; i<listeners.size(); i++)
-          ((TaskListener)listeners.get(i)).subtaskNameChanged(te);
+        for (int i = 0; i < listeners.size(); i++)
+        {
+            ((TaskListener) listeners.get(i)).subtaskNameChanged(te);
+        }
     }
-
 
     /**
      * @return
      */
-    public String getSubtaskName() {
+    public String getSubtaskName()
+    {
         return subtaskName;
     }
 
     /**
      * @return
      */
-    public String getTaskName() {
+    public String getTaskName()
+    {
         return taskName;
     }
 
     /**
      * @param string
      */
-    public void setSubtaskName(String string) {
+    public void setSubtaskName(String string)
+    {
         subtaskName = string;
         fireSubtaskNameChanged();
     }
@@ -158,15 +192,16 @@ public class Task {
     /**
      * @return
      */
-    public int getFailed() {
+    public int getFailed()
+    {
         return failed;
     }
 
     /**
      * @return
      */
-    public int getSuccessfull() {
+    public int getSuccessfull()
+    {
         return successfull;
     }
-
 }

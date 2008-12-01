@@ -43,7 +43,9 @@ import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.beans.PropertyValue;
 
-public class SystemDialog {
+public class SystemDialog
+{
+
     Object systemDialog;
     XFilePicker xFilePicker;
     XFolderPicker xFolderPicker;
@@ -54,7 +56,6 @@ public class SystemDialog {
     XFilePickerControlAccess xFilePickerControlAccess;
     XMultiServiceFactory xMSF;
     public XStringSubstitution xStringSubstitution;
-
     public String sStorePath;
 
     /**
@@ -63,8 +64,10 @@ public class SystemDialog {
      * @param ServiceName
      * @param type  according to com.sun.star.ui.dialogs.TemplateDescription
      */
-    public SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type) {
-        try {
+    public SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
+    {
+        try
+        {
             this.xMSF = xMSF;
             systemDialog = (XInterface) xMSF.createInstance(ServiceName);
             xFilePicker = (XFilePicker) UnoRuntime.queryInterface(XFilePicker.class, systemDialog);
@@ -75,43 +78,54 @@ public class SystemDialog {
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, systemDialog);
             xFilePickerControlAccess = (XFilePickerControlAccess) UnoRuntime.queryInterface(XFilePickerControlAccess.class, systemDialog);
             xStringSubstitution = createStringSubstitution(xMSF);
-            Short[] listAny = new Short[] { new Short(type)};
+            Short[] listAny = new Short[]
+            {
+                new Short(type)
+            };
             if (xInitialize != null)
+            {
                 xInitialize.initialize(listAny);
-
-        } catch (com.sun.star.uno.Exception exception) {
+            }
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace();
         }
     }
 
-    public static SystemDialog createStoreDialog(XMultiServiceFactory xmsf) {
+    public static SystemDialog createStoreDialog(XMultiServiceFactory xmsf)
+    {
         return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILESAVE_AUTOEXTENSION);
     }
 
-    public static SystemDialog createOpenDialog(XMultiServiceFactory xmsf) {
+    public static SystemDialog createOpenDialog(XMultiServiceFactory xmsf)
+    {
         return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILEOPEN_SIMPLE);
     }
 
-    public static SystemDialog createFolderDialog(XMultiServiceFactory xmsf) {
+    public static SystemDialog createFolderDialog(XMultiServiceFactory xmsf)
+    {
         return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FolderPicker", (short) 0);
     }
 
-    public static SystemDialog createOfficeFolderDialog(XMultiServiceFactory xmsf) {
+    public static SystemDialog createOfficeFolderDialog(XMultiServiceFactory xmsf)
+    {
         return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", (short) 0);
     }
 
-
-
-    private String subst(String path) {
-        try {
+    private String subst(String path)
+    {
+        try
+        {
             //System.out.println("SystemDialog.subst:");
             //System.out.println(path);
-            String s = xStringSubstitution.substituteVariables(path,false);
+            String s = xStringSubstitution.substituteVariables(path, false);
             //System.out.println(s);
             return s;
 
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
             return path;
         }
@@ -127,12 +141,12 @@ public class SystemDialog {
      * @param sDocuType
      * @return
      */
-    public String callStoreDialog(String DisplayDirectory, String DefaultName, String sDocuType) {
+    public String callStoreDialog(String DisplayDirectory, String DefaultName, String sDocuType)
+    {
         String sExtension = DefaultName.substring(DefaultName.length() - 3, DefaultName.length());
         addFilterToDialog(sExtension, sDocuType, true);
         return callStoreDialog(DisplayDirectory, DefaultName);
     }
-
 
     /**
      *
@@ -142,79 +156,107 @@ public class SystemDialog {
      * given url to a local path.
      * @return
      */
-    public String callStoreDialog(String displayDir, String defaultName) {
+    public String callStoreDialog(String displayDir, String defaultName)
+    {
         sStorePath = null;
-        try {
+        try
+        {
             xFilePickerControlAccess.setValue(com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_AUTOEXTENSION, (short) 0, new Boolean(true));
             xFilePicker.setDefaultName(defaultName);
             xFilePicker.setDisplayDirectory(subst(displayDir));
-            if (execute(xExecutable)) {
+            if (execute(xExecutable))
+            {
                 String[] sPathList = xFilePicker.getFiles();
                 sStorePath = sPathList[0];
             }
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace();
         }
         return sStorePath;
     }
 
-    public String callFolderDialog(String title, String description, String displayDir) {
-        try {
+    public String callFolderDialog(String title, String description, String displayDir)
+    {
+        try
+        {
             xFolderPicker.setDisplayDirectory(subst(displayDir));
-        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae)
+        {
             iae.printStackTrace();
             throw new IllegalArgumentException(iae.getMessage());
         }
         xFolderPicker.setTitle(title);
         xFolderPicker.setDescription(description);
         if (execute(xFolderPicker))
+        {
             return xFolderPicker.getDirectory();
+        }
         else
+        {
             return null;
+        }
     }
 
-    private boolean execute(XExecutableDialog execDialog) {
+    private boolean execute(XExecutableDialog execDialog)
+    {
         return execDialog.execute() == 1;
     }
 
-    public String[] callOpenDialog(boolean multiSelect, String displayDirectory) {
+    public String[] callOpenDialog(boolean multiSelect, String displayDirectory)
+    {
 
-        try {
+        try
+        {
             xFilePicker.setMultiSelectionMode(multiSelect);
             xFilePicker.setDisplayDirectory(subst(displayDirectory));
             if (execute(xExecutable))
+            {
                 return xFilePicker.getFiles();
-        } catch (com.sun.star.uno.Exception exception) {
+            }
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace();
         }
         return null;
     }
 
     //("writer_StarOffice_XML_Writer_Template")    'StarOffice XML (Writer)
-    public void addFilterToDialog(String sExtension, String filterName, boolean setToDefault) {
-        try {
+    public void addFilterToDialog(String sExtension, String filterName, boolean setToDefault)
+    {
+        try
+        {
             //get the localized filtername
             String uiName = getFilterUIName(filterName);
             String pattern = "*." + sExtension;
 
             //add the filter
             addFilter(uiName, pattern, setToDefault);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void addFilter(String uiName, String pattern, boolean setToDefault) {
-        try {
+    public void addFilter(String uiName, String pattern, boolean setToDefault)
+    {
+        try
+        {
             xFilterManager.appendFilter(uiName, pattern);
             if (setToDefault)
+            {
                 xFilterManager.setCurrentFilter(uiName);
-        } catch (Exception ex) {
+            }
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
-
-
 
     /**
      * converts the name returned from getFilterUIName_(...) so the
@@ -222,9 +264,14 @@ public class SystemDialog {
      * @param filterName
      * @return
      */
-    private String getFilterUIName(String filterName) {
+    private String getFilterUIName(String filterName)
+    {
         String prodName = Configuration.getProductName(xMSF);
-        String[][] s = new String[][] { { getFilterUIName_(filterName)}
+        String[][] s = new String[][]
+        {
+            {
+                getFilterUIName_(filterName)
+            }
         };
         s[0][0] = JavaTools.replaceSubString(s[0][0], prodName, "%productname%");
         return s[0][0];
@@ -235,26 +282,34 @@ public class SystemDialog {
      * @param filterName
      * @return the UI localized name of the given filter name.
      */
-    private String getFilterUIName_(String filterName) {
-        try {
+    private String getFilterUIName_(String filterName)
+    {
+        try
+        {
             Object oFactory = xMSF.createInstance("com.sun.star.document.FilterFactory");
             Object oObject = Helper.getUnoObjectbyName(oFactory, filterName);
             Object oArrayObject = AnyConverter.toArray(oObject);
             PropertyValue[] xPropertyValue = (PropertyValue[]) oArrayObject; //UnoRuntime.queryInterface(XPropertyValue.class, oObject);
             int MaxCount = xPropertyValue.length;
-            for (int i = 0; i < MaxCount; i++) {
+            for (int i = 0; i < MaxCount; i++)
+            {
                 PropertyValue aValue = (PropertyValue) xPropertyValue[i];
                 if (aValue != null && aValue.Name.equals("UIName"))
+                {
                     return AnyConverter.toString(aValue.Value);
+                }
             }
             throw new NullPointerException("UIName property not found for Filter " + filterName);
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID, String AddTag, String AddString) {
+    public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID, String AddTag, String AddString)
+    {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
         oResource = new Resource(xMSF, ResName, ResPrefix);
@@ -265,8 +320,8 @@ public class SystemDialog {
         return SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sErrorMessage);
     }
 
-
-    public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID) {
+    public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID)
+    {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
         oResource = new Resource(xMSF, ResName, ResPrefix);
@@ -280,7 +335,6 @@ public class SystemDialog {
      * example:
      * (xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, "message")
      */
-
     /**
      * @param windowServiceName one of the following strings:
      * "ErrorBox", "WarningBox", "MessBox", "InfoBox", "QueryBox".
@@ -290,21 +344,26 @@ public class SystemDialog {
      * @return 0 = cancel, 1 = ok, 2 = yes,  3 = no(I'm not sure here)
      * other values check for yourself ;-)
      */
-    public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText) {
+    public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText)
+    {
 
         short iMessage = 0;
-        try {
+        try
+        {
             if (MessageText == null)
+            {
                 return 0;
+            }
             XFrame xFrame = Desktop.getActiveFrame(xMSF);
             XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
-            return showMessageBox(xMSF,xWindowPeer, windowServiceName, windowAttribute, MessageText);
-        } catch (Exception exception) {
+            return showMessageBox(xMSF, xWindowPeer, windowServiceName, windowAttribute, MessageText);
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
         return iMessage;
     }
-
 
     /**
      * just like the other showMessageBox(...) method, but recieves a
@@ -316,13 +375,16 @@ public class SystemDialog {
      * @param MessageText
      * @return
      */
-    public static int showMessageBox(XMultiServiceFactory xMSF, XWindowPeer peer, String windowServiceName, int windowAttribute, String MessageText) {
+    public static int showMessageBox(XMultiServiceFactory xMSF, XWindowPeer peer, String windowServiceName, int windowAttribute, String MessageText)
+    {
         // If the peer is null we try to get one from the desktop...
-        if (peer==null)
-            return showMessageBox(xMSF,windowServiceName, windowAttribute, MessageText);
-
+        if (peer == null)
+        {
+            return showMessageBox(xMSF, windowServiceName, windowAttribute, MessageText);
+        }
         short iMessage = 0;
-        try {
+        try
+        {
             XInterface xAWTToolkit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
             XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, xAWTToolkit);
             com.sun.star.awt.WindowDescriptor oDescriptor = new com.sun.star.awt.WindowDescriptor();
@@ -336,7 +398,9 @@ public class SystemDialog {
             xMsgbox.setMessageText(MessageText);
             iMessage = xMsgbox.execute();
             xComponent.dispose();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace(System.out);
         }
@@ -345,19 +409,24 @@ public class SystemDialog {
 
     public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
     {
-          Object xPathSubst = null;
-          try {
-              xPathSubst = xMSF.createInstance(
-                 "com.sun.star.util.PathSubstitution" );
-          }
-          catch (com.sun.star.uno.Exception e) {
-              e.printStackTrace();
-          }
-          if (xPathSubst != null)
-              return (XStringSubstitution)UnoRuntime.queryInterface(
-                  XStringSubstitution.class, xPathSubst );
-          else
-              return null;
+        Object xPathSubst = null;
+        try
+        {
+            xPathSubst = xMSF.createInstance(
+                    "com.sun.star.util.PathSubstitution");
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            e.printStackTrace();
+        }
+        if (xPathSubst != null)
+        {
+            return (XStringSubstitution) UnoRuntime.queryInterface(
+                    XStringSubstitution.class, xPathSubst);
+        }
+        else
+        {
+            return null;
+        }
     }
-
 }

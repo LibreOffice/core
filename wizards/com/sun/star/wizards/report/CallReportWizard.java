@@ -29,7 +29,6 @@
  ************************************************************************/
 package com.sun.star.wizards.report;
 
-
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.uno.Type;
@@ -37,8 +36,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.lang.XComponent;
-
-
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
@@ -48,6 +45,7 @@ import com.sun.star.lang.XComponent;
  */
 public class CallReportWizard
 {
+
     static boolean bWizardstartedalready;
 
     /** Gives a factory for creating the service.
@@ -64,19 +62,19 @@ public class CallReportWizard
      * registry key accessible.
      */
     public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
+    {
+        com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
+        if (stringImplementationName.equals(
+                ReportWizardImplementation.class.getName()))
         {
-            com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
-            if ( stringImplementationName.equals(
-                     ReportWizardImplementation.class.getName() ) )
-            {
-                xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
+            xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
                     ReportWizardImplementation.class,
                     ReportWizardImplementation.__serviceName,
                     xMSF,
-                    xregistrykey );
-            }
-            return xsingleservicefactory;
+                    xregistrykey);
         }
+        return xsingleservicefactory;
+    }
 
     /** Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>.
@@ -87,18 +85,19 @@ public class CallReportWizard
      * registry key accessible.
      */
     public static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xregistrykey)
-        {
-            return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+    {
+        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
                 ReportWizardImplementation.class.getName(),
                 ReportWizardImplementation.__serviceName,
-                xregistrykey );
-        }
+                xregistrykey);
+    }
 
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
     public static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
     {
+
         PropertyValue[] databaseproperties;
         public XComponent DocumentDefinition = null;
         public XComponent Document = null;
@@ -108,16 +107,16 @@ public class CallReportWizard
          * could be introduced while initializing.
          */
         public ReportWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
-            {
-                super();
-                xmultiservicefactory = xmultiservicefactoryInitialization;
-                registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
-                registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
-            }
+        {
+            super();
+            xmultiservicefactory = xmultiservicefactoryInitialization;
+            registerProperty("Document", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
+            registerProperty("DocumentDefinition", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
+        }
 
         public void trigger(String sEvent)
-            {
-                try
+        {
+            try
             {
                 com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
                 if (sEvent.compareTo("start") == 0)
@@ -126,10 +125,17 @@ public class CallReportWizard
                     {
                         ReportWizard CurReportWizard = new ReportWizard(xmultiservicefactory);
                         XComponent[] obj = CurReportWizard.startReportWizard(xmultiservicefactory, databaseproperties);
-                        if ( obj != null )
+                        if (obj != null)
                         {
                             DocumentDefinition = obj[0];
-                            Document = obj[1];
+                            if (obj.length > 1)
+                            {
+                                Document = obj[1];
+                            }
+                            else
+                            {
+                                Document = null;
+                            }
                         }
                     }
                     bWizardstartedalready = false;
@@ -144,36 +150,32 @@ public class CallReportWizard
                 {
                     Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
                     XTextDocument xTextDocument = null;
-                    if ( databaseproperties != null )
+                    if (databaseproperties != null)
                     {
-                        for( int i=0;i < databaseproperties.length;++i)
+                        for (int i = 0; i < databaseproperties.length; ++i)
                         {
-                            if ( databaseproperties[i].Name.equals("TextDocument") )
+                            if (databaseproperties[i].Name.equals("TextDocument"))
                             {
                                 xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
                             }
 
                         }
-                        if ( xTextDocument != null )
+                        if (xTextDocument != null)
                         {
-                            CurDataimport.createReport(xmultiservicefactory,xTextDocument,databaseproperties);
+                            CurDataimport.createReport(xmultiservicefactory, xTextDocument, databaseproperties);
                         }
                     }
                 }
             }
-
-        catch( Exception exception )
-        {
-            System.err.println( exception );
+            catch (Exception exception)
+            {
+                System.err.println(exception);
+            }
+            System.gc();
         }
-        System.gc();
-    }
-
-
         /** The service name, that must be used to get an instance of this service.
          */
         private static final String __serviceName = "com.sun.star.wizards.report.CallReportWizard";
-
         /** The service manager, that gives access to all registered services.
          */
         private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
@@ -186,23 +188,23 @@ public class CallReportWizard
          * passed to the caller.
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
-            {
-                this.databaseproperties = Properties.convertToPropertyValueArray(object);
+        {
+            this.databaseproperties = Properties.convertToPropertyValueArray(object);
 
-                //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
-            }
+        //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
+        }
 
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
         public java.lang.String[] getSupportedServiceNames()
-            {
-                String []stringSupportedServiceNames = new String[ 1 ];
+        {
+            String[] stringSupportedServiceNames = new String[1];
 
-                stringSupportedServiceNames[ 0 ] = __serviceName;
+            stringSupportedServiceNames[ 0] = __serviceName;
 
-                return( stringSupportedServiceNames );
-            }
+            return (stringSupportedServiceNames);
+        }
 
         /** This method returns true, if the given service will be
          * supported by the component.
@@ -210,15 +212,15 @@ public class CallReportWizard
          * @return True, if the given service name will be supported.
          */
         public boolean supportsService(String stringService)
-            {
-                boolean booleanSupportsService = false;
+        {
+            boolean booleanSupportsService = false;
 
-                if ( stringService.equals( __serviceName ) )
-                {
-                    booleanSupportsService = true;
-                }
-                return( booleanSupportsService );
+            if (stringService.equals(__serviceName))
+            {
+                booleanSupportsService = true;
             }
+            return (booleanSupportsService);
+        }
 
         /** This method returns an array of bytes, that can be used to
          * unambiguously distinguish between two sets of types, e.g.
@@ -232,27 +234,30 @@ public class CallReportWizard
          * @return Array of bytes, in order to distinguish between two sets.
          */
         public byte[] getImplementationId()
+        {
+            byte[] byteReturn =
             {
-                byte[] byteReturn = {};
+            };
 
-                try
-                {
-                    byteReturn = new String( "" + this.hashCode() ).getBytes();
-                }
-                catch( Exception exception ) {
-                    System.err.println( exception );
-                }
-
-                return( byteReturn );
+            try
+            {
+                byteReturn = new String("" + this.hashCode()).getBytes();
             }
+            catch (Exception exception)
+            {
+                System.err.println(exception);
+            }
+
+            return (byteReturn);
+        }
 
         /** Return the class name of the component.
          * @return Class name of the component.
          */
         public java.lang.String getImplementationName()
-            {
-                return( ReportWizardImplementation.class.getName() );
-            }
+        {
+            return (ReportWizardImplementation.class.getName());
+        }
 
         /** Provides a sequence of all types (usually interface types)
          * provided by the object.
@@ -260,23 +265,28 @@ public class CallReportWizard
          * service.
          */
         public Type[] getTypes()
+        {
+            Type[] typeReturn =
             {
-                Type[] typeReturn = {};
+            };
 
-                try
-                {
-                    typeReturn = new Type[] {
-                        new Type( com.sun.star.task.XJobExecutor.class ) ,
-                        new Type( com.sun.star.lang.XTypeProvider.class ),
-                        new Type( com.sun.star.lang.XServiceInfo.class ),
-                        new Type( com.sun.star.lang.XInitialization.class )
-                    };
-                } catch( Exception exception ) {
-                    System.err.println( exception );
-                }
-
-                return( typeReturn );
+            try
+            {
+                typeReturn = new Type[]
+                        {
+                            new Type(com.sun.star.task.XJobExecutor.class),
+                            new Type(com.sun.star.lang.XTypeProvider.class),
+                            new Type(com.sun.star.lang.XServiceInfo.class),
+                            new Type(com.sun.star.lang.XInitialization.class)
+                        };
             }
+            catch (Exception exception)
+            {
+                System.err.println(exception);
+            }
+
+            return (typeReturn);
+        }
     }
 }
 

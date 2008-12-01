@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.ui;
 
 import java.util.Vector;
@@ -44,107 +43,123 @@ import com.sun.star.wizards.common.Helper;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class PeerConfig implements XWindowListener{
+public class PeerConfig implements XWindowListener
+{
+
     private Vector m_aPeerTasks = new Vector();
     Vector aControlTasks = new Vector();
     Vector aImageUrlTasks = new Vector();
     UnoDialog oUnoDialog = null;
 
-    public PeerConfig(UnoDialog _oUnoDialog) {
+    public PeerConfig(UnoDialog _oUnoDialog)
+    {
         oUnoDialog = _oUnoDialog;
         oUnoDialog.xWindow.addWindowListener(this);
     }
 
-    class PeerTask{
+    class PeerTask
+    {
+
         XControl xControl;
         String[] propnames;
         Object[] propvalues;
 
-        public PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_){
+        public PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_)
+        {
             propnames = propNames_;
             propvalues = propValues_;
             xControl = _xControl;
         }
     }
 
+    class ControlTask
+    {
 
-    class ControlTask{
         Object oModel;
         String propname;
         Object propvalue;
 
-        public ControlTask(Object _oModel, String _propName, Object _propValue){
+        public ControlTask(Object _oModel, String _propName, Object _propValue)
+        {
             propname = _propName;
             propvalue = _propValue;
             oModel = _oModel;
         }
     }
 
+    class ImageUrlTask
+    {
 
-    class ImageUrlTask{
         Object oModel;
         Object oResource;
         Object oHCResource;
 
-        public ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource){
+        public ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource)
+        {
             oResource = _oResource;
             oHCResource = _oHCResource;
             oModel = _oModel;
         }
     }
 
-
-    public void windowResized(WindowEvent arg0) {
+    public void windowResized(WindowEvent arg0)
+    {
     }
 
-    public void windowMoved(WindowEvent arg0) {
+    public void windowMoved(WindowEvent arg0)
+    {
     }
 
-
-    public void windowShown(EventObject arg0) {
-    try {
-        for (int i = 0; i < this.m_aPeerTasks.size(); i++)
+    public void windowShown(EventObject arg0)
+    {
+        try
         {
-            PeerTask aPeerTask = (PeerTask) m_aPeerTasks.elementAt(i);
-            XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
-            for (int n = 0; n < aPeerTask.propnames.length; n++)
+            for (int i = 0; i < this.m_aPeerTasks.size(); i++)
             {
-                xVclWindowPeer.setProperty(aPeerTask.propnames[n], aPeerTask.propvalues[n]);
+                PeerTask aPeerTask = (PeerTask) m_aPeerTasks.elementAt(i);
+                XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
+                for (int n = 0; n < aPeerTask.propnames.length; n++)
+                {
+                    xVclWindowPeer.setProperty(aPeerTask.propnames[n], aPeerTask.propvalues[n]);
+                }
+            }
+            for (int i = 0; i < this.aControlTasks.size(); i++)
+            {
+                ControlTask aControlTask = (ControlTask) aControlTasks.elementAt(i);
+                Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, aControlTask.propvalue);
+            }
+            for (int i = 0; i < this.aImageUrlTasks.size(); i++)
+            {
+                ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.elementAt(i);
+                String sImageUrl = "";
+                if (AnyConverter.isInt(aImageUrlTask.oResource))
+                {
+                    sImageUrl = oUnoDialog.getWizardImageUrl(((Integer) aImageUrlTask.oResource).intValue(), ((Integer) aImageUrlTask.oHCResource).intValue());
+                }
+                else if (AnyConverter.isString(aImageUrlTask.oResource))
+                {
+                    sImageUrl = oUnoDialog.getImageUrl(((String) aImageUrlTask.oResource), ((String) aImageUrlTask.oHCResource));
+                }
+                if (!sImageUrl.equals(""))
+                {
+                    Helper.setUnoPropertyValue(aImageUrlTask.oModel, "ImageURL", sImageUrl);
+                }
+            }
+
         }
-        }
-        for (int i = 0; i < this.aControlTasks.size(); i++)
+        catch (RuntimeException re)
         {
-            ControlTask aControlTask = (ControlTask) aControlTasks.elementAt(i);
-            Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, aControlTask.propvalue);
+            re.printStackTrace(System.out);
+            throw re;
         }
-        for (int i = 0; i < this.aImageUrlTasks.size(); i++){
-            ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.elementAt(i);
-            String sImageUrl = "";
-            if (AnyConverter.isInt(aImageUrlTask.oResource))
-            {
-                sImageUrl = oUnoDialog.getWizardImageUrl(((Integer) aImageUrlTask.oResource).intValue(), ((Integer) aImageUrlTask.oHCResource).intValue());
-            }
-            else if (AnyConverter.isString(aImageUrlTask.oResource))
-            {
-                sImageUrl = oUnoDialog.getImageUrl(((String) aImageUrlTask.oResource), ((String) aImageUrlTask.oHCResource));
-            }
-            if (!sImageUrl.equals(""))
-            {
-                Helper.setUnoPropertyValue(aImageUrlTask.oModel, "ImageURL", sImageUrl);
-        }
-        }
-
-    } catch (RuntimeException re) {
-        re.printStackTrace(System.out);
-        throw re;
-    }}
-
-
-    public void windowHidden(EventObject arg0) {
     }
 
+    public void windowHidden(EventObject arg0)
+    {
+    }
 
-    public void disposing(EventObject arg0) {
+    public void disposing(EventObject arg0)
+    {
     }
 
     /**
@@ -155,13 +170,24 @@ public class PeerConfig implements XWindowListener{
     public void setAccessibleName(Object oAPIControl, String _saccessname)
     {
         XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
-        setPeerProperties(xControl, new String[] { "AccessibleName" }, new String[]{_saccessname});
+        setPeerProperties(xControl, new String[]
+                {
+                    "AccessibleName"
+                }, new String[]
+                {
+                    _saccessname
+                });
     }
-
 
     public void setAccessibleName(XControl _xControl, String _saccessname)
     {
-        setPeerProperties(_xControl, new String[] { "AccessibleName" }, new String[]{_saccessname});
+        setPeerProperties(_xControl, new String[]
+                {
+                    "AccessibleName"
+                }, new String[]
+                {
+                    _saccessname
+                });
     }
 
     /**
@@ -176,10 +202,9 @@ public class PeerConfig implements XWindowListener{
         setPeerProperties(xControl, _propnames, _propvalues);
     }
 
-
     public void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues)
     {
-        PeerTask  oPeerTask = new PeerTask(_xControl, propnames, propvalues);
+        PeerTask oPeerTask = new PeerTask(_xControl, propnames, propvalues);
         this.m_aPeerTasks.add(oPeerTask);
     }
 
@@ -190,7 +215,8 @@ public class PeerConfig implements XWindowListener{
      * @param _spropname
      * @param _propvalue
      */
-    public void setControlProperty(Object _ocontrolmodel, String _spropname, Object _propvalue){
+    public void setControlProperty(Object _ocontrolmodel, String _spropname, Object _propvalue)
+    {
         ControlTask oControlTask = new ControlTask(_ocontrolmodel, _spropname, _propvalue);
         this.aControlTasks.add(oControlTask);
     }
@@ -203,7 +229,8 @@ public class PeerConfig implements XWindowListener{
      * @param _nResId
      * @param _nhcResId
      */
-    public void setImageUrl(Object _ocontrolmodel, int _nResId, int _nhcResId){
+    public void setImageUrl(Object _ocontrolmodel, int _nResId, int _nhcResId)
+    {
         ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, new Integer(_nResId), new Integer(_nhcResId));
         this.aImageUrlTasks.add(oImageUrlTask);
     }
@@ -215,11 +242,11 @@ public class PeerConfig implements XWindowListener{
      * @param _sResourceUrl
      * @param _sHCResourceUrl
      */
-    public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl, String _sHCResourceUrl){
+    public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl, String _sHCResourceUrl)
+    {
         ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _sResourceUrl, _sHCResourceUrl);
         this.aImageUrlTasks.add(oImageUrlTask);
     }
-
 
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
@@ -229,11 +256,9 @@ public class PeerConfig implements XWindowListener{
      * @param _oResource
      * @param _oHCResource
      */
-    public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource){
+    public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource)
+    {
         ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _oResource, _oHCResource);
         this.aImageUrlTasks.add(oImageUrlTask);
     }
-
-
-
 }

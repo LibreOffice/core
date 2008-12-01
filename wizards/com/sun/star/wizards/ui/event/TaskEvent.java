@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui.event;
+ ************************************************************************/
+package com.sun.star.wizards.ui.event;
 
 import java.util.EventObject;
 
@@ -36,14 +37,14 @@ import java.util.EventObject;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class TaskEvent extends EventObject {
+public class TaskEvent extends EventObject
+{
 
     public static final int TASK_STARTED = 1;
     public static final int TASK_FINISHED = 2;
     public static final int TASK_STATUS_CHANGED = 3;
     public static final int SUBTASK_NAME_CHANGED = 4;
     public static final int TASK_FAILED = 5;
-
     private int type;
 
     /**
@@ -54,13 +55,14 @@ public class TaskEvent extends EventObject {
      * @param success_
      * @param failed_
      */
-    public TaskEvent(Task source, int type_) {
+    public TaskEvent(Task source, int type_)
+    {
         super(source);
         type = type_;
     }
 
-    public Task getTask() {
-        return (Task)getSource();
+    public Task getTask()
+    {
+        return (Task) getSource();
     }
-
 }

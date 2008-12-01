@@ -1,3 +1,34 @@
+/*
+ ************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: FaxWizardDialogImpl.java,v $
+ *
+ * $Revision: 1.10.36.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 package com.sun.star.wizards.fax;
 
 import java.util.Vector;
@@ -31,24 +62,25 @@ import com.sun.star.wizards.ui.event.*;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.document.MacroExecMode;
 
-public class FaxWizardDialogImpl extends FaxWizardDialog {
+public class FaxWizardDialogImpl extends FaxWizardDialog
+{
 
-protected void enterStep(int OldStep, int NewStep){}
-protected void leaveStep(int OldStep, int NewStep){}
+    protected void enterStep(int OldStep, int NewStep)
+    {
+    }
 
+    protected void leaveStep(int OldStep, int NewStep)
+    {
+    }
     static FaxDocument myFaxDoc;
     static boolean running;
-
     XTextDocument xTextDocument;
     PathSelection myPathSelection;
-
     CGFaxWizard myConfig;
     Vector mainDA = new Vector();
     Vector faxDA = new Vector();
-
     String[][] BusinessFiles;
     String[][] PrivateFiles;
-
     String sTemplatePath;
     String sUserTemplatePath;
     String sBitmapPath;
@@ -58,42 +90,52 @@ protected void leaveStep(int OldStep, int NewStep){}
     boolean bEditTemplate;
     boolean bSaveSuccess = false;
     private boolean filenameChanged = false;
-
     final static int RM_TYPESTYLE = 1;
     final static int RM_ELEMENTS = 2;
     final static int RM_SENDERRECEIVER = 3;
     final static int RM_FOOTER = 4;
     final static int RM_FINALSETTINGS = 5;
 
-    public FaxWizardDialogImpl(XMultiServiceFactory xmsf) {
+    public FaxWizardDialogImpl(XMultiServiceFactory xmsf)
+    {
         super(xmsf);
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         //only being called when starting wizard remotely
 
-            try {
-                String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
-                XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
-                FaxWizardDialogImpl lw = new FaxWizardDialogImpl(xLocMSF);
-                lw.startWizard(xLocMSF, null);
-            } catch (RuntimeException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (java.lang.Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        try
+        {
+            String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+            XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
+            FaxWizardDialogImpl lw = new FaxWizardDialogImpl(xLocMSF);
+            lw.startWizard(xLocMSF, null);
+        }
+        catch (RuntimeException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (java.lang.Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
-    public void startWizard(XMultiServiceFactory xMSF, Object[] CurPropertyValue) {
+    public void startWizard(XMultiServiceFactory xMSF, Object[] CurPropertyValue)
+    {
 
         running = true;
-        try {
+        try
+        {
             //Number of steps on WizardDialog:
             setMaxStep(5);
 
@@ -124,7 +166,10 @@ protected void leaveStep(int OldStep, int NewStep){}
             //update the dialog UI according to the loaded Configuration
             updateUI();
 
-            if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
+            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+            {
+                myPathSelection.initializePath();
+            }
 
             XWindow xContainerWindow = myFaxDoc.xFrame.getContainerWindow();
             XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
@@ -151,28 +196,33 @@ protected void leaveStep(int OldStep, int NewStep){}
             closeDocument();
             running = false;
 
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             removeTerminateListener();
             exception.printStackTrace(System.out);
-            running=false;
+            running = false;
             return;
         }
     }
 
-
-    public void cancelWizard() {
+    public void cancelWizard()
+    {
         xDialog.endExecute();
         running = false;
     }
 
-    public void finishWizard() {
-        switchToStep(getCurrentStep(),getMaxStep());
+    public void finishWizard()
+    {
+        switchToStep(getCurrentStep(), getMaxStep());
         myFaxDoc.setWizardTemplateDocInfo(resources.resFaxWizardDialog_title, resources.resTemplateDescription);
-        try {
+        try
+        {
             //myFaxDoc.xTextDocument.lockControllers();
             FileAccess fileAccess = new FileAccess(xMSF);
             sPath = myPathSelection.getSelectedPath();
-            if (sPath.equals("")) {
+            if (sPath.equals(""))
+            {
                 myPathSelection.triggerPathPicker();
                 sPath = myPathSelection.getSelectedPath();
             }
@@ -182,12 +232,17 @@ protected void leaveStep(int OldStep, int NewStep){}
             //it is coming from a saved session, check if the
             // file exists and warn the user.
             if (!filenameChanged)
-                if (fileAccess.exists(sPath, true)) {
+            {
+                if (fileAccess.exists(sPath, true))
+                {
 
                     int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resOverwriteWarning);
                     if (answer == 3) // user said: no, do not overwrite....
+                    {
                         return;
+                    }
                 }
+            }
             myFaxDoc.setWizardTemplateDocInfo(resources.resFaxWizardDialog_title, resources.resTemplateDescription);
             myFaxDoc.killEmptyUserFields();
             myFaxDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
@@ -196,7 +251,8 @@ protected void leaveStep(int OldStep, int NewStep){}
 
 
             bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
-            if (bSaveSuccess) {
+            if (bSaveSuccess)
+            {
                 saveConfiguration();
                 XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
                 PropertyValue loadValues[] = new PropertyValue[4];
@@ -204,18 +260,21 @@ protected void leaveStep(int OldStep, int NewStep){}
                 loadValues[0].Name = "AsTemplate";
                 loadValues[1] = new PropertyValue();
                 loadValues[1].Name = "MacroExecutionMode";
-                loadValues[1].Value = new Short (MacroExecMode.ALWAYS_EXECUTE);
+                loadValues[1].Value = new Short(MacroExecMode.ALWAYS_EXECUTE);
                 loadValues[2] = new PropertyValue();
                 loadValues[2].Name = "UpdateDocMode";
-                loadValues[2].Value = new Short (com.sun.star.document.UpdateDocMode.FULL_UPDATE);
+                loadValues[2].Value = new Short(com.sun.star.document.UpdateDocMode.FULL_UPDATE);
                 loadValues[3] = new PropertyValue();
                 loadValues[3].Name = "InteractionHandler";
                 loadValues[3].Value = xIH;
 
 
-                if (bEditTemplate) {
+                if (bEditTemplate)
+                {
                     loadValues[0].Value = Boolean.FALSE;
-                } else {
+                }
+                else
+                {
                     loadValues[0].Value = Boolean.TRUE;
                 }
                 Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", loadValues);
@@ -223,30 +282,40 @@ protected void leaveStep(int OldStep, int NewStep){}
                 XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
                 ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
                 myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.OPTIMAL));
-            } else {
+            }
+            else
+            {
                 //TODO: Error Handling
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
-        finally {
+        finally
+        {
             xDialog.endExecute();
             running = false;
         }
 
     }
 
-    public void closeDocument() {
-        try {
+    public void closeDocument()
+    {
+        try
+        {
             //xComponent.dispose();
             XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
             xCloseable.close(false);
-        } catch (CloseVetoException e) {
+        }
+        catch (CloseVetoException e)
+        {
             e.printStackTrace();
         }
     }
 
-    public void insertRoadmap() {
+    public void insertRoadmap()
+    {
         addRoadmap();
         int i = 0;
         i = insertRoadmapItem(0, true, resources.RoadmapLabels[RM_TYPESTYLE], RM_TYPESTYLE);
@@ -259,26 +328,33 @@ protected void leaveStep(int OldStep, int NewStep){}
         setCurrentRoadmapItemID((short) 1);
     }
 
-    private class myPathSelectionListener implements XPathSelectionListener {
-        public void validatePath() {
-            if (myPathSelection.usedPathPicker) {
+    private class myPathSelectionListener implements XPathSelectionListener
+    {
+
+        public void validatePath()
+        {
+            if (myPathSelection.usedPathPicker)
+            {
                 filenameChanged = true;
             }
             myPathSelection.usedPathPicker = false;
         }
     }
 
-    public void insertPathSelectionControl() {
+    public void insertPathSelectionControl()
+    {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 34 ), "HID:" + ( HID + 35 ));
+        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + (HID + 34), "HID:" + (HID + 35));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myFaxTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";
         myPathSelection.addSelectionListener(new myPathSelectionListener());
     }
 
-    private void insertIcons() {
-        try {
+    private void insertIcons()
+    {
+        try
+        {
             Object oGS = xMSF.createInstance("com.sun.star.graphic.GraphicProvider");
             XGraphicProvider xGraphicProvider = (XGraphicProvider) UnoRuntime.queryInterface(XGraphicProvider.class, oGS);
 
@@ -288,93 +364,122 @@ protected void leaveStep(int OldStep, int NewStep){}
             GraphicValues[0].Value = "private:resource/svx/imagelist/18000/18022";
             XGraphic xGraphic = xGraphicProvider.queryGraphic(GraphicValues);
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
 
-    private void updateUI() {
+    private void updateUI()
+    {
         UnoDataAware.updateUI(mainDA);
         UnoDataAware.updateUI(faxDA);
     }
 
-    private void initializePaths() {
-        try {
+    private void initializePaths()
+    {
+        try
+        {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
-        } catch (NoValidPathException e) {
+        }
+        catch (NoValidPathException e)
+        {
             e.printStackTrace();
         }
     }
 
-    public boolean initializeTemplates(XMultiServiceFactory xMSF) {
-            try {
-                String sFaxSubPath = "/wizard/fax";
-                sFaxPath = FileAccess.combinePaths(xMSF, sTemplatePath, sFaxSubPath);
-                sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
+    public boolean initializeTemplates(XMultiServiceFactory xMSF)
+    {
+        try
+        {
+            String sFaxSubPath = "/wizard/fax";
+            sFaxPath = FileAccess.combinePaths(xMSF, sTemplatePath, sFaxSubPath);
+            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
 
-                BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sFaxPath);
-                PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sFaxPath);
+            BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sFaxPath);
+            PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sFaxPath);
 
-                setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
-                setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
+            setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
+            setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
 
-                setControlProperty("lstBusinessStyle", "SelectedItems", new short[]{0});
-                setControlProperty("lstPrivateStyle", "SelectedItems", new short[]{0});
+            setControlProperty("lstBusinessStyle", "SelectedItems", new short[]
+                    {
+                        0
+                    });
+            setControlProperty("lstPrivateStyle", "SelectedItems", new short[]
+                    {
+                        0
+                    });
 
-                return true;
-            } catch (NoValidPathException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                return false;
-            }
+            return true;
+        }
+        catch (NoValidPathException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public void initializeElements() {
+    public void initializeElements()
+    {
         setControlProperty("chkUseLogo", "Enabled", new Boolean(myFaxDoc.hasElement("Company Logo")));
         setControlProperty("chkUseSubject", "Enabled", new Boolean(myFaxDoc.hasElement("Subject Line")));
         setControlProperty("chkUseDate", "Enabled", new Boolean(myFaxDoc.hasElement("Date")));
         myFaxDoc.updateDateFields();
     }
 
-    public void initializeSalutation() {
+    public void initializeSalutation()
+    {
         setControlProperty("lstSalutation", "StringItemList", resources.SalutationLabels);
     }
 
-    public void initializeGreeting() {
+    public void initializeGreeting()
+    {
         setControlProperty("lstGreeting", "StringItemList", resources.GreetingLabels);
     }
 
-    public void initializeCommunication() {
+    public void initializeCommunication()
+    {
         setControlProperty("lstCommunicationType", "StringItemList", resources.CommunicationLabels);
     }
 
-    private void setDefaultForGreetingAndSalutationAndCommunication() {
+    private void setDefaultForGreetingAndSalutationAndCommunication()
+    {
         XTextComponent xTextComponent;
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
-        if (xTextComponent.getText().equals("")) {
+        if (xTextComponent.getText().equals(""))
+        {
             xTextComponent.setText(resources.SalutationLabels[0]);
         }
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
-        if (xTextComponent.getText().equals("")) {
+        if (xTextComponent.getText().equals(""))
+        {
             xTextComponent.setText(resources.GreetingLabels[0]);
         }
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
-        if (xTextComponent.getText().equals("")) {
+        if (xTextComponent.getText().equals(""))
+        {
             xTextComponent.setText(resources.CommunicationLabels[0]);
         }
     }
 
-
-    public void initConfiguration() {
-        try {
+    public void initConfiguration()
+    {
+        try
+        {
             myConfig = new CGFaxWizard();
             Object root = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.Office.Writer/Wizards/Fax", false);
             myConfig.readConfiguration(root, "cp_");
-            mainDA.add(RadioDataAware.attachRadioButtons(myConfig, "cp_FaxType", new Object[] { optBusinessFax, optPrivateFax }, null, true));
+            mainDA.add(RadioDataAware.attachRadioButtons(myConfig, "cp_FaxType", new Object[]
+                    {
+                        optBusinessFax, optPrivateFax
+                    }, null, true));
             mainDA.add(UnoDataAware.attachListBox(myConfig.cp_BusinessFax, "cp_Style", lstBusinessStyle, null, true));
             mainDA.add(UnoDataAware.attachListBox(myConfig.cp_PrivateFax, "cp_Style", lstPrivateStyle, null, true));
 
@@ -390,49 +495,68 @@ protected void leaveStep(int OldStep, int NewStep){}
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_Salutation", lstSalutation, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_Greeting", lstGreeting, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_CommunicationType", lstCommunicationType, null, true));
-            faxDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_SenderAddressType", new Object[] { optSenderDefine, optSenderPlaceholder }, null, true));
+            faxDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_SenderAddressType", new Object[]
+                    {
+                        optSenderDefine, optSenderPlaceholder
+                    }, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderCompanyName", txtSenderName, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderStreet", txtSenderStreet, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderPostCode", txtSenderPostCode, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderState", txtSenderState, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderCity", txtSenderCity, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderFax", txtSenderFax, null, true));
-            faxDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_ReceiverAddressType", new Object[] { optReceiverDatabase, optReceiverPlaceholder }, null, true));
+            faxDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_ReceiverAddressType", new Object[]
+                    {
+                        optReceiverDatabase, optReceiverPlaceholder
+                    }, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_Footer", txtFooter, null, true));
             faxDA.add(UnoDataAware.attachCheckBox(cgl, "cp_FooterOnlySecondPage", chkFooterNextPages, null, true));
             faxDA.add(UnoDataAware.attachCheckBox(cgl, "cp_FooterPageNumbers", chkFooterPageNumbers, null, true));
-            faxDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_CreationType", new Object[] { optCreateFax, optMakeChanges }, null, true));
+            faxDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_CreationType", new Object[]
+                    {
+                        optCreateFax, optMakeChanges
+                    }, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_TemplateName", txtTemplateName, null, true));
             faxDA.add(UnoDataAware.attachEditControl(cgl, "cp_TemplatePath", myPathSelection.xSaveTextBox, null, true));
 
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace();
         }
 
     }
 
-    public void saveConfiguration() {
-        try {
+    public void saveConfiguration()
+    {
+        try
+        {
             Object root = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.Office.Writer/Wizards/Fax", true);
             myConfig.writeConfiguration(root, "cp_");
             Configuration.commit(root);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    public void setConfiguration() {
+    public void setConfiguration()
+    {
         //set correct Configuration tree:
-        if (optBusinessFax.getState())  {
+        if (optBusinessFax.getState())
+        {
             optBusinessFaxItemChanged();
         }
-        if (optPrivateFax.getState())  {
+        if (optPrivateFax.getState())
+        {
             optPrivateFaxItemChanged();
         }
     }
 
-    public void optBusinessFaxItemChanged() {
-        DataAware.setDataObject(faxDA,myConfig.cp_BusinessFax,true);
+    public void optBusinessFaxItemChanged()
+    {
+        DataAware.setDataObject(faxDA, myConfig.cp_BusinessFax, true);
         setControlProperty("lblBusinessStyle", "Enabled", Boolean.TRUE);
         setControlProperty("lstBusinessStyle", "Enabled", Boolean.TRUE);
         setControlProperty("lblPrivateStyle", "Enabled", Boolean.FALSE);
@@ -442,14 +566,16 @@ protected void leaveStep(int OldStep, int NewStep){}
         setPossibleFooter(true);
     }
 
-    public void lstBusinessStyleItemChanged() {
+    public void lstBusinessStyleItemChanged()
+    {
         xTextDocument = myFaxDoc.loadAsPreview(BusinessFiles[1][lstBusinessStyle.getSelectedItemPos()], false);
         initializeElements();
         setElements();
     }
 
-    public void optPrivateFaxItemChanged() {
-        DataAware.setDataObject(faxDA,myConfig.cp_PrivateFax,true);
+    public void optPrivateFaxItemChanged()
+    {
+        DataAware.setDataObject(faxDA, myConfig.cp_PrivateFax, true);
         setControlProperty("lblBusinessStyle", "Enabled", Boolean.FALSE);
         setControlProperty("lstBusinessStyle", "Enabled", Boolean.FALSE);
         setControlProperty("lblPrivateStyle", "Enabled", Boolean.TRUE);
@@ -459,20 +585,23 @@ protected void leaveStep(int OldStep, int NewStep){}
         setPossibleFooter(false);
     }
 
-    public void lstPrivateStyleItemChanged() {
+    public void lstPrivateStyleItemChanged()
+    {
         xTextDocument = myFaxDoc.loadAsPreview(PrivateFiles[1][lstPrivateStyle.getSelectedItemPos()], false);
         initializeElements();
         setElements();
     }
 
-    public void txtTemplateNameTextChanged() {
+    public void txtTemplateNameTextChanged()
+    {
         XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
         XDocumentInfo xDocInfo = xDocInfoSuppl.getDocumentInfo();
         String TitleName = txtTemplateName.getText();
         Helper.setUnoPropertyValue(xDocInfo, "Title", TitleName);
     }
 
-    public void optSenderPlaceholderItemChanged() {
+    public void optSenderPlaceholderItemChanged()
+    {
         setControlProperty("lblSenderName", "Enabled", Boolean.FALSE);
         setControlProperty("lblSenderStreet", "Enabled", Boolean.FALSE);
         setControlProperty("lblPostCodeCity", "Enabled", Boolean.FALSE);
@@ -486,7 +615,8 @@ protected void leaveStep(int OldStep, int NewStep){}
         myFaxDoc.fillSenderWithUserData();
     }
 
-    public void optSenderDefineItemChanged() {
+    public void optSenderDefineItemChanged()
+    {
         setControlProperty("lblSenderName", "Enabled", Boolean.TRUE);
         setControlProperty("lblSenderStreet", "Enabled", Boolean.TRUE);
         setControlProperty("lblPostCodeCity", "Enabled", Boolean.TRUE);
@@ -505,58 +635,73 @@ protected void leaveStep(int OldStep, int NewStep){}
         txtSenderFaxTextChanged();
     }
 
-    public void optReceiverPlaceholderItemChanged() {
+    public void optReceiverPlaceholderItemChanged()
+    {
         OfficeDocument.attachEventCall(xTextDocument, "OnNew", "StarBasic", "macro:///Template.Correspondence.Placeholder()");
     }
 
-    public void optReceiverDatabaseItemChanged() {
+    public void optReceiverDatabaseItemChanged()
+    {
         OfficeDocument.attachEventCall(xTextDocument, "OnNew", "StarBasic", "macro:///Template.Correspondence.Database()");
     }
 
-    public void optCreateFaxItemChanged() {
+    public void optCreateFaxItemChanged()
+    {
         bEditTemplate = false;
     }
 
-    public void optMakeChangesItemChanged() {
+    public void optMakeChangesItemChanged()
+    {
         bEditTemplate = true;
     }
 
-    public void txtSenderNameTextChanged() {
+    public void txtSenderNameTextChanged()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("Company", txtSenderName.getText());
     }
 
-    public void txtSenderStreetTextChanged() {
+    public void txtSenderStreetTextChanged()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("Street", txtSenderStreet.getText());
     }
 
-    public void txtSenderCityTextChanged() {
+    public void txtSenderCityTextChanged()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("City", txtSenderCity.getText());
     }
 
-    public void txtSenderPostCodeTextChanged() {
+    public void txtSenderPostCodeTextChanged()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("PostCode", txtSenderPostCode.getText());
     }
 
-    public void txtSenderStateTextChanged() {
+    public void txtSenderStateTextChanged()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("State", txtSenderState.getText());
     }
 
-    public void txtSenderFaxTextChanged() {
+    public void txtSenderFaxTextChanged()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("Fax", txtSenderFax.getText());
     }
-
-
     //switch Elements on/off -------------------------------------------------------
-    public void setElements() {
+    public void setElements()
+    {
         //UI relevant:
-        if (optSenderDefine.getState())  {optSenderDefineItemChanged();}
-        if (optSenderPlaceholder.getState())  {optSenderPlaceholderItemChanged();}
+        if (optSenderDefine.getState())
+        {
+            optSenderDefineItemChanged();
+        }
+        if (optSenderPlaceholder.getState())
+        {
+            optSenderPlaceholderItemChanged();
+        }
         chkUseLogoItemChanged();
         chkUseSubjectItemChanged();
         chkUseSalutationItemChanged();
@@ -567,39 +712,61 @@ protected void leaveStep(int OldStep, int NewStep){}
         txtTemplateNameTextChanged();
 
         //not UI relevant:
-        if (optReceiverDatabase.getState())  {optReceiverDatabaseItemChanged();}
-        if (optReceiverPlaceholder.getState())  {optReceiverPlaceholderItemChanged();}
-        if (optCreateFax.getState())  {optCreateFaxItemChanged();}
-        if (optMakeChanges.getState())  {optMakeChangesItemChanged();}
+        if (optReceiverDatabase.getState())
+        {
+            optReceiverDatabaseItemChanged();
+        }
+        if (optReceiverPlaceholder.getState())
+        {
+            optReceiverPlaceholderItemChanged();
+        }
+        if (optCreateFax.getState())
+        {
+            optCreateFaxItemChanged();
+        }
+        if (optMakeChanges.getState())
+        {
+            optMakeChangesItemChanged();
+        }
     }
 
-
-    public void chkUseLogoItemChanged() {
-        if (myFaxDoc.hasElement("Company Logo")) {
+    public void chkUseLogoItemChanged()
+    {
+        if (myFaxDoc.hasElement("Company Logo"))
+        {
             myFaxDoc.switchElement("Company Logo", (chkUseLogo.getState() != 0));
         }
     }
 
-    public void chkUseSubjectItemChanged() {
-        if (myFaxDoc.hasElement("Subject Line")) {
+    public void chkUseSubjectItemChanged()
+    {
+        if (myFaxDoc.hasElement("Subject Line"))
+        {
             myFaxDoc.switchElement("Subject Line", (chkUseSubject.getState() != 0));
         }
     }
 
-    public void chkUseDateItemChanged() {
-        if (myFaxDoc.hasElement("Date")) {
+    public void chkUseDateItemChanged()
+    {
+        if (myFaxDoc.hasElement("Date"))
+        {
             myFaxDoc.switchElement("Date", (chkUseDate.getState() != 0));
         }
     }
 
-    public void chkUseFooterItemChanged() {
-        try {
+    public void chkUseFooterItemChanged()
+    {
+        try
+        {
             boolean bFooterPossible = (chkUseFooter.getState() != 0) && AnyConverter.toBoolean(getControlProperty("chkUseFooter", "Enabled"));
 
-            if (chkFooterNextPages.getState() != 0) {
-                myFaxDoc.switchFooter("First Page", false, (chkFooterPageNumbers.getState() != 0),txtFooter.getText());
+            if (chkFooterNextPages.getState() != 0)
+            {
+                myFaxDoc.switchFooter("First Page", false, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
                 myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
-            } else {
+            }
+            else
+            {
                 myFaxDoc.switchFooter("First Page", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
                 myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
@@ -608,85 +775,100 @@ protected void leaveStep(int OldStep, int NewStep){}
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
             Helper.setUnoPropertyValue(BPaperItem, "Enabled", new Boolean(bFooterPossible));
 
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void chkFooterNextPagesItemChanged() {
+    public void chkFooterNextPagesItemChanged()
+    {
         chkUseFooterItemChanged();
     }
 
-    public void chkFooterPageNumbersItemChanged() {
+    public void chkFooterPageNumbersItemChanged()
+    {
         chkUseFooterItemChanged();
     }
 
-    public void txtFooterTextChanged() {
+    public void txtFooterTextChanged()
+    {
         chkUseFooterItemChanged();
     }
 
-    public void chkUseSalutationItemChanged() {
+    public void chkUseSalutationItemChanged()
+    {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myFaxDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
         setControlProperty("lstSalutation", "Enabled", new Boolean(chkUseSalutation.getState() != 0));
     }
 
-    public void lstSalutationItemChanged() {
+    public void lstSalutationItemChanged()
+    {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myFaxDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
     }
 
-    public void lstSalutationTextChanged() {
+    public void lstSalutationTextChanged()
+    {
     }
 
-    public void chkUseCommunicationItemChanged() {
+    public void chkUseCommunicationItemChanged()
+    {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
         myFaxDoc.switchUserField("CommunicationType", xTextComponent.getText(), (chkUseCommunicationType.getState() != 0));
         setControlProperty("lstCommunicationType", "Enabled", new Boolean(chkUseCommunicationType.getState() != 0));
     }
 
-    public void lstCommunicationItemChanged() {
+    public void lstCommunicationItemChanged()
+    {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
         myFaxDoc.switchUserField("CommunicationType", xTextComponent.getText(), (chkUseCommunicationType.getState() != 0));
     }
 
-    public void lstCommunicationTextChanged() {
+    public void lstCommunicationTextChanged()
+    {
     }
 
-    public void chkUseGreetingItemChanged() {
+    public void chkUseGreetingItemChanged()
+    {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myFaxDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
         setControlProperty("lstGreeting", "Enabled", new Boolean(chkUseGreeting.getState() != 0));
     }
 
-    public void lstGreetingItemChanged() {
+    public void lstGreetingItemChanged()
+    {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myFaxDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
     }
 
-    public void lstGreetingTextChanged() {
+    public void lstGreetingTextChanged()
+    {
     }
 
-    private void setPossibleFooter(boolean bState) {
+    private void setPossibleFooter(boolean bState)
+    {
         setControlProperty("chkUseFooter", "Enabled", new Boolean(bState));
-        if (!bState) {
+        if (!bState)
+        {
             chkUseFooter.setState((short) 0);
         }
         chkUseFooterItemChanged();
     }
 
-    private void enableSenderReceiver() {
+    private void enableSenderReceiver()
+    {
         XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
         Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.TRUE);
     }
 
-    private void disableSenderReceiver() {
+    private void disableSenderReceiver()
+    {
         XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
         Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.FALSE);
     }
-
-
-
 }
 
 

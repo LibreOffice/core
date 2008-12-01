@@ -35,6 +35,8 @@ package com.sun.star.wizards.common;
  * Can be used to reference resources, internationalizartion
  * a.s.o
  */
-public interface Renderer {
+public interface Renderer
+{
+
     public String render(Object object);
 }

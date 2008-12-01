@@ -26,24 +26,32 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
-public class CGStyle       extends ConfigSetItem {
-    public String          cp_Name;
+public class CGStyle extends ConfigSetItem
+{
+
+    public String cp_Name;
     //public boolean         cp_Readonly;
-    public String          cp_CssHref;
-    public String          cp_BackgroundImage;
-    public String          cp_IconSet;
+    public String cp_CssHref;
+    public String cp_BackgroundImage;
+    public String cp_IconSet;
 
-    public String toString() {
+    public String toString()
+    {
         return cp_Name;
     }
 
-    public String getBackgroundUrl() {
+    public String getBackgroundUrl()
+    {
         if (cp_BackgroundImage == null || cp_BackgroundImage.equals(""))
-          return null;
+        {
+            return null;
+        }
         else
-          return cp_BackgroundImage;
+        {
+            return cp_BackgroundImage;
+        }
     }
-
 }

@@ -34,22 +34,18 @@ package com.sun.star.wizards.web;
  * Error IDs for errors that can accure
  * in the interaction with the Process class.
  */
-public interface ProcessErrors {
+public interface ProcessErrors
+{
 
     public final static int ERROR_MKDIR = 0;
-
     public final static int ERROR_EXPORT = 1;
     public final static int ERROR_EXPORT_MKDIR = 2;
     public final static int ERROR_DOC_VALIDATE = 3;
     public final static int ERROR_EXPORT_IO = 4;
     public final static int ERROR_EXPORT_SECURITY = 5;
-
     public final static int ERROR_GENERATE_XSLT = 6;
     public final static int ERROR_GENERATE_COPY = 7;
-
     public final static int ERROR_PUBLISH = 8;
     public final static int ERROR_PUBLISH_MEDIA = 9;
-
     public final static int ERROR_CLEANUP = 10;
-
 }

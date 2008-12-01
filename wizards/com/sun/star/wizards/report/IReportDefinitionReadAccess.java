@@ -9,7 +9,7 @@
  *
  * $RCSfile: IReportDefinitionReadAccess.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,7 @@
  * for a copy of the LGPLv3 License.
  *
  ***********************************************************************
-  */
-
+ */
 package com.sun.star.wizards.report;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -44,11 +43,13 @@ import com.sun.star.report.XReportDefinition;
  */
 public interface IReportDefinitionReadAccess
 {
+
     /**
      * Gives access to a ReportDefinition, if initialized.
      * @return a ReportDefinition or null.
      */
     public XReportDefinition getReportDefinition(); /* should throw NullPointerException but does not. */
+
 
     /**
      * This ServiceFactory is the 'global' Service Factory, which knows all and every thing in the program.

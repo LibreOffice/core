@@ -26,9 +26,12 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
-public class CGIconSet extends ConfigSetItem {
+public class CGIconSet extends ConfigSetItem
+{
+
     public String cp_FNPrefix;
     public String cp_FNPostfix;
     public String cp_Name;

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.23.84.2 $
 #
 # This file is part of OpenOffice.org.
 #

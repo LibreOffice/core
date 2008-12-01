@@ -26,13 +26,16 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.db;
+ ************************************************************************/
+package com.sun.star.wizards.db;
 
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.JavaTools;
 
-public class CommandName{
+public class CommandName
+{
+
     protected CommandMetaData oCommandMetaData;
     protected String CatalogName = "";
     protected String SchemaName = "";
@@ -45,165 +48,223 @@ public class CommandName{
     protected String sIdentifierQuote;
     protected boolean baddQuotation = true;
 
-
-    public CommandName(CommandMetaData _CommandMetaData, String _DisplayName){
+    public CommandName(CommandMetaData _CommandMetaData, String _DisplayName)
+    {
         oCommandMetaData = _CommandMetaData;
         setComposedCommandName(_DisplayName);
     }
 
-
-    public CommandName(CommandMetaData _CommandMetaData, String _CatalogName, String _SchemaName, String _TableName, boolean _baddQuotation){
-    try {
-        baddQuotation = _baddQuotation;
-        oCommandMetaData = _CommandMetaData;
-        if ((_CatalogName != null) && (oCommandMetaData.xDBMetaData.supportsCatalogsInTableDefinitions())){
-            if (!_CatalogName.equals("")){
-                CatalogName = _CatalogName;
-            }
-        }
-        if ((_SchemaName != null) && (oCommandMetaData.xDBMetaData.supportsSchemasInTableDefinitions())){
-            if (!_SchemaName.equals("")){
-                SchemaName = _SchemaName;
-            }
-        }
-        if (_TableName != null){
-            if (!_TableName.equals("")){
-                TableName = _TableName;
-            }
-        }
-        setComposedCommandName();
-    } catch (SQLException e) {
-        e.printStackTrace(System.out);
-    }}
-
-
-    private void setComposedCommandName(String _DisplayName) {
-    try{
-        if (this.setMetaDataAttributes()){
-            this.DisplayName = _DisplayName;
-            int iIndex;
-            if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true) { // ...dann Catalog mit in TableName
-                iIndex = _DisplayName.indexOf(sCatalogSep);
-                if (iIndex >= 0) {
-                    if (bCatalogAtStart == true) {
-                        CatalogName = _DisplayName.substring(0, iIndex);
-                        _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
-                    } else {
-                        CatalogName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
-                        _DisplayName = _DisplayName.substring(0, iIndex);
-                    }
+    public CommandName(CommandMetaData _CommandMetaData, String _CatalogName, String _SchemaName, String _TableName, boolean _baddQuotation)
+    {
+        try
+        {
+            baddQuotation = _baddQuotation;
+            oCommandMetaData = _CommandMetaData;
+            if ((_CatalogName != null) && (oCommandMetaData.xDBMetaData.supportsCatalogsInTableDefinitions()))
+            {
+                if (!_CatalogName.equals(""))
+                {
+                    CatalogName = _CatalogName;
                 }
             }
-            if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true) {
-                String[] NameList;
-                NameList = new String[0];
-                NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
-                SchemaName = NameList[0];
-                TableName = NameList[1]; // TODO Was ist mit diesem Fall: CatalogSep = "." und CatalogName = ""
-            } else
-                TableName = _DisplayName;
+            if ((_SchemaName != null) && (oCommandMetaData.xDBMetaData.supportsSchemasInTableDefinitions()))
+            {
+                if (!_SchemaName.equals(""))
+                {
+                    SchemaName = _SchemaName;
+                }
+            }
+            if (_TableName != null)
+            {
+                if (!_TableName.equals(""))
+                {
+                    TableName = _TableName;
+                }
+            }
             setComposedCommandName();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace(System.out);
+        }
     }
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-    }}
 
+    private void setComposedCommandName(String _DisplayName)
+    {
+        try
+        {
+            if (this.setMetaDataAttributes())
+            {
+                this.DisplayName = _DisplayName;
+                int iIndex;
+                if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true)
+                { // ...dann Catalog mit in TableName
+                    iIndex = _DisplayName.indexOf(sCatalogSep);
+                    if (iIndex >= 0)
+                    {
+                        if (bCatalogAtStart == true)
+                        {
+                            CatalogName = _DisplayName.substring(0, iIndex);
+                            _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
+                        }
+                        else
+                        {
+                            CatalogName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
+                            _DisplayName = _DisplayName.substring(0, iIndex);
+                        }
+                    }
+                }
+                if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true)
+                {
+                    String[] NameList;
+                    NameList = new String[0];
+                    NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
+                    SchemaName = NameList[0];
+                    TableName = NameList[1]; // TODO Was ist mit diesem Fall: CatalogSep = "." und CatalogName = ""
+                }
+                else
+                {
+                    TableName = _DisplayName;
+                }
+                setComposedCommandName();
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
 
-    public void setComposedCommandName() {
-        if (this.setMetaDataAttributes()){
-            if (CatalogName != null){
-                if (!CatalogName.equals("")){
-                    if (bCatalogAtStart == true){
+    public void setComposedCommandName()
+    {
+        if (this.setMetaDataAttributes())
+        {
+            if (CatalogName != null)
+            {
+                if (!CatalogName.equals(""))
+                {
+                    if (bCatalogAtStart == true)
+                    {
                         ComposedName = quoteName(CatalogName) + sCatalogSep;
                     }
                 }
             }
-            if (SchemaName != null){
+            if (SchemaName != null)
+            {
                 if (!SchemaName.equals(""))
+                {
                     ComposedName += quoteName(SchemaName) + ".";
+                }
             }
-            if (ComposedName == "")
+            if (ComposedName.equals(""))
+            {
                 ComposedName = quoteName(TableName);
+            }
             else
+            {
                 ComposedName += quoteName(TableName);
-            if ((bCatalogAtStart == false) && (CatalogName != null)){
+            }
+            if ((bCatalogAtStart == false) && (CatalogName != null))
+            {
                 if (!CatalogName.equals(""))
+                {
                     ComposedName += sCatalogSep + quoteName(CatalogName);
+                }
             }
         }
     }
 
-
-    private boolean setMetaDataAttributes(){
-    try {
-        bCatalogAtStart = oCommandMetaData.xDBMetaData.isCatalogAtStart();
-        sCatalogSep = oCommandMetaData.xDBMetaData.getCatalogSeparator();
-        sIdentifierQuote = oCommandMetaData.xDBMetaData.getIdentifierQuoteString();
-        return true;
-    } catch (SQLException e) {
-        e.printStackTrace(System.out);
-        return false;
-    }}
-
-
-    public String quoteName(String _sName) {
-        if (baddQuotation)
-            return quoteName(_sName, this.oCommandMetaData.getIdentifierQuote());
-        else
-            return _sName;
+    private boolean setMetaDataAttributes()
+    {
+        try
+        {
+            bCatalogAtStart = oCommandMetaData.xDBMetaData.isCatalogAtStart();
+            sCatalogSep = oCommandMetaData.xDBMetaData.getCatalogSeparator();
+            sIdentifierQuote = oCommandMetaData.xDBMetaData.getIdentifierQuoteString();
+            return true;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace(System.out);
+            return false;
+        }
     }
 
+    public String quoteName(String _sName)
+    {
+        if (baddQuotation)
+        {
+            return quoteName(_sName, this.oCommandMetaData.getIdentifierQuote());
+        }
+        else
+        {
+            return _sName;
+        }
+    }
 
-    public static String quoteName(String sName, String _sIdentifierQuote) {
+    public static String quoteName(String sName, String _sIdentifierQuote)
+    {
         if (sName == null)
+        {
             sName = "";
+        }
         String ReturnQuote = "";
         ReturnQuote = _sIdentifierQuote + sName + _sIdentifierQuote;
         return ReturnQuote;
     }
 
-
-    public void setAliasName(String _AliasName){
+    public void setAliasName(String _AliasName)
+    {
         AliasName = _AliasName;
     }
 
-
-    public String getAliasName(){
+    public String getAliasName()
+    {
         return AliasName;
     }
 
     /**
      * @return Returns the catalogName.
      */
-    public String getCatalogName() {
+    public String getCatalogName()
+    {
         return CatalogName;
     }
+
     /**
      * @return Returns the composedName.
      */
-    public String getComposedName() {
+    public String getComposedName()
+    {
         return ComposedName;
     }
+
     /**
      * @return Returns the displayName.
      */
-    public String getDisplayName() {
+    public String getDisplayName()
+    {
         return DisplayName;
     }
+
     /**
      * @return Returns the schemaName.
      */
-    public String getSchemaName() {
+    public String getSchemaName()
+    {
         return SchemaName;
     }
+
     /**
      * @return Returns the tableName.
      */
-    public String getTableName() {
+    public String getTableName()
+    {
         return TableName;
     }
 
-    public CommandMetaData getCommandMetaData(){
+    public CommandMetaData getCommandMetaData()
+    {
         return oCommandMetaData;
     }
 }

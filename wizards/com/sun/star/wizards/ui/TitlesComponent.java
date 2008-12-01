@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+package com.sun.star.wizards.ui;
 
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
@@ -37,80 +38,111 @@ import com.sun.star.awt.XTextListener;
 
 import java.util.*;
 
-public class TitlesComponent extends ControlScroller{
+public class TitlesComponent extends ControlScroller
+{
+
     int iLabelPosX;
     final int iRelLabelPosXDist = 6;
     public String[] fieldnames;
     public Map fieldtitleset;
     public String[] fieldtitles;
     public XTextListener xTextListener;
-
     final String SOLABELPREFIX = "lblColumnName_";
     final String SOTITLEPREFIX = "lblTitleName_";
 
-
-    public TitlesComponent(WizardDialog _CurUnoDialog, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _uitextfieldcount, String _slblColumnNames, String _slblColumnTitles, int _firsthelpindex){
+    public TitlesComponent(WizardDialog _CurUnoDialog, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _uitextfieldcount, String _slblColumnNames, String _slblColumnTitles, int _firsthelpindex)
+    {
         super(_CurUnoDialog, null, _iStep, _iCompPosX, _iCompPosY, _iCompWidth, _uitextfieldcount, 18, _firsthelpindex);
-        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnNames", new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "Width" }, new Object[] { new Integer(8), _slblColumnNames, new Integer(iLabelPosX), new Integer(iCompPosY - 10), IStep, new Integer(60)});
-        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnTitles", new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "Width" }, new Object[] { new Integer(8), _slblColumnTitles, new Integer(90), new Integer(iCompPosY - 10), IStep, new Integer(152)});
+        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnNames", new String[]
+                {
+                    "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                }, new Object[]
+                {
+                    new Integer(8), _slblColumnNames, new Integer(iLabelPosX), new Integer(iCompPosY - 10), IStep, new Integer(60)
+                });
+        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnTitles", new String[]
+                {
+                    "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                }, new Object[]
+                {
+                    new Integer(8), _slblColumnTitles, new Integer(90), new Integer(iCompPosY - 10), IStep, new Integer(152)
+                });
     }
 
-    protected void insertControlGroup(int i, int ypos) {
+    protected void insertControlGroup(int i, int ypos)
+    {
         iLabelPosX = iCompPosX + iRelLabelPosXDist;
         ControlRow oControlRow = new ControlRow(i, ypos);
         ControlGroupVector.addElement(oControlRow);
 
     }
 
-
-    protected void setControlGroupVisible(int _index, boolean _bIsVisible){
+    protected void setControlGroupVisible(int _index, boolean _bIsVisible)
+    {
         CurUnoDialog.setControlVisible(getColumnName(_index), _bIsVisible);
         CurUnoDialog.setControlVisible(getTitleName(_index), _bIsVisible);
     }
 
-
-    public void addTextListener(XTextListener _xTextListener){
-        for (int i = 0; i < super.ControlGroupVector.size(); i++){
+    public void addTextListener(XTextListener _xTextListener)
+    {
+        for (int i = 0; i < super.ControlGroupVector.size(); i++)
+        {
             ControlRow curControlRow = (ControlRow) ControlGroupVector.elementAt(i);
             XTextComponent xTextBox = curControlRow.xTextComponent;
             if ((xTextBox != null) && (_xTextListener != null))
+            {
                 xTextBox.addTextListener(_xTextListener);
+            }
         }
     }
 
+    class ControlRow
+    {
 
-
-    class ControlRow {
         PropertyValue[] regproperties;
         XTextComponent xTextComponent;
 
-        public ControlRow(int _index, int _iCompPosY) {
+        public ControlRow(int _index, int _iCompPosY)
+        {
             String slabelname = getColumnName(_index);
             String stextfieldname = getTitleName(_index);
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", slabelname,
-                new String[] { "Height", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                new Object[] { new Integer(16), new Boolean(true), new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(30)});
+                    new String[]
+                    {
+                        "Height", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(16), new Boolean(true), new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(30)
+                    });
 
             xTextComponent = CurUnoDialog.insertTextField(stextfieldname, 0, null,
-                new String[] { "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                new Object[] { new Integer(12), "HID:" + curHelpIndex++, new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)});
+                    new String[]
+                    {
+                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(12), "HID:" + curHelpIndex++, new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)
+                    });
         }
     }
 
-
-    private String getColumnName(int _index) {
+    private String getColumnName(int _index)
+    {
         return SOLABELPREFIX + Integer.toString(_index + 1);
     }
 
-
-    private String getTitleName(int _index) {
+    private String getTitleName(int _index)
+    {
         return SOTITLEPREFIX + Integer.toString(_index + 1);
     }
 
-
-    protected void initializeScrollFields() {
-        for (int i = 0; i < fieldnames.length; i++) {
+    protected void initializeScrollFields()
+    {
+        for (int i = 0; i < fieldnames.length; i++)
+        {
             PropertyValue[] currowproperties = new PropertyValue[2];
             currowproperties[0] = Properties.createProperty(getColumnName(i), fieldnames[i], i);
             currowproperties[1] = Properties.createProperty(getTitleName(i), fieldtitles[i], i); //getTitleName(i)
@@ -118,8 +150,8 @@ public class TitlesComponent extends ControlScroller{
         }
     }
 
-
-    private void adjustPosSizes() {
+    private void adjustPosSizes()
+    {
         String sLongestFieldName = JavaTools.getlongestArrayItem(fieldnames);
         Size aSize = CurUnoDialog.getpreferredLabelSize(getColumnName(0), sLongestFieldName);
         double dblMAPConversion = CurUnoDialog.getMAPConversionFactor(getColumnName(0));
@@ -127,16 +159,23 @@ public class TitlesComponent extends ControlScroller{
         Integer FieldNameWidth = new Integer(iFieldNameWidth);
         Integer TitlePosX = new Integer(iLabelPosX + iFieldNameWidth + 2);
         Integer TitleWidth = new Integer(iCompPosX + iCompWidth - TitlePosX.intValue() - iScrollBarWidth - 6);
-        for (short i = 0; i <= ncurfieldcount; i++) {
+        for (short i = 0; i <= ncurfieldcount; i++)
+        {
             CurUnoDialog.setControlProperty(getColumnName(i), "Width", FieldNameWidth);
-            CurUnoDialog.setControlProperties(getTitleName(i), new String[] { "PositionX", "Width" }, new Object[] { TitlePosX, TitleWidth });
+            CurUnoDialog.setControlProperties(getTitleName(i), new String[]
+                    {
+                        "PositionX", "Width"
+                    }, new Object[]
+                    {
+                        TitlePosX, TitleWidth
+                    });
         }
         CurUnoDialog.setControlProperty("lblColumnNames", "Width", FieldNameWidth);
         CurUnoDialog.setControlProperty("lblColumnTitles", "PositionX", TitlePosX);
     }
 
-
-    public void initialize(String[] _fieldnames, Map _fieldtitleset) {
+    public void initialize(String[] _fieldnames, Map _fieldtitleset)
+    {
         this.fieldnames = _fieldnames;
         this.fieldtitleset = _fieldtitleset;
         setFieldTitles();
@@ -146,36 +185,44 @@ public class TitlesComponent extends ControlScroller{
 //      setComponentMouseTransparent();
     }
 
-
-    private void setFieldTitles() {
+    private void setFieldTitles()
+    {
         fieldtitles = new String[fieldnames.length];
-        for (int i = 0; i < fieldnames.length; i++) {
-            if (this.fieldtitleset.containsKey(fieldnames[i])) {
+        for (int i = 0; i < fieldnames.length; i++)
+        {
+            if (this.fieldtitleset.containsKey(fieldnames[i]))
+            {
                 Object curvalue = fieldtitleset.get(fieldnames[i]);
                 if (curvalue != null)
+                {
                     fieldtitles[i] = (String) curvalue;
+                }
                 else
+                {
                     fieldtitles[i] = fieldnames[i];
+                }
             }
-            else{
+            else
+            {
                 fieldtitles[i] = fieldnames[i];
             }
         }
     }
 
-
-    public String getFieldNameByTitleControl(Object _fieldtitlemodel){
+    public String getFieldNameByTitleControl(Object _fieldtitlemodel)
+    {
         String sTitleModelName = (String) Helper.getUnoPropertyValue(_fieldtitlemodel, "Name");
         String sindex = JavaTools.getSuffixNumber(sTitleModelName);
         return (String) CurUnoDialog.getControlProperty(this.SOLABELPREFIX + sindex, "Label");
     }
 
-
-    public String[] getFieldTitles(){
+    public String[] getFieldTitles()
+    {
         PropertyValue[][] titlelist = this.getScrollFieldValues();
         PropertyValue[] currowproperties;
         PropertyValue curtitleproperty;
-        for (int i = 0; i < titlelist.length; i++) {
+        for (int i = 0; i < titlelist.length; i++)
+        {
             currowproperties = titlelist[i];
             curtitleproperty = currowproperties[1];
             fieldtitles[i] = (String) curtitleproperty.Value;
@@ -184,18 +231,22 @@ public class TitlesComponent extends ControlScroller{
         return fieldtitles;
     }
 
-
-    private void refreshtitleset() {
+    private void refreshtitleset()
+    {
         for (int i = 0; i < fieldnames.length; i++)
+        {
             fieldtitleset.put(fieldnames[i], fieldtitles[i]);
+        }
     }
 
-
-    private int getFieldNameWidth(int iMAPControlWidth, double dblMAPConversion) {
+    private int getFieldNameWidth(int iMAPControlWidth, double dblMAPConversion)
+    {
         int iFieldNameWidth = (int) (1.15 * ((double) (iMAPControlWidth)) / dblMAPConversion);
         double dblAvailableWidth = (double) (iCompWidth - iScrollBarWidth - iRelLabelPosXDist);
         if (iFieldNameWidth > (0.5 * (dblAvailableWidth)))
+        {
             iFieldNameWidth = (int) (0.5 * (dblAvailableWidth));
+        }
         return iFieldNameWidth;
     }
 }

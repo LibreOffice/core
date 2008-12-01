@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.XPropertySet;
@@ -61,7 +60,8 @@ import com.sun.star.util.DateTime;
  * conveneince methods for using them.
  * These Convenince methods include mainly Exception-handling.
  */
-public class FileAccess {
+public class FileAccess
+{
 
     /**
      *
@@ -69,7 +69,8 @@ public class FileAccess {
      * @param sPath
      * @param sAddPath
      */
-    public static void addOfficePath(XMultiServiceFactory xMSF, String sPath, String sAddPath) {
+    public static void addOfficePath(XMultiServiceFactory xMSF, String sPath, String sAddPath)
+    {
         XSimpleFileAccess xSimpleFileAccess = null;
         String ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess);
         // As there are several conventions about the look of Url  (e.g. with " " or with "%20") you cannot make a
@@ -82,10 +83,12 @@ public class FileAccess {
         //  sAddPath.replace(null, (char) 47);
         String CompAddPath = JavaTools.replaceSubString(sAddPath, "", "/");
         String CurPath;
-        for (int i = 0; i <= MaxIndex; i++) {
+        for (int i = 0; i <= MaxIndex; i++)
+        {
             CurPath = JavaTools.convertfromURLNotation(PathList[i]);
             CompCurPath = JavaTools.replaceSubString(CurPath, "", "/");
-            if (CompCurPath.equals(CompAddPath)) {
+            if (CompCurPath.equals(CompAddPath))
+            {
                 return;
             }
         }
@@ -93,10 +96,11 @@ public class FileAccess {
         return;
     }
 
-    public static String deleteLastSlashfromUrl(String _sPath){
+    public static String deleteLastSlashfromUrl(String _sPath)
+    {
         if (_sPath.endsWith("/"))
         {
-            return _sPath.substring(0, _sPath.length()-1);
+            return _sPath.substring(0, _sPath.length() - 1);
         }
         else
         {
@@ -104,79 +108,89 @@ public class FileAccess {
         }
     }
 
-
     /**
-        * Further information on arguments value see in OO Developer Guide,
-        * chapter 6.2.7
-    * @param xMSF
-        * @param sPath
-        * @param xSimpleFileAccess
-        * @return the respective path of the office application. A probable following "/" at the end is trimmed.
-        */
-    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, XSimpleFileAccess xSimpleFileAccess) {
-        try {
+     * Further information on arguments value see in OO Developer Guide,
+     * chapter 6.2.7
+     * @param xMSF
+     * @param sPath
+     * @param xSimpleFileAccess
+     * @return the respective path of the office application. A probable following "/" at the end is trimmed.
+     */
+    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, XSimpleFileAccess xSimpleFileAccess)
+    {
+        try
+        {
             String ResultPath = "";
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
             ResultPath = com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xInterface, sPath));
             ResultPath = deleteLastSlashfromUrl(ResultPath);
             return ResultPath;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return "";
         }
     }
 
-
     /**
-    * Further information on arguments value see in OO Developer Guide,
-    * chapter 6.2.7
-    * @param sType use "share" or "user". Set to "" if not needed eg for the WorkPath;
-    * In the return Officepath a possible slash at the end is cut off
-    */
-
-    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType, String sSearchDir) throws NoValidPathException {
+     * Further information on arguments value see in OO Developer Guide,
+     * chapter 6.2.7
+     * @param sType use "share" or "user". Set to "" if not needed eg for the WorkPath;
+     * In the return Officepath a possible slash at the end is cut off
+     */
+    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType, String sSearchDir) throws NoValidPathException
+    {
         //This method currently only works with sPath="Template"
 
         String ResultPath = "";
 
         String Template_writable = "";
-        String [] Template_internal;
-        String [] Template_user;
+        String[] Template_internal;
+        String[] Template_user;
 
         boolean bexists = false;
-        try {
+        try
+        {
             XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
             XPropertySet xPropertySet = (XPropertySet) com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
             String WritePath = "";
-            String [] ReadPaths = null;
+            String[] ReadPaths = null;
             XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
 
-            Template_writable = (String) xPropertySet.getPropertyValue(sPath+"_writable");
-            Template_internal = (String []) xPropertySet.getPropertyValue(sPath+"_internal");
-            Template_user = (String []) xPropertySet.getPropertyValue(sPath+"_user");
+            Template_writable = (String) xPropertySet.getPropertyValue(sPath + "_writable");
+            Template_internal = (String[]) xPropertySet.getPropertyValue(sPath + "_internal");
+            Template_user = (String[]) xPropertySet.getPropertyValue(sPath + "_user");
             int iNumEntries = Template_user.length + Template_internal.length + 1;
             ReadPaths = new String[iNumEntries];
-            int t=0;
-            for (int i=0; i<Template_internal.length; i++) {
+            int t = 0;
+            for (int i = 0; i < Template_internal.length; i++)
+            {
                 ReadPaths[t] = Template_internal[i];
                 t++;
             }
-            for (int i=0; i<Template_user.length; i++) {
+            for (int i = 0; i < Template_user.length; i++)
+            {
                 ReadPaths[t] = Template_user[i];
                 t++;
             }
             ReadPaths[t] = Template_writable;
             WritePath = Template_writable;
 
-            if (sType.equalsIgnoreCase("user")) {
+            if (sType.equalsIgnoreCase("user"))
+            {
                 ResultPath = WritePath;
                 bexists = true;
-            } else {
+            }
+            else
+            {
                 //find right path using the search sub path
-                for (int i = 0; i<ReadPaths.length; i++) {
-                    String tmpPath = ReadPaths[i]+sSearchDir;
-                    if (xSimpleFileAccess.exists(tmpPath)) {
+                for (int i = 0; i < ReadPaths.length; i++)
+                {
+                    String tmpPath = ReadPaths[i] + sSearchDir;
+                    if (xSimpleFileAccess.exists(tmpPath))
+                    {
                         ResultPath = ReadPaths[i];
                         bexists = true;
                         break;
@@ -184,7 +198,9 @@ public class FileAccess {
                 }
             }
             ResultPath = deleteLastSlashfromUrl(ResultPath);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             ResultPath = "";
         }
@@ -195,19 +211,21 @@ public class FileAccess {
         return ResultPath;
     }
 
-    public static ArrayList getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir) throws NoValidPathException {
+    public static ArrayList getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir) throws NoValidPathException
+    {
         //This method currently only works with sPath="Template"
 
         // String ResultPath = "";
         ArrayList aPathList = new ArrayList();
         String Template_writable = "";
-        String [] Template_internal;
-        String [] Template_user;
+        String[] Template_internal;
+        String[] Template_user;
 
         // String [] ReadPaths = null;
 
         // boolean bexists = false;
-        try {
+        try
+        {
             XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
             XPropertySet xPropertySet = (XPropertySet) com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
             // String WritePath = "";
@@ -215,11 +233,11 @@ public class FileAccess {
             // XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
 
             Template_writable = (String) xPropertySet.getPropertyValue(_sPath + "_writable");
-            Template_internal = (String []) xPropertySet.getPropertyValue(_sPath + "_internal");
-            Template_user = (String []) xPropertySet.getPropertyValue(_sPath + "_user");
+            Template_internal = (String[]) xPropertySet.getPropertyValue(_sPath + "_internal");
+            Template_user = (String[]) xPropertySet.getPropertyValue(_sPath + "_user");
 
             // int iNumEntries = Template_user.length + Template_internal.length + 1;
-            for (int i=0; i<Template_internal.length; i++)
+            for (int i = 0; i < Template_internal.length; i++)
             {
                 String sPath = Template_internal[i];
                 if (sPath.startsWith("vnd."))
@@ -235,12 +253,12 @@ public class FileAccess {
 
                 aPathList.add(sPath);
             }
-            for (int i=0; i<Template_user.length; i++)
+            for (int i = 0; i < Template_user.length; i++)
             {
                 aPathList.add(Template_user[i]);
             }
             aPathList.add(Template_writable);
-            // WritePath = Template_writable;
+        // WritePath = Template_writable;
 
 //            if (sType.equalsIgnoreCase("user"))
 //            {
@@ -248,7 +266,7 @@ public class FileAccess {
 //                bexists = true;
 //            }
 
-            // There was a bug here, because we have to search through the whole list of paths
+        // There was a bug here, because we have to search through the whole list of paths
 //            else
 //            {
 //                //find right path using the search sub path
@@ -268,7 +286,7 @@ public class FileAccess {
         catch (Exception exception)
         {
             exception.printStackTrace(System.out);
-            // ResultPath = "";
+        // ResultPath = "";
         }
 //        if (bexists == false)
 //        {
@@ -283,7 +301,7 @@ public class FileAccess {
         try
         {
             Object defaults = _xMSF.createInstance("com.sun.star.text.Defaults");
-            Locale  aLocale = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
+            Locale aLocale = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
             if (aLocale == null)
             {
                 java.util.Locale.getDefault();
@@ -294,8 +312,8 @@ public class FileAccess {
             }
 
             String sLanguage = aLocale.Language;
-            String sCountry =  aLocale.Country;
-            String sVariant =  aLocale.Variant;
+            String sCountry = aLocale.Country;
+            String sVariant = aLocale.Variant;
 
             // de-DE-Bayrisch
             StringBuffer aLocaleAll = new StringBuffer();
@@ -342,8 +360,8 @@ public class FileAccess {
                 return sPath;
             }
 
-            // java.util.Locale jl = new java.util.Locale(
-            //        l.Language , l.Country, l.Variant );
+        // java.util.Locale jl = new java.util.Locale(
+        //        l.Language , l.Country, l.Variant );
         }
         catch (com.sun.star.uno.Exception e)
         {
@@ -354,52 +372,51 @@ public class FileAccess {
 
     /*
     public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType) throws NoValidPathException {
-        String ResultPath = "";
-        Object oPathSettings;
-        int iPathCount;
-        String[] PathList;
-        boolean bexists = false;
-        try {
-            XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-            ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess);
-            PathList = JavaTools.ArrayoutofString(ResultPath, ";");
-            if (!sType.equals("")) {
-                ResultPath = "";
-                String CurPath = "";
-                String EndString = "/" + sType;
-                int EndLength = EndString.length();
-                sType = "/" + sType + "/";
-                int MaxIndex = PathList.length - 1;
-                int iPos;
-                for (int i = 0; i <= MaxIndex; i++) {
-                    CurPath = PathList[i];
-                    iPos = CurPath.length() - EndLength;
-                    if ((CurPath.indexOf(sType) > 0) || (CurPath.indexOf(EndString) == iPos)) {
-                        ResultPath = deleteLastSlashfromUrl(CurPath);
-                        if (xSimpleFileAccess.exists(ResultPath))
-                                break;
-                    }
-                }
-            } else
-                ResultPath = PathList[0];
-            if (ResultPath.equals("") == false)
-                bexists = xSimpleFileAccess.exists(ResultPath);
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-            ResultPath = "";
-        }
-        if (bexists == false)
-            throw new NoValidPathException(xMSF);
-        return ResultPath;
+    String ResultPath = "";
+    Object oPathSettings;
+    int iPathCount;
+    String[] PathList;
+    boolean bexists = false;
+    try {
+    XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+    XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
+    ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess);
+    PathList = JavaTools.ArrayoutofString(ResultPath, ";");
+    if (!sType.equals("")) {
+    ResultPath = "";
+    String CurPath = "";
+    String EndString = "/" + sType;
+    int EndLength = EndString.length();
+    sType = "/" + sType + "/";
+    int MaxIndex = PathList.length - 1;
+    int iPos;
+    for (int i = 0; i <= MaxIndex; i++) {
+    CurPath = PathList[i];
+    iPos = CurPath.length() - EndLength;
+    if ((CurPath.indexOf(sType) > 0) || (CurPath.indexOf(EndString) == iPos)) {
+    ResultPath = deleteLastSlashfromUrl(CurPath);
+    if (xSimpleFileAccess.exists(ResultPath))
+    break;
+    }
+    }
+    } else
+    ResultPath = PathList[0];
+    if (ResultPath.equals("") == false)
+    bexists = xSimpleFileAccess.exists(ResultPath);
+    } catch (Exception exception) {
+    exception.printStackTrace(System.out);
+    ResultPath = "";
+    }
+    if (bexists == false)
+    throw new NoValidPathException(xMSF);
+    return ResultPath;
     }
      **/
-
     public static void combinePaths(XMultiServiceFactory xMSF, ArrayList _aFirstPath, String _sSecondPath) throws NoValidPathException
     {
-        for (int i=0;i<_aFirstPath.size();i++)
+        for (int i = 0; i < _aFirstPath.size(); i++)
         {
-            String sOnePath = (String)_aFirstPath.get(i);
+            String sOnePath = (String) _aFirstPath.get(i);
             sOnePath = addPath(sOnePath, _sSecondPath);
             if (isPathValid(xMSF, sOnePath))
             {
@@ -429,7 +446,8 @@ public class FileAccess {
         return bExists;
     }
 
-    public static String combinePaths(XMultiServiceFactory xMSF, String _sFirstPath, String _sSecondPath) throws NoValidPathException {
+    public static String combinePaths(XMultiServiceFactory xMSF, String _sFirstPath, String _sSecondPath) throws NoValidPathException
+    {
         boolean bexists = false;
         String ReturnPath = "";
         try
@@ -451,11 +469,14 @@ public class FileAccess {
         return ReturnPath;
     }
 
-    public static boolean createSubDirectory(XMultiServiceFactory xMSF, XSimpleFileAccess xSimpleFileAccess, String Path) {
+    public static boolean createSubDirectory(XMultiServiceFactory xMSF, XSimpleFileAccess xSimpleFileAccess, String Path)
+    {
         String sNoDirCreation = "";
-        try {
+        try
+        {
             Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
-            if (oResource != null) {
+            if (oResource != null)
+            {
                 sNoDirCreation = oResource.getResText(1050);
                 String sMsgDirNotThere = oResource.getResText(1051);
                 String sQueryForNewCreation = oResource.getResText(1052);
@@ -463,17 +484,22 @@ public class FileAccess {
                 String sQueryMessage = JavaTools.replaceSubString(sMsgDirNotThere, OSPath, "%1");
                 sQueryMessage = sQueryMessage + (char) 13 + sQueryForNewCreation;
                 int icreate = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.YES_NO, sQueryMessage);
-                if (icreate == 2) {
+                if (icreate == 2)
+                {
                     xSimpleFileAccess.createFolder(Path);
                     return true;
                 }
             }
             return false;
-        } catch (com.sun.star.ucb.CommandAbortedException exception) {
+        }
+        catch (com.sun.star.ucb.CommandAbortedException exception)
+        {
             String sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1");
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDir);
             return false;
-        } catch (com.sun.star.uno.Exception unoexception) {
+        }
+        catch (com.sun.star.uno.Exception unoexception)
+        {
             String sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1");
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDir);
             return false;
@@ -482,8 +508,10 @@ public class FileAccess {
 
     // checks if the root of a path exists. if the parameter xWindowPeer is not null then also the directory is
     // created when it does not exists and the user
-    public static boolean PathisValid(XMultiServiceFactory xMSF, String Path, String sMsgFilePathInvalid, boolean baskbeforeOverwrite) {
-        try {
+    public static boolean PathisValid(XMultiServiceFactory xMSF, String Path, String sMsgFilePathInvalid, boolean baskbeforeOverwrite)
+    {
+        try
+        {
             String SubDir;
             String SubDirPath = "";
             int SubLen;
@@ -495,8 +523,10 @@ public class FileAccess {
             String NewPath = Path;
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
-            if (baskbeforeOverwrite) {
-                if (xSimpleFileAccess.exists(Path)) {
+            if (baskbeforeOverwrite)
+            {
+                if (xSimpleFileAccess.exists(Path))
+                {
                     Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
                     String sFileexists = oResource.getResText(1053);
                     String NewString = JavaTools.convertfromURLNotation(Path);
@@ -511,25 +541,31 @@ public class FileAccess {
             }
             String[] DirArray = JavaTools.ArrayoutofString(Path, "/");
             int MaxIndex = DirArray.length - 1;
-            if (MaxIndex > 0) {
-                for (int i = MaxIndex; i >= 0; i--) {
+            if (MaxIndex > 0)
+            {
+                for (int i = MaxIndex; i >= 0; i--)
+                {
                     SubDir = DirArray[i];
                     SubLen = SubDir.length();
                     NewLen = NewPath.length();
                     RestLen = NewLen - SubLen;
-                    if (RestLen > 0) {
+                    if (RestLen > 0)
+                    {
                         NewPath = NewPath.substring(0, NewLen - SubLen - 1);
                         if (i == MaxIndex)
                         {
                             SubDirPath = NewPath;
                         }
                         bexists = xSimpleFileAccess.exists(NewPath);
-                        if (bexists) {
+                        if (bexists)
+                        {
                             LowerCasePath = NewPath.toLowerCase();
                             bexists = (((LowerCasePath.equals("file:///")) || (LowerCasePath.equals("file://")) || (LowerCasePath.equals("file:/")) || (LowerCasePath.equals("file:"))) == false);
                         }
-                        if (bexists) {
-                            if (bSubDirexists == false) {
+                        if (bexists)
+                        {
+                            if (bSubDirexists == false)
+                            {
                                 boolean bSubDiriscreated = createSubDirectory(xMSF, xSimpleFileAccess, SubDirPath);
                                 return bSubDiriscreated;
                             }
@@ -544,7 +580,9 @@ public class FileAccess {
             }
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid);
             return false;
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid);
             return false;
@@ -561,10 +599,11 @@ public class FileAccess {
      * the second with the corresponding URLs.
      * @deprecated please use the getFolderTitles() with ArrayList
      */
-
-        public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName) {
+    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName)
+    {
         String[][] LocLayoutFiles = new String[2][]; //{"",""}{""};
-        try {
+        try
+        {
             java.util.Vector TitleVector = null;
             java.util.Vector NameVector = null;
 
@@ -582,10 +621,12 @@ public class FileAccess {
             FilterName = FilterName == null || FilterName.equals("") ? null : FilterName + "-";
 
             String fileName = "";
-            for (int i = 0; i < nameList.length; i++) {
-                fileName = getFilename( nameList[i] );
+            for (int i = 0; i < nameList.length; i++)
+            {
+                fileName = getFilename(nameList[i]);
 
-                if (FilterName == null || fileName.startsWith(FilterName)) {
+                if (FilterName == null || fileName.startsWith(FilterName))
+                {
 
                     xDocInfo.loadFromURL(nameList[i]);
                     NameVector.addElement(nameList[i]);
@@ -602,19 +643,20 @@ public class FileAccess {
             LocLayoutFiles[0] = LocTitleList;
 
             JavaTools.bubblesortList(LocLayoutFiles);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
         return LocLayoutFiles;
     }
 
-        /**
-         * We search in all given path for a given file
-         * @param _sPath
-         * @param _sPath2
-         * @return
-         */
-
+    /**
+     * We search in all given path for a given file
+     * @param _sPath
+     * @param _sPath2
+     * @return
+     */
     public static String addPath(String _sPath, String _sPath2)
     {
         String sNewPath;
@@ -638,9 +680,9 @@ public class FileAccess {
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
 
-            for (int i=0;i<_aList.size();i++)
+            for (int i = 0; i < _aList.size(); i++)
             {
-                String sPath = (String)_aList.get(i);
+                String sPath = (String) _aList.get(i);
                 sPath = addPath(sPath, _sFile);
                 if (xSimpleFileAccess.exists(sPath))
                 {
@@ -648,20 +690,20 @@ public class FileAccess {
                 }
             }
         }
-        catch(com.sun.star.uno.Exception e)
+        catch (com.sun.star.uno.Exception e)
         {
         }
         return sFoundFile;
     }
 
-        /**
-         *
-         * @param xMSF
-         * @param _sStartFilterName
-         * @param FolderNames
-         * @return
-         * @throws com.sun.star.wizards.common.NoValidPathException
-         */
+    /**
+     *
+     * @param xMSF
+     * @param _sStartFilterName
+     * @param FolderNames
+     * @return
+     * @throws com.sun.star.wizards.common.NoValidPathException
+     */
     public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList FolderNames)
             throws NoValidPathException
     {
@@ -767,11 +809,11 @@ public class FileAccess {
 
         return LocLayoutFiles;
     }
-
     public XSimpleFileAccess2 fileAccess;
     public XFileIdentifierConverter filenameConverter;
 
-    public FileAccess(XMultiServiceFactory xmsf) throws com.sun.star.uno.Exception {
+    public FileAccess(XMultiServiceFactory xmsf) throws com.sun.star.uno.Exception
+    {
         //get a simple file access...
         Object fa = xmsf.createInstance("com.sun.star.ucb.SimpleFileAccess");
         fileAccess = (XSimpleFileAccess2) UnoRuntime.queryInterface(XSimpleFileAccess2.class, fa);
@@ -780,31 +822,34 @@ public class FileAccess {
         filenameConverter = (XFileIdentifierConverter) UnoRuntime.queryInterface(XFileIdentifierConverter.class, fcv);
     }
 
-    public String getURL(String parentPath, String childPath) {
+    public String getURL(String parentPath, String childPath)
+    {
         String parent = filenameConverter.getSystemPathFromFileURL(parentPath);
         File f = new File(parent, childPath);
         String r = filenameConverter.getFileURLFromSystemPath(parentPath, f.getAbsolutePath());
         return r;
     }
 
-    public String getURL(String path) {
+    public String getURL(String path)
+    {
         File f = new File(path);
         String r = filenameConverter.getFileURLFromSystemPath(
-            path,f.getAbsolutePath());
+                path, f.getAbsolutePath());
         return r;
     }
 
-    public String getPath(String parentURL, String childURL) {
+    public String getPath(String parentURL, String childURL)
+    {
         return filenameConverter.getSystemPathFromFileURL(parentURL + (((childURL == null || childURL.equals("")) ? "" : "/" + childURL)));
     }
-
 
     /**
      * @author rpiterman
      * @param filename
      * @return the extension of the given filename.
      */
-    public static String getExtension(String filename) {
+    public static String getExtension(String filename)
+    {
         int p = filename.indexOf(".");
         if (p == -1)
         {
@@ -826,13 +871,19 @@ public class FileAccess {
      * @param s
      * @return
      */
-    public boolean mkdir(String s) {
-        try {
+    public boolean mkdir(String s)
+    {
+        try
+        {
             fileAccess.createFolder(s);
             return true;
-        } catch (CommandAbortedException cax) {
+        }
+        catch (CommandAbortedException cax)
+        {
             cax.printStackTrace();
-        } catch (com.sun.star.uno.Exception ex) {
+        }
+        catch (com.sun.star.uno.Exception ex)
+        {
             ex.printStackTrace();
         }
         return false;
@@ -845,11 +896,17 @@ public class FileAccess {
      * @return true if the given file exists or not.
      * if an exception accures, returns the def value.
      */
-    public boolean exists(String filename, boolean def) {
-        try {
+    public boolean exists(String filename, boolean def)
+    {
+        try
+        {
             return fileAccess.exists(filename);
-        } catch (CommandAbortedException e) {
-        } catch (Exception e) {
+        }
+        catch (CommandAbortedException e)
+        {
+        }
+        catch (Exception e)
+        {
         }
 
         return def;
@@ -860,11 +917,17 @@ public class FileAccess {
      * @param filename
      * @return
      */
-    public boolean isDirectory(String filename) {
-        try {
+    public boolean isDirectory(String filename)
+    {
+        try
+        {
             return fileAccess.isFolder(filename);
-        } catch (CommandAbortedException e) {
-        } catch (Exception e) {
+        }
+        catch (CommandAbortedException e)
+        {
+        }
+        catch (Exception e)
+        {
         }
 
         return false;
@@ -877,11 +940,17 @@ public class FileAccess {
      * @param includeFolders
      * @return
      */
-    public String[] listFiles(String dir, boolean includeFolders) {
-        try {
+    public String[] listFiles(String dir, boolean includeFolders)
+    {
+        try
+        {
             return fileAccess.getFolderContents(dir, includeFolders);
-        } catch (CommandAbortedException e) {
-        } catch (Exception e) {
+        }
+        catch (CommandAbortedException e)
+        {
+        }
+        catch (Exception e)
+        {
         }
 
         return new String[0];
@@ -892,13 +961,19 @@ public class FileAccess {
      * @param file
      * @return
      */
-    public boolean delete(String file) {
-        try {
+    public boolean delete(String file)
+    {
+        try
+        {
             fileAccess.kill(file);
             return true;
-        } catch (CommandAbortedException e) {
+        }
+        catch (CommandAbortedException e)
+        {
             e.printStackTrace(System.out);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
 
@@ -910,7 +985,8 @@ public class FileAccess {
      * @param path
      * @return
      */
-    public static String getFilename(String path) {
+    public static String getFilename(String path)
+    {
         return getFilename(path, "/");
     }
 
@@ -919,7 +995,8 @@ public class FileAccess {
      * @param path
      * @return
      */
-    public static String getPathFilename(String path) {
+    public static String getPathFilename(String path)
+    {
         return getFilename(path, File.separator);
     }
 
@@ -929,16 +1006,17 @@ public class FileAccess {
      * @param pathSeparator
      * @return
      */
-    public static String getFilename(String path, String pathSeparator) {
+    public static String getFilename(String path, String pathSeparator)
+    {
         String[] s = JavaTools.ArrayoutofString(path, pathSeparator);
         return s[s.length - 1];
     }
 
-
-    public static String getBasename(String path, String pathSeparator){
+    public static String getBasename(String path, String pathSeparator)
+    {
         String filename = getFilename(path, pathSeparator);
         String sExtension = getExtension(filename);
-        String basename = filename.substring(0, filename.length()- (sExtension.length() + 1));
+        String basename = filename.substring(0, filename.length() - (sExtension.length() + 1));
         return basename;
     }
 
@@ -948,22 +1026,34 @@ public class FileAccess {
      * @param target
      * @return
      */
-    public boolean copy(String source, String target) {
-        try {
+    public boolean copy(String source, String target)
+    {
+        try
+        {
             fileAccess.copy(source, target);
             return true;
-        } catch (CommandAbortedException e) {
-        } catch (Exception e) {
+        }
+        catch (CommandAbortedException e)
+        {
+        }
+        catch (Exception e)
+        {
         }
 
         return false;
     }
 
-    public DateTime getLastModified(String url) {
-        try {
+    public DateTime getLastModified(String url)
+    {
+        try
+        {
             return fileAccess.getDateTimeModified(url);
-        } catch (CommandAbortedException e) {
-        } catch (Exception e) {
+        }
+        catch (CommandAbortedException e)
+        {
+        }
+        catch (Exception e)
+        {
         }
         return null;
     }
@@ -974,7 +1064,8 @@ public class FileAccess {
      * @return the parent dir of the given url.
      * if the path points to file, gives the directory in which the file is.
      */
-    public static String getParentDir(String url) {
+    public static String getParentDir(String url)
+    {
         if (url.endsWith("/"))
         {
             return getParentDir(url.substring(0, url.length() - 1));
@@ -988,8 +1079,8 @@ public class FileAccess {
         return url.substring(0, lastPos);
     }
 
-
-    public String createNewDir(String parentDir, String name) {
+    public String createNewDir(String parentDir, String name)
+    {
         String s = getNewFile(parentDir, name, "");
         if (mkdir(s))
         {
@@ -1001,45 +1092,55 @@ public class FileAccess {
         }
     }
 
-    public String getNewFile(String parentDir, String name, String extension) {
+    public String getNewFile(String parentDir, String name, String extension)
+    {
 
         int i = 0;
         String url;
-        do {
+        do
+        {
             String filename = filename(name, extension, i++);
             String u = getURL(parentDir, filename);
             url = u;
-        } while (exists(url, true));
+        }
+        while (exists(url, true));
 
         return url;
     }
 
-    private static String filename(String name, String ext, int i) {
+    private static String filename(String name, String ext, int i)
+    {
         return name + (i == 0 ? "" : String.valueOf(i)) + (ext.equals("") ? "" : "." + ext);
     }
 
-    public int getSize(String url) {
-        try {
+    public int getSize(String url)
+    {
+        try
+        {
             return fileAccess.getSize(url);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             return -1;
         }
     }
 
-    public static String connectURLs(String urlFolder, String urlFilename) {
-        return urlFolder + ( urlFolder.endsWith("/") ? "" : "/" ) +
-            ( urlFilename.startsWith("/") ? urlFilename.substring(1) : urlFilename );
+    public static String connectURLs(String urlFolder, String urlFilename)
+    {
+        return urlFolder + (urlFolder.endsWith("/") ? "" : "/") +
+                (urlFilename.startsWith("/") ? urlFilename.substring(1) : urlFilename);
     }
 
-
-    public static String[] getDataFromTextFile(XMultiServiceFactory _xMSF, String _filepath){
+    public static String[] getDataFromTextFile(XMultiServiceFactory _xMSF, String _filepath)
+    {
         String[] sFileData = null;
-        try {
+        try
+        {
             Vector oDataVector = new Vector();
             Object oSimpleFileAccess = _xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
-            if (xSimpleFileAccess.exists(_filepath)){
+            if (xSimpleFileAccess.exists(_filepath))
+            {
                 XInputStream xInputStream = xSimpleFileAccess.openFileRead(_filepath);
                 Object oTextInputStream = _xMSF.createInstance("com.sun.star.io.TextInputStream");
                 XTextInputStream xTextInputStream = (XTextInputStream) UnoRuntime.queryInterface(XTextInputStream.class, oTextInputStream);
@@ -1054,7 +1155,9 @@ public class FileAccess {
                 oDataVector.toArray(sFileData);
 
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
         return sFileData;
@@ -1066,20 +1169,24 @@ public class FileAccess {
      * @param maxLength
      * @return
      */
-    public static String getShortFilename(String path, int maxLength) {
+    public static String getShortFilename(String path, int maxLength)
+    {
         int firstPart = 0;
 
-        if (path.length() > maxLength) {
-            if (path.startsWith("/"))  { // unix
-                int nextSlash = path.indexOf("/",1) + 1;
-                firstPart = Math.min(nextSlash, ( maxLength - 3 ) / 2  );
+        if (path.length() > maxLength)
+        {
+            if (path.startsWith("/"))
+            { // unix
+                int nextSlash = path.indexOf("/", 1) + 1;
+                firstPart = Math.min(nextSlash, (maxLength - 3) / 2);
             }
-            else { //windows
-                firstPart = Math.min( 10, (maxLength - 3) / 2);
+            else
+            { //windows
+                firstPart = Math.min(10, (maxLength - 3) / 2);
             }
 
-            String s1 = path.substring(0,firstPart);
-            String s2 = path.substring(path.length() - (maxLength - ( 3 + firstPart)));
+            String s1 = path.substring(0, firstPart);
+            String s2 = path.substring(path.length() - (maxLength - (3 + firstPart)));
 
             return s1 + "..." + s2;
         }

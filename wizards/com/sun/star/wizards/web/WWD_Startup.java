@@ -26,11 +26,11 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web;
+ ************************************************************************/
+package com.sun.star.wizards.web;
 
 //import com.sun.star.awt.ItemEvent;
 //import com.sun.star.awt.XItemListener;
-
 import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
@@ -119,8 +119,8 @@ import com.sun.star.wizards.web.data.CGStyle;
  * @author rpiterman
  *
  */
-
-public abstract class WWD_Startup extends WWD_General{
+public abstract class WWD_Startup extends WWD_General
+{
 
     SimpleDataAware sda = null;
     /**
@@ -137,7 +137,6 @@ public abstract class WWD_Startup extends WWD_General{
      * like publishing-checkboxes, save-session check- and textbox.
      */
     protected DataAware.Listener checkPublish = new CheckPublish();
-
     /**
      * The Vector containing DataAware objects
      * which relay on the selected document
@@ -168,7 +167,6 @@ public abstract class WWD_Startup extends WWD_General{
      * So they are handled with more care.
      */
     protected List pubAware = new Vector(3);
-
     /**
      * The DataAware object which handles
      * the documents-list events.
@@ -181,12 +179,10 @@ public abstract class WWD_Startup extends WWD_General{
      * name in step 7 with the CGSession.cp_Name
      */
     protected UnoDataAware sessionNameDA;
-
     /**
      * Binds a ListModel to the UnoControlListBox.
      */
     protected ListModelBinder docsBinder;
-
     /**
      *  a DocumentPreview object is
      * the UI OO Document preview
@@ -199,12 +195,10 @@ public abstract class WWD_Startup extends WWD_General{
      * style preview
      */
     protected StylePreview stylePreview;
-
     /**
      * the currently selected document.
      */
     protected short[] selectedDoc = new short[0];
-
     /**
      * If ftp proxies are on, ftp is disabled, and
      * the true/false of the FTP publisher is set to false.
@@ -212,8 +206,6 @@ public abstract class WWD_Startup extends WWD_General{
      * at the end, the original loaded value is saved to this variable;
      */
     boolean __ftp;
-
-
     /**
      * When the wizard starts, a new document opens.
      * The backgroundDoc memeber contains the TextDocument
@@ -231,7 +223,6 @@ public abstract class WWD_Startup extends WWD_General{
     /*
      * GENERAL Initialization  methods
      */
-
     /**
      * He - my constructor !
      * I call/do here in this order: <br/>
@@ -252,14 +243,15 @@ public abstract class WWD_Startup extends WWD_General{
      * fill the documents listbox. <br/>
      * if proxies are set, disable the ftp controls in step 7.
      */
-    public WWD_Startup(XMultiServiceFactory xmsf) throws Exception {
+    public WWD_Startup(XMultiServiceFactory xmsf) throws Exception
+    {
         super(xmsf);
 
         proxies = getOOProxies();
 
         String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template", "share", "/wizard");
 
-        String exclamationURL = FileAccess.connectURLs( soTemplateDir, "wizard/bitmap/caution_16.png");
+        String exclamationURL = FileAccess.connectURLs(soTemplateDir, "wizard/bitmap/caution_16.png");
         this.drawNaviBar();
         this.buildStep1();
         this.buildStep2();
@@ -274,7 +266,7 @@ public abstract class WWD_Startup extends WWD_General{
         this.xMSF = xMSF;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
         myFrame = OfficeDocument.createNewFrame(xMSF, this);
-        Object doc = OfficeDocument.createNewDocument( myFrame, "swriter", false, true );
+        Object doc = OfficeDocument.createNewDocument(myFrame, "swriter", false, true);
 
         loadSettings(doc);
         setSaveSessionName(settings.cp_DefaultSession);
@@ -282,7 +274,7 @@ public abstract class WWD_Startup extends WWD_General{
         ilLayouts.setListModel(settings.cp_Layouts);
         ilLayouts.create(this);
 
-        checkContent(settings.cp_DefaultSession.cp_Content, new Task("", "", 99999), this.xControl );
+        checkContent(settings.cp_DefaultSession.cp_Content, new Task("", "", 99999), this.xControl);
 
         //saved sessions, styles, combobox save session.
         // also set the chosen saved session...
@@ -294,12 +286,12 @@ public abstract class WWD_Startup extends WWD_General{
         mount(settings.cp_DefaultSession.cp_Content);
 
 
-        if (proxies) {
-            setEnabled(btnFTP,false);
-            setEnabled(chkFTP,false);
+        if (proxies)
+        {
+            setEnabled(btnFTP, false);
+            setEnabled(chkFTP, false);
         }
     }
-
 
     /**
      * return true if http proxies or other proxies
@@ -307,20 +299,21 @@ public abstract class WWD_Startup extends WWD_General{
      * @return true if (http) proxies are on.
      * @throws Exception
      */
-    private boolean getOOProxies() throws Exception {
-        Object node = Configuration.getConfigurationRoot(xMSF,"org.openoffice.Inet/Settings",false);
-        int i = Configuration.getInt("ooInetProxyType",node);
+    private boolean getOOProxies() throws Exception
+    {
+        Object node = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Inet/Settings", false);
+        int i = Configuration.getInt("ooInetProxyType", node);
         //System.out.println("WWD:Startup:getOOProxies:" + i);
-        switch (i) {
-            case 0 : //no proxies
+        switch (i)
+        {
+            case 0: //no proxies
                 return false;
-            case 2 : //http proxies
+            case 2: //http proxies
                 return true;
-            default :
+            default:
                 return true;
         }
     }
-
 
     /**
      * calculates the first available session name,
@@ -328,27 +321,35 @@ public abstract class WWD_Startup extends WWD_General{
      * The combobox text in step 7 will be updated
      * automatically when updateUI() is called.
      */
-    protected void setSaveSessionName(CGSession session) {
+    protected void setSaveSessionName(CGSession session)
+    {
         int max = 0;
         int len = resources.resSessionName.length();
         // traverse between the sessions and find the one that
         // has the biggest number.
-        for (int i = 0; i < settings.cp_SavedSessions.getSize(); i++) {
+        for (int i = 0; i < settings.cp_SavedSessions.getSize(); i++)
+        {
             String sessionName = ((CGSessionName) settings.cp_SavedSessions.getElementAt(i)).cp_Name;
             if (sessionName.startsWith(resources.resSessionName))
+            {
                 max = max(max, Integer.valueOf(sessionName.substring(len)).intValue());
+            }
         }
 
         session.cp_Name = resources.resSessionName + ++max;
 
     }
 
-
-    private int max(int i1, int i2) {
+    private int max(int i1, int i2)
+    {
         if (i1 > i2)
+        {
             return i1;
+        }
         else
+        {
             return i2;
+        }
     }
 
     /**
@@ -356,8 +357,18 @@ public abstract class WWD_Startup extends WWD_General{
      * like MaxStep, Complete, Interactive-
      * Disables the finbihButton.
      */
-    private void addRoadMapItems() {
-        insertRoadMapItems(new String[] { resources.resStep1, resources.resStep2, resources.resStep3, resources.resStep4, resources.resStep5, resources.resStep6, resources.resStep7  }, new int[] { 1, 2, 3, 4, 5, 6, 7 }, new boolean[] { true, true, false, false, false, false, false });
+    private void addRoadMapItems()
+    {
+        insertRoadMapItems(new String[]
+                {
+                    resources.resStep1, resources.resStep2, resources.resStep3, resources.resStep4, resources.resStep5, resources.resStep6, resources.resStep7
+                }, new int[]
+                {
+                    1, 2, 3, 4, 5, 6, 7
+                }, new boolean[]
+                {
+                    true, true, false, false, false, false, false
+                });
 
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
@@ -375,7 +386,8 @@ public abstract class WWD_Startup extends WWD_General{
      * the state of the corresponding data objects.
      *
      */
-    private void updateUI() {
+    private void updateUI()
+    {
         DataAware.updateUI(designAware);
         DataAware.updateUI(genAware);
         DataAware.updateUI(pubAware);
@@ -383,8 +395,9 @@ public abstract class WWD_Startup extends WWD_General{
         checkPublish();
     }
 
-    private XFrame getFrame(Object model) {
-        XModel xmodel = (XModel)UnoRuntime.queryInterface(XModel.class,model);
+    private XFrame getFrame(Object model)
+    {
+        XModel xmodel = (XModel) UnoRuntime.queryInterface(XModel.class, model);
         return xmodel.getCurrentController().getFrame();
     }
 
@@ -394,8 +407,10 @@ public abstract class WWD_Startup extends WWD_General{
      * disable the steps 3 to 7 if no documents are
      * on the list, and... show the dialog!
      */
-    public void show() {
-        try {
+    public void show()
+    {
+        try
+        {
 
 
             /* myFrame.initialize(docWindow);
@@ -418,7 +433,9 @@ public abstract class WWD_Startup extends WWD_General{
             executeDialog(myFrame);
             removeTerminateListener();
 
-        } catch (java.lang.Exception jexception) {
+        }
+        catch (java.lang.Exception jexception)
+        {
             jexception.printStackTrace(System.out);
         }
     }
@@ -426,14 +443,18 @@ public abstract class WWD_Startup extends WWD_General{
     /**
      * initializes the style preview.
      */
-    private void addStylePreview() {
-        try {
+    private void addStylePreview()
+    {
+        try
+        {
             dpStylePreview = new DocumentPreview(xMSF, imgPreview);
             stylePreview = new StylePreview(xMSF, settings.workPath);
             stylePreview.refresh(settings.cp_DefaultSession.getStyle(), settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
             dpStylePreview.setDocument(stylePreview.htmlFilename, DocumentPreview.PREVIEW_MODE);
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -441,18 +462,21 @@ public abstract class WWD_Startup extends WWD_General{
     /**
      * Loads the web wizard settings from the registry.
      */
-    private void loadSettings(Object document) {
-        try {
+    private void loadSettings(Object document)
+    {
+        try
+        {
             // instanciate
-            String[] settingsResources = new String[] {
-                    resources.resPages,
-                    resources.resSlides,
-                    resources.resCreatedTemplate,
-                    resources.resUpdatedTemplate,
-                    resources.resSizeTemplate
+            String[] settingsResources = new String[]
+            {
+                resources.resPages,
+                resources.resSlides,
+                resources.resCreatedTemplate,
+                resources.resUpdatedTemplate,
+                resources.resSizeTemplate
             };
 
-            settings = new CGSettings(xMSF, settingsResources, document );
+            settings = new CGSettings(xMSF, settingsResources, document);
 
             // get configuration view
             Object confRoot = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH, false);
@@ -463,8 +487,9 @@ public abstract class WWD_Startup extends WWD_General{
 
             // now if path variables are used in publisher pathes, they
             // are getting replaced here...
-            for (int i = 0; i<set.getSize(); i++) {
-                CGPublish p =(CGPublish)set.getElementAt(i);
+            for (int i = 0; i < set.getSize(); i++)
+            {
+                CGPublish p = (CGPublish) set.getElementAt(i);
                 p.cp_URL = substitute(p.cp_URL);
             }
 
@@ -478,26 +503,29 @@ public abstract class WWD_Startup extends WWD_General{
 
             prepareSessionLists();
 
-            if (proxies) {
+            if (proxies)
+            {
                 __ftp = getPublisher(FTP_PUBLISHER).cp_Publish;
                 getPublisher(FTP_PUBLISHER).cp_Publish = false;
 
             }
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
 
-
-    protected void prepareSessionLists() {
+    protected void prepareSessionLists()
+    {
         // now copy the sessions list...
         Object[] sessions = settings.cp_SavedSessions.items();
         settings.savedSessions.clear();
-        for (int i = 0; i< sessions.length; i++)
-            settings.savedSessions.add(i, sessions[i]);
-
-        // add an empty session to the saved session list which apears in step 1
+        for (int i = 0; i < sessions.length; i++)
+        {
+            settings.savedSessions.add(i, sessions[i]);        // add an empty session to the saved session list which apears in step 1
+        }
         CGSessionName sn = new CGSessionName();
         sn.cp_Name = resources.resSessionNameNone;
         settings.cp_SavedSessions.add(0, sn);
@@ -509,7 +537,8 @@ public abstract class WWD_Startup extends WWD_General{
      * Also set the selected "load" session to the last session
      * which was saved.
      */
-    private void fillLists() {
+    private void fillLists()
+    {
         // fill the saved session list.
         ListModelBinder.fillList(lstLoadSettings, settings.cp_SavedSessions.items(), null);
 
@@ -525,32 +554,41 @@ public abstract class WWD_Startup extends WWD_General{
 
     }
 
-    protected void selectSession() {
+    protected void selectSession()
+    {
         int selectedSession = 0;
-        if (settings.cp_LastSavedSession != null  && !settings.cp_LastSavedSession.equals("")) {
+        if (settings.cp_LastSavedSession != null && !settings.cp_LastSavedSession.equals(""))
+        {
 
-            Object ses = settings.cp_SavedSessions.getElement( settings.cp_LastSavedSession );
-            if (ses != null) {
+            Object ses = settings.cp_SavedSessions.getElement(settings.cp_LastSavedSession);
+            if (ses != null)
+            {
                 selectedSession = settings.cp_SavedSessions.getIndexOf(ses);
             }
         }
-        Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", new short[] { (short) selectedSession } );
+        Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", new short[]
+                {
+                    (short) selectedSession
+                });
 
     }
 
-
-    public class SimpleDataawareUpdater implements XItemListener{
+    public class SimpleDataawareUpdater implements XItemListener
+    {
         /* (non-Javadoc)
          * @see com.sun.star.lang.XEventListener#disposing(com.sun.star.lang.EventObject)
          */
-        public void disposing(EventObject arg0) {
+
+        public void disposing(EventObject arg0)
+        {
             // TODO Auto-generated method stub
         }
 
-        public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
+        public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent)
+        {
             sda.updateData();
-            //TODO xf uncomment
-            //refresh.eventPerformed(ie);
+        //TODO xf uncomment
+        //refresh.eventPerformed(ie);
         }
     }
 
@@ -559,30 +597,33 @@ public abstract class WWD_Startup extends WWD_General{
      * textbox, no buttons though), a DataObject's JavaBean Property,
      * or class member.
      */
-    private void makeDataAware() {
+    private void makeDataAware()
+    {
         //page 1
         new ListModelBinder(lstLoadSettings, settings.cp_SavedSessions);
 
         //page 2 : document properties
 
         docListDA = (UnoDataAware) UnoDataAware.attachListBox(this, "SelectedDoc", lstDocuments, null, false);
-        docListDA.disableControls(new Object[] {
-            /*btnDocDown, btnDocUp, */
-            lnDocsInfo, btnRemoveDoc, lblDocTitle, txtDocTitle, lblDocInfo, txtDocInfo, lblDocAuthor, txtDocAuthor, lblDocExportFormat, lstDocTargetType });
+        docListDA.disableControls(new Object[]
+                {
+                    /*btnDocDown, btnDocUp, */
+                    lnDocsInfo, btnRemoveDoc, lblDocTitle, txtDocTitle, lblDocInfo, txtDocInfo, lblDocAuthor, txtDocAuthor, lblDocExportFormat, lstDocTargetType
+                });
         docListDA.updateUI();
 
         CGDocument doc = new CGDocument(); //dummy
 
         docsBinder = new ListModelBinder(lstDocuments, settings.cp_DefaultSession.cp_Content.cp_Documents);
 
-        docAware.add(UnoDataAware.attachEditControl(doc, "cp_Title", txtDocTitle, refresh, true ));
+        docAware.add(UnoDataAware.attachEditControl(doc, "cp_Title", txtDocTitle, refresh, true));
         docAware.add(UnoDataAware.attachEditControl(doc, "cp_Description", txtDocInfo, refresh, true));
         docAware.add(UnoDataAware.attachEditControl(doc, "cp_Author", txtDocAuthor, refresh, true));
         docAware.add(UnoDataAware.attachListBox(doc, "Exporter", lstDocTargetType, refresh, false));
 
         //page 3 : Layout
         Object design = settings.cp_DefaultSession.cp_Design;
-        sda = new SimpleDataAware(design, new DataAware.PropertyValue("Layout",design), ilLayouts, new DataAware.PropertyValue("Selected",ilLayouts));
+        sda = new SimpleDataAware(design, new DataAware.PropertyValue("Layout", design), ilLayouts, new DataAware.PropertyValue("Selected", ilLayouts));
         ilLayouts.addItemListener(new SimpleDataawareUpdater());
         designAware.add(sda);
 
@@ -596,7 +637,10 @@ public abstract class WWD_Startup extends WWD_General{
         designAware.add(UnoDataAware.attachCheckBox(design, "cp_DisplayFormatIcon", chkDocFormatIcon, refresh, true));
         designAware.add(UnoDataAware.attachCheckBox(design, "cp_DisplayPages", chkDocPages, refresh, true));
         designAware.add(UnoDataAware.attachCheckBox(design, "cp_DisplaySize", chkDocSize, refresh, true));
-        designAware.add(RadioDataAware.attachRadioButtons(settings.cp_DefaultSession.cp_Design, "cp_OptimizeDisplaySize", new Object[] { optOptimize640x480, optOptimize800x600, optOptimize1024x768 }, refresh, true));
+        designAware.add(RadioDataAware.attachRadioButtons(settings.cp_DefaultSession.cp_Design, "cp_OptimizeDisplaySize", new Object[]
+                {
+                    optOptimize640x480, optOptimize800x600, optOptimize1024x768
+                }, refresh, true));
 
 
         //page 5 : Style
@@ -618,16 +662,15 @@ public abstract class WWD_Startup extends WWD_General{
         //page 7 : publishing
 
         pubAware(LOCAL_PUBLISHER, chkLocalDir, txtLocalDir, false);
-        pubAware(FTP_PUBLISHER, chkFTP, lblFTP ,true );
-        pubAware(ZIP_PUBLISHER, chkZip, txtZip , false );
+        pubAware(FTP_PUBLISHER, chkFTP, lblFTP, true);
+        pubAware(ZIP_PUBLISHER, chkZip, txtZip, false);
 
         sessionNameDA = UnoDataAware.attachEditControl(settings.cp_DefaultSession, "cp_Name", cbSaveSettings, null, true);
 
-        //cleanup when exiting wizard.
-        //guiEventListener.add("WebWizardDialog",EventNames.EVENT_WINDOW_HIDDEN, "cleanup", this);
-        //xWindow.addWindowListener((XWindowListener)guiEventListener);
+    //cleanup when exiting wizard.
+    //guiEventListener.add("WebWizardDialog",EventNames.EVENT_WINDOW_HIDDEN, "cleanup", this);
+    //xWindow.addWindowListener((XWindowListener)guiEventListener);
     }
-
 
     /**
      * A help method to attach a Checkbox and a TextBox to
@@ -636,16 +679,20 @@ public abstract class WWD_Startup extends WWD_General{
      * @param checkbox
      * @param textbox
      */
-    private void pubAware(String publish, Object checkbox, Object textbox, boolean isLabel) {
+    private void pubAware(String publish, Object checkbox, Object textbox, boolean isLabel)
+    {
         Object p = settings.cp_DefaultSession.cp_Publishing.getElement(publish);
         UnoDataAware uda = UnoDataAware.attachCheckBox(p, "cp_Publish", checkbox, checkPublish, true);
         uda.setInverse(true);
 
-        uda.disableControls(new Object[] { textbox });
+        uda.disableControls(new Object[]
+                {
+                    textbox
+                });
         pubAware.add(uda);
         pubAware.add(
-                isLabel ? UnoDataAware.attachLabel(p, "URL", textbox, checkPublish, false )
-                        : UnoDataAware.attachEditControl(p, "URL", textbox, checkPublish, false));
+                isLabel ? UnoDataAware.attachLabel(p, "URL", textbox, checkPublish, false)
+                : UnoDataAware.attachEditControl(p, "URL", textbox, checkPublish, false));
 
     }
 
@@ -654,7 +701,6 @@ public abstract class WWD_Startup extends WWD_General{
      * (are used both on the start of the wizard and
      * when the user loads a session)
      */
-
     /**
      * Is called when a new session/settings is
      * loaded. <br/>
@@ -666,7 +712,8 @@ public abstract class WWD_Startup extends WWD_General{
      * and ??? times for each document in the session.
      *
      */
-    protected void mount(CGSession session, Task task, boolean refreshStyle, XControl xC ) {
+    protected void mount(CGSession session, Task task, boolean refreshStyle, XControl xC)
+    {
         /* This checks the documents. If the user
          * chooses to cancel, the session is not loaded.
          */
@@ -695,12 +742,13 @@ public abstract class WWD_Startup extends WWD_General{
 
         task.advance(true);
 
-        if (refreshStyle) {
+        if (refreshStyle)
+        {
             refreshStylePreview();
             updateIconsetText();
         }
 
-        //updateUI();
+    //updateUI();
     }
 
     /**
@@ -713,7 +761,8 @@ public abstract class WWD_Startup extends WWD_General{
      * @param data the CGPublish object
      * @param i the number of the object (0 = local, 1 = ftp, 2 = zip)
      */
-    private void mount(Object data, int i) {
+    private void mount(Object data, int i)
+    {
         ((DataAware) pubAware.get(i * 2)).setDataObject(data, true);
         ((DataAware) pubAware.get(i * 2 + 1)).setDataObject(data, true);
     }
@@ -723,7 +772,8 @@ public abstract class WWD_Startup extends WWD_General{
      * @param root the CGContent object
      * that contains the documents (a ListModel)
      */
-    private void mount(CGContent root) {
+    private void mount(CGContent root)
+    {
         ListModelBinder.fillList(lstDocuments, root.cp_Documents.items(), null);
         docsBinder.setListModel(root.cp_Documents);
         disableDocUpDown();
@@ -736,9 +786,12 @@ public abstract class WWD_Startup extends WWD_General{
      * @param data
      * @param list
      */
-    protected void mount(Object data, List list) {
+    protected void mount(Object data, List list)
+    {
         for (int i = 0; i < list.size(); i++)
-             ((DataAware) list.get(i)).setDataObject(data, true);
+        {
+            ((DataAware) list.get(i)).setDataObject(data, true);
+        }
     }
 
     /**
@@ -752,42 +805,54 @@ public abstract class WWD_Startup extends WWD_General{
      * displayed, using the Task object to monitor progress.
      * @return true if the document is ok (a file exists in the given url).
      */
-    protected boolean checkDocument(CGDocument doc, Task task, XControl xC) {
-        try {
+    protected boolean checkDocument(CGDocument doc, Task task, XControl xC)
+    {
+        try
+        {
             doc.validate(xMSF, task);
             return true;
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex)
+        {
 
-            int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer()
-                    , "WarningBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL,"") + "\n\n" + resources.resSpecifyNewFileLocation);
+            int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer(), "WarningBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL, "") + "\n\n" + resources.resSpecifyNewFileLocation);
 
-            if (relocate == 2) {
+            if (relocate == 2)
+            {
                 String[] file = getDocAddDialog().callOpenDialog(false, FileAccess.getParentDir(doc.cp_URL));
                 if (file == null)
+                {
                     return false;
-                else {
-                    doc.cp_URL = file[0];
-                    return checkDocument(doc, task, xC );
                 }
-            } else
+                else
+                {
+                    doc.cp_URL = file[0];
+                    return checkDocument(doc, task, xC);
+                }
+            }
+            else
+            {
                 return false;
+            }
         }
-        catch (IllegalArgumentException iaex) {
+        catch (IllegalArgumentException iaex)
+        {
             //file is a directory
-            AbstractErrorHandler.showMessage(xMSF,xControl.getPeer(),
-                JavaTools.replaceSubString(resources.resErrIsDirectory,
-                    getFileAccess().getPath(doc.cp_URL,""),
+            AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),
+                    JavaTools.replaceSubString(resources.resErrIsDirectory,
+                    getFileAccess().getPath(doc.cp_URL, ""),
                     "%FILENAME"),
-                ErrorHandler.ERROR_PROCESS_FATAL);
+                    ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
         }
-        catch (Exception exp) {
+        catch (Exception exp)
+        {
             //something went wrong.
             exp.printStackTrace();
-            AbstractErrorHandler.showMessage(xMSF,xControl.getPeer(),
-            JavaTools.replaceSubString(resources.resErrDocValidate,
-                getFileAccess().getPath(doc.cp_URL,""),
-                "%FILENAME"),ErrorHandler.ERROR_PROCESS_FATAL);
+            AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),
+                    JavaTools.replaceSubString(resources.resErrDocValidate,
+                    getFileAccess().getPath(doc.cp_URL, ""),
+                    "%FILENAME"), ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
         }
 
@@ -798,14 +863,19 @@ public abstract class WWD_Startup extends WWD_General{
      * @param content
      * @param task
      */
-    private void checkContent(CGContent content, Task task, XControl xC) {
+    private void checkContent(CGContent content, Task task, XControl xC)
+    {
         for (int i = 0; i < content.cp_Documents.getSize(); i++)
+        {
             if (!checkDocument((CGDocument) content.cp_Documents.getElementAt(i), task, xC))
-                // I use here 'i--' since, when the document is removed
-                // an index change accures
+            // I use here 'i--' since, when the document is removed
+            // an index change accures
+            {
                 content.cp_Documents.remove(i--);
-        /*for (Iterator i = content.cp_Contents.childrenMap.values().iterator(); i.hasNext();)
-          checkContent((CGContent)i.next(),task);*/
+            /*for (Iterator i = content.cp_Contents.childrenMap.values().iterator(); i.hasNext();)
+            checkContent((CGContent)i.next(),task);*/
+            }
+        }
     }
 
     /**
@@ -814,8 +884,11 @@ public abstract class WWD_Startup extends WWD_General{
      * changes the "create" button enable state accordingly.
      * @author rpiterman
      */
-    private class CheckPublish implements DataAware.Listener {
-        public void eventPerformed(Object event) {
+    private class CheckPublish implements DataAware.Listener
+    {
+
+        public void eventPerformed(Object event)
+        {
             checkPublish();
         }
     }
@@ -827,39 +900,55 @@ public abstract class WWD_Startup extends WWD_General{
      * down disabled and so on...)
      *
      */
-    protected void disableDocUpDown() {
-        try {
+    protected void disableDocUpDown()
+    {
+        try
+        {
             setEnabled(btnDocUp, selectedDoc.length == 0 ? Boolean.FALSE : (selectedDoc[0] == 0 ? Boolean.FALSE : Boolean.TRUE));
             setEnabled(btnDocDown, selectedDoc.length == 0 ? Boolean.FALSE : (selectedDoc[0] + 1 < settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() ? Boolean.TRUE : Boolean.FALSE));
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    void updateBackgroundText() {
+    void updateBackgroundText()
+    {
         String bg = settings.cp_DefaultSession.cp_Design.cp_BackgroundImage;
         if (bg == null || bg.equals(""))
+        {
             bg = resources.resBackgroundNone;
+        }
         else
-            bg = FileAccess.getPathFilename( getFileAccess().getPath(bg,null));
-
-        Helper.setUnoPropertyValue(getModel(txtBackground),"Label",bg);
+        {
+            bg = FileAccess.getPathFilename(getFileAccess().getPath(bg, null));
+        }
+        Helper.setUnoPropertyValue(getModel(txtBackground), "Label", bg);
     }
 
-    void updateIconsetText() {
+    void updateIconsetText()
+    {
         String iconset = settings.cp_DefaultSession.cp_Design.cp_IconSet;
         String iconsetName;
         if (iconset == null || iconset.equals(""))
+        {
             iconsetName = resources.resIconsetNone;
-        else {
-            CGIconSet is = (CGIconSet)settings.cp_IconSets.getElement(iconset);
+        }
+        else
+        {
+            CGIconSet is = (CGIconSet) settings.cp_IconSets.getElement(iconset);
             if (is == null)
+            {
                 iconsetName = resources.resIconsetNone;
+            }
             else
+            {
                 iconsetName = is.cp_Name;
+            }
         }
 
-        Helper.setUnoPropertyValue(getModel(txtIconset),"Label",iconsetName);
+        Helper.setUnoPropertyValue(getModel(txtIconset), "Label", iconsetName);
     }
 
     /**
@@ -868,31 +957,38 @@ public abstract class WWD_Startup extends WWD_General{
      * when the background is changed, this method
      * has to be called, so I am walking on the safe side here...
      */
-    public void refreshStylePreview() {
-        try {
+    public void refreshStylePreview()
+    {
+        try
+        {
             updateBackgroundText();
             stylePreview.refresh(settings.cp_DefaultSession.getStyle(), settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
             dpStylePreview.reload(xMSF);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
 
-
-    private class StylesComparator implements Comparator {
+    private class StylesComparator implements Comparator
+    {
 
         /* (non-Javadoc)
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
-        public int compare(Object o1, Object o2) {
+        public int compare(Object o1, Object o2)
+        {
             // TODO Auto-generated method stub
-            if (o1 instanceof CGStyle && o2 instanceof CGStyle) {
-                return ((CGStyle)o1).cp_Name.compareTo(
-                        ((CGStyle)o2).cp_Name);
+            if (o1 instanceof CGStyle && o2 instanceof CGStyle)
+            {
+                return ((CGStyle) o1).cp_Name.compareTo(
+                        ((CGStyle) o2).cp_Name);
             }
-            else throw new IllegalArgumentException("Cannot compare objects which are not CGStyle.");
+            else
+            {
+                throw new IllegalArgumentException("Cannot compare objects which are not CGStyle.");
+            }
         }
-
     }
-
 }

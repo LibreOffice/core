@@ -9,7 +9,7 @@
  *
  * $RCSfile: ColumnarSingleColumn.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
@@ -42,8 +41,9 @@ import com.sun.star.wizards.ui.UIConsts;
  *
  * @author ll93751
  */
-public class ColumnarSingleColumn  extends ReportBuilderLayouter
+public class ColumnarSingleColumn extends ReportBuilderLayouter
 {
+
     public ColumnarSingleColumn(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
         super(_xDefinitionAccess, _aResource);
@@ -87,7 +87,7 @@ public class ColumnarSingleColumn  extends ReportBuilderLayouter
 
         final int nWidth = getPageWidth() - getLeftPageIndent() - getRightPageIndent() - getLeftGroupIndent(getCountOfGroups()) - nLabelWidth;
 
-        for (int i=0;i<aFieldNames.length;i++)
+        for (int i = 0; i < aFieldNames.length; i++)
         {
             aRect.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
             final String sLabel = aFieldTitleNames[i];
@@ -100,9 +100,9 @@ public class ColumnarSingleColumn  extends ReportBuilderLayouter
         xSection.setHeight(aRect.Y);
         doNotBreakInTable(xSection);
     }
+
     protected void insertDetailFieldTitles()
     {
         // we won't extra field titles
     }
-
 }

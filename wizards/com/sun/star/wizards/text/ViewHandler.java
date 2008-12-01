@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -48,7 +48,9 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XViewSettingsSupplier;
 import com.sun.star.wizards.common.Helper;
 
-public class ViewHandler {
+public class ViewHandler
+{
+
     private XTextViewCursorSupplier xTextViewCursorSupplier;
     private XMultiServiceFactory xMSFDoc;
     private XTextDocument xTextDocument;
@@ -56,7 +58,8 @@ public class ViewHandler {
     private XViewSettingsSupplier xViewSettingsSupplier;
 
     /** Creates a new instance of View */
-    public ViewHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
+    public ViewHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
+    {
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
         xTextViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
@@ -64,8 +67,10 @@ public class ViewHandler {
         xStyleFamiliesSupplier = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
     }
 
-    public void selectFirstPage(TextTableHandler oTextTableHandler) {
-        try {
+    public void selectFirstPage(TextTableHandler oTextTableHandler)
+    {
+        try
+        {
             XPageCursor xPageCursor = (XPageCursor) UnoRuntime.queryInterface(XPageCursor.class, xTextViewCursorSupplier.getViewCursor());
             XTextCursor xViewTextCursor = (XTextCursor) UnoRuntime.queryInterface(XTextCursor.class, xPageCursor);
             xPageCursor.jumpToFirstPage();
@@ -84,28 +89,30 @@ public class ViewHandler {
 //            }
             //      }
             XTextRange xHeaderRange = (XTextRange) Helper.getUnoPropertyValue(oPageStyle, "HeaderText", XTextRange.class);
-            if (!com.sun.star.uno.AnyConverter.isVoid(xHeaderRange)) {
+            if (!com.sun.star.uno.AnyConverter.isVoid(xHeaderRange))
+            {
                 xViewTextCursor.gotoRange(xHeaderRange, false);
                 xViewTextCursor.collapseToStart();
-            } else
+            }
+            else
+            {
                 System.out.println("No Headertext available");
-
-        } catch (com.sun.star.uno.Exception exception) {
+            }
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void setViewSetting(String Setting, Object Value) throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
+    public void setViewSetting(String Setting, Object Value) throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException
+    {
         xViewSettingsSupplier.getViewSettings().setPropertyValue(Setting, Value);
     }
 
-    public void collapseViewCursorToStart() {
+    public void collapseViewCursorToStart()
+    {
         XTextViewCursor xTextViewCursor = xTextViewCursorSupplier.getViewCursor();
         xTextViewCursor.collapseToStart();
     }
-
-
-
-
-
 }

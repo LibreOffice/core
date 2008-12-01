@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -58,22 +58,22 @@ import com.sun.star.util.XRefreshable;
 import com.sun.star.util.XUpdatable;
 import com.sun.star.wizards.common.Helper;
 
-public class TextFieldHandler {
+public class TextFieldHandler
+{
 
     public XTextFieldsSupplier xTextFieldsSupplier;
     private XMultiServiceFactory xMSFDoc;
-
 
     /**
      * Creates a new instance of TextFieldHandler
      * @param xMSF
      * @param xTextDocument
      */
-    public TextFieldHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
+    public TextFieldHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
+    {
         this.xMSFDoc = xMSF;
         xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument);
     }
-
 
     public void refreshTextFields()
     {
@@ -81,8 +81,8 @@ public class TextFieldHandler {
         xUp.refresh();
     }
 
-
-    public String getUserFieldContent(XTextCursor xTextCursor) {
+    public String getUserFieldContent(XTextCursor xTextCursor)
+    {
         try
         {
             XTextRange xTextRange = xTextCursor.getEnd();
@@ -106,7 +106,8 @@ public class TextFieldHandler {
         return "";
     }
 
-    public void insertUserField(XTextCursor xTextCursor, String FieldName, String FieldTitle) {
+    public void insertUserField(XTextCursor xTextCursor, String FieldName, String FieldTitle)
+    {
         try
         {
             XInterface xField = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextField.User");
@@ -135,11 +136,11 @@ public class TextFieldHandler {
 //            }
 
         }
-        catch (com.sun.star.uno.Exception exception) {
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
-
 
     public XPropertySet createUserField(String FieldName, String FieldTitle) throws com.sun.star.uno.Exception
     {
@@ -154,67 +155,64 @@ public class TextFieldHandler {
         return xPSet;
     }
 
-
-
     private XDependentTextField[] getTextFieldsByProperty(String _PropertyName, Object _aPropertyValue, String _TypeName) throws Exception
     {
         try
         {
-        XDependentTextField[] xDependentFields;
-        Vector xDependentVector = new Vector();
+            XDependentTextField[] xDependentFields;
+            Vector xDependentVector = new Vector();
             if (xTextFieldsSupplier.getTextFields().hasElements())
             {
-            XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
+                XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
                 while (xEnum.hasMoreElements())
                 {
-                Object oTextField = xEnum.nextElement();
-                XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
-                XPropertySet xPropertySet = xDependent.getTextFieldMaster();
+                    Object oTextField = xEnum.nextElement();
+                    XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
+                    XPropertySet xPropertySet = xDependent.getTextFieldMaster();
                     if (xPropertySet.getPropertySetInfo().hasPropertyByName(_PropertyName))
                     {
-                    Object oValue = xPropertySet.getPropertyValue(_PropertyName);
-                    // TODO replace the following comparison via com.sun.star.uno.Any.Type
-                        if(AnyConverter.isString(oValue))
+                        Object oValue = xPropertySet.getPropertyValue(_PropertyName);
+                        // TODO replace the following comparison via com.sun.star.uno.Any.Type
+                        if (AnyConverter.isString(oValue))
                         {
                             if (_TypeName.equals("String"))
                             {
-                            String sValue = AnyConverter.toString(oValue);
-                            if (sValue.equals(_aPropertyValue))
+                                String sValue = AnyConverter.toString(oValue);
+                                if (sValue.equals(_aPropertyValue))
                                 {
-                                xDependentVector.addElement(xDependent);
-                        }
-                    }
+                                    xDependentVector.addElement(xDependent);
+                                }
+                            }
                         }
                         else if (AnyConverter.isShort(oValue))
                         {
                             if (_TypeName.equals("Short"))
                             {
-                            short iShortParam = ((Short) _aPropertyValue).shortValue();
-                            short ishortValue = AnyConverter.toShort(oValue);
-                            if (ishortValue == iShortParam)
+                                short iShortParam = ((Short) _aPropertyValue).shortValue();
+                                short ishortValue = AnyConverter.toShort(oValue);
+                                if (ishortValue == iShortParam)
                                 {
-                                xDependentVector.addElement(xDependent);
+                                    xDependentVector.addElement(xDependent);
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
-            }
             if (xDependentVector.size() > 0)
             {
-            xDependentFields = new XDependentTextField[xDependentVector.size()];
-            xDependentVector.toArray(xDependentFields);
-            return xDependentFields;
+                xDependentFields = new XDependentTextField[xDependentVector.size()];
+                xDependentVector.toArray(xDependentFields);
+                return xDependentFields;
+            }
         }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace(System.out);
         }
-        catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace(System.out);
+        return null;
     }
-    return null;
-    }
-
-
 
     public void changeUserFieldContent(String _FieldName, String _FieldContent)
     {
@@ -236,31 +234,38 @@ public class TextFieldHandler {
         }
     }
 
-
-    public void updateDocInfoFields() {
-        try {
+    public void updateDocInfoFields()
+    {
+        try
+        {
             XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
-            while (xEnum.hasMoreElements()) {
+            while (xEnum.hasMoreElements())
+            {
                 Object oTextField = xEnum.nextElement();
                 XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
 
-                if (xSI.supportsService("com.sun.star.text.TextField.ExtendedUser")) {
+                if (xSI.supportsService("com.sun.star.text.TextField.ExtendedUser"))
+                {
                     XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
                     xUp.update();
                 }
-                if (xSI.supportsService("com.sun.star.text.TextField.User")) {
+                if (xSI.supportsService("com.sun.star.text.TextField.User"))
+                {
                     XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
                     xUp.update();
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-
-    public void updateDateFields() {
-        try {
+    public void updateDateFields()
+    {
+        try
+        {
             XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
             Calendar cal = new GregorianCalendar();
             DateTime dt = new DateTime();
@@ -269,57 +274,65 @@ public class TextFieldHandler {
             dt.Month = (short) cal.get(Calendar.MONTH);
             dt.Month++;
 
-            while (xEnum.hasMoreElements()) {
+            while (xEnum.hasMoreElements())
+            {
                 Object oTextField = xEnum.nextElement();
                 XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
 
-                if (xSI.supportsService("com.sun.star.text.TextField.DateTime")) {
+                if (xSI.supportsService("com.sun.star.text.TextField.DateTime"))
+                {
                     XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
                     xPSet.setPropertyValue("IsFixed", Boolean.FALSE);
                     xPSet.setPropertyValue("DateTimeValue", dt);
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    public void fixDateFields(boolean _bSetFixed) {
-    try {
-        XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
-        while (xEnum.hasMoreElements()) {
-            Object oTextField = xEnum.nextElement();
-            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
-            if (xSI.supportsService("com.sun.star.text.TextField.DateTime")) {
-                XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
-                xPSet.setPropertyValue("IsFixed", new Boolean(_bSetFixed));
-            }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }}
-
-
-    public void removeUserFieldByContent(String _FieldContent)
+    public void fixDateFields(boolean _bSetFixed)
     {
         try
         {
-        XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Content", _FieldContent, "String");
-        if (xDependentTextFields != null)
+            XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
+            while (xEnum.hasMoreElements())
             {
-            for (int i = 0; i < xDependentTextFields.length; i++)
+                Object oTextField = xEnum.nextElement();
+                XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+                if (xSI.supportsService("com.sun.star.text.TextField.DateTime"))
                 {
-                xDependentTextFields[i].dispose();
+                    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
+                    xPSet.setPropertyValue("IsFixed", new Boolean(_bSetFixed));
                 }
             }
         }
         catch (Exception e)
         {
-        e.printStackTrace(System.out);
+            e.printStackTrace();
         }
     }
 
-
+    public void removeUserFieldByContent(String _FieldContent)
+    {
+        try
+        {
+            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Content", _FieldContent, "String");
+            if (xDependentTextFields != null)
+            {
+                for (int i = 0; i < xDependentTextFields.length; i++)
+                {
+                    xDependentTextFields[i].dispose();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
     public void changeExtendedUserFieldContent(short UserDataPart, String _FieldContent)
     {
@@ -334,7 +347,9 @@ public class TextFieldHandler {
                 }
             }
             refreshTextFields();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
         }
     }

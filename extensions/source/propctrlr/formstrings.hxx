@@ -55,6 +55,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_NAVIGATION,             "NavigationBarMode");
     PCR_CONSTASCII_STRING( PROPERTY_CYCLE,                  "Cycle");
     PCR_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,          "DataField");
+    PCR_CONSTASCII_STRING( PROPERTY_INPUT_REQUIRED,         "InputRequired");
     PCR_CONSTASCII_STRING( PROPERTY_ENABLED,                "Enabled");
     PCR_CONSTASCII_STRING( PROPERTY_READONLY,               "ReadOnly");
     PCR_CONSTASCII_STRING( PROPERTY_ISREADONLY,             "IsReadOnly");
@@ -182,6 +183,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_STATE,                  "State");
     PCR_CONSTASCII_STRING( PROPERTY_TIME,                   "Time");
     PCR_CONSTASCII_STRING( PROPERTY_SCALEIMAGE,             "ScaleImage");
+    PCR_CONSTASCII_STRING( PROPERTY_SCALE_MODE,             "ScaleMode");
     PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
     PCR_CONSTASCII_STRING( PROPERTY_SELECTEDITEMS,          "SelectedItems");

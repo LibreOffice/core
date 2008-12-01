@@ -147,7 +147,7 @@
 #define RID_STR_TAG                         ( RID_FORMBROWSER_START + 116 )
 #define RID_STR_HELPTEXT                    ( RID_FORMBROWSER_START + 117 )
 #define RID_STR_HELPURL                     ( RID_FORMBROWSER_START + 118 )
-    // FREE
+#define RID_STR_INPUT_REQUIRED              ( RID_FORMBROWSER_START + 119 )
 #define RID_STR_UNCHECKEDREFVALUE           ( RID_FORMBROWSER_START + 120 )
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
     // FREE
@@ -336,6 +336,7 @@
 #define RID_RSC_ENUM_CELL_EXCHANGE_TYPE     ( RID_PROPCONTROLLER_START + 23 )
 #define RID_RSC_ENUM_SUBMIT_TARGET          ( RID_PROPCONTROLLER_START + 24 )
 #define RID_RSC_ENUM_SELECTION_TYPE         ( RID_PROPCONTROLLER_START + 25 )
+#define RID_RSC_ENUM_SCALE_MODE             ( RID_PROPCONTROLLER_START + 26 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids

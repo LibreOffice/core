@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 package com.sun.star.wizards.document;
+
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XControl;
@@ -51,8 +52,9 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 
+public class Control extends Shape
+{
 
-public class Control extends Shape{
     XControlModel xControlModel;
     XControl xControl;
     public XPropertySet xPropertySet;
@@ -67,72 +69,87 @@ public class Control extends Shape{
     protected XNameContainer xFormName;
     protected final int IIMGFIELDWIDTH = 2000;
 
-
-    public Control(){
+    public Control()
+    {
     }
 
-    public Control(FormHandler _oFormHandler, String _sServiceName, Point _aPoint){
+    public Control(FormHandler _oFormHandler, String _sServiceName, Point _aPoint)
+    {
         super(_oFormHandler, _sServiceName, _aPoint, null);
     }
 
-    public Control(FormHandler _oFormHandler, XNameContainer _xFormName, int _icontroltype, String _FieldName, Point _aPoint, Size _aSize){
-    super(_oFormHandler, _aPoint, _aSize);
+    public Control(FormHandler _oFormHandler, XNameContainer _xFormName, int _icontroltype, String _FieldName, Point _aPoint, Size _aSize)
+    {
+        super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
         createControl(_icontroltype, _aPoint, _aSize, null, _FieldName);
     }
 
-
-    public Control(FormHandler _oFormHandler, XShapes _xGroupShapes, XNameContainer _xFormName, int _icontroltype, Point _aPoint, Size _aSize){
-    super(_oFormHandler, _aPoint, _aSize);
+    public Control(FormHandler _oFormHandler, XShapes _xGroupShapes, XNameContainer _xFormName, int _icontroltype, Point _aPoint, Size _aSize)
+    {
+        super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
         createControl(_icontroltype, _aPoint, _aSize, _xGroupShapes, null);
     }
 
-
-    public Control(FormHandler _oFormHandler, int _icontroltype, Point _aPoint, Size _aSize){
+    public Control(FormHandler _oFormHandler, int _icontroltype, Point _aPoint, Size _aSize)
+    {
         super(_oFormHandler, _aPoint, _aSize);
         createControl(_icontroltype, _aPoint, _aSize, null, null);
     }
 
-
-
-    public void createControl(int _icontroltype, Point _aPoint, Size _aSize, XShapes _xGroupShapes, String _FieldName){
-    try {
-        this.icontroltype = _icontroltype;
-        this.sServiceName = oFormHandler.sModelServices[icontroltype];
-        Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
-        xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oControlModel);
-        xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oControlModel);
-        insertControlInContainer(_FieldName);
-        xControlShape.setControl(xControlModel);
-        if  (_xGroupShapes == null)
-            oFormHandler.xDrawPage.add(xShape);
-        else
-            _xGroupShapes.add(xShape);
-        xControl = oFormHandler.xControlAccess.getControl(xControlModel);
-        xControlPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl);
-        xWindowPeer = xControl.getPeer();
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
-
-
-    public void insertControlInContainer(String _fieldname){
-    try {
-        if (xFormName != null){
-            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
-            String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
-            xPropertySet.setPropertyValue("Name", sControlName);
-            xFormName.insertByName(sControlName, xControlModel);
+    public void createControl(int _icontroltype, Point _aPoint, Size _aSize, XShapes _xGroupShapes, String _FieldName)
+    {
+        try
+        {
+            this.icontroltype = _icontroltype;
+            this.sServiceName = oFormHandler.sModelServices[icontroltype];
+            Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
+            xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oControlModel);
+            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oControlModel);
+            insertControlInContainer(_FieldName);
+            xControlShape.setControl(xControlModel);
+            if (_xGroupShapes == null)
+            {
+                oFormHandler.xDrawPage.add(xShape);
+            }
+            else
+            {
+                _xGroupShapes.add(xShape);
+            }
+            xControl = oFormHandler.xControlAccess.getControl(xControlModel);
+            xControlPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl);
+            xWindowPeer = xControl.getPeer();
         }
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
+    public void insertControlInContainer(String _fieldname)
+    {
+        try
+        {
+            if (xFormName != null)
+            {
+                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
+                String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
+                xPropertySet.setPropertyValue("Name", sControlName);
+                xFormName.insertByName(sControlName, xControlModel);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-    public String getControlName(String _fieldname){
+    public String getControlName(String _fieldname)
+    {
         String controlname = "";
-        switch (getControlType()){
+        switch (getControlType())
+        {
             case FormHandler.SOLABEL:
                 controlname = "lbl" + _fieldname;
                 break;
@@ -163,140 +180,182 @@ public class Control extends Shape{
         return controlname;
     }
 
-
-    private void setDefaultValue(Object DatabaseField){
+    private void setDefaultValue(Object DatabaseField)
+    {
         oDefaultValue = Helper.getUnoPropertyValue(DatabaseField, "DefaultValue");
     }
 
-
-    public int getPreferredWidth(String sText){
+    public int getPreferredWidth(String sText)
+    {
         Size aPeerSize = getPreferredSize(sText);
         return ((aPeerSize.Width + 10) * oFormHandler.getXPixelFactor());
     }
 
-
-    public int getPreferredHeight(String sText){
+    public int getPreferredHeight(String sText)
+    {
         Size aPeerSize = getPreferredSize(sText);
         if (icontroltype == FormHandler.SOCHECKBOX)
+        {
             return (aPeerSize.Height * oFormHandler.getXPixelFactor());
+        }
         else
+        {
             return ((aPeerSize.Height + 2) * oFormHandler.getXPixelFactor());
+        }
     }
 
-
-    public int getPreferredWidth(){
+    public int getPreferredWidth()
+    {
         if (icontroltype == FormHandler.SOIMAGECONTROL)
+        {
             return IIMGFIELDWIDTH;
-        else{
+        }
+        else
+        {
             Size aPeerSize = getPeerSize();
             // We increase the preferred Width a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
             if (icontroltype == FormHandler.SOCHECKBOX)
-                return((aPeerSize.Width * oFormHandler.getXPixelFactor()) );
+            {
+                return ((aPeerSize.Width * oFormHandler.getXPixelFactor()));
+            }
             else
-                return((aPeerSize.Width * oFormHandler.getXPixelFactor()) + 200);
+            {
+                return ((aPeerSize.Width * oFormHandler.getXPixelFactor()) + 200);
+            }
         }
     }
 
-
-    public int getPreferredHeight(){
+    public int getPreferredHeight()
+    {
         if (this.icontroltype == FormHandler.SOIMAGECONTROL)
+        {
             return 2000;
-        else{
+        }
+        else
+        {
             Size aPeerSize = getPeerSize();
             int nHeight = aPeerSize.Height;
             // We increase the preferred Height a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
-            return((nHeight+1) * oFormHandler.getYPixelFactor());
+            return ((nHeight + 1) * oFormHandler.getYPixelFactor());
         }
     }
 
-
-    public Size getPreferredSize(String sText){
-    try {
-        if (xPropertySet.getPropertySetInfo().hasPropertyByName("Text")){
-            xPropertySet.setPropertyValue("Text", sText);
+    public Size getPreferredSize(String sText)
+    {
+        try
+        {
+            if (xPropertySet.getPropertySetInfo().hasPropertyByName("Text"))
+            {
+                xPropertySet.setPropertyValue("Text", sText);
+            }
+            else if (xPropertySet.getPropertySetInfo().hasPropertyByName("Label"))
+            {
+                xPropertySet.setPropertyValue("Label", sText);
+            }
+            else
+            {
+                throw new IllegalArgumentException();
+            }
+            return getPeer().getPreferredSize();
         }
-        else if (xPropertySet.getPropertySetInfo().hasPropertyByName("Label"))
-            xPropertySet.setPropertyValue("Label", sText);
-        else
-            throw new IllegalArgumentException();
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 
-        return getPeer().getPreferredSize();
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return null;
-    }}
-
-
-    public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception{
+    public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception
+    {
         if (xPropertySet.getPropertySetInfo().hasPropertyByName(_sPropertyName))
+        {
             xPropertySet.setPropertyValue(_sPropertyName, _aPropertyValue);
+        }
     }
-
 
     /** the peer should be retrieved every time before it is used because it
      * might be disposed otherwise
      *
      * @return
      */
-    public XLayoutConstrains getPeer(){
-         return (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
+    public XLayoutConstrains getPeer()
+    {
+        return (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
     }
 
-    public Size getPeerSize(){
-    try {
-        Size aPreferredSize = null;
-        double dblEffMax = 0;
-        if (xPropertySet.getPropertySetInfo().hasPropertyByName("EffectiveMax")){
-            Object oValue = xPropertySet.getPropertyValue("EffectiveMax");
-            if (xPropertySet.getPropertyValue("EffectiveMax") != com.sun.star.uno.Any.VOID)
-                dblEffMax = AnyConverter.toDouble(xPropertySet.getPropertyValue("EffectiveMax"));
-            if (dblEffMax == 0){
-                // This is relevant for decimal fields
-                xPropertySet.setPropertyValue("EffectiveValue", new Double(99999));
+    public Size getPeerSize()
+    {
+        try
+        {
+            Size aPreferredSize = null;
+            double dblEffMax = 0;
+            if (xPropertySet.getPropertySetInfo().hasPropertyByName("EffectiveMax"))
+            {
+                Object oValue = xPropertySet.getPropertyValue("EffectiveMax");
+                if (xPropertySet.getPropertyValue("EffectiveMax") != com.sun.star.uno.Any.VOID)
+                {
+                    dblEffMax = AnyConverter.toDouble(xPropertySet.getPropertyValue("EffectiveMax"));
+                }
+                if (dblEffMax == 0)
+                {
+                    // This is relevant for decimal fields
+                    xPropertySet.setPropertyValue("EffectiveValue", new Double(99999));
+                }
+                else
+                {
+                    xPropertySet.setPropertyValue("EffectiveValue", new Double(dblEffMax)); //new Double(100000.2)); //
+                }
+                aPreferredSize = getPeer().getPreferredSize();
+                xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);
             }
-            else{
-                xPropertySet.setPropertyValue("EffectiveValue", new Double(dblEffMax)); //new Double(100000.2)); //
+            else if (this.icontroltype == FormHandler.SOCHECKBOX)
+            {
+                aPreferredSize = getPeer().getPreferredSize();
             }
-            aPreferredSize = getPeer().getPreferredSize();
-            xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);
-        }
-        else if (this.icontroltype == FormHandler.SOCHECKBOX){
-            aPreferredSize = getPeer().getPreferredSize();
-        }
-        else if (this.icontroltype == FormHandler.SODATECONTROL){
-            xPropertySet.setPropertyValue("Date", new Integer(4711));       //TODO find a better date
-            aPreferredSize = getPeer().getPreferredSize();
-            xPropertySet.setPropertyValue("Date",  com.sun.star.uno.Any.VOID);
-        }
-        else if (this.icontroltype == FormHandler.SOTIMECONTROL){
-            xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
-            aPreferredSize = getPeer().getPreferredSize();
-            xPropertySet.setPropertyValue("Time",  com.sun.star.uno.Any.VOID);
-        }
-        else{
-            String stext;
-            short iTextLength = AnyConverter.toShort(xPropertySet.getPropertyValue("MaxTextLen"));
-            if (iTextLength < this.SOMAXTEXTSIZE)
-                stext = FormHandler.SOSIZETEXT.substring(0,this.SOMAXTEXTSIZE);
+            else if (this.icontroltype == FormHandler.SODATECONTROL)
+            {
+                xPropertySet.setPropertyValue("Date", new Integer(4711));       //TODO find a better date
+                aPreferredSize = getPeer().getPreferredSize();
+                xPropertySet.setPropertyValue("Date", com.sun.star.uno.Any.VOID);
+            }
+            else if (this.icontroltype == FormHandler.SOTIMECONTROL)
+            {
+                xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
+                aPreferredSize = getPeer().getPreferredSize();
+                xPropertySet.setPropertyValue("Time", com.sun.star.uno.Any.VOID);
+            }
             else
-                stext = FormHandler.SOSIZETEXT.substring(0, iTextLength);
-            xPropertySet.setPropertyValue("Text", stext);
-            aPreferredSize = getPeer().getPreferredSize();
-            xPropertySet.setPropertyValue("Text", "");
+            {
+                String stext;
+                short iTextLength = AnyConverter.toShort(xPropertySet.getPropertyValue("MaxTextLen"));
+                if (iTextLength < this.SOMAXTEXTSIZE)
+                {
+                    stext = FormHandler.SOSIZETEXT.substring(0, this.SOMAXTEXTSIZE);
+                }
+                else
+                {
+                    stext = FormHandler.SOSIZETEXT.substring(0, iTextLength);
+                }
+                xPropertySet.setPropertyValue("Text", stext);
+                aPreferredSize = getPeer().getPreferredSize();
+                xPropertySet.setPropertyValue("Text", "");
+            }
+            return aPreferredSize;
         }
-        return aPreferredSize;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return null;
-    }}
-
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 
     /**
      * @return
      */
-    public int getControlType() {
+    public int getControlType()
+    {
         return icontroltype;
     }
 }

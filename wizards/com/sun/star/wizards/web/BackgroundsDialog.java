@@ -47,7 +47,8 @@ import com.sun.star.wizards.web.data.CGSettings;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class BackgroundsDialog extends ImageListDialog {
+public class BackgroundsDialog extends ImageListDialog
+{
 
     private FileAccess fileAccess;
     private SystemDialog sd;
@@ -57,35 +58,36 @@ public class BackgroundsDialog extends ImageListDialog {
      * @param xmsf
      */
     public BackgroundsDialog(
-        XMultiServiceFactory xmsf,
-        ConfigSet set_, WebWizardDialogResources resources) throws Exception {
+            XMultiServiceFactory xmsf,
+            ConfigSet set_, WebWizardDialogResources resources) throws Exception
+    {
 
-        super(xmsf, WWHID.HID_BG, new String[] {
-            resources.resBackgroundsDialog,
-            resources.resBackgroundsDialogCaption,
-            resources.resOK,
-            resources.resCancel,
-            resources.resHelp,
-            resources.resDeselect,
-            resources.resOther,
-            resources.resCounter
-        } );
+        super(xmsf, WWHID.HID_BG, new String[]
+                {
+                    resources.resBackgroundsDialog,
+                    resources.resBackgroundsDialogCaption,
+                    resources.resOK,
+                    resources.resCancel,
+                    resources.resHelp,
+                    resources.resDeselect,
+                    resources.resOther,
+                    resources.resCounter
+                });
 
         sd = SystemDialog.createOpenDialog(xmsf);
-        sd.addFilter(resources.resImages,"*.jpg;*.jpeg;*.jpe;*.gif",true);
-        sd.addFilter(resources.resAllFiles,"*.*",false);
+        sd.addFilter(resources.resImages, "*.jpg;*.jpeg;*.jpe;*.gif", true);
+        sd.addFilter(resources.resAllFiles, "*.*", false);
 
-        settings = (CGSettings)set_.root;
+        settings = (CGSettings) set_.root;
 
         fileAccess = new FileAccess(xmsf);
         il.setListModel(new Model(set_));
-        il.setImageSize( new Size(40,40));
+        il.setImageSize(new Size(40, 40));
         il.setRenderer(new BGRenderer(0));
         build();
 
 
     }
-
 
     /**
      * trigered when the user clicks the "other" button.
@@ -94,9 +96,11 @@ public class BackgroundsDialog extends ImageListDialog {
      * and then jumps to the new image, selecting it in the list.
      * @see add(String)
      */
-    public void other() {
-        String filename[] = sd.callOpenDialog(false,settings.cp_DefaultSession.cp_InDirectory);
-        if (filename != null && filename.length > 0 && filename[0] != null) {
+    public void other()
+    {
+        String filename[] = sd.callOpenDialog(false, settings.cp_DefaultSession.cp_InDirectory);
+        if (filename != null && filename.length > 0 && filename[0] != null)
+        {
             settings.cp_DefaultSession.cp_InDirectory = FileAccess.getParentDir(filename[0]);
             int i = add(filename[0]);
             il.setSelected(i);
@@ -110,22 +114,28 @@ public class BackgroundsDialog extends ImageListDialog {
      * @param s
      * @return
      */
-    private int add(String s) {
+    private int add(String s)
+    {
 
         //first i check the item does not already exists in the list...
-        for (int i = 0; i<il.getListModel().getSize(); i++)
+        for (int i = 0; i < il.getListModel().getSize(); i++)
+        {
             if (il.getListModel().getElementAt(i).equals(s))
+            {
                 return i;
-
-        ((DefaultListModel)il.getListModel()).addElement(s);
-        try {
-            Object configView = Configuration.getConfigurationRoot(xMSF,FileAccess.connectURLs(WebWizardConst.CONFIG_PATH ,  "BackgroundImages"),true);
+            }
+        }
+        ((DefaultListModel) il.getListModel()).addElement(s);
+        try
+        {
+            Object configView = Configuration.getConfigurationRoot(xMSF, FileAccess.connectURLs(WebWizardConst.CONFIG_PATH, "BackgroundImages"), true);
             int i = Configuration.getChildrenNames(configView).length + 1;
-            Object o = Configuration.addConfigNode(configView,"" + i);
-            Configuration.set(s, "Href",o);
+            Object o = Configuration.addConfigNode(configView, "" + i);
+            Configuration.set(s, "Href", o);
             Configuration.commit(configView);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
 
@@ -141,25 +151,32 @@ public class BackgroundsDialog extends ImageListDialog {
      * @author rpiterman
      *
      */
-    private class BGRenderer implements ImageList.ImageRenderer {
-            private int cut;
+    private class BGRenderer implements ImageList.ImageRenderer
+    {
 
-            public BGRenderer(int cut_) {
-                cut = cut_;
+        private int cut;
+
+        public BGRenderer(int cut_)
+        {
+            cut = cut_;
+        }
+
+        public Object[] getImageUrls(Object listItem)
+        {
+            Object[] sRetUrls;
+            if (listItem != null)
+            {
+                sRetUrls = new Object[1];
+                sRetUrls[0] = listItem;
+                return sRetUrls;
             }
-            public Object[] getImageUrls(Object listItem) {
-                Object[] sRetUrls;
-                if (listItem != null){
-                    sRetUrls = new Object[1];
-                    sRetUrls[0] = listItem;
-                    return sRetUrls;
-                }
-                return null;
-            }
-            public String render(Object object) {
-                return object == null ? "" :
-                    FileAccess.getPathFilename(fileAccess.getPath((String)object,null));
-            }
+            return null;
+        }
+
+        public String render(Object object)
+        {
+            return object == null ? "" : FileAccess.getPathFilename(fileAccess.getPath((String) object, null));
+        }
     }
 
     /**
@@ -172,29 +189,38 @@ public class BackgroundsDialog extends ImageListDialog {
      * if it is a file, it adds the file to the list.
      * @author rpiterman
      */
-    private class Model extends DefaultListModel {
+    private class Model extends DefaultListModel
+    {
 
-       /**
-        * constructor. </br>
-        * see class description for a description of
-        * the handling of the given model
-        * @param model the configuration set of the background images.
-        */
-       public Model(ConfigSet model)  {
-           try {
-               for (int i = 0; i<model.getSize(); i++) {
-                   CGImage image = (CGImage)model.getElementAt(i);
-                   String path = sd.xStringSubstitution.substituteVariables(image.cp_Href,false);
-                   if (fileAccess.exists(path,false))
-                       addDir(path);
-                   else
-                       remove((String)model.getKey(image));
-               }
-           }
-           catch (Exception ex) {
-               ex.printStackTrace();
-           }
-       }
+        /**
+         * constructor. </br>
+         * see class description for a description of
+         * the handling of the given model
+         * @param model the configuration set of the background images.
+         */
+        public Model(ConfigSet model)
+        {
+            try
+            {
+                for (int i = 0; i < model.getSize(); i++)
+                {
+                    CGImage image = (CGImage) model.getElementAt(i);
+                    String path = sd.xStringSubstitution.substituteVariables(image.cp_Href, false);
+                    if (fileAccess.exists(path, false))
+                    {
+                        addDir(path);
+                    }
+                    else
+                    {
+                        remove((String) model.getKey(image));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
 
         /**
          * when instanciating the model, it checks if each image
@@ -203,15 +229,18 @@ public class BackgroundsDialog extends ImageListDialog {
          * This is what this method does...
          * @param imageName
          */
-       private void remove(String imageName) {
-           try {
-               Object conf = Configuration.getConfigurationRoot(xMSF,WebWizardConst.CONFIG_PATH + "/BackgroundImages",true);
-               Configuration.removeNode(conf,imageName);
-           }
-           catch (Exception ex) {
-               ex.printStackTrace();
-           }
-       }
+        private void remove(String imageName)
+        {
+            try
+            {
+                Object conf = Configuration.getConfigurationRoot(xMSF, WebWizardConst.CONFIG_PATH + "/BackgroundImages", true);
+                Configuration.removeNode(conf, imageName);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
 
         /**
          * if the given url is a directory
@@ -219,22 +248,30 @@ public class BackgroundsDialog extends ImageListDialog {
          * otherwise (if it is a file) adds the file to the list.
          * @param url
          */
-        private void addDir(String url) {
-           if (fileAccess.isDirectory(url))
-               add(fileAccess.listFiles(url,false));
-           else
-               add(url);
-       }
+        private void addDir(String url)
+        {
+            if (fileAccess.isDirectory(url))
+            {
+                add(fileAccess.listFiles(url, false));
+            }
+            else
+            {
+                add(url);
+            }
+        }
 
         /**
          * adds the given filenames (urls) to
          * the list
          * @param filenames
          */
-        private void add(String[] filenames) {
-           for (int i = 0; i<filenames.length; i++)
-            add(filenames[i]);
-       }
+        private void add(String[] filenames)
+        {
+            for (int i = 0; i < filenames.length; i++)
+            {
+                add(filenames[i]);
+            }
+        }
 
         /**
          * adds the given image url to the list.
@@ -242,13 +279,15 @@ public class BackgroundsDialog extends ImageListDialog {
          * (case insensitive)
          * @param filename image url.
          */
-       private void add(String filename) {
-           String lcase = filename.toLowerCase();
-               if (lcase.endsWith("jpg") ||
-                   lcase.endsWith("jpeg") ||
-                   lcase.endsWith("gif")
-               )
-                   Model.this.addElement(filename);
-           }
-       }
+        private void add(String filename)
+        {
+            String lcase = filename.toLowerCase();
+            if (lcase.endsWith("jpg") ||
+                    lcase.endsWith("jpeg") ||
+                    lcase.endsWith("gif"))
+            {
+                Model.this.addElement(filename);
+            }
+        }
+    }
 }

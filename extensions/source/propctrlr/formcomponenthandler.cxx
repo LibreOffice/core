@@ -80,6 +80,7 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
+#include <com/sun/star/graphic/GraphicObject.hpp>
 /** === end UNO includes === **/
 #include <connectivity/dbexception.hxx>
 #include <vcl/wrkwin.hxx>
@@ -116,6 +117,7 @@
 
 #include <limits>
 
+#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler()
 {
@@ -320,7 +322,8 @@ namespace pcr
     Any SAL_CALL FormComponentPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         if( _rPropertyName == PROPERTY_ROWSET )
-            return ::comphelper::OPropertyContainer::getPropertyValue( _rPropertyName);
+            return ::comphelper::OPropertyContainer::getPropertyValue( _rPropertyName );
+
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_getPropertyValue_throw( _rPropertyName );
     }
@@ -333,10 +336,19 @@ namespace pcr
             ::comphelper::OPropertyContainer::setPropertyValue( _rPropertyName, _rValue );
             return;
         }
+
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) ); // check if property is known by the handler
 
-        if ( PROPERTY_ID_FONT_NAME == nPropId )
+        Reference< graphic::XGraphicObject > xGrfObj;
+        if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
+        {
+            DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
+            rtl::OUString sObjectID( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
+            sObjectID = sObjectID + xGrfObj->getUniqueID();
+            m_xComponent->setPropertyValue( _rPropertyName, uno::makeAny( sObjectID ) );
+        }
+        else if ( PROPERTY_ID_FONT_NAME == nPropId )
         {
             // special handling, the value is a faked value we generated ourself in impl_executeFontDialog_nothrow
             Sequence< NamedValue > aFontPropertyValues;
@@ -561,9 +573,14 @@ namespace pcr
         {
             ::rtl::OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
-
-            INetURLObject aDocURL( impl_getDocumentURL_nothrow() );
-            aPropertyValue <<= (::rtl::OUString)URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+            // Don't convert a placeholder
+            if ( nPropId == PROPERTY_ID_IMAGE_URL && sControlValue.equals( String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ) )
+                aPropertyValue <<= sControlValue;
+            else
+            {
+                INetURLObject aDocURL( impl_getDocumentURL_nothrow() );
+                aPropertyValue <<= (::rtl::OUString)URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+            }
         }
         break;
 
@@ -816,7 +833,6 @@ namespace pcr
                 if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
                     const_cast< FormComponentPropertyHandler* >( this )->m_bHaveCommand = true;
                 break;
-
             }   // switch ( nPropId )
 
             aProperties.push_back( *pProperty );
@@ -858,6 +874,7 @@ namespace pcr
         aInterestingProperties.push_back( PROPERTY_DECIMAL_ACCURACY );
         aInterestingProperties.push_back( PROPERTY_SHOWTHOUSANDSEP );
         aInterestingProperties.push_back( PROPERTY_FORMATKEY );
+        aInterestingProperties.push_back( PROPERTY_EMPTY_IS_NULL );
         return Sequence< ::rtl::OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
     }
 
@@ -1505,8 +1522,14 @@ namespace pcr
 
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
+            aDependentProperties.push_back( PROPERTY_ID_SCALE_MODE );
+            aDependentProperties.push_back( PROPERTY_ID_INPUT_REQUIRED );
         }
         break;
+
+        case PROPERTY_ID_EMPTY_IS_NULL:
+            aDependentProperties.push_back( PROPERTY_ID_INPUT_REQUIRED );
+            break;
 
         // ----- SubmitEncoding -----
         case PROPERTY_ID_SUBMIT_ENCODING:
@@ -1569,6 +1592,7 @@ namespace pcr
             }
 
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
+            aDependentProperties.push_back( PROPERTY_ID_SCALE_MODE );
         }
         break;
 
@@ -1739,8 +1763,9 @@ namespace pcr
             }
             break;  // case PROPERTY_ID_BOUNDCOLUMN
 
-            // ----- ScaleImage -----
+            // ----- ScaleImage, ScaleMode -----
             case PROPERTY_ID_SCALEIMAGE:
+            case PROPERTY_ID_SCALE_MODE:
             {
                 ::rtl::OUString sControlSource;
                 if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_CONTROLSOURCE ) )
@@ -1749,15 +1774,36 @@ namespace pcr
                 ::rtl::OUString sImageURL;
                 impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sImageURL;
 
-                _rxInspectorUI->enablePropertyUI( PROPERTY_SCALEIMAGE,
+                _rxInspectorUI->enablePropertyUI( impl_getPropertyNameFromId_nothrow( _nPropId ),
                     ( sControlSource.getLength() != 0 ) || ( sImageURL.getLength() != 0 )
                 );
             }
-            break;  // case PROPERTY_ID_SCALEIMAGE
+            break;  // case PROPERTY_ID_SCALEIMAGE, PROPERTY_ID_SCALE_MODE
 
-            // ----- SelectedItems -----
+            // ----- InputRequired -----
+            case PROPERTY_ID_INPUT_REQUIRED:
+            {
+                ::rtl::OUString sControlSource;
+                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_CONTROLSOURCE ) >>= sControlSource );
+
+                sal_Bool bEmptyIsNULL = sal_False;
+                sal_Bool bHasEmptyIsNULL = impl_componentHasProperty_throw( PROPERTY_EMPTY_IS_NULL );
+                if ( bHasEmptyIsNULL )
+                    OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_EMPTY_IS_NULL ) >>= bEmptyIsNULL );
+
+                // if the control is not bound to a DB field, there is no sense in having the "Input required"
+                // property
+                // Also, if an empty input of this control are *not* written as NULL, but as empty strings,
+                // then "Input required" does not make sense, too (since there's always an input, even if the control
+                // is empty).
+                _rxInspectorUI->enablePropertyUI( PROPERTY_INPUT_REQUIRED,
+                    ( sControlSource.getLength() != 0 ) && ( !bHasEmptyIsNULL || bEmptyIsNULL )
+                );
+            }
+            break;
+
+            // ----- SelectedItems, DefaultSelection -----
             case PROPERTY_ID_SELECTEDITEMS:
-            // ----- DefaultSelection -----
             case PROPERTY_ID_DEFAULT_SELECT_SEQ:
             {
                 Sequence< ::rtl::OUString > aEntries;
@@ -2129,6 +2175,12 @@ namespace pcr
             if  (   ( FormComponentType::DATEFIELD == m_nClassId )
                 ||  ( FormComponentType::TIMEFIELD == m_nClassId )
                 )
+                return true;
+            break;
+
+        case PROPERTY_ID_SCALEIMAGE:
+            if ( impl_componentHasProperty_throw( PROPERTY_SCALE_MODE ) )
+                // ScaleImage is superseded by ScaleMode
                 return true;
             break;
         }
@@ -2658,11 +2710,15 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForImage_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
+        bool bIsLink = true;// reflect the legacy behavior
         ::rtl::OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
         ::sfx2::FileDialogHelper aFileDlg(SFXWB_GRAPHIC);
 
         aFileDlg.SetTitle(aStrTrans);
+        // non-linked images ( e.g. those located in the document
+        // stream ) cannot *currently* be handled by openoffice basic dialogs.
+        bool bHandleNonLink = ( m_eComponentClass == eFormControl );
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");
@@ -2671,14 +2727,14 @@ namespace pcr
             // do a preview by default
             xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
 
-            // "as link" is checked, but disabled
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(sal_True));
-            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(bIsLink));
+            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, bHandleNonLink );
+
         }
 
         ::rtl::OUString sCurValue;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue );
-        if ( sCurValue.getLength() != 0 )
+        if ( sCurValue.getLength() != 0 && sCurValue.compareToAscii(GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH(GRAPHOBJ_URLPREFIX) ) != 0 )
         {
             aFileDlg.SetDisplayDirectory( sCurValue );
             // TODO: need to set the display directory _and_ the default name
@@ -2687,7 +2743,26 @@ namespace pcr
         _rClearBeforeDialog.clear();
         bool bSuccess = ( 0 == aFileDlg.Execute() );
         if ( bSuccess )
-            _out_rNewValue <<= (::rtl::OUString)aFileDlg.GetPath();
+        {
+            if ( bHandleNonLink && xController.is() )
+            {
+                xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
+            }
+            if ( !bIsLink )
+            {
+                Graphic aGraphic;
+                aFileDlg.GetGraphic( aGraphic );
+
+                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_aContext.getUNOContext() );
+                xGrfObj->setGraphic( aGraphic.GetXGraphic() );
+
+
+                _out_rNewValue <<= xGrfObj;
+
+            }
+            else
+                _out_rNewValue <<= (::rtl::OUString)aFileDlg.GetPath();
+        }
         return bSuccess;
     }
 

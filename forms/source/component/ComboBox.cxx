@@ -748,14 +748,22 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
 //-----------------------------------------------------------------------------
 sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    ::rtl::OUString aNewValue;
-    m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= aNewValue;
-    sal_Bool bModified = ( aNewValue != m_aSaveValue );
+    Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
+    ::rtl::OUString sNewValue;
+    aNewValue >>= sNewValue;
+
+    bool bModified = ( aNewValue != m_aLastKnownValue );
     if ( bModified )
     {
-        if (!aNewValue.getLength() && !isRequired() && m_bEmptyIsNull)
+        if  (   !aNewValue.hasValue()
+            ||  (   !sNewValue.getLength()      // an empty string
+                &&  m_bEmptyIsNull              // which should be interpreted as NULL
+                )
+            )
+        {
             m_xColumnUpdate->updateNull();
+        }
         else
         {
             try
@@ -763,18 +771,19 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
                 OSL_PRECOND( m_pValueFormatter.get(), "OComboBoxModel::commitControlValueToDbColumn: no value formatter!" );
                 if ( m_pValueFormatter.get() )
                 {
-                    if ( !m_pValueFormatter->setFormattedValue( aNewValue ) )
+                    if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
                         return sal_False;
                 }
                 else
-                    m_xColumnUpdate->updateString( aNewValue );
+                    m_xColumnUpdate->updateString( sNewValue );
             }
             catch ( const Exception& )
             {
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+
+        m_aLastKnownValue = aNewValue;
     }
 
     // add the new value to the list
@@ -790,7 +799,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
             sal_Int32 i;
             for (i=0; i<aStringItemList.getLength(); ++i, ++pStringItems)
             {
-                if (pStringItems->equals(aNewValue))
+                if ( pStringItems->equals( sNewValue ) )
                     break;
             }
 
@@ -799,7 +808,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
             {
                 sal_Int32 nOldLen = aStringItemList.getLength();
                 aStringItemList.realloc( nOldLen + 1 );
-                aStringItemList.getArray()[ nOldLen ] = aNewValue;
+                aStringItemList.getArray()[ nOldLen ] = sNewValue;
 
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
             }
@@ -815,10 +824,26 @@ Any OComboBoxModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pValueFormatter.get(), "OComboBoxModel::translateDbColumnToControlValue: no value formatter!" );
     if ( m_pValueFormatter.get() )
-        m_aSaveValue = m_pValueFormatter->getFormattedValue();
+    {
+        ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
+        if  (   !sValue.getLength()
+            &&  m_pValueFormatter->getColumn().is()
+            &&  m_pValueFormatter->getColumn()->wasNull()
+            )
+        {
+            m_aLastKnownValue.clear();
+        }
+        else
+        {
+
+            m_aLastKnownValue <<= sValue;
+        }
+    }
     else
-        m_aSaveValue = ::rtl::OUString();
-    return makeAny( m_aSaveValue );
+        m_aLastKnownValue.clear();
+
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( ::rtl::OUString() );
+        // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
 }
 
 //------------------------------------------------------------------------------

@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.document;
+ ************************************************************************/
+package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
@@ -44,8 +45,9 @@ import com.sun.star.form.XGridColumnFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
+public class GridControl extends Shape
+{
 
-public class GridControl extends Shape{
     FieldColumn[] fieldcolumns;
     public XNameContainer xNameContainer;
     public XGridColumnFactory xGridColumnFactory;
@@ -55,33 +57,41 @@ public class GridControl extends Shape{
     XControlModel xControlModel;
     public XComponent xComponent;
 
-    public GridControl(XMultiServiceFactory _xMSF, String _sname, FormHandler _oFormHandler, XNameContainer _xFormName, FieldColumn[] _fieldcolumns, Point _aPoint, Size _aSize) {
-    super(_oFormHandler, _aPoint, _aSize);
-    try {
-        fieldcolumns = _fieldcolumns;
-        Object oGridModel = oFormHandler.xMSFDoc.createInstance(oFormHandler.sModelServices[FormHandler.SOGRIDCONTROL]);
-        xNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oGridModel);
-        xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oGridModel);
-        _xFormName.insertByName(_sname, oGridModel);
-        xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oGridModel);
-        xControlShape.setControl(xControlModel);
-        xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oGridModel);
-        oFormHandler.xDrawPage.add(xShape);
-        xGridColumnFactory = (XGridColumnFactory) UnoRuntime.queryInterface(XGridColumnFactory.class, oGridModel);
-        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oGridModel);
+    public GridControl(XMultiServiceFactory _xMSF, String _sname, FormHandler _oFormHandler, XNameContainer _xFormName, FieldColumn[] _fieldcolumns, Point _aPoint, Size _aSize)
+    {
+        super(_oFormHandler, _aPoint, _aSize);
+        try
+        {
+            fieldcolumns = _fieldcolumns;
+            Object oGridModel = oFormHandler.xMSFDoc.createInstance(oFormHandler.sModelServices[FormHandler.SOGRIDCONTROL]);
+            xNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oGridModel);
+            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oGridModel);
+            _xFormName.insertByName(_sname, oGridModel);
+            xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oGridModel);
+            xControlShape.setControl(xControlModel);
+            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oGridModel);
+            oFormHandler.xDrawPage.add(xShape);
+            xGridColumnFactory = (XGridColumnFactory) UnoRuntime.queryInterface(XGridColumnFactory.class, oGridModel);
+            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oGridModel);
 
 //      Helper.setUnoPropertyValue(oGridModel, "Name", _sname);
-        for (int i = 0; i < fieldcolumns.length; i++){
-            FieldColumn curfieldcolumn = fieldcolumns[i];
-            if (curfieldcolumn.FieldType == DataType.TIMESTAMP){
-                TimeStampControl oControl = new TimeStampControl(new Resource(_xMSF, "", "dbw"),this, curfieldcolumn);
+            for (int i = 0; i < fieldcolumns.length; i++)
+            {
+                FieldColumn curfieldcolumn = fieldcolumns[i];
+                if (curfieldcolumn.FieldType == DataType.TIMESTAMP)
+                {
+                    TimeStampControl oControl = new TimeStampControl(new Resource(_xMSF, "", "dbw"), this, curfieldcolumn);
+                }
+                else
+                {
+                    Control oControl = new DatabaseControl(this, curfieldcolumn);
+                }
             }
-            else{
-                Control oControl = new DatabaseControl(this, curfieldcolumn);
-            }
-        }
 
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 }

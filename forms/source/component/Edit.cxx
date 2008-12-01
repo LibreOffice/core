@@ -679,12 +679,21 @@ sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 //------------------------------------------------------------------------------
 sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
-    ::rtl::OUString sNewValue;
-    m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
-    if (sNewValue != m_aSaveValue)
+    Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
+
+    if ( aNewValue != m_aLastKnownValue )
     {
-        if (!sNewValue.getLength() && !isRequired() && m_bEmptyIsNull)
+        ::rtl::OUString sNewValue;
+        aNewValue >>= sNewValue;
+
+        if  (   !aNewValue.hasValue()
+            ||  (   !sNewValue.getLength()      // an empty string
+                &&  m_bEmptyIsNull              // which should be interpreted as NULL
+                )
+            )
+        {
             m_xColumnUpdate->updateNull();
+        }
         else
         {
             OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::commitControlValueToDbColumn: no value formatter!" );
@@ -703,8 +712,9 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 return sal_False;
             }
         }
-        m_aSaveValue = sNewValue;
+        m_aLastKnownValue = aNewValue;
     }
+
     return sal_True;
 }
 
@@ -713,19 +723,33 @@ Any OEditModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::translateDbColumnToControlValue: no value formatter!" );
     if ( m_pValueFormatter.get() )
-        m_aSaveValue = m_pValueFormatter->getFormattedValue();
-    else
-        m_aSaveValue = ::rtl::OUString();
-
-    // #i2817# OJ
-    sal_uInt16 nMaxTextLen = getINT16( m_xAggregateSet->getPropertyValue( PROPERTY_MAXTEXTLEN ) );
-    if ( nMaxTextLen && m_aSaveValue.getLength() > nMaxTextLen )
     {
-        sal_Int32 nDiff = m_aSaveValue.getLength() - nMaxTextLen;
-        m_aSaveValue = m_aSaveValue.replaceAt( nMaxTextLen, nDiff, ::rtl::OUString() );
-    }
+        ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
+        if  (   !sValue.getLength()
+            &&  m_pValueFormatter->getColumn().is()
+            &&  m_pValueFormatter->getColumn()->wasNull()
+            )
+        {
+            m_aLastKnownValue.clear();
+        }
+        else
+        {
+            // #i2817# OJ
+            sal_uInt16 nMaxTextLen = getINT16( m_xAggregateSet->getPropertyValue( PROPERTY_MAXTEXTLEN ) );
+            if ( nMaxTextLen && sValue.getLength() > nMaxTextLen )
+            {
+                sal_Int32 nDiff = sValue.getLength() - nMaxTextLen;
+                sValue = sValue.replaceAt( nMaxTextLen, nDiff, ::rtl::OUString() );
+            }
 
-    return makeAny( m_aSaveValue );
+            m_aLastKnownValue <<= sValue;
+        }
+    }
+    else
+        m_aLastKnownValue.clear();
+
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( ::rtl::OUString() );
+        // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
 }
 
 //------------------------------------------------------------------------------

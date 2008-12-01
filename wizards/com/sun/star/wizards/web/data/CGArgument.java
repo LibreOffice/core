@@ -26,10 +26,13 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.ConfigGroup;
 
-public class CGArgument extends ConfigGroup {
+public class CGArgument extends ConfigGroup
+{
+
     public String cp_Value;
 }

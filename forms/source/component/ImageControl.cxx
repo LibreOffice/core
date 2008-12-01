@@ -32,14 +32,12 @@
 #include "precompiled_forms.hxx"
 #include "ImageControl.hxx"
 
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 #include "frm_resource.hxx"
 #include "services.hxx"
+#include "componenttools.hxx"
+
 #include <svtools/imageresourceaccess.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -57,6 +55,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicObject.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
@@ -66,6 +65,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/guarding.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <svtools/urihelper.hxx>
 
 #include <memory>
 
@@ -90,12 +90,49 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::frame;
 
-//==================================================================
+//==============================================================================
+//= OImageControlModel
+//==============================================================================
+namespace
+{
+    enum ImageStoreType
+    {
+        ImageStoreBinary,
+        ImageStoreLink,
+
+        ImageStoreInvalid
+    };
+
+    ImageStoreType lcl_getImageStoreType( const sal_Int32 _nFieldType )
+    {
+        // binary/longvarchar types could be used to store images in binary representation
+        if  (   ( _nFieldType == DataType::BINARY )
+            ||  ( _nFieldType == DataType::VARBINARY )
+            ||  ( _nFieldType == DataType::LONGVARBINARY )
+            ||  ( _nFieldType == DataType::OTHER )
+            ||  ( _nFieldType == DataType::OBJECT )
+            ||  ( _nFieldType == DataType::BLOB )
+            ||  ( _nFieldType == DataType::LONGVARCHAR )
+            )
+            return ImageStoreBinary;
+
+        // char types could be used to store links to images
+        if  (   ( _nFieldType == DataType::CHAR )
+            ||  ( _nFieldType == DataType::VARCHAR )
+            )
+            return ImageStoreLink;
+
+        return ImageStoreInvalid;
+    }
+}
+
+//==============================================================================
 // OImageControlModel
-//==================================================================
+//==============================================================================
 
-//------------------------------------------------------------------
+//------------------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageControlModel(_rxFactory));
@@ -144,8 +181,8 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
         ::rtl::OUString sImageURL;
         aImageURL >>= sImageURL;
 
-        ::osl::MutexGuard aGuard( m_aMutex );   // handleNewImageURL expects this
-        handleNewImageURL( sImageURL, eOther );
+        ::osl::MutexGuard aGuard( m_aMutex );
+        impl_handleNewImageURL_lck( sImageURL, eOther );
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -203,15 +240,9 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::approveDbColumnType(sal_Int32 _nColumnType)
+sal_Bool OImageControlModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
-    // zulaessing sind die binary Typen, OTHER- und LONGVARCHAR-Felder
-    if ((_nColumnType == DataType::BINARY) || (_nColumnType == DataType::VARBINARY)
-        || (_nColumnType == DataType::LONGVARBINARY) || (_nColumnType == DataType::OTHER)
-        || (_nColumnType == DataType::LONGVARCHAR))
-        return sal_True;
-
-    return sal_False;
+    return ImageStoreInvalid != lcl_getImageStoreType( _nColumnType );
 }
 
 
@@ -229,8 +260,8 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& _rEvent )
         ::rtl::OUString sImageURL;
         _rEvent.NewValue >>= sImageURL;
 
-        ::osl::MutexGuard aGuard( m_aMutex );   // handleNewImageURL expects this
-        handleNewImageURL( sImageURL, eOther );
+        ::osl::MutexGuard aGuard( m_aMutex );
+        impl_handleNewImageURL_lck( sImageURL, eOther );
     }
 }
 
@@ -339,30 +370,22 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
+sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
-    // if the image URL has been set, we have to forward this to the image producer
-    // xInStream erzeugen
-    Reference< XActiveDataSink > xSink(
-        m_xServiceFactory->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.io.ObjectInputStream" ) ), UNO_QUERY );
-    if ( !xSink.is() )
-        return sal_False;
-
     // create a stream for the image specified by the URL
     ::std::auto_ptr< SvStream > pImageStream;
     Reference< XInputStream > xImageStream;
 
-    if ( ::svt::ImageResourceAccess::isImageResourceURL( _rURL ) )
+    if ( ::svt::GraphicAccess::isSupportedURL( _rURL ) )
     {
-        xImageStream = ::svt::ImageResourceAccess::getImageXStream( getORB(), _rURL );
+        xImageStream = ::svt::GraphicAccess::getImageXStream( getORB(), _rURL );
     }
     else
     {
         pImageStream.reset( ::utl::UcbStreamHelper::CreateStream( _rURL, STREAM_READ ) );
         sal_Bool bSetNull = ( pImageStream.get() == NULL ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
 
-        if (!bSetNull)
+        if ( !bSetNull )
         {
             // get the size of the stream
             pImageStream->Seek(STREAM_SEEK_TO_END);
@@ -377,30 +400,52 @@ sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL, Va
 
     if ( xImageStream.is() )
     {
-        xSink->setInputStream( xImageStream );
-        Reference< XInputStream >  xInStream(xSink, UNO_QUERY);
-
         if ( m_xColumnUpdate.is() )
-            updateColumnWithStream( xInStream );
+            m_xColumnUpdate->updateBinaryStream( xImageStream, xImageStream->available() );
         else
-            setControlValue( makeAny( xInStream ), _eInstigator );
-
-        // close the stream, just to be on the safe side (should have been done elsewhere ...)
-        try
-        {
-            xInStream->closeInput();
-        }
-        catch (NotConnectedException&)
-        {
-        }
+            setControlValue( makeAny( xImageStream ), _eInstigator );
+        xImageStream->closeInput();
+        return sal_True;
     }
-    else
+
+    return sal_False;
+}
+
+//------------------------------------------------------------------------------
+sal_Bool OImageControlModel::impl_handleNewImageURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
+{
+    switch ( lcl_getImageStoreType( getFieldType() ) )
     {
+    case ImageStoreBinary:
+        if ( impl_updateStreamForURL_lck( _rURL, _eInstigator ) )
+            return sal_True;
+        break;
+
+    case ImageStoreLink:
+    {
+        ::rtl::OUString sCommitURL( _rURL );
+        if ( m_sDocumentURL.getLength() )
+            sCommitURL = URIHelper::simpleNormalizedMakeRelative( m_sDocumentURL, sCommitURL );
+        OSL_ENSURE( m_xColumnUpdate.is(), "OImageControlModel::impl_handleNewImageURL_lck: no bound field, but ImageStoreLink?!" );
         if ( m_xColumnUpdate.is() )
-            updateColumnWithStream( NULL );
-        else
-            setControlValue( Any(), _eInstigator );
+        {
+            m_xColumnUpdate->updateString( sCommitURL );
+            return sal_True;
+        }
     }
+    break;
+
+    case ImageStoreInvalid:
+        OSL_ENSURE( false, "OImageControlModel::impl_handleNewImageURL_lck: invalid current field type!" );
+        break;
+    }
+
+    // if we're here, then the above code was unable to update our field/control from the given URL
+    // => fall back to NULL/VOID
+    if ( m_xColumnUpdate.is() )
+        m_xColumnUpdate->updateNull();
+    else
+        setControlValue( Any(), _eInstigator );
 
     return sal_True;
 }
@@ -412,7 +457,8 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
     {
         // since this is a "commit after reset", we can simply update the column
         // with null - this is our "default" which we were just reset to
-        updateColumnWithStream( NULL );
+        if ( m_xColumnUpdate.is() )
+            m_xColumnUpdate->updateNull();
     }
     else
     {
@@ -420,34 +466,77 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 
         ::rtl::OUString sImageURL;
         m_xAggregateSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sImageURL;
-        return handleNewImageURL( sImageURL, eDbColumnBinding );
+        return impl_handleNewImageURL_lck( sImageURL, eDbColumnBinding );
     }
 
     return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::updateColumnWithStream( const Reference< XInputStream >& _rxStream )
+namespace
 {
-    OSL_PRECOND( m_xColumnUpdate.is(), "OImageControlModel::updateColumnWithStream: no column update interface!" );
-    if ( m_xColumnUpdate.is() )
+    bool lcl_isValidDocumentURL( const ::rtl::OUString& _rDocURL )
     {
-        if ( _rxStream.is() )
-            m_xColumnUpdate->updateBinaryStream( _rxStream, _rxStream->available() );
-        else
-            m_xColumnUpdate->updateNull();
-
-        // note that this will fire a value change for the column, which
-        // will result in us (our base class, actually) syncing the
-        // db column content to our control content - finally, this will arrive
-        // in setControlValue
+        return ( _rDocURL.getLength() && !_rDocURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:object" ) ) );
     }
+}
+
+//------------------------------------------------------------------------------
+void OImageControlModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
+{
+    OBoundControlModel::onConnectedDbColumn( _rxForm );
+
+    try
+    {
+        Reference< XModel > xDocument( getXModel( *this ) );
+        if ( xDocument.is() )
+        {
+            m_sDocumentURL = xDocument->getURL();
+            if ( !lcl_isValidDocumentURL( m_sDocumentURL ) )
+            {
+                Reference< XChild > xAsChild( xDocument, UNO_QUERY );
+                while ( xAsChild.is() && !lcl_isValidDocumentURL( m_sDocumentURL ) )
+                {
+                    xDocument.set( xAsChild->getParent(), UNO_QUERY );
+                    if ( xDocument.is() )
+                        m_sDocumentURL = xDocument->getURL();
+                    xAsChild.set( xDocument, UNO_QUERY );
+                }
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------------------
+void OImageControlModel::onDisconnectedDbColumn()
+{
+    OBoundControlModel::onDisconnectedDbColumn();
+
+    m_sDocumentURL = ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
 Any OImageControlModel::translateDbColumnToControlValue()
 {
-    return makeAny( m_xColumn->getBinaryStream() );
+    switch ( lcl_getImageStoreType( getFieldType() ) )
+    {
+    case ImageStoreBinary:  return makeAny( m_xColumn->getBinaryStream() );
+    case ImageStoreLink:
+    {
+        ::rtl::OUString sImageLink( m_xColumn->getString() );
+        if ( m_sDocumentURL.getLength() )
+            sImageLink = INetURLObject::GetAbsURL( m_sDocumentURL, sImageLink );
+        return makeAny( sImageLink );
+    }
+    case ImageStoreInvalid:
+        OSL_ENSURE( false, "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
+        break;
+    }
+    return Any();
 }
 
 //------------------------------------------------------------------------------
@@ -457,20 +546,46 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     if ( !GetImageProducer() || !m_xImageProducer.is() )
         return;
 
-    // give the image producer the stream
-    Reference< XInputStream > xInStream;
-    _rValue >>= xInStream;
-    GetImageProducer()->setImage( xInStream );
-
-    // and start production
-    Reference< XImageProducer > xProducer = m_xImageProducer;
+    bool bStartProduction = false;
+    switch ( lcl_getImageStoreType( getFieldType() ) )
     {
-        // release our mutex once (it's acquired in the calling method!), as starting the image production may
-        // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
-        // VCLXImageControl, does this locking)
-        // FS - 74438 - 30.03.00
-        MutexRelease aRelease(m_aMutex);
-        xProducer->startProduction();
+    case ImageStoreBinary:
+    {
+        // give the image producer the stream
+        Reference< XInputStream > xInStream;
+        _rValue >>= xInStream;
+        GetImageProducer()->setImage( xInStream );
+        bStartProduction = true;
+    }
+    break;
+
+    case ImageStoreLink:
+    {
+        ::rtl::OUString sImageURL;
+        _rValue >>= sImageURL;
+        GetImageProducer()->SetImage( sImageURL );
+        bStartProduction = true;
+    }
+    break;
+
+    case ImageStoreInvalid:
+        OSL_ENSURE( false, "OImageControlModel::doSetControlValue: invalid field type!" );
+        break;
+
+    }   // switch ( lcl_getImageStoreType( getFieldType() ) )
+
+    if ( bStartProduction )
+    {
+        // start production
+        Reference< XImageProducer > xProducer = m_xImageProducer;
+        {
+            // release our mutex once (it's acquired in the calling method!), as starting the image production may
+            // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
+            // VCLXImageControl, does this locking)
+            // FS - 74438 - 30.03.00
+            MutexRelease aRelease(m_aMutex);
+            xProducer->startProduction();
+        }
     }
 }
 
@@ -647,7 +762,24 @@ void OImageControlControl::implInsertGraphics()
         if ( xController.is() )
         {
             xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
-            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
+
+            Reference<XPropertySet> xBoundField;
+            if ( hasProperty( PROPERTY_BOUNDFIELD, xSet ) )
+                xSet->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= xBoundField;
+            sal_Bool bHasField = xBoundField.is();
+
+            // if the control is bound to a DB field, then it's not possible to decide whether or not to link
+            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, !bHasField );
+
+            // if the control is bound to a DB field, then linking of the image depends on the type of the field
+            sal_Bool bImageIsLinked = sal_True;
+            if ( bHasField )
+            {
+                sal_Int32 nFieldType = DataType::OTHER;
+                OSL_VERIFY( xBoundField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType );
+                bImageIsLinked = ( lcl_getImageStoreType( nFieldType ) == ImageStoreLink );
+            }
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, makeAny( bImageIsLinked ) );
         }
 
         if ( ERRCODE_NONE == aDialog.Execute() )
@@ -655,8 +787,21 @@ void OImageControlControl::implInsertGraphics()
             // reset the url property in case it already has the value we're about to set - in this case
             // our propertyChanged would not get called without this.
             implClearGraphics( sal_False );
+            sal_Bool bIsLink = sal_False;
+            xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
+            if ( !bIsLink )
+            {
+                Graphic aGraphic;
+                aDialog.GetGraphic( aGraphic );
 
-            xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );
+                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_aContext.getUNOContext() );
+                xGrfObj->setGraphic( aGraphic.GetXGraphic() );
+                rtl::OUString sObjectID( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+                sObjectID = sObjectID + xGrfObj->getUniqueID();
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( sObjectID ) ) );
+            }
+            else
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );
         }
     }
     catch(Exception&)
@@ -779,19 +924,16 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 //------------------------------------------------------------------------------
 void SAL_CALL OImageControlControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
-    // TODO: place your code here
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
-    // TODO: place your code here
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
-    // TODO: place your code here
 }
 
 

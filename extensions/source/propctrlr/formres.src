@@ -1382,3 +1382,23 @@ String RID_STR_NOLABEL
 {
     Text [ en-US ] = "No Label" ;
 };
+
+Resource RID_RSC_ENUM_SCALE_MODE
+{
+    String 1
+    {
+        Text [ en-US ] = "No";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Keep Ratio";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Fit to Size";
+    };
+};
+String RID_STR_INPUT_REQUIRED
+{
+    Text [ en-US ] = "Input required";
+};

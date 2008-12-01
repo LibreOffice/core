@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.table;
+ ************************************************************************/
+package com.sun.star.wizards.table;
 
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
@@ -47,8 +48,8 @@ import com.sun.star.wizards.common.Properties;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 // import com.sun.star.wizards.common.ConfigGroup;
-
-public class CGCategory{
+public class CGCategory
+{
 
     public String Name;
     public int Index;
@@ -59,29 +60,36 @@ public class CGCategory{
     XNameAccess xNameAccessCurBusinessNode;
     Object oconfigView;
 
-    public CGCategory(XMultiServiceFactory _xMSF){
+    public CGCategory(XMultiServiceFactory _xMSF)
+    {
         xMSF = _xMSF;
     }
 
+    public void initialize(int _index)
+    {
+        try
+        {
+            oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
+            xNameAccessCurBusinessNode = Configuration.getChildNodebyIndex(oconfigView, _index);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-    public void initialize(int _index){
-    try {
-        oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
-        xNameAccessCurBusinessNode = Configuration.getChildNodebyIndex(oconfigView, _index);
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
-
-
-    public String[] getTableNames(){
-    try {
-        xNameAccessTablesNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
-        String[] sTableNames = Configuration.getNodeDisplayNames(xNameAccessTablesNode);
-        return sTableNames;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return null;
-    }}
-
-
+    public String[] getTableNames()
+    {
+        try
+        {
+            xNameAccessTablesNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
+            String[] sTableNames = Configuration.getNodeDisplayNames(xNameAccessTablesNode);
+            return sTableNames;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 }

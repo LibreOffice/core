@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui.event;
+ ************************************************************************/
+package com.sun.star.wizards.ui.event;
 
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XRadioButton;
@@ -38,48 +39,66 @@ import com.sun.star.uno.UnoRuntime;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class RadioDataAware extends DataAware {
+public class RadioDataAware extends DataAware
+{
+
     protected XRadioButton[] radioButtons;
 
-    public RadioDataAware(Object data, Value value, Object[] radioButs) {
+    public RadioDataAware(Object data, Value value, Object[] radioButs)
+    {
         super(data, value);
         radioButtons = new XRadioButton[radioButs.length];
         for (int i = 0; i < radioButs.length; i++)
+        {
             radioButtons[i] = (XRadioButton) UnoRuntime.queryInterface(XRadioButton.class, radioButs[i]);
+        }
     }
 
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.DataAware#setToUI(java.lang.Object)
      */
-    protected void setToUI(Object value) {
+    protected void setToUI(Object value)
+    {
         int selected = ((Number) value).intValue();
         if (selected == -1)
+        {
             for (int i = 0; i < radioButtons.length; i++)
+            {
                 radioButtons[i].setState(false);
+            }
+        }
         else
+        {
             radioButtons[selected].setState(true);
+        }
     }
 
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.DataAware#getFromUI()
      */
-    protected Object getFromUI() {
+    protected Object getFromUI()
+    {
         for (int i = 0; i < radioButtons.length; i++)
+        {
             if (radioButtons[i].getState())
+            {
                 return new Integer(i);
+            }
+        }
         return new Integer(-1);
     }
 
-    public static DataAware attachRadioButtons(Object data, String dataProp, Object[] buttons, final Listener listener, boolean field) {
+    public static DataAware attachRadioButtons(Object data, String dataProp, Object[] buttons, final Listener listener, boolean field)
+    {
         final RadioDataAware da = new RadioDataAware(data,
-            field
-                ? DataAwareFields.getFieldValueFor(data,dataProp,new Integer(0))
-                : new DataAware.PropertyValue(dataProp,data)
-            , buttons);
+                field
+                ? DataAwareFields.getFieldValueFor(data, dataProp, new Integer(0))
+                : new DataAware.PropertyValue(dataProp, data), buttons);
         XItemListener xil = UnoDataAware.itemListener(da, listener);
         for (int i = 0; i < da.radioButtons.length; i++)
+        {
             da.radioButtons[i].addItemListener(xil);
+        }
         return da;
     }
-
 }

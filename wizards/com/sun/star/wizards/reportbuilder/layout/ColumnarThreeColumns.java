@@ -9,7 +9,7 @@
  *
  * $RCSfile: ColumnarThreeColumns.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.wizards.common.Resource;
@@ -43,6 +42,7 @@ import com.sun.star.wizards.ui.*;
  */
 public class ColumnarThreeColumns extends ColumnarTwoColumns
 {
+
     public ColumnarThreeColumns(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
         super(_xDefinitionAccess, _aResource);

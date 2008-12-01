@@ -1,3 +1,34 @@
+/*
+ ************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: LetterDocument.java,v $
+ *
+ * $Revision: 1.10.146.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 package com.sun.star.wizards.letter;
 
 import com.sun.star.wizards.common.*;
@@ -17,7 +48,8 @@ import com.sun.star.style.ParagraphAdjust;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.style.XStyle;
 
-public class LetterDocument extends TextDocument {
+public class LetterDocument extends TextDocument
+{
 
     XDesktop xDesktop;
     boolean keepLogoFrame = true;
@@ -26,36 +58,44 @@ public class LetterDocument extends TextDocument {
     boolean keepSenderAddressRepeatedFrame = true;
     boolean keepAddressFrame = true;
 
-
-    public LetterDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
+    public LetterDocument(XMultiServiceFactory xMSF, XTerminateListener listener)
+    {
         super(xMSF, listener, "WIZARD_LIVE_PREVIEW");
     }
 
-
-    public XWindowPeer getWindowPeer() {
+    public XWindowPeer getWindowPeer()
+    {
         XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xTextDocument);
         return xWindowPeer;
     }
 
-    public void switchElement(String sElement, boolean bState) {
-        try {
+    public void switchElement(String sElement, boolean bState)
+    {
+        try
+        {
             TextSectionHandler mySectionHandler = new TextSectionHandler(xMSF, xTextDocument);
             Object oSection = mySectionHandler.xTextSectionsSupplier.getTextSections().getByName(sElement);
             Helper.setUnoPropertyValue(oSection, "IsVisible", new Boolean(bState));
 
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void updateDateFields() {
+    public void updateDateFields()
+    {
         TextFieldHandler FH = new TextFieldHandler(xMSFDoc, xTextDocument);
         FH.updateDateFields();
     }
 
-    public void switchFooter(String sPageStyle, boolean bState, boolean bPageNumber, String sText) {
-        if (xTextDocument != null) {
-            try {
+    public void switchFooter(String sPageStyle, boolean bState, boolean bPageNumber, String sText)
+    {
+        if (xTextDocument != null)
+        {
+            try
+            {
                 xTextDocument.lockControllers();
                 XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
                 com.sun.star.container.XNameAccess xNameAccess = null;
@@ -67,11 +107,13 @@ public class LetterDocument extends TextDocument {
                 XText xFooterText;
                 XStyle xPageStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName(sPageStyle));
 
-                if (bState) {
+                if (bState)
+                {
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", new Boolean(true));
                     xFooterText = (XText) UnoRuntime.queryInterface(XText.class, Helper.getUnoPropertyValue(xPageStyle, "FooterText"));
                     xFooterText.setString(sText);
-                    if (bPageNumber) {
+                    if (bPageNumber)
+                    {
                         //Adding the Page Number
                         XTextCursor myCursor = xFooterText.createTextCursor();
                         myCursor.gotoEnd(false);
@@ -81,39 +123,53 @@ public class LetterDocument extends TextDocument {
                         XTextField xPageNumberField = (XTextField) UnoRuntime.queryInterface(XTextField.class, xMSFDoc.createInstance("com.sun.star.text.TextField.PageNumber"));
                         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageNumberField);
                         xPSet.setPropertyValue("SubType", PageNumberType.CURRENT);
-                        xPSet.setPropertyValue("NumberingType", new Short (NumberingType.ARABIC));
+                        xPSet.setPropertyValue("NumberingType", new Short(NumberingType.ARABIC));
                         xFooterText.insertTextContent(xFooterText.getEnd(), xPageNumberField, false);
                     }
-                } else {
+                }
+                else
+                {
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", new Boolean(false));
                 }
                 xTextDocument.unlockControllers();
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 exception.printStackTrace(System.out);
             }
         }
     }
 
-    public boolean hasElement(String sElement) {
-        if (xTextDocument != null) {
+    public boolean hasElement(String sElement)
+    {
+        if (xTextDocument != null)
+        {
             TextSectionHandler SH = new TextSectionHandler(xMSF, xTextDocument);
             return SH.hasTextSectionByName(sElement);
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
 
-    public void switchUserField(String sFieldName, String sNewContent, boolean bState) {
+    public void switchUserField(String sFieldName, String sNewContent, boolean bState)
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(xMSF, xTextDocument);
-        if (bState) {
+        if (bState)
+        {
             myFieldHandler.changeUserFieldContent(sFieldName, sNewContent);
-        } else {
+        }
+        else
+        {
             myFieldHandler.changeUserFieldContent(sFieldName, "");
         }
     }
 
-    public void fillSenderWithUserData() {
-        try {
+    public void fillSenderWithUserData()
+    {
+        try
+        {
             TextFieldHandler myFieldHandler = new TextFieldHandler(xMSFDoc, xTextDocument);
             Object oUserDataAccess = Configuration.getConfigurationRoot(xMSF, "org.openoffice.UserProfile/Data", false);
             myFieldHandler.changeUserFieldContent("Company", (String) Helper.getUnoObjectbyName(oUserDataAccess, "o"));
@@ -121,64 +177,92 @@ public class LetterDocument extends TextDocument {
             myFieldHandler.changeUserFieldContent("PostCode", (String) Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"));
             myFieldHandler.changeUserFieldContent("City", (String) Helper.getUnoObjectbyName(oUserDataAccess, "l"));
             myFieldHandler.changeUserFieldContent("State", (String) Helper.getUnoObjectbyName(oUserDataAccess, "st"));
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void killEmptyUserFields() {
+    public void killEmptyUserFields()
+    {
         TextFieldHandler myFieldHandler = new TextFieldHandler(xMSF, xTextDocument);
         myFieldHandler.removeUserFieldByContent("");
     }
 
-    public void killEmptyFrames() {
-        try {
-            if (!keepLogoFrame) {
+    public void killEmptyFrames()
+    {
+        try
+        {
+            if (!keepLogoFrame)
+            {
                 XTextFrame xTF = TextFrameHandler.getFrameByName("Company Logo", xTextDocument);
-                if (xTF != null) xTF.dispose();
+                if (xTF != null)
+                {
+                    xTF.dispose();
+                }
             }
-            if (!keepBendMarksFrame) {
+            if (!keepBendMarksFrame)
+            {
                 XTextFrame xTF = TextFrameHandler.getFrameByName("Bend Marks", xTextDocument);
-                if (xTF != null) xTF.dispose();
+                if (xTF != null)
+                {
+                    xTF.dispose();
+                }
             }
-            if (!keepLetterSignsFrame) {
+            if (!keepLetterSignsFrame)
+            {
                 XTextFrame xTF = TextFrameHandler.getFrameByName("Letter Signs", xTextDocument);
-                if (xTF != null) xTF.dispose();
+                if (xTF != null)
+                {
+                    xTF.dispose();
+                }
             }
-            if (!keepSenderAddressRepeatedFrame) {
+            if (!keepSenderAddressRepeatedFrame)
+            {
                 XTextFrame xTF = TextFrameHandler.getFrameByName("Sender Address Repeated", xTextDocument);
-                if (xTF != null) xTF.dispose();
+                if (xTF != null)
+                {
+                    xTF.dispose();
+                }
             }
-            if (!keepAddressFrame) {
+            if (!keepAddressFrame)
+            {
                 XTextFrame xTF = TextFrameHandler.getFrameByName("Sender Address", xTextDocument);
-                if (xTF != null) xTF.dispose();
+                if (xTF != null)
+                {
+                    xTF.dispose();
+                }
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
     }
 
-
-    public class BusinessPaperObject {
+    public class BusinessPaperObject
+    {
 
         public int iWidth;
         public int iHeight;
         public int iXPos;
         public int iYPos;
-
         XTextFrame xFrame;
         XShape xShape;
 
-        public BusinessPaperObject(String FrameText, int Width, int Height, int XPos, int YPos) {
+        public BusinessPaperObject(String FrameText, int Width, int Height, int XPos, int YPos)
+        {
 
             iWidth = Width;
             iHeight = Height;
             iXPos = XPos;
             iYPos = YPos;
 
-            try {
+            try
+            {
                 xFrame = (XTextFrame) UnoRuntime.queryInterface(XTextFrame.class, xMSFDoc.createInstance("com.sun.star.text.TextFrame"));
                 xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xFrame);
 
@@ -213,12 +297,15 @@ public class LetterDocument extends TextDocument {
 
                 xFrameText.insertString(xFrameCursor, FrameText, false);
 
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace(System.out);
             }
         }
 
-        public void setFramePosition() {
+        public void setFramePosition()
+        {
             Helper.setUnoPropertyValue(xFrame, "HoriOrient", new Short(HoriOrientation.NONE));
             Helper.setUnoPropertyValue(xFrame, "VertOrient", new Short(VertOrientation.NONE));
             Helper.setUnoPropertyValue(xFrame, "Height", new Integer(iHeight));
@@ -229,16 +316,19 @@ public class LetterDocument extends TextDocument {
             Helper.setUnoPropertyValue(xFrame, "VertOrientRelation", new Short(RelOrientation.PAGE_FRAME));
         }
 
-        public void removeFrame() {
-            if (xFrame != null) {
-                try {
+        public void removeFrame()
+        {
+            if (xFrame != null)
+            {
+                try
+                {
                     xTextDocument.getText().removeTextContent(xFrame);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     e.printStackTrace(System.out);
                 }
             }
         }
-
     }
-
 }

@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.common;
 
 /**
@@ -38,7 +37,8 @@ package com.sun.star.wizards.common;
  * The root is the first Java Object in the configuration hirarchie.
  * @author  rpiterman
  */
-public interface ConfigNode {
+public interface ConfigNode
+{
 
     /**
      * reads the object data out of the configuration.
@@ -49,7 +49,8 @@ public interface ConfigNode {
      * it might be practical to be able to pass an extra parameter, for a free use.
      */
     public void readConfiguration(Object configurationView, Object param);
-    public void writeConfiguration(Object configurationView, Object param);
-    public void setRoot(Object root);
 
+    public void writeConfiguration(Object configurationView, Object param);
+
+    public void setRoot(Object root);
 }

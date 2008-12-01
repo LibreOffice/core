@@ -9,7 +9,7 @@
  *
  * $RCSfile: SectionLabel.java,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,23 +30,22 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.report.XFixedText;
 // import com.sun.star.wizards.common.PropertySetHelper;
-
 /**
  *
  * @author ll93751
  */
 public class SectionLabel extends SectionObject
 {
+
     protected SectionLabel(XFixedText _aFixedText)
     {
         m_aParentObject = _aFixedText;
-        // We would like to know, what properties are in this object.
+    // We would like to know, what properties are in this object.
 //        PropertySetHelper aHelper = new PropertySetHelper(_aFixedText);
 //        aHelper.showProperties();
     }
@@ -66,15 +65,14 @@ public class SectionLabel extends SectionObject
         FontDescriptor a = null;
         try
         {
-            final XFixedText aLabel = (XFixedText)getParent();
-            a= aLabel.getFontDescriptor();
+            final XFixedText aLabel = (XFixedText) getParent();
+            a = aLabel.getFontDescriptor();
         }
         catch (com.sun.star.beans.UnknownPropertyException e)
         {
         }
         return a;
     }
-
 }
 
 

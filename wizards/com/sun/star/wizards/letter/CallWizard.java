@@ -1,3 +1,34 @@
+/*
+ ************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: CallWizard.java,v $
+ *
+ * $Revision: 1.3.192.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 package com.sun.star.wizards.letter;
 
 import com.sun.star.beans.XPropertyAccess;
@@ -18,9 +49,10 @@ import com.sun.star.uno.Type;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author $author$
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.3.192.1 $
  */
-public class CallWizard {
+public class CallWizard
+{
 
     /**
      * Gives a factory for creating the service. This method is called by the
@@ -37,10 +69,12 @@ public class CallWizard {
      *
      * @see com.sun.star.comp.loader.JavaLoader#
      */
-    public static XSingleServiceFactory __getServiceFactory(String stringImplementationName, XMultiServiceFactory xMSF, XRegistryKey xregistrykey) {
+    public static XSingleServiceFactory __getServiceFactory(String stringImplementationName, XMultiServiceFactory xMSF, XRegistryKey xregistrykey)
+    {
         XSingleServiceFactory xsingleservicefactory = null;
 
-        if (stringImplementationName.equals(WizardImplementation.class.getName())) {
+        if (stringImplementationName.equals(WizardImplementation.class.getName()))
+        {
             xsingleservicefactory = FactoryHelper.getServiceFactory(WizardImplementation.class, WizardImplementation.__serviceName, xMSF, xregistrykey);
         }
 
@@ -58,7 +92,8 @@ public class CallWizard {
      *
      * @see com.sun.star.comp.loader.JavaLoader#
      */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey xregistrykey) {
+    public static boolean __writeRegistryServiceInfo(XRegistryKey xregistrykey)
+    {
         return FactoryHelper.writeRegistryServiceInfo(WizardImplementation.class.getName(), WizardImplementation.__serviceName, xregistrykey);
     }
 
@@ -66,7 +101,8 @@ public class CallWizard {
      * This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class WizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XJobExecutor {
+    public static class WizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XJobExecutor
+    {
 
         /**
          * The constructor of the inner class has a XMultiServiceFactory parameter.
@@ -74,11 +110,12 @@ public class CallWizard {
          * @param xmultiservicefactoryInitialization A special service factory could be
          *        introduced while initializing.
          */
-        public WizardImplementation(XMultiServiceFactory xmultiservicefactoryInitialization) {
+        public WizardImplementation(XMultiServiceFactory xmultiservicefactoryInitialization)
+        {
             xmultiservicefactory = xmultiservicefactoryInitialization;
 
-            if (xmultiservicefactory != null) {
-
+            if (xmultiservicefactory != null)
+            {
             }
         }
 
@@ -87,23 +124,21 @@ public class CallWizard {
          *
          * @param str only valid parameter is 'start' at the moment.
          */
-
-        public void trigger(String str) {
-            if (str.equalsIgnoreCase("start")) {
+        public void trigger(String str)
+        {
+            if (str.equalsIgnoreCase("start"))
+            {
                 LetterWizardDialogImpl lw = new LetterWizardDialogImpl(xmultiservicefactory);
-                if (!LetterWizardDialogImpl.running) {
+                if (!LetterWizardDialogImpl.running)
+                {
                     lw.startWizard(xmultiservicefactory, null);
                 }
             }
-        }
-
-        //*******************************************
-
+        }        //*******************************************
         /**
          * The service name, that must be used to get an instance of this service.
          */
         private static final String __serviceName = "com.sun.star.wizards.letter.CallWizard";
-
         /**
          * The service manager, that gives access to all registered services.
          */
@@ -119,8 +154,8 @@ public class CallWizard {
          * @throws com.sun.star.uno.Exception Every exception will not be handled, but
          *         will be passed to the caller.
          */
-        public void initialize(Object[] object) throws com.sun.star.uno.Exception {
-
+        public void initialize(Object[] object) throws com.sun.star.uno.Exception
+        {
         }
 
         /**
@@ -128,7 +163,8 @@ public class CallWizard {
          *
          * @return Array of supported service names.
          */
-        public java.lang.String[] getSupportedServiceNames() {
+        public java.lang.String[] getSupportedServiceNames()
+        {
             String[] stringSupportedServiceNames = new String[1];
             stringSupportedServiceNames[0] = __serviceName;
 
@@ -143,10 +179,12 @@ public class CallWizard {
          *
          * @return True, if the given service name will be supported.
          */
-        public boolean supportsService(String stringService) {
+        public boolean supportsService(String stringService)
+        {
             boolean booleanSupportsService = false;
 
-            if (stringService.equals(__serviceName)) {
+            if (stringService.equals(__serviceName))
+            {
                 booleanSupportsService = true;
             }
 
@@ -164,13 +202,18 @@ public class CallWizard {
          *
          * @return Array of bytes, in order to distinguish between two sets.
          */
-        public byte[] getImplementationId() {
-            byte[] byteReturn = {
+        public byte[] getImplementationId()
+        {
+            byte[] byteReturn =
+            {
             };
 
-            try {
+            try
+            {
                 byteReturn = ("" + this.hashCode()).getBytes();
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 System.err.println(exception);
             }
 
@@ -182,7 +225,8 @@ public class CallWizard {
          *
          * @return Class name of the component.
          */
-        public java.lang.String getImplementationName() {
+        public java.lang.String getImplementationName()
+        {
             return (WizardImplementation.class.getName());
         }
 
@@ -193,13 +237,21 @@ public class CallWizard {
          * @return Sequence of all types (usually interface types) provided by the
          *         service.
          */
-        public com.sun.star.uno.Type[] getTypes() {
-            Type[] typeReturn = {
+        public com.sun.star.uno.Type[] getTypes()
+        {
+            Type[] typeReturn =
+            {
             };
 
-            try {
-                typeReturn = new Type[] { new Type(XPropertyAccess.class), new Type(XJob.class), new Type(XJobExecutor.class), new Type(XTypeProvider.class), new Type(XServiceInfo.class), new Type(XInitialization.class)};
-            } catch (Exception exception) {
+            try
+            {
+                typeReturn = new Type[]
+                        {
+                            new Type(XPropertyAccess.class), new Type(XJob.class), new Type(XJobExecutor.class), new Type(XTypeProvider.class), new Type(XServiceInfo.class), new Type(XInitialization.class)
+                        };
+            }
+            catch (Exception exception)
+            {
                 System.err.println(exception);
             }
 

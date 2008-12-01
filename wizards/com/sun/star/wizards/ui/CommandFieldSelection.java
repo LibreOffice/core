@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.ui;
 
 import com.sun.star.wizards.common.*;
@@ -44,7 +43,9 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class CommandFieldSelection extends FieldSelection implements Comparator{
+public class CommandFieldSelection extends FieldSelection implements Comparator
+{
+
     CommandMetaData CurDBMetaData;
     XListBox xTableListBox;
     XFixedText xlblTable;
@@ -61,26 +62,31 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
     WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener {
+    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    {
 
-        public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject) {
+        public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
+        {
             short[] SelItems = (short[]) CurUnoDialog.getControlProperty(sTableListBoxName, "SelectedItems");
-            if (SelItems.length > 0) {
+            if (SelItems.length > 0)
+            {
                 iOldSelPos = iSelPos;
                 iSelPos = SelItems[0];
-                if ((iSelPos > -1) && (iSelPos != iOldSelPos)){
+                if ((iSelPos > -1) && (iSelPos != iOldSelPos))
+                {
                     if (!AppendMode)
+                    {
                         oWizardDialog.enablefromStep(IStep.intValue() + 1, false);
+                    }
                     fillUpFieldsListbox();
                 }
             }
         }
 
-
-        public void disposing(com.sun.star.lang.EventObject eventObject) {
+        public void disposing(com.sun.star.lang.EventObject eventObject)
+        {
         }
     }
-
 
     /**
      * instantiates a CommandFieldSelection with a preselected command
@@ -94,12 +100,12 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
      * @param _bgetQueries
      * @param _ifirstHID
      */
-    public CommandFieldSelection(WizardDialog _CurUnoDialog, CommandMetaData _CurDBMetaData, int iStep, int _iHeight, String _reslblFields, String _reslblSelFields, String _reslblTables, boolean _bgetQueries, int _ifirstHID) {
+    public CommandFieldSelection(WizardDialog _CurUnoDialog, CommandMetaData _CurDBMetaData, int iStep, int _iHeight, String _reslblFields, String _reslblSelFields, String _reslblTables, boolean _bgetQueries, int _ifirstHID)
+    {
         super(_CurUnoDialog, iStep, 95, 57, 210, _iHeight, _reslblFields, _reslblSelFields, (_ifirstHID + 1), true);
         insertControls(_CurDBMetaData, _bgetQueries, _reslblTables);
         oWizardDialog = (WizardDialog) CurUnoDialog;
     }
-
 
     /**
      * instantiates a CommandFieldSelection with a preselected command
@@ -112,15 +118,17 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
      * @param _bgetQueries
      * @param _ifirstHID
      */
-    public CommandFieldSelection(UnoDialog _CurUnoDialog, CommandMetaData _CurDBMetaData, int _iHeight, String _reslblFields, String _reslblSelFields, String _reslblTables, boolean _bgetQueries, int _ifirstHID) {
+    public CommandFieldSelection(UnoDialog _CurUnoDialog, CommandMetaData _CurDBMetaData, int _iHeight, String _reslblFields, String _reslblSelFields, String _reslblTables, boolean _bgetQueries, int _ifirstHID)
+    {
         super(_CurUnoDialog, 1, 95, 57, 210, _iHeight, _reslblFields, _reslblSelFields, (_ifirstHID + 1), true);
         insertControls(_CurDBMetaData, _bgetQueries, _reslblTables);
         oWizardDialog = (WizardDialog) CurUnoDialog;
     }
 
-
-    private void insertControls(CommandMetaData _CurDBMetaData, boolean _bgetQueries, String _reslblTables){
-        try {
+    private void insertControls(CommandMetaData _CurDBMetaData, boolean _bgetQueries, String _reslblTables)
+    {
+        try
+        {
             this.AppendMode = !_bgetQueries;
             this.bgetQueries = _bgetQueries;
             this.CurDBMetaData = _CurDBMetaData;
@@ -131,14 +139,28 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
             sQueryPrefix = getQueryPrefix();
             Integer LabelWidth = new Integer(getListboxWidth().intValue() + 6);
             xlblTable = CurUnoDialog.insertLabel(sTableLabelName,
-                        new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                        new Object[] { Boolean.FALSE, new Integer(8), _reslblTables, new Integer(95), new Integer(27), IStep, new Short((short) 3), LabelWidth });
+                    new String[]
+                    {
+                        "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        Boolean.FALSE, new Integer(8), _reslblTables, new Integer(95), new Integer(27), IStep, new Short((short) 3), LabelWidth
+                    });
             xTableListBox = CurUnoDialog.insertListBox(sTableListBoxName, 0, null, new ItemListenerImpl(),
-                        new String[] { "Dropdown", "Enabled", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                        new Object[] { Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:" + (super.FirstHelpIndex-1), new Short("7"), new Integer(95), new Integer(37), IStep, new Short((short) 4), getListboxWidth()});
+                    new String[]
+                    {
+                        "Dropdown", "Enabled", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:" + (super.FirstHelpIndex - 1), new Short("7"), new Integer(95), new Integer(37), IStep, new Short((short) 4), getListboxWidth()
+                    });
             XWindow xTableListBoxWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xTableListBox);
             fillupCommandListBox();
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
@@ -146,126 +168,177 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
     /**
      * @return Returns the sQueryPrefix.
      */
-    public String getQueryPrefix() {
+    public String getQueryPrefix()
+    {
         if (sQueryPrefix == null)
+        {
             sQueryPrefix = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 22);
+        }
         return sQueryPrefix;
     }
 
-
-    private String getCommandPrefix(int _nCommandType){
+    private String getCommandPrefix(int _nCommandType)
+    {
         if (_nCommandType == CommandType.TABLE)
+        {
             return getTablePrefix();
+        }
         else if (_nCommandType == CommandType.QUERY)
+        {
             return getQueryPrefix();
-        else return "";
+        }
+        else
+        {
+            return "";
+        }
     }
-
 
     /**
      * @return Returns the sTablePrefix.
      */
-    public String getTablePrefix() {
+    public String getTablePrefix()
+    {
         if (sTablePrefix == null)
+        {
             sTablePrefix = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 21);
+        }
         return sTablePrefix;
     }
 
-    private short getselectedItemPos(){
+    private short getselectedItemPos()
+    {
         short[] iSelPoses = ((short[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems"));
         if (iSelPoses.length > 0)
+        {
             return iSelPoses[0];
-        else{
-            if (this.bpreselectCommand){
-                String[] sItemList= ((String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList"));
+        }
+        else
+        {
+            if (this.bpreselectCommand)
+            {
+                String[] sItemList = ((String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList"));
                 if (sItemList.length > 0)
+                {
                     return (short) 0;
+                }
             }
             return (short) -1;
         }
     }
 
-    public void fillUpFieldsListbox() {
-    try {
-        boolean binitialize = false;
-        String curCommandName = "";
-        //As the peer of the control might not yet exist we have to query the model for the SelectedItems
-        String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, "StringItemList");
-        short iSelPos = getselectedItemPos();
-        if (!bgetQueries){
-            curCommandName = sLocList[iSelPos];
-            CurDBMetaData.setTableByName(curCommandName);
-            binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
-        }
-        else {
-            if (sLocList[iSelPos].startsWith(sTablePrefix)){
-                CurDBMetaData.setCommandType(CommandType.TABLE);
-                curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sTablePrefix);
+    public void fillUpFieldsListbox()
+    {
+        try
+        {
+            boolean binitialize = false;
+            String curCommandName = "";
+            //As the peer of the control might not yet exist we have to query the model for the SelectedItems
+            String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, "StringItemList");
+            short iSelPos = getselectedItemPos();
+            if (!bgetQueries)
+            {
+                curCommandName = sLocList[iSelPos];
                 CurDBMetaData.setTableByName(curCommandName);
                 binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
             }
-            else {
-                CurDBMetaData.setCommandType(CommandType.QUERY);
-                curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sQueryPrefix);
-                CurDBMetaData.setQueryByName(curCommandName);
-                binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY, AppendMode);
-            }
-        }
-        if (binitialize){
-            CurDBMetaData.setCommandName(curCommandName);
-            if (CurDBMetaData.AllFieldNames != null){
-                if (CurDBMetaData.AllFieldNames.length > 0) {
-                    initialize(CurDBMetaData.AllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
-                    return;
+            else
+            {
+                if (sLocList[iSelPos].startsWith(sTablePrefix))
+                {
+                    CurDBMetaData.setCommandType(CommandType.TABLE);
+                    curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sTablePrefix);
+                    CurDBMetaData.setTableByName(curCommandName);
+                    binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
+                }
+                else
+                {
+                    CurDBMetaData.setCommandType(CommandType.QUERY);
+                    curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sQueryPrefix);
+                    CurDBMetaData.setQueryByName(curCommandName);
+                    binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY, AppendMode);
                 }
             }
+            if (binitialize)
+            {
+                CurDBMetaData.setCommandName(curCommandName);
+                if (CurDBMetaData.AllFieldNames != null)
+                {
+                    if (CurDBMetaData.AllFieldNames.length > 0)
+                    {
+                        initialize(CurDBMetaData.AllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
+                        return;
+                    }
+                }
+            }
+            emptyFieldsListBoxes();
         }
-        emptyFieldsListBoxes();
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-    }}
-
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
 
     /** returns the selected entry index in the commandListbox
      *
      * @return
      * @throws com.sun.star.wizards.common.TerminateWizardException
      */
-    private short fillupCommandListBox() throws com.sun.star.wizards.common.TerminateWizardException {
+    private short fillupCommandListBox() throws com.sun.star.wizards.common.TerminateWizardException
+    {
         short[] iSelArray = new short[0];
         boolean bgetFields = false;
         String[] ContentList = new String[0];
         CurDBMetaData.setCommandNames();
-        if (bgetQueries) {
+        if (bgetQueries)
+        {
             ContentList = new String[CurDBMetaData.TableNames.length + CurDBMetaData.QueryNames.length];
             System.arraycopy(CurDBMetaData.QueryNames, 0, ContentList, CurDBMetaData.TableNames.length, CurDBMetaData.QueryNames.length);
             ContentList = setPrefixinArray(ContentList, sQueryPrefix, CurDBMetaData.TableNames.length, CurDBMetaData.QueryNames.length);
-        } else
+        }
+        else
+        {
             ContentList = new String[CurDBMetaData.TableNames.length];
+        }
         System.arraycopy(CurDBMetaData.TableNames, 0, ContentList, 0, CurDBMetaData.TableNames.length);
         if (bgetQueries)
+        {
             ContentList = setPrefixinArray(ContentList, sTablePrefix, 0, CurDBMetaData.TableNames.length);
+        }
         java.util.Arrays.sort(ContentList, this);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList", ContentList);
         short iSelPos = getselectedItemPos();
-        if (bpreselectCommand) {
-            if (iSelPos > -1) {
+        if (bpreselectCommand)
+        {
+            if (iSelPos > -1)
+            {
                 bgetFields = true;
-                iSelArray = new short[] { iSelPos };
+                iSelArray = new short[]
+                        {
+                            iSelPos
+                        };
             }
-        } else {
+        }
+        else
+        {
             emptyFieldsListBoxes();
-            iSelArray = new short[] {(short) iSelPos };
+            iSelArray = new short[]
+                    {
+                        (short) iSelPos
+                    };
         }
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", iSelArray);
         toggleCommandListBox(true);
         if (bgetFields)
+        {
             fillUpFieldsListbox();
+        }
         return iSelPos;
     }
 
-    private Collator getCollator() {
-        if (this.aCollator == null) {
+    private Collator getCollator()
+    {
+        if (this.aCollator == null)
+        {
             com.sun.star.lang.Locale aOfficeLocale = Configuration.getOfficeLocale(this.CurDBMetaData.xMSF);
             java.util.Locale aJavaLocale = new java.util.Locale(aOfficeLocale.Language, aOfficeLocale.Country, aOfficeLocale.Variant);
             //Get the Collator for US English and set its strength to PRIMARY
@@ -275,90 +348,134 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
         return aCollator;
     }
 
-    public int compare(Object _oObject1, Object _oObject2){
+    public int compare(Object _oObject1, Object _oObject2)
+    {
         return this.getCollator().compare(_oObject1, _oObject2);
     }
 
-
-    private String[] setPrefixinArray(String[] _ContentList, String _sprefix, int _startindex, int _nlen) {
+    private String[] setPrefixinArray(String[] _ContentList, String _sprefix, int _startindex, int _nlen)
+    {
         for (int i = _startindex; i < _startindex + _nlen; i++)
+        {
             _ContentList[i] = _sprefix + _ContentList[i];
+        }
         return _ContentList;
     }
 
-
-    public void toggleCommandListBox(String[] _NewItems) {
+    public void toggleCommandListBox(String[] _NewItems)
+    {
         boolean bdoenable = !(QueryMetaData.getIncludedCommandNames(_NewItems).length >= CurDBMetaData.getMaxTablesInSelect());
         toggleCommandListBox(bdoenable);
     }
 
-
-    public void toggleCommandListBox(boolean _bdoenable) {
+    public void toggleCommandListBox(boolean _bdoenable)
+    {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "Enabled", new Boolean(_bdoenable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlblTable), "Enabled", new Boolean(_bdoenable));
     }
 
-    public String getSelectedCommandName(){
+    public String getSelectedCommandName()
+    {
         String sCommandname = xTableListBox.getSelectedItem();
         if (sCommandname.startsWith(this.sTablePrefix))
+        {
             return sCommandname.substring(sTablePrefix.length());
+        }
         else if ((sCommandname.startsWith(this.sQueryPrefix)))
+        {
             return sCommandname.substring(sQueryPrefix.length());
+        }
         else
+        {
             return sCommandname;
+        }
     }
 
-
-    public int getSelectedCommandType(){
+    public int getSelectedCommandType()
+    {
         String sCommandname = xTableListBox.getSelectedItem();
         if (sCommandname.startsWith(this.sTablePrefix))
+        {
             return CommandType.TABLE;
+        }
         else
+        {
             return CommandType.QUERY;
+        }
     }
 
-
-    public void preselectCommand(PropertyValue[] _aPropertyValue, boolean _bReadOnly){
-    try {
-        if (Properties.hasPropertyValue(_aPropertyValue, "CommandType")){
-            int nCommandType = AnyConverter.toInt(Properties.getPropertyValue(_aPropertyValue, "CommandType"));
-            String sCommand = AnyConverter.toString(Properties.getPropertyValue(_aPropertyValue, "Command"));
-            if (sCommand != null)
-                preselectCommand(sCommand, nCommandType, _bReadOnly );
+    public void preselectCommand(PropertyValue[] _aPropertyValue, boolean _bReadOnly)
+    {
+        try
+        {
+            if (Properties.hasPropertyValue(_aPropertyValue, "CommandType"))
+            {
+                int nCommandType = AnyConverter.toInt(Properties.getPropertyValue(_aPropertyValue, "CommandType"));
+                String sCommand = AnyConverter.toString(Properties.getPropertyValue(_aPropertyValue, "Command"));
+                if (sCommand != null)
+                {
+                    preselectCommand(sCommand, nCommandType, _bReadOnly);
+                }
+            }
         }
-    } catch (IllegalArgumentException e) {
-        e.printStackTrace();
-    }}
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
-
-
-    public void preselectCommand(String _selitem, int _nCommandType, boolean _bReadOnly){
-        if (_selitem.length() > 0){
+    public void preselectCommand(String _selitem, int _nCommandType, boolean _bReadOnly)
+    {
+        if (_selitem.length() > 0)
+        {
             String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList");
             String sPrefix = getCommandPrefix(_nCommandType);
             short iselpos = (short) JavaTools.FieldInList(sitems, sPrefix + _selitem);
             if (iselpos > -1)
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{iselpos});
+            {
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+                        {
+                            iselpos
+                        });
+            }
             this.fillUpFieldsListbox();
         }
         else
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{});
+        {
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+                    {
+                    });
+        }
         if (_bReadOnly)
+        {
             Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "ReadOnly", new Boolean(_selitem.length() > 0));
+        }
     }
 
-
-    public void preselectCommand(String _selitem, boolean _bReadOnly){
-        if (_selitem.length() > 0){
+    public void preselectCommand(String _selitem, boolean _bReadOnly)
+    {
+        if (_selitem.length() > 0)
+        {
             String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList");
             short iselpos = (short) JavaTools.FieldInList(sitems, getTablePrefix() + _selitem);
             if (iselpos > -1)
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{iselpos});
+            {
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+                        {
+                            iselpos
+                        });
+            }
             this.fillUpFieldsListbox();
         }
         else
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{});
+        {
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+                    {
+                    });
+        }
         if (_bReadOnly)
+        {
             Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "ReadOnly", new Boolean(_selitem.length() > 0));
+        }
     }
 }

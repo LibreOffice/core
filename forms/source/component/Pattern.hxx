@@ -49,9 +49,9 @@ class OPatternModel
                 :public OEditBaseModel
 {
 private:
-    ::rtl::OUString     m_aSaveValue;
+    ::com::sun::star::uno::Any  m_aLastKnownValue;
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
-                        m_pFormattedValue;
+                                m_pFormattedValue;
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
