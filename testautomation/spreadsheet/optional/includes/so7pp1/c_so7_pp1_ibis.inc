@@ -217,7 +217,7 @@ printlog "iBIS Task 111711"
     try  
         DocumentCalc.typekeys "<DELETE>"
         sleep (2)
-        printlog "OK, there are still " & hWindowGetCount & " documents open"
+        printlog "OK, there are still " & GetDocumentCount & " documents open"
     catch 
         warnlog "Probably the office did crash -> #111711#"
         call hCloseDocument

@@ -37,7 +37,7 @@
 '*
 '\******************************************************************************
 
-private const C_INFO = TRUE ' Set this to TRUE to increase verbosity of some functions
+private const C_INFO = FALSE ' Set this to TRUE to increase verbosity of some functions
 
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert
