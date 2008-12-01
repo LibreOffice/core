@@ -1229,10 +1229,14 @@ void SAL_CALL SfxDocumentMetaData::init(
     types[7] = ::cppu::UnoType<sal_Int16>::get();
     types[8] = ::cppu::UnoType<sal_Int32>::get();
     types[9] = ::cppu::UnoType<sal_Int64>::get();
-    css::uno::Sequence<css::uno::Any> args(1);
+    css::uno::Sequence<css::uno::Any> args(2);
     args[0] <<= css::beans::NamedValue(
         ::rtl::OUString::createFromAscii("AllowedTypes"),
         css::uno::makeAny(types));
+    // #i94175#:  ODF 1.1 allows empty user-defined property names!
+    args[1] <<= css::beans::NamedValue(
+        ::rtl::OUString::createFromAscii("AllowEmptyPropertyName"),
+        css::uno::makeAny(sal_True));
     m_xUserDefined.set(
         xMsf->createInstanceWithContext(::rtl::OUString::createFromAscii(
                 "com.sun.star.beans.PropertyBag"), m_xContext),
@@ -1307,15 +1311,9 @@ void SAL_CALL SfxDocumentMetaData::init(
         } catch (css::beans::IllegalTypeException &) {
             DBG_ERROR1("SfxDocumentMetaData: illegal type: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-            throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
-                "SfxDocumentMetaData::init: cannot add property"),
-                *this);
         } catch (css::lang::IllegalArgumentException &) {
             DBG_ERROR1("SfxDocumentMetaData: illegal arg: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-            throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
-                "SfxDocumentMetaData::init: cannot add property"),
-                *this);
         }
     }
 
