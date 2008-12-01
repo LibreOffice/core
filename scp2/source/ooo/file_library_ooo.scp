@@ -1224,7 +1224,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sax , sax)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Oox , oox)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oox , oox)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sb , sb)
 
