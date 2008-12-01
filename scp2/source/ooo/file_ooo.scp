@@ -1394,6 +1394,20 @@ File gid_File_Oo_Office_Recovery_Xcs
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
 End
 
+File gid_File_Oo_Office_Accelerators_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Accelerators.xcs";
+End
+
+File gid_File_Oo_Office_Accelerators_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Accelerators.xcu";
+End
+
 File gid_File_Oo_Office_Paths_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
