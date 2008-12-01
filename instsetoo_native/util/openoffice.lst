@@ -33,6 +33,7 @@ Globals
             UPDATE_DATABASE 1
             CREATE_MSP_INSTALLSET 0
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
+ 			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 2
 		}
 	}
@@ -268,6 +269,7 @@ URE
             STARTCENTER_INFO_URL http://www.openoffice.org
             STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
+			PACKAGEMAP package_names_ext.txt
         }
         active 1
         compression 5

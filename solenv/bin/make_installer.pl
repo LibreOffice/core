@@ -1278,6 +1278,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # installer::packagelist::add_defaultpathes_into_filescollector($filesinproductlanguageresolvedarrayref);
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
+        ####################################################
+        # Reading for Solaris all package descriptions
+        # from file defined in property PACKAGEMAP
+        ####################################################
+
+        if (  $installer::globals::issolarisbuild ) { installer::epmfile::read_packagemap($allvariableshashref, $includepatharrayref, $languagesarrayref); }
+
         my $epmexecutable = "";
         my $found_epm = 0;
 
