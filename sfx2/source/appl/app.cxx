@@ -366,7 +366,7 @@ SfxApplication::SfxApplication()
             aStr += ByteString::CreateFromInt32(GetDdeService()->GetError());
         else
             aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() )
+        DBG_ASSERT( sal_False, aStr.GetBuffer() );
     }
 #endif
 #endif
