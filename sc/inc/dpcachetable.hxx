@@ -58,7 +58,7 @@ class ScDocument;
 class ScRange;
 class ScDPDimension;
 class ScDPCollection;
-class ScDPCacheCell;
+struct ScDPCacheCell;
 struct ScDPItemData;
 class Date;
 
@@ -102,6 +102,7 @@ public:
     public:
         explicit SingleFilter(ScSimpleSharedString& rSharedString,
                               sal_Int32 nMatchStrId, double fValue, bool bHasValue);
+        virtual ~SingleFilter(){}
 
         virtual bool match(const ScDPCacheCell& rCell) const;
 

@@ -123,6 +123,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dpgroup.obj \
     $(SLO)$/dptabres.obj \
     $(SLO)$/dptabdat.obj \
+    $(SLO)$/global2.obj \
     $(SLO)$/table1.obj \
     $(SLO)$/table3.obj \
     $(SLO)$/postit.obj \
