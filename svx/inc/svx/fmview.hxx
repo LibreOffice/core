@@ -155,11 +155,11 @@ public:
     // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
     void    onBeginCompleteRedraw();
     void    onEndCompleteRedraw();
+    SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
+    SVX_DLLPRIVATE sal_Bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
 
 private:
-    SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
     SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);
-    SVX_DLLPRIVATE sal_Bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;
  protected:
     using E3dView::SetMoveOutside;
