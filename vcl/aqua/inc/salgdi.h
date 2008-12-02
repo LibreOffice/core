@@ -396,11 +396,6 @@ inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
 
-inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
-{
-    RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
-}
-
 inline RGBAColor::RGBAColor( SalColor nSalColor )
 :   mfRed( SALCOLOR_RED(nSalColor) * (1.0/255))
 ,   mfGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
