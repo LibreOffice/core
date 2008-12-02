@@ -91,6 +91,11 @@ SCP1FILES  = installation_ooo.par          \
              common_brand_readme.par       \
              ooo_brand.par
 
+.IF "$(OS)"=="MACOSX" 
+SCP1FILES +=                               \
+             directory_ooo_macosx.par      
+.ENDIF
+ 
 .IF "$(WITH_BINFILTER)" != "NO"
 SCP1FILES +=                               \
              module_binfilter.par          \
@@ -236,6 +241,11 @@ SCP2FILES  = installation_ooo.par          \
              common_brand_readme.par       \
              ooo_brand.par
 
+.IF "$(OS)"=="MACOSX" 
+SCP2FILES +=                               \
+             directory_ooo_macosx.par      
+.ENDIF
+ 
 .IF "$(WITH_BINFILTER)" != "NO"
 SCP2FILES +=                               \
              module_binfilter.par          \

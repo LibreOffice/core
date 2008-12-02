@@ -255,6 +255,7 @@ PARFILES=                          \
         installation_ooo.par       \
         scpaction_ooo.par          \
         directory_ooo.par          \
+        directory_ooo_macosx.par   \
         datacarrier_ooo.par        \
         file_ooo.par               \
         file_extra_ooo.par         \
