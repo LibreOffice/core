@@ -57,7 +57,7 @@ namespace rptui
             create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     private:
-        void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::RuntimeException);
+        void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         // XInterface
         DECLARE_XINTERFACE( )
         // XServiceInfo
