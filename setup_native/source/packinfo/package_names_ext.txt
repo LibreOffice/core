@@ -12,3 +12,6 @@ SUNWkvm	Core Architecture, (Kvm)
 SUNWlibC	Sun Workshop Compilers Bundled libC
 SUNWxwplt	X Window System platform software
 SUNWxwrtl	X Window System & Graphics Runtime Library Links in /usr/lib
+SUNWbtool	CCS tools bundled with SunOS
+SUNWxcu4	XCU4 Utilities
+
