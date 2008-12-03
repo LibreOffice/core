@@ -316,6 +316,14 @@ sub get_cws_from_environment
     my $child  = $ENV{CWS_WORK_STAMP};
     my $master = $ENV{WORK_STAMP};
 
+    if ( !$child ) {
+        print_error("Environment variable CWS_WORK_STAMP is not set. Please set it to your CWS name.", 2);
+    }
+
+    if ( !$master ) {
+        print_error("Environment variable WORK_STAMP is not set. Please set it to the MWS name.", 2);
+    }
+
     my $cws = get_this_cws();
     $cws->child($child);
     $cws->master($master);
@@ -988,6 +996,16 @@ sub verify_milestone
 sub relink_workspace {
     my $linkdir = shift;
 
+    my %obligatory_modules = ('solenv'             => 1,
+                              'default_images'     => 1,
+                              'custom_images'      => 1,
+                              'ooo_custom_images'  => 1,
+                              'external_images'    => 1,
+                              'postprocess'        => 1,
+                              'instset_native'     => 1,
+                              'instsetoo_native'   => 1,
+                              'smoketest_native'   => 1,
+                              'smoketestoo_native' => 1);
     # clean out pre-existing linkdir
     my $bd = dirname($linkdir);
     if ( !opendir(DIR, $bd) ) {
@@ -1024,13 +1042,15 @@ sub relink_workspace {
     if ( !chdir($linkdir) ) {
         print_error("Can't chdir() to directory '$linkdir': $!.", 44);
     }
+    my $suffix = 'lnk';
     foreach(@ooo_top_level_dirs) {
         # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
         if ( ! -d "../ooo/$_" ) {
             next;
         }
-        if ( !symlink("../ooo/$_", $_) ) {
-            print_error("Can't symlink directory '../ooo/$_ -> '$_': $!.", 44);
+        my $target = exists $obligatory_modules{$_} ? $_ : "$_.$suffix";
+        if ( !symlink("../ooo/$_", $target) ) {
+            print_error("Can't symlink directory '../ooo/$_ -> $target': $!.", 44);
         }
     }
     foreach(@so_top_level_dirs) {
@@ -1038,8 +1058,9 @@ sub relink_workspace {
         if ( ! -d "../sun/$_" ) {
             next;
         }
-        if ( !symlink("../sun/$_", $_) ) {
-            print_error("Can't symlink directory '../sun/$_ -> '$_': $!.", 44);
+        my $target = exists $obligatory_modules{$_} ? $_ : "$_.$suffix";
+        if ( !symlink("../sun/$_", $target) ) {
+            print_error("Can't symlink directory '../sun/$_ -> $target': $!.", 44);
         }
     }
     if ( !chdir($savedir) ) {
