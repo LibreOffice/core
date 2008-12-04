@@ -79,8 +79,6 @@ namespace drawinglayer
             void setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY);
 
             double getTextHeight() const;
-            double getOverlineHeight() const;
-            double getOverlineOffset() const;
             double getUnderlineHeight() const;
             double getUnderlineOffset() const;
             double getStrikeoutOffset() const;
