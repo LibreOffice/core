@@ -39,6 +39,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 use strict;
 use Getopt::Long;
 use File::stat;
+use IO::Handle;
 
 #### globals #####
 
@@ -144,11 +145,12 @@ sub check
     my %delivered;
     my $module;
     my $islinked = 0;
+    STDOUT->autoflush(1);
     # which module are we checking?
     if ( $listname =~ /\/([\w-]+?)\/deliver\.log$/o) {
         $module = $1;
     } else {
-        print STDERR "Error: cannot determine module name from \'$listname\'\n";
+        print "Error: cannot determine module name from \'$listname\'\n";
         return 1;
     }
     # is module physically accessible?
@@ -166,7 +168,7 @@ sub check
             # print STDERR "Warning: module '$module' not found. Skipping.\n";
             return $error;
         }
-        print STDERR "Error: module '$module' not found.\n";
+        print "Error: module '$module' not found.\n";
         $error++;
         return $error;
     }
@@ -180,15 +182,13 @@ sub check
     foreach ( <DELIVERLOG> ) {
         next if ( /^LINK / );
         # For now we concentrate on binaries, located in 'bin' or 'lib'.
-        # It probably is a good idea to check all files but this requires some
-        # d.lst cleanup which is beyond the current scope. -> TODO
         next if ( ! / $module\/$platform\/[bl]i[nb]\// );
         next if ( /\.html$/ );
         chomp;
         if ( /^\w+? (\S+) (\S+)\s*$/o ) {
             $delivered{$1} = $2;
         } else {
-            print STDERR "Warning: cannot parse \'$listname\' line\n\'$_\'\n";
+            print "Warning: cannot parse \'$listname\' line\n\'$_\'\n";
         }
     }
     close( DELIVERLOG );
@@ -222,19 +222,20 @@ sub check
             # rebasing, but only increase. It must not happen that a file on
             # solver is older than it's source.
             if ( ( $orgfile_stats->mtime - $delivered_stats->mtime ) gt 1 ) {
-                print STDERR "Error: ";
-                print STDERR "delivered file is older than it's source '$ofile' '$sfile'\n";
+                print "Error: ";
+                print "delivered file is older than it's source '$ofile' '$sfile'\n";
                 $error ++;
             }
         } else {
-            print STDERR "Error: no such file '$ofile'\n" if ( ! $orgfile_stats );
-            print STDERR "Error: no such file '$sfile'\n" if ( ! $delivered_stats );
+            print "Error: no such file '$ofile'\n" if ( ! $orgfile_stats );
+            print "Error: no such file '$sfile'\n" if ( ! $delivered_stats );
             $error ++;
         }
     }
     if ( $error ) {
-        print STDERR "Errors found: Module '$module' not delivered correctly?\n\n";
+        print "$error errors found: Module '$module' not delivered correctly?\n\n";
     }
+    STDOUT->autoflush(0);
     return $error;
 }
 

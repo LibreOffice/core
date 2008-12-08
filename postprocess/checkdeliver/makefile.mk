@@ -42,5 +42,5 @@ TARGET=checkdeliver
 ALLTAR : $(MISC)$/checkdeliver.done
 
 $(MISC)$/checkdeliver.done .PHONY:
-    $(PERL) checkdeliver.pl
+    $(PERL) checkdeliver.pl > $@ || cat $@
 

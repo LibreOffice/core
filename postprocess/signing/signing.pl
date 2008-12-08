@@ -77,10 +77,10 @@ sub script_id
     ( my $script_name = $0 ) =~ s/^.*[\\\/]([\w\.]+)$/$1/;
 
     my $script_rev;
-    my $id_str = ' $Revision: 1.3 $ ';
+    my $id_str = ' $Revision$ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
-    print "\n$script_name -- version: $script_rev\n";
+#    print "\n$script_name -- version: $script_rev\n";
     return $script_name;
 }
 
