@@ -224,7 +224,7 @@ HtmlFactory_Idl::write_Docu( Xml::Element &     o_screen,
             aDocuList( o_screen );
         HF_IdlDocu
             aDocu( Env(), aDocuList );
-        aDocu.Produce_byData(i_ce);
+        aDocu.Produce_byDocu4Reference(*doc, i_ce);
     }
 
     write_ManualLinks(o_screen, i_ce);

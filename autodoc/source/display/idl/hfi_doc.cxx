@@ -54,154 +54,17 @@ HF_IdlDocu::~HF_IdlDocu()
 {
 }
 
-// KORR_FUTURE
-//   Should not be used any longer.
-//   Use Produce_byCesOwnDocu() or Produce_byDocu4Reference()
-//   instead.
 void
-HF_IdlDocu::Produce_byData( const client &  i_ce,
-                            const ce_info * i_doc ) const
+HF_IdlDocu::Produce_byDocu4Reference( const ce_info &   i_rDocuForReference,
+                                      const client &    i_rScopeGivingCe ) const
 {
-    const ce_info * i_pDocu = i_doc != 0
-                                ?   i_doc
-                                :   Get_IdlDocu(i_ce.Docu());
-    if (i_pDocu == 0)
-        return;
-
-    bool bShort = NOT i_pDocu->Short().IsEmpty();
-    bool bDescr = NOT i_pDocu->Description().IsEmpty();
-
-
-    if ( i_pDocu->IsDeprecated() AND i_ce.SightLevel() != ary::idl::sl_File
-         OR
-         i_pDocu->IsOptional() )
-    {
-        rOut.Produce_Term("Usage Restrictions");
-
-        if ( i_pDocu->IsDeprecated() )
-            rOut.Produce_Definition() >> *new Html::Italic << "deprecated";
-        if ( i_pDocu->IsOptional() )
-            rOut.Produce_Definition() >> *new Html::Italic << "optional";
-    }
-
-    if ( i_pDocu->IsDeprecated()
-         AND
-         // KORR_FUTURE
-         // Workaround, because DocuTex2::IsEmpty() does not
-         //   calculate whitespace tokens only as empty.
-         i_pDocu->DeprecatedText().Tokens().size() > 1 )
-    {
-        rOut.Produce_Term("Deprecation Info");
-
-        HF_IdlDocuTextDisplay
-            aDescription( Env(), 0, i_ce);
-        aDescription.Out().Enter( rOut.Produce_Definition() );
-        i_pDocu->DeprecatedText().DisplayAt( aDescription );
-        aDescription.Out().Leave();
-    }
-
-    if ( bShort OR bDescr )
-    {
-        rOut.Produce_Term("Description");
-        HF_IdlDocuTextDisplay
-                aDescription( Env(), 0, i_ce);
-        if (bShort)
-        {
-            aDescription.Out().Enter( rOut.Produce_Definition() );
-            i_pDocu->Short().DisplayAt( aDescription );
-            aDescription.Out().Leave();
-        }
-        if (bDescr)
-        {
-            aDescription.Out().Enter( rOut.Produce_Definition() );
-            i_pDocu->Description().DisplayAt( aDescription );
-            aDescription.Out().Leave();
-        }
-    }
-
-    std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
-        aSeeAlsosWithoutText;
-    std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
-        aSeeAlsosWithText;
-
-    for ( std::vector< ary::inf::AtTag2* >::const_iterator
-                iter = i_pDocu->Tags().begin();
-          iter != i_pDocu->Tags().end();
-          ++iter )
-    {
-        if ( strlen( (*iter)->Title() ) > 0 )
-        {
-            csi::dsapi::DT_SeeAlsoAtTag*
-                pSeeAlso = dynamic_cast< csi::dsapi::DT_SeeAlsoAtTag * >(*iter);
-            if (pSeeAlso != 0 )
-            {
-                if ( pSeeAlso->Text().IsEmpty() )
-                {
-                    aSeeAlsosWithoutText.push_back(pSeeAlso);
-                }
-                else
-                {
-                    aSeeAlsosWithText.push_back(pSeeAlso);
-                }
-                continue;
-            }
-
-            HF_IdlTag
-                    aTag(Env(),  i_ce);
-            Xml::Element &
-                rTerm = rOut.Produce_Term();
-            aTag.Produce_byData( rTerm,
-                                 rOut.Produce_Definition(),
-                                 *(*iter) );
-        }
-    }   // end for
-
-    if (aSeeAlsosWithoutText.size() > 0)
-    {
-        HF_IdlTag
-            aSeeAlsoTag(Env(),  i_ce);
-        Xml::Element &
-            rTerm = rOut.Produce_Term();
-        aSeeAlsoTag.Produce_byData( rTerm,
-                                    rOut.Produce_Definition(),
-                                    aSeeAlsosWithoutText );
-    }
-
-    for ( std::vector< csi::dsapi::DT_SeeAlsoAtTag* >::const_iterator
-                itSee2 = aSeeAlsosWithText.begin();
-          itSee2 != aSeeAlsosWithText.end();
-          ++itSee2 )
-    {
-        HF_IdlTag
-            aTag(Env(),  i_ce);
-        Xml::Element &
-            rTerm = rOut.Produce_Term();
-            aTag.Produce_byData( rTerm,
-                                 rOut.Produce_Definition(),
-                                 *(*itSee2) );
-    }   // end for
+    Produce_byDocuAndScope(i_rDocuForReference, 0, i_rScopeGivingCe );
 }
 
 void
-HF_IdlDocu::Produce_byCesOwnDocu( const client & i_ce ) const
-{
-    const ce_info *
-        i_pDocu = Get_IdlDocu(i_ce.Docu());
-    if (i_pDocu != 0)
-        Produce_byDocuAndScope(*i_pDocu, &i_ce, i_ce);
-}
-
-void
-HF_IdlDocu::Produce_byDocu4Reference( const ce_info &     i_rDocuForReference,
-                                      const client &      i_rScopeGivingCe ) const
-{
-    Produce_byDocuAndScope(i_rDocuForReference, 0, i_rScopeGivingCe);
-}
-
-void
-HF_IdlDocu::Produce_byDocuAndScope( const ce_info &     i_rDocu,
-                                    const client *      i_pClient,
-                                    const client &      i_rScopeGivingCe ) const
+HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
+                                    const client *  i_pClient,
+                                    const client &  i_rScopeGivingCe ) const
 {
     bool bShort = NOT i_rDocu.Short().IsEmpty();
     bool bDescr = NOT i_rDocu.Description().IsEmpty();

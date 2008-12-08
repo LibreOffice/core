@@ -45,7 +45,9 @@ class HF_SubTitleTable;
 class HF_IdlService : public HtmlFactory_Idl
 {
   public:
-    typedef ::ary::StdConstIterator< ::ary::idl::CommentedRelation> comref_list;
+    typedef ::ary::idl::CommentedRelation       comref;
+    typedef ::ary::StdConstIterator< comref >   comref_list;
+
                         HF_IdlService(
                             Environment &       io_rEnv,
                             Xml::Element &      o_rOut );
@@ -63,24 +65,27 @@ class HF_IdlService : public HtmlFactory_Idl
     DYN HF_NaviSubRow & make_Navibar(
                             const client &      i_ce ) const;
 
-    void                produce_IncludedServices(
-                            const client &      i_ce,
-                            comref_list &       it_list ) const;
-    void                produce_ExportedInterfaces(
-                            const client &      i_ce,
-                            comref_list &       it_list ) const;
-
     void                produce_Link(
                             Xml::Element &      o_row,
                             type_id             i_type ) const;
-    void                produce_LinkDoc(
+    void                produce_LinkSummary(
                             const client &      i_ce,
                             Xml::Element &      o_row,
-                            comref_list &       i_commentedRef ) const;
+                            const comref &  i_commentedRef ) const;
 
     void                produce_MemberDetails(        /// of property
                             HF_SubTitleTable &  o_table,
                             const client &      i_ce ) const;
+
+    void                produce_CommentedRelations(
+                            const client &  i_ce,
+                            comref_list &   it_list,
+                            const String &  i_summaryTitle,
+                            const String &  i_summaryLabel,
+                            const String &  i_detailsTitle,
+                            const String &  i_detailsLabel,
+                            const E_DocType i_docType ) const;
+
 };
 
 

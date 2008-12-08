@@ -38,6 +38,7 @@
 #include "hi_factory.hxx"
     // COMPONENTS
     // PARAMETERS
+#include <ary/idl/i_comrela.hxx>
 
 class HF_SubTitleTable;
 
@@ -53,9 +54,14 @@ class HF_IdlDataMember : public HtmlFactory_Idl
     virtual             ~HF_IdlDataMember() {}
 
   private:
-    /// @descr Must enclose writing a horizontal line.
+    virtual void        write_Title(
+                            const client &      i_ce ) const;
+
     virtual void        write_Declaration(
                             const client &      i_ce ) const = 0;
+
+    virtual void        write_Description(
+                            const client &      i_ce ) const;
 
     void                enter_ContentCell() const;
     void                leave_ContentCell() const;
@@ -134,5 +140,46 @@ class HF_IdlStructElement : public HF_IdlDataMember
                             const client &      i_ce ) const;
 };
 
+class HF_IdlCommentedRelationElement : public HF_IdlDataMember
+{
+  public:
+                        HF_IdlCommentedRelationElement(
+                            Environment &                       io_rEnv,
+                            HF_SubTitleTable &                  o_table,
+                            const ary::idl::CommentedRelation&  i_relation )
+                            :   HF_IdlDataMember(io_rEnv, o_table)
+                            ,   m_relation( i_relation )
+                        {
+                        }
+    virtual             ~HF_IdlCommentedRelationElement();
+
+    typedef ::ary::idl::CommentedRelation       comref;
+
+    static void         produce_LinkDoc(
+                            Environment &   io_env,
+                            const client &  i_ce,
+                            Xml::Element &  io_context,
+                            const comref &  i_commentedRef,
+                            const E_DocType i_docType );
+
+  private:
+    virtual void        write_Title(
+                            const client &      i_ce ) const;
+    virtual void        write_Declaration(
+                            const client &      i_ce ) const;
+    virtual void        write_Description(
+                            const client &      i_ce ) const;
+  private:
+    static void         produce_Summary( Environment &  io_env,
+                                         Xml::Element & io_context,
+                                         const comref & i_commentedRef,
+                                         const client & i_rScopeGivingCe );
+
+    static String       get_LocalLinkName( Environment &  io_env,
+                                           const comref & i_commentedRef );
+
+  private:
+    const ary::idl::CommentedRelation&  m_relation;
+};
 
 #endif

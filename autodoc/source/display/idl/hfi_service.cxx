@@ -57,13 +57,29 @@ namespace
 {
 
 const String
-    C_sList_IncludedServices("Included Services");
+    C_sList_IncludedServices("Services' Summary");
 const String
-    C_sList_IncludedServices_Label("IncludedServices");
+    C_sList_IncludedServices_Heading("Included Services - Summary");
 const String
-    C_sList_ExportedInterfaces("Exported Interfaces");
+    C_sList_IncludedServices_Label("ServicesSummary");
 const String
-    C_sList_ExportedInterfaces_Label("ExportedInterfaces");
+    C_sList_IncludedServicesDetails("Services' Details");
+const String
+    C_sList_IncludedServicesDetails_Heading("Included Services - Details");
+const String
+    C_sList_IncludedServicesDetails_Label("ServicesDetails");
+const String
+    C_sList_ExportedInterfaces("Interfaces' Summary");
+const String
+    C_sList_ExportedInterfaces_Heading("Exported Interfaces - Summary");
+const String
+    C_sList_ExportedInterfaces_Label("InterfacesSummary");
+const String
+    C_sList_ExportedInterfacesDetails("Interfaces' Details");
+const String
+    C_sList_ExportedInterfacesDetails_Heading("Exported Interfaces - Details");
+const String
+    C_sList_ExportedInterfacesDetails_Label("InterfacesDetails");
 const String
     C_sList_Properties("Properties' Summary");
 const String
@@ -76,10 +92,12 @@ const String
 
 enum E_SubListIndices
 {
-    sli_IncludedServices = 0,
-    sli_ExportedInterfaces = 1,
+    sli_IncludedServicesSummary = 0,
+    sli_InterfacesSummary = 1,
     sli_PropertiesSummary = 2,
-    sli_PropertiesDetails = 3
+    sli_IncludedServicesDetails = 3,
+    sli_InterfacesDetails = 4,
+    sli_PropertiesDetails = 5
 };
 
 } //anonymous namespace
@@ -102,6 +120,43 @@ typedef ::ary::Dyn_StdConstIterator< ::ary::idl::CommentedRelation >
     dyn_comref_list;
 
 void
+HF_IdlService::produce_CommentedRelations( const client &   i_ce,
+                                           comref_list &    it_list,
+                                           const String &   i_summaryTitle,
+                                           const String &   i_summaryLabel,
+                                           const String &   i_detailsTitle,
+                                           const String &   i_detailsLabel,
+                                           const E_DocType  i_docType ) const
+{
+    csv_assert( it_list );
+
+    bool bSummaryOnly = ( i_docType == doctype_summaryOnly );
+    HF_SubTitleTable aTable(
+                CurOut(),
+                bSummaryOnly ? i_summaryLabel : i_detailsLabel,
+                bSummaryOnly ? i_summaryTitle : i_detailsTitle,
+                2 );
+
+    for ( ; it_list; ++it_list )
+    {
+        Xml::Element &
+            rRow = aTable.Add_Row();
+
+        if ( bSummaryOnly )
+        {
+            produce_Link(rRow, (*it_list).Type());
+            produce_LinkSummary(i_ce, rRow, *it_list);
+        }
+        else
+        {
+            HF_IdlCommentedRelationElement
+                aRelation( Env(), aTable, *it_list );
+            aRelation.Produce_byData( i_ce );
+        }
+    }   // end for
+}
+
+void
 HF_IdlService::Produce_byData( const client & i_ce ) const
 {
     Dyn<HF_NaviSubRow>
@@ -118,26 +173,37 @@ HF_IdlService::Produce_byData( const client & i_ce ) const
     write_Docu(aTitle.Add_Row(), i_ce);
     CurOut() << new Html::HorizontalLine();
 
-    dyn_comref_list
-        dpIncludedServices;
+    // produce ...
+    // - included services: summary
+    dyn_comref_list dpIncludedServices;
     ServiceAttr::Get_IncludedServices(dpIncludedServices, i_ce);
     if ( (*dpIncludedServices).operator bool() )
     {
-        produce_IncludedServices( i_ce, *dpIncludedServices );
-        pNaviSubRow->SwitchOn(sli_IncludedServices);
+        produce_CommentedRelations( i_ce, *dpIncludedServices,
+                         C_sList_IncludedServices_Heading,
+                         C_sList_IncludedServices_Label,
+                         C_sList_IncludedServicesDetails_Heading,
+                         C_sList_IncludedServicesDetails_Label,
+                         doctype_summaryOnly );
+        pNaviSubRow->SwitchOn(sli_IncludedServicesSummary);
     }
 
-    dyn_comref_list
-        dpExportedInterfaces;
+    // - exported interfaces: summary
+    dyn_comref_list dpExportedInterfaces;
     ServiceAttr::Get_ExportedInterfaces(dpExportedInterfaces, i_ce);
     if ( (*dpExportedInterfaces).operator bool() )
     {
-        produce_ExportedInterfaces( i_ce, *dpExportedInterfaces );
-        pNaviSubRow->SwitchOn(sli_ExportedInterfaces);
+        produce_CommentedRelations( i_ce, *dpExportedInterfaces,
+                         C_sList_ExportedInterfaces_Heading,
+                         C_sList_ExportedInterfaces_Label,
+                         C_sList_ExportedInterfacesDetails_Heading,
+                         C_sList_ExportedInterfacesDetails_Label,
+                         doctype_summaryOnly );
+        pNaviSubRow->SwitchOn(sli_InterfacesSummary);
     }
 
-    dyn_ce_list
-        dpProperties;
+    // - supported properties: summary
+    dyn_ce_list dpProperties;
     ServiceAttr::Get_Properties(dpProperties, i_ce);
     if ( (*dpProperties).operator bool() )
     {
@@ -145,8 +211,47 @@ HF_IdlService::Produce_byData( const client & i_ce ) const
                          C_sList_Properties,
                          C_sList_Properties_Label,
                          C_sList_PropertiesDetails,
-                         C_sList_PropertiesDetails_Label );
+                         C_sList_PropertiesDetails_Label,
+                         viewtype_summary );
         pNaviSubRow->SwitchOn(sli_PropertiesSummary);
+    }
+
+    // - included services: details
+    ServiceAttr::Get_IncludedServices(dpIncludedServices, i_ce);
+    if ( (*dpIncludedServices).operator bool() )
+    {
+        produce_CommentedRelations( i_ce, *dpIncludedServices,
+                         C_sList_IncludedServices_Heading,
+                         C_sList_IncludedServices_Label,
+                         C_sList_IncludedServicesDetails_Heading,
+                         C_sList_IncludedServicesDetails_Label,
+                         doctype_complete );
+        pNaviSubRow->SwitchOn(sli_IncludedServicesDetails);
+    }
+
+    // - exported interfaces: details
+    ServiceAttr::Get_ExportedInterfaces(dpExportedInterfaces, i_ce);
+    if ( (*dpExportedInterfaces).operator bool() )
+    {
+        produce_CommentedRelations( i_ce, *dpExportedInterfaces,
+                         C_sList_ExportedInterfaces_Heading,
+                         C_sList_ExportedInterfaces_Label,
+                         C_sList_ExportedInterfacesDetails_Heading,
+                         C_sList_ExportedInterfacesDetails_Label,
+                         doctype_complete );
+        pNaviSubRow->SwitchOn(sli_InterfacesDetails);
+    }
+
+    // supported properties: details
+    ServiceAttr::Get_Properties(dpProperties, i_ce);
+    if ( (*dpProperties).operator bool() )
+    {
+        produce_Members( *dpProperties,
+                         C_sList_Properties,
+                         C_sList_Properties_Label,
+                         C_sList_PropertiesDetails,
+                         C_sList_PropertiesDetails_Label,
+                         viewtype_details );
         pNaviSubRow->SwitchOn(sli_PropertiesDetails);
     }
 
@@ -214,52 +319,12 @@ HF_IdlService::make_Navibar( const client & i_ce ) const
     ret.AddItem(C_sList_IncludedServices, C_sList_IncludedServices_Label, false);
     ret.AddItem(C_sList_ExportedInterfaces, C_sList_ExportedInterfaces_Label, false);
     ret.AddItem(C_sList_Properties, C_sList_Properties_Label, false);
+    ret.AddItem(C_sList_IncludedServicesDetails, C_sList_IncludedServicesDetails_Label, false);
+    ret.AddItem(C_sList_ExportedInterfacesDetails, C_sList_ExportedInterfacesDetails_Label, false);
     ret.AddItem(C_sList_PropertiesDetails, C_sList_PropertiesDetails_Label, false);
 
     CurOut() << new Html::HorizontalLine();
     return ret;
-}
-
-void
-HF_IdlService::produce_IncludedServices( const client & i_ce,
-                                         comref_list &  it_list ) const
-{
-    csv_assert( it_list );
-
-    HF_SubTitleTable
-        aTable( CurOut(),
-                C_sList_IncludedServices_Label,
-                C_sList_IncludedServices,
-                2 );
-
-    for ( ; it_list.operator bool(); ++it_list )
-    {
-        Xml::Element &
-            rRow = aTable.Add_Row();
-        produce_Link(rRow, (*it_list).Type());
-        produce_LinkDoc(i_ce, rRow, it_list);
-    }   // end for
-}
-
-void
-HF_IdlService::produce_ExportedInterfaces( const client &   i_ce,
-                                           comref_list &    it_list ) const
-{
-    csv_assert( it_list );
-
-    HF_SubTitleTable
-        aTable( CurOut(),
-                C_sList_ExportedInterfaces_Label,
-                C_sList_ExportedInterfaces,
-                2 );
-
-    for ( ; it_list; ++it_list )
-    {
-        Xml::Element &
-            rRow = aTable.Add_Row();
-        produce_Link(rRow, (*it_list).Type());
-        produce_LinkDoc(i_ce, rRow, it_list);
-    }   // end for
 }
 
 void
@@ -276,46 +341,17 @@ HF_IdlService::produce_Link( Xml::Element &     o_row,
 }
 
 void
-HF_IdlService::produce_LinkDoc( const client &     i_ce,
-                                Xml::Element &     o_row,
-                                comref_list &      i_commentedRef ) const
+HF_IdlService::produce_LinkSummary( const client &  i_ce,
+                                    Xml::Element &  o_row,
+                                    const comref &  i_commentedRef ) const
 {
     Xml::Element &
         rCell = o_row
                 >> *new Html::TableCell
                     << new Html::ClassAttr(C_sCellStyle_SummaryRight);
 
-    HF_DocEntryList
-        aDocList(rCell);
-
-    if ( (*i_commentedRef).Info() != 0 )
-    {
-//      aDocList.Produce_Term("Comment on Reference");
-
-        HF_IdlDocu
-            aDocuDisplay(Env(), aDocList);
-        aDocuDisplay.Produce_byDocu4Reference(*(*i_commentedRef).Info(), i_ce);
-    }
-    else
-    {
-        const client *
-            pCe = Env().Linker().Search_CeFromType((*i_commentedRef).Type());
-        const ce_info *
-            pShort = pCe != 0
-                        ?   Get_IdlDocu(pCe->Docu())
-                        :   (const ce_info *)(0);
-        if ( pShort != 0 )
-        {
-            aDocList.Produce_NormalTerm("(referenced entity's summary:)");
-            Xml::Element &
-                rDef = aDocList.Produce_Definition();
-            HF_IdlDocuTextDisplay
-                aShortDisplay( Env(), &rDef, *pCe);
-            pShort->Short().DisplayAt(aShortDisplay);
-        }   // end if (pShort != 0)
-    }   // endif ( (*i_commentedRef).Info() != 0 ) else
+    HF_IdlCommentedRelationElement::produce_LinkDoc( Env(), i_ce, rCell, i_commentedRef, doctype_summaryOnly );
 }
-
 
 void
 HF_IdlService::produce_MemberDetails( HF_SubTitleTable &  o_table,

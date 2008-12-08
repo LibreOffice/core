@@ -42,20 +42,19 @@
 #include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_title.hxx>
 #include "hfi_typetext.hxx"
+#include "hfi_doc.hxx"
+#include "hfi_tag.hxx"
+#include "hi_env.hxx"
+#include "hi_ary.hxx"
+#include "hi_linkhelper.hxx"
 
 void
 HF_IdlDataMember::Produce_byData( const client & ce ) const
 {
-    // Title:
-    CurOut()
-        >> *new Html::Label(ce.LocalName())
-            << new Html::ClassAttr(C_sMemberTitle)
-            << ce.LocalName();
-
+    write_Title(ce);
     enter_ContentCell();
     write_Declaration(ce);
-    CurOut() << new Html::HorizontalLine;
-    write_Docu(CurOut(), ce);
+    write_Description(ce);
     leave_ContentCell();
 }
 
@@ -76,6 +75,22 @@ const String sContentSpacing("0");
 
 const String sBgWhite("#ffffff");
 const String sCenter("center");
+
+void
+HF_IdlDataMember::write_Title( const client & i_ce ) const
+{
+    CurOut()
+        >> *new Html::Label(i_ce.LocalName())
+            << new Html::ClassAttr(C_sMemberTitle)
+            << i_ce.LocalName();
+}
+
+void
+HF_IdlDataMember::write_Description( const client & i_ce ) const
+{
+    CurOut() << new Html::HorizontalLine;
+    write_Docu(CurOut(), i_ce);
+}
 
 void
 HF_IdlDataMember::enter_ContentCell() const
@@ -304,3 +319,136 @@ HF_IdlStructElement::write_Declaration( const client & i_ce ) const
         << ";";
 }
 
+HF_IdlCommentedRelationElement::~HF_IdlCommentedRelationElement()
+{
+}
+
+void
+HF_IdlCommentedRelationElement::produce_Summary( Environment &   io_env,
+                                                 Xml::Element &  io_context,
+                                                 const comref &  i_commentedRef,
+                                                 const client &  i_rScopeGivingCe )
+{
+    csv_assert( i_commentedRef.Info() );
+
+    const ary::idl::Type_id aType = i_commentedRef.Type();
+    const ce_info &         rDocu = *i_commentedRef.Info();
+
+    bool bShort = NOT rDocu.Short().IsEmpty();
+    bool bDescr = NOT rDocu.Description().IsEmpty();
+
+    if ( bShort )
+    {
+        HF_IdlDocuTextDisplay
+                aDescription(io_env, 0, i_rScopeGivingCe);
+
+        Xml::Element& rPara = io_context >> *new Html::Paragraph;
+        aDescription.Out().Enter( rPara );
+        rDocu.Short().DisplayAt( aDescription );
+
+        // if there's more than just the summary - i.e. a description, or usage restrictions, or tags -,
+        // then add a link to the details section
+        if ( bDescr OR rDocu.IsDeprecated() OR rDocu.IsOptional() OR NOT rDocu.Tags().empty() )
+        {
+            StreamLock aLocalLink(100);
+            aLocalLink() << "#" << get_LocalLinkName(io_env, i_commentedRef);
+
+            aDescription.Out().Out() << "(";
+            aDescription.Out().Out()
+                >> *new Html::Link( aLocalLink().c_str() )
+                    << "details";
+            aDescription.Out().Out() << ")";
+        }
+
+        aDescription.Out().Leave();
+    }
+}
+
+void
+HF_IdlCommentedRelationElement::produce_LinkDoc( Environment &   io_env,
+                                                 const client &  i_ce,
+                                                 Xml::Element &  io_context,
+                                                 const comref &  i_commentedRef,
+                                                 const E_DocType i_docType )
+{
+    if ( i_commentedRef.Info() != 0 )
+    {
+        if ( i_docType == doctype_complete )
+        {
+            HF_DocEntryList aDocList(io_context);
+            HF_IdlDocu aDocuDisplay(io_env, aDocList);
+
+            aDocuDisplay.Produce_byDocu4Reference(*i_commentedRef.Info(), i_ce);
+        }
+        else
+        {
+            produce_Summary(io_env, io_context, i_commentedRef, i_ce);
+        }
+    }
+    else
+    {
+        HF_DocEntryList aDocList(io_context);
+
+        const client *
+            pCe = io_env.Linker().Search_CeFromType(i_commentedRef.Type());
+        const ce_info *
+            pShort = pCe != 0
+                        ?   Get_IdlDocu(pCe->Docu())
+                        :   (const ce_info *)(0);
+        if ( pShort != 0 )
+        {
+            aDocList.Produce_NormalTerm("(referenced entity's summary:)");
+            Xml::Element &
+                rDef = aDocList.Produce_Definition();
+            HF_IdlDocuTextDisplay
+                aShortDisplay( io_env, &rDef, *pCe);
+            pShort->Short().DisplayAt(aShortDisplay);
+        }   // end if (pShort != 0)
+    }   // endif ( (*i_commentedRef).Info() != 0 ) else
+}
+
+
+String
+HF_IdlCommentedRelationElement::get_LocalLinkName( Environment &  io_env,
+                                                   const comref & i_commentedRef )
+{
+    StringVector        aModules;
+    String              sLocalName;
+    ce_id               nCe;
+    int                 nSequenceCount = 0;
+
+    const ary::idl::Type &
+        rType = io_env.Data().Find_Type(i_commentedRef.Type());
+    io_env.Data().Get_TypeText(aModules, sLocalName, nCe, nSequenceCount, rType);
+
+    // speaking strictly, this is not correct: If we have two interfaces with the same local
+    // name, but in different modules, then the link name will be ambiguous. However, this should
+    // be too seldom a case to really make the link names that ugly by adding the module information.
+    return sLocalName;
+}
+
+void
+HF_IdlCommentedRelationElement::write_Title( const client & /*i_ce*/ ) const
+{
+
+    Xml::Element &
+        rAnchor = CurOut()
+                    >> *new Html::Label(get_LocalLinkName(Env(), m_relation))
+                        << new Html::ClassAttr(C_sMemberTitle);
+
+    HF_IdlTypeText
+        aText(Env(), rAnchor, true);
+    aText.Produce_byData(m_relation.Type());
+}
+
+void
+HF_IdlCommentedRelationElement::write_Declaration( const client & /*i_ce*/ ) const
+{
+    // nothing to do here - an entity which is a commented relation does not have a declaration
+}
+
+void
+HF_IdlCommentedRelationElement::write_Description( const client & i_ce ) const
+{
+    produce_LinkDoc( Env(), i_ce, CurOut(), m_relation, doctype_complete );
+}

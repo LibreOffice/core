@@ -52,20 +52,6 @@ class HF_IdlDocu : public HtmlFactory_Idl
     virtual             ~HF_IdlDocu();
 
 
-    /** @Deprecated
-        Use on of:
-            ->Produce_byCesOwnDocu()
-            ->Produce_byDocu4Reference()
-    */
-    void                Produce_byData(
-                            const client &      i_ce,
-                            const ce_info *     i_doc = 0 ) const;
-
-    /** Produces documentation by the CodeInfo accompanying
-        ->i_ce.
-    */
-    void                Produce_byCesOwnDocu(
-                            const client &      i_ce ) const;
     /** Produces documentation by the CodeInfo accompanying
         a link or reference to a CodeEntity.
 

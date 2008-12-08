@@ -71,6 +71,13 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
         viewtype_details,   // the details of the members
         viewtype_complete   // everything
     };
+
+    enum E_DocType
+    {
+        doctype_summaryOnly,    // only the summary
+        doctype_complete        // the complete documentation
+    };
+
   public:
     typedef ary::idl::CodeEntity                client;
     typedef ary::idl::Ce_id                     ce_id;
