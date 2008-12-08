@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: deliver.pl,v $
 #
-# $Revision: 1.130 $
+# $Revision$
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.130 $ ';
+$id_str = ' $Revision$ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1218,6 +1218,13 @@ sub zip_files
             $work_file = get_tempfilename() . ".zip";
             die "Error: temp file $work_file already exists" if ( -e $work_file);
             zipped_path_extension($zip_file, $work_file, $ext, 1) if ( -e $zip_file );
+        } elsif ( $zip_file eq $common_zip_file) {
+            # Zip file in common tree: work on uniq copy to avoid collisions
+            $work_file = $zip_file;
+            $work_file =~ s/\.zip$//;
+            $work_file .= (sprintf('%s.%d-%d', $to, $$, time())) . ".zip";
+            die "Error: temp file $work_file already exists" if ( -e $work_file);
+            copy($zip_file, $work_file) if ( -e $zip_file );
         } else {
             # No pre processing necessary, working directly on solver.
             $work_file = $zip_file;
@@ -1255,6 +1262,14 @@ sub zip_files
             zipped_path_extension($work_file, $zip_file, $ext, 0);
             if (( -e $work_file ) && ($work_file ne $zip_file)) {
                 unlink $work_file;
+            }
+        } elsif ( $zip_file eq $common_zip_file) {
+            # rename work file back
+            if ( -e $work_file ) {
+                if (! rename($work_file, $zip_file)) {
+                    print_error("can't rename temporary file to $zip_file: $!",0);
+                    unlink $work_file;
+                }
             }
         }
     }
