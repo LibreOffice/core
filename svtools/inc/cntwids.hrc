@@ -27,15 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//=========================================================================
-//
-// WID-definitions for CHAOS
-//
-// (C) 1997 StarDivision GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2008-04-10 18:16:37 $ $Revision: 1.3 $
-// $Logfile:   T:/svtools/inc/cntwids.hrv  $ $Workfile:   CNTWIDS.HRC  $
-//
-//=========================================================================
 
 #ifndef _CNTWIDS_HRC
 #define _CNTWIDS_HRC
