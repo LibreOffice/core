@@ -129,6 +129,11 @@ OUT2BIN+=src/rasqal-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
+
+.ELIF "$(OS)"=="OS2"
+OUT2LIB+=src$/.libs$/*.a
+OUT2BIN+=src$/rasqal-config
+
 .ELSE
 OUT2LIB+=src$/.libs$/librasqal*.so*
 OUT2BIN+=src/rasqal-config

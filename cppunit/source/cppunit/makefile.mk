@@ -87,7 +87,7 @@ LIB1ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB1FILES=$(LB)$/c5t_winstuff.lib
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
 LIB1ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 .ENDIF
 
@@ -103,7 +103,7 @@ LIB2ARCHIV=$(LB)$/lib$(TARGET2)$(DLLPOSTFIX).a
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
 LIB2ARCHIV=$(LB)$/lib$(TARGET2)$(DLLPOSTFIX).a
 .ENDIF
 

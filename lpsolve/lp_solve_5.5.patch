@@ -7,6 +7,23 @@
  
  def=
  so=
+--- misc/lp_solve_5.5/lpsolve55/ccc.os2	2008-11-26 12:49:36.000000000 +0100
++++ misc/build/lp_solve_5.5/lpsolve55/ccc.os2	2008-09-25 17:27:48.000000000 +0200
+@@ -1 +1,13 @@
+-dummy
++src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
++c=$CC
++
++def=
++so=
++
++opts='-O3'
++
++$c -s -c -Zomf -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
++emxomfar rv liblpsolve55.lib `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
++echo liblpsolve55.a
++
++rm *.o 2>/dev/null
 --- misc/lp_solve_5.5/lpsolve55/ccc.osx	Thu Jun 23 22:53:08 2005
 +++ misc/build/lp_solve_5.5/lpsolve55/ccc.osx	Wed May 21 17:19:56 2008
 @@ -3,6 +3,10 @@

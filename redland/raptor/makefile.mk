@@ -70,6 +70,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
 .ENDIF
+
 .ELSE # "WNT"
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
@@ -129,6 +130,11 @@ OUT2BIN+=src/raptor-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+OUT2LIB+=src$/.libs$/*.a
+OUT2BIN+=src$/raptor-config
+
 .ELSE
 OUT2LIB+=src$/.libs$/libraptor*.so*
 OUT2BIN+=src/raptor-config

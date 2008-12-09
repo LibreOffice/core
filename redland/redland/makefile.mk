@@ -131,6 +131,10 @@ OUT2BIN+=librdf$/.libs$/*.dll
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
+
+.ELIF "$(OS)"=="OS2"
+OUT2LIB+=librdf$/.libs$/*.a
+
 .ELSE
 OUT2LIB+=librdf$/.libs$/librdf*.so*
 .ENDIF

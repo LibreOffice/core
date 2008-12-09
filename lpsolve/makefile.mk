@@ -46,7 +46,7 @@ TARFILE_NAME=lp_solve_5.5
 PATCH_FILE_NAME=lp_solve_5.5-windows.patch
 .ELSE
 PATCH_FILE_NAME=lp_solve_5.5.patch
-ADDITIONAL_FILES=lpsolve55$/ccc.solaris
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2
 .ENDIF
 
 CONFIGURE_DIR=
@@ -62,6 +62,9 @@ BUILD_ACTION=cmd /c cvc6.bat
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
 .ENDIF
 OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
+.ELIF "$(GUI)"=="OS2"
+BUILD_ACTION=sh ccc.os2
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.lib
 .ELSE
 .IF "$(OS)"=="MACOSX"
 BUILD_ACTION=sh ccc.osx
