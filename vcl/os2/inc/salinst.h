@@ -41,9 +41,6 @@ namespace vos { class OMutex; }
 // -------------------
 
 class SalYieldMutex;
-//class SalInstance;
-//class SalFrame;
-//class SalObject;
 
 #define SAL_COMMANDLINENOINIT   ((USHORT)0xFFFF)
 #define SAL_MAXPARAM            40
@@ -57,8 +54,6 @@ public:
     int                     mnArgc;                 // commandline param count
     char**                  mpArgv;                 // commandline
     HWND                    mhComWnd;               // window, for communication (between threads and the main thread)
-    //void*                 mpFilterInst;           // hack for clipboard
-    //void*                 mpFilterCallback;       // hack for clipboard
     SalYieldMutex*          mpSalYieldMutex;        // Sal-Yield-Mutex
     vos::OMutex*            mpSalWaitMutex;         // Sal-Wait-Mutex
     USHORT              mnYieldWaitCount;       // Wait-Count
@@ -86,7 +81,6 @@ public:
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String             GetDefaultPrinter();
-    virtual SalSound*           CreateSalSound();
     virtual SalTimer*           CreateSalTimer();
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();

@@ -70,7 +70,7 @@ void Help()
 }
 
 /*****************************************************************************/
-#if defined( UNX )
+#if defined(UNX) || defined(OS2)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )

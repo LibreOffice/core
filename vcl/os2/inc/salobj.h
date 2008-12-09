@@ -32,7 +32,6 @@
 #define _SV_SALOBJ_H
 
 #include <vcl/sv.h>
-#include <sysdata.hxx>
 #include <vcl/salobj.hxx>
 
 // -----------------

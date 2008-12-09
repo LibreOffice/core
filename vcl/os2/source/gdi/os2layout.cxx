@@ -107,7 +107,7 @@ inline int ImplOs2FontEntry::GetCachedGlyphWidth( int nCharCode ) const
 class Os2Layout : public SalLayout
 {
 public:
-                        Os2Layout( HDC, ImplOs2FontData&, ImplOs2FontEntry& );
+                        Os2Layout( HDC, const ImplOs2FontData&, ImplOs2FontEntry& );
     virtual void        InitFont() const;
     void                SetFontScale( float f ) { mfFontScale = f; }
     float               GetFontScale() const    { return mfFontScale; }
@@ -118,7 +118,7 @@ protected:
     int                 mnBaseAdv;          // x-offset relative to Layout origin
     float               mfFontScale;        // allows metrics emulation of huge font sizes
 
-    ImplOs2FontData&    mrOs2FontData;
+    const ImplOs2FontData&    mrOs2FontData;
     ImplOs2FontEntry&   mrOs2FontEntry;
 };
 
@@ -127,7 +127,7 @@ protected:
 class Os2SalLayout : public Os2Layout
 {
 public:
-                    Os2SalLayout( HPS, BYTE nCharSet, ImplOs2FontData&, ImplOs2FontEntry& );
+                    Os2SalLayout( HPS, BYTE nCharSet, const ImplOs2FontData&, ImplOs2FontEntry& );
     virtual         ~Os2SalLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
@@ -172,7 +172,7 @@ private:
 
 // =======================================================================
 
-Os2Layout::Os2Layout( HPS hPS, ImplOs2FontData& rWFD, ImplOs2FontEntry& rWFE )
+Os2Layout::Os2Layout( HPS hPS, const ImplOs2FontData& rWFD, ImplOs2FontEntry& rWFE )
 :   mhPS( hPS ),
     mnBaseAdv( 0 ),
     mfFontScale( 1.0 ),
@@ -194,7 +194,7 @@ void Os2Layout::InitFont() const
 // =======================================================================
 
 Os2SalLayout::Os2SalLayout( HPS hPS, BYTE nCharSet,
-    ImplOs2FontData& rOs2FontData, ImplOs2FontEntry& rOs2FontEntry )
+    const ImplOs2FontData& rOs2FontData, ImplOs2FontEntry& rOs2FontEntry )
 :   Os2Layout( hPS, rOs2FontData, rOs2FontEntry ),
     mnGlyphCount( 0 ),
     mnCharCount( 0 ),
@@ -950,7 +950,7 @@ SalLayout* Os2SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     Os2SalLayout* pLayout = NULL;
     DBG_ASSERT( mpOs2FontEntry[nFallbackLevel], "WinSalGraphics mpWinFontEntry==NULL");
 
-    ImplOs2FontData& rFontFace      = *mpOs2FontData[ nFallbackLevel ];
+    const ImplOs2FontData& rFontFace      = *mpOs2FontData[ nFallbackLevel ];
     ImplOs2FontEntry& rFontInstance = *mpOs2FontEntry[ nFallbackLevel ];
 
     {

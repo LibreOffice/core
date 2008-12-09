@@ -49,7 +49,6 @@ YD00_CXXFILES=\
             salinst.cxx 		\
             sallang.cxx 		\
             saltimer.cxx		\
-            salsound.cxx		\
             salsys.cxx
 
 SLOFILES=	$(SLO)$/salshl.obj	\
@@ -57,10 +56,7 @@ SLOFILES=	$(SLO)$/salshl.obj	\
             $(SLO)$/salinfo.obj \
             $(SLO)$/salinst.obj	\
             $(SLO)$/sallang.obj	\
-            $(SLO)$/saltimer.obj \
-            $(SLO)$/salsound.obj 
-
-#			$(SLO)$/salsys.obj
+            $(SLO)$/saltimer.obj
 
 # --- Targets ------------------------------------------------------
 

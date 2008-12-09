@@ -52,7 +52,6 @@
 #include <vcl/svapp.hxx>
 #include <saldata.hxx>
 #include <salgdi.h>
-#include <vcl/outfont.hxx>
 #include <vcl/font.hxx>
 #include <vcl/sallayout.hxx>
 #include <tools/poly.hxx>
@@ -61,7 +60,9 @@
 #include <tools/debug.hxx>
 #include <saldata.hxx>
 #include <salgdi.h>
-#include <outfont.hxx>
+#ifndef _SV_OUTFONT_HXX
+#include <vcl/outfont.hxx>
+#endif
 #include <sallayout.h>
 #include <tools/poly.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -400,7 +401,7 @@ sal_IntPtr ImplOs2FontData::GetFontId() const
 
 // -----------------------------------------------------------------------
 
-void ImplOs2FontData::UpdateFromHPS( HPS hPS )
+void ImplOs2FontData::UpdateFromHPS( HPS hPS ) const
 {
     // short circuit if already initialized
     if( mpUnicodeMap != NULL )
@@ -437,7 +438,7 @@ bool ImplOs2FontData::IsGSUBstituted( sal_Ucs cChar ) const
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* ImplOs2FontData::GetImplFontCharMap()
+ImplFontCharMap* ImplOs2FontData::GetImplFontCharMap() const
 {
     mpUnicodeMap->AddReference();
     return mpUnicodeMap;
@@ -450,7 +451,7 @@ static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
-void ImplOs2FontData::ReadOs2Table( HPS hPS )
+void ImplOs2FontData::ReadOs2Table( HPS hPS ) const
 {
     const DWORD Os2Tag = CalcTag( "OS/2" );
     DWORD nLength = Ft2GetFontData( hPS, Os2Tag, 0, NULL, 0 );
@@ -556,7 +557,7 @@ void ImplOs2FontData::ReadGsubTable( HPS hPS ) const
 
 // -----------------------------------------------------------------------
 
-void ImplOs2FontData::ReadCmapTable( HPS hPS )
+void ImplOs2FontData::ReadCmapTable( HPS hPS ) const
 {
     CmapResult aResult;
     aResult.mnPairCount = 0;
@@ -804,7 +805,7 @@ USHORT Os2SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
     DBG_ASSERT( pFont->mpFontData, "WinSalGraphics mpFontData==NULL");
     mpOs2FontEntry[ nFallbackLevel ] = reinterpret_cast<ImplOs2FontEntry*>( pFont->mpFontEntry );
-    mpOs2FontData[ nFallbackLevel ] = reinterpret_cast<ImplOs2FontData*>( pFont->mpFontData );
+    mpOs2FontData[ nFallbackLevel ] = static_cast<const ImplOs2FontData*>( pFont->mpFontData );
 
     ImplDoSetFont( pFont, mfFontScale, nFallbackLevel);
 
@@ -1010,13 +1011,6 @@ ImplFontCharMap* Os2SalGraphics::GetImplFontCharMap() const
     if( !mpOs2FontData[0] )
         return ImplFontCharMap::GetDefaultMap();
     return mpOs2FontData[0]->GetImplFontCharMap();
-#if 0
-//if( !mpWinFontData[0] )
-    //    return ImplFontCharMap::GetDefaultMap();
-    if (!pOs2DefaultImplFontCharMap)
-        pOs2DefaultImplFontCharMap = new ImplFontCharMap( 1, pOs2DefaultRangeCodes, NULL );
-    return pOs2DefaultImplFontCharMap;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1462,7 +1456,7 @@ BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
     // use height=1000 for easier debugging (to match psprint's font units)
-    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
@@ -1581,7 +1575,7 @@ const void* Os2SalGraphics::GetEmbedFontData( const ImplFontData* pFont,
 {
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
-    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
@@ -1665,11 +1659,11 @@ const Ucs2SIntMap* Os2SalGraphics::GetFontEncodingVector( const ImplFontData* pF
 void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                                      bool bVertical,
                                      Int32Vector& rWidths,
-                                     Ucs2UInt& rUnicodeEnc )
+                                     Ucs2UIntMap& rUnicodeEnc )
 {
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
-    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
@@ -1680,11 +1674,11 @@ void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
     if( pFont->IsSubsettable() )
     {
         // get raw font file data
-        DWORD nFontSize1 = ::Ft2GetFontData( mhDC, 0, 0, NULL, 0 );
+        DWORD nFontSize1 = ::Ft2GetFontData( mhPS, 0, 0, NULL, 0 );
         if( nFontSize1 == FT2_ERROR )
             return;
         ScopedCharArray xRawFontData(new char[ nFontSize1 ]);
-        DWORD nFontSize2 = ::Ft2GetFontData( mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize1 );
+        DWORD nFontSize2 = ::Ft2GetFontData( mhPS, 0, 0, (void*)xRawFontData.get(), nFontSize1 );
         if( nFontSize1 != nFontSize2 )
             return;
 
@@ -1716,7 +1710,7 @@ void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 free( pMetrics );
                 rUnicodeEnc.clear();
             }
-            ImplOs2FontData* pWinFont = static_cast<ImplOs2FontData*>(pFont);
+            const ImplOs2FontData* pWinFont = static_cast<const ImplOs2FontData*>(pFont);
             ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
 

@@ -444,7 +444,7 @@ BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorP
             }
         }
 
-        ByteString aDelimiter( String( sal_Unicode(0x2016) ), RTL_TEXTENCODING_UTF8 );
+        ByteString aDelimiter( (String)String( sal_Unicode(0x2016) ), RTL_TEXTENCODING_UTF8 );
 
         if ( aID.Equals( aDelimiter, 6, aDelimiter.Len() ) )
         {   // New KeyId     6 Letters, digits and spechial chars followed by delimiter
@@ -780,7 +780,7 @@ void Help()
 }
 
 /*****************************************************************************/
-#if defined( UNX )
+#if defined(UNX) || defined(OS2)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
