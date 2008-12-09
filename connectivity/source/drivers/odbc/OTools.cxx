@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 #include "odbc/OConnection.hxx"
 #include "diagnose_ex.h"
+#include <rtl/logfile.hxx>
 
 #include <string.h>
 #include <string>
@@ -55,6 +56,7 @@ void OTools::getValue(  OConnection* _pConnection,
                         void* _pValue,
                         SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getValue" );
     SQLINTEGER pcbValue = SQL_NULL_DATA;
     OTools::ThrowException(_pConnection,
                             (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
@@ -80,6 +82,7 @@ void OTools::bindParameter( OConnection* _pConnection,
                             rtl_TextEncoding _nTextEncoding)
                              throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindParameter" );
     SQLRETURN nRetcode;
     SWORD   fSqlType;
     SWORD   fCType;
@@ -123,6 +126,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                         rtl_TextEncoding _nTextEncoding,
                         SQLUINTEGER& _nColumnSize)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindData" );
     _nColumnSize = 0;
 
     switch (_nOdbcType)
@@ -261,6 +265,7 @@ void OTools::bindValue( OConnection* _pConnection,
                         rtl_TextEncoding _nTextEncoding,
                         sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindValue" );
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
     SQLSMALLINT   fCType;
@@ -436,6 +441,7 @@ void OTools::ThrowException(OConnection* _pConnection,
 
     // Zusaetliche Informationen zum letzten ODBC-Funktionsaufruf vorhanden.
     // SQLError liefert diese Informationen.
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::ThrowException" );
 
     SDB_ODBC_CHAR szSqlState[5];
     SDWORD pfNativeError;
@@ -474,6 +480,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                          sal_Bool &_bWasNull,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBytesValue" );
     char aCharArray[2048];
     // Erstmal versuchen, die Daten mit dem kleinen Puffer
     // abzuholen:
@@ -536,6 +543,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                        const Reference< XInterface >& _xInterface,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getStringValue" );
     ::rtl::OUString aData;
     switch(_fSqlType)
     {
@@ -798,6 +806,7 @@ sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)
 //--------------------------------------------------------------------
 sal_Int32 OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::jdbcTypeToOdbc" );
     // For the most part, JDBC types match ODBC types.  We'll
     // just convert the ones that we know are different
 
@@ -826,6 +835,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
                           SQLSMALLINT& fSqlType
                           )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBindTypes" );
     switch(_nOdbcType)
     {
         case SQL_CHAR:              if(_bUseWChar)

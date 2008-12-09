@@ -91,14 +91,14 @@ namespace dbtools
     //--------------------------------------------------------------------
     void ParameterManager::initialize( const Reference< XPropertySet >& _rxComponent, const Reference< XAggregation >& _rxComponentAggregate )
     {
-        OSL_ENSURE( !m_xComponent.is(), "ParameterManager::initialize: already initialized!" );
+        OSL_ENSURE( !m_xComponent.get().is(), "ParameterManager::initialize: already initialized!" );
 
         m_xComponent        = _rxComponent;
         m_xAggregatedRowSet = _rxComponentAggregate;
         if ( m_xAggregatedRowSet.is() )
             m_xAggregatedRowSet->queryAggregation( ::getCppuType( &m_xInnerParamUpdate ) ) >>= m_xInnerParamUpdate;
-        OSL_ENSURE( m_xComponent.is() && m_xInnerParamUpdate.is(), "ParameterManager::initialize: invalid arguments!" );
-        if ( !m_xComponent.is() || !m_xInnerParamUpdate.is() )
+        OSL_ENSURE( m_xComponent.get().is() && m_xInnerParamUpdate.is(), "ParameterManager::initialize: invalid arguments!" );
+        if ( !m_xComponent.get().is() || !m_xInnerParamUpdate.is() )
             return;
     }
 
@@ -109,7 +109,7 @@ namespace dbtools
 
         m_xComposer.clear();
         m_xParentComposer.clear();
-        m_xComponent.clear();
+        //m_xComponent.clear();
         m_xInnerParamUpdate.clear();
         m_xAggregatedRowSet.clear();
     }
@@ -359,8 +359,13 @@ namespace dbtools
         try
         {
             // the links as determined by the  properties
-            m_xComponent->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MASTERFIELDS) ) >>= m_aMasterFields;
-            m_xComponent->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DETAILFIELDS) ) >>= m_aDetailFields;
+            Reference< XPropertySet > xProp = m_xComponent;
+            OSL_ENSURE(xProp.is(),"Some already released my component!");
+            if ( xProp.is() )
+            {
+                xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MASTERFIELDS) ) >>= m_aMasterFields;
+                xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DETAILFIELDS) ) >>= m_aDetailFields;
+            }
 
             {
                 // normalize to equal length
@@ -500,10 +505,15 @@ namespace dbtools
         cacheConnectionInfo();
 
         // check whether the  is based on a statement/query which requires parameters
-        if ( !initializeComposerByComponent( m_xComponent ) )
-        {   // okay, nothing to do
-            m_bUpToDate = true;
-            return;
+        Reference< XPropertySet > xProp = m_xComponent;
+        OSL_ENSURE(xProp.is(),"Some already released my component!");
+        if ( xProp.is() )
+        {
+            if ( !initializeComposerByComponent( xProp ) )
+            {   // okay, nothing to do
+                m_bUpToDate = true;
+                return;
+            } // if ( !initializeComposerByComponent( m_xComponent ) )
         }
         OSL_POSTCOND( m_xInnerParamColumns.is(), "ParameterManager::updateParameterInfo: initializeComposerByComponent did nonsense (1)!" );
 
@@ -699,7 +709,9 @@ namespace dbtools
         if ( nParamsLeft )
         {
             ::cppu::OInterfaceIteratorHelper aIter( m_aParameterListeners );
-            DatabaseParameterEvent aEvent( m_xComponent.get(), m_pOuterParameters.get() );
+            Reference< XPropertySet > xProp = m_xComponent;
+            OSL_ENSURE(xProp.is(),"Some already released my component!");
+            DatabaseParameterEvent aEvent( xProp.get(), m_pOuterParameters.get() );
 
             _rClearForNotifies.clear();
             while ( aIter.hasMoreElements() && !bCanceled )
@@ -746,7 +758,10 @@ namespace dbtools
         _rxConnection.clear();
         try
         {
-            m_xComponent->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ACTIVE_CONNECTION) ) >>= _rxConnection;
+            Reference< XPropertySet > xProp = m_xComponent;
+            OSL_ENSURE(xProp.is(),"Some already released my component!");
+            if ( xProp.is() )
+                xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ACTIVE_CONNECTION) ) >>= _rxConnection;
         }
         catch( const Exception& )
         {
@@ -786,7 +801,7 @@ namespace dbtools
         if ( _bFromComposer )
             xColumnSupp = xColumnSupp.query( m_xComposer );
         else
-            xColumnSupp = xColumnSupp.query( m_xComponent );
+            xColumnSupp.set( m_xComponent.get(),UNO_QUERY);
         if ( xColumnSupp.is() )
             _rxColumns = xColumnSupp->getColumns();
         OSL_ENSURE( _rxColumns.is(), "ParameterManager::getColumns: could not retrieve the columns for the detail !" );
@@ -803,7 +818,7 @@ namespace dbtools
         try
         {
             // get the parent of the component we're working for
-            Reference< XChild > xAsChild( m_xComponent, UNO_QUERY_THROW );
+            Reference< XChild > xAsChild( m_xComponent.get(), UNO_QUERY_THROW );
             Reference< XPropertySet > xParent( xAsChild->getParent(), UNO_QUERY );
             if ( !xParent.is() )
                 return false;

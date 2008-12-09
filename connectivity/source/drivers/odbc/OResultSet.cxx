@@ -48,6 +48,7 @@
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"
 #include "diagnose_ex.h"
+#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -61,6 +62,8 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
+
+#define ODBC_SQL_NOT_DEFINED    99UL
 
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
@@ -101,6 +104,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
                         ,m_nRowPos(0)
                         ,m_nLastColumnPos(0)
+                        ,m_nUseBookmarks(ODBC_SQL_NOT_DEFINED)
                         ,m_nCurrentFetchState(0)
                         ,m_bWasNull(sal_True)
                         ,m_bEOF(sal_True)
@@ -187,23 +191,10 @@ void OResultSet::disposing(void)
     m_xStatement    = NULL;
     m_xMetaData     = NULL;
 }
-// -----------------------------------------------------------------------------
-sal_Int32 OResultSet::mapColumn (sal_Int32  column)
-{
-    sal_Int32   map = column;
-
-    if (!m_aColMapping.empty())
-    {
-        // Validate column number
-        OSL_ENSURE(column>0,"OResultSet::mapColumn column <= 0");
-        map = m_aColMapping[column];
-    }
-
-    return map;
-}
 // -------------------------------------------------------------------------
 SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::unbind" );
     SQLRETURN nRet = 0;
     if ( _bUnbindHandle )
         nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
@@ -273,6 +264,7 @@ SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
 // -------------------------------------------------------------------------
 TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::allocBindColumn" );
     TVoidPtr aPair;
     switch (_nType)
     {
@@ -332,6 +324,7 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
 // -------------------------------------------------------------------------
 void OResultSet::allocBuffer()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::allocBuffer" );
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
 
@@ -349,6 +342,7 @@ void OResultSet::allocBuffer()
 // -------------------------------------------------------------------------
 void OResultSet::releaseBuffer()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::releaseBuffer" );
     unbind(sal_False);
     m_aLengthVector.clear();
 }
@@ -371,7 +365,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
-
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::findColumn" );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
@@ -387,35 +381,31 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     return i;
 }
 // -------------------------------------------------------------------------
-Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    columnIndex = mapColumn(columnIndex);
     // TODO use getBytes instead of
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    columnIndex = mapColumn(columnIndex);
     // TODO use getBytes instead of
     return NULL;
 }
 // -----------------------------------------------------------------------------
 const ORowSetValue& OResultSet::getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getValue" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    _nColumnIndex = mapColumn(_nColumnIndex);
 
     if(m_bFetchData)
     {
@@ -447,12 +437,12 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getBytes" );
 
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-    columnIndex = mapColumn(columnIndex);
     if(m_bFetchData)
     {
         if(columnIndex > m_nLastColumnPos)
@@ -475,8 +465,11 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         return nRet;
     }
 
-    SWORD nType = OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex);
-    switch(nType)
+    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+    if ( aFind == m_aODBCColumnTypes.end() )
+        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+
+    switch(aFind->second)
     {
         case SQL_WVARCHAR:
         case SQL_WCHAR:
@@ -485,7 +478,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         case SQL_CHAR:
         case SQL_LONGVARCHAR:
         {
-            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
+            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,aFind->second,m_bWasNull,**this,m_nTextEncoding);
             return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
         }
         default:
@@ -497,6 +490,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
 
 Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getDate" );
     DATE_STRUCT aDate;
     aDate.day   = 0;
     aDate.month = 0;
@@ -560,6 +554,7 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
 
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getMetaData" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -599,10 +594,10 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getObject" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    columnIndex = mapColumn(columnIndex);
     fillRow(columnIndex);
     return m_aRow[columnIndex].makeAny();
 }
@@ -619,17 +614,19 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getString" );
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    columnIndex = mapColumn(columnIndex);
     ::rtl::OUString nRet;
-    if(m_bFetchData)
+    if ( m_bFetchData )
         nRet = getValue(columnIndex,0,NULL,0);
     else
     {
-        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex),m_bWasNull,**this,m_nTextEncoding);
+        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+        ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+        if ( aFind == m_aODBCColumnTypes.end() )
+            aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,aFind->second,m_bWasNull,**this,m_nTextEncoding);
     }
     return nRet;
 }
@@ -637,6 +634,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getTime" );
     TIME_STRUCT aTime={0,0,0};
     const ORowSetValue& aValue = getValue(columnIndex,
         m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME,
@@ -648,6 +646,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getTimestamp" );
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
     const ORowSetValue& aValue = getValue(columnIndex,
         m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP,
@@ -694,6 +693,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::beforeFirst" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -705,6 +705,7 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::afterLast" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -727,27 +728,32 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::first" );
     return moveImpl(IResultSetHelper::FIRST,0,sal_True);
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::last" );
     return moveImpl(IResultSetHelper::LAST,0,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::absolute" );
     return moveImpl(IResultSetHelper::ABSOLUTE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::relative" );
     return moveImpl(IResultSetHelper::RELATIVE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::previous" );
     return moveImpl(IResultSetHelper::PRIOR,0,sal_True);
 }
 // -------------------------------------------------------------------------
@@ -761,6 +767,7 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
 
 sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::rowDeleted" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -772,6 +779,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::rowInserted" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -783,6 +791,7 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::rowUpdated" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -793,12 +802,14 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
 
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::next" );
     return moveImpl(IResultSetHelper::NEXT,1,sal_True);
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::wasNull" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -827,6 +838,7 @@ Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::insertRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -904,6 +916,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::updateRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -932,6 +945,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::deleteRow" );
     SQLRETURN nRet = SQL_SUCCESS;
     sal_Int32 nPos = getDriverPos();
     nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_DELETE,SQL_LOCK_NO_CHANGE);
@@ -963,6 +977,7 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
 
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::moveToInsertRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -982,10 +997,10 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 // -------------------------------------------------------------------------
 void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::updateValue" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    columnIndex = mapColumn(columnIndex);
     m_aBindVector.push_back(allocBindColumn(OTools::MapOdbcType2Jdbc(_nType),columnIndex));
     void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
     OSL_ENSURE(pData != NULL,"Data for update is NULL!");
@@ -1007,8 +1022,6 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    columnIndex = mapColumn(columnIndex);
     m_aBindVector.push_back(allocBindColumn(DataType::CHAR,columnIndex));
     void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
     OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,(sal_Int8*)NULL,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
@@ -1108,6 +1121,7 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::refreshRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1133,6 +1147,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 // XRowLocate
 Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getBookmark" );
      ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1141,10 +1156,14 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 
     if ( aFind == m_aPosToBookmarks.end() )
     {
-        sal_uInt32 nValue = SQL_UB_OFF;
-        SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
-        OSL_UNUSED( nRet );
-        if(nValue == SQL_UB_OFF)
+        if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
+        {
+            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "SQLGetStmtAttr" );
+            m_nUseBookmarks = SQL_UB_OFF;
+            SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&m_nUseBookmarks,SQL_IS_UINTEGER,NULL);
+            OSL_UNUSED( nRet );
+        }
+        if(m_nUseBookmarks == SQL_UB_OFF)
             throw SQLException();
 
         m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
@@ -1158,6 +1177,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::moveToBookmark" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1186,6 +1206,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::moveRelativeToBookmark" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1202,6 +1223,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::compareBookmarks" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1333,10 +1355,15 @@ sal_Bool  OResultSet::isBookmarkable() const
     {
         return sal_False;
     }
-    sal_uInt32 nUseBookmark = SQL_UB_OFF;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nUseBookmark,SQL_IS_UINTEGER,NULL);
 
-    return (nUseBookmark != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
+    if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
+    {
+        m_nUseBookmarks = SQL_UB_OFF;
+        SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&m_nUseBookmarks,SQL_IS_UINTEGER,NULL);
+        OSL_UNUSED( nRet );
+    }
+
+    return (m_nUseBookmarks != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
 }
 //------------------------------------------------------------------------------
 void OResultSet::setFetchDirection(sal_Int32 _par0)
@@ -1450,6 +1477,7 @@ void OResultSet::getFastPropertyValue(
 // -------------------------------------------------------------------------
 void OResultSet::fillRow(sal_Int32 _nToColumn)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::fillRow" );
     if((sal_Int32)m_aRow.size() <= _nToColumn)
     {
         m_aRow.resize(_nToColumn+1);
@@ -1468,11 +1496,15 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                *pColumn = getString(nColumn);
-                break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                *pColumn = getString(nColumn);
+            case DataType::LONGVARCHAR:
+                {
+                    ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(nColumn);
+                    if ( aFind == m_aODBCColumnTypes.end() )
+                        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(nColumn,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,nColumn))).first;
+                    *pColumn = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,nColumn,aFind->second,m_bWasNull,**this,m_nTextEncoding);
+                }
                 break;
             case DataType::BIGINT:
                 *pColumn = getLong(nColumn);
@@ -1480,9 +1512,6 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::REAL:
             case DataType::DOUBLE:
                 *pColumn = getDouble(nColumn);
-                break;
-            case DataType::LONGVARCHAR:
-                *pColumn = getString(nColumn);
                 break;
             case DataType::LONGVARBINARY:
                 *pColumn = getBytes(nColumn);
@@ -1517,7 +1546,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 break;
         }
 
-        if(wasNull())
+        if ( m_bWasNull )
             pColumn->setNull();
         if(nType != pColumn->getTypeKind())
         {
@@ -1545,6 +1574,7 @@ void SAL_CALL OResultSet::release() throw()
 // -----------------------------------------------------------------------------
 sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool /*_bRetrieveData*/)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::move" );
     SQLSMALLINT nFetchOrientation = SQL_FETCH_NEXT;
     switch(_eCursorPosition)
     {
@@ -1592,7 +1622,8 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
     OSL_TRACE( __FILE__": OSkipDeletedSet::OResultSet::move(%d,%d), FetchState = %d",nFetchOrientation,_nOffset,m_nCurrentFetchState);
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
-    if ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO )
+    const bool bSuccess = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+    if ( bSuccess )
     {
         switch(_eCursorPosition)
         {
@@ -1615,12 +1646,17 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
             case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
                 m_nRowPos = _nOffset;
                 break;
-        }
-        sal_uInt32 nValue = SQL_UB_OFF;
-        SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
-        OSL_UNUSED( nRet );
-        if ( nValue != SQL_UB_OFF )
+        } // switch(_eCursorPosition)
+        if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
         {
+            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "SQLGetStmtAttr" );
+            m_nUseBookmarks = SQL_UB_OFF;
+            SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&m_nUseBookmarks,SQL_IS_UINTEGER,NULL);
+            OSL_UNUSED( nRet );
+        }
+        if ( m_nUseBookmarks != SQL_UB_OFF )
+        {
+            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "OTools::getBytesValue" );
             m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
             m_aPosToBookmarks[m_aBookmark] = m_nRowPos;
             OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
@@ -1631,7 +1667,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
     else if(IResultSetHelper::NEXT == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA && nOldFetchStatus != SQL_NO_DATA)
         ++m_nRowPos;
 
-    return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+    return bSuccess;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OResultSet::getDriverPos() const
@@ -1664,6 +1700,7 @@ sal_Bool OResultSet::moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_I
 // -----------------------------------------------------------------------------
 void OResultSet::fillNeededData(SQLRETURN _nRet)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::fillNeededData" );
     SQLRETURN nRet = _nRet;
     if( nRet == SQL_NEED_DATA)
     {

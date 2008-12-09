@@ -1686,9 +1686,11 @@ void FmGridControl::InitColumnByField(
     // lookup the column which belongs to the control source
     ::rtl::OUString sFieldName;
     _rxColumnModel->getPropertyValue( FM_PROP_CONTROLSOURCE ) >>= sFieldName;
-
     Reference< XPropertySet > xField;
-    if ( sFieldName.getLength() && _rxFieldsByNames->hasByName( sFieldName ) )
+    _rxColumnModel->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
+
+
+    if ( !xField.is() && /*sFieldName.getLength() && */_rxFieldsByNames->hasByName( sFieldName ) ) // #i93452# do not check for name length
         _rxFieldsByNames->getByName( sFieldName ) >>= xField;
 
     // determine the position of this column
