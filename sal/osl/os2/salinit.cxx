@@ -93,6 +93,7 @@ void SAL_CALL sal_detail_initialize(int argc, char ** argv)
 {
     APIRET rc = -1;
 
+#if OSL_DEBUG_LEVEL == 0
     excRegisterHooks(_oslExceptOpenLogFile, NULL, NULL, FALSE);
 
     g_excptstruct.RegRec2.pfnHandler = (PFN)excHandlerLoud;
@@ -105,6 +106,7 @@ void SAL_CALL sal_detail_initialize(int argc, char ** argv)
         else
             DosBeep(1000, 1000);
     g_excptstruct.ulExcpt = setjmp(g_excptstruct.RegRec2.jmpThread);
+#endif
 
     osl_setCommandArgs(argc, argv);
 }
@@ -113,7 +115,9 @@ void SAL_CALL sal_detail_deinitialize()
 {
     APIRET rc = -1;
 
+#if OSL_DEBUG_LEVEL == 0
     rc = DosUnsetExceptionHandler((PEXCEPTIONREGISTRATIONRECORD)&(g_excptstruct.RegRec2));
+#endif
 }
 
 }
