@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printoptions.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.236.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,36 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
+#ifndef _SVT_LOGHELPER_HXX
+#include <loghelper.hxx>
+#endif
+
 #include <itemholder2.hxx>
+
 
 // -----------
 // - statics -
@@ -63,6 +92,7 @@ static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 // -----------
 
 #define ROOTNODE_START                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print/Option"))
+#define ROOTNODE_PRINTOPTION                            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option"))
 
 #define PROPERTYNAME_REDUCETRANSPARENCY                 OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
 #define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
@@ -75,19 +105,6 @@ static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 #define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
 #define PROPERTYNAME_CONVERTTOGREYSCALES                OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
 
-#define PROPERTYHDL_REDUCETRANSPARENCY                  0
-#define PROPERTYHDL_REDUCEDTRANSPARENCYMODE             1
-#define PROPERTYHDL_REDUCEGRADIENTS                     2
-#define PROPERTYHDL_REDUCEDGRADIENTMODE                 3
-#define PROPERTYHDL_REDUCEDGRADIENTSTEPCOUNT            4
-#define PROPERTYHDL_REDUCEBITMAPS                       5
-#define PROPERTYHDL_REDUCEDBITMAPMODE                   6
-#define PROPERTYHDL_REDUCEDBITMAPRESOLUTION             7
-#define PROPERTYHDL_REDUCEDBITMAPINCLUDESTRANSPARENCY   8
-#define PROPERTYHDL_CONVERTTOGREYSCALES                 9
-
-#define PROPERTYCOUNT                                   10
-
 // --------------
 // - Namespaces -
 // --------------
@@ -96,6 +113,7 @@ using namespace ::utl;
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+namespace css = com::sun::star;
 
 // -----------
 // - statics -
@@ -114,7 +132,7 @@ sal_Int32               SvtPrintFileOptions::m_nRefCount = 0;
 // - SvtPrintOptions_Impl -
 // ------------------------
 
-class SvtPrintOptions_Impl : public ConfigItem
+class SvtPrintOptions_Impl
 {
 public:
 
@@ -126,255 +144,408 @@ public:
     ~SvtPrintOptions_Impl();
 
 //---------------------------------------------------------------------------------------------------------
-//  overloaded methods of baseclass
-//---------------------------------------------------------------------------------------------------------
-
-    virtual void Commit();
-
-//---------------------------------------------------------------------------------------------------------
 //  public interface
 //---------------------------------------------------------------------------------------------------------
 
-    sal_Bool    IsReduceTransparency() const { return m_bReduceTransparency; }
-    sal_Int16   GetReducedTransparencyMode() const { return m_nReducedTransparencyMode; }
-    sal_Bool    IsReduceGradients() const { return m_bReduceGradients; }
-    sal_Int16   GetReducedGradientMode() const { return m_nReducedGradientMode; }
-    sal_Int16   GetReducedGradientStepCount() const { return m_nReducedGradientStepCount; }
-    sal_Bool    IsReduceBitmaps() const { return m_bReduceBitmaps; }
-    sal_Int16   GetReducedBitmapMode() const { return m_nReducedBitmapMode; }
-    sal_Int16   GetReducedBitmapResolution() const { return m_nReducedBitmapResolution; }
-    sal_Bool    IsReducedBitmapIncludesTransparency() const { return m_bReducedBitmapIncludesTransparency; }
-       sal_Bool IsConvertToGreyscales() const { return m_bConvertToGreyscales; }
+    sal_Bool    IsReduceTransparency() const ;
+    sal_Int16   GetReducedTransparencyMode() const ;
+    sal_Bool    IsReduceGradients() const ;
+    sal_Int16   GetReducedGradientMode() const ;
+    sal_Int16   GetReducedGradientStepCount() const ;
+    sal_Bool    IsReduceBitmaps() const ;
+    sal_Int16   GetReducedBitmapMode() const ;
+    sal_Int16   GetReducedBitmapResolution() const ;
+    sal_Bool    IsReducedBitmapIncludesTransparency() const ;
+       sal_Bool IsConvertToGreyscales() const;
 
-    void        SetReduceTransparency( sal_Bool bState ) { m_bReduceTransparency = bState; SetModified(); }
-    void        SetReducedTransparencyMode( sal_Int16 nMode ) { m_nReducedTransparencyMode = nMode; SetModified(); }
-    void        SetReduceGradients( sal_Bool bState ) { m_bReduceGradients = bState; SetModified(); }
-    void        SetReducedGradientMode( sal_Int16 nMode ) { m_nReducedGradientMode = nMode; SetModified(); }
-    void        SetReducedGradientStepCount( sal_Int16 nStepCount ) { m_nReducedGradientStepCount = nStepCount; SetModified(); }
-    void        SetReduceBitmaps( sal_Bool bState ) { m_bReduceBitmaps = bState; SetModified(); }
-    void        SetReducedBitmapMode( sal_Int16 nMode ) { m_nReducedBitmapMode = nMode; SetModified(); }
-    void        SetReducedBitmapResolution( sal_Int16 nResolution ) { m_nReducedBitmapResolution = nResolution; SetModified(); }
-    void        SetReducedBitmapIncludesTransparency( sal_Bool bState ) { m_bReducedBitmapIncludesTransparency = bState; SetModified(); }
-       void        SetConvertToGreyscales( sal_Bool bState ) { m_bConvertToGreyscales = bState; SetModified(); }
+    void        SetReduceTransparency( sal_Bool bState ) ;
+    void        SetReducedTransparencyMode( sal_Int16 nMode ) ;
+    void        SetReduceGradients( sal_Bool bState ) ;
+    void        SetReducedGradientMode( sal_Int16 nMode ) ;
+    void        SetReducedGradientStepCount( sal_Int16 nStepCount ) ;
+    void        SetReduceBitmaps( sal_Bool bState ) ;
+    void        SetReducedBitmapMode( sal_Int16 nMode ) ;
+    void        SetReducedBitmapResolution( sal_Int16 nResolution ) ;
+    void        SetReducedBitmapIncludesTransparency( sal_Bool bState ) ;
+       void        SetConvertToGreyscales( sal_Bool bState ) ;
 
 //-------------------------------------------------------------------------------------------------------------
-//  private methods
+//  private API
 //-------------------------------------------------------------------------------------------------------------
 
 private:
-
-    static Sequence< OUString > impl_GetPropertyNames();
+    void impl_setValue (const ::rtl::OUString& sProp,
+                              ::sal_Bool       bNew );
+    void impl_setValue (const ::rtl::OUString& sProp,
+                              ::sal_Int16      nNew );
 
 //-------------------------------------------------------------------------------------------------------------
 //  private member
 //-------------------------------------------------------------------------------------------------------------
 
 private:
-
-    sal_Bool    m_bReduceTransparency;
-    sal_Int16   m_nReducedTransparencyMode;
-    sal_Bool    m_bReduceGradients;
-    sal_Int16   m_nReducedGradientMode;
-    sal_Int16   m_nReducedGradientStepCount;
-    sal_Bool    m_bReduceBitmaps;
-    sal_Int16   m_nReducedBitmapMode;
-    sal_Int16   m_nReducedBitmapResolution;
-    sal_Bool    m_bReducedBitmapIncludesTransparency;
-       sal_Bool m_bConvertToGreyscales;
+       css::uno::Reference< css::container::XNameAccess > m_xCfg;
+    css::uno::Reference< css::container::XNameAccess > m_xNode;
 };
 
-// -----------------------------------------------------------------------------
-
-SvtPrintOptions_Impl::SvtPrintOptions_Impl( const OUString& rConfigRoot ) :
-    ConfigItem( rConfigRoot ),
-    m_bReduceTransparency( sal_False ),
-    m_nReducedTransparencyMode( 0 ),
-    m_bReduceGradients( sal_False ),
-    m_nReducedGradientMode( 0 ),
-    m_nReducedGradientStepCount( 64 ),
-    m_bReduceBitmaps( sal_False ),
-    m_nReducedBitmapMode( 1 ),
-    m_nReducedBitmapResolution( 3 ),
-    m_bReducedBitmapIncludesTransparency( sal_True ),
-    m_bConvertToGreyscales( sal_False )
+SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
 {
-    Sequence< OUString >    seqNames( impl_GetPropertyNames() );
-    Sequence< Any >         seqValues( GetProperties( seqNames ) );
-
-    DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtPrintOptions_Impl::SvtPrintOptions_Impl()\nI miss some values of configuration keys!\n" );
-
-    // Copy values from list in right order to our internal member.
-    sal_Int32 nPropertyCount = seqValues.getLength();
-    sal_Int32 nProperty = 0;
-
-    for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    try
     {
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtPrintOptions_Impl::SvtPrintOptions_Impl()\nInvalid property value for property detected!\n" );
+        m_xCfg = css::uno::Reference< css::container::XNameAccess >(
+            ::comphelper::ConfigurationHelper::openConfig(
+            utl::getProcessServiceFactory(),
+            ROOTNODE_PRINTOPTION,
+            ::comphelper::ConfigurationHelper::E_STANDARD),
+            css::uno::UNO_QUERY);
 
-        switch( nProperty )
+        if (m_xCfg.is())
         {
-            case PROPERTYHDL_REDUCETRANSPARENCY:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
-                seqValues[nProperty] >>= m_bReduceTransparency;
-            }
-            break;
-
-
-            case PROPERTYHDL_REDUCEDTRANSPARENCYMODE:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "Invalid type" );
-                seqValues[nProperty] >>= m_nReducedTransparencyMode;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEGRADIENTS:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
-                seqValues[nProperty] >>= m_bReduceGradients;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEDGRADIENTMODE:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "Invalid type" );
-                seqValues[nProperty] >>= m_nReducedGradientMode;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEDGRADIENTSTEPCOUNT:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "Invalid type" );
-                seqValues[nProperty] >>= m_nReducedGradientStepCount;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEBITMAPS:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
-                seqValues[nProperty] >>= m_bReduceBitmaps;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEDBITMAPMODE:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "Invalid type" );
-                seqValues[nProperty] >>= m_nReducedBitmapMode;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEDBITMAPRESOLUTION:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "Invalid type" );
-                seqValues[nProperty] >>= m_nReducedBitmapResolution;
-            }
-            break;
-
-            case PROPERTYHDL_REDUCEDBITMAPINCLUDESTRANSPARENCY:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
-                seqValues[nProperty] >>= m_bReducedBitmapIncludesTransparency;
-            }
-            break;
-
-            case PROPERTYHDL_CONVERTTOGREYSCALES:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "Invalid type" );
-                seqValues[nProperty] >>= m_bConvertToGreyscales;
-            }
-            break;
+            UniString  sTmp = UniString(rConfigRoot);
+            xub_StrLen nTokenCount = sTmp.GetTokenCount('/');
+            sTmp = sTmp.GetToken(nTokenCount - 1, '/');
+            m_xCfg->getByName(OUString(sTmp.GetBuffer())) >>= m_xNode;
         }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        m_xNode.clear();
+        m_xCfg.clear();
+        LogHelper::logIt(ex);
     }
 }
 
-// -----------------------------------------------------------------------------
+sal_Bool SvtPrintOptions_Impl::IsReduceTransparency() const
+{
+    sal_Bool bRet = sal_False;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference< css::beans::XPropertySet > xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+                xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bRet;
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return bRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedTransparencyMode() const
+{
+    sal_Int16 nRet = 0;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference< css::beans::XPropertySet > xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nRet;
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return  nRet;
+}
+
+sal_Bool SvtPrintOptions_Impl::IsReduceGradients() const
+{
+    sal_Bool bRet = sal_False;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEGRADIENTS) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return bRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedGradientMode() const
+{
+    sal_Int16 nRet = 0;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTMODE) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedGradientStepCount() const
+{
+    sal_Int16 nRet = 64;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return nRet;
+}
+
+sal_Bool SvtPrintOptions_Impl::IsReduceBitmaps() const
+{
+    sal_Bool bRet = sal_False;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return bRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapMode() const
+{
+    sal_Int16 nRet = 1;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPMODE) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapResolution() const
+{
+    sal_Int16 nRet = 3;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return  nRet;
+}
+
+sal_Bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
+{
+    sal_Bool bRet = sal_True;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return  bRet;
+}
+
+sal_Bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
+{
+    sal_Bool bRet = sal_False;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return  bRet;
+
+}
+
+void SvtPrintOptions_Impl::SetReduceTransparency(sal_Bool bState)
+{
+    impl_setValue(PROPERTYNAME_REDUCETRANSPARENCY, bState);
+}
+
+void SvtPrintOptions_Impl::SetReducedTransparencyMode(sal_Int16 nMode)
+{
+    impl_setValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE, nMode);
+}
+
+void SvtPrintOptions_Impl::SetReduceGradients(sal_Bool bState)
+{
+    impl_setValue(PROPERTYNAME_REDUCEGRADIENTS, bState);
+}
+
+void SvtPrintOptions_Impl::SetReducedGradientMode(sal_Int16 nMode)
+{
+    impl_setValue(PROPERTYNAME_REDUCEDGRADIENTMODE, nMode);
+}
+
+void SvtPrintOptions_Impl::SetReducedGradientStepCount(sal_Int16 nStepCount )
+{
+    impl_setValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT, nStepCount);
+}
+
+void SvtPrintOptions_Impl::SetReduceBitmaps(sal_Bool bState )
+{
+    impl_setValue(PROPERTYNAME_REDUCEBITMAPS, bState);
+}
+
+void SvtPrintOptions_Impl::SetReducedBitmapMode(sal_Int16 nMode )
+{
+    impl_setValue(PROPERTYNAME_REDUCEDBITMAPMODE, nMode);
+}
+
+void SvtPrintOptions_Impl::SetReducedBitmapResolution(sal_Int16 nResolution )
+{
+    impl_setValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION, nResolution);
+}
+
+void SvtPrintOptions_Impl::SetReducedBitmapIncludesTransparency(sal_Bool bState )
+{
+    impl_setValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY, bState);
+}
+
+void SvtPrintOptions_Impl::SetConvertToGreyscales(sal_Bool bState)
+{
+    impl_setValue(PROPERTYNAME_CONVERTTOGREYSCALES, bState);
+}
 
 SvtPrintOptions_Impl::~SvtPrintOptions_Impl()
 {
-    if( IsModified() )
-        Commit();
+    m_xNode.clear();
+    m_xCfg.clear();
 }
 
-// -----------------------------------------------------------------------------
-
-void SvtPrintOptions_Impl::Commit()
+void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
+                                                ::sal_Bool       bNew )
 {
-    Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
-    Sequence< Any >         aSeqValues( aSeqNames.getLength() );
-
-    for( sal_Int32 nProperty = 0, nCount = aSeqNames.getLength(); nProperty < nCount; ++nProperty )
+    try
     {
-        switch( nProperty )
+        if ( ! m_xNode.is())
+            return;
+
+        css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+        if ( ! xSet.is())
+            return;
+
+        ::sal_Bool bOld = ! bNew;
+        if ( ! (xSet->getPropertyValue(sProp) >>= bOld))
+            return;
+
+        if (bOld != bNew)
         {
-            case PROPERTYHDL_REDUCETRANSPARENCY:
-                aSeqValues[nProperty] <<= m_bReduceTransparency;
-            break;
-
-            case PROPERTYHDL_REDUCEDTRANSPARENCYMODE:
-                aSeqValues[nProperty] <<= m_nReducedTransparencyMode;
-            break;
-
-            case PROPERTYHDL_REDUCEGRADIENTS:
-                aSeqValues[nProperty] <<= m_bReduceGradients;
-            break;
-
-            case PROPERTYHDL_REDUCEDGRADIENTMODE:
-                aSeqValues[nProperty] <<= m_nReducedGradientMode;
-            break;
-
-            case PROPERTYHDL_REDUCEDGRADIENTSTEPCOUNT:
-                aSeqValues[nProperty] <<= m_nReducedGradientStepCount;
-            break;
-
-            case PROPERTYHDL_REDUCEBITMAPS:
-                aSeqValues[nProperty] <<= m_bReduceBitmaps;
-            break;
-
-            case PROPERTYHDL_REDUCEDBITMAPMODE:
-                aSeqValues[nProperty] <<= m_nReducedBitmapMode;
-            break;
-
-            case PROPERTYHDL_REDUCEDBITMAPRESOLUTION:
-                aSeqValues[nProperty] <<= m_nReducedBitmapResolution;
-            break;
-
-            case PROPERTYHDL_REDUCEDBITMAPINCLUDESTRANSPARENCY:
-                aSeqValues[nProperty] <<= m_bReducedBitmapIncludesTransparency;
-            break;
-
-            case PROPERTYHDL_CONVERTTOGREYSCALES:
-                aSeqValues[nProperty] <<= m_bConvertToGreyscales;
-            break;
+            xSet->setPropertyValue(sProp, css::uno::makeAny(bNew));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
     }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+}
 
-    PutProperties( aSeqNames, aSeqValues );
+void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
+                                                ::sal_Int16      nNew )
+{
+    try
+    {
+        if ( ! m_xNode.is())
+            return;
+
+        css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+        if ( ! xSet.is())
+            return;
+
+        ::sal_Int16 nOld = nNew+1;
+        if ( ! (xSet->getPropertyValue(sProp) >>= nOld))
+            return;
+
+        if (nOld != nNew)
+        {
+            xSet->setPropertyValue(sProp, css::uno::makeAny(nNew));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< OUString > SvtPrintOptions_Impl::impl_GetPropertyNames()
-{
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
-    {
-        PROPERTYNAME_REDUCETRANSPARENCY,
-        PROPERTYNAME_REDUCEDTRANSPARENCYMODE,
-        PROPERTYNAME_REDUCEGRADIENTS,
-        PROPERTYNAME_REDUCEDGRADIENTMODE,
-        PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT,
-        PROPERTYNAME_REDUCEBITMAPS,
-        PROPERTYNAME_REDUCEDBITMAPMODE,
-        PROPERTYNAME_REDUCEDBITMAPRESOLUTION,
-        PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY,
-        PROPERTYNAME_CONVERTTOGREYSCALES
-    };
-
-    // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-
-    return seqPropertyNames;
-}
 
 // -----------------------
 // - SvtBasePrintOptions -

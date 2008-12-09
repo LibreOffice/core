@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewoptions.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.29.236.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -382,9 +382,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
 
 /*-************************************************************************************************************//**
     @short          dtor
-    @descr          If something was changed on our internal cached values - baselcass can tell us that by return value
-                    of method "IsModified()". So we should flush these changes by calling "Commit()" of our own instance.
-                    It's an auto-save. Normaly user of these object should do that explicitly!
+    @descr          clean up something
 
     @attention      We implement a write through cache! So we mustn't do it realy. All changes was written to cfg directly.
                     Commit isn't neccessary then.
@@ -401,15 +399,10 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
-    try
-    {
-        if (m_xRoot.is())
-            ::comphelper::ConfigurationHelper::flush(m_xRoot);
-    }
-    catch(const css::uno::Exception& ex)
-        {
-            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
-        }
+    // dont flush configuration changes here to m_xRoot.
+    // That must be done inside every SetXXX() method already !
+    // Here its to late - DisposedExceptions from used configuration access can occure otherwise.
+
     m_xRoot.clear();
     m_xSet.clear();
 
