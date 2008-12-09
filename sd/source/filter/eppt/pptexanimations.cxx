@@ -1302,10 +1302,13 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                         // taking the first child
                         Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
                         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
-//                      while( xE->hasMoreElements() )
+                        if ( xE.is() && xE->hasMoreElements() )
                         {
-                            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-                            aAny = xClickNode->getBegin();
+//                          while( xE->hasMoreElements() )
+                            {
+                                Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
+                                aAny = xClickNode->getBegin();
+                            }
                         }
                     }
                     else if ( nFlags & 0x40 )
