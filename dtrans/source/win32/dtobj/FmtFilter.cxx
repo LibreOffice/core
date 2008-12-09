@@ -167,10 +167,8 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
 
 HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
-    OSL_ASSERT( aOOMetaFilePict.getLength() > 22 );
-
     HMETAFILEPICT   hPict = NULL;
-    HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength() - 22, (sal_uChar*) aOOMetaFilePict.getConstArray() + 22 );
+    HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), (sal_uChar*) aOOMetaFilePict.getConstArray() );
 
     if( hMtf )
     {

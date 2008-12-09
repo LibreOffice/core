@@ -78,6 +78,7 @@
 
 #include "urlbmk.hxx"
 #include "inetimg.hxx"
+#include <svtools/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 
@@ -286,10 +287,10 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         *pSrcStm >> aMtf;
                         delete pSrcStm;
 
-                        Graphic         aGraphic( aMtf );
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
-                        if( GraphicConverter::Export( aDstStm, aGraphic, CVT_WMF ) == ERRCODE_NONE )
+                        // taking wmf without file header
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, FALSE ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
