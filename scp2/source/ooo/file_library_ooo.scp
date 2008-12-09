@@ -1377,7 +1377,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
 
 File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
