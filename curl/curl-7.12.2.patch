@@ -142,7 +142,7 @@
 +
 +libcurl.dll: libcurl.a 
 +	$(RM) $@
-+	dllar -omf -libflags "INITINSTANCE TERMINSTANCE" -libdata "MULTIPLE" libcurl.a -lz -Zmap -Zno-fork -Zhigh-mem -Zbin-files
++	dllar -omf -libflags "INITINSTANCE TERMINSTANCE" -libdata "MULTIPLE" libcurl.a -lz -lgcc_eh -Zmap -Zno-fork -Zhigh-mem -Zbin-files
 +
 +# remove the last line above to keep debug info
 +

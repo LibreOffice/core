@@ -89,6 +89,9 @@ BUILD_ACTION=cd src/hunspell && dmake
 .ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
+.IF "$(GUI)"=="OS2"
+BUILD_ACTION=cd src/hunspell && dmake
+.ENDIF # "$(GUI)"=="OS2"
 
 OUT2INC= \
     $(BUILD_DIR)$/src$/hunspell$/*.hxx
