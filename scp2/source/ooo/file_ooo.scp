@@ -1351,11 +1351,11 @@ File gid_File_Oo_Office_Common_Xcs
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
-File gid_File_Oo_Office_Common_Xcu
+File gid_File_Oo_Office_Histories_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Histories.xcs";
 End
 
 File gid_File_Oo_Office_Extendedcolorscheme_Xcs
@@ -1392,6 +1392,20 @@ File gid_File_Oo_Office_Recovery_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
+End
+
+File gid_File_Oo_Office_Histories_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Histories.xcu";
+End
+
+File gid_File_Oo_Office_Common_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Common.xcu";
 End
 
 File gid_File_Oo_Office_Accelerators_Xcs
