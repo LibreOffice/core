@@ -235,9 +235,39 @@ HRESULT CSOActiveX::Cleanup()
     if( ::IsWindow( mOffWin ) )
         ::DestroyWindow( mOffWin );
 
+    TerminateOffice();
+
     return S_OK;
 }
 
+HRESULT CSOActiveX::TerminateOffice()
+{
+    // create desktop
+    CComPtr<IDispatch> pdispDesktop;
+    HRESULT hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Desktop" ), 1, pdispDesktop );
+    if( !pdispDesktop || !SUCCEEDED( hr ) ) return hr;
+
+    // create tree of frames
+    CComPtr<IDispatch> pdispChildren;
+    hr = GetIDispByFunc( pdispDesktop, L"getFrames", NULL, 0, pdispChildren );
+    if( !pdispChildren || !SUCCEEDED( hr ) ) return hr;
+
+    CComVariant aFrames;
+    hr = ExecuteFunc( pdispChildren, L"queryFrames", &CComVariant( 4 ), 1, &aFrames );
+    if ( SUCCEEDED( hr ) )
+    {
+        if ( ( aFrames.vt == ( VT_ARRAY | VT_DISPATCH ) || aFrames.vt == ( VT_ARRAY | VT_VARIANT ) )
+          && ( !aFrames.parray || aFrames.parray->cDims == 1 && aFrames.parray->rgsabound[0].cElements == 0 ) )
+        {
+            // there is no frames open
+            // TODO: check whether the frames are hidden if they are open?
+            CComVariant dummyResult;
+            hr = ExecuteFunc( pdispDesktop, L"terminate", NULL, 0, &dummyResult );
+        }
+    }
+
+    return hr;
+}
 
 STDMETHODIMP CSOActiveX::InitNew ()
 {
@@ -751,6 +781,36 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     hr = CallDispatchMethod( L"slot:6661", &aBarName, &aBarVis, 1 );
     // does not work for some documents, but it is no error
     // if( !SUCCEEDED( hr ) ) return hr;
+
+    // try to get the model and set the presetation specific property, the setting will fail for other document formats
+    CComPtr<IDispatch> pdispController;
+    hr = GetIDispByFunc( mpDispFrame, L"getController", NULL, 0, pdispController );
+    if ( SUCCEEDED( hr ) && pdispController )
+    {
+        CComPtr<IDispatch> pdispModel;
+        hr = GetIDispByFunc( pdispController, L"getModel", NULL, 0, pdispModel );
+        if ( SUCCEEDED( hr ) && pdispModel )
+        {
+            CComPtr<IDispatch> pdispPres;
+            hr = GetIDispByFunc( pdispModel, L"getPresentation", NULL, 0, pdispPres );
+            if ( SUCCEEDED( hr ) && pdispPres )
+            {
+                // this is a presentation
+                // let the slide show be shown in the document window
+                OLECHAR* pPropName = L"IsFullScreen";
+                CComVariant pPresProp;
+                pPresProp.vt = VT_BOOL; pPresProp.boolVal = VARIANT_FALSE ;
+                hr = PutPropertiesToIDisp( pdispPres, &pPropName, &pPresProp, 1 );
+
+                // start the slide show
+                if ( SUCCEEDED( hr ) )
+                {
+                    CComVariant dummyResult;
+                    ExecuteFunc( pdispPres, L"Start", NULL, 0, &dummyResult );
+                }
+            }
+        }
+    }
 
     /*
     // create dispatch interceptor
