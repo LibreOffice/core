@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scendlg.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.16.296.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,9 +105,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     String aComment( ScResId( STR_CREATEDBY ) );
 
     aComment += ' ';
-    aComment += aUserOpt.GetFirstName();
+    aComment += (String)aUserOpt.GetFirstName();
     aComment += ' ';
-    aComment += aUserOpt.GetLastName();
+    aComment += (String)aUserOpt.GetLastName();
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += String( ScResId( STR_ON ) );
     aComment += ' ';

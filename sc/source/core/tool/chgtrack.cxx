@@ -2760,7 +2760,7 @@ void ScChangeTrack::Init()
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
     aUser = rUserOpt.GetFirstName();
     aUser += ' ';
-    aUser += rUserOpt.GetLastName();
+    aUser += (String)rUserOpt.GetLastName();
     aUserCollection.Insert( new StrData( aUser ) );
 }
 
@@ -2828,7 +2828,7 @@ void __EXPORT ScChangeTrack::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         String aStr( rUserOptions.GetFirstName() );
         aStr += ' ';
-        aStr += rUserOptions.GetLastName();
+        aStr += (String)rUserOptions.GetLastName();
         SetUser( aStr );
 
         if ( aUserCollection.GetCount() != nOldCount )

@@ -202,7 +202,7 @@ void ScShareDocumentDlg::UpdateView()
         {
             aUser += ' ';
         }
-        aUser += aUserOpt.GetLastName();
+        aUser += String(aUserOpt.GetLastName());
         if ( aUser.Len() == 0 )
         {
             // get sys user name
