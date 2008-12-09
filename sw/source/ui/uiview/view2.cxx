@@ -688,7 +688,29 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_ACCEPT:
             GetViewFrame()->ToggleChildWindow(nSlot);
         break;
-
+        case FN_REDLINE_ACCEPT_DIRECT:
+        case FN_REDLINE_REJECT_DIRECT:
+        {
+            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
+            Point aCrsrPos = pWrtShell->GetCrsrDocPos( sal_True );
+            if( pWrtShell->GetContentAtPos( aCrsrPos, aCntntAtPos ) )
+            {
+                USHORT nCount = pWrtShell->GetRedlineCount();
+                for( USHORT nRedline = 0; nRedline < nCount; ++nRedline )
+                {
+                    const SwRedline& rRedline = pWrtShell->GetRedline( nRedline );
+                    if( *aCntntAtPos.aFnd.pRedl == rRedline )
+                    {
+                        if( FN_REDLINE_ACCEPT_DIRECT == nSlot )
+                            pWrtShell->AcceptRedline( nRedline );
+                        else
+                            pWrtShell->RejectRedline( nRedline );
+                        break;
+                    }
+                }
+            }
+        }
+        break;
         case SID_DOCUMENT_COMPARE:
         case SID_DOCUMENT_MERGE:
             {

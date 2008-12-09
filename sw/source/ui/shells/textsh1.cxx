@@ -55,9 +55,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
+#include <vcl/unohelp2.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/macitem.hxx>
@@ -816,6 +815,27 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_EDIT_HYPERLINK:
             GetView().GetViewFrame()->ToggleChildWindow(SID_HYPERLINK_DIALOG);
         break;
+        case FN_REMOVE_HYPERLINK:
+        {
+            BOOL bSel = rWrtSh.HasSelection();
+            if(!bSel)
+            {
+                rWrtSh.StartAction();
+                rWrtSh.Push();
+                if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
+                    rWrtSh.SelWrd();
+            }
+            //now remove the attribute
+            SvUShortsSort aAttribs;
+            aAttribs.Insert( RES_TXTATR_INETFMT );
+            rWrtSh.ResetAttr( &aAttribs );
+            if(!bSel)
+            {
+                rWrtSh.Pop(FALSE);
+                rWrtSh.EndAction();
+            }
+        }
+        break;
         case SID_ATTR_BRUSH_CHAR :
         case SID_ATTR_CHAR_SCALEWIDTH :
         case SID_ATTR_CHAR_ROTATED :
@@ -1242,6 +1262,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
     break;
     case SID_OPEN_HYPERLINK:
+    case FN_COPY_HYPERLINK_LOCATION:
     {
         SfxItemSet aSet(GetPool(),
                         RES_TXTATR_INETFMT,
@@ -1249,8 +1270,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.GetCurAttr(aSet);
         if(SFX_ITEM_SET <= aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ))
         {
-            const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
-            rWrtSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
+            const SwFmtINetFmt& rINetFmt = dynamic_cast<const SwFmtINetFmt&>( aSet.Get(RES_TXTATR_INETFMT, TRUE) );
+            if( nSlot == FN_COPY_HYPERLINK_LOCATION )
+            {
+                ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
+                vcl::unohelper::TextDataObject::CopyStringTo(
+                        rINetFmt.GetValue(),
+                        xClipboard );
+            }
+            else
+                rWrtSh.ClickToINetAttr(rINetFmt, URLLOAD_NOFILTER);
         }
     }
     break;
@@ -1530,6 +1559,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 GetViewFrame()->GetChildWindow( nWhich ) ));
                 break;
             case FN_EDIT_HYPERLINK:
+            case FN_REMOVE_HYPERLINK:
+            case FN_COPY_HYPERLINK_LOCATION:
             {
                 SfxItemSet aSet(GetPool(),
                                 RES_TXTATR_INETFMT,
@@ -1537,7 +1568,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSh.GetCurAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ) || rSh.HasReadonlySel())
                 {
-                    rSet.DisableItem(FN_EDIT_HYPERLINK);
+                    rSet.DisableItem(nWhich);
                 }
             }
             break;

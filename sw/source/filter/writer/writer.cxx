@@ -151,6 +151,7 @@ Writer::Writer()
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
         bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
         bOrganizerMode = false;
+    bExportPargraphNumbering = sal_True;
 }
 
 Writer::~Writer()

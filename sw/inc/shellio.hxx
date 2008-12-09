@@ -477,6 +477,7 @@ public:
     BOOL bASCII_ParaAsBlanc : 1;
     BOOL bASCII_NoLastLineEnd : 1;
     BOOL bUCS2_WithStartChar : 1;
+    BOOL bExportPargraphNumbering : 1;
 
     BOOL bBlock : 1;
     BOOL bOrganizerMode : 1;

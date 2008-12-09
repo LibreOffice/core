@@ -180,7 +180,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
 
-    if( !nStrPos )
+    if( !nStrPos && rWrt.bExportPargraphNumbering )
         rWrt.Strm().WriteUnicodeOrByteText( rNd.GetNumString() );
 
     String aStr( rNd.GetTxt() );

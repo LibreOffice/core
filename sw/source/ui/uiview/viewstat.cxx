@@ -297,6 +297,15 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
+            case FN_REDLINE_ACCEPT_DIRECT:
+            case FN_REDLINE_REJECT_DIRECT:
+            {
+                SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
+                Point aCrsrPos = pWrtShell->GetCrsrDocPos( sal_True );
+                if( !pWrtShell->GetContentAtPos( aCrsrPos, aCntntAtPos ) )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
             case FN_THESAURUS_DLG:
             {
                 SwWrtShell  &rSh = GetWrtShell();

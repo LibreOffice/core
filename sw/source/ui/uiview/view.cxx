@@ -937,7 +937,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetZoom( 100 );
         }
         if(pDocSh->IsPreview())
+        {
             aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
+            aUsrPref.SetViewLayoutBookMode( false );
+            aUsrPref.SetViewLayoutColumns( 1 );
+        }
         pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, &aUsrPref );
         //#97610# creating an SwView from a SwPagePreView needs to
         // add the ViewShell to the ring of the other ViewShell(s)

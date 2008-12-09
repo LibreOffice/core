@@ -382,10 +382,11 @@ TYPEINIT1( SwXMLDocStylesContext_Impl, SwXMLDocContext_Impl );
 
 void SwXMLDocStylesContext_Impl::EndElement()
 {
-    // --> OD 2006-10-11 #i69629#
     // assign paragraph styles to list levels of outline style after all styles
     // are imported and finished.
-    GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+    SwXMLImport& rSwImport = dynamic_cast<SwXMLImport&>( GetImport());
+    GetImport().GetTextImport()->SetOutlineStyles(
+            (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) ? sal_True : sal_False);
     // <--
 }
 // <--

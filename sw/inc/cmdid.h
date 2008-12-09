@@ -263,6 +263,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_EDIT_HYPERLINK            (FN_EDIT2 + 35)    /* edit hyperlink */
 #define FN_NUM_CONTINUE              (FN_EDIT2 + 36)    /* continue previous numbering */
+#define FN_REDLINE_ACCEPT_DIRECT     (FN_EDIT2 + 37)    /* accept redline at current position*/
+#define FN_REDLINE_REJECT_DIRECT     (FN_EDIT2 + 38)    /* reject redline at current position*/
+#define FN_REMOVE_HYPERLINK          (FN_EDIT2 + 39)    /* remove hyperlink attribute */
+#define FN_COPY_HYPERLINK_LOCATION   (FN_EDIT2 + 40)    /* copy hyperlink URL to clipboard */
+
 /*--------------------------------------------------------------------
     Bereich: Bearbeiten
  --------------------------------------------------------------------*/

@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -124,11 +123,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::i18n;
@@ -690,7 +687,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         pTextView->SetSelection( TextSelection( aPaM, aPaM ));
     }
 
-    SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
+    util::SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
     aSearchOpt.Locale = SvxCreateLocale(
         static_cast< LanguageType >( GetAppLanguage() ) );
 
