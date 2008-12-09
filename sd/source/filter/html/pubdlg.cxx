@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pubdlg.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.12.186.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,9 +172,9 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_nResolution   = PUB_LOWRES_WIDTH;
     m_aAuthor       = aUserOptions.GetFirstName();
-    if( m_aAuthor.Len() && aUserOptions.GetLastName().Len() )
+    if( m_aAuthor.Len() && aUserOptions.GetLastName().getLength() )
         m_aAuthor      += sal_Unicode(' ');
-    m_aAuthor      += aUserOptions.GetLastName();
+    m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
     m_bDownload     = FALSE;
 //-/    m_bCreated      = TRUE;
