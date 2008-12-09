@@ -535,10 +535,10 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
         // nur die n"otigen Items f"uer Umrandung und Hintergrund benutzen
         USHORT nBrush = GetWhich( SID_ATTR_BRUSH );
         USHORT nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
-        USHORT nInner = GetWhich( SID_ATTR_BORDER_INNER );
+        USHORT nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
         USHORT nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
 
-        // einen leeren Set erzeugen
+        // einen leeren Set erzeugenc
         pBBSet = new SfxItemSet( *GetItemSet().GetPool(), nBrush, nBrush,
                                  nOuter, nOuter, nInner, nInner,
                                  nShadow, nShadow, 0 );

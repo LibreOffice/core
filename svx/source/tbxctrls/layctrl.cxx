@@ -413,14 +413,13 @@ void TableWindow::Paint( const Rectangle& )
         aText = Button::GetStandardText( BUTTON_CANCEL );
     Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
 
-    //#i72805# prevent damaged table dimension text
-    sal_Bool bWasRTL = IsRTLEnabled();
-    EnableRTL( sal_False );
-    DrawText( Point( (aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2 ), aText );
-    EnableRTL( bWasRTL );
+    Rectangle aClearRect( 0, aSize.Height()-nTextHeight+2, (aSize.Width()), aSize.Height() );
+    DrawRect( aClearRect );
 
-    DrawRect( Rectangle( 0, aSize.Height()-nTextHeight+2, (aSize.Width()-aTextSize.Width())/2-1, aSize.Height() ) );
-    DrawRect( Rectangle( (aSize.Width()-aTextSize.Width())/2+aTextSize.Width(), aSize.Height()-nTextHeight+2, aSize.Width(), aSize.Height() ) );
+    // #i95350# force RTL output
+    if( IsRTLEnabled() &&   nCol && nLine )
+        aText.Insert(0x202D, 0);
+    DrawText( Point( (aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2 ), aText );
 
     SetLineColor( aLineColor );
     SetFillColor();

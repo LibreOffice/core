@@ -1517,7 +1517,7 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
     if ( ( mpOutlineStylesCandidates != NULL || bSetEmptyLevels ) &&
          xChapterNumbering.is() &&
-         !( IsInsertMode() || IsStylesOnlyMode() ) )
+         !IsInsertMode() )
     {
         // --> OD 2007-12-19 #152540#
         bool bChooseLastOne( false );

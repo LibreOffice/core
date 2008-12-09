@@ -156,21 +156,8 @@ static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
     else
     {
         pVDev->SetFont(rTextFont);
-        if (Application::GetSettings().GetLayoutRTL())
-        {
-            String  sTmpText(rText);
-            sTmpText.Reverse();
-            for(sal_uInt16 j = 0; j < sTmpText.Len(); j++)
-                sTmpText.SetChar(j, static_cast< sal_Unicode>(GetMirroredChar(sTmpText.GetChar(j))));
-            OUString osTmpText(sTmpText);
-                pVDev->DrawText(rLeft, osTmpText);
-                rLeft.X() += pVDev->GetTextWidth(osTmpText);
-        }
-        else
-        {
-                pVDev->DrawText(rLeft, rText);
-                rLeft.X() += pVDev->GetTextWidth(rText);
-        }
+        pVDev->DrawText(rLeft, rText);
+        rLeft.X() += pVDev->GetTextWidth(rText);
     }
 }
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
@@ -285,12 +272,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         rValue.Name = sValue;
                         rValue.Value <<= (sal_Int32)(i + 1);
                         sText = xFormatter->makeNumberingString( aLevel, aLocale );
-                        if (Application::GetSettings().GetLayoutRTL())
-                        {
-                            sText.Reverse();
-                            for(sal_uInt16 j = 0; j < sText.Len(); j++)
-                                sText.SetChar(j, static_cast< sal_Unicode>(GetMirroredChar(sText.GetChar(j))));
-                        }
                     }
                     catch(Exception&)
                     {
@@ -375,20 +356,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         sPrefixes[i].getStr()[0] != 0)
                     {
                         pVDev->SetFont(aFont);
-                        if (Application::GetSettings().GetLayoutRTL())
-                        {
-                            String  sTmpPref(sPrefixes[i]);
-                            for(sal_uInt16 j = 0; j < sTmpPref.Len(); j++)
-                                sTmpPref.SetChar(j, static_cast< sal_Unicode>(GetMirroredChar(sTmpPref.GetChar(j))));
-                            OUString osTmpPref(sTmpPref);
-                                        pVDev->DrawText(aLeft, osTmpPref);
-                                        aLeft.X() += pDev->GetTextWidth(osTmpPref);
-                        }
-                        else
-                        {
-                                        pVDev->DrawText(aLeft, sPrefixes[i]);
-                                        aLeft.X() += pDev->GetTextWidth(sPrefixes[i]);
-                        }
+                        pVDev->DrawText(aLeft, sPrefixes[i]);
+                        aLeft.X() += pDev->GetTextWidth(sPrefixes[i]);
                     }
                     if(aParentNumberings[i])
                     {
@@ -421,20 +390,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         sSuffixes[i].getStr()[0] != 0)
                     {
                         pVDev->SetFont(aFont);
-                        if (Application::GetSettings().GetLayoutRTL())
-                        {
-                            String  sTmpSuff(sSuffixes[i]);
-                            for( sal_uInt16 j = 0; j < sTmpSuff.Len(); j++)
-                                sTmpSuff.SetChar(j, static_cast< sal_Unicode>(GetMirroredChar(sTmpSuff.GetChar(j))));
-                            OUString osTmpSuff(sTmpSuff);
-                                        pVDev->DrawText(aLeft, osTmpSuff);
-                                        aLeft.X() += pDev->GetTextWidth(osTmpSuff);
-                        }
-                        else
-                        {
-                                        pVDev->DrawText(aLeft, sSuffixes[i]);
-                                        aLeft.X() += pDev->GetTextWidth(sSuffixes[i]);
-                        }
+                        pVDev->DrawText(aLeft, sSuffixes[i]);
+                        aLeft.X() += pDev->GetTextWidth(sSuffixes[i]);
                     }
 
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;

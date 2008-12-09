@@ -399,7 +399,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     String STR_LESS_BTN
     {
-        Text [ en-US ] = "Less ~Options" ;
+        Text [ en-US ] = "Fewer ~Options" ;
     };
 };
 
