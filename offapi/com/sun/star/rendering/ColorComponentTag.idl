@@ -84,50 +84,58 @@ constants ColorComponentTag
     /// Grey value. Used for monochrome color spaces
     const byte GREY=13;
 
+    /** Premultiplied alpha channel<p>
+
+       Note that this alpha format actually influences the other color
+       components, in that their values are pre-multiplied with the
+       alpha value.<p>
+     */
+    const byte PREMULTIPLIED_ALPHA=14;
+
     /// CieXYZ X value
-    const byte CIEXYZ_X=14;
+    const byte CIEXYZ_X=15;
 
     /// CieXYZ Y value
-    const byte CIEXYZ_Y=15;
+    const byte CIEXYZ_Y=16;
 
     /// CieXYZ Z value
-    const byte CIEXYZ_Z=16;
+    const byte CIEXYZ_Z=17;
 
     /// CieLab L value
-    const byte CIELAB_L=17;
+    const byte CIELAB_L=18;
 
     /// CieLab a value
-    const byte CIELAB_A=18;
+    const byte CIELAB_A=19;
 
     /// CieLab b value
-    const byte CIELAB_B=19;
+    const byte CIELAB_B=20;
 
     /// HSV H value
-    const byte HSV_H=20;
+    const byte HSV_H=21;
 
     /// HSV S value
-    const byte HSV_S=21;
+    const byte HSV_S=22;
 
     /// HSV V value
-    const byte HSV_V=22;
+    const byte HSV_V=23;
 
     /// HSL H value
-    const byte HSL_H=23;
+    const byte HSL_H=24;
 
     /// HSL S value
-    const byte HSL_S=24;
+    const byte HSL_S=25;
 
     /// HSL L value
-    const byte HSL_L=25;
+    const byte HSL_L=26;
 
     /// YCbCr Y value
-    const byte YCBCR_Y=26;
+    const byte YCBCR_Y=27;
 
     /// YCbCr Cb value
-    const byte YCBCR_CB=27;
+    const byte YCBCR_CB=28;
 
     /// YCbCr Cr value
-    const byte YCBCR_CR=28;
+    const byte YCBCR_CR=29;
 };
 
 }; }; }; };
