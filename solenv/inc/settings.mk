@@ -577,7 +577,7 @@ ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(USE_SHELL)"!="4nt"
 PATH_IN_MODULE:=\
     $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))$/, $(PWD))

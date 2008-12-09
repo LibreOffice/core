@@ -23788,7 +23788,7 @@ fi
 ENABLE_GCONF=""
 { echo "$as_me:$LINENO: checking whether to enable GConf support" >&5
 echo $ECHO_N "checking whether to enable GConf support... $ECHO_C" >&6; }
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "OS2" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }

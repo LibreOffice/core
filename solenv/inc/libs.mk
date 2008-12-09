@@ -481,7 +481,11 @@ SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
 XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
+.IF "$(GUI)"=="OS2"
+REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
+.ELSE
 REDLANDLIB = librdf.lib
+.ENDIF
 
 JVMFWKLIB = ijvmfwk.lib
 
