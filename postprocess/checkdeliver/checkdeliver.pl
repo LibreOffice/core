@@ -173,8 +173,8 @@ sub check
         return $error;
     }
     if ( $canread == 2 ) {
-        # module is linked, link can be resolved
-        $islinked = 1;
+        # module is linked and not built, no need for checking
+        return $error;
     }
 
     # read deliver log file
