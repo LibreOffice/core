@@ -169,6 +169,9 @@ protected:
 
     virtual void rebuildColumns( );
 
+    // OContentHelper overridables
+    virtual ::rtl::OUString determineContentType() const;
+
 private:
     void registerProperties();
 };

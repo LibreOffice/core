@@ -156,42 +156,42 @@ void OTableFieldDesc::Load(const ::com::sun::star::beans::PropertyValue& _rPrope
     DBG_CHKTHIS(OTableFieldDesc,NULL);
     Sequence<PropertyValue> aFieldDesc;
     _rProperty.Value >>= aFieldDesc;
-    if ( aFieldDesc.getLength() == 13 )
+    //if ( aFieldDesc.getLength() == 12 )
     {
         sal_Int32 nCount = aFieldDesc.getLength();
         for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
         {
-            if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AliasName")) )
+            if ( aFieldDesc[nPos].Name.equalsAscii("AliasName") )
                 aFieldDesc[nPos].Value >>= m_aAliasName;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableName")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("TableName") )
                 aFieldDesc[nPos].Value >>= m_aTableName;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldName")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("FieldName") )
                 aFieldDesc[nPos].Value >>= m_aFieldName;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldAlias")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("FieldAlias") )
                 aFieldDesc[nPos].Value >>= m_aFieldAlias;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionName")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("FunctionName") )
                 aFieldDesc[nPos].Value >>= m_aFunctionName;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataType")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("DataType") )
                 aFieldDesc[nPos].Value >>= m_eDataType;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionType")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("FunctionType") )
                 aFieldDesc[nPos].Value >>= m_eFunctionType;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldType")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("FieldType") )
             {
                 sal_Int32 nTemp = 0;
                 aFieldDesc[nPos].Value >>= nTemp;
                 m_eFieldType = static_cast<ETableFieldType>(nTemp);
             }
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OrderDir")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("OrderDir") )
             {
                 sal_Int32 nTemp = 0;
                 aFieldDesc[nPos].Value >>= nTemp;
                 m_eOrderDir = static_cast<EOrderDir>(nTemp);
             }
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColWidth")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("ColWidth") )
                 aFieldDesc[nPos].Value >>= m_nColWidth;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GroupBy")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("GroupBy") )
                 aFieldDesc[nPos].Value >>= m_bGroupBy;
-            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Visible")) )
+            else if ( aFieldDesc[nPos].Name.equalsAscii("Visible") )
                 aFieldDesc[nPos].Value >>= m_bVisible;
         }
     }

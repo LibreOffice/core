@@ -34,6 +34,7 @@
 #include "ReportController.hxx"
 #include <comphelper/types.hxx>
 #include <svtools/syslocale.hxx>
+#include <svtools/viewoptions.hxx>
 #include "RptDef.hxx"
 #include "UITools.hxx"
 #include "RptObject.hxx"
@@ -48,6 +49,7 @@
 #include "ScrollHelper.hxx"
 #include "Navigator.hxx"
 #include "SectionWindow.hxx"
+#include "RptResId.hrc"
 #include <vcl/svapp.hxx>
 
 namespace rptui
@@ -204,12 +206,16 @@ ODesignView::~ODesignView()
     }
     if ( m_pAddField )
     {
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( UID_RPT_RPT_APP_VIEW ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
     }
     if ( m_pReportExplorer )
     {
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pReportExplorer->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
         m_pReportExplorer = NULL;
@@ -560,6 +566,9 @@ void ODesignView::toggleReportExplorer()
     {
         OReportController& rReportController = getController();
         m_pReportExplorer = new ONavigator(this,rReportController);
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
+        if ( aDlgOpt.Exists() )
+            m_pReportExplorer->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
@@ -592,6 +601,9 @@ void ODesignView::toggleAddField()
             xReport = xSection->getReportDefinition();
         }
         m_pAddField = new OAddFieldWindow(rReportController,this);
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( UID_RPT_RPT_APP_VIEW ) );
+        if ( aDlgOpt.Exists() )
+            m_pAddField->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pAddField->Update();
         m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));

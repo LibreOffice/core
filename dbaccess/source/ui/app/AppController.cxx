@@ -1322,7 +1322,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         getContainer()->selectContainer(E_NONE);
                         getContainer()->selectContainer(E_TABLE);
+                        // #i95524#
+                        getContainer()->Invalidate();
+                        refreshTables();
                     }
+
                 }
                 break;
             case ID_BROWSER_SORTUP:
@@ -2822,6 +2826,10 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
                 sal_Int32 nValue = 0;
                 pIter->Value >>= nValue;
                 m_ePreviewMode = static_cast<PreviewMode>(nValue);
+                if ( getView() )
+                {
+                    getContainer()->switchPreview(m_ePreviewMode);
+                }
             }
         }
         catch( const Exception& )

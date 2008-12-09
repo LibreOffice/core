@@ -50,6 +50,7 @@
 #include <svx/svditer.hxx>
 #include <svx/dbaexchange.hxx>
 
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <toolkit/helper/convert.hxx>
@@ -69,6 +70,7 @@
 #include <svtools/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
+#include <framework/imageproducer.hxx>
 
 // =============================================================================
 namespace rptui
@@ -460,6 +462,39 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         }
     }
 }
+void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame,BOOL _bHiContrast)
+{
+    const USHORT nCount = rContextMenu.GetItemCount();
+    for (USHORT i = 0; i < nCount; ++i)
+    {
+        if ( MENUITEM_SEPARATOR != rContextMenu.GetItemType(i))
+        {
+            const USHORT nId = rContextMenu.GetItemId(i);
+            PopupMenu* pPopupMenu = rContextMenu.GetPopupMenu( nId );
+            if ( pPopupMenu )
+            {
+                lcl_insertMenuItemImages(*pPopupMenu,rController,_xReportDefinition,_rFrame,_bHiContrast);
+            }
+            else
+            {
+                const ::rtl::OUString sCommand = rContextMenu.GetItemCommand(nId);
+                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,FALSE,_bHiContrast));
+                if ( nId == SID_PAGEHEADERFOOTER )
+                {
+                    String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
+                    rContextMenu.SetItemText(nId,sText);
+                }
+                else if ( nId == SID_REPORTHEADERFOOTER )
+                {
+                    String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT));
+                    rContextMenu.SetItemText(nId,sText);
+                }
+            }
+            rContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
+            rContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
+        }
+    } // for (USHORT i = 0; i < nCount; ++i)
+}
 //----------------------------------------------------------------------------
 void OReportSection::Command( const CommandEvent& _rCEvt )
 {
@@ -468,29 +503,15 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
+            const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+            BOOL bHiContrast = rSettings.GetMenuColor().IsDark();
             OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+            uno::Reference<frame::XFrame> xFrame = rController.getFrame();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
             uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
-            const USHORT nCount = aContextMenu.GetItemCount();
-            for (USHORT i = 0; i < nCount; ++i)
-            {
-                if ( MENUITEM_SEPARATOR != aContextMenu.GetItemType(i))
-                {
-                    const USHORT nId = aContextMenu.GetItemId(i);
-                    if ( nId == SID_PAGEHEADERFOOTER )
-                    {
-                        String sText = String(ModuleRes((xReportDefinition.is() && xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
-                        aContextMenu.SetItemText(nId,sText);
-                    }
-                    else if ( nId == SID_REPORTHEADERFOOTER )
-                    {
-                        String sText = String(ModuleRes((xReportDefinition.is() && xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT));
-                        aContextMenu.SetItemText(nId,sText);
-                    }
-                    aContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
-                    aContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
-                }
-            } // for (USHORT i = 0; i < nCount; ++i)
+
+            lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame,bHiContrast);
+
             Point aPos = _rCEvt.GetMousePosPixel();
             m_pView->EndAction();
             const USHORT nId = aContextMenu.Execute(this, aPos);

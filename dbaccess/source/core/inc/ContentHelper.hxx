@@ -103,7 +103,8 @@ namespace dbaccess
     struct ContentProperties
     {
         ::rtl::OUString aTitle;         // Title
-        ::rtl::OUString aContentType;   // ContentType
+        ::boost::optional< ::rtl::OUString >
+                        aContentType;   // ContentType (aka MediaType aka MimeType)
         sal_Bool        bIsDocument;    // IsDocument
         sal_Bool        bIsFolder;      // IsFolder
         sal_Bool        bAsTemplate;    // AsTemplate
@@ -155,6 +156,8 @@ namespace dbaccess
         com::sun::star::uno::Sequence< com::sun::star::beans::Property >
             getProperties( const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment > & xEnv );
+
+        void impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify = true);
 
     protected:
         ::cppu::OInterfaceContainerHelper       m_aContentListeners;
@@ -231,6 +234,9 @@ namespace dbaccess
                             ::com::sun::star::beans::Property >& rProperties );
 
         inline TContentPtr getImpl() const { return m_pImpl; }
+
+    protected:
+        virtual ::rtl::OUString determineContentType() const = 0;
     };
 
 //........................................................................

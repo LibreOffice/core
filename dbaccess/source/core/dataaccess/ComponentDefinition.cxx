@@ -240,6 +240,15 @@ Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OComponentDefinition::determineContentType() const
+{
+    return m_bTable
+        ?   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseTable" ) )
+        :   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinition" ) );
+}
+
 // -----------------------------------------------------------------------------
 Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException)
 {

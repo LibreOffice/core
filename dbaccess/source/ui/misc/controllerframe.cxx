@@ -108,7 +108,7 @@ namespace dbaui
 
     private:
         void impl_checkDisposed_throw() const;
-        void impl_actOnFrameWindow_nothrow( bool _bRegister );
+        void impl_registerOnFrameContainerWindow_nothrow( bool _bRegister );
 
     private:
         ControllerFrame_Data*   m_pData;
@@ -125,6 +125,7 @@ namespace dbaui
             ,m_xDocEventBroadcaster()
             ,m_pListener()
             ,m_bActive( false )
+            ,m_bLivesInTopWindow( false )
         {
         }
 
@@ -133,6 +134,7 @@ namespace dbaui
         Reference< XDocumentEventBroadcaster >              m_xDocEventBroadcaster;
         ::rtl::Reference< FrameWindowActivationListener >   m_pListener;
         bool                                                m_bActive;
+        bool                                                m_bLivesInTopWindow;
     };
 
     //====================================================================
@@ -206,7 +208,7 @@ namespace dbaui
             if ( !xCompController.is() )
                 return;
 
-            if ( _rData.m_bActive )
+            if ( _rData.m_bActive && _rData.m_bLivesInTopWindow )
             {
                 // set the "current component" at the SfxObjectShell
                 Reference< XModel > xModel( xCompController->getModel() );
@@ -259,7 +261,7 @@ namespace dbaui
     FrameWindowActivationListener::FrameWindowActivationListener( ControllerFrame_Data& _rData )
         :m_pData( &_rData )
     {
-        impl_actOnFrameWindow_nothrow( true );
+        impl_registerOnFrameContainerWindow_nothrow( true );
     }
 
     //--------------------------------------------------------------------
@@ -270,14 +272,14 @@ namespace dbaui
     //--------------------------------------------------------------------
     void FrameWindowActivationListener::dispose()
     {
-        impl_actOnFrameWindow_nothrow( false );
+        impl_registerOnFrameContainerWindow_nothrow( false );
         m_pData = NULL;
     }
 
     //--------------------------------------------------------------------
-    void FrameWindowActivationListener::impl_actOnFrameWindow_nothrow( bool _bRegister )
+    void FrameWindowActivationListener::impl_registerOnFrameContainerWindow_nothrow( bool _bRegister )
     {
-        OSL_ENSURE( m_pData && m_pData->m_xFrame.is(), "FrameWindowActivationListener::impl_actOnFrameWindow_nothrow: no frame!" );
+        OSL_ENSURE( m_pData && m_pData->m_xFrame.is(), "FrameWindowActivationListener::impl_registerOnFrameContainerWindow_nothrow: no frame!" );
         if ( !m_pData || !m_pData->m_xFrame.is() )
             return;
 
@@ -286,8 +288,11 @@ namespace dbaui
             void ( SAL_CALL XTopWindow::*pListenerAction )( const Reference< XTopWindowListener >& ) =
                 _bRegister ? &XTopWindow::addTopWindowListener : &XTopWindow::removeTopWindowListener;
 
-            Reference< XTopWindow > xFrameContainer( m_pData->m_xFrame->getContainerWindow(), UNO_QUERY_THROW );
-            (xFrameContainer.get()->*pListenerAction)( this );
+            Reference< XTopWindow > xFrameContainer( m_pData->m_xFrame->getContainerWindow(), UNO_QUERY );
+            if ( _bRegister )
+                m_pData->m_bLivesInTopWindow = xFrameContainer.is();
+            if ( xFrameContainer.is() )
+                (xFrameContainer.get()->*pListenerAction)( this );
         }
         catch( const Exception& )
         {

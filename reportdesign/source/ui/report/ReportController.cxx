@@ -2952,7 +2952,6 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
                             ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                          NULL,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
-
         delete pLabel;
 
         pNewControl = pControl;
@@ -2975,7 +2974,11 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         {
             if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
                 xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
-        }
+        } // for(size_t i = 0; i < sizeof(sProps)/sizeof(sProps[0]);++i)
+
+        if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
+            xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
+
 
         if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && _sFunction.getLength() )
         {
@@ -3279,7 +3282,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                             ReportFormula aFormula( ReportFormula::Field, sName );
                             xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFormula.getCompleteFormula() ) );
-                        }
+                        } // if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) )
+
+                        if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
+                            xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
 
                         pObjs[i]->CreateMediator(sal_True);
                         // need SectionView from the above or follow Section

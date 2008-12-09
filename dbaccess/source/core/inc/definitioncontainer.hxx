@@ -174,6 +174,7 @@ protected:
                             m_aContainerListeners;
 
     sal_Bool                m_bInPropertyChange;
+    bool                    m_bCheckSlash;
 
 protected:
     /** Additionally to our own approvals which new elements must pass, derived classes
@@ -204,7 +205,8 @@ public:
     ODefinitionContainer(
           const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
         , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  _xParentContainer
-        ,const TContentPtr& _pImpl
+        , const TContentPtr& _pImpl
+        , bool _bCheckSlash = true
         );
 
 // ::com::sun::star::uno::XInterface

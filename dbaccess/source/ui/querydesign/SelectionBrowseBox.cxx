@@ -1658,8 +1658,11 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, USHORT& _nColu
             pEntry->SetFunction(sFunctionName);
     }
 
+    nColumnId = pEntry->GetColumnId();
+
+    SetColWidth(nColumnId,getDesignView()->getColWidth(GetColumnPos(nColumnId)-1));
     // Neuzeichnen
-    Rectangle aInvalidRect = GetInvalidRect( pEntry->GetColumnId() );
+    Rectangle aInvalidRect = GetInvalidRect( nColumnId );
     Invalidate( aInvalidRect );
 
     ActivateCell( nCurrentRow, nCurCol );
@@ -1707,11 +1710,6 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
     // Neue Spaltenbeschreibung
     OTableFieldDescRef pEntry = _rInfo;
     pEntry->SetVisible(bVis);
-    sal_uInt32 nColWidth;
-    if( getDesignView()->getColWidth(_rInfo->GetAlias(), _rInfo->GetField(), nColWidth) )
-        pEntry->SetColWidth( (sal_uInt16)nColWidth );
-    else
-        pEntry->SetColWidth( (sal_uInt16)DEFAULT_SIZE );
 
     // Spalte einfuegen
     InsertColumn( pEntry, _nColumnPostion );

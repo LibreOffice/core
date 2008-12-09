@@ -148,8 +148,10 @@ sal_Bool OQueryTableWindow::Init()
     if (m_strInitialAlias.getLength() )
         // Der Alias wurde explizit mit angegeben
         sAliasName = m_strInitialAlias;
-    else
+    else if ( GetTable().is() )
         GetTable()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
+    else
+        return sal_False;
 
     // Alias mit fortlaufender Nummer versehen
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))

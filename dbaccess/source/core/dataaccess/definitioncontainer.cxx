@@ -144,11 +144,13 @@ DBG_NAME(ODefinitionContainer)
 ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFactory >& _xORB
                                             , const Reference< XInterface >&    _xParentContainer
                                             , const TContentPtr& _pImpl
+                                            , bool _bCheckSlash
                                             )
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
     ,m_aApproveListeners(m_aMutex)
     ,m_aContainerListeners(m_aMutex)
     ,m_bInPropertyChange(sal_False)
+    ,m_bCheckSlash(_bCheckSlash)
 {
     m_pImpl->m_aProps.bIsDocument = sal_False;
     m_pImpl->m_aProps.bIsFolder = sal_True;
@@ -645,7 +647,7 @@ void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const 
             *this,
             0 );
 
-    if ( _sName.indexOf( '/' ) != -1 )
+    if ( m_bCheckSlash && _sName.indexOf( '/' ) != -1 )
         throw IllegalArgumentException(
             m_aErrorHelper.getErrorMessage( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES ),
             *this,
@@ -681,7 +683,7 @@ void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const 
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     ClearableMutexGuard aGuard(m_aMutex);
-    if(evt.PropertyName == (rtl::OUString) PROPERTY_NAME)
+    if(evt.PropertyName == (rtl::OUString) PROPERTY_NAME || evt.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ))
     {
         m_bInPropertyChange = sal_True;
         try
@@ -708,7 +710,7 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
 {
     MutexGuard aGuard(m_aMutex);
 
-    if(aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME)
+    if(aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME || aEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
     {
         ::rtl::OUString sNewName;
         aEvent.NewValue >>= sNewName;
@@ -725,7 +727,10 @@ void ODefinitionContainer::addObjectListener(const Reference< XContent >& _xNewO
     {
         xProp->addPropertyChangeListener(PROPERTY_NAME, this);
         xProp->addVetoableChangeListener(PROPERTY_NAME, this);
-    }
+        //::rtl::OUString sTitle(RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+        //xProp->addPropertyChangeListener(sTitle, this);
+        //xProp->addVetoableChangeListener(sTitle, this);
+    } // if ( xProp.is() )
 }
 // -----------------------------------------------------------------------------
 void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xNewObject)
@@ -736,6 +741,9 @@ void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xN
     {
         xProp->removePropertyChangeListener(PROPERTY_NAME, this);
         xProp->removeVetoableChangeListener(PROPERTY_NAME, this);
+        //::rtl::OUString sTitle(RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+        //xProp->removePropertyChangeListener(sTitle, this);
+        //xProp->removeVetoableChangeListener(sTitle, this);
     }
 }
 // -----------------------------------------------------------------------------

@@ -171,7 +171,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
                 uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
                 Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-                pContext = new OXMLSubDocument( rImport, _nPrefix, _rLocalName,xControl.get(),m_pContainer);
+                pContext = new OXMLSubDocument( rImport, _nPrefix, _rLocalName,xControl.get(),m_pContainer, this /* give the current cell as parent*/ );
             }
             break;
 
@@ -283,6 +283,11 @@ void OXMLCell::Characters( const ::rtl::OUString& rChars )
 
         m_sText += s_Quote + rChars + s_Quote;
     }
+}
+
+void OXMLCell::setContainsShape(bool _bContainsShape)
+{
+    m_bContainsShape = _bContainsShape;
 }
 
 //----------------------------------------------------------------------------

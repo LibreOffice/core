@@ -202,8 +202,8 @@ private:
     virtual void SAL_CALL disposing();
 
     void impl_fillRowSet_throw();
-    bool impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
-    bool fillParameters( ::osl::ResettableMutexGuard& _rClearForNotifies, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler );
+    void impl_executeRowSet_nothrow(::osl::ResettableMutexGuard& _rClearForNotifies);
+    bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
     void impl_fillInternalDataProvider_throw();
     void impl_invalidateParameter_nothrow();
 
@@ -228,6 +228,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider >     m_xInternal;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>          m_xHandler;
     // the object doin' most of the work - an SDB-rowset
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>                  m_xAggregate;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>                m_xAggregateSet;

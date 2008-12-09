@@ -49,6 +49,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -66,11 +67,13 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -111,6 +114,7 @@ namespace dbmm
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XComponentLoader;
     using ::com::sun::star::ucb::XCommandProcessor;
+    using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::Command;
     using ::com::sun::star::embed::XComponentSupplier;
     using ::com::sun::star::task::XStatusIndicator;
@@ -138,6 +142,7 @@ namespace dbmm
     using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::script::ScriptEventDescriptor;
     using ::com::sun::star::script::XLibraryContainerPassword;
+    using ::com::sun::star::io::WrongFormatException;
     /** === end UNO using === **/
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
@@ -158,12 +163,15 @@ namespace dbmm
         Reference< XModel >             xDocument;          // valid only temporarily
         ::rtl::OUString                 sHierarchicalName;
         SubDocumentType                 eType;
+        size_t                          nNumber;
 
-        SubDocument( const Reference< XCommandProcessor >& _rxCommandProcessor, const ::rtl::OUString& _rName, const SubDocumentType _eType )
+        SubDocument( const Reference< XCommandProcessor >& _rxCommandProcessor, const ::rtl::OUString& _rName,
+                const SubDocumentType _eType, const size_t _nNumber )
             :xCommandProcessor( _rxCommandProcessor )
             ,xDocument()
             ,sHierarchicalName( _rName )
             ,eType( _eType )
+            ,nNumber( _nNumber )
         {
         }
     };
@@ -265,7 +273,31 @@ namespace dbmm
         }
 
         //----------------------------------------------------------------
-        static bool lcl_loadSubDocument_nothrow( SubDocument& _rDocument,
+        ::rtl::OUString lcl_getMimeType_nothrow( const Reference< XCommandProcessor >& _rxContent )
+        {
+            ::rtl::OUString sMimeType;
+            try
+            {
+                Reference< XContent > xContent( _rxContent, UNO_QUERY_THROW );
+                sMimeType = xContent->getContentType();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return sMimeType;
+        }
+
+        //----------------------------------------------------------------
+        enum OpenDocResult
+        {
+            eOpenedDoc,
+            eIgnoreDoc,
+            eFailure
+        };
+
+        //----------------------------------------------------------------
+        static OpenDocResult lcl_loadSubDocument_nothrow( SubDocument& _rDocument,
             const Reference< XStatusIndicator >& _rxProgress, MigrationLog& _rLogger )
         {
             OSL_PRECOND( !_rDocument.xDocument.is(), "lcl_loadSubDocument_nothrow: already loaded!" );
@@ -292,13 +324,31 @@ namespace dbmm
             }
             catch( const Exception& )
             {
-                _rLogger.logFailure( MigrationError(
-                    ERR_OPENING_SUB_DOCUMENT_FAILED,
-                    lcl_getSubDocumentDescription( _rDocument ),
-                    ::cppu::getCaughtException()
-                ) );
+                Any aError( ::cppu::getCaughtException() );
+
+                bool bCausedByNewStyleReport =
+                        ( _rDocument.eType == eReport )
+                    &&  ( aError.isExtractableTo( ::cppu::UnoType< WrongFormatException >::get() ) )
+                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ).equalsAscii( "application/vnd.sun.xml.report" ) );
+
+                if ( bCausedByNewStyleReport )
+                {
+                    _rLogger.logRecoverable( MigrationError(
+                        ERR_NEW_STYLE_REPORT,
+                        lcl_getSubDocumentDescription( _rDocument )
+                    ) );
+                    return eIgnoreDoc;
+                }
+                else
+                {
+                    _rLogger.logFailure( MigrationError(
+                        ERR_OPENING_SUB_DOCUMENT_FAILED,
+                        lcl_getSubDocumentDescription( _rDocument ),
+                        aError
+                    ) );
+                }
             }
-            return _rDocument.xDocument.is();
+            return _rDocument.xDocument.is() ? eOpenedDoc : eFailure;
         }
 
         //----------------------------------------------------------------
@@ -822,8 +872,8 @@ namespace dbmm
         );
         ~MigrationEngine_Impl();
 
-        inline  sal_Int32   getFormCount() const    { return m_nFormCount; }
-        inline  sal_Int32   getReportCount()const   { return m_nReportCount; }
+        inline  size_t      getFormCount() const    { return m_nFormCount; }
+        inline  size_t      getReportCount()const   { return m_nReportCount; }
         bool    migrateAll();
 
     private:
@@ -995,12 +1045,10 @@ namespace dbmm
     //--------------------------------------------------------------------
     namespace
     {
-        size_t lcl_collectHierarchicalElementNames_throw(
+        void lcl_collectHierarchicalElementNames_throw(
             const Reference< XNameAccess >& _rxContainer, const ::rtl::OUString& _rContainerLoc,
-            SubDocuments& _out_rDocs, const SubDocumentType _eType )
+            SubDocuments& _out_rDocs, const SubDocumentType _eType, size_t& _io_counter )
         {
-            size_t nAddedElements = 0;
-
             const ::rtl::OUString sHierarhicalBase(
                 _rContainerLoc.getLength()  ?   ::rtl::OUStringBuffer( _rContainerLoc ).appendAscii( "/" ).makeStringAndClear()
                                             :   ::rtl::OUString() );
@@ -1017,7 +1065,7 @@ namespace dbmm
                 Reference< XNameAccess > xSubContainer( aElement, UNO_QUERY );
                 if ( xSubContainer.is() )
                 {
-                    nAddedElements += lcl_collectHierarchicalElementNames_throw( xSubContainer, sElementName, _out_rDocs, _eType );
+                    lcl_collectHierarchicalElementNames_throw( xSubContainer, sElementName, _out_rDocs, _eType, _io_counter );
                 }
                 else
                 {
@@ -1025,12 +1073,10 @@ namespace dbmm
                     OSL_ENSURE( xCommandProcessor.is(), "lcl_collectHierarchicalElementNames_throw: no container, and no comand processor? What *is* it, then?!" );
                     if ( xCommandProcessor.is() )
                     {
-                        _out_rDocs.push_back( SubDocument( xCommandProcessor, sElementName, _eType ) );
-                        ++nAddedElements;
+                        _out_rDocs.push_back( SubDocument( xCommandProcessor, sElementName, _eType, ++_io_counter ) );
                     }
                 }
             }
-            return nAddedElements;
         }
     }
 
@@ -1044,10 +1090,12 @@ namespace dbmm
         try
         {
             Reference< XNameAccess > xDocContainer( m_xDocument->getFormDocuments(), UNO_SET_THROW );
-            m_nFormCount = lcl_collectHierarchicalElementNames_throw( xDocContainer, ::rtl::OUString(), m_aSubDocs, eForm );
+            m_nFormCount = 0;
+            lcl_collectHierarchicalElementNames_throw( xDocContainer, ::rtl::OUString(), m_aSubDocs, eForm, m_nFormCount );
 
             xDocContainer.set( m_xDocument->getReportDocuments(), UNO_SET_THROW );
-            m_nReportCount = lcl_collectHierarchicalElementNames_throw( xDocContainer, ::rtl::OUString(), m_aSubDocs, eReport );
+            m_nReportCount = 0;
+            lcl_collectHierarchicalElementNames_throw( xDocContainer, ::rtl::OUString(), m_aSubDocs, eReport, m_nReportCount );
         }
         catch( const Exception& )
         {
@@ -1075,13 +1123,14 @@ namespace dbmm
         // load the document
         ::rtl::Reference< ProgressCapture > pStatusIndicator( new ProgressCapture( sObjectName, m_rProgress ) );
         SubDocument aSubDocument( _rDocument );
-        if ( !lcl_loadSubDocument_nothrow( aSubDocument, pStatusIndicator.get(), m_rLogger ) )
+        OpenDocResult eResult = lcl_loadSubDocument_nothrow( aSubDocument, pStatusIndicator.get(), m_rLogger );
+        if ( eResult != eOpenedDoc )
         {
             pStatusIndicator->dispose();
             m_rProgress.endObject();
             m_rLogger.finishedDocument( m_nCurrentDocumentID );
             m_nCurrentDocumentID = -1;
-            return false;
+            return ( eResult == eIgnoreDoc );
         }
 
         // -----------------
@@ -1145,32 +1194,69 @@ namespace dbmm
     namespace
     {
         static ::rtl::OUString lcl_createTargetLibName( const SubDocument& _rDocument,
-            const ::rtl::OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetStorage )
+            const ::rtl::OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetContainer )
         {
-            // a prefix denoting the type
+            // The new library name is composed from the prefix, the base name, and the old library name.
             const ::rtl::OUString sPrefix( ::rtl::OUString::createFromAscii( _rDocument.eType == eForm ? "Form_" : "Report_" ) );
 
-            ::rtl::OUStringBuffer aBuffer;
-            aBuffer.append( sPrefix );
-
-            // first try with the base name of the sub document
-            aBuffer.append( _rDocument.sHierarchicalName.copy(
+            ::rtl::OUString sBaseName( _rDocument.sHierarchicalName.copy(
                 _rDocument.sHierarchicalName.lastIndexOf( '/' ) + 1 ) );
-            aBuffer.appendAscii( "_" );
-            aBuffer.append( _rSourceLibName );
-            ::rtl::OUString sTargetName( aBuffer.makeStringAndClear() );
-            if ( !_rxTargetStorage->hasByName( sTargetName ) )
-                return sTargetName;
+            // Normalize this name. In our current storage implementation (and script containers in a document
+            // are finally mapped to sub storages of the document storage), not all characters are allowed.
+            // The bug requesting to change this is #i95409#.
+            // Unfortunately, the storage implementation does not complain if you use invalid characters/names, but instead
+            // it silently accepts them, and produces garbage in the file (#i95408).
+            // So, until especially the former is fixed, we need to strip the name from all invalid characters.
+            // #i95865# / 2008-11-06 / frank.schoenheit@sun.com
 
-            // if this name is already used (which is valid, since documents with the same base
-            // name can exist in different logical folders), then use the complete name
-            aBuffer.append( sPrefix );
-            aBuffer.append( ::comphelper::string::searchAndReplaceAllAsciiWithAscii(
-                _rDocument.sHierarchicalName, "/", "_" ) );
-            aBuffer.appendAscii( "_" );
-            aBuffer.append( _rSourceLibName );
-            return aBuffer.makeStringAndClear();
+            // The general idea is to replace invalid characters with '_'. However, since "valid" essentially means
+            // ASCII only, this implies that for a lot of languages, we would simply replace everything with '_',
+            // which of course is not desired.
+            // So, we use a heuristics: If the name contains at most 3 invalid characters, and as many valid as invalid
+            // characters, then we use the replacement. Otherwise, we just use a unambiguous number for the sub document.
+            sal_Int32 nValid=0, nInvalid=0;
+            const sal_Unicode* pBaseName = sBaseName.getStr();
+            const sal_Int32 nBaseNameLen = sBaseName.getLength();
+            for ( sal_Int32 i=0; i<nBaseNameLen; ++i )
+            {
+                if ( ::comphelper::IsValidZipEntryFileName( pBaseName + i, 1, sal_False ) )
+                    ++nValid;
+                else
+                    ++nInvalid;
+            }
+            if ( ( nInvalid <= 3 ) && ( nInvalid * 2 <= nValid ) )
+            {   // not "too many" invalid => replace them
+                ::rtl::OUStringBuffer aReplacement;
+                aReplacement.ensureCapacity( nBaseNameLen );
+                aReplacement.append( sBaseName );
+                const sal_Unicode* pReplacement = aReplacement.getStr();
+                for ( sal_Int32 i=0; i<nBaseNameLen; ++i )
+                {
+                    if ( !::comphelper::IsValidZipEntryFileName( pReplacement + i, 1, sal_False ) )
+                        aReplacement.setCharAt( i, '_' );
+                }
+                sBaseName = aReplacement.makeStringAndClear();
 
+                ::rtl::OUStringBuffer aNewLibNameAttempt;
+                aNewLibNameAttempt.append( sPrefix );
+                aNewLibNameAttempt.append( sBaseName );
+                aNewLibNameAttempt.appendAscii( "_" );
+                aNewLibNameAttempt.append( _rSourceLibName );
+                ::rtl::OUString sTargetName( aNewLibNameAttempt.makeStringAndClear() );
+                if ( !_rxTargetContainer->hasByName( sTargetName ) )
+                    return sTargetName;
+            }
+
+            // "too many" invalid characters, or the name composed with the base name was already used.
+            // (The latter is valid, since there can be multiple sub documents with the same base name,
+            // in different levels in the hierarchy.)
+            // In this case, just use the umambiguous sub document number.
+            ::rtl::OUStringBuffer aNewLibName;
+            aNewLibName.append( sPrefix );
+            aNewLibName.append( ::rtl::OUString::valueOf( sal_Int64( _rDocument.nNumber ) ) );
+            aNewLibName.appendAscii( "_" );
+            aNewLibName.append( _rSourceLibName );
+            return aNewLibName.makeStringAndClear();
         }
     }
 
@@ -1314,8 +1400,8 @@ namespace dbmm
             {
                 m_rLogger.logFailure( MigrationError(
                     ERR_COMMITTING_SCRIPT_STORAGES_FAILED,
-                    lcl_getSubDocumentDescription( _rDocument ),
-                    getScriptTypeDisplayName( _eScriptType )
+                    getScriptTypeDisplayName( _eScriptType ),
+                    lcl_getSubDocumentDescription( _rDocument )
                 ) );
                 return false;
             }
@@ -1340,8 +1426,8 @@ namespace dbmm
         {
             m_rLogger.logFailure( MigrationError(
                 ERR_GENERAL_SCRIPT_MIGRATION_FAILURE,
-                lcl_getSubDocumentDescription( _rDocument ),
                 getScriptTypeDisplayName( _eScriptType ),
+                lcl_getSubDocumentDescription( _rDocument ),
                 aException
             ) );
         }

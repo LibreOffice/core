@@ -677,6 +677,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
+    if ( getView() )
+        static_cast<OTableDesignView*>(getView())->GrabFocus();
     sal_Bool bCheck = sal_True;
     if ( isModified() )
     {

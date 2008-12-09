@@ -209,6 +209,10 @@ namespace dbaccess
     // ::com::sun::star::container::XNameAccess
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    protected:
+        // OContentHelper overridables
+        virtual ::rtl::OUString determineContentType() const;
+
     private:
         // helper
         /** create a query object wrapping a CommandDefinition given by name. To retrieve the object, the CommandDescription

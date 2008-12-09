@@ -2840,20 +2840,13 @@ SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, sa
     return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID,bVis, bActivate ).isValid() ? eOk : eTooManyColumns;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OQueryDesignView::getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth )
+sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
 {
-    OTableFields& aFields = static_cast<OQueryController&>(getController()).getTableFieldDesc();
-    OTableFields::iterator aIter = aFields.begin();
-    for(;aIter != aFields.end();++aIter)
-    {
-        if( rAliasName == (*aIter)->GetFieldAlias() && rFieldName == (*aIter)->GetField())
-        {
-            nWidth = (*aIter)->GetColWidth();
-            return sal_True;
-        }
-    }
-
-    return sal_False;
+    static sal_Int32 s_nDefaultWidth = GetTextWidth(String(RTL_CONSTASCII_USTRINGPARAM("0"))) * 15;
+    sal_Int32 nWidth = static_cast<OQueryController&>(getController()).getColWidth(_nColPos);
+    if ( !nWidth )
+        nWidth = s_nDefaultWidth;
+    return nWidth;
 }
 //------------------------------------------------------------------------------
 void OQueryDesignView::fillValidFields(const ::rtl::OUString& sAliasName, ComboBox* pFieldList)

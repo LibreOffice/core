@@ -195,6 +195,10 @@ protected:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
+
+    // OContentHelper overridables
+    virtual ::rtl::OUString determineContentType() const;
+
 private:
     void registerProperties();
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
                 // ignore .. assume that the reference has not changed.
                 }
             }
-            ole.setAttribute(OfficeNamespaces.INTERNAL_NS, "master-columns", masterfields);
+            ole.setAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.MASTER_COLUMNS, masterfields);
             ole.setAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.MASTER_VALUES, values);
             ole.setAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.DETAIL_COLUMNS, element.getDetailfields());
 

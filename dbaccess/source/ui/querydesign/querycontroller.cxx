@@ -931,6 +931,7 @@ void OQueryController::impl_initialize()
             }
         }
 
+
         getUndoMgr()->Clear();
 
         if  (  ( m_bGraphicalDesign )
@@ -1138,37 +1139,34 @@ void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
 // -----------------------------------------------------------------------------
 void OQueryController::loadViewSettings(const Sequence<PropertyValue>& _rViewProps)
 {
-    //////////////////////////////////////////////////////////////////////
-    // Liste loeschen
-    OTableFields().swap(m_vTableFieldDesc);
-
     const PropertyValue *pIter = _rViewProps.getConstArray();
     const PropertyValue *pEnd = pIter + _rViewProps.getLength();
     for (; pIter != pEnd; ++pIter)
     {
-        if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitterPosition")) )
+        if ( pIter->Name.equalsAscii("SplitterPosition") )
         {
             pIter->Value >>= m_nSplitPos;
         }
-        else if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleRows")) )
+        else if ( pIter->Name.equalsAscii("VisibleRows") )
         {
             pIter->Value >>= m_nVisibleRows;
         }
-        else if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields")) )
+        else if ( pIter->Name.equalsAscii("Fields") )
         {
-            Sequence<PropertyValue> aFields;
-            pIter->Value >>= aFields;
-            m_vTableFieldDesc.reserve(aFields.getLength() + 1);
-            const PropertyValue *pFieldIter = aFields.getConstArray();
-            const PropertyValue *pFieldEnd = pFieldIter + aFields.getLength();
-            for (; pFieldIter != pFieldEnd; ++pFieldIter)
-            {
-                OTableFieldDescRef pData = new OTableFieldDesc();
-                pData->Load(*pFieldIter);
-                m_vTableFieldDesc.push_back(pData);
-            }
+            pIter->Value >>= m_aFieldInformation;
         }
     }
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
+{
+    if ( _nColPos < m_aFieldInformation.getLength() )
+    {
+        ::std::auto_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
+        pField->Load(m_aFieldInformation[_nColPos]);
+        return pField->GetColWidth();
+    }
+    return 0;
 }
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OQueryController::getObjectContainer()  const
@@ -1595,8 +1593,8 @@ short OQueryController::saveModified()
 void OQueryController::impl_reset()
 {
     bool bValid = false;
-    Sequence< PropertyValue > aLayoutInformation;
 
+    Sequence< PropertyValue > aLayoutInformation;
     // get command from the query if a query name was supplied
     if ( !editingCommand() )
     {
@@ -1657,7 +1655,6 @@ void OQueryController::impl_reset()
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-
         if ( m_sStatement.getLength() )
         {
             setQueryComposer();

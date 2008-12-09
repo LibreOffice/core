@@ -452,7 +452,7 @@ namespace dbaui
 
             const OJoinTableView* pView = _pSource->getTableView();
             OTableConnection* pConn = pView->GetTabConn(_pSource,_pDest);
-            if ( pConn )
+            if ( pConn && !m_pConnData->GetConnLineDataList()->empty() )
             {
                 m_pConnData->CopyFrom(*pConn->GetData());
                 m_pBoxControl->getContainer()->notifyConnectionChange();

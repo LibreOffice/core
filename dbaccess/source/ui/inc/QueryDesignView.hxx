@@ -146,7 +146,7 @@ namespace dbaui
         // called when a table from tabeview was deleted
         void TableDeleted(const ::rtl::OUString& rAliasName);
 
-        BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth );
+        sal_Int32 getColWidth( sal_uInt16 _nColPos) const;
         void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
 
         void SaveUIConfig();

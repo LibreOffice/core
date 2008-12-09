@@ -77,10 +77,11 @@ namespace dbaui
         OTableFields                            m_vTableFieldDesc;
         OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
 
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aFieldInformation;
+
         ::svxform::OSystemParseContext*         m_pParseContext;
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator;
-        ::std::vector<sal_uInt32>               m_vColumnWidth;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
         /// if we're editing an existing view, this is non-NULL
@@ -167,12 +168,10 @@ namespace dbaui
         void            setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
         void            setVisibleRows(sal_Int32 _nVisibleRows) { m_nVisibleRows = _nVisibleRows;}
 
+        sal_Int32       getColWidth(sal_uInt16 _nColPos) const;
+
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
-        sal_uInt32 getColWidth(sal_uInt16 _nPos) const
-        {
-            return m_vColumnWidth.size() < _nPos ? m_vColumnWidth[_nPos] : sal_uInt32(0);
-        }
 
         virtual sal_Bool Construct(Window* pParent);
 

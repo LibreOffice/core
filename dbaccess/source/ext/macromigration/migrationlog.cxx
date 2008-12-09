@@ -248,18 +248,18 @@ namespace dbmm
             switch ( _rError.eType )
             {
             case ERR_OPENING_SUB_DOCUMENT_FAILED:
-                pAsciiErrorDescription = "opening '#name#' failed";
-                aAsciiParameterNames.push_back( "#name#" );
+                pAsciiErrorDescription = "opening '#doc#' failed";
+                aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
             case ERR_CLOSING_SUB_DOCUMENT_FAILED:
-                pAsciiErrorDescription = "closing '#name#' failed";
-                aAsciiParameterNames.push_back( "#name#" );
+                pAsciiErrorDescription = "closing '#doc#' failed";
+                aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
             case ERR_STORAGE_COMMIT_FAILED:
-                pAsciiErrorDescription = "committing the changes for document '#name#' failed";
-                aAsciiParameterNames.push_back( "#name#" );
+                pAsciiErrorDescription = "committing the changes for document '#doc#' failed";
+                aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
             case ERR_STORING_DATABASEDOC_FAILED:
@@ -289,7 +289,7 @@ namespace dbmm
                 break;
 
             case ERR_GENERAL_SCRIPT_MIGRATION_FAILURE:
-                pAsciiErrorDescription = "general error during migrationg #scripttype# scripts of document '#doc#'";
+                pAsciiErrorDescription = "general error while migrating #scripttype# scripts of document '#doc#'";
                 aAsciiParameterNames.push_back( "#scripttype#" );
                 aAsciiParameterNames.push_back( "#doc#" );
                 break;
@@ -325,7 +325,7 @@ namespace dbmm
                 break;
 
             case ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED:
-                pAsciiErrorDescription = "adjusting events for document #doc# failed";
+                pAsciiErrorDescription = "adjusting events for document '#doc#' failed";
                 aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
@@ -365,6 +365,11 @@ namespace dbmm
                 aAsciiParameterNames.push_back( "#doc#" );
                 aAsciiParameterNames.push_back( "#libtype#" );
                 aAsciiParameterNames.push_back( "#name#" );
+                break;
+
+            case ERR_NEW_STYLE_REPORT:
+                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Sun Report Builder (TM) extension installed.";
+                aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
                 // do *not* add a default case here: Without a default, some compilers will warn you when

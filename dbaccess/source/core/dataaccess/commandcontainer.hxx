@@ -81,6 +81,10 @@ protected:
 
     // ODefinitionContainer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(const ::rtl::OUString& _rName);
+
+protected:
+    // OContentHelper overridables
+    virtual ::rtl::OUString determineContentType() const;
 };
 
 //........................................................................

@@ -131,6 +131,7 @@ SHL2STDLIBS= \
         $(COMPHELPERLIB)		\
         $(CPPUHELPERLIB)		\
         $(CPPULIB)				\
+        $(FWELIB)				\
         $(SO2LIB)				\
         $(I18NISOLANGLIB)		\
         $(SALLIB)

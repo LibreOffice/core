@@ -134,11 +134,16 @@ public:
 
     // helper
     ::rtl::Reference<OContentHelper> getContent(const ::rtl::OUString& _sName) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getContainerStorage() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getContainerStorage() const;
 
 protected:
     virtual ~ODocumentContainer();
-// ODefinitionContainer
+
+    /** OContentHelper
+    */
+    virtual ::rtl::OUString determineContentType() const;
+
+    // ODefinitionContainer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(
         const ::rtl::OUString& _rName
     );

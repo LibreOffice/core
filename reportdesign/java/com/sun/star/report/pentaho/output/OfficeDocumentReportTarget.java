@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -316,7 +316,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
         return outputRepository;
     }
-
+    
     protected InputRepository getInputRepository()
     {
         return inputRepository;
@@ -1610,7 +1610,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
         final String classId = (String) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "class-id");
         final String chartUrl = (String) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "href");
-        final ArrayList masterColumns = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "master-columns");
+        final ArrayList masterColumns = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.MASTER_COLUMNS);
         final ArrayList masterValues = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.MASTER_VALUES);
         final ArrayList detailColumns = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.DETAIL_COLUMNS);
         final String href = oleProducer.produceOle(chartUrl, masterColumns, masterValues, detailColumns);
