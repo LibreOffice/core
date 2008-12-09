@@ -346,8 +346,10 @@ ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress 
         Ref2.SetColRel( aRef.IsColRel());
     if (Ref2.nRow == aRef.nRow)
         Ref2.SetRowRel( aRef.IsRowRel());
+    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and
+    // not $Sheet1.$A$5:Sheet1.$A$6 (with invisible second 3D, but relative).
     if (Ref2.nTab == aRef.nTab)
-        Ref2.SetTabRel( aRef.IsTabRel());
+        Ref2.SetTabRel( bInherit3Dtemp ? Ref1.IsTabRel() : aRef.IsTabRel());
     Ref2.CalcRelFromAbs( rPos);
     // Force 3D if necessary. References to other sheets always.
     if (Ref1.nTab != rPos.Tab())
