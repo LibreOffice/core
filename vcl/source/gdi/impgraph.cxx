@@ -1504,7 +1504,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
         // read Id
         rIStm >> nTmp;
 
-        if( NATIVE_FORMAT_50 == nTmp )
+        if( !rIStm.GetError() && NATIVE_FORMAT_50 == nTmp )
         {
             Graphic         aGraphic;
             GfxLink         aLink;

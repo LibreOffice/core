@@ -32,6 +32,7 @@
 #include "precompiled_vcl.hxx"
 
 // bootstrap stuff
+#include <sal/main.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/processfactory.hxx>
@@ -54,19 +55,44 @@
 #include <cppuhelper/compbase3.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <tools/extendapplicationenvironment.hxx>
 
 #include "vcl/svapp.hxx"
 #include "vcl/canvastools.hxx"
+#include "vcl/canvasbitmap.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/bmpacc.hxx"
 #include "vcl/virdev.hxx"
 #include "vcl/bitmapex.hxx"
-#include "canvasbitmap.hxx"
 
 
 using namespace ::com::sun::star;
 using namespace ::vcl::unotools;
+
+// -----------------------------------------------------------------------
+
+void Main();
+
+// -----------------------------------------------------------------------
+
+SAL_IMPLEMENT_MAIN()
+{
+    tools::extendApplicationEnvironment();
+
+    uno::Reference< lang::XMultiServiceFactory > xMS;
+    xMS = cppu::createRegistryServiceFactory(
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ),
+        sal_True );
+
+    InitVCL( xMS );
+    ::Main();
+    DeInitVCL();
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -258,28 +284,28 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     if( nOriginalDepth > 8 )
     {
         const uno::Sequence<sal_Int8> aComponentTags( xBmp->getComponentTags() );
-        uno::Sequence<rendering::ARGBColor> aARGBColors(1);
-        uno::Sequence<rendering::RGBColor>  aRGBColors(1);
+        uno::Sequence<rendering::ARGBColor> aARGBColor(1);
+        uno::Sequence<rendering::RGBColor>  aRGBColor(1);
         uno::Sequence<sal_Int8> aPixel3, aPixel4;
 
         const Color aCol(COL_GREEN);
-        aARGBColors[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aARGBColors[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aARGBColors[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-        aARGBColors[0].Alpha = 1.0;
+        aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
+        aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
+        aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+        aARGBColor[0].Alpha = 1.0;
 
-        aRGBColors[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aRGBColors[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aRGBColors[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+        aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
+        aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
+        aRGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
 
-        aPixel3 = xBmp->convertIntegerFromARGB( aARGBColors );
+        aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
         aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
         test( aPixel3 == aPixel4,
               "Green pixel from bitmap matches with manually converted green pixel" );
 
         if( !aContainedBmpEx.IsTransparent() )
         {
-            aPixel3 = xBmp->convertIntegerFromRGB( aRGBColors );
+            aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
             test( aPixel3 == aPixel4,
                   "Green pixel from bitmap matches with manually RGB-converted green pixel" );
         }
@@ -409,28 +435,28 @@ void checkBitmapImport( const rtl::Reference<VclCanvasBitmap>& xBmp,
     if( nOriginalDepth > 8 )
     {
         const uno::Sequence<sal_Int8> aComponentTags( xBmp->getComponentTags() );
-        uno::Sequence<rendering::ARGBColor> aARGBColors(1);
-        uno::Sequence<rendering::RGBColor>  aRGBColors(1);
+        uno::Sequence<rendering::ARGBColor> aARGBColor(1);
+        uno::Sequence<rendering::RGBColor>  aRGBColor(1);
         uno::Sequence<sal_Int8> aPixel3, aPixel4;
 
         const Color aCol(COL_GREEN);
-        aARGBColors[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aARGBColors[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aARGBColors[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-        aARGBColors[0].Alpha = 1.0;
+        aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
+        aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
+        aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+        aARGBColor[0].Alpha = 1.0;
 
-        aRGBColors[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aRGBColors[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aRGBColors[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+        aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
+        aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
+        aRGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
 
-        aPixel3 = xBmp->convertIntegerFromARGB( aARGBColors );
+        aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
         aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
         test( aPixel3 == aPixel4,
               "Green pixel from bitmap matches with manually converted green pixel" );
 
         if( !aContainedBmpEx.IsTransparent() )
         {
-            aPixel3 = xBmp->convertIntegerFromRGB( aRGBColors );
+            aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
             test( aPixel3 == aPixel4,
                   "Green pixel from bitmap matches with manually RGB-converted green pixel" );
         }
@@ -631,6 +657,13 @@ private:
         return uno::Sequence< rendering::ARGBColor >();
     }
 
+    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& ) throw (lang::IllegalArgumentException,
+                                                                                                                   uno::RuntimeException)
+    {
+        test(false, "Method not implemented");
+        return uno::Sequence< rendering::ARGBColor >();
+    }
+
     virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                   uno::RuntimeException)
     {
@@ -639,6 +672,13 @@ private:
     }
 
     virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
+                                                                                                                    uno::RuntimeException)
+    {
+        test(false, "This method is not expected to be called!");
+        return uno::Sequence< double >();
+    }
+
+    virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                     uno::RuntimeException)
     {
         test(false, "This method is not expected to be called!");
@@ -660,9 +700,17 @@ private:
         return util::Endianness::LITTLE;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerColorSpace( const uno::Sequence< ::sal_Int8 >&,
-                                                                           const uno::Reference< rendering::XIntegerBitmapColorSpace >& ) throw (lang::IllegalArgumentException,
-                                                                                                                                                 uno::RuntimeException)
+    virtual uno::Sequence< double > SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& ,
+                                                                           const uno::Reference< rendering::XColorSpace >& ) throw (lang::IllegalArgumentException,
+                                                                                                                                    uno::RuntimeException)
+    {
+        test(false, "Method not implemented");
+        return uno::Sequence< double >();
+    }
+
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& ,
+                                                                             const uno::Reference< rendering::XIntegerBitmapColorSpace >& ) throw (lang::IllegalArgumentException,
+                                                                                                                                                   uno::RuntimeException)
     {
         test(false, "Method not implemented");
         return uno::Sequence< sal_Int8 >();
@@ -722,6 +770,44 @@ private:
         return aRes;
     }
 
+    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException,
+                                                                                                                                         uno::RuntimeException)
+    {
+        const sal_Size  nLen( deviceColor.getLength() );
+        const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
+        test(nLen%nBytesPerPixel==0,
+             "number of channels no multiple of pixel element count");
+
+        uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
+        rendering::ARGBColor* pOut( aRes.getArray() );
+
+        if( getPalette().is() )
+        {
+            for( sal_Size i=0; i<nLen; ++i )
+            {
+                *pOut++ = rendering::ARGBColor(
+                    1.0,
+                    vcl::unotools::toDoubleColor(deviceColor[i]),
+                    vcl::unotools::toDoubleColor(deviceColor[i]),
+                    vcl::unotools::toDoubleColor(deviceColor[i]));
+            }
+        }
+        else
+        {
+            for( sal_Size i=0; i<nLen; i+=4 )
+            {
+                const double fAlpha=vcl::unotools::toDoubleColor(deviceColor[i+3]);
+                *pOut++ = rendering::ARGBColor(
+                    fAlpha,
+                    fAlpha*vcl::unotools::toDoubleColor(deviceColor[i+0]),
+                    fAlpha*vcl::unotools::toDoubleColor(deviceColor[i+1]),
+                    fAlpha*vcl::unotools::toDoubleColor(deviceColor[i+2]));
+            }
+        }
+
+        return aRes;
+    }
+
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                              uno::RuntimeException)
     {
@@ -731,6 +817,13 @@ private:
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                                uno::RuntimeException)
+    {
+        test(false, "Method not implemented");
+        return uno::Sequence< sal_Int8 >();
+    }
+
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
+                                                                                                                                uno::RuntimeException)
     {
         test(false, "Method not implemented");
         return uno::Sequence< sal_Int8 >();
@@ -784,14 +877,14 @@ public:
 
 void TestWindow::Paint( const Rectangle& )
 {
-    static sal_Int8 lcl_depths[]={1,4,8,16,24,32};
+    static sal_Int8 lcl_depths[]={1,4,8,16,24};
 
     try
     {
         // Testing VclCanvasBitmap wrapper
         // ===============================
 
-        for( int i=0; i<sizeof(lcl_depths)/sizeof(*lcl_depths); ++i )
+        for( unsigned int i=0; i<sizeof(lcl_depths)/sizeof(*lcl_depths); ++i )
         {
             const sal_Int8 nDepth( lcl_depths[i] );
             Bitmap aBitmap(Size(200,200),nDepth);
@@ -801,8 +894,8 @@ void TestWindow::Paint( const Rectangle& )
                                              aBitmap);
                 if( pAcc.get() )
                 {
-                    BitmapColor aBlack;
-                    BitmapColor aWhite;
+                    BitmapColor aBlack(0);
+                    BitmapColor aWhite(0);
                     if( pAcc->HasPalette() )
                     {
                         aBlack.SetIndex( sal::static_int_cast<BYTE>(pAcc->GetBestPaletteIndex(BitmapColor(0,0,0))) );
@@ -943,73 +1036,14 @@ void TestWindow::Paint( const Rectangle& )
         exit(2);
 }
 
-USHORT TestApp::Exception( USHORT nError )
-{
-    switch( nError & EXC_MAJORTYPE )
-    {
-        case EXC_RSCNOTLOADED:
-            Abort( String::CreateFromAscii(
-                       "Error: could not load language resources.\nPlease check your installation.\n" ) );
-            break;
-    }
-    return 0;
-}
-
-void TestApp::Main()
-{
-    bool bHelp = false;
-
-    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
-    {
-        ::rtl::OUString aParam = GetCommandLineParam( i );
-
-        if( aParam.equalsAscii( "--help" ) ||
-            aParam.equalsAscii( "-h" ) )
-                bHelp = true;
-    }
-
-    if( bHelp )
-    {
-        printf( "outdevgrind - Profile OutputDevice\n" );
-        return;
-    }
-
-    //-------------------------------------------------
-    // create the global service-manager
-    //-------------------------------------------------
-    uno::Reference< lang::XMultiServiceFactory > xFactory;
-    try
-    {
-        uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
-                                                                  uno::UNO_QUERY );
-        if( xFactory.is() )
-            ::comphelper::setProcessServiceFactory( xFactory );
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    if( !xFactory.is() )
-    {
-        fprintf( stderr,
-                 "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
-    }
-
-    // Create UCB.
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
-
-    TestWindow pWindow;
-    pWindow.Execute();
-
-    // clean up UCB
-    ::ucbhelper::ContentBroker::deinitialize();
-}
-
 } // namespace
 
-TestApp aTestApp;
+void Main()
+{
+    TestWindow aWindow;
+    aWindow.Execute();
+    aWindow.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL - canvasbitmaptest" ) ) );
+
+    Application::Execute();
+}
+
