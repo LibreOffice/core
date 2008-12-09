@@ -77,7 +77,7 @@ private:
         enum ::xmloff::token::XMLTokenEnum eElementName );
 
     /// currently unused; for exporting via the XDocumentProperties interface
-    SAL_DLLPRIVATE void _Export();
+    SAL_DLLPRIVATE void _MExport();
 
 public:
     SvXMLMetaExport( SvXMLExport& i_rExport,
@@ -86,7 +86,7 @@ public:
 
     virtual ~SvXMLMetaExport();
 
-    /// export via XSAXWriter interface, with fallback to _Export
+    /// export via XSAXWriter interface, with fallback to _MExport
     void Export();
 
     static ::rtl::OUString GetISODateTimeString(

@@ -1,5 +1,5 @@
 ..\%__SRC%\lib\idrawinglayer.lib %_DEST%\lib%_EXT%\idrawinglayer.lib
-..\%__SRC%\bin\drawinglayer?????.dll %_DEST%\bin%_EXT%\drawinglayer?????.dll
+..\%__SRC%\bin\drawingl*.dll %_DEST%\bin%_EXT%\drawingl*.dll
 ..\%__SRC%\lib\libdrawinglayer?????.* %_DEST%\lib%_EXT%\libdrawinglayer?????.*
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib

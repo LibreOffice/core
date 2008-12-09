@@ -58,7 +58,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
     {
         res = xmlParseFile(filePath.native_file_string().c_str());
         if( !res ){
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sleep( 3 );
 #else
             Sleep( 3 );
@@ -87,7 +87,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
         xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
         if( !doc )
         {
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sleep( 3 );
 #else
             Sleep( 3 );
@@ -412,7 +412,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
     // resolve the dom
     if (!docResolvedOrg)
     {
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
         sleep( 3 );
 #else
         Sleep( 3 );

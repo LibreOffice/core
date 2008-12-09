@@ -16,7 +16,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\so\soffice.bin %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\so\officeloader.exe %_DEST%\bin%_EXT%\so\soffice.exe
 ..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
-..\%__SRC%\bin\sofficeapp.dll %_DEST%\bin%_EXT%\sofficeapp.dll
+..\%__SRC%\bin\sofficea*.dll %_DEST%\bin%_EXT%\sofficea*.dll
 ..\%__SRC%\lib\isofficeapp.lib %_DEST%\lib%_EXT%\isofficeapp.lib
 ..\%__SRC%\lib\libsofficeapp.dylib %_DEST%\lib%_EXT%\libsofficeapp.dylib
 ..\%__SRC%\lib\libsofficeapp.so %_DEST%\lib%_EXT%\libsofficeapp.so
@@ -81,7 +81,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.bin
 ..\%__SRC%\bin\so\unopkg.exe %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
-..\%__SRC%\bin\unopkgapp.dll %_DEST%\bin%_EXT%\unopkgapp.dll
+..\%__SRC%\bin\unopkga*.dll %_DEST%\bin%_EXT%\unopkga*.dll
 ..\%__SRC%\lib\libunopkgapp.dylib %_DEST%\lib%_EXT%\libunopkgapp.dylib
 ..\%__SRC%\lib\libunopkgapp.so %_DEST%\lib%_EXT%\libunopkgapp.so
 

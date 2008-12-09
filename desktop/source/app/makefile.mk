@@ -88,8 +88,11 @@ DEF1NAME = $(SHL1TARGET)
 
 OBJFILES = \
     $(OBJ)$/copyright_ascii_ooo.obj \
-    $(OBJ)$/copyright_ascii_sun.obj \
     $(OBJ)$/main.obj
+.IF "$(GUI)" != "OS2"
+OBJFILES += \
+    $(OBJ)$/copyright_ascii_sun.obj
+.ENDIF
 
 SLOFILES = $(SHL1OBJS)
 

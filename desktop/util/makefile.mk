@@ -131,7 +131,7 @@ APP5STACK=10000000
 .IF "$(GUI)" == "OS2"
 APP5DEF= # automatic
 APP5RES=    $(RES)$/oodesktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo3_main_app.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP5VERINFO=ooverinfo2.rc
 APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF # OS2

@@ -30,9 +30,11 @@
 
 #include "sjapplet_impl.hxx"
 
+#ifndef OS2
 #define HWND int
 #define HMENU int
 #define HDC int
+#endif
 
 #include "rtl/ustring.hxx"
 #include <rtl/process.h>
