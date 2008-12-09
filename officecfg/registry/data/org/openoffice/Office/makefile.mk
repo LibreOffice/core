@@ -64,7 +64,8 @@ XCUFILES= \
     WebWizard.xcu \
     FormWizard.xcu \
     Writer.xcu \
-    Paths.xcu
+    Paths.xcu \
+    Histories.xcu
 
 MODULEFILES= \
     Common-brand.xcu \

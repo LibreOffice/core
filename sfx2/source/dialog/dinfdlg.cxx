@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dinfdlg.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.43.42.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1082,7 +1082,7 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             SfxDocumentInfoItem newItem( *pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
-                : String() );
+                : ::rtl::OUString() );
             pInfoItem->SetUseUserData( STATE_CHECK == aUseUserDataCB.GetState() );
             newItem.SetUseUserData( STATE_CHECK == aUseUserDataCB.GetState() );
 

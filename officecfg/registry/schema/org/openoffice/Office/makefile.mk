@@ -78,7 +78,8 @@ XCSFILES= \
     ExtendedColorScheme.xcs \
     TypeDetection.xcs \
     TabBrowse.xcs \
-    Paths.xcs
+    Paths.xcs	\
+    Histories.xcs
 
 .INCLUDE :  target.mk
 
