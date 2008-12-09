@@ -446,6 +446,7 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
    }
    elsif ($platform =~ m/^powerpc/)
    {
@@ -477,16 +478,17 @@ elsif ( $platform =~ m/linux/ )
             $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin";
             $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."xawt";
          }
+         else { 
+	    # OpenJDK (aka JDK=sun)
+            $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc";
+            $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc".$ds."client";
+            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc".$ds."native_threads";
+      	    $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc".$ds."xawt";
+         }
       }
 
       $CPU            = "P";
 
-# the "standard" ppc j2sdk is IBMJava2-ppc-142
-      if ( $JDK ne "gcj" ) {
-          $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."bin";
-          $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
-          $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."bin";
-      }
    }
    elsif ($platform =~ m/^s390/)
    {
