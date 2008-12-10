@@ -34,6 +34,7 @@
 #ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
+#include "formresid.hrc"
 #include <comphelper/extract.hxx>
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
@@ -55,6 +56,7 @@
 /** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/StringListResource.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
@@ -91,11 +93,9 @@ namespace pcr
         // special handling for booleans (this will become a list)
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
-            String aBoolOptions = String( PcrRes( RID_STR_BOOL ) );
-            Sequence< ::rtl::OUString > aEntries(2);
-            for ( xub_StrLen i=0; i<2; ++i )
-                aEntries[i] = aBoolOptions.GetToken( i );
-            _out_rDescriptor.Control = createListBoxControl( _rxControlFactory, aEntries, bReadOnlyControl, sal_False );
+            ::std::vector< ::rtl::OUString > aListEntries;
+            tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
+            _out_rDescriptor.Control = createListBoxControl( _rxControlFactory, aListEntries, bReadOnlyControl, sal_False );
             return;
         }
 

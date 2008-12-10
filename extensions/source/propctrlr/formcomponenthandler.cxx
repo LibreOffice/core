@@ -114,6 +114,7 @@
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <tools/StringListResource.hxx>
 
 #include <limits>
 
@@ -1164,19 +1165,16 @@ namespace pcr
         // boolean values
         if ( eType == TypeClass_BOOLEAN )
         {
-            String aEntries;
+            USHORT nResId = RID_RSC_ENUM_YESNO;
             if  (   ( nPropId == PROPERTY_ID_SHOW_POSITION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_NAVIGATION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_RECORDACTIONS )
                 ||  ( nPropId == PROPERTY_ID_SHOW_FILTERSORT )
                 )
-                aEntries = String( PcrRes( RID_STR_SHOW_HIDE ) );
-            else
-                aEntries = String( PcrRes( RID_STR_BOOL ) );
+                nResId = RID_RSC_ENUM_SHOWHIDE;
 
             ::std::vector< ::rtl::OUString > aListEntries;
-            for ( xub_StrLen i=0; i<2; ++i )
-                aListEntries.push_back( aEntries.GetToken(i) );
+            tools::StringListResource aRes(PcrRes(nResId),aListEntries);
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
             bNeedDefaultStringIfVoidAllowed = true;
         }
