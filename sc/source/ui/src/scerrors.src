@@ -102,6 +102,10 @@ Resource RID_ERRHDLSC
     {
         Text [ en-US ] = "Data could not be written." ;
     };
+    String SCERR_EXPORT_SQLEXCEPTION & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "$(ARG1)" ;
+    };
     String SCERR_EXPORT_ENCODING & ERRCODE_RES_MASK
     {
         Text [ en-US ] = "Cell $(ARG1) contains characters that are not representable in the selected target character set \"$(ARG2)\"." ;
