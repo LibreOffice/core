@@ -638,7 +638,9 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
     sal_Size nByteOffset = 1;
     // Felder:
     OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Size i = 1; aIter != _rCols.end() && nByteOffset <= m_nBufferSize && i < _rRow->size();++aIter, i++)
+    OSQLColumns::const_iterator aEnd  = _rCols.end();
+    const sal_Size nCount = _rRow->size();
+    for (sal_Size i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
     {
         // Laengen je nach Datentyp:
         sal_Int32 nLen = 0;
@@ -689,10 +691,11 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
             String aStr(pData,(xub_StrLen)nLen,m_eEncoding);
             aStr.EraseTrailingChars();
 
-            if (!aStr.Len())                // keine StringLaenge, dann NULL
+            if ( aStr.Len() )
+                *(*_rRow)[i] = ::rtl::OUString(aStr);
+            else// keine StringLaenge, dann NULL
                 (*_rRow)[i]->setNull();
-            else
-                *(*_rRow)[i]= ORowSetValue(aStr);
+
             pData[nLen] = cLast;
         }
         else
@@ -724,11 +727,11 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                         (*_rRow)[i]->setNull();
                         break;
                     }
-                    sal_uInt16  nYear   = (sal_uInt16)aStr.Copy( 0, 4 ).ToInt32();
-                    sal_uInt16  nMonth  = (sal_uInt16)aStr.Copy( 4, 2 ).ToInt32();
-                    sal_uInt16  nDay    = (sal_uInt16)aStr.Copy( 6, 2 ).ToInt32();
+                    const sal_uInt16  nYear   = (sal_uInt16)aStr.Copy( 0, 4 ).ToInt32();
+                    const sal_uInt16  nMonth  = (sal_uInt16)aStr.Copy( 4, 2 ).ToInt32();
+                    const sal_uInt16  nDay    = (sal_uInt16)aStr.Copy( 6, 2 ).ToInt32();
 
-                    ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
+                    const ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
                     *(*_rRow)[i] = aDate;
                 }
                 break;
@@ -744,7 +747,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                         case 'T':
                         case 'Y':
                         case 'J':   b = TRUE; break;
-                        default:    b = sal_False; break;
+                        default:    b = FALSE; break;
                     }
                     *(*_rRow)[i] = b;
                     //  pVal->setDouble(b);
@@ -752,7 +755,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 break;
                 case DataType::LONGVARCHAR:
                 {
-                    long nBlockNo = aStr.ToInt32(); // Blocknummer lesen
+                    const long nBlockNo = aStr.ToInt32();   // Blocknummer lesen
                     if (nBlockNo > 0 && m_pMemoStream) // Daten aus Memo-Datei lesen, nur wenn
                     {
                         if ( !ReadMemo(nBlockNo, (*_rRow)[i]->get()) )
@@ -1469,7 +1472,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             }
         }
 
-        const sal_Int32 nRealPrecision = nLen;
         switch (nType)
         {
             case DataType::DATE:        nLen = 8; break;
@@ -1480,7 +1482,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             case DataType::LONGVARCHAR: nLen = 10; break;
             default:                    break;
 
-        }
+        } // switch (nType)
 
         sal_Int32 nPos = i;
         if(_xCols != xColumns)
@@ -1525,8 +1527,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 pIndex->Insert(m_nFilePos,*rRow[nPos]);
         }
 
-
-
         char* pData = (char *)(m_pBuffer + nByteOffset);
         if (rRow[nPos]->getValue().isNull())
         {
@@ -1537,9 +1537,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         }
 
         sal_Bool bHadError = sal_False;
-        sal_Int32 nErrorCode = 1000;
-        ::rtl::OUString sSQLState = ::dbtools::getStandardSQLState( SQL_GENERAL_ERROR );
-        Any aSQLError;
         try
         {
             switch (nType)
@@ -1566,41 +1563,33 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 {
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
 
-                    double n = rRow[nPos]->getValue();
+                    const double n = rRow[nPos]->getValue();
 
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste
 
                     const ByteString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
-                    sal_Int32 nRealLen = aDefaultValue.Len();
-                    BOOL bValidLength  = nRealLen <= nLen;
+                    BOOL bValidLength  = aDefaultValue.Len() <= nLen;
                     if ( bValidLength )
                     {
-                        nRealLen -= nScale;
-                        if ( nScale ) // for '.'
-                            --nRealLen;
-                        if ( n < 0.0 ) // for the sign '-'
-                            --nRealLen;
-
-                        bValidLength = nRealLen <= nRealPrecision;
-                        if ( bValidLength )
-                        {
-                            strncpy(pData,aDefaultValue.GetBuffer(),nLen);
-                            // write the resulting double back
-                            *rRow[nPos] = toDouble(aDefaultValue);
-                        } // if ( nRealLen < nRealPrecision )
+                        strncpy(pData,aDefaultValue.GetBuffer(),nLen);
+                        // write the resulting double back
+                        *rRow[nPos] = toDouble(aDefaultValue);
                     }
-                    if (!bValidLength)
+                    else
                     {
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+                        ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > > aStringToSubstitutes;
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$columnname$", aColName));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$precision$", String::CreateFromInt32(nLen)));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$scale$", String::CreateFromInt32(nScale)));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$value$", ::rtl::OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
 
                         const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
-                                STR_INVALID_COLUMN_DECIMAL_VALUE,
-                                "$columnname$", aColName,
-                                "$precision$", String::CreateFromInt32(nRealPrecision),
-                                "$scale$", String::CreateFromInt32(nScale)
+                                STR_INVALID_COLUMN_DECIMAL_VALUE
+                                ,aStringToSubstitutes
                              ) );
                         ::dbtools::throwGenericSQLException( sError, *this );
                     }
@@ -1644,12 +1633,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 break;
             }
         }
-        catch( SQLException& e )
+        catch( SQLException&  )
         {
-            aSQLError = ::cppu::getCaughtException();
-            bHadError = sal_True;
-            nErrorCode = e.ErrorCode;
-            sSQLState = e.SQLState;
+            throw;
         }
         catch ( Exception& ) { bHadError = sal_True; }
 

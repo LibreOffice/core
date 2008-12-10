@@ -137,6 +137,11 @@ String STR_LINKEDDOC_DOESNOTEXIST
     Text [ en-US ] = "The file\n$file$\ndoes not exist.";
 };
 
+String STR_LINKEDDOC_NO_SYSTEM_FILE
+{
+    Text [ en-US ] = "The file\n$file$\ndoes not exist in the local file system.";
+};
+
 String STR_NAME_CONFLICT
 {
     Text [ en-US ] = "The name '$file$' is already used for another database.\nPlease choose a different name.";

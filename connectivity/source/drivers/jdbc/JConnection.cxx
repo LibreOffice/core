@@ -880,7 +880,7 @@ namespace
     {
         ::rtl::OUString sError1( _aResource.getResourceStringWithSubstitution(
                 STR_NO_CLASSNAME,
-                "$class$", _rDriverClass
+                "$classname$", _rDriverClass
              ) );
         if ( _rDriverClassPath.getLength() )
         {

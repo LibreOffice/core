@@ -1491,16 +1491,14 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     MapMode   eTargetMode( _rOutDev.GetMapMode() ),
               eSourceMode( MAP_100TH_MM );
 
-    // Textbreite ist mindestens 5cm
+    // Textbreite ist mindestens 4cm
     // Texthoehe immer halber cm
-    ::Size aDefTxtSize(3000, 500);
+    ::Size aDefTxtSize(4000, 500);
     ::Size aDefSize(4000, 500);
     ::Size aDefImageSize(4000, 4000);
-    // Abstand zwischen Text und Control
-    ::Size aDelta(500, 0);
 
     ::Size aRealSize = _rOutDev.LogicToLogic(aTextSize, eTargetMode, eSourceMode);
-    aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width()) + aDelta.Width();
+    aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width());
     aRealSize.Height()= aDefSize.Height();
 
     // je nach Skalierung des Zieldevices muss die Groesse noch normiert werden (#53523#)

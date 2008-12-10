@@ -1920,7 +1920,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
     }
     // row_value_constructor comparison row_value_constructor
     // row_value_constructor comparison any_all_some subquery
-    else if(bNegate  && SQL_ISRULE(pSearchCondition,comparison_predicate) || SQL_ISRULE(pSearchCondition,all_or_any_predicate))
+    else if(bNegate && (SQL_ISRULE(pSearchCondition,comparison_predicate) || SQL_ISRULE(pSearchCondition,all_or_any_predicate)))
     {
         OSQLParseNode* pComparison = pSearchCondition->getChild(1);
         OSQLParseNode* pNewComparison = NULL;

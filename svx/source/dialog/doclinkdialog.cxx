@@ -147,6 +147,16 @@ namespace svx
             aError.Execute();
             return 0L;
         } // if (!bFileExists)
+        INetURLObject aURL( sURL );
+        if ( aURL.GetProtocol() != INET_PROT_FILE )
+        {
+            String sMsg = String(SVX_RES(STR_LINKEDDOC_NO_SYSTEM_FILE));
+            sMsg.SearchAndReplaceAscii("$file$", m_aURL.GetText());
+            ErrorBox aError(this, WB_OK , sMsg);
+            aError.Execute();
+            return 0L;
+        }
+
         String sCurrentText = m_aName.GetText();
         if ( m_aNameValidator.IsSet() )
         {
