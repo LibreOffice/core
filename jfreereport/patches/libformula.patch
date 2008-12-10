@@ -19,3 +19,14 @@
   build.retro.target=1.2
   build.retro.jdk=/opt/jdk1.2.2
   
+--- misc/libformula/source/org/jfree/formula/function/text/MidFunctionDescription.java	2007-10-18 08:21:30.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/text/MidFunctionDescription.java	2008-07-07 14:44:01.790739928 +0200
+@@ -62,7 +62,7 @@
+ 
+   public Type getParameterType(final int position)
+   {
+-    if(position == 1)
++    if(position == 0)
+     {
+       return TextType.TYPE;
+     }

@@ -54,7 +54,8 @@ TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
 
 CONVERTFILES=build.xml\
-                build.properties
+            build.properties \
+            source/org/jfree/formula/function/text/MidFunctionDescription.java
 
 OUT2CLASS=$(TARGET)$(VERSION).jar
 
