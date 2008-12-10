@@ -1545,8 +1545,10 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
     OutRTFBorders(pFmt->GetAttrSet().GetBox());
 
     // falls es gesharte Heaer/Footer gibt, so gebe diese auch noch aus
-    if( nsUseOnPage::PD_MIRROR & pAktPageDesc->GetUseOn() &&
-        !pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared() )
+    if (
+        (nsUseOnPage::PD_MIRROR & pAktPageDesc->GetUseOn()) &&
+        (!pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared())
+       )
     {
         bOutLeftHeadFoot = TRUE;
         const SfxPoolItem* pHt;

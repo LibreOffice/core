@@ -99,6 +99,7 @@ namespace nsSwDocInfoSubType
     const SwDocInfoSubType DI_SUB_TIME      = 0x0200;
     const SwDocInfoSubType DI_SUB_DATE      = 0x0300;
     const SwDocInfoSubType DI_SUB_FIXED     = 0x1000;
+    const SwDocInfoSubType DI_SUB_MASK      = 0xff00;
 }
 
 

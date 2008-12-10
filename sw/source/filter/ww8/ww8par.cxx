@@ -3502,8 +3502,14 @@ void wwSectionManager::InsertSegments()
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
     {
         mySegIter aNext = aIter+1;
+        mySegIter aPrev = (aIter == aStart) ? aIter : aIter-1;
 
-        bool bInsertSection = aIter != aStart ? aIter->IsContinous() : false;
+        // If two following sections are different in following properties, Word will interprete a continuous
+        // section break between them as if it was a section break next page.
+        bool bThisAndPreviousAreCompatible = ((aIter->GetPageWidth() == aPrev->GetPageWidth()) &&
+            (aIter->GetPageHeight() == aPrev->GetPageHeight()) && (aIter->IsLandScape() == aPrev->IsLandScape()));
+
+        bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = !bUseEnhFields && SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
         if (bInsertPageDesc)
@@ -3518,7 +3524,10 @@ void wwSectionManager::InsertSegments()
             */
 
             bool bIgnoreCols = false;
-            if ((aNext != aEnd && aNext->IsContinous() || bProtected))
+            bool bThisAndNextAreCompatible = (aNext != aEnd) ? ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
+                (aIter->GetPageHeight() == aNext->GetPageHeight()) && (aIter->IsLandScape() == aNext->IsLandScape())) : true;
+
+            if ((aNext != aEnd && aNext->IsContinous() && bThisAndNextAreCompatible || bProtected))
             {
                 bIgnoreCols = true;
                 if ((aIter->NoCols() > 1) || bProtected)

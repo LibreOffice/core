@@ -6003,7 +6003,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //recorded as 3 byte;
         {0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate},
         {0x6649, 0},                                 //undocumented
-        {0xF614, 0},                                 //undocumented
+        {0xF614, 0},                                 //"sprmTTableWidth"
+                                                     //recorded as 3 bytes;
         {0xD612, 0},                                 //undocumented
         {0xD613, 0},                                 //undocumented
         {0xD61A, 0},                                 //undocumented

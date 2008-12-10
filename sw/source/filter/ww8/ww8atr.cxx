@@ -2549,26 +2549,26 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     eFld = ww::eREVNUM;
                     break;
                 case DI_CREATE:
-                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_AUTHOR))
+                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eFld = ww::eAUTHOR;
                     else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::eCREATEDATE;
                     break;
 
                 case DI_CHANGE:
-                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_AUTHOR))
+                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eFld = ww::eLASTSAVEDBY;
                     else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::eSAVEDATE;
                     break;
 
                 case DI_PRINT:
-                    if (DI_SUB_AUTHOR != (nSubType & DI_SUB_AUTHOR) &&
+                    if (DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK) &&
                         rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::ePRINTDATE;
                     break;
                 case DI_EDIT:
-                    if( DI_SUB_AUTHOR != (nSubType & DI_SUB_AUTHOR ) &&
+                    if( DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK ) &&
                         rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                         eFld = ww::eSAVEDATE;
                     break;

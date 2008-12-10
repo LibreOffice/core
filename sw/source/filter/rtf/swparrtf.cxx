@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swparrtf.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,6 +224,7 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     bInPgDscTbl = bNewNumList = false;
     bFirstContinue = true;
     bContainsPara = false;
+    bContainsTablePara = false;
     bNestedField = false;
     bForceNewTable = false;
 

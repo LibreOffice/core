@@ -188,7 +188,7 @@ public:
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
     SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, const BYTE nLevel,
-        std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0) const;
+        std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0);
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
 private:
@@ -220,6 +220,7 @@ private:
     //No copying
     WW8ListManager(const WW8ListManager&);
     WW8ListManager& operator=(const WW8ListManager&);
+    sal_uInt16 nLastLFOPosition;
 };
 
 //-----------------------------------------

@@ -2280,11 +2280,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // values, if it differs from the one in the FSPA.
         if ( pRecord->nXRelTo == 2 && pRecord->nYRelTo == 2 )
         {
-            // if <nXRelTo> differs from <FSPA.nbx> overwrite <nXRelTo>
-            if ( pFSPA->nbx != pRecord->nXRelTo )
-            {
-                pRecord->nXRelTo = pFSPA->nbx;
-            }
             // if <nYRelTo> differs from <FSPA.nby> overwrite <nYRelTo>
             if ( pFSPA->nby != pRecord->nYRelTo )
             {
