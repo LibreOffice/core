@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: element.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,6 +173,7 @@ namespace DOM
             xmlChar *xValue = (xmlChar*)xmlGetNsProp(m_aNodePtr, xName, xNS);
             if (xValue != NULL) {
                 aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
+                xmlFree(xValue);
             }
         }
         return aValue;

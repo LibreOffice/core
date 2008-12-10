@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodelist.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include "libxml/tree.h"
 #include "libxml/xpath.h"
+#include <boost/shared_ptr.hpp>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -54,10 +55,11 @@ namespace XPath
     class CNodeList : public cppu::WeakImplHelper1< XNodeList >
     {
     private:
+        boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
-        CNodeList(const xmlXPathObjectPtr xpathObj);
+        CNodeList(boost::shared_ptr<xmlXPathObject> &rxpathObj);
         /**
         The number of nodes in the list.
         */
