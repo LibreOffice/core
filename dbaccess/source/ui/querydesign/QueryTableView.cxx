@@ -1054,8 +1054,6 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
 
     return bSuccess;
 }
-
-
 //------------------------------------------------------------------------
 void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 {

@@ -76,7 +76,7 @@
 #define HID_RPT_PROP_DETAILFIELDS               (HID_RPT_START + 38)
 #define HID_RPT_PROP_AREA                       (HID_RPT_START + 39)
 #define UID_RPT_RPT_PROP_DLG_AREA               (HID_RPT_START + 40)
-// free
+#define HID_RPT_PROP_MIMETYPE                   (HID_RPT_START + 41)
 // free
 // free
 #define HID_RPT_PROP_PRINTREPEATEDVALUES        (HID_RPT_START + 44)

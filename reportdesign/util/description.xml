@@ -7,7 +7,7 @@
     <!-- <name lang="en-US">Sun(TM) Report Builder</name> -->
   </display-name>
   <registration>
-    <simple-license accept-by="admin" default-license-id="en-US" >
+    <simple-license accept-by="admin" default-license-id="lic-en-US" >
             <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
     </simple-license>
   </registration>

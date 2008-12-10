@@ -122,6 +122,12 @@
              style-family="chart"
              type="styleNameRef"/>
     <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+             element-name="title"
+             attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+             attribute-name="style-name"
+             style-family="chart"
+             type="styleNameRef"/>
+    <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
              element-name="axis"
              attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
              attribute-name="style-name"

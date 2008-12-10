@@ -408,9 +408,15 @@ void OSelectionBrowseBox::Init()
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
 
-    //xxx richtige Zeilenhoehe fuer EditEng ???
-    long nLSize = GetDataWindow().GetTextHeight() + 4;
-    SetDataRowHeight(nLSize);
+    Size aHeight;
+    const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
+    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    {
+        const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
+        if ( aTemp.Height() > aHeight.Height() )
+            aHeight.Height() = aTemp.Height();
+    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    SetDataRowHeight(aHeight.Height());
     SetTitleLines(1);
     // Anzahl der sichtbaren Zeilen ermitteln
     for(long i=0;i<BROW_ROW_CNT;i++)
@@ -1329,7 +1335,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
     if (nRow == BROW_VIS_ROW)
         PaintTristate(rDev, rRect, pEntry->IsVisible() ? STATE_CHECK : STATE_NOCHECK);
     else
-        rDev.DrawText(rRect.TopLeft(), GetCellText(nRow, nColumnId));
+        rDev.DrawText(rRect, GetCellText(nRow, nColumnId),TEXT_DRAW_VCENTER);
 
     rDev.SetClipRegion( );
 }
@@ -1338,15 +1344,15 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
 void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    Point   aPos(rRect.TopLeft());
-    aPos.Y() -= 2;
+    Rectangle aRect(rRect);
+    aRect.TopLeft().Y() -= 2;
     String  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
 
     // ab BROW_CRIT2_ROW werden alle Zeilen mit "oder" angegeben
     xub_StrLen nToken = (xub_StrLen) (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
                                 ?
             xub_StrLen(BROW_CRIT2_ROW) : xub_StrLen(GetRealRow(m_nSeekRow));
-    rDev.DrawText(aPos, aLabel.GetToken(nToken));
+    rDev.DrawText(aRect, aLabel.GetToken(nToken),TEXT_DRAW_VCENTER);
 }
 
 //------------------------------------------------------------------------------
@@ -2833,5 +2839,21 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 // -----------------------------------------------------------------------------
+bool OSelectionBrowseBox::HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const
+{
+    OTableFields& aFields = getFields();
+    OTableFields::iterator aIter = aFields.begin();
+    OTableFields::iterator aEnd  = aFields.end();
 
+    for(;aIter != aEnd;++aIter)
+    {
+        if ( (*aIter)->GetFieldAlias() == rFieldName )
+        {
+            rInfo = *aIter;
+            break;
+        }
+    }
+    return aIter != aEnd;
+}
+// -----------------------------------------------------------------------------
 

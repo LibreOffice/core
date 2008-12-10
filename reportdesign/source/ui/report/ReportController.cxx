@@ -50,6 +50,7 @@
 #include "ReportDefinition.hxx"
 #include "CondFormat.hxx"
 #include "UITools.hxx"
+#include "AddField.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "DateTime.hxx"
 #include <svtools/syslocale.hxx>
@@ -84,6 +85,8 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/streamsection.hxx>
@@ -290,6 +293,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 ,m_xContext(xContext)
 ,m_nSplitPos(-1)
 ,m_nPageNum(-1)
+,m_nSelectionCount(0)
 ,m_nZoomValue(100)
 ,m_eZoomType(SVX_ZOOM_PERCENT)
 ,m_bShowRuler(sal_True)
@@ -427,7 +431,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable();
             break;
         case SID_ADD_CONTROL_PAIR:
-            aReturn.bEnabled = isEditable() && m_pMyOwnView->getMarkedSection().get() != NULL;
+            aReturn.bEnabled = isEditable();
             break;
         case SID_REDO:
         case SID_UNDO:
@@ -439,9 +443,9 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_OBJECT_SMALLESTHEIGHT:
         case SID_OBJECT_GREATESTWIDTH:
         case SID_OBJECT_GREATESTHEIGHT:
-            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && m_pMyOwnView->isAlignPossible();
+            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection();// && m_pMyOwnView->isAlignPossible();
             if ( aReturn.bEnabled )
-                aReturn.bEnabled = m_pMyOwnView->getMarkedObjectCount() > 1;
+                aReturn.bEnabled = m_nSelectionCount > 1;
             break;
 
         case SID_DISTRIBUTION:
@@ -501,7 +505,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_SECTION_ALIGN_UP:
         case SID_SECTION_ALIGN_MIDDLE:
         case SID_SECTION_ALIGN_DOWN:
-            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && m_pMyOwnView->isAlignPossible();
+            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection();// && m_pMyOwnView->isAlignPossible();
             break;
         case SID_CUT:
             aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && !m_pMyOwnView->isHandleEvent(_nId);
@@ -1657,6 +1661,18 @@ void OReportController::impl_initialize( )
             m_xFormatter.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
+            if ( !m_xReportDefinition->getCommand().getLength() && getConnection().is())
+            {
+                uno::Reference<sdbcx::XTablesSupplier> xTablesSup(getConnection(),uno::UNO_QUERY_THROW);
+                uno::Reference<container::XNameAccess> xTables = xTablesSup->getTables();
+                const uno::Sequence< ::rtl::OUString > aNames( xTables->getElementNames() );
+
+                if ( aNames.hasElements() )
+                {
+                    m_xReportDefinition->setCommand(aNames[0]);
+                    m_xReportDefinition->setCommandType(sdb::CommandType::TABLE);
+                }
+            }
 
         } // if ( m_xReportDefinition.is() )
 
@@ -1696,7 +1712,7 @@ void OReportController::impl_initialize( )
             m_pMyOwnView->setCurrentPage(m_sLastActivePage);
             uno::Sequence< beans::PropertyValue> aArgs;
             executeUnChecked(SID_SELECT_REPORT,aArgs);
-        }
+        } // if ( m_bShowProperties && m_nPageNum == -1 )
 
         setModified(sal_False);     // and we are not modified yet
 
@@ -1714,6 +1730,18 @@ IMPL_LINK( OReportController, OnOpenHelpAgent, void* ,/*_pMemfun*/)
 {
     //m_nExecuteReportEvent = 0;
     doOpenHelpAgent();
+    return 0L;
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow* ,_pAddFieldDlg)
+{
+    WaitObject aObj(m_pMyOwnView);
+    uno::Sequence< beans::PropertyValue > aArgs = _pAddFieldDlg->getSelectedFieldDescriptors();
+    // we use this way to create undo actions
+    if ( aArgs.getLength() )
+    {
+        executeChecked(SID_ADD_CONTROL_PAIR,aArgs);
+    }
     return 0L;
 }
 // -----------------------------------------------------------------------------
@@ -2469,7 +2497,12 @@ void OReportController::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         && (static_cast< DlgEdHint const & >(rHint).GetKind()
             == RPTUI_HINT_SELECTIONCHANGED))
     {
-        InvalidateAll();
+        const sal_Int32 nSelectionCount = m_pMyOwnView->getMarkedObjectCount();
+        if ( m_nSelectionCount != nSelectionCount )
+        {
+            m_nSelectionCount = nSelectionCount;
+            InvalidateAll();
+        }
         lang::EventObject aEvent(*this);
         m_aSelectionListeners.forEach<view::XSelectionChangeListener>(
             ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
@@ -3086,7 +3119,12 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     pSectionWindow[0] = m_pMyOwnView->getMarkedSection();
 
     if ( !pSectionWindow[0] )
-        return;
+    {
+        select(uno::makeAny(m_xReportDefinition->getDetail()));
+        pSectionWindow[0] = m_pMyOwnView->getMarkedSection();
+        if ( !pSectionWindow[0] )
+            return;
+    }
 
     uno::Reference<report::XSection> xCurrentSection = m_pMyOwnView->getCurrentSection();
     UndoManagerListAction aUndo( *getUndoMgr(), String( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
@@ -3928,8 +3966,7 @@ bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndo
 void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
-    const rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
-    _rState.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE && sShapeType.compareToAscii(_pCustomShapeType) == 0;
+    _rState.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE && m_pMyOwnView->GetInsertObjString().compareToAscii(_pCustomShapeType) == 0;
 }
 // -----------------------------------------------------------------------------
 void OReportController::openZoomDialog()

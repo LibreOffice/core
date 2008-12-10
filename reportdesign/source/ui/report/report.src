@@ -629,3 +629,23 @@ String RID_ERR_NO_OBJECTS
 {
     Text [ en-US ] = "The report can not be executed unless at least one object has been inserted.";
 };
+String RID_STR_DETAIL
+{
+    Text [ en-US ] = "Detail";
+};
+String RID_STR_PAGE_HEADER
+{
+    Text [ en-US ] = "Page Header";
+};
+String RID_STR_PAGE_FOOTER
+{
+    Text [ en-US ] = "Page Footer";
+};
+String RID_STR_REPORT_HEADER
+{
+    Text [ en-US ] = "Report Header";
+};
+String RID_STR_REPORT_FOOTER
+{
+    Text [ en-US ] = "Report Footer";
+};

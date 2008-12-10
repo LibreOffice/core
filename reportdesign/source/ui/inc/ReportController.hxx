@@ -77,6 +77,7 @@ namespace rptui
     class OPropertyMediator;
     class OReportModel;
     class OSectionView;
+    class OAddFieldWindow;
 
     typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
     typedef ::cppu::ImplHelper4 <   ::com::sun::star::container::XContainerListener
@@ -117,6 +118,7 @@ namespace rptui
         ::rtl::OUString         m_sMode;                /// the current mode of the controller
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
+        sal_Int32               m_nSelectionCount;
         sal_Int16               m_nZoomValue;
         SvxZoomType             m_eZoomType;
         sal_Bool                m_bShowRuler;
@@ -127,7 +129,6 @@ namespace rptui
         sal_Bool                m_bHelplinesMove;
         bool                    m_bChartEnabled;
         bool                    m_bChartEnabledAsked;
-
 
         /** creates a formatted field in the given section with the given formula as data field
         *
@@ -317,6 +318,7 @@ namespace rptui
 
         DECL_LINK( NotifyUndoActionHdl, SfxUndoAction* );
         DECL_LINK( EventLstHdl, VclWindowEvent* );
+        DECL_LINK( OnCreateHdl, OAddFieldWindow*);
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

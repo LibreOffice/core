@@ -139,7 +139,8 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
-        SqlParseError InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        SqlParseError   InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        bool            HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
         // save the position of the table window and the pos of the splitters
         // called when fields are deleted
         void DeleteFields( const ::rtl::OUString& rAliasName );

@@ -150,6 +150,7 @@ namespace rptui
     #define PROPERTY_ID_DETAILFIELDS                    36
     #define PROPERTY_ID_PREVIEW_COUNT                   37
     #define PROPERTY_ID_AREA                            38
+    #define PROPERTY_ID_MIMETYPE                        39
 
 //............................................................................
 } // namespace rptui

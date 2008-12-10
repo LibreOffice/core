@@ -600,10 +600,15 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                         {
                             xReportComponent->setPosition(aPos);
                             correctOverlapping(pObject,*this,false);
+                            Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
+                            aRet.setHeight(aRet.getHeight() + 1);
+                            aRet.setWidth(aRet.getWidth() + 1);
+                            if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
+                                m_xSection->setHeight(aRet.getHeight() + aRet.Top());
                         }
                         pBase->StartListening();
                     }
-                }
+                } // for (sal_Int32 i = 0; i < nCount; ++i)
             }
             catch(uno::Exception)
             {
@@ -772,7 +777,8 @@ sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
     else
     {
         const DataFlavorExVector& rFlavors = GetDataFlavorExVector();
-        if ( ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
+        if (   ::svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors)
+            || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
             return _rEvt.mnAction;
 
         const sal_Int8 nDropOption = ( OReportExchange::canExtract(rFlavors) ) ? DND_ACTION_COPYMOVE : DND_ACTION_NONE;
@@ -794,6 +800,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     sal_Int8 nDropOption = DND_ACTION_NONE;
     const TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     DataFlavorExVector& rFlavors = aDropped.GetDataFlavorExVector();
+    bool bMultipleFormat = ::svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors);
     if ( OReportExchange::canExtract(rFlavors) )
     {
         OReportExchange::TSectionElements aCopies = OReportExchange::extractCopies(aDropped);
@@ -803,7 +810,8 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
         //m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
     } // if ( OReportExchange::canExtract(rFlavors) )
-    else if ( ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
+    else if ( bMultipleFormat
+        || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
     {
         m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
         m_pView->UnmarkAll();
@@ -816,21 +824,41 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         if ( aDropPos.Y() > rRect.Bottom() )
             aDropPos.Y() = rRect.Bottom();
 
-        ::svx::ODataAccessDescriptor aDescriptor = ::svx::OColumnTransferable::extractColumnDescriptor(aDropped);
+        uno::Sequence<beans::PropertyValue> aValues;
+        if ( !bMultipleFormat )
+        {
+            ::svx::ODataAccessDescriptor aDescriptor = ::svx::OColumnTransferable::extractColumnDescriptor(aDropped);
+
+            aValues.realloc(1);
+            aValues[0].Value <<= aDescriptor.createPropertyValueSequence();
+        } // if ( !bMultipleFormat )
+        else
+            aValues = ::svx::OMultiColumnTransferable::extractDescriptor(aDropped);
+
+        beans::PropertyValue* pIter = aValues.getArray();
+        beans::PropertyValue* pEnd  = pIter + aValues.getLength();
+        for(;pIter != pEnd; ++pIter)
+        {
+            uno::Sequence<beans::PropertyValue> aCurrent;
+            pIter->Value >>= aCurrent;
+            sal_Int32 nLength = aCurrent.getLength();
+            if ( nLength )
+            {
+                aCurrent.realloc(nLength + 3);
+                aCurrent[nLength].Name = PROPERTY_POSITION;
+                aCurrent[nLength++].Value <<= AWTPoint(aDropPos);
+                // give also the DND Action (Shift|Ctrl) Key to really say what we want
+                aCurrent[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DNDAction"));
+                aCurrent[nLength++].Value <<= _rEvt.mnAction;
+
+                aCurrent[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Section"));
+                aCurrent[nLength++].Value <<= getSection();
+                pIter->Value <<= aCurrent;
+            }
+        }
+
         // we use this way to create undo actions
         OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
-        uno::Sequence<beans::PropertyValue> aValues( aDescriptor.createPropertyValueSequence() );
-        sal_Int32 nLength = aValues.getLength();
-        aValues.realloc(nLength + 3);
-        aValues[nLength].Name = PROPERTY_POSITION;
-        aValues[nLength++].Value <<= AWTPoint(aDropPos);
-        // give also the DND Action (Shift|Ctrl) Key to really say what we want
-        aValues[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DNDAction"));
-        aValues[nLength++].Value <<= _rEvt.mnAction;
-
-        aValues[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Section"));
-        aValues[nLength++].Value <<= getSection();
-
         rController.executeChecked(SID_ADD_CONTROL_PAIR,aValues);
         nDropOption = DND_ACTION_COPY;
     }

@@ -31,14 +31,19 @@
 #ifndef RPTUI_ADDFIELDWINDOW_HXX
 #define RPTUI_ADDFIELDWINDOW_HXX
 
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <svtools/svtreebx.hxx>
+#include <svtools/transfer.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/propmultiplex.hxx>
-#include <svtools/transfer.hxx>
-#include "ReportController.hxx"
+#include <comphelper/containermultiplexer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "cppuhelper/basemutex.hxx"
-#include <comphelper/containermultiplexer.hxx>
+#include <dbaccess/ToolBoxHelper.hxx>
+#include <vcl/toolbox.hxx>
+
 #include <rtl/ref.hxx>
 
 namespace rptui
@@ -51,11 +56,16 @@ class  OAddFieldWindow  :public FloatingWindow
                     ,   public ::cppu::BaseMutex
                     ,   public ::comphelper::OPropertyChangeListener
                     ,   public ::comphelper::OContainerListener
+                    ,   public dbaui::OToolBoxHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       m_xHoldAlive;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xRowSet;
+
+    ToolBox                                                                     m_aActions;
     ::std::auto_ptr<OAddFieldWindowListBox>                                     m_pListBox;
-    ::rptui::OReportController&                                                 m_rController;
+
+    Link                                                                        m_aCreateLink;
     ::rtl::OUString                                                             m_aCommandName;
     ::rtl::OUString                                                             m_sFilter;
     sal_Int32                                                                   m_nCommandType;
@@ -63,10 +73,15 @@ class  OAddFieldWindow  :public FloatingWindow
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
+    DECL_LINK( OnDoubleClickHdl, void* );
+    DECL_LINK( OnSelectHdl,      void* );
+    DECL_LINK( OnSortAction,     ToolBox* );
+
     OAddFieldWindow(const OAddFieldWindow&);
     void operator =(const OAddFieldWindow&);
 public:
-    OAddFieldWindow(::rptui::OReportController& _rController,Window* pParent);
+    OAddFieldWindow(Window* pParent
+                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xRowSet);
 
     virtual ~OAddFieldWindow();
     virtual void Resize();
@@ -79,7 +94,19 @@ public:
     inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  getColumns() const { return m_xColumns; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              getConnection() const;
 
-    sal_Bool    createSelectionControls( );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getSelectedFieldDescriptors();
+
+    /** will be called when the id of the image list is needed.
+        @param  _eBitmapSet
+            <svtools/imgdef.hxx>
+        @param  _bHiContast
+            <TRUE/> when in high contrast mode.
+    */
+    virtual ImageList getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+
+    /** will be called when the controls need to be resized.
+    */
+    virtual void resizeControls(const Size& _rDiff);
 
     /// Updates the current field list
     void Update();
@@ -90,6 +117,8 @@ public:
     * \param _rDescriptor the descriptor will be filled
     */
     void fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor);
+
+    inline void SetCreateHdl(const Link& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 
 private:
     // FmXChangeListener

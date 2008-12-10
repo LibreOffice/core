@@ -58,6 +58,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sfx2/docfilt.hxx>
 // =============================================================================
 namespace reportdesign
 {
@@ -170,16 +171,29 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
         if ( !m_xReport.is() || !m_xActiveConnection.is() )
             throw lang::IllegalArgumentException();
 
+        static const ::rtl::OUString s_sMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
         try
         {
+            const uno::Reference< lang::XMultiServiceFactory > xFactory(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW);
+            MimeConfigurationHelper aConfighelper(xFactory);
+            const ::rtl::OUString sMimeType = m_xReport->getMimeType();
+            const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
+            String sExt;
+            if ( pFilter )
+            {
+                sExt = pFilter->GetDefaultExtension();
+                sExt.EraseLeadingChars( '*' );
+            }
+            else
+                sExt = String::CreateFromAscii(".rpt");
+
             uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
             utl::DisposableComponent aTemp(xTemp);
             uno::Sequence< beans::PropertyValue > aEmpty;
             uno::Reference< beans::XPropertySet> xStorageProp(xTemp,uno::UNO_QUERY);
             if ( xStorageProp.is() )
             {
-                static const ::rtl::OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-                xStorageProp->setPropertyValue( sPropName, uno::makeAny(m_xReport->getMimeType()));
+                xStorageProp->setPropertyValue( s_sMediaType, uno::makeAny(sMimeType));
             }
             m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which aren't in the database yet.
 
@@ -189,18 +203,17 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             aConvertedProperties[nPos++].Value <<= xTemp;
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStorage"));
 
-            const static String s_sExt = String::CreateFromAscii(".rpt");
+
             String sName = m_xReport->getCaption();
             if ( !sName.Len() )
                 sName = m_xReport->getName();
-            ::utl::TempFile aFile(sName,sal_False,&s_sExt);
+            ::utl::TempFile aFile(sName,sal_False,&sExt);
             uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(aFile.GetURL(),embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
             utl::DisposableComponent aOut(xOut);
             xStorageProp.set(xOut,uno::UNO_QUERY);
             if ( xStorageProp.is() )
             {
-                static const ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-                xStorageProp->setPropertyValue( sPropName, uno::makeAny(m_xReport->getMimeType()));
+                xStorageProp->setPropertyValue( s_sMediaType, uno::makeAny(sMimeType));
             }
 
             aConvertedProperties[nPos++].Value <<= xOut;
@@ -225,7 +238,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 
             // create job factory and initialize
-            const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW));
+            const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(xFactory);
             uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
             if ( m_xReport->getCommand().getLength() )
             {

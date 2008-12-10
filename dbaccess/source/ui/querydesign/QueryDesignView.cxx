@@ -434,7 +434,11 @@ namespace
             bErg = (pSTW && pSTW->ExistsField( aColumnName, _rDragInfo ) );
         }
         if ( !bErg )
+        {
             bErg = static_cast<OQueryTableView*>(_pView->getTableView())->FindTableFromField(aColumnName, _rDragInfo, nCntAccount);
+            if ( !bErg )
+                bErg = _pView->HasFieldByAliasName(aColumnName, _rDragInfo);
+        }
         if ( !bErg )
         {
             eErrorCode = eColumnNotFound;
@@ -2833,6 +2837,11 @@ void OQueryDesignView::TableDeleted(const ::rtl::OUString& rAliasName)
 void OQueryDesignView::DeleteFields( const ::rtl::OUString& rAliasName )
 {
     m_pSelectionBox->DeleteFields( rAliasName );
+}
+// -----------------------------------------------------------------------------
+bool OQueryDesignView::HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo)  const
+{
+    return m_pSelectionBox->HasFieldByAliasName( rFieldName, rInfo);
 }
 // -----------------------------------------------------------------------------
 SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis, sal_Bool bActivate)

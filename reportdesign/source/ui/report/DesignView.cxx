@@ -600,13 +600,16 @@ void ODesignView::toggleAddField()
             uno::Reference< report::XSection > xSection = m_pCurrentView->getReportSection()->getSection();
             xReport = xSection->getReportDefinition();
         }
-        m_pAddField = new OAddFieldWindow(rReportController,this);
+        uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
+        m_pAddField = new OAddFieldWindow(this,xSet);
+        m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( UID_RPT_RPT_APP_VIEW ) );
         if ( aDlgOpt.Exists() )
             m_pAddField->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pAddField->Update();
         m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+        m_pAddField->Show();
     }
     else
         m_pAddField->Show(!m_pAddField->IsVisible());

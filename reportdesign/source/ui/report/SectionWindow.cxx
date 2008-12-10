@@ -151,8 +151,18 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         }
         else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
         {
-            m_aStartMarker.setTitle(xSection->getName());
-            m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
+            uno::Reference< report::XReportDefinition > xReport = xSection->getReportDefinition();
+            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn))
+                ||  setReportSectionTitle(xReport,RID_STR_REPORT_FOOTER,::std::mem_fun(&OReportHelper::getReportFooter),::std::mem_fun(&OReportHelper::getReportFooterOn))
+                ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
+                ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
+                m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
+            else
+            {
+                String sTitle = String(ModuleRes(RID_STR_DETAIL));
+                m_aStartMarker.setTitle(sTitle);
+                m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
+            }
         }
     } // if ( xSection.is() )
     else if ( _rEvent.PropertyName.equals(PROPERTY_EXPRESSION) )
@@ -160,23 +170,37 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
         if ( xGroup.is() )
         {
-            setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fun(&OGroupHelper::getHeader),::std::mem_fun(&OGroupHelper::getHeaderOn));
-            setGroupSectionTitle(xGroup,RID_STR_FOOTER,::std::mem_fun(&OGroupHelper::getFooter),::std::mem_fun(&OGroupHelper::getFooterOn));
+            if ( !setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fun(&OGroupHelper::getHeader),::std::mem_fun(&OGroupHelper::getHeaderOn)) )
+                setGroupSectionTitle(xGroup,RID_STR_FOOTER,::std::mem_fun(&OGroupHelper::getFooter),::std::mem_fun(&OGroupHelper::getFooterOn));
         }
     }
 }
 // -----------------------------------------------------------------------------
-void OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
+{
+    OReportHelper aReportHelper(_xReport);
+    const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
+    if ( bRet )
+    {
+        String sTitle = String(ModuleRes(_nResId));
+        m_aStartMarker.setTitle(sTitle);
+        m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
+    } // if ( bRet )
+    return bRet;
+}
+// -----------------------------------------------------------------------------
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
-    if ( _pIsSectionOn(&aGroupHelper) )
+    const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
+    if ( bRet )
     {
-        uno::Reference< report::XSection > xSection = _pGetSection(&aGroupHelper);
         String sTitle = String(ModuleRes(_nResId));
         sTitle.SearchAndReplace('#',_xGroup->getExpression());
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
-    }
+    } // if ( _pIsSectionOn(&aGroupHelper) )
+    return bRet;
 }
 //------------------------------------------------------------------------------
 void OSectionWindow::ImplInitSettings()
@@ -316,7 +340,7 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
     const Point aPos = _pSplitter->GetPosPixel();
-    _pSplitter->SetPosPixel( Point( aPos.X(),nSplitPos ));
+
 
     const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
     nSplitPos = m_aSplitter.PixelToLogic(Size(0,nSplitPos)).Height();
@@ -326,18 +350,17 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference<report::XReportComponent> xReportComponent(xSection->getByIndex(i),uno::UNO_QUERY);
-        if ( xReportComponent.is() && nSplitPos < (xReportComponent->getPositionY() + xReportComponent->getHeight()) )
+        if ( xReportComponent.is() /*&& nSplitPos < (xReportComponent->getPositionY() + xReportComponent->getHeight())*/ )
         {
-            nSplitPos = xReportComponent->getPositionY() + xReportComponent->getHeight();
-            break;
+            nSplitPos = ::std::max(nSplitPos,xReportComponent->getPositionY() + xReportComponent->getHeight());
         }
-    }
+    } // for (sal_Int32 i = 0; i < nCount; ++i)
 
-    //nSplitPos += xSection->getHeight();
     if ( nSplitPos < 0 )
         nSplitPos = 0;
 
     xSection->setHeight(nSplitPos);
+    m_aSplitter.SetSplitPosPixel(m_aSplitter.LogicToPixel(Size(0,nSplitPos)).Height());
 
     return 0L;
 }

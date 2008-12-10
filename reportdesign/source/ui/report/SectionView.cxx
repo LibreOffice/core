@@ -75,7 +75,7 @@ void OSectionView::MarkListHasChanged()
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     SdrView::MarkListHasChanged();
 
-    if ( m_pReportWindow )
+    if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
     {
         //m_pReportWindow->unmarkAllObjects(this); // WHY
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );

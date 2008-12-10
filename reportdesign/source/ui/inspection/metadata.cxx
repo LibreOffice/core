@@ -176,6 +176,7 @@ namespace rptui
             ,DEF_INFO_2( MASTERFIELDS,                  MASTERFIELDS,               MASTERFIELDS,               COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               COMPOSEABLE,DATA_PROPERTY)
             ,DEF_INFO_1( AREA,                          AREA,                       AREA,                       COMPOSEABLE )
+            ,DEF_INFO_2( MIMETYPE,                      MIMETYPE,                   MIMETYPE,                   COMPOSEABLE,DATA_PROPERTY )
         };
 
         s_pPropertyInfos = aPropertyInfos;

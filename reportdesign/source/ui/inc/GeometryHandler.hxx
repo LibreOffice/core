@@ -162,11 +162,29 @@ namespace rptui
         */
         void impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
 
-        /**return all group names in a semicolon seperated list starting with the group where this control is contained in.
+        /** return all group names in a semicolon seperated list starting with the group where this control is contained in.
         *
         * \param _rList fills the list with all scope names.
         */
         void impl_fillScopeList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
+
+        /** return all supported output formats of the report definition
+        *
+        * \param _rList fills the list with all mime types
+        */
+        void impl_fillMimeTypes_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
+
+        /** return the one supported output formats of the report definition
+        *
+        * \param _sMimetype the mimetype
+        */
+        ::rtl::OUString impl_ConvertMimeTypeToUI_nothrow(const ::rtl::OUString& _sMimetype) const;
+
+        /** return the MimeType for the given UI Name
+        *
+        * \param _sUIName the doc ui name
+        */
+        ::rtl::OUString impl_ConvertUIToMimeType_nothrow(const ::rtl::OUString& _sUIName) const;
 
         /** get the functions supplier for the set scope, default is the surrounding group.
         *
