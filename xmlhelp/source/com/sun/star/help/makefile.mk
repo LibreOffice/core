@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.39 $
+# $Revision: 1.38 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,6 +98,7 @@ DEFLIB1NAME	=$(TARGET)
 JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
 
 JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar

@@ -306,6 +306,9 @@ namespace chelp {
 
         rtl::OUString expandURL( const rtl::OUString& aURL );
 
+        static rtl::OUString expandURL( const rtl::OUString& aURL,
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext );
+
     private:
 
         osl::Mutex                                                                     m_aMutex;
@@ -448,6 +451,8 @@ namespace chelp {
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        rtl::OUString implGetFileFromPackage( const rtl::OUString& rFileExtension,
+            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >    m_xSFA;
@@ -535,6 +540,22 @@ namespace chelp {
             implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
     }; // end class JarFileIterator
+
+    //===================================================================
+    class IndexFolderIterator : public ExtensionIteratorBase
+    {
+    public:
+        IndexFolderIterator( Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
+            : ExtensionIteratorBase( rDatabases, aInitialModule, aLanguage )
+        {}
+
+        rtl::OUString nextIndexFolder( bool& o_rbExtension );
+
+    private:
+        rtl::OUString implGetIndexFolderFromPackage(
+            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+
+    }; // end class KeyDataBaseFileIterator
 
     //===================================================================
 

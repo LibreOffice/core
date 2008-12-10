@@ -35,6 +35,7 @@
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
+#include "osl/file.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "svtools/inettype.hxx"
@@ -44,6 +45,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -258,6 +260,15 @@ void BackendImpl::implProcessHelp
                 makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
         }
 
+        Reference<XComponentContext> const & xContext = getComponentContext();
+        Reference< script::XInvocation > xInvocation;
+        if( xContext.is() )
+        {
+            xInvocation = Reference< script::XInvocation >(
+                xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
+                "com.sun.star.help.HelpIndexer" ), xContext ) , UNO_QUERY );
+        }
+
         // Scan languages
         Sequence< rtl::OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
         sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
@@ -334,6 +345,29 @@ void BackendImpl::implProcessHelp
                 HelpProcessingErrorInfo aErrorInfo;
                 bool bSuccess = compileExtensionHelp( aHelpStr, aLangURL,
                     nXhpFileCount, pXhpFiles, aErrorInfo );
+
+                if( bSuccess && xInvocation.is() )
+                {
+                    Sequence<uno::Any> aParamsSeq( 6 );
+
+                    aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
+                    rtl::OUString aLang;    // TODO
+                    aLang = rtl::OUString::createFromAscii( "de" ); // TODO
+                    aParamsSeq[1] = uno::makeAny( aLang );
+
+                    aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-mod" ) );
+                    aParamsSeq[3] = uno::makeAny( rtl::OUString::createFromAscii( "help" ) );
+
+                    aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-zipdir" ) );
+                    rtl::OUString aSystemPath;
+                    osl::FileBase::getSystemPathFromFileURL( aLangURL, aSystemPath );
+                    aParamsSeq[5] = uno::makeAny( aSystemPath );
+
+                    Sequence< sal_Int16 > aOutParamIndex;
+                    Sequence< uno::Any > aOutParam;
+                    uno::Any aRet = xInvocation->invoke( rtl::OUString::createFromAscii( "createIndex" ),
+                        aParamsSeq, aOutParamIndex, aOutParam );
+                }
 
                 if( !bSuccess )
                 {
