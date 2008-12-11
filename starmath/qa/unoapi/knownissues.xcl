@@ -5,6 +5,11 @@ sm.XMLMetaImporter::com::sun::star::xml::sax::XDocumentHandler
 ### i88645 ###
 sm.XMLExporter::com::sun::star::document::XFilter
 
-#TEST#
+### i94322 ###
 sm.SmEditAccessible::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i94320 ###
 sm.SmGraphicAccessible::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i94275 ###
+sm.SmGraphicAccessible::com::sun::star::accessibility::XAccessibleText
