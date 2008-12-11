@@ -37,10 +37,6 @@
 '*
 '\******************************************************************************
 
-Option Explicit
-
-private const CBUILDID = "680" ' This corresponds to the 680 codeline
-
 function hDeleteFile( cFileOrig as string ) as boolean
 
     const CFN = "hDeleteFile::"
@@ -306,7 +302,7 @@ function hHandleInitialDialogs() as integer
         if ( StarOfficeCalendar1.Exists() ) then
             printlog( CFN & "Closing StarOfficeCalendar1-dialog" )
             incident = 2
-            Create.Click()
+            Cancel.Click()
         endif
 
         '///+<li>Test for StarOfficeCalendar2-dialog (This should be idential to StarofficeCalendar1)</li>
@@ -314,7 +310,7 @@ function hHandleInitialDialogs() as integer
         if ( StarOfficeCalendar2.Exists() ) then
             printlog( CFN & "Closing StarOfficeCalendar2-dialog" )
             incident = 5
-            Create.Click()
+            Cancel.Click()
         endif
           
         '///+<li>Test for NewsletterLayout-dialog</li>
@@ -341,75 +337,6 @@ function hHandleInitialDialogs() as integer
     '///</ul>
 
 end function         
-
-'*******************************************************************************
-
-function hWaitWhileLoading() as boolean
-
-    '///<h3>Wait for a document to load</h3>
-    '///<i>Extends: IsItLoaded with 10 retries</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: Document was loaded</li>
-    '///+<li>FALSE: Document not loaded</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    ' IsItLoaded wastes at least 5 seconds on each call which is bad
-    ' for the extras test which run at least 20 minutes longer than 
-    ' necessary. The function works the same way as IsItLoaded but
-    ' eliminates a lot of sleep-cycles.
-    
-    dim iNextProbe as integer
-    dim brc as boolean
-    dim iTime as integer
-
-    const CFN = "hWaitWhileLoading::"
-    const I_MAX_WAIT = 30
-    const I_PROBE_INTERVAL = 100
-    
-    printlog( CFN & "Enter" )
-
-    '///+<li>Cycle for at most ten times to check the IsDocLoading-slot</li>
-    for iNextProbe = 1 to I_MAX_WAIT
-    
-        brc = false
-        wait( I_PROBE_INTERVAL )
-
-        '///+<li>while the file is loaded the slot will not be dispatched -> catch</li>
-        try
-            brc = IsDocLoading
-            hWaitWhileLoading() = true
-            iTime = iNextProbe * I_PROBE_INTERVAL
-            printlog( CFN & "File loaded in less than " & iTime & " ms" )
-        catch
-        endcatch
-
-        '///+<li>"exit for" within try...catch does not always work</li>
-        if ( brc ) then
-            exit for
-        endif
-
-    next iNextProbe
-
-    '///+<li>Warn if the document did not respond in at most 10 seconds</li>
-    if ( not brc ) then
-        printlog( CFN & "Exit: Did not get feedback within 10 seconds" )
-        hWaitWhileLoading() = true
-    else
-        printlog( CFN & "Exit" )
-    endif
-    '///</ul>
-
-end function
 
 '*******************************************************************************
 
@@ -484,84 +411,6 @@ function hGetWorkPath() as string
     hGetWorkPath() = sPath 
     '///</ul>
 
-end function
-
-'*******************************************************************************
-
-function hGetInputPath( byval sBasePath as string, byval sFile as string ) as string
-
-    '///<h3>Create an input path for reference files</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>BasePath (string) without trailing slash/backslash</li>
-    '///<ul>
-    '///+<li>Format: gTesttoolPath &amp; &quot;[project]\input\[dir]&quot;</li>
-    '///</ul>
-    '///+<li>Filename (string)</li>
-    '///<ul>
-    '///+<li>The name of the file below BasePath to be used</li>
-    '///+<li>The filename may be an empty string</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Full path to file: BasePath + Build-Id + ProductName + sFile</li>
-    '///<ul>
-    '///+<li>Build-ID (e.g. &quot;680&quot;, from environment)</li>
-    '///+<li>ProducName (e.g &quot;OpenOffice.org&quot;, from environment)</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hGetInputPath::"
-    dim sPath as string
-    dim iAttr as integer
-    dim cLastChar as string
-    dim iLen as integer
-    
-    sPath = convertpath( sBasePath )
-    
-    '///+<li>None of the two parameters may be empty</li>
-    if ( sPath = "" ) then
-        warnlog( CFN & "Invalid parameter: Empty string passed to function" )
-        hGetInputPath() = ""
-        exit function
-    endif
-
-    '///+<li>Remove trailing slash or backslash</li>
-    iLen = len( sPath )
-    cLastChar = right( sPath , 1 )
-    if ( cLastChar = gPathSigne ) then
-        sPath = mid( sPath , 1 , iLen - 1 )
-        printlog( CFN & "Truncated path: Trailing Pathseparator not allowed" )
-    endif
-
-    '///+<li>At least Basepath should exist</li>
-    if ( dir ( sPath ) = "" ) then
-        warnlog( CFN & "BasePath does not exist: " & sPath )
-        hGetInputPath() = ""
-        exit function
-    endif    
-    
-    '///+<li>We must be certain, that basepath is a directory</li>
-    iAttr = getAttr( sPath )
-    if ( iAttr < 16 or iAttr > 17 ) then
-        warnlog( CFN & "Invalid Path: Not a directory: " & sPath )
-        hGetInputPath() = ""
-        exit function
-    endif
-     
-    '///+<li>Now we concatenate all the information we have to a fully qualified path</li>
-    sPath = sPath & "\" & CBUILDID & "\" & gProductName & "\" & sFile
-    sPath = convertpath( sPath )
-    
-    '///+<li>...and return it (without further verification)</li>
-    printlog( CFN & sPath )
-    hGetInputPath() = sPath
-    
-    '///</ul>
-    
 end function
 
 '*******************************************************************************

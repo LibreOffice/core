@@ -39,8 +39,6 @@
 
 testcase tUpdtWizardDocumentConverter
     
-    '///<H1>Update test for documentconverter</H1>
-    '///<ul>
     dim irc as integer
     dim brc as boolean
     dim iDialog as integer
@@ -55,10 +53,8 @@ testcase tUpdtWizardDocumentConverter
     dim aFileList( 100 ) as string
     dim iCurrentFile as integer
     
-    '///+<li>Make sure exactly one single writer document is open</li>
     hInitSingleDoc()
     
-    '///+<li>Open the wizard</li>
     irc = hOpenWizardWithMenu( "DOCCONV" )
     if ( irc <> 0 ) then
         warnlog( "Unable to open requested wizard, aborting test" )
@@ -71,7 +67,6 @@ testcase tUpdtWizardDocumentConverter
     stargetFile = sTargetFile & "docconv1" & hGetSuffix( "current" )
     
     
-    '///+<li>Page 1 - select all four documenttypes</li>
     Kontext "DocumentConverter"
     hWaitForObject( CreateLogfile, 3000 )
     CreateLogfile.check()
@@ -86,7 +81,6 @@ testcase tUpdtWizardDocumentConverter
     
     ' as we selected all documenttypes, the settings page for each
     ' documenttype has to pop up
-    '///+<li>Check all file-open dialogs for all doctypes (4 pages)</li>
     for iDocumentType = 1 to 4
     
         ContinueButton.click()
@@ -113,7 +107,6 @@ testcase tUpdtWizardDocumentConverter
             Call Dialogtest (OeffnenDlg)
             OeffnenDLG.Cancel()
             
-            '///+<li>Set a source-path for documents</li>
             Kontext "DocumentConverter"
             ImportFormDocument.setText( sSourcePathWriter )
             
@@ -121,7 +114,6 @@ testcase tUpdtWizardDocumentConverter
         
     next iDocumentType
     
-    '///+<li>Summary page</li>
     Kontext "DocumentConverter"
     ContinueButton.click()
     
@@ -132,7 +124,6 @@ testcase tUpdtWizardDocumentConverter
         warnlog( "Page 6 - Summary Page is missing" )
     endif
     
-    '///+<li>Review the log / check that it is opened (Writer-Doc)</li>
     Kontext "DocumentConverter"
     ContinueButton.click()
 
@@ -153,18 +144,13 @@ testcase tUpdtWizardDocumentConverter
         endif
     loop
     
-    '///+<li>verify that exactly the document conversion results document is open</li>
     if ( getDocumentCount <> 1 ) then
         warnlog( "Exactly one - the conversion result document - should be open" )
     endif
     
-    '///+<li>Close document, shutdown the test, cleanup etc.</li>
     hDestroyDocument()
     hDeleteFile( sTargetFile )
     hDeleteFile( sLogFile )
-
-    
-    '///</ul>
 
 endcase
 

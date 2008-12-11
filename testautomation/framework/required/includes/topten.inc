@@ -193,10 +193,10 @@ testcase Top_ten_test
         hFileSave()
 
         Kontext "AlienWarning"
-        if AlienWarning.exists(5) then
+        if AlienWarning.exists() then ' was 5 secs.
             printlog "- alien warning came up. Good."
             AlienWarning.OK
-            sleep 5
+            hFileWait() 
         else
             if (gBuild > 8870) then '8871 is CWS alienwarning integrated SRC680m77
                 warnlog "- alien warning didn't came up."
