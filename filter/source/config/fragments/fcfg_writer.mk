@@ -31,12 +31,6 @@ T4_WRITER = \
     writer_MS_Word_2007_XML_Template \
     MediaWiki_File
 
-.IF "$(WITH_WRITER2LATEX)" != "NO"
-T4_WRITER += \
-    LaTeX \
-    BibTeX
-.ENDIF
-
 # -----------------------------------------------
 # count = 39
 F4_WRITER = \
@@ -68,12 +62,6 @@ F4_WRITER = \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
     MS_Word_2007_XML_Template
-
-.IF "$(WITH_WRITER2LATEX)" != "NO"
-F4_WRITER += \
-    LaTeX_Writer \
-    BibTeX_Writer
-.ENDIF
 
 # -----------------------------------------------
 # count = 14

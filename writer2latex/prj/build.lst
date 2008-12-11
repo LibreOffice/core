@@ -1,0 +1,2 @@
+wl	writer2latex	:	solenv jurt unoil javaunohelper NULL
+wl	writer2latex			nmake	-	all	wl_mkout NULL
