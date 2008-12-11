@@ -662,7 +662,7 @@ static PyObject *setCurrentContext( PyObject *, PyObject * args )
 
             Reference< com::sun::star::uno::XCurrentContext > context;
 
-            if( a.hasValue() && (a >>= context) || ! a.hasValue() )
+            if( (a.hasValue() && (a >>= context)) || ! a.hasValue() )
             {
                 ret = com::sun::star::uno::setCurrentContext( context ) ? Py_True : Py_False;
             }

@@ -1768,8 +1768,10 @@ void addBaseArguments(
         }
         firstField = 1;
     } else {
-        if (typeClass == RT_TYPE_STRUCT && (superTypes > 1 || fields == 0)
-            || typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
+        if (
+            (typeClass == RT_TYPE_STRUCT && (superTypes > 1 || fields == 0)) ||
+            (typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
+           )
         {
             throw CannotDumpException(
                 rtl::OString(
@@ -1871,10 +1873,16 @@ void handleAggregatingType(
             RTL_CONSTASCII_STRINGPARAM("java/lang/RuntimeException"));
         runtimeException = true;
     } else {
-        if ((typeClass == RT_TYPE_STRUCT
-             && (fields == 0
-                 || (references == 0 ? superTypes > 1 : superTypes != 0)))
-            || typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
+        if (
+             (
+              typeClass == RT_TYPE_STRUCT &&
+              (
+               fields == 0 ||
+               (references == 0 ? superTypes > 1 : superTypes != 0)
+              )
+             ) ||
+             (typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
+           )
         {
             throw CannotDumpException(
                 rtl::OString(

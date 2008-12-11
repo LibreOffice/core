@@ -559,8 +559,10 @@ void OPropertySetHelper::fire
             OUString aPropName;
             rInfo.fillPropertyMembersByHandle( &aPropName, &nAttributes, pnHandles[i] );
 
-            if( bVetoable && (nAttributes & PropertyAttribute::CONSTRAINED)
-              || !bVetoable && (nAttributes & PropertyAttribute::BOUND) )
+            if(
+               (bVetoable && (nAttributes & PropertyAttribute::CONSTRAINED)) ||
+               (!bVetoable && (nAttributes & PropertyAttribute::BOUND))
+              )
             {
                 pEvts[nChangesLen].Source = xSource;
                 pEvts[nChangesLen].PropertyName = aPropName;

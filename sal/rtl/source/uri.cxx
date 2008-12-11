@@ -61,8 +61,11 @@ inline bool isDigit(sal_uInt32 nUtf32)
 
 inline bool isAlpha(sal_uInt32 nUtf32)
 {
-    return nUtf32 >= 0x41 && nUtf32 <= 0x5A || nUtf32 >= 0x61 && nUtf32 <= 0x7A;
-        // 'A'--'Z', 'a'--'z'
+    // 'A'--'Z', 'a'--'z'
+    return (
+            (nUtf32 >= 0x41 && nUtf32 <= 0x5A) ||
+            (nUtf32 >= 0x61 && nUtf32 <= 0x7A)
+           );
 }
 
 inline bool isHighSurrogate(sal_uInt32 nUtf16)
@@ -266,7 +269,7 @@ void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
             static_cast< sal_Unicode >(nUtf32 >> 10 | 0xD800));
         writeUnicode(
             pBuffer, pCapacity,
-            static_cast< sal_Unicode >(nUtf32 & 0x3FF | 0xDC00));
+            static_cast< sal_Unicode >((nUtf32 & 0x3FF) | 0xDC00));
     }
 }
 
@@ -294,20 +297,20 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         else if (nUtf32 < 0x800)
         {
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 | 0xC0);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
+            writeEscapeOctet(pBuffer, pCapacity, (nUtf32 & 0x3F) | 0x80);
         }
         else if (nUtf32 < 0x10000)
         {
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 12 | 0xE0);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
+            writeEscapeOctet(pBuffer, pCapacity, (nUtf32 >> 6 & 0x3F) | 0x80);
+            writeEscapeOctet(pBuffer, pCapacity, (nUtf32 & 0x3F) | 0x80);
         }
         else
         {
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 18 | 0xF0);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 12 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
-            writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
+            writeEscapeOctet(pBuffer, pCapacity, (nUtf32 >> 12 & 0x3F) | 0x80);
+            writeEscapeOctet(pBuffer, pCapacity, (nUtf32 >> 6 & 0x3F) | 0x80);
+            writeEscapeOctet(pBuffer, pCapacity, (nUtf32 & 0x3F) | 0x80);
         }
     } else {
         rtl_UnicodeToTextConverter aConverter
@@ -452,8 +455,10 @@ rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
     for (sal_Unicode const * q = p; q != rBasePath.pEnd; ++q)
         if (*q == '/')
         {
-            if (q - p == 1 && p[0] == '.'
-                || q - p == 2 && p[0] == '.' && p[1] == '.')
+            if (
+                (q - p == 1 && p[0] == '.') ||
+                (q - p == 2 && p[0] == '.' && p[1] == '.')
+               )
             {
                 nFixed = q + 1 - rBasePath.pBegin;
             }
