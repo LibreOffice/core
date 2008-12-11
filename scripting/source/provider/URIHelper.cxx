@@ -52,12 +52,12 @@ static const char SHARE_URI[] =
     "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
 
 static const char SHARE_UNO_PACKAGES[] = "share:uno_packages";
-static const char SHARE_UNO_PACKAGES_DIR[] =
-    "/share/uno_packages/cache";
+static const char SHARE_UNO_PACKAGES_URI[] =
+    "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
 static const char USER[] = "user";
 static const char USER_URI[] =
-    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") ":::UserInstallation}";
+    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
 static const char USER_UNO_PACKAGES[] = "user:uno_packages";
 static const char USER_UNO_PACKAGES_DIR[] =
@@ -164,8 +164,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
     else if (m_sLocation.equalsAscii(SHARE_UNO_PACKAGES))
     {
         test = OUString::createFromAscii("uno_packages");
-        uri = OUString::createFromAscii(SHARE_URI);
-        uri = uri.concat(OUString::createFromAscii(SHARE_UNO_PACKAGES_DIR));
+        uri = OUString::createFromAscii(SHARE_UNO_PACKAGES_URI);
     }
     else if (m_sLocation.indexOf(OUString::createFromAscii(TDOC_SCHEME)) == 0)
     {
