@@ -2104,6 +2104,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 }
 
 
+#if 0
 /*  */
 
 USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
@@ -2222,7 +2223,7 @@ bool RowContainsProblematicGraphic(const SwWriteTableCellPtr *pRow,
     }
     return bHasGraphic;
 }
-
+#endif
 //---------------------------------------------------------------------------
 //       Tabellen
 //---------------------------------------------------------------------------

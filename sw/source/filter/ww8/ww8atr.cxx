@@ -3449,16 +3449,6 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
     return nRetPos;
 }
 
-void SwWW8Writer::WriteCellEnd()
-{
-    //Technically in a word document this is a different value for a
-    //cell without a graphic. But it doesn't seem to make a difference
-    ULONG nOffset = ReplaceCr( (BYTE)0x07 );
-    ASSERT(nOffset, "Eek!, no para end mark to replace with row end mark");
-    if (nOffset)
-        pMagicTable->Append(Fc2Cp(nOffset),0x122);
-}
-
 void SwWW8Writer::WriteRowEnd(sal_uInt32 nDepth)
 {
     if (nDepth == 1)

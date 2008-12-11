@@ -2082,7 +2082,7 @@ void SmSymDefineDialog::UpdateButtons()
         // oder wenn es noch kein Symbol des neuen Namens gibt (wuerde implizites
         // loeschen des bereits vorhandenen Symbols erfordern)
         BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
-        bChange = pOrigSymbol && (bEqualName && !bEqual || !bEqualName && bAdd);
+        bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
     }
 
     aAddBtn   .Enable(bAdd);

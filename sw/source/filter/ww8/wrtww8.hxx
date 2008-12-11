@@ -594,10 +594,11 @@ public:
     void WriteText();
     void WriteCR(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo = ww8::WW8TableNodeInfo::Pointer_t());
     void WriteChar( sal_Unicode c );
-    void WriteCellEnd();
     void WriteRowEnd(sal_uInt32 nDepth = 1);
+#if 0
     USHORT StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
         SwTwips &rPageSize);
+#endif
 
     void OutSwString(const String&, xub_StrLen nStt, xub_StrLen nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);

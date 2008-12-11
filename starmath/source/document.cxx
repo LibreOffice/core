@@ -822,8 +822,16 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
     {
         uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
-        if ( xAccess->hasByName( C2S( "content.xml" ) ) && xStorage->isStreamElement( C2S( "content.xml" ) ) ||
-             xAccess->hasByName( C2S( "Content.xml" ) ) && xStorage->isStreamElement( C2S( "Content.xml" ) ) )
+        if (
+            (
+             xAccess->hasByName( C2S( "content.xml" ) ) &&
+             xStorage->isStreamElement( C2S( "content.xml" ) )
+            ) ||
+            (
+             xAccess->hasByName( C2S( "Content.xml" ) ) &&
+             xStorage->isStreamElement( C2S( "Content.xml" ) )
+            )
+           )
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
