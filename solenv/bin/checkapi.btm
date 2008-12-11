@@ -3,7 +3,14 @@ rem @echo off
 setlocal
 
 SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
-SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar;\\unoapi\export\unoapi\bin\mysql.jar
+
+IFF "%RUNNERJAR%" != "" THEN
+    SET APICLASSPATH=%RUNNERJAR%
+ELSE
+    SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar
+ENDIFF
+
+SET APICLASSPATH=%APICLASSPATH%;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar;\\unoapi\export\unoapi\bin\mysql.jar
 
 IFF "%JAVAI%" != "" THEN
     SET JAVABIN=%JAVAI%
