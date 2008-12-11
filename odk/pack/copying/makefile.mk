@@ -55,8 +55,6 @@ IDL_SINCE_TAGS=apiref-autodoc.since
 EXELIST = \
     $(DESTDIRBIN)$/cppumaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regcompare$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)$/regmerge$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)$/regview$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/idlcpp$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/idlc$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/javamaker$(EXEPOSTFIX) 	\

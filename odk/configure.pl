@@ -521,8 +521,8 @@ print " * ... your SDK environment has been prepared.\n";
 print " * For each time you want to use this configured SDK environment, you\n";
 print " * have to run the \"setsdkenv_unix\" script file!\n";
 print " * Alternatively can you source one of the scripts\n";
-print " *   \"$main::OO_SDK_CONFIG_HOME/setsdkenv_unix.sh\"\n";
-print " *   \"$main::OO_SDK_CONFIG_HOME/setsdkenv_unix.csh\"\n";
+print " *   \"$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.sh\"\n";
+print " *   \"$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.csh\"\n";
 print " * to get an environment without starting a new shell.\n";
 print " ************************************************************************\n\n";
 

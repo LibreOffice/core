@@ -48,7 +48,7 @@ if (-d "$StartDir") {
     print "check binaries: ";
     if (-d "$StartDir/bin") {
     my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker",
-               "regcompare","regmerge","regview","autodoc",
+               "regcompare","autodoc",
                "unoapploader", "uno-skeletonmaker" );
 
     foreach $i (@binarylist)
