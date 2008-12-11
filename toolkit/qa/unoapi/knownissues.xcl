@@ -237,3 +237,6 @@ toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleComponent
 
 ### i90356 ###
 toolkit.UnoScrollBarControl::com::sun::star::awt::XScrollBar
+
+### i94344 ###
+toolkit.AccessibleTabPage::com::sun::star::accessibility::XAccessibleText
