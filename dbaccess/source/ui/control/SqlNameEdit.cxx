@@ -38,12 +38,13 @@ namespace dbaui
     //------------------------------------------------------------------
     sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars)
     {
-        return  (_cChar >= 'A' && _cChar <= 'Z'                     ||
-                 _cChar == '_'                                      ||
-                 _sAllowedChars.indexOf(_cChar) != -1               ||
+        return  (
+                 (_cChar >= 'A' && _cChar <= 'Z') ||
+                 _cChar == '_' ||
+                 _sAllowedChars.indexOf(_cChar) != -1 ||
                  (!_bFirstChar && (_cChar >= '0' && _cChar <= '9')) ||
-                 (!_bUpperCase && (_cChar >= 'a' && _cChar <= 'z')));
-
+                 (!_bUpperCase && (_cChar >= 'a' && _cChar <= 'z'))
+                );
     }
     //------------------------------------------------------------------
     sal_Bool OSQLNameChecker::checkString(  const ::rtl::OUString& _sOldValue,

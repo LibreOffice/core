@@ -2358,10 +2358,12 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     {
         Reference< XInterface >  xCurrent(aColumnControls->getByIndex(nViewPos),UNO_QUERY);
         if (IsSearchableControl(xCurrent))
+        {
             if (pInfo->nFieldPos)
                 --pInfo->nFieldPos;
             else
                 break;
+        }
     }
 
     Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);

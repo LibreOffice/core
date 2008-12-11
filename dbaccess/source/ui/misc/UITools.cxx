@@ -1301,8 +1301,8 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
         aSize.Height() = aOldSize.Height();
 
     Size aTbSize = _pToolBox->GetSizePixel();
-    if (aSize.Width() && aSize.Width() != aTbSize.Width() ||
-            aSize.Height() && aSize.Height() != aTbSize.Height())
+    if ( (aSize.Width() && aSize.Width() != aTbSize.Width()) ||
+            (aSize.Height() && aSize.Height() != aTbSize.Height()) )
     {
         _pToolBox->SetPosSizePixel( _pToolBox->GetPosPixel(), aSize );
         _pToolBox->Invalidate();

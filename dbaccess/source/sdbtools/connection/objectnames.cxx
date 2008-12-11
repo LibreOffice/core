@@ -436,10 +436,12 @@ namespace sdbtools
 
         String sBaseName( _BaseName );
         if ( sBaseName.Len() == 0 )
+        {
             if ( _CommandType == CommandType::TABLE )
                 sBaseName = String( SdbtRes( STR_BASENAME_TABLE ) );
             else
                 sBaseName = String( SdbtRes( STR_BASENAME_QUERY ) );
+        }
 
         ::rtl::OUString sName( sBaseName );
         sal_Int32 i = 1;

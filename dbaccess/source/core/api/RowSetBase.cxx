@@ -739,10 +739,12 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
         return sal_False;
 
     if ( rowDeleted() )
+    {
         if ( !m_pCache->m_bRowCountFinal )
             return sal_False;
         else
             return ( m_nDeletedPosition == impl_getRowCount() );
+    }
 
     positionCache( MOVE_NONE_REFRESH_ONLY );
     sal_Bool bIsLast = m_pCache->isLast();
