@@ -574,6 +574,9 @@ public:
     void AddAttributeXmlId(::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface> const & i_xIfc);
 
+    // --> OD 2008-11-26 #158694#
+    const sal_Bool exportTextNumberElement() const;
+    // <--
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()

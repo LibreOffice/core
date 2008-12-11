@@ -666,6 +666,10 @@ void XMLTextParagraphExport::exportListChange(
             bool bExportListStyle( true );
             bool bRestartNumberingAtContinuedRootList( false );
             sal_Int16 nRestartValueForContinuedRootList( -1 );
+            // --> OD 2008-11-26 #158694#
+            bool bContinueingPreviousSubList = !bRootListToBeStarted &&
+                                               rNextInfo.IsContinueingPreviousSubTree();
+            // <--
             do {
                 GetExport().CheckAttrList();
 
@@ -760,6 +764,15 @@ void XMLTextParagraphExport::exportListChange(
                     bExportListStyle = false;
                 }
 
+                // --> OD 2008-11-26 #158694#
+                if ( bContinueingPreviousSubList )
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                              XML_CONTINUE_NUMBERING, XML_TRUE );
+                    bContinueingPreviousSubList = false;
+                }
+                // <--
+
                 enum XMLTokenEnum eLName = XML_LIST;
 
                 OUString *pElem = new OUString(
@@ -807,6 +820,23 @@ void XMLTextParagraphExport::exportListChange(
                 GetExport().StartElement( *pElem, sal_False );
 
                 pListElements->Insert( pElem, pListElements->Count() );
+
+                // --> OD 2008-11-26 #158694#
+                // export of <text:number> element for last opened <text:list-item>, if requested
+                if ( GetExport().exportTextNumberElement() &&
+                     eLName == XML_LIST_ITEM && nListLevelsToBeOpened == 1 && // last iteration --> last opened <text:list-item>
+                     rNextInfo.ListLabelString().getLength() > 0 )
+                {
+                    const ::rtl::OUString aTextNumberElem =
+                            OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                                      XML_NAMESPACE_TEXT,
+                                      GetXMLToken(XML_NUMBER) ) );
+                    GetExport().IgnorableWhitespace();
+                    GetExport().StartElement( aTextNumberElem, sal_False );
+                    GetExport().Characters( rNextInfo.ListLabelString() );
+                    GetExport().EndElement( aTextNumberElem, sal_True );
+                }
+                // <--
 
                 --nListLevelsToBeOpened;
             } while ( nListLevelsToBeOpened > 0 );
@@ -869,6 +899,22 @@ void XMLTextParagraphExport::exportListChange(
         GetExport().StartElement( *pElem, sal_False );
 
         pListElements->Insert( pElem, pListElements->Count() );
+
+        // --> OD 2008-11-26 #158694#
+        // export of <text:number> element for <text:list-item>, if requested
+        if ( GetExport().exportTextNumberElement() &&
+             rNextInfo.ListLabelString().getLength() > 0 )
+        {
+            const ::rtl::OUString aTextNumberElem =
+                    OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                              XML_NAMESPACE_TEXT,
+                              GetXMLToken(XML_NUMBER) ) );
+            GetExport().IgnorableWhitespace();
+            GetExport().StartElement( aTextNumberElem, sal_False );
+            GetExport().Characters( rNextInfo.ListLabelString() );
+            GetExport().EndElement( aTextNumberElem, sal_True );
+        }
+        // <--
     }
 }
 // <--
@@ -1800,9 +1846,13 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                     // --> OD 2006-09-27 #i69627#
                     // --> OD 2008-04-24 #refactorlists#
                     // pass list auto style pool to <XMLTextNumRuleInfo> instance
+                    // --> OD 2008-11-26 #158694#
+                    // pass info about request to export <text:number> element
+                    // to <XMLTextNumRuleInfo> instance
                     aNextNumInfo.Set( xTxtCntnt,
                                       GetExport().writeOutlineStyleAsNormalListStyle(),
-                                      GetListAutoStylePool() );
+                                      GetListAutoStylePool(),
+                                      GetExport().exportTextNumberElement() );
                     // <--
 
                     exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,

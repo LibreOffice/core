@@ -221,6 +221,10 @@ public:
 
     /// relative path of stream in package, e.g. "someobject/content.xml"
     ::rtl::OUString mStreamPath;
+
+    // --> OD 2008-11-26 #158694#
+    sal_Bool                                            mbExportTextNumberElement;
+    // <--
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
@@ -231,6 +235,9 @@ SvXMLExport_Impl::SvXMLExport_Impl()
         ,mbSaveBackwardCompatibleODF( sal_True )
     // <--
         ,mStreamPath()
+    // --> OD 2008-11-26 #158694#
+        ,mbExportTextNumberElement( sal_False )
+    // <--
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create(
             comphelper_getProcessComponentContext());
@@ -746,7 +753,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             ::rtl::OUString::createFromAscii("/") + sName : sName;
 
         // --> OD 2006-09-26 #i69627#
-        OUString sOutlineStyleAsNormalListStyle(
+        const ::rtl::OUString sOutlineStyleAsNormalListStyle(
                 RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
         if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
         {
@@ -755,10 +762,19 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         }
         // <--
 
-
         OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
         if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
             mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
+
+        // --> OD 2008-11-26 #158694#
+        const ::rtl::OUString sExportTextNumberElement(
+                RTL_CONSTASCII_USTRINGPARAM("ExportTextNumberElement") );
+        if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
+        {
+            uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
+            aAny >>= (mpImpl->mbExportTextNumberElement);
+        }
+        // <--
     }
 
 }
@@ -2357,6 +2373,13 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
         }
     }
 }
+
+// --> OD 2008-11-26 #158694#
+const sal_Bool SvXMLExport::exportTextNumberElement() const
+{
+    return mpImpl->mbExportTextNumberElement;
+}
+// <--
 
 //=============================================================================
 
