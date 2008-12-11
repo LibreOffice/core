@@ -218,6 +218,11 @@
                     <value xml:lang="en-US">Margins</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ScalingFactor" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Scaling Factor</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ClosePreview" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Close Preview</value>

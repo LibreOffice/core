@@ -696,6 +696,8 @@ struct ZoomSlider
 {
     INT16  CurrentZoom          MID_ZOOMSLIDER_CURRENTZOOM;
     Points SnappingPoints       MID_ZOOMSLIDER_SNAPPINGPOINTS;
+    INT16  SvxMinZoom           MID_ZOOMSLIDER_MINZOOM;
+    INT16  SvxMaxZoom           MID_ZOOMSLIDER_MAXZOOM;
 };
 item ZoomSlider SvxZoomSliderItem;
 
