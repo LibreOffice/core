@@ -66,6 +66,7 @@ APP2STDLIBS=\
 
 APP3TARGET= regcompare
 APP3OBJS=   $(OBJ)$/regcompare.obj
+APP3RPATH=  SDK
 
 APP3STDLIBS=\
             $(SALLIB) \

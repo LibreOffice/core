@@ -129,3 +129,5 @@
   change css.text.IllustrationIndex into css.text.IllustrationsIndex because the 
   implementation used the plural version.
   
+04/12/08 (JSC): TaskID=i96902
+  update reference rdb with the released version from OO.org 3.0 (ooo300m9)
