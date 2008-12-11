@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Outliner.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,6 @@
 
 #include "Outliner.hxx"
 #include <vcl/wrkwin.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
 #include <sfx2/srchitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/eeitem.hxx>
@@ -61,7 +59,7 @@
 #include <svtools/linguprops.hxx>
 #include <svtools/lingucfg.hxx>
 #include <svx/editeng.hxx>
-
+#include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include "strings.hrc"

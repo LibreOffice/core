@@ -136,6 +136,7 @@ private:
     RadioButton*    pPage3_Resolution_3;
     FixedLine*      pPage3_Titel3;
     CheckBox*       pPage3_SldSound;
+    CheckBox*       pPage3_HiddenSlides;
     // page 4 controls
 
     FixedBitmap*    pPage4_Bmp;

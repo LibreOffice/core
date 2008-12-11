@@ -177,6 +177,10 @@ String STR_AUTOLAYOUT_ONLY_TITLE
 {
     Text [ en-US ] = "Title Only" ;
 };
+String STR_AUTOLAYOUT_ONLY_TEXT
+{
+    Text [ en-US ] = "Centered Text" ;
+};
 String STR_AUTOLAYOUT_TITLE
 {
     Text [ en-US ] = "Title Slide" ;

@@ -238,7 +238,7 @@ ModalDialog DLG_START_PRESENTATION
         Pos = MAP_APPFONT ( 6, 174 ) ;
         Size = MAP_APPFONT ( 244, 8 );
         Hide = TRUE;
-        Text [ en-US ] = "Multiple monitors" ;
+        Text [ en-US ] = "Multiple displays" ;
     };
 
     FixedText FT_MONITOR
@@ -247,7 +247,7 @@ ModalDialog DLG_START_PRESENTATION
         Pos = MAP_APPFONT ( 12 , 185 + 2  ) ;
         Size = MAP_APPFONT( 70, 8 );
         Hide = TRUE;
-        Text [ en-US ] = "P~resentation monitor" ;
+        Text [ en-US ] = "P~resentation display" ;
     };
 
     ListBox LB_MONITOR
@@ -264,17 +264,17 @@ ModalDialog DLG_START_PRESENTATION
 
     String STR_PRIMARY_MONITOR
     {
-        Text [ en-US ] = "Monitor %1 (primary)";
+        Text [ en-US ] = "Display %1 (primary)";
     };
 
     String STR_MONITOR
     {
-        Text [ en-US ] = "Monitor %1";
+        Text [ en-US ] = "Display %1";
     };
 
     String STR_ALL_MONITORS
     {
-        Text [ en-US ] = "All monitors";
+        Text [ en-US ] = "All displays";
     };
 
 };

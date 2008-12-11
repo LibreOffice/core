@@ -186,4 +186,15 @@ shell TextObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
+    SID_GROW_FONT_SIZE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_SHRINK_FONT_SIZE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
 }

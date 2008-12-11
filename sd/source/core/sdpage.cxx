@@ -1116,6 +1116,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
         LayoutDescriptor( 9, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE|VERTICAL ),    // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
         LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT9
+        LayoutDescriptor( 10, PRESOBJ_TEXT, PRESOBJ_NONE )                                  // AUTOLAYOUT_ONLY_TEXT
     };
 
     if( (eLayout < AUTOLAYOUT__START) || (eLayout >= AUTOLAYOUT__END) )
@@ -1295,6 +1296,13 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         aSize.Width() = long( aPageSize.Width() * 0.7 );
         rRectangle[1].SetPos( aTitleRect.TopLeft() );
         rRectangle[1].SetSize( aSize );
+        break;
+    }
+    case 10: // onlytext
+    {
+        Size aSize( rRectangle[0].GetSize().Width(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
+        rRectangle[0].SetSize( aSize );
+        rRectangle[0].SetPos( aTitlePos);
         break;
     }
     }

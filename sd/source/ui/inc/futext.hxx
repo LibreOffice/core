@@ -40,6 +40,8 @@
 struct StyleRequestData;
 class SdrTextObj;
 class OutlinerParaObject;
+class FontList;
+class OutlinerView;
 
 namespace sd {
 
@@ -86,6 +88,8 @@ public:
         @returns true if a active function was aborted
     */
     virtual bool cancel();
+
+    static void ChangeFontSize( bool, OutlinerView*, const FontList*, ::sd::View* );
 
 protected:
     FuText (ViewShell* pViewSh,

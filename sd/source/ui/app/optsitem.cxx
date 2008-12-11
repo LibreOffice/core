@@ -1584,8 +1584,8 @@ BOOL SdOptionsPrint::ReadData( const Any* pValues )
         if( pValues[12].hasValue() ) SetNotes( *(sal_Bool*) pValues[ 12 ].getValue() );
         if( pValues[13].hasValue() ) SetHandout( *(sal_Bool*) pValues[ 13 ].getValue() );
         if( pValues[14].hasValue() ) SetOutline( *(sal_Bool*) pValues[ 14 ].getValue() );
-        if( pValues[15].hasValue() ) SetHandoutHorizontal( *(sal_Bool*) pValues[12].getValue() );
-        if( pValues[16].hasValue() ) SetHandoutPages( (UINT16)*(sal_Int32*) pValues[13].getValue() );
+        if( pValues[15].hasValue() ) SetHandoutHorizontal( *(sal_Bool*) pValues[15].getValue() );
+        if( pValues[16].hasValue() ) SetHandoutPages( (UINT16)*(sal_Int32*) pValues[16].getValue() );
     }
 
     return TRUE;

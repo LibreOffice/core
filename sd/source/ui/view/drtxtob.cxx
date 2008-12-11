@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -373,6 +373,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     if( !bLeftToRight )
                         bDisableParagraphTextDirection = sal_True;
                 }
+            }
+            break;
+
+            case SID_GROW_FONT_SIZE:
+            case SID_SHRINK_FONT_SIZE:
+            {
+                // todo
             }
             break;
 
