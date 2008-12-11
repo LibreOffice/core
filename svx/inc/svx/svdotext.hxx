@@ -571,6 +571,11 @@ public:
     bool IsTextAnimationAllowed() const;
     void SetTextAnimationAllowed(sal_Bool bNew);
 
+    // #i8824#
+    // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
+    // ItemChange(), PostItemChange() and ItemSetChanged() calls.
+    void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
+
 public:
     //////////////////////////////////////////////////////////////////////////////
     // text primitive decomposition helpers

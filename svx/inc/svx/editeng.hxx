@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ class SvxLRSpaceItem;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
+class FontList;
 
 #include <vos/ref.hxx>
 #include <vector>

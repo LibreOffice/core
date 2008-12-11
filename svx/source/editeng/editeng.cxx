@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.118 $
+ * $Revision: 1.117.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 #include <svtools/ctloptions.hxx>
+#include <svtools/ctrltool.hxx>
 
 #include <svx/svxfont.hxx>
 #include <impedit.hxx>

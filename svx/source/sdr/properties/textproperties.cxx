@@ -47,6 +47,7 @@
 #include <svx/editeng.hxx>
 #include <svx/flditem.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/svdpool.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -536,6 +537,13 @@ namespace sdr
                 delete pOutliner;
             }
         }
+
+        void TextProperties::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
+        {
+            GetObjectItemSet();
+            mpItemSet->Put(rItem);
+        }
+
 
         void TextProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         {

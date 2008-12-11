@@ -78,6 +78,10 @@ namespace sdr
 
             // This is the notifyer from SfxListener
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+            // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
+            // ItemChange(), PostItemChange() and ItemSetChanged() calls.
+            void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
         };
     } // end of namespace properties
 } // end of namespace sdr

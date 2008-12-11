@@ -576,7 +576,14 @@ void SdXMLPresentationPageLayoutContext::EndElement()
             {
                 case 1:
                 {
-                    mnTypeId = 19; // AUTOLAYOUT_ONLY_TITLE
+                    if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
+                    {
+                        mnTypeId = 19; // AUTOLAYOUT_ONLY_TITLE
+                    }
+                    else
+                    {
+                        mnTypeId = 32; // AUTOLAYOUT_ONLY_TEXT
+                    }
                     break;
                 }
                 case 2:

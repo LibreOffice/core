@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editview.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.198.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,7 @@ class SvStream;
 class SvKeyValueIterator;
 class SfxStyleSheet;
 class Font;
+class FontList;
 
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
@@ -236,6 +237,11 @@ public:
 
     void            SetInvalidateMore( USHORT nPixel );
     USHORT          GetInvalidateMore() const;
+
+    // grows or shrinks the font height for the current selection
+    void            ChangeFontSize( bool bGrow, const FontList* pList );
+
+    static bool ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList );
 };
 
 #endif // _MyEDITVIEW_HXX

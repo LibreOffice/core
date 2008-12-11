@@ -135,7 +135,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
         throw container::ElementExistException();
 
     INT32 nColor = 0;
-    if( aElement >>= nColor )
+    if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
     if( pTable )
@@ -160,7 +160,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     INT32 nColor = 0;
-    if( aElement >>= nColor )
+    if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
     long nIndex = pTable ? ((XPropertyTable*)pTable)->Get( aName ) : -1;

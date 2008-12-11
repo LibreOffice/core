@@ -2175,6 +2175,11 @@ sal_Int32 SdrTextObj::CheckTextHit(const Point& /*rPnt*/) const
     return 0;
 }
 
+void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
+{
+    static_cast< sdr::properties::TextProperties& >(GetProperties()).SetObjectItemNoBroadcast(rItem);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Konzept des TextObjekts:
