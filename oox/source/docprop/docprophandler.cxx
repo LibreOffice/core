@@ -273,9 +273,9 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const ::rtl::OUString& aChars )
 // ------------------------------------------------
 sal_Bool OOXMLDocPropHandler::Is16Digit( sal_Unicode cSign )
 {
-    return ( cSign >= (sal_Unicode)'0' && cSign <= (sal_Unicode)'9'
-          || cSign >= (sal_Unicode)'a' && cSign <= (sal_Unicode)'f'
-          || cSign >= (sal_Unicode)'A' && cSign <= (sal_Unicode)'F' );
+    return ( (cSign >= (sal_Unicode)'0' && cSign <= (sal_Unicode)'9')
+          || (cSign >= (sal_Unicode)'a' && cSign <= (sal_Unicode)'f')
+          || (cSign >= (sal_Unicode)'A' && cSign <= (sal_Unicode)'F') );
 }
 
 // ------------------------------------------------
