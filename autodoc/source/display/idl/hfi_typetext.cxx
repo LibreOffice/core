@@ -490,9 +490,9 @@ HF_IdlTypeText::produce_IndexLink( const StringVector & i_module,
     output::Position
         aTargetPos(rCeNode);
     bool
-        bShowModule = i_bIsOwner OR i_module.size() > 0 AND i_ce.empty();
+        bShowModule = i_bIsOwner OR (i_module.size() > 0 AND i_ce.empty());
     bool
-        bShowNonModule = NOT bShowModule OR i_bIsOwner AND NOT i_ce.empty();
+        bShowNonModule = NOT bShowModule OR (i_bIsOwner AND NOT i_ce.empty());
     bool
         bUseMember = NOT i_member.empty();
 

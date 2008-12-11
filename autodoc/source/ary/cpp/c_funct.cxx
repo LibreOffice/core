@@ -147,7 +147,7 @@ Function::IsIdentical( const Function & i_f ) const
         AND
         aFlags == i_f.aFlags
         AND
-        ( NOT pExceptions AND NOT i_f.pExceptions
+        ( ( NOT pExceptions AND NOT i_f.pExceptions )
           OR
           ( pExceptions AND i_f.pExceptions
                 ?   *pExceptions == *i_f.pExceptions

@@ -70,8 +70,10 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
     bool bDescr = NOT i_rDocu.Description().IsEmpty();
 
     if ( i_rDocu.IsDeprecated()
-         OR (i_pClient != 0 ? i_pClient->SightLevel() == ary::idl::sl_File : false)
-            AND NOT i_rDocu.IsPublished()
+         OR (
+             (i_pClient != 0 ? i_pClient->SightLevel() == ary::idl::sl_File : false)
+             AND NOT i_rDocu.IsPublished()
+            )
          OR i_rDocu.IsOptional() )
     {   // any usage restriction
         rOut.Produce_Term("Usage Restrictions");

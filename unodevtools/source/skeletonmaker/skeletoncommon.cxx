@@ -542,12 +542,14 @@ bool checkAddinType(TypeManager const & manager,
         if ( !bIsReturn && type.equals("com/sun/star/table/XCellRange") )
             return true;
         if ( !bIsReturn && type.equals("com/sun/star/beans/XPropertySet") )
+        {
             if ( bHasXPropertySet ) {
                 return false;
             } else {
                 bHasXPropertySet = true;
                 return true;
             }
+        }
     }
     return false;
 }

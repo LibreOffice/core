@@ -129,8 +129,8 @@ PE_Value::On_expect_name_Identifier(const char * i_sText)
 void
 PE_Value::On_got_name_Punctuation(const char * i_sText)
 {
-    if ( i_sText[0] == ',' AND NOT IsConst()
-         OR i_sText[0] == ';' AND IsConst() )
+    if ( (i_sText[0] == ',' AND NOT IsConst())
+         OR (i_sText[0] == ';' AND IsConst()) )
     {
         SetResult(done,pop_success);
         eState = e_none;

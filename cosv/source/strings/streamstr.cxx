@@ -555,7 +555,7 @@ StreamStr::operator_read_line( bstream & i_src )
         char oldc = c;
           if (i_src.read(&c, 1) == 1)
         {
-            if (c != 13 AND c != 10 OR c == oldc)
+            if ( (c != 13 AND c != 10) OR c == oldc)
                 i_src.seek(-1,::csv::cur);
         }
     }
