@@ -1545,15 +1545,19 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetPoint (
         mnVerticalBorder + nRow*(maPreviewSize.Height+mnVerticalGap));
 
     if (nRelativeHorizontalPosition >= 0)
+    {
         if (nRelativeHorizontalPosition > 0)
             aPosition.X += maPreviewSize.Width;
         else
             aPosition.X += maPreviewSize.Width / 2.0;
+    }
     if (nRelativeVerticalPosition >= 0)
+    {
         if (nRelativeVerticalPosition > 0)
             aPosition.Y += maPreviewSize.Height;
         else
             aPosition.Y += maPreviewSize.Height / 2.0;
+    }
 
     return aPosition;
 }
