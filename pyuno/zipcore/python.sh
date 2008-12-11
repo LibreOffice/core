@@ -48,7 +48,7 @@ PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
 # Set LD_LIBRARY_PATH so that "import pyuno" finds libpyuno.so:
-LD_LIBRARY_PATH=$sd_prog/../basis-link/program${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
+LD_LIBRARY_PATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
 # Set URE_BOOTSTRAP so that "uno.getComponentContext()" bootstraps a complete

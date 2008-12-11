@@ -55,14 +55,17 @@ wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
         wchar_t c = *text++;
         if (c == L'\0') {
             break;
-        } else if (c == L'$') {
+        } else if (c == L'"') {
+            // Double any preceding backslashes as required by Windows:
+            for (std::size_t i = 0; i < n; ++i) {
+                *buffer++ = L'\\';
+            }
             *buffer++ = L'\\';
-            *buffer++ = L'$';
+            *buffer++ = L'"';
             n = 0;
         } else if (c == L'\\') {
             *buffer++ = L'\\';
-            *buffer++ = L'\\';
-            n += 2;
+            ++n;
         } else {
             *buffer++ = c;
             n = 0;
@@ -88,9 +91,11 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         exit(EXIT_FAILURE);
     }
     wchar_t * pathEnd = tools::filename(path);
-    wchar_t bootstrap[MAX_PATH];
+    wchar_t bootstrap[MY_LENGTH(L"vnd.sun.star.pathname:") + MAX_PATH] =
+        L"vnd.sun.star.pathname:"; //TODO: overflow
     wchar_t * bootstrapEnd = tools::buildPath(
-        bootstrap, path, pathEnd, MY_STRING(L"fundamental.ini"));
+        bootstrap + MY_LENGTH(L"vnd.sun.star.pathname:"), path, pathEnd,
+        MY_STRING(L"fundamental.ini"));
     if (bootstrapEnd == NULL ||
         (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
          == NULL))
@@ -251,5 +256,8 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             NULL, &startinfo, &procinfo)) {
         exit(EXIT_FAILURE);
     }
-    exit(EXIT_SUCCESS);
+    WaitForSingleObject(procinfo.hProcess,INFINITE);
+    DWORD exitStatus;
+    GetExitCodeProcess(procinfo.hProcess,&exitStatus);
+    exit(exitStatus);
 }
