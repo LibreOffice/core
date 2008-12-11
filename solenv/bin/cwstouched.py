@@ -87,7 +87,6 @@ cwsWorkStamp=getCwsWorkStamp()
 minor = getMinor(cwsWorkStamp)
 
 oldWorkStamp = workstamp + "_" + minor
-
 diff="svn diff --summarize --old=svn://svn.services.openoffice.org/ooo/tags/"+oldWorkStamp+" --new=svn://svn.services.openoffice.org/ooo/cws/"+cwsWorkStamp
 
 modules=[]
@@ -96,8 +95,15 @@ modules=[]
 for outline in output.readlines():
     if outline.find("svn://svn.services.openoffice.org"):
         index = outline.index(oldWorkStamp)+len(oldWorkStamp)+1
-        newModule=outline[index:outline.index("/",index)]
-        if not modules.count(newModule): 
+        newModule=""
+        if outline.find("/",index) != -1:
+            # seems to be a file
+            newModule=string.strip(outline[index:outline.index("/",index)])
+        else:
+            #seems to be a folder
+            if len(outline[index:]) > 0:
+                newModule=string.strip(outline[index:])
+        if newModule != "" and not modules.count(newModule): 
             modules.append(newModule)
 
 for module in modules:
