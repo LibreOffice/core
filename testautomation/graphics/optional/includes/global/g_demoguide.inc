@@ -202,7 +202,7 @@ testcase t_Interoperability
     'Save the name of the origin background (taken from last slide)
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<END>"
-        sleep (1)
+        sleep (4)
         sTemplatename = DocumentImpress.StatusGetText (6)
         printlog "    Background = " & sTemplatename     'Debugcode
     

@@ -279,7 +279,6 @@ testcase tOLE_SaveLoad
     printlog "Closing Context Menu"
     MenuSelect (0)
     printlog "Save the File."
-    MenuSelect (0)
     FileSaveAs
     sleep 1
     Kontext "SpeichernDlg"

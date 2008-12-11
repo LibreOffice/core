@@ -124,7 +124,8 @@ testcase tContextSaveAsPicture
 
         '/// Choose the first file-format available in the dialogue ///'
          DateiAuswahl.TypeKeys "<END>"
-         if DateiAuswahl.GetItemCount < 2 then
+         DateiAuswahl.TypeKeys "<SPACE>"
+         if DateiAuswahl.GetItemCount < 1 then
             warnlog "The file with the extension " + Filetype + " does not exist. Please inform FHA."
          else
              printlog "Selected: " + DateiAuswahl.GetSelText
@@ -449,7 +450,8 @@ testcase tContextSavePictureLinkAsPicture
 
         '/// Choose the first file-format available in the dialogue ///'
          DateiAuswahl.TypeKeys "<END>"
-         if DateiAuswahl.GetItemCount < 2 then
+         DateiAuswahl.TypeKeys "<SPACE>"
+         if DateiAuswahl.GetItemCount < 1 then
             warnlog "The file with the extension " + Filetype + " does not exist. Please inform FHA."
          else
              printlog "   Selected: " + DateiAuswahl.GetSelText
