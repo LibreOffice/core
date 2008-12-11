@@ -39,6 +39,7 @@
 
 sub w_007_
     printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tToolsSpellcheck
     Call tToolsThesaurus
@@ -57,6 +58,17 @@ sub w_007_
     Call tToolsOptionsTest
     Call tToolsHangulHanjaConversion
     Call tToolsChineseTranslation
+
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocToolsHangulHanjaConversion
+    Call tHtmlDocToolsOptionsTest
+
+    'Writer Master Document
+    gApplication = "MASTERDOC"
+    Call tMasterDocToolsHyphenation
+    Call tMasterDocToolsOptionsTest
+    gApplication = "WRITER"
 
 end sub
 
@@ -949,6 +961,8 @@ endcase
 ' -------------------------------------------
 
 testcase tToolsHangulHanjaConversion
+   WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+   exit sub
 
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
@@ -1091,4 +1105,192 @@ testcase tToolsChineseTranslation
 
    printlog " Close active document"
    Call hCloseDocument
+endcase
+
+' -------------------------------------------
+
+testcase tHtmlDocToolsHangulHanjaConversion
+   WarnLog "#96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+   exit sub
+
+    Dim bAsianLanguage as Boolean
+    Dim sTestFile as String
+
+    gApplication = "HTMLDOKUMENT"
+    PrintLog "- Tools / HangulHanjaConversion"
+    sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.html")
+
+    printlog " Enable 'Asian Language support' ON"
+    bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
+
+    printlog " Open the test file"
+    Call hFileOpen (sTestFile)
+    Call sMakeReadOnlyDocumentEditable
+    Call wTypeKeys("<MOD1 Home>")
+
+    printlog " Tools / HangulHanjaConversion"
+    try
+        ToolsLanguageHangulHanjaConversion
+    catch
+        Warnlog "- Format / HangulHanjaConversion is disabled or hidden!"
+        bAsianLanguage = ActiveDeactivateAsianSupport(False)
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    
+    Kontext "HangulHanjaConversion"
+    if HangulHanjaConversion.Exists then
+        Call DialogTest ( HangulHanjaConversion )
+    else
+        Warnlog "- Format / HangulHanjaConversion doesn't work. Dialog is not up"
+        bAsianLanguage = ActiveDeactivateAsianSupport(False)
+        Call hCloseDocument
+        goto endsub
+    end if
+
+    printlog " Click button 'Options'"
+    try
+        Options.Click
+        Kontext "HangulHanjaOptions"
+        Call DialogTest ( HangulHanjaOptions )
+    catch
+        Warnlog "- Something is wrong in the button 'Options' !"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+
+    NewDictionary.Click
+    Kontext "HangulHanjaNewDictionary"
+    Call DialogTest ( HangulHanjaNewDictionary )
+    HangulHanjaNewDictionary.Close
+
+    Kontext "HangulHanjaOptions"
+    HangulHanjaOptions.Cancel
+
+    Kontext "HangulHanjaConversion"
+    printlog " Close HangulHanja dialog"
+    HangulHanjaConversion.Close
+
+    printlog " Set the 'Asian Language support' to default"
+    if bAsianLanguage = FALSE then
+       Call ActiveDeactivateAsianSupport(FALSE)
+    end if
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+' -------------------------------------------
+
+testcase tMasterDocToolsHyphenation
+    Dim DieDatei as string
+    Dim LingFile as string
+
+    gApplication = "MASTERDOC"
+    PrintLog "- Tools / Hyphenation"
+	' As long as OOo has no modules for that, disabled
+	if gOOO = True then
+		printlog "No hyphenation in OOo"
+		goto endsub
+	end if
+
+    if gBuild < 9239 then
+        QAErrorlog "Hyphenation dialog freezes office!"
+        goto endsub
+    end if
+
+    select case iSprache
+        case 1,01 : LingFile = "01-44-hyph.dat"
+                     DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
+        case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
+        case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
+        case 81 : Printlog "- No Hyphenation in Japanese!"
+                     goto endsub
+        case 82 : Printlog "- No Hyphenation in Korean!"
+                     goto endsub
+        case 86 : Printlog "- No Hyphenation in Chinese (simplified)!"
+                     goto endsub
+        case 88 : Printlog "- No Hyphenation in Chinese (traditional)!"
+                     goto endsub
+        case else : DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt" )
+                        LingFile = str$(iSprache) + "-hyph.dat"
+    end select
+
+    if hFileExists(DieDatei) = False then
+        Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
+        goto endsub
+    end if
+
+    if wInsertDocumentinMasterDoc(DieDatei) = False then
+        Warnlog "Loading document did not work!"
+        goto endsub
+    else
+        Call hNewDocument
+        printlog " Open new document"
+        EditPaste
+    end if
+
+    Call sMakeReadOnlyDocumentEditable
+    printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
+    Sleep 1
+    Call wTypeKeys ("<Mod1 Home>")
+
+    ToolsLanguageHyphenate
+    printlog " Tools / Hyphenate"
+    Kontext "Active"
+    try
+        Active.Yes
+    catch
+    endcatch
+    if Active.Exists then
+        if Active.GetRT = 304 then
+            Active.Ok
+            ' Force pagesize change to bringup Hyphenation-dialog
+            FormatPageWriter
+            Kontext
+            active.SetPage TabSeite
+            Kontext "TabSeite"
+            Breite.Settext "15"
+            TabSeite.Ok
+            Sleep 1
+            ToolsLanguageHyphenate
+        end if
+    end if
+
+    Kontext "Silbentrennung"
+    printlog " Close upcoming 'Hyphenation' dialog"
+    if Silbentrennung.Exists then
+        Call DialogTest ( Silbentrennung )
+        Silbentrennung.Cancel
+    else
+        Warnlog "Dialog 'Hyphenation' not up!"
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Ok
+            catch
+            endcatch
+        end if
+    end if
+
+    printlog " Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    gApplication = "WRITER"
+endcase
+
+' -------------------------------------------
+
+testcase tHtmlDocToolsOptionsTest
+    gApplication = "HTMLDOKUMENT"
+    Call tToolsOptionsTest
+endcase
+
+' -------------------------------------------
+
+testcase tMasterDocToolsOptionsTest
+    gApplication = "MASTERDOC"
+    Call tToolsOptionsTest
 endcase

@@ -38,6 +38,7 @@
 
 sub w_009_
     printLog Chr(13) + "--------- Menu Help (w_009_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tHelpTip
     Call tHelpExtendedTips
@@ -50,16 +51,15 @@ end sub
 testcase tHelpTip
     PrintLog "- Help / Tip"
 
-    Call hNewDocument
     printlog " Open new document"
-    HelpTips
+    Call hNewDocument
     printlog " Help / Tips"
+    HelpTips
     WaitSlot (2000)
     printlog " Help / Tips"
     HelpTips
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -67,16 +67,15 @@ endcase
 testcase tHelpExtendedTips
     PrintLog "- Help / Extended Tips"
 
-    Call hNewDocument
     printlog " Open new document"
-    HelpEntendedHelp
+    Call hNewDocument
     printlog " Help / Extended Help"
+    HelpEntendedHelp
     WaitSlot (2000)
-    HelpEntendedHelp
     printlog " Help / Extended Help"
-    Call hCloseDocument
+    HelpEntendedHelp
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -84,10 +83,10 @@ endcase
 testcase tHelpAboutStarOffice
     PrintLog "- Help / About StarOffice"
 
-    Call hNewDocument
     printlog " Open new document"
-    HelpAboutStarOffice
+    Call hNewDocument
     printlog " Help / About"
+    HelpAboutStarOffice
     Kontext "UeberStarWriter"
     DialogTest ( UeberStarWriter )
     printlog " In About dialog enter key <Strg+Alt+Del>"
@@ -95,8 +94,8 @@ testcase tHelpAboutStarOffice
     Sleep 3
     printlog " Close About dialog"
     UeberStarWriter.OK
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
+'-----------------------------------------------------------

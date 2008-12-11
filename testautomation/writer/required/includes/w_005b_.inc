@@ -39,6 +39,7 @@
 
 sub w_005b_
     printLog Chr(13) + "--------- Menu Format / 2 (w_005b_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tFormatAlignment
     Call tFormatAlignmentArea
@@ -64,14 +65,21 @@ sub w_005b_
     Call tFormatAnchorObject
     Call tFormatWrapObject
     Call hExportUmstellung ( FALSE )
-    
-    '    Picture ( jolink.jpg )
+
+    'Picture ( jolink.jpg )
     Call tFormatGraphics
 
-    '    Editmode with Draw objects
+    'Editmode with Draw objects
     Call tFormatStyleEdit
     Call tFormatLineSpacing
     Call tFormatParagraphEdit
+
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocFormatGraphics
+    Call tHtmlDocFormatAlignment
+    Call tHtmlDocFormatObject
+    gApplication = "WRITER"
 
 end sub
 
@@ -1299,3 +1307,194 @@ testcase tFormatParagraphEdit
     Call hCloseDocument
     printlog " Close active document"
 endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocFormatGraphics
+    PrintLog "- Format / Graphics"
+    Dim j as integer
+
+    gApplication = "HTMLDOKUMENT"
+    printlog " Open new document"
+    Call hNewDocument
+
+    printlog " Insert a graphic (..\writer\required\input\graphics\jolink.jpg)"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+
+    try
+        printlog " Format / Graphic"
+        FormatGraphics
+    catch
+        Warnlog "- Format / Graphics disabled or hidden!"
+        goto endsub
+    endcatch
+
+    printlog " Step through all tabpages"
+    Kontext
+    active.SetPage TabType
+    Kontext "TabType"
+    Call DialogTest ( TabType )
+
+    Kontext
+    active.SetPage TabZusaetze
+    Kontext "TabZusaetze"
+    Call DialogTest ( TabZusaetze )
+
+    Kontext
+    active.SetPage TabUmlauf
+    Kontext "TabUmlauf"
+    Call DialogTest ( TabUmlauf )
+
+    Kontext
+    active.SetPage TabHyperlinkRahmen
+    Kontext "TabHyperlinkRahmen"
+    Call DialogTest ( TabHyperlinkRahmen )
+
+    Kontext
+    active.SetPage TabGrafik
+    Kontext "TabGrafik"
+    Call DialogTest ( TabGrafik )
+
+    Kontext
+    active.SetPage TabUmrandung
+    Kontext "TabUmrandung"
+    Call DialogTest ( TabUmrandung )
+
+    Kontext
+    active.SetPage TabMakro
+    ' if no JRE is installed a messagebox appears
+    Do
+        j = j + 1
+        Kontext "Active"
+        if Active.Exists then
+            if Active.GetRT = 304 then
+                if j = 1 then Warnlog Active.Gettext
+                Active.Ok
+            else
+                exit do
+            end if
+        else
+            exit do
+        end if
+    Loop
+    Kontext "TabMakro"
+    Call DialogTest ( TabMakro )
+
+    printlog " Close dialog"
+    TabMakro.Cancel
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocFormatAlignment
+    gApplication = "HTMLDOKUMENT"
+    PrintLog "- Format / Alignment"
+
+    printlog " Open new document"
+    Call hNewDocument
+    printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    wait 500
+    printlog " Format / Anchor / to Page"
+    FormatAnchorToPage
+
+    try
+        printlog " Format / Alignment / Left"
+        FormatAlignmentLeft
+        WaitSlot (1000)
+    catch
+        Warnlog "'Alignment left' couldn't be executed!"
+    endcatch
+
+    try
+        printlog " Format / Alignment / Right"
+        FormatAlignmentRight
+        WaitSlot (1000)
+    catch
+        Warnlog "'Alignment right' couldn't be executed!"
+    endcatch
+
+    try
+        printlog " Format / Alignment / Top"
+        FormatAlignmentTop
+        WaitSlot (1000)
+    catch
+        Warnlog "'Alignment top' couldn't be executed!"
+    endcatch
+
+    try
+        printlog " Format / Alignment / Center"
+        FormatAlignmentCenter
+        WaitSlot (1000)
+    catch
+        Warnlog "'Alignment center' couldn't be executed!"
+    endcatch
+
+    try
+        printlog " Format / Alignment / Bottom"
+        FormatAlignmentBottom
+        WaitSlot (1000)
+    catch
+        Warnlog "'Alignment bottom' couldn't be executed!"
+    endcatch
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocFormatObject
+    PrintLog "- Format / Object"
+    Dim j as integer
+
+    gApplication = "HTMLDOKUMENT"
+    printlog " Open new document"
+    Call hNewDocument
+
+    printlog " Insert a frame"
+    Call wInsertFrame
+
+    printlog " Format / Frame"
+    FormatFrame
+
+    printlog " Step through all tabpages"
+    Kontext
+    active.SetPage TabType
+    Kontext "TabType"
+    Call DialogTest ( TabType )
+
+    Kontext
+    active.SetPage TabZusaetze
+    Kontext "TabZusaetze"
+    Call DialogTest ( TabZusaetze )
+
+    Kontext
+    active.SetPage TabUmlauf
+    Kontext "TabUmlauf"
+    Call DialogTest ( TabUmlauf )
+
+    Kontext
+    active.SetPage TabUmrandung
+    Kontext "TabUmrandung"
+    Call DialogTest ( TabUmrandung )
+
+    Kontext
+    active.SetPage TabHintergrund
+    Kontext "TabHintergrund"
+    Call DialogTest ( TabHintergrund )
+
+    printlog " Close dialog"
+    TabHintergrund.Cancel
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------

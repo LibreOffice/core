@@ -39,7 +39,7 @@
 
 sub w_003_
     printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
-
+    gApplication = "WRITER"
 
 	Call tViewPrintLayout
 	Call tViewWebLayout
@@ -61,6 +61,12 @@ sub w_003_
 
 	Call tViewFullScreen
 	Call tViewZoom
+
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocViewZoom
+    Call tHtmlDocViewHTMLSource
+    gApplication = "WRITER"
 
 end sub
 
@@ -380,7 +386,6 @@ testcase tViewFields
     ViewFields
     printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 '------------------------------------------------------
@@ -499,9 +504,9 @@ testcase tViewInputMethodStatus
     PrintLog "- View / Input Method Status (only Solaris)"
     if Ucase(gPlatform) <> "SOLARIS" then goto endsub
     
-    '/// Open new document ///    
+    PrintLog " Open new document"
     Call hNewDocument
-    '/// View / View / Input Method Status  ///
+    PrintLog " View / View / Input Method Status"
     try
 		ViewInputMethodStatus
 	catch
@@ -510,9 +515,9 @@ testcase tViewInputMethodStatus
 		goto endsub
 	endcatch
     WaitSlot (2000)
-    '/// View / View / Input Method Status  ///
+    PrintLog " View / View / Input Method Status"
     ViewInputMethodStatus
-    '/// Close active document ///
+    PrintLog " Close active document"
     Call hCloseDocument
 endcase
 
@@ -552,5 +557,67 @@ testcase tViewHTMLSource
     printlog "Close active document"
     Call hCloseDocument
 endcase
+
 '-----------------------------------------------------------
 
+testcase tHtmlDocViewZoom
+    gApplication = "HTMLDOKUMENT"
+    printlog " open application"
+    Call hNewDocument
+    printlog " type something into the document"
+    hTypekeys "<RETURN>", 3
+    UseBindings
+    printlog " View -> Zoom"
+    ViewZoom
+    Kontext "Massstab"
+    DialogTest ( Massstab )
+    printlog " check checkbox '100%'"
+    Vergroesserung100.check
+    printlog " check checkbox 'Variable'"
+    VergroesserungStufenlos.check
+    Massstab.Cancel
+
+    printlog " close application"
+    Call  hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocViewHTMLSource
+    PrintLog "- View / HTML Source (only in HTML-Document)"
+    gApplication = "HTMLDOKUMENT"
+    printlog "Open new document"
+    Call hNewDocument
+    printlog "View / HTML-Source"
+    AnsichtHTMLQuelltext
+    WaitSlot (1000)
+    printlog "Save-As dialog has to come up"
+    printlog "Save sourcecode"
+    Kontext "SpeichernDlg"
+    Dateiname.Settext Convertpath(gofficepath + "user\work\sourcecode.html")
+    Speichern.Click
+    Kontext "Active"
+    If Active.Exists then
+        if Active.GetRT = 304 then
+            try
+                Active.Yes
+            catch
+                Warnlog Active.Gettext
+                Active.Ok
+            endcatch
+        end if
+    end if
+	wait 500
+	Kontext "DocumentHTMLSourceView"
+	DocumentHTMLSourceView.TypeKeys "Check for bug: #116402"
+	wait 500
+    printlog "View / HTML-Source"
+    AnsichtHTMLQuelltext
+    WaitSlot (1000)
+    printlog "Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------

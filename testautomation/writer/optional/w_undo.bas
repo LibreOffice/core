@@ -56,6 +56,7 @@ sub main
     Call hStatusIn ( "writer", "w_undo.bas" )
 
    	Call tEditUndoRedo
+    Call tEditUndoTOX
 	Call w_undo_history_1
 	Call w_undo_history_2
 	Call w_undo_history_3

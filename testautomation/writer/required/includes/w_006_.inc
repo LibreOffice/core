@@ -39,8 +39,8 @@
 
 sub w_006_
     printLog Chr(13) + "--------- Table Menu (w_006_.inc) ----------"
+    gApplication = "WRITER"
 
-   '   Table
     Call tFormatTable
     Call tFormatSplitTables
     Call tFormatJoinTables
@@ -48,8 +48,10 @@ sub w_006_
     Call tTableCell
     Call tTableRow
     Call tFormatAutoformatTable
-    
+
 end sub
+
+'---------------------------------------------------------------------------------------------------------
 
 testcase tFormatTable
     PrintLog "- Format / Table"

@@ -38,6 +38,7 @@
 
 sub w_008_
     printLog Chr(13) + "--------- Window Menu (w_008_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tWindowNewWindow
 
@@ -60,7 +61,6 @@ testcase tWindowNewWindow
     WaitSlot (2000)
     Call hCloseDocument
     printlog " Close active document"
-
 endcase
 
 '-----------------------------------------------------------

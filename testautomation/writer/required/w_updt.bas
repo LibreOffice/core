@@ -78,7 +78,7 @@ sub main
     Call w_020_              ' Toolbar
     Call hStatusOut
 
-    end sub
+end sub
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"

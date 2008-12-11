@@ -38,6 +38,7 @@
 
 sub w_005_
     printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tFormatDefault
 
@@ -58,6 +59,13 @@ sub w_005_
     Call tFormatAnchorArea
     Call tFormatWrap
     Call tFormatWrapArea
+
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocFormatParagraph
+    Call tHtmlDocFormatPage
+    Call tHtmlDocFormatStylist
+    gApplication = "WRITER"
 
 end sub
 
@@ -255,10 +263,10 @@ testcase tFormatChangeCase
         endcatch
         WaitSlot(500)
         try
+            printlog " Format / Case Characters / Katagana"
             FormatChangeCaseKatagana
         catch
             Warnlog "Format / Change Case / Katagana does not work. Maybe no Asian support!"
-            printlog " Format / Case Characters / Katagana"
         endcatch
     end if
 
@@ -391,7 +399,6 @@ testcase tFormatParagraph
 
     printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 '------------------------------------------------
@@ -673,8 +680,7 @@ testcase tFormatAutoformatWhileTyping
     FormatAutoformatWhileTyping
     printlog " Close active document"
     Call hCloseDocument
-
-    endcase
+endcase
 
 '-----------------------------------------------------------
 
@@ -728,7 +734,6 @@ testcase tFormatColumn
     EinfuegenSpalten.OK
     printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -999,3 +1004,154 @@ testcase tFormatWrapArea
     Call hCloseDocument
 endcase
 
+'-----------------------------------------------------------
+
+testcase tHtmlDocFormatParagraph
+    PrintLog "- Format / Paragraph"
+    gApplication = "HTMLDOKUMENT"
+    printlog " Open new document"
+    Call hNewDocument
+    printlog " Format / Paragraph"
+    FormatParagraph
+
+    Kontext
+    active.SetPage TabEinzuegeUndAbstaende
+    kontext "TabEinzuegeUndAbstaende"
+    Call DialogTest ( TabEinzuegeUndAbstaende )
+    printlog " Step through all tabpages"
+
+    Kontext
+    Active.SetPage TabAusrichtungAbsatz
+    Kontext "TabAusrichtungAbsatz"
+    Call DialogTest ( TabAusrichtungAbsatz )
+
+    Kontext
+    active.SetPage TabNumerierungAbsatz
+    kontext "TabNumerierungAbsatz"
+    Call DialogTest ( TabNumerierungAbsatz )
+
+    Kontext
+    active.SetPage TabUmrandung
+    kontext "TabUmrandung"
+    Call DialogTest ( TabUmrandung )
+    printlog " Close dialog"
+    TabUmrandung.Close
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'------------------------------------------------
+
+testcase tHtmlDocFormatPage
+    PrintLog "- Format / Page"
+    gApplication = "HTMLDOKUMENT"
+    printlog " Open new document"
+    Call hNewDocument
+
+    printlog " Format / Page"
+    FormatPageWriter
+
+    Kontext
+    printlog " Step through all tabpages"
+    active.SetPage TabVerwalten
+    kontext "TabVerwalten"
+    Call DialogTest ( TabVerwalten )
+
+    Kontext
+    active.SetPage TabSeite
+    kontext "TabSeite"
+    Call DialogTest ( TabSeite )
+
+    Kontext
+    active.SetPage TabHintergrund
+    Kontext "Active"
+    If Active.GetRT = 304 then Active.Yes         ' Messagebox abfangen-> Seitenr�nder au�erhalb des Bereichs
+
+    Kontext
+    active.SetPage TabHintergrund
+    kontext "TabHintergrund"
+    Call DialogTest2 ( TabHintergrund, 1 )
+    Als.Select 2
+    Call DialogTest2 ( TabHintergrund, 2 )
+    Durchsuchen.Click
+    Sleep 1
+    Kontext "GrafikEinfuegenDlg"
+    GrafikEinfuegenDlg.Cancel
+
+    Kontext
+    active.SetPage TabKopfzeile
+    kontext "TabKopfzeile"
+    Call DialogTest ( TabKopfzeile )
+    Kontext
+    active.SetPage TabFusszeile
+    kontext "TabFusszeile"
+    Call DialogTest ( TabFusszeile )
+    printlog " Close dialog"
+    TabFussZeile.Close
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'--------------------------------------------------
+
+testcase tHtmlDocFormatStylist
+    PrintLog "- Format / Stylist"
+    gApplication = "HTMLDOKUMENT"
+	if gPlatgroup = "unx" then
+		QAErrorlog "Doesn't run on unix"
+		goto endsub
+	end if
+    printlog " Open new document"
+    Call hNewDocument
+    Kontext "Gestalter"
+    If Not Gestalter.Exists then FormatStylist
+    printlog " Format / Stylist"
+    Kontext "Gestalter"
+    Call DialogTest ( Gestalter )
+    Zeichenvorlagen.Click
+    printlog " Click all Styles-buttons in Stylist"
+    Sleep 1
+    Numerierungsvorlagen.Click
+    Sleep 1
+    Absatzvorlagen.Click
+    Sleep 1
+
+    TBGestalterRight.Click Giesskanne
+    Sleep 1
+
+    AusSelektion.OpenMenu
+    Sleep 1
+    hMenuSelectNr(1)
+    Sleep 1
+    Kontext "VorlageErzeugen"
+    DialogTest ( VorlageErzeugen )
+    VorlageErzeugen.Cancel
+    Sleep 1
+
+    Kontext "Gestalter"
+    AusSelektion.OpenMenu
+    Sleep 1
+    hMenuSelectNr(2)
+
+    AusSelektion.OpenMenu
+    Sleep 1
+    hMenuSelectNr(3)
+    Sleep 10
+    Kontext "Neu"
+    DialogTest ( Neu )
+    Neu.Cancel
+
+    printlog " Close Stylist"
+    Kontext "Gestalter"
+    Gestalter.Close
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'------------------------------------------------------
