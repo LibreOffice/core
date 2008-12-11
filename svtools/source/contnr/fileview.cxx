@@ -684,8 +684,8 @@ OUString CreateExactSizeText_Impl( sal_Int64 nSize )
     double fSize( ( double ) nSize );
     int nDec;
 
-    ULONG nMega = 1024 * 1024;
-    ULONG nGiga = nMega * 1024;
+    long nMega = 1024 * 1024;
+    long nGiga = nMega * 1024;
 
     String aUnitStr = ' ';
 

@@ -224,8 +224,13 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
 {
     ::com::sun::star::uno::Any aDefault;
 
-    if ( ( nPropId == BASEPROPERTY_FONTDESCRIPTOR ) ||
-         ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
+    if (
+        (nPropId == BASEPROPERTY_FONTDESCRIPTOR) ||
+        (
+         (nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START) &&
+         (nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END)
+        )
+       )
     {
         EmptyFontDescriptor aFD;
         switch ( nPropId )

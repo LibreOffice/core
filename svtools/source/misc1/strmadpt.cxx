@@ -301,18 +301,26 @@ SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
                                   sal_Int32 nBytesToRead)
     throw (io::IOException, uno::RuntimeException)
 {
+    OSL_ASSERT(m_nPosition >= 0);
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();
-    if (nBytesToRead < 0
-        || m_nPosition > std::numeric_limits< ULONG >::max()
-           && nBytesToRead > 0)
+    if (
+         nBytesToRead < 0 ||
+         (
+          static_cast<sal_uInt64>(m_nPosition) > SAL_MAX_SIZE &&
+          nBytesToRead > 0
+         )
+       )
+    {
         throw io::IOException();
+    }
     rData.realloc(nBytesToRead);
     sal_Int32 nSize = 0;
     while (nSize < nBytesToRead)
     {
-        ULONG nCount;
-        ErrCode nError = m_xLockBytes->ReadAt(ULONG(m_nPosition),
+        sal_Size nCount;
+        ErrCode nError = m_xLockBytes->ReadAt(static_cast<sal_Size>(
+                                                  m_nPosition),
                                               rData.getArray() + nSize,
                                               nBytesToRead - nSize, &nCount);
         if (nError != ERRCODE_NONE && nError != ERRCODE_IO_PENDING)
@@ -333,19 +341,20 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
                                       sal_Int32 nMaxBytesToRead)
     throw (io::IOException, uno::RuntimeException)
 {
+    OSL_ASSERT(m_nPosition >= 0);
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();
-    if (m_nPosition > std::numeric_limits< ULONG >::max()
+    if (static_cast<sal_uInt64>(m_nPosition) > SAL_MAX_SIZE
         && nMaxBytesToRead > 0)
         throw io::IOException();
     rData.realloc(nMaxBytesToRead);
-    ULONG nCount = 0;
+    sal_Size nCount = 0;
     if (nMaxBytesToRead > 0)
     {
         ErrCode nError;
         do
         {
-            nError = m_xLockBytes->ReadAt(ULONG(m_nPosition),
+            nError = m_xLockBytes->ReadAt(static_cast<sal_Size>(m_nPosition),
                                           rData.getArray(),
                                           nMaxBytesToRead < 0 ?
                                               0 : nMaxBytesToRead,
@@ -369,7 +378,7 @@ void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
         throw io::NotConnectedException();
     if (nBytesToSkip < 0)
         throw io::IOException();
-    if (m_nPosition + nBytesToSkip < 0)
+    if (nBytesToSkip > SAL_MAX_INT64 - m_nPosition)
         throw io::BufferSizeExceededException();
     m_nPosition += nBytesToSkip;
 }
@@ -379,16 +388,18 @@ void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
 sal_Int32 SAL_CALL SvLockBytesInputStream::available()
     throw (io::IOException, uno::RuntimeException)
 {
+    OSL_ASSERT(m_nPosition >= 0);
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();
     SvLockBytesStat aStat;
     if (m_xLockBytes->Stat(&aStat, SVSTATFLAG_DEFAULT) != ERRCODE_NONE)
         throw io::IOException();
-    return aStat.nSize <= m_nPosition ?
+    return aStat.nSize <= static_cast<sal_uInt64>(m_nPosition) ?
                0 :
-               std::min< sal_uInt32 >(
-                   sal_uInt32(aStat.nSize - m_nPosition),
-                   sal_uInt32(std::numeric_limits< sal_Int32 >::max()));
+           static_cast<sal_Size>(aStat.nSize - m_nPosition) <=
+                   static_cast<sal_uInt32>(SAL_MAX_INT32) ?
+               static_cast<sal_Int32>(aStat.nSize - m_nPosition) :
+               SAL_MAX_INT32;
 }
 
 //============================================================================
@@ -434,6 +445,10 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     SvLockBytesStat aStat;
     if (m_xLockBytes->Stat(&aStat, SVSTATFLAG_DEFAULT) != ERRCODE_NONE)
         throw io::IOException();
+#if SAL_TYPES_SIZEOFPOINTER > 4 // avoid warnings if sal_Size < sal_Int64
+    if (aStat.nSize > static_cast<sal_uInt64>(SAL_MAX_INT64))
+        throw io::IOException();
+#endif
     return aStat.nSize;
 }
 
@@ -575,14 +590,18 @@ void SvInputStream::FlushData()
 ULONG SvInputStream::SeekPos(ULONG nPos)
 {
     if (open())
+    {
         if (nPos == STREAM_SEEK_TO_END)
+        {
             if (m_nSeekedFrom == STREAM_SEEK_TO_END)
             {
                 if (m_xSeekable.is())
                     try
                     {
                         sal_Int64 nLength = m_xSeekable->getLength();
-                        if (nLength < STREAM_SEEK_TO_END)
+                        OSL_ASSERT(nLength >= 0);
+                        if (static_cast<sal_uInt64>(nLength)
+                            < STREAM_SEEK_TO_END)
                         {
                             m_nSeekedFrom = Tell();
                             return ULONG(nLength);
@@ -594,6 +613,7 @@ ULONG SvInputStream::SeekPos(ULONG nPos)
             }
             else
                 return Tell();
+        }
         else if (nPos == m_nSeekedFrom)
         {
             m_nSeekedFrom = STREAM_SEEK_TO_END;
@@ -612,6 +632,7 @@ ULONG SvInputStream::SeekPos(ULONG nPos)
             m_nSeekedFrom = STREAM_SEEK_TO_END;
             return nPos;
         }
+    }
     SetError(ERRCODE_IO_CANTSEEK);
     return Tell();
 }
@@ -785,10 +806,17 @@ USHORT SvOutputStream::IsA() const
 
 bool SvDataPipe_Impl::remove(Page * pPage)
 {
-    if (pPage != m_pFirstPage || m_pReadPage == m_pFirstPage
-        || !m_aMarks.empty()
-           && *m_aMarks.begin() < m_pFirstPage->m_nOffset + m_nPageSize)
+    if (
+        pPage != m_pFirstPage ||
+        m_pReadPage == m_pFirstPage ||
+        (
+         !m_aMarks.empty() &&
+         *m_aMarks.begin() < m_pFirstPage->m_nOffset + m_nPageSize
+        )
+       )
+    {
         return false;
+    }
 
     m_pFirstPage = m_pFirstPage->m_pNext;
 

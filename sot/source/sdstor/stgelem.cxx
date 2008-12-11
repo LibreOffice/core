@@ -389,7 +389,7 @@ BOOL StgEntry::Load( const void* pFrom )
     UINT16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    if( n > 31 || nSize < 0 && cType != STG_STORAGE )
+    if( n > 31 || (nSize < 0 && cType != STG_STORAGE) )
     {
         // the size makes no sence for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb

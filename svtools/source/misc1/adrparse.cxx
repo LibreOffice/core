@@ -495,6 +495,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                     addTokenToAddrSpec(ELEMENT_ITEM);
                 }
                 if (!m_bRealNameFinished && m_eState != AFTER_LESS)
+                {
                     if (m_bCurTokenReparse)
                     {
                         if (!m_pRealNameBegin)
@@ -516,16 +517,19 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                         m_pRealNameEnd = m_pCurTokenEnd;
                         m_bRealNameReparse = true;
                     }
+                }
                 m_eType = TOKEN_ATOM;
                 break;
 
             case TOKEN_DOMAIN:
                 if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+                {
                     if (m_pAddrSpec->m_bAtFound
                         && m_pAddrSpec->m_eLastElem == ELEMENT_DELIM)
                         addTokenToAddrSpec(ELEMENT_ITEM);
                     else
                         m_pAddrSpec->reset();
+                }
                 addTokenToRealName();
                 m_eType = TOKEN_ATOM;
                 break;
@@ -603,6 +607,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 
             case '@':
                 if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+                {
                     if (!m_pAddrSpec->m_bAtFound
                         && m_pAddrSpec->m_eLastElem == ELEMENT_ITEM)
                     {
@@ -611,6 +616,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                     }
                     else
                         m_pAddrSpec->reset();
+                }
                 addTokenToRealName();
                 break;
 
@@ -741,10 +747,12 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 
             case '.':
                 if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+                {
                     if (m_pAddrSpec->m_eLastElem != ELEMENT_DELIM)
                         addTokenToAddrSpec(ELEMENT_DELIM);
                     else
                         m_pAddrSpec->reset();
+                }
                 addTokenToRealName();
                 break;
 
@@ -832,10 +840,12 @@ bool SvAddressParser::createRFC822Mailbox(String const & rPhrase,
     {
         p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
         if (p == pEnd)
+        {
             if (bSegment)
                 break;
             else
                 return false;
+        }
         if (bSegment)
         {
             if (*p++ != '.')

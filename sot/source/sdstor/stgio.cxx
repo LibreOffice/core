@@ -67,10 +67,12 @@ BOOL StgIo::Load()
     if( pStrm )
     {
         if( aHdr.Load( *this ) )
+        {
             if( aHdr.Check() )
                 SetupStreams();
             else
                 return FALSE;
+        }
     }
     return Good();
 }
