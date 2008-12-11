@@ -141,7 +141,6 @@ CFLAGSWERRCC=-Werror
 MODULES_WITH_WARNINGS := \
     extensions \
     soldep \
-    svtools \
     svx
 
 # switches for dynamic and static linking
