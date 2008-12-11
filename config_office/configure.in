@@ -5914,6 +5914,7 @@ AC_MSG_CHECKING([whether to include writer2latex])
 if test "$with_writer2latex" != "no" ; then
   AC_MSG_RESULT([yes])
   WITH_WRITER2LATEX=YES
+  BUILD_TYPE="$BUILD_TYPE WRITER2LATEX"
 else
   AC_MSG_RESULT([no])
   WITH_WRITER2LATEX=NO

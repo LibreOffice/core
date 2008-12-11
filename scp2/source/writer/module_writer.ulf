@@ -46,5 +46,8 @@ en-US = "%PRODUCTNAME Writer Help"
 [STR_DESC_MODULE_PRG_WRT_HELP]
 en-US = "Help about %PRODUCTNAME Writer"
 
+[STR_NAME_MODULE_PRG_WRT_WRITER2LATEX]
+en-US = "LaTeX Export"
 
-
+[STR_DESC_MODULE_PRG_WRT_WRITER2LATEX]
+en-US = "LaTeX export filter for Writer documents."

@@ -62,10 +62,10 @@ End
 
 #ifdef SOLAR_JAVA
 #ifndef WITHOUT_WRITER2LATEX
-File gid_File_Jar_Writer2latex
+File gid_File_Oxt_Writer2latex
     TXT_FILE_BODY;
-    Name = "writer2latex.jar";
-    Dir = gid_Dir_Classes;
+    Name = "writer2latex.oxt";
+    Dir = gid_Brand_Dir_Share_Extension_Install;
     Styles = (PACKED);
 End
 #endif
