@@ -922,6 +922,7 @@ void ViewShell::ArrangeGUIElements (void)
 
     // Filler in the lower right corner.
     if (mpScrollBarBox.get() != NULL)
+    {
         if (mpHorizontalScrollBar.get()!=NULL
             && mpHorizontalScrollBar->IsVisible()
             && mpVerticalScrollBar.get()!=NULL
@@ -932,6 +933,7 @@ void ViewShell::ArrangeGUIElements (void)
         }
         else
             mpScrollBarBox->Hide();
+    }
 
     // Place horizontal ruler below tab bar.
     if (mbHasRulers && mpContentWindow.get() != NULL)

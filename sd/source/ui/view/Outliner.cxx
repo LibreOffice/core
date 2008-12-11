@@ -1235,6 +1235,7 @@ void Outliner::PrepareSpellCheck (void)
         // When spell checking we have to test whether we have processed the
         // whole document and have reached the start page again.
         if (meMode == SPELL)
+        {
             if (maSearchStartPosition == ::sd::outliner::Iterator())
                 // Remember the position of the first text object so that we
                 // know when we have processed the whole document.
@@ -1243,7 +1244,7 @@ void Outliner::PrepareSpellCheck (void)
             {
                 mbEndOfSearch = true;
             }
-
+        }
 
         EnterEditMode( FALSE );
     }

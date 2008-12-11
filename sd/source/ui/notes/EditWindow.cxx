@@ -118,8 +118,10 @@ void SmGetLeftSelectionPart(const ESelection aSel,
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (    aSel.nStartPara <  aSel.nEndPara
-        ||  aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos)
+    if (
+        (aSel.nStartPara <  aSel.nEndPara) ||
+        (aSel.nStartPara == aSel.nEndPara && aSel.nStartPos < aSel.nEndPos)
+       )
     {   nPara = aSel.nStartPara;
         nPos  = aSel.nStartPos;
     }

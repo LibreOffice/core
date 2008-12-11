@@ -647,7 +647,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
             pPage = (SdPage*) pObj->GetPage();
             bMasterPage = pPage->IsMasterPage();
 
-            if (bMasterPage && bOnMasterPage || !bMasterPage && bOnPage)
+            if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
             {
                 if ( pPage && pPage->IsPresObj(pObj) )
                 {

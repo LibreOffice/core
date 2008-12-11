@@ -117,10 +117,12 @@ void PageSelector::UpdateAllPages (void)
     }
 
     if (bSelectionHasChanged)
+    {
         if (mnBroadcastDisableLevel > 0)
             mbSelectionChangeBroadcastPending = true;
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
+    }
 }
 
 

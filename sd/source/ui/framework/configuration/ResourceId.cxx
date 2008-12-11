@@ -363,10 +363,12 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
         // two resource ids are equivalent.  Otherwise the shorter comes
         // first.
         if (nLocalURLCount != nURLCount)
+        {
             if (nLocalURLCount < nURLCount)
                 nResult = -1;
             else
                 nResult = +1;
+        }
     }
 
     return nResult;

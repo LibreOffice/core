@@ -189,10 +189,12 @@ void GenericPageCache::RequestPreviewBitmap (
         // No, the bitmap is not up-to-date.  Request a new one.
         RequestPriorityClass ePriorityClass (NOT_VISIBLE);
         if (mpCacheContext->IsVisible(aKey))
+        {
             if (mpBitmapCache->HasBitmap(pPage))
                 ePriorityClass = VISIBLE_OUTDATED_PREVIEW;
             else
                 ePriorityClass = VISIBLE_NO_PREVIEW;
+        }
         maRequestQueue.AddRequest(aKey, ePriorityClass);
         mpQueueProcessor->Start(ePriorityClass);
     }

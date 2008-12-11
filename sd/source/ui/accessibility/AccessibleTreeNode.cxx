@@ -333,6 +333,7 @@ void AccessibleTreeNode::UpdateState(
     bool bValue)
 {
     if ((mrStateSet->contains(aState)!=sal_False) != bValue)
+    {
         if (bValue)
         {
             mrStateSet->AddState(aState);
@@ -343,6 +344,7 @@ void AccessibleTreeNode::UpdateState(
             mrStateSet->RemoveState(aState);
             FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(aState),Any());
         }
+    }
 }
 
 

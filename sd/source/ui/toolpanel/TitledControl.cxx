@@ -386,10 +386,12 @@ void TitledControl::UpdateStates (void)
 
     TreeNode* pControl = GetControl(false);
     if (pControl!=NULL  &&  pControl->GetWindow() != NULL)
+    {
         if (IsVisible() && IsExpanded())
             pControl->GetWindow()->Show();
         else
             pControl->GetWindow()->Hide();
+    }
 }
 
 

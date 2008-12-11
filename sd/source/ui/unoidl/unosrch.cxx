@@ -670,8 +670,8 @@ sal_Bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nSta
 
         if(pDescr->IsWords())
         {
-            if( nStartPos > 0 && aText.getStr()[nStartPos-1] > ' ' ||
-                nEndPos < aText.getLength() && aText.getStr()[nEndPos] > ' ')
+            if( (nStartPos > 0 && aText.getStr()[nStartPos-1] > ' ') ||
+                (nEndPos < aText.getLength() && aText.getStr()[nEndPos] > ' ') )
             {
                 nStartPos++;
                 return Search( aText, nStartPos, nEndPos, pDescr );

@@ -145,6 +145,7 @@ void TimerBasedTaskExecution::SetSelf (
 IMPL_LINK(TimerBasedTaskExecution,TimerCallback, Timer*,EMPTYARG)
 {
     if (mpTask.get() != NULL)
+    {
         if (mpTask->HasNextStep())
         {
             // Execute as many steps as fit into the time span of length
@@ -172,6 +173,7 @@ IMPL_LINK(TimerBasedTaskExecution,TimerCallback, Timer*,EMPTYARG)
         }
         else
             mpSelf.reset();
+    }
 
     return 0;
 }
