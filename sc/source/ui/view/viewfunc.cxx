@@ -1762,11 +1762,13 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
     }
 
     if (!AdjustRowHeight(0, MAXROW))
+    {
         if (bRows)
             pDocSh->PostPaint( 0,pRanges[0],nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT );
         else
             pDocSh->PostPaint( static_cast<SCCOL>(pRanges[0]),0,nTab,
                     MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_TOP );
+    }
     aModificator.SetDocumentModified();
 
     CellContentChanged();

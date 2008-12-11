@@ -802,6 +802,7 @@ void ScUndoMerge::DoChange( const BOOL bUndo ) const
                        aRange.aEnd.Col(),   aRange.aEnd.Row()   );
 
     if (pUndoDoc)
+    {
         if (bUndo)
         {
             pDoc->DeleteAreaTab( aRange, IDF_CONTENTS );
@@ -811,6 +812,7 @@ void ScUndoMerge::DoChange( const BOOL bUndo ) const
 /*!*/       pDoc->DoMergeContents( aRange.aStart.Tab(),
                                    aRange.aStart.Col(), aRange.aStart.Row(),
                                    aRange.aEnd.Col(),   aRange.aEnd.Row()   );
+    }
 
     BOOL bDidPaint = FALSE;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

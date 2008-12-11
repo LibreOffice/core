@@ -1036,10 +1036,12 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             const sal_Bool bLeft )
 {
     if (!bLeft)
+    {
         if (bFooter)
             bContainsRightFooter = sal_True;
         else
             bContainsRightHeader = sal_True;
+    }
     if (!xPropSet.is())
         xPropSet.set(GetStyle(), UNO_QUERY );
     return new XMLTableHeaderFooterContext( GetImport(),

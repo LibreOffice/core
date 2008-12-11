@@ -80,6 +80,7 @@ void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bStrin
 {
     rtl::OUStringBuffer sBuffer;
     if (!bEmpty)
+    {
         if (bString)
         {
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
@@ -91,6 +92,7 @@ void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bStrin
             rExport.GetMM100UnitConverter().convertDouble(sBuffer, fValue);
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sBuffer.makeStringAndClear());
         }
+    }
     if (nRepeat > 1)
     {
         rExport.GetMM100UnitConverter().convertNumber(sBuffer, nRepeat);

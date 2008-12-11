@@ -603,7 +603,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNam
 
 sal_Bool IsLeapYear( sal_uInt16 nYear )
 {
-    return (((nYear % 4) == 0) && ((nYear % 100) != 0) || ((nYear % 400) == 0));
+    return ((((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0));
 }
 
 sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )

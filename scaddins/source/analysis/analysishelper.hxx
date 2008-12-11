@@ -603,7 +603,7 @@ public:
 
 inline sal_Bool IsLeapYear( sal_uInt16 n )
 {
-    return ( ( ( n % 4 ) == 0 ) && ( ( n % 100 ) != 0) || ( ( n % 400 ) == 0 ) );
+    return ( (( ( n % 4 ) == 0 ) && ( ( n % 100 ) != 0)) || ( ( n % 400 ) == 0 ) );
 }
 
 
