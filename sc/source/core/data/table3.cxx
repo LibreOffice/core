@@ -365,6 +365,15 @@ short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nInd
                 pInfo1->pCell, static_cast<SCCOL>(pInfo1->nOrg), aSortParam.nField[nSort],
                 pInfo2->pCell, static_cast<SCCOL>(pInfo2->nOrg), aSortParam.nField[nSort] );
     } while ( nRes == 0 && ++nSort < pArray->GetUsedSorts() );
+    if( nRes == 0 )
+    {
+        ScSortInfo* pInfo1 = pArray->Get( 0, nIndex1 );
+        ScSortInfo* pInfo2 = pArray->Get( 0, nIndex2 );
+        if( pInfo1->nOrg < pInfo2->nOrg )
+            nRes = -1;
+        else if( pInfo1->nOrg > pInfo2->nOrg )
+            nRes = 1;
+    }
     return nRes;
 }
 

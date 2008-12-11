@@ -1559,7 +1559,8 @@ BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord, BOOL bPartOfPaste )
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, eCmd, bRecord, FALSE, bPartOfPaste );
+        const ScMarkData& rMark = GetViewData()->GetMarkData();
+        BOOL bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, &rMark, eCmd, bRecord, FALSE, bPartOfPaste );
         if (bSuccess)
         {
             pDocSh->UpdateOle(GetViewData());
@@ -1582,7 +1583,8 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, BOOL bRecord )
     if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
-        pDocSh->GetDocFunc().DeleteCells( aRange, eCmd, bRecord, FALSE );
+        const ScMarkData& rMark = GetViewData()->GetMarkData();
+        pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, FALSE );
 
         pDocSh->UpdateOle(GetViewData());
         CellContentChanged();

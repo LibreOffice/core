@@ -171,6 +171,11 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     // mouse button down and up on same page?
     if( nMouseClickPageId != GetPageId( aPos ) )
         nMouseClickPageId = TAB_PAGE_NOTFOUND;
+    else if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() )
+    {
+        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
+        pDispatcher->Execute( FID_TAB_MENU_RENAME, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+    }
 
     if( nMouseClickPageId == 0 )
     {

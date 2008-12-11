@@ -80,6 +80,7 @@
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 
+#include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include "scabstdlg.hxx" //CHINA001
@@ -748,6 +749,35 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rBindings.Invalidate( SID_ATTR_ZOOM );
                     rReq.AppendItem( SvxZoomItem( GetZoomType(), nZoom, nSlot ) );
                     rReq.Done();
+                }
+            }
+            break;
+
+        case SID_ATTR_ZOOMSLIDER:
+            {
+                const SfxPoolItem* pItem = NULL;
+                BOOL bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem) == SFX_ITEM_SET )
+                {
+                    const USHORT nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    if( nCurrentZoom )
+                    {
+                        SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
+                        if (!GetViewData()->IsPagebreakMode())
+                        {
+                            ScAppOptions aNewOpt = pScMod->GetAppOptions();
+                            aNewOpt.SetZoom( nCurrentZoom );
+                            aNewOpt.SetZoomType( GetZoomType() );
+                            pScMod->SetAppOptions( aNewOpt );
+                        }
+                        Fraction aFract( nCurrentZoom,100 );
+                        SetZoom( aFract, aFract, bSyncZoom );
+                        PaintGrid();
+                        PaintTop();
+                        PaintLeft();
+                        rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
+                        rReq.Done();
+                    }
                 }
             }
             break;

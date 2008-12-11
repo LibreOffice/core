@@ -69,7 +69,9 @@ private:
 
     TypedStrCollection*     pColumnData;
     TypedStrCollection*     pFormulaData;
+    TypedStrCollection*     pFormulaDataPara;
     ULONG                   nTipVisible;
+    ULONG                   nTipVisibleSec;
     String                  aManualTip;
     String                  aAutoSearch;
     USHORT                  nAutoPos;
@@ -191,7 +193,10 @@ public:
     void            ResetDelayTimer(); //BugId 54702
 
     void            HideTip();
+    void            HideTipBelow();
+    void            ShowTipCursor();
     void            ShowTip( const String& rText );     // am Cursor
+    void            ShowTipBelow( const String& rText );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
     void            UpdateRefDevice();

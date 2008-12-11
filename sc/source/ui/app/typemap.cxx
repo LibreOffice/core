@@ -120,6 +120,7 @@
 #include <svtools/ilstitem.hxx>
 #include <svtools/globalnameitem.hxx>
 #include <svx/chrtitem.hxx>
+#include <svx/zoomslideritem.hxx>
 
 // #i25616#
 #include <svx/sdshitm.hxx>

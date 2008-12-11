@@ -237,7 +237,15 @@ void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     }
     else
     {
-        aLbSort1.SelectEntryPos( 1 );
+        SCCOL  nCol = pViewData->GetCurX();
+
+        if( nCol < rSortData.nCol1 )
+            nCol = rSortData.nCol1;
+        else if( nCol > rSortData.nCol2 )
+            nCol = rSortData.nCol2;
+
+        USHORT  nSort1Pos = nCol - rSortData.nCol1+1;
+        aLbSort1.SelectEntryPos( nSort1Pos );
         aLbSort2.SelectEntryPos( 0 );
         aLbSort3.SelectEntryPos( 0 );
         aBtnUp1.Check();

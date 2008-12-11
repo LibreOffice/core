@@ -41,6 +41,7 @@
 #include <sfx2/app.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/srchitem.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <svx/svdview.hxx>
 //CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/dispatch.hxx>
@@ -51,12 +52,18 @@
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 
+#ifndef _SVX_ZOOMSLIDERITEM_HXX
+#include <svx/zoomslideritem.hxx>
+#endif
 #include "prevwsh.hxx"
 #include "preview.hxx"
+#include "printfun.hxx"
+#include "attrib.hxx"
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "docsh.hxx"
@@ -83,6 +90,8 @@
 #include "scabstdlg.hxx" //CHINA001
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
+#define MINZOOM_SLIDER 10
+#define MAXZOOM_SLIDER 400
 
 #define SC_USERDATA_SEP ';'
 
@@ -298,66 +307,145 @@ void ScPreviewShell::UpdateScrollBars()
     Point aOfs = pPreview->GetOffset();
     long nMaxPos;
 
-    pHorScroll->SetRange( Range( 0, aPageSize.Width() ) );
-    pHorScroll->SetLineSize( aWindowSize.Width() / 16 );
-    pHorScroll->SetPageSize( aWindowSize.Width() );
-    pHorScroll->SetVisibleSize( aWindowSize.Width() );
-    nMaxPos = aPageSize.Width() - aWindowSize.Width();
-    if (nMaxPos<0)
+    if( pHorScroll )
     {
-        //  page smaller than window -> center (but put scrollbar to 0)
-        aOfs.X() = 0;
-        pPreview->SetXOffset( nMaxPos / 2 );
+        pHorScroll->SetRange( Range( 0, aPageSize.Width() ) );
+        pHorScroll->SetLineSize( aWindowSize.Width() / 16 );
+        pHorScroll->SetPageSize( aWindowSize.Width() );
+        pHorScroll->SetVisibleSize( aWindowSize.Width() );
+        nMaxPos = aPageSize.Width() - aWindowSize.Width();
+        if ( nMaxPos<0 )
+        {
+            //  page smaller than window -> center (but put scrollbar to 0)
+            aOfs.X() = 0;
+            pPreview->SetXOffset( nMaxPos / 2 );
+        }
+        else if (aOfs.X() < 0)
+        {
+            //  page larger than window -> never use negative offset
+            aOfs.X() = 0;
+            pPreview->SetXOffset( 0 );
+        }
+        else if (aOfs.X() > nMaxPos)
+        {
+            //  limit offset to align with right edge of window
+            aOfs.X() = nMaxPos;
+            pPreview->SetXOffset(nMaxPos);
+        }
+        pHorScroll->SetThumbPos( aOfs.X() );
     }
-    else if (aOfs.X() < 0)
-    {
-        //  page larger than window -> never use negative offset
-        aOfs.X() = 0;
-        pPreview->SetXOffset( 0 );
-    }
-    else if (aOfs.X() > nMaxPos)
-    {
-        //  limit offset to align with right edge of window
-        aOfs.X() = nMaxPos;
-        pPreview->SetXOffset(nMaxPos);
-    }
-    pHorScroll->SetThumbPos( aOfs.X() );
 
-    pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
-    pVerScroll->SetLineSize( aWindowSize.Height() / 16 );
-    pVerScroll->SetPageSize( aWindowSize.Height() );
-    pVerScroll->SetVisibleSize( aWindowSize.Height() );
-    nMaxPos = aPageSize.Height() - aWindowSize.Height();
-    if (nMaxPos<0)
+    if( pVerScroll )
     {
-        //  page smaller than window -> center (but put scrollbar to 0)
-        aOfs.Y() = 0;
-        pPreview->SetYOffset( nMaxPos / 2 );
+        long nPageNo     = pPreview->GetPageNo();
+        long nTotalPages = pPreview->GetTotalPages();
+
+        nMaxVertPos = aPageSize.Height() - aWindowSize.Height();
+        pVerScroll->SetLineSize( aWindowSize.Height() / 16  );
+        pVerScroll->SetPageSize( aWindowSize.Height() );
+        pVerScroll->SetVisibleSize( aWindowSize.Height() );
+        if ( nMaxVertPos < 0 )
+        {
+            //  page smaller than window -> center (but put scrollbar to 0)
+            aOfs.Y() = 0;
+            pPreview->SetYOffset( nMaxVertPos / 2 );
+            pVerScroll->SetThumbPos( nPageNo * aWindowSize.Height() );
+            pVerScroll->SetRange( Range( 0, aWindowSize.Height() * nTotalPages ));
+        }
+        else if (aOfs.Y() < 0)
+        {
+            //  page larger than window -> never use negative offset
+            pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
+            aOfs.Y() = 0;
+            pPreview->SetYOffset( 0 );
+            pVerScroll->SetThumbPos( aOfs.Y() );
+        }
+        else if (aOfs.Y() > nMaxVertPos )
+        {
+            //  limit offset to align with window bottom
+            pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
+            aOfs.Y() = nMaxVertPos;
+            pPreview->SetYOffset( nMaxVertPos );
+            pVerScroll->SetThumbPos( aOfs.Y() );
+        }
     }
-    else if (aOfs.Y() < 0)
-    {
-        //  page larger than window -> never use negative offset
-        aOfs.Y() = 0;
-        pPreview->SetYOffset( 0 );
-    }
-    else if (aOfs.Y() > nMaxPos)
-    {
-        //  limit offset to align with window bottom
-        aOfs.Y() = nMaxPos;
-        pPreview->SetYOffset(nMaxPos);
-    }
-    pVerScroll->SetThumbPos( aOfs.Y() );
 }
 
 IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
 {
-    long nPos = pScroll->GetThumbPos();
+    long nPos           = pScroll->GetThumbPos();
+    long nDelta         = pScroll->GetDelta();
+    long nMaxRange      = pScroll->GetRangeMax();
+    long nTotalPages    = pPreview->GetTotalPages();
+    long nPageNo        = 0;
+    long nPerPageLength = 0;
+    BOOL bIsDivide      = TRUE;
+
+    if( nTotalPages )
+        nPerPageLength = nMaxRange / nTotalPages;
+
+    if( nPerPageLength )
+    {
+        nPageNo = nPos / nPerPageLength;
+        if( nPos % nPerPageLength )
+        {
+            bIsDivide = FALSE;
+            nPageNo ++;
+        }
+    }
 
     BOOL bHoriz = ( pScroll == pHorScroll );
-    if (bHoriz)
+
+    if( bHoriz )
         pPreview->SetXOffset( nPos );
     else
-        pPreview->SetYOffset( nPos );
+    {
+        if( nMaxVertPos > 0 )
+            pPreview->SetYOffset( nPos );
+        else
+        {
+            Point  aMousePos = pScroll->OutputToNormalizedScreenPixel( pScroll->GetPointerPosPixel() );
+            Point  aPos      = pScroll->GetParent()->OutputToNormalizedScreenPixel( pScroll->GetPosPixel() );
+            String aHelpStr;
+            Rectangle aRect;
+            USHORT   nAlign;
+
+            if( nDelta < 0 )
+            {
+                if ( nTotalPages && nPageNo > 0 && !bIsDivide )
+                    pPreview->SetPageNo( nPageNo-1 );
+                if( bIsDivide )
+                    pPreview->SetPageNo( nPageNo );
+
+                aHelpStr = ScGlobal::GetRscString( STR_PAGE );
+                aHelpStr += ' ';
+                aHelpStr += String::CreateFromInt32( nPageNo );
+
+                aHelpStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
+                aHelpStr += String::CreateFromInt32( nTotalPages );
+            }
+            else if( nDelta > 0 )
+            {
+                BOOL bAllTested = pPreview->AllTested();
+                if ( nTotalPages && ( nPageNo < nTotalPages || !bAllTested ) )
+                    pPreview->SetPageNo( nPageNo );
+
+                aHelpStr = ScGlobal::GetRscString( STR_PAGE );
+                aHelpStr += ' ';
+                aHelpStr += String::CreateFromInt32( nPageNo+1 );
+
+                aHelpStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
+                aHelpStr += String::CreateFromInt32( nTotalPages );
+            }
+
+            aRect.Left()    = aPos.X() - 8;
+            aRect.Top()     = aMousePos.Y();
+            aRect.Right()   = aRect.Left();
+            aRect.Top()     = aRect.Top();
+            nAlign          = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
+            Help::ShowQuickHelp( pScroll->GetParent(), aRect, aHelpStr, nAlign );
+        }
+    }
 
     return 0;
 }
@@ -685,6 +773,42 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
+        case SID_ATTR_ZOOMSLIDER:
+            {
+                const SfxPoolItem* pItem;
+                eZoom = SVX_ZOOM_PERCENT;
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, TRUE, &pItem ) )
+                {
+                    const USHORT nCurrentZoom = ((const SvxZoomSliderItem*)pItem)->GetValue();
+                    if( nCurrentZoom )
+                    {
+                        pPreview->SetZoom( nCurrentZoom );
+                        rReq.Done();
+                    }
+                }
+            }
+            break;
+        case SID_PREVIEW_SCALINGFACTOR:
+            {
+                const SfxPoolItem* pItem;
+                SCTAB nTab                      = pPreview->GetTab();
+                String aOldName                 = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
+                ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
+                SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
+                DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+
+                if ( pReqArgs && pStyleSheet && SFX_ITEM_SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, TRUE, &pItem ) )
+                {
+                    const USHORT nCurrentZoom   = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    SfxItemSet& rSet            = pStyleSheet->GetItemSet();
+                    rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nCurrentZoom ) );
+                    ScPrintFunc aPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab );
+                    aPrintFunc.UpdatePages();
+                    rReq.Done();
+                }
+                GetViewFrame()->GetBindings().Invalidate( nSlot );
+            }
+            break;
         case SID_PRINTPREVIEW:
         case SID_PREVIEW_CLOSE:
             //  print preview is now always in the same frame as the tab view
@@ -758,6 +882,40 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
                     SvxZoomItem aZoom( eZoom, nZoom, nWhich );
                     aZoom.SetValueSet( SVX_ZOOM_ENABLE_ALL & ~SVX_ZOOM_ENABLE_OPTIMAL );
                     rSet.Put( aZoom );
+                }
+                break;
+            case SID_ATTR_ZOOMSLIDER:
+                {
+                    SvxZoomSliderItem aZoomSliderItem( nZoom, MINZOOM, MAXZOOM, SID_ATTR_ZOOMSLIDER );
+                    aZoomSliderItem.AddSnappingPoint( 100 );
+                    rSet.Put( aZoomSliderItem );
+                }
+                break;
+            case SID_PREVIEW_SCALINGFACTOR:
+                {
+                    if( pDocShell->IsReadOnly() )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        String aOldName                 = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
+                        ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
+                        SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
+                        DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+
+                        if ( pStyleSheet )
+                        {
+                            SfxItemSet& rStyleSet   = pStyleSheet->GetItemSet();
+                            USHORT nCurrentZoom     = ((const SfxUInt16Item&)rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
+                            if( nCurrentZoom )
+                            {
+                                SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM_SLIDER, MAXZOOM_SLIDER, SID_PREVIEW_SCALINGFACTOR );
+                                aZoomSliderItem.AddSnappingPoint( 100 );
+                                rSet.Put( aZoomSliderItem );
+                            }
+                            else
+                                rSet.DisableItem( nWhich );
+                        }
+                    }
                 }
                 break;
             case SID_STATUS_DOCPOS:
@@ -891,19 +1049,7 @@ void ScPreviewShell::DoScroll( USHORT nMode )
     switch( nMode )
     {
         case SID_CURSORUP:
-            aCurPos.Y() -= nVLine;
-            break;
-        case SID_CURSORDOWN:
-            aCurPos.Y() += nVLine;
-            break;
-        case SID_CURSORLEFT:
-            aCurPos.X() -= nHLine;
-            break;
-        case SID_CURSORRIGHT:
-            aCurPos.X() += nHLine;
-            break;
-        case SID_CURSORPAGEUP:
-            if(nThumbPos==0)
+            if( nMaxVertPos<0 )
             {
                 long nPage = pPreview->GetPageNo();
 
@@ -912,14 +1058,13 @@ void ScPreviewShell::DoScroll( USHORT nMode )
                     SfxViewFrame* pSfxViewFrame = GetViewFrame();
                     SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_PREVIOUS );
                     Execute( aSfxRequest );
-                    aCurPos.Y() = nVRange;
                 }
             }
             else
-                aCurPos.Y() -= nVPage;
+                aCurPos.Y() -= nVLine;
             break;
-        case SID_CURSORPAGEDOWN:
-            if((abs(nVPage+nThumbPos-nRangeMax)<10)||(nVPage>nRangeMax))
+        case SID_CURSORDOWN:
+            if( nMaxVertPos<0 )
             {
                 long nPage = pPreview->GetPageNo();
                 long nTotal = pPreview->GetTotalPages();
@@ -936,6 +1081,50 @@ void ScPreviewShell::DoScroll( USHORT nMode )
                     SfxViewFrame* pSfxViewFrame = GetViewFrame();
                     SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_NEXT );
                     Execute( aSfxRequest );
+                }
+            }
+            else
+                aCurPos.Y() += nVLine;
+            break;
+        case SID_CURSORLEFT:
+            aCurPos.X() -= nHLine;
+            break;
+        case SID_CURSORRIGHT:
+            aCurPos.X() += nHLine;
+            break;
+        case SID_CURSORPAGEUP:
+            if( nThumbPos==0 || nMaxVertPos<0 )
+            {
+                long nPage = pPreview->GetPageNo();
+
+                if( nPage>0 )
+                {
+                    SfxViewFrame* pSfxViewFrame = GetViewFrame();
+                    SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_PREVIOUS );
+                    Execute( aSfxRequest );
+                    aCurPos.Y() = nVRange;
+                }
+            }
+            else
+                aCurPos.Y() -= nVPage;
+            break;
+        case SID_CURSORPAGEDOWN:
+            if( (abs(nVPage+nThumbPos-nRangeMax)<10) || nMaxVertPos<0 )
+            {
+                long nPage = pPreview->GetPageNo();
+                long nTotal = pPreview->GetTotalPages();
+
+                // before testing for last page, make sure all page counts are calculated
+                if ( nPage+1 == nTotal && !pPreview->AllTested() )
+                {
+                    pPreview->CalcAll();
+                    nTotal = pPreview->GetTotalPages();
+                }
+                if( nPage<nTotal-1 )
+                {
+                    SfxViewFrame* pSfxViewFrame = GetViewFrame();
+                    SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_NEXT );
+                    Execute( aSfxRequest );
                     aCurPos.Y() = 0;
                 }
             }
@@ -943,26 +1132,63 @@ void ScPreviewShell::DoScroll( USHORT nMode )
                 aCurPos.Y() += nVPage;
             break;
         case SID_CURSORHOME:
-            aCurPos.Y() = 0;
-            aCurPos.X() = 0;
+            if( nMaxVertPos<0 )
+            {
+                long nPage  = pPreview->GetPageNo();
+                long nTotal = pPreview->GetTotalPages();
+                if( nTotal && nPage != 0 )
+                {
+                    SfxViewFrame* pSfxViewFrame = GetViewFrame();
+                    SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_FIRST );
+                    Execute( aSfxRequest );
+                }
+            }
+            else
+            {
+                aCurPos.Y() = 0;
+                aCurPos.X() = 0;
+            }
             break;
         case SID_CURSOREND:
-            aCurPos.Y() = nVRange;
-            aCurPos.X() = nHRange;
+            if( nMaxVertPos<0 )
+            {
+                if( !pPreview->AllTested() )
+                    pPreview->CalcAll();
+                long nPage  = pPreview->GetPageNo();
+                long nTotal = pPreview->GetTotalPages();
+                if( nTotal && nPage+1 != nTotal )
+                {
+                    SfxViewFrame* pSfxViewFrame = GetViewFrame();
+                    SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_LAST );
+                    Execute( aSfxRequest );
+                }
+            }
+            else
+            {
+                aCurPos.Y() = nVRange;
+                aCurPos.X() = nHRange;
+            }
             break;
     }
 
         // nHRange-nHPage kann negativ sein, deshalb Abfrage auf < 0 hinterher
 
-    if( aCurPos.Y() > (nVRange-nVPage) )    aCurPos.Y() = (nVRange-nVPage);
-    if( aCurPos.Y() < 0 )                   aCurPos.Y() = 0;
-    if( aCurPos.X() > (nHRange-nHPage) )    aCurPos.X() = (nHRange-nHPage);
-    if( aCurPos.X() < 0 )                   aCurPos.X() = 0;
+    if( aCurPos.Y() > (nVRange-nVPage) )
+        aCurPos.Y() = (nVRange-nVPage);
+    if( aCurPos.Y() < 0 )
+        aCurPos.Y() = 0;
+    if( aCurPos.X() > (nHRange-nHPage) )
+        aCurPos.X() = (nHRange-nHPage);
+    if( aCurPos.X() < 0 )
+        aCurPos.X() = 0;
 
-    if( aCurPos.Y() != aPrevPos.Y() )
+    if( nMaxVertPos>=0 )
     {
-        pVerScroll->SetThumbPos( aCurPos.Y() );
-        pPreview->SetYOffset( aCurPos.Y() );
+        if( aCurPos.Y() != aPrevPos.Y() )
+        {
+            pVerScroll->SetThumbPos( aCurPos.Y() );
+            pPreview->SetYOffset( aCurPos.Y() );
+        }
     }
 
     if( aCurPos.X() != aPrevPos.X() )

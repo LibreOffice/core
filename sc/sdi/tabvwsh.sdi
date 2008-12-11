@@ -170,6 +170,7 @@ interface TableEditView : View
      // hat zwar ein SW im Namen, wird aber im Calc auch gebraucht
     SID_CREATE_SW_DRAWVIEW [ ExecMethod = Execute; ]
     SID_ATTR_ZOOM       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ATTR_ZOOMSLIDER [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_INSERT_FILE [ ExecMethod = Execute; StateMethod = GetState; ]
      // Save / SaveAs ueberladen, um die Eingabe abzuschliessen
 

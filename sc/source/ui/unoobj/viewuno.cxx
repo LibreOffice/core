@@ -1440,6 +1440,7 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
         pViewSh->PaintTop();
         pViewSh->PaintLeft();
         pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+        pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     }
 }
 

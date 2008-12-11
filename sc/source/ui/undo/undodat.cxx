@@ -1034,6 +1034,10 @@ void __EXPORT ScUndoQuery::Undo()
     if (!bCopy)
         pDoc->UpdatePageBreaks( nTab );
 
+    ScRange aDirtyRange( 0 , aQueryParam.nRow1, nTab,
+        MAXCOL, aQueryParam.nRow2, nTab );
+    pDoc->SetDirty( aDirtyRange );
+
     DoSdrUndoAction( pDrawUndo, pDoc );
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();

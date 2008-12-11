@@ -103,11 +103,14 @@ TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 //
 
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
-                                const ScRange& rRange, InsCellCmd eNewCmd,
-                                ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
+                                InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
                                 BOOL bNewPartOfPaste ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
     aEffRange( rRange ),
+    nCount( nNewCount ),
+    pTabs( pNewTabs ),
+    pScenarios( pNewScenarios ),
     eCmd( eNewCmd ),
     bPartOfPaste( bNewPartOfPaste ),
     pPasteUndo( NULL )
@@ -130,6 +133,8 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
 __EXPORT ScUndoInsertCells::~ScUndoInsertCells()
 {
     delete pPasteUndo;
+    delete []pTabs;
+    delete []pScenarios;
 }
 
 String __EXPORT ScUndoInsertCells::GetComment() const
@@ -177,6 +182,7 @@ void ScUndoInsertCells::SetChangeTrack()
 void ScUndoInsertCells::DoChange( const BOOL bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
+    SCTAB i;
 
     if ( bUndo )
     {
@@ -193,17 +199,27 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
     {
         case INS_INSROWS:
         case INS_CELLSDOWN:
-            if (bUndo)
-                pDoc->DeleteRow( aEffRange );
-            else
-                pDoc->InsertRow( aEffRange );
+            for( i=0; i<nCount; i++ )
+            {
+                if (bUndo)
+                    pDoc->DeleteRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+                else
+                    pDoc->InsertRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+            }
             break;
         case INS_INSCOLS:
         case INS_CELLSRIGHT:
-            if (bUndo)
-                pDoc->DeleteCol( aEffRange );
-            else
-                pDoc->InsertCol( aEffRange );
+            for( i=0; i<nCount; i++ )
+            {
+                if (bUndo)
+                    pDoc->DeleteCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+                else
+                    pDoc->InsertCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+            }
             break;
         default:
         {
@@ -214,8 +230,16 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
     ScRange aWorkRange( aEffRange );
     if ( eCmd == INS_CELLSRIGHT )                   // only "shift right" requires refresh of the moved area
         aWorkRange.aEnd.SetCol(MAXCOL);
-    if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )
-        pDoc->ExtendMerge( aWorkRange, TRUE );
+    for( i=0; i<nCount; i++ )
+    {
+        if ( pDoc->HasAttrib( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED ) )
+        {
+            SCCOL nEndCol = aWorkRange.aEnd.Col();
+            SCROW nEndRow = aWorkRange.aEnd.Row();
+            pDoc->ExtendMerge( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), nEndCol, nEndRow, pTabs[i], TRUE );
+        }
+    }
 
 //? Undo fuer herausgeschobene Attribute ?
 
@@ -228,25 +252,29 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
         case INS_CELLSDOWN:
-            aWorkRange.aEnd.SetRow(MAXROW);     // bis ganz nach unten
-/*A*/       if ( (pViewShell) && pViewShell->AdjustRowHeight(
-                    aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), FALSE ) )
+            for( i=0; i<nCount; i++ )
             {
-                aWorkRange.aStart.SetCol(0);
-                aWorkRange.aEnd.SetCol(MAXCOL);
-                nPaint |= PAINT_LEFT;
+                aWorkRange.aEnd.SetRow(MAXROW);
+                if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i] ))
+                {
+                    aWorkRange.aStart.SetCol(0);
+                    aWorkRange.aEnd.SetCol(MAXCOL);
+                    nPaint |= PAINT_LEFT;
+                }
             }
             break;
         case INS_INSCOLS:
             nPaint |= PAINT_TOP;                // obere Leiste
         case INS_CELLSRIGHT:
-            aWorkRange.aEnd.SetCol(MAXCOL);     // bis ganz nach rechts
-/*A*/       if ( (pViewShell) && pViewShell->AdjustRowHeight(
-                    aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), FALSE ) )
-            {                                   // AdjustDraw zeichnet PAINT_TOP nicht,
-                aWorkRange.aStart.SetCol(0);    // daher so geloest
-                aWorkRange.aEnd.SetRow(MAXROW);
-                nPaint |= PAINT_LEFT;
+            for( i=0; i<nCount; i++ )
+            {
+                aWorkRange.aEnd.SetCol(MAXCOL);     // bis ganz nach rechts
+                if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i]) )
+                {                                   // AdjustDraw zeichnet PAINT_TOP nicht,
+                    aWorkRange.aStart.SetCol(0);    // daher so geloest
+                    aWorkRange.aEnd.SetRow(MAXROW);
+                    nPaint |= PAINT_LEFT;
+                }
             }
             break;
         default:
@@ -254,12 +282,15 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
             // added to avoid warnings
         }
     }
-    pDocShell->PostPaint( aWorkRange, nPaint );
+
+    for( i=0; i<nCount; i++ )
+    {
+        pDocShell->PostPaint( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i]+pScenarios[i], nPaint );
+    }
     pDocShell->PostDataChanged();
     if (pViewShell)
         pViewShell->CellContentChanged();
-
-    ShowTable( aEffRange.aStart.Tab() );
 }
 
 void __EXPORT ScUndoInsertCells::Undo()
@@ -314,10 +345,13 @@ BOOL __EXPORT ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
-                                const ScRange& rRange, DelCellCmd eNewCmd,
-                                ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
+                                const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
+                                DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
     aEffRange( rRange ),
+    nCount( nNewCount ),
+    pTabs( pNewTabs ),
+    pScenarios( pNewScenarios ),
     eCmd( eNewCmd )
 {
     if (eCmd == DEL_DELROWS)            // gaze Zeilen?
@@ -337,6 +371,8 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
 
 __EXPORT ScUndoDeleteCells::~ScUndoDeleteCells()
 {
+    delete []pTabs;
+    delete []pScenarios;
 }
 
 String __EXPORT ScUndoDeleteCells::GetComment() const
@@ -357,6 +393,7 @@ void ScUndoDeleteCells::SetChangeTrack()
 void ScUndoDeleteCells::DoChange( const BOOL bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
+    SCTAB i;
 
     if ( bUndo )
     {
@@ -367,28 +404,32 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     else
         SetChangeTrack();
 
-    // are there merged cells?
-    ScRange aWorkRange( aEffRange );
-    if ( eCmd == DEL_CELLSLEFT )        // only "shift left" requires refresh of the moved area
-        aWorkRange.aEnd.SetCol(MAXCOL);
-    BOOL bMergeBefore = pDoc->HasAttrib( aWorkRange, HASATTR_MERGED );
-
     // Ausfuehren
     switch (eCmd)
     {
         case DEL_DELROWS:
         case DEL_CELLSUP:
-            if (bUndo)
-                pDoc->InsertRow( aEffRange );
-            else
-                pDoc->DeleteRow( aEffRange );
+            for( i=0; i<nCount; i++ )
+            {
+                if (bUndo)
+                    pDoc->InsertRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+                else
+                    pDoc->DeleteRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+            }
             break;
         case DEL_DELCOLS:
         case DEL_CELLSLEFT:
-            if (bUndo)
-                pDoc->InsertCol( aEffRange );
-            else
-                pDoc->DeleteCol( aEffRange );
+            for( i=0; i<nCount; i++ )
+            {
+                if (bUndo)
+                    pDoc->InsertCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+                else
+                    pDoc->DeleteCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
+                    aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+            }
             break;
         default:
         {
@@ -397,35 +438,47 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     }
 
     // bei Undo Referenzen wiederherstellen
-    if (bUndo)
-        pRefUndoDoc->CopyToDocument( aEffRange, IDF_ALL, FALSE, pDoc );
-
-//? Datenbank muss vor ExtendMerge sein ?????
-
-    if ( bMergeBefore || pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )
+    for( i=0; i<nCount && bUndo; i++ )
     {
-        // #i51445# old merge flag attributes must be deleted also for single cells,
-        // not only for whole columns/rows
+        pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
+            IDF_ALL, FALSE, pDoc );
+    }
 
-        if ( !bUndo )
+    ScRange aWorkRange( aEffRange );
+    if ( eCmd == DEL_CELLSLEFT )        // only "shift left" requires refresh of the moved area
+        aWorkRange.aEnd.SetCol(MAXCOL);
+
+    for( i=0; i<nCount; i++ )
+    {
+        if ( pDoc->HasAttrib( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED ) )
         {
-            if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT ) aWorkRange.aEnd.SetCol(MAXCOL);
-            if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP ) aWorkRange.aEnd.SetRow(MAXROW);
-            ScMarkData aMarkData;
-            aMarkData.SelectOneTable( aWorkRange.aStart.Tab() );
-            ScPatternAttr aPattern( pDoc->GetPool() );
-            aPattern.GetItemSet().Put( ScMergeFlagAttr() );
-            pDoc->ApplyPatternArea( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(),
-                                    aWorkRange.aEnd.Col(),   aWorkRange.aEnd.Row(),
-                                    aMarkData, aPattern );
-        }
+            // #i51445# old merge flag attributes must be deleted also for single cells,
+            // not only for whole columns/rows
 
-        pDoc->ExtendMerge( aWorkRange, TRUE );
+            if ( !bUndo )
+            {
+                if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT )
+                    aWorkRange.aEnd.SetCol(MAXCOL);
+                if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP )
+                    aWorkRange.aEnd.SetRow(MAXROW);
+                ScMarkData aMarkData;
+                aMarkData.SelectOneTable( aWorkRange.aStart.Tab() );
+                ScPatternAttr aPattern( pDoc->GetPool() );
+                aPattern.GetItemSet().Put( ScMergeFlagAttr() );
+                pDoc->ApplyPatternArea( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(),
+                    aWorkRange.aEnd.Col(),   aWorkRange.aEnd.Row(),
+                    aMarkData, aPattern );
+            }
+
+            SCCOL nEndCol = aWorkRange.aEnd.Col();
+            SCROW nEndRow = aWorkRange.aEnd.Row();
+            pDoc->ExtendMerge( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), nEndCol, nEndRow, pTabs[i], TRUE );
+        }
     }
 
     // Zeichnen
     USHORT nPaint = PAINT_GRID;
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     switch (eCmd)
     {
         case DEL_DELROWS:
@@ -433,39 +486,46 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
         case DEL_CELLSUP:
-            aWorkRange.aEnd.SetRow(MAXROW);
-/*A*/       if ( (pViewShell) && pViewShell->AdjustRowHeight(
-                    aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), FALSE   ) )
+            for( i=0; i<nCount; i++ )
             {
-                aWorkRange.aStart.SetCol(0);
-                aWorkRange.aEnd.SetCol(MAXCOL);
-                nPaint |= PAINT_LEFT;
+                aWorkRange.aEnd.SetRow(MAXROW);
+                if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i] ))
+                {
+                    aWorkRange.aStart.SetCol(0);
+                    aWorkRange.aEnd.SetCol(MAXCOL);
+                    nPaint |= PAINT_LEFT;
+                }
             }
             break;
         case DEL_DELCOLS:
             nPaint |= PAINT_TOP;                // obere Leiste
         case DEL_CELLSLEFT:
-            aWorkRange.aEnd.SetCol(MAXCOL);     // bis ganz nach rechts
-/*A*/       if ( (pViewShell) && pViewShell->AdjustRowHeight(
-                    aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), FALSE ) )
+            for( i=0; i<nCount; i++ )
             {
-                aWorkRange.aStart.SetCol(0);
-                aWorkRange.aEnd.SetRow(MAXROW);
-                nPaint |= PAINT_LEFT;
+                aWorkRange.aEnd.SetCol(MAXCOL);     // bis ganz nach rechts
+                if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i] ) )
+                {
+                    aWorkRange.aStart.SetCol(0);
+                    aWorkRange.aEnd.SetRow(MAXROW);
+                    nPaint |= PAINT_LEFT;
+                }
             }
+            break;
         default:
         {
             // added to avoid warnings
         }
     }
-    pDocShell->PostPaint( aWorkRange, nPaint, SC_PF_LINES );    //! auf Lines testen
 
+    for( i=0; i<nCount; i++ )
+    {
+        pDocShell->PostPaint( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i]+pScenarios[i], nPaint, SC_PF_LINES );
+    }
     // Markierung erst nach EndUndo
 
     pDocShell->PostDataChanged();
     //  CellContentChanged kommt mit der Markierung
-
-    ShowTable( aEffRange.aStart.Tab() );
 }
 
 void __EXPORT ScUndoDeleteCells::Undo()
@@ -479,7 +539,12 @@ void __EXPORT ScUndoDeleteCells::Undo()
     // Markierung erst nach EndUndo
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->MarkRange( aEffRange );
+    {
+        for( SCTAB i=0; i<nCount; i++ )
+        {
+            pViewShell->MarkRange( ScRange(aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i]) );
+        }
+    }
 }
 
 void __EXPORT ScUndoDeleteCells::Redo()
@@ -1244,6 +1309,11 @@ void __EXPORT ScUndoDragDrop::Redo()
 
     BOOL bIncludeFiltered = bCut;
     pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL & ~IDF_OBJECTS, NULL, pClipDoc, TRUE, FALSE, bIncludeFiltered );
+
+    if (bCut)
+        for (nTab=aSrcRange.aStart.Tab(); nTab<=aSrcRange.aEnd.Tab(); nTab++)
+            pDoc->RefreshAutoFilter( aSrcRange.aStart.Col(), aSrcRange.aStart.Row(),
+                                     aSrcRange.aEnd.Col(),   aSrcRange.aEnd.Row(), nTab );
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )

@@ -3783,7 +3783,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = TRUE to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         if ( nThisTab == nSourceTab )
@@ -3834,7 +3834,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                          ( eCmd == DEL_CELLSLEFT && nDestPosY == aSource.aStart.Row() ) )
                     {
                         // call with bApi = TRUE to avoid error messages in drop handler
-                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, eCmd, TRUE /*bRecord*/, TRUE /*bApi*/ );
+                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, NULL, eCmd, TRUE /*bRecord*/, TRUE /*bApi*/ );
                         if ( bDone )
                         {
                             if ( eCmd == DEL_CELLSUP && nDestPosY > aSource.aEnd.Row() )
@@ -3920,7 +3920,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = TRUE to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         pDocSh->UpdateOle( pViewData );
@@ -3979,7 +3979,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if ( meDragInsertMode != INS_NONE )
             {
                 // call with bApi = TRUE to avoid error messages in drop handler
-                bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
                 if ( bDone )
                 {
                     pDocSh->UpdateOle( pViewData );
@@ -4317,6 +4317,8 @@ void ScGridWindow::UpdateFormulas()
     {
         Invalidate( aChangedPoly );
     }
+
+    CheckNeedsRepaint();    // #i90362# used to be called via Draw() - still needed here
 }
 
 void ScGridWindow::UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange)

@@ -1065,10 +1065,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, INS_INSROWS, TRUE, FALSE );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, TRUE, FALSE );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, INS_INSCOLS, TRUE, FALSE );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, TRUE, FALSE );
                         break;
                         case SC_CAT_DELETE_TABS :
                             GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), TRUE, FALSE );
@@ -1079,7 +1079,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, DEL_DELROWS, TRUE, FALSE );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, TRUE, FALSE );
                             }
                         }
                         break;
@@ -1089,7 +1089,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, DEL_DELCOLS, TRUE, FALSE );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, TRUE, FALSE );
                             }
                         }
                         break;

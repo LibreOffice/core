@@ -311,6 +311,98 @@ void lcl_RemoveLineEnd(String& rStr)
         rStr.SetChar( nPos, ' ' );
 }
 
+xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
+{
+    int nDir;
+    sal_Unicode c1, c2 = 0;
+    c1 = rStr.GetChar( nPos );
+    switch ( c1 )
+    {
+    case '(' :
+        c2 = ')';
+        nDir = 1;
+        break;
+    case ')' :
+        c2 = '(';
+        nDir = -1;
+        break;
+    case '<' :
+        c2 = '>';
+        nDir = 1;
+        break;
+    case '>' :
+        c2 = '<';
+        nDir = -1;
+        break;
+    case '{' :
+        c2 = '}';
+        nDir = 1;
+        break;
+    case '}' :
+        c2 = '{';
+        nDir = -1;
+        break;
+    case '[' :
+        c2 = ']';
+        nDir = 1;
+        break;
+    case ']' :
+        c2 = '[';
+        nDir = -1;
+        break;
+    default:
+        nDir = 0;
+    }
+    if ( !nDir )
+        return STRING_NOTFOUND;
+    xub_StrLen nLen = rStr.Len();
+    const sal_Unicode* p0 = rStr.GetBuffer();
+    register const sal_Unicode* p;
+    const sal_Unicode* p1;
+    USHORT nQuotes = 0;
+    if ( nPos < nLen / 2 )
+    {
+        p = p0;
+        p1 = p0 + nPos;
+    }
+    else
+    {
+        p = p0 + nPos;
+        p1 = p0 + nLen;
+    }
+    while ( p < p1 )
+    {
+        if ( *p++ == '\"' )
+            nQuotes++;
+    }
+    // Odd number of quotes that we find ourselves in a string
+    BOOL bLookInString = ((nQuotes % 2) != 0);
+    BOOL bInString = bLookInString;
+    p = p0 + nPos;
+    p1 = (nDir < 0 ? p0 : p0 + nLen) ;
+    USHORT nLevel = 1;
+    while ( p != p1 && nLevel )
+    {
+        p += nDir;
+        if ( *p == '\"' )
+        {
+            bInString = !bInString;
+            if ( bLookInString && !bInString )
+                p = p1;     //That's it then
+        }
+        else if ( bInString == bLookInString )
+        {
+            if ( *p == c1 )
+                nLevel++;
+            else if ( *p == c2 )
+                nLevel--;
+        }
+    }
+    if ( nLevel )
+        return STRING_NOTFOUND;
+    return (xub_StrLen) (p - p0);
+}
+
 //==================================================================
 
 ScInputHandler::ScInputHandler()
@@ -320,7 +412,9 @@ ScInputHandler::ScInputHandler()
         pTopView( NULL ),
         pColumnData( NULL ),
         pFormulaData( NULL ),
+        pFormulaDataPara( NULL ),
         nTipVisible( 0 ),
+        nTipVisibleSec( 0 ),
         nAutoPos( SCPOS_INVALID ),
         bUseTab( FALSE ),
         bTextValid( TRUE ),
@@ -379,6 +473,7 @@ __EXPORT ScInputHandler::~ScInputHandler()
     delete pDelayTimer;
     delete pColumnData;
     delete pFormulaData;
+    delete pFormulaDataPara;
 }
 
 void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
@@ -535,16 +630,21 @@ void ScInputHandler::GetFormulaData()
         else
             pFormulaData = new TypedStrCollection;
 
+        if( pFormulaDataPara )
+            pFormulaDataPara->FreeAll();
+        else
+            pFormulaDataPara = new TypedStrCollection;
+
         //      MRU-Funktionen aus dem Funktions-Autopiloten
         //      wie in ScPosWnd::FillFunctions (inputwin.cxx)
 
         const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
         USHORT nMRUCount = rOpt.GetLRUFuncListCount();
         const USHORT* pMRUList = rOpt.GetLRUFuncList();
+        const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
+        ULONG nListCount = pFuncList->GetCount();
         if (pMRUList)
         {
-            const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-            ULONG nListCount = pFuncList->GetCount();
             for (USHORT i=0; i<nMRUCount; i++)
             {
                 USHORT nId = pMRUList[i];
@@ -563,8 +663,20 @@ void ScInputHandler::GetFormulaData()
                 }
             }
         }
-
+        for(ULONG i=0;i<nListCount;i++)
+        {
+            const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
+            if ( pDesc->pFuncName )
+            {
+                pDesc->InitArgumentInfo();
+                String aEntry = pDesc->GetSignature();
+                TypedStrData* pData = new TypedStrData( aEntry, 0.0, SC_STRTYPE_FUNCTIONS );
+                if (!pFormulaDataPara->Insert(pData))
+                    delete pData;
+            }
+        }
         pDoc->GetFormulaEntries( *pFormulaData );
+        pDoc->GetFormulaEntries( *pFormulaDataPara );
     }
 }
 
@@ -576,6 +688,189 @@ void ScInputHandler::HideTip()
         nTipVisible = 0;
     }
     aManualTip.Erase();
+}
+void ScInputHandler::HideTipBelow()
+{
+    if ( nTipVisibleSec )
+    {
+        Help::HideTip( nTipVisibleSec );
+        nTipVisibleSec = 0;
+    }
+    aManualTip.Erase();
+}
+
+void ScInputHandler::ShowTipCursor()
+{
+    HideTip();
+    HideTipBelow();
+    EditView* pActiveView = pTopView ? pTopView : pTableView;
+
+    if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
+    {
+        String aFormula = pEngine->GetText( (USHORT) 0 );
+        ESelection aSel = pActiveView->GetSelection();
+        aSel.Adjust();
+        xub_StrLen  nLeftParentPos = 0;
+        if( aSel.nEndPos )
+        {
+            if ( aFormula.Len() < aSel.nEndPos )
+                return;
+            xub_StrLen nPos = aSel.nEndPos;
+            String  aSelText = aFormula.Copy( 0, nPos );
+            xub_StrLen  nNextFStart = 0;
+            xub_StrLen  nNextFEnd = 0;
+            xub_StrLen  nArgPos = 0;
+            const ScFuncDesc* ppFDesc;
+            String**    pppArgs;
+            USHORT      nArgs;
+            BOOL  bFound = FALSE;
+
+            while( !bFound )
+            {
+                aSelText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+                nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
+                if( nLeftParentPos != STRING_NOTFOUND )
+                {
+                    sal_Unicode c = aSelText.GetChar( nLeftParentPos-1 );
+                    if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
+                        continue;
+                    nNextFStart = ScFormulaUtil::GetFunctionStart( aSelText, nLeftParentPos, TRUE);
+                    if( ScFormulaUtil::GetNextFunc( aSelText, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &pppArgs ) )
+                    {
+                        if( ppFDesc->pFuncName )
+                        {
+                            nArgPos = ScFormulaUtil::GetArgStart( aSelText, nNextFStart, 0 );
+                            nArgs = ppFDesc->nArgCount;
+
+                            USHORT nActive = 0;
+                            USHORT nCount = 0;
+                            USHORT nCountSemicolon = 0;
+                            USHORT nCountDot = 0;
+                            USHORT nStartPosition = 0;
+                            USHORT nEndPosition = 0;
+                            BOOL   bFlag = FALSE;
+                            String aNew;
+                            USHORT nParAutoPos = SCPOS_INVALID;
+                            if( pFormulaDataPara->FindText( *(ppFDesc->pFuncName), aNew, nParAutoPos, FALSE ) )
+                            {
+                                for( USHORT i=0; i < nArgs; i++ )
+                                {
+                                    xub_StrLen nLength=(pppArgs[i])->Len();
+                                    if( nArgPos <= aSelText.Len()-1 )
+                                    {
+                                        nActive = i+1;
+                                        bFlag = TRUE;
+                                    }
+                                    nArgPos+=nLength+1;
+                                }
+                                if( bFlag )
+                                {
+                                    nCountSemicolon = aNew.GetTokenCount(';')-1;
+                                    nCountDot = aNew.GetTokenCount('.')-1;
+
+                                    if( !nCountSemicolon )
+                                    {
+                                        for( USHORT i = 0; i < aNew.Len(); i++ )
+                                        {
+                                            sal_Unicode cNext = aNew.GetChar( i );
+                                            if( cNext == '(' )
+                                            {
+                                                nStartPosition = i+1;
+                                            }
+                                        }
+                                    }
+                                    else if( !nCountDot )
+                                    {
+                                        for( USHORT i = 0; i < aNew.Len(); i++ )
+                                        {
+                                            sal_Unicode cNext = aNew.GetChar( i );
+                                            if( cNext == '(' )
+                                            {
+                                                nStartPosition = i+1;
+                                            }
+                                            else if( cNext == ';' )
+                                            {
+                                                nCount ++;
+                                                nEndPosition = i;
+                                                if( nCount == nActive )
+                                                {
+                                                    break;
+                                                }
+                                                nStartPosition = nEndPosition+1;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for( USHORT i = 0; i < aNew.Len(); i++ )
+                                        {
+                                            sal_Unicode cNext = aNew.GetChar( i );
+                                            if( cNext == '(' )
+                                            {
+                                                nStartPosition = i+1;
+                                            }
+                                            else if( cNext == ';' )
+                                            {
+                                                nCount ++;
+                                                nEndPosition = i;
+                                                if( nCount == nActive )
+                                                {
+                                                    break;
+                                                }
+                                                nStartPosition = nEndPosition+1;
+                                            }
+                                            else if( cNext == '.' )
+                                            {
+                                                continue;
+                                            }
+                                        }
+                                    }
+
+                                    if( nStartPosition )
+                                    {
+                                        aNew.Insert( 0x25BA, nStartPosition );
+                                        ShowTipBelow( aNew );
+                                        bFound = TRUE;
+                                    }
+                                }
+                                else
+                                {
+                                    ShowTipBelow( aNew );
+                                    bFound = TRUE;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    USHORT nPosition = 0;
+                    String aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
+                    if( aText.GetChar( aSel.nEndPos-1 ) == '=' )
+                    {
+                        break;
+                    }
+                    String aNew;
+                    USHORT nParAutoPos = SCPOS_INVALID;
+                    nPosition = aText.Len()+1;
+                    if( pFormulaDataPara->FindText( aText, aNew, nParAutoPos, FALSE ) )
+                    {
+                        if( aFormula.GetChar( nPosition ) =='(' )
+                        {
+                            ShowTipBelow( aNew );
+                            bFound = TRUE;
+                        }
+                        else
+                            break;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void ScInputHandler::ShowTip( const String& rText )
@@ -599,6 +894,29 @@ void ScInputHandler::ShowTip( const String& rText )
     }
 }
 
+void ScInputHandler::ShowTipBelow( const String& rText )
+{
+    HideTipBelow();
+
+    EditView* pActiveView = pTopView ? pTopView : pTableView;
+    if ( pActiveView )
+    {
+        Point aPos;
+        Window* pWin = pActiveView->GetWindow();
+        Cursor* pCur = pActiveView->GetCursor();
+        if ( pCur )
+        {
+            Point aLogicPos = pCur->GetPos();
+            aLogicPos.Y() += pCur->GetHeight();
+            aPos = pWin->LogicToPixel( aLogicPos );
+        }
+        aPos = pWin->OutputToScreenPixel( aPos );
+        Rectangle aRect( aPos, aPos );
+        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP;
+        nTipVisibleSec = Help::ShowTip(pWin, aRect, rText, nAlign);
+    }
+}
+
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -619,19 +937,147 @@ void ScInputHandler::UseFormulaData()
 
         //  steht der Cursor am Ende eines Wortes?
 
-        if ( aSel.nEndPos > 0 && (
-                aSel.nEndPos == aTotal.Len() ||
-                pEngine->GetWordDelimiters().Search( aTotal.GetChar(aSel.nEndPos) ) != STRING_NOTFOUND ) )
+        if ( aSel.nEndPos > 0 )
         {
+            xub_StrLen nPos = aSel.nEndPos;
+            String  aFormula = aTotal.Copy( 0, nPos );;
+            xub_StrLen  nLeftParentPos = 0;
+            xub_StrLen  nNextFStart = 0;
+            xub_StrLen  nNextFEnd = 0;
+            xub_StrLen  nArgPos = 0;
+            const ScFuncDesc* ppFDesc;
+            String**    pppArgs;
+            USHORT      nArgs;
+            BOOL  bFound = FALSE;
+
             String aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-            if (aText.Len())
+            if ( aText.Len() )
             {
                 String aNew;
-                nAutoPos = SCPOS_INVALID;   // nix
+                nAutoPos = SCPOS_INVALID;
                 if ( pFormulaData->FindText( aText, aNew, nAutoPos, FALSE ) )
                 {
-                    ShowTip( aNew );        //  als QuickHelp anzeigen
-                    aAutoSearch = aText;    // zum Weitersuchen - nAutoPos ist gesetzt
+                    ShowTip( aNew );
+                    aAutoSearch = aText;
+                }
+            }
+
+            while( !bFound )
+            {
+                aFormula.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+                nLeftParentPos = lcl_MatchParenthesis( aFormula, aFormula.Len()-1 );
+                if( nLeftParentPos == STRING_NOTFOUND )
+                    break;
+
+                sal_Unicode c = aFormula.GetChar( nLeftParentPos-1 );
+                if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
+                    continue;
+                nNextFStart = ScFormulaUtil::GetFunctionStart( aFormula, nLeftParentPos, TRUE);
+                if( ScFormulaUtil::GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &pppArgs ) )
+                {
+                    if( ppFDesc->pFuncName )
+                    {
+                        nArgPos = ScFormulaUtil::GetArgStart( aFormula, nNextFStart, 0 );
+                        nArgs = ppFDesc->nArgCount;
+
+                        USHORT nActive = 0;
+                        USHORT nCount = 0;
+                        USHORT nCountSemicolon = 0;
+                        USHORT nCountDot = 0;
+                        USHORT nStartPosition = 0;
+                        USHORT nEndPosition = 0;
+                        BOOL   bFlag = FALSE;
+                        String aNew;
+                        USHORT nParAutoPos = SCPOS_INVALID;
+                        if( pFormulaDataPara->FindText( *(ppFDesc->pFuncName), aNew, nParAutoPos, FALSE ) )
+                        {
+                            for( USHORT i=0; i < nArgs; i++ )
+                            {
+                                xub_StrLen nLength=(pppArgs[i])->Len();
+                                if( nArgPos <= aFormula.Len()-1 )
+                                {
+                                    nActive = i+1;
+                                    bFlag = TRUE;
+                                }
+                                nArgPos+=nLength+1;
+                            }
+                            if( bFlag )
+                            {
+                                nCountSemicolon = aNew.GetTokenCount(';')-1;
+                                nCountDot = aNew.GetTokenCount('.')-1;
+
+                               if( !nCountSemicolon )
+                               {
+                                    for( USHORT i = 0; i < aNew.Len(); i++ )
+                                    {
+                                        sal_Unicode cNext = aNew.GetChar( i );
+                                        if( cNext == '(' )
+                                        {
+                                            nStartPosition = i+1;
+                                        }
+                                    }
+                                }
+                                else if( !nCountDot )
+                                {
+                                    for( USHORT i = 0; i < aNew.Len(); i++ )
+                                    {
+                                        sal_Unicode cNext = aNew.GetChar( i );
+                                        if( cNext == '(' )
+                                        {
+                                            nStartPosition = i+1;
+                                        }
+                                        else if( cNext == ';' )
+                                        {
+                                            nCount ++;
+                                            nEndPosition = i;
+                                            if( nCount == nActive )
+                                            {
+                                                break;
+                                            }
+                                            nStartPosition = nEndPosition+1;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for( USHORT i = 0; i < aNew.Len(); i++ )
+                                    {
+                                        sal_Unicode cNext = aNew.GetChar( i );
+                                        if( cNext == '(' )
+                                        {
+                                            nStartPosition = i+1;
+                                        }
+                                        else if( cNext == ';' )
+                                        {
+                                            nCount ++;
+                                            nEndPosition = i;
+                                            if( nCount == nActive )
+                                            {
+                                                break;
+                                            }
+                                            nStartPosition = nEndPosition+1;
+                                        }
+                                        else if( cNext == '.' )
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                }
+
+                                if( nStartPosition )
+                                {
+                                    aNew.Insert( 0x25BA, nStartPosition );
+                                    ShowTipBelow( aNew );
+                                    bFound = TRUE;
+                                }
+                            }
+                            else
+                            {
+                                ShowTipBelow( aNew );
+                                bFound = TRUE;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -712,6 +1158,7 @@ void ScInputHandler::PasteFunctionData()
             lcl_CompleteFunction( pTopView, aInsert, bParInserted );
             lcl_CompleteFunction( pTableView, aInsert, bParInserted );
             DataChanged();
+            ShowTipCursor();
 
             if (bParInserted)
                 AutoParAdded();
@@ -1096,98 +1543,6 @@ void ScInputHandler::NextAutoEntry( BOOL bBack )
 //
 //      Klammern hervorheben
 //
-
-xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
-{
-    int nDir;
-    sal_Unicode c1, c2 = 0;
-    c1 = rStr.GetChar( nPos );
-    switch ( c1 )
-    {
-        case '(' :
-            c2 = ')';
-            nDir = 1;
-        break;
-        case ')' :
-            c2 = '(';
-            nDir = -1;
-        break;
-        case '<' :
-            c2 = '>';
-            nDir = 1;
-        break;
-        case '>' :
-            c2 = '<';
-            nDir = -1;
-        break;
-        case '{' :
-            c2 = '}';
-            nDir = 1;
-        break;
-        case '}' :
-            c2 = '{';
-            nDir = -1;
-        break;
-        case '[' :
-            c2 = ']';
-            nDir = 1;
-        break;
-        case ']' :
-            c2 = '[';
-            nDir = -1;
-        break;
-        default:
-            nDir = 0;
-    }
-    if ( !nDir )
-        return STRING_NOTFOUND;
-    xub_StrLen nLen = rStr.Len();
-    const sal_Unicode* p0 = rStr.GetBuffer();
-    register const sal_Unicode* p;
-    const sal_Unicode* p1;
-    USHORT nQuotes = 0;
-    if ( nPos < nLen / 2 )
-    {
-        p = p0;
-        p1 = p0 + nPos;
-    }
-    else
-    {
-        p = p0 + nPos;
-        p1 = p0 + nLen;
-    }
-    while ( p < p1 )
-    {
-        if ( *p++ == '\"' )
-            nQuotes++;
-    }
-    // ungerade Anzahl Quotes: wir befinden uns in einem String
-    BOOL bLookInString = ((nQuotes % 2) != 0);
-    BOOL bInString = bLookInString;
-    p = p0 + nPos;
-    p1 = (nDir < 0 ? p0 : p0 + nLen) ;
-    USHORT nLevel = 1;
-    while ( p != p1 && nLevel )
-    {
-        p += nDir;
-        if ( *p == '\"' )
-        {
-            bInString = !bInString;
-            if ( bLookInString && !bInString )
-                p = p1;     // das war's dann
-        }
-        else if ( bInString == bLookInString )
-        {
-            if ( *p == c1 )
-                nLevel++;
-            else if ( *p == c2 )
-                nLevel--;
-        }
-    }
-    if ( nLevel )
-        return STRING_NOTFOUND;
-    return (xub_StrLen) (p - p0);
-}
 
 void ScInputHandler::UpdateParenthesis()
 {
@@ -2663,6 +3018,11 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                 HideTip();
                 bUsed = TRUE;
             }
+            else if( nTipVisibleSec )
+            {
+                HideTipBelow();
+                bUsed = TRUE;
+            }
             else if (eMode != SC_INPUT_NONE)
             {
                 CancelHandler();
@@ -2689,6 +3049,7 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                     ( eMode != SC_INPUT_NONE && ( bCursorKey || bInsKey ) ) ) )
     {
         HideTip();
+        HideTipBelow();
 
         if (bSelIsRef)
         {
@@ -2783,7 +3144,7 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
 
                 //  when the selection is changed manually or an opening parenthesis
                 //  is typed, stop overwriting parentheses
-                if ( bUsed && ( nChar == '(' || bCursorKey ) )
+                if ( bUsed && nChar == '(' )
                     ResetAutoPar();
 
                 if ( KEY_INSERT == nCode )
@@ -2791,6 +3152,10 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                     if (pViewFrm)
                         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+                }
+                if( bUsed && bFormulaMode && ( bCursorKey || bInsKey || nCode == KEY_DELETE || nCode == KEY_BACKSPACE ) )
+                {
+                    ShowTipCursor();
                 }
             }
 
@@ -2837,6 +3202,7 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
             }
 
             HideTip();
+            HideTipBelow();
 
             if ( bSelIsRef )
             {
@@ -3097,6 +3463,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     }
 
     HideTip();
+    HideTipBelow();
     bInOwnChange = FALSE;
 }
 
@@ -3155,7 +3522,7 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
 void ScInputHandler::InputSelection( EditView* pView )
 {
     SyncViews( pView );
-
+    ShowTipCursor();
     UpdateParenthesis();    //  Selektion geaendert -> Klammer-Hervorhebung neu
 
     //  when the selection is changed manually, stop overwriting parentheses

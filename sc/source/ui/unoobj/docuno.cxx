@@ -2359,7 +2359,7 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( (SCCOL)(nStartCol+nPosition), 0, nTab,
                         (SCCOL)(nStartCol+nPosition+nCount-1), MAXROW, nTab );
-        bDone = aFunc.InsertCells( aRange, INS_INSCOLS, TRUE, TRUE );
+        bDone = aFunc.InsertCells( aRange, NULL, INS_INSCOLS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2376,7 +2376,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( (SCCOL)(nStartCol+nIndex), 0, nTab,
                         (SCCOL)(nStartCol+nIndex+nCount-1), MAXROW, nTab );
-        bDone = aFunc.DeleteCells( aRange, DEL_DELCOLS, TRUE, TRUE );
+        bDone = aFunc.DeleteCells( aRange, NULL, DEL_DELCOLS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2624,7 +2624,7 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( 0, (SCROW)(nStartRow+nPosition), nTab,
                         MAXCOL, (SCROW)(nStartRow+nPosition+nCount-1), nTab );
-        bDone = aFunc.InsertCells( aRange, INS_INSROWS, TRUE, TRUE );
+        bDone = aFunc.InsertCells( aRange, NULL, INS_INSROWS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2641,7 +2641,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( 0, (SCROW)(nStartRow+nIndex), nTab,
                         MAXCOL, (SCROW)(nStartRow+nIndex+nCount-1), nTab );
-        bDone = aFunc.DeleteCells( aRange, DEL_DELROWS, TRUE, TRUE );
+        bDone = aFunc.DeleteCells( aRange, NULL, DEL_DELROWS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified

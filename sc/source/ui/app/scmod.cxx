@@ -70,6 +70,7 @@
 #include <svx/zoomctrl.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
+#include <svx/zoomsliderctrl.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/inethist.hxx>
 #include <vcl/waitobj.hxx>
@@ -389,12 +390,6 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
                             SIB_LEFT|SIB_AUTOSIZE );
     rStatusBar.SetHelpId( SID_STATUS_PAGESTYLE, SID_STATUS_PAGESTYLE );
 
-    // Ma"sstab
-    rStatusBar.InsertItem( SID_ATTR_ZOOM,
-                            SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-
     // Einfuege-/Ueberschreibmodus
     rStatusBar.InsertItem( SID_ATTR_INSERT,
                             SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
@@ -423,6 +418,18 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
                             SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
                             SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
     rStatusBar.SetHelpId( SID_ATTR_SIZE, SID_ATTR_SIZE );
+
+    // Ma"sstab
+    rStatusBar.InsertItem( SID_ATTR_ZOOM,
+        SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
+        SIB_CENTER );
+    rStatusBar.SetHelpId( SID_ATTR_ZOOM, SID_ATTR_ZOOM );
+
+    // ZoomSlider
+    rStatusBar.InsertItem( SID_ATTR_ZOOMSLIDER,
+        TEXT_WIDTH( String().Fill( 15, 'X' ) ),
+        SIB_CENTER );
+    rStatusBar.SetHelpId( SID_ATTR_ZOOMSLIDER, SID_ATTR_ZOOMSLIDER );
 }
 
 #undef TEXT_WIDTH

@@ -2737,6 +2737,7 @@ void ScTabView::ZoomChanged()
 
     SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_ATTR_ZOOM );
+    rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
 
     HideNoteMarker();
 

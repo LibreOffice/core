@@ -103,9 +103,11 @@ public:
     BOOL            ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
                                     BOOL bRecord, BOOL bApi );
 
-    BOOL            InsertCells( const ScRange& rRange, InsCellCmd eCmd, BOOL bRecord, BOOL bApi,
+    BOOL            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
+                                 InsCellCmd eCmd, BOOL bRecord, BOOL bApi,
                                     BOOL bPartOfPaste = FALSE );
-    BOOL            DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecord, BOOL bApi );
+    BOOL            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
+                                 DelCellCmd eCmd, BOOL bRecord, BOOL bApi );
 
     BOOL            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                 BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi );

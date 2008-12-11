@@ -108,6 +108,8 @@
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include "tbinsert.hxx"
+#include "tbzoomsliderctrl.hxx"
+#include <svx/zoomsliderctrl.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child-Windows
@@ -215,6 +217,7 @@ void ScDLL::Init()
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSOBJ, pMod);
+    ScZoomSliderControl ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
 
     //  Svx-Toolbox-Controller
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
@@ -267,6 +270,7 @@ void ScDLL::Init()
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
     SvxSelectionModeControl         ::RegisterControl(SID_STATUS_SELMODE,   pMod);
     SvxZoomStatusBarControl         ::RegisterControl(SID_ATTR_ZOOM,        pMod);
+    SvxZoomSliderControl            ::RegisterControl(SID_ATTR_ZOOMSLIDER,  pMod);
     SvxModifyControl                ::RegisterControl(SID_DOC_MODIFIED,     pMod);
     XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
 

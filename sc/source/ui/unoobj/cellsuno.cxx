@@ -7275,7 +7275,7 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRang
             ScRange aScRange;
             ScUnoConversion::FillScRange( aScRange, rRangeAddress );
             ScDocFunc aFunc(*pDocSh);
-            aFunc.InsertCells( aScRange, eCmd, TRUE, TRUE );
+            aFunc.InsertCells( aScRange, NULL, eCmd, TRUE, TRUE );
         }
     }
 }
@@ -7307,7 +7307,7 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRang
             ScRange aScRange;
             ScUnoConversion::FillScRange( aScRange, rRangeAddress );
             ScDocFunc aFunc(*pDocSh);
-            aFunc.DeleteCells( aScRange, eCmd, TRUE, TRUE );
+            aFunc.DeleteCells( aScRange, NULL, eCmd, TRUE, TRUE );
         }
     }
 }

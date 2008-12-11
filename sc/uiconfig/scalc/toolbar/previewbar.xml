@@ -16,5 +16,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Margins" toolbar:helpid="helpid:26504" />
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ScalingFactor" toolbar:helpid="helpid:26505" />
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="helpid:5325"  />
 </toolbar:toolbar>
