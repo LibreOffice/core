@@ -303,11 +303,17 @@ testcase tInsertSpecialCharacters
     DialogTest ( Sonderzeichen )
     '/// Change 'Font' to next one
     printlog " Change 'Font' to next one"
-    Schrift.Select(Schrift.GetSelIndex +1)
+	if Schrift.GetItemCount = Schrift.GetSelIndex then
+			Schrift.Select(Schrift.GetSelIndex -1)
+		else Schrift.Select(Schrift.GetSelIndex +1)
+	end if
     '/// Change 'Subset' to next one
     printlog " Change 'Subset' to next one"
     If Subset.IsVisible then
-        Subset.Select(Subset.GetSelIndex +1)
+		if Subset.GetItemCount = Subset.GetSelIndex then
+			Subset.Select(Subset.GetSelIndex -1)
+		else Subset.Select(Subset.GetSelIndex +1)
+		end if
     end if
     '/// Choose a character by clicking
     printlog " Choose a character by clicking"

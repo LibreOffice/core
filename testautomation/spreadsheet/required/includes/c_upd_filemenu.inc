@@ -577,13 +577,16 @@ testcase tFilePagePreview
 '    printlog " Disable fullscreen mode"
 '    FullScreen.click
 '    Kontext "Previewbar"
-    '/// Enable and disable Margins (available only since cws_pagemargins)
-    printlog " Enable and disable Margins (available only since cws_pagemargins)"
+    printlog " Enable Margins"
     try
         Margins.Click
-    catch
-        qaErrorLog "Pagemargins does not exists. Maybe version older then cws_pagemargins"
+	catch
+        warnlog "Pagemargins does not exists."
     endcatch
+	printlog " Check availability of the scaling slider"
+	if Not ScalingFactor.IsEnabled then
+		warnlog "Scalingslider is not available"
+	end if
     '/// Close page preview with button in toolbar
     Printlog " Close page preview with button in toolbar"
     Seitenansicht.Click
