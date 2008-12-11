@@ -217,7 +217,7 @@ namespace
         }
         if (aImporterService.getLength() == 0)
         {
-            if (use_truncate && truncate || use_overwrite && !overwrite)
+            if ( (use_truncate && truncate) || (use_overwrite && !overwrite) )
                 aImporterService = OUSTRING("com.sun.star.configuration.backend.CopyImporter");
             else
                 aImporterService = OUSTRING("com.sun.star.configuration.backend.MergeImporter");

@@ -157,7 +157,7 @@ BOOL SfxDockingWindow::PrepareToggleFloatingMode()
     if (!pImp->bConstructed)
         return TRUE;
 
-    if ( Application::IsInModalMode() && IsFloatingMode() || !pMgr )
+    if ( (Application::IsInModalMode() && IsFloatingMode()) || !pMgr )
         return FALSE;
 
     if ( pImp->bDockingPrevented )
@@ -719,9 +719,13 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     if ( GetAlignment() != SFX_ALIGN_NOALIGNMENT )
     {
         // check if SfxWorkWindow is able to allow docking at its border
-        if ( !pWorkWin->IsDockingAllowed() || !pWorkWin->IsInternalDockingAllowed() || ( GetFloatStyle() & WB_STANDALONE )
-            && Application::IsInModalMode() )
+        if (
+            !pWorkWin->IsDockingAllowed() ||
+            !pWorkWin->IsInternalDockingAllowed() ||
+            ( (GetFloatStyle() & WB_STANDALONE) && Application::IsInModalMode()) )
+        {
             SetAlignment( SFX_ALIGN_NOALIGNMENT );
+        }
     }
 
     // detect floating mode

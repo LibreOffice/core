@@ -48,6 +48,7 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
 {
     // maybe it's a sub control
     if (_rLocalName == m_sWrapperElementName)
+    {
         if (m_xMeAsContainer.is())
             return implCreateControlWrapper(_nPrefix, _rLocalName);
         else
@@ -55,6 +56,7 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
             OSL_ENSURE(sal_False, "OContainerImport::CreateChildContext: don't have an element!");
             return NULL;
         }
+    }
 
     return BASE::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
 }

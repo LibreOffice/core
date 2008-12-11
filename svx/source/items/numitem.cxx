@@ -446,14 +446,22 @@ BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         sCharStyleName      != rFormat.sCharStyleName
         )
         return FALSE;
-    if(pGraphicBrush && !rFormat.pGraphicBrush ||
-            !pGraphicBrush && rFormat.pGraphicBrush ||
-                pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush )
+    if (
+        (pGraphicBrush && !rFormat.pGraphicBrush) ||
+        (!pGraphicBrush && rFormat.pGraphicBrush) ||
+        (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush)
+       )
+    {
         return FALSE;
-    if(pBulletFont && !rFormat.pBulletFont ||
-            !pBulletFont && rFormat.pBulletFont ||
-                pBulletFont && *pBulletFont != *rFormat.pBulletFont)
+    }
+    if (
+        (pBulletFont && !rFormat.pBulletFont) ||
+        (!pBulletFont && rFormat.pBulletFont) ||
+        (pBulletFont && *pBulletFont != *rFormat.pBulletFont)
+       )
+    {
         return FALSE;
+    }
     return TRUE;
 }
 /* -----------------28.10.98 09:53-------------------
@@ -467,7 +475,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
         delete pGraphicBrush;
         pGraphicBrush = 0;
     }
-    else if(!pGraphicBrush || pGraphicBrush && !(*pBrushItem == *pGraphicBrush))
+    else if ( !pGraphicBrush || (pGraphicBrush && !(*pBrushItem == *pGraphicBrush)) )
     {
         delete pGraphicBrush;
         pGraphicBrush =  (SvxBrushItem*)pBrushItem->Clone();
@@ -947,11 +955,15 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
             return FALSE;
     for(USHORT i = 0; i < nLevelCount; i++)
     {
-        if( aFmtsSet[i] != rCopy.aFmtsSet[i] ||
-            !aFmts[i] &&  rCopy.aFmts[i] ||
-            aFmts[i] &&  !rCopy.aFmts[i] ||
-            aFmts[i] && *aFmts[i] !=  *rCopy.aFmts[i] )
+        if (
+            (aFmtsSet[i] != rCopy.aFmtsSet[i]) ||
+            (!aFmts[i] && rCopy.aFmts[i]) ||
+            (aFmts[i] && !rCopy.aFmts[i]) ||
+            (aFmts[i] && *aFmts[i] !=  *rCopy.aFmts[i])
+           )
+        {
             return FALSE;
+        }
     }
     return TRUE;
 }

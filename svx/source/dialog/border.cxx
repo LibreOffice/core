@@ -739,16 +739,18 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                 {
                     SvxBoxInfoItem* pOldBoxInfoItem = (SvxBoxInfoItem*)GetOldItem(
                                                         rCoreAttrs, SID_ATTR_BORDER_INNER );
-                    if(!pOldBoxItem ||
-                    aLeftMF  .GetText() != aLeftMF  .GetSavedValue() ||
-                    aRightMF .GetText() != aRightMF .GetSavedValue() ||
-                    aTopMF   .GetText() != aTopMF   .GetSavedValue() ||
-                    aBottomMF.GetText() != aBottomMF.GetSavedValue() ||
-                    nMinValue == aLeftMF  .GetValue() ||
-                    nMinValue == aRightMF .GetValue() ||
-                    nMinValue == aTopMF   .GetValue() ||
-                    nMinValue == aBottomMF.GetValue() ||
-                        pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE))
+                    if (
+                        !pOldBoxItem ||
+                        aLeftMF  .GetText() != aLeftMF  .GetSavedValue() ||
+                        aRightMF .GetText() != aRightMF .GetSavedValue() ||
+                        aTopMF   .GetText() != aTopMF   .GetSavedValue() ||
+                        aBottomMF.GetText() != aBottomMF.GetSavedValue() ||
+                        nMinValue == aLeftMF  .GetValue() ||
+                        nMinValue == aRightMF .GetValue() ||
+                        nMinValue == aTopMF   .GetValue() ||
+                        nMinValue == aBottomMF.GetValue() ||
+                        (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE))
+                       )
                     {
                         aBoxItem.SetDistance( (USHORT)GetCoreValue( aLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
                         aBoxItem.SetDistance( (USHORT)GetCoreValue( aRightMF, eCoreUnit ), BOX_LINE_RIGHT );

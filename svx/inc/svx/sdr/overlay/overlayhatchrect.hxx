@@ -78,9 +78,9 @@ namespace sdr
             virtual void zoomHasChanged();
 
             // data read access
-            const double getDiscreteWidth() const { return mfDiscreteWidth; }
-            const double getHatchRotation() const { return mfHatchRotation; }
-            const double getRotation() const { return mfRotation; }
+            double getDiscreteWidth() const { return mfDiscreteWidth; }
+            double getHatchRotation() const { return mfHatchRotation; }
+            double getRotation() const { return mfRotation; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

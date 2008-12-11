@@ -1215,8 +1215,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // preserve only if the same filter has been used
             bTryToPreservScriptSignature = pMedium->GetFilter() && pFilter && pMedium->GetFilter()->GetFilterName() == pFilter->GetFilterName();
 
-            bNoPreserveForOasis = ( aODFVersion.equals( ODFVER_012_TEXT ) && nVersion == SvtSaveOptions::ODFVER_011
-                                      || !aODFVersion.getLength() && nVersion == SvtSaveOptions::ODFVER_012 );
+            bNoPreserveForOasis = (
+                                   (aODFVersion.equals( ODFVER_012_TEXT ) && nVersion == SvtSaveOptions::ODFVER_011) ||
+                                   (!aODFVersion.getLength() && nVersion == SvtSaveOptions::ODFVER_012)
+                                  );
         }
     }
 
@@ -1226,7 +1228,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
         bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-                    pSaveToItem && pSaveToItem->GetValue();
+                    (pSaveToItem && pSaveToItem->GetValue());
     }
 
     // use UCB for case sensitive/insensitive file name comparison
@@ -2622,7 +2624,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
     if ( !pFilter
         || !pFilter->CanExport()
-        || !bSaveTo && !pFilter->CanImport() )
+        || (!bSaveTo && !pFilter->CanImport()) )
     {
         SetError( ERRCODE_IO_INVALIDPARAMETER );
         return sal_False;
@@ -2786,7 +2788,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
     // check if a "SaveTo" is wanted, no "SaveAs"
     SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-    sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
+    sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
 
     // distinguish between "Save" and "SaveAs"
     pImp->bIsSaving = sal_False;

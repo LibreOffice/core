@@ -274,6 +274,7 @@ void SAL_CALL CommandEnvironment_Impl::handle(
                             setPassword(aRec.UserList[0].Passwords[0].getStr());
                     }
                     if (aRec.UserList[0].Passwords.getLength() > 1)
+                    {
                         if (rRequest.HasRealm)
                         {
                             if (xSupplyAuthentication->canSetRealm())
@@ -285,6 +286,7 @@ void SAL_CALL CommandEnvironment_Impl::handle(
                             xSupplyAuthentication->
                                 setAccount(aRec.UserList[0].Passwords[1].
                                            getStr());
+                    }
                     xSupplyAuthentication->select();
                     return;
                 }
@@ -310,6 +312,7 @@ void SAL_CALL CommandEnvironment_Impl::handle(
                                 setPassword(aRec.UserList[0].Passwords[0].
                                             getStr());
                         if (aRec.UserList[0].Passwords.getLength() > 1)
+                        {
                             if (rRequest.HasRealm)
                             {
                                 if (xSupplyAuthentication->canSetRealm())
@@ -321,6 +324,7 @@ void SAL_CALL CommandEnvironment_Impl::handle(
                                 xSupplyAuthentication->
                                     setAccount(aRec.UserList[0].Passwords[1].
                                                getStr());
+                        }
                         xSupplyAuthentication->select();
                         return;
                     }

@@ -433,9 +433,10 @@ BOOL IPRSpellCache::CheckWord( const String& rWord, INT16 nLang, BOOL bAllLang )
         {
             if ( pRun->GetPrev() )
             {   // Wenn wir noch nicht erster sind, werden wir es jetzt:
-                if ( ( pRun->GetFound() <= nInputValue ) &&
-                         ( ++nInputPos > IPR_CACHE_MAXINPUT )
-                    || ( pInput == pRun ) && NULL == ( pInput = pRun->GetFollow() ) )
+                if (
+                    ((pRun->GetFound() <= nInputValue) && (++nInputPos > IPR_CACHE_MAXINPUT)) ||
+                    ((pInput == pRun) && NULL == (pInput = pRun->GetFollow()))
+                   )
 
                 {   // Wenn die Input-Stelle am Maximum anlangt, erhoehen
                     ++nInputValue; // wir den InputValue und gehen wieder

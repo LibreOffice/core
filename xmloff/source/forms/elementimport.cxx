@@ -1829,8 +1829,8 @@ namespace xmloff
                                     m_xMeAsContainer);
         else if ( token::IsXMLToken(_rLocalName, token::XML_CONNECTION_RESOURCE) )
             return new OXMLDataSourceImport(GetImport(), _nPrefix, _rLocalName, _rxAttrList,m_xElement);
-        else if( token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) &&
-                 (XML_NAMESPACE_OFFICE == _nPrefix) ||
+        else if( (token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) &&
+                 (XML_NAMESPACE_OFFICE == _nPrefix)) ||
                  token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
             return OElementImport::CreateChildContext( _nPrefix, _rLocalName,
                                                        _rxAttrList );

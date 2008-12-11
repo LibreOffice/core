@@ -1137,8 +1137,10 @@ IMPL_LINK( SvxPageDescPage, PaperSizeModify_Impl, Edit *, EMPTYARG )
 
 IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 {
-    if ( !bLandscape && pBtn == &aLandscapeBtn ||
-         bLandscape  && pBtn == &aPortraitBtn )
+    if (
+        (!bLandscape && pBtn == &aLandscapeBtn) ||
+        (bLandscape  && pBtn == &aPortraitBtn)
+       )
     {
         bLandscape = aLandscapeBtn.IsChecked();
 

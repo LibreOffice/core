@@ -716,7 +716,7 @@ void SdXMLNumberFormatImportContext::EndElement()
                     sal_Int16 nIndex2 = nIndex + 1;
                     if( compareStyle( aSdXMLFixedTimeFormats[nTimeFormat], nIndex2 ) )
                     {
-                        mnKey = nFormat + 2 | ((nTimeFormat + 2) << 4);
+                        mnKey = (nFormat + 2) | ((nTimeFormat + 2) << 4);
                         break;
                     }
                 }

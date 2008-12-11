@@ -515,7 +515,7 @@ Reference < XContent > SfxMedium::GetContent() const
     {
         SvtSaveOptions aOpt;
         sal_Bool bIsRemote = IsRemote();
-        if( bIsRemote && !aOpt.IsSaveRelINet() || !bRemote && !aOpt.IsSaveRelFSys() )
+        if( (bIsRemote && !aOpt.IsSaveRelINet()) || (!bRemote && !aOpt.IsSaveRelFSys()) )
             return ::rtl::OUString();
     }
 
@@ -1134,7 +1134,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading )
             // or the document has been opened for editing explicitly
 
             SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
-            if ( !bLoading || pReadOnlyItem && !pReadOnlyItem->GetValue() )
+            if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                 SetError( ERRCODE_IO_ACCESSDENIED );
             else
                 GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
@@ -1826,8 +1826,8 @@ sal_Bool SfxMedium::TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& 
                     aInsertArg.Data = xInStream;
                        SFX_ITEMSET_ARG( &aTargetSet, pRename, SfxBoolItem, SID_RENAME, sal_False );
                        SFX_ITEMSET_ARG( &aTargetSet, pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
-                       if ( pOverWrite && !pOverWrite->GetValue() // argument says: never overwrite
-                         || pRename && pRename->GetValue() ) // argument says: rename file
+                       if ( (pOverWrite && !pOverWrite->GetValue()) // argument says: never overwrite
+                         || (pRename && pRename->GetValue()) ) // argument says: rename file
                         aInsertArg.ReplaceExisting = sal_False;
                        else
                         aInsertArg.ReplaceExisting = sal_True; // default is overwrite existing files

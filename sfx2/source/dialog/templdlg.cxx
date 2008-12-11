@@ -1396,10 +1396,12 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
         SfxControllerItem *pCItem=pBoundItems[n];
         BOOL bChecked = pItem && pItem->GetValue();
         if( pCItem->IsBound() == bChecked )
+        {
             if( !bChecked )
                 pCItem->ReBind();
             else
                 pCItem->UnBind();
+        }
     }
     pBindings->LeaveRegistrations();
 }
@@ -1573,9 +1575,13 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
             {
                 SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
                 SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
-                if( bUpdate && (
-                    !IsCheckedItem(SID_STYLE_WATERCAN) || pDocShell
-                    && pDocShell->GetStyleSheetPool() != pStyleSheetPool) )
+                if (
+                    bUpdate &&
+                    (
+                     !IsCheckedItem(SID_STYLE_WATERCAN) ||
+                     (pDocShell && pDocShell->GetStyleSheetPool() != pStyleSheetPool)
+                    )
+                   )
                 {
                     bUpdate = FALSE;
                     Update_Impl();

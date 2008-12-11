@@ -1015,10 +1015,12 @@ void StarBASIC::ActivateObject( const String* pName, BOOL bActivate )
     {
         SbxObject* p = (SbxObject*) SbxObject::Find( *pName, SbxCLASS_OBJECT );
         if( p )
+        {
             if( bActivate )
                 p->SetFlag( SBX_EXTSEARCH );
             else
                 p->ResetFlag( SBX_EXTSEARCH );
+        }
     }
     else
     {

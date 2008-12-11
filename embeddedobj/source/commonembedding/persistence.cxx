@@ -93,7 +93,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
           || aMedDescr[nInd].Name.equalsAscii( "ViewId" )
           || aMedDescr[nInd].Name.equalsAscii( "MacroExecutionMode" )
           || aMedDescr[nInd].Name.equalsAscii( "UpdateDocMode" )
-          || aMedDescr[nInd].Name.equalsAscii( "DocumentBaseURL" ) && bCanUseDocumentBaseURL )
+          || (aMedDescr[nInd].Name.equalsAscii( "DocumentBaseURL" ) && bCanUseDocumentBaseURL) )
         {
             aResult.realloc( ++nResLen );
             aResult[nResLen-1] = aMedDescr[nInd];

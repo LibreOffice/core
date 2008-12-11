@@ -2139,7 +2139,7 @@ String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
             aTitle += String( SfxResId(STR_REPAIREDDOCUMENT) );
     }
 
-    if ( IsReadOnlyUI() || pMed && pMed->IsReadOnly() )
+    if ( IsReadOnlyUI() || (pMed && pMed->IsReadOnly()) )
         aTitle += String( SfxResId(STR_READONLY) );
     else if ( IsDocShared() )
         aTitle += String( SfxResId(STR_SHARED) );

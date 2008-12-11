@@ -540,7 +540,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
 
         if ( aLibrary.compareToAscii("document") != 0 )
         {
-            if ( !aLibrary.getLength() || pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() ) )
+            if ( !aLibrary.getLength() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
                 aLibrary = String::CreateFromAscii("document");
             else
                 aLibrary = String::CreateFromAscii("application");

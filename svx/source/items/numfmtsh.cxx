@@ -988,8 +988,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 sal_Bool bInsFlag=sal_False;
                 if ( pNumEntry->HasNewCurrency() )
                     bInsFlag = sal_True;    // merge locale formats into currency selection
-                else if(!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND||
-                   bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND)
+                else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
+                   (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
                 {
                     bInsFlag=sal_True;
                 }

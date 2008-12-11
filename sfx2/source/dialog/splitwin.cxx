@@ -637,7 +637,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             USHORT nL=0, nP=0;
             GetWindowPos( pD->pWin, nL, nP );
 
-            if ( nL == nLine && nP == nPos || nL > nLine )
+            if ( (nL == nLine && nP == nPos) || nL > nLine )
             {
                 DBG_ASSERT( nL == nLine || bNewLine || nPos > 0, "Falsche Parameter!" );
                 if ( nL == nLine && nPos == 0 && !bNewLine )

@@ -2619,8 +2619,13 @@ void SfxViewFrame::ExecView_Impl
                 while ( pFrame )
                 {
                     SfxViewFrame *pView = pFrame->GetCurrentViewFrame();
-                    if ( nActFrame == nFrame || pView &&
-                         aName.CompareIgnoreCaseToAscii( pView->SfxShell::GetName() ) == COMPARE_EQUAL )
+                    if (
+                        nActFrame == nFrame ||
+                        (
+                         pView &&
+                         aName.CompareIgnoreCaseToAscii( pView->SfxShell::GetName() ) == COMPARE_EQUAL
+                        )
+                       )
                     {
                         pRet = pView;
                         break;

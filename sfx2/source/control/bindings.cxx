@@ -2084,7 +2084,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
     // modifying the SfxObjectInterface-stack without SfxBindings => nothing to do
     SfxViewFrame* pFrame = pDispatcher->GetFrame();
-    if ( pFrame && pFrame->GetObjectShell()->IsInModalMode() || pSfxApp->IsDowning() || !pImp->pCaches->Count() )
+    if ( (pFrame && pFrame->GetObjectShell()->IsInModalMode()) || pSfxApp->IsDowning() || !pImp->pCaches->Count() )
     {
         DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
         return sal_True;

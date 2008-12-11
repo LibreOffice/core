@@ -104,12 +104,6 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     return sURL;
 }
 
-gboolean rundialog(RunDialog *pDialog)
-{
-    pDialog->run();
-    return false;
-}
-
 gboolean canceldialog(RunDialog *pDialog)
 {
     pDialog->cancel();

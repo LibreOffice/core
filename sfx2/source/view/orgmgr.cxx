@@ -312,9 +312,11 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
                 aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ), FALSE, 0 );
             const SfxFilter* pFilter = NULL;
             pMed->UseInteractionHandler(TRUE);
-            if( pSfxApp->GetFilterMatcher().GuessFilter( *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
-                pFilter && !pFilter->IsOwnFormat() ||
-                pFilter && !pFilter->UsesStorage() )
+            if (
+                pSfxApp->GetFilterMatcher().GuessFilter(*pMed, &pFilter, SFX_FILTER_TEMPLATE, 0) ||
+                (pFilter && !pFilter->IsOwnFormat()) ||
+                (pFilter && !pFilter->UsesStorage())
+               )
             {
                 pSfxApp->LoadTemplate( pEntry->aDocShell, aFilePath );
                 pEntry->bOwnFormat = FALSE;

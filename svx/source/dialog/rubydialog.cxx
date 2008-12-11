@@ -494,7 +494,7 @@ void SvxRubyDialog::Update()
                 sal_Bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
                 if(!nRuby)
                     nPosition = bTmp ? 0 : 1;
-                else  if(!nPosition && !bTmp || nPosition == 1 && bTmp  )
+                else if( (!nPosition && !bTmp) || (nPosition == 1 && bTmp)  )
                     nPosition = -2;
             }
             if(bCharStyleEqual &&
@@ -520,7 +520,7 @@ void SvxRubyDialog::Update()
         aAdjustLB.SetNoSelection();
     if(nPosition > -1)
         aPositionLB.SelectEntryPos(nPosition ? 1 : 0);
-    if(!nLen || bCharStyleEqual && !sCharStyleName.getLength())
+    if(!nLen || (bCharStyleEqual && !sCharStyleName.getLength()))
         sCharStyleName = C2U(cRubies);
     if(sCharStyleName.getLength())
     {

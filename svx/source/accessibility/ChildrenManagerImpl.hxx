@@ -550,7 +550,13 @@ public:
     */
     inline bool operator == (const ChildDescriptor& aDescriptor)
     {
-        return (this == &aDescriptor || (mxShape.get() == aDescriptor.mxShape.get() ) && ( mxShape.is() || mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get()));
+        return (
+                this == &aDescriptor ||
+                (
+                 (mxShape.get() == aDescriptor.mxShape.get() ) &&
+                 (mxShape.is() || mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get())
+                )
+               );
     }
 
     /** The ordering defined by this operator is only used in order to be able

@@ -750,10 +750,12 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
         // script events
         Reference< XEventAttacherManager > xManager( _rxContainer, UNO_QUERY );
         if ( xManager.is() )
+        {
             if ( _bStartListening )
                 m_pScriptingEnv->registerEventAttacherManager( xManager );
             else
                 m_pScriptingEnv->revokeEventAttacherManager( xManager );
+        }
 
         // also handle all children of this element
         sal_uInt32 nCount = _rxContainer->getCount();
@@ -771,10 +773,12 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
         OSL_ENSURE( xSimpleContainer.is(), "FmXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
+        {
             if ( _bStartListening )
                 xSimpleContainer->addContainerListener( this );
             else
                 xSimpleContainer->removeContainerListener( this );
+        }
     }
     catch( const Exception& )
     {
@@ -793,18 +797,22 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
         {
             Reference< XPropertySet > xProps( _rxObject, UNO_QUERY );
             if ( xProps.is() )
+            {
                 if ( _bStartListening )
                     xProps->addPropertyChangeListener( ::rtl::OUString(), this );
                 else
                     xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+            }
         }
 
         Reference< XModifyBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
         if ( xBroadcaster.is() )
+        {
             if ( _bStartListening )
                 xBroadcaster->addModifyListener( this );
             else
                 xBroadcaster->removeModifyListener( this );
+        }
     }
     catch( const Exception& )
     {

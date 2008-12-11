@@ -163,6 +163,8 @@ extern "C" void * SAL_CALL component_getFactory( const sal_Char *pImplName,
         (reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
+    g_type_init();
+
     if ( !::gio::ContentProvider::getImplementationName_Static().compareToAscii( pImplName ) )
         xFactory = ::gio::ContentProvider::createServiceFactory( xSMgr );
 

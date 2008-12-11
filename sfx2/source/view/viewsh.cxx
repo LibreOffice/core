@@ -1759,7 +1759,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
            // object in client is currently not active
            // check if the object wants to be activated always or when it becomes at least partially visible
            // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
-           if ( bAlwaysActive || bActiveWhenVisible && rVisArea.IsOver( pIPClient->GetObjArea() ) )
+           if ( bAlwaysActive || (bActiveWhenVisible && rVisArea.IsOver(pIPClient->GetObjArea())) )
         {
             try
             {

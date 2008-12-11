@@ -646,7 +646,7 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
                 aItems.Put( aHeightItem );
 
                 // Absatzabstaende, wenn Heading:
-                if ( !nHLevel || ( nHLevel >= 1 ) && ( nHLevel <= 6 ) )
+                if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
                 {
                     SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
                     aULSpaceItem.SetUpper( (USHORT)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );

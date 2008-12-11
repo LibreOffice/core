@@ -157,11 +157,13 @@ namespace dbtools
         for ( i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
         {
             if ( m_aFilterComponents[ i ].getLength() )
+            {
                 if ( nOnlyNonEmpty != -1 )
                     // it's the second non-empty component
                     break;
                 else
                     nOnlyNonEmpty = i;
+            }
         }
         if ( nOnlyNonEmpty == -1 )
         {

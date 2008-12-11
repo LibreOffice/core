@@ -1391,11 +1391,14 @@ void OutlinerView::StartTextConversion(
     INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
 {
     DBG_CHKTHIS(OutlinerView,0);
-    if (LANGUAGE_KOREAN == nSrcLang && LANGUAGE_KOREAN == nDestLang ||
-        LANGUAGE_CHINESE_SIMPLIFIED  == nSrcLang && LANGUAGE_CHINESE_TRADITIONAL == nDestLang ||
-        LANGUAGE_CHINESE_TRADITIONAL == nSrcLang && LANGUAGE_CHINESE_SIMPLIFIED  == nDestLang
-        )
+    if (
+        (LANGUAGE_KOREAN == nSrcLang && LANGUAGE_KOREAN == nDestLang) ||
+        (LANGUAGE_CHINESE_SIMPLIFIED  == nSrcLang && LANGUAGE_CHINESE_TRADITIONAL == nDestLang) ||
+        (LANGUAGE_CHINESE_TRADITIONAL == nSrcLang && LANGUAGE_CHINESE_SIMPLIFIED  == nDestLang)
+       )
+    {
         pEditView->StartTextConversion( nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
+    }
     else
     {
         DBG_ERROR( "unexpected language" );
