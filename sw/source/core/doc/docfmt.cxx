@@ -365,8 +365,12 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark )
     SetModified();
 }
 
-void SwDoc::ResetAttrs( const SwPaM &rRg, BOOL bTxtAttr,
-                        const SvUShortsSort* pAttrs )
+void SwDoc::ResetAttrs( const SwPaM &rRg,
+                        BOOL bTxtAttr,
+                        const SvUShortsSort* pAttrs,
+                        // --> OD 2008-11-28 #b96644#
+                        const bool bSendDataChangedEvents )
+                        // <--
 {
     SwPaM* pPam = (SwPaM*)&rRg;
     if( !bTxtAttr && pAttrs && pAttrs->Count() &&
@@ -422,7 +426,14 @@ void SwDoc::ResetAttrs( const SwPaM &rRg, BOOL bTxtAttr,
         pPam->GetPoint()->nContent = nPtPos;
     }
 
-    SwDataChanged aTmp( *pPam, 0 );
+    // --> OD 2008-11-28 #i96644#
+//    SwDataChanged aTmp( *pPam, 0 );
+    std::auto_ptr< SwDataChanged > pDataChanged;
+    if ( bSendDataChangedEvents )
+    {
+        pDataChanged.reset( new SwDataChanged( *pPam, 0 ) );
+    }
+    // <--
     SwHistory* pHst = 0;
     if( DoesUndo() )
     {

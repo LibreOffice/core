@@ -47,6 +47,9 @@ SwNumberTreeNode::SwNumberTreeNode()
     : mChildren(),
       mpParent( 0 ),
       mnNumber( 0 ),
+      // --> OD 2008-11-26 #158694#
+      mbContinueingPreviousSubTree( false ),
+      // <--
       mbPhantom( false ),
       mItLastValid()
 {
@@ -207,6 +210,10 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
         else
         {
             aIt = mChildren.begin();
+            // --> OD 2008-11-26 #158694#
+            (*aIt)->mbContinueingPreviousSubTree = false;
+            // <--
+
             // determine default start value
             // consider the case that the first child isn't counted.
             nTmpNumber = (*aIt)->GetStartValue();
@@ -235,6 +242,9 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
                     SwNumberTreeNode* pPrevNode( *aParentChildIt );
                     if ( pPrevNode->GetChildCount() > 0 )
                     {
+                        // --> OD 2008-11-26 #158694#
+                        (*aIt)->mbContinueingPreviousSubTree = true;
+                        // <--
                         nTmpNumber = (*(pPrevNode->mChildren.rbegin()))->GetNumber();
                         // --> OD 2005-10-27 #126009#
                         if ( (*aIt)->IsCounted() &&
@@ -264,6 +274,9 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
         while (aIt != aValidateIt)
         {
             ++aIt;
+            // --> OD 2008-11-26 #158694#
+            (*aIt)->mbContinueingPreviousSubTree = false;
+            // <--
 
             // --> OD 2005-10-19 #126009# - only for counted nodes the number
             // has to be adjusted, compared to the previous node.
@@ -789,6 +802,14 @@ SwNumberTree::tSwNumTreeNumber SwNumberTreeNode::GetNumber(bool bValidate)
 
     return mnNumber;
 }
+
+// --> OD 2008-11-26 #158694#
+bool SwNumberTreeNode::IsContinueingPreviousSubTree() const
+{
+    return mbContinueingPreviousSubTree;
+}
+// <--
+
 
 vector<SwNumberTree::tSwNumTreeNumber> SwNumberTreeNode::GetNumberVector() const
 {

@@ -1353,14 +1353,26 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
 |*                      wird angehaengt
 *************************************************************************/
 
-void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rStart, xub_StrLen nLen )
+// --> OD 2008-11-18 #i96213#
+// introduction of new optional parameter to control, if all attributes have to be copied.
+void SwTxtNode::Copy( SwTxtNode *pDest,
+                      const SwIndex &rStart,
+                      xub_StrLen nLen,
+                      const bool bForceCopyOfAllAttrs )
 {
     SwIndex aIdx( pDest, pDest->aText.Len() );
-    Copy( pDest, aIdx, rStart, nLen );
+    Copy( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
+// <--
 
-void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
-                      const SwIndex &rStart, xub_StrLen nLen)
+// --> OD 2008-11-18 #i96213#
+// introduction of new optional parameter to control, if all attributes have to be copied.
+void SwTxtNode::Copy( SwTxtNode *pDest,
+                      const SwIndex &rDestStart,
+                      const SwIndex &rStart,
+                      xub_StrLen nLen,
+                      const bool bForceCopyOfAllAttrs )
+// <--
 {
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
@@ -1375,8 +1387,12 @@ void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
         if( HasSwAttrSet() )
         {
             // alle, oder nur die CharAttribute ?
-            if( nDestStart || pDest->HasSwAttrSet() ||
-                nLen != pDest->GetTxt().Len() )
+            // --> OD 2008-11-18 #i96213#
+            if ( !bForceCopyOfAllAttrs &&
+                 ( nDestStart ||
+                   pDest->HasSwAttrSet() ||
+                   nLen != pDest->GetTxt().Len() ) )
+            // <--
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1421,8 +1437,12 @@ void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
     if( HasSwAttrSet() )
     {
         // alle, oder nur die CharAttribute ?
-        if( nDestStart || pDest->HasSwAttrSet() ||
-            nLen != pDest->GetTxt().Len() )
+        // --> OD 2008-11-18 #i96213#
+        if ( !bForceCopyOfAllAttrs &&
+             ( nDestStart ||
+               pDest->HasSwAttrSet() ||
+               nLen != pDest->GetTxt().Len() ) )
+        // <--
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -3266,7 +3286,12 @@ namespace {
                         aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
                         aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
                         SwPaM aPam( rTxtNode );
-                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_True, &aResetAttrsArray );
+                        // --> OD 2008-11-28 #i96644#
+                        // suppress side effect "send data changed events"
+                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
+                                                       &aResetAttrsArray,
+                                                       false );
+                        // <--
                     }
                 }
                 else
@@ -3299,7 +3324,12 @@ namespace {
                     aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
                     aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
                     SwPaM aPam( rTxtNode );
-                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_True, &aResetAttrsArray );
+                    // --> OD 2008-11-28 #i96644#
+                    // suppress side effect "send data changed events"
+                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
+                                                   &aResetAttrsArray,
+                                                   false );
+                    // <--
                 }
             }
         }

@@ -84,6 +84,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+// --> OD 2008-11-26 #158694#
+#include <SwNodeNum.hxx>
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -112,6 +115,45 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
     sal_Bool bDone = sal_True;
     switch(pMap->nWID)
     {
+        // --> OD 2008-11-26 #158694#
+        case FN_UNO_PARA_CONT_PREV_SUBTREE:
+            if (pAny)
+            {
+                const SwTxtNode * pTmpNode = pNode;
+
+                if (!pTmpNode)
+                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+                bool bRet = false;
+
+                if ( pTmpNode &&
+                     pTmpNode->GetNum() &&
+                     pTmpNode->GetNum()->IsContinueingPreviousSubTree() )
+                {
+                    bRet = true;
+                }
+
+                *pAny <<= bRet;
+            }
+        break;
+        case FN_UNO_PARA_NUM_STRING:
+            if (pAny)
+            {
+                const SwTxtNode * pTmpNode = pNode;
+
+                if (!pTmpNode)
+                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+                String sRet;
+                if ( pTmpNode && pTmpNode->GetNum() )
+                {
+                    sRet = pTmpNode->GetNumString();
+                }
+
+                *pAny <<= OUString(sRet);
+            }
+        break;
+        // <--
         case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
             if (pAny)
             {

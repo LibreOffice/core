@@ -909,6 +909,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 // <--
 #define FN_UNO_REPLACEMENT_GRAPHIC          (FN_EXTRA2 + 108)
 
+#define FN_UNO_PARA_CONT_PREV_SUBTREE       (FN_EXTRA2 + 109)
+#define FN_UNO_PARA_NUM_STRING              (FN_EXTRA2 + 110)
+
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/

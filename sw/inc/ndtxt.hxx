@@ -305,9 +305,18 @@ public:
     void    Delete( SwTxtAttr * pTxtAttr, BOOL bThisOnly = FALSE );
 
     // Aktionen auf Text und Attributen
-    void    Copy(SwTxtNode *pDest, const SwIndex &rStart, USHORT nLen);
-    void    Copy(SwTxtNode *pDest, const SwIndex &rDestStart,
-                const SwIndex &rStart, xub_StrLen nLen);
+    // --> OD 2008-11-18 #i96213#
+    // introduce optional parameter to control, if all attributes have to be copied.
+    void Copy( SwTxtNode *pDest,
+               const SwIndex &rStart,
+               USHORT nLen,
+               const bool bForceCopyOfAllAttrs = false );
+    void Copy( SwTxtNode *pDest,
+               const SwIndex &rDestStart,
+               const SwIndex &rStart,
+               xub_StrLen nLen,
+               const bool bForceCopyOfAllAttrs = false );
+    // <--
     void    Cut(SwTxtNode *pDest, const SwIndex &rStart, xub_StrLen nLen);
     inline void Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
                     const SwIndex &rStart, xub_StrLen nLen);

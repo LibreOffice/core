@@ -772,7 +772,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0727 UNO_NAME_TABLE_BORDER_DISTANCES */ {MAP_CHAR_LEN("TableBorderDistances")},
 /* 0728 UNO_NAME_LIST_ID*/ {MAP_CHAR_LEN("ListId")},
 /* 0729 UNO_NAME_DEFAULT_LIST_ID*/ {MAP_CHAR_LEN("DefaultListId")},
-/* 0730 UNO_NAME_STREAM_NAME */ {MAP_CHAR_LEN("StreamName")}
+/* 0730 UNO_NAME_STREAM_NAME */ {MAP_CHAR_LEN("StreamName")},
+/* 0731 UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE */  {MAP_CHAR_LEN("ContinueingPreviousSubTree")},
+/* 0732 UNO_NAME_PARA_LIST_LABEL_STRING */  {MAP_CHAR_LEN("ListLabelString")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )

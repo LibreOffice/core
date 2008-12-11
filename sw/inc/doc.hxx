@@ -1211,8 +1211,14 @@ public:
 
         //Zuruecksetzen der Attribute; es werden alle TxtHints und bei
         //vollstaendiger Selektion harte Formatierung (AUTO-Formate) entfernt
-    void ResetAttrs(const SwPaM &rRg, sal_Bool bTxtAttr = sal_True,
-                        const SvUShortsSort* = 0 );
+    // --> OD 2008-11-28 #i96644#
+    // introduce new optional parameter <bSendDataChangedEvents> in order to
+    // control, if the side effect "send data changed events" is triggered or not.
+    void ResetAttrs( const SwPaM &rRg,
+                     sal_Bool bTxtAttr = sal_True,
+                     const SvUShortsSort* = 0,
+                     const bool bSendDataChangedEvents = true );
+    // <--
     void RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
 
         // Setze das Attribut im angegebenen Format. Ist Undo aktiv, wird
