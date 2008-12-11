@@ -66,6 +66,12 @@ void Request::wait(::sal_Int32 nMilliSeconds)
     lcl_sleep(m_aJoiner, nMilliSeconds);
 }
 
+void Request::waitProcessMessages()
+{
+    while (!m_aJoiner.check())
+        Application::Yield();
+}
+
 //-----------------------------------------------------------------------------
 void Request::notify()
 {
@@ -92,6 +98,20 @@ AsyncRequests::~AsyncRequests()
     // <- SYNCHRONIZED
 
     join();
+}
+
+void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
+{
+    // SYNCHRONIZED ->
+    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    m_lRequests.push(rRequest);
+    aLock.clear();
+    // <- SYNCHRONIZED
+
+    if ( ! isRunning())
+        create();
+
+    rRequest->waitProcessMessages();
 }
 
 //-----------------------------------------------------------------------------
@@ -137,47 +157,22 @@ void AsyncRequests::triggerRequestDirectly(const RequestRef& rRequest)
 
 //-----------------------------------------------------------------------------
 void AsyncRequests::triggerRequestThreadAware(const RequestRef& rRequest,
-                                                    ::sal_Bool  bWait   )
+                                                    ::sal_Int16  nWait   )
 {
     oslThreadIdentifier nOurThreadId    = getIdentifier();
     oslThreadIdentifier nCallerThreadId = ::osl::Thread::getCurrentIdentifier();
-
     if (nOurThreadId == nCallerThreadId)
         triggerRequestDirectly(rRequest);
-    else
-    if (bWait)
+    else if (nWait == BLOCKED)
         triggerRequestBlocked(rRequest);
+    else if (nWait == PROCESS_MESSAGES)
+        triggerRequestProcessMessages(rRequest);
     else
         triggerRequestNonBlocked(rRequest);
 }
 
 //-----------------------------------------------------------------------------
-class SmallAsyncThread : private ::cppu::BaseMutex
-                       , public  ::osl::Thread
-{
-    public:
 
-        SmallAsyncThread(const RequestHandlerRef& rHandler,
-                         const RequestRef&        rRequest)
-            : m_rHandler(rHandler)
-            , m_rRequest(rRequest)
-        {};
-
-        virtual ~SmallAsyncThread() {};
-
-    private:
-
-        virtual void SAL_CALL run()
-        {
-            m_rHandler->doRequest(m_rRequest);
-            m_rRequest->notify();
-        }
-
-    private:
-
-        RequestHandlerRef m_rHandler;
-        RequestRef m_rRequest;
-};
 
 //-----------------------------------------------------------------------------
 void SAL_CALL AsyncRequests::run()
@@ -222,10 +217,6 @@ void SAL_CALL AsyncRequests::run()
         {
             rHandler->doRequest(rRequest);
             rRequest->notify();
-            /*
-            SmallAsyncThread* pThread = new SmallAsyncThread(rHandler, rRequest);
-            pThread->create();
-            */
         }
     }
 

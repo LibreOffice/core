@@ -95,9 +95,10 @@ static const ::rtl::OUString PROP_DIALOG_SHOW_RESULT  = ::rtl::OUString::createF
 static const ::rtl::OUString PROP_SELECTED_FILES      = ::rtl::OUString::createFromAscii("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
 static const ::rtl::OUString PROP_MULTISELECTION_MODE = ::rtl::OUString::createFromAscii("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
 static const ::rtl::OUString PROP_TITLE               = ::rtl::OUString::createFromAscii("title"              ); // [OUString]
-static const ::rtl::OUString PROP_FILENAME            = ::rtl::OUString::createFromAscii("filename"              ); // [OUString]
+static const ::rtl::OUString PROP_FILENAME            = ::rtl::OUString::createFromAscii("filename"           ); // [OUString]
 static const ::rtl::OUString PROP_DIRECTORY           = ::rtl::OUString::createFromAscii("directory"          ); // [OUString]
 static const ::rtl::OUString PROP_FEATURES            = ::rtl::OUString::createFromAscii("features"           ); // [sal_Int32]
+static const ::rtl::OUString PROP_TEMPLATE_DESCR      = ::rtl::OUString::createFromAscii("templatedescription"); // [sal_Int32]
 static const ::rtl::OUString PROP_FILTER_TITLE        = ::rtl::OUString::createFromAscii("filter_title"       ); // [OUString]
 static const ::rtl::OUString PROP_FILTER_VALUE        = ::rtl::OUString::createFromAscii("filter_value"       ); // [OUString]
 
@@ -136,7 +137,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
             E_SET_MULTISELECTION_MODE,
             E_SET_TITLE,
             E_SET_FILENAME,
+            E_GET_DIRECTORY,
             E_SET_DIRECTORY,
+            E_SET_DEFAULT_NAME,
             E_GET_SELECTED_FILES,
             E_SHOW_DIALOG_MODAL,
             E_SET_CONTROL_VALUE,
@@ -212,6 +215,14 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         void impl_sta_SetDirectory(const RequestRef& rRequest);
 
         //---------------------------------------------------------------------
+        /// implementation of request E_GET_DIRECTORY
+        void impl_sta_GetDirectory(const RequestRef& rRequest);
+
+        //---------------------------------------------------------------------
+        /// implementation of request E_SET_DEFAULT_NAME
+        void impl_sta_SetDefaultName(const RequestRef& rRequest);
+
+        //---------------------------------------------------------------------
         /// implementation of request E_GET_SELECTED_FILES
         void impl_sta_getSelectedFiles(const RequestRef& rRequest);
 
@@ -257,7 +268,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
          *  @param  nFeatures
          *          flag field(!) knows all features wich must be enabled.
          */
-        void impl_sta_enableFeatures(::sal_Int32 nFeatures);
+        void impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_Int32 nTemplate);
 
         //---------------------------------------------------------------------
         /** returns an interface, which can be used to customize the internaly used
@@ -275,6 +286,8 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         //---------------------------------------------------------------------
         /// fill filter list of internal used dialog.
         void impl_sta_setFiltersOnDialog();
+
+        void impl_SetDefaultExtension( const rtl::OUString& currentFilter );
 
    private:
 
@@ -312,6 +325,15 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         //---------------------------------------------------------------------
         /// @todo document me
         ::sal_Bool m_bInExecute;
+
+        // handle to parent window
+        HWND m_hParentWindow;
+
+        //
+        ::rtl::OUString m_sDirectory;
+
+        //
+        ::rtl::OUString m_sFilename;
 };
 
 } // namespace vista
