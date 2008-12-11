@@ -4146,7 +4146,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
         if ( !Controls::pClasses )                        // Ist static, wird also nur einmal geladen
             ReadFlatArray( Controls::arClasses, Controls::pClasses );
 
-        if ( Controls::pClasses && Controls::pClasses->Seek_Entry( &WhatName )
+        if ( (Controls::pClasses && Controls::pClasses->Seek_Entry( &WhatName ))
             || rSymbol.EqualsIgnoreCaseAscii( "ID" )
             || rSymbol.EqualsIgnoreCaseAscii( "Name" ) )
             return TT_METHOD;

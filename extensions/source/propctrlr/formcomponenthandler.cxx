@@ -1193,6 +1193,7 @@ namespace pcr
             if  (   ( PROPERTY_ID_DEFAULTCHECKED == nPropId )
                 ||  ( PROPERTY_ID_STATE == nPropId )
                 )
+            {
                 if ( impl_componentHasProperty_throw( PROPERTY_TRISTATE ) )
                 {
                     if ( !::comphelper::getBOOL( m_xComponent->getPropertyValue( PROPERTY_TRISTATE ) ) )
@@ -1203,6 +1204,7 @@ namespace pcr
                 }
                 else
                     --pEnd;
+            }
 
             if ( PROPERTY_ID_LISTSOURCETYPE == nPropId )
                 if ( FormComponentType::COMBOBOX == m_nClassId )
@@ -1643,10 +1645,12 @@ namespace pcr
                     OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
                     DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
                     if ( pControl )
+                    {
                         if ( bAccuracy )
                             pControl->SetDecimalDigits( nNewDigits );
                         else
                             pControl->SetThousandsSep( bUseSep );
+                    }
                 }
             }
         }

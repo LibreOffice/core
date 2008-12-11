@@ -639,8 +639,10 @@ void BibToolBar::AdjustToolBox()
         aSize.Height() = aOldSize.Height();
 
     Size aTbSize = GetSizePixel();
-    if ( aSize.Width() && aSize.Width() != aTbSize.Width() ||
-         aSize.Height() && aSize.Height() != aTbSize.Height() )
+    if (
+        (aSize.Width() && aSize.Width() != aTbSize.Width()) ||
+        (aSize.Height() && aSize.Height() != aTbSize.Height())
+       )
     {
         SetPosSizePixel( GetPosPixel(), aSize );
         Invalidate();

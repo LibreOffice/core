@@ -263,8 +263,7 @@ bool DigitalSignaturesDialog::canAdd()
     // see specification
     //cvs: specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //Paragraph 'Behavior with regard to ODF 1.2'
-    if (!bSave1_1  && bDoc1_1
-        || bSave1_1 && bDoc1_1)
+    if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
         ErrorBox err(NULL, XMLSEC_RES(RID_XMLSECDLG_OLD_ODF_FORMAT));

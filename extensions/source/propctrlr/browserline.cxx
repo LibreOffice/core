@@ -344,10 +344,12 @@ namespace pcr
         void implSetBitIfAffected( sal_uInt16& _nEnabledBits, sal_Int16 _nAffectedMask, sal_Int16 _nTestBit, bool _bSet )
         {
             if ( _nAffectedMask & _nTestBit )
+            {
                 if ( _bSet )
                     _nEnabledBits |= _nTestBit;
                 else
                     _nEnabledBits &= ~_nTestBit;
+            }
         }
 
         void implEnable( Window* _pWindow, sal_uInt16 _nEnabledBits, sal_uInt16 _nMatchBits  )

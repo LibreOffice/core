@@ -168,7 +168,7 @@ bool ComputedExpression::evaluate( const EvaluationContext& rContext )
 {
     // for simple expression we don't need to re-evaluate (if we have
     // an older result); neither for empty expressions
-    if( mbIsEmpty  ||  mxResult.is() && mbIsSimple )
+    if( mbIsEmpty || (mxResult.is() && mbIsSimple) )
         return true;
 
     return _evaluate( rContext, _getExpressionForEvaluation() );
