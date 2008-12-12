@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basdoc.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,8 @@ protected:
                                String * pAppName,
                                String * pFullTypeName,
                                String * pShortTypeName,
-                               sal_Int32 nVersion ) const;
+                               sal_Int32 nVersion,
+                               sal_Bool bTemplate = sal_False ) const;
 
 public:
                         TYPEINFO();

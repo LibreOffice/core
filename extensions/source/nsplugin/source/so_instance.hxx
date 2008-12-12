@@ -63,8 +63,6 @@ class SoPluginInstance
 private:
     // Service manager of remote Soffice
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxRemoteMSF;
-    // Service manager of local Soffice
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxLocalMSF;
     // Dir where Soffice is in, ie. /Soffice7/program
     static char sSO_Dir[NPP_PATH_MAX];
     int m_nWidth;
@@ -93,14 +91,13 @@ private:
     PluginDocumentClosePreventer* m_pCloseListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xCloseListener;
 
-    bool LoadDocument(NSP_HWND hParent);
-    sal_Bool Connect(void);
+    sal_Bool LoadDocument(NSP_HWND hParent);
 
     long m_dParentStyl;       // Old Windows style of parent window
 
 
 public:
-    SoPluginInstance(long iInstance);
+    SoPluginInstance(long iInstance, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF);
     virtual ~SoPluginInstance(void);
     virtual sal_Bool SetURL(char* aURL);
     virtual sal_Bool IsInit(void){return m_bInit;};
