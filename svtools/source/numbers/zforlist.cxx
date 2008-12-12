@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zforlist.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.72.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2913,6 +2913,22 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
         pFormat = rTable.aFTable.Next();
     }
     return pMergeTable;
+}
+
+
+SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
+{
+    if (!HasMergeFmtTbl())
+        return SvNumberFormatterMergeMap();
+
+    SvNumberFormatterMergeMap aMap;
+    for (sal_uInt32* pIndex = pMergeTable->First(); pIndex; pIndex = pMergeTable->Next())
+    {
+        sal_uInt32 nOldKey = pMergeTable->GetCurKey();
+        aMap.insert( SvNumberFormatterMergeMap::value_type( nOldKey, *pIndex));
+    }
+    ClearMergeTable();
+    return aMap;
 }
 
 
