@@ -340,7 +340,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         String aFullTypeName, aShortTypeName, aAppName;
         sal_uInt32 nClipFormat=0;
 
-        FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion );
+        FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
         if ( nClipFormat )
         {
             // basic doesn't have a ClipFormat
@@ -350,30 +350,13 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
             if ( aDataFlavor.MimeType.getLength() )
             {
-                if ( bTemplate )
-                {
-                    // TODO/LATER: this is a temporary solution for BETA to avoid incompatible change
-                    if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_TEXT ) )
-                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE;
-                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING ) )
-                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE;
-                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION ) )
-                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE;
-                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET ) )
-                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE;
-                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_CHART ) )
-                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE;
-                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA ) )
-                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE;
-                }
-
                 try
                 {
                     xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
-                    // TODO/LATER: ErrorHandling
+                    const_cast<SfxObjectShell*>( this )->SetError( ERRCODE_IO_GENERAL );
                 }
 
                 ::rtl::OUString aVersion;

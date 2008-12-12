@@ -49,6 +49,7 @@
 #include <svtools/rectitem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/urihelper.hxx>
+#include <svtools/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/securityoptions.hxx>
@@ -171,6 +172,18 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
                 "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
 
     pFile->Record( &aDevice );
+
+    LanguageType eLang;
+    SvtCTLOptions*  pCTLOptions = new SvtCTLOptions;
+    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ARABIC;
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ENGLISH;
+    else
+        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+
+    aDevice.SetDigitLanguage( eLang );
+
     ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
     pFile->Stop();
 

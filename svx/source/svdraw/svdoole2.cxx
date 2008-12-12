@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.89.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2021,6 +2021,11 @@ void SdrOle2Obj::GetObjRef_Impl()
 uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef() const
 {
     const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();
+    return xObjRef.GetObject();
+}
+
+uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef_NoInit() const
+{
     return xObjRef.GetObject();
 }
 

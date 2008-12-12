@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdetc.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.152.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,6 +293,7 @@ class OLEObjCache : public Container
     ULONG               nSize;
     AutoTimer*          pTimer;
 
+    void UnloadOnDemand();
     BOOL UnloadObj( SdrOle2Obj* pObj );
     DECL_LINK( UnloadCheckHdl, AutoTimer* );
 

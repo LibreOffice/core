@@ -41,6 +41,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
+#include <vcl/fixed.hxx>
 
 //============================================================================
 class MasterPasswordCreateDialog : public ModalDialog
@@ -49,6 +50,8 @@ class MasterPasswordCreateDialog : public ModalDialog
     Edit            aEDMasterPasswordCrt;
     FixedText       aFTMasterPasswordRepeat;
     Edit            aEDMasterPasswordRepeat;
+    FixedText       aFTMasterPasswordWarning;
+    FixedLine       aFL;
     OKButton        aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton      aHelpBtn;

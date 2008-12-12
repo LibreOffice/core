@@ -1623,15 +1623,6 @@ UUIInteractionHelper::executePasswordDialog(
         xDialog(new PasswordCreateDialog(
                             getParentProperty(), xManager.get()));
 
-        ::rtl::OUString aTitle( xDialog->GetText() );
-        if( aDocName.getLength() )
-        {
-        aTitle += ::rtl::OUString::createFromAscii( " [" );
-        aTitle += aDocName;
-        aTitle += ::rtl::OUString::createFromAscii( "]" );
-        xDialog->SetText( aTitle );
-        }
-
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                 ERRCODE_BUTTON_CANCEL);
         rInfo.SetPassword( xDialog->GetPassword() );
@@ -1640,16 +1631,7 @@ UUIInteractionHelper::executePasswordDialog(
     {
         std::auto_ptr< PasswordDialog >
         xDialog(new PasswordDialog(
-                            getParentProperty(), nMode, xManager.get()));
-
-        ::rtl::OUString aTitle( xDialog->GetText() );
-        if( aDocName.getLength() )
-        {
-        aTitle += ::rtl::OUString::createFromAscii( " [" );
-        aTitle += aDocName;
-        aTitle += ::rtl::OUString::createFromAscii( "]" );
-        xDialog->SetText( aTitle );
-        }
+                            getParentProperty(), nMode, xManager.get(), aDocName ));
 
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                 ERRCODE_BUTTON_CANCEL);

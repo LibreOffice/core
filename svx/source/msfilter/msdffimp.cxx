@@ -7552,9 +7552,19 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             ::rtl::OUString aName( aDstStgName );
             comphelper::EmbeddedObjectContainer aCnt( rDestStorage );
             xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+
             if ( !xObj.is() )
-                // TODO/LATER: error handling
-                return xObj;
+            {
+                if( aFilterName.getLength() )
+                {
+                    // throw the filter parameter away as workaround
+                    aMedium.realloc( 2 );
+                    xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+                }
+
+                if ( !xObj.is() )
+                     return xObj;
+            }
 
             // TODO/LATER: ViewAspect must be passed from outside!
             sal_Int64 nViewAspect = embed::Aspects::MSOLE_CONTENT;

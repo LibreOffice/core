@@ -133,10 +133,9 @@
 #define BORDER_OFFSET               8
 #define COL_0                       (RSC_SP_TBPG_INNERBORDER_LEFT)
 #define COL_1                       (COL_0+RSC_SP_FLGR_SPACE_X)
-#define COL_5                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define COL_4                       (COL_5-RSC_SP_FLGR_SPACE_X)
+#define COL_4                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
 #define COL_3                       (COL_4-RSC_CD_PUSHBUTTON_WIDTH)
-#define COL_2                       (COL_3-RSC_SP_CTRL_X)
+#define COL_2                       (COL_3-RSC_SP_CTRL_DESC_X)
 
 #define ROW_0                       (RSC_SP_FLGR_INNERBORDER_TOP)
 #define ROW_1                       (ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)

@@ -28,17 +28,19 @@
  *
  ************************************************************************/
 
-#ifndef UUI_PASSCRT_HRC
-#define UUI_PASSCRT_HRC
+#ifndef UUI_PASSCRTDLG_HRC
+#define UUI_PASSCRTDLG_HRC
 
-//============================================================================
-#define FT_PASSWORD_CRT         20
-#define ED_PASSWORD_CRT         21
-#define FT_PASSWORD_REPEAT  22
-#define ED_PASSWORD_REPEAT  23
+// local identifiers
+#define BTN_PASSCRT_CANCEL 1
+#define ED_PASSWORD_CRT     2
+#define FT_PASSWORD_REPEAT          3
+#define FT_PASSWORD_WARNING          4
+#define ED_PASSWORD_REPEAT     5
+#define FL_FIXED_LINE_1     6
+#define BTN_PASSCRT_OK 7
+#define BTN_PASSCRT_HELP 8
+#define FT_PASSWORD_CRT          9
 
-#define BTN_PASSCRT_OK      50
-#define BTN_PASSCRT_CANCEL  51
-#define BTN_PASSCRT_HELP        52
 
-#endif // UUI_PASSCRT_HRC
+#endif // UUI_PASSCRTDLG_HRC

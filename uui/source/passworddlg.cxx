@@ -53,30 +53,64 @@ IMPL_LINK( PasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 PasswordDialog::PasswordDialog
 (
-    Window*                                     pParent,
-    ::com::sun::star::task::PasswordRequestMode aDialogMode,
-    ResMgr*                                     pResMgr
-) :
-
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, *pResMgr ) ),
-
-    aFTPassword     ( this, ResId( FT_PASSWORD, *pResMgr ) ),
-    aEDPassword     ( this, ResId( ED_PASSWORD, *pResMgr ) ),
-    aOKBtn          ( this, ResId( BTN_PASSWORD_OK, *pResMgr ) ),
-    aCancelBtn      ( this, ResId( BTN_PASSWORD_CANCEL, *pResMgr ) ),
-    aHelpBtn        ( this, ResId( BTN_PASSWORD_HELP, *pResMgr ) ),
-    nDialogMode     ( aDialogMode ),
-    pResourceMgr    ( pResMgr )
+    Window* _pParent,
+    ::com::sun::star::task::PasswordRequestMode nDlgMode,
+    ResMgr * pResMgr,
+    rtl::OUString& aDocURL
+    )
+    :ModalDialog( _pParent, ResId( DLG_UUI_PASSWORD, *pResMgr ) )
+    ,aFTPassword    ( this, ResId( FT_PASSWORD, *pResMgr )    )
+    ,aEDPassword           ( this, ResId( ED_PASSWORD, *pResMgr )            )
+    ,aOKBtn       ( this, ResId( BTN_PASSWORD_OK, *pResMgr )        )
+    ,aCancelBtn       ( this, ResId( BTN_PASSWORD_CANCEL, *pResMgr )        )
+    ,aHelpBtn       ( this, ResId( BTN_PASSWORD_HELP, *pResMgr )        )
+    ,aFixedLine1           ( this, ResId( FL_FIXED_LINE_1, *pResMgr )            )
+    ,nDialogMode        ( nDlgMode )
+    ,pResourceMgr   ( pResMgr )
 {
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, *pResourceMgr ));
-        ErrorBox aErrorBox( pParent, WB_OK, aErrorMsg );
+        ErrorBox aErrorBox( _pParent, WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
 
     FreeResource();
 
-    aOKBtn.SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
-};
+    aFTPassword.SetText( aFTPassword.GetText() + aDocURL );
 
+    aOKBtn.SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
+
+    long nLabelWidth = aFTPassword.GetSizePixel().Width();
+    long nLabelHeight = aFTPassword.GetSizePixel().Height();
+    long nTextWidth = aFTPassword.GetCtrlTextWidth( aFTPassword.GetText() );
+    long nTextHeight = aFTPassword.GetTextHeight();
+
+    Rectangle aLabelRect( aFTPassword.GetPosPixel(), aFTPassword.GetSizePixel() );
+    Rectangle aRect = aFTPassword.GetTextRect( aLabelRect, aFTPassword.GetText() );
+
+    long nNewLabelHeight = 0;
+    for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight;
+        nNewLabelHeight < aRect.GetHeight();
+        nNewLabelHeight += nTextHeight );
+
+    long nDelta = nNewLabelHeight - nLabelHeight;
+
+    Size aNewDlgSize = GetSizePixel();
+    aNewDlgSize.Height() += nDelta;
+    SetSizePixel( aNewDlgSize );
+
+    Size aNewLabelSize = aFTPassword.GetSizePixel();
+    aNewLabelSize.Height() = nNewLabelHeight;
+    aFTPassword.SetPosSizePixel( aFTPassword.GetPosPixel(), aNewLabelSize );
+
+    Window* pControls[] = { &aEDPassword, &aFixedLine1, &aOKBtn, &aCancelBtn, &aHelpBtn };
+    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    for ( int i = 0; i < nCCount; ++i )
+    {
+        Point aNewPos =(*pControls[i]).GetPosPixel();
+        aNewPos.Y() += nDelta;
+        pControls[i]->SetPosSizePixel( aNewPos, pControls[i]->GetSizePixel() );
+    }
+
+}

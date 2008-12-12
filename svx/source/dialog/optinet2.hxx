@@ -191,16 +191,15 @@ private:
     SvxSearchEngineData aCurrentSrchData;
 
 #ifdef _SVX_OPTINET2_CXX
-    void            FillSearchBox_Impl();
-    String          GetSearchString_Impl();
+    void        InitControls_Impl();
 
-    DECL_LINK( NewSearchHdl_Impl, PushButton * );
-    DECL_LINK( AddSearchHdl_Impl, PushButton * );
-    DECL_LINK( ChangeSearchHdl_Impl, PushButton * );
-    DECL_LINK( DeleteSearchHdl_Impl, PushButton * );
-    DECL_LINK( SearchEntryHdl_Impl, ListBox * );
-    DECL_LINK( SearchModifyHdl_Impl, SvxNoSpaceEdit * );
-    DECL_LINK( SearchPartHdl_Impl, RadioButton * );
+    DECL_LINK(  NewSearchHdl_Impl, PushButton * );
+    DECL_LINK(  AddSearchHdl_Impl, PushButton * );
+    DECL_LINK(  ChangeSearchHdl_Impl, PushButton * );
+    DECL_LINK(  DeleteSearchHdl_Impl, PushButton * );
+    DECL_LINK(  SearchEntryHdl_Impl, ListBox * );
+    DECL_LINK(  SearchModifyHdl_Impl, SvxNoSpaceEdit * );
+    DECL_LINK(  SearchPartHdl_Impl, RadioButton * );
 #endif
 
     virtual void        ActivatePage( const SfxItemSet& rSet );

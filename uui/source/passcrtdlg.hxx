@@ -31,16 +31,12 @@
 #ifndef UUI_PASSCRTDLG_HXX
 #define UUI_PASSCRTDLG_HXX
 
-#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/group.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 
 //============================================================================
 class PasswordCreateDialog : public ModalDialog
@@ -49,10 +45,14 @@ class PasswordCreateDialog : public ModalDialog
     Edit            aEDPasswordCrt;
     FixedText       aFTPasswordRepeat;
     Edit            aEDPasswordRepeat;
+    FixedText       aFTWarning;
+    FixedLine       aFixedLine1;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
+    ResMgr*                                         pResourceMgr;
+    sal_uInt16                                      nMinLen;
 
     DECL_LINK( OKHdl_Impl, OKButton * );
     DECL_LINK( EditHdl_Impl, Edit * );
@@ -61,10 +61,6 @@ public:
     PasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
 
     String          GetPassword() const { return aEDPasswordCrt.GetText(); }
-
-private:
-    ResMgr*                                         pResourceMgr;
-    sal_uInt16                                      nMinLen;
 };
 
 #endif // UUI_PASSCRTDLG_HXX

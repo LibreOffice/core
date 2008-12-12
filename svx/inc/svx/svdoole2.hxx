@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +125,8 @@ public:
 
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef() const;
+
+    SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef_NoInit() const;
 
     void AbandonObject();
 

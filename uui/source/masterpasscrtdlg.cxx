@@ -82,6 +82,8 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     aEDMasterPasswordCrt        ( this, ResId( ED_MASTERPASSWORD_CRT, *pResMgr ) ),
     aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT, *pResMgr ) ),
     aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT, *pResMgr ) ),
+    aFTMasterPasswordWarning ( this, ResId( FT_MASTERPASSWORD_WARNING, *pResMgr ) ),
+    aFL ( this, ResId( FL_FIXED_LINE, *pResMgr ) ),
     aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK, *pResMgr ) ),
     aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL, *pResMgr ) ),
     aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP, *pResMgr ) ),
@@ -93,5 +95,36 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     aOKBtn.Enable( sal_False );
     aOKBtn.SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
     aEDMasterPasswordCrt.SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
+
+    long nLableWidth = aFTMasterPasswordWarning.GetSizePixel().Width();
+    long nLabelHeight = aFTMasterPasswordWarning.GetSizePixel().Height();
+    long nTextWidth = aFTMasterPasswordWarning.GetCtrlTextWidth( aFTMasterPasswordWarning.GetText() );
+    long nTextHeight = aFTMasterPasswordWarning.GetTextHeight();
+
+    Rectangle aLabelRect( aFTMasterPasswordWarning.GetPosPixel(), aFTMasterPasswordWarning.GetSizePixel() );
+    Rectangle aRect = aFTMasterPasswordWarning.GetTextRect( aLabelRect, aFTMasterPasswordWarning.GetText() );
+
+    long nNewLabelHeight = 0;
+    for( nNewLabelHeight = ( nTextWidth / nLableWidth + 1 ) * nTextHeight;
+        nNewLabelHeight < aRect.GetHeight();
+        nNewLabelHeight += nTextHeight );
+
+    long nDelta = nNewLabelHeight - nLabelHeight;
+    Size aNewDlgSize = GetSizePixel();
+    aNewDlgSize.Height() += nDelta;
+    SetSizePixel( aNewDlgSize );
+
+    Size aNewWarningSize = aFTMasterPasswordWarning.GetSizePixel();
+    aNewWarningSize.Height() = nNewLabelHeight;
+    aFTMasterPasswordWarning.SetPosSizePixel( aFTMasterPasswordWarning.GetPosPixel(), aNewWarningSize );
+
+    Window* pControls[] = { &aFL, &aOKBtn, &aCancelBtn, &aHelpBtn };
+    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    for ( int i = 0; i < nCCount; ++i )
+    {
+        Point aNewPos =(*pControls[i]).GetPosPixel();
+        aNewPos.Y() += nDelta;
+        pControls[i]->SetPosSizePixel( aNewPos, pControls[i]->GetSizePixel() );
+    }
 };
 
