@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetbuffer.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@ namespace xls {
 /** Contains data from the 'sheet' element describing a sheet in the workbook. */
 struct OoxSheetInfo
 {
-    ::rtl::OUString     maId;           /// Relation identifier for the sheet substream.
+    ::rtl::OUString     maRelId;        /// Relation identifier for the sheet substream.
     ::rtl::OUString     maName;         /// Original name of the sheet.
     ::rtl::OUString     maFinalName;    /// Final (converted) name of the sheet.
     sal_Int32           mnSheetId;      /// Sheet identifier.
@@ -59,8 +59,7 @@ struct OoxSheetInfo
 
 // ============================================================================
 
-/** Stores information about all internal and external linked sheets in a
-    spreadsheet document.
+/** Stores information about all sheets in a spreadsheet document.
 
     Information about sheets includes the sheet name, the visibility state, and
     for the OOX filter, the relation identifier of the sheet used to obtain the
@@ -81,14 +80,8 @@ public:
     /** Imports the SHEET record from the passed BIFF stream. */
     void                importSheet( BiffInputStream& rStrm );
 
-    /** Inserts an external linked sheet into the document, looks for existing sheet.
-         @return  Internal index of the linked sheet. */
-    sal_Int32           insertExternalSheet(
-                            const ::rtl::OUString& rTargetUrl,
-                            const ::rtl::OUString& rSheetName );
-
-    /** Returns the number of internal sheets. */
-    sal_Int32           getInternalSheetCount() const;
+    /** Returns the number of sheets contained in the workbook. */
+    sal_Int32           getSheetCount() const;
     /** Returns the OOX relation identifier of the specified sheet. */
     ::rtl::OUString     getSheetRelId( sal_Int32 nSheet ) const;
     /** Returns the finalized name of the specified sheet. */
@@ -99,20 +92,16 @@ public:
     sal_Int32           getFinalSheetIndex( const ::rtl::OUString& rName ) const;
 
 private:
-    sal_Int16           getTotalSheetCount() const;
     const OoxSheetInfo* getSheetInfo( sal_Int32 nSheet ) const;
 
     ::rtl::OUString     insertSheet( const ::rtl::OUString& rName, sal_Int16 nSheet, bool bVisible );
     void                insertSheet( const OoxSheetInfo& rSheetInfo );
 
 private:
-    typedef ::std::vector< OoxSheetInfo >                   SheetInfoVec;
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > ExternalSheetName;
-    typedef ::std::map< ExternalSheetName, sal_Int16 >      ExternalSheetMap;
+    typedef ::std::vector< OoxSheetInfo > SheetInfoVec;
 
     const ::rtl::OUString maIsVisibleProp;
     SheetInfoVec        maSheetInfos;
-    ExternalSheetMap    maExternalSheets;
 };
 
 // ============================================================================

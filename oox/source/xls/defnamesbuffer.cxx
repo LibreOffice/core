@@ -427,7 +427,8 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
                         maOoxData.mnSheet = pExtLink->getSheetIndex();
         break;
         case BIFF8:
-            // one-based sheet index
+            // convert one-based sheet index to zero-based
+            OSL_ENSURE( nTabId >= 0, "DefinedName::importDefinedName - invalid local sheet index" );
             if( nTabId != BIFF_DEFNAME_GLOBAL )
                 maOoxData.mnSheet = nTabId - 1;
         break;

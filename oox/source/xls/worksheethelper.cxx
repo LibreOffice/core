@@ -362,8 +362,6 @@ public:
     /** Returns true, if this helper refers to an existing Calc sheet. */
     inline bool         isValidSheet() const { return mxSheet.is(); }
 
-    /** Returns a cell formula simulating an empty string result. */
-    inline const OUString& getEmptyStringFormula() const { return maEmptyStrFormula; }
     /** Returns a cell formula simulating the passed boolean value. */
     const OUString&     getBooleanFormula( bool bValue ) const;
 
@@ -534,7 +532,6 @@ private:
     void                groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLastColRow, bool bCollapsed, bool bRows );
 
 private:
-    const OUString      maEmptyStrFormula;  /// Replacement formula for empty string result.
     const OUString      maTrueFormula;      /// Replacement formula for TRUE boolean cells.
     const OUString      maFalseFormula;     /// Replacement formula for FALSE boolean cells.
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
@@ -585,7 +582,6 @@ private:
 
 WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
     WorkbookHelper( rHelper ),
-    maEmptyStrFormula( CREATE_OUSTRING( "=\"\"" ) ),
     maTrueFormula( CREATE_OUSTRING( "=TRUE()" ) ),
     maFalseFormula( CREATE_OUSTRING( "=FALSE()" ) ),
     maSheetCellRanges( CREATE_OUSTRING( "com.sun.star.sheet.SheetCellRanges" ) ),
@@ -1683,25 +1679,12 @@ SheetViewSettings& WorksheetHelper::getSheetViewSettings() const
     return mrSheetData.getSheetViewSettings();
 }
 
-void WorksheetHelper::setEmptyStringCell( const Reference< XCell >& rxCell ) const
+void WorksheetHelper::setStringCell( const Reference< XCell >& rxCell, const OUString& rText ) const
 {
-    OSL_ENSURE( rxCell.is(), "WorksheetHelper::setEmptyStringCell - missing cell interface" );
-    rxCell->setFormula( mrSheetData.getEmptyStringFormula() );
-}
-
-void WorksheetHelper::setStringCell( const Reference< XCell >& rxCell, const OUString& rText, bool bEmptyStringAsFormula ) const
-{
-    if( bEmptyStringAsFormula && (rText.getLength() == 0) )
-    {
-        setEmptyStringCell( rxCell );
-    }
-    else
-    {
-        OSL_ENSURE( rxCell.is(), "WorksheetHelper::setStringCell - missing cell interface" );
-        Reference< XText > xText( rxCell, UNO_QUERY );
-        if( xText.is() )
-            xText->setString( rText );
-    }
+    OSL_ENSURE( rxCell.is(), "WorksheetHelper::setStringCell - missing cell interface" );
+    Reference< XText > xText( rxCell, UNO_QUERY );
+    if( xText.is() )
+        xText->setString( rText );
 }
 
 void WorksheetHelper::setSharedStringCell( const Reference< XCell >& rxCell, sal_Int32 nStringId, sal_Int32 nXfId ) const
@@ -1732,7 +1715,7 @@ void WorksheetHelper::setErrorCell( const Reference< XCell >& rxCell, sal_uInt8 
     }
 }
 
-void WorksheetHelper::setOoxCell( OoxCellData& orCellData, bool bEmptyStringAsFormula ) const
+void WorksheetHelper::setOoxCell( OoxCellData& orCellData ) const
 {
     OSL_ENSURE( orCellData.mxCell.is(), "WorksheetHelper::setCell - missing cell interface" );
     if( orCellData.mbHasValueStr ) switch( orCellData.mnCellType )
@@ -1749,7 +1732,7 @@ void WorksheetHelper::setOoxCell( OoxCellData& orCellData, bool bEmptyStringAsFo
             setErrorCell( orCellData.mxCell, orCellData.maValueStr );
         break;
         case XML_str:
-            setStringCell( orCellData.mxCell, orCellData.maValueStr, bEmptyStringAsFormula );
+            setStringCell( orCellData.mxCell, orCellData.maValueStr );
         break;
         case XML_s:
             setSharedStringCell( orCellData.mxCell, orCellData.maValueStr.toInt32(), orCellData.mnXfId );

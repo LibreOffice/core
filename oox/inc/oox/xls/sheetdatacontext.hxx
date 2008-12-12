@@ -114,50 +114,6 @@ private:
 
 // ============================================================================
 
-/** This class implements importing the sheetData element in external sheets.
-
-    The sheetData element embedded in the externalBook element contains cached
-    cells from externally linked sheets.
- */
-class OoxExternalSheetDataContext : public OoxWorksheetContextBase
-{
-public:
-    explicit            OoxExternalSheetDataContext( OoxWorkbookFragmentBase& rFragment, sal_Int32 nSheet );
-
-protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
-
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
-
-private:
-    /** Imports cell settings from a c element. */
-    void                importCell( const AttributeList& rAttribs );
-
-    void                importCellHeader( RecordInputStream& rStrm );
-
-    /** Imports the EXTCELL_BLANK from the passed stream. */
-    void                importExtCellBlank( RecordInputStream& rStrm );
-    /** Imports the EXTCELL_BOOL from the passed stream. */
-    void                importExtCellBool( RecordInputStream& rStrm );
-    /** Imports the EXTCELL_DOUBLE from the passed stream. */
-    void                importExtCellDouble( RecordInputStream& rStrm );
-    /** Imports the EXTCELL_ERROR from the passed stream. */
-    void                importExtCellError( RecordInputStream& rStrm );
-    /** Imports the EXTCELL_STRING from the passed stream. */
-    void                importExtCellString( RecordInputStream& rStrm );
-
-private:
-    OoxCellData         maCurrCell;         /// Position of current imported cell.
-    BinAddress          maCurrPos;          /// Current position for binary import.
-};
-
-// ============================================================================
-
 /** This class implements importing row settings and all cells of a sheet.
  */
 class BiffSheetDataContext : public BiffWorksheetContextBase
@@ -212,19 +168,6 @@ private:
     sal_uInt32          mnFormulaIgnoreSize;    /// Number of bytes to be ignored in FORMULA record.
     sal_uInt32          mnArrayIgnoreSize;      /// Number of bytes to be ignored in ARRAY record.
     sal_uInt16          mnBiff2XfId;            /// Current XF identifier from IXFE record.
-};
-
-// ============================================================================
-
-/** This class implements importing cached cell data of external links.
- */
-class BiffExternalSheetDataContext : public BiffWorksheetContextBase
-{
-public:
-    explicit            BiffExternalSheetDataContext( const BiffWorkbookFragmentBase& rParent, sal_Int32 nSheet );
-
-    /** Import the CRN record containing cached cell values. */
-    virtual void        importRecord();
 };
 
 // ============================================================================

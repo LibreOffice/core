@@ -42,6 +42,7 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
+#include <com/sun/star/sheet/XExternalDocLinks.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include "oox/helper/progressbar.hxx"
@@ -86,6 +87,7 @@ using ::com::sun::star::sheet::XSpreadsheet;
 using ::com::sun::star::sheet::XNamedRange;
 using ::com::sun::star::sheet::XNamedRanges;
 using ::com::sun::star::sheet::XDatabaseRanges;
+using ::com::sun::star::sheet::XExternalDocLinks;
 using ::com::sun::star::style::XStyle;
 using ::com::sun::star::style::XStyleFamiliesSupplier;
 using ::oox::core::BinaryFilterBase;
@@ -179,6 +181,8 @@ public:
     Reference< XNamedRanges > getNamedRanges() const;
     /** Returns the container for database ranges from the Calc document. */
     Reference< XDatabaseRanges > getDatabaseRanges() const;
+    /** Returns the container for external documents from the Calc document. */
+    Reference< XExternalDocLinks > getExternalDocLinks() const;
     /** Returns the container for DDE links from the Calc document. */
     Reference< XNameAccess > getDdeLinks() const;
     /** Returns the cell or page styles container from the Calc document. */
@@ -290,6 +294,7 @@ private:
     OUString            maRefDeviceProp;        /// Property name for reference device.
     OUString            maNamedRangesProp;      /// Property name for defined names.
     OUString            maDatabaseRangesProp;   /// Property name for database ranges.
+    OUString            maExtDocLinksProp;      /// Property name for external links.
     OUString            maDdeLinksProp;         /// Property name for DDE links.
     OUString            maCellStylesProp;       /// Property name for cell styles.
     OUString            maPageStylesProp;       /// Property name for page styles.
@@ -386,6 +391,14 @@ Reference< XDatabaseRanges > WorkbookData::getDatabaseRanges() const
     Reference< XDatabaseRanges > xDatabaseRanges;
     aPropSet.getProperty( xDatabaseRanges, maDatabaseRangesProp );
     return xDatabaseRanges;
+}
+
+Reference< XExternalDocLinks > WorkbookData::getExternalDocLinks() const
+{
+    PropertySet aPropSet( mxDoc );
+    Reference< XExternalDocLinks > xDocLinks;
+    aPropSet.getProperty( xDocLinks, maExtDocLinksProp );
+    return xDocLinks;
 }
 
 Reference< XNameAccess > WorkbookData::getDdeLinks() const
@@ -542,6 +555,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     maRefDeviceProp = CREATE_OUSTRING( "ReferenceDevice" );
     maNamedRangesProp = CREATE_OUSTRING( "NamedRanges" );
     maDatabaseRangesProp = CREATE_OUSTRING( "DatabaseRanges" );
+    maExtDocLinksProp = CREATE_OUSTRING( "ExternalDocLinks" );
     maDdeLinksProp = CREATE_OUSTRING( "DDELinks" );
     maCellStylesProp = CREATE_OUSTRING( "CellStyles" );
     maPageStylesProp = CREATE_OUSTRING( "PageStyles" );
@@ -721,6 +735,11 @@ Reference< XNamedRanges > WorkbookHelper::getNamedRanges() const
 Reference< XDatabaseRanges > WorkbookHelper::getDatabaseRanges() const
 {
     return mrBookData.getDatabaseRanges();
+}
+
+Reference< XExternalDocLinks > WorkbookHelper::getExternalDocLinks() const
+{
+    return mrBookData.getExternalDocLinks();
 }
 
 Reference< XNameAccess > WorkbookHelper::getDdeLinks() const

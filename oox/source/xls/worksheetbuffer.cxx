@@ -31,6 +31,7 @@
 #include "oox/xls/worksheetbuffer.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
@@ -47,15 +48,12 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
+using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::com::sun::star::sheet::XSpreadsheets;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::sheet::XExternalSheetName;
-using ::com::sun::star::sheet::XSheetLinkable;
 
 namespace oox {
 namespace xls {
@@ -102,7 +100,7 @@ void WorksheetBuffer::initializeSingleSheet()
 void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
 {
     OoxSheetInfo aSheetInfo;
-    aSheetInfo.maId = rAttribs.getString( R_TOKEN( id ), OUString() );
+    aSheetInfo.maRelId = rAttribs.getString( R_TOKEN( id ), OUString() );
     aSheetInfo.maName = rAttribs.getString( XML_name, OUString() );
     aSheetInfo.mnSheetId = rAttribs.getInteger( XML_sheetId, -1 );
     aSheetInfo.mnState = rAttribs.getToken( XML_state, XML_visible );
@@ -113,7 +111,7 @@ void WorksheetBuffer::importSheet( RecordInputStream& rStrm )
 {
     sal_Int32 nState;
     OoxSheetInfo aSheetInfo;
-    rStrm >> nState >> aSheetInfo.mnSheetId >> aSheetInfo.maId >> aSheetInfo.maName;
+    rStrm >> nState >> aSheetInfo.mnSheetId >> aSheetInfo.maRelId >> aSheetInfo.maName;
     static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
     aSheetInfo.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
     insertSheet( aSheetInfo );
@@ -137,42 +135,7 @@ void WorksheetBuffer::importSheet( BiffInputStream& rStrm )
     insertSheet( aSheetInfo );
 }
 
-sal_Int32 WorksheetBuffer::insertExternalSheet( const OUString& rTargetUrl, const OUString& rSheetName )
-{
-    // try to find existing external sheet (needed for BIFF4W and BIFF5)
-    ExternalSheetName aExtSheet( rTargetUrl, rSheetName );
-    ExternalSheetMap::iterator aIt = maExternalSheets.find( aExtSheet );
-    if( aIt != maExternalSheets.end() )
-        return aIt->second;
-
-    // create a new external sheet
-    sal_Int16& rnSheet = maExternalSheets[ aExtSheet ];
-    rnSheet = getTotalSheetCount();
-    insertSheet( OUString(), rnSheet, false );
-
-    try
-    {
-        Reference< XSpreadsheet > xSheet = getSheet( rnSheet );
-        // use base file name as sheet name, if sheet name is missing (e.g. links to BIFF2-BIFF4 files)
-        OUString aSheetName = rSheetName;
-        if( aSheetName.getLength() == 0 )
-            aSheetName = lclGetBaseFileName( rTargetUrl );
-        // link the sheet
-        Reference< XSheetLinkable > xLinkable( xSheet, UNO_QUERY_THROW );
-        xLinkable->link( rTargetUrl, aSheetName, OUString(), OUString(), ::com::sun::star::sheet::SheetLinkMode_VALUE );
-        // set the special external sheet name
-        Reference< XExternalSheetName > xSheetName( xSheet, UNO_QUERY_THROW );
-        xSheetName->setExternalName( xLinkable->getLinkUrl(), xLinkable->getLinkSheetName() );
-    }
-    catch( Exception& )
-    {
-    }
-
-    // return sheet index
-    return rnSheet;
-}
-
-sal_Int32 WorksheetBuffer::getInternalSheetCount() const
+sal_Int32 WorksheetBuffer::getSheetCount() const
 {
     return static_cast< sal_Int32 >( maSheetInfos.size() );
 }
@@ -181,7 +144,7 @@ OUString WorksheetBuffer::getSheetRelId( sal_Int32 nSheet ) const
 {
     OUString aRelId;
     if( const OoxSheetInfo* pInfo = getSheetInfo( nSheet ) )
-        aRelId = pInfo->maId;
+        aRelId = pInfo->maRelId;
     return aRelId;
 }
 
@@ -212,20 +175,6 @@ sal_Int32 WorksheetBuffer::getFinalSheetIndex( const OUString& rName ) const
 }
 
 // private --------------------------------------------------------------------
-
-sal_Int16 WorksheetBuffer::getTotalSheetCount() const
-{
-    try
-    {
-        Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
-        return static_cast< sal_Int16 >( xSheetsIA->getCount() );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "WorksheetBuffer::getTotalSheetCount - cannot get sheet count" );
-    }
-    return 1;
-}
 
 const OoxSheetInfo* WorksheetBuffer::getSheetInfo( sal_Int32 nSheet ) const
 {
@@ -273,7 +222,6 @@ OUString WorksheetBuffer::insertSheet( const OUString& rName, sal_Int16 nSheet, 
 
 void WorksheetBuffer::insertSheet( const OoxSheetInfo& rSheetInfo )
 {
-    OSL_ENSURE( maExternalSheets.empty(), "WorksheetBuffer::insertSheet - external sheets exist already" );
     sal_Int16 nSheet = static_cast< sal_Int16 >( maSheetInfos.size() );
     maSheetInfos.push_back( rSheetInfo );
     maSheetInfos.back().maFinalName = insertSheet( rSheetInfo.maName, nSheet, rSheetInfo.mnState == XML_visible );

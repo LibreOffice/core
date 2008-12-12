@@ -339,14 +339,10 @@ public:
     /** Returns the view settings for this sheet. */
     SheetViewSettings&  getSheetViewSettings() const;
 
-    /** Sets a formula resulting in an empty string to the cell. */
-    void                setEmptyStringCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell ) const;
     /** Sets the passed string to the cell. */
     void                setStringCell(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            const ::rtl::OUString& rText,
-                            bool bEmptyStringAsFormula = false ) const;
+                            const ::rtl::OUString& rText ) const;
     /** Sets the shared string with the passed identifier to the cell. */
     void                setSharedStringCell(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
@@ -365,7 +361,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             sal_uInt8 nErrorCode ) const;
     /** Sets cell contents to the cell specified in the passed cell data object. */
-    void                setOoxCell( OoxCellData& orCellData, bool bEmptyStringAsFormula = false ) const;
+    void                setOoxCell( OoxCellData& orCellData ) const;
 
     /** Changes the current sheet type. */
     void                setSheetType( WorksheetType eSheetType );
