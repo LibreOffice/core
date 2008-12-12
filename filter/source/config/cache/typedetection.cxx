@@ -298,9 +298,28 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             aLock.clear();
             // <- SAFE
 
-            if (lFilters.size() > 0)
+            for (  OUStringList::const_iterator pIt  = lFilters.begin();
+                   pIt != lFilters.end() && sFilter.getLength() == 0 ;
+                 ++pIt                    )
             {
-                sFilter = *(lFilters.begin());
+                // SAFE ->
+                aLock.reset();
+                try
+                {
+                    CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, *pIt);
+                    sal_Int32 nFlags  = 0;
+                    aFilter[PROPNAME_FLAGS] >>= nFlags;
+
+                    if ((nFlags & FLAGVAL_IMPORT) == FLAGVAL_IMPORT)
+                        sFilter = *pIt;
+                }
+                catch(const css::uno::Exception&) {}
+                aLock.clear();
+                // <- SAFE
+            }
+
+            if (sFilter.getLength() > 0)
+            {
                 rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sRealType;
                 rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
                 sType = sRealType;

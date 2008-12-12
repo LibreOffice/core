@@ -1410,6 +1410,10 @@
 		<apply-templates/>
 	</template>
 
+	<template match="text:tracked-changes">
+		<!-- Ignore change history. -->
+	</template>
+
 	<template match="office:* | text:* | draw:frame | draw:text-box | draw:frame | draw:a">
 		<apply-templates/>
 	</template>
