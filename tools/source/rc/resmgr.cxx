@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resmgr.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.52.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,6 +275,10 @@ void ResMgrContainer::init()
                  OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr() );
     }
     #endif
+
+    // set default language
+    LanguageType nLang = MsLangId::getSystemUILanguage();
+    MsLangId::convertLanguageToLocale(nLang, m_aDefLocale);
 }
 
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
