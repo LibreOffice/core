@@ -724,7 +724,6 @@ testcase tFileSaveWithPassword
     PrintLog "Enter some text into document"
     Call wTypeKeys("This document will be saved with a password!")
 
-
     if gUseSysDlg = True then goto endsub
     Datei$ = ConvertPath ( gOfficePath + "user\work\" + sFile$ )
     if Dir (Datei$) <> "" then kill Datei$
@@ -752,13 +751,13 @@ testcase tFileSaveWithPassword
 
     Sleep 1
     PrintLog "Password dialog has to come up"
-    Kontext "Passwort"
-    if Passwort.Exists then
+    Kontext "PasswordFileSave"
+    if PasswordFileSave.Exists then
         PrintLog "Enter your password"
-        PasswortName.SetText "12345"
+        Password.SetText "12345"
         PrintLog "Re-Enter a wrong passwort"
-        PasswortBestaetigen.Settext "54321"
-        Passwort.OK
+        PasswordConfirm.Settext "54321"
+        PasswordFileSave.OK
         Sleep 2
     else
         Warnlog "- Password-Dialog not up !"
@@ -773,12 +772,12 @@ testcase tFileSaveWithPassword
         Warnlog "Able to save document with wrong password"
     end if
 
-    Kontext "Passwort"
-    if Passwort.Exists then
+    Kontext "PasswordFileSave"
+    if PasswordFileSave.Exists then
         PrintLog "Enter new password, and re-enter the same password"
-        PasswortName.SetText "12345"
-        PasswortBestaetigen.SetText "12345"
-        Passwort.OK
+        Password.SetText "12345"
+        PasswordConfirm.SetText "12345"
+        PasswordFileSave.OK
     else
         Warnlog "- Password-Dialog not up !"
     end if
@@ -825,7 +824,6 @@ testcase tFileSaveWithPassword
     else
         Warnlog "- Password-Dialog not up!"
     end if
-
     Sleep 1
 
     Datei$ = ConvertPath ( gOfficePath + "user\work\" + sFile2$ )
@@ -847,13 +845,13 @@ testcase tFileSaveWithPassword
         Kontext "Active"
         if Active.Exists(2) then Active.Yes
         PrintLog "Click on 'Save' in file open dialog"
-        Kontext "Passwort"
-        if Not Passwort.Exists(1) then
+        Kontext "PasswordFileSave"
+        if Not PasswordFileSave.Exists(1) then
             Warnlog "Passworddialog is not coming up on saving document"
         else
-            PasswortName.SetText "54321"
-            PasswortBestaetigen.SetText "54321"
-            Passwort.OK
+            Password.SetText "54321"
+            PasswordConfirm.SetText "54321"
+            PasswordFileSave.OK
             PrintLog "The password dialog should come up"
             Sleep 1
             FileClose
