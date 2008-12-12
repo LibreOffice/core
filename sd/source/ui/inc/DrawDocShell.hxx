@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawDocShell.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.17.76.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,7 @@ public:
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
     virtual void            SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
     virtual Size            GetFirstPageSize();
-    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat ) const;
+    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat, sal_Bool bTemplate = sal_False ) const;
     virtual void            SetModified( BOOL = TRUE );
 
     using SotObject::GetInterface;
