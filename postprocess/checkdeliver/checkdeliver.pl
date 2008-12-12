@@ -226,6 +226,26 @@ sub check
                 print "delivered file is older than it's source '$ofile' '$sfile'\n";
                 $error ++;
             }
+        } elsif ( !$orgfile_stats && $delivered_stats ) {
+            # This is not an error if we have a solver and did not build the
+            # module!
+        } elsif ( !$orgfile_stats && !$delivered_stats ) {
+            # This is not an error if we have a solver and did not build the
+            # module!
+            # Instead, this seems to be an error of the deliver.log file, where
+            # even in the master build an allegedly delivered directory is not
+            # present in the solver. Places where this occurred:
+            #
+            # moz_prebuilt/deliver.log:
+            # COPY macromigration/unxlngi6/bin/samples unxlngi6/bin/samples
+            # COPY macromigration/unxlngi6/bin/lib unxlngi6/bin/lib
+            #
+            # macromigration/deliver.log:
+            # COPY moz_prebuilt/unxlngi6/lib/defaults unxlngi6/lib/defaults
+            # COPY moz_prebuilt/unxlngi6/lib/greprefs unxlngi6/lib/greprefs
+            # COPY moz_prebuilt/unxlngi6/lib/components unxlngi6/lib/components
+            #
+            # However release engineers got around that..
         } else {
             print "Error: no such file '$ofile'\n" if ( ! $orgfile_stats );
             print "Error: no such file '$sfile'\n" if ( ! $delivered_stats );
