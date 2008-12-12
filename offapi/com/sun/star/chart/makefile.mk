@@ -52,6 +52,9 @@ IDLFILES=\
     ChartAxisArrangeOrderType.idl\
     ChartAxisAssign.idl\
     ChartAxisMarks.idl\
+    ChartAxisPosition.idl\
+    ChartAxisLabelPosition.idl\
+    ChartAxisMarkPosition.idl\
     ChartAxisXSupplier.idl\
     ChartAxisYSupplier.idl\
     ChartAxisZSupplier.idl\

@@ -33,9 +33,11 @@
 #include <com/sun/star/beans/PropertySet.idl>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
+#include <com/sun/star/chart/ChartAxisPosition.idl>
+#include <com/sun/star/chart/ChartAxisLabelPosition.idl>
+#include <com/sun/star/chart/ChartAxisMarkPosition.idl>
 
 #include <com/sun/star/chart2/XAxis.idl>
-#include <com/sun/star/chart2/AxisPosition.idl>
 #include <com/sun/star/chart2/XTitled.idl>
 
 #include <com/sun/star/drawing/LineProperties.idl>
@@ -68,14 +70,21 @@ service Axis
      */
     [property]      boolean   Show;
 
-    /** Describes where to place the axis within a coordinate system -
-    wether it should be placed at the standard position for a main axis or at the standard position for a secondary axis or maybe something else in future.
+    /** Determines where the axis crosses the other axis.
      */
-    [property]      AxisPosition   AxisPosition;
+    [optional, property] com::sun::star::chart::ChartAxisPosition CrossoverPosition;
+
+    /** Determines the scale value on the other axis when CrossoverPosition is set to VALUE.
+     */
+    [optional, property] double CrossoverValue;
 
     /** Determines whether to display text at the axis or not.
      */
     [property]      boolean   DisplayLabels;
+
+    /** Determines where the axis labels are placed.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisLabelPosition LabelPosition;
 
     /** Determines how to stagger the labels at the axis (side by side, even, odd, auto )
     */
@@ -122,6 +131,10 @@ service Axis
         @see <type>TickmarkStyle</type>.
      */
     [property]      long      MinorTickmarks;
+
+    /** Determines where the interval marks are placed.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
 };
 
 } ; // chart2

@@ -45,7 +45,6 @@ PRJNAME=offapi
 IDLFILES= \
     AxisType.idl \
     AxisOrientation.idl \
-    AxisPosition.idl \
     Break.idl \
     CoordinateSystemTypeID.idl \
     CurveStyle.idl \
