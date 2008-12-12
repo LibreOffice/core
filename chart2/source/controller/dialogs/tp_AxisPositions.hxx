@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: tp_Scale.hxx,v $
- * $Revision: 1.7 $
+ * $RCSfile: tp_AxisPositions.hxx,v $
+ * $Revision: 1.1.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,29 +27,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CHART2_TP_SCALES_HXX
-#define _CHART2_TP_SCALES_HXX
+#ifndef _CHART2_TP_AXISPOSITIONS_HXX
+#define _CHART2_TP_AXISPOSITIONS_HXX
 
 // header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
-// header for class FormattedField
 #include <svtools/fmtfield.hxx>
-// header for FixedText
 #include <vcl/fixed.hxx>
-// header for CheckBox
 #include <vcl/button.hxx>
-// header for MetricField
 #include <vcl/field.hxx>
+#include <vcl/lstbox.hxx>
+//class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-class ScaleTabPage : public SfxTabPage
+class AxisPositionsTabPage : public SfxTabPage
 {
 public:
-    ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    AxisPositionsTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
@@ -58,64 +56,56 @@ public:
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
-    void SetNumFormat();
 
-    void ShowAxisOrigin( bool bShowOrigin );
+    void SetCrossingAxisIsCategoryAxis( bool bCrossingAxisIsCategoryAxis );
+    void SetCategories( const ::com::sun::star::uno::Sequence< rtl::OUString >& rCategories );
 
-private:
-    FixedLine           aFlScale;
+    void SupportAxisPositioning( bool bSupportAxisPositioning );
 
-    FixedText           aTxtMin;
-    FormattedField      aFmtFldMin;
-    CheckBox            aCbxAutoMin;
+private: //methods:
+    DECL_LINK( CrossesAtSelectHdl, void* );
+    DECL_LINK( PlaceLabelsSelectHdl, void* );
 
-    FixedText           aTxtMax;
-    FormattedField      aFmtFldMax;
-    CheckBox            aCbxAutoMax;
+private: //member:
+    FixedLine           m_aFL_AxisLine;
+    FixedText           m_aFT_CrossesAt;
+    ListBox             m_aLB_CrossesAt;
+    FormattedField      m_aED_CrossesAt;
+    ComboBox            m_aED_CrossesAtCategory;
+    CheckBox            m_aCB_AxisBetweenCategories;
 
-    FixedText           aTxtMain;
-    FormattedField      aFmtFldStepMain;
-    CheckBox            aCbxAutoStepMain;
+    FixedLine       m_aFL_Labels;
+    FixedText       m_aFT_PlaceLabels;
+    ListBox         m_aLB_PlaceLabels;
+    FixedText       m_aFT_LabelDistance;
+    FormattedField  m_aED_LabelDistance;
 
-    FixedText           aTxtHelp;
-    MetricField         aMtStepHelp;
-    CheckBox            aCbxAutoStepHelp;
+    FixedLine   m_aFL_Ticks;
 
-    FixedText           aTxtOrigin;
-    FormattedField      aFmtFldOrigin;
-    CheckBox            aCbxAutoOrigin;
+    FixedText   m_aFT_Major;
+    CheckBox    m_aCB_TicksInner;
+    CheckBox    m_aCB_TicksOuter;
 
-    CheckBox            aCbxLogarithm;
-    CheckBox            aCbxReverse;
+    FixedText   m_aFT_Minor;
+    CheckBox    m_aCB_MinorInner;
+    CheckBox    m_aCB_MinorOuter;
 
-    double              fMin;
-    double              fMax;
-    double              fStepMain;
-    sal_Int32           nStepHelp;
-    double              fOrigin;
-    int                 nAxisType;
-    SvNumberFormatter*  pNumFormatter;
+    FixedLine   m_aFL_Vertical;
+    FixedText   m_aFT_PlaceTicks;
+    ListBox     m_aLB_PlaceTicks;
 
-    bool                m_bShowAxisOrigin;
+    FixedLine   m_aFL_Grids;
+    CheckBox    m_aCB_MajorGrid;
+    PushButton  m_aPB_MajorGrid;
+    CheckBox    m_aCB_MinorGrid;
+    PushButton  m_aPB_MinorGrid;
 
-    void EnableControls();
+    SvNumberFormatter*  m_pNumFormatter;
 
-    DECL_LINK( EnableValueHdl, CheckBox* );
+    bool    m_bCrossingAxisIsCategoryAxis;
+    ::com::sun::star::uno::Sequence< rtl::OUString > m_aCategories;
 
-    /** shows a warning window due to an invalid input.
-
-        @param nResIdMessage
-            The resource identifier that represents the localized warning text.
-            If this is 0, no warning is shown and false is returned.
-
-        @param pControl
-            If non-NULL, contains a pointer to the control in which the
-            errornous value was in.  This method gives this control the focus
-            and selects its content.
-
-        @return false, if nResIdMessage was 0, true otherwise
-     */
-    bool ShowWarning( USHORT nResIdMessage, Edit * pControl = NULL );
+    bool    m_bSupportAxisPositioning;
 };
 
 //.............................................................................
@@ -123,4 +113,3 @@ private:
 //.............................................................................
 
 #endif
-

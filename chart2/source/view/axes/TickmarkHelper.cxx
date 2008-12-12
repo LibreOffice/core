@@ -693,10 +693,12 @@ void TickmarkHelper::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence
 TickmarkHelper_2D::TickmarkHelper_2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
           //, double fStrech_SceneToScreen, double fOffset_SceneToScreen )
-          , const B2DVector& rStartScreenPos, const B2DVector& rEndScreenPos )
+          , const B2DVector& rStartScreenPos, const B2DVector& rEndScreenPos
+          , const B2DVector& rAxisLineToLabelLineShift )
           : TickmarkHelper( rScale, rIncrement )
           , m_aAxisStartScreenPosition2D(rStartScreenPos)
           , m_aAxisEndScreenPosition2D(rEndScreenPos)
+          , m_aAxisLineToLabelLineShift(rAxisLineToLabelLineShift)
           , m_fStrech_LogicToScreen(1.0)
           , m_fOffset_LogicToScreen(0.0)
 {
@@ -727,7 +729,7 @@ TickmarkHelper* TickmarkHelper_2D::createShiftedTickmarkHelper() const
     if( AxisOrientation_MATHEMATICAL==m_rScale.Orientation )
         std::swap( aStart, aEnd );
 
-    return new TickmarkHelper_2D( m_rScale, aShiftedIncrement, aStart, aEnd );
+    return new TickmarkHelper_2D( m_rScale, aShiftedIncrement, aStart, aEnd, m_aAxisLineToLabelLineShift );
 }
 
 TickmarkHelper_2D::~TickmarkHelper_2D()
@@ -772,12 +774,15 @@ B2DVector TickmarkHelper_2D::getTickScreenPosition2D( double fScaledLogicTickVal
 void TickmarkHelper_2D::addPointSequenceForTickLine( drawing::PointSequenceSequence& rPoints
                                 , sal_Int32 nSequenceIndex
                                 , double fScaledLogicTickValue, double fInnerDirectionSign
-                                , const TickmarkProperties& rTickmarkProperties ) const
+                                , const TickmarkProperties& rTickmarkProperties
+                                , bool bPlaceAtLabels ) const
 {
     if( fInnerDirectionSign==0.0 )
         fInnerDirectionSign = 1.0;
 
     B2DVector aTickScreenPosition = this->getTickScreenPosition2D(fScaledLogicTickValue);
+    if( bPlaceAtLabels )
+        aTickScreenPosition += m_aAxisLineToLabelLineShift;
 
     B2DVector aMainDirection = m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D;
     aMainDirection.normalize();
@@ -795,8 +800,13 @@ void TickmarkHelper_2D::addPointSequenceForTickLine( drawing::PointSequenceSeque
     rPoints[nSequenceIndex][1].Y = static_cast<sal_Int32>(aEnd.getY());
 }
 
-B2DVector TickmarkHelper_2D::getDistanceTickToText( const AxisProperties& rAxisProperties ) const
+B2DVector TickmarkHelper_2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties ) const
 {
+    bool bFarAwayLabels = false;
+    if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == rAxisProperties.m_eLabelPos
+        || ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == rAxisProperties.m_eLabelPos )
+        bFarAwayLabels = true;
+
     double fInnerDirectionSign = rAxisProperties.m_fInnerDirectionSign;
     if( fInnerDirectionSign==0.0 )
         fInnerDirectionSign = 1.0;
@@ -808,26 +818,37 @@ B2DVector TickmarkHelper_2D::getDistanceTickToText( const AxisProperties& rAxisP
     aOrthoDirection.normalize();
 
     B2DVector aStart(0,0), aEnd(0,0);
-    for( sal_Int32 nN=rAxisProperties.m_aTickmarkPropertiesList.size();nN--;)
+    if( bFarAwayLabels )
     {
-        const TickmarkProperties& rProps = rAxisProperties.m_aTickmarkPropertiesList[nN];
-        B2DVector aNewStart = aOrthoDirection*rProps.RelativePos;
-        B2DVector aNewEnd = aNewStart - aOrthoDirection*rProps.Length;
-        if(aNewStart.getLength()>aStart.getLength())
-            aStart=aNewStart;
-        if(aNewEnd.getLength()>aEnd.getLength())
-            aEnd=aNewEnd;
+        TickmarkProperties aProps( AxisProperties::getBiggestTickmarkProperties() );
+        aStart = aOrthoDirection*aProps.RelativePos;
+        aEnd = aStart - aOrthoDirection*aProps.Length;
+    }
+    else
+    {
+        for( sal_Int32 nN=rAxisProperties.m_aTickmarkPropertiesList.size();nN--;)
+        {
+            const TickmarkProperties& rProps = rAxisProperties.m_aTickmarkPropertiesList[nN];
+            B2DVector aNewStart = aOrthoDirection*rProps.RelativePos;
+            B2DVector aNewEnd = aNewStart - aOrthoDirection*rProps.Length;
+            if(aNewStart.getLength()>aStart.getLength())
+                aStart=aNewStart;
+            if(aNewEnd.getLength()>aEnd.getLength())
+                aEnd=aNewEnd;
+        }
     }
 
     B2DVector aLabelDirection(aStart);
-    if(!rAxisProperties.m_bLabelsOutside)
+    if( rAxisProperties.m_fInnerDirectionSign != rAxisProperties.m_fLabelDirectionSign )
         aLabelDirection = aEnd;
 
     B2DVector aOrthoLabelDirection(aOrthoDirection);
-    if(!rAxisProperties.m_bLabelsOutside)
+    if( rAxisProperties.m_fInnerDirectionSign != rAxisProperties.m_fLabelDirectionSign )
         aOrthoLabelDirection*=-1.0;
     aOrthoLabelDirection.normalize();
     aLabelDirection += aOrthoLabelDirection*AXIS2D_TICKLABELSPACING;
+    if( bFarAwayLabels )
+        aLabelDirection += m_aAxisLineToLabelLineShift;
     return aLabelDirection;
 }
 

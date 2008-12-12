@@ -119,6 +119,11 @@ String STR_PAGE_SCALE
     Text [ en-US ] = "Scale" ;
 };
 
+String STR_PAGE_POSITIONING
+{
+    Text [ en-US ] = "Positioning" ;
+};
+
 // String STR_PAGE_STATISTICS
 // {
 //  Text [ en-US ] = "Statistics" ;

@@ -71,6 +71,7 @@ SLOFILES=   	\
                 $(SLO)$/tp_Wizard_TitlesAndObjects.obj \
                 $(SLO)$/tp_Location.obj \
                 $(SLO)$/tp_AxisLabel.obj \
+                $(SLO)$/tp_AxisPositions.obj \
                 $(SLO)$/tp_DataLabel.obj \
                 $(SLO)$/tp_DataSource.obj \
                 $(SLO)$/tp_DataSourceControls.obj \
@@ -120,6 +121,7 @@ SRC1FILES=		\
                 tp_Wizard_TitlesAndObjects.src \
                 tp_Location.src \
                 tp_AxisLabel.src \
+                tp_AxisPositions.src \
                 tp_DataLabel.src \
                 tp_DataSource.src \
                 tp_LegendPosition.src \

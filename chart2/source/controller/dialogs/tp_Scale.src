@@ -30,92 +30,109 @@
 #include "HelpIds.hrc"
 #include "TabPages.hrc"
 
-TabPage TP_SCALE_Y
+#define YLine1 3
+#define Y1 (YLine1+13)
+#define Y2 (Y1+16)
+#define Y3 (Y2+16)
+#define Y4 (Y3+16)
+#define Y5 (Y4+16)
+#define Y6 (Y5+17)
+#define Y7 (Y6+15)
+
+#define LABELWIDTH 88
+#define AUTOCHECKWIDTH 88
+#define EDITWIDTH 50
+#define X1 6
+#define X2 11
+#define X3 (X2+LABELWIDTH+4)
+#define X4 (X3+EDITWIDTH+5)
+
+TabPage TP_SCALE
 {
     Hide = TRUE ;
-    HelpID = HID_SCH_SCALE_Y ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
 
-    FixedLine FL_SCALE_Y
+    FixedLine FL_SCALE
     {
-        Pos = MAP_APPFONT ( 5 , 4  ) ;
+        Pos = MAP_APPFONT ( X1 , YLine1  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Axis scale" ;
+        Text [ en-US ] = "Scale" ;
     };
     FixedText TXT_MIN
     {
-        Pos = MAP_APPFONT ( 11 , 16  ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Pos = MAP_APPFONT ( X2 , Y1  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "~Minimum:" ;
     };
     SpinField EDT_MIN
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 14  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( X3 , Y1-2 ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_MIN
     {
-        Pos = MAP_APPFONT ( 159 , 15  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( X4 , Y1-1  ) ;
+        Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "~Automatic" ;
     };
+
     FixedText TXT_MAX
     {
-        Pos = MAP_APPFONT ( 11 , 32  ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Pos = MAP_APPFONT ( X2 , Y2  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Ma~ximum:" ;
     };
     SpinField EDT_MAX
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 30  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( X3 , Y2-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_MAX
     {
-        Pos = MAP_APPFONT ( 159 , 31  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( X4 , Y2-1  ) ;
+        Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "A~utomatic" ;
     };
     FixedText TXT_STEP_MAIN
     {
-        Pos = MAP_APPFONT ( 11 , 48  ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Pos = MAP_APPFONT ( X2 , Y3  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Ma~jor interval:" ;
     };
     SpinField EDT_STEP_MAIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 46  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( X3 , Y3-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_STEP_MAIN
     {
-        Pos = MAP_APPFONT ( 159 , 47  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( X4 , Y3-1  ) ;
+        Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "Au~tomatic" ;
     };
     FixedText TXT_STEP_HELP
     {
-        Pos = MAP_APPFONT ( 11 , 64  ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
-        Text [ en-US ] = "Minor inter~val:" ;
+        Pos = MAP_APPFONT ( X2 , Y4  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
+        Text [ en-US ] = "Minor interval ~count:" ;
     };
     MetricField MT_STEPHELP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 62  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( X3 , Y4-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -129,80 +146,48 @@ TabPage TP_SCALE_Y
     };
     CheckBox CBX_AUTO_STEP_HELP
     {
-        Pos = MAP_APPFONT ( 159 , 63  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( X4 , Y4-1  ) ;
+        Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "Aut~omatic" ;
     };
+
     FixedText TXT_ORIGIN
     {
-        Pos = MAP_APPFONT ( 11 , 80  ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
-        Text [ en-US ] = "Axi~s at:" ;
+        Pos = MAP_APPFONT ( X2 , Y5  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
+        Text [ en-US ] = "Reference ~value:" ;
     };
     SpinField EDT_ORIGIN
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 78  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( X3 , Y5-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_ORIGIN
     {
-        Pos = MAP_APPFONT ( 159 , 79  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( X4 , Y5-1  ) ;
+        Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "Automat~ic" ;
     };
+
     CheckBox CBX_LOGARITHM
     {
-        Pos = MAP_APPFONT ( 11 , 97  ) ;
+        Pos = MAP_APPFONT ( X2 , Y6  ) ;
         Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Logarithmic scale" ;
     };
+
     CheckBox CBX_REVERSE
     {
-        Pos = MAP_APPFONT ( 11 , 112  ) ;
+        Pos = MAP_APPFONT ( X2 , Y7  ) ;
         Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Reverse ~direction" ;
+        Text [ en-US ] = "~Reverse direction" ;
     };
-    FixedLine FL_TICKS
-    {
-        Pos = MAP_APPFONT ( 6 , 129  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ en-US ] = "Major interval marks";
-    };
-    CheckBox CBX_TICKS_INNER
-    {
-        Pos = MAP_APPFONT ( 11 , 140  ) ;
-        Size = MAP_APPFONT ( 78 , 10 ) ;
-        Text [ en-US ] = "I~nner";
-    };
-    CheckBox CBX_TICKS_OUTER
-    {
-        Pos = MAP_APPFONT ( 103 , 140  ) ;
-        Size = MAP_APPFONT ( 78 , 10 ) ;
-        Text [ en-US ] = "~Outer";
-    };
-    FixedLine FL_HELPTICKS
-    {
-        Pos = MAP_APPFONT ( 6 , 155  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ en-US ] = "Minor interval marks";
-    };
-    CheckBox CBX_HELPTICKS_INNER
-    {
-        Pos = MAP_APPFONT ( 11 , 166  );
-        Size = MAP_APPFONT ( 78 , 10 ) ;
-        Text [ en-US ] = "Inne~r";
-    };
-    CheckBox CBX_HELPTICKS_OUTER
-    {
-        Pos = MAP_APPFONT ( 103 , 166  ) ;
-        Size = MAP_APPFONT ( 78 , 10 ) ;
-        Text [ en-US ] = "Out~er";
-    };
+
 };

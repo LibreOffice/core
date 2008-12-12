@@ -165,17 +165,6 @@ void DiagramHelper::setVertical(
                             Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( nDimIndex,nI ));
                             if( xAxis.is() )
                             {
-                                if( nDimensionCount == 2 && nDimIndex == 0 )
-                                {
-                                    //adapt scale orientation for 2D bar charts
-                                    chart2::ScaleData aScaleData = xAxis->getScaleData();
-                                    if( !bVertical != (AxisOrientation_MATHEMATICAL==aScaleData.Orientation) )
-                                    {
-                                        aScaleData.Orientation = bVertical ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
-                                        xAxis->setScaleData( aScaleData );
-                                    }
-                                }
-
                                 //adapt title rotation only when axis swapping has changed
                                 if( bChanged )
                                 {

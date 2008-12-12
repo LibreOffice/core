@@ -37,6 +37,7 @@
 #include "Strings.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
+#include "AxisHelper.hxx"
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -74,7 +75,7 @@ namespace chart
 namespace
 {
 
-void lcl_shiftControls( Control& rEdit, CheckBox& rAuto, long nNewXPos )
+void lcl_shiftControls( Control& rEdit, Control& rAuto, long nNewXPos )
 {
     Point aPos( rEdit.GetPosPixel() );
     long nShift = nNewXPos - aPos.X();
@@ -86,12 +87,24 @@ void lcl_shiftControls( Control& rEdit, CheckBox& rAuto, long nNewXPos )
     rAuto.SetPosPixel(aPos);
 }
 
+void lcl_placeControlsAtY( Control& rTop, Control& rBottom, long nNewYPos )
+{
+    Point aPos( rTop.GetPosPixel() );
+    long nShift = nNewYPos - aPos.Y();
+    aPos.Y() = nNewYPos;
+    rTop.SetPosPixel(aPos);
+
+    aPos = rBottom.GetPosPixel();
+    aPos.Y() += nShift;
+    rBottom.SetPosPixel(aPos);
+}
+
 }
 
 ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow, SchResId(TP_SCALE_Y), rInAttrs),
+    SfxTabPage(pWindow, SchResId(TP_SCALE), rInAttrs),
 
-    aFlScale(this, SchResId(FL_SCALE_Y)),
+    aFlScale(this, SchResId(FL_SCALE)),
     aTxtMin (this, SchResId (TXT_MIN)),
     aFmtFldMin(this, SchResId(EDT_MIN)),
     aCbxAutoMin(this, SchResId(CBX_AUTO_MIN)),
@@ -104,19 +117,13 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aTxtHelp (this, SchResId (TXT_STEP_HELP)),
     aMtStepHelp (this, SchResId (MT_STEPHELP)),
     aCbxAutoStepHelp(this, SchResId(CBX_AUTO_STEP_HELP)),
+
     aTxtOrigin (this, SchResId (TXT_ORIGIN)),
     aFmtFldOrigin(this, SchResId(EDT_ORIGIN)),
     aCbxAutoOrigin(this, SchResId(CBX_AUTO_ORIGIN)),
+
     aCbxLogarithm(this, SchResId(CBX_LOGARITHM)),
     aCbxReverse(this, SchResId(CBX_REVERSE)),
-
-    aFlTicks(this,SchResId(FL_TICKS)),
-    aCbxTicksInner(this, SchResId(CBX_TICKS_INNER)),
-    aCbxTicksOuter(this, SchResId(CBX_TICKS_OUTER)),
-
-    aFlHelpTicks(this,SchResId(FL_HELPTICKS)),
-    aCbxHelpTicksInner(this, SchResId(CBX_HELPTICKS_INNER)),
-    aCbxHelpTicksOuter(this, SchResId(CBX_HELPTICKS_OUTER)),
 
     fMin(0.0),
     fMax(0.0),
@@ -124,7 +131,8 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     nStepHelp(0),
     fOrigin(0.0),
     nAxisType(chart2::AxisType::REALNUMBER),
-    pNumFormatter(NULL)
+    pNumFormatter(NULL),
+    m_bShowAxisOrigin(false)
 {
     FreeResource();
     SetExchangeSupport();
@@ -167,37 +175,6 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
             lcl_shiftControls( aFmtFldStepMain, aCbxAutoStepMain, nNewXPos );
             lcl_shiftControls( aMtStepHelp, aCbxAutoStepHelp, nNewXPos );
             lcl_shiftControls( aFmtFldOrigin, aCbxAutoOrigin, nNewXPos );
-
-            //tickmark controls
-            long nCheckWidth = 1 + ::std::max( aCbxTicksInner.CalcMinimumSize().Width(), aCbxHelpTicksInner.CalcMinimumSize().Width() );
-            aSize = aCbxTicksInner.GetSizePixel();
-            aSize.Width() = nCheckWidth;
-
-            long nCheckDistance = aCbxTicksInner.LogicToPixel( Size(RSC_SP_CTRL_X, 0), MapMode(MAP_APPFONT) ).Width();
-            long nNewCheckXPos = aCbxTicksInner.GetPosPixel().X() + nCheckWidth + nCheckDistance;
-
-            aCbxTicksOuter.SetSizePixel( aCbxTicksOuter.CalcMinimumSize() );
-            aCbxHelpTicksOuter.SetSizePixel( aCbxHelpTicksOuter.CalcMinimumSize() );
-
-            nWidthOfOtherControls = aCbxTicksOuter.GetSizePixel().Width();
-            nLeftSpace = nDialogWidth - nNewCheckXPos - nWidthOfOtherControls;
-
-            if(nLeftSpace>=0)
-            {
-                aCbxTicksInner.SetSizePixel(aSize);
-                aCbxHelpTicksInner.SetSizePixel(aSize);
-
-                if( nNewCheckXPos < nNewXPos && (nDialogWidth - nNewXPos - nWidthOfOtherControls)>=0 )
-                    nNewCheckXPos = nNewXPos;//alignement looks nicer
-
-                Point aPos( aCbxTicksOuter.GetPosPixel() );
-                aPos.X() = nNewCheckXPos;
-                aCbxTicksOuter.SetPosPixel(aPos);
-
-                aPos = aCbxHelpTicksOuter.GetPosPixel();
-                aPos.X() = nNewCheckXPos;
-                aCbxHelpTicksOuter.SetPosPixel(aPos);
-            }
         }
     }
 
@@ -224,11 +201,19 @@ void ScaleTabPage::EnableControls()
     aTxtHelp.Enable( bEnableForValueOrPercentAxis );
     aMtStepHelp.Enable( bEnableForValueOrPercentAxis );
     aCbxAutoStepHelp.Enable( bEnableForValueOrPercentAxis );
-    aTxtOrigin.Enable( bEnableForValueOrPercentAxis );
-    aFmtFldOrigin.Enable( bEnableForValueOrPercentAxis );
-    aCbxAutoOrigin.Enable( bEnableForValueOrPercentAxis );
     aCbxLogarithm.Enable( bEnableForValueOrPercentAxis );
+
+    aTxtOrigin.Show( m_bShowAxisOrigin && bEnableForValueOrPercentAxis );
+    aFmtFldOrigin.Show( m_bShowAxisOrigin && bEnableForValueOrPercentAxis );
+    aCbxAutoOrigin.Show( m_bShowAxisOrigin && bEnableForValueOrPercentAxis );
+
+    long nNewYPos = aTxtOrigin.GetPosPixel().Y();
+    if( m_bShowAxisOrigin )
+        nNewYPos += ( aTxtOrigin.GetPosPixel().Y() - aTxtHelp.GetPosPixel().Y() );
+    lcl_placeControlsAtY( aCbxLogarithm, aCbxReverse, nNewYPos );
 }
+
+
 
 IMPL_LINK( ScaleTabPage, EnableValueHdl, CheckBox *, pCbx )
 {
@@ -265,21 +250,6 @@ BOOL ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
 
-    long nTicks=0;
-    long nHelpTicks=0;
-
-    if(aCbxHelpTicksInner.IsChecked())
-        nHelpTicks|=CHAXIS_MARK_INNER;
-    if(aCbxHelpTicksOuter.IsChecked())
-        nHelpTicks|=CHAXIS_MARK_OUTER;
-    if(aCbxTicksInner.IsChecked())
-        nTicks|=CHAXIS_MARK_INNER;
-    if(aCbxTicksOuter.IsChecked())
-        nTicks|=CHAXIS_MARK_OUTER;
-
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nHelpTicks));
-
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,aCbxAutoMin.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,aCbxAutoMax.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,aCbxAutoStepHelp.IsChecked()));
@@ -310,17 +280,6 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
         nAxisType = (int) ((const SfxInt32Item*)pPoolItem)->GetValue();
         EnableControls();
     }
-
-    long nTicks=0,nHelpTicks=0;
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,TRUE, &pPoolItem)== SFX_ITEM_SET)
-        nTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_HELPTICKS,TRUE, &pPoolItem)== SFX_ITEM_SET)
-        nHelpTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
-
-    aCbxHelpTicksInner.Check(BOOL(nHelpTicks&CHAXIS_MARK_INNER));
-    aCbxHelpTicksOuter.Check(BOOL(nHelpTicks&CHAXIS_MARK_OUTER));
-    aCbxTicksInner.Check(BOOL(nTicks&CHAXIS_MARK_INNER));
-    aCbxTicksOuter.Check(BOOL(nTicks&CHAXIS_MARK_OUTER));
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MIN,TRUE,&pPoolItem) == SFX_ITEM_SET)
         aCbxAutoMin.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
@@ -421,17 +380,6 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         pEdit = &aFmtFldStepMain;
         nErrStrId = STR_STEP_GT_ZERO;
     }
-    //user often forgets to switch visibility of help tickmarks on
-    if( !aCbxAutoStepHelp.IsChecked() && aMtStepHelp.IsModified() && nStepHelp > 1
-        && !aCbxHelpTicksInner.IsChecked() && !aCbxHelpTicksOuter.IsChecked() )
-        //&& !aCbxHelpTicksInner.IsModified() && !aCbxHelpTicksOuter.IsModified() )
-    {
-        //check help ticks like main ticks
-        if(aCbxTicksInner.IsChecked())
-            aCbxHelpTicksInner.Check();
-        if(aCbxTicksOuter.IsChecked())
-            aCbxHelpTicksOuter.Check();
-    }
 
     //check wich entries need user action
 
@@ -511,22 +459,38 @@ void ScaleTabPage::SetNumFormat()
         aFmtFldMin.SetFormatKey( nFmt );
         aFmtFldOrigin.SetFormatKey( nFmt );
 
-        // for steps use standard format if date or time format is chosen
-        short eType = pNumFormatter->GetType( nFmt );
-        if( pNumFormatter &&
-            ( eType == NUMBERFORMAT_DATE ||
-              eType == NUMBERFORMAT_TIME ||
-              eType == NUMBERFORMAT_DATETIME ) )
+        if( pNumFormatter )
         {
-            const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
-            if( pFormat )
-                nFmt = pNumFormatter->GetStandardFormat( pFormat->GetLanguage());
-            else
-                nFmt = pNumFormatter->GetStandardIndex();
+            short eType = pNumFormatter->GetType( nFmt );
+            if( eType == NUMBERFORMAT_DATE )
+            {
+                // for intervals use standard format for dates (so you can enter a number of days)
+                const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+                if( pFormat )
+                    nFmt = pNumFormatter->GetStandardIndex( pFormat->GetLanguage());
+                else
+                    nFmt = pNumFormatter->GetStandardIndex();
+            }
+            else if( eType == NUMBERFORMAT_DATETIME )
+            {
+                // for intervals use time format for date times
+                const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+                if( pFormat )
+                    nFmt = pNumFormatter->GetStandardFormat( NUMBERFORMAT_TIME, pFormat->GetLanguage() );
+                else
+                    nFmt = pNumFormatter->GetStandardFormat( NUMBERFORMAT_TIME );
+            }
         }
 
         aFmtFldStepMain.SetFormatKey( nFmt );
     }
+}
+
+void ScaleTabPage::ShowAxisOrigin( bool bShowOrigin )
+{
+    m_bShowAxisOrigin = bShowOrigin;
+    if( !AxisHelper::isAxisPositioningEnabled() )
+        m_bShowAxisOrigin = true;
 }
 
 bool ScaleTabPage::ShowWarning( USHORT nResIdMessage, Edit * pControl /* = NULL */ )

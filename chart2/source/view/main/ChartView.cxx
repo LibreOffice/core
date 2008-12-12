@@ -77,6 +77,7 @@
 
 #include <time.h>
 
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
@@ -900,7 +901,8 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
 
     //iterate over the main scales first than secondary axis
     size_t nC;
-    for( sal_Int32 nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
+    sal_Int32 nAxisIndex=0;
+    for( nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
     {
 
         // - first do autoscale for all x and z scales (because they are treated independent)
@@ -1055,6 +1057,47 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
                         aVCooSysList_Y[nC]->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScaleDest, aExplicitIncrementDest );
                     }
                 }
+            }
+        }
+    }
+
+    if( AxisHelper::isAxisPositioningEnabled() )
+    {
+        //correct origin for y main axis (the origin is where the other main axis crosses)
+        nAxisIndex=0;
+        sal_Int32 nDimensionIndex=1;
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        {
+            AxisUsage& rAxisUsage = (*aAxisIter).second;
+            ::std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
+            for( nC=0; nC < aVCooSysList.size(); nC++)
+            {
+                ExplicitScaleData aExplicitScale( aVCooSysList[nC]->getExplicitScale( nDimensionIndex, nAxisIndex ) );
+                ExplicitIncrementData aExplicitIncrement( aVCooSysList[nC]->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
+
+                Reference< chart2::XCoordinateSystem > xCooSys( aVCooSysList[nC]->getModel() );
+                Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
+                Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ), uno::UNO_QUERY );
+
+                ::com::sun::star::chart::ChartAxisPosition eCrossingMainAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+                if( xCrossingMainAxis.is() )
+                {
+                    xCrossingMainAxis->getPropertyValue(C2U( "CrossoverPosition" )) >>= eCrossingMainAxisPos;
+                    if( ::com::sun::star::chart::ChartAxisPosition_VALUE == eCrossingMainAxisPos )
+                    {
+                        double fValue = 0.0;
+                        xCrossingMainAxis->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue;
+                        aExplicitScale.Origin = fValue;
+                    }
+                    else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == eCrossingMainAxisPos )
+                        aExplicitScale.Origin = 0.0;
+                    else  if( ::com::sun::star::chart::ChartAxisPosition_START == eCrossingMainAxisPos )
+                        aExplicitScale.Origin = aExplicitScale.Minimum;
+                    else  if( ::com::sun::star::chart::ChartAxisPosition_END == eCrossingMainAxisPos )
+                        aExplicitScale.Origin = aExplicitScale.Maximum;
+                }
+
+                aVCooSysList[nC]->setExplicitScaleAndIncrement( nDimensionIndex, nAxisIndex, aExplicitScale, aExplicitIncrement );
             }
         }
     }

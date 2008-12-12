@@ -200,7 +200,8 @@ public:
     TickmarkHelper_2D(
         const ::com::sun::star::chart2::ExplicitScaleData& rScale
         , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-        , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos );
+        , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos
+        , const ::basegfx::B2DVector& rAxisLineToLabelLineShift );
         //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
     virtual ~TickmarkHelper_2D();
 
@@ -212,8 +213,8 @@ public:
     void addPointSequenceForTickLine( ::com::sun::star::drawing::PointSequenceSequence& rPoints
                             , sal_Int32 nSequenceIndex
                             , double fScaledLogicTickValue, double fInnerDirectionSign
-                            , const TickmarkProperties& rTickmarkProperties ) const;
-    ::basegfx::B2DVector  getDistanceTickToText( const AxisProperties& rAxisProperties ) const;
+                            , const TickmarkProperties& rTickmarkProperties, bool bPlaceAtLabels ) const;
+    ::basegfx::B2DVector  getDistanceAxisTickToText( const AxisProperties& rAxisProperties ) const;
 
     virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
     virtual void        hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
@@ -227,6 +228,10 @@ protected: //methods
 private: //member
     ::basegfx::B2DVector    m_aAxisStartScreenPosition2D;
     ::basegfx::B2DVector    m_aAxisEndScreenPosition2D;
+
+    //labels might be posioned high or low on the border of the diagram far away from the axis
+    //add this vector to go from the axis line to the label line (border of the diagram)
+    ::basegfx::B2DVector    m_aAxisLineToLabelLineShift;
 
     double      m_fStrech_LogicToScreen;
     double      m_fOffset_LogicToScreen;

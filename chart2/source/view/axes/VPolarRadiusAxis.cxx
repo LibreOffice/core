@@ -50,6 +50,7 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
             , sal_Int32 nDimensionCount )
             : VPolarAxis( rAxisProperties, xNumberFormatsSupplier, 1/*nDimensionIndex*/, nDimensionCount )
 {
+    m_aAxisProperties.m_fLabelDirectionSign=0.0;
     m_aAxisProperties.m_fInnerDirectionSign=0.0;
     m_aAxisProperties.m_bLabelsOutside=true;
     m_aAxisProperties.m_bIsMainAxis=false;

@@ -129,6 +129,21 @@ public:
         getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
             , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XAxis >
+        getCrossingMainAxis( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XAxis >& xAxis
+            , const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XAxis >
+        getParallelAxis( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XAxis >& xAxis
+            , const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XDiagram >& xDiagram );
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >
         getGridProperties( const ::com::sun::star::uno::Reference<
@@ -210,6 +225,13 @@ public:
             ::com::sun::star::chart2::XChartType >
         getChartTypeByIndex( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >& xCooSys, sal_Int32 nIndex );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartType >
+        getFirstChartTypeWithSeriesAttachedToAxisIndex( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex );
+
+    static bool isAxisPositioningEnabled();
 };
 
 //.............................................................................

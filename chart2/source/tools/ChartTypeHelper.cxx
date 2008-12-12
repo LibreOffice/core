@@ -375,6 +375,32 @@ bool ChartTypeHelper::isSupportingStartingAngle( const uno::Reference< chart2::X
     }
     return false;
 }
+bool ChartTypeHelper::isSupportingBaseValue( const uno::Reference< chart2::XChartType >& xChartType )
+{
+    if(xChartType.is())
+    {
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA)
+            )
+            return true;
+    }
+    return false;
+}
+
+bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
+{
+    if(xChartType.is())
+    {
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+            return false;
+    }
+    if( nDimensionCount==3 )
+        return nDimensionIndex<2;
+    return true;
+}
 
 bool ChartTypeHelper::shiftTicksAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
 {
@@ -516,46 +542,6 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
         }
     }
     return nNumberOfSeries;
-}
-
-bool ChartTypeHelper::allSeriesAttachedToSameAxis(
-    const uno::Reference< XChartType >& xChartType,
-    sal_Int32 & rOutAxisIndex )
-{
-    try
-    {
-        uno::Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY_THROW );
-        uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDataSeriesContainer->getDataSeries());
-
-        const sal_Int32 nSeriesCount( aSeriesSeq.getLength());
-        // AxisIndex can only be 0 or 1
-        sal_Int32 nSeriesAtFirstAxis = 0;
-        sal_Int32 nSeriesAtSecondAxis = 0;
-
-        for( sal_Int32 nI = 0; nI < nSeriesCount; ++nI )
-        {
-            uno::Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nI], uno::UNO_QUERY );
-            sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex( xSeries );
-            if( nAxisIndex == 0 )
-                ++nSeriesAtFirstAxis;
-            else if( nAxisIndex == 1 )
-                ++nSeriesAtSecondAxis;
-        }
-        OSL_ENSURE( nSeriesAtFirstAxis + nSeriesAtSecondAxis == nSeriesCount, "Invalid axis index found" );
-
-        if( nSeriesAtFirstAxis == nSeriesCount )
-            rOutAxisIndex = 0;
-        else if( nSeriesAtSecondAxis == nSeriesCount )
-            rOutAxisIndex = 1;
-
-        return ( nSeriesAtFirstAxis == nSeriesCount ||
-                 nSeriesAtSecondAxis == nSeriesCount );
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-        return false;
-    }
 }
 
 uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments( const uno::Reference< XChartType >& xChartType )

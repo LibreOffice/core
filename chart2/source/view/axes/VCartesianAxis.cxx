@@ -43,6 +43,8 @@
 #include "LabelPositionHelper.hxx"
 #include "TrueGuard.hxx"
 #include "BaseGFXHelper.hxx"
+#include "AxisHelper.hxx"
+
 #include <rtl/math.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
@@ -628,7 +630,7 @@ bool VCartesianAxis::createTextShapes(
     FixedNumberFormatter aFixedNumberFormatter(
                 m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
-    B2DVector aTextToTickDistance( pTickmarkHelper->getDistanceTickToText( m_aAxisProperties ) );
+    B2DVector aTextToTickDistance( pTickmarkHelper->getDistanceAxisTickToText( m_aAxisProperties ) );
 
     TickInfo* pPreviousVisibleTickInfo = NULL;
     TickInfo* pPREPreviousVisibleTickInfo = NULL;
@@ -815,12 +817,26 @@ double VCartesianAxis::getLogicValueWhereMainLineCrossesOtherAxis() const
         fCrossesOtherAxis = *m_aAxisProperties.m_pfMainLinePositionAtOtherAxis;
     else
     {
-        bool bMinimumForLeftAxis = ( (m_nDimensionIndex==1) && m_pPosHelper->isMathematicalOrientationX() )
-                            || ( (m_nDimensionIndex!=1) && m_pPosHelper->isMathematicalOrientationY() );
-        if(!m_aAxisProperties.m_bIsMainAxis)
-            bMinimumForLeftAxis = !bMinimumForLeftAxis;
-        fCrossesOtherAxis = bMinimumForLeftAxis ? fMin : fMax;
+        if( ::com::sun::star::chart::ChartAxisPosition_END == m_aAxisProperties.m_eCrossoverType )
+            fCrossesOtherAxis = fMax;
+        else
+            fCrossesOtherAxis = fMin;
     }
+    return fCrossesOtherAxis;
+}
+
+double VCartesianAxis::getLogicValueWhereLabelLineCrossesOtherAxis() const
+{
+    double fMin = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
+    double fMax = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
+
+    double fCrossesOtherAxis;
+    if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == m_aAxisProperties.m_eLabelPos )
+        fCrossesOtherAxis = fMin;
+    else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_aAxisProperties.m_eLabelPos )
+        fCrossesOtherAxis = fMax;
+    else
+        fCrossesOtherAxis = getLogicValueWhereMainLineCrossesOtherAxis();
     return fCrossesOtherAxis;
 }
 
@@ -955,139 +971,265 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
 
     if( 0==m_nDimensionIndex ) //x-axis
     {
+        if( fCrossesOtherAxis < fMinY )
+            fCrossesOtherAxis = fMinY;
+        else if( fCrossesOtherAxis > fMaxY )
+            fCrossesOtherAxis = fMaxY;
+
         fYStart = fYEnd = fCrossesOtherAxis;
         fXEnd=m_pPosHelper->getLogicMaxX();
 
         if(3==m_nDimension)
         {
-            rStart = getScreenPosition( fXStart, fYStart, fZStart );
-            rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
-
-            double fDeltaX = rEnd.getX() - rStart.getX();
-            double fDeltaY = rEnd.getY() - rStart.getY();
-
-            //only those points are candidates which are lying on exactly one wall as these are outer edges
-            tScreenPosAndLogicPosList aPosList;
-            aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ) );
-            aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) );
-
-            if( fabs(fDeltaY) > fabs(fDeltaX)  )
+            if( AxisHelper::isAxisPositioningEnabled() )
             {
-                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
-                //choose most left positions
-                ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
-                m_aAxisProperties.m_fInnerDirectionSign = fDeltaY<0 ? -1 : 1;
+                if( ::rtl::math::approxEqual( fYOther, fYStart) )
+                    fZStart = fZEnd = fZOnZPlane;
+                else
+                    fZStart = fZEnd = fZOther;
             }
             else
             {
-                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
-                //choose most bottom positions
-                ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
-                m_aAxisProperties.m_fInnerDirectionSign = fDeltaX<0 ? -1 : 1;
+                rStart = getScreenPosition( fXStart, fYStart, fZStart );
+                rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
+
+                double fDeltaX = rEnd.getX() - rStart.getX();
+                double fDeltaY = rEnd.getY() - rStart.getY();
+
+                //only those points are candidates which are lying on exactly one wall as these are outer edges
+                tScreenPosAndLogicPosList aPosList;
+                aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ) );
+                aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) );
+
+                if( fabs(fDeltaY) > fabs(fDeltaX)  )
+                {
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+                    //choose most left positions
+                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaY<0 ? -1 : 1;
+                }
+                else
+                {
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                    //choose most bottom positions
+                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaX<0 ? -1 : 1;
+                }
+                ScreenPosAndLogicPos aBestPos( aPosList[0] );
+                fYStart = fYEnd = aBestPos.fLogicY;
+                fZStart = fZEnd = aBestPos.fLogicZ;
+                if( !m_pPosHelper->isMathematicalOrientationX() )
+                    m_aAxisProperties.m_fLabelDirectionSign *= -1;
             }
-            ScreenPosAndLogicPos aBestPos( aPosList[0] );
-            fYStart = fYEnd = aBestPos.fLogicY;
-            fZStart = fZEnd = aBestPos.fLogicZ;
-            if( !m_pPosHelper->isMathematicalOrientationX() )
-                m_aAxisProperties.m_fInnerDirectionSign *= -1;
         }//end 3D x axis
     }
     else if( 1==m_nDimensionIndex ) //y-axis
     {
+        if( fCrossesOtherAxis < fMinX )
+            fCrossesOtherAxis = fMinX;
+        else if( fCrossesOtherAxis > fMaxX )
+            fCrossesOtherAxis = fMaxX;
+
         fXStart = fXEnd = fCrossesOtherAxis;
         fYEnd=m_pPosHelper->getLogicMaxY();
 
         if(3==m_nDimension)
         {
-            rStart = getScreenPosition( fXStart, fYStart, fZStart );
-            rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
-
-            double fDeltaX = rEnd.getX() - rStart.getX();
-            double fDeltaY = rEnd.getY() - rStart.getY();
-
-            //only those points are candidates which are lying on exactly one wall as these are outer edges
-            tScreenPosAndLogicPosList aPosList;
-            aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fMinY, fZOther ) );
-            aPosList.push_back( getScreenPosAndLogicPos( fXOther, fMinY, fZOnZPlane ) );
-
-            if( fabs(fDeltaY) > fabs(fDeltaX)  )
+            if( AxisHelper::isAxisPositioningEnabled() )
             {
-                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
-                //choose most left positions
-                ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
-                m_aAxisProperties.m_fInnerDirectionSign = fDeltaY<0 ? -1 : 1;
+                if( ::rtl::math::approxEqual( fXOther, fXStart) )
+                    fZStart = fZEnd = fZOnZPlane;
+                else
+                    fZStart = fZEnd = fZOther;
             }
             else
             {
-                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
-                //choose most bottom positions
-                ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
-                m_aAxisProperties.m_fInnerDirectionSign = fDeltaX<0 ? -1 : 1;
+                rStart = getScreenPosition( fXStart, fYStart, fZStart );
+                rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
+
+                double fDeltaX = rEnd.getX() - rStart.getX();
+                double fDeltaY = rEnd.getY() - rStart.getY();
+
+                //only those points are candidates which are lying on exactly one wall as these are outer edges
+                tScreenPosAndLogicPosList aPosList;
+                aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fMinY, fZOther ) );
+                aPosList.push_back( getScreenPosAndLogicPos( fXOther, fMinY, fZOnZPlane ) );
+
+                if( fabs(fDeltaY) > fabs(fDeltaX)  )
+                {
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+                    //choose most left positions
+                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaY<0 ? -1 : 1;
+                }
+                else
+                {
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                    //choose most bottom positions
+                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaX<0 ? -1 : 1;
+                }
+                ScreenPosAndLogicPos aBestPos( aPosList[0] );
+                fXStart = fXEnd = aBestPos.fLogicX;
+                fZStart = fZEnd = aBestPos.fLogicZ;
+                if( !m_pPosHelper->isMathematicalOrientationY() )
+                    m_aAxisProperties.m_fLabelDirectionSign *= -1;
             }
-            ScreenPosAndLogicPos aBestPos( aPosList[0] );
-            fXStart = fXEnd = aBestPos.fLogicX;
-            fZStart = fZEnd = aBestPos.fLogicZ;
-            if( !m_pPosHelper->isMathematicalOrientationY() )
-                m_aAxisProperties.m_fInnerDirectionSign *= -1;
         }//end 3D y axis
     }
     else //z-axis
     {
         fZEnd = m_pPosHelper->getLogicMaxZ();
-        if( !m_pPosHelper->isSwapXAndY() )
+        if( AxisHelper::isAxisPositioningEnabled() )
         {
-            fXStart = fXEnd = m_pPosHelper->isMathematicalOrientationX() ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMinX();
-            fYStart = fYEnd = m_pPosHelper->isMathematicalOrientationY() ? m_pPosHelper->getLogicMinY() : m_pPosHelper->getLogicMaxY();
-        }
-        else
-        {
-            fXStart = fXEnd = m_pPosHelper->isMathematicalOrientationX() ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMaxX();
-            fYStart = fYEnd = m_pPosHelper->isMathematicalOrientationY() ? m_pPosHelper->getLogicMaxY() : m_pPosHelper->getLogicMinY();
-        }
-
-        if(3==m_nDimension)
-        {
-            rStart = getScreenPosition( fXStart, fYStart, fZStart );
-            rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
-
-            double fDeltaX = rEnd.getX() - rStart.getX();
-
-            //only those points are candidates which are lying on exactly one wall as these are outer edges
-            tScreenPosAndLogicPosList aPosList;
-            aPosList.push_back( getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ) );
-            aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fYOther, fMinZ ) );
-
-            ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
-            ScreenPosAndLogicPos aBestPos( aPosList[0] );
-            ScreenPosAndLogicPos aNotSoGoodPos( aPosList[1] );
-
-            //choose most bottom positions
-            if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefere left-right algnments
+            if( !m_aAxisProperties.m_bSwapXAndY )
             {
-                if( aBestPos.aScreenPos.getX() > aNotSoGoodPos.aScreenPos.getX() )
-                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_RIGHT;
+                if( fCrossesOtherAxis < fMinY )
+                    fCrossesOtherAxis = fMinY;
+                else if( fCrossesOtherAxis > fMaxY )
+                    fCrossesOtherAxis = fMaxY;
+                fYStart = fYEnd = fCrossesOtherAxis;
+
+                if( ::rtl::math::approxEqual( fYOther, fYStart) )
+                    fXStart = fXEnd = fXOnXPlane;
                 else
-                     m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+                    fXStart = fXEnd = fXOther;
             }
             else
             {
-                if( aBestPos.aScreenPos.getY() > aNotSoGoodPos.aScreenPos.getY() )
-                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                if( fCrossesOtherAxis < fMinX )
+                    fCrossesOtherAxis = fMinX;
+                else if( fCrossesOtherAxis > fMaxX )
+                    fCrossesOtherAxis = fMaxX;
+                fXStart = fXEnd = fCrossesOtherAxis;
+
+                if( ::rtl::math::approxEqual( fXOther, fXStart) )
+                    fYStart = fYEnd = fYOnYPlane;
                 else
-                     m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_TOP;
+                    fYStart = fYEnd = fYOther;
+            }
+        }
+        else
+        {
+            if( !m_pPosHelper->isSwapXAndY() )
+            {
+                fXStart = fXEnd = m_pPosHelper->isMathematicalOrientationX() ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMinX();
+                fYStart = fYEnd = m_pPosHelper->isMathematicalOrientationY() ? m_pPosHelper->getLogicMinY() : m_pPosHelper->getLogicMaxY();
+            }
+            else
+            {
+                fXStart = fXEnd = m_pPosHelper->isMathematicalOrientationX() ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMaxX();
+                fYStart = fYEnd = m_pPosHelper->isMathematicalOrientationY() ? m_pPosHelper->getLogicMaxY() : m_pPosHelper->getLogicMinY();
             }
 
-            m_aAxisProperties.m_fInnerDirectionSign = fDeltaX<0 ? -1 : 1;
-            if( !m_pPosHelper->isMathematicalOrientationZ() )
-                m_aAxisProperties.m_fInnerDirectionSign *= -1;
+            if(3==m_nDimension)
+            {
+                rStart = getScreenPosition( fXStart, fYStart, fZStart );
+                rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
 
-            fXStart = fXEnd = aBestPos.fLogicX;
-            fYStart = fYEnd = aBestPos.fLogicY;
+                double fDeltaX = rEnd.getX() - rStart.getX();
+
+                //only those points are candidates which are lying on exactly one wall as these are outer edges
+                tScreenPosAndLogicPosList aPosList;
+                aPosList.push_back( getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ) );
+                aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fYOther, fMinZ ) );
+
+                ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                ScreenPosAndLogicPos aBestPos( aPosList[0] );
+                ScreenPosAndLogicPos aNotSoGoodPos( aPosList[1] );
+
+                //choose most bottom positions
+                if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefere left-right algnments
+                {
+                    if( aBestPos.aScreenPos.getX() > aNotSoGoodPos.aScreenPos.getX() )
+                        m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_RIGHT;
+                    else
+                         m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+                }
+                else
+                {
+                    if( aBestPos.aScreenPos.getY() > aNotSoGoodPos.aScreenPos.getY() )
+                        m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                    else
+                         m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_TOP;
+                }
+
+                m_aAxisProperties.m_fLabelDirectionSign = fDeltaX<0 ? -1 : 1;
+                if( !m_pPosHelper->isMathematicalOrientationZ() )
+                    m_aAxisProperties.m_fLabelDirectionSign *= -1;
+
+                fXStart = fXEnd = aBestPos.fLogicX;
+                fYStart = fYEnd = aBestPos.fLogicY;
+            }
         }//end 3D z axis
     }
 
     rStart = getScreenPosition( fXStart, fYStart, fZStart );
     rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
+
+    if(3==m_nDimension && !AxisHelper::isAxisPositioningEnabled() )
+        m_aAxisProperties.m_fInnerDirectionSign = m_aAxisProperties.m_fLabelDirectionSign;//to behave like before
+
+    if(3==m_nDimension && AxisHelper::isAxisPositioningEnabled() )
+    {
+        double fDeltaX = rEnd.getX() - rStart.getX();
+        double fDeltaY = rEnd.getY() - rStart.getY();
+
+        if( 2==m_nDimensionIndex )
+        {
+            if( m_eLeftWallPos != CuboidPlanePosition_Left )
+            {
+                m_aAxisProperties.m_fLabelDirectionSign *= -1.0;
+                m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
+            }
+
+            m_aAxisProperties.m_aLabelAlignment =
+                ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
+                    LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
+
+            if( ( fDeltaY<0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
+                ( fDeltaY>0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
+                m_aAxisProperties.m_aLabelAlignment =
+                    ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
+                        LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
+        }
+        else if( fabs(fDeltaY) > fabs(fDeltaX) )
+        {
+            if( m_eBackWallPos != CuboidPlanePosition_Back )
+            {
+                m_aAxisProperties.m_fLabelDirectionSign *= -1.0;
+                m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
+            }
+
+            m_aAxisProperties.m_aLabelAlignment =
+                ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
+                    LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
+
+            if( ( fDeltaY<0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
+                ( fDeltaY>0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
+                m_aAxisProperties.m_aLabelAlignment =
+                    ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
+                        LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
+        }
+        else
+        {
+            if( m_eBackWallPos != CuboidPlanePosition_Back )
+            {
+                m_aAxisProperties.m_fLabelDirectionSign *= -1.0;
+                m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
+            }
+
+            m_aAxisProperties.m_aLabelAlignment =
+                ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
+                    LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
+
+            if( ( fDeltaX>0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
+                ( fDeltaX<0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
+                m_aAxisProperties.m_aLabelAlignment =
+                    ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_TOP ) ?
+                        LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
+        }
+    }
 }
 
 TickmarkHelper* VCartesianAxis::createTickmarkHelper()
@@ -1099,7 +1241,11 @@ TickmarkHelper_2D* VCartesianAxis::createTickmarkHelper2D()
 {
     B2DVector aStart, aEnd;
     this->get2DAxisMainLine( aStart, aEnd, this->getLogicValueWhereMainLineCrossesOtherAxis() );
-    return new TickmarkHelper_2D( m_aScale, m_aIncrement, aStart, aEnd );
+
+    B2DVector aLabelLineStart, aLabelLineEnd;
+    this->get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, this->getLogicValueWhereLabelLineCrossesOtherAxis() );
+
+    return new TickmarkHelper_2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
 
 sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
@@ -1146,7 +1292,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
 
         lcl_correctPositionForStaggering( aOuterIter
             , lcl_getStaggerDistance( aInnerIter
-                , pTickmarkHelper2D->getDistanceTickToText( m_aAxisProperties ) ) );
+                , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ) ) );
     }
 }
 
@@ -1252,7 +1398,7 @@ void SAL_CALL VCartesianAxis::updatePositions()
             xShape2DText = pTickInfo->xTextShape;
             if( xShape2DText.is() )
             {
-                B2DVector aTextToTickDistance( pTickmarkHelper2D->getDistanceTickToText( m_aAxisProperties ) );
+                B2DVector aTextToTickDistance( pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ) );
                 B2DVector aTickScreenPos2D( pTickInfo->aTickScreenPosition );
                 aTickScreenPos2D += aTextToTickDistance;
                 awt::Point aAnchorScreenPosition2D(
@@ -1325,7 +1471,7 @@ void SAL_CALL VCartesianAxis::createShapes()
             const TickmarkProperties& rTickmarkProperties = m_aAxisProperties.m_aTickmarkPropertiesList[nDepth];
 
             sal_Int32 nPointCount = (*aDepthIter).size();
-            drawing::PointSequenceSequence aPoints(nPointCount);
+            drawing::PointSequenceSequence aPoints(2*nPointCount);
 
             ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
@@ -1334,9 +1480,16 @@ void SAL_CALL VCartesianAxis::createShapes()
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;
-                apTickmarkHelper2D->addPointSequenceForTickLine( aPoints, nN, (*aTickIter).fScaledTickValue
-                    , m_aAxisProperties.m_fInnerDirectionSign, rTickmarkProperties );
-                nN++;
+
+                bool bTicksAtLabels = ( m_aAxisProperties.m_eTickmarkPos != ::com::sun::star::chart::ChartAxisMarkPosition_AT_AXIS );
+                double fInnerDirectionSign = m_aAxisProperties.m_fInnerDirectionSign;
+                if( bTicksAtLabels && m_aAxisProperties.m_eLabelPos == ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END )
+                    fInnerDirectionSign *= -1.0;
+                apTickmarkHelper2D->addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
+                    , fInnerDirectionSign , rTickmarkProperties, bTicksAtLabels );
+                if( m_aAxisProperties.m_eTickmarkPos == ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
+                    apTickmarkHelper2D->addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
+                        , m_aAxisProperties.m_fInnerDirectionSign, rTickmarkProperties, !bTicksAtLabels );
             }
             aPoints.realloc(nN);
             m_pShapeFactory->createLine2D( m_xGroupShape_Shapes, aPoints
@@ -1356,14 +1509,17 @@ void SAL_CALL VCartesianAxis::createShapes()
         }
         //-----------------------------------------
         //create an additional line at NULL
-        double fExtraLineCrossesOtherAxis;
-        if( getLogicValueWhereExtraLineCrossesOtherAxis(fExtraLineCrossesOtherAxis) )
+        if( !AxisHelper::isAxisPositioningEnabled() )
         {
-            B2DVector aStart, aEnd;
-            this->get2DAxisMainLine( aStart, aEnd, fExtraLineCrossesOtherAxis );
-            drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
-            Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
-                    m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
+            double fExtraLineCrossesOtherAxis;
+            if( getLogicValueWhereExtraLineCrossesOtherAxis(fExtraLineCrossesOtherAxis) )
+            {
+                B2DVector aStart, aEnd;
+                this->get2DAxisMainLine( aStart, aEnd, fExtraLineCrossesOtherAxis );
+                drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
+                Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+                        m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
+            }
         }
     }
 

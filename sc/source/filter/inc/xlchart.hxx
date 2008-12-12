@@ -76,7 +76,6 @@ namespace com { namespace sun { namespace star {
 // property names
 #define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
 #define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
-#define EXC_CHPROP_AXISPOSITION             CREATE_OUSTRING( "AxisPosition" )
 #define EXC_CHPROP_BLACKDAY                 CREATE_OUSTRING( "BlackDay" )
 #define EXC_CHPROP_COLOR                    CREATE_OUSTRING( "Color" )
 #define EXC_CHPROP_CONNECTBARS              CREATE_OUSTRING( "ConnectBars" )

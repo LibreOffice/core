@@ -1,0 +1,295 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tp_AxisPositions.src,v $
+ * $Revision: 1.1.4.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "TabPages.hrc"
+
+#define Y0 3
+#define Y1 (Y0+13)
+#define Y2 (Y1)
+#define Y3 (Y2+16)
+#define Y4 (Y3+13)
+#define Y5 (Y4)
+#define Y6 (Y5+16)
+#define Y7 (Y6+13)
+#define Y8 (Y7+16)
+#define Y9 (Y8+16)
+#define Y10 (Y9+16)
+#define Y11 (Y10+13)
+#define Y12 (Y11+16)
+
+#define EDITWIDTH 50
+#define LABELWIDTH 88
+#define MAXLABELWIDTH 138
+
+#define X1 6
+#define X2 11
+#define X3 (X2+LABELWIDTH+4)
+#define X4 (X2+MAXLABELWIDTH+4)
+#define X5 (X4+EDITWIDTH+5)
+
+#define XTICK_1 X2
+#define XTICK_2 (XTICK_1+60)
+#define XTICK_3 (XTICK_2+60)
+#define XTICK_4 (XTICK_3+60)
+#define XTICK_5 (XTICK_4+6)
+#define TICKWIDTH 59
+
+TabPage TP_AXIS_POSITIONS
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    FixedLine FL_AXIS_LINE
+    {
+        Pos = MAP_APPFONT ( X1 , Y0  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Axis line" ;
+    };
+
+    FixedText FT_CROSSES_OTHER_AXIS_AT
+    {
+        Pos = MAP_APPFONT ( X2 , Y1  ) ;
+        Size = MAP_APPFONT ( MAXLABELWIDTH , 8 ) ;
+        Text [ en-US ] = "~Cross other axis at" ;
+    };
+    ListBox LB_CROSSES_OTHER_AXIS_AT
+    {
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X4 , Y1-2 ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        StringList [ en-US ] =
+        {
+            "Start" ;
+            "End" ;
+            "Value" ;
+            "Category" ;
+        };
+    };
+    SpinField EDT_CROSSES_OTHER_AXIS_AT
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( X5 , Y1-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ComboBox EDT_CROSSES_OTHER_AXIS_AT_CATEGORY
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( X5 , Y1-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    CheckBox CB_AXIS_BETWEEN_CATEGORIES
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( X2 , Y2  ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Axis ~between categories" ;
+    };
+
+    FixedLine FL_LABELS
+    {
+        Pos = MAP_APPFONT ( X1 , Y3  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Labels" ;
+    };
+    FixedText FT_PLACE_LABELS
+    {
+        Pos = MAP_APPFONT ( X2 , Y4  ) ;
+        Size = MAP_APPFONT ( MAXLABELWIDTH , 8 ) ;
+        Text [ en-US ] = "~Place labels" ;
+    };
+    ListBox LB_PLACE_LABELS
+    {
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X4 , Y4-2 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        StringList [ en-US ] =
+        {
+            "Near axis" ;
+            "Near axis (other side)" ;
+            "Outside start" ;
+            "Outside end" ;
+        };
+    };
+
+    FixedText FT_AXIS_LABEL_DISTANCE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( X2 , Y5  ) ;
+        Size = MAP_APPFONT ( MAXLABELWIDTH , 8 ) ;
+        Text [ en-US ] = "~Distance" ;
+    };
+    SpinField EDT_AXIS_LABEL_DISTANCE
+    {
+        Hide = TRUE;
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( X4 , Y5-2 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        TabStop = TRUE ;
+    };
+
+    FixedLine FL_TICKS
+    {
+        Pos = MAP_APPFONT ( X1 , Y6  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text[ en-US ] = "Interval marks";
+    };
+    FixedText FT_MAJOR
+    {
+        Pos = MAP_APPFONT ( XTICK_1 , Y7  ) ;
+        Size = MAP_APPFONT ( TICKWIDTH , 8 ) ;
+        Text [ en-US ] = "Major:" ;
+    };
+    CheckBox CB_TICKS_INNER
+    {
+        Pos = MAP_APPFONT ( XTICK_2 , Y7  ) ;
+        Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
+        Text [ en-US ] = "~Inner";
+    };
+    CheckBox CB_TICKS_OUTER
+    {
+        Pos = MAP_APPFONT ( XTICK_3 , Y7  ) ;
+        Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
+        Text [ en-US ] = "~Outer";
+    };
+
+    FixedText FT_MINOR
+    {
+        Pos = MAP_APPFONT ( XTICK_1 , Y8  ) ;
+        Size = MAP_APPFONT ( TICKWIDTH , 8 ) ;
+        Text [ en-US ] = "Minor:" ;
+    };
+    CheckBox CB_MINOR_INNER
+    {
+        Pos = MAP_APPFONT ( XTICK_2 , Y8  );
+        Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
+        Text [ en-US ] = "I~nner";
+    };
+    CheckBox CB_MINOR_OUTER
+    {
+        Pos = MAP_APPFONT ( XTICK_3 , Y8  ) ;
+        Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
+        Text [ en-US ] = "O~uter";
+    };
+
+    FixedLine FL_VERTICAL
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( XTICK_4 , Y7  ) ;
+        Size = MAP_APPFONT ( 6 , 25 ) ;
+        Vert = TRUE ;
+    };
+
+    FixedText FT_PLACE_TICKS
+    {
+        Pos = MAP_APPFONT ( X2 , Y9  );
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
+        Text [ en-US ] = "Place ~marks";
+    };
+    ListBox LB_PLACE_TICKS
+    {
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X3 , Y9-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        StringList [ en-US ] =
+        {
+            "At labels" ;
+            "At axis" ;
+            "At axis and labels" ;
+        };
+    };
+
+
+    FixedLine FL_GRIDS
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( X1 , Y10  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text[ en-US ] = "Grids";
+    };
+    CheckBox CB_MAJOR_GRID
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( X2 , Y11  ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Show major ~grid" ;
+    };
+    PushButton PB_MAJOR_GRID
+    {
+        Hide = TRUE ;
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( X3 , Y11-2  );
+        Size = MAP_APPFONT ( 54 , 14 );
+        Text [ en-US ] = "Mo~re...";
+    };
+    CheckBox CB_MINOR_GRID
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( X2 , Y12  ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Show minor grid" ;
+    };
+    PushButton PB_MINOR_GRID
+    {
+        Hide = TRUE ;
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( X3 , Y12-2  );
+        Size = MAP_APPFONT ( 54 , 14 );
+        Text [ en-US ] = "Mor~e...";
+    };
+};

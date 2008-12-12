@@ -39,6 +39,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -49,7 +50,6 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <com/sun/star/chart2/AxisPosition.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
@@ -2872,8 +2872,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
 
         // axis position ------------------------------------------------------
 
-        namespace ApiAxisPosition = ::com::sun::star::chart2::AxisPosition;
-        aAxisProp.SetProperty( EXC_CHPROP_AXISPOSITION, bPrimary ? ApiAxisPosition::MAIN : ApiAxisPosition::SECONDARY );
+        aAxisProp.SetProperty( CREATE_OUSTRING( "CrossoverPosition" ), bPrimary ? ::com::sun::star::chart::ChartAxisPosition_START : ::com::sun::star::chart::ChartAxisPosition_END );
     }
     return xAxis;
 }

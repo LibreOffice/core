@@ -61,7 +61,10 @@ public:
     static sal_Bool isSupportingRightAngledAxes(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static bool     isSupportingAxisSideBySide(      const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool     isSupportingStartingAngle(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    //starting value for bars or baseline for areas for example
+    static bool     isSupportingBaseValue(           const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static bool     shiftTicksAtXAxisPerDefault(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static bool     isSupportingAxisPositioning(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
 
     //returns sequence of ::com::sun::star::chart::DataLabelPlacement
     static ::com::sun::star::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
@@ -82,17 +85,6 @@ public:
     static sal_Int32 //one of ::com::sun::star::chart2::AxisType
                     getAxisType( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
-
-    /** Determines if all data series of a chart type are attached to the same
-        axis.
-
-        @param rOutAxisIndex If, and only if, </TRUE> is returned this
-               out-parameter is filled with the index (0 or 1) of the axis to
-               which all series are attached.
-     */
-    static bool allSeriesAttachedToSameAxis(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType,
-        sal_Int32 & rOutAxisIndex );
 };
 
 //.............................................................................
