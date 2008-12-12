@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.33 $
+# $Revision: 1.33.134.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +57,7 @@ CXXFILES = \
         xmlexprt.cxx \
         xmlbodyi.cxx \
         xmltabi.cxx \
+        xmlexternaltabi.cxx \
         xmlrowi.cxx \
         xmlcelli.cxx \
         xmlconti.cxx \
@@ -106,6 +107,7 @@ SLOFILES =  \
         $(SLO)$/xmlexprt.obj \
         $(SLO)$/xmlbodyi.obj \
         $(SLO)$/xmltabi.obj \
+        $(SLO)$/xmlexternaltabi.obj \
         $(SLO)$/xmlrowi.obj \
         $(SLO)$/xmlcelli.obj \
         $(SLO)$/xmlconti.obj \

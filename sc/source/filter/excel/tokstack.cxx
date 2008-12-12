@@ -395,6 +395,34 @@ void TokenPool::GetElement( const UINT16 nId )
                         pScToken->AddMatrix( p );
                 }
                 break;
+            case T_ExtName:
+            {
+                UINT16 n = pElement[nId];
+                if (n < maExtNames.size())
+                {
+                    const ExtName& r = maExtNames[n];
+                    pScToken->AddExternalName(r.mnFileId, r.maName);
+                }
+            }
+            case T_ExtRefC:
+            {
+                UINT16 n = pElement[nId];
+                if (n < maExtCellRefs.size())
+                {
+                    const ExtCellRef& r = maExtCellRefs[n];
+                    pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
+                }
+            }
+            case T_ExtRefA:
+            {
+                UINT16 n = pElement[nId];
+                if (n < maExtAreaRefs.size())
+                {
+                    const ExtAreaRef& r = maExtAreaRefs[n];
+                    pScToken->AddExternalDoubleReference(r.mnFileId, r.maTabName, r.maRef);
+                }
+            }
+            break;
             default:
                 DBG_ERROR("-TokenPool::GetElement(): Zustand undefiniert!?");
         }
@@ -477,6 +505,34 @@ void TokenPool::GetElementRek( const UINT16 nId )
                             pScToken->AddMatrix( p );
                     }
                     break;
+                case T_ExtName:
+                {
+                    UINT16 n = pElement[*pAkt];
+                    if (n < maExtNames.size())
+                    {
+                        const ExtName& r = maExtNames[n];
+                        pScToken->AddExternalName(r.mnFileId, r.maName);
+                    }
+                }
+                case T_ExtRefC:
+                {
+                    UINT16 n = pElement[*pAkt];
+                    if (n < maExtCellRefs.size())
+                    {
+                        const ExtCellRef& r = maExtCellRefs[n];
+                        pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
+                    }
+                }
+                case T_ExtRefA:
+                {
+                    UINT16 n = pElement[*pAkt];
+                    if (n < maExtAreaRefs.size())
+                    {
+                        const ExtAreaRef& r = maExtAreaRefs[n];
+                        pScToken->AddExternalDoubleReference(r.mnFileId, r.maTabName, r.maRef);
+                    }
+                }
+                break;
                 default:
                     DBG_ERROR("-TokenPool::GetElementRek(): Zustand undefiniert!?");
             }
@@ -724,9 +780,68 @@ const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
     return ( const TokenId ) nElementAkt;
 }
 
+const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maExtNames.size());
+    pType[nElementAkt] = T_ExtName;
+
+    maExtNames.push_back(ExtName());
+    ExtName& r = maExtNames.back();
+    r.mnFileId = nFileId;
+    r.maName = rName;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maExtCellRefs.size());
+    pType[nElementAkt] = T_ExtRefC;
+
+    maExtCellRefs.push_back(ExtCellRef());
+    ExtCellRef& r = maExtCellRefs.back();
+    r.mnFileId = nFileId;
+    r.maTabName = rTabName;
+    r.maRef = rRef;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maExtAreaRefs.size());
+    pType[nElementAkt] = T_ExtRefA;
+
+    maExtAreaRefs.push_back(ExtAreaRef());
+    ExtAreaRef& r = maExtAreaRefs.back();
+    r.mnFileId = nFileId;
+    r.maTabName = rTabName;
+    r.maRef = rRef;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
 void TokenPool::Reset( void )
 {
     nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
+    maExtNames.clear();
+    maExtCellRefs.clear();
+    maExtAreaRefs.clear();
 }
 
 

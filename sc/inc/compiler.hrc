@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.hrc,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,25 +39,26 @@
 #define SC_OPCODE_STOP                2
 #define SC_OPCODE_EXTERNAL            3
 #define SC_OPCODE_NAME                4
-#define SC_OPCODE_IF                  5     /* jump commands */
-#define SC_OPCODE_CHOSE               6
-#define SC_OPCODE_OPEN                7     /* parentheses and separators */
-#define SC_OPCODE_CLOSE               8
-#define SC_OPCODE_SEP                 9
-#define SC_OPCODE_MISSING            10     /* special OpCodes */
-#define SC_OPCODE_BAD                11
-#define SC_OPCODE_SPACES             12
-#define SC_OPCODE_MAT_REF            13
-#define SC_OPCODE_DB_AREA            14     /* additional access operators */
-#define SC_OPCODE_MACRO              15
-#define SC_OPCODE_COL_ROW_NAME       16
-#define SC_OPCODE_COL_ROW_NAME_AUTO  17
-#define SC_OPCODE_PERCENT_SIGN       18     /* operator _follows_ value */
-#define SC_OPCODE_ARRAY_OPEN         19
-#define SC_OPCODE_ARRAY_CLOSE        20
-#define SC_OPCODE_ARRAY_ROW_SEP      21
-#define SC_OPCODE_ARRAY_COL_SEP      22     /* some convs use sep != col_sep */
-#define SC_OPCODE_STOP_DIV           23
+#define SC_OPCODE_EXTERNAL_REF        5
+#define SC_OPCODE_IF                  6     /* jump commands */
+#define SC_OPCODE_CHOSE               7
+#define SC_OPCODE_OPEN                8     /* parentheses and separators */
+#define SC_OPCODE_CLOSE               9
+#define SC_OPCODE_SEP                10
+#define SC_OPCODE_MISSING            11     /* special OpCodes */
+#define SC_OPCODE_BAD                12
+#define SC_OPCODE_SPACES             13
+#define SC_OPCODE_MAT_REF            14
+#define SC_OPCODE_DB_AREA            15     /* additional access operators */
+#define SC_OPCODE_MACRO              16
+#define SC_OPCODE_COL_ROW_NAME       17
+#define SC_OPCODE_COL_ROW_NAME_AUTO  18
+#define SC_OPCODE_PERCENT_SIGN       19     /* operator _follows_ value */
+#define SC_OPCODE_ARRAY_OPEN         20
+#define SC_OPCODE_ARRAY_CLOSE        21
+#define SC_OPCODE_ARRAY_ROW_SEP      22
+#define SC_OPCODE_ARRAY_COL_SEP      23     /* some convs use sep != col_sep */
+#define SC_OPCODE_STOP_DIV           24
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       30

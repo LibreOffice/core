@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltabi.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,13 +30,28 @@
 #ifndef SC_XMLTABI_HXX
 #define SC_XMLTABI_HXX
 
+#include "externalrefmgr.hxx"
+
 #include <xmloff/xmlictxt.hxx>
+#include <memory>
 
 class ScXMLImport;
+
+struct ScXMLExternalTabData
+{
+    String maFileUrl;
+    ScExternalRefCache::TableTypeRef mpCacheTable;
+    sal_Int32 mnRow;
+    sal_Int32 mnCol;
+    sal_uInt16 mnFileId;
+
+    ScXMLExternalTabData();
+};
 
 class ScXMLTableContext : public SvXMLImportContext
 {
     rtl::OUString   sPrintRanges;
+    ::std::auto_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Bool        bStartFormPage;
     sal_Bool        bPrintEntireSheet;
 

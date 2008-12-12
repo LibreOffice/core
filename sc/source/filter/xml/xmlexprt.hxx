@@ -38,6 +38,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+#include <hash_map>
+
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
 class ScMyShapesContainer;
@@ -79,6 +81,8 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
+    typedef ::std::hash_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
+    NumberFormatIndexMap                aNumFmtIndexMap;
     ScMySharedData*                     pSharedData;
     ScColumnStyles*                 pColumnStyles;
     ScRowStyles*                    pRowStyles;
@@ -98,6 +102,7 @@ class ScXMLExport : public SvXMLExport
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     const rtl::OUString         sLayerID;
     const rtl::OUString         sCaptionShape;
+    rtl::OUString               sExternalRefTabStyleName;
     rtl::OUString               sAttrName;
     rtl::OUString               sAttrStyleName;
     rtl::OUString               sAttrColumnsRepeated;
@@ -117,7 +122,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool                    bRowHeaderOpen;
     sal_Bool                    mbShowProgress;
 
-
+    sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
     sal_Bool        HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
     void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount);
     void            CollectShapesAutoStyles(const sal_Int32 nTableCount);
@@ -145,6 +150,7 @@ class ScXMLExport : public SvXMLExport
     void OpenHeaderColumn();
     void CloseHeaderColumn();
     void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
+    void ExportExternalRefCacheStyles();
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
@@ -195,6 +201,7 @@ class ScXMLExport : public SvXMLExport
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteExternalRefCaches();
     void WriteConsolidation();  // core implementation
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);

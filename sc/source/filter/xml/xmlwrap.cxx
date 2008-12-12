@@ -85,6 +85,7 @@
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 using namespace com::sun::star;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 

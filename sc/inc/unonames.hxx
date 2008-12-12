@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unonames.hxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.82.104.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
 #define SC_UNO_DDELINKS             "DDELinks"
+#define SC_UNO_EXTERNALDOCLINKS     "ExternalDocLinks"
 #define SC_UNO_COLLABELRNG          "ColumnLabelRanges"
 #define SC_UNO_DATABASERNG          "DatabaseRanges"
 #define SC_UNO_NAMEDRANGES          "NamedRanges"
@@ -600,6 +601,7 @@
 #define SC_UNO_FORMULACONVENTION    "FormulaConvention"
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
 #define SC_UNO_OPCODEMAP            "OpCodeMap"
+#define SC_UNO_EXTERNALLINKS        "ExternalLinks"
 
 // Chart2
 #define SC_UNONAME_ISHIDDEN         "IsHidden"

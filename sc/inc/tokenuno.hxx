@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenuno.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.130.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +38,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
-#ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
-#endif
+#include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include "address.hxx"
@@ -54,9 +53,11 @@ class ScTokenConversion
 {
 public:
     static bool ConvertToTokenArray(
+                        ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
                         const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence );
     static bool ConvertToTokenSequence(
+                        ScDocument& rDoc,
                         com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray );
 };
@@ -70,6 +71,7 @@ class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::FormulaOpCodeMapEntry > maOpCodeMapping;
+    ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
     ScAddress           maRefPos;

@@ -302,6 +302,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Insert Array Formula" ;
     };
+    String STR_UNDO_INSERTNOTE
+    {
+        Text [ en-US ] = "Insert Note" ;
+    };
+    String STR_UNDO_DELETENOTE
+    {
+        Text [ en-US ] = "Delete Note" ;
+    };
     String STR_UNDO_SHOWNOTE
     {
         Text [ en-US ] = "Show Note" ;

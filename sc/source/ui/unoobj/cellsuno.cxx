@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsuno.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.113.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5175,7 +5175,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens() thr
                 {
                     ScTokenArray* pTokenArray = pFCell1->GetCode();
                     if ( pTokenArray )
-                        (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+                        (void)ScTokenConversion::ConvertToTokenSequence( *pDoc, aSequence, *pTokenArray );
                 }
             }
         }
@@ -5197,8 +5197,9 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
                 throw uno::RuntimeException();
             }
 
+            ScDocument* pDoc = pDocSh->GetDocument();
             ScTokenArray aTokenArray;
-            (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
+            (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, rTokens );
 
             // Actually GRAM_PODF_A1 is a don't-care here because of the token
             // array being set, it fits with other API compatibility grammars
@@ -6596,7 +6597,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens() throw(uno::Ru
         {
             ScTokenArray* pTokenArray = static_cast<ScFormulaCell*>(pCell)->GetCode();
             if ( pTokenArray )
-                (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+                (void)ScTokenConversion::ConvertToTokenSequence( *pDoc, aSequence, *pTokenArray );
         }
     }
     return aSequence;
@@ -6610,7 +6611,7 @@ void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rT
     {
         ScDocument* pDoc = pDocSh->GetDocument();
         ScTokenArray aTokenArray;
-        (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
+        (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, rTokens );
 
         ScDocFunc aFunc( *pDocSh );
         ScBaseCell* pNewCell = new ScFormulaCell( pDoc, aCellPos, &aTokenArray );

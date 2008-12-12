@@ -123,6 +123,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/excrecds.obj				\
         $(SLO)$/expop2.obj					\
         $(SLO)$/namebuff.obj				\
+        $(SLO)$/tokstack.obj				\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xeescher.obj				\
         $(SLO)$/xeformula.obj				\

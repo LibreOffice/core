@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkuno.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.134.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,9 @@
 #include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XDDELinks.hpp>
+#include <com/sun/star/sheet/XExternalDocLink.hpp>
+#include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <com/sun/star/sheet/XExternalSheetCache.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
@@ -45,10 +48,15 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 
+#include "externalrefmgr.hxx"
+
+#include <hash_map>
+#include <vector>
 
 class ScAreaLink;
 class ScDocShell;
@@ -493,8 +501,137 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+// ============================================================================
 
+class ScExternalSheetCacheObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalSheetCache >
+{
+public:
+    explicit ScExternalSheetCacheObj(ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
+    ~ScExternalSheetCacheObj();
 
+                            // XExternalSheetCache
+    virtual void SAL_CALL setCellValue(
+        sal_Int32 nCol, sal_Int32 nRow, const ::com::sun::star::uno::Any& rAny)
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getCellValue(sal_Int32 nCol, sal_Int32 nRow)
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getAllRows()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getAllColumns(sal_Int32 nRow)
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // Attributes
+    virtual sal_Int32 SAL_CALL getTokenIndex()
+            throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    ScExternalSheetCacheObj();
+    ScExternalSheetCacheObj(const ScExternalSheetCacheObj&);
+
+private:
+    ScExternalRefCache::TableTypeRef mpTable;
+    size_t mnIndex;
+};
+
+// ============================================================================
+
+class ScExternalDocLinkObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLink >
+{
+public:
+    ScExternalDocLinkObj(ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
+    ~ScExternalDocLinkObj();
+
+                            // XExternalDocLink
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
+        SAL_CALL addSheetCache( const ::rtl::OUString& aSheetName )
+            throw (::com::sun::star::uno::RuntimeException);
+
+                            // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+    // Attributes
+    virtual sal_Int32 SAL_CALL getTokenIndex()
+            throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    ScExternalRefManager*   mpRefMgr;
+    sal_uInt16              mnFileId;
+};
+
+// ============================================================================
+
+/** This is the UNO API equivalent of ScExternalRefManager. */
+class ScExternalDocLinksObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLinks >
+{
+public:
+    ScExternalDocLinksObj(ScDocShell* pDocShell);
+    ~ScExternalDocLinksObj();
+
+                            // XExternalDocLinks
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLink >
+        SAL_CALL addDocLink( const ::rtl::OUString& aDocName )
+            throw (::com::sun::star::uno::RuntimeException);
+
+                            // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ScExternalDocLinksObj();
+    ScExternalDocLinksObj(const ScExternalDocLinksObj&);
+
+private:
+    ScDocShell*                         mpDocShell;
+    ScExternalRefManager*               mpRefMgr;
+};
 
 #endif
 

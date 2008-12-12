@@ -40,7 +40,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <vector>
 #include "xmlsubti.hxx"
 #include "global.hxx"
 #include "grammar.hxx"
@@ -55,11 +54,12 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
+#include <vector>
+#include <hash_map>
+
 class ScRangeList;
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
-
-using namespace rtl;
 
 enum ScXMLDocTokens
 {
@@ -642,6 +642,9 @@ class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
+    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >  CellTypeMap;
+    CellTypeMap             aCellTypeMap;
+
     ScDocument*             pDoc;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
@@ -809,6 +812,8 @@ public:
 
     sal_Bool IsLatinDefaultStyle() const  { return bLatinDefaultStyle; }
 
+    sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
+
 //  SvI18NMap& GetI18NMap() { return *pI18NMap; }
 
 //  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
@@ -848,7 +853,7 @@ public:
     const SvXMLTokenMap& GetTableRowElemTokenMap();
     const SvXMLTokenMap& GetTableRowAttrTokenMap();
     const SvXMLTokenMap& GetTableRowCellElemTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
+    const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
     const SvXMLTokenMap& GetTableAnnotationAttrTokenMap();
     const SvXMLTokenMap& GetDetectiveElemTokenMap();
     const SvXMLTokenMap& GetDetectiveHighlightedAttrTokenMap();

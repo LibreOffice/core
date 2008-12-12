@@ -49,7 +49,7 @@
 #include "editutil.hxx"
 #include "chgtrack.hxx"
 #include "indexmap.hxx"
-
+#include "externalrefmgr.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -757,6 +757,17 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
 
         delete pOld;
+    }
+
+    pCode->Reset();
+    for ( ScToken* t = pCode->GetNextReferenceOrName(); t; t = pCode->GetNextReferenceOrName() )
+    {
+        StackVar sv = t->GetType();
+        if (sv == svExternalSingleRef || sv == svExternalDoubleRef || sv == svExternalName)
+        {
+            pDocument->GetExternalRefManager()->updateRefCell(aOldPos, aPos, eUpdateRefMode == URM_COPY);
+            break;
+        }
     }
 }
 

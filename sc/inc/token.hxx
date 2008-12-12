@@ -64,7 +64,9 @@ enum StackVarEnum
                                         // cell during import, having a double
                                         // and/or string result and a formula
                                         // string to be compiled.
-
+    svExternalSingleRef,
+    svExternalDoubleRef,
+    svExternalName,
     svError,                            // error token
     svMissing = 0x70,                   // 0 or ""
     svSep,                              // separator, ocSep, ocOpen, ocClose
@@ -444,6 +446,69 @@ public:
                                     ScOpToken( r ), nIndex( r.nIndex ) {}
     virtual USHORT              GetIndex() const;
     virtual void                SetIndex( USHORT n );
+    virtual BOOL                operator==( const ScToken& rToken ) const;
+};
+
+
+class ScExternalSingleRefToken : public ScOpToken
+{
+private:
+    sal_uInt16                  mnFileId;
+    String                      maTabName;
+    SingleRefData               maSingleRef;
+
+                                ScExternalSingleRefToken(); // disabled
+public:
+                                ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& r );
+                                ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
+    virtual                     ~ScExternalSingleRefToken();
+
+    virtual USHORT                  GetIndex() const;
+    virtual const String&           GetString() const;
+    virtual const SingleRefData&    GetSingleRef() const;
+    virtual SingleRefData&          GetSingleRef();
+    virtual BOOL                    operator==( const ScToken& rToken ) const;
+};
+
+
+class ScExternalDoubleRefToken : public ScOpToken
+{
+private:
+    sal_uInt16                  mnFileId;
+    String                      maTabName;  // name of the first sheet
+    ComplRefData                maDoubleRef;
+
+                                ScExternalDoubleRefToken(); // disabled
+public:
+                                ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& r );
+                                ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
+    virtual                     ~ScExternalDoubleRefToken();
+
+    virtual USHORT                 GetIndex() const;
+    virtual const String&          GetString() const;
+    virtual const SingleRefData&   GetSingleRef() const;
+    virtual SingleRefData&         GetSingleRef();
+    virtual const SingleRefData&   GetSingleRef2() const;
+    virtual SingleRefData&         GetSingleRef2();
+    virtual const ComplRefData&    GetDoubleRef() const;
+    virtual ComplRefData&          GetDoubleRef();
+    virtual BOOL                    operator==( const ScToken& rToken ) const;
+};
+
+
+class ScExternalNameToken : public ScOpToken
+{
+private:
+    sal_uInt16                  mnFileId;
+    String                      maName;
+private:
+                                ScExternalNameToken(); // disabled
+public:
+                                ScExternalNameToken( sal_uInt16 nFileId, const String& rName );
+                                ScExternalNameToken( const ScExternalNameToken& r );
+    virtual                     ~ScExternalNameToken();
+    virtual USHORT              GetIndex() const;
+    virtual const String&       GetString() const;
     virtual BOOL                operator==( const ScToken& rToken ) const;
 };
 

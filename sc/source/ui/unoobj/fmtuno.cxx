@@ -197,14 +197,14 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         if ( aData.maTokens1.getLength() )
         {
             ScTokenArray aTokenArray;
-            if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aData.maTokens1) )
+            if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens1) )
                 aCoreEntry.SetFormula1(aTokenArray);
         }
 
         if ( aData.maTokens2.getLength() )
         {
             ScTokenArray aTokenArray;
-            if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aData.maTokens2) )
+            if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens2) )
                 aCoreEntry.SetFormula2(aTokenArray);
         }
         rFormat.AddEntry( aCoreEntry );
@@ -660,14 +660,14 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     if ( aTokens1.getLength() )
     {
         ScTokenArray aTokenArray;
-        if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aTokens1) )
+        if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens1) )
             pRet->SetFormula1(aTokenArray);
     }
 
     if ( aTokens2.getLength() )
     {
         ScTokenArray aTokenArray;
-        if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aTokens2) )
+        if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens2) )
             pRet->SetFormula2(aTokenArray);
     }
 

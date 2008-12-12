@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr4.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.57.92.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,7 @@
 #include "addinlis.hxx"
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
+#include "externalrefmgr.hxx"
 
 #include <math.h>
 #include <float.h>
@@ -2911,6 +2912,82 @@ void ScInterpreter::ScColRowNameAuto()
         PushError( errNoRef );
 }
 
+void ScInterpreter::ScExternalRef()
+{
+    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
+    const String* pFile = pRefMgr->getExternalFileName(pCur->GetIndex());
+    if (!pFile)
+        PushError(errNoName);
+
+    switch (pCur->GetType())
+    {
+        case svExternalSingleRef:
+        {
+            SingleRefData aData(pCur->GetSingleRef());
+            if (aData.IsTabRel())
+            {
+                DBG_ERROR("ScCompiler::GetToken: external single reference must have an absolute table reference!");
+                break;
+            }
+
+            aData.CalcAbsIfRel(aPos);
+            ScAddress aAddr(aData.nCol, aData.nRow, aData.nTab);
+            ScExternalRefCache::CellFormat aFmt;
+            ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
+                pCur->GetIndex(), pCur->GetString(), aAddr, &aPos, NULL, &aFmt);
+
+            if (!xNew)
+                break;
+
+            PushTempToken( *xNew);      // push a clone
+
+            if (aFmt.mbIsSet)
+            {
+                nFuncFmtType = aFmt.mnType;
+                nFuncFmtIndex = aFmt.mnIndex;
+            }
+            return;
+        }
+        //break;    // unreachable, prevent compiler warning
+        case svExternalDoubleRef:
+        {
+            ComplRefData aData(pCur->GetDoubleRef());
+            if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
+            {
+                DBG_ERROR("ScCompiler::GetToken: external double reference must have an absolute table reference!");
+                break;
+            }
+
+            aData.CalcAbsIfRel(aPos);
+            ScRange aRange(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab,
+                           aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
+            ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getDoubleRefTokens(
+                pCur->GetIndex(), pCur->GetString(), aRange, &aPos);
+
+            if (!xNew)
+                break;
+
+            ScToken* p = xNew->First();
+            if (p->GetType() != svMatrix)
+                break;
+
+            if (xNew->Next())
+            {
+                // Can't handle more than one matrix per parameter.
+                SetError( errIllegalArgument);
+                break;
+            }
+
+            PushMatrix(p->GetMatrix());
+            return;
+        }
+        //break;    // unreachable, prevent compiler warning
+        default:
+            ;
+    }
+    PushError(errNoRef);
+}
+
 // --- internals ------------------------------------------------------------
 
 
@@ -3343,6 +3420,7 @@ StackVar ScInterpreter::Interpret()
                 case ocDBArea           : ScDBArea();                   break;
                 case ocColRowNameAuto   : ScColRowNameAuto();           break;
 // separated    case ocPush             : Push( (ScToken&) *pCur );     break;
+                case ocExternalRef      : ScExternalRef();              break;
                 case ocIf               : ScIfJump();                   break;
                 case ocChose            : ScChoseJump();                break;
                 case ocAdd              : ScAdd();                      break;

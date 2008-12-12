@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpre.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -505,6 +505,7 @@ BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
+void ScExternalRef();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();

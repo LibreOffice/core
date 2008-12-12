@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLDDELinksContext.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 

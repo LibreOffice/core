@@ -116,6 +116,7 @@ struct SingleRefData        // Single reference (one address) into the sheet
 //UNUSED2008-05  BYTE CreateStoreByteFromFlags() const;
 //UNUSED2008-05  void CreateFlagsFromLoadByte( BYTE );
             BOOL operator==( const SingleRefData& ) const;
+            bool operator!=( const SingleRefData& ) const;
 };
 
 inline void SingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )

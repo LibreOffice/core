@@ -44,6 +44,14 @@
 #endif
 #include "scdllapi.h"
 
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace sheet {
+        struct ExternalLinkInfo;
+    }
+}}}
+
 class ScDocument;
 
 // The typedefs
@@ -284,6 +292,15 @@ public:
     };
     static const Details detailsOOOa1;
 
+    struct ExternalInfo
+    {
+        String      maTabName;
+        sal_uInt16  mnFileId;
+        bool        mbExternal;
+
+        inline ExternalInfo() : mnFileId(0), mbExternal(false) {}
+    };
+
     inline ScAddress() : nRow(0), nCol(0), nTab(0) {}
     inline ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
         : nRow(nRowP), nCol(nColP), nTab(nTabP)
@@ -315,7 +332,11 @@ public:
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
     USHORT Parse( const String&, ScDocument* = NULL,
-                  const Details& rDetails = detailsOOOa1);
+                  const Details& rDetails = detailsOOOa1,
+                  ExternalInfo* pExtInfo = NULL,
+                  const ::com::sun::star::uno::Sequence<
+                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+
     void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
@@ -457,13 +478,44 @@ public:
     inline bool In( const ScRange& ) const;     // is Range& in Range?
 
     USHORT Parse( const String&, ScDocument* = NULL,
-                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                  ScAddress::ExternalInfo* pExtInfo = NULL,
+                  const ::com::sun::star::uno::Sequence<
+                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+
     USHORT ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     USHORT ParseCols( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     USHORT ParseRows( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+
+    /** Parse an Excel style reference up to and including the sheet name
+        separator '!', including detection of external documents and sheet
+        names, and in case of MOOXML import the bracketed index is used to
+        determine the actual document name passed in pExternalLinks. For
+        internal references (resulting rExternDocName empty), aStart.nTab and
+        aEnd.nTab are set, or -1 if sheet name not found.
+        @param bOnlyAcceptSingle  If <TRUE/>, a 3D reference (Sheet1:Sheet2)
+            encountered results in an error (NULL returned).
+        @param pExternalLinks  pointer to ExternalLinkInfo sequence, may be
+            NULL for non-filter usage, in which case indices such as [1] are
+            not resolved.
+        @returns
+            Pointer to the position after '!' if successfully parsed, and
+            rExternDocName, rStartTabName and/or rEndTabName filled if
+            applicable. SCA_... flags set in nFlags.
+            Or if no valid document and/or sheet header could be parsed the start
+            position passed with pString.
+            Or NULL if a 3D sheet header could be parsed but
+            bOnlyAcceptSingle==true was given.
+     */
+    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDoc,
+            String& rExternDocName, String& rStartTabName, String& rEndTabName, USHORT& nFlags,
+            bool bOnlyAcceptSingle,
+            const ::com::sun::star::uno::Sequence<
+                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+
     void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 

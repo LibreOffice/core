@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyli.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.63.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -584,28 +584,10 @@ void XMLTableStyleContext::FillPropertySet(
                 AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, GetParentName() )));
                 bParentSet = sal_True;
             }
-            if ((nNumberFormat == -1) && sDataStyleName.getLength())
-            {
-                SvXMLNumFormatContext* pStyle((SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
-                if (!pStyle)
-                {
-                    XMLTableStylesContext* pMyStyles((XMLTableStylesContext *)GetScImport().GetStyles());
-                    if (pMyStyles)
-                        pStyle = (SvXMLNumFormatContext *)pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
-                    else
-                    {
-                        DBG_ERROR("not possible to get style");
-                    }
-                }
-                if (pStyle)
-                {
-                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
-                    nNumberFormat = pStyle->GetKey();
-                    AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumberFormat));
-                }
-            }
+            sal_Int32 nNumFmt = GetNumberFormat();
+            if (nNumFmt >= 0)
+                AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
+
             if (!bConditionalFormatCreated && (aMaps.size() > 0))
             {
                 aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
@@ -681,6 +663,30 @@ XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
         }
     }
     return pRet;
+}
+
+sal_Int32 XMLTableStyleContext::GetNumberFormat()
+{
+    if (nNumberFormat < 0 && sDataStyleName.getLength())
+    {
+        const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext*>(
+            pStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
+
+        if (!pStyle)
+        {
+            XMLTableStylesContext* pMyStyles = static_cast<XMLTableStylesContext*>(GetScImport().GetStyles());
+            if (pMyStyles)
+                pStyle = static_cast<const SvXMLNumFormatContext*>(
+                    pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
+            else
+            {
+                DBG_ERROR("not possible to get style");
+            }
+        }
+        if (pStyle)
+            nNumberFormat = const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey();
+    }
+    return nNumberFormat;
 }
 
 // ----------------------------------------------------------------------------

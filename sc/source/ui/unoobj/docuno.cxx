@@ -120,6 +120,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0, 0},
         {MAP_CHAR_LEN(SC_UNO_DDELINKS),          0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),        0, &getCppuType((sal_Int16*)0),                              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_EXTERNALDOCLINKS),  0, &getCppuType((uno::Reference<sheet::XExternalDocLinks>*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),         0, &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_HASDRAWPAGES),      0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_IGNORECASE),        0, &getBooleanCppuType(),                                    0, 0},
@@ -1508,6 +1509,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_DDELINKS ) )
         {
             aRet <<= uno::Reference<container::XNameAccess>(new ScDDELinksObj( pDocShell ));
+        }
+        else if ( aString.EqualsAscii( SC_UNO_EXTERNALDOCLINKS ) )
+        {
+            aRet <<= uno::Reference<sheet::XExternalDocLinks>(new ScExternalDocLinksObj(pDocShell));
         }
         else if ( aString.EqualsAscii( SC_UNO_SHEETLINKS ) )
         {

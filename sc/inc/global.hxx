@@ -653,11 +653,36 @@ SC_DLLPUBLIC    static void             AddToken(
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */
-SC_DLLPUBLIC    static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '"' );
-    /** Inserts the character cQuote at beginning and end of rString. */
-SC_DLLPUBLIC    static void             AddQuotes( String& rString, sal_Unicode cQuote = '"' );
-    /** Erases the character cQuote from rString, if it exists at beginning AND end. */
-SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '"' );
+SC_DLLPUBLIC    static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '\'' );
+
+    /** Inserts the character cQuote at beginning and end of rString.
+        @param bEscapeEmbedded      If <TRUE/>, embedded quote characters are
+                                    escaped by doubling them.
+     */
+SC_DLLPUBLIC    static void             AddQuotes( String& rString, sal_Unicode cQuote = '\'', bool bEscapeEmbedded = true );
+
+    /** Erases the character cQuote from rString, if it exists at beginning AND end.
+        @param bUnescapeEmbedded    If <TRUE/>, embedded doubled quote characters
+                                    are unescaped by replacing them with a
+                                    single instance.
+     */
+SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '\'', bool bUnescapeEmbedded = true );
+
+    /** Finds an unquoted instance of cChar in rString, starting at
+        offset nStart. Unquoted instances may occur when concatenating two
+        quoted strings with a separator, for example, 's1':'s2'. Embedded
+        quotes have to be escaped by being doubled. Caller must ensure that
+        nStart points into an unquoted range or the opening quote. Specialty:
+        if cChar==cQuote the first cQuote character from nStart on is found.
+        @returns offset if found, else STRING_NOTFOUND
+     */
+SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const String& rString, sal_Unicode cChar, xub_StrLen nStart = 0, sal_Unicode cQuote = '\'' );
+
+    /** Finds an unquoted instance of cChar in null-terminated pString. Same
+        semantics as FindUnquoted( const String&, ...)
+        @returns: pointer to cChar if found, else NULL
+     */
+SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
 
 
     static  CharSet         GetCharsetValue( const String& rCharSet );

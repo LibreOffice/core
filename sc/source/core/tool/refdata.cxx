@@ -199,6 +199,10 @@ BOOL SingleRefData::operator==( const SingleRefData& r ) const
         (Flags.bTabRel ? nRelTab == r.nRelTab : nTab == r.nTab);
 }
 
+bool SingleRefData::operator!=( const SingleRefData& r ) const
+{
+    return !operator==(r);
+}
 
 static void lcl_putInOrder( SingleRefData & rRef1, SingleRefData & rRef2 )
 {

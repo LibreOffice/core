@@ -194,6 +194,9 @@ public:
     ScToken* AddDoubleReference( const ComplRefData& rRef );
     ScToken* AddName( USHORT n );
     ScToken* AddMatrix( ScMatrix* p );
+    ScToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
+    ScToken* AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );
+    ScToken* AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef );
     ScToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */

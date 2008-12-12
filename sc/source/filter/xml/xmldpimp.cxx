@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmldpimp.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 

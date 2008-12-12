@@ -104,6 +104,7 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using ::rtl::OUString;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
@@ -417,27 +418,25 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-#if 0 // apparently not used - 2008-08-15 (Friday)
 static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                      XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
-    { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME,         XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED,             XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS            },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED,          XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS            },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED,   XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS     },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED,      XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS     },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,         XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED                },
-    { XML_NAMESPACE_TABLE, XML_VALUE_TYPE,                      XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE              },
-    { XML_NAMESPACE_TABLE, XML_VALUE,                           XML_TOK_TABLE_ROW_CELL_ATTR_VALUE                   },
-    { XML_NAMESPACE_TABLE, XML_DATE_VALUE,                      XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE              },
-    { XML_NAMESPACE_TABLE, XML_TIME_VALUE,                      XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE              },
-    { XML_NAMESPACE_TABLE, XML_STRING_VALUE,                    XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE            },
-    { XML_NAMESPACE_TABLE, XML_BOOLEAN_VALUE,                   XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE           },
-    { XML_NAMESPACE_TABLE, XML_FORMULA,                         XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA                 },
-    { XML_NAMESPACE_TABLE, XML_CURRENCY,                        XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY                },
+    { XML_NAMESPACE_TABLE,  XML_STYLE_NAME,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
+    { XML_NAMESPACE_TABLE,  XML_CONTENT_VALIDATION_NAME,        XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME },
+    { XML_NAMESPACE_TABLE,  XML_NUMBER_ROWS_SPANNED,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS            },
+    { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_SPANNED,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS            },
+    { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_COLUMNS_SPANNED,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS     },
+    { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_ROWS_SPANNED,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS     },
+    { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED                },
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE              },
+    { XML_NAMESPACE_OFFICE, XML_VALUE,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE                   },
+    { XML_NAMESPACE_OFFICE, XML_DATE_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE              },
+    { XML_NAMESPACE_OFFICE, XML_TIME_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE              },
+    { XML_NAMESPACE_OFFICE, XML_STRING_VALUE,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE            },
+    { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE           },
+    { XML_NAMESPACE_TABLE,  XML_FORMULA,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA                 },
+    { XML_NAMESPACE_OFFICE, XML_CURRENCY,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY                },
     XML_TOKEN_MAP_END
 };
-#endif
 
 static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
 {
@@ -1120,12 +1119,12 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
     return *pTableRowCellElemTokenMap;
 }
 
-//UNUSED2008-05  const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( !pTableRowCellAttrTokenMap )
-//UNUSED2008-05          pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
-//UNUSED2008-05      return *pTableRowCellAttrTokenMap;
-//UNUSED2008-05  }
+const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
+{
+    if ( !pTableRowCellAttrTokenMap )
+        pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
+    return *pTableRowCellAttrTokenMap;
+}
 
 const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
 {
@@ -1564,6 +1563,25 @@ ScXMLImport::ScXMLImport(
         GetXMLToken( XML_NP_PRESENTATION ),
         GetXMLToken( XML_N_PRESENTATION ),
         XML_NAMESPACE_PRESENTATION );
+
+    // initialize cell type map.
+    const struct { XMLTokenEnum  _token; sal_Int16 _type; } aCellTypePairs[] =
+    {
+        { XML_FLOAT,        util::NumberFormat::NUMBER },
+        { XML_STRING,       util::NumberFormat::TEXT },
+        { XML_TIME,         util::NumberFormat::TIME },
+        { XML_DATE,         util::NumberFormat::DATETIME },
+        { XML_PERCENTAGE,   util::NumberFormat::PERCENT },
+        { XML_CURRENCY,     util::NumberFormat::CURRENCY },
+        { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
+    };
+    size_t n = sizeof(aCellTypePairs)/sizeof(aCellTypePairs[0]);
+    for (size_t i = 0; i < n; ++i)
+    {
+        aCellTypeMap.insert(
+            CellTypeMap::value_type(
+                GetXMLToken(aCellTypePairs[i]._token), aCellTypePairs[i]._type));
+    }
 }
 
 ScXMLImport::~ScXMLImport() throw()
@@ -1778,6 +1796,15 @@ void ScXMLImport::SetStatistics(
         GetProgressBarHelper()->SetReference(nCount);
         GetProgressBarHelper()->SetValue(0);
     }
+}
+
+sal_Int16 ScXMLImport::GetCellType(const OUString& rStrValue) const
+{
+    CellTypeMap::const_iterator itr = aCellTypeMap.find(rStrValue);
+    if (itr != aCellTypeMap.end())
+        return itr->second;
+
+    return util::NumberFormat::UNDEFINED;
 }
 
 XMLShapeImportHelper* ScXMLImport::CreateShapeImport()

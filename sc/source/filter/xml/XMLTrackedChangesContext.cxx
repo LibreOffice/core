@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTrackedChangesContext.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
 

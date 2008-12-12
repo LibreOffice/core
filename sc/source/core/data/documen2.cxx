@@ -93,6 +93,7 @@
 #include "listenercalls.hxx"
 #include "recursionhelper.hxx"
 #include "lookupcache.hxx"
+#include "externalrefmgr.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -150,6 +151,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pChangeViewSettings( NULL ),
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
+        pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
         pExtDocOptions( NULL ),
@@ -379,6 +381,11 @@ ScDocument::~ScDocument()
         if ( pLinkManager->GetLinks().Count() )
             pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
     }
+
+    if (pExternalRefMgr.get())
+        // Destroy the external ref mgr instance here because it has a timer
+        // which needs to be stopped before the app closes.
+        pExternalRefMgr.reset(NULL);
 
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
@@ -798,6 +805,10 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 if (pDrawLayer)
                     DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
+                // Update cells containing external references.
+                if (pExternalRefMgr.get())
+                    pExternalRefMgr->updateRefMoveTable(nOldPos, nNewPos, false);
+
                 bValid = TRUE;
             }
         }
@@ -919,6 +930,10 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
+
+        // Update cells containing external references.
+        if (pExternalRefMgr.get())
+            pExternalRefMgr->updateRefMoveTable(nOldPos, nNewPos, true);
     }
     else
         SetAutoCalc( bOldAutoCalc );

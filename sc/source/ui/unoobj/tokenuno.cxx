@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenuno.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.108.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include "tokenuno.hxx"
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
+#include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svtools/itemprop.hxx>
 
-#include "tokenuno.hxx"
 #include "miscuno.hxx"
 #include "convuno.hxx"
 #include "unonames.hxx"
@@ -48,6 +49,7 @@
 #include "tokenarray.hxx"
 #include "docsh.hxx"
 #include "rangeseq.hxx"
+#include "externalrefmgr.hxx"
 
 using namespace com::sun::star;
 
@@ -123,6 +125,8 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         eConv = aConvMap[mnConv];
 
     rCompiler.SetRefConvention( eConv );
+
+    rCompiler.SetExternalLinks( maExternalLinks);
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( const rtl::OUString& aFormula )
@@ -138,7 +142,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( co
         SetCompilerFlags( aCompiler );
 
         ScTokenArray* pCode = aCompiler.CompileString( aFormula );
-        (void)ScTokenConversion::ConvertToTokenSequence( aRet, *pCode );
+        (void)ScTokenConversion::ConvertToTokenSequence( *pDoc, aRet, *pCode );
         delete pCode;
     }
 
@@ -155,7 +159,7 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula( const uno::Sequence<she
     {
         ScDocument* pDoc = mpDocShell->GetDocument();
         ScTokenArray aCode;
-        (void)ScTokenConversion::ConvertToTokenArray( aCode, aTokens );
+        (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aCode, aTokens );
         ScCompiler aCompiler( pDoc, maRefPos, aCode, pDoc->GetGrammar() );
         SetCompilerFlags( aCompiler );
 
@@ -220,6 +224,11 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         else
             throw lang::IllegalArgumentException();
     }
+    else if ( aString.EqualsAscii( SC_UNO_EXTERNALLINKS ) )
+    {
+        if (!(aValue >>= maExternalLinks))
+            throw lang::IllegalArgumentException();
+    }
     else
         throw beans::UnknownPropertyException();
 }
@@ -253,6 +262,10 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
     {
         aRet <<= maOpCodeMapping;
     }
+    else if ( aString.EqualsAscii( SC_UNO_EXTERNALLINKS ) )
+    {
+        aRet <<= maExternalLinks;
+    }
     else
         throw beans::UnknownPropertyException();
     return aRet;
@@ -261,6 +274,27 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
 //------------------------------------------------------------------------
+
+void lcl_ExternalRefToCalc( SingleRefData& rRef, const sheet::SingleReference& rAPI )
+{
+    rRef.InitFlags();
+
+    rRef.nCol    = static_cast<SCsCOL>(rAPI.Column);
+    rRef.nRow    = static_cast<SCsROW>(rAPI.Row);
+    rRef.nTab    = 0;
+    rRef.nRelCol = static_cast<SCsCOL>(rAPI.RelativeColumn);
+    rRef.nRelRow = static_cast<SCsROW>(rAPI.RelativeRow);
+    rRef.nRelTab = 0;
+
+    rRef.SetColRel(     ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_RELATIVE ) != 0 );
+    rRef.SetRowRel(     ( rAPI.Flags & sheet::ReferenceFlags::ROW_RELATIVE    ) != 0 );
+    rRef.SetTabRel(     false );    // sheet index must be absolute for external refs
+    rRef.SetColDeleted( ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_DELETED  ) != 0 );
+    rRef.SetRowDeleted( ( rAPI.Flags & sheet::ReferenceFlags::ROW_DELETED     ) != 0 );
+    rRef.SetTabDeleted( false );    // sheet must not be deleted for external refs
+    rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
+    rRef.SetRelName(    false );
+}
 
 void lcl_SingleRefToCalc( SingleRefData& rRef, const sheet::SingleReference& rAPI )
 {
@@ -281,6 +315,25 @@ void lcl_SingleRefToCalc( SingleRefData& rRef, const sheet::SingleReference& rAP
     rRef.SetTabDeleted( ( rAPI.Flags & sheet::ReferenceFlags::SHEET_DELETED   ) != 0 );
     rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
     rRef.SetRelName(    ( rAPI.Flags & sheet::ReferenceFlags::RELATIVE_NAME   ) != 0 );
+}
+
+void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const SingleRefData& rRef )
+{
+    rAPI.Column         = rRef.nCol;
+    rAPI.Row            = rRef.nRow;
+    rAPI.Sheet          = 0;
+    rAPI.RelativeColumn = rRef.nRelCol;
+    rAPI.RelativeRow    = rRef.nRelRow;
+    rAPI.RelativeSheet  = 0;
+
+    sal_Int32 nFlags = 0;
+    if ( rRef.IsColRel() )     nFlags |= sheet::ReferenceFlags::COLUMN_RELATIVE;
+    if ( rRef.IsRowRel() )     nFlags |= sheet::ReferenceFlags::ROW_RELATIVE;
+    if ( rRef.IsColDeleted() ) nFlags |= sheet::ReferenceFlags::COLUMN_DELETED;
+    if ( rRef.IsRowDeleted() ) nFlags |= sheet::ReferenceFlags::ROW_DELETED;
+    if ( rRef.IsFlag3D() )     nFlags |= sheet::ReferenceFlags::SHEET_3D;
+    if ( rRef.IsRelName() )    nFlags |= sheet::ReferenceFlags::RELATIVE_NAME;
+    rAPI.Flags = nFlags;
 }
 
 void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const SingleRefData& rRef )
@@ -305,8 +358,8 @@ void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const SingleRefData& rRef
 }
 
 // static
-bool ScTokenConversion::ConvertToTokenArray( ScTokenArray& rTokenArray,
-                        const uno::Sequence<sheet::FormulaToken>& rSequence )
+bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
+        ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
 {
     bool bError = false;
     sal_Int32 nCount = rSequence.getLength();
@@ -384,6 +437,61 @@ bool ScTokenConversion::ConvertToTokenArray( ScTokenArray& rTokenArray,
                         else
                             bError = true;
                     }
+                    else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
+                    {
+                        sheet::ExternalReference aApiExtRef;
+                        if( (eOpCode == ocPush) && (rAPI.Data >>= aApiExtRef) && (0 <= aApiExtRef.Index) && (aApiExtRef.Index <= SAL_MAX_UINT16) )
+                        {
+                            sal_uInt16 nFileId = static_cast< sal_uInt16 >( aApiExtRef.Index );
+                            sheet::SingleReference aApiSRef;
+                            sheet::ComplexReference aApiCRef;
+                            ::rtl::OUString aName;
+                            if( aApiExtRef.Reference >>= aApiSRef )
+                            {
+                                // try to resolve cache index to sheet name
+                                size_t nCacheId = static_cast< size_t >( aApiSRef.Sheet );
+                                String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
+                                if( aTabName.Len() > 0 )
+                                {
+                                    SingleRefData aSingleRef;
+                                    // convert column/row settings, set sheet index to absolute
+                                    lcl_ExternalRefToCalc( aSingleRef, aApiSRef );
+                                    rTokenArray.AddExternalSingleReference( nFileId, aTabName, aSingleRef );
+                                }
+                                else
+                                    bError = true;
+                            }
+                            else if( aApiExtRef.Reference >>= aApiCRef )
+                            {
+                                // try to resolve cache index to sheet name.
+                                size_t nCacheId = static_cast< size_t >( aApiCRef.Reference1.Sheet );
+                                String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
+                                if( aTabName.Len() > 0 )
+                                {
+                                    ComplRefData aComplRef;
+                                    // convert column/row settings, set sheet index to absolute
+                                    lcl_ExternalRefToCalc( aComplRef.Ref1, aApiCRef.Reference1 );
+                                    lcl_ExternalRefToCalc( aComplRef.Ref2, aApiCRef.Reference2 );
+                                    // NOTE: This assumes that cached sheets are in consecutive order!
+                                    aComplRef.Ref2.nTab = aComplRef.Ref1.nTab + (aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet);
+                                    rTokenArray.AddExternalDoubleReference( nFileId, aTabName, aComplRef );
+                                }
+                                else
+                                    bError = true;
+                            }
+                            else if( aApiExtRef.Reference >>= aName )
+                            {
+                                if( aName.getLength() > 0 )
+                                    rTokenArray.AddExternalName( nFileId, aName );
+                                else
+                                    bError = true;
+                            }
+                            else
+                                bError = true;
+                        }
+                        else
+                            bError = true;
+                    }
                     else
                         bError = true;      // unknown struct
                 }
@@ -414,8 +522,8 @@ bool ScTokenConversion::ConvertToTokenArray( ScTokenArray& rTokenArray,
 }
 
 // static
-bool ScTokenConversion::ConvertToTokenSequence( uno::Sequence<sheet::FormulaToken>& rSequence,
-                        const ScTokenArray& rTokenArray )
+bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
+        uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray )
 {
     bool bError = false;
 
@@ -430,7 +538,7 @@ bool ScTokenConversion::ConvertToTokenSequence( uno::Sequence<sheet::FormulaToke
             sheet::FormulaToken& rAPI = rSequence[nPos];
 
             OpCode eOpCode = rToken.GetOpCode();
-            rAPI.OpCode = static_cast<sal_Int32>(eOpCode);      //! assuming equal values for the moment
+            // eOpCode may be changed in the following switch/case
             switch ( rToken.GetType() )
             {
                 case svByte:
@@ -473,9 +581,54 @@ bool ScTokenConversion::ConvertToTokenSequence( uno::Sequence<sheet::FormulaToke
                     if (!ScRangeToSequence::FillMixedArray( rAPI.Data, rToken.GetMatrix(), true))
                         rAPI.Data.clear();
                     break;
+                case svExternalSingleRef:
+                    {
+                        sheet::SingleReference aSingleRef;
+                        lcl_ExternalRefToApi( aSingleRef, rToken.GetSingleRef() );
+                        size_t nCacheId;
+                        rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
+                        aSingleRef.Sheet = static_cast< sal_Int32 >( nCacheId );
+                        sheet::ExternalReference aExtRef;
+                        aExtRef.Index = rToken.GetIndex();
+                        aExtRef.Reference <<= aSingleRef;
+                        rAPI.Data <<= aExtRef;
+                        eOpCode = ocPush;
+                    }
+                    break;
+                case svExternalDoubleRef:
+                    {
+                        sheet::ComplexReference aComplRef;
+                        lcl_ExternalRefToApi( aComplRef.Reference1, rToken.GetSingleRef() );
+                        lcl_ExternalRefToApi( aComplRef.Reference2, rToken.GetSingleRef2() );
+                        size_t nCacheId;
+                        rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
+                        aComplRef.Reference1.Sheet = static_cast< sal_Int32 >( nCacheId );
+                        // NOTE: This assumes that cached sheets are in consecutive order!
+                        aComplRef.Reference2.Sheet = aComplRef.Reference1.Sheet + (rToken.GetSingleRef2().nTab - rToken.GetSingleRef().nTab);
+                        sheet::ExternalReference aExtRef;
+                        aExtRef.Index = rToken.GetIndex();
+                        aExtRef.Reference <<= aComplRef;
+                        rAPI.Data <<= aExtRef;
+                        eOpCode = ocPush;
+                    }
+                    break;
+                case svExternalName:
+                    {
+                        sheet::ExternalReference aExtRef;
+                        aExtRef.Index = rToken.GetIndex();
+                        aExtRef.Reference <<= ::rtl::OUString( rToken.GetString() );
+                        rAPI.Data <<= aExtRef;
+                        eOpCode = ocPush;
+                    }
+                    break;
                 default:
+                    DBG_ERROR1( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
+                case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
+                case svJump:    // occurs with ocIf, ocChose
+                case svMissing: // occurs with ocMissing
                     rAPI.Data.clear();      // no data
             }
+            rAPI.OpCode = static_cast<sal_Int32>(eOpCode);      //! assuming equal values for the moment
         }
     }
     else

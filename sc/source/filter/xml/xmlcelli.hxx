@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlcelli.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,8 +94,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
-    sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
     sal_Bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                 const sal_Int32 nCol, const sal_Int32 nRow,

@@ -54,6 +54,8 @@
 #include "parclass.hxx"
 #include "jumpmatrix.hxx"
 
+using ::std::vector;
+
 // ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
 // SubCode via ScTokenIterator Push/Pop moeglich
 IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
@@ -193,6 +195,48 @@ void ScRawToken::SetName( USHORT n )
     nRefCnt = 0;
 }
 
+void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef )
+{
+    eOp = ocExternalRef;
+    eType = svExternalSingleRef;
+    nRefCnt = 0;
+
+    extref.nFileId = nFileId;
+    extref.aRef.Ref1 =
+    extref.aRef.Ref2 = rRef;
+
+    xub_StrLen n = rTabName.Len();
+    memcpy(extref.cTabName, rTabName.GetBuffer(), n*sizeof(sal_Unicode));
+    extref.cTabName[n] = 0;
+}
+
+void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef )
+{
+    eOp = ocExternalRef;
+    eType = svExternalDoubleRef;
+    nRefCnt = 0;
+
+    extref.nFileId = nFileId;
+    extref.aRef = rRef;
+
+    xub_StrLen n = rTabName.Len();
+    memcpy(extref.cTabName, rTabName.GetBuffer(), n*sizeof(sal_Unicode));
+    extref.cTabName[n] = 0;
+}
+
+void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
+{
+    eOp = ocExternalRef;
+    eType = svExternalName;
+    nRefCnt = 0;
+
+    extname.nFileId = nFileId;
+
+    xub_StrLen n = rName.Len();
+    memcpy(extname.cName, rName.GetBuffer(), n*sizeof(sal_Unicode));
+    extname.cName[n] = 0;
+}
+
 //UNUSED2008-05  void ScRawToken::SetInt(int rVal)
 //UNUSED2008-05  {
 //UNUSED2008-05      eOp   = ocPush;
@@ -260,22 +304,38 @@ ScRawToken* ScRawToken::Clone() const
         static USHORT nOffset = lcl_ScRawTokenOffset();     // offset of sbyte
         USHORT n = nOffset;
 
-        switch( eType )
+        if (eOp == ocExternalRef)
         {
-            case svSep:         break;
-            case svByte:        n += sizeof(ScRawToken::sbyte); break;
-            case svDouble:      n += sizeof(double); break;
-            case svString:      n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
-            case svSingleRef:
-            case svDoubleRef:   n += sizeof(aRef); break;
-            case svMatrix:      n += sizeof(ScMatrix*); break;
-            case svIndex:       n += sizeof(USHORT); break;
-            case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-            case svExternal:    n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
-            default:
-                                {
-                                    DBG_ERROR1( "unknown ScRawToken::Clone() type %d", int(eType));
-                                }
+            switch (eType)
+            {
+                case svExternalSingleRef:
+                case svExternalDoubleRef: n += sizeof(extref); break;
+                case svExternalName:      n += sizeof(extname); break;
+                default:
+                {
+                    DBG_ERROR1( "unknown ScRawToken::Clone() external type %d", int(eType));
+                }
+            }
+        }
+        else
+        {
+            switch( eType )
+            {
+                case svSep:         break;
+                case svByte:        n += sizeof(ScRawToken::sbyte); break;
+                case svDouble:      n += sizeof(double); break;
+                case svString:      n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
+                case svSingleRef:
+                case svDoubleRef:   n += sizeof(aRef); break;
+                case svMatrix:      n += sizeof(ScMatrix*); break;
+                case svIndex:       n += sizeof(USHORT); break;
+                case svJump:        n += nJump[ 0 ] * 2 + 2; break;
+                case svExternal:    n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
+                default:
+                {
+                    DBG_ERROR1( "unknown ScRawToken::Clone() type %d", int(eType));
+                }
+            }
         }
         p = (ScRawToken*) new BYTE[ n ];
         memcpy( p, this, n * sizeof(BYTE) );
@@ -297,55 +357,57 @@ ScToken* ScRawToken::CreateToken() const
     {
         case svByte :
             return new ScByteToken( eOp, sbyte.cByte, sbyte.bHasForceArray );
-        //break;
         case svDouble :
             IF_NOT_OPCODE_ERROR( ocPush, ScDoubleToken);
             return new ScDoubleToken( nValue );
-        //break;
         case svString :
             if (eOp == ocPush)
                 return new ScStringToken( String( cStr ) );
             else
                 return new ScStringOpToken( eOp, String( cStr ) );
-        //break;
         case svSingleRef :
             if (eOp == ocPush)
                 return new ScSingleRefToken( aRef.Ref1 );
             else
                 return new ScSingleRefOpToken( eOp, aRef.Ref1 );
-        //break;
         case svDoubleRef :
             if (eOp == ocPush)
                 return new ScDoubleRefToken( aRef );
             else
                 return new ScDoubleRefOpToken( eOp, aRef );
-        //break;
         case svMatrix :
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
-        //break;
         case svIndex :
             return new ScIndexToken( eOp, nIndex );
-        //break;
+        case svExternalSingleRef:
+            {
+                String aTabName(extref.cTabName);
+                return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
+            }
+        case svExternalDoubleRef:
+            {
+                String aTabName(extref.cTabName);
+                return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
+            }
+        case svExternalName:
+            {
+                String aName(extname.cName);
+                return new ScExternalNameToken( extname.nFileId, aName );
+            }
         case svJump :
             return new ScJumpToken( eOp, (short*) nJump );
-        //break;
         case svExternal :
             return new ScExternalToken( eOp, sbyte.cByte, String( cStr+1 ) );
-        //break;
         case svFAP :
             return new ScFAPToken( eOp, sbyte.cByte, NULL );
-        //break;
         case svMissing :
             IF_NOT_OPCODE_ERROR( ocMissing, ScMissingToken);
             return new ScMissingToken;
-        //break;
         case svSep :
             return new ScOpToken( eOp, svSep );
-        //break;
         case svUnknown :
             return new ScUnknownToken( eOp );
-        //break;
         default:
             {
                 DBG_ERROR1( "unknown ScRawToken::CreateToken() type %d", int(GetType()));
@@ -478,68 +540,58 @@ BOOL ScToken::IsMatrixFunction() const
 
 ScToken* ScToken::Clone() const
 {
+    OpCode nOp = GetOpCode();
     switch ( GetType() )
     {
         case svByte :
             return new ScByteToken( *static_cast<const ScByteToken*>(this) );
-        //break;
         case svDouble :
             return new ScDoubleToken( *static_cast<const ScDoubleToken*>(this) );
-        //break;
         case svString :
-            if (GetOpCode() == ocPush)
+            if (nOp == ocPush)
                 return new ScStringToken( *static_cast<const ScStringToken*>(this) );
             else
                 return new ScStringOpToken( *static_cast<const ScStringOpToken*>(this) );
-        //break;
         case svSingleRef :
-            if (GetOpCode() == ocPush)
+            if (nOp == ocPush)
                 return new ScSingleRefToken( *static_cast<const ScSingleRefToken*>(this) );
             else
                 return new ScSingleRefOpToken( *static_cast<const ScSingleRefOpToken*>(this) );
-        //break;
         case svDoubleRef :
-            if (GetOpCode() == ocPush)
+            if (nOp == ocPush)
                 return new ScDoubleRefToken( *static_cast<const ScDoubleRefToken*>(this) );
             else
                 return new ScDoubleRefOpToken( *static_cast<const ScDoubleRefOpToken*>(this) );
-        //break;
         case svMatrix :
             return new ScMatrixToken( *static_cast<const ScMatrixToken*>(this) );
-        //break;
         case svIndex :
             return new ScIndexToken( *static_cast<const ScIndexToken*>(this) );
-        //break;
         case svJump :
             return new ScJumpToken( *static_cast<const ScJumpToken*>(this) );
-        //break;
         case svJumpMatrix :
             return new ScJumpMatrixToken( *static_cast<const ScJumpMatrixToken*>(this) );
-        //break;
         case svRefList :
             return new ScRefListToken( *static_cast<const ScRefListToken*>(this) );
-        //break;
         case svExternal :
             return new ScExternalToken( *static_cast<const ScExternalToken*>(this) );
-        //break;
+        case svExternalSingleRef :
+            return new ScExternalSingleRefToken( *static_cast<const ScExternalSingleRefToken*>(this) );
+        case svExternalDoubleRef :
+            return new ScExternalDoubleRefToken( *static_cast<const ScExternalDoubleRefToken*>(this) );
+        case svExternalName :
+            return new ScExternalNameToken( *static_cast<const ScExternalNameToken*>(this) );
         case svFAP :
             return new ScFAPToken( *static_cast<const ScFAPToken*>(this) );
-        //break;
         case svMissing :
             return new ScMissingToken( *static_cast<const ScMissingToken*>(this) );
-        //break;
         case svError :
             return new ScErrorToken( *static_cast<const ScErrorToken*>(this) );
-        //break;
         case svEmptyCell :
             return new ScEmptyCellToken( *static_cast<const ScEmptyCellToken*>(this) );
-        //break;
         case svSep :
             return new ScOpToken( *static_cast<const ScOpToken*>(this) );
-        //break;
         case svUnknown :
             return new ScUnknownToken( *static_cast<const ScUnknownToken*>(this) );
-        //break;
         default:
             DBG_ERROR1( "unknown ScToken::Clone() type %d", int(GetType()));
             return new ScUnknownToken( ocBad );
@@ -655,26 +707,52 @@ ScTokenRef ScToken::ExtendRangeReference( ScToken & rTok1, ScToken & rTok2,
     // Doing a RangeOp with RefList is probably utter nonsense, but Xcl
     // supports it, so do we.
     if (((p1 = &rTok1) == 0) || ((p2 = &rTok2) == 0) ||
-            ((sv1 = p1->GetType()) != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList) ||
+            ((sv1 = p1->GetType()) != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList &&
+             sv1 != svExternalSingleRef && sv1 != svExternalDoubleRef) ||
             ((sv2 = p2->GetType()) != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
         return NULL;
 
     ScTokenRef xRes;
-    if (sv1 == svSingleRef && sv2 == svSingleRef)
+    bool bExternal = (sv1 == svExternalSingleRef);
+    if ((sv1 == svSingleRef || bExternal) && sv2 == svSingleRef)
     {
         // Range references like Sheet1.A1:A2 are generalized and built by
         // first creating a DoubleRef from the first SingleRef, effectively
         // generating Sheet1.A1:A1, and then extending that with A2 as if
         // Sheet1.A1:A1:A2 was encountered, so the mechanisms to adjust the
         // references apply as well.
+
+        /* Given the current structure of external references an external
+         * reference can only be extended if the second reference does not
+         * point to a different sheet. 'file'#Sheet1.A1:A2 is ok,
+         * 'file'#Sheet1.A1:Sheet2.A2 is not. Since we can't determine from a
+         * svSingleRef whether the sheet would be different from the one given
+         * in the external reference, we have to bail out if there is any sheet
+         * specified. NOTE: Xcl does handle external 3D references as in
+         * '[file]Sheet1:Sheet2'!A1:A2
+         *
+         * FIXME: For OOo syntax be smart and remember an external singleref
+         * encountered and if followed by ocRange and singleref, create an
+         * external singleref for the second singleref. Both could then be
+         * merged here. For Xcl syntax already parse an external range
+         * reference entirely, cumbersome. */
+
+        const SingleRefData& rRef2 = p2->GetSingleRef();
+        if (bExternal && rRef2.IsFlag3D())
+            return NULL;
+
         ComplRefData aRef;
         aRef.Ref1 = aRef.Ref2 = p1->GetSingleRef();
         aRef.Ref2.SetFlag3D( false);
-        aRef.Extend( p2->GetSingleRef(), rPos);
-        xRes = new ScDoubleRefToken( aRef);
+        aRef.Extend( rRef2, rPos);
+        if (bExternal)
+            xRes = new ScExternalDoubleRefToken( p1->GetIndex(), p1->GetString(), aRef);
+        else
+            xRes = new ScDoubleRefToken( aRef);
     }
     else
     {
+        bExternal |= (sv1 == svExternalDoubleRef);
         const ScRefList* pRefList = NULL;
         if (sv1 == svDoubleRef)
         {
@@ -694,6 +772,8 @@ ScTokenRef ScToken::ExtendRangeReference( ScToken & rTok1, ScToken & rTok2,
         {
             if (!pRefList->size())
                 return NULL;
+            if (bExternal)
+                return NULL;    // external reference list not possible
             xRes = new ScDoubleRefToken( (*pRefList)[0] );
         }
         if (!xRes)
@@ -723,6 +803,18 @@ ScTokenRef ScToken::ExtendRangeReference( ScToken & rTok1, ScToken & rTok2,
                             rRef.Extend( *it, rPos);
                         }
                     }
+                    break;
+                case svExternalSingleRef:
+                    if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
+                        return NULL;    // no other sheets with external refs
+                    else
+                        rRef.Extend( pt[i]->GetSingleRef(), rPos);
+                    break;
+                case svExternalDoubleRef:
+                    if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
+                        return NULL;    // no other sheets with external refs
+                    else
+                        rRef.Extend( pt[i]->GetDoubleRef(), rPos);
                     break;
                 default:
                     ;   // nothing, prevent compiler warning
@@ -1035,6 +1127,190 @@ BOOL ScIndexToken::operator==( const ScToken& r ) const
     return ScToken::operator==( r ) && nIndex == r.GetIndex();
 }
 
+// ============================================================================
+
+ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& r ) :
+    ScOpToken(ocExternalRef, svExternalSingleRef),
+    mnFileId(nFileId),
+    maTabName(rTabName),
+    maSingleRef(r)
+{
+}
+
+ScExternalSingleRefToken::ScExternalSingleRefToken( const ScExternalSingleRefToken& r ) :
+    ScOpToken(r),
+    mnFileId(r.mnFileId),
+    maTabName(r.maTabName),
+    maSingleRef(r.maSingleRef)
+{
+}
+
+ScExternalSingleRefToken::~ScExternalSingleRefToken()
+{
+}
+
+USHORT ScExternalSingleRefToken::GetIndex() const
+{
+    return mnFileId;
+}
+
+const String& ScExternalSingleRefToken::GetString() const
+{
+    return maTabName;
+}
+
+const SingleRefData& ScExternalSingleRefToken::GetSingleRef() const
+{
+    return maSingleRef;
+}
+
+SingleRefData& ScExternalSingleRefToken::GetSingleRef()
+{
+    return maSingleRef;
+}
+
+BOOL ScExternalSingleRefToken::operator ==( const ScToken& r ) const
+{
+    if (!ScToken::operator==(r))
+        return false;
+
+    if (mnFileId != r.GetIndex())
+        return false;
+
+    if (maTabName != r.GetString())
+        return false;
+
+    return maSingleRef == r.GetSingleRef();
+}
+
+// ============================================================================
+
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& r ) :
+    ScOpToken(ocExternalRef, svExternalDoubleRef),
+    mnFileId(nFileId),
+    maTabName(rTabName),
+    maDoubleRef(r)
+{
+}
+
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r ) :
+    ScOpToken(r),
+    mnFileId(r.mnFileId),
+    maTabName(r.maTabName),
+    maDoubleRef(r.maDoubleRef)
+{
+}
+
+ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
+{
+}
+
+USHORT ScExternalDoubleRefToken::GetIndex() const
+{
+    return mnFileId;
+}
+
+const String& ScExternalDoubleRefToken::GetString() const
+{
+    return maTabName;
+}
+
+const SingleRefData& ScExternalDoubleRefToken::GetSingleRef() const
+{
+    return maDoubleRef.Ref1;
+}
+
+SingleRefData& ScExternalDoubleRefToken::GetSingleRef()
+{
+    return maDoubleRef.Ref1;
+}
+
+const SingleRefData& ScExternalDoubleRefToken::GetSingleRef2() const
+{
+    return maDoubleRef.Ref2;
+}
+
+SingleRefData& ScExternalDoubleRefToken::GetSingleRef2()
+{
+    return maDoubleRef.Ref2;
+}
+
+const ComplRefData& ScExternalDoubleRefToken::GetDoubleRef() const
+{
+    return maDoubleRef;
+}
+
+ComplRefData& ScExternalDoubleRefToken::GetDoubleRef()
+{
+    return maDoubleRef;
+}
+
+BOOL ScExternalDoubleRefToken::operator ==( const ScToken& r ) const
+{
+    if (!ScToken::operator==(r))
+        return false;
+
+    if (mnFileId != r.GetIndex())
+        return false;
+
+    if (maTabName != r.GetString())
+        return false;
+
+    return maDoubleRef == r.GetDoubleRef();
+}
+
+// ============================================================================
+
+ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const String& rName ) :
+    ScOpToken(ocExternalRef, svExternalName),
+    mnFileId(nFileId),
+    maName(rName)
+{
+}
+
+ScExternalNameToken::ScExternalNameToken( const ScExternalNameToken& r ) :
+    ScOpToken(r),
+    mnFileId(r.mnFileId),
+    maName(r.maName)
+{
+}
+
+ScExternalNameToken::~ScExternalNameToken() {}
+
+USHORT ScExternalNameToken::GetIndex() const
+{
+    return mnFileId;
+}
+
+const String& ScExternalNameToken::GetString() const
+{
+    return maName;
+}
+
+BOOL ScExternalNameToken::operator==( const ScToken& r ) const
+{
+    if ( !ScToken::operator==(r) )
+        return false;
+
+    if (mnFileId != r.GetIndex())
+        return false;
+
+    xub_StrLen nLen = maName.Len();
+    const String& rName = r.GetString();
+    if (nLen != rName.Len())
+        return false;
+
+    const sal_Unicode* p1 = maName.GetBuffer();
+    const sal_Unicode* p2 = rName.GetBuffer();
+    for (xub_StrLen j = 0; j < nLen; ++j)
+    {
+        if (p1[j] != p2[j])
+            return false;
+    }
+    return true;
+}
+
+// ============================================================================
 
 short* ScJumpToken::GetJump() const                     { return pJump; }
 BOOL ScJumpToken::operator==( const ScToken& r ) const
@@ -1193,6 +1469,8 @@ ScToken* ScTokenArray::GetNextReference()
         {
             case svSingleRef:
             case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
                 return t;
             default:
             {
@@ -1223,6 +1501,8 @@ ScToken* ScTokenArray::GetNextReferenceRPN()
         {
             case svSingleRef:
             case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
                 return t;
             default:
             {
@@ -1242,6 +1522,9 @@ ScToken* ScTokenArray::GetNextReferenceOrName()
             case svSingleRef:
             case svDoubleRef:
             case svIndex:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            case svExternalName:
                 return t;
             default:
             {
@@ -1785,10 +2068,11 @@ ScToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
     if (!pCode || !nLen)
         return NULL;
     USHORT nIdx = nLen;
-    ScToken *p1, *p2, *p3;
-    if (((p3 = PeekPrev(nIdx)) != 0) && p3->GetType() == svSingleRef &&
-            ((p2 = PeekPrev(nIdx)) != 0) && p2->GetOpCode() == ocRange &&
-            ((p1 = PeekPrev(nIdx)) != 0) && p1->GetType() == svSingleRef)
+    ScToken *p1, *p2, *p3;      // ref, ocRange, ref
+    // The actual types are checked in ExtendRangeReference().
+    if (((p3 = PeekPrev(nIdx)) != 0) &&
+            (((p2 = PeekPrev(nIdx)) != 0) && p2->GetOpCode() == ocRange) &&
+            ((p1 = PeekPrev(nIdx)) != 0))
     {
         ScTokenRef p = ScToken::ExtendRangeReference( *p1, *p3, rPos, true);
         if (p)
@@ -1891,6 +2175,21 @@ ScToken* ScTokenArray::AddExternal( const String& rStr,
 ScToken* ScTokenArray::AddMatrix( ScMatrix* p )
 {
     return Add( new ScMatrixToken( p ) );
+}
+
+ScToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName )
+{
+    return Add( new ScExternalNameToken(nFileId, rName) );
+}
+
+ScToken* ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef )
+{
+    return Add( new ScExternalSingleRefToken(nFileId, rTabName, rRef) );
+}
+
+ScToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef )
+{
+    return Add( new ScExternalDoubleRefToken(nFileId, rTabName, rRef) );
 }
 
 ScToken* ScTokenArray::AddColRowName( const SingleRefData& rRef )

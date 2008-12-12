@@ -92,6 +92,7 @@ class ScDocOptions;
 class ScDocumentPool;
 class ScDrawLayer;
 class ScExtDocOptions;
+class ScExternalRefManager;
 class ScFormulaCell;
 class ScMarkData;
 class ScOutlineTable;
@@ -282,6 +283,8 @@ private:
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
     com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
+
+    ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
     String              aDocName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
@@ -602,14 +605,11 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                     const String& aFileName,
                                     const String& aTabName );
 
-    /** Creates a new sheet, and makes it linked to the specified sheet in an external document.
-        @param rnTab  (out-param) Returns the sheet index, if sheet could be inserted).
-        @return  TRUE = Sheet created, rnTab contains valid sheet index. */
-    BOOL            InsertLinkedEmptyTab( SCTAB& rnTab, const String& rFileName,
-                        const String& rFilterName, const String& rFilterOpt, const String& rTabName );
+    ScExternalRefManager* GetExternalRefManager();
 
     BOOL            HasDdeLinks() const;
     BOOL            HasAreaLinks() const;
+    void            UpdateExternalRefLinks();
     void            UpdateDdeLinks();
     void            UpdateAreaLinks();
 

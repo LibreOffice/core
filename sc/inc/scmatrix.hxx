@@ -115,11 +115,14 @@ class ScMatrix
 
 public:
 
-    /// The maximum number of elements a matrix may have at runtime
+    /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
     {
-        const size_t nMemMax = (((size_t)(~0))-64) / sizeof(ScMatrixValue);
-        const size_t nArbitraryLimit = 0x80000;  // 512k elements ~= 4MB memory
+        // Roughly 125MB in total, divided by 8+1 per element => 14M elements.
+        const size_t nMemMax = 0x08000000 / (sizeof(ScMatrixValue) + sizeof(ScMatValType));
+        // With MAXROWCOUNT==65536 and 128 columns => 8M elements ~72MB.
+        const size_t nArbitraryLimit = (size_t)MAXROWCOUNT * 128;
+        // Stuffed with a million rows would limit this to 14 columns.
         return nMemMax < nArbitraryLimit ? nMemMax : nArbitraryLimit;
     }
 

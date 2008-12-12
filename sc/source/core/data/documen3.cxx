@@ -61,6 +61,7 @@
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "tablink.hxx"
+#include "externalrefmgr.hxx"
 #include "markdata.hxx"
 #include "validat.hxx"
 #include "dociter.hxx"
@@ -79,7 +80,10 @@
 #include "editutil.hxx"    // ScPostIt EditTextObject
 #include "postit.hxx"
 
+#include <memory>
+
 using namespace com::sun::star;
+using ::std::auto_ptr;
 
 //------------------------------------------------------------------------
 
@@ -471,33 +475,12 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     return TRUE;
 }
 
-BOOL ScDocument::InsertLinkedEmptyTab( SCTAB& rnTab, const String& rFileName,
-        const String& rFilterName, const String& rFilterOpt, const String& rTabName )
+ScExternalRefManager* ScDocument::GetExternalRefManager()
 {
-    DBG_ASSERT( !IsClipboard(), "ScDocument::InsertLinkedEmptyTab - not allowed in clipboard" );
-    if( IsClipboard() )
-        return FALSE;
+    if (!pExternalRefMgr.get())
+        pExternalRefMgr.reset(new ScExternalRefManager(this));
 
-    String aOwnTabName( ScGlobal::GetDocTabName( rFileName, rTabName ) );
-    if( !InsertTab( SC_TAB_APPEND, aOwnTabName, TRUE ) )
-        return FALSE;
-
-    rnTab = GetTableCount() - 1;
-
-    ULONG nRefreshDelay = 0;
-    BOOL bWasThere = HasLink( rFileName, rFilterName, rFilterOpt );
-    SetLink( rnTab, SC_LINK_VALUE, rFileName, rFilterName, rFilterOpt, rTabName, nRefreshDelay );
-    if( !bWasThere )    // insert link into link manager only once per external document
-    {
-        ScTableLink* pLink = new ScTableLink( pShell, rFileName, rFilterName, rFilterOpt, nRefreshDelay );
-        pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFileName, &rFilterName );
-        pLink->Update();
-        pLink->SetInCreate( FALSE );
-        if( SfxBindings* pBindings = GetViewBindings() )
-            pBindings->Invalidate( SID_LINKS );
-    }
-    return TRUE;
+    return pExternalRefMgr.get();
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )

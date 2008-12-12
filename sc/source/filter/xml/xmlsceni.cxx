@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsceni.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 

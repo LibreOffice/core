@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XclImpChangeTrack.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ public:
 
                                 // reads extended 3D ref info following the formulas, returns sc tab nums
                                 // ( called by XclImpChTrFmlConverter::Read3DTabReference() )
-    sal_Bool                    Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab );
+    sal_Bool                    Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo );
 
     void                        Apply();
 };
@@ -182,7 +182,7 @@ class XclImpChTrFmlConverter : public ExcelToSc8
 private:
     XclImpChangeTrack&          rChangeTrack;
 
-    virtual BOOL                Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab );
+    virtual bool                Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
 
 public:
     inline                      XclImpChTrFmlConverter(

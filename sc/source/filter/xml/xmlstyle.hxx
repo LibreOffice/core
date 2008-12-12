@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyle.hxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +39,6 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/contextid.hxx>
-
-using namespace rtl;
 
 extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];

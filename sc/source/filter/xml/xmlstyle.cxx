@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyle.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.70.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using ::rtl::OUString;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }

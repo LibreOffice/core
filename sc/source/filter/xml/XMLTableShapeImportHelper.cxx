@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableShapeImportHelper.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
         ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :

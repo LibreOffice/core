@@ -838,15 +838,79 @@ bool ScGlobal::IsQuoted( const String& rString, sal_Unicode cQuote )
     return (rString.Len() >= 2) && (rString.GetChar( 0 ) == cQuote) && (rString.GetChar( rString.Len() - 1 ) == cQuote);
 }
 
-void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote )
+void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote, bool bEscapeEmbedded )
 {
+    if (bEscapeEmbedded)
+    {
+        sal_Unicode pQ[3];
+        pQ[0] = pQ[1] = cQuote;
+        pQ[2] = 0;
+        String aQuotes( pQ );
+        rString.SearchAndReplaceAll( cQuote, aQuotes);
+    }
     rString.Insert( cQuote, 0 ).Append( cQuote );
 }
 
-void ScGlobal::EraseQuotes( String& rString, sal_Unicode /* cQuote */ )
+void ScGlobal::EraseQuotes( String& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
 {
-    if( IsQuoted( rString ) )
+    if ( IsQuoted( rString, cQuote ) )
+    {
         rString.Erase( rString.Len() - 1 ).Erase( 0, 1 );
+        if (bUnescapeEmbedded)
+        {
+            sal_Unicode pQ[3];
+            pQ[0] = pQ[1] = cQuote;
+            pQ[2] = 0;
+            String aQuotes( pQ );
+            rString.SearchAndReplaceAll( aQuotes, cQuote);
+        }
+    }
+}
+
+xub_StrLen ScGlobal::FindUnquoted( const String& rString, sal_Unicode cChar, xub_StrLen nStart, sal_Unicode cQuote )
+{
+    const sal_Unicode* const pStart = rString.GetBuffer();
+    const sal_Unicode* const pStop = pStart + rString.Len();
+    const sal_Unicode* p = pStart + nStart;
+    bool bQuoted = false;
+    while (p < pStop)
+    {
+        if (*p == cChar && !bQuoted)
+            return p - pStart;
+        else if (*p == cQuote)
+        {
+            if (!bQuoted)
+                bQuoted = true;
+            else if (p < pStop-1 && *(p+1) == cQuote)
+                ++p;
+            else
+                bQuoted = false;
+        }
+        ++p;
+    }
+    return STRING_NOTFOUND;
+}
+
+const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote )
+{
+    const sal_Unicode* p = pString;
+    bool bQuoted = false;
+    while (*p)
+    {
+        if (*p == cChar && !bQuoted)
+            return p;
+        else if (*p == cQuote)
+        {
+            if (!bQuoted)
+                bQuoted = true;
+            else if (*(p+1) == cQuote)
+                ++p;
+            else
+                bQuoted = false;
+        }
+        ++p;
+    }
+    return NULL;
 }
 
 //------------------------------------------------------------------------

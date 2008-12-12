@@ -123,6 +123,7 @@ using namespace ::com::sun::star;
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include "scresid.hxx" //add by CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "externalrefmgr.hxx"
 
 #include "sharedocdlg.hxx"
 
@@ -510,6 +511,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (nDlgRet == RET_YES || nSet==LM_ALWAYS)
                 {
                     ReloadTabLinks();
+                    aDocument.UpdateExternalRefLinks();
                     aDocument.UpdateDdeLinks();
                     aDocument.UpdateAreaLinks();
 

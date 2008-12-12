@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nameuno.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,11 +313,11 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens() throw(u
     ScUnoGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aSequence;
     ScRangeData* pData = GetRangeData_Impl();
-    if (pData)
+    if (pData && pDocShell)
     {
         ScTokenArray* pTokenArray = pData->GetCode();
         if ( pTokenArray )
-            (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+            (void)ScTokenConversion::ConvertToTokenSequence( *pDocShell->GetDocument(), aSequence, *pTokenArray );
     }
     return aSequence;
 }
@@ -325,10 +325,13 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens() throw(u
 void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScTokenArray aTokenArray;
-    (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
-    // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
+    if( pDocShell )
+    {
+        ScTokenArray aTokenArray;
+        (void)ScTokenConversion::ConvertToTokenArray( *pDocShell->GetDocument(), aTokenArray, rTokens );
+        // GRAM_PODF_A1 for API compatibility.
+        Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
+    }
 }
 
 

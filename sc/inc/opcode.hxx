@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opcode.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@ enum OpCodeEnum
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
         ocName              = SC_OPCODE_NAME,
+        ocExternalRef       = SC_OPCODE_EXTERNAL_REF,
     // Jump commands
         ocIf                = SC_OPCODE_IF,
         ocChose             = SC_OPCODE_CHOSE,

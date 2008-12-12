@@ -45,6 +45,8 @@
 #include <unotools/charclass.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/sheet/ExternalLinkInfo.hpp>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
@@ -71,35 +73,37 @@ namespace com { namespace sun { namespace star {
 #define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
 
 // flag values of CharTable
-#define SC_COMPILER_C_ILLEGAL       0x00000000
-#define SC_COMPILER_C_CHAR          0x00000001
-#define SC_COMPILER_C_CHAR_BOOL     0x00000002
-#define SC_COMPILER_C_CHAR_WORD     0x00000004
-#define SC_COMPILER_C_CHAR_VALUE    0x00000008
-#define SC_COMPILER_C_CHAR_STRING   0x00000010
-#define SC_COMPILER_C_CHAR_DONTCARE 0x00000020
-#define SC_COMPILER_C_BOOL          0x00000040
-#define SC_COMPILER_C_WORD          0x00000080
-#define SC_COMPILER_C_WORD_SEP      0x00000100
-#define SC_COMPILER_C_VALUE         0x00000200
-#define SC_COMPILER_C_VALUE_SEP     0x00000400
-#define SC_COMPILER_C_VALUE_EXP     0x00000800
-#define SC_COMPILER_C_VALUE_SIGN    0x00001000
-#define SC_COMPILER_C_VALUE_VALUE   0x00002000
-#define SC_COMPILER_C_STRING_SEP    0x00004000
-#define SC_COMPILER_C_NAME_SEP      0x00008000  // there can be only one! '\''
-#define SC_COMPILER_C_CHAR_IDENT    0x00010000  // identifier (built-in function) start
-#define SC_COMPILER_C_IDENT         0x00020000  // identifier continuation
-#define SC_COMPILER_C_ODF_LBRACKET  0x00040000  // ODF '[' reference bracket
-#define SC_COMPILER_C_ODF_RBRACKET  0x00080000  // ODF ']' reference bracket
-#define SC_COMPILER_C_ODF_LABEL_OP  0x00100000  // ODF '!!' automatic intersection of labels
+#define SC_COMPILER_C_ILLEGAL         0x00000000
+#define SC_COMPILER_C_CHAR            0x00000001
+#define SC_COMPILER_C_CHAR_BOOL       0x00000002
+#define SC_COMPILER_C_CHAR_WORD       0x00000004
+#define SC_COMPILER_C_CHAR_VALUE      0x00000008
+#define SC_COMPILER_C_CHAR_STRING     0x00000010
+#define SC_COMPILER_C_CHAR_DONTCARE   0x00000020
+#define SC_COMPILER_C_BOOL            0x00000040
+#define SC_COMPILER_C_WORD            0x00000080
+#define SC_COMPILER_C_WORD_SEP        0x00000100
+#define SC_COMPILER_C_VALUE           0x00000200
+#define SC_COMPILER_C_VALUE_SEP       0x00000400
+#define SC_COMPILER_C_VALUE_EXP       0x00000800
+#define SC_COMPILER_C_VALUE_SIGN      0x00001000
+#define SC_COMPILER_C_VALUE_VALUE     0x00002000
+#define SC_COMPILER_C_STRING_SEP      0x00004000
+#define SC_COMPILER_C_NAME_SEP        0x00008000  // there can be only one! '\''
+#define SC_COMPILER_C_CHAR_IDENT      0x00010000  // identifier (built-in function) or reference start
+#define SC_COMPILER_C_IDENT           0x00020000  // identifier or reference continuation
+#define SC_COMPILER_C_ODF_LBRACKET    0x00040000  // ODF '[' reference bracket
+#define SC_COMPILER_C_ODF_RBRACKET    0x00080000  // ODF ']' reference bracket
+#define SC_COMPILER_C_ODF_LABEL_OP    0x00100000  // ODF '!!' automatic intersection of labels
+#define SC_COMPILER_C_ODF_NAME_MARKER 0x00200000  // ODF '$$' marker that starts a defined (range) name
 
-#define SC_COMPILER_FILE_TAB_SEP    '#'         // 'Doc'#Tab
+#define SC_COMPILER_FILE_TAB_SEP      '#'         // 'Doc'#Tab
 
 
 class ScDocument;
 class ScMatrix;
 class ScRangeData;
+class ScExternalRefManager;
 
 // constants and data types internal to compiler
 
@@ -151,6 +155,15 @@ public:
             bool        bHasForceArray;
         } sbyte;
         ComplRefData aRef;
+        struct {
+            sal_uInt16      nFileId;
+            sal_Unicode     cTabName[MAXSTRLEN+1];
+            ComplRefData    aRef;
+        } extref;
+        struct {
+            sal_uInt16  nFileId;
+            sal_Unicode cName[MAXSTRLEN+1];
+        } extname;
         ScMatrix*    pMat;
         USHORT       nIndex;                // index into name collection
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
@@ -180,10 +193,15 @@ public:
     void SetDouble( double fVal );
 //UNUSED2008-05  void SetInt( int nVal );
 //UNUSED2008-05  void SetMatrix( ScMatrix* p );
-//UNUSED2008-05  // These methods are ok to use, reference count not cleared.
+
+    // These methods are ok to use, reference count not cleared.
 //UNUSED2008-05  ComplRefData& GetReference();
 //UNUSED2008-05  void SetReference( ComplRefData& rRef );
     void SetName( USHORT n );
+    void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );
+    void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef );
+    void SetExternalName( sal_uInt16 nFileId, const String& rName );
+    void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
 
     ScRawToken* Clone() const;      // real copy!
@@ -227,6 +245,27 @@ public:
                     parseAnyToken( const String& rFormula,
                                    xub_StrLen nSrcPos,
                                    const CharClass* pCharClass) const = 0;
+
+        /**
+         * Parse the symbol string and pick up the file name and the external
+         * range name.
+         *
+         * @return true on successful parse, or false otherwise.
+         */
+        virtual bool parseExternalName( const String& rSymbol, String& rFile, String& rName,
+                const ScDocument* pDoc,
+                const ::com::sun::star::uno::Sequence<
+                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const = 0;
+
+        virtual String makeExternalNameStr( const String& rFile, const String& rName ) const = 0;
+
+        virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+                                         sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef,
+                                         ScExternalRefManager* pRefMgr ) const = 0;
+
+        virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+                                         sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef,
+                                         ScExternalRefManager* pRefMgr ) const = 0;
 
         enum SpecialSymbolType
         {
@@ -372,6 +411,7 @@ private:
     static const Convention * const pConvOOO_A1_ODF;
     static const Convention * const pConvXL_A1;
     static const Convention * const pConvXL_R1C1;
+    static const Convention * const pConvXL_OOX;
 
     static struct AddInMap
     {
@@ -386,6 +426,9 @@ private:
 
     ScDocument* pDoc;
     ScAddress   aPos;
+
+    // For ScAddress::CONV_XL_OOX, may be set via API by MOOXML filter.
+    ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
 
     String      aCorrectedFormula;                  // autocorrected Formula
     String      aCorrectedSymbol;                   // autocorrected Symbol
@@ -448,6 +491,7 @@ private:
     BOOL IsDoubleReference( const String& );
     BOOL IsMacro( const String& );
     BOOL IsNamedRange( const String& );
+    bool IsExternalNamedRange( const String& rSymbol );
     BOOL IsDBRange( const String& );
     BOOL IsColRowName( const String& );
     BOOL IsBoolean( const String& );
@@ -538,6 +582,29 @@ public:
         including an address reference convention. */
     void            SetGrammar( const ScGrammar::Grammar eGrammar );
     inline  ScGrammar::Grammar   GetGrammar() const { return meGrammar; }
+
+private:
+    /** Set grammar and reference convention from within SetFormulaLanguage()
+        or SetGrammar().
+
+        @param eNewGrammar
+            The new grammar to be set and the associated reference convention.
+
+        @param eOldGrammar
+            The previous grammar that was active before SetFormulaLanguage().
+     */
+    void            SetGrammarAndRefConvention(
+                        const ScGrammar::Grammar eNewGrammar,
+                        const ScGrammar::Grammar eOldGrammar );
+public:
+
+    /// Set external link info for ScAddress::CONV_XL_OOX.
+    inline  void    SetExternalLinks(
+            const ::com::sun::star::uno::Sequence<
+            const ::com::sun::star::sheet::ExternalLinkInfo > & rLinks )
+    {
+        maExternalLinks = rLinks;
+    }
 
     void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
 

@@ -46,6 +46,7 @@
 #include "xilink.hxx"
 #include "xiname.hxx"
 
+using ::std::vector;
 
 const UINT16 ExcelToSc::nRowMask = 0x3FFF;
 const UINT16 ExcelToSc::nLastInd = 399;
@@ -1325,6 +1326,13 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
     aIn.Seek( nEndPos );
     return eRet;
+}
+
+ConvErr ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, sal_Size /*nFormulaLen*/,
+                                      const String& /*rUrl*/, const vector<String>& /*rTabNames*/ )
+{
+    // not implemented ...
+    return ConvErrNi;
 }
 
 BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )

@@ -81,12 +81,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell,  nMemPoolStringCell, nMemPoolStringCell 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell,    nMemPoolNoteCell, nMemPoolNoteCell )
 #endif
 
-#ifndef PRODUCT
-static const sal_Char __FAR_DATA msgDbgInfinity[] =
-    "Formelzelle INFINITY ohne Err503 !!! (os/2?)\n"
-    "NICHTS anruehren und ER bescheid sagen!";
-#endif
-
 // -----------------------------------------------------------------------
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
@@ -683,7 +677,12 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
         for( ScToken* t = pCode->GetNextReferenceOrName(); t && !bCompile;
                       t = pCode->GetNextReferenceOrName() )
         {
-            if ( t->GetType() == svIndex )
+            if ( t->GetOpCode() == ocExternalRef )
+            {
+                // External name, cell, and area references.
+                bCompile = true;
+            }
+            else if ( t->GetType() == svIndex )
             {
                 ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
                 if( pRangeData )
@@ -1540,6 +1539,13 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             if( cMatrixFlag != MM_FORMULA && !pCode->IsHyperLink() )
                 aResult.SetToken( aResult.GetCellResultToken());
         }
+        if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
+        {
+            // Coded double error may occur via filter import.
+            USHORT nErr = GetDoubleErrorValue( aResult.GetDouble());
+            aResult.SetResultError( nErr);
+            bChanged = true;
+        }
         if( bChanged )
         {
             SetTextWidth( TEXTWIDTH_DIRTY );
@@ -1547,14 +1553,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
-#ifndef PRODUCT
-        if ( aResult.IsValue() && !p->GetError() && !::rtl::math::isFinite( aResult.GetDouble() ) )
-        {
-            DBG_ERRORFILE( msgDbgInfinity );
-            aResult.SetToken( NULL);
-            aResult.SetResultError( errIllegalFPOperation );
-        }
-#endif
 
         //  FORCED Zellen auch sofort auf Gueltigkeit testen (evtl. Makro starten)
 
