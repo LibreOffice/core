@@ -54,6 +54,7 @@
 #include "XMLErrorBarStylePropertyHdl.hxx"
 #include "XMLTextOrientationHdl.hxx"
 #include "XMLSymbolTypePropertyHdl.hxx"
+#include "XMLAxisPositionPropertyHdl.hxx"
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
@@ -61,6 +62,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 
 // header for any2enum
 #include <comphelper/extract.hxx>
@@ -94,6 +96,23 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
     {
         switch( nType )
         {
+            case XML_SCH_TYPE_AXIS_POSITION:
+                pHdl = new XMLAxisPositionPropertyHdl( false );
+                break;
+            case XML_SCH_TYPE_AXIS_POSITION_VALUE:
+                pHdl = new XMLAxisPositionPropertyHdl( true );
+                break;
+
+            case XML_SCH_TYPE_AXIS_LABEL_POSITION:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisLabelPositionEnumMap,
+                                               ::getCppuType((const chart::ChartAxisLabelPosition*)0) );
+                break;
+
+            case XML_SCH_TYPE_TICK_MARK_POSITION:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisMarkPositionEnumMap,
+                                               ::getCppuType((const chart::ChartAxisMarkPosition*)0) );
+                break;
+
             case XML_SCH_TYPE_AXIS_ARRANGEMENT:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartAxisArrangementEnumMap,
                                                ::getCppuType((const chart::ChartAxisArrangeOrderType*)0) );

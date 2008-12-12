@@ -63,6 +63,7 @@ SLOFILES =	$(SLO)$/ColorPropertySet.obj \
             $(SLO)$/XMLLabelSeparatorContext.obj \
             $(SLO)$/XMLTextOrientationHdl.obj \
             $(SLO)$/XMLSymbolTypePropertyHdl.obj \
+            $(SLO)$/XMLAxisPositionPropertyHdl.obj \
             $(SLO)$/transporttypes.obj
 
 # --- Targets --------------------------------------------------------------

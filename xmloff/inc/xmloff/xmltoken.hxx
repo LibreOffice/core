@@ -3054,6 +3054,17 @@ namespace xmloff { namespace token {
         XML_ISOTROPIC,
         XML_ANISOTROPIC,
 
+        XML_AXIS_POSITION,
+        XML_AXIS_LABEL_POSITION,
+        XML_NEAR_AXIS,
+        XML_NEAR_AXIS_OTHER_SIDE,
+        XML_OUTSIDE_START,
+        XML_OUTSIDE_END,
+        XML_TICK_MARK_POSITION,
+        XML_AT_LABELS,
+        XML_AT_AXIS,
+        XML_AT_LABELS_AND_AXIS,
+
         XML_TOKEN_END
     };
 

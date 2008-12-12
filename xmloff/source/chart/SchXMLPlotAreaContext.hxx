@@ -96,6 +96,8 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
+    void CorrectAxisPositions();
+
 private:
     SchXMLImportHelper& mrImportHelper;
     ::com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
@@ -115,6 +117,7 @@ private:
     bool mbHasSize;
     bool mbHasPosition;
     bool mbPercentStacked;
+    bool m_bAxisPositionAttributeImported;
     ::rtl::OUString msAutoStyleName;
     ::rtl::OUString& mrChartAddress;
     sal_Bool & mrHasOwnTable;
@@ -146,6 +149,8 @@ private:
     rtl::OUString& mrCategoriesAddress;
     bool mbAddMissingXAxisForNetCharts; //to correct errors from older versions
     bool mbAdaptWrongPercentScaleValues; //to correct errors from older versions
+    bool mbAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
+    bool& m_rbAxisPositionAttributeImported;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
     void CreateGrid( ::rtl::OUString sAutoStyleName, sal_Bool bIsMajor );
@@ -159,7 +164,9 @@ public:
                        std::vector< SchXMLAxis >& aAxes,
                        ::rtl::OUString& rCategoriesAddress,
                        bool bAddMissingXAxisForNetCharts,
-                       bool bAdaptWrongPercentScaleValues );
+                       bool bAdaptWrongPercentScaleValues,
+                       bool bAdaptXAxisOrientationForOld2DBarCharts,
+                       bool& rbAxisPositionAttributeImported );
     virtual ~SchXMLAxisContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );

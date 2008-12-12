@@ -54,6 +54,7 @@ class SvXMLExport;
 namespace SchXMLTools
 {
     bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
 
     enum SchXMLChartTypeEnum

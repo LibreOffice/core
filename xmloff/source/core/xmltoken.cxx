@@ -3056,6 +3056,17 @@ namespace xmloff { namespace token {
         TOKEN( "isotropic",             XML_ISOTROPIC  ),
         TOKEN( "anisotropic",           XML_ANISOTROPIC ),
 
+        TOKEN( "axis-position",         XML_AXIS_POSITION ),
+        TOKEN( "axis-label-position",   XML_AXIS_LABEL_POSITION ),
+        TOKEN( "near-axis",             XML_NEAR_AXIS ),
+        TOKEN( "near-axis-other-side",  XML_NEAR_AXIS_OTHER_SIDE ),
+        TOKEN( "outside-minimum",       XML_OUTSIDE_START ),
+        TOKEN( "outside-maximum",       XML_OUTSIDE_END ),
+        TOKEN( "tick-mark-position",    XML_TICK_MARK_POSITION ),
+        TOKEN( "at-labels",             XML_AT_LABELS ),
+        TOKEN( "at-axis",               XML_AT_AXIS ),
+        TOKEN( "at-labels-and-axis",    XML_AT_LABELS_AND_AXIS ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
