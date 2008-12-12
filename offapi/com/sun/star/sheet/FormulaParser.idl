@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormulaParser.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,9 @@
 #ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
 #endif
+#ifndef __com_sun_star_sheet_ExternalLinkInfo_idl__
+#include <com/sun/star/sheet/ExternalLinkInfo.idl>
+#endif
 
 //=============================================================================
 
@@ -76,9 +79,10 @@ service FormulaParser
 
     // ------------------------------------------------------------------------
 
-    /** Specifies which convention to use when parsing a formula string.
+    /** Specifies which address reference style convention to use when
+        parsing a formula string.
 
-        @see com::sun::star::sheet::FormulaConvention
+        @see com::sun::star::sheet::AddressConvention
       */
     [property] short FormulaConvention;
 
@@ -97,6 +101,21 @@ service FormulaParser
         Names and symbols not defined here lead to a parser/print error.
      */
     [property] sequence< FormulaOpCodeMapEntry > OpCodeMap;
+
+    // ------------------------------------------------------------------------
+
+    /** List of external links referenced in formulas.
+
+        Use of this property depends on the
+        <member>FormulaConvention</member> in use. It is relevant only
+        for <type>AddressConvention::XL_OOX</type> to map indices to
+        external documents. The sequence must be in the order of indices
+        used. Note that indices are 1-based, the sequence must start
+        with an empty element.
+
+        @since OOo3.1
+     */
+    [property] sequence< ExternalLinkInfo > ExternalLinks;
 
     // ------------------------------------------------------------------------
 };

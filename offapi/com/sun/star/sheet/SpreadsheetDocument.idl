@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpreadsheetDocument.idl,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.114.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +111,10 @@
 
 #ifndef __com_sun_star_sheet_XAreaLinks_idl__
 #include <com/sun/star/sheet/XAreaLinks.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XExternalDocLinks_idl__
+#include <com/sun/star/sheet/XExternalDocLinks.idl>
 #endif
 
 //=============================================================================
@@ -266,6 +270,16 @@ published service SpreadsheetDocument
     /** contains the collection of DDE links in the document.
      */
     [readonly, property] com::sun::star::container::XNameAccess DDELinks;
+
+    //-------------------------------------------------------------------------
+
+#if 0
+    /** contains the collection of external document links in the document.
+
+        @since OOo 3.1
+     */
+    [optional, readonly, property] com::sun::star::sheet::XExternalDocLinks ExternalDocLinks;
+#endif
 
 };
 
