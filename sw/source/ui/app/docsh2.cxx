@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1517,7 +1517,8 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    String * /*pAppName*/,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   sal_Int32 nVersion ) const
+                                   sal_Int32 nVersion,
+                                   sal_Bool bTemplate /* = sal_False */) const
 {
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
@@ -1528,7 +1529,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_8;
+        *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITER_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
 

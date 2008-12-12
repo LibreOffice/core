@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: globdoc.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,8 +68,12 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    String * /*pAppName*/,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   sal_Int32 nVersion ) const
+                                   sal_Int32 nVersion,
+                                   sal_Bool bTemplate /* = sal_False */) const
 {
+    (void)bTemplate;
+    DBG_ASSERT( bTemplate == sal_False, "No template for Writer Global" );
+
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
