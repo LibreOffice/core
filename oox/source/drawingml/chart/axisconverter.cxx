@@ -30,7 +30,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axisconverter.hxx"
-#include <com/sun/star/chart2/AxisPosition.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -261,9 +261,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 
         // axis position ------------------------------------------------------
 
-        namespace ApiAxisPosition = ::com::sun::star::chart2::AxisPosition;
-        sal_Int32 nPosition = (nAxesSetIdx == API_PRIM_AXESSET) ? ApiAxisPosition::MAIN : ApiAxisPosition::SECONDARY;
-        aAxisProp.setProperty( CREATE_OUSTRING( "AxisPosition" ), nPosition );
+        aAxisProp.setProperty( CREATE_OUSTRING( "CrossoverPosition" ), (nAxesSetIdx == API_PRIM_AXESSET) ? ::com::sun::star::chart::ChartAxisPosition_START : ::com::sun::star::chart::ChartAxisPosition_END );
 
         // axis title ---------------------------------------------------------
 
