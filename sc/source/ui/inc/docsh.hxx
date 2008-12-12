@@ -185,7 +185,8 @@ public:
                                String * pAppName,
                                String * pFullTypeName,
                                String * pShortTypeName,
-                               sal_Int32 nFileFormat ) const;
+                               sal_Int32 nFileFormat,
+                               sal_Bool bTemplate = sal_False ) const;
 
     virtual BOOL    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     virtual BOOL    Load( SfxMedium& rMedium );

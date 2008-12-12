@@ -193,7 +193,8 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
                                         String* /* pAppName */,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
-                                        sal_Int32 nFileFormat ) const
+                                        sal_Int32 nFileFormat,
+                                        sal_Bool bTemplate /* = sal_False */) const
 {
     if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
@@ -205,7 +206,7 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
-        *pFormat        = SOT_FORMATSTR_ID_STARCALC_8;
+        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
         *pFullTypeName  = String( RTL_CONSTASCII_USTRINGPARAM("calc8") );
         *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
