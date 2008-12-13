@@ -324,6 +324,7 @@ done
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
 /usr/share/applications/%unixfilename-writer.desktop
+/usr/share/applications/%unixfilename-startcenter.desktop
 /usr/share/icons/gnome/*/apps/*png
 /usr/share/icons/gnome/*/mimetypes/*png
 /usr/share/icons/hicolor/*/apps/*png
