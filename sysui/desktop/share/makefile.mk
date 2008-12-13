@@ -56,7 +56,7 @@ ULFFILES= \
     launcher_genericname.ulf \
     launcher_name.ulf
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin qstart
+LAUNCHERLIST = writer calc draw impress math base printeradmin qstart startcenter
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag

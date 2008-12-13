@@ -10,3 +10,11 @@ en-US = "Spreadsheet"
 [base]
 en-US = "Database Development"
 
+[math]
+en-US = "Formula Editor"
+
+[draw]
+en-US = "Drawing Program"
+
+[startcenter] 
+en-US = "Office"
