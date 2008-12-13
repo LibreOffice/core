@@ -5248,11 +5248,6 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     rIn >> aSet.mnFontHeight;
                     aSet.mnAttrSet |= 1 << PPT_CharAttr_FontHeight;
                 }
-                if ( nMask & 0x80000 )  // cfPosition
-                {
-                    rIn >> aSet.mnEscapement;
-                    aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
-                }
                 if ( nMask & 0x40000 )  // cfColor
                 {
                     sal_uInt32 nVal;
@@ -5261,6 +5256,11 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         nVal = PPT_COLSCHEME_HINTERGRUND;
                     aSet.mnColor = nVal;
                     aSet.mnAttrSet |= 1 << PPT_CharAttr_FontColor;
+                }
+                if ( nMask & 0x80000 )  // cfPosition
+                {
+                    rIn >> aSet.mnEscapement;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
                 }
                 if ( nExtParaPos )
                 {
