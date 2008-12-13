@@ -2475,6 +2475,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
         if ( aAny >>= nBulletOfs )
             nBulletOfs = static_cast< sal_Int32 >( nBulletOfs / ( 2540.0 / 576 ) + 0.5 );
     }
+    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsNumber" ) ) ) )
+        aAny >>= bNumberingIsNumber;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > aXIndexReplace;
 
@@ -2766,7 +2768,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         }
                         nParaFlags |= 0x2f;
                         nBulletFlags |= 6;
-                        if ( mbIsBullet )
+                        if ( mbIsBullet && bNumberingIsNumber )
                             nBulletFlags |= 1;
                     }
                 }

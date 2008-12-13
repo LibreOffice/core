@@ -668,6 +668,19 @@ void AccessibleDrawDocumentView::Deactivated (void)
 
 
 
+void AccessibleDrawDocumentView::impl_dispose (void)
+{
+    if (mpChildrenManager != NULL)
+    {
+        delete mpChildrenManager;
+        mpChildrenManager = NULL;
+    }
+
+    AccessibleDocumentViewBase::impl_dispose();
+}
+
+
+
 /** This method is called from the component helper base class while
     disposing.
 */

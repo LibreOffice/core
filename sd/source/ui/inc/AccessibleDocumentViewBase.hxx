@@ -306,6 +306,8 @@ protected:
         ::com::sun::star::accessibility::XAccessible>
         mxAccessibleOLEObject;
 
+    Link maWindowLink;
+
     // This method is called from the component helper base class while
     // disposing.
     virtual void SAL_CALL disposing (void);
@@ -362,6 +364,8 @@ protected:
     virtual void SetAccessibleOLEObject (
         const ::com::sun::star::uno::Reference <
         ::com::sun::star::accessibility::XAccessible>& xOLEObject);
+
+    virtual void impl_dispose (void);
 };
 
 } // end of namespace accessibility
