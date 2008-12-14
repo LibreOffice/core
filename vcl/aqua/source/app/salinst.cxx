@@ -59,7 +59,6 @@
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import "apple_remote/RemoteMainController.h"
-#include "apple_remote/RemoteControl.h"
 #include "postmac.h"
 
 
@@ -564,10 +563,6 @@ bool AquaSalInstance::isNSAppThread() const
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
-
-    // export REPLACE_F5=TRUE allows to test the fix for issue #i97195#
-    static const char *pExperimentalEvent = getenv ("REPLACE_F5");
-
     switch( [pEvent subtype] )
     {
     case AppStartTimerEvent:
@@ -590,121 +585,9 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         }
     }
     break;
-    case AppleRemoteEvent:
-    {
-        sal_Int16 nCommand = 0;
-        SalData* pSalData = GetSalData();
-        bool bIsFullScreenMode = false;
-        std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
-        while( (*it) &&  ( (it != pSalData->maFrames.end() ) || ( (*it)->mbFullScreen == false ) ) )
-        {
-            if ( ((*it)->mbFullScreen == true) )
-                bIsFullScreenMode = true;
-            it++;
-        }
-
-        if ( bIsFullScreenMode == true )
-        {
-#ifdef DEBUG
-            fprintf( stderr, "Received the following event from the Apple Remote :  %d \n", [pEvent data1] );
-#endif
-            switch ([pEvent data1])
-            {
-                // FIXME : Cocoa controls everything. How to control then ?
-                // case kRemoteButtonMenu:         nCommand = MEDIA_COMMAND_MENU; break;
-
-                case kRemoteButtonPlay:         nCommand = MEDIA_COMMAND_PLAY_PAUSE; break;
-
-                // FIXME : does not work as expected. Maybe Apple black magic
-                //case kRemoteButtonPlus:   nCommand = MEDIA_COMMAND_VOLUME_UP; break;
-                //case kRemoteButtonMinus:  nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
-
-                case kRemoteButtonPlus:
-                case kRemoteButtonRight:        nCommand = MEDIA_COMMAND_NEXTTRACK; break;
-
-                case kRemoteButtonMinus:
-                case kRemoteButtonLeft:         nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
-
-                case kRemoteButtonLeft_Hold:    nCommand = MEDIA_COMMAND_REWIND; break;
-
-                case kRemoteButtonRight_Hold:   nCommand = MEDIA_COMMAND_NEXTTRACK_HOLD; break;
-
-                // not detected (why?)
-                case kRemoteButtonPlus_Hold:
-                case kRemoteButtonMinus_Hold:
-                    break;
-
-                case kRemoteButtonPlay_Hold:    nCommand = MEDIA_COMMAND_PLAY_HOLD; break;
-
-                case kRemoteButtonMenu_Hold:    nCommand = MEDIA_COMMAND_STOP; break;
-
-                default:
-                    break;
-            }
-        }
-        else // normal mode
-        {
-            switch ([pEvent data1])
-            {
-                // FIXME : experimental, will be removed. Currently, the way to startShow() is not implemented.
-                // and the most simple is to keep the KeyCode (efault) until we have a better solution
-
-                case kRemoteButtonPlay:
-                {
-                    if ( (pExperimentalEvent && !strcasecmp(pExperimentalEvent, "TRUE")) )
-                    {
-                        fprintf( stdout, "<<<___ MEDIA_COMMAND_PLAY is used ___>>> (REPLACE_F5 is set to TRUE) \n");
-                        nCommand = MEDIA_COMMAND_PLAY;
-                    }
-                    else
-                    {
-                        unichar playFunction=NSF5FunctionKey;
-                        NSString *characters=[NSString stringWithCharacters: &playFunction length: 1];
-                        [NSApp postEvent:
-                            [NSEvent keyEventWithType:NSKeyDown
-                            location: NSZeroPoint
-                            modifierFlags : 0
-                            timestamp: 0
-                            windowNumber: [[NSApp keyWindow] windowNumber]
-                            context: nil
-                            characters: characters
-                            charactersIgnoringModifiers: characters
-                            isARepeat: NO
-                            keyCode: NSF5FunctionKey]
-                            atStart: NO];
-                    }
-                }
-                    break;
-
-                case kRemoteButtonMenu_Hold:    nCommand = MEDIA_COMMAND_MENU_HOLD; break;
-
-                default:
-#ifdef DEBUG
-                    NSLog(@"Unmapped event for button %d", [pEvent data1] );
-#endif
-                    break;
-            }
-        }
-        AquaSalFrame* pFrame = pSalData->maFrames.front();
-        Window * pWindow = pFrame->GetWindow() ? pSalData->maFrames.front()->GetWindow() : NULL;
-
-        if( pWindow )
-        {
-            const Point aPoint;
-            CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &nCommand );
-            NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
-
-            if ( !ImplCallPreNotify( aNCmdEvt ) )
-                pWindow->Command( aCEvt );
-        }
-
-    }
-    break;
-
     case YieldWakeupEvent:
         // do nothing, fall out of Yield
     break;
-
     default:
         DBG_ERROR( "unhandled NSApplicationDefined event" );
         break;
