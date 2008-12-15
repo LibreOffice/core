@@ -639,7 +639,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
     aEvent.ExecutePosition.X = -1;
     aEvent.ExecutePosition.Y = -1;
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        m_xORB, pContextMenu.get() );
+        m_xORB, pContextMenu.get(), 0 );
     aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
 
     ::cppu::OInterfaceIteratorHelper aIter( *pInterceptors );
