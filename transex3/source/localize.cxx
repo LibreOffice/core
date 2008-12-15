@@ -70,6 +70,7 @@ const char *NegativeList[] = {
     "officecfg/data/org.openoffice.Office.Labels.xcd",
     "officecfg/data/org/openoffice/Office/Labels.xcd",
     "officecfg/data/org/openoffice/Office/SFX.xcd",
+    "officecfg/data/org/openoffice/Office/Accelerators.xcu",
     "hidother.src",
     "NULL"
 };
