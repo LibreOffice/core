@@ -260,7 +260,6 @@ SpellDialog::SpellDialog(
     nOldLang        ( LANGUAGE_NONE )
 {
     FreeResource();
-
     xSpell = LinguMgr::GetSpellChecker();
     pImpl = new SpellDialog_Impl;
 
@@ -373,7 +372,10 @@ void SpellDialog::UpdateBoxes_Impl()
     {
         String aTmp( pNewWords[i] );
         if ( LISTBOX_ENTRY_NOTFOUND == aSuggestionLB.GetEntryPos( aTmp ) )
+        {
             aSuggestionLB.InsertEntry( aTmp );
+            aSuggestionLB.SetEntryFlags(aSuggestionLB.GetEntryCount() - 1, LISTBOX_ENTRY_FLAG_MULTILINE);
+        }
     }
     if(!nSize)
         aSuggestionLB.InsertEntry( aNoSuggestionsST );
