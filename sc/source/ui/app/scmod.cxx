@@ -492,31 +492,6 @@ void ScModule::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_AUTOSPELL_MARKOFF:
-            {
-                BOOL bSet;
-                const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, TRUE, &pItem ) )
-                    bSet = ((const SfxBoolItem*)pItem)->GetValue();
-                else
-                {                       //  Toggle
-                    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    if ( pViewSh )
-                        bSet = !pViewSh->GetViewData()->GetOptions().IsHideAutoSpell();
-                    else if ( pDocSh )
-                        bSet = !pDocSh->GetDocument()->GetViewOptions().IsHideAutoSpell();
-                    else
-                        bSet = !GetViewOptions().IsHideAutoSpell();
-                }
-
-                SfxItemSet aSet( GetPool(), SID_AUTOSPELL_MARKOFF, SID_AUTOSPELL_MARKOFF );
-                aSet.Put( SfxBoolItem( SID_AUTOSPELL_MARKOFF, bSet ) );
-                ModifyOptions( aSet );
-                rReq.Done();
-            }
-            break;
-
         case SID_ATTR_METRIC:
             {
                 const SfxPoolItem* pItem;
@@ -704,28 +679,9 @@ void ScModule::GetState( SfxItemSet& rSet )
                     else
                     {
                         USHORT nDummyLang, nDummyCjk, nDummyCtl;
-                        BOOL bDummyHide;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto, bDummyHide );
+                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bAuto ) );
-                }
-                break;
-            case SID_AUTOSPELL_MARKOFF:
-                {
-                    BOOL bHide;
-                    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    if ( pViewSh )
-                        bHide = pViewSh->GetViewData()->GetOptions().IsHideAutoSpell();
-                    else if ( pDocSh )
-                        bHide = pDocSh->GetDocument()->GetViewOptions().IsHideAutoSpell();
-                    else
-                    {
-                        USHORT nDummyLang, nDummyCjk, nDummyCtl;
-                        BOOL bDummyAuto;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bDummyAuto, bHide );
-                    }
-                    rSet.Put( SfxBoolItem( nWhich, bHide ) );
                 }
                 break;
             case SID_ATTR_LANGUAGE:
@@ -1063,7 +1019,7 @@ USHORT ScModule::GetOptDigitLanguage()
 
 //
 //      ModifyOptions - Items aus Calc-Options-Dialog
-//                      und SID_AUTOSPELL_CHECK / SID_AUTOSPELL_MARKOFF
+//                      und SID_AUTOSPELL_CHECK
 //
 
 #define IS_AVAILABLE(w,item) (SFX_ITEM_SET==rOptSet.GetItemState((w),TRUE,&item))
@@ -1071,8 +1027,8 @@ USHORT ScModule::GetOptDigitLanguage()
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
     USHORT nOldSpellLang, nOldCjkLang, nOldCtlLang;
-    BOOL bOldAutoSpell, bOldHideAuto;
-    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell, bOldHideAuto );
+    BOOL bOldAutoSpell;
+    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
 
     if (!pAppCfg)
         GetAppOptions();
@@ -1189,44 +1145,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //
-    //  AutoSpell ausblenden auch nach den ViewOptions
-    //
-
-    if ( IS_AVAILABLE(SID_AUTOSPELL_MARKOFF,pItem) )            // an View-Options
-    {
-        BOOL bHideAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
-
-        if (pViewSh)
-        {
-            ScViewData* pViewData = pViewSh->GetViewData();
-            ScViewOptions aNewOpt = pViewData->GetOptions();
-            if ( aNewOpt.IsHideAutoSpell() != bHideAutoSpell )
-            {
-                aNewOpt.SetHideAutoSpell( bHideAutoSpell );
-                pViewData->SetOptions( aNewOpt );
-                bRepaint = TRUE;
-            }
-            ScViewOptions aDocView = pDoc->GetViewOptions();    // auch am Dokument
-            if ( aDocView.IsHideAutoSpell() != bHideAutoSpell )
-            {
-                aDocView.SetHideAutoSpell( bHideAutoSpell );
-                pDoc->SetViewOptions( aDocView );
-                //#92038#; don't set document modified, because this flag is no longer saved
-//              pDocSh->SetDocumentModified();
-            }
-        }
-        if ( bOldHideAuto != bHideAutoSpell )
-        {
-            SetHideAutoProperty( bHideAutoSpell );
-            bSaveSpellCheck = TRUE;
-        }
-        ScInputHandler* pInputHandler = GetInputHdl();
-        if ( pInputHandler )
-            pInputHandler->UpdateSpellSettings();               // EditEngine-Flags
-        if ( pViewSh )
-            pViewSh->UpdateDrawTextOutliner();                  // EditEngine-Flags
-    }
 
     //============================================
     // DocOptions

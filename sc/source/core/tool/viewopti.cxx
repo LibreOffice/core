@@ -176,8 +176,6 @@ void ScViewOptions::SetDefaults()
     aGridColName = ScGlobal::GetRscString( STR_GRIDCOLOR );
 
     aGridOpt.SetDefaults();
-
-    bHideAutoSpell = FALSE;
 }
 
 //------------------------------------------------------------------------
@@ -202,7 +200,6 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
     aGridCol        = rCpy.aGridCol;
     aGridColName    = rCpy.aGridColName;
     aGridOpt        = rCpy.aGridOpt;
-    bHideAutoSpell  = rCpy.bHideAutoSpell;
 
     return *this;
 }
@@ -220,7 +217,6 @@ int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     bEqual = bEqual && (aGridCol       == rOpt.aGridCol);
     bEqual = bEqual && (aGridColName   == rOpt.aGridColName);
     bEqual = bEqual && (aGridOpt       == rOpt.aGridOpt);
-    bEqual = bEqual && (bHideAutoSpell == rOpt.bHideAutoSpell);
 
     return bEqual;
 }

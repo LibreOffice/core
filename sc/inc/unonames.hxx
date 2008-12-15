@@ -488,7 +488,7 @@
 //  view options
 #define SC_UNO_COLROWHDR            "HasColumnRowHeaders"
 #define SC_UNO_GRIDCOLOR            "GridColor"
-#define SC_UNO_HIDESPELL            "HideSpellMarks"
+#define SC_UNO_HIDESPELL            "HideSpellMarks"                /* deprecated #i91949 */
 #define SC_UNO_HORSCROLL            "HasHorizontalScrollBar"
 #define SC_UNO_OUTLSYMB             "IsOutlineSymbolsSet"
 #define SC_UNO_SHEETTABS            "HasSheetTabs"

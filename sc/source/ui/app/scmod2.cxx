@@ -48,13 +48,12 @@ using namespace com::sun::star;
 //------------------------------------------------------------------
 
 #define LINGUPROP_AUTOSPELL         "IsSpellAuto"
-#define LINGUPROP_HIDEAUTO          "IsSpellHide"
 
 //------------------------------------------------------------------
 
 // static
 void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
-                                    BOOL& rAutoSpell, BOOL& rHideAuto )
+                                    BOOL& rAutoSpell )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
     //  loading the linguistic component
@@ -67,7 +66,6 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCt
     rCjkLang = aOptions.nDefaultLanguage_CJK;
     rCtlLang = aOptions.nDefaultLanguage_CTL;
     rAutoSpell = aOptions.bIsSpellAuto;
-    rHideAuto = aOptions.bIsSpellHideMarkings;
 }
 
 // static
@@ -82,17 +80,6 @@ void ScModule::SetAutoSpellProperty( BOOL bSet )
     aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
 }
 
-// static
-void ScModule::SetHideAutoProperty( BOOL bSet )
-{
-    //  use SvtLinguConfig instead of service LinguProperties to avoid
-    //  loading the linguistic component
-    SvtLinguConfig aConfig;
-
-    uno::Any aAny;
-    aAny <<= bSet;
-    aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ), aAny );
-}
 
 
 // static

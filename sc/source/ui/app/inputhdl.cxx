@@ -556,7 +556,6 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
     {
         ScViewData* pViewData = pActiveViewSh->GetViewData();
         BOOL bOnlineSpell = pViewData->GetDocument()->GetDocOptions().IsAutoSpell();
-        BOOL bHideSpell = pViewData->GetOptions().IsHideAutoSpell();
 
         //  SetDefaultLanguage is independent of the language attributes,
         //  ScGlobal::GetEditDefaultLanguage is always used.
@@ -571,10 +570,6 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
         {
             ULONG nCntrl = pEngine->GetControlWord();
             ULONG nOld = nCntrl;
-            if( bHideSpell )
-                nCntrl |= EE_CNTRL_NOREDLINES;
-            else
-                nCntrl &= ~EE_CNTRL_NOREDLINES;
             if( bOnlineSpell )
                 nCntrl |= EE_CNTRL_ONLINESPELLING;
             else

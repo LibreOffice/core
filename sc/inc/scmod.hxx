@@ -207,9 +207,8 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                    RecentFunctionsChanged();
 
     static void         GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
-                                        BOOL& rAutoSpell, BOOL& rHideAuto );
+                                        BOOL& rAutoSpell );
     static void         SetAutoSpellProperty( BOOL bSet );
-    static void         SetHideAutoProperty( BOOL bSet );
     static BOOL         HasThesaurusLanguage( USHORT nLang );
 
     USHORT              GetOptDigitLanguage();      // from CTL options

@@ -429,14 +429,13 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
     USHORT nDefLang, nCjkLang, nCtlLang;
-    BOOL bAutoSpell, bHideAuto;
-    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell, bHideAuto );
+    BOOL bAutoSpell;
+    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
     aDocOpt.SetAutoSpell( bAutoSpell );
-    aViewOpt.SetHideAutoSpell( bHideAuto );
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
     aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( SFX_APP()->GetMiscConfig()->GetYear2000() ) );
