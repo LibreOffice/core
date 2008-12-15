@@ -315,12 +315,14 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).unpack
 
 .IF "$(P_ADDITIONAL_FILES)"!=""
 $(P_ADDITIONAL_FILES) :
+    @-$(MKDIRHIER) $(@:d)
     -echo dummy > $@
     -$(TOUCH) $@
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+    @-$(MKDIRHIER) $(@:d)
     -echo dummy > $@
     -$(TOUCH) $@
     -echo dummy > $(@:d)$(@:b)
