@@ -840,8 +840,6 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                 }
                 else
                 {
-                    if( mpFloatWin )
-                        mpImplLB->GetMainWindow()->CalcMaxVisibleEntries( mpFloatWin->CalcFloatSize() );
                     nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
                 }
             }

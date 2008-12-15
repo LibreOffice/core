@@ -70,11 +70,13 @@ struct ImplEntryType
     void*       mpUserData;
     BOOL        mbIsSelected;
     long        mnFlags;
+    long        mnHeight;
 
                 ImplEntryType( const XubString& rStr, const Image& rImage ) :
                     maStr( rStr ),
                     maImage( rImage ),
-                    mnFlags(0)
+                    mnFlags( 0 ),
+                    mnHeight( 0 )
                 {
                     mbIsSelected = FALSE;
                     mpUserData = NULL;
@@ -82,7 +84,8 @@ struct ImplEntryType
 
                 ImplEntryType( const XubString& rStr ) :
                     maStr( rStr ),
-                    mnFlags(0)
+                    mnFlags( 0 ),
+                    mnHeight( 0 )
                 {
                     mbIsSelected = FALSE;
                     mpUserData = NULL;
@@ -90,7 +93,8 @@ struct ImplEntryType
 
                 ImplEntryType( const Image& rImage ) :
                     maImage( rImage ),
-                    mnFlags( 0 )
+                    mnFlags( 0 ),
+                    mnHeight( 0 )
                 {
                     mbIsSelected = FALSE;
                     mpUserData = NULL;
@@ -124,11 +128,19 @@ public:
     USHORT                  InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL bSort );
     void                    RemoveEntry( USHORT nPos );
     const ImplEntryType*    GetEntryPtr( USHORT nPos ) const { return (const ImplEntryType*) GetObject( nPos ); }
+    ImplEntryType*          GetMutableEntryPtr( USHORT nPos ) const { return (ImplEntryType*) GetObject( nPos ); }
     void                    Clear();
 
     USHORT          FindMatchingEntry( const XubString& rStr, USHORT nStart = 0, BOOL bForward = TRUE, BOOL bLazy = TRUE ) const;
     USHORT          FindEntry( const XubString& rStr, BOOL bSearchMRUArea = FALSE ) const;
     USHORT          FindEntry( const void* pData ) const;
+
+    // helper: add up heights up to index nEndIndex.
+    // GetAddedHeight( 0 ) returns 0
+    // GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) returns 0
+    // GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
+    long            GetAddedHeight( USHORT nEndIndex, USHORT nBeginIndex = 0, long nBeginHeight = 0 ) const;
+    long            GetEntryHeight( USHORT nPos ) const;
 
     USHORT          GetEntryCount() const { return (USHORT)List::Count(); }
     BOOL            HasImages() const { return mnImages ? TRUE : FALSE; }
@@ -194,17 +206,16 @@ private:
 
     Size            maUserItemSize;
 
-    USHORT          mnMaxTxtHeight;  // Maximale Hoehe eines Text-Items
-    USHORT          mnMaxTxtWidth;   // Maximale Breite eines Text-Items
+    long            mnMaxTxtHeight;  // Maximale Hoehe eines Text-Items
+    long            mnMaxTxtWidth;   // Maximale Breite eines Text-Items
                                      // Entry ohne Image
-    USHORT          mnMaxImgTxtWidth;// Maximale Breite eines Text-Items
+    long            mnMaxImgTxtWidth;// Maximale Breite eines Text-Items
                                      // Entry UND Image
-    USHORT          mnMaxImgWidth;   // Maximale Breite eines Image-Items
-    USHORT          mnMaxImgHeight;  // Maximale Hoehe eines Image-Items
-    USHORT          mnMaxWidth;      // Maximale Breite eines Eintrags
-    USHORT          mnMaxHeight;     // Maximale Hoehe eines Eintrags
+    long            mnMaxImgWidth;   // Maximale Breite eines Image-Items
+    long            mnMaxImgHeight;  // Maximale Hoehe eines Image-Items
+    long            mnMaxWidth;      // Maximale Breite eines Eintrags
+    long            mnMaxHeight;     // Maximale Hoehe eines Eintrags
 
-    USHORT          mnMaxVisibleEntries; // Anzahl der sichtbaren Eintraege
     USHORT          mnCurrentPos;    // Position (Focus)
     USHORT          mnTrackingSaveSelection; // Selektion vor Tracking();
 
@@ -213,9 +224,9 @@ private:
     USHORT          mnUserDrawEntry;
 
     USHORT          mnTop;           // Ausgabe ab Zeile
-    USHORT          mnLeft;          // Ausgabe ab Spalte
-    USHORT          mnBorder;        // Abstand Rahmen - Text
-    USHORT          mnTextHeight;    // Texthoehe
+    long            mnLeft;          // Ausgabe ab Spalte
+    long            mnBorder;        // Abstand Rahmen - Text
+    long            mnTextHeight;    // Texthoehe
 
     USHORT          mnSelectModifier;   // Modifiers
 
@@ -261,7 +272,7 @@ protected:
     void            ImplPaint( USHORT nPos, BOOL bErase = FALSE, bool bLayout = false );
     void            ImplDoPaint( const Rectangle& rRect, bool bLayout = false );
     void            ImplCalcMetrics();
-    void            ImplCalcEntryMetrics( const ImplEntryType& rEntry, BOOL bUpdateMetrics );
+    void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );
     void            ImplCallSelect();
 
     void            ImplShowFocusRect();
@@ -285,23 +296,25 @@ public:
     void            ResetCurrentPos()               { mnCurrentPos = LISTBOX_ENTRY_NOTFOUND; }
     USHORT          GetCurrentPos() const           { return mnCurrentPos; }
     USHORT          GetDisplayLineCount() const;
+    void            SetEntryFlags( USHORT nPos, long nFlags );
 
     void            DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos = FALSE, bool bLayout = false );
 
     void            SelectEntry( USHORT nPos, BOOL bSelect );
     void            DeselectAll();
     USHORT          GetEntryPosForPoint( const Point& rPoint ) const;
+    USHORT          GetLastVisibleEntry() const;
 
     BOOL            ProcessKeyInput( const KeyEvent& rKEvt );
 
     void            SetTopEntry( USHORT nTop );
     USHORT          GetTopEntry() const             { return mnTop; }
     using Window::IsVisible;
-    BOOL            IsVisible( USHORT nEntry ) const { return ( ( nEntry >= mnTop ) && ( nEntry < (mnTop+mnMaxVisibleEntries) ) ); }
+    BOOL            IsVisible( USHORT nEntry ) const;
 
-    USHORT          GetLeftIndent() const           { return mnLeft; }
-    void            SetLeftIndent( USHORT n );
-    void            ScrollHorz( short nDiff );
+    long            GetLeftIndent() const           { return mnLeft; }
+    void            SetLeftIndent( long n );
+    void            ScrollHorz( long nDiff );
 
     void            AllowGrabFocus( BOOL b )        { mbGrabFocus = b; }
     BOOL            IsGrabFocusAllowed() const      { return mbGrabFocus; }
@@ -330,7 +343,6 @@ public:
     BOOL            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
 
     Size            CalcSize( USHORT nMaxLines ) const;
-    void            CalcMaxVisibleEntries( const Size& rFloatSize);
     Rectangle       GetBoundingRectangle( USHORT nItem ) const;
 
     long            GetEntryHeight() const              { return mnMaxHeight; }
@@ -433,7 +445,7 @@ public:
     using Window::IsVisible;
     BOOL            IsVisible( USHORT nEntry ) const { return maLBWindow.IsVisible( nEntry ); }
 
-    USHORT          GetLeftIndent() const           { return maLBWindow.GetLeftIndent(); }
+    long            GetLeftIndent() const           { return maLBWindow.GetLeftIndent(); }
     void            SetLeftIndent( USHORT n )       { maLBWindow.SetLeftIndent( n ); }
     void            ScrollHorz( short nDiff )       { maLBWindow.ScrollHorz( nDiff ); }
 
