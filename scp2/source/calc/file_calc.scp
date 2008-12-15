@@ -47,7 +47,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sc, sc)
 
-STD_LIB_FILE( gid_File_Lib_Scui, scui)
+STD_LIB_FILE_PATCH( gid_File_Lib_Scui, scui)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Scd, scd)
 

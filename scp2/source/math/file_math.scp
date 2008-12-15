@@ -46,7 +46,7 @@ File gid_File_Dtd_Math
 End
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sm , sm)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sm , sm)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Smd , smd)
 

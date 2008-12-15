@@ -346,7 +346,7 @@ End
 
 File gid_File_Lib_Dlgprov
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -624,7 +624,7 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Fwe , fwe)
+STD_LIB_FILE_PATCH( gid_File_Lib_Fwe , fwe)
 
 STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 
@@ -841,7 +841,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Lng, lng)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
     TXT_FILE_BODY;
@@ -1251,7 +1251,7 @@ File gid_File_Lib_Scriptframe
 End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sd , sd)
-STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
+STD_LIB_FILE_PATCH( gid_File_Lib_Sdui, sdui)
 
 File gid_File_Lib_Slideshow
     TXT_FILE_BODY;
@@ -1341,7 +1341,7 @@ End
 
 File gid_File_Lib_Spell
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(spell);
     Dir = gid_Dir_Program;
@@ -1365,7 +1365,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
-STD_LIB_FILE( gid_File_Lib_Svl, svl )
+STD_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
@@ -1472,7 +1472,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(lnth);
     Dir = gid_Dir_Program;
@@ -1480,7 +1480,7 @@ End
 
 File gid_File_Lib_Hyph
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(hyphen);
     Dir = gid_Dir_Program;

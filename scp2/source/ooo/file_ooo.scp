@@ -1643,7 +1643,7 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
@@ -1706,7 +1706,7 @@ End
 
 File gid_File_Oo_Office_Linguistic_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Linguistic.xcs";
 End
@@ -2871,7 +2871,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_ImagesCrystal_Zip
