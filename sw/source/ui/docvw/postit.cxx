@@ -757,10 +757,6 @@ void SwPostIt::InitControls()
         nCntrl |= EE_CNTRL_MARKFIELDS;
     else
         nCntrl &= ~EE_CNTRL_MARKFIELDS;
-    if (pVOpt->IsHideSpell())
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
@@ -1435,10 +1431,6 @@ void SwPostIt::SetSpellChecking()
 {
     const SwViewOption* pVOpt = mpView->GetWrtShellPtr()->GetViewOptions();
     ULONG nCntrl = mpOutliner->GetControlWord();
-    if (pVOpt->IsHideSpell())
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else

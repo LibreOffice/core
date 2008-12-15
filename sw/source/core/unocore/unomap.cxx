@@ -2557,7 +2557,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_PAGE_COUNT),             WID_PAGE_COUNT,             CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_LINE_COUNT),             WID_LINE_COUNT,             CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_CONSTANT_SPELLCHECK), WID_IS_CONSTANT_SPELLCHECK, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_IS_HIDE_SPELL_MARKS),    WID_IS_HIDE_SPELL_MARKS,    CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_HIDE_SPELL_MARKS),    WID_IS_HIDE_SPELL_MARKS,    CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},  // deprecated #i91949
                     {0,0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = pTextViewMap;

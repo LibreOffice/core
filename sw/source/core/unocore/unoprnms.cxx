@@ -741,7 +741,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0696 UNO_NAME_PAGE_COUNT*/               {MAP_CHAR_LEN("PageCount")},
 /* 0697 UNO_NAME_LINE_COUNT*/               {MAP_CHAR_LEN("LineCount")},
 /* 0698 UNO_NAME_IS_CONSTANT_SPELLCHECK*/   {MAP_CHAR_LEN("IsConstantSpellcheck")},
-/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")},
+/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")},     /* deprecated #i91949 */
 /* 0700 UNO_NAME_IS_FIELD_USED */       {MAP_CHAR_LEN("IsFieldUsed")},
 /* 0701 UNO_NAME_IS_FIELD_DISPLAYED */  {MAP_CHAR_LEN("IsFieldDisplayed")},
 /* 0702 UNO_NAME_BUILDID */             {MAP_CHAR_LEN("BuildId")},

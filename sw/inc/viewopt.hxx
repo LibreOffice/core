@@ -71,7 +71,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_1_SYNCHRONIZE   0x01000000L
 #define VIEWOPT_1_GRIDVISIBLE   0x02000000L
 #define VIEWOPT_1_ONLINESPELL   0x04000000L
-#define VIEWOPT_1_HIDESPELL     0x08000000L
+//#define VIEWOPT_1_HIDESPELL     0x08000000L   /* removed #i91949 */
 #define VIEWOPT_1_RESERVED1     0x10000000L
 #define VIEWOPT_1_VIEWMETACHARS 0x20000000L
 #define VIEWOPT_1_PAGEBACK      0x40000000L
@@ -332,11 +332,6 @@ public:
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_ONLINESPELL) ? TRUE : FALSE; }
     inline void SetOnlineSpell( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL); }
-
-    inline BOOL IsHideSpell() const
-        { return nCoreOptions & VIEWOPT_1_HIDESPELL ? TRUE : FALSE; }
-    inline void SetHideSpell( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_HIDESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_HIDESPELL); }
 
     inline BOOL IsViewMetaChars() const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_VIEWMETACHARS) ? TRUE : FALSE; }

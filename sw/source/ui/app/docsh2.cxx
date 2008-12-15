@@ -1201,7 +1201,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                         SID_HTML_MODE,
                                         SID_RULER_PROTECT,
                                         SID_AUTOSPELL_CHECK,
-                                        SID_AUTOSPELL_MARKOFF,
                                         FN_RULER,       /*20211*/
                                         FN_VIEW_GRAPHIC,    /*20213*/
                                         FN_VIEW_BOUNDS,     /**/

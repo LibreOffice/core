@@ -40,7 +40,7 @@
 #endif
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
+#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <linguistic/lngprops.hxx>
 #include <comphelper/processfactory.hxx>
@@ -97,6 +97,18 @@
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+
+#include <unotools/processfactory.hxx>
+
+#include <vcl/svapp.hxx>
+#include <rtl/ustring.hxx>
+
 #include <cppuhelper/bootstrap.hxx>
 #include "stmenu.hxx"              // PopupMenu for smarttags
 #include <svx/dialogs.hrc>
@@ -105,6 +117,7 @@
 
 #include <memory>
 
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -702,13 +715,45 @@ void SwView::StartThesaurus()
     Beschreibung:   Online-Vorschlaege anbieten
  *--------------------------------------------------------------------*/
 
+//!! Start of extra code for context menu modifying extensions
+struct ExecuteInfo
+{
+    uno::Reference< frame::XDispatch >  xDispatch;
+    util::URL                           aTargetURL;
+    uno::Sequence< PropertyValue >      aArgs;
+};
+
+class AsyncExecute
+{
+public:
+    DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo* );
+};
+
+IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+{
+    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+    try
+    {
+        // Asynchronous execution as this can lead to our own destruction!
+        // Framework can recycle our current frame and the layout manager disposes all user interface
+        // elements if a component gets detached from its frame!
+        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+    }
+    catch ( Exception& )
+    {
+    }
+
+    Application::AcquireSolarMutex( nRef );
+    delete pExecuteInfo;
+    return 0;
+}
+//!! End of extra code for context menu modifying extensions
 
 sal_Bool SwView::ExecSpellPopup(const Point& rPt)
 {
     sal_Bool bRet = sal_False;
     const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
     if( pVOpt->IsOnlineSpell() &&
-        !pVOpt->IsHideSpell() &&
         !pWrtShell->IsSelection())
     {
         if (pWrtShell->GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
@@ -725,7 +770,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             // default context menu.
             bool bUseGrammarContext = false;
             Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt, aToFill) );
-            /*linguistic2::*/GrammarCheckingResult aGrammarCheckRes;
+            /*linguistic2::*/ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorPosInText = -1;
             sal_Int32 nErrorInResult = -1;
             uno::Sequence< rtl::OUString > aSuggestions;
@@ -735,7 +780,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 bCorrectionRes = pWrtShell->GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, &rPt, aToFill );
                 ::rtl::OUString aMessageText;
                 if (nErrorInResult >= 0)
-                    aMessageText = aGrammarCheckRes.aGrammarErrors[ nErrorInResult ].aShortComment;
+                    aMessageText = aGrammarCheckRes.aErrors[ nErrorInResult ].aShortComment;
                 // we like to use the grammar checking context menu if we either get
                 // some suggestions or at least a comment about the error found...
                 bUseGrammarContext = bCorrectionRes &&
@@ -744,7 +789,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
 
             // open respective context menu for spell check or grammar errors with correction suggestions...
             if ((!bUseGrammarContext && xAlt.is()) ||
-                (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aGrammarErrors.getLength() > 0))
+                (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aErrors.getLength() > 0))
             {
                 // get paragraph text
                 String aParaText;
@@ -777,13 +822,64 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 Menu* pMenu = 0;
 
-                if(TryContextMenuInterception( *pPopup, pMenu, aEvent ))
+                ::rtl::OUString sMenuName = ::rtl::OUString::createFromAscii(
+                    bUseGrammarContext ? "private:resource/GrammarContextMenu" : "private:resource/SpellContextMenu");
+                if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
+
+                    //! happy hacking for context menu modifying extensions of this
+                    //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
                     {
+                        OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                         USHORT nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
-                        if(!ExecuteMenuCommand( *dynamic_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
-                            pPopup->Execute(nId);
+                        OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
+                        if (aCommand.getLength() == 0 )
+                        {
+                            if(!ExecuteMenuCommand( *dynamic_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
+                                pPopup->Execute(nId);
+                        }
+                        else
+                        {
+                            SfxViewFrame *pSfxViewFrame = GetViewFrame();
+                            SfxFrame *pSfxFrame = pSfxViewFrame? pSfxViewFrame->GetFrame() : 0;
+                            uno::Reference< frame::XFrame > xFrame;
+                            if (pSfxFrame)
+                                xFrame = pSfxFrame->GetFrameInterface();
+                            com::sun::star::util::URL aURL;
+                            uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY );
+                            uno::Reference< lang::XMultiServiceFactory > xMgr( utl::getProcessServiceFactory(), uno::UNO_QUERY );
+
+                            try
+                            {
+                                uno::Reference< frame::XDispatch > xDispatch;
+                                uno::Reference< util::XURLTransformer > xURLTransformer;
+                                if (xMgr.is())
+                                {
+                                    xURLTransformer = uno::Reference< util::XURLTransformer >( xMgr->createInstance(
+                                            C2U("com.sun.star.util.URLTransformer")), UNO_QUERY);
+                                }
+
+                                aURL.Complete = aCommand;
+                                xURLTransformer->parseStrict(aURL);
+                                uno::Sequence< beans::PropertyValue > aArgs;
+                                xDispatch = xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
+
+
+                                if (xDispatch.is())
+                                {
+                                    // Execute dispatch asynchronously
+                                    ExecuteInfo* pExecuteInfo   = new ExecuteInfo;
+                                    pExecuteInfo->xDispatch     = xDispatch;
+                                    pExecuteInfo->aTargetURL    = aURL;
+                                    pExecuteInfo->aArgs         = aArgs;
+                                    Application::PostUserEvent( STATIC_LINK(0, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
+                                }
+                            }
+                            catch (Exception &)
+                            {
+                            }
+                        }
                     }
                     else
                     {

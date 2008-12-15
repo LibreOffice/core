@@ -1032,8 +1032,10 @@ void SAL_CALL SwXTextView::setPropertyValue(
     {
         switch (pCur->nWID)
         {
-            case WID_IS_CONSTANT_SPELLCHECK :
             case WID_IS_HIDE_SPELL_MARKS :
+                // deprecated #i91949
+            break;
+            case WID_IS_CONSTANT_SPELLCHECK :
             {
                 sal_Bool bVal = sal_False;
                 const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
@@ -1042,8 +1044,6 @@ void SAL_CALL SwXTextView::setPropertyValue(
                 SwViewOption aNewOpt( *pOpt );
                 if (pCur->nWID == WID_IS_CONSTANT_SPELLCHECK)
                     aNewOpt.SetOnlineSpell(bVal);
-                else
-                    aNewOpt.SetHideSpell(bVal);
                 pView->GetWrtShell().ApplyViewOptions( aNewOpt );
             }
             break;
@@ -1085,14 +1085,15 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 aRet <<= nCount;
             }
             break;
-            case WID_IS_CONSTANT_SPELLCHECK :
             case WID_IS_HIDE_SPELL_MARKS :
+                // deprecated #i91949
+            break;
+            case WID_IS_CONSTANT_SPELLCHECK :
             {
                 const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
                 if (!pOpt)
                     throw RuntimeException();
-                UINT32 nFlag = nWID == WID_IS_CONSTANT_SPELLCHECK ?
-                                    VIEWOPT_1_ONLINESPELL : VIEWOPT_1_HIDESPELL;
+                UINT32 nFlag = VIEWOPT_1_ONLINESPELL;
                 sal_Bool bVal = 0 != (pOpt->GetCoreOptions() & nFlag);
                 aRet <<= bVal;
             }

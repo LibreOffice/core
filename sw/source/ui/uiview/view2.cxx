@@ -1106,21 +1106,39 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GenerateFormLetter(bUseCurrentDocument);
         }
         break;
+        case SID_RECHECK_DOCUMENT:
+        {
+            SwDocShell* pDocShell = GetDocShell();
+            SwDoc* pDoc = pDocShell->GetDoc();
+            uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( pDoc->GetGCIterator() );
+            if( xGCIterator.is() )
+            {
+                xGCIterator->resetIgnoreRules();
+            }
+            // reset ignore lists
+            pDoc->SpellItAgainSam( sal_True, sal_False, sal_False );
+            // clear ignore dictionary
+            uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
+            if( xDictionary.is() )
+                xDictionary->clear();
+            // put cursor to the start of the document
+            pWrtShell->SttDoc();
+        }
+        // no break; - but call spell/grammar dialog
         case FN_SPELL_GRAMMAR_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != NULL)
-                pViewFrame->SetChildWindow (nSlot,
+                pViewFrame->SetChildWindow (FN_SPELL_GRAMMAR_DIALOG,
                     ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(nSlot))).GetValue());
+                        Get(FN_SPELL_GRAMMAR_DIALOG))).GetValue());
             else
-                pViewFrame->ToggleChildWindow(nSlot);
+                pViewFrame->ToggleChildWindow(FN_SPELL_GRAMMAR_DIALOG);
 
-            pViewFrame->GetBindings().Invalidate(nSlot);
+            pViewFrame->GetBindings().Invalidate(FN_SPELL_GRAMMAR_DIALOG);
             rReq.Ignore ();
         }
         break;
-
         case SID_ALIGN_ANY_LEFT :
         case SID_ALIGN_ANY_HCENTER  :
         case SID_ALIGN_ANY_RIGHT    :

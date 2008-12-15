@@ -41,7 +41,7 @@
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
+#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <fldupde.hxx>
 #include <tblenum.hxx>
 
@@ -735,6 +735,8 @@ public:
     // spells on a sentence basis - the SpellPortions are needed
     // returns false if no error could be found
     bool SpellSentence(::svx::SpellPortions& rToFill, bool bIsGrammarCheck );
+    // make SpellIter start with the current sentence when called next time
+    void PutSpellingToSentenceStart();
     //applies a changed sentence
     void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bIsGrammarCheck);
 
@@ -748,12 +750,13 @@ public:
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
 
 
-    bool GetGrammarCorrection( ::com::sun::star::linguistic2::GrammarCheckingResult /*out*/ &rResult,
+    bool GetGrammarCorrection( ::com::sun::star::linguistic2::ProofreadingResult /*out*/ &rResult,
             sal_Int32 /*out*/ &rErrorPosInText,
             sal_Int32 /*out*/ &rErrorIndexInResult,
             ::com::sun::star::uno::Sequence< rtl::OUString > /*out*/ &rSuggestions,
             const Point* pPt, SwRect& rSelectRect );
 
+    void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnde );
 
     // returne zum Namen die im Doc gesetzte Referenz

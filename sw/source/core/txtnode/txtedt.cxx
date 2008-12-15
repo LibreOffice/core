@@ -1284,7 +1284,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         //
         // Calculate repaint area:
         //
-        if( nChgStart < nChgEnd && !rViewOpt.IsHideSpell() )
+        if( nChgStart < nChgEnd )
         {
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
         }

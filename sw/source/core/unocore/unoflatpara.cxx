@@ -144,7 +144,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
             mpTxtNode->SetWrongDirty( !bVal );
         else if ( text::TextMarkupType::SMARTTAG == nType )
             mpTxtNode->SetSmartTagDirty( !bVal );
-        else if( text::TextMarkupType::GRAMMAR == nType )
+        else if( text::TextMarkupType::PROOFREADING == nType )
         {
             mpTxtNode->SetGrammarCheckDirty( !bVal );
             if( bVal )
@@ -161,7 +161,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
             return mpTxtNode->IsWrongDirty();
-        else if ( text::TextMarkupType::GRAMMAR == nType )
+        else if ( text::TextMarkupType::PROOFREADING == nType )
             return mpTxtNode->IsGrammarCheckDirty();
         else if ( text::TextMarkupType::SMARTTAG == nType )
             return mpTxtNode->IsSmartTagDirty();
@@ -337,7 +337,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
                     if ( pTxtNode &&
                         ((mnType == text::TextMarkupType::SPELLCHECK &&
                                 pTxtNode->IsWrongDirty()) ||
-                         (mnType == text::TextMarkupType::GRAMMAR &&
+                         (mnType == text::TextMarkupType::PROOFREADING &&
                                 pTxtNode->IsGrammarCheckDirty())) )
                     {
                         pRet = pTxtNode;
@@ -402,7 +402,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
     // in case that grammar checking will be finished we now have to reset
     // the flag at the root frame that indicated grammar checking was still active.
-    if (!xRet.is() && mnType == text::TextMarkupType::GRAMMAR)
+    if (!xRet.is() && mnType == text::TextMarkupType::PROOFREADING)
     {
         SwRootFrm *pRootFrm = mpDoc? mpDoc->GetRootFrm() : NULL;
         if (pRootFrm)

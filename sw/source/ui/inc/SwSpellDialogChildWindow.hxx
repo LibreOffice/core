@@ -58,9 +58,6 @@ protected:
     virtual bool HasGrammarChecking();
     virtual bool IsGrammarChecking();
     virtual void SetGrammarChecking(bool bOn);
-    virtual bool HasAnyVendor();
-    virtual String GetVendorForLanguage( LanguageType eLanguage );
-    virtual Image GetVendorLogoForLanguage( LanguageType eLanguage );
     virtual void GetFocus();
     virtual void LoseFocus();
 

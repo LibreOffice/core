@@ -69,8 +69,7 @@ SLOFILES =	\
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
         $(SLO)$/usrpref.obj \
-        $(SLO)$/viewopt.obj \
-        $(SLO)$/swlinguconfig.obj
+        $(SLO)$/viewopt.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -84,8 +83,8 @@ LIB1OBJFILES = \
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
         $(SLO)$/usrpref.obj \
-        $(SLO)$/viewopt.obj \
-        $(SLO)$/swlinguconfig.obj
+        $(SLO)$/viewopt.obj
+
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk

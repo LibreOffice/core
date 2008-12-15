@@ -34,6 +34,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <svtools/linguprops.hxx>
+#include <svtools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <svtools/ctloptions.hxx>
 #include <sfx2/printer.hxx>
@@ -703,11 +704,11 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( ! IsMulti() )
         nComp = GetKanaComp();
 
+    sal_Bool bCfgIsAutoGrammar = sal_False;
+    SvtLinguConfig().GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bCfgIsAutoGrammar;
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
-    const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell() &&
-                               !GetOpt().IsHideSpell();
-    const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && GetOpt().IsOnlineSpell() &&
-                               !GetOpt().IsHideSpell();
+    const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
+    const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
     ASSERT( GetParaPortion(), "No paragraph!");

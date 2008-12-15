@@ -3041,7 +3041,7 @@ const ModelToViewHelper::ConversionMap*
     if ( pConversionMap && pConversionMap->size() )
         pConversionMap->push_back(
             ModelToViewHelper::ConversionMapEntry(
-                rNodeText.getLength(), rRetText.getLength() ) );
+                rNodeText.getLength()+1, rRetText.getLength()+1 ) );
 
     return pConversionMap;
 }

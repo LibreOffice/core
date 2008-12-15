@@ -266,6 +266,11 @@ interface BaseTextEditView : View
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_RECHECK_DOCUMENT
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_LINE_NUMBERING_DLG // status()
     [
         ExecMethod = Execute;
@@ -615,12 +620,6 @@ interface BaseTextEditView : View
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
     SID_AUTOSPELL_CHECK
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-    ]
-
-    SID_AUTOSPELL_MARKOFF
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;

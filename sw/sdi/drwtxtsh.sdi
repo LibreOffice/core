@@ -455,12 +455,6 @@ interface TextDrawText
         StateMethod = GetDrawTxtCtrlState
     ]
 
-    SID_AUTOSPELL_MARKOFF
-    [
-        ExecMethod = Execute;
-        StateMethod = GetDrawTxtCtrlState
-    ]
-
     SID_SEARCH_DLG
     [
         StateMethod = StateDisableItems

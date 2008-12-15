@@ -548,11 +548,6 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
         else
             nCntrl &= ~EE_CNTRL_MARKFIELDS;
 
-        if (pOpt->IsHideSpell())
-            nCntrl |= EE_CNTRL_NOREDLINES;
-        else
-            nCntrl &= ~EE_CNTRL_NOREDLINES;
-
         if (pOpt->IsOnlineSpell())
             nCntrl |= EE_CNTRL_ONLINESPELLING;
         else

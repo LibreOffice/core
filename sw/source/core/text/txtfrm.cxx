@@ -812,11 +812,9 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
             if( pTxtNode->GetWrong() )
                 pTxtNode->GetWrong()->Move( nPos, nCnt );
             if( pWrongGrammar )
-            {
                 pWrongGrammar->MoveGrammar( nPos, nCnt );
-                if( bGrammarProxy && pTxtNode->GetGrammarCheck() )
-                    pTxtNode->GetGrammarCheck()->MoveGrammar( nPos, nCnt );
-            }
+            if( bGrammarProxy && pTxtNode->GetGrammarCheck() )
+                pTxtNode->GetGrammarCheck()->MoveGrammar( nPos, nCnt );
             if( pTxtNode->GetSmartTags() )
                 pTxtNode->GetSmartTags()->Move( nPos, nCnt );
         }

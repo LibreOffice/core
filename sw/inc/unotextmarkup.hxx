@@ -32,7 +32,9 @@
 #define _UNOTEXTMARKUP_HXX
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/text/XTextMarkup.hpp>
+#include <com/sun/star/text/XMultiTextMarkup.hpp>
 #include <calbck.hxx>
 #include <modeltoviewhelper.hxx>
 
@@ -49,17 +51,23 @@ class SfxPoolItem;
 /** Implementation of the css::text::XTextMarkup interface
  */
 class SwXTextMarkup:
-    public ::cppu::WeakImplHelper1<
-        ::com::sun::star::text::XTextMarkup >,
+    public ::cppu::WeakImplHelper2
+    <
+        ::com::sun::star::text::XTextMarkup,
+        ::com::sun::star::text::XMultiTextMarkup
+    >,
     public SwClient
 {
 public:
     SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pConversionMap );
     virtual ~SwXTextMarkup();
 
-    // ::com::sun::star::smarttags::XTextMarkup:
+    // ::com::sun::star::text::XTextMarkup:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL commitTextMarkup(::sal_Int32 nType, const ::rtl::OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > & xMarkupInfoContainer) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::text::XMultiTextMarkup:
+    virtual void SAL_CALL commitMultiTextMarkup( const ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextMarkupDescriptor >& aMarkups ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //SwClient
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);

@@ -151,11 +151,9 @@ void SwDrawTextShell::Init()
     if(pVOpt->IsOnlineSpell())
     {
         nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
-        if(pVOpt->IsHideSpell())
-            nCtrl |= EE_CNTRL_NOREDLINES;
     }
     else
-        nCtrl &= ~(EE_CNTRL_ONLINESPELLING|EE_CNTRL_NOREDLINES);
+        nCtrl &= ~(EE_CNTRL_ONLINESPELLING);
 
     pOutliner->SetControlWord(nCtrl);
     pOLV->ShowCursor();

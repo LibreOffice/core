@@ -345,7 +345,8 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
         aEvent.ExecutePosition.X = aPoint.X();
         aEvent.ExecutePosition.Y = aPoint.Y();
-        if ( GetView()->TryContextMenuInterception( *pPopupMenu, pMenu, aEvent ) )
+        ::rtl::OUString sDummy;
+        if ( GetView()->TryContextMenuInterception( *pPopupMenu, sDummy, pMenu, aEvent ) )
         {
             if ( pMenu )
             {

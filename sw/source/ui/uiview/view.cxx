@@ -158,8 +158,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
 
-// #107253#
-#include <swlinguconfig.hxx>
 #include "formatclipboard.hxx"
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
@@ -880,11 +878,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-    SwLinguConfig().GetOptions( aLinguOpt );
+    SvtLinguConfig().GetOptions( aLinguOpt );
 
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
-    aUsrPref.SetHideSpell( aLinguOpt.bIsSpellHideMarkings );
 
     sal_Bool bOldShellWasSrcView = FALSE;
 

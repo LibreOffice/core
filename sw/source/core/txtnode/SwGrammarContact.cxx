@@ -41,6 +41,9 @@
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 
+extern void repaintTextFrames( SwModify& rModify );
+
+
 /* SwGrammarContact
     This class is responsible for the delayed display of grammar checks when a paragraph is edited
     It's a client of the paragraph the cursor points to.
@@ -59,7 +62,6 @@ class SwGrammarContact : public IGrammarContact, public SwClient
     SwGrammarMarkUp *mpProxyList;
     bool mbFinished;
     SwTxtNode* getMyTxtNode() { return (SwTxtNode*)pRegisteredIn; }
-    void repaintTextFrames( SwModify& rModify ) const;
       DECL_LINK( TimerRepaint, Timer * );
 
 public:
@@ -94,21 +96,6 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer )
         }
     }
     return 0;
-}
-
-/* repaint all text frames of the given text node */
-void SwGrammarContact::repaintTextFrames( SwModify& rModify ) const
-{
-    SwClientIter aIter( rModify );
-    for( const SwTxtFrm *pFrm = (const SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
-         pFrm; pFrm = (const SwTxtFrm*)aIter.Next() )
-    {
-        SwRect aRec( pFrm->PaintArea() );
-        const SwRootFrm *pRootFrm = pFrm->FindRootFrm();
-        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
-        if( pCurShell )
-            pCurShell->InvalidateWindows( aRec );
-    }
 }
 
 /* I'm always a client of the current paragraph */
@@ -147,7 +134,15 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
                 mpProxyList = 0;
             }
             if( !mpProxyList )
-                mpProxyList = new SwGrammarMarkUp();
+            {
+                if( rTxtNode.GetGrammarCheck() )
+                    mpProxyList = (SwGrammarMarkUp*)rTxtNode.GetGrammarCheck()->Clone();
+                else
+                {
+                    mpProxyList = new SwGrammarMarkUp();
+                    mpProxyList->SetInvalid( 0, STRING_LEN );
+                }
+            }
            mbFinished = false;
         }
         pRet = mpProxyList;
@@ -158,6 +153,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
         if( bCreate && !pRet ) // do you want to create a list?
         {
             pRet = new SwGrammarMarkUp();
+            pRet->SetInvalid( 0, STRING_LEN );
             rTxtNode.SetGrammarCheck( pRet );
             rTxtNode.SetGrammarCheckDirty( true );
         }
@@ -202,6 +198,21 @@ void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
 IGrammarContact* createGrammarContact()
 {
     return new SwGrammarContact();
+}
+
+/* repaint all text frames of the given text node */
+void repaintTextFrames( SwModify& rModify )
+{
+    SwClientIter aIter( rModify );
+    for( const SwTxtFrm *pFrm = (const SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
+         pFrm; pFrm = (const SwTxtFrm*)aIter.Next() )
+    {
+        SwRect aRec( pFrm->PaintArea() );
+        const SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
+        if( pCurShell )
+            pCurShell->InvalidateWindows( aRec );
+    }
 }
 
 void finishGrammarCheck( SwTxtNode& rTxtNode )

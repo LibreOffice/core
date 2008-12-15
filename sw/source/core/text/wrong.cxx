@@ -52,6 +52,39 @@ SwWrongList::SwWrongList( WrongListType eType ) :
     maList.reserve( 5 );
 }
 
+SwWrongList::~SwWrongList()
+{
+    ClearList();
+}
+
+/*************************************************************************
+ * SwWrongList* SwWrongList::Clone()
+ *************************************************************************/
+
+SwWrongList* SwWrongList::Clone()
+{
+    SwWrongList* pClone = new SwWrongList( meType );
+    pClone->CopyFrom( *this );
+    return pClone;
+}
+
+/*************************************************************************
+ * void SwWrongList::CopyFrom( const SwWrongList& rCopy )
+ *************************************************************************/
+
+void SwWrongList::CopyFrom( const SwWrongList& rCopy )
+{
+    maList = rCopy.maList;
+    meType = rCopy.meType;
+    nBeginInvalid = rCopy.nBeginInvalid;
+    nEndInvalid = rCopy.nEndInvalid;
+    for( size_t i = 0; i < maList.size(); ++i )
+    {
+        if( maList[i].mpSubList )
+            maList[i].mpSubList = maList[i].mpSubList->Clone();
+    }
+}
+
 /*************************************************************************
  * SwWrongList::ClearList()
  *************************************************************************/
@@ -225,18 +258,12 @@ void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
         nBeginInvalid = nBegin;
     if ( nEnd > GetEndInv() )
         nEndInvalid = nEnd;
-    if( meType == WRONGLIST_GRAMMAR )
-    {
-        ((SwGrammarMarkUp*)this)->removeSentence( nBegin, nEnd );
-    }
 }
 
 void SwWrongList::SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
 {
     nBeginInvalid = nBegin;
     nEndInvalid = nEnd;
-    if( meType == WRONGLIST_GRAMMAR )
-        ((SwGrammarMarkUp*)this)->removeSentence( nBegin, nEnd );
 }
 
 
@@ -538,6 +565,44 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
 #if OSL_DEBUG_LEVEL > 1
     ASSERT( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" )
 #endif
+}
+
+void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
+    USHORT nDelPos = 0;
+    USHORT nDel = 0;
+    std::vector<SwWrongArea>::iterator aIter = maList.begin();
+    while( aIter != maList.end() && (*aIter).mnPos < nBegin )
+    {
+        ++aIter;
+        ++nDelPos;
+    }
+    if( WRONGLIST_GRAMMAR == GetWrongListType() )
+    {
+        while( aIter != maList.end() && nBegin < nEnd && nEnd > (*aIter).mnPos )
+        {
+            ++aIter;
+            ++nDel;
+        }
+    }
+    else
+    {
+        while( aIter != maList.end() && nBegin == (*aIter).mnPos && nEnd == (*aIter).mnPos +(*aIter).mnLen )
+        {
+            ++aIter;
+            ++nDel;
+        }
+    }
+    if( nDel )
+        Remove( nDelPos, nDel );
+}
+
+bool SwWrongList::LookForEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
+    std::vector<SwWrongArea>::iterator aIter = maList.begin();
+    while( aIter != maList.end() && (*aIter).mnPos < nBegin )
+        ++aIter;
+    if( aIter != maList.end() && nBegin == (*aIter).mnPos && nEnd == (*aIter).mnPos +(*aIter).mnLen )
+        return true;
+    return false;
 }
 
 void SwWrongList::Insert( const rtl::OUString& rType,

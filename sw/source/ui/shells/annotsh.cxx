@@ -410,7 +410,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             break;
         }
 
-        case SID_AUTOSPELL_MARKOFF:
         case SID_AUTOSPELL_CHECK:
         {
             rView.ExecuteSlot(rReq);
@@ -601,7 +600,6 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     }
                     break;
                 }
-            case SID_AUTOSPELL_MARKOFF:
             case SID_AUTOSPELL_CHECK:
             {
                 const SfxPoolItem* pState = rView.GetSlotState(nWhich);

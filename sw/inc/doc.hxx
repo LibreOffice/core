@@ -106,7 +106,7 @@ class SwList;
 #include <svx/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 
 #include <hash_map>
 #include <stringhash.hxx>
@@ -317,7 +317,7 @@ class SwDoc :
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         xXForms;                        // container with XForms models
-    mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XGrammarCheckingIterator > m_xGCIterator;
+    mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -2074,7 +2074,7 @@ public:
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         getXForms() const;
 
-    com::sun::star::uno::Reference< com::sun::star::linguistic2::XGrammarCheckingIterator > GetGCIterator() const;
+    com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > GetGCIterator() const;
 
     /// is this an XForms document?
     bool isXForms() const;

@@ -347,7 +347,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aNewAttr.Put(*pArgs);
         }
         break;
-        case SID_AUTOSPELL_MARKOFF:
         case SID_AUTOSPELL_CHECK:
         {
 //!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
@@ -357,20 +356,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
             sal_Bool bSet = ((const SfxBoolItem&)rReq.GetArgs()->Get(
                                                     nSlot)).GetValue();
-            if(nSlot == SID_AUTOSPELL_MARKOFF)
-            {
-                if(bSet)
-                    nCtrl |= EE_CNTRL_NOREDLINES;
-                else
-                    nCtrl &= ~EE_CNTRL_NOREDLINES;
-            }
+            if(bSet)
+                nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
             else
-            {
-                if(bSet)
-                    nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
-                else
-                    nCtrl &= ~EE_CNTRL_ONLINESPELLING;
-            }
+                nCtrl &= ~EE_CNTRL_ONLINESPELLING;
             pOutliner->SetControlWord(nCtrl);
 
             rView.ExecuteSlot(rReq);
@@ -728,7 +717,6 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
             case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
-            case SID_AUTOSPELL_MARKOFF:
             case SID_AUTOSPELL_CHECK:
             {
                 const SfxPoolItem* pState = rView.GetSlotState(nWhich);
