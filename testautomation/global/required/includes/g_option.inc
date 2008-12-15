@@ -487,7 +487,7 @@ testcase tToolsOptionsLanguageSettings
                    Kontext "TabLinguistik"
                    Optionen.TypeKeys "<PageUp>", 3
                    Sleep 1
-                   Optionen.TypeKeys "<Down>", 8
+                   Optionen.TypeKeys "<Down>", 6
                    Sleep 1
                    OptionenBearbeiten.Click
                     Kontext "SilbentrennungOptionen"
