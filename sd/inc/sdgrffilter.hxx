@@ -44,8 +44,6 @@ class Graphic;
 
 class SdGRFFilter : public SdFilter
 {
-    bool mbHideSpell;
-
 public:
     SdGRFFilter ( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell );
 

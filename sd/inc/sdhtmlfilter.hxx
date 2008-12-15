@@ -51,7 +51,6 @@ public:
 
 private:
     DECL_LINK( IOProgressHdl, USHORT* );
-    bool mbHideSpell;
 
 };
 

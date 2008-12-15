@@ -198,29 +198,22 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
 
-    BOOL bHideSpell = true;
     BOOL bOnlineSpell = false;
 
     DrawDocShell* pDocSh = mpDrawDocument->GetDocSh();
 
     if (pDocSh)
     {
-        bHideSpell = mpDrawDocument->GetHideSpell();
         bOnlineSpell = mpDrawDocument->GetOnlineSpell();
     }
     else
     {
-        bHideSpell = true;
         bOnlineSpell = false;
 
         try
         {
             const SvtLinguConfig    aLinguConfig;
             Any                     aAny;
-
-            aAny = aLinguConfig.GetProperty(
-                rtl::OUString::createFromAscii( UPN_IS_SPELL_HIDE ) );
-            aAny >>= bHideSpell;
 
             aAny = aLinguConfig.GetProperty(
                 rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
@@ -231,10 +224,6 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
             DBG_ERROR( "Ill. type in linguistic property" );
         }
     }
-
-    if (bHideSpell)
-        nCntrl |= EE_CNTRL_NOREDLINES;  else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
 
     if (bOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;

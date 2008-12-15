@@ -188,7 +188,6 @@ private:
     BOOL                mbNewOrLoadCompleted;
 
     BOOL                mbOnlineSpell;
-    BOOL                mbHideSpell;
     BOOL                mbSummationOfParagraphs;
     bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
     LanguageType        meLanguage;
@@ -408,9 +407,6 @@ public:
 
     void                InsertObject(SdrObject* pObj, SdPage* pPage);
     void                RemoveObject(SdrObject* pObj, SdPage* pPage);
-
-    void                SetHideSpell( BOOL bIn );
-    BOOL                GetHideSpell() const { return mbHideSpell; }
 
     ULONG               GetLinkCount();
 

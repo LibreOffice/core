@@ -153,15 +153,12 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell, sal_True )
 {
-    mbHideSpell = mrDocument.GetHideSpell();
-    mrDocument.SetHideSpell(TRUE);
 }
 
 // -----------------------------------------------------------------------------
 
 SdGRFFilter::~SdGRFFilter()
 {
-    mrDocument.SetHideSpell(mbHideSpell);
 }
 
 // -----------------------------------------------------------------------------

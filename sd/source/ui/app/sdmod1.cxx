@@ -147,24 +147,6 @@ void SdModule::Execute(SfxRequest& rReq)
         }
         break;
 
-        case SID_AUTOSPELL_MARKOFF:
-        {
-            const SfxPoolItem* pItem;
-            if( pSet && SFX_ITEM_SET == pSet->GetItemState(
-                        SID_AUTOSPELL_MARKOFF, FALSE, &pItem ) )
-            {
-                BOOL bHideSpell = ( (const SfxBoolItem*) pItem )->GetValue();
-                // am Dokument sichern:
-                ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
-                if( pDocSh )
-                {
-                    SdDrawDocument* pDoc = pDocSh->GetDoc();
-                    pDoc->SetHideSpell( bHideSpell );
-                }
-            }
-        }
-        break;
-
         case SID_ATTR_METRIC:
         {
             const SfxPoolItem* pItem;
@@ -418,8 +400,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             rItemSet.Put(*pItem);
     }
 
-    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) ||
-        SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_MARKOFF ) )
+    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) )
     {
         ::sd::DrawDocShell* pDocSh =
               PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
@@ -427,7 +408,6 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         {
             SdDrawDocument* pDoc = pDocSh->GetDoc();
             rItemSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, pDoc->GetOnlineSpell() ) );
-            rItemSet.Put( SfxBoolItem( SID_AUTOSPELL_MARKOFF, pDoc->GetHideSpell() ) );
         }
     }
 

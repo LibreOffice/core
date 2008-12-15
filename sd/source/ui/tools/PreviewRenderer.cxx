@@ -293,7 +293,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
         nOriginalControlWord = pOutliner->GetControlWord();
         pOutliner->SetControlWord(
-            (nOriginalControlWord & ~EE_CNTRL_ONLINESPELLING) | EE_CNTRL_NOREDLINES);
+            (nOriginalControlWord & ~EE_CNTRL_ONLINESPELLING));
     }
 
     try
