@@ -63,6 +63,7 @@ testcase tVerifyFilterNames
             case "Windows"       : cFile = cFile & "add_" & gIsoLang & ".txt"
             case "Solaris SPARC" : cFile = cFile & "add_" & gIsoLang & ".txt"
             case "WinXP"         : cFile = cFile & "add_" & gIsoLang & ".txt"
+            case "Mac OS X"      : cFile = cFile & "add_" & gIsoLang & ".txt"
             case "Linux"         : cFile = cFile & gIsoLang & ".txt"
             case "Solaris x86"   : cFile = cFile & gIsoLang & ".txt"
         end select

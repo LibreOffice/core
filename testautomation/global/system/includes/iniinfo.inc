@@ -169,9 +169,9 @@ sub GetOfficeInformation
     Dim sPlatformProgramPath as string
     Dim sPlatformBinExt as string      
    
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
         sPlatformProgramPath = "MacOS"
-        sPlatformBinExt = ".bin"
+        sPlatformBinExt = ""
     else
         sPlatformProgramPath = "program"
         if gPlatGroup <> "unx" then
