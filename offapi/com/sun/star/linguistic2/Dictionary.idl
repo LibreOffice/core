@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: Dictionary.idl,v $
+ * $Revision: 1.1.2.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_Dictionary_idl__
+#define __com_sun_star_linguistic2_Dictionary_idl__
+
+#ifndef __com_sun_star_linguistic2_XDictionary_idl__
+#include <com/sun/star/linguistic2/XDictionary.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XSearchableDictionary_idl__
+#include <com/sun/star/linguistic2/XSearchableDictionary.idl>
+#endif
+
+#ifndef __com_sun_star_util_XFlushable_idl__
+#include <com/sun/star/util/XFlushable.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XStorable_idl__
+#include <com/sun/star/frame/XStorable.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** represents a dictionary used for spell checking and hyphenation.
+
+
+    @see    com::sun::star::linguistic2::DictionaryList
+    @see    com::sun::star::linguistic2::XSearchableDictionaryList
+
+    @since OOo 3.01
+*/
+service Dictionary
+{
+    /** to access the dictionary functionality.
+    */
+    interface com::sun::star::linguistic2::XDictionary;
+
+    /** provide search for similar words functionality.
+    */
+    [optional] interface com::sun::star::linguistic2::XSearchableDictionary;
+
+    /** to save the dictionary content to file
+
+        <p>storeAsURL and storeToURL are empty implementations since the dictionaries are expected
+        to be found in specific locations</p>
+    */
+    [optional] interface com::sun::star::frame::XStorable;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

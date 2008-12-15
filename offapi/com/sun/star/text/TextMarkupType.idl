@@ -50,14 +50,16 @@ constants TextMarkupType
     /// Markup originates from spell checking.
     const long SPELLCHECK = 1;
 
-    /// Markup originates from grammar checking.
-    const long GRAMMAR = 2;
+    /// Markup originates from proofreading
+    /// @since OOo 3.0.1
+    const long PROOFREADING = 2;
 
     /// Markup originates from smart tag checking.
     const long SMARTTAG = 3;
 
-    /// Markup originates from grammar checking.
+    /// Markup originates from proofreading
     /// An inivisible markup used to identify sentence boundaries.
+    /// @since OOo 3.0.1
     const long SENTENCE = 4;
 };
 

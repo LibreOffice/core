@@ -29,6 +29,7 @@
 #
 #*************************************************************************
 
+
 PRJ=..$/..$/..$/..
 
 PRJNAME=offapi
@@ -47,6 +48,7 @@ IDLFILES=\
     ConversionDictionaryType.idl \
     ConversionDirection.idl \
     ConversionPropertyType.idl \
+    Dictionary.idl\
     DictionaryEvent.idl\
     DictionaryEventFlags.idl\
     DictionaryList.idl\
@@ -80,18 +82,21 @@ IDLFILES=\
     XLinguServiceManager.idl\
     XMeaning.idl\
     XPossibleHyphens.idl\
+    XSearchableDictionary.idl\
     XSearchableDictionaryList.idl\
     XSpellAlternatives.idl\
+    XSetSpellAlternatives.idl\
     XSpellChecker.idl\
     XSpellChecker1.idl\
     XSupportedLanguages.idl\
     XSupportedLocales.idl\
     XThesaurus.idl\
-    SingleGrammarError.idl\
-    GrammarCheckingResult.idl\
-    XGrammarChecker.idl\
-    XGrammarCheckingIterator.idl\
-    GrammarCheckingIterator.idl
+    SingleProofreadingError.idl\
+    ProofreadingResult.idl\
+    Proofreader.idl\
+    XProofreader.idl\
+    XProofreadingIterator.idl\
+    ProofreadingIterator.idl
 
 
 # ------------------------------------------------------------------

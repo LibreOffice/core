@@ -169,6 +169,7 @@ IDLFILES=\
      TextGraphicObjects.idl\
      TextGridMode.idl\
       TextLayoutCursor.idl\
+    TextMarkupDescriptor.idl\
     TextMarkupType.idl \
       TextPageStyle.idl\
       TextPortion.idl\
@@ -249,6 +250,7 @@ IDLFILES=\
       XTextFramesSupplier.idl\
       XTextGraphicObjectsSupplier.idl\
     XTextMarkup.idl\
+    XMultiTextMarkup.idl\
       XTextRange.idl\
       XTextRangeCompare.idl\
       XTextRangeMover.idl\
