@@ -397,7 +397,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
                                saved ? saved->len : 0 ) );
 
     char *pArgnBuf, *pArgvBuf;
-    int nArgnLen = 0, nArgvLen = 0;
+    size_t nArgnLen = 0, nArgvLen = 0;
     int i;
     for( i = 0; i < argc; i++ )
     {
@@ -425,7 +425,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
                       &argc, sizeof( argc ),
                       pArgnBuf, nArgnLen,
                       pArgvBuf, nArgvLen,
-                      saved->buf, saved->len,
+                      saved->buf, static_cast<size_t>(saved->len),
                       NULL );
     else
         pMes =
@@ -435,7 +435,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
                       &argc, sizeof( argc ),
                       pArgnBuf, nArgnLen,
                       pArgvBuf, nArgvLen,
-                      "0000", 4,
+                      "0000", size_t(4),
                       NULL );
     delete [] pArgnBuf;
     delete [] pArgvBuf;
@@ -542,7 +542,7 @@ int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, in
                   POST_INSTANCE(),
                   &nFileID, sizeof( nFileID ),
                   &offset, sizeof( offset ),
-                  buffer, len,
+                  buffer, static_cast<size_t>(len),
                   NULL );
     if( ! pMes )
         return 0;
