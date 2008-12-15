@@ -121,7 +121,7 @@ String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim  )
         }
 */
         default:
-            DBG_ERROR( "unexpected argument (path)" );
+            DBG_ASSERT( 0, "unexpected argument (path)" );
     }
     if (bAddAccessDelim && aRes.Len())
     {

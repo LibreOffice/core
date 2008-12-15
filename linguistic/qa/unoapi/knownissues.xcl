@@ -5,4 +5,5 @@ lng.LngSvcMgr
 ### i88538 ###
 lng.DicList::com::sun::star::linguistic2::XSearchableDictionaryList
 
-
+### i96846 ###
+lng.LinguProperties::com::sun::star::linguistic2::LinguProperties

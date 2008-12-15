@@ -33,6 +33,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -48,45 +49,14 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <vos/mutex.hxx>
-#include <tools/table.hxx>
+
+#include <boost/shared_ptr.hpp>
+#include <map>
 
 #include "lngopt.hxx"
 
 
-class LinguOptions;
-
-namespace com { namespace sun { namespace star { namespace beans {
-    class XPropertySet;
-}}}}
-
 ///////////////////////////////////////////////////////////////////////////
-
-class SeqLangSvcEntry_Thes
-{
-    friend class ThesaurusDispatcher;
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >      aSvcImplNames;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XThesaurus > >   aSvcRefs;
-//  INT16           nLang;     //used as key in the table
-    SvcFlags        aFlags;
-
-public:
-    SeqLangSvcEntry_Thes() {}
-    SeqLangSvcEntry_Thes( const ::com::sun::star::uno::Sequence<
-            ::rtl::OUString > &rSvcImplNames );
-    ~SeqLangSvcEntry_Thes();
-
-    BOOL    IsAlreadyWarned() const     { return aFlags.bAlreadyWarned != 0; }
-    void    SetAlreadyWarned(BOOL bVal) { aFlags.bAlreadyWarned = 0 != bVal; }
-    BOOL    IsDoWarnAgain() const       { return aFlags.bDoWarnAgain != 0; }
-    void    SetDoWarnAgain(BOOL bVal)   { aFlags.bDoWarnAgain = 0 != bVal; }
-};
-
-
-
-DECLARE_TABLE( ThesSvcList, SeqLangSvcEntry_Thes * )
 
 class ThesaurusDispatcher :
     public cppu::WeakImplHelper1
@@ -95,7 +65,9 @@ class ThesaurusDispatcher :
     >,
     public LinguDispatcher
 {
-    ThesSvcList     aSvcList;
+    typedef boost::shared_ptr< LangSvcEntries_Thes >                LangSvcEntries_Thes_Ptr_t;
+    typedef std::map< LanguageType, LangSvcEntries_Thes_Ptr_t >     ThesSvcByLangMap_t;
+    ThesSvcByLangMap_t      aSvcMap;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >     xPropSet;

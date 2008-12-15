@@ -65,7 +65,6 @@
 #include <fontitem.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
 #include <com/sun/star/beans/PropertyValues.hdl>
 #endif
@@ -1129,10 +1128,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         sal_uInt16 nDicCount = (USHORT)aDics.getLength();
         for ( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
-            Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
+            Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
             if (xDic.is())
             {
-                sal_uInt16 nActLanguage = xDic->getLanguage();
+                sal_uInt16 nActLanguage = SvxLocaleToLanguage( xDic->getLocale() );
                 if( xDic->isActive() &&
                     xDic->getDictionaryType() == DictionaryType_POSITIVE &&
                     (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage ) )
@@ -1212,7 +1211,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         }
         else if ( nId >= MN_DICTSTART )
         {
-            Reference< XDictionary1 >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
+            Reference< XDictionary >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
             if (xDic.is())
                 xDic->add( aSelected, sal_False, String() );
             // save modified user-dictionary if it is persistent

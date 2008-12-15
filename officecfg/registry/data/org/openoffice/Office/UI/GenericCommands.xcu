@@ -2947,6 +2947,11 @@
                     <value xml:lang="en-US">~Spelling...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:RecheckDocument" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Recheck Document...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:SpellingAndGrammarDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Spelling and Grammar...</value>

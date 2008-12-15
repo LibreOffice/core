@@ -794,6 +794,13 @@ bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill,
 {
     return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
 }
+/*-- 08.09.2008 11:39:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
+{
+    pEditEngine->PutSpellingToSentenceStart( rEditView );
+}
 /*-- 13.10.2003 16:56:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/

@@ -1751,9 +1751,8 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
         }
 
         sal_Bool bSpellingChanged = nChanges & EE_CNTRL_ONLINESPELLING ? sal_True : sal_False;
-        sal_Bool bRedLinesChanged = nChanges & EE_CNTRL_NOREDLINES ? sal_True : sal_False;
 
-        if ( bSpellingChanged || bRedLinesChanged )
+        if ( bSpellingChanged )
         {
             pImpEditEngine->StopOnlineSpellTimer();
             if ( bSpellingChanged && ( nWord & EE_CNTRL_ONLINESPELLING ) )
@@ -2181,6 +2180,14 @@ bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, b
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking  );
+}
+/*-- 08.09.2008 11:38:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->PutSpellingToSentenceStart( rEditView );
 }
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 

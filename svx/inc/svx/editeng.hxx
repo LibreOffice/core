@@ -394,6 +394,8 @@ public:
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence
     bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    // put spell position to start of current sentence
+    void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
     //deinitialize sentence spelling

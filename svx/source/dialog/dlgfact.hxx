@@ -405,7 +405,7 @@ class SvxNewDictionaryDialog;
 class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl,SvxNewDictionaryDialog)
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary1 > GetNewDictionary();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  GetNewDictionary();
 };
 //for SvxNewDictionaryDialog end
 

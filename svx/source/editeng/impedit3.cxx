@@ -3375,7 +3375,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     }
 
 #ifndef SVX_LIGHT
-                                    if ( GetStatus().DoOnlineSpelling() && GetStatus().DoDrawRedLines() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
+                                    if ( GetStatus().DoOnlineSpelling() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
                                     {
                                         {//#105750# adjust LinePos for superscript or subscript text
                                             short _nEsc = aTmpFont.GetEscapement();

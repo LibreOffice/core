@@ -101,15 +101,6 @@ protected:
     /** switches grammar checking on/off
      */
     virtual void SetGrammarChecking(bool bOn);
-    /** This method determines if a vendor dependent Image is to be displayed in any language
-     */
-    virtual bool HasAnyVendor();
-    /** This method returns the name of the vendor of the grammar/spell checker for a specific language
-     */
-    virtual String GetVendorForLanguage( LanguageType eLanguage);
-    /** This method returns the vendor image for the requested language
-     */
-    virtual Image GetVendorLogoForLanguage( LanguageType eLanguage );
 
     SfxBindings& GetBindings (void) const;
     /** Set the spell dialog into the 'resume' state. This method should be called

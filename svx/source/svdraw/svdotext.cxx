@@ -2085,10 +2085,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     pRetval->Record(&aBlackHole);
     Point aPaintPos = aPaintRect.TopLeft();
 
-    sal_uInt32 nStat0(rOutliner.GetControlWord());
-    rOutliner.SetControlWord(nStat0|EE_CNTRL_NOREDLINES);
     rOutliner.Draw(&aBlackHole, aPaintPos);
-    rOutliner.SetControlWord(nStat0);
 
     pRetval->Stop();
     pRetval->WindStart();

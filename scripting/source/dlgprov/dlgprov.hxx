@@ -83,7 +83,6 @@ namespace dlgprov
         std::auto_ptr< BasicRTLParams > m_BasicInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsAttacher > m_xScriptEventsAttacher;
 
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const ::rtl::OUString& sURL );

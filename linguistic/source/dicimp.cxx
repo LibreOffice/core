@@ -805,7 +805,7 @@ sal_Bool SAL_CALL DictionaryNeo::isActive(  )
     return bIsActive;
 }
 
-sal_Int16 SAL_CALL DictionaryNeo::getCount(  )
+sal_Int32 SAL_CALL DictionaryNeo::getCount(  )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -827,21 +827,7 @@ void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    setLanguage( LocaleToLanguage( aLocale ) );
-}
-
-sal_Int16 SAL_CALL DictionaryNeo::getLanguage(  )
-        throw(RuntimeException)
-{
-    MutexGuard  aGuard( GetLinguMutex() );
-    return nLanguage;
-}
-
-void SAL_CALL DictionaryNeo::setLanguage( sal_Int16 nLanguageP )
-        throw(RuntimeException)
-{
-    MutexGuard  aGuard( GetLinguMutex() );
-
+    INT16 nLanguageP = LocaleToLanguage( aLocale );
     if (!bIsReadonly  &&  nLanguage != nLanguageP)
     {
         nLanguage = nLanguageP;
@@ -850,7 +836,6 @@ void SAL_CALL DictionaryNeo::setLanguage( sal_Int16 nLanguageP )
         launchEvent( DictionaryEventFlags::CHG_LANGUAGE, NULL );
     }
 }
-
 
 uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
             const OUString& aWord )

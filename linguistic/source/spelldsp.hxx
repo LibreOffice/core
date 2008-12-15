@@ -36,69 +36,39 @@
 #include "iprcache.hxx"
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase7.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase7.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <tools/table.hxx>
 
+#include <boost/shared_ptr.hpp>
+#include <map>
 
 class LngSvcMgr;
 
 ///////////////////////////////////////////////////////////////////////////
 
-class SeqLangSvcEntry_Spell
-{
-    friend class SpellCheckerDispatcher;
-    friend BOOL SvcListHasLanguage(
-                            const SeqLangSvcEntry_Spell &rEntry,
-                            INT16 nLanguage );
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >          aSvcImplNames;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XSpellChecker > >    aSvcRefs;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XSpellChecker1 > >   aSvc1Refs;
-
-//  INT16           nLang;     //used as key in the table
-    SvcFlags        aFlags;
-
-public:
-    SeqLangSvcEntry_Spell() {}
-    SeqLangSvcEntry_Spell( const ::com::sun::star::uno::Sequence<
-            ::rtl::OUString > &rSvcImplNames );
-    ~SeqLangSvcEntry_Spell();
-
-    BOOL    IsAlreadyWarned() const     { return aFlags.bAlreadyWarned != 0; }
-    void    SetAlreadyWarned(BOOL bVal) { aFlags.bAlreadyWarned = 0 != bVal; }
-    BOOL    IsDoWarnAgain() const       { return aFlags.bDoWarnAgain != 0; }
-    void    SetDoWarnAgain(BOOL bVal)   { aFlags.bDoWarnAgain = 0 != bVal; }
-};
-
-DECLARE_TABLE( SpellSvcList, SeqLangSvcEntry_Spell * )
-
-
 class SpellCheckerDispatcher :
     public cppu::WeakImplHelper2
     <
-        ::com::sun::star::linguistic2::XSpellChecker,
-        ::com::sun::star::linguistic2::XSpellChecker1
+        ::com::sun::star::linguistic2::XSpellChecker1,
+        ::com::sun::star::linguistic2::XSpellChecker
     >,
     public LinguDispatcher
 {
-    SpellSvcList        aSvcList;
-    LinguOptions        aOpt;
+    typedef boost::shared_ptr< LangSvcEntries_Spell >               LangSvcEntries_Spell_Ptr_t;
+    typedef std::map< LanguageType, LangSvcEntries_Spell_Ptr_t >    SpellSvcByLangMap_t;
+    SpellSvcByLangMap_t     aSvcMap;
+    LinguOptions            aOpt;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >                     xPropSet;
@@ -106,15 +76,13 @@ class SpellCheckerDispatcher :
         ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
 
     LngSvcMgr                   &rMgr;
-    linguistic::IPRSpellCache   *pExtCache; // SpellCache for external SpellCheckers
-                                    // (usually those not called via XSpellChecker1)
-                                    // One for all of them.
+    linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
 
     // disallow copy-constructor and assignment-operator for now
     SpellCheckerDispatcher(const SpellCheckerDispatcher &);
     SpellCheckerDispatcher & operator = (const SpellCheckerDispatcher &);
 
-    inline linguistic::IPRSpellCache &  GetExtCache() const;
+    inline linguistic::SpellCache &  GetCache() const;
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >
@@ -125,29 +93,16 @@ class SpellCheckerDispatcher :
 
     void    ClearSvcList();
 
-    BOOL    isValid_Impl(const ::rtl::OUString& aWord, INT16 nLanguage,
+    BOOL    isValid_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
                     BOOL bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
-            spell_Impl(const ::rtl::OUString& aWord, INT16 nLanguage,
+            spell_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
                     BOOL bCheckDics)
-                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
-
-    BOOL    isValidInAny(const ::rtl::OUString& aWord,
-                         const ::com::sun::star::uno::Sequence< INT16 >& aLanguages,
-                         const ::com::sun::star::beans::PropertyValues& aProperties)
-                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
-
-    com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives >
-            spellInAny(const ::rtl::OUString& aWord,
-                       const ::com::sun::star::uno::Sequence< INT16 >& aLanguages,
-                       const ::com::sun::star::beans::PropertyValues& aProperties,
-                       INT16 nPreferredResultLang)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
@@ -155,67 +110,35 @@ public:
     virtual ~SpellCheckerDispatcher();
 
     // XSupportedLocales (for XSpellChecker)
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::lang::Locale > SAL_CALL
-        getLocales()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL
-        hasLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasLocale( const ::com::sun::star::lang::Locale& aLocale ) throw(::com::sun::star::uno::RuntimeException);
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL
-        isValid( const ::rtl::OUString& aWord,
-                const ::com::sun::star::lang::Locale& aLocale,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL
-        spell( const ::rtl::OUString& aWord,
-                const ::com::sun::star::lang::Locale& aLocale,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isValid( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL spell( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    // XSupportedLanguages (for XSpellChecker1)
-    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
-        getLanguages()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL
-        hasLanguage( sal_Int16 nLanguage )
-            throw(::com::sun::star::uno::RuntimeException);
+    // XSupportedLanguages
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasLanguage( ::sal_Int16 nLanguage ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
-    virtual sal_Bool SAL_CALL
-        isValid( const ::rtl::OUString& aWord, sal_Int16 nLanguage,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL
-        spell( const ::rtl::OUString& aWord, sal_Int16 nLanguage,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+    // XSpellChecker1
+    virtual ::sal_Bool SAL_CALL isValid( const ::rtl::OUString& aWord, ::sal_Int16 nLanguage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL spell( const ::rtl::OUString& aWord, ::sal_Int16 nLanguage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // LinguDispatcher
-    virtual void
-        SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
-                const ::com::sun::star::uno::Sequence<
-                    rtl::OUString > &rSvcImplNames );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
-    virtual DspType
-        GetDspType() const;
+    virtual void SetServiceList( const ::com::sun::star::lang::Locale &rLocale, const ::com::sun::star::uno::Sequence< rtl::OUString > &rSvcImplNames );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
+    virtual DspType GetDspType() const;
+
+    void    FlushSpellCache();
 };
 
 
-inline linguistic::IPRSpellCache & SpellCheckerDispatcher::GetExtCache() const
+inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 {
-    if (!pExtCache)
-        ((SpellCheckerDispatcher *) this)->pExtCache = new linguistic::IPRSpellCache( 997 );
-    return *pExtCache;
+    if (!pCache)
+        ((SpellCheckerDispatcher *) this)->pCache = new linguistic::SpellCache();
+    return *pCache;
 }
 
 

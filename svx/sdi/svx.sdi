@@ -5691,33 +5691,6 @@ SfxVoidItem HideDetail SID_OUTLINE_HIDE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem HideSpellMark SID_AUTOSPELL_MARKOFF
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem HScrollbar SID_INSERT_HSCROLLBAR
 
 [
@@ -14885,3 +14858,29 @@ SfxVoidItem Shrink SID_SHRINK_FONT_SIZE
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+//--------------------------------------------------------------------------
+
+SfxVoidItem RecheckDocument SID_RECHECK_DOCUMENT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+

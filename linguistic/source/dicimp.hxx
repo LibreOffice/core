@@ -31,13 +31,12 @@
 #ifndef _LINGUISTIC_DICIMP_HXX_
 #define _LINGUISTIC_DICIMP_HXX_
 
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/string.hxx>
@@ -48,7 +47,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define DIC_MAX_ENTRIES     2000
+#define DIC_MAX_ENTRIES     30000
 
 INT16           ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg );
 const String    GetDicExtension();
@@ -56,9 +55,8 @@ const String    GetDicExtension();
 ///////////////////////////////////////////////////////////////////////////
 
 class DictionaryNeo :
-    public ::cppu::WeakImplHelper3
+    public ::cppu::WeakImplHelper2
     <
-        ::com::sun::star::linguistic2::XDictionary1,
         ::com::sun::star::linguistic2::XDictionary,
         ::com::sun::star::frame::XStorable
     >
@@ -116,15 +114,6 @@ public:
         setName( const ::rtl::OUString& aName )
             throw(::com::sun::star::uno::RuntimeException);
 
-    // XDictionary1 (same as XDictionary but for sal_Int16 as language)
-    // only the different ones are listed
-    virtual sal_Int16 SAL_CALL
-        getLanguage()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-        setLanguage( sal_Int16 nLang )
-            throw(::com::sun::star::uno::RuntimeException);
-
     // XDictionary
     virtual ::com::sun::star::linguistic2::DictionaryType SAL_CALL
         getDictionaryType()
@@ -135,7 +124,7 @@ public:
     virtual sal_Bool SAL_CALL
         isActive()
             throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getCount()
             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::lang::Locale SAL_CALL

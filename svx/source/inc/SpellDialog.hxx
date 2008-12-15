@@ -114,7 +114,7 @@ public:
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
     void            SetUndoEditMode(bool bSet);
 
-    svx::SpellPortions  CreateSpellPortions() const;
+    svx::SpellPortions  CreateSpellPortions( bool bSetIgnoreFlag ) const;
 
     void            ResetUndo();
     void            Undo();
@@ -162,6 +162,7 @@ private:
 
     PushButton      aIgnorePB;
     PushButton      aIgnoreAllPB;
+    PushButton      aIgnoreRulePB;
     MenuButton      aAddToDictMB;
 
     PushButton      aChangePB;

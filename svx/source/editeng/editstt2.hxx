@@ -110,9 +110,6 @@ public:
     BOOL    DoImportRTFStyleSheets() const
                 { return ( ( nControlBits & EE_CNTRL_RTFSTYLESHEETS ) != 0 ); }
 
-    BOOL    DoDrawRedLines() const
-                { return ( ( nControlBits & EE_CNTRL_NOREDLINES ) == 0 ); }
-
     BOOL    DoAutoCorrect() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOCORRECT ) != 0 ); }
 

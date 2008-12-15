@@ -51,12 +51,15 @@
 class SpellCheckerDispatcher;
 class HyphenatorDispatcher;
 class ThesaurusDispatcher;
-class SvcInfoArray;
+class GrammarCheckingIterator;
 class LngSvcMgrListenerHelper;
+struct SvcInfo;
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XLinguServiceEventBroadcaster;
     class XSpellChecker;
+    class XProofreader;
+    class XProofreadingIterator;
     class XHyphenator;
     class XThesaurus;
 } } } }
@@ -74,14 +77,18 @@ class LngSvcMgr :
     >,
     private utl::ConfigItem
 {
+    friend class LngSvcMgrListenerHelper;
+
     ::cppu::OInterfaceContainerHelper                   aEvtListeners;
 
     com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker >  xSpellDsp;
+        ::com::sun::star::linguistic2::XSpellChecker >              xSpellDsp;
     com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyphDsp;
+        ::com::sun::star::linguistic2::XProofreadingIterator >      xGrammarDsp;
     com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     xThesDsp;
+        ::com::sun::star::linguistic2::XHyphenator >                xHyphDsp;
+    com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XThesaurus >                 xThesDsp;
 
     com::sun::star::uno::Reference<
         ::com::sun::star::lang::XEventListener >        xListenerHelper;
@@ -89,22 +96,28 @@ class LngSvcMgr :
     com::sun::star::uno::Sequence<
         com::sun::star::lang::Locale >                  aAvailSpellLocales;
     com::sun::star::uno::Sequence<
+        com::sun::star::lang::Locale >                  aAvailGrammarLocales;
+    com::sun::star::uno::Sequence<
         com::sun::star::lang::Locale >                  aAvailHyphLocales;
     com::sun::star::uno::Sequence<
         com::sun::star::lang::Locale >                  aAvailThesLocales;
 
     SpellCheckerDispatcher *                            pSpellDsp;
+    GrammarCheckingIterator *                           pGrammarDsp;
     HyphenatorDispatcher *                              pHyphDsp;
     ThesaurusDispatcher *                               pThesDsp;
 
     LngSvcMgrListenerHelper *                           pListenerHelper;
 
+    typedef std::vector< SvcInfo * >    SvcInfoArray;
     SvcInfoArray *                                      pAvailSpellSvcs;
+    SvcInfoArray *                                      pAvailGrammarSvcs;
     SvcInfoArray *                                      pAvailHyphSvcs;
     SvcInfoArray *                                      pAvailThesSvcs;
 
     BOOL bDisposing;
     BOOL bHasAvailSpellLocales;
+    BOOL bHasAvailGrammarLocales;
     BOOL bHasAvailHyphLocales;
     BOOL bHasAvailThesLocales;
 
@@ -113,14 +126,18 @@ class LngSvcMgr :
     LngSvcMgr & operator = (const LngSvcMgr &);
 
     void    GetAvailableSpellSvcs_Impl();
+    void    GetAvailableGrammarSvcs_Impl();
     void    GetAvailableHyphSvcs_Impl();
     void    GetAvailableThesSvcs_Impl();
     void    GetListenerHelper_Impl();
+
     void    GetSpellCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
+    void    GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
     void    GetHyphenatorDsp_Impl( sal_Bool bSetSvcList = sal_True );
     void    GetThesaurusDsp_Impl( sal_Bool bSetSvcList = sal_True );
 
     void    SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
+    void    SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp );
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
@@ -138,84 +155,31 @@ public:
     virtual ~LngSvcMgr();
 
     // XLinguServiceManager
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XSpellChecker > SAL_CALL
-        getSpellChecker()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XHyphenator > SAL_CALL
-        getHyphenator()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XThesaurus > SAL_CALL
-        getThesaurus()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL
-        addLinguServiceManagerListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL
-        removeLinguServiceManagerListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getAvailableServices(
-                const ::rtl::OUString& rServiceName,
-                const ::com::sun::star::lang::Locale& rLocale )
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-        setConfiguredServices(
-                const ::rtl::OUString& rServiceName,
-                const ::com::sun::star::lang::Locale& rLocale,
-                const ::com::sun::star::uno::Sequence<
-                    ::rtl::OUString >& rServiceImplNames )
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getConfiguredServices(
-                const ::rtl::OUString& rServiceName,
-                const ::com::sun::star::lang::Locale& rLocale )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker > SAL_CALL getSpellChecker(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator > SAL_CALL getHyphenator(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus > SAL_CALL getThesaurus(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL addLinguServiceManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL removeLinguServiceManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServices( const ::rtl::OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setConfiguredServices( const ::rtl::OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aServiceImplNames ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getConfiguredServices( const ::rtl::OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAvailableLocales
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::lang::Locale > SAL_CALL
-        getAvailableLocales(
-                const ::rtl::OUString& rServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAvailableLocales( const ::rtl::OUString& aServiceName ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL
-        dispose()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-        addEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-        removeEventListener(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
-        getImplementationName()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL
-        supportsService( const ::rtl::OUString& ServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 
-    static inline ::rtl::OUString
-        getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
-        getSupportedServiceNames_Static() throw();
+    static inline ::rtl::OUString   getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static() throw();
 
     BOOL    AddLngSvcEvtBroadcaster(
                 const ::com::sun::star::uno::Reference<

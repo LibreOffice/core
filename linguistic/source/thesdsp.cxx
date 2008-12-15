@@ -74,19 +74,6 @@ static BOOL SvcListHasLanguage(
 
 ///////////////////////////////////////////////////////////////////////////
 
-SeqLangSvcEntry_Thes::~SeqLangSvcEntry_Thes()
-{
-}
-
-
-SeqLangSvcEntry_Thes::SeqLangSvcEntry_Thes(
-        const Sequence< OUString > &rSvcImplNames ) :
-    aSvcImplNames   ( rSvcImplNames ),
-    aSvcRefs        ( rSvcImplNames.getLength() )
-{
-}
-
-///////////////////////////////////////////////////////////////////////////
 
 ThesaurusDispatcher::ThesaurusDispatcher()
 {
@@ -102,13 +89,8 @@ ThesaurusDispatcher::~ThesaurusDispatcher()
 void ThesaurusDispatcher::ClearSvcList()
 {
     // release memory for each table entry
-    SeqLangSvcEntry_Thes *pItem = aSvcList.First();
-    while (pItem)
-    {
-        SeqLangSvcEntry_Thes *pTmp = pItem;
-        pItem = aSvcList.Next();
-        delete pTmp;
-    }
+    ThesSvcByLangMap_t aTmp;
+    aSvcMap.swap( aTmp );
 }
 
 
@@ -118,15 +100,12 @@ Sequence< Locale > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    ULONG nCnt = aSvcList.Count();
-    Sequence< Locale > aLocales( nCnt );
-    Locale *pItem = aLocales.getArray();
-    SeqLangSvcEntry_Thes *pEntry = aSvcList.First();
-    for (ULONG i = 0;  i < nCnt;  i++)
+    Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
+    Locale *pLocales = aLocales.getArray();
+    ThesSvcByLangMap_t::const_iterator aIt;
+    for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
-        DBG_ASSERT( pEntry, "lng : pEntry is NULL pointer" );
-        pItem[i] = CreateLocale( (LanguageType) aSvcList.GetKey( pEntry ) );
-        pEntry = aSvcList.Next();
+        *pLocales++ = CreateLocale( aIt->first );
     }
     return aLocales;
 }
@@ -137,7 +116,8 @@ sal_Bool SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return 0 != aSvcList.Get( LocaleToLanguage( rLocale ) );
+    ThesSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
+    return aIt != aSvcMap.end();
 }
 
 
@@ -156,7 +136,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         return aMeanings;
 
     // search for entry with that language
-    SeqLangSvcEntry_Thes *pEntry = aSvcList.Get( nLanguage );
+    LangSvcEntries_Thes *pEntry = aSvcMap[ nLanguage ].get();
 
     if (!pEntry)
     {
@@ -175,7 +155,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         INT32 nLen = pEntry->aSvcRefs.getLength();
         DBG_ASSERT( nLen == pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
-        DBG_ASSERT( pEntry->aFlags.nLastTriedSvcIndex < nLen,
+        DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                 "lng : index out of range");
 
         INT32 i = 0;
@@ -183,7 +163,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         // try already instantiated services first
         {
             const Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getConstArray();
-            while (i <= pEntry->aFlags.nLastTriedSvcIndex
+            while (i <= pEntry->nLastTriedSvcIndex
                    &&  aMeanings.getLength() == 0)
             {
                 if (pRef[i].is()  &&  pRef[i]->hasLocale( rLocale ))
@@ -194,7 +174,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
         // if still no result instantiate new services and try those
         if (aMeanings.getLength() == 0
-            &&  pEntry->aFlags.nLastTriedSvcIndex < nLen - 1)
+            &&  pEntry->nLastTriedSvcIndex < nLen - 1)
         {
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getArray();
@@ -218,14 +198,14 @@ Sequence< Reference< XMeaning > > SAL_CALL
                     }
                     catch (uno::Exception &)
                     {
-                        DBG_ERROR( "createInstanceWithArguments failed" );
+                        DBG_ASSERT( 0, "createInstanceWithArguments failed" );
                     }
                     pRef[i] = xThes;
 
                     if (xThes.is()  &&  xThes->hasLocale( rLocale ))
                         aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
 
-                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
+                    pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
                 }
 
@@ -234,7 +214,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                 if (i == nLen  &&  aMeanings.getLength() == 0)
                 {
                     if (!SvcListHasLanguage( pEntry->aSvcRefs, rLocale ))
-                        aSvcList.Remove( nLanguage );
+                        aSvcMap.erase( nLanguage );
                 }
             }
         }
@@ -251,25 +231,25 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
 
-    if (0 == rSvcImplNames.getLength())
+    INT32 nLen = rSvcImplNames.getLength();
+    if (0 == nLen)
         // remove entry
-        aSvcList.Remove( nLanguage );
+        aSvcMap.erase( nLanguage );
     else
     {
         // modify/add entry
-        SeqLangSvcEntry_Thes *pEntry = aSvcList.Get( nLanguage );
+        LangSvcEntries_Thes *pEntry = aSvcMap[ nLanguage ].get();
         if (pEntry)
         {
+            pEntry->Clear();
             pEntry->aSvcImplNames = rSvcImplNames;
-            pEntry->aSvcRefs = Sequence< Reference < XThesaurus > >(
-                                    rSvcImplNames.getLength() );
-            pEntry->aFlags = SvcFlags();
+            pEntry->aSvcRefs = Sequence< Reference < XThesaurus > >( nLen );
         }
         else
         {
-            pEntry = new SeqLangSvcEntry_Thes( rSvcImplNames );
-            aSvcList.Insert( nLanguage, pEntry );
-            DBG_ASSERT( aSvcList.Get( nLanguage ), "lng : Insert failed" );
+            boost::shared_ptr< LangSvcEntries_Thes > pTmpEntry( new LangSvcEntries_Thes( rSvcImplNames ) );
+            pTmpEntry->aSvcRefs = Sequence< Reference < XThesaurus > >( nLen );
+            aSvcMap[ nLanguage ] = pTmpEntry;
         }
     }
 }
@@ -285,7 +265,7 @@ Sequence< OUString >
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
     ThesaurusDispatcher         *pThis = (ThesaurusDispatcher *) this;
-    const SeqLangSvcEntry_Thes  *pEntry = pThis->aSvcList.Get( nLanguage );
+    const LangSvcEntries_Thes  *pEntry = pThis->aSvcMap[ nLanguage ].get();
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 
@@ -293,8 +273,7 @@ Sequence< OUString >
 }
 
 
-ThesaurusDispatcher::DspType
-    ThesaurusDispatcher::GetDspType() const
+LinguDispatcher::DspType ThesaurusDispatcher::GetDspType() const
 {
     return DSP_THES;
 }

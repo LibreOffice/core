@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <tools/color.hxx>
 //namespace com{ namespace sun{ namespace star{ namespace linguistic2{
 //    class XSpellAlternatives;
@@ -49,24 +50,39 @@ struct SpellErrorDescription
 {
     bool                                                bIsGrammarError;
     ::rtl::OUString                                     sErrorText;
+    ::rtl::OUString                                     sDialogTitle;
     ::rtl::OUString                                     sExplanation;
     ::com::sun::star::lang::Locale                      aLocale;
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
+    ::rtl::OUString                                     sServiceName; //service name of GrammarChecker/SpellChecker
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSuggestions;
+    ::rtl::OUString                                     sRuleId;
 
     SpellErrorDescription() :
-        bIsGrammarError( false ){};
+        bIsGrammarError( false ){}
+
     SpellErrorDescription( bool bGrammar,
                       const ::rtl::OUString& rText,
                       const ::com::sun::star::lang::Locale& rLocale,
                       const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSuggestions,
-                      const ::rtl::OUString* pExplanation = 0) :
+                      ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > rxGrammarChecker,
+                      const ::rtl::OUString& rServiceName,
+                      const ::rtl::OUString* pDialogTitle = 0,
+                      const ::rtl::OUString* pExplanation = 0,
+                      const ::rtl::OUString* pRuleId = 0 ) :
         bIsGrammarError( bGrammar ),
         sErrorText( rText ),
         aLocale( rLocale ),
+        xGrammarChecker( rxGrammarChecker ),
+        sServiceName( rServiceName ),
         aSuggestions( rSuggestions )
         {
+            if( pDialogTitle )
+                sDialogTitle = *pDialogTitle;
             if( pExplanation )
                 sExplanation = *pExplanation;
+            if( pRuleId )
+                sRuleId = *pRuleId;
         };
 
     int operator==( const SpellErrorDescription& rDesc ) const
@@ -77,7 +93,10 @@ struct SpellErrorDescription
                 aLocale.Country.equals( rDesc.aLocale.Country ) &&
                 aLocale.Variant.equals( rDesc.aLocale.Variant ) &&
                 aSuggestions == rDesc.aSuggestions &&
-                sExplanation.equals( rDesc.sExplanation );
+                xGrammarChecker == rDesc.xGrammarChecker &&
+                sDialogTitle.equals( rDesc.sDialogTitle ) &&
+                sExplanation.equals( rDesc.sExplanation ) &&
+                sRuleId == rDesc.sRuleId;
     }
 };
 /* -----------------10.09.2003 14:23-----------------

@@ -1985,7 +1985,7 @@ void Change( Menu* pMenu, SfxViewShell* pView )
 }
 
 
-BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent )
+BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent )
 {
     rpOut = NULL;
     BOOL bModified = FALSE;
@@ -1994,7 +1994,7 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
     // #110897#
     // aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rIn );
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        ::comphelper::getProcessServiceFactory(), &rIn );
+        ::comphelper::getProcessServiceFactory(), &rIn, &rMenuIdentifier );
 
     // get selection from controller
     aEvent.Selection = ::com::sun::star::uno::Reference < ::com::sun::star::view::XSelectionSupplier > ( GetController(), ::com::sun::star::uno::UNO_QUERY );

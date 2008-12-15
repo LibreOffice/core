@@ -34,7 +34,6 @@
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
@@ -143,9 +142,9 @@ void SearchSimilarText( const OUString &rText, INT16 nLanguage,
 
     for (INT32 i = 0;  i < nDics;  i++)
     {
-        Reference< XDictionary1 > xDic( pDic[i], UNO_QUERY );
+        Reference< XDictionary > xDic( pDic[i], UNO_QUERY );
 
-        INT16           nLang = xDic->getLanguage();
+        INT16           nLang = LocaleToLanguage( xDic->getLocale() );
 
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -323,6 +322,22 @@ Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aAlt;
+}
+
+
+void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives )
+throw (uno::RuntimeException)
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+    aAlt = rAlternatives;
+}
+
+
+void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType )
+throw (uno::RuntimeException)
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+    nType = nFailureType;
 }
 
 

@@ -33,11 +33,12 @@
 
 #include <vector>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+#include <com/sun/star/linguistic2/XSetSpellAlternatives.hpp>
 
 #include <tools/solar.h>
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -86,9 +87,10 @@ void SearchSimilarText( const rtl::OUString &rText, INT16 nLanguage,
 
 
 class SpellAlternatives :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper2
     <
-        ::com::sun::star::linguistic2::XSpellAlternatives
+        ::com::sun::star::linguistic2::XSpellAlternatives,
+        ::com::sun::star::linguistic2::XSetSpellAlternatives
     >
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aAlt;   // list of alternatives, may be empty.
@@ -109,21 +111,15 @@ public:
     virtual ~SpellAlternatives();
 
     // XSpellAlternatives
-    virtual ::rtl::OUString SAL_CALL
-        getWord()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::lang::Locale SAL_CALL
-        getLocale()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL
-        getFailureType()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL
-        getAlternativesCount()
-            throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getAlternatives()
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getWord(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getFailureType(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getAlternativesCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAlternatives(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XSetSpellAlternatives
+    virtual void SAL_CALL setAlternatives( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAlternatives ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) throw (::com::sun::star::uno::RuntimeException);
 
     // non-interface specific functions
     void    SetWordLanguage(const ::rtl::OUString &rWord, INT16 nLang);

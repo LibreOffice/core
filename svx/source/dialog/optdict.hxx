@@ -54,7 +54,6 @@
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
     class XDictionary;
-    class XDictionary1;
     class XSpellChecker1;
     class XSpellChecker;
 }}}}
@@ -79,7 +78,7 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   xNewDic;
+        ::com::sun::star::linguistic2::XDictionary >    xNewDic;
 
 #ifdef _SVX_OPTDICT_CXX
     DECL_LINK( OKHdl_Impl, Button * );
@@ -92,7 +91,7 @@ public:
                 ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl );
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >
+        ::com::sun::star::linguistic2::XDictionary >
                 GetNewDictionary() { return xNewDic; }
 };
 
@@ -166,7 +165,7 @@ private:
     void            SetLanguage_Impl( ::com::sun::star::util::Language nLanguage );
     sal_Bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
     void            SetDicReadonly_Impl( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XDictionary1 >  &xDic );
+                            ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
     void            RemoveDictEntry(SvLBoxEntry* pEntry);
     USHORT          GetLBInsertPos(const String &rDicWord);

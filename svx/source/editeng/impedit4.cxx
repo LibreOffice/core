@@ -2272,6 +2272,20 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::Spell
     aEditDoc.SetModified(TRUE);
 #endif
 }
+/*-- 08.09.2008 11:33:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
+{
+#ifdef SVX_LIGHT
+#else
+    if( pSpellInfo && pSpellInfo->aLastSpellContentSelections.size() )
+    {
+        rEditView.pImpEditView->SetEditSelection( pSpellInfo->aLastSpellContentSelections.begin()->Min() );
+    }
+
+#endif
+}
 
 
 void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpellAtCursorPos, sal_Bool bInteruptable )
@@ -2423,7 +2437,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
             }
 
             // Invalidieren?
-            if ( ( nPaintFrom != 0xFFFF ) && ( GetStatus().DoDrawRedLines() ) )
+            if ( ( nPaintFrom != 0xFFFF ) )
             {
                 aStatus.GetStatusWord() |= EE_STAT_WRONGWORDCHANGED;
                 CallStatusHdl();

@@ -63,10 +63,6 @@ using namespace linguistic;
 
 ///////////////////////////////////////////////////////////////////////////
 
-SV_IMPL_OBJARR(ActDicArray, ActDic);
-
-///////////////////////////////////////////////////////////////////////////
-
 static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
@@ -303,12 +299,12 @@ void DicList::MyAppExitListener::AtExit()
 
 
 DicList::DicList() :
-    aEvtListeners   ( GetLinguMutex() ),
-    pDicList( 0 )
+    aEvtListeners   ( GetLinguMutex() )
 {
     pDicEvtLstnrHelper  = new DicEvtListenerHelper( this );
     xDicEvtLstnrHelper  = pDicEvtLstnrHelper;
     bDisposing = FALSE;
+    bInCreation = FALSE;
 
     pExitListener = new MyAppExitListener( *this );
     xExitListener = pExitListener;
@@ -318,12 +314,11 @@ DicList::DicList() :
 DicList::~DicList()
 {
     pExitListener->Deactivate();
-    delete pDicList;
 }
 
 
-void DicList::searchForDictionaries(
-    ActDicArray &rDicList,
+void DicList::SearchForDictionaries(
+    DictionaryVec_t&rDicList,
     const String &rDicDirURL,
     BOOL bIsWriteablePath )
 {
@@ -366,11 +361,11 @@ void DicList::searchForDictionaries(
         if (STRING_NOTFOUND != nPos)
             aTmp1 = aTmp1.Copy( nPos + 1 );
         String aTmp2;
-        USHORT j;
-        USHORT nCount = rDicList.Count();
+        size_t j;
+        size_t nCount = rDicList.size();
         for(j = 0;  j < nCount;  j++)
         {
-            aTmp2 = rDicList.GetObject( j ).xDic->getName().getStr();
+            aTmp2 = rDicList[j]->getName().getStr();
             aTmp2 = ToLower( aTmp2, nSystemLanguage );
             if(aTmp1 == aTmp2)
                 break;
@@ -394,16 +389,16 @@ void DicList::searchForDictionaries(
 }
 
 
-INT32 DicList::getDicPos(const uno::Reference< XDictionary > &xDic)
+INT32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     INT32 nPos = -1;
-    ActDicArray& rDicList = GetDicList();
-    USHORT n = rDicList.Count();
-    for (USHORT i = 0;  i < n;  i++)
+    DictionaryVec_t& rDicList = GetOrCreateDicList();
+    size_t n = rDicList.size();
+    for (size_t i = 0;  i < n;  i++)
     {
-        if ( rDicList.GetObject(i).xDic == xDic )
+        if ( rDicList[i] == xDic )
             return i;
     }
     return nPos;
@@ -421,7 +416,7 @@ uno::Reference< XInterface > SAL_CALL
 sal_Int16 SAL_CALL DicList::getCount() throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-    return GetDicList().Count();
+    return static_cast< sal_Int16 >(GetOrCreateDicList().size());
 }
 
 uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
@@ -430,14 +425,14 @@ uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    ActDicArray& rDicList = GetDicList();
+    DictionaryVec_t& rDicList = GetOrCreateDicList();
 
-    uno::Sequence< uno::Reference< XDictionary > > aDics( rDicList.Count() );
+    uno::Sequence< uno::Reference< XDictionary > > aDics( rDicList.size() );
     uno::Reference< XDictionary > *pDic = aDics.getArray();
 
-    USHORT n = (USHORT) aDics.getLength();
-    for (USHORT i = 0;  i < n;  i++)
-        pDic[i] = rDicList.GetObject(i).xDic;
+    INT32 n = (USHORT) aDics.getLength();
+    for (INT32 i = 0;  i < n;  i++)
+        pDic[i] = rDicList[i];
 
     return aDics;
 }
@@ -449,11 +444,11 @@ uno::Reference< XDictionary > SAL_CALL
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     uno::Reference< XDictionary > xDic;
-    ActDicArray& rDicList = GetDicList();
-    USHORT nCount = rDicList.Count();
-    for (USHORT i = 0;  i < nCount;  i++)
+    DictionaryVec_t& rDicList = GetOrCreateDicList();
+    size_t nCount = rDicList.size();
+    for (size_t i = 0;  i < nCount;  i++)
     {
-        const uno::Reference< XDictionary > &rDic = rDicList.GetObject(i).xDic;
+        const uno::Reference< XDictionary > &rDic = rDicList[i];
         if (rDic.is()  &&  rDic->getName() == aDictionaryName)
         {
             xDic = rDic;
@@ -476,8 +471,8 @@ sal_Bool SAL_CALL DicList::addDictionary(
     BOOL bRes = FALSE;
     if (xDictionary.is())
     {
-        ActDicArray& rDicList = GetDicList();
-        rDicList.Insert( ActDic(xDictionary), rDicList.Count() );
+        DictionaryVec_t& rDicList = GetOrCreateDicList();
+        rDicList.push_back( xDictionary );
         bRes = TRUE;
 
         // add listener helper to the dictionaries listener lists
@@ -496,12 +491,12 @@ sal_Bool SAL_CALL
         return FALSE;
 
     BOOL  bRes = FALSE;
-    INT32 nPos = getDicPos( xDictionary );
+    INT32 nPos = GetDicPos( xDictionary );
     if (nPos >= 0)
     {
         // remove dictionary list from the dictionaries listener lists
-        ActDicArray& rDicList = GetDicList();
-        uno::Reference< XDictionary > xDic( rDicList.GetObject( (USHORT) nPos ).xDic );
+        DictionaryVec_t& rDicList = GetOrCreateDicList();
+        uno::Reference< XDictionary > xDic( rDicList[ nPos ] );
         DBG_ASSERT(xDic.is(), "lng : empty reference");
         if (xDic.is())
         {
@@ -511,7 +506,8 @@ sal_Bool SAL_CALL
             xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
 
-        rDicList.Remove( (USHORT) nPos );
+        // remove element at nPos
+        rDicList.erase( rDicList.begin() + nPos );
         bRes = TRUE;
     }
     return bRes;
@@ -613,13 +609,13 @@ void SAL_CALL
             pDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
 
         //! avoid creation of dictionaries if not already done
-        if (pDicList)
+        if (aDicList.size() > 0)
         {
-            ActDicArray& rDicList = GetDicList();
-            INT16 nCount = rDicList.Count();
-            for (INT16 i = 0;  i < nCount;  i++)
+            DictionaryVec_t& rDicList = GetOrCreateDicList();
+            size_t nCount = rDicList.size();
+            for (size_t i = 0;  i < nCount;  i++)
             {
-                uno::Reference< XDictionary > xDic( rDicList.GetObject(i).xDic , UNO_QUERY );
+                uno::Reference< XDictionary > xDic( rDicList[i], UNO_QUERY );
 
                 // save (modified) dictionaries
                 uno::Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
@@ -666,7 +662,7 @@ void SAL_CALL
 
 void DicList::_CreateDicList()
 {
-    pDicList = new ActDicArray;
+    bInCreation = TRUE;
 
     // look for dictionaries
     const rtl::OUString aWriteablePath( GetDictionaryWriteablePath() );
@@ -675,7 +671,7 @@ void DicList::_CreateDicList()
     for (sal_Int32 i = 0;  i < aPaths.getLength();  ++i)
     {
         const BOOL bIsWriteablePath = (pPaths[i] == aWriteablePath);
-        searchForDictionaries( *pDicList, pPaths[i], bIsWriteablePath );
+        SearchForDictionaries( aDicList, pPaths[i], bIsWriteablePath );
     }
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
@@ -717,6 +713,8 @@ void DicList::_CreateDicList()
     pDicEvtLstnrHelper->ClearEvents();
 
     pDicEvtLstnrHelper->EndCollectEvents();
+
+    bInCreation = FALSE;
 }
 
 
@@ -724,16 +722,15 @@ void DicList::SaveDics()
 {
     // save dics only if they have already been used/created.
     //! don't create them just for the purpose of saving them !
-    if (pDicList)
+    if (aDicList.size() > 0)
     {
         // save (modified) dictionaries
-        ActDicArray& rDicList = GetDicList();
-        USHORT nCount = rDicList.Count();;
-        for (USHORT i = 0;  i < nCount;  i++)
+        DictionaryVec_t& rDicList = GetOrCreateDicList();
+        size_t nCount = rDicList.size();;
+        for (size_t i = 0;  i < nCount;  i++)
         {
             // save (modified) dictionaries
-            uno::Reference< frame::XStorable >  xStor( rDicList.GetObject(i).xDic,
-                                                  UNO_QUERY );
+            uno::Reference< frame::XStorable >  xStor( rDicList[i], UNO_QUERY );
             if (xStor.is())
             {
                 try

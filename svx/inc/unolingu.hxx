@@ -42,7 +42,6 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #include "svx/svxdllapi.h"
 
 class LinguMgrExitLstnr;
@@ -94,9 +93,9 @@ class SVX_DLLPUBLIC LinguMgr
         ::com::sun::star::beans::XPropertySet >         xProp;
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   xIgnoreAll;
+        ::com::sun::star::linguistic2::XDictionary >    xIgnoreAll;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   xChangeAll;
+        ::com::sun::star::linguistic2::XDictionary >    xChangeAll;
 
     static LinguMgrExitLstnr                           *pExitLstnr;
     static sal_Bool                                     bExiting;
@@ -112,11 +111,11 @@ class SVX_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         GetProp();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   GetStandard();
+        ::com::sun::star::linguistic2::XDictionary >    GetStandard();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   GetIgnoreAll();
+        ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAll();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   GetChangeAll();
+        ::com::sun::star::linguistic2::XDictionary >    GetChangeAll();
 
     // disallow access to copy-constructor and assignment-operator
     LinguMgr(const LinguMgr &);
@@ -139,11 +138,11 @@ public:
         ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   GetStandardDic();
+        ::com::sun::star::linguistic2::XDictionary >    GetStandardDic();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   GetIgnoreAllList();
+        ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAllList();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >   GetChangeAllList();
+        ::com::sun::star::linguistic2::XDictionary >    GetChangeAllList();
 
     // update all configuration entries
     static void UpdateAll();
@@ -212,13 +211,13 @@ SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
 //TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary1 >   SvxGetOrCreatePosDic(
+    ::com::sun::star::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XDictionaryList >  xDicList );
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary1 >   SvxGetIgnoreAllList();
+    ::com::sun::star::linguistic2::XDictionary >    SvxGetIgnoreAllList();
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary1 >   SvxGetChangeAllList();
+    ::com::sun::star::linguistic2::XDictionary >    SvxGetChangeAllList();
 
 ///////////////////////////////////////////////////////////////////////////
 // misc functions

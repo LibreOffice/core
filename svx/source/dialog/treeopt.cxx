@@ -1537,7 +1537,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             pRet = new SfxItemSet(
                 SFX_APP()->GetPool(),
                 SID_ATTR_METRIC, SID_ATTR_SPELL,
-                SID_AUTOSPELL_CHECK, SID_AUTOSPELL_MARKOFF,
+                SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                 SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                 SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
                 SID_HTML_MODE, SID_HTML_MODE,
@@ -1576,7 +1576,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         case SID_LANGUAGE_OPTIONS :
         {
             pRet = new SfxItemSet(SFX_APP()->GetPool(),
-                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_MARKOFF,
+                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
                     SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
@@ -1629,22 +1629,6 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         }
 
                         pRet->Put(SfxBoolItem(SID_AUTOSPELL_CHECK, bVal));
-                }
-
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState(SID_AUTOSPELL_MARKOFF, pItem))
-                {
-                    pClone = pItem->Clone();
-                    pRet->Put(*pClone);
-                    delete pClone;
-                }
-                else
-                {
-                    sal_Bool bVal = sal_False;
-                    if (xProp.is())
-                    {
-                        xProp->getPropertyValue( String::CreateFromAscii( UPN_IS_SPELL_HIDE) ) >>= bVal;
-                    }
-                    pRet->Put(SfxBoolItem(SID_AUTOSPELL_MARKOFF, bVal));
                 }
             }
             pRet->Put( SfxBoolItem( SID_SET_DOCUMENT_LANGUAGE, bIsForSetDocumentLanguage ) );
@@ -1832,19 +1816,6 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
                 xProp->setPropertyValue(
                         String::CreateFromAscii(UPN_IS_SPELL_AUTO),
                         makeAny(bOnlineSpelling) );
-            }
-        }
-
-        if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_MARKOFF, sal_False, &pItem ))
-        {
-            sal_Bool bHideSpell = ((const SfxBoolItem*)pItem)->GetValue();
-            pDispatch->Execute(SID_AUTOSPELL_MARKOFF, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
-
-            if (xProp.is())
-            {
-                xProp->setPropertyValue(
-                        String::CreateFromAscii(UPN_IS_SPELL_HIDE),
-                        makeAny(bHideSpell) );
             }
         }
 
