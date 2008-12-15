@@ -1059,6 +1059,29 @@ sal_Bool Desktop::SaveTasks()
         sal_False);
 }
 
+#ifdef MACOSX
+static void DoRestart()
+{
+    oslProcess      process;
+    oslProcessError error;
+    OUString    sExecutableFile;
+
+    osl_getExecutableFile( &sExecutableFile.pData );
+
+    error = osl_executeProcess(
+        sExecutableFile.pData,
+        NULL,
+        0,
+        0,
+        NULL,
+        NULL,
+        NULL,
+        0,
+        &process
+        );
+}
+#endif
+
 USHORT Desktop::Exception(USHORT nError)
 {
     // protect against recursive calls
@@ -1146,6 +1169,10 @@ USHORT Desktop::Exception(USHORT nError)
                 if (m_pLockfile != NULL) {
                     m_pLockfile->clean();
                 }
+
+#ifdef MACOSX
+                DoRestart();
+#endif
                 _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }
             else
