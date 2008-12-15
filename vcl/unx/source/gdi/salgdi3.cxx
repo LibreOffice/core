@@ -1551,7 +1551,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     // allow disabling of native X11 fonts
     static const char* pEnableX11FontStr = getenv( "SAL_ENABLE_NATIVE_XFONTS" );
-    if( !pEnableX11FontStr || (pEnableX11FontStr[0] != '0') )
+    if( pEnableX11FontStr && (pEnableX11FontStr[0] != '0') )
     {
         // announce X11 fonts
         XlfdStorage* pX11FontList = GetDisplay()->GetXlfdList();
@@ -1808,19 +1808,34 @@ public:
 
 static void RegisterFontSubstitutors( ImplDevFontList* pList )
 {
-    bool bDisableFC = false;
+    // init font substitution defaults
+    int nDisableBits = 0;
 #ifdef SOLARIS
-    bDisableFC = true;
+    nDisableBits = 1; // disable "font fallback" here on default
 #endif
+    // apply the environment variable if any
     const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
     if( pEnvStr )
-        bDisableFC = (*pEnvStr == '\0') || (*pEnvStr != '0');
-    if( bDisableFC )
-        return;
-    static FcPreMatchSubstititution aSubstPreMatch;
-    static FcGlyphFallbackSubstititution aSubstFallback;
-    pList->SetPreMatchHook( &aSubstPreMatch );
-    pList->SetFallbackHook( &aSubstFallback );
+    {
+        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
+            nDisableBits = (*pEnvStr - '0');
+        else
+            nDisableBits = ~0U; // no specific bits set: disable all
+    }
+
+    // register font fallback substitutions (unless disabled by bit0)
+    if( (nDisableBits & 1) == 0 )
+    {
+        static FcPreMatchSubstititution aSubstPreMatch;
+        pList->SetPreMatchHook( &aSubstPreMatch );
+    }
+
+    // register glyph fallback substitutions (unless disabled by bit1)
+    if( (nDisableBits & 2) == 0 )
+    {
+        static FcGlyphFallbackSubstititution aSubstFallback;
+        pList->SetFallbackHook( &aSubstFallback );
+    }
 }
 
 // -----------------------------------------------------------------------
