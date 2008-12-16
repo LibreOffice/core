@@ -1358,6 +1358,13 @@ File gid_File_Oo_Office_Histories_Xcs
     Name = "/registry/schema/org/openoffice/Office/Histories.xcs";
 End
 
+File gid_File_Oo_Office_Ui_WindowContentFactories_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WindowContentFactories.xcs";
+End
+
 File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
