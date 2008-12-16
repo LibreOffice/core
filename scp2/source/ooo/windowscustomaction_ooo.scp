@@ -332,6 +332,33 @@ WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Assignment2 = ("InstallExecuteSequence", "", "RunningOffice");
 End
 
+WindowsCustomAction gid_Customaction_Full_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_CheckPatchList
+	Name = "CheckPatchList";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckPatchList";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
+End
+
 WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
 	Name = "SetUserInstallMode";
 	Typ = "321";

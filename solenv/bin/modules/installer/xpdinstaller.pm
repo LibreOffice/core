@@ -652,7 +652,7 @@ sub get_fullpkgname_value
     if (( $installer::globals::islinuxrpmbuild ) && ( $isrpmfile ))
     {
         if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
-        my $systemcall = "$installer::globals::rpmquerycommand -qp $packagename 2\>\&1 |";
+        my $systemcall = "$installer::globals::rpmquerycommand -qp $packagename |";
         my $returnarray = make_systemcall($systemcall, 0);
         $value = ${$returnarray}[0];
         installer::remover::remove_leading_and_ending_whitespaces(\$value);
