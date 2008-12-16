@@ -78,9 +78,17 @@ struct OUStringHashCode
 
 struct ShortHashCode
 {
-    size_t operator()( const sal_Int16& nShort ) const
+    size_t operator()( const ::sal_Int16& nShort ) const
     {
         return (size_t)nShort;
+    }
+};
+
+struct Int32HashCode
+{
+    size_t operator()( const ::sal_Int32& nValue ) const
+    {
+        return (size_t)nValue;
     }
 };
 

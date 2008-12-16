@@ -77,7 +77,8 @@ XCSFILES= \
     Effects.xcs \
     Category.xcs \
     GenericCategories.xcs \
-    GlobalSettings.xcs
+    GlobalSettings.xcs \
+    WindowContentFactories.xcs
 
 .INCLUDE :  target.mk
 

@@ -255,7 +255,7 @@ namespace framework{
 #define OFFICEFACTORY_PROPNAME_ICON                     ::rtl::OUString::createFromAscii( OFFICEFACTORY_PROPNAME_ASCII_ICON )
 
 //_______________________________________________
-/** properties for tab window */
+/** properties for tab window (old) */
 #define TABWINDOW_PROPNAME_ASCII_PARENTWINDOW           "ParentWindow"
 #define TABWINDOW_PROPNAME_ASCII_TOPWINDOW              "TopWindow"
 #define TABWINDOW_PROPNAME_PARENTWINDOW                 ::rtl::OUString::createFromAscii( TABWINDOW_PROPNAME_ASCII_PARENTWINDOW )
@@ -264,6 +264,14 @@ namespace framework{
 #define TABWINDOW_PROPHANDLE_PARENTWINDOW               0
 #define TABWINDOW_PROPHANDLE_TOPWINDOW                  1
 #define TABWINDOW_PROPCOUNT                             2
+
+//_______________________________________________
+/** properties for tab window service (new) */
+#define TABWINDOWSERVICE_PROPNAME_ASCII_WINDOW          "Window"
+#define TABWINDOWSERVICE_PROPNAME_WINDOW                ::rtl::OUString::createFromAscii( TABWINDOWSERVICE_PROPNAME_ASCII_WINDOW )
+
+#define TABWINDOWSERVICE_PROPHANDLE_WINDOW              0
+#define TABWINDOWSERVICE_PROPCOUNT                      1
 
 //_______________________________________________
 /** properties of tabreg service */

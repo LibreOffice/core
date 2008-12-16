@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,21 @@
 #define _SFXDOCKWIN_HXX
 
 #include "sal/config.h"
-#include "sfx2/dllapi.h"
 #include "sal/types.h"
-#ifndef _DOCKWIN_HXX //autogen
 #include <vcl/dockwin.hxx>
-#endif
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+
+#include "sfx2/dllapi.h"
 #include <sfx2/childwin.hxx>
 
 class SfxSplitWindow;
 class SfxDockingWindow_Impl;
+
+void SFX2_DLLPUBLIC SAL_CALL SfxDockingWindowFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName );
+bool SFX2_DLLPUBLIC SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName );
 
 class SFX2_DLLPUBLIC SfxDockingWindow : public DockingWindow
 {
@@ -125,5 +131,15 @@ public:
 //#endif
 };
 
-#endif // #ifndef _SFXDOCKWIN_HXX
+class SfxDockingWrapper : public SfxChildWindow
+{
+    public:
+        SfxDockingWrapper( Window* pParent ,
+                           USHORT nId ,
+                           SfxBindings* pBindings ,
+                           SfxChildWinInfo* pInfo );
 
+        SFX_DECL_CHILDWINDOW(SfxDockingWrapper);
+};
+
+#endif // #ifndef _SFXDOCKWIN_HXX

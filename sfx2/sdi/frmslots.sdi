@@ -115,6 +115,165 @@ interface Window
         StateMethod = ChildWindowState ;
     ]
 
+    // Pre-defined docking window slots (usable by internal docking windows)
+    SID_DOCKWIN_0
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_1
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_2
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_3
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_4
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_5
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_6
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_7
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_8
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_9
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+/*  Be careful!
+    You also have to make changes in:
+    - sfx2/sdi/sfx.sdi
+    - sfx2/source/dialog/dockwin.cxx
+    - sfx2/sdi/frmslots.sdi
+    - sfx2/inc/sfx2/sfxsids.hrc
+
+    SID_DOCKWIN_10
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_11
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_12
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_13
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_14
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_15
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_16
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_17
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_18
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_19
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_20
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_21
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_22
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_23
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_24
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_25
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_26
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_27
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_28
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_29
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+*/
     // Window.GetFrameWindow( "Name" )
     SID_FILLFRAME
     [

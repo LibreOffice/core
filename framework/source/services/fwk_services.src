@@ -170,4 +170,13 @@ Resource RES_BACKING_IMAGES_HC
     };
 };
 
+Window WIN_TABWINDOW
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    TabControl TC_TABCONTROL
+    {
+        OutputSize = TRUE ;
+    };
+};
 

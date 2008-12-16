@@ -50,7 +50,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/partwnd.obj         \
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
-        $(SLO)$/dinfdlg.obj
+        $(SLO)$/dinfdlg.obj         \
+        $(SLO)$/dockwin.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -58,7 +59,6 @@ SLOFILES =\
         $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfedt.obj			\
-        $(SLO)$/dockwin.obj			\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj         \
         $(SLO)$/mgetempl.obj		\

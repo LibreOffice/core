@@ -48,7 +48,8 @@ SLOFILES=			\
                     $(SLO)$/addonstoolboxfactory.obj        \
                     $(SLO)$/toolbarcontrollerfactory.obj    \
                     $(SLO)$/statusbarfactory.obj            \
-                    $(SLO)$/statusbarcontrollerfactory.obj
+                    $(SLO)$/statusbarcontrollerfactory.obj	\
+                    $(SLO)$/windowcontentfactorymanager.obj
 
 # --- Targets ------------------------------------------------------
 

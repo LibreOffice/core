@@ -43,6 +43,45 @@
 #include <sfx2/cntids.hrc>
 #endif
 
+// Please be careful:
+// Changing just one part here doesn't add new
+// docking windows automatically!
+//
+#define SID_DOCKWIN_START           9800
+#define SID_DOCKWIN_0               9800
+#define SID_DOCKWIN_1               9801
+#define SID_DOCKWIN_2               9802
+#define SID_DOCKWIN_3               9803
+#define SID_DOCKWIN_4               9804
+#define SID_DOCKWIN_5               9805
+#define SID_DOCKWIN_6               9806
+#define SID_DOCKWIN_7               9807
+#define SID_DOCKWIN_8               9808
+#define SID_DOCKWIN_9               9809
+/*
+#define SID_DOCKWIN_10              9810
+#define SID_DOCKWIN_11              9811
+#define SID_DOCKWIN_12              9812
+#define SID_DOCKWIN_13              9813
+#define SID_DOCKWIN_14              9814
+#define SID_DOCKWIN_15              9815
+#define SID_DOCKWIN_16              9816
+#define SID_DOCKWIN_17              9817
+#define SID_DOCKWIN_18              9818
+#define SID_DOCKWIN_19              9819
+#define SID_DOCKWIN_20              9820
+#define SID_DOCKWIN_21              9821
+#define SID_DOCKWIN_22              9822
+#define SID_DOCKWIN_23              9823
+#define SID_DOCKWIN_24              9824
+#define SID_DOCKWIN_25              9825
+#define SID_DOCKWIN_26              9826
+#define SID_DOCKWIN_27              9827
+#define SID_DOCKWIN_28              9828
+#define SID_DOCKWIN_29              9829
+*/
+#define SID_DOCKWIN_END             9999
+
 #define SID_LIB_START               10000
 #define SID_LIB_END                 19999
 

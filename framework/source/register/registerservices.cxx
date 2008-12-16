@@ -61,13 +61,10 @@
 =================================================================================================================*/
 #include <services/urltransformer.hxx>
 #include <services/desktop.hxx>
-
-
+#include <services/tabwindowservice.hxx>
 #include <services/frame.hxx>
 #include <services/modulemanager.hxx>
-
 #include <dispatch/oxt_handler.hxx>
-
 #include <jobs/jobexecutor.hxx>
 #include <recording/dispatchrecordersupplier.hxx>
 #include <recording/dispatchrecorder.hxx>
@@ -87,10 +84,7 @@
 #include <uielement/footermenucontroller.hxx>
 #include <uielement/controlmenucontroller.hxx>
 #include <uielement/macrosmenucontroller.hxx>
-
-#ifndef __FRAMEWORK_UIELEMENT_UICOMMANDDESCRIPTION_HXX_
 #include <uielement/uicommanddescription.hxx>
-#endif
 #include <uiconfiguration/uiconfigurationmanager.hxx>
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
@@ -109,10 +103,7 @@
 #include <helper/statusindicatorfactory.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <uifactory/statusbarfactory.hxx>
-
-#ifndef __FRAMEWORK_UIELEMENT_UICATEGORYDESCRPTION_HXX_
 #include <uiconfiguration/uicategorydescription.hxx>
-#endif
 #include <services/sessionlistener.hxx>
 #include <uielement/logoimagestatusbarcontroller.hxx>
 #include <uielement/logotextstatusbarcontroller.hxx>
@@ -120,13 +111,11 @@
 #include <services/taskcreatorsrv.hxx>
 #include <uielement/simpletextstatusbarcontroller.hxx>
 #include <services/uriabbreviation.hxx>
-
 #include <dispatch/popupmenudispatcher.hxx>
-
 #include <uielement/langselectionstatusbarcontroller.hxx>
 #include <uielement/langselectionmenucontroller.hxx>
-
 #include <uiconfiguration/imagemanager.hxx>
+#include <uifactory/windowcontentfactorymanager.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
@@ -184,6 +173,8 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::ImageManager                            )
                         COMPONENTINFO( ::framework::LangSelectionStatusbarController        )
                         COMPONENTINFO( ::framework::LanguageSelectionMenuController         )
+                        COMPONENTINFO( ::framework::TabWindowService                        )
+                        COMPONENTINFO( ::framework::WindowContentFactoryManager             )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -241,6 +232,8 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
-                        IFFACTORY( ::framework::LanguageSelectionMenuController         )
+                        IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
+                        IFFACTORY( ::framework::WindowContentFactoryManager             )   else
+                        IFFACTORY( ::framework::TabWindowService                        )
             )
 
