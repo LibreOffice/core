@@ -66,7 +66,9 @@ SLOFILES = \
     $(SLO)$/layerlinks.obj \
     $(SLO)$/dotnetcheck.obj \
     $(SLO)$/registerextensions.obj \
-    $(SLO)$/copyeditiondata.obj
+    $(SLO)$/copyeditiondata.obj \
+    $(SLO)$/checkrunningoffice.obj \
+    $(SLO)$/checkpatches.obj
 
 STDSHL += \
     $(ADVAPI32LIB)\

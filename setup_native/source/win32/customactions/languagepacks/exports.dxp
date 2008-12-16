@@ -1,3 +1,4 @@
 SetProductInstallationPath
 RegisterLanguagePack
 GetUserInstallMode    
+IsOfficeRunning

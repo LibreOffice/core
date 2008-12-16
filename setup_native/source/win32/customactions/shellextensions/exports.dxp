@@ -16,3 +16,5 @@ RemoveLayerLinks
 DotNetCheck
 ShowProperties
 copyEditionData
+IsOfficeRunning
+CheckPatchList
