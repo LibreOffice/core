@@ -118,6 +118,10 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
         if ( ! pSetup->CheckVersion() )
             throw pSetup->GetError();
 
+        // CheckForUpgrade() has to be called after calling GetPatches()!
+        if ( ! pSetup->CheckForUpgrade() )
+            throw pSetup->GetError();
+
         long nLanguage;
 
         if ( ! pSetup->ChooseLanguage( nLanguage ) )

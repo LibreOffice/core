@@ -84,12 +84,15 @@ class SetupAppX : public SetupApp
     LPTSTR      m_pErrorText;
     LPTSTR      m_pModuleFile;
     LPTSTR      m_pPatchFiles;
+    LPCTSTR     m_pUpgradeKey;
+    LPCTSTR     m_pProductVersion;
     int        *m_pMSIErrorCode;
 
     boolean     m_bQuiet            : 1;
     boolean     m_bIgnoreAlreadyRunning : 1;
     boolean     m_bRegNoMsoTypes :1;
     boolean     m_bRegAllMsoTypes :1;
+    boolean     m_bIsMinorUpgrade :1;
 
     FILE       *m_pLogFile;
 
@@ -133,6 +136,7 @@ public:
     virtual boolean GetPatches();
     virtual boolean ChooseLanguage( long& rLanguage );
     virtual boolean CheckVersion();
+    virtual boolean CheckForUpgrade();
     virtual boolean Install( long nLanguage );
 
     virtual UINT    GetError() const;
