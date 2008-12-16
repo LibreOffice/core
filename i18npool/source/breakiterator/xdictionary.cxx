@@ -56,6 +56,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 xdictionary::xdictionary(const sal_Char *lang)
 {
+    index1 = 0;
 #ifdef SAL_DLLPREFIX
     OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
     aBuf.appendAscii( SAL_DLLPREFIX );
@@ -78,7 +79,14 @@ xdictionary::xdictionary(const sal_Char *lang)
             dataArea = (sal_Unicode*) (*func)();
         }
         else
+        {
             existMark = NULL;
+            index1 = NULL;
+            index2 = NULL;
+            lenArray = NULL;
+            dataArea = NULL;
+        }
+
         for (sal_Int32 i = 0; i < CACHE_MAX; i++)
             cache[i].size = 0;
 
@@ -112,6 +120,8 @@ sal_Bool xdictionary::exists(const sal_Unicode c) {
 
 sal_Int32 SAL_CALL
 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) {
+
+        if ( !index1 ) return 0;
 
         sal_Int16 idx = index1[str[0] >> 8];
 
