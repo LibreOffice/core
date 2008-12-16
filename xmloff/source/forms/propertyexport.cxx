@@ -457,6 +457,8 @@ namespace xmloff
 
         // the "VerticalAlign" property should have been exported at the shape, too
         exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) ) );
+        // ditto the TextWritingMode
+        exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ) );
     }
 
     //---------------------------------------------------------------------

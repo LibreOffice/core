@@ -3077,6 +3077,11 @@ void SdrObject::SetBLIPSizeRectangle( const Rectangle& aRect )
     maBLIPSizeRectangle = aRect;
 }
 
+void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ )
+{
+    // this base class does not support different writing modes, so ignore the call
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //   @@@@  @@@@@  @@@@@@  @@@@@  @@@@   @@@@  @@@@@@  @@@@  @@@@@  @@  @@

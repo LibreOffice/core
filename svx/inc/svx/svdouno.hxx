@@ -101,6 +101,8 @@ public:
     virtual void TakeObjNameSingul(XubString& rName) const;
     virtual void TakeObjNamePlural(XubString& rName) const;
 
+    virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode );
+
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > GetUnoControlModel() const {return xUnoControlModel;}
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
 

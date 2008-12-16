@@ -943,6 +943,23 @@ public:
     virtual void DisconnectFromNode(FASTBOOL bTail1);
     virtual SdrObject* GetConnectedNode(FASTBOOL bTail1) const;
 
+    /** sets the writing mode of the object's context
+
+        Objects which itself do not support different writing modes will ignore this call.
+
+        Objects which support different writing modes, but have an own, explicit writing mode set,
+        will also ignore this call.
+
+        Objects which support different writing modes, and whose own mode is set to css.text.WritingMode2.CONTEXT,
+        will use the given writing mode to calculate their "effective writing mode".
+
+        The behaviour of this method is undefined if you pass css.text.WritingMode2.CONTEXT.
+
+        @param _nContextWritingMode
+            the effective writing mode of the context of the object
+    */
+    virtual void    SetContextWritingMode( const sal_Int16 _nContextWritingMode );
+
     // Wenn ein Objekt in der Lage ist, sich in ein Polygon oder in eine
     // Bezierkurve (oder beides) zu verwandeln, dann sollten die folgenden
     // Methoden ueberladen werden.

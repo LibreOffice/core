@@ -61,8 +61,8 @@
 #include <memory>
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
+#include <tools/diagnose_ex.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::sdr::contact;
 
@@ -251,6 +251,22 @@ UINT16 SdrUnoObj::GetObjIdentifier() const
     return UINT16(OBJ_UNO);
 }
 
+void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
+{
+    try
+    {
+        uno::Reference< beans::XPropertySet > xModelProperties( GetUnoControlModel(), uno::UNO_QUERY_THROW );
+        xModelProperties->setPropertyValue(
+            ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "ContextWritingMode" ) ),
+            uno::makeAny( _nContextWritingMode )
+        );
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 // ----------------------------------------------------------------------------
 namespace
 {
@@ -379,7 +395,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     if (xSet.is())
     {
         uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
-        OUString aStr;
+        ::rtl::OUString aStr;
 
         if( aValue >>= aStr )
             aUnoControlTypeName = String(aStr);
@@ -545,7 +561,7 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
         if (xSet.is())
         {
             uno::Any aValue( xSet->getPropertyValue(String("DefaultControl", gsl_getSystemTextEncoding())) );
-            OUString aStr;
+            ::rtl::OUString aStr;
             if( aValue >>= aStr )
                 aUnoControlTypeName = String(aStr);
         }

@@ -156,7 +156,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     GMAP( "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     GMAP( "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE ),
+    PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE|MID_FLAG_MULTI_PROPERTY, CTF_WRITINGMODE ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
@@ -267,6 +267,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ControlDataStyle",               XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
     GMAP( "ControlTextEmphasis",            XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
     GMAP( "ImageScaleMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_IMAGE_SCALE_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( "ControlWritingMode",             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, 0 ),
 
     // special entries for floating frames
     GMAP( "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR ),

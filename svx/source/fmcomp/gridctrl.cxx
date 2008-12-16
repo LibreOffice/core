@@ -754,32 +754,44 @@ void DbGridControl::NavigationBar::Paint(const Rectangle& rRect)
 //------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 {
-    Control::StateChanged(nType);
-    if (STATE_CHANGE_ZOOM == nType)
+    Control::StateChanged( nType );
+
+    Window* pWindows[] = {  &m_aRecordText,
+                            &m_aAbsolute,
+                            &m_aRecordOf,
+                            &m_aRecordCount,
+                            &m_aFirstBtn,
+                            &m_aPrevBtn,
+                            &m_aNextBtn,
+                            &m_aLastBtn,
+                            &m_aNewBtn
+                        };
+
+    switch ( nType )
     {
-        Fraction aZoom = GetZoom();
-
-        Window* pWindows[] = {
-                                &m_aRecordText,
-                                &m_aAbsolute,
-                                &m_aRecordOf,
-                                &m_aRecordCount,
-                                &m_aFirstBtn,
-                                &m_aPrevBtn,
-                                &m_aNextBtn,
-                                &m_aLastBtn,
-                                &m_aNewBtn
-                            };
-
-        // not all of these controls need to know the new zoom, but to be sure ...
-        Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
-        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        case STATE_CHANGE_MIRRORING:
         {
-            pWindows[i]->SetZoom(aZoom);
-            pWindows[i]->SetZoomedPointFont(aFont);
+            BOOL bIsRTLEnabled = IsRTLEnabled();
+            for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+                pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
-        // rearrange the controls
-        m_nDefaultWidth = ArrangeControls();
+        break;
+
+        case STATE_CHANGE_ZOOM:
+        {
+            Fraction aZoom = GetZoom();
+
+            // not all of these controls need to know the new zoom, but to be sure ...
+            Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
+            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            {
+                pWindows[i]->SetZoom(aZoom);
+                pWindows[i]->SetZoomedPointFont(aFont);
+            }
+            // rearrange the controls
+            m_nDefaultWidth = ArrangeControls();
+        }
+        break;
     }
 }
 
@@ -935,7 +947,7 @@ DbGridControl::DbGridControl(
     String sName(SVX_RES(RID_STR_NAVIGATIONBAR));
     m_aBar.SetAccessibleName(sName);
     m_aBar.Show();
-    ImplInitSettings(sal_True,sal_True,sal_True);
+    ImplInitWindow( InitAll );
 }
 
 //------------------------------------------------------------------------------
@@ -1002,11 +1014,17 @@ DbGridControl::~DbGridControl()
 void DbGridControl::StateChanged( StateChangedType nType )
 {
     DbGridControl_Base::StateChanged( nType );
+
     switch (nType)
     {
+        case STATE_CHANGE_MIRRORING:
+            ImplInitWindow( InitWritingMode );
+            Invalidate();
+            break;
+
         case STATE_CHANGE_ZOOM:
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitWindow( InitFont );
 
             // and give it a chance to rearrange
             Point aPoint = GetControlArea().TopLeft();
@@ -1016,15 +1034,15 @@ void DbGridControl::StateChanged( StateChangedType nType )
         }
         break;
         case STATE_CHANGE_CONTROLFONT:
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitWindow( InitFont );
             Invalidate();
             break;
         case STATE_CHANGE_CONTROLFOREGROUND:
-            ImplInitSettings( sal_False, sal_True, sal_False );
+            ImplInitWindow( InitForeground );
             Invalidate();
             break;
         case STATE_CHANGE_CONTROLBACKGROUND:
-            ImplInitSettings( sal_False, sal_False, sal_True );
+            ImplInitWindow( InitBackground );
             Invalidate();
             break;
     }
@@ -1037,7 +1055,7 @@ void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitWindow( InitAll );
         Invalidate();
     }
 }
@@ -1055,16 +1073,24 @@ void DbGridControl::Select()
 }
 
 //------------------------------------------------------------------------------
-void DbGridControl::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
 {
-    for (sal_uInt32 i = 0; i < m_aColumns.Count(); i++)
+    for ( sal_uInt32 i = 0; i < m_aColumns.Count(); ++i )
     {
         DbGridColumn* pCol = m_aColumns.GetObject(i);
         if (pCol)
-            pCol->ImplInitSettings( GetDataWindow(), bFont, bForeground, bBackground );
+            pCol->ImplInitWindow( GetDataWindow(), _eInitWhat );
     }
 
-    if ( bFont )
+    if ( ( _eInitWhat & InitWritingMode ) != 0 )
+    {
+        if ( m_bNavigationBar )
+        {
+            m_aBar.EnableRTL( IsRTLEnabled() );
+        }
+    }
+
+    if ( ( _eInitWhat & InitFont ) != 0 )
     {
         if ( m_bNavigationBar )
         {
@@ -1083,7 +1109,7 @@ void DbGridControl::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_
         }
     }
 
-    if (bBackground)
+    if ( ( _eInitWhat & InitBackground ) != 0 )
     {
         if (IsControlBackground())
         {

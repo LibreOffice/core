@@ -188,5 +188,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_FORM_OPERATIONS, "FormOperations" );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_INPUT_REQUIRED, "InputRequired" );
 
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_WRITING_MODE, "WritingMode" );
+
 }   // namespace svxform
 

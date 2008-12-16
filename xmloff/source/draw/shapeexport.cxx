@@ -345,7 +345,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     if (0 != sNumberStyle.getLength())
                     {
                         sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
-                            // TODO : this retrieval of the index should be moved into the ctor, holding the index
+                            // TODO : this retrieval of the index could be moved into the ctor, holding the index
                             //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 
