@@ -43,6 +43,9 @@ class SwNodeNum;
 // --> OD 2008-05-06 #refactorlists#
 class SwList;
 // <--
+// --> OD 2008-12-02 #i96772#
+class SvxLRSpaceItem;
+// <--
 
 #include <vector>
 #include <set>
@@ -459,6 +462,10 @@ public:
        @retval FALSE  else
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+
+    // --> OD 2008-12-02 #i96772#
+    void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
+    // <--
 
     /** return left margin for tab stop position calculation
 

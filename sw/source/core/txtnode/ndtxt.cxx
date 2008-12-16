@@ -2725,6 +2725,25 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return bRet;
 }
 
+// --> OD 2008-12-02 #i96772#
+void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const
+{
+    if ( AreListLevelIndentsApplicable() )
+    {
+        const SwNumRule* pRule = GetNumRule();
+        if ( pRule && GetActualListLevel() >= 0 )
+        {
+            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+            if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                o_rLRSpaceItem = aLR;
+            }
+        }
+    }
+}
+// <--
+
 // --> OD 2008-07-01 #i91133#
 long SwTxtNode::GetLeftMarginForTabCalculation() const
 {
