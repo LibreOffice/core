@@ -1713,7 +1713,7 @@ File gid_File_Lib_Unopkgapp
     Styles = (PACKED);
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
 #if defined WNT && \
     (defined M1310 || \
