@@ -747,10 +747,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         }
         // <--
         pImpRec->eLineStyle = (nLineFlags & 8)
-                            ? (MSO_LineStyle)GetPropertyValue(
-                                                DFF_Prop_lineStyle,
-                                                mso_lineSimple )
-                            : (MSO_LineStyle)USHRT_MAX;
+                              ? (MSO_LineStyle)GetPropertyValue(
+                                                    DFF_Prop_lineStyle,
+                                                    mso_lineSimple )
+                              : (MSO_LineStyle)USHRT_MAX;
         pTextImpRec->eLineStyle = pImpRec->eLineStyle;
 
         pImpRec->nFlags = rObjData.nSpFlags;
