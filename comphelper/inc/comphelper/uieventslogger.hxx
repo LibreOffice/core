@@ -30,11 +30,8 @@
 #ifndef _COMPHELPER_UIEVENTSLOGGER_HXX
 #define _COMPHELPER_UIEVENTSLOGGER_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/logging/XCsvLogFormatter.hpp>
-#include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -55,6 +52,7 @@ namespace comphelper
             static void logVcl(const ::rtl::OUString& parent_id, sal_Int32 window_type, const ::rtl::OUString& id, const ::rtl::OUString& method, const ::rtl::OUString& param);
             static void logVcl(const ::rtl::OUString& parent_id, sal_Int32 window_type, const ::rtl::OUString& id, const ::rtl::OUString& method, sal_Int32 param);
             static void logVcl(const ::rtl::OUString& parent_id, sal_Int32 window_type, const ::rtl::OUString& id, const ::rtl::OUString& method);
+            static void disposing();
             virtual ~UiEventsLogger() {}
     };
 }
