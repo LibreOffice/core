@@ -31,26 +31,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#include "Grid.hxx"
 #include "Columns.hxx"
 #include "findpos.hxx"
+#include "Grid.hxx"
+#include "property.hrc"
+#include "property.hxx"
+#include "services.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-#include "services.hxx"
-#ifndef _FRM_PROPERTY_HRC_
-#include "property.hrc"
-#endif
-#include "property.hxx"
-#include <cppuhelper/queryinterface.hxx>
-#include <comphelper/extract.hxx>
-#include <comphelper/container.hxx>
-#include <comphelper/basicio.hxx>
-#include <vcl/svapp.hxx>
+#include <com/sun/star/text/WritingMode2.hpp>
+/** === end UNO includes === **/
 
-#ifndef _TOOLKIT_UNOHLP_HXX
+#include <comphelper/basicio.hxx>
+#include <comphelper/container.hxx>
+#include <comphelper/extract.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -71,6 +71,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
+
+namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
 const sal_uInt16 ROWHEIGHT          =   0x0001;
 const sal_uInt16 FONTTYPE           =   0x0002;
@@ -99,6 +101,8 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
     ,m_aResetListeners(m_aMutex)
     ,m_aDefaultControl( FRM_SUN_CONTROL_GRIDCONTROL )
     ,m_nBorder(1)
+    ,m_nWritingMode( WritingMode2::CONTEXT )
+    ,m_nContextWritingMode( WritingMode2::CONTEXT )
     ,m_bEnable(sal_True)
     ,m_bNavigation(sal_True)
     ,m_bRecordMarker(sal_True)
@@ -126,6 +130,8 @@ OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const
     m_bEnable = _pOriginal->m_bEnable;
     m_bNavigation = _pOriginal->m_bNavigation;
     m_nBorder = _pOriginal->m_nBorder;
+    m_nWritingMode = _pOriginal->m_nWritingMode;
+    m_nContextWritingMode = _pOriginal->m_nContextWritingMode;
     m_bRecordMarker = _pOriginal->m_bRecordMarker;
     m_bPrintable = _pOriginal->m_bPrintable;
     m_bAlwaysShowCursor = _pOriginal->m_bAlwaysShowCursor;
@@ -409,7 +415,7 @@ void OGridControlModel::_reset()
 //------------------------------------------------------------------------------
 void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 34 )
+    BEGIN_DESCRIBE_BASE_PROPERTIES( 36 )
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
@@ -444,6 +450,8 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP3(ALWAYSSHOWCURSOR,    sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP3(DISPLAYSYNCHRON,     sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP2(HELPURL,             ::rtl::OUString,    BOUND, MAYBEDEFAULT);
+        DECL_PROP2(WRITING_MODE,        sal_Int16,          BOUND, MAYBEDEFAULT);
+        DECL_PROP3(CONTEXT_WRITING_MODE,sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -452,6 +460,12 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_CONTEXT_WRITING_MODE:
+            rValue <<= m_nContextWritingMode;
+            break;
+        case PROPERTY_ID_WRITING_MODE:
+            rValue <<= m_nWritingMode;
+            break;
         case PROPERTY_ID_HELPTEXT:
             rValue <<= m_sHelpText;
             break;
@@ -513,6 +527,12 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
     sal_Bool bModified(sal_False);
     switch (nHandle)
     {
+        case PROPERTY_ID_CONTEXT_WRITING_MODE:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_nContextWritingMode );
+            break;
+        case PROPERTY_ID_WRITING_MODE:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_nWritingMode );
+            break;
         case PROPERTY_ID_HELPTEXT:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sHelpText);
             break;
@@ -592,6 +612,12 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_CONTEXT_WRITING_MODE:
+            rValue >>= m_nContextWritingMode;
+            break;
+        case PROPERTY_ID_WRITING_MODE:
+            rValue >>= m_nWritingMode;
+            break;
         case PROPERTY_ID_HELPTEXT:
             rValue >>= m_sHelpText;
             break;
@@ -662,6 +688,11 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     Any aReturn;
     switch (nHandle)
     {
+        case PROPERTY_ID_CONTEXT_WRITING_MODE:
+        case PROPERTY_ID_WRITING_MODE:
+            aReturn <<= WritingMode2::CONTEXT;
+            break;
+
         case PROPERTY_ID_DEFAULTCONTROL:
             aReturn <<= ::rtl::OUString( STARDIV_ONE_FORM_CONTROL_GRID  );
             break;
@@ -956,15 +987,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeShort( aFont.Pitch );
     }
 
-    // no need to write a compatible service name anymore: Since the binfilter workspace, this
-    // code here is not used anymore for writing old binary file formats. Thus, there's no need
-    // to be compatible to anything except ourself.
-    // 2004-07-26 - #i31138# - fs@openoffice.org
-//    if ( m_aDefaultControl == FRM_SUN_CONTROL_GRIDCONTROL )
-//        // for compatibility, write a sevice name which older versions understand (up to 5.1)
-//        _rxOutStream << STARDIV_ONE_FORM_CONTROL_GRID;
-//    else
-        _rxOutStream << m_aDefaultControl;
+    _rxOutStream << m_aDefaultControl;
 
     _rxOutStream->writeShort(m_nBorder);
     _rxOutStream->writeBoolean(m_bEnable);

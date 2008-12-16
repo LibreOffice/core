@@ -276,6 +276,8 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_RICH_TEXT,                "RichText" );
     FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
     FORMS_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,           "LineEndFormat" );
+    FORMS_CONSTASCII_STRING( PROPERTY_WRITING_MODE,             "WritingMode" );
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTEXT_WRITING_MODE,     "ContextWritingMode" );
 
     FORMS_CONSTASCII_STRING( PROPERTY_NATIVE_LOOK,              "NativeWidgetLook" );
     FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );

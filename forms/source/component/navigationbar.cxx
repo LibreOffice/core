@@ -32,6 +32,9 @@
 #include "precompiled_forms.hxx"
 #include "navigationbar.hxx"
 #include "frm_module.hxx"
+
+#include <com/sun/star/text/WritingMode2.hpp>
+
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 
@@ -56,9 +59,7 @@ namespace frm
     using namespace ::com::sun::star::container;
     using namespace ::comphelper;
 
-#define REGISTER_PROP( prop, member ) \
-    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT, \
-        &member, ::getCppuType( &member ) );
+    namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
 #define REGISTER_VOID_PROP( prop, memberAny, type ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID, \
@@ -78,15 +79,17 @@ namespace frm
         m_nClassId = FormComponentType::NAVIGATIONBAR;
         implInitPropertyContainer();
 
-        getPropertyDefaultByHandle( PROPERTY_ID_DEFAULTCONTROL     ) >>= m_sDefaultControl;
-        getPropertyDefaultByHandle( PROPERTY_ID_ICONSIZE           ) >>= m_nIconSize;
-        getPropertyDefaultByHandle( PROPERTY_ID_BORDER             ) >>= m_nBorder;
-        getPropertyDefaultByHandle( PROPERTY_ID_DELAY              ) >>= m_nDelay;
-        getPropertyDefaultByHandle( PROPERTY_ID_ENABLED            ) >>= m_bEnabled;
-        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_POSITION      ) >>= m_bShowPosition;
-        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_NAVIGATION    ) >>= m_bShowNavigation;
-        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_RECORDACTIONS ) >>= m_bShowActions;
-        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_FILTERSORT    ) >>= m_bShowFilterSort;
+        getPropertyDefaultByHandle( PROPERTY_ID_DEFAULTCONTROL          ) >>= m_sDefaultControl;
+        getPropertyDefaultByHandle( PROPERTY_ID_ICONSIZE                ) >>= m_nIconSize;
+        getPropertyDefaultByHandle( PROPERTY_ID_BORDER                  ) >>= m_nBorder;
+        getPropertyDefaultByHandle( PROPERTY_ID_DELAY                   ) >>= m_nDelay;
+        getPropertyDefaultByHandle( PROPERTY_ID_ENABLED                 ) >>= m_bEnabled;
+        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_POSITION           ) >>= m_bShowPosition;
+        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_NAVIGATION         ) >>= m_bShowNavigation;
+        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_RECORDACTIONS      ) >>= m_bShowActions;
+        getPropertyDefaultByHandle( PROPERTY_ID_SHOW_FILTERSORT         ) >>= m_bShowFilterSort;
+        getPropertyDefaultByHandle( PROPERTY_ID_WRITING_MODE            ) >>= m_nWritingMode;
+        getPropertyDefaultByHandle( PROPERTY_ID_CONTEXT_WRITING_MODE    ) >>= m_nContextWritingMode;
     }
 
     //------------------------------------------------------------------
@@ -98,35 +101,39 @@ namespace frm
 
         implInitPropertyContainer();
 
-        m_aTabStop          = _pOriginal->m_aTabStop;
-        m_aBackgroundColor  = _pOriginal->m_aBackgroundColor;
-        m_sDefaultControl   = _pOriginal->m_sDefaultControl;
-        m_sHelpText         = _pOriginal->m_sHelpText;
-        m_sHelpURL          = _pOriginal->m_sHelpURL;
-        m_bEnabled          = _pOriginal->m_bEnabled;
-        m_nIconSize         = _pOriginal->m_nIconSize;
-        m_nBorder           = _pOriginal->m_nBorder;
-        m_nDelay            = _pOriginal->m_nDelay;
-        m_bShowPosition     = _pOriginal->m_bShowPosition;
-        m_bShowNavigation   = _pOriginal->m_bShowNavigation;
-        m_bShowActions      = _pOriginal->m_bShowActions;
-        m_bShowFilterSort   = _pOriginal->m_bShowFilterSort;
+        m_aTabStop              = _pOriginal->m_aTabStop;
+        m_aBackgroundColor      = _pOriginal->m_aBackgroundColor;
+        m_sDefaultControl       = _pOriginal->m_sDefaultControl;
+        m_sHelpText             = _pOriginal->m_sHelpText;
+        m_sHelpURL              = _pOriginal->m_sHelpURL;
+        m_bEnabled              = _pOriginal->m_bEnabled;
+        m_nIconSize             = _pOriginal->m_nIconSize;
+        m_nBorder               = _pOriginal->m_nBorder;
+        m_nDelay                = _pOriginal->m_nDelay;
+        m_bShowPosition         = _pOriginal->m_bShowPosition;
+        m_bShowNavigation       = _pOriginal->m_bShowNavigation;
+        m_bShowActions          = _pOriginal->m_bShowActions;
+        m_bShowFilterSort       = _pOriginal->m_bShowFilterSort;
+        m_nWritingMode          = _pOriginal->m_nWritingMode;
+        m_nContextWritingMode   = _pOriginal->m_nContextWritingMode;
     }
 
     //------------------------------------------------------------------
     void ONavigationBarModel::implInitPropertyContainer()
     {
-        REGISTER_PROP( DEFAULTCONTROL,     m_sDefaultControl  );
-        REGISTER_PROP( HELPTEXT,           m_sHelpText        );
-        REGISTER_PROP( HELPURL,            m_sHelpURL         );
-        REGISTER_PROP( ENABLED,            m_bEnabled         );
-        REGISTER_PROP( ICONSIZE,           m_nIconSize        );
-        REGISTER_PROP( BORDER,             m_nBorder          );
-        REGISTER_PROP( DELAY,              m_nDelay           );
-        REGISTER_PROP( SHOW_POSITION,      m_bShowPosition    );
-        REGISTER_PROP( SHOW_NAVIGATION,    m_bShowNavigation  );
-        REGISTER_PROP( SHOW_RECORDACTIONS, m_bShowActions     );
-        REGISTER_PROP( SHOW_FILTERSORT,    m_bShowFilterSort  );
+        REGISTER_PROP_2( DEFAULTCONTROL,      m_sDefaultControl,        BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HELPTEXT,            m_sHelpText,              BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HELPURL,             m_sHelpURL,               BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( ENABLED,             m_bEnabled,               BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( ICONSIZE,            m_nIconSize,              BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( BORDER,              m_nBorder,                BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( DELAY,               m_nDelay,                 BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( SHOW_POSITION,       m_bShowPosition,          BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( SHOW_NAVIGATION,     m_bShowNavigation,        BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( SHOW_RECORDACTIONS,  m_bShowActions,           BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( SHOW_FILTERSORT,     m_bShowFilterSort,        BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( WRITING_MODE,        m_nWritingMode,           BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_3( CONTEXT_WRITING_MODE,m_nContextWritingMode,    BOUND, MAYBEDEFAULT, TRANSIENT );
 
         REGISTER_VOID_PROP( TABSTOP,         m_aTabStop,         sal_Bool );
         REGISTER_VOID_PROP( BACKGROUNDCOLOR, m_aBackgroundColor, sal_Int32 );
@@ -430,6 +437,10 @@ namespace frm
         case PROPERTY_ID_TABSTOP:
         case PROPERTY_ID_BACKGROUNDCOLOR:
             /* void */
+            break;
+        case PROPERTY_ID_WRITING_MODE:
+        case PROPERTY_ID_CONTEXT_WRITING_MODE:
+            aDefault <<= WritingMode2::CONTEXT;
             break;
 
         case PROPERTY_ID_ENABLED:

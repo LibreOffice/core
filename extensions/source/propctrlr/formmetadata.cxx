@@ -142,6 +142,7 @@ namespace pcr
         DEF_INFO_2( TITLE,             TITLE,              TITLE,             FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_3( LABEL,             LABEL,              LABEL,             FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( CONTROLLABEL,      LABELCONTROL,       CONTROLLABEL,      FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( WRITING_MODE,      WRITING_MODE,       WRITING_MODE,      FORM_VISIBLE, ENUM, COMPOSEABLE ),
         DEF_INFO_2( TEXT,              TEXT,               TEXT,              DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( MAXTEXTLEN,        MAXTEXTLEN,         MAXTEXTLEN,        FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( EDITMASK,          EDITMASK,           EDITMASK,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
@@ -507,6 +508,9 @@ namespace pcr
                 break;
             case PROPERTY_ID_SCALE_MODE:
                 nStringItemsResId = RID_RSC_ENUM_SCALE_MODE;
+                break;
+            case PROPERTY_ID_WRITING_MODE:
+                nStringItemsResId = RID_RSC_ENUM_WRITING_MODE;
                 break;
             default:
                 OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );

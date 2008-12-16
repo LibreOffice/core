@@ -30,24 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-#include "formcomponenthandler.hxx"
-#include "formmetadata.hxx"
-#include "usercontrol.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
-#include "formstrings.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
-#include "formresid.hrc"
-#endif
+
 #include "controltype.hxx"
-#include "listselectiondlg.hxx"
-#include "formlinkdialog.hxx"
+#include "extensio.hrc"
 #include "fontdialog.hxx"
+#include "formcomponenthandler.hxx"
+#include "formlinkdialog.hxx"
+#include "formmetadata.hxx"
+#include "formresid.hrc"
+#include "formstrings.hxx"
+#include "handlerhelper.hxx"
+#include "listselectiondlg.hxx"
+#include "pcrcommon.hxx"
 #include "selectlabeldialog.hxx"
 #include "taborder.hxx"
-#include "pcrcommon.hxx"
-#include "handlerhelper.hxx"
+#include "usercontrol.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -81,39 +78,35 @@
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 /** === end UNO includes === **/
-#include <connectivity/dbexception.hxx>
-#include <vcl/wrkwin.hxx>
-#include <svtools/numuno.hxx>
-#include <unotools/confignode.hxx>
+
 #include <comphelper/extract.hxx>
-#ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
-#endif
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/stdtext.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/numuno.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbexception.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/app.hxx>
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <svtools/intitem.hxx>
-#include <svx/numinf.hxx>
-#include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
-#include <svx/dialogs.hrc>
-#endif
-#include <vcl/msgbox.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <svtools/ctloptions.hxx>
 #include <svtools/colrdlg.hxx>
-#include <svtools/urihelper.hxx>
+#include <svtools/filenotation.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itemset.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <svtools/numuno.hxx>
+#include <svtools/urihelper.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/numinf.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <cppuhelper/exc_hlp.hxx>
-#include <connectivity/dbconversion.hxx>
+#include <unotools/confignode.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/wrkwin.hxx>
 #include <tools/StringListResource.hxx>
 
 #include <limits>
@@ -147,6 +140,8 @@ namespace pcr
     using namespace ui::dialogs;
     using namespace inspection;
     using namespace ::dbtools;
+
+    namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
     //====================================================================
     //= FormComponentPropertyHandler
@@ -607,6 +602,28 @@ namespace pcr
         }
         break;
 
+        case PROPERTY_ID_WRITING_MODE:
+        {
+            aPropertyValue = FormComponentPropertyHandler_Base::convertToPropertyValue( _rPropertyName, _rControlValue );
+
+            sal_Int16 nNormalizedValue( 2 );
+            OSL_VERIFY( aPropertyValue >>= nNormalizedValue );
+            sal_Int16 nWritingMode = WritingMode2::CONTEXT;
+            switch ( nNormalizedValue )
+            {
+            case 0: nWritingMode = WritingMode2::LR_TB;      break;
+            case 1: nWritingMode = WritingMode2::RL_TB;      break;
+            case 2: nWritingMode = WritingMode2::CONTEXT;    break;
+            default:
+                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unexpected 'normalized value' for WritingMode!" );
+                nWritingMode = WritingMode2::CONTEXT;
+                break;
+            }
+
+            aPropertyValue <<= nWritingMode;
+        }
+        break;
+
         default:
             aPropertyValue = FormComponentPropertyHandler_Base::convertToPropertyValue( _rPropertyName, _rControlValue );
             break;  // default
@@ -713,6 +730,26 @@ namespace pcr
             sal_Int32 nTime = 0;
             OSL_VERIFY( _rPropertyValue >>= nTime );
             aControlValue <<= DBTypeConversion::toTime( nTime );
+        }
+        break;
+
+        case PROPERTY_ID_WRITING_MODE:
+        {
+            sal_Int16 nWritingMode( WritingMode2::CONTEXT );
+            OSL_VERIFY( _rPropertyValue >>= nWritingMode );
+            sal_Int16 nNormalized = 2;
+            switch ( nWritingMode )
+            {
+            case WritingMode2::LR_TB:   nNormalized = 0;    break;
+            case WritingMode2::RL_TB:   nNormalized = 1;    break;
+            case WritingMode2::CONTEXT: nNormalized = 2;    break;
+            default:
+                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unsupported API value for WritingMode!" );
+                nNormalized = 2;
+                break;
+            }
+
+            aControlValue = FormComponentPropertyHandler_Base::convertToControlValue( _rPropertyName, makeAny( nNormalized ), _rControlValueType );
         }
         break;
 
@@ -2183,6 +2220,11 @@ namespace pcr
         case PROPERTY_ID_SCALEIMAGE:
             if ( impl_componentHasProperty_throw( PROPERTY_SCALE_MODE ) )
                 // ScaleImage is superseded by ScaleMode
+                return true;
+            break;
+
+        case PROPERTY_ID_WRITING_MODE:
+            if ( !SvtCTLOptions().IsCTLFontEnabled() )
                 return true;
             break;
         }

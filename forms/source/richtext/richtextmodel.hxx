@@ -79,6 +79,8 @@ namespace frm
         ::rtl::OUString             m_sHelpURL;
         ::rtl::OUString             m_sLastKnownEngineText;
         sal_Int16                   m_nLineEndFormat;
+        sal_Int16                   m_nTextWritingMode;
+        sal_Int16                   m_nContextWritingMode;
         sal_Int16                   m_nBorder;
         sal_Bool                    m_bEnabled;
         sal_Bool                    m_bHardLineBreaks;

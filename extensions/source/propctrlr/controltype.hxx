@@ -30,6 +30,8 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_CONTROLTYPE_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_CONTROLTYPE_HXX
 
+#include <sal/types.h>
+
 //........................................................................
 namespace pcr
 {

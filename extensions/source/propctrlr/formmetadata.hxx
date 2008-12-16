@@ -339,6 +339,7 @@ namespace pcr
     #define PROPERTY_ID_NOLABEL                     195
     #define PROPERTY_ID_SCALE_MODE                  196
     #define PROPERTY_ID_INPUT_REQUIRED              197
+    #define PROPERTY_ID_WRITING_MODE                198
 
 //............................................................................
 } // namespace pcr

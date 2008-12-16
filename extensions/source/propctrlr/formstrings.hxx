@@ -262,6 +262,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_SUBMISSION_ID,          "SubmissionID" );
     PCR_CONSTASCII_STRING( PROPERTY_BINDING_ID,             "BindingID" );
     PCR_CONSTASCII_STRING( PROPERTY_ID,                     "ID" );
+    PCR_CONSTASCII_STRING( PROPERTY_WRITING_MODE,           "WritingMode" );
 
     PCR_CONSTASCII_STRING( PROPERTY_MODEL,                  "Model" );
 

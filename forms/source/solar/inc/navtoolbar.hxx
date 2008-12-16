@@ -148,6 +148,7 @@ namespace frm
         void setItemControlFont( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
         void setItemControlForeground( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
         void adjustItemWindowWidth( USHORT _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void enableItemRTL( USHORT /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
     };
 
     //=====================================================================

@@ -33,6 +33,7 @@
 
 
 #include "Filter.hxx"
+#include "FormComponent.hxx"
 #include "frm_module.hxx"
 #include "frm_resource.hrc"
 #include "frm_resource.hxx"
@@ -203,66 +204,70 @@ namespace frm
     {
         UnoControl::createPeer( rxToolkit, rParentPeer );
 
-        Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
-        Any aValue;
-        if (xVclWindow.is())
+        try
         {
-            switch (m_nControlClass)
+            Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY_THROW );
+            switch ( m_nControlClass )
             {
                 case FormComponentType::CHECKBOX:
                 {
                     // checkboxes always have a tristate-mode
-                    sal_Bool bB(sal_True);
-                    aValue.setValue(&bB,::getBooleanCppuType());
-                    xVclWindow->setProperty(PROPERTY_TRISTATE, aValue);
+                    xVclWindow->setProperty( PROPERTY_TRISTATE, makeAny( sal_Bool( sal_True ) ) );
+                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( STATE_DONTKNOW ) ) );
 
-                    aValue <<= (sal_Int32)STATE_DONTKNOW;
-                    xVclWindow->setProperty(PROPERTY_STATE, aValue);
+                    Reference< XCheckBox >  xBox( getPeer(), UNO_QUERY_THROW );
+                    xBox->addItemListener( this );
 
-                    Reference< XCheckBox >  xBox( getPeer(), UNO_QUERY );
-                    xBox->addItemListener(this);
+                }
+                break;
 
-                }   break;
                 case FormComponentType::RADIOBUTTON:
                 {
-                    aValue <<= (sal_Int32)STATE_NOCHECK;
-                    xVclWindow->setProperty(PROPERTY_STATE, aValue);
+                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( STATE_NOCHECK ) ) );
 
-                    Reference< XRadioButton >  xRadio( getPeer(), UNO_QUERY );
-                    xRadio->addItemListener(this);
-                }   break;
+                    Reference< XRadioButton >  xRadio( getPeer(), UNO_QUERY_THROW );
+                    xRadio->addItemListener( this );
+                }
+                break;
+
                 case FormComponentType::LISTBOX:
                 {
-                    Reference< XListBox >  xListBox( getPeer(), UNO_QUERY );
-                    xListBox->addItemListener(this);
+                    Reference< XListBox >  xListBox( getPeer(), UNO_QUERY_THROW );
+                    xListBox->addItemListener( this );
                 }
-                case FormComponentType::COMBOBOX: // no break;
+                // no break
+
+                case FormComponentType::COMBOBOX:
                 {
-                    sal_Bool bB(sal_True);
-                    aValue.setValue(&bB,::getBooleanCppuType());
-                    xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, aValue);
+                    xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, makeAny( sal_Bool( sal_True ) ) );
                 }
-                default:    // no break;
+                // no break
+
+                default:
                 {
                     Reference< XWindow >  xWindow( getPeer(), UNO_QUERY );
-                    xWindow->addFocusListener(this);
+                    xWindow->addFocusListener( this );
 
                     Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
                     if (xText.is())
                         xText->setMaxTextLen(0);
-                }   break;
+                }
+                break;
             }
-        }
 
-        // filter controls are _never_ readonly
-        // #107013# - 2002-02-03 - fs@openoffice.org
-        Reference< XPropertySet > xModel( getModel(), UNO_QUERY );
-        OSL_ENSURE( xModel.is(), "OFilterControl::createPeer: no model!" );
-        Reference< XPropertySetInfo > xModelPSI;
-        if ( xModel.is() )
-            xModelPSI = xModel->getPropertySetInfo();
-        if ( xModelPSI.is() && xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
-            xVclWindow->setProperty( PROPERTY_READONLY, makeAny( sal_False ) );
+            OControl::initFormControlPeer( getPeer() );
+
+            // filter controls are _never_ readonly
+            // #107013# - 2002-02-03 - fs@openoffice.org
+            Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
+            if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
+                xVclWindow->setProperty( PROPERTY_READONLY, makeAny( sal_Bool( sal_False ) ) );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
 
         if (m_bFilterList)
             m_bFilterListFilled = sal_False;
