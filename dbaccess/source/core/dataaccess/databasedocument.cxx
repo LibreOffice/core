@@ -90,6 +90,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <list>
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -1396,13 +1397,21 @@ void ODatabaseDocument::disposing()
     m_aCloseListener.disposeAndClear( aDisposeEvent );
     m_aStorageListeners.disposeAndClear( aDisposeEvent );
 
+    // this is the list of objects which we currently hold as member. Upon resetting
+    // those members, we can (potentially) release the last reference to them, in which
+    // case they will be deleted - if they're C++ implementations, that is :).
+    // Some of those implementations are offending enough to require the SolarMutex, which
+    // means we should not release the last reference while our own mutex is locked ...
+    ::std::list< Reference< XInterface > > aKeepAlive;
+
     // SYNCHRONIZED ->
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
 
+    aKeepAlive.push_back( m_xUIConfigurationManager );
     m_xUIConfigurationManager = NULL;
 
     clearObjectContainer( m_xForms );
@@ -1424,11 +1433,18 @@ void ODatabaseDocument::disposing()
     DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
+    aKeepAlive.push_back( m_xModuleManager );
     m_xModuleManager.clear();
+
+    aKeepAlive.push_back( m_xTitleHelper );
     m_xTitleHelper.clear();
 
     m_pImpl.clear();
+
+    aGuard.clear();
     // <- SYNCHRONIZED
+
+    aKeepAlive.clear();
 }
 // -----------------------------------------------------------------------------
 // XComponent
