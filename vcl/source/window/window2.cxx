@@ -68,8 +68,6 @@ DBG_NAMEEX( Window )
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
 
-//#define USE_NEW_RTL_IMPLEMENTATION
-
 // =======================================================================
 
 struct ImplFocusDelData : public ImplDelData
@@ -690,15 +688,10 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 
     // Tracking-Event erzeugen
     Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    if( ImplIsAntiparallel() )
     {
         // - RTL - re-mirror frame pos at pChild
-#ifdef USE_NEW_RTL_IMPLEMENTATION
-        Window *pRefWindow = (Window*) mpDummy4;
-        pRefWindow->ImplReMirror( aMousePos );
-#else
         ImplReMirror( aMousePos );
-#endif
     }
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                            mpWindowImpl->mpFrameData->mnClickCount, 0,
@@ -768,15 +761,10 @@ void Window::EndTracking( USHORT nFlags )
         if ( !(nFlags & ENDTRACK_DONTCALLHDL) )
         {
             Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-            if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            if( ImplIsAntiparallel() )
             {
                 // - RTL - re-mirror frame pos at pChild
-#ifdef USE_NEW_RTL_IMPLEMENTATION
-                Window *pRefWindow = (Window*) mpDummy4;
-                pRefWindow->ImplReMirror( aMousePos );
-#else
                 ImplReMirror( aMousePos );
-#endif
             }
 
             MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),

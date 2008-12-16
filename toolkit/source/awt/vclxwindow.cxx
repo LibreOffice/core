@@ -43,6 +43,7 @@
 #include <com/sun/star/awt/EndPopupModeEvent.hpp>
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxpointer.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
@@ -73,55 +74,66 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
+using ::com::sun::star::awt::XDockableWindowListener;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
+namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-//#define SYNCHRON_NOTIFICATION
-    // define this for notifying mouse events synchronously when they happen
-    // disadvantage: potential of deadlocks, since this means that the
-    // SolarMutex is locked when the listener is called
-    // See http://www.openoffice.org/issues/show_bug.cgi?id=40583 for an example
-    // deadlock
-//#define THREADED_NOTIFICATION
-    // define this for notifying mouse events asynchronously, in a dedicated thread
-    // This is what I'd like to use. However, there's some Windows API code
-    // which doesn't like being called in the non-main thread, and we didn't
-    // find out which one :(
-    // See http://www.openoffice.org/issues/show_bug.cgi?id=47502 for an example
-    // of a bug triggered by asynchronous notification in a foreign thread
-
-// If none of the above is defined, then mouse events are notified asynchronously
-// in the main thread, using PostUserEvent.
-// disadvantage: The event we're posting is delayed until the next event
-// reschedule. Normally, this is virtually immediately, but there's no guarantee
-// ....
 
 //====================================================================
-//= VCLXWindowImpl
+//= misc helpers
 //====================================================================
 namespace
 {
+    //................................................................
+    //. FlagGuard
+    //................................................................
+    class FlagGuard
+    {
+    private:
+        bool&   m_rFlag;
+
+    public:
+        FlagGuard( bool& _rFlag )
+            :m_rFlag( _rFlag )
+        {
+            m_rFlag = true;
+        }
+        ~FlagGuard()
+        {
+            m_rFlag = false;
+        }
+    };
+
+    //................................................................
+    //. MouseEventType
+    //................................................................
     enum MouseEventType
     {
+        META_FIRST_MOUSE_EVENT  = 0,
+
         EVENT_MOUSE_PRESSED     = 0,
         EVENT_MOUSE_RELEASED    = 1,
         EVENT_MOUSE_ENTERED     = 2,
         EVENT_MOUSE_EXITED      = 3,
 
-        META_FIRST_MOUSE_EVENT  = 0,
         META_LAST_MOUSE_EVENT   = 3
     };
 
+    //................................................................
+    //. PlainEventType
+    //................................................................
     enum PlainEventType
     {
+        META_FIRST_PLAIN_EVENT  = 4,
+
         EVENT_WINDOW_ENABLED    = 4,
         EVENT_WINDOW_DISABLED   = 5,
 
-        META_FIRST_PLAIN_EVENT  = 4,
         META_LAST_PLAIN_EVENT   = 5
     };
 
@@ -135,6 +147,9 @@ namespace
     #define DBG_CHECK_EVENTS()
 #endif
 
+    //................................................................
+    //. AnyWindowEvent
+    //................................................................
     struct AnyWindowEvent : public ::comphelper::AnyEvent
     {
     private:
@@ -196,6 +211,9 @@ namespace
     };
 }
 
+//====================================================================
+//= VCLXWindowImpl
+//====================================================================
 class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
 {
 private:
@@ -203,23 +221,49 @@ private:
         EventArray;
 
 private:
-    oslInterlockedCount                 m_refCount;
     VCLXWindow&                         mrAntiImpl;
     ::vos::IMutex&                      mrMutex;
     ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
+    bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
+
     ::osl::Mutex                        maListenerContainerMutex;
     ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
+    ::cppu::OInterfaceContainerHelper   maDockableWindowListeners;
+    EventListenerMultiplexer            maEventListeners;
+    FocusListenerMultiplexer            maFocusListeners;
+    WindowListenerMultiplexer           maWindowListeners;
+    KeyListenerMultiplexer              maKeyListeners;
+    MouseListenerMultiplexer            maMouseListeners;
+    MouseMotionListenerMultiplexer      maMouseMotionListeners;
+    PaintListenerMultiplexer            maPaintListeners;
+    VclContainerListenerMultiplexer     maContainerListeners;
+    TopWindowListenerMultiplexer        maTopWindowListeners;
 
-#ifdef THREADED_NOTIFICATION
-    ::rtl::Reference< ::comphelper::AsyncEventNotifier >
-                                        mpAsyncNotifier;
-#else
-#if !defined( SYNCHRON_NOTIFICATION )
     EventArray                          maEvents;
     ULONG                               mnEventId;
-#endif
-#endif
+
+public:
+    bool                                mbDisposing             : 1;
+    bool                                mbDesignMode            : 1;
+    bool                                mbSynthesizingVCLEvent  : 1;
+    bool                                mbWithDefaultProps      : 1;
+
+    ULONG                               mnListenerLockLevel;
+    sal_Int16                           mnWritingMode;
+    sal_Int16                           mnContextWritingMode;
+
+    UnoPropertyArrayHelper*             mpPropHelper;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >
+                                        mxPointer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                                        mxAccessibleContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >
+                                        mxViewGraphics;
+
+public:
+    bool&   getDrawingOntoParent_ref()  { return mbDrawingOntoParent; }
 
 public:
     /** ctor
@@ -227,7 +271,7 @@ public:
         the <type>VCLXWindow</type> instance which the object belongs to. Must
         live longer then the object just being constructed.
     */
-    VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex );
+    VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, bool _bWithDefaultProps );
 
     /** asynchronously notifies a mouse event to the VCLXWindow's XMouseListeners
     */
@@ -248,33 +292,37 @@ public:
 
     /** returns the container of registered XWindowListener2 listeners
     */
-    inline ::cppu::OInterfaceContainerHelper&
-            getWindow2Listeners() { return maWindow2Listeners; }
+    inline ::cppu::OInterfaceContainerHelper&   getWindow2Listeners()       { return maWindow2Listeners; }
+    inline ::cppu::OInterfaceContainerHelper&   getDockableWindowListeners(){ return maDockableWindowListeners; }
+    inline EventListenerMultiplexer&            getEventListeners()         { return maEventListeners; }
+    inline FocusListenerMultiplexer&            getFocusListeners()         { return maFocusListeners; }
+    inline WindowListenerMultiplexer&           getWindowListeners()        { return maWindowListeners; }
+    inline KeyListenerMultiplexer&              getKeyListeners()           { return maKeyListeners; }
+    inline MouseListenerMultiplexer&            getMouseListeners()         { return maMouseListeners; }
+    inline MouseMotionListenerMultiplexer&      getMouseMotionListeners()   { return maMouseMotionListeners; }
+    inline PaintListenerMultiplexer&            getPaintListeners()         { return maPaintListeners; }
+    inline VclContainerListenerMultiplexer&     getContainerListeners()     { return maContainerListeners; }
+    inline TopWindowListenerMultiplexer&        getTopWindowListeners()     { return maTopWindowListeners; }
 
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual ~VCLXWindowImpl();
 
 protected:
-    virtual ~VCLXWindowImpl();
+    virtual void SAL_CALL acquire();
+    virtual void SAL_CALL release();
 
     // IEventProcessor
     virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
-#if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
 private:
     DECL_LINK( OnProcessEvent, void* );
-#endif
 
 private:
     /** notifies an arbitrary event
         @param _rEvent
             the event to notify
-        @param _rGuard
-            a guard currentl guarding our mutex, which is released for the actual notification
     */
     void impl_notifyAnyEvent(
-        const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent,
-        ::vos::OClearableGuard& _rGuard
+        const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent
     );
 
 private:
@@ -294,81 +342,78 @@ private:
 };
 
 //--------------------------------------------------------------------
-VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
-    :m_refCount( 0 )
-    ,mrAntiImpl( _rAntiImpl )
+VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, bool _bWithDefaultProps )
+    :mrAntiImpl( _rAntiImpl )
     ,mrMutex( _rMutex )
     ,mbDisposed( false )
+    ,mbDrawingOntoParent( false )
     ,maListenerContainerMutex( )
     ,maWindow2Listeners( maListenerContainerMutex )
-#ifdef THREADED_NOTIFICATION
-    ,mpAsyncNotifier( NULL )
-#else
-#ifndef SYNCHRON_NOTIFICATION
+    ,maDockableWindowListeners( maListenerContainerMutex )
+    ,maEventListeners( _rAntiImpl )
+    ,maFocusListeners( _rAntiImpl )
+    ,maWindowListeners( _rAntiImpl )
+    ,maKeyListeners( _rAntiImpl )
+    ,maMouseListeners( _rAntiImpl )
+    ,maMouseMotionListeners( _rAntiImpl )
+    ,maPaintListeners( _rAntiImpl )
+    ,maContainerListeners( _rAntiImpl )
+    ,maTopWindowListeners( _rAntiImpl )
     ,mnEventId( 0 )
-#endif
-#endif
+    ,mbDisposing( false )
+    ,mbDesignMode( false )
+    ,mbSynthesizingVCLEvent( false )
+    ,mbWithDefaultProps( _bWithDefaultProps )
+    ,mnListenerLockLevel( 0 )
+    ,mnWritingMode( WritingMode2::CONTEXT )
+    ,mnContextWritingMode( WritingMode2::CONTEXT )
+    ,mpPropHelper( NULL )
 {
 }
 
 VCLXWindowImpl::~VCLXWindowImpl()
 {
+    delete mpPropHelper;
 }
 
 //--------------------------------------------------------------------
 void VCLXWindowImpl::disposing()
 {
     ::vos::OGuard aGuard( mrMutex );
-#ifdef THREADED_NOTIFICATION
-    if ( mpAsyncNotifier.is() )
-    {
-        mpAsyncNotifier->removeEventsForProcessor( this );
-        mpAsyncNotifier->dispose();
-        mpAsyncNotifier = NULL;
-    }
-#else
-#ifndef SYNCHRON_NOTIFICATION
     if ( mnEventId )
         Application::RemoveUserEvent( mnEventId );
     mnEventId = 0;
-#endif
-#endif
     mbDisposed= true;
+
+    ::com::sun::star::lang::EventObject aEvent;
+    aEvent.Source = mrAntiImpl;
+
+    maEventListeners.disposeAndClear( aEvent );
+    maFocusListeners.disposeAndClear( aEvent );
+    maWindowListeners.disposeAndClear( aEvent );
+    maKeyListeners.disposeAndClear( aEvent );
+    maMouseListeners.disposeAndClear( aEvent );
+    maMouseMotionListeners.disposeAndClear( aEvent );
+    maPaintListeners.disposeAndClear( aEvent );
+    maContainerListeners.disposeAndClear( aEvent );
+    maTopWindowListeners.disposeAndClear( aEvent );
+
 }
 
 //--------------------------------------------------------------------
-void VCLXWindowImpl::impl_notifyAnyEvent( const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent, ::vos::OClearableGuard& _rGuard )
+void VCLXWindowImpl::impl_notifyAnyEvent( const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent )
 {
-#ifdef THREADED_NOTIFICATION
-    (void)_rGuard;
-    if ( !mpAsyncNotifier.is() )
-    {
-        mpAsyncNotifier = new ::comphelper::AsyncEventNotifier;
-        mpAsyncNotifier->create();
-    }
-    mpAsyncNotifier->addEvent( _rEvent, this );
-
-#else   // #ifdef THREADED_NOTIFICATION
-
-#ifdef SYNCHRON_NOTIFICATION
-    _rGuard.clear();
-    processEvent( *_rEvent );
-#else   // #ifdef SYNCHRON_NOTIFICATION
-    (void)_rGuard;
     maEvents.push_back( _rEvent );
     if ( !mnEventId )
         mnEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessEvent ) );
-#endif  // #ifdef SYNCHRON_NOTIFICATION
-
-#endif  // // #ifdef THREADED_NOTIFICATION
 }
 
 //--------------------------------------------------------------------
 void VCLXWindowImpl::notifyMouseEvent( const awt::MouseEvent& _rMouseEvent, MouseEventType _nType )
 {
     ::vos::OClearableGuard aGuard( mrMutex );
-    if ( mrAntiImpl.GetMouseListeners().getLength() )
-        impl_notifyAnyEvent( new AnyWindowEvent( _rMouseEvent, _nType ), aGuard );
+    if ( maMouseListeners.getLength() )
+        impl_notifyAnyEvent( new AnyWindowEvent( _rMouseEvent, _nType ) );
 }
 
 //--------------------------------------------------------------------
@@ -376,10 +421,9 @@ void VCLXWindowImpl::notifyPlainEvent( const lang::EventObject& _rPlainEvent, Pl
 {
     ::vos::OClearableGuard aGuard( mrMutex );
     if ( maWindow2Listeners.getLength() )
-        impl_notifyAnyEvent( new AnyWindowEvent( _rPlainEvent, _nType ), aGuard );
+        impl_notifyAnyEvent( new AnyWindowEvent( _rPlainEvent, _nType ) );
 }
 
-#if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
 //--------------------------------------------------------------------
 IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, EMPTYARG )
 {
@@ -410,7 +454,6 @@ IMPL_LINK( VCLXWindowImpl, OnProcessEvent, void*, EMPTYARG )
 
     return 0L;
 }
-#endif
 
 //--------------------------------------------------------------------
 void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
@@ -427,16 +470,16 @@ void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
         switch ( rEventDescriptor.getMouseEventType() )
         {
         case EVENT_MOUSE_PRESSED:
-            mrAntiImpl.GetMouseListeners().mousePressed( rEvent );
+            maMouseListeners.mousePressed( rEvent );
             break;
         case EVENT_MOUSE_RELEASED:
-            mrAntiImpl.GetMouseListeners().mouseReleased( rEvent );
+            maMouseListeners.mouseReleased( rEvent );
             break;
         case EVENT_MOUSE_ENTERED:
-            mrAntiImpl.GetMouseListeners().mouseEntered( rEvent );
+            maMouseListeners.mouseEntered( rEvent );
             break;
         case EVENT_MOUSE_EXITED:
-            mrAntiImpl.GetMouseListeners().mouseExited( rEvent );
+            maMouseListeners.mouseExited( rEvent );
             break;
         default:
             DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (1)?" );
@@ -468,14 +511,13 @@ void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
 //--------------------------------------------------------------------
 void SAL_CALL VCLXWindowImpl::acquire()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    mrAntiImpl.acquire();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL VCLXWindowImpl::release()
 {
-    if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
-        delete this;
+    mrAntiImpl.release();
 }
 
 //====================================================================
@@ -543,40 +585,19 @@ void ImplInitMouseEvent( awt::MouseEvent& rEvent, const MouseEvent& rEvt )
 
 DBG_NAME(VCLXWindow);
 
-VCLXWindow::VCLXWindow( bool bWithDefaultProps )
-    : maEventListeners( *this ),
-      maFocusListeners( *this ),
-      maWindowListeners( *this ),
-      maKeyListeners( *this ),
-      maMouseListeners( *this ),
-      maMouseMotionListeners( *this ),
-      maPaintListeners( *this ),
-      maContainerListeners( *this ),
-      maTopWindowListeners( *this ),
-      mnListenerLockLevel( 0 ),
-      mpImpl( NULL ),
-      mpPropHelper( NULL ),
-      mbDisposing( false ),
-      mbDesignMode( false ),
-      mbSynthesizingVCLEvent( false ),
-      mbWithDefaultProps( !!bWithDefaultProps ),
-      mbDrawingOntoParent( false )
+VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
+    :mpImpl( NULL )
 {
     DBG_CTOR( VCLXWindow, 0 );
 
-    mpImpl = new VCLXWindowImpl( *this, GetMutex() );
-    mpImpl->acquire();
-
-    mbDisposing = sal_False;
-    mbDesignMode = sal_False;
-    mbSynthesizingVCLEvent = sal_False;
+    mpImpl = new VCLXWindowImpl( *this, GetMutex(), _bWithDefaultProps );
 }
 
 VCLXWindow::~VCLXWindow()
 {
     DBG_DTOR( VCLXWindow, 0 );
 
-    delete mpPropHelper;
+    delete mpImpl;
 
     if ( GetWindow() )
     {
@@ -607,18 +628,29 @@ void VCLXWindow::SetWindow( Window* pWindow )
 
 void VCLXWindow::suspendVclEventListening( )
 {
-    ++mnListenerLockLevel;
+    ++mpImpl->mnListenerLockLevel;
 }
 
 void VCLXWindow::resumeVclEventListening( )
 {
-    DBG_ASSERT( mnListenerLockLevel, "VCLXWindow::resumeVclEventListening: not suspended!" );
-    --mnListenerLockLevel;
+    DBG_ASSERT( mpImpl->mnListenerLockLevel, "VCLXWindow::resumeVclEventListening: not suspended!" );
+    --mpImpl->mnListenerLockLevel;
+}
+
+void VCLXWindow::notifyWindowRemoved( Window& _rWindow )
+{
+    if ( mpImpl->getContainerListeners().getLength() )
+    {
+        awt::VclContainerEvent aEvent;
+        aEvent.Source = *this;
+        aEvent.Child = static_cast< XWindow* >( _rWindow.GetWindowPeer() );
+        mpImpl->getContainerListeners().windowRemoved( aEvent );
+    }
 }
 
 IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    if ( mnListenerLockLevel )
+    if ( mpImpl->mnListenerLockLevel )
         return 0L;
 
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
@@ -648,109 +680,109 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
         case VCLEVENT_WINDOW_PAINT:
         {
-            if ( GetPaintListeners().getLength() )
+            if ( mpImpl->getPaintListeners().getLength() )
             {
                 ::com::sun::star::awt::PaintEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 aEvent.UpdateRect = AWTRectangle( *(Rectangle*)rVclWindowEvent.GetData() );
                 aEvent.Count = 0;
-                GetPaintListeners().windowPaint( aEvent );
+                mpImpl->getPaintListeners().windowPaint( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_MOVE:
         {
-            if ( GetWindowListeners().getLength() )
+            if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
-                GetWindowListeners().windowMoved( aEvent );
+                mpImpl->getWindowListeners().windowMoved( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_RESIZE:
         {
-            if ( GetWindowListeners().getLength() )
+            if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
-                GetWindowListeners().windowResized( aEvent );
+                mpImpl->getWindowListeners().windowResized( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_SHOW:
         {
-            if ( GetWindowListeners().getLength() )
+            if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
-                GetWindowListeners().windowShown( aEvent );
+                mpImpl->getWindowListeners().windowShown( aEvent );
             }
 
             // For TopWindows this means opened...
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowOpened( aEvent );
+                mpImpl->getTopWindowListeners().windowOpened( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_HIDE:
         {
-            if ( GetWindowListeners().getLength() )
+            if ( mpImpl->getWindowListeners().getLength() )
             {
                 ::com::sun::star::awt::WindowEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
-                GetWindowListeners().windowHidden( aEvent );
+                mpImpl->getWindowListeners().windowHidden( aEvent );
             }
 
             // For TopWindows this means closed...
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowClosed( aEvent );
+                mpImpl->getTopWindowListeners().windowClosed( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_ACTIVATE:
         {
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowActivated( aEvent );
+                mpImpl->getTopWindowListeners().windowActivated( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_DEACTIVATE:
         {
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowDeactivated( aEvent );
+                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_CLOSE:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                mxDockableWindowListener->closed( aEvent );
+                mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::closed, aEvent );
             }
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowClosing( aEvent );
+                mpImpl->getTopWindowListeners().windowClosing( aEvent );
             }
         }
         break;
@@ -765,13 +797,13 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     )
                 )
             {
-                if ( GetFocusListeners().getLength() )
+                if ( mpImpl->getFocusListeners().getLength() )
                 {
                     ::com::sun::star::awt::FocusEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
                     aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
                     aEvent.Temporary = sal_False;
-                    GetFocusListeners().focusGained( aEvent );
+                    mpImpl->getFocusListeners().focusGained( aEvent );
                 }
             }
         }
@@ -787,7 +819,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     )
                 )
             {
-                if ( GetFocusListeners().getLength() )
+                if ( mpImpl->getFocusListeners().getLength() )
                 {
                     ::com::sun::star::awt::FocusEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
@@ -807,57 +839,57 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                         pNext->GetComponentInterface( sal_True );
                         aEvent.NextFocus = (::cppu::OWeakObject*)pNext->GetWindowPeer();
                     }
-                    GetFocusListeners().focusLost( aEvent );
+                    mpImpl->getFocusListeners().focusLost( aEvent );
                 }
             }
         }
         break;
         case VCLEVENT_WINDOW_MINIMIZE:
         {
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowMinimized( aEvent );
+                mpImpl->getTopWindowListeners().windowMinimized( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_NORMALIZE:
         {
-            if ( GetTopWindowListeners().getLength() )
+            if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                GetTopWindowListeners().windowNormalized( aEvent );
+                mpImpl->getTopWindowListeners().windowNormalized( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_KEYINPUT:
         {
-            if ( GetKeyListeners().getLength() )
+            if ( mpImpl->getKeyListeners().getLength() )
             {
                 ::com::sun::star::awt::KeyEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
-                GetKeyListeners().keyPressed( aEvent );
+                mpImpl->getKeyListeners().keyPressed( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_KEYUP:
         {
-            if ( GetKeyListeners().getLength() )
+            if ( mpImpl->getKeyListeners().getLength() )
             {
                 ::com::sun::star::awt::KeyEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
-                GetKeyListeners().keyReleased( aEvent );
+                mpImpl->getKeyListeners().keyReleased( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_COMMAND:
         {
             CommandEvent* pCmdEvt = (CommandEvent*)rVclWindowEvent.GetData();
-            if ( GetMouseListeners().getLength() && ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU ) )
+            if ( mpImpl->getMouseListeners().getLength() && ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU ) )
             {
                 // COMMAND_CONTEXTMENU als mousePressed mit PopupTrigger = sal_True versenden...
                 Point aWhere = static_cast< CommandEvent* >( rVclWindowEvent.GetData() )->GetMousePosPixel();
@@ -882,7 +914,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_WINDOW_MOUSEMOVE:
         {
             MouseEvent* pMouseEvt = (MouseEvent*)rVclWindowEvent.GetData();
-            if ( GetMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
+            if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
                 awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -894,7 +926,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 );
             }
 
-            if ( GetMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
+            if ( mpImpl->getMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
             {
                 awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -902,15 +934,15 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.ClickCount = 0;  // #92138#
 
                 if ( pMouseEvt->GetMode() & MOUSE_SIMPLEMOVE )
-                    GetMouseMotionListeners().mouseMoved( aEvent );
+                    mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else
-                    GetMouseMotionListeners().mouseDragged( aEvent );
+                    mpImpl->getMouseMotionListeners().mouseDragged( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
         {
-            if ( GetMouseListeners().getLength() )
+            if ( mpImpl->getMouseListeners().getLength() )
             {
                 awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -921,7 +953,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VCLEVENT_WINDOW_MOUSEBUTTONUP:
         {
-            if ( GetMouseListeners().getLength() )
+            if ( mpImpl->getMouseListeners().getLength() )
             {
                 awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -932,7 +964,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VCLEVENT_WINDOW_STARTDOCKING:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 DockingData *pData = (DockingData*)rVclWindowEvent.GetData();
 
@@ -946,14 +978,14 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.bLiveMode = pData->mbLivemode;
                     aEvent.bInteractive = pData->mbInteractive;
 
-                    mxDockableWindowListener->startDocking( aEvent );
+                    mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::startDocking, aEvent );
                 }
             }
         }
         break;
         case VCLEVENT_WINDOW_DOCKING:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 DockingData *pData = (DockingData*)rVclWindowEvent.GetData();
 
@@ -966,8 +998,16 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.MousePos.Y = pData->maMousePos.Y();
                     aEvent.bLiveMode = pData->mbLivemode;
                     aEvent.bInteractive = pData->mbInteractive;
+
+                    Reference< XDockableWindowListener > xFirstListener;
+                    ::cppu::OInterfaceIteratorHelper aIter( mpImpl->getDockableWindowListeners() );
+                    while ( aIter.hasMoreElements() && !xFirstListener.is() )
+                    {
+                        xFirstListener.set( aIter.next(), UNO_QUERY );
+                    }
+
                     ::com::sun::star::awt::DockingData aDockingData =
-                        mxDockableWindowListener->docking( aEvent );
+                        xFirstListener->docking( aEvent );
                     pData->maTrackRect = VCLRectangle( aDockingData.TrackingRectangle );
                     pData->mbFloating = aDockingData.bFloating;
                 }
@@ -976,7 +1016,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VCLEVENT_WINDOW_ENDDOCKING:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 EndDockingData *pData = (EndDockingData*)rVclWindowEvent.GetData();
 
@@ -987,36 +1027,44 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.WindowRectangle = AWTRectangle( pData->maWindowRect );
                     aEvent.bFloating = pData->mbFloating;
                     aEvent.bCancelled = pData->mbCancelled;
-                    mxDockableWindowListener->endDocking( aEvent );
+                    mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::endDocking, aEvent );
                 }
             }
         }
         break;
         case VCLEVENT_WINDOW_PREPARETOGGLEFLOATING:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 BOOL *p_bFloating = (BOOL*)rVclWindowEvent.GetData();
 
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                *p_bFloating = mxDockableWindowListener->prepareToggleFloatingMode( aEvent );
+
+                Reference< XDockableWindowListener > xFirstListener;
+                ::cppu::OInterfaceIteratorHelper aIter( mpImpl->getDockableWindowListeners() );
+                while ( aIter.hasMoreElements() && !xFirstListener.is() )
+                {
+                    xFirstListener.set( aIter.next(), UNO_QUERY );
+                }
+
+                *p_bFloating = xFirstListener->prepareToggleFloatingMode( aEvent );
             }
         }
         break;
         case VCLEVENT_WINDOW_TOGGLEFLOATING:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                mxDockableWindowListener->toggleFloatingMode( aEvent );
+                mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::toggleFloatingMode, aEvent );
             }
-        }
+       }
         break;
         case VCLEVENT_WINDOW_ENDPOPUPMODE:
         {
-            if ( mxDockableWindowListener.is() )
+            if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 EndPopupModeData *pData = (EndPopupModeData*)rVclWindowEvent.GetData();
 
@@ -1027,7 +1075,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.FloatingPosition.X = pData->maFloatingPos.X();
                     aEvent.FloatingPosition.Y = pData->maFloatingPos.Y();
                     aEvent.bTearoff = pData->mbTearoff;
-                    mxDockableWindowListener->endPopupMode( aEvent );
+                    mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::endPopupMode, aEvent );
                 }
             }
         }
@@ -1042,11 +1090,15 @@ uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessible
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-/*
-void VCLXWindow::FillAccessibleStateSet( AccessibleStateSetHelper& rStateSet )
+void VCLXWindow::SetSynthesizingVCLEvent( sal_Bool _b )
 {
+    mpImpl->mbSynthesizingVCLEvent = _b;
 }
-*/
+
+BOOL VCLXWindow::IsSynthesizingVCLEvent() const
+{
+    return mpImpl->mbSynthesizingVCLEvent;
+}
 
 Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 {
@@ -1064,74 +1116,21 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 }
 
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, (::com::sun::star::awt::XWindow*)this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XWindow*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XWindowPeer*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XVclWindowPeer*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XLayoutConstrains*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::accessibility::XAccessible*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertySetInfo*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XWindow2*, this ),
-                                           SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindow*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
-}
-
 // ::com::sun::star::lang::XUnoTunnel
 IMPL_XUNOTUNNEL2( VCLXWindow, VCLXDevice )
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXWindow )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow>* ) NULL ),
-    VCLXDevice::getTypes()
-IMPL_XTYPEPROVIDER_END
-
 
 // ::com::sun::star::lang::Component
 void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    mxViewGraphics = NULL;
+    mpImpl->mxViewGraphics = NULL;
 
-    if ( !mbDisposing )
+    if ( !mpImpl->mbDisposing )
     {
-        mbDisposing = sal_True;
+        mpImpl->mbDisposing = true;
 
-        ::com::sun::star::lang::EventObject aObj;
-        aObj.Source = static_cast< ::cppu::OWeakObject* >( this );
-
-        maEventListeners.disposeAndClear( aObj );
-        maFocusListeners.disposeAndClear( aObj );
-        maWindowListeners.disposeAndClear( aObj );
-        maKeyListeners.disposeAndClear( aObj );
-        maMouseListeners.disposeAndClear( aObj );
-        maMouseMotionListeners.disposeAndClear( aObj );
-        maPaintListeners.disposeAndClear( aObj );
-        maContainerListeners.disposeAndClear( aObj );
-        maTopWindowListeners.disposeAndClear( aObj );
-
-        if ( mpImpl )
-        {
-            mpImpl->disposing();
-            mpImpl->release();
-            mpImpl = NULL;
-        }
+        mpImpl->disposing();
 
         if ( GetWindow() )
         {
@@ -1146,7 +1145,7 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         // for VCLEVENT_WINDOW_CHILDDESTROYED contains a reference to an already disposed accessible object
         try
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }
@@ -1154,9 +1153,9 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         {
             DBG_ERROR( "VCLXWindow::dispose: could not dispose the accessible context!" );
         }
-        mxAccessibleContext.clear();
+        mpImpl->mxAccessibleContext.clear();
 
-        mbDisposing = sal_False;
+        mpImpl->mbDisposing = false;
     }
 }
 
@@ -1164,14 +1163,14 @@ void VCLXWindow::addEventListener( const ::com::sun::star::uno::Reference< ::com
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    GetEventListeners().addInterface( rxListener );
+    mpImpl->getEventListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    GetEventListeners().removeInterface( rxListener );
+    mpImpl->getEventListeners().removeInterface( rxListener );
 }
 
 
@@ -1253,7 +1252,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    GetWindowListeners().addInterface( rxListener );
+    mpImpl->getWindowListeners().addInterface( rxListener );
 
     Reference< XWindowListener2 > xListener2( rxListener, UNO_QUERY );
     if ( xListener2.is() )
@@ -1272,77 +1271,67 @@ void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< :
     if ( xListener2.is() )
         mpImpl->getWindow2Listeners().removeInterface( xListener2 );
 
-    GetWindowListeners().removeInterface( rxListener );
+    mpImpl->getWindowListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetFocusListeners().addInterface( rxListener );
+    mpImpl->getFocusListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetFocusListeners().removeInterface( rxListener );
+    mpImpl->getFocusListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetKeyListeners().addInterface( rxListener );
+    mpImpl->getKeyListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetKeyListeners().removeInterface( rxListener );
+    mpImpl->getKeyListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetMouseListeners().addInterface( rxListener );
+    mpImpl->getMouseListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetMouseListeners().removeInterface( rxListener );
+    mpImpl->getMouseListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetMouseMotionListeners().addInterface( rxListener );
+    mpImpl->getMouseMotionListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetMouseMotionListeners().removeInterface( rxListener );
+    mpImpl->getMouseMotionListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetPaintListeners().addInterface( rxListener );
+    mpImpl->getPaintListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    GetPaintListeners().removeInterface( rxListener );
+    mpImpl->getPaintListeners().removeInterface( rxListener );
 }
 
 // ::com::sun::star::awt::XWindowPeer
@@ -1360,7 +1349,7 @@ void VCLXWindow::setPointer( const ::com::sun::star::uno::Reference< ::com::sun:
     VCLXPointer* pPointer = VCLXPointer::GetImplementation( rxPointer );
     if ( pPointer )
     {
-        mxPointer = rxPointer;
+        mpImpl->mxPointer = rxPointer;
         if ( GetWindow() )
             GetWindow()->SetPointer( pPointer->GetPointer() );
     }
@@ -1423,14 +1412,13 @@ void VCLXWindow::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::Runt
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    mbDesignMode = bOn;
+    mpImpl->mbDesignMode = bOn;
 }
 
 sal_Bool VCLXWindow::isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    return mbDesignMode;
+    return mpImpl->mbDesignMode;
 }
 
 void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::uno::RuntimeException)
@@ -1561,485 +1549,554 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
     }
 }
 
+void VCLXWindow::GetPropertyIds( std::list< sal_uInt16 >& _out_rIds )
+{
+    return ImplGetPropertyIds( _out_rIds, mpImpl->mbWithDefaultProps );
+}
+
+::cppu::OInterfaceContainerHelper& VCLXWindow::GetContainerListeners()
+{
+    return mpImpl->getContainerListeners();
+}
+
+::cppu::OInterfaceContainerHelper& VCLXWindow::GetTopWindowListeners()
+{
+    return mpImpl->getTopWindowListeners();
+}
+
+namespace
+{
+    void    lcl_updateWritingMode( Window& _rWindow, const sal_Int16 _nWritingMode, const sal_Int16 _nContextWritingMode )
+    {
+        BOOL bEnableRTL = FALSE;
+        switch ( _nWritingMode )
+        {
+        case WritingMode2::LR_TB:   bEnableRTL = FALSE; break;
+        case WritingMode2::RL_TB:   bEnableRTL = TRUE; break;
+        case WritingMode2::CONTEXT:
+        {
+            // consult our ContextWritingMode. If it has an explicit RTL/LTR value, then use
+            // it. If it doesn't (but is CONTEXT itself), then just ask the parent window of our
+            // own window for its RTL mode
+            switch ( _nContextWritingMode )
+            {
+                case WritingMode2::LR_TB:   bEnableRTL = FALSE; break;
+                case WritingMode2::RL_TB:   bEnableRTL = TRUE; break;
+                case WritingMode2::CONTEXT:
+                {
+                    const Window* pParent = _rWindow.GetParent();
+                    OSL_ENSURE( pParent, "lcl_updateWritingMode: cannot determine context's writing mode!" );
+                    if ( pParent )
+                        bEnableRTL = pParent->IsRTLEnabled();
+                }
+                break;
+            }
+        }
+        break;
+        default:
+            OSL_ENSURE( false, "lcl_updateWritingMode: unsupported WritingMode!" );
+        }   // switch ( nWritingMode )
+
+        _rWindow.EnableRTL( bEnableRTL );
+    }
+}
+
 void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
-    if ( pWindow )
+    if ( !pWindow )
+        return;
+
+    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+    WindowType eWinType = pWindow->GetType();
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
-
-        WindowType eWinType = pWindow->GetType();
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_CONTEXT_WRITING_MODE:
         {
-            case BASEPROPERTY_WHEELWITHOUTFOCUS:
+            OSL_VERIFY( Value >>= mpImpl->mnContextWritingMode );
+            if ( mpImpl->mnWritingMode == WritingMode2::CONTEXT )
+                lcl_updateWritingMode( *pWindow, mpImpl->mnWritingMode, mpImpl->mnContextWritingMode );
+        }
+        break;
+
+        case BASEPROPERTY_WRITING_MODE:
+        {
+            sal_Bool bProperType = ( Value >>= mpImpl->mnWritingMode );
+            OSL_ENSURE( bProperType, "VCLXWindow::setProperty( 'WritingMode' ): illegal value type!" );
+            if ( bProperType )
+                lcl_updateWritingMode( *pWindow, mpImpl->mnWritingMode, mpImpl->mnContextWritingMode );
+        }
+        break;
+
+        case BASEPROPERTY_WHEELWITHOUTFOCUS:
+        {
+            sal_Bool bWheelOnHover( sal_True );
+            if ( Value >>= bWheelOnHover )
             {
-                sal_Bool bWheelOnHover( sal_True );
-                if ( Value >>= bWheelOnHover )
+                AllSettings aSettings = pWindow->GetSettings();
+                MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+
+                aMouseSettings.SetNoWheelActionWithoutFocus( !bWheelOnHover );
+                aSettings.SetMouseSettings( aMouseSettings );
+
+                pWindow->SetSettings( aSettings, TRUE );
+            }
+        }
+        break;
+
+        case BASEPROPERTY_NATIVE_WIDGET_LOOK:
+        {
+            sal_Bool bEnable( sal_True );
+            OSL_VERIFY( Value >>= bEnable );
+            pWindow->EnableNativeWidget( bEnable );
+        }
+        break;
+
+        case BASEPROPERTY_PLUGINPARENT:
+        {
+            // set parent handle
+            SetSystemParent_Impl( Value );
+        }
+        break;
+
+        case BASEPROPERTY_ENABLED:
+        {
+            sal_Bool b = sal_Bool();
+            if ( Value >>= b )
+                setEnable( b );
+        }
+        break;
+        case BASEPROPERTY_TEXT:
+        case BASEPROPERTY_LABEL:
+        case BASEPROPERTY_TITLE:
+        {
+            ::rtl::OUString aText;
+            if ( Value >>= aText )
+            {
+                switch (eWinType)
                 {
-                    AllSettings aSettings = pWindow->GetSettings();
-                    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-
-                    aMouseSettings.SetNoWheelActionWithoutFocus( !bWheelOnHover );
-                    aSettings.SetMouseSettings( aMouseSettings );
-
-                    pWindow->SetSettings( aSettings, TRUE );
-                }
-            }
-            break;
-
-            case BASEPROPERTY_NATIVE_WIDGET_LOOK:
-            {
-                sal_Bool bEnable( sal_True );
-                OSL_VERIFY( Value >>= bEnable );
-                pWindow->EnableNativeWidget( bEnable );
-            }
-            break;
-
-             case BASEPROPERTY_PLUGINPARENT:
-             {
-                // set parent handle
-                SetSystemParent_Impl( Value );
-             }
-             break;
-
-            case BASEPROPERTY_ENABLED:
-            {
-                sal_Bool b = sal_Bool();
-                if ( Value >>= b )
-                    setEnable( b );
-            }
-            break;
-            case BASEPROPERTY_TEXT:
-            case BASEPROPERTY_LABEL:
-            case BASEPROPERTY_TITLE:
-            {
-                ::rtl::OUString aText;
-                if ( Value >>= aText )
-                {
-                    switch (eWinType)
-                    {
-                        case WINDOW_OKBUTTON:
-                        case WINDOW_CANCELBUTTON:
-                        case WINDOW_HELPBUTTON:
-                            // Standard Button: overwrite only if not empty.
-                            if (aText.getLength())
-                                pWindow->SetText( aText );
-                            break;
-
-                        default:
+                    case WINDOW_OKBUTTON:
+                    case WINDOW_CANCELBUTTON:
+                    case WINDOW_HELPBUTTON:
+                        // Standard Button: overwrite only if not empty.
+                        if (aText.getLength())
                             pWindow->SetText( aText );
-                            break;
-                    }
+                        break;
+
+                    default:
+                        pWindow->SetText( aText );
+                        break;
                 }
             }
-            break;
-            case BASEPROPERTY_ACCESSIBLENAME:
+        }
+        break;
+        case BASEPROPERTY_ACCESSIBLENAME:
+        {
+            ::rtl::OUString aText;
+            if ( Value >>= aText )
+                pWindow->SetAccessibleName( aText );
+        }
+        break;
+        case BASEPROPERTY_HELPURL:
+        {
+            ::rtl::OUString aURL;
+            if ( Value >>= aURL )
             {
-                ::rtl::OUString aText;
-                if ( Value >>= aText )
-                    pWindow->SetAccessibleName( aText );
-            }
-            break;
-            case BASEPROPERTY_HELPURL:
-            {
-                ::rtl::OUString aURL;
-                if ( Value >>= aURL )
+                String aHelpURL(  aURL );
+                String aPattern( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+                if ( aHelpURL.CompareIgnoreCaseToAscii( aPattern, aPattern.Len() ) == COMPARE_EQUAL )
                 {
-                    String aHelpURL(  aURL );
-                    String aPattern( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-                    if ( aHelpURL.CompareIgnoreCaseToAscii( aPattern, aPattern.Len() ) == COMPARE_EQUAL )
-                    {
-                        String aID = aHelpURL.Copy( aPattern.Len() );
-                        pWindow->SetHelpId( aID.ToInt32() );
-                    }
-                    else
-                    {
-                        pWindow->SetSmartHelpId( SmartId( aHelpURL ) );
-                    }
+                    String aID = aHelpURL.Copy( aPattern.Len() );
+                    pWindow->SetHelpId( aID.ToInt32() );
                 }
-            }
-            break;
-            case BASEPROPERTY_HELPTEXT:
-            {
-                ::rtl::OUString aHelpText;
-                if ( Value >>= aHelpText )
-                {
-                    pWindow->SetQuickHelpText( aHelpText );
-                }
-            }
-            break;
-            case BASEPROPERTY_FONTDESCRIPTOR:
-            {
-                if ( bVoid )
-                    pWindow->SetControlFont( Font() );
                 else
                 {
-                    ::com::sun::star::awt::FontDescriptor aFont;
-                    if ( Value >>= aFont )
-                        pWindow->SetControlFont( VCLUnoHelper::CreateFont( aFont, pWindow->GetControlFont() ) );
+                    pWindow->SetSmartHelpId( SmartId( aHelpURL ) );
                 }
             }
-            break;
-            case BASEPROPERTY_FONTRELIEF:
+        }
+        break;
+        case BASEPROPERTY_HELPTEXT:
+        {
+            ::rtl::OUString aHelpText;
+            if ( Value >>= aHelpText )
             {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
-                {
-                    Font aFont = pWindow->GetControlFont();
-                    aFont.SetRelief( (FontRelief)n );
-                    pWindow->SetControlFont( aFont );
-                }
+                pWindow->SetQuickHelpText( aHelpText );
             }
-            break;
-            case BASEPROPERTY_FONTEMPHASISMARK:
+        }
+        break;
+        case BASEPROPERTY_FONTDESCRIPTOR:
+        {
+            if ( bVoid )
+                pWindow->SetControlFont( Font() );
+            else
             {
-                sal_Int16 n = sal_Int16();
-                if ( Value >>= n )
+                ::com::sun::star::awt::FontDescriptor aFont;
+                if ( Value >>= aFont )
+                    pWindow->SetControlFont( VCLUnoHelper::CreateFont( aFont, pWindow->GetControlFont() ) );
+            }
+        }
+        break;
+        case BASEPROPERTY_FONTRELIEF:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+            {
+                Font aFont = pWindow->GetControlFont();
+                aFont.SetRelief( (FontRelief)n );
+                pWindow->SetControlFont( aFont );
+            }
+        }
+        break;
+        case BASEPROPERTY_FONTEMPHASISMARK:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+            {
+                Font aFont = pWindow->GetControlFont();
+                aFont.SetEmphasisMark( n );
+                pWindow->SetControlFont( aFont );
+            }
+        }
+        break;
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+            if ( bVoid )
+            {
+                switch ( eWinType )
                 {
-                    Font aFont = pWindow->GetControlFont();
-                    aFont.SetEmphasisMark( n );
-                    pWindow->SetControlFont( aFont );
+                    // set dialog color for default
+                    case WINDOW_DIALOG:
+                    case WINDOW_MESSBOX:
+                    case WINDOW_INFOBOX:
+                    case WINDOW_WARNINGBOX:
+                    case WINDOW_ERRORBOX:
+                    case WINDOW_QUERYBOX:
+                    case WINDOW_TABPAGE:
+                    {
+                        Color aColor = pWindow->GetSettings().GetStyleSettings().GetDialogColor();
+                        pWindow->SetBackground( aColor );
+                        pWindow->SetControlBackground( aColor );
+                        break;
+                    }
+
+                    case WINDOW_FIXEDTEXT:
+                    case WINDOW_CHECKBOX:
+                    case WINDOW_RADIOBUTTON:
+                    case WINDOW_GROUPBOX:
+                    case WINDOW_FIXEDLINE:
+                    {
+                        // support transparency only for special controls
+                        pWindow->SetBackground();
+                        pWindow->SetControlBackground();
+                        pWindow->SetPaintTransparent( TRUE );
+                        break;
+                    }
+
+                    default:
+                    {
+                        // default code which enables transparency for
+                        // compound controls. It's not real transparency
+                        // as most of these controls repaint their client
+                        // area completely new.
+                        if ( pWindow->IsCompoundControl() )
+                            pWindow->SetBackground();
+                        pWindow->SetControlBackground();
+                        break;
+                    }
                 }
             }
-            break;
-            case BASEPROPERTY_BACKGROUNDCOLOR:
-                if ( bVoid )
+            else
+            {
+                sal_Int32 nColor = 0;
+                if ( Value >>= nColor )
                 {
+                    Color aColor( nColor );
+                    pWindow->SetControlBackground( aColor );
+                    pWindow->SetBackground( aColor );
                     switch ( eWinType )
                     {
-                        // set dialog color for default
-                        case WINDOW_DIALOG:
-                        case WINDOW_MESSBOX:
-                        case WINDOW_INFOBOX:
-                        case WINDOW_WARNINGBOX:
-                        case WINDOW_ERRORBOX:
-                        case WINDOW_QUERYBOX:
-                        case WINDOW_TABPAGE:
-                        {
-                            Color aColor = pWindow->GetSettings().GetStyleSettings().GetDialogColor();
-                            pWindow->SetBackground( aColor );
-                            pWindow->SetControlBackground( aColor );
-                            break;
-                        }
-
+                        // reset paint transparent mode
                         case WINDOW_FIXEDTEXT:
                         case WINDOW_CHECKBOX:
                         case WINDOW_RADIOBUTTON:
                         case WINDOW_GROUPBOX:
                         case WINDOW_FIXEDLINE:
-                        {
-                            // support transparency only for special controls
-                            pWindow->SetBackground();
-                            pWindow->SetControlBackground();
-                            pWindow->SetPaintTransparent( TRUE );
-                            break;
-                        }
-
-                        default:
-                        {
-                            // default code which enables transparency for
-                            // compound controls. It's not real transparency
-                            // as most of these controls repaint their client
-                            // area completely new.
-                            if ( pWindow->IsCompoundControl() )
-                                pWindow->SetBackground();
-                            pWindow->SetControlBackground();
-                            break;
-                        }
+                            pWindow->SetPaintTransparent( FALSE );
+                        default: ;
                     }
-                }
-                else
-                {
-                    sal_Int32 nColor = 0;
-                    if ( Value >>= nColor )
-                    {
-                        Color aColor( nColor );
-                        pWindow->SetControlBackground( aColor );
-                        pWindow->SetBackground( aColor );
-                        switch ( eWinType )
-                        {
-                            // reset paint transparent mode
-                            case WINDOW_FIXEDTEXT:
-                            case WINDOW_CHECKBOX:
-                            case WINDOW_RADIOBUTTON:
-                            case WINDOW_GROUPBOX:
-                            case WINDOW_FIXEDLINE:
-                                pWindow->SetPaintTransparent( FALSE );
-                            default: ;
-                        }
-                        pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
-                    }
-                }
-            break;
-            case BASEPROPERTY_TEXTCOLOR:
-                if ( bVoid )
-                {
-                    pWindow->SetControlForeground();
-                }
-                else
-                {
-                    sal_Int32 nColor = 0;
-                    if ( Value >>= nColor )
-                    {
-                        Color aColor( nColor );
-                        pWindow->SetTextColor( aColor );
-                        pWindow->SetControlForeground( aColor );
-                    }
-                }
-            break;
-            case BASEPROPERTY_TEXTLINECOLOR:
-                if ( bVoid )
-                {
-                    pWindow->SetTextLineColor();
-                }
-                else
-                {
-                    sal_Int32 nColor = 0;
-                    if ( Value >>= nColor )
-                    {
-                        Color aColor( nColor );
-                        pWindow->SetTextLineColor( aColor );
-                    }
-                }
-            break;
-            case BASEPROPERTY_FILLCOLOR:
-                if ( bVoid )
-                    pWindow->SetFillColor();
-                else
-                {
-                    sal_Int32 nColor = 0;
-                    if ( Value >>= nColor )
-                    {
-                        Color aColor( nColor );
-                        pWindow->SetFillColor( aColor );
-                    }
-                }
-            break;
-            case BASEPROPERTY_LINECOLOR:
-                if ( bVoid )
-                    pWindow->SetLineColor();
-                else
-                {
-                    sal_Int32 nColor = 0;
-                    if ( Value >>= nColor )
-                    {
-                        Color aColor( nColor );
-                        pWindow->SetLineColor( aColor );
-                    }
-                }
-            break;
-            case BASEPROPERTY_BORDER:
-            {
-                WinBits nStyle = pWindow->GetStyle();
-                sal_uInt16 nBorder = 0;
-                Value >>= nBorder;
-                if ( !nBorder )
-                {
-                    pWindow->SetStyle( nStyle & ~WB_BORDER );
-                }
-                else
-                {
-                    pWindow->SetStyle( nStyle | WB_BORDER );
-                    pWindow->SetBorderStyle( nBorder );
+                    pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
                 }
             }
-            break;
-            case BASEPROPERTY_TABSTOP:
+        break;
+        case BASEPROPERTY_TEXTCOLOR:
+            if ( bVoid )
             {
-                WinBits nStyle = pWindow->GetStyle() & ~WB_TABSTOP;
-                if ( !bVoid )
-                {
-                    sal_Bool bTab = false;
-                    Value >>= bTab;
-                    if ( bTab )
-                        nStyle |= WB_TABSTOP;
-                    else
-                        nStyle |= WB_NOTABSTOP;
-                }
-                pWindow->SetStyle( nStyle );
+                pWindow->SetControlForeground();
             }
-            break;
-            case BASEPROPERTY_VERTICALALIGN:
+            else
             {
-                VerticalAlignment eAlign = VerticalAlignment_MAKE_FIXED_SIZE;
-                WinBits nStyle = pWindow->GetStyle();
-                nStyle &= ~(WB_TOP|WB_VCENTER|WB_BOTTOM);
-                if ( !bVoid )
-                    Value >>= eAlign;
-                switch ( eAlign )
+                sal_Int32 nColor = 0;
+                if ( Value >>= nColor )
                 {
-                case VerticalAlignment_TOP:
-                    nStyle |= WB_TOP;
-                    break;
-                case VerticalAlignment_MIDDLE:
-                    nStyle |= WB_VCENTER;
-                    break;
-                case VerticalAlignment_BOTTOM:
-                    nStyle |= WB_BOTTOM;
-                    break;
-                default: ; // for warning free code, MAKE_FIXED_SIZE
-                }
-                pWindow->SetStyle( nStyle );
-            }
-            break;
-            case BASEPROPERTY_ALIGN:
-            {
-                sal_Int16 nAlign = PROPERTY_ALIGN_LEFT;
-                switch ( eWinType )
-                {
-                    case WINDOW_COMBOBOX:
-                    case WINDOW_BUTTON:
-                    case WINDOW_PUSHBUTTON:
-                    case WINDOW_OKBUTTON:
-                    case WINDOW_CANCELBUTTON:
-                    case WINDOW_HELPBUTTON:
-                        nAlign = PROPERTY_ALIGN_CENTER;
-                        // no break here!
-                    case WINDOW_FIXEDTEXT:
-                    case WINDOW_EDIT:
-                    case WINDOW_MULTILINEEDIT:
-                    case WINDOW_CHECKBOX:
-                    case WINDOW_RADIOBUTTON:
-                    case WINDOW_LISTBOX:
-                    {
-                        WinBits nStyle = pWindow->GetStyle();
-                        nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
-                        if ( !bVoid )
-                            Value >>= nAlign;
-                        if ( nAlign == PROPERTY_ALIGN_LEFT )
-                            nStyle |= WB_LEFT;
-                        else if ( nAlign == PROPERTY_ALIGN_CENTER )
-                            nStyle |= WB_CENTER;
-                        else
-                            nStyle |= WB_RIGHT;
-                        pWindow->SetStyle( nStyle );
-                    }
-                    break;
+                    Color aColor( nColor );
+                    pWindow->SetTextColor( aColor );
+                    pWindow->SetControlForeground( aColor );
                 }
             }
-            break;
-            case BASEPROPERTY_MULTILINE:
+        break;
+        case BASEPROPERTY_TEXTLINECOLOR:
+            if ( bVoid )
             {
-                if  (  ( eWinType == WINDOW_FIXEDTEXT )
-                    || ( eWinType == WINDOW_CHECKBOX )
-                    || ( eWinType == WINDOW_RADIOBUTTON )
-                    || ( eWinType == WINDOW_BUTTON )
-                    || ( eWinType == WINDOW_PUSHBUTTON )
-                    || ( eWinType == WINDOW_OKBUTTON )
-                    || ( eWinType == WINDOW_CANCELBUTTON )
-                    || ( eWinType == WINDOW_HELPBUTTON )
-                    )
+                pWindow->SetTextLineColor();
+            }
+            else
+            {
+                sal_Int32 nColor = 0;
+                if ( Value >>= nColor )
+                {
+                    Color aColor( nColor );
+                    pWindow->SetTextLineColor( aColor );
+                }
+            }
+        break;
+        case BASEPROPERTY_FILLCOLOR:
+            if ( bVoid )
+                pWindow->SetFillColor();
+            else
+            {
+                sal_Int32 nColor = 0;
+                if ( Value >>= nColor )
+                {
+                    Color aColor( nColor );
+                    pWindow->SetFillColor( aColor );
+                }
+            }
+        break;
+        case BASEPROPERTY_LINECOLOR:
+            if ( bVoid )
+                pWindow->SetLineColor();
+            else
+            {
+                sal_Int32 nColor = 0;
+                if ( Value >>= nColor )
+                {
+                    Color aColor( nColor );
+                    pWindow->SetLineColor( aColor );
+                }
+            }
+        break;
+        case BASEPROPERTY_BORDER:
+        {
+            WinBits nStyle = pWindow->GetStyle();
+            sal_uInt16 nBorder = 0;
+            Value >>= nBorder;
+            if ( !nBorder )
+            {
+                pWindow->SetStyle( nStyle & ~WB_BORDER );
+            }
+            else
+            {
+                pWindow->SetStyle( nStyle | WB_BORDER );
+                pWindow->SetBorderStyle( nBorder );
+            }
+        }
+        break;
+        case BASEPROPERTY_TABSTOP:
+        {
+            WinBits nStyle = pWindow->GetStyle() & ~WB_TABSTOP;
+            if ( !bVoid )
+            {
+                sal_Bool bTab = false;
+                Value >>= bTab;
+                if ( bTab )
+                    nStyle |= WB_TABSTOP;
+                else
+                    nStyle |= WB_NOTABSTOP;
+            }
+            pWindow->SetStyle( nStyle );
+        }
+        break;
+        case BASEPROPERTY_VERTICALALIGN:
+        {
+            VerticalAlignment eAlign = VerticalAlignment_MAKE_FIXED_SIZE;
+            WinBits nStyle = pWindow->GetStyle();
+            nStyle &= ~(WB_TOP|WB_VCENTER|WB_BOTTOM);
+            if ( !bVoid )
+                Value >>= eAlign;
+            switch ( eAlign )
+            {
+            case VerticalAlignment_TOP:
+                nStyle |= WB_TOP;
+                break;
+            case VerticalAlignment_MIDDLE:
+                nStyle |= WB_VCENTER;
+                break;
+            case VerticalAlignment_BOTTOM:
+                nStyle |= WB_BOTTOM;
+                break;
+            default: ; // for warning free code, MAKE_FIXED_SIZE
+            }
+            pWindow->SetStyle( nStyle );
+        }
+        break;
+        case BASEPROPERTY_ALIGN:
+        {
+            sal_Int16 nAlign = PROPERTY_ALIGN_LEFT;
+            switch ( eWinType )
+            {
+                case WINDOW_COMBOBOX:
+                case WINDOW_BUTTON:
+                case WINDOW_PUSHBUTTON:
+                case WINDOW_OKBUTTON:
+                case WINDOW_CANCELBUTTON:
+                case WINDOW_HELPBUTTON:
+                    nAlign = PROPERTY_ALIGN_CENTER;
+                    // no break here!
+                case WINDOW_FIXEDTEXT:
+                case WINDOW_EDIT:
+                case WINDOW_MULTILINEEDIT:
+                case WINDOW_CHECKBOX:
+                case WINDOW_RADIOBUTTON:
+                case WINDOW_LISTBOX:
                 {
                     WinBits nStyle = pWindow->GetStyle();
-                    sal_Bool bMulti = false;
-                    Value >>= bMulti;
-                    if ( bMulti )
-                        nStyle |= WB_WORDBREAK;
+                    nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
+                    if ( !bVoid )
+                        Value >>= nAlign;
+                    if ( nAlign == PROPERTY_ALIGN_LEFT )
+                        nStyle |= WB_LEFT;
+                    else if ( nAlign == PROPERTY_ALIGN_CENTER )
+                        nStyle |= WB_CENTER;
                     else
-                        nStyle &= ~WB_WORDBREAK;
+                        nStyle |= WB_RIGHT;
                     pWindow->SetStyle( nStyle );
                 }
+                break;
             }
-            break;
-            case BASEPROPERTY_ORIENTATION:
+        }
+        break;
+        case BASEPROPERTY_MULTILINE:
+        {
+            if  (  ( eWinType == WINDOW_FIXEDTEXT )
+                || ( eWinType == WINDOW_CHECKBOX )
+                || ( eWinType == WINDOW_RADIOBUTTON )
+                || ( eWinType == WINDOW_BUTTON )
+                || ( eWinType == WINDOW_PUSHBUTTON )
+                || ( eWinType == WINDOW_OKBUTTON )
+                || ( eWinType == WINDOW_CANCELBUTTON )
+                || ( eWinType == WINDOW_HELPBUTTON )
+                )
             {
-                switch ( eWinType )
-                {
-                    case WINDOW_FIXEDLINE:
-                    {
-                        sal_Int32 nOrientation = 0;
-                        if ( Value >>= nOrientation )
-                        {
-                            WinBits nStyle = pWindow->GetStyle();
-                            nStyle &= ~(WB_HORZ|WB_VERT);
-                            if ( nOrientation == 0 )
-                                nStyle |= WB_HORZ;
-                            else
-                                nStyle |= WB_VERT;
-
-                            pWindow->SetStyle( nStyle );
-                        }
-                    }
-                    break;
-                }
-            }
-            break;
-            case BASEPROPERTY_AUTOMNEMONICS:
-            {
-                sal_Bool bAutoMnemonics = false;
-                Value >>= bAutoMnemonics;
-                AllSettings aSettings = pWindow->GetSettings();
-                StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-                if ( aStyleSettings.GetAutoMnemonic() != bAutoMnemonics )
-                {
-                    aStyleSettings.SetAutoMnemonic( bAutoMnemonics );
-                    aSettings.SetStyleSettings( aStyleSettings );
-                    pWindow->SetSettings( aSettings );
-                }
-            }
-            break;
-            case BASEPROPERTY_MOUSETRANSPARENT:
-            {
-                sal_Bool bMouseTransparent = false;
-                Value >>= bMouseTransparent;
-                pWindow->SetMouseTransparent( bMouseTransparent );
-            }
-            break;
-            case BASEPROPERTY_PAINTTRANSPARENT:
-            {
-                sal_Bool bPaintTransparent = false;
-                Value >>= bPaintTransparent;
-                pWindow->SetPaintTransparent( bPaintTransparent );
-//                pWindow->SetBackground();
-            }
-            break;
-
-            case BASEPROPERTY_REPEAT:
-            {
-                sal_Bool bRepeat( FALSE );
-                Value >>= bRepeat;
-
                 WinBits nStyle = pWindow->GetStyle();
-                if ( bRepeat )
-                    nStyle |= WB_REPEAT;
+                sal_Bool bMulti = false;
+                Value >>= bMulti;
+                if ( bMulti )
+                    nStyle |= WB_WORDBREAK;
                 else
-                    nStyle &= ~WB_REPEAT;
+                    nStyle &= ~WB_WORDBREAK;
                 pWindow->SetStyle( nStyle );
             }
-            break;
-
-            case BASEPROPERTY_REPEAT_DELAY:
+        }
+        break;
+        case BASEPROPERTY_ORIENTATION:
+        {
+            switch ( eWinType )
             {
-                sal_Int32 nRepeatDelay = 0;
-                if ( Value >>= nRepeatDelay )
+                case WINDOW_FIXEDLINE:
                 {
-                    AllSettings aSettings = pWindow->GetSettings();
-                    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+                    sal_Int32 nOrientation = 0;
+                    if ( Value >>= nOrientation )
+                    {
+                        WinBits nStyle = pWindow->GetStyle();
+                        nStyle &= ~(WB_HORZ|WB_VERT);
+                        if ( nOrientation == 0 )
+                            nStyle |= WB_HORZ;
+                        else
+                            nStyle |= WB_VERT;
 
-                    aMouseSettings.SetButtonRepeat( nRepeatDelay );
-                    aSettings.SetMouseSettings( aMouseSettings );
-
-                    pWindow->SetSettings( aSettings, TRUE );
+                        pWindow->SetStyle( nStyle );
+                    }
                 }
+                break;
             }
+        }
+        break;
+        case BASEPROPERTY_AUTOMNEMONICS:
+        {
+            sal_Bool bAutoMnemonics = false;
+            Value >>= bAutoMnemonics;
+            AllSettings aSettings = pWindow->GetSettings();
+            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+            if ( aStyleSettings.GetAutoMnemonic() != bAutoMnemonics )
+            {
+                aStyleSettings.SetAutoMnemonic( bAutoMnemonics );
+                aSettings.SetStyleSettings( aStyleSettings );
+                pWindow->SetSettings( aSettings );
+            }
+        }
+        break;
+        case BASEPROPERTY_MOUSETRANSPARENT:
+        {
+            sal_Bool bMouseTransparent = false;
+            Value >>= bMouseTransparent;
+            pWindow->SetMouseTransparent( bMouseTransparent );
+        }
+        break;
+        case BASEPROPERTY_PAINTTRANSPARENT:
+        {
+            sal_Bool bPaintTransparent = false;
+            Value >>= bPaintTransparent;
+            pWindow->SetPaintTransparent( bPaintTransparent );
+//                pWindow->SetBackground();
+        }
+        break;
+
+        case BASEPROPERTY_REPEAT:
+        {
+            sal_Bool bRepeat( FALSE );
+            Value >>= bRepeat;
+
+            WinBits nStyle = pWindow->GetStyle();
+            if ( bRepeat )
+                nStyle |= WB_REPEAT;
+            else
+                nStyle &= ~WB_REPEAT;
+            pWindow->SetStyle( nStyle );
+        }
+        break;
+
+        case BASEPROPERTY_REPEAT_DELAY:
+        {
+            sal_Int32 nRepeatDelay = 0;
+            if ( Value >>= nRepeatDelay )
+            {
+                AllSettings aSettings = pWindow->GetSettings();
+                MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+
+                aMouseSettings.SetButtonRepeat( nRepeatDelay );
+                aSettings.SetMouseSettings( aMouseSettings );
+
+                pWindow->SetSettings( aSettings, TRUE );
+            }
+        }
+        break;
+
+        case BASEPROPERTY_SYMBOL_COLOR:
+            ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetButtonTextColor, &StyleSettings::GetButtonTextColor );
             break;
 
-            case BASEPROPERTY_SYMBOL_COLOR:
-                ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetButtonTextColor, &StyleSettings::GetButtonTextColor );
-                break;
-
-            case BASEPROPERTY_BORDERCOLOR:
-                ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetMonoColor, &StyleSettings::GetMonoColor);
-                break;
-            case BASEPROPERTY_DEFAULTCONTROL:
-            {
-                rtl::OUString aName;
-                Value >>= aName;
-                break;
-            }
+        case BASEPROPERTY_BORDERCOLOR:
+            ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetMonoColor, &StyleSettings::GetMonoColor);
+            break;
+        case BASEPROPERTY_DEFAULTCONTROL:
+        {
+            rtl::OUString aName;
+            Value >>= aName;
+            break;
         }
     }
 }
@@ -2055,6 +2112,14 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_CONTEXT_WRITING_MODE:
+                aProp <<= mpImpl->mnContextWritingMode;
+                break;
+
+            case BASEPROPERTY_WRITING_MODE:
+                aProp <<= mpImpl->mnWritingMode;
+                break;
+
             case BASEPROPERTY_WHEELWITHOUTFOCUS:
             {
                 sal_Bool bWheelOnHover = !GetWindow()->GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus();
@@ -2312,18 +2377,18 @@ sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com:
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( VCLUnoHelper::GetOutputDevice( rxDevice ) )
-        mxViewGraphics = rxDevice;
+        mpImpl->mxViewGraphics = rxDevice;
     else
-        mxViewGraphics = NULL;
+        mpImpl->mxViewGraphics = NULL;
 
-    return mxViewGraphics.is();
+    return mpImpl->mxViewGraphics.is();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > VCLXWindow::getGraphics(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    return mxViewGraphics;
+    return mpImpl->mxViewGraphics;
 }
 
 ::com::sun::star::awt::Size VCLXWindow::getSize(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -2334,26 +2399,6 @@ sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com:
     if ( GetWindow() )
         aSz = GetWindow()->GetSizePixel();
     return ::com::sun::star::awt::Size( aSz.Width(), aSz.Height() );
-}
-
-namespace
-{
-    class FlagGuard
-    {
-    private:
-        sal_Bool&   m_rFlag;
-
-    public:
-        FlagGuard( sal_Bool& _rFlag )
-            :m_rFlag( _rFlag )
-        {
-            m_rFlag = sal_True;
-        }
-        ~FlagGuard()
-        {
-            m_rFlag = sal_False;
-        }
-    };
 }
 
 void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
@@ -2372,7 +2417,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             Point aPos( nX, nY );
             Size  aSize = pWindow->GetSizePixel();
 
-            OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
+            OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
             aPos  = pDev->PixelToLogic( aPos );
             aSize = pDev->PixelToLogic( aSize );
 
@@ -2380,7 +2425,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             return;
         }
 
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
         Point aPos( nX, nY );
 
         if ( !pDev )
@@ -2393,9 +2438,9 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             // (strangely) triggers another paint. Prevent a stack overflow here
             // Yes, this is only fixing symptoms for the moment ....
             // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
-            if ( !mbDrawingOntoParent )
+            if ( !mpImpl->getDrawingOntoParent_ref() )
             {
-                FlagGuard aDrawingflagGuard( mbDrawingOntoParent );
+                FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
 
                 BOOL bWasVisible = pWindow->IsVisible();
                 Point aOldPos( pWindow->GetPosPixel() );
@@ -2466,12 +2511,12 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     ::vos::OGuard aGuard( GetMutex() );
 
     // check if it comes from our AccessibleContext
-    uno::Reference< uno::XInterface > aAC( mxAccessibleContext, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > aAC( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
 
     if ( aAC.get() == xSource.get() )
     {   // yep, it does
-        mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
+        mpImpl->mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
     }
 }
 
@@ -2486,19 +2531,19 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     if( ! mpImpl )
         return uno::Reference< accessibility::XAccessibleContext >();
 
-    if ( !mxAccessibleContext.is() && GetWindow() )
+    if ( !mpImpl->mxAccessibleContext.is() && GetWindow() )
     {
-        mxAccessibleContext = CreateAccessibleContext();
+        mpImpl->mxAccessibleContext = CreateAccessibleContext();
 
         // add as event listener to this component
         // in case somebody disposes it, we do not want to have a (though weak) reference to a dead
         // object
-        uno::Reference< lang::XComponent > xComp( mxAccessibleContext, uno::UNO_QUERY );
+        uno::Reference< lang::XComponent > xComp( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
         if ( xComp.is() )
             xComp->addEventListener( this );
     }
 
-    return mxAccessibleContext;
+    return mpImpl->mxAccessibleContext;
 }
 
 // ::com::sun::star::awt::XDockable
@@ -2506,10 +2551,8 @@ void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    if( !mxDockableWindowListener.is() )
-        mxDockableWindowListener = xListener;
-    //else
-    //    throw too_many_listeners_exception
+    if ( xListener.is() )
+        mpImpl->getDockableWindowListeners().addInterface( xListener );
 
 }
 
@@ -2517,8 +2560,7 @@ void SAL_CALL VCLXWindow::removeDockableWindowListener( const ::com::sun::star::
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    if( mxDockableWindowListener == xListener )
-        mxDockableWindowListener.clear();
+    mpImpl->getDockableWindowListeners().removeInterface( xListener );
 }
 
 void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException)
@@ -2668,13 +2710,13 @@ UnoPropertyArrayHelper *
 VCLXWindow::GetPropHelper()
 {
     ::vos::OGuard aGuard( GetMutex() );
-    if (mpPropHelper == NULL)
+    if ( mpImpl->mpPropHelper == NULL )
     {
         std::list< sal_uInt16 > aIDs;
         GetPropertyIds( aIDs );
-        mpPropHelper = new UnoPropertyArrayHelper( aIDs );
+        mpImpl->mpPropHelper = new UnoPropertyArrayHelper( aIDs );
     }
-    return mpPropHelper;
+    return mpImpl->mpPropHelper;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL

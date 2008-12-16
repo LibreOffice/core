@@ -80,9 +80,6 @@ extern void MyOutputDebugString( char *s);
 #endif
 
 
-//#define USE_NEW_RTL_IMPLEMENTATION
-
-
 // =======================================================================
 
 #define IMPL_MIN_NEEDSYSWIN         49
@@ -458,15 +455,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     // Ein paar Test ausfuehren und Message abfangen oder Status umsetzen
     if ( pChild )
     {
-        if( pChild->ImplHasMirroredGraphics() && !pChild->IsRTLEnabled() )
+        if( pChild->ImplIsAntiparallel() )
         {
             // - RTL - re-mirror frame pos at pChild
-#ifdef USE_NEW_RTL_IMPLEMENTATION
-            Window *pRefWindow = (Window*) pChild->mpDummy4;
-            pRefWindow->ImplReMirror( aMousePos );
-#else
             pChild->ImplReMirror( aMousePos );
-#endif
         }
         // no mouse messages to system object windows ?
         // !!!KA: Is it OK to comment this out? !!!

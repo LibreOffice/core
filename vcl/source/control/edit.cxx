@@ -340,7 +340,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     mnAlign = EDIT_ALIGN_LEFT;
 
     // --- RTL --- hack: right align until keyinput and cursor travelling works
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( IsRTLEnabled() )
         mnAlign = EDIT_ALIGN_RIGHT;
 
     if ( nStyle & WB_RIGHT )
@@ -1253,7 +1253,10 @@ void Edit::ImplAlign()
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraOffset();
-        if( Application::GetSettings().GetLayoutRTL() )
+        bool bRTL = IsRTLEnabled();
+        if( mbIsSubEdit && GetParent() )
+            bRTL = GetParent()->IsRTLEnabled();
+        if( bRTL )
         {
             if( nTextWidth < nOutWidth )
                 mnXOffset = nMinXOffset;
@@ -2258,17 +2261,33 @@ void Edit::StateChanged( StateChangedType nType )
             ImplInvalidateOrRepaint( 0, 0xFFFF );
         }
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == STATE_CHANGE_STYLE || nType == STATE_CHANGE_MIRRORING )
     {
-        WinBits nStyle = ImplInitStyle( GetStyle() );
-        SetStyle( nStyle );
+        WinBits nStyle = GetStyle();
+        if( nType == STATE_CHANGE_STYLE )
+        {
+            nStyle = ImplInitStyle( GetStyle() );
+            SetStyle( nStyle );
+        }
 
         USHORT nOldAlign = mnAlign;
         mnAlign = EDIT_ALIGN_LEFT;
 
         // --- RTL --- hack: right align until keyinput and cursor travelling works
-        if( Application::GetSettings().GetLayoutRTL() )
-            mnAlign = EDIT_ALIGN_RIGHT;
+        // edits are always RTL disabled
+        // however the parent edits contain the correct setting
+        if( mbIsSubEdit && GetParent()->IsRTLEnabled() )
+        {
+            if( GetParent()->GetStyle() & WB_LEFT )
+                mnAlign = EDIT_ALIGN_RIGHT;
+            if ( nType == STATE_CHANGE_MIRRORING )
+                SetLayoutMode( TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
+        else if( mbIsSubEdit && !GetParent()->IsRTLEnabled() )
+        {
+            if ( nType == STATE_CHANGE_MIRRORING )
+                SetLayoutMode( TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
 
         if ( nStyle & WB_RIGHT )
             mnAlign = EDIT_ALIGN_RIGHT;

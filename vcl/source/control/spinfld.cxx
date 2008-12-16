@@ -313,7 +313,6 @@ void SpinField::ImplInitSpinFieldData()
     mbInitialDown   = FALSE;
     mbNoSelect      = FALSE;
     mbInDropDown    = FALSE;
-    EnableRTL( TRUE );
 }
 
 // --------------------------------------------------------------------
@@ -765,6 +764,7 @@ void SpinField::Resize()
     {
         Control::Resize();
         Size aSize = GetOutputSizePixel();
+        bool bSubEditPositioned = false;
 
         if ( GetStyle() & (WB_SPIN|WB_DROPDOWN) )
         {
@@ -789,6 +789,7 @@ void SpinField::Resize()
                 // use the themes drop down size
                 Rectangle aContentRect = aContent.GetBoundRect();
                 mpEdit->SetPosPixel( aContentRect.TopLeft() );
+                bSubEditPositioned = true;
                 aSize = aContentRect.GetSize();
             }
             else
@@ -803,6 +804,11 @@ void SpinField::Resize()
             }
         }
 
+        if( ! bSubEditPositioned )
+        {
+            // this moves our sub edit if RTL gets switched
+            mpEdit->SetPosPixel( Point() );
+        }
         mpEdit->SetSizePixel( aSize );
 
         if ( GetStyle() & WB_SPIN )
@@ -867,6 +873,12 @@ void SpinField::StateChanged( StateChangedType nType )
             mpEdit->SetControlBackground( GetControlBackground() );
         ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
+    }
+    else if( nType == STATE_CHANGE_MIRRORING )
+    {
+        if( mpEdit )
+            mpEdit->StateChanged( STATE_CHANGE_MIRRORING );
+        Resize();
     }
 }
 

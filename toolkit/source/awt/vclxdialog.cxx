@@ -94,9 +94,9 @@ Window* VCLXDialog::GetWindowImpl()
     return VCLXWindow::GetWindow();
 }
 
-TopWindowListenerMultiplexer& VCLXDialog::GetTopWindowListenersImpl()
+::cppu::OInterfaceContainerHelper& VCLXDialog::GetTopWindowListenersImpl()
 {
-    return VCLXWindow::GetTopWindowListeners();
+    return GetTopWindowListeners();
 }
 
 IMPLEMENT_2_FORWARD_XINTERFACE2( VCLXDialog, VCLXWindow, Bin, VCLXDialog_Base );

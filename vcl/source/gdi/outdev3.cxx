@@ -118,9 +118,6 @@ using namespace ::vcl;
 
 // =======================================================================
 
-//#ifdef USE_NEW_RTL_IMPLEMENTATION
-
-
 static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
                            int nOrientation )
 {
@@ -4105,7 +4102,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
     BOOL            bNormalLines = TRUE;
 
     // TODO: fix rotated text
-    if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+    if( IsRTLEnabled() )
         // --- RTL --- mirror at basex
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
 
@@ -4576,7 +4573,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
 {
     long nBaseX = nX;
-    if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+    if( /*ImplHasMirroredGraphics() &&*/ IsRTLEnabled() )
     {
         // --- RTL ---
         // add some strange offset
@@ -4752,7 +4749,7 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
     // TODO: pass nWidth as width of this mark
     long nWidth = 0;
 
-    if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+    if( IsRTLEnabled() )
         // --- RTL --- mirror at basex
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
 
@@ -4970,15 +4967,19 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
             if( !IsRTLEnabled() )
             {
                 OutputDevice *pOutDevRef = (OutputDevice *)this;
-#ifdef USE_NEW_RTL_IMPLEMENTATION
-                if( meOutDevType == OUTDEV_WINDOW )
-                    pOutDevRef = (OutputDevice*) ((Window *) this)->mpDummy4;
-#endif
-
                 // mirror this window back
                 long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
                 rSalLayout.DrawBase().X() = devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
             }
+        }
+        else if( IsRTLEnabled() )
+        {
+            //long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
+            //long x = rSalLayout.DrawBase().X();
+            OutputDevice *pOutDevRef = (OutputDevice *)this;
+            // mirror this window back
+            long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
+            rSalLayout.DrawBase().X() = pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX;
         }
 
         rSalLayout.DrawText( *mpGraphics );
@@ -6067,7 +6068,7 @@ bool OutputDevice::GetCaretPositions( const XubString& rStr, sal_Int32* pCaretXA
     }
 
     // handle window mirroring
-    if( ((OutputDevice*)this)->ImplHasMirroredGraphics() && IsRTLEnabled() )
+    if( IsRTLEnabled() )
     {
         for( i = 0; i < 2 * nLen; ++i )
             pCaretXArray[i] = nWidth - pCaretXArray[i] - 1;
@@ -6213,7 +6214,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI
     //static const char* pEnv = getenv( "SAL_RTL_MIRRORTEXT" );
-    bool bRTLWindow = (((OutputDevice*)this)->ImplHasMirroredGraphics() && IsRTLEnabled());
+    bool bRTLWindow = IsRTLEnabled();
     bRightAlign ^= bRTLWindow;
     if( bRightAlign )
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;

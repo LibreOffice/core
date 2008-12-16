@@ -2558,6 +2558,13 @@ void ImplListBox::StateChanged( StateChangedType nType )
     {
         maLBWindow.SetControlBackground( GetControlBackground() );
     }
+    else if( nType == STATE_CHANGE_MIRRORING )
+    {
+        maLBWindow.EnableRTL( IsRTLEnabled() );
+        mpHScrollBar->EnableRTL( IsRTLEnabled() );
+        mpVScrollBar->EnableRTL( IsRTLEnabled() );
+        ImplResizeControls();
+    }
 
     Control::StateChanged( nType );
 }
@@ -3200,7 +3207,7 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
         // where the document is unmirrored
         // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
-        if( GetParent()->GetParent()->ImplHasMirroredGraphics() && !GetParent()->GetParent()->IsRTLEnabled() )
+        if( GetParent()->GetParent()->ImplIsAntiparallel() )
             GetParent()->GetParent()->ImplReMirror( aRect );
 
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );

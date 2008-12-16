@@ -195,7 +195,7 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const ::rtl::OUStrin
 }
 
 //------------------------------------------------------------------
-sal_Bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, Any& _rCurrentValue, const Type& _rExpectedType)
+sal_Bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, const Any& _rCurrentValue, const Type& _rExpectedType)
 {
     sal_Bool bModified(sal_False);
     if (_rCurrentValue.getValue() != _rValueToSet.getValue())

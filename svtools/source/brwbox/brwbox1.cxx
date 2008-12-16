@@ -291,11 +291,10 @@ void BrowseBox::InsertHandleColumn( ULONG nWidth )
     // Headerbar anpassen
     if ( getDataWindow()->pHeaderBar )
     {
-        getDataWindow()->pHeaderBar->SetPosPixel(
-                    Point(nWidth, 0));
-
-        getDataWindow()->pHeaderBar->SetSizePixel(
-                    Size( GetOutputSizePixel().Width() - nWidth, GetTitleHeight() ) );
+        getDataWindow()->pHeaderBar->SetPosSizePixel(
+                    Point(nWidth, 0),
+                    Size( GetOutputSizePixel().Width() - nWidth, GetTitleHeight() )
+                    );
     }
 
     /*if ( getDataWindow()->pHeaderBar )
@@ -837,11 +836,10 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
         // Headerbar anpassen
         if ( getDataWindow()->pHeaderBar )
         {
-            getDataWindow()->pHeaderBar->SetPosPixel(
-                        Point(0, 0));
-
-            getDataWindow()->pHeaderBar->SetSizePixel(
-                        Size( GetOutputSizePixel().Width(), GetTitleHeight() ) );
+            getDataWindow()->pHeaderBar->SetPosSizePixel(
+                        Point(0, 0),
+                        Size( GetOutputSizePixel().Width(), GetTitleHeight() )
+                        );
         }
     }
 

@@ -330,6 +330,7 @@ namespace svt
         }
 
         Image aImage;
+        bool bNeedMirror = IsRTLEnabled();
         switch (eStatus)
         {
             case CURRENT:
@@ -340,6 +341,7 @@ namespace svt
                 break;
             case MODIFIED:
                 aImage = m_aStatusImages.GetImage(IMG_EBB_MODIFIED);
+                bNeedMirror = false;    // the pen is not mirrored
                 break;
             case NEW:
                 aImage = m_aStatusImages.GetImage(IMG_EBB_NEW);
@@ -361,6 +363,12 @@ namespace svt
                 break;
             case CLEAN:
                 break;
+        }
+        if ( bNeedMirror )
+        {
+            BitmapEx aBitmap( aImage.GetBitmapEx() );
+            aBitmap.Mirror( BMP_MIRROR_HORZ );
+            aImage = Image( aBitmap );
         }
         return aImage;
     }
@@ -788,14 +796,15 @@ namespace svt
     {
         BrowseBox::StateChanged( nType );
 
-        if ( nType == STATE_CHANGE_ZOOM )
+        bool bNeedCellReActivation = false;
+        if ( nType == STATE_CHANGE_MIRRORING )
+        {
+            bNeedCellReActivation = true;
+        }
+        else if ( nType == STATE_CHANGE_ZOOM )
         {
             ImplInitSettings( sal_True, sal_False, sal_False );
-            if (IsEditing())
-            {
-                DeactivateCell();
-                ActivateCell();
-            }
+            bNeedCellReActivation = true;
         }
         else if ( nType == STATE_CHANGE_CONTROLFONT )
         {
@@ -819,6 +828,14 @@ namespace svt
                 nStyle |= WB_TABSTOP;
 
             SetStyle(nStyle);
+        }
+        if ( bNeedCellReActivation )
+        {
+            if ( IsEditing() )
+            {
+                DeactivateCell();
+                ActivateCell();
+            }
         }
     }
 

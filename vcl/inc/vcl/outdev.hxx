@@ -394,7 +394,6 @@ private:
                         mbRefPoint:1,
                         mbEnableRTL:1;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIY() const { return mnDPIY; }
@@ -550,7 +549,10 @@ public:
 
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
     SAL_DLLPRIVATE static BOOL ImplIsUnderlineAbove( const Font& );
-//#endif
+
+
+    // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
+    SAL_DLLPRIVATE bool ImplIsAntiparallel() const ;
 
 protected:
                         OutputDevice();

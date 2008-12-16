@@ -231,7 +231,7 @@ inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno:
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-COMPHELPER_DLLPUBLIC sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
+COMPHELPER_DLLPUBLIC sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, const staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
 
 //.........................................................................
 }

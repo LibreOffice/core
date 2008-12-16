@@ -43,6 +43,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/ctrl.hxx>
 #ifndef _POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -169,6 +170,22 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
     }
 
     delete pObjStack;
+}
+
+// -----------------------------------------------------------------------
+
+bool OutputDevice::ImplIsAntiparallel() const
+{
+    bool bRet = false;
+    if( ImplGetGraphics() )
+    {
+        if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && ! IsRTLEnabled() ) ||
+            ( ! (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && IsRTLEnabled() ) )
+        {
+            bRet = true;
+        }
+    }
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -564,10 +581,17 @@ void OutputDevice::EnableRTL( BOOL bEnable )
         // under rare circumstances in the UI, eg the valueset control
         // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
         // ...hopefully
-        if( Application::GetSettings().GetLayoutRTL() ) // allow mirroring only in BiDi Office
-            if( ImplGetGraphics() )
-                mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
+        if( ImplGetGraphics() )
+            mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
     }
+
+    // convenience: for controls also switch layout mode
+    if( dynamic_cast<Control*>(this) != 0 )
+        SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT : TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT);
+
+    Window* pWin = dynamic_cast<Window*>(this);
+    if( pWin )
+        pWin->StateChanged( STATE_CHANGE_MIRRORING );
 
     if( mpAlphaVDev )
         mpAlphaVDev->EnableRTL( bEnable );
@@ -1019,7 +1043,7 @@ void OutputDevice::ImplInitClipRegion()
             aRegion = *(pWindow->ImplGetWinChildClipRegion());
             // --- RTL -- only this region is in frame coordinates, so re-mirror it
             // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
-            if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            if( ImplIsAntiparallel() )
                 ImplReMirror ( aRegion );
         }
         if ( mbClipRegion )
