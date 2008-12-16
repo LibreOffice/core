@@ -53,6 +53,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
 
+#include <com/sun/star/text/WritingMode2.hpp>
+
 #include "document.hxx"
 #include "table.hxx"
 #include "attrib.hxx"
@@ -91,6 +93,8 @@
 #include "bcaslot.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
+
+namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
 struct ScDefaultAttr
 {
@@ -528,6 +532,8 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
                     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
                     if ( !pData )
                         pDrawLayer->MirrorRTL( pObject );
+
+                    pObject->SetContextWritingMode( bRTL ? WritingMode2::RL_TB : WritingMode2::LR_TB );
 
                     pObject = aIter.Next();
                 }
