@@ -38,6 +38,9 @@
 //=============================================================================
 
 /** this enum covers the different writing directions
+
+    @deprecated
+        Use WritingMode2 instead
  */
 published enum WritingMode
 {

@@ -37,9 +37,10 @@
 
 //=============================================================================
 
-/** this set of constants describes different writing directions, and
- * also allows for a value 'PAGE' which causes the writing mode to be
- * obtained from the current page.
+/** this set of constants describes different writing directions
+
+    <p>In addition to numerous explicit writing directions, it allows allows to specify to take the writing
+    direction from the object's context.</p>
  */
 published constants WritingMode2
 {
@@ -82,11 +83,17 @@ published constants WritingMode2
     //-------------------------------------------------------------------------
 
     /** obtain writing mode from the current page.
-        <p>
-        May not be used in page styles.
+
+        <p>May not be used in page styles.</p>
+
+        @deprecated
+            Use <member>CONTEXT</member> instead.
     */
     const short PAGE = 4;
 
+    /** obtain actual writing mode from the context of the object.
+    */
+    const short CONTEXT = 4;
 };
 
 //=============================================================================

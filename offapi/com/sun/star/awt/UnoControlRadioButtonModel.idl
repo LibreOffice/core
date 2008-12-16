@@ -219,6 +219,15 @@ published service UnoControlRadioButtonModel
      */
     [optional, property] short VisualEffect;
 
+    /** denotes the writing mode used in the control, as specified in the
+        <type scope="com::sun::star::text">WritingMode2</type> constants group.
+
+        <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
+        <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
+
+        @since OOo 3.1
+    */
+    [optional, property] short WritingMode;
 };
 
 //=============================================================================
