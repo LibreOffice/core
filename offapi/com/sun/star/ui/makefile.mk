@@ -69,6 +69,7 @@ IDLFILES=\
     UIElementFactoryManager.idl                 \
     UIElementSettings.idl                       \
     UIElementType.idl                           \
+    WindowContentFactory.idl					\
     WindowStateConfiguration.idl                \
     XAcceleratorConfiguration.idl               \
     XContextMenuInterception.idl                \

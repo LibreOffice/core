@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,14 @@ IDLFILES=\
     XFilterGroupManager.idl\
     XFilterManager.idl\
     XFolderPicker.idl\
-    XControlAccess.idl\
-    XControlInformation.idl \
-    XAsynchronousExecutableDialog.idl \
-    XDialogClosedListener.idl \
-    DialogClosedEvent.idl
+        XControlAccess.idl\
+        XControlInformation.idl \
+        XAsynchronousExecutableDialog.idl \
+        XDialogClosedListener.idl \
+        DialogClosedEvent.idl
 
 # ------------------------------------------------------------------
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/util$/target.pmk
+
