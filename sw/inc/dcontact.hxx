@@ -72,6 +72,8 @@ inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
 {   return ::FindFrmFmt( (SdrObject*)pObj ); }
 sal_Bool HasWrap( const SdrObject* pObj );
 
+void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
+
 //Bei Aenderungen das Objekt aus dem ContourCache entfernen.
 //Implementierung in TxtFly.Cxx
 void ClrContourCache( const SdrObject *pObj );

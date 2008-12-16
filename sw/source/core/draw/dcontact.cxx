@@ -90,12 +90,30 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #endif
 
+#include <com/sun/star/text/WritingMode2.hpp>
+
 using namespace ::com::sun::star;
 
 
 TYPEINIT1( SwContact, SwClient )
 TYPEINIT1( SwFlyDrawContact, SwContact )
 TYPEINIT1( SwDrawContact, SwContact )
+
+void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
+{
+    if( pObj && pAnchor )
+    {
+        short nWritingDirection = text::WritingMode2::LR_TB;
+        if( pAnchor->IsVertical() )
+        {
+            nWritingDirection = text::WritingMode2::TB_RL;
+        } else if( pAnchor->IsRightToLeft() )
+        {
+            nWritingDirection = text::WritingMode2::RL_TB;
+        }
+        pObj->SetContextWritingMode( nWritingDirection );
+    }
+}
 
 
 //Der Umgekehrte Weg: Sucht das Format zum angegebenen Objekt.
@@ -246,6 +264,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
                 "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
         if ( pAnchoredObj )
         {
+            ::setContextWritingMode( _pDrawObj, pAnchoredObj->GetAnchorFrmContainingAnchPos() );
             // Note: as-character anchored objects aren't registered at a page frame and
             //       a notification of its background isn't needed.
             if ( pAnchoredObj->GetPageFrm() )
@@ -2056,6 +2075,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     }
     if ( GetAnchorFrm() )
     {
+        ::setContextWritingMode( maAnchoredDrawObj.DrawObj(), GetAnchorFrm() );
         // OD 2004-04-01 #i26791# - invalidate objects instead of direct positioning
         _InvalidateObjs();
     }
