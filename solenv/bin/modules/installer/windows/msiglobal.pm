@@ -1232,6 +1232,33 @@ sub put_productcode_into_setupini
 }
 
 ##########################################################################
+# Writing the ProductVersion from Property table into setup.ini
+##########################################################################
+
+sub put_productversion_into_setupini
+{
+    my ($setupinifile) = @_;
+
+    my $line = "productversion=" . $installer::globals::msiproductversion . "\n";
+    push(@{$setupinifile}, $line);
+}
+
+##########################################################################
+# Writing the key for Minor Upgrades into setup.ini
+##########################################################################
+
+sub put_upgradekey_into_setupini
+{
+    my ($setupinifile) = @_;
+
+    if ( $installer::globals::minorupgradekey ne "" )
+    {
+        my $line = "upgradekey=" . $installer::globals::minorupgradekey . "\n";
+        push(@{$setupinifile}, $line);
+    }
+}
+
+##########################################################################
 # Writing the number of languages into setup.ini
 ##########################################################################
 
@@ -1313,6 +1340,8 @@ sub create_setup_ini
     put_msiversion_into_setupini($setupinifile);
     put_productname_into_setupini($setupinifile, $allvariableshashref);
     put_productcode_into_setupini($setupinifile);
+    put_productversion_into_setupini($setupinifile);
+    put_upgradekey_into_setupini($setupinifile);
 
     $line = "\[languages\]\n";
     push(@setupinifile, $line);

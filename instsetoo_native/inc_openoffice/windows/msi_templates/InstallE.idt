@@ -58,6 +58,7 @@ MoveFiles		1900
 MsiPublishAssemblies		3025
 MsiUnpublishAssemblies		875
 NewProductFound	NEWPRODUCTS	110
+OldProductFound	OLDPRODUCTSSAMEMAJOR And (VersionNT > 599)	115
 PatchFiles		2000
 ProcessComponents		800
 PublishComponents		3000
