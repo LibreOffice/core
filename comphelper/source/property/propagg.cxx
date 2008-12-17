@@ -37,7 +37,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #if OSL_DEBUG_LEVEL > 0
-#include <typeinfo.h>
+#include <typeinfo>
 #include <rtl/strbuf.hxx>
 #endif
 
