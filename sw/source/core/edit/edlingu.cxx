@@ -1353,7 +1353,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 {
                     //add the 'ignore' markup to the TextNode's grammar ignore markup list
                     IgnoreGrammarErrorAt( *pCrsr );
-                    DBG_ERROR("TODO: add ignore mark to text node")
+                    DBG_ERROR("TODO: add ignore mark to text node");
                 }
                 if(aCurrentNewPortion == rNewPortions.begin())
                     break;

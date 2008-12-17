@@ -511,7 +511,7 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
         {
             SdrView*     pSdrView = pWrtShell->GetDrawView();
             SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : 0;
-            DBG_ASSERT(pOutliner, "No Outliner in SwSpellDialogChildWindow::SetGrammarChecking")
+            DBG_ASSERT(pOutliner, "No Outliner in SwSpellDialogChildWindow::SetGrammarChecking");
             if(pOutliner)
             {
                 pOutliner->PutSpellingToSentenceStart( pSdrView->GetTextEditOutlinerView()->GetEditView() );
