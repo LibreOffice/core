@@ -748,7 +748,7 @@ void lcl_MergeDisplayArray(
             {
                 DBG_ASSERT( !pEntry->xGrammar.is() &&
                             pEntry->sGrammarImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sGrammarImplName = rToAdd.sGrammarImplName;
                 pEntry->xGrammar = rToAdd.xGrammar;
             }
