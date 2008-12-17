@@ -3154,7 +3154,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 {
                                     EEngineData::WrongSpellVector aWrongSpellVector;
 
-                                    if(GetStatus().DoOnlineSpelling() && GetStatus().DoDrawRedLines() && pTextPortion->GetLen())
+                                    if(GetStatus().DoOnlineSpelling() && pTextPortion->GetLen())
                                     {
                                         WrongList* pWrongs = pPortion->GetNode()->GetWrongList();
 
