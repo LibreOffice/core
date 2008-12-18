@@ -995,17 +995,26 @@ sub verify_milestone
 
 sub relink_workspace {
     my $linkdir = shift;
+    my $restore = shift;
 
-    my %obligatory_modules = ('solenv'             => 1,
-                              'default_images'     => 1,
-                              'custom_images'      => 1,
-                              'ooo_custom_images'  => 1,
-                              'external_images'    => 1,
-                              'postprocess'        => 1,
-                              'instset_native'     => 1,
-                              'instsetoo_native'   => 1,
-                              'smoketest_native'   => 1,
-                              'smoketestoo_native' => 1);
+    # The list if obligatory added modules, build will not work
+    # if these are not present.
+    my @added_modules = ('solenv',
+                         'default_images',
+                         'custom_images',
+                         'ooo_custom_images',
+                         'external_images',
+                         'postprocess',
+                         'instset_native',
+                         'instsetoo_native',
+                         'smoketest_native',
+                         'smoketestoo_native');
+
+    my %added_modules_hash;
+    for (@added_modules) {
+        $added_modules_hash{$_}++;
+    }
+
     # clean out pre-existing linkdir
     my $bd = dirname($linkdir);
     if ( !opendir(DIR, $bd) ) {
@@ -1019,8 +1028,27 @@ sub relink_workspace {
         foreach (@old_link_dirs) {
             print STDERR "@old_link_dirs\n";
         }
+        if ( $restore ) {
+            print_error("Please remove all old link directories but the last one", 67);
+        }
     }
+
     my $old_link_dir = "$bd/" . $old_link_dirs[0];
+    if ( $restore ) {
+        if ( !opendir(DIR, $old_link_dir) ) {
+            print_error("Can't open directory '$old_link_dir': $!.", 44);
+        }
+        my @links = grep { !/\.lnk/ } readdir(DIR);
+        close(DIR);
+        # everything which is not a link to a directory can't be an "added" module
+        foreach (@links) {
+            next if /^\./;
+            my $link = "$old_link_dir/$_";
+            if ( -s $link && -d $link ) {
+                $added_modules_hash{$_} = 1;
+            }
+        }
+    }
     print_message("... removing '$old_link_dir'");
     rmtree([$old_link_dir], 0);
 
@@ -1048,7 +1076,7 @@ sub relink_workspace {
         if ( ! -d "../ooo/$_" ) {
             next;
         }
-        my $target = exists $obligatory_modules{$_} ? $_ : "$_.$suffix";
+        my $target = exists $added_modules_hash{$_} ? $_ : "$_.$suffix";
         if ( !symlink("../ooo/$_", $target) ) {
             print_error("Can't symlink directory '../ooo/$_ -> $target': $!.", 44);
         }
@@ -1058,7 +1086,7 @@ sub relink_workspace {
         if ( ! -d "../sun/$_" ) {
             next;
         }
-        my $target = exists $obligatory_modules{$_} ? $_ : "$_.$suffix";
+        my $target = exists $added_modules_hash{$_} ? $_ : "$_.$suffix";
         if ( !symlink("../sun/$_", $target) ) {
             print_error("Can't symlink directory '../sun/$_ -> $target': $!.", 44);
         }
@@ -1520,8 +1548,7 @@ sub do_rebase
     my $commit_phase = 0;
     my $milestone;
 
-    # TODO: Switching to a new master dooes not correctly yet
-
+    # TODO: Switching to a new master dooes work not correctly yet
 
     if (exists $options_ref->{'help'} || @{$args_ref} != 1) {
         do_help(['rebase']);
@@ -1534,7 +1561,10 @@ sub do_rebase
         print_error("At least one of the options -m (--milestone) or -C (--commit) are required.", 0 );
         do_help(['rebase']);
     }
-#    print_error("The rebase command has not seen enough testing yet, and will be available in DEV300 m35\nIf you feel brave, comment out this line in cws.pl and go ahead anyway\nBe sure to report any problems to hr\@openoffice.org", 99);
+
+    if ( !svn_version_check() ) {
+        print_error("cws rebase requires svn-1.5.4 or later (merge tracking and bug fixes). Please upgrade your svn client.", 1);
+    }
 
     my $new_masterws;
     my $new_milestone;
@@ -1664,7 +1694,7 @@ sub do_rebase
         }
         if ( $so_setup) {
             print_message("... relinking workspace\n");
-            relink_workspace("$workspace/$new_masterws/src.$new_milestone");
+            relink_workspace("$workspace/$new_masterws/src.$new_milestone", 1);
             if ( !unlink("$workspace/REBASE.CONFIG_DONT_DELETE") ) {
                 print_error("Can't unlink '$workspace/REBASE.CONFIG_DONT_DELETE': $!", 0);
             }
@@ -1878,7 +1908,7 @@ sub do_fetch
             }
 
             if ( $so_setup ) {
-                relink_workspace("$workspace/$masterws/$linkdir");
+                relink_workspace("$workspace/$masterws/$linkdir", 0);
             }
         }
         else {
@@ -2179,9 +2209,44 @@ sub usage
 # pro:
 #       - SVN make guarantees about API stability but no about the command line
 #       - finer access to the SVN functionality, better error reporting
+#       - prevents parsing errors due to localized SVN messages
 # con:
 #       - the bindings are difficult to install, mostly due to subtle install bugs
 #       - we do not really use much of the SVN functionality here
+
+sub svn_version_check
+{
+    my $major_required = 1;
+    my $minor_required = 5;
+    my $patchlevel_required = 4;
+
+    my $version_required = $major_required*1000000 + $minor_required*1000 + $patchlevel_required;
+
+    if ( $debug ) {
+        print STDERR "\nCWS-DEBUG: ... svn version\n";
+    }
+
+    my @result = execute_svn_command(0, '--version --quiet', " ");
+    # svn --version --quiet returns the version in major.minor.patchlevel scheme
+    # for example: 1.5.4 or 1.6.0-dev (for developer codelines)
+    # hopefully they don't change the versioning scheme
+    my ($major, $minor, $patchlevel);
+    if ( $result[0] =~ /^(\d+)\.(\d+)\.(\d+)/ ) {
+        $major       = $1;
+        $minor       = $2;
+        $patchlevel  = $3;
+    }
+    else {
+        print_error("Can't determine svn version. Please file an issue with the output of 'svn --version --quiet'. CWS tooling requires svn-1.5.4 or later\n", 1)
+    }
+
+    my $version =  $major*1000000 + $minor*1000 + $patchlevel;
+
+    if ( $version < $version_required ) {
+        return 0;
+    }
+    return 1;
+}
 
 sub svn_copy
 {
@@ -2382,6 +2447,9 @@ sub execute_svn_command
     my @args    = @_;
 
     my $args_str = join(" ", @args);
+
+    # we can only parse english strings, hopefully a C locale is available everywhere
+    $ENV{LC_ALL}='C';
     $command = "svn $command $options $args_str";
 
     if ( $debug ) {
