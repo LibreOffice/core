@@ -84,7 +84,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
@@ -119,8 +118,6 @@ using namespace ::svx;
 using com::sun::star::style::VerticalAlignment_MIDDLE;
 using ::com::sun::star::form::binding::XValueBinding;
 using ::com::sun::star::form::binding::XBindableValue;
-
-namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
 namespace svxform
 {

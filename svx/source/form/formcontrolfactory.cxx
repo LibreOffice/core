@@ -51,6 +51,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -102,6 +103,7 @@ namespace svxform
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
+    namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
     //====================================================================
     //= FormControlFactory_Data
@@ -592,7 +594,7 @@ namespace svxform
             }
 
             if ( xPSI->hasPropertyByName( FM_PROP_WRITING_MODE ) )
-                _rxModel->setPropertyValue( FM_PROP_WRITING_MODE, makeAny( WritingMode2::CONTEXT ) );
+                _rxControlModel->setPropertyValue( FM_PROP_WRITING_MODE, makeAny( WritingMode2::CONTEXT ) );
         }
         catch( const Exception& )
         {
