@@ -257,7 +257,7 @@ namespace vcl
                             {
                                 const rendering::ARGBColor& rColor=aARGBColors[x];
                                 rWriteAcc->SetPixel( aRect.Y1, x,
-                                                     rWriteAcc->GetBestPaletteIndex(
+                                                     (BYTE)rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))) );
@@ -289,7 +289,7 @@ namespace vcl
                             {
                                 const rendering::RGBColor& rColor=aRGBColors[x];
                                 rWriteAcc->SetPixel( aRect.Y1, x,
-                                                     rWriteAcc->GetBestPaletteIndex(
+                                                     (BYTE)rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))) );
