@@ -590,6 +590,9 @@ namespace svxform
             {
                 _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, makeAny( sal_Bool( sal_True ) ) );
             }
+
+            if ( xPSI->hasPropertyByName( FM_PROP_WRITING_MODE ) )
+                _rxModel->setPropertyValue( FM_PROP_WRITING_MODE, makeAny( WritingMode2::CONTEXT ) );
         }
         catch( const Exception& )
         {

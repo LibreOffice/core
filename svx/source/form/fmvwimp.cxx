@@ -1055,9 +1055,6 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-
-        if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_WRITING_MODE ) )
-            _rxModel->setPropertyValue( FM_PROP_WRITING_MODE, makeAny( WritingMode2::CONTEXT ) );
     }
 
     m_xLastCreatedControlModel.clear();
