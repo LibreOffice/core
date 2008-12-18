@@ -598,7 +598,6 @@ namespace
 
 bool SdrTextObj::impCheckSpellCheckForDecomposeTextPrimitive() const
 {
-    SdrOutliner& rOutliner = ImpGetDrawOutliner();
     return false;
 }
 
