@@ -339,7 +339,7 @@
 #define RID_RSC_ENUM_SCALE_MODE             ( RID_PROPCONTROLLER_START + 26 )
 #define RID_RSC_ENUM_YESNO                  ( RID_PROPCONTROLLER_START + 27 )
 #define RID_RSC_ENUM_SHOWHIDE               ( RID_PROPCONTROLLER_START + 28 )
-#define RID_RSC_ENUM_WRITING_MODE           ( RID_PROPCONTROLLER_START + 26 )
+#define RID_RSC_ENUM_WRITING_MODE           ( RID_PROPCONTROLLER_START + 29 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
