@@ -1064,12 +1064,13 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
     if( AxisHelper::isAxisPositioningEnabled() )
     {
         //correct origin for y main axis (the origin is where the other main axis crosses)
-        nAxisIndex=0;
+        sal_Int32 nAxisIndex=0;
         sal_Int32 nDimensionIndex=1;
         for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
+            size_t nC;
             for( nC=0; nC < aVCooSysList.size(); nC++)
             {
                 ExplicitScaleData aExplicitScale( aVCooSysList[nC]->getExplicitScale( nDimensionIndex, nAxisIndex ) );
