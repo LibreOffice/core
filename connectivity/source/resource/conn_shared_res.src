@@ -374,7 +374,7 @@ String STR_VIEW_NO_COMMAND_ERROR
 
 String STR_NO_CONNECTION
 {
-    Text [ en-US ] = "The connection could not be created. May be the nescessary data provider is not installed.";
+    Text [ en-US ] = "The connection could not be created. May be the necessary data provider is not installed.";
 };
 
 // dbase
