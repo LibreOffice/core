@@ -549,9 +549,9 @@ void SAL_CALL
 void AccessibleDocumentViewBase::impl_dispose()
 {
     // Unregister from VCL Window.
+    Window* pWindow = maShapeTreeInfo.GetWindow();
     if (maWindowLink.IsSet())
     {
-        Window* pWindow = maShapeTreeInfo.GetWindow();
         if (pWindow)
             pWindow->RemoveChildEventListener (maWindowLink);
         maWindowLink = Link();
