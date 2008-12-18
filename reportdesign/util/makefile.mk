@@ -213,7 +213,7 @@ DEF3NAME=$(SHL3TARGET)
 XMLFILES =  $(EXTENSIONDIR)$/META-INF$/manifest.xml
 
 # DESCRIPTION_SRC is the source file which is copied into the extension
-# It is defaulted to "descriptio.xml", but we want to pre-process it, so we use an intermediate
+# It is defaulted to "description.xml", but we want to pre-process it, so we use an intermediate
 # file
 DESCRIPTION_SRC = $(MISC)$/description.xml
 
@@ -345,7 +345,8 @@ $(COMPONENT_HELP) : $$(@:f)
     $(COPY) $< $@
 
 $(DESCRIPTION_SRC): description.xml
-    $(TYPE) description.xml | $(SED) s/#VERSION#/$(EXTENSION_VERSION)/> $@
+    +-$(RM) $@
+    $(TYPE) description.xml | $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" > $@
 
 .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
