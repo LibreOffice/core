@@ -599,7 +599,7 @@ namespace
 bool SdrTextObj::impCheckSpellCheckForDecomposeTextPrimitive() const
 {
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    return (rOutliner.GetControlWord() & EE_CNTRL_NOREDLINES);
+    return false;
 }
 
 bool SdrTextObj::impDecomposeContourTextPrimitive(
@@ -654,7 +654,7 @@ bool SdrTextObj::impDecomposeContourTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
-    return (rOutliner.GetControlWord() & EE_CNTRL_NOREDLINES);
+    return false;
 }
 
 bool SdrTextObj::impDecomposeBlockTextPrimitive(
@@ -827,7 +827,7 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
-    return (rOutliner.GetControlWord() & EE_CNTRL_NOREDLINES);
+    return false;
 }
 
 bool SdrTextObj::impDecomposeStretchTextPrimitive(
@@ -899,7 +899,7 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
-    return (rOutliner.GetControlWord() & EE_CNTRL_NOREDLINES);
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////
