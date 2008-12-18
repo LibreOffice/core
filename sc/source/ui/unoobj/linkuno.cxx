@@ -1513,7 +1513,7 @@ void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nR
         throw IllegalArgumentException();
 
     ScExternalRefCache::TokenRef pToken;
-    double fVal;
+    double fVal = 0.0;
     OUString aVal;
     if (rValue >>= fVal)
         pToken.reset(new ScDoubleToken(fVal));
