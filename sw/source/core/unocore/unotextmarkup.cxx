@@ -243,7 +243,7 @@ void lcl_commitGrammarMarkUp(
     ::sal_Int32 nLength,
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
 {
-    ASSERT( nType == text::TextMarkupType::GRAMMAR || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" )
+    ASSERT( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" )
     const ModelToViewHelper::ModelPosition aStartPos =
             ModelToViewHelper::ConvertToModelPosition( pConversionMap, nStart );
     const ModelToViewHelper::ModelPosition aEndPos   =
