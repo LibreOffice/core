@@ -114,6 +114,8 @@ namespace oooimprovecore
 
     void SAL_CALL Core::inviteUser() throw(RuntimeException)
     {
+        Reference<XMultiServiceFactory> xServiceFactory = ::comphelper::getProcessServiceFactory();
+
         OUString help_url;
         Reference<XCoreController> core_c(
             xServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
