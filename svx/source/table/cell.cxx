@@ -1590,7 +1590,6 @@ Any SAL_CALL Cell::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPrope
 {
     (void)nHandle;
     throw UnknownPropertyException();
-    throw new UnknownPropertyException();
 }
 
 // -----------------------------------------------------------------------------
