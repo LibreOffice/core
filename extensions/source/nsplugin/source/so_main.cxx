@@ -388,6 +388,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             _exit(255);
         }
 #else
+        (void) read_fd; /* avoid warning about unused parameter */
         Security sec;
         oslProcess hProcess = 0;
         rtl_uString * ar_args [] = {

@@ -244,7 +244,9 @@ HRESULT CSOActiveX::TerminateOffice()
 {
     // create desktop
     CComPtr<IDispatch> pdispDesktop;
-    HRESULT hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Desktop" ), 1, pdispDesktop );
+    CComVariant aDesktopServiceName( L"com.sun.star.frame.Desktop" );
+
+    HRESULT hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aDesktopServiceName, 1, pdispDesktop );
     if( !pdispDesktop || !SUCCEEDED( hr ) ) return hr;
 
     // create tree of frames
@@ -253,7 +255,8 @@ HRESULT CSOActiveX::TerminateOffice()
     if( !pdispChildren || !SUCCEEDED( hr ) ) return hr;
 
     CComVariant aFrames;
-    hr = ExecuteFunc( pdispChildren, L"queryFrames", &CComVariant( 4 ), 1, &aFrames );
+    CComVariant nFlag( 4 );
+    hr = ExecuteFunc( pdispChildren, L"queryFrames", &nFlag, 1, &aFrames );
     if ( SUCCEEDED( hr ) )
     {
         if ( ( aFrames.vt == ( VT_ARRAY | VT_DISPATCH ) || aFrames.vt == ( VT_ARRAY | VT_VARIANT ) )
