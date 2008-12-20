@@ -1222,7 +1222,7 @@ sub zip_files
             # Zip file in common tree: work on uniq copy to avoid collisions
             $work_file = $zip_file;
             $work_file =~ s/\.zip$//;
-            $work_file .= (sprintf('%s.%d-%d', $to, $$, time())) . ".zip";
+            $work_file .= (sprintf('.%d-%d', $$, time())) . ".zip";
             die "Error: temp file $work_file already exists" if ( -e $work_file);
             copy($zip_file, $work_file) if ( -e $zip_file );
         } else {
