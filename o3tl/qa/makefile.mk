@@ -75,6 +75,6 @@ unittest : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        testshl2 $(SHL1TARGETN)
+        testshl2 -sf $(mktmp ) $(SHL1TARGETN)
 
 ALLTAR : unittest
