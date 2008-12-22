@@ -28,23 +28,6 @@
              </manifest>
          </jar>
      </target>
---- misc/writer2latex05/source/oxt/writer2latex/w2l_filters.xcu	Wed Jul 23 17:52:00 2008
-+++ misc/build/writer2latex05/source/oxt/writer2latex/w2l_filters.xcu	Fri Dec 19 20:53:15 2008
-@@ -3,14 +3,6 @@
- 
-   <node oor:name="Filters">
-    
--    <!-- disable integrated Writer2LaTeX 0.4 from OOo 2.0.4 -->
--	<node oor:name="LaTeX_Writer" oor:op="replace">
--		<prop oor:name="Flags"><value>NOTINFILEDIALOG NOTINCHOOSER</value></prop>
--	</node>
--	<node oor:name="BibTeX_Writer" oor:op="replace">
--		<prop oor:name="Flags"><value>NOTINFILEDIALOG NOTINCHOOSER</value></prop>
--	</node>
--   
- 	<node oor:name="LaTeX File" oor:op="replace" oor:finalized="true" oor:mandatory="true">
- 		<prop oor:name="FileFormatVersion"><value>0</value></prop>
- 		<prop oor:name="Type"><value>writer_latex_File</value></prop>
 --- misc/build/writer2latex05/source/writer2latex/office/ImageLoader.java       2007-04-17 09:30:42.000000000 +0200
 +++ misc/build/writer2latex05/source/writer2latex/office/ImageLoader.java        2007-11-20 21:18:32.000000000 +0100
 @@ -107,8 +107,8 @@
