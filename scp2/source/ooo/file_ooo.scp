@@ -3154,3 +3154,12 @@ File gid_File_Extension_Dictionary_Zu
 	UnixRights = 444;
 End
 #endif
+
+#ifdef BUILD_SPECIAL
+File gid_File_Extension_Oxt_Oooimprovement
+    Name = "OOoImprovement.oxt";
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Styles = (PACKED);
+	UnixRights = 444;
+End
+#endif
