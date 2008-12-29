@@ -93,6 +93,7 @@ testcase tUpdtWizardEuroconverter
     kontext "FilePicker"
     EFFilename.setText( cTargetDir )
     PBSelect.click()
+    WaitSlot()
     
     kontext "AutopilotEuroKonverter"
     Waehrungen.Select(1) 'Setting to first entry of listbox

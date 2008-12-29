@@ -707,6 +707,8 @@ sub mMakeGeneralOptionsAPI
     Dim xViewRoot
     Dim sTempList
     Dim bError as boolean
+
+    Dim oOOoImprovementController as object  ' Check presence of the OOo Improvement Extension
    
     sFileFunction="global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
 
@@ -819,6 +821,25 @@ sub mMakeGeneralOptionsAPI
         end if
         xViewRoot.dispose()
 
+        '///+ OOo Improvement Extension
+        ' Note: Logging is disabled the hard way. The UI will not notice the change so even if logging is disabled
+        '       the UI will claim that it is. You can verify the status manually though by performing some action
+        '       in the application and looking for the log file in user/temp/Feedback.
+        oOOoImprovementController = oUnoOfficeConnection.createInstance( "com.sun.star.oooimprovement.CoreController" )
+        if ( isNull( oOOoImprovementController ) ) then
+            gExtensionOOoImprovementIsInstalled = FALSE 
+        else
+            gExtensionOOoImprovementIsInstalled = TRUE
+            aPropertyValue(0).Value="/org.openoffice.Office.Logging/OOoImprovement"
+            xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+            xViewRoot.replaceByName("EnablingAllowed", false)
+            xViewRoot.commitChanges()
+            if xViewRoot.hasPendingChanges() then
+                qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
+            end if
+            xViewRoot.dispose()
+        endif
+
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")
         '///+<li>If the temp-path does not exist it will be created. 
@@ -862,6 +883,7 @@ sub mMakeGeneralOptionsAPI
         end if
         '///Check which 'Macro Security Level' is set and put it into <i>gMacroSecurityLevel</i> variable. 
         gMacroSecurityLevel = fGetSetMacroSecurityUNO()
+
 
     catch
         ExceptLog
@@ -1086,7 +1108,7 @@ sub sStartUpOffice (optional sProfPath as String, optional sProfParameter as Str
     '///+ <li><i>-autocrashreport</i> to enable the non-GUI crash report functionality</li>
     '///+ <li><i>-accept=socket,host=localhost,port=12345;urp</i> to enable UNO connection</li>
     '///+ <li><i>OPTIONAL application parameters</i> for profiling tests</li>    
-    sParameter = "-enableautomation -norestore -nolockcheck -autocrashreport " & sUnoPort & sAppParameter & " "
+    sParameter = "-enableautomation -norestore -nolockcheck -autocrashreport -nofirststartwizard " & sUnoPort & sAppParameter & " "
     if IsMissing (sProfPath) then
         '///+ <li><i>Factory</i>-parameter which depends on the value of <b>gApplication</b> (WRITER, CALC, ...)</li></ol>
         sParameter = sParameter & sFactory

@@ -172,6 +172,9 @@ Global Const GC_MACRO_SECURITY_LEVEL_HIGH     = 2  '///+ GC_MACRO_SECURITY_LEVEL
 Global Const GC_MACRO_SECURITY_LEVEL_VERYHIGH = 3  '///+ GC_MACRO_SECURITY_LEVEL_VERYHIGH: Symbolic name for very high macro security
 Global Const GC_MACRO_SECURITY_LEVEL_DEFAULT  = 2  '///+ GC_MACRO_SECURITY_LEVEL_DEFAULT:  Symbolic name for default macro security level
 
+'///* Extensions
+Global gExtensionOOoImprovementIsInstalled as boolean
+
 sub OnlyForDocuGVariables
 '///<b>System for the installed Office</b>
 '///<i>gPlatform</i>: Operatingsystem (internal shortkey)
