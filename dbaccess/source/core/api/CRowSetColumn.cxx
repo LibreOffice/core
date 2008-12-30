@@ -148,7 +148,7 @@ void SAL_CALL ORowSetColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandl
             break;
         case PROPERTY_ID_VALUE:
             if ( !m_aColumnValue.isNull() && (*m_aColumnValue).isValid() )
-                rValue = (*(*m_aColumnValue))[m_nPos].makeAny();
+                rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
             break;
         default:
             ORowSetDataColumn::getFastPropertyValue(rValue,nHandle);

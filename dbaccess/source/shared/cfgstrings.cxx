@@ -34,7 +34,7 @@
 
 namespace dbacfg
 {
-#include "stringconstants.cxx"
+#include "stringconstants.inc"
 
     //============================================================
     //= configuration key names

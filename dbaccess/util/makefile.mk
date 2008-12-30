@@ -51,8 +51,7 @@ LIB1FILES=\
         $(SLB)$/api.lib	\
         $(SLB)$/dataaccess.lib	\
         $(SLB)$/misc.lib	\
-        $(SLB)$/core_resource.lib	\
-        $(SLB)$/dbashared.lib	
+        $(SLB)$/core_resource.lib
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 

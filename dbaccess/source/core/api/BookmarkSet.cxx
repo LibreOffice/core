@@ -119,13 +119,13 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
     {
         xUpd->moveToInsertRow();
         sal_Int32 i = 1;
-        for(connectivity::ORowVector< ORowSetValue > ::iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
+        for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != _rInsertRow->get().end();++aIter,++i)
         {
             aIter->setSigned(m_aSignedFlags[i-1]);
             updateColumn(i,xUpdRow,*aIter);
         }
         xUpd->insertRow();
-        (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
+        (*_rInsertRow->get().begin()) = m_xRowLocate->getBookmark();
     }
     else
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XRESULTSETUPDATE ), SQL_GENERAL_ERROR, *this );
@@ -139,8 +139,8 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XROWUPDATE ), SQL_GENERAL_ERROR, *this );
 
     sal_Int32 i = 1;
-    connectivity::ORowVector< ORowSetValue > ::const_iterator aOrgIter = _rOrginalRow->begin()+1;
-    for(connectivity::ORowVector< ORowSetValue > ::iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i,++aOrgIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOrginalRow->get().begin()+1;
+    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != _rInsertRow->get().end();++aIter,++i,++aOrgIter)
     {
         aIter->setSigned(aOrgIter->isSigned());
         updateColumn(i,xUpdRow,*aIter);

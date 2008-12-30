@@ -37,6 +37,7 @@ TARGET=core_resource
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE : $(PRJ)$/util$/dba.pmk
 
 # --- Files --------------------------------------------------------
 

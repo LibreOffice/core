@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: sdbtstrings.cxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: dbastrings.cxx,v $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#include "sdbtstrings.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
+#endif
 
-namespace sdbtools
+namespace dbaccess
 {
-    #include "stringconstants.inc"
+
+#include "stringconstants.inc"
+    //============================================================
+    //= SQLSTATE
+    //============================================================
+    IMPLEMENT_CONSTASCII_USTRING(SQLSTATE_GENERAL, "01000");
+
+    //============================================================
+    //= Properties
+    //============================================================
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_APPLYFORMDESIGNMODE, "ApplyFormDesignMode");
+
 }

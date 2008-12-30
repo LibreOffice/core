@@ -122,8 +122,8 @@ sal_Bool OStaticSet::fetchRow()
     {
         m_aSet.push_back(new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount()));
         m_aSetIter = m_aSet.end() - 1;
-        (*(*m_aSetIter))[0] = getRow();
-        OCacheSet::fillValueRow(*m_aSetIter,(*(*m_aSetIter))[0]);
+        ((*m_aSetIter)->get())[0] = getRow();
+        OCacheSet::fillValueRow(*m_aSetIter,((*m_aSetIter)->get())[0]);
     }
     else
         m_bEnd = sal_True;
@@ -139,8 +139,8 @@ void OStaticSet::fillAllRows()
             ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount());
             m_aSet.push_back(pRow);
             m_aSetIter = m_aSet.end() - 1;
-            (*pRow)[0] = getRow();
-            OCacheSet::fillValueRow(pRow,(*pRow)[0]);
+            (pRow->get())[0] = getRow();
+            OCacheSet::fillValueRow(pRow,(pRow->get())[0]);
         }
         m_bEnd = sal_True;
     }
@@ -324,7 +324,7 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     {
         m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); // we don't know where the new row is so we append it to the current rows
         m_aSetIter = m_aSet.end() - 1;
-        (*(*m_aSetIter))[0] = (*_rInsertRow)[0] = getBookmark();
+        ((*m_aSetIter)->get())[0] = (_rInsertRow->get())[0] = getBookmark();
         m_bEnd = sal_False;
     }
 }
@@ -339,7 +339,7 @@ void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connect
     OCacheSet::deleteRow(_rDeleteRow,_xTable);
     if(m_bDeleted)
     {
-        ORowSetMatrix::iterator aPos = m_aSet.begin()+(*_rDeleteRow)[0].getInt32();
+        ORowSetMatrix::iterator aPos = m_aSet.begin()+(_rDeleteRow->get())[0].getInt32();
         if(aPos == (m_aSet.end()-1))
             m_aSetIter = m_aSet.end();
         m_aSet.erase(aPos);

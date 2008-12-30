@@ -158,8 +158,8 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
 #if OSL_DEBUG_LEVEL > 0
                 ORowSetRow aRow = *m_aColumnValue;
 #endif
-                OSL_ENSURE((sal_Int32)aRow->size() > m_nPos,"Pos is greater than size of vector");
-                rValue = (*(*m_aColumnValue))[m_nPos].makeAny();
+                OSL_ENSURE((sal_Int32)aRow->get().size() > m_nPos,"Pos is greater than size of vector");
+                rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
             }
             break;
         default:
@@ -237,11 +237,11 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 // -------------------------------------------------------------------------
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() && (!((*(*m_aColumnValue))[m_nPos] == _rOldValue)) )
+    if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() && (!(((*m_aColumnValue)->get())[m_nPos] == _rOldValue)) )
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
-        Any aNew = (*(*m_aColumnValue))[m_nPos].makeAny();
+        Any aNew = ((*m_aColumnValue)->get())[m_nPos].makeAny();
 
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
@@ -278,8 +278,8 @@ sdbcx::ObjectType ORowSetDataColumns::createObject(const ::rtl::OUString& _rName
     connectivity::sdbcx::ObjectType xNamed;
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
-    ::connectivity::OSQLColumns::const_iterator first =  ::connectivity::find(m_aColumns->begin(),m_aColumns->end(),_rName,aCase);
-    if(first != m_aColumns->end())
+    ::connectivity::OSQLColumns::Vector::const_iterator first =  ::connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),_rName,aCase);
+    if(first != m_aColumns->get().end())
         xNamed.set(*first,UNO_QUERY);
 
     return xNamed;

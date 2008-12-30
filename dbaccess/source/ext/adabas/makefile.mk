@@ -34,6 +34,7 @@ PRJ=..$/..$/..
 PRJNAME=dbaccess
 TARGET=adabasui
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 .INCLUDE :	settings.mk

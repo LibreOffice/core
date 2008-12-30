@@ -34,6 +34,6 @@
 
 namespace dbaxml
 {
-#include "stringconstants.cxx"
+#include "stringconstants.inc"
 }
 
