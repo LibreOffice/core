@@ -43,6 +43,14 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Common ----------------------------------------------------------
 
+.IF "$(OS)"=="SOLARIS"
+.IF "$(CCNUMVER)"=="00050009"
+# SunStudio12: anachronism warning in boost code (smilfunctionparser.cxx)
+# reevaluate with newer boost or compiler version
+CFLAGSWARNCXX!:=$(CFLAGSWARNCXX),badargtype2w
+.ENDIF
+.ENDIF
+
 # Disable optimization for SunCC Sparc (funny loops
 # when parsing e.g. "x+width/2")
 # Do not disable optimization for SunCC++ 5.5 Solaris x86,
