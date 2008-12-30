@@ -30,6 +30,7 @@
 #ifndef _CHART2_TOOLS_AXISHELPER_HXX
 #define _CHART2_TOOLS_AXISHELPER_HXX
 
+#include "charttoolsdllapi.hxx"
 #include "ReferenceSizeProvider.hxx"
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
@@ -47,7 +48,7 @@ namespace chart
 /**
 */
 
-class AxisHelper
+class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
 public:
     static ::com::sun::star::chart2::ScaleData createDefaultScale();

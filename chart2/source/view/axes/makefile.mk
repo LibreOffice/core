@@ -39,6 +39,8 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE: settings.mk
+.INCLUDE: $(PRJ)$/chartview.pmk
+
 #.IF "$(GUI)" == "WNT"
 #CFLAGS+=-GR
 #.ENDIF
@@ -61,7 +63,6 @@ SLOFILES = \
     $(SLO)$/VPolarRadiusAxis.obj \
     $(SLO)$/VPolarGrid.obj \
     $(SLO)$/VPolarCoordinateSystem.obj \
-    $(SLO)$/ExplicitCategoriesProvider.obj \
     $(SLO)$/VCoordinateSystem.obj
 
 # --- Targets -----------------------------------------------------------------

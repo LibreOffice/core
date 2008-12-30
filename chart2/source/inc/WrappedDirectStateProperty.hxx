@@ -31,11 +31,13 @@
 #define CHART2_WRAPPEDDIRECTSTATEPROPERTY_HXX
 
 #include "WrappedProperty.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class WrappedDirectStateProperty : public WrappedProperty
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedDirectStateProperty :
+        public WrappedProperty
 {
 public:
     explicit WrappedDirectStateProperty(

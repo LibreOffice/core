@@ -31,11 +31,13 @@
 #define CHART2_LINEARREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class LinearRegressionCurveCalculator : public RegressionCurveCalculator
+class OOO_DLLPUBLIC_CHARTTOOLS LinearRegressionCurveCalculator :
+        public RegressionCurveCalculator
 {
 public:
     LinearRegressionCurveCalculator();

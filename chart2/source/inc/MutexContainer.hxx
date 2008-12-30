@@ -31,11 +31,12 @@
 #define CHART_MUTEXCONTAINER_HXX
 
 #include <osl/mutex.hxx>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class MutexContainer
+class OOO_DLLPUBLIC_CHARTTOOLS MutexContainer
 {
 public:
     virtual ~MutexContainer();

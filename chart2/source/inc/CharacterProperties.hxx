@@ -32,6 +32,7 @@
 
 #include "PropertyHelper.hxx"
 #include "FastPropertyIdRanges.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -45,7 +46,7 @@ namespace chart
 //   com.sun.star.style.CharacterProperties
 //   com.sun.star.style.CharacterPropertiesAsian
 //   com.sun.star.style.CharacterPropertiesComplex
-class CharacterProperties
+class OOO_DLLPUBLIC_CHARTTOOLS CharacterProperties
 {
 public:
     // FastProperty Ids for properties

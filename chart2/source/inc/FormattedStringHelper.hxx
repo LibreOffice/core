@@ -33,13 +33,14 @@
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-class FormattedStringHelper
+class OOO_DLLPUBLIC_CHARTTOOLS FormattedStringHelper
 {
 public:
     static ::com::sun::star::uno::Sequence<

@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -61,7 +62,7 @@ enum CuboidPlanePosition
     CuboidPlanePosition_Back
 };
 
-class ThreeDHelper
+class OOO_DLLPUBLIC_CHARTTOOLS ThreeDHelper
 {
 public:
 

@@ -32,6 +32,7 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include "charttoolsdllapi.hxx"
 
 #define CHART_TRACE_OSL_DEBUG_LEVEL 2
 
@@ -47,7 +48,7 @@ namespace debug
     If OSL_DEBUG_LEVEL is less than CHART_TRACE_OSL_DEBUG_LEVEL this
     function does nothing.
  */
-void ChartDebugTraceDocument(
+OOO_DLLPUBLIC_CHARTTOOLS void ChartDebugTraceDocument(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartDocument > & xDoc,
     int nIndent = 0 );
@@ -58,7 +59,7 @@ void ChartDebugTraceDocument(
     If OSL_DEBUG_LEVEL is less than CHART_TRACE_OSL_DEBUG_LEVEL this
     function does nothing.
  */
-void ChartDebugTraceDiagram(
+OOO_DLLPUBLIC_CHARTTOOLS void ChartDebugTraceDiagram(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDiagram > & xDiagram,
     int nIndent = 0 );

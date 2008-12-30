@@ -35,11 +35,12 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class StatisticsHelper
+class OOO_DLLPUBLIC_CHARTTOOLS StatisticsHelper
 {
 public:
     /** Calculates 1/n * sum (x_i - x_mean)^2.

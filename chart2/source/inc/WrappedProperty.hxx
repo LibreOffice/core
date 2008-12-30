@@ -32,6 +32,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include "charttoolsdllapi.hxx"
 
 #include <map>
 
@@ -40,7 +41,7 @@ namespace chart
 {
 //.............................................................................
 
-class WrappedProperty
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedProperty
 {
     /** The property visible to the outer PropertySet in the PropertySetWrapper may have a different name, type and value than
     a corresponding property of the inner PropertySet. Use this class to do the conversion between the two.

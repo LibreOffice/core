@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -46,7 +47,7 @@ namespace chart
 /**
 */
 
-class ChartTypeHelper
+class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeHelper
 {
 public:
     static sal_Bool isSupportingGeometryProperties(  const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );

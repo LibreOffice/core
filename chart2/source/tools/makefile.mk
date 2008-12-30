@@ -37,10 +37,13 @@ PRJINC=				$(PRJ)$/source
 
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
+VISIBILITY_HIDDEN=  TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
+
+CDEFS += -DOOO_DLLIMPLEMENTATION_CHARTTOOLS
 
 # --- export library -------------------------------------------------
 

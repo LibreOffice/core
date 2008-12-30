@@ -32,6 +32,7 @@
 
 #include <svtools/zforlist.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include "chartviewdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -43,7 +44,7 @@ namespace chart
 */
 class FixedNumberFormatter;
 
-class NumberFormatterWrapper
+class OOO_DLLPUBLIC_CHARTVIEW NumberFormatterWrapper
 {
 public:
     NumberFormatterWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier );
@@ -63,7 +64,7 @@ private: //private member
 };
 
 
-class FixedNumberFormatter
+class OOO_DLLPUBLIC_CHARTVIEW FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier

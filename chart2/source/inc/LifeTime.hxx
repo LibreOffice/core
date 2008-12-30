@@ -40,12 +40,13 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/weakref.hxx>
+#include "charttoolsdllapi.hxx"
 
 namespace apphelper
 {
 
 class LifeTimeGuard;
-class LifeTimeManager
+class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeManager
 {
 friend class LifeTimeGuard;
 protected:
@@ -84,7 +85,7 @@ protected:
     sal_Int32 volatile      m_nLongLastingCallCount;
 };
 
-class CloseableLifeTimeManager : public LifeTimeManager
+class OOO_DLLPUBLIC_CHARTTOOLS CloseableLifeTimeManager : public LifeTimeManager
 {
 protected:
     ::com::sun::star::util::XCloseable*         m_pCloseable;
@@ -200,12 +201,12 @@ your XComponent::dispose method has to be implemented in the following way:
 */
 //-----------------------------------------------------------------
 
-class LifeTimeGuard : public ::osl::ResettableMutexGuard
+class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeGuard
 {
 
 public:
     LifeTimeGuard( LifeTimeManager& rManager )
-        : ::osl::ResettableGuard< ::osl::Mutex >( rManager.m_aAccessMutex )
+        : m_guard( rManager.m_aAccessMutex )
         , m_rManager(rManager)
         , m_bCallRegistered(sal_False)
         , m_bLongLastingCallRegistered(sal_False)
@@ -213,9 +214,11 @@ public:
 
     }
     sal_Bool startApiCall(sal_Bool bLongLastingCall=sal_False);
-    virtual ~LifeTimeGuard();
+    ~LifeTimeGuard();
+    void clear() { m_guard.clear(); }
 
 private:
+    osl::ClearableMutexGuard m_guard;
     LifeTimeManager&    m_rManager;
     sal_Bool            m_bCallRegistered;
     sal_Bool            m_bLongLastingCallRegistered;

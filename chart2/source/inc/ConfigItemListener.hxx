@@ -31,11 +31,12 @@
 #define CHART2_CONFIGITEMLISTENER_HXX
 
 #include <rtl/ustring.hxx>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class ConfigItemListener
+class OOO_DLLPUBLIC_CHARTTOOLS ConfigItemListener
 {
 public:
     virtual void notify( const ::rtl::OUString & rPropertyName ) = 0;

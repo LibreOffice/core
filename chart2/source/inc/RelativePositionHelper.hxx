@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -46,7 +47,7 @@ namespace chart
 /**
 */
 
-class RelativePositionHelper
+class OOO_DLLPUBLIC_CHARTTOOLS RelativePositionHelper
 {
 public:
     /** returns the upper left corner of an object that has size aObjectSize and

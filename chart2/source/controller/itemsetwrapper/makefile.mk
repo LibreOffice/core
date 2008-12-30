@@ -34,6 +34,7 @@ PRJNAME=			chart2
 TARGET=				chcitemsetwrapper
 
 ENABLE_EXCEPTIONS=	TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

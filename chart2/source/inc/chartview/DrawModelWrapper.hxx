@@ -40,13 +40,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "chartviewdllapi.hxx"
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-class DrawModelWrapper : private SdrModel
+class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper : private SdrModel
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory > m_xMCF;

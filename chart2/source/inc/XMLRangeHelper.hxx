@@ -32,13 +32,14 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 namespace XMLRangeHelper
 {
 
-struct Cell
+struct OOO_DLLPUBLIC_CHARTTOOLS Cell
 {
     sal_Int32 nColumn;
     sal_Int32 nRow;
@@ -57,15 +58,17 @@ struct Cell
     inline bool empty() const { return bIsEmpty; }
 };
 
-struct CellRange
+struct OOO_DLLPUBLIC_CHARTTOOLS CellRange
 {
     Cell aUpperLeft;
     Cell aLowerRight;
     ::rtl::OUString aTableName;
 };
 
+OOO_DLLPUBLIC_CHARTTOOLS
 CellRange getCellRangeFromXMLString( const ::rtl::OUString & rXMLString );
 
+OOO_DLLPUBLIC_CHARTTOOLS
 ::rtl::OUString getXMLStringFromCellRange( const CellRange & rRange );
 
 

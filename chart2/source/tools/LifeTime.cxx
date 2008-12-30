@@ -467,8 +467,7 @@ LifeTimeGuard::~LifeTimeGuard()
     try
     {
         //do acquire the mutex if it was cleared before
-        if(!pT)
-            reset();
+        osl::MutexGuard g(m_rManager.m_aAccessMutex);
         if(m_bCallRegistered)
         {
             //Mutex needs to be acquired exactly ones

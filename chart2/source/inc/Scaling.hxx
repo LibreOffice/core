@@ -30,6 +30,7 @@
 #ifndef _CHART2_SCALING_HXX
 #define _CHART2_SCALING_HXX
 #include "ServiceMacros.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -45,7 +46,8 @@ namespace chart
 /**
 */
 
-class LogarithmicScaling : public ::cppu::WeakImplHelper3 <
+class OOO_DLLPUBLIC_CHARTTOOLS LogarithmicScaling :
+        public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -86,7 +88,8 @@ private:
 
 // ----------------------------------------
 
-class ExponentialScaling : public ::cppu::WeakImplHelper3 <
+class OOO_DLLPUBLIC_CHARTTOOLS ExponentialScaling :
+        public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -126,7 +129,7 @@ private:
 
 // ----------------------------------------
 
-class LinearScaling : public ::cppu::WeakImplHelper3 <
+class OOO_DLLPUBLIC_CHARTTOOLS LinearScaling : public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -168,7 +171,7 @@ private:
 
 // ----------------------------------------
 
-class PowerScaling : public ::cppu::WeakImplHelper3 <
+class OOO_DLLPUBLIC_CHARTTOOLS PowerScaling : public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo

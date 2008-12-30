@@ -35,6 +35,7 @@ PRJNAME=			chart2
 TARGET=				chcdialogs
 
 ENABLE_EXCEPTIONS=	TRUE
+VISIBILITY_HIDDEN=TRUE
 GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------

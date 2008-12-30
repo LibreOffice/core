@@ -31,6 +31,7 @@
 #define CHART2_DIAGRAMHELPER_HXX
 
 #include "StackMode.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -48,7 +49,7 @@
 namespace chart
 {
 
-class DiagramHelper
+class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
     typedef ::std::pair<

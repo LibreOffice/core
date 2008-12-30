@@ -38,6 +38,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include "charttoolsdllapi.hxx"
 
 /*
 * This class helps to read and write the properties mentioned in the service description
@@ -53,7 +54,7 @@
 namespace apphelper
 {
 
-class MediaDescriptorHelper
+class OOO_DLLPUBLIC_CHARTTOOLS MediaDescriptorHelper
 {
 private:
     //MediaDescriptorHelper(){};

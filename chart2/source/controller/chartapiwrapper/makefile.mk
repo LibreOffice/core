@@ -36,6 +36,7 @@ TARGET=				chchartapiwrapper
 PRJINC=				$(PRJ)$/source
 
 ENABLE_EXCEPTIONS=	TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

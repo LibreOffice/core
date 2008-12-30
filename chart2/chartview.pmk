@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
+# $RCSfile: $
 #
-# $Revision: 1.4 $
+# $Revision: $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,25 +29,6 @@
 #
 #*************************************************************************
 
-PRJ=				..$/..$/..
-PRJINC=				$(PRJ)$/source
-PRJNAME=			chart2
-TARGET=				chcdrawinglayer
+VISIBILITY_HIDDEN = TRUE
 
-ENABLE_EXCEPTIONS=	TRUE
-VISIBILITY_HIDDEN=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE: settings.mk
-
-# --- export library -------------------------------------------------
-
-#object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES=   	$(SLO)$/DrawViewWrapper.obj \
-                $(SLO)$/ViewElementListProvider.obj
-
-# --- Targets -----------------------------------------------------------------
-
-.INCLUDE: target.mk
-
+CDEFS += -DOOO_DLLIMPLEMENTATION_CHARTVIEW

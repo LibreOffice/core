@@ -34,11 +34,12 @@
 
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class RegressionCurveCalculator : public
+class OOO_DLLPUBLIC_CHARTTOOLS RegressionCurveCalculator : public
     ::cppu::WeakImplHelper1< ::com::sun::star::chart2::XRegressionCurveCalculator >
 {
 public:

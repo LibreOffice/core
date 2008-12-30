@@ -39,6 +39,7 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
+.INCLUDE: $(PRJ)$/chartview.pmk
 
 # --- export library -------------------------------------------------
 

@@ -31,11 +31,12 @@
 #define CHART2_WRAPPEDDEFAULTPROPERTY_HXX
 
 #include "WrappedProperty.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class WrappedDefaultProperty : public WrappedProperty
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedDefaultProperty : public WrappedProperty
 {
 public:
     explicit WrappedDefaultProperty(

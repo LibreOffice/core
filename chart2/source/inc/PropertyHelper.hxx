@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/property.hxx>
 #include <map>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -54,7 +55,7 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
-::rtl::OUString addLineDashUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addLineDashUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
@@ -65,7 +66,7 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
-::rtl::OUString addGradientUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addGradientUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
@@ -76,6 +77,7 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
+OOO_DLLPUBLIC_CHARTTOOLS
 ::rtl::OUString addTransparencyGradientUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
@@ -87,7 +89,7 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
-::rtl::OUString addHatchUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addHatchUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
@@ -98,7 +100,7 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
-::rtl::OUString addBitmapUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addBitmapUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
@@ -111,6 +113,7 @@ namespace PropertyHelper
 
     @param any is the value encapsulated in the variant type Any
  */
+OOO_DLLPUBLIC_CHARTTOOLS
 void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
                           const ::com::sun::star::uno::Any & rAny );
 
@@ -129,7 +132,7 @@ template< typename Value >
 template<>
     void setPropertyValue< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
 
-void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+OOO_DLLPUBLIC_CHARTTOOLS void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set
     before.
@@ -148,14 +151,14 @@ template<>
 
 /** Calls setPropertyValueDefault() with an empty Any as value
  */
-void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
+OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
 
 
 } // namespace PropertyHelper
 
 // ================================================================================
 
-struct PropertyNameLess
+struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
 {
     inline bool operator() ( const ::com::sun::star::beans::Property & first,
                              const ::com::sun::star::beans::Property & second )
@@ -164,7 +167,7 @@ struct PropertyNameLess
     }
 };
 
-struct PropertyLess : public ::std::binary_function<
+struct OOO_DLLPUBLIC_CHARTTOOLS PropertyLess : public ::std::binary_function<
         ::com::sun::star::beans::Property,
         ::com::sun::star::beans::Property,
         bool >
@@ -176,7 +179,7 @@ struct PropertyLess : public ::std::binary_function<
     }
 };
 
-struct PropertyValueNameEquals : public ::std::unary_function< ::com::sun::star::beans::PropertyValue, bool >
+struct OOO_DLLPUBLIC_CHARTTOOLS PropertyValueNameEquals : public ::std::unary_function< ::com::sun::star::beans::PropertyValue, bool >
 {
     explicit PropertyValueNameEquals( const ::rtl::OUString & rName ) :
             m_aName( rName )

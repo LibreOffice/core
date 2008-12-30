@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace com { namespace sun { namespace star {
 namespace chart2 {
@@ -45,7 +46,7 @@ namespace chart2 {
 namespace chart
 {
 
-class ReferenceSizeProvider
+class OOO_DLLPUBLIC_CHARTTOOLS ReferenceSizeProvider
 {
 public:
 

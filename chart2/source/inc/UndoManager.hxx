@@ -32,6 +32,7 @@
 
 #include "ConfigItemListener.hxx"
 #include "MutexContainer.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -81,7 +82,7 @@ typedef ::cppu::WeakComponentImplHelper3<
     redo-stacks support the css::util::XCloneable interface, which is
     implemented such that the entire model is cloned.
  */
-class UndoManager :
+class OOO_DLLPUBLIC_CHARTTOOLS UndoManager :
         public MutexContainer,
         public ConfigItemListener,
         public impl::UndoManager_Base

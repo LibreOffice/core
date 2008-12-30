@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -48,7 +49,7 @@ namespace chart
 /**
 */
 
-class ChartModelHelper
+class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:
     static ::com::sun::star::uno::Reference<
