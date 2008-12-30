@@ -86,9 +86,9 @@ LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 
 .IF "$(SYSBASE)"!=""
-CPPFLAGS+:=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external $(EXTRA_CFLAGS)
+CPPFLAGS+:=-I$(SOLARINCDIR)$/external -I$(SYSBASE)$/usr$/include $(EXTRA_CFLAGS)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
-LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
+LDFLAGS+:=-L$(SOLARLIBDIR) -L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
 

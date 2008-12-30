@@ -105,7 +105,7 @@ python_LDFLAGS+=-Wl,-z,noexecstack
 # SunStudio on Solaris 10 and above needs the -xc99=all flag already 
 # during the configuration tests, otherwise the HAVE_LIMITS_H check will
 # be wrong resulting in a build breaker.
-.IF "$(SYSBASE)"=="" || "$(OS)$(CPU)"=="SOLARISU"
+.IF "$(OS)"=="SOLARIS"
 .IF "$(COMNAME)"=="sunpro5"
 CC+:=-xc99=all
 .ENDIF          # "$(COMNAME)"=="sunpro5"

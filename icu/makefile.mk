@@ -65,7 +65,10 @@ icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
 .IF "$(COMNAME)"=="sunpro5"
 icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
-icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
+# add SYSBASE libraries and make certain that they are found *after* the 
+# icu build internal libraries - in case that icu is available in SYSBASE
+# as well
+icu_LDFLAGS+= -L../../lib -L../../stubdata  -L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
 .IF "$(OS)"=="MACOSX"
