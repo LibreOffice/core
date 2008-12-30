@@ -586,7 +586,7 @@ BOOL ODbaseIndex::CreateImpl()
     sal_Int32 nType = 0;
     ::vos::ORef<OSQLColumns> aCols = m_pTable->getTableColumns();
 
-    Reference< XPropertySet > xTableCol(*find(aCols->begin(),aCols->end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
+    Reference< XPropertySet > xTableCol(*find(aCols->get().begin(),aCols->get().end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
 
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 

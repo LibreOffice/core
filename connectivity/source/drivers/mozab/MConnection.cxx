@@ -54,7 +54,8 @@
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
 
-extern "C" void*  SAL_CALL OMozabConnection_CreateInstance(void* _pDriver)
+extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozabConnection_CreateInstance(
+    void* _pDriver)
 {
     return (new connectivity::mozab::OConnection( reinterpret_cast<connectivity::mozab::MozabDriver*>(_pDriver) ));
 }

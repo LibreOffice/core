@@ -99,7 +99,7 @@ Any SAL_CALL OCalcResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcept
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return makeAny((sal_Int32)(*m_aRow)[0]->getValue());
+    return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OCalcResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)

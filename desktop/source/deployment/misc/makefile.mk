@@ -35,6 +35,7 @@ PRJNAME = desktop
 TARGET = deployment_misc
 USE_DEFFILE = TRUE
 ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN=TRUE
 
 .IF "$(GUI)"=="OS2"
 TARGET = deplmisc
@@ -44,11 +45,6 @@ TARGET = deplmisc
 
 # Reduction of exported symbols:
 CDEFS += -DDESKTOP_DEPLOYMENTMISC_DLLIMPLEMENTATION
-.IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-CFLAGS += -fvisibility=hidden
-.ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
-CFLAGS += -xldscope=hidden
-.ENDIF
 
 .IF "$(SYSTEM_DB)" == "YES"
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)

@@ -103,20 +103,20 @@ void OOperandRow::bindValue(const OValueRefRow& _pRow)
 {
     OSL_ENSURE(_pRow.isValid(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    (*m_pRow)[m_nRowPos]->setBound(sal_True);
+    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    (m_pRow->get())[m_nRowPos]->setBound(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    (*(*m_pRow)[m_nRowPos]) = _rVal;
+    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    (*(m_pRow->get())[m_nRowPos]) = _rVal;
 }
 //------------------------------------------------------------------
 const ORowSetValue& OOperandRow::getValue() const
 {
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    return (*m_pRow)[m_nRowPos]->getValue();
+    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    return (m_pRow->get())[m_nRowPos]->getValue();
 }
 
 // -----------------------------------------------------------------------------

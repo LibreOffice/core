@@ -32,12 +32,12 @@
 #define CONNECTIVITY_INDEXCOLUMNSHELPER_HXX
 
 #include "connectivity/sdbcx/VCollection.hxx"
-
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
     class OIndexHelper;
-    class OIndexColumns : public sdbcx::OCollection
+    class OOO_DLLPUBLIC_DBTOOLS OIndexColumns : public sdbcx::OCollection
     {
         OIndexHelper* m_pIndex;
     protected:

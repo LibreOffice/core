@@ -47,6 +47,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "connectivity/sdbcx/VDescriptor.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity
@@ -60,7 +61,8 @@ namespace connectivity
                                                     ::com::sun::star::container::XNamed,
                                                     ::com::sun::star::lang::XServiceInfo> OGroup_BASE;
 
-        class OGroup :  public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_DBTOOLS OGroup :
+                        public comphelper::OBaseMutex,
                         public OGroup_BASE,
                         public IRefreshableUsers,
                         public ::comphelper::OPropertyArrayUsageHelper<OGroup>,

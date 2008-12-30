@@ -45,6 +45,7 @@
 #include "connectivity/CommonTools.hxx"
 #include "odbc/OFunctions.hxx"
 #include "odbc/OConnection.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include <list>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -65,7 +66,8 @@ namespace connectivity
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
-        class OStatement_Base       :   public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_ODBCBASE OStatement_Base :
+                                        public comphelper::OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
@@ -208,7 +210,8 @@ namespace connectivity
             using OPropertySetHelper::getFastPropertyValue;
         };
 
-        class OStatement_BASE2  :public OStatement_Base
+        class OOO_DLLPUBLIC_ODBCBASE OStatement_BASE2 :
+                                 public OStatement_Base
                                 ,public ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>
 
         {
@@ -222,7 +225,8 @@ namespace connectivity
             virtual void SAL_CALL release() throw();
         };
 
-        class OStatement :  public OStatement_BASE2,
+        class OOO_DLLPUBLIC_ODBCBASE OStatement :
+                            public OStatement_BASE2,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {

@@ -40,6 +40,7 @@ USE_DEFFILE=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/dbtools.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 LDUMP=ldump2.exe

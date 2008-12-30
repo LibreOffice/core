@@ -104,7 +104,7 @@ Any SAL_CALL ODbaseResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcep
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getBookmark called for deleted row");
 
-    return makeAny((sal_Int32)(*m_aRow)[0]->getValue());
+    return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
@@ -194,9 +194,9 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                 while (nRec != SQL_COLUMN_NOTFOUND)
                 {
                     if (m_aOrderbyAscending[0])
-                        m_pFileSet->push_back(nRec);
+                        m_pFileSet->get().push_back(nRec);
                     else
-                        m_pFileSet->insert(m_pFileSet->begin(),nRec);
+                        m_pFileSet->get().insert(m_pFileSet->get().begin(),nRec);
                     nRec = pIter->Next();
                 }
                 m_pFileSet->setFrozen();

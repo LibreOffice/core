@@ -39,6 +39,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace dbtools
@@ -68,7 +69,7 @@ namespace dbtools
         controls which act as live filter, which could be implemented with a third component), but
         at the moment there are only these two.
     */
-    class FilterManager
+    class OOO_DLLPUBLIC_DBTOOLS FilterManager
     {
     public:
         enum FilterComponent

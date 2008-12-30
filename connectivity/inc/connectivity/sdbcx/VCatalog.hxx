@@ -44,6 +44,7 @@
 #include "OSubComponent.hxx"
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "connectivity/StdTypeDefs.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -62,7 +63,8 @@ namespace connectivity
                                                   ::com::sun::star::lang::XServiceInfo> OCatalog_BASE;
 
 
-        class SAL_NO_VTABLE OCatalog :  public OCatalog_BASE,
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCatalog :
+                            public OCatalog_BASE,
                             public IRefreshableGroups,
                             public IRefreshableUsers,
                             public connectivity::OSubComponent<OCatalog, OCatalog_BASE>

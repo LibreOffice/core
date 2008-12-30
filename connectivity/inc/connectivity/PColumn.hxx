@@ -30,6 +30,7 @@
 #ifndef _CONNECTIVITY_PCOLUMN_HXX_
 #define _CONNECTIVITY_PCOLUMN_HXX_
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <vos/ref.hxx>
@@ -46,8 +47,8 @@ namespace connectivity
         typedef sdbcx::OColumn OParseColumn_BASE;
         typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
 
-        class OParseColumn :    public OParseColumn_BASE,
-                                public OParseColumn_PROP
+        class OOO_DLLPUBLIC_DBTOOLS OParseColumn :
+            public OParseColumn_BASE, public OParseColumn_PROP
         {
             ::rtl::OUString m_aRealName;
             ::rtl::OUString m_aTableName;
@@ -115,8 +116,8 @@ namespace connectivity
         typedef sdbcx::OColumn OOrderColumn_BASE;
         typedef ::comphelper::OPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
 
-        class OOrderColumn :    public OOrderColumn_BASE,
-                                public OOrderColumn_PROP
+        class OOO_DLLPUBLIC_DBTOOLS OOrderColumn :
+            public OOrderColumn_BASE, public OOrderColumn_PROP
         {
             sal_Bool        m_bAscending;
             sal_Bool        m_bOrder;

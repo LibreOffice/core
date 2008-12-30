@@ -31,7 +31,7 @@
 #ifndef _CONNECTIVITY_FILE_OPREPAREDSTATEMENT_HXX_
 #define _CONNECTIVITY_FILE_OPREPAREDSTATEMENT_HXX_
 
-
+#include "file/filedllapi.hxx"
 #include "file/FStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -46,7 +46,7 @@ namespace connectivity
     namespace file
     {
 
-        class SAL_NO_VTABLE OPreparedStatement :    public  OStatement_BASE2,
+        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OPreparedStatement : public  OStatement_BASE2,
                                     public  ::com::sun::star::sdbc::XPreparedStatement,
                                     public  ::com::sun::star::sdbc::XParameters,
                                     public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,

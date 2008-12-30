@@ -29,6 +29,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

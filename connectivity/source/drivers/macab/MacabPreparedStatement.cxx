@@ -54,8 +54,8 @@ void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(S
     if (nParams < 1)
         ::dbtools::throwInvalidIndexException(*(MacabPreparedStatement *) this,Any());
 
-    if (nParams >= (sal_Int32) (*m_aParameterRow).size())
-        (*m_aParameterRow).resize(nParams);
+    if (nParams >= (sal_Int32) (m_aParameterRow->get()).size())
+        (m_aParameterRow->get()).resize(nParams);
 }
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::setMacabFields() const throw(SQLException)
@@ -81,7 +81,7 @@ void MacabPreparedStatement::resetParameters() const throw(SQLException)
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const throw(SQLException)
 {
-    if (m_nParameterIndex >= (sal_Int32) (*m_aParameterRow).size())
+    if (m_nParameterIndex >= (sal_Int32) (m_aParameterRow->get()).size())
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceString(
@@ -90,7 +90,7 @@ void MacabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const
         ::dbtools::throwGenericSQLException(sError,*(MacabPreparedStatement *) this);
     }
 
-    rParameter = (*m_aParameterRow)[m_nParameterIndex];
+    rParameter = (m_aParameterRow->get())[m_nParameterIndex];
 
     m_nParameterIndex++;
 }
@@ -117,7 +117,7 @@ void MacabPreparedStatement::disposing()
 
     if (m_aParameterRow.isValid())
     {
-        m_aParameterRow->clear();
+        m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
     }
 }
@@ -209,7 +209,7 @@ void SAL_CALL MacabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int3
 
     checkAndResizeParameters(parameterIndex);
 
-    (*m_aParameterRow)[parameterIndex - 1].setNull();
+    (m_aParameterRow->get())[parameterIndex - 1].setNull();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
@@ -283,7 +283,7 @@ void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const 
 
     checkAndResizeParameters(parameterIndex);
 
-    (*m_aParameterRow)[parameterIndex - 1] = x;
+    (m_aParameterRow->get())[parameterIndex - 1] = x;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException)

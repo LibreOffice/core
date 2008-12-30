@@ -67,8 +67,8 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) thro
 {
     sal_Int32 nValue = 0;
     sal_Bool bFound = sal_False;
-    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->size() )
-        bFound = (*m_aSelectColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)) >>= nValue;
+    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->get().size() )
+        bFound = (m_aSelectColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)) >>= nValue;
 
     if ( !bFound )
         nValue = getNumColAttrib(column,SQL_DESC_NULLABLE);
@@ -77,10 +77,10 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) thro
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OAdabasResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->size() )
+    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->get().size() )
     {
         sal_Bool bAutoIncrement = sal_False;
-        (*m_aSelectColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+        (m_aSelectColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
         return bAutoIncrement;
     }
 

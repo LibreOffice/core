@@ -35,6 +35,8 @@ PRJNAME=connectivity
 TARGET=simpledbt
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/dbtools.pmk
+
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\

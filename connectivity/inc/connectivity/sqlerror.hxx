@@ -39,6 +39,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace connectivity
@@ -72,7 +73,7 @@ namespace connectivity
 
         @see ::com::sun::star::sdb::ErrorCondition
     */
-    class SQLError
+    class OOO_DLLPUBLIC_DBTOOLS SQLError
     {
     public:
         // --------------------------------------------------------------------

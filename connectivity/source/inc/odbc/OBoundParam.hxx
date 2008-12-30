@@ -31,12 +31,13 @@
 #define _CONNECTIVITY_OBOUNPARAM_HXX_
 
 #include <com/sun/star/io/XInputStream.hpp>
+#include "odbc/odbcbasedllapi.hxx"
 
 namespace connectivity
 {
     namespace odbc
     {
-        class OBoundParam
+        class OOO_DLLPUBLIC_ODBCBASE OBoundParam
         {
 
         public:

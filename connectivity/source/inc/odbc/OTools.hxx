@@ -31,6 +31,7 @@
 #define _CONNECTIVITY_OTOOLS_HXX_
 
 #include "odbc/OFunctiondefs.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -104,7 +105,7 @@ namespace connectivity
         const sal_uInt32 ODBC_FRACTION_UNITS_PER_HSECOND = 10000000L;
         const sal_Int32 MAX_PUT_DATA_LENGTH = 2000;
 
-        class OTools
+        class OOO_DLLPUBLIC_ODBCBASE OTools
         {
         public:
             static void ThrowException( OConnection* _pConnection,

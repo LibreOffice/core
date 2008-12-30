@@ -38,6 +38,7 @@
 #include "connectivity/CommonTools.hxx"
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sdbcx/VDescriptor.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity
@@ -52,7 +53,8 @@ namespace connectivity
         typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OColumn_BASE;
 
 
-        class OColumn            :  public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_DBTOOLS OColumn :
+                                    public comphelper::OBaseMutex,
                                     public OColumn_BASE,
                                     public OColumnDescriptor_BASE,
                                     public OColumn_PROP,

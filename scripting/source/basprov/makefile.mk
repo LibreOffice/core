@@ -34,6 +34,7 @@ PRJ=..$/..
 PRJNAME=scripting
 TARGET=basprov
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 COMP1TYPELIST=$(TARGET)
 
 # --- Settings -----------------------------------------------------

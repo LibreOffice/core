@@ -89,6 +89,7 @@
 
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
+#include "OSubComponent.hxx"
 
 #include <algorithm>
 
@@ -2007,8 +2008,8 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 
 }
 // -------------------------------------------------------------------------
-    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
-                                        OSQLColumns::const_iterator __last,
+    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
+                                        OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
@@ -2016,8 +2017,8 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         return find(__first,__last,sName,_rVal,_rCase);
     }
     // -------------------------------------------------------------------------
-    OSQLColumns::const_iterator findRealName(   OSQLColumns::const_iterator __first,
-                                        OSQLColumns::const_iterator __last,
+    OSQLColumns::Vector::const_iterator findRealName(   OSQLColumns::Vector::const_iterator __first,
+                                        OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
@@ -2025,8 +2026,8 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         return find(__first,__last,sRealName,_rVal,_rCase);
     }
     // -------------------------------------------------------------------------
-    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
-                                        OSQLColumns::const_iterator __last,
+    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
+                                        OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)

@@ -49,6 +49,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(TARGET)
 
 .INCLUDE : settings.mk
+.INCLUDE :  $(PRJ)$/dbtools.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 

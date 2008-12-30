@@ -32,6 +32,8 @@
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include "connectivity/dbtoolsdllapi.hxx"
+
 namespace com
 {
     namespace sun
@@ -47,7 +49,7 @@ namespace com
 }
 namespace connectivity
 {
-
+    OOO_DLLPUBLIC_DBTOOLS
     void release(oslInterlockedCount& _refCount,
                  ::cppu::OBroadcastHelper& rBHelper,
                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,

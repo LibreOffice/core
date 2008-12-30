@@ -29,6 +29,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdobj.hxx>

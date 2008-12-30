@@ -46,7 +46,7 @@ using namespace connectivity::mozab;
 
 static MozillaBootstrap *pMozillaBootstrap=NULL;
 static Reference<XMozillaBootstrap> xMozillaBootstrap;
-extern "C" void*  SAL_CALL OMozillaBootstrap_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
 {
     if (!pMozillaBootstrap)
     {
@@ -244,7 +244,8 @@ using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -270,7 +271,7 @@ void REGISTER_PROVIDER(
         xNewKey->createKey(Services[i]);
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 void* /*pServiceManager*/,
                 void* pRegistryKey
             )
@@ -302,7 +303,7 @@ static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiS
         return *pBootstrap;
 }
 
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                                         const sal_Char* pImplementationName,
                                         void* pServiceManager,
                                         void* /*pRegistryKey*/)

@@ -39,6 +39,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <memory>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace dbtools
@@ -51,7 +52,7 @@ namespace dbtools
     struct StatementComposer_Data;
     /** a class which is able to compose queries (SELECT statements) from a command and a command type
     */
-    class StatementComposer : public ::boost::noncopyable
+    class OOO_DLLPUBLIC_DBTOOLS StatementComposer : public ::boost::noncopyable
     {
         ::std::auto_ptr< StatementComposer_Data >   m_pData;
 

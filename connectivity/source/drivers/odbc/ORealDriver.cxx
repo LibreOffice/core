@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include "ORealDriver.hxx"
 #include "odbc/ODriver.hxx"
 #include "odbc/OTools.hxx"
 #include "odbc/OFunctions.hxx"

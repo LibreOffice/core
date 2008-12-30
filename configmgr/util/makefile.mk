@@ -36,6 +36,7 @@ TARGET=configmgr
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 DLLPRE = 
 

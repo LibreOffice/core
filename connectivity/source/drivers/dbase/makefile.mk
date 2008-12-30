@@ -34,6 +34,8 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=dbase
 
+VISIBILITY_HIDDEN=TRUE
+
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/

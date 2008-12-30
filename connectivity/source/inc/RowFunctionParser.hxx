@@ -37,12 +37,13 @@
 #endif
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <vector>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 // -------------------------------------------------------------------------
 namespace connectivity
 {
 // -------------------------------------------------------------------------
-struct RowEquation
+struct OOO_DLLPUBLIC_DBTOOLS RowEquation
 {
     sal_Int32   nOperation;
     ORowSetValueDecoratorRef    nPara[ 3 ];
@@ -66,7 +67,7 @@ enum ExpressionFunct
 
 #define EXPRESSION_FLAG_SUMANGLE_MODE 1
 
-class SAL_NO_VTABLE ExpressionNode
+class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE ExpressionNode
 {
 public:
     virtual ~ExpressionNode(){}
@@ -93,13 +94,13 @@ typedef ::boost::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
 /** This exception is thrown, when the arithmetic expression
     parser failed to parse a string.
     */
-struct ParseError
+struct OOO_DLLPUBLIC_DBTOOLS ParseError
 {
     ParseError() {}
     ParseError( const char* ) {}
 };
 
-class FunctionParser
+class OOO_DLLPUBLIC_DBTOOLS FunctionParser
 {
 public:
 

@@ -34,10 +34,11 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class DateConversion
+    class OOO_DLLPUBLIC_DBTOOLS DateConversion
     {
     public:
         static sal_Int32 toINT32(const ::com::sun::star::util::Date&)

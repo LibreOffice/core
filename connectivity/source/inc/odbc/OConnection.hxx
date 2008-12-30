@@ -33,6 +33,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "odbc/OFunctiondefs.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include "OSubComponent.hxx"
 #include "connectivity/CommonTools.hxx"
 #include "TConnection.hxx"
@@ -56,7 +57,8 @@ namespace connectivity
         typedef connectivity::OMetaConnection OConnection_BASE;
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
-        class OConnection : public OConnection_BASE,
+        class OOO_DLLPUBLIC_ODBCBASE OConnection :
+                            public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>,
                             public OAutoRetrievingBase
         {

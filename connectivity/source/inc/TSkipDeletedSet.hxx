@@ -34,13 +34,14 @@
 #include <rtl/alloc.h>
 #include <hash_map>
 #include <vector>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
     /**
         the class OSkipDeletedSet supports a general method to skip deleted rows
     */
-    class OSkipDeletedSet
+    class OOO_DLLPUBLIC_DBTOOLS OSkipDeletedSet
     {
         ::std::vector<sal_Int32>                m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
         IResultSetHelper*                       m_pHelper;            // used for moving in the resultset

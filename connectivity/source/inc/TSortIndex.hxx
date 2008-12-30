@@ -30,6 +30,7 @@
 #ifndef CONNECTIVITY_TSORTINDEX_HXX
 #define CONNECTIVITY_TSORTINDEX_HXX
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "TKeyValue.hxx"
 
 namespace connectivity
@@ -54,7 +55,7 @@ namespace connectivity
         The class OSortIndex can be used to implement a sorted index.
         This can depend on the fields which should be sorted.
     */
-    class OSortIndex
+    class OOO_DLLPUBLIC_DBTOOLS OSortIndex
     {
     public:
         typedef ::std::vector< ::std::pair<sal_Int32,OKeyValue*> >  TIntValuePairVector;
@@ -123,14 +124,14 @@ namespace connectivity
         The class OKeySet is a refcountable vector which also has a state.
         This state gives information about if the keyset is fixed.
     */
-    class OKeySet : public ORefVector<sal_Int32>
+    class OOO_DLLPUBLIC_DBTOOLS OKeySet : public ORefVector<sal_Int32>
     {
         sal_Bool m_bFrozen;
     public:
         OKeySet()
             : ORefVector<sal_Int32>()
             , m_bFrozen(sal_False){}
-        OKeySet(size_type _nSize)
+        OKeySet(Vector::size_type _nSize)
             : ORefVector<sal_Int32>(_nSize)
             , m_bFrozen(sal_False){}
 

@@ -35,6 +35,7 @@
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustring.hxx>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //.........................................................................
 namespace dbtools
@@ -58,7 +59,7 @@ namespace dbtools
         </ul>
         </p>
     */
-    class OCharsetMap
+    class OOO_DLLPUBLIC_DBTOOLS OCharsetMap
     {
     protected:
         DECLARE_STL_STDKEY_SET( rtl_TextEncoding, TextEncBag );
@@ -103,7 +104,7 @@ namespace dbtools
     //-------------------------------------------------------------------------
     //- CharsetIteratorDerefHelper
     //-------------------------------------------------------------------------
-    class CharsetIteratorDerefHelper
+    class OOO_DLLPUBLIC_DBTOOLS CharsetIteratorDerefHelper
     {
         friend class OCharsetMap::CharsetIterator;
 
@@ -126,11 +127,11 @@ namespace dbtools
     //-------------------------------------------------------------------------
     //- OCharsetMap::CharsetIterator
     //-------------------------------------------------------------------------
-    class OCharsetMap::CharsetIterator
+    class OOO_DLLPUBLIC_DBTOOLS OCharsetMap::CharsetIterator
     {
         friend class OCharsetMap;
 
-        friend bool operator==(const CharsetIterator& lhs, const CharsetIterator& rhs);
+        friend OOO_DLLPUBLIC_DBTOOLS bool operator==(const CharsetIterator& lhs, const CharsetIterator& rhs);
         friend bool operator!=(const CharsetIterator& lhs, const CharsetIterator& rhs) { return !(lhs == rhs); }
 
 //      friend sal_Int32 operator-(const CharsetIterator& lhs, const CharsetIterator& rhs);

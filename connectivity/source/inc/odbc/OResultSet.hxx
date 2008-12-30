@@ -46,6 +46,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include "odbc/OFunctions.hxx"
 #include "odbc/OStatement.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/FValue.hxx"
 #include "TSkipDeletedSet.hxx"
@@ -77,7 +78,7 @@ namespace connectivity
         typedef ::std::vector<TVoidPtr> TVoidVector;
         //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
         /// unary_function Functor object for class ZZ returntype is void
-        struct TBookmarkPosMapCompare : ::std::less< ::com::sun::star::uno::Sequence<sal_Int8> >
+        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : ::std::binary_function< ::com::sun::star::uno::Sequence<sal_Int8>, ::com::sun::star::uno::Sequence<sal_Int8>, bool >
         {
             inline bool operator()( const ::com::sun::star::uno::Sequence<sal_Int8>& _rLH,
                                     const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH) const
@@ -114,7 +115,8 @@ namespace connectivity
 
         typedef ::std::map< ::com::sun::star::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
-        class OResultSet :  public  comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_ODBCBASE OResultSet :
+                            public  comphelper::OBaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,

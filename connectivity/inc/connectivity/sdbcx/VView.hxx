@@ -40,6 +40,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/container/XNamed.hpp>
 #include "connectivity/sdbcx/VDescriptor.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <comphelper/IdPropArrayHelper.hxx>
 
 namespace connectivity
@@ -50,7 +51,7 @@ namespace connectivity
         typedef ::cppu::OWeakObject OView_BASE;
 
 
-        class OViewHelper
+        class OOO_DLLPUBLIC_DBTOOLS OViewHelper
         {
         protected:
             ::osl::Mutex             m_aMutex;
@@ -60,7 +61,8 @@ namespace connectivity
             OViewHelper(): rBHelper(m_aMutex){}
         };
 
-        class OView :   public OViewHelper,
+        class OOO_DLLPUBLIC_DBTOOLS OView :
+                        public OViewHelper,
                         public OView_BASE,
                         public ::com::sun::star::container::XNamed,
                         public ::com::sun::star::lang::XServiceInfo,

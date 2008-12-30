@@ -36,6 +36,7 @@
 /** === end UNO includes === **/
 
 #include <memory>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace dbtools
@@ -57,7 +58,7 @@ namespace dbtools
             Once CWS dba30 is integrated, we could easily add all the meta data
             which is part of the "Info" property of a data source.
     */
-    class DatabaseMetaData
+    class OOO_DLLPUBLIC_DBTOOLS DatabaseMetaData
     {
     private:
         ::std::auto_ptr< DatabaseMetaData_Impl >    m_pImpl;

@@ -31,6 +31,7 @@
 #ifndef CONNECTIVITY_PARAMWRAPPER_HXX
 #define CONNECTIVITY_PARAMWRAPPER_HXX
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/FValue.hxx>
 
 /** === begin UNO includes === **/
@@ -62,7 +63,7 @@ namespace param
     /** wraps a parameter column as got from an SQLQueryComposer, so that it has an additional
         property "Value", which is forwarded to an XParameters interface
     */
-    class ParameterWrapper  :public ::cppu::OWeakObject
+    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapper  :public ::cppu::OWeakObject
                             ,public ::comphelper::OMutexAndBroadcastHelper
                             ,public ::cppu::OPropertySetHelper
     {
@@ -142,7 +143,8 @@ namespace param
                                                 >   ParameterWrapperContainer_Base;
 
     /// class for the parameter event @see approveParameter
-    class ParameterWrapperContainer : public ParameterWrapperContainer_Base
+    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapperContainer :
+        public ParameterWrapperContainer_Base
     {
     private:
         ::osl::Mutex    m_aMutex;

@@ -34,7 +34,7 @@
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "connectivity/sdbcx/IRefreshable.hxx"
-
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -42,7 +42,7 @@ namespace connectivity
     class OColumnsHelperImpl;
     /** contains generell column handling to creat default columns and default sql statements.
     */
-    class OColumnsHelper : public sdbcx::OCollection
+    class OOO_DLLPUBLIC_DBTOOLS OColumnsHelper : public sdbcx::OCollection
     {
         OColumnsHelperImpl* m_pImpl;
     protected:

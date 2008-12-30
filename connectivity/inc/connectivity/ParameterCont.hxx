@@ -32,12 +32,14 @@
 
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <comphelper/interaction.hxx>
+#include "connectivity/dbtoolsdllapi.hxx"
+
 namespace dbtools
 {
 //====================================================================
     //= OParameterContinuation
     //====================================================================
-    class OParameterContinuation : public comphelper::OInteraction< ::com::sun::star::sdb::XInteractionSupplyParameters >
+    class OOO_DLLPUBLIC_DBTOOLS OParameterContinuation : public comphelper::OInteraction< ::com::sun::star::sdb::XInteractionSupplyParameters >
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aValues;
 

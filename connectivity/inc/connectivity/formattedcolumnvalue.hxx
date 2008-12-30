@@ -41,6 +41,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <memory>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace comphelper { class ComponentContext; }
 
@@ -56,7 +57,7 @@ namespace dbtools
     /** a class which helps retrieving and setting the value of a database column
         as formatted string.
     */
-    class FormattedColumnValue : public ::boost::noncopyable
+    class OOO_DLLPUBLIC_DBTOOLS FormattedColumnValue : public ::boost::noncopyable
     {
     public:
         /** constructs an instance

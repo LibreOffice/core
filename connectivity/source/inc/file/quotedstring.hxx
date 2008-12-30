@@ -32,6 +32,7 @@
 #define CONNECTIVITY_QUOTED_STRING_HXX
 
 #include <tools/string.hxx>
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
@@ -39,7 +40,7 @@ namespace connectivity
     // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
     // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
     //==================================================================
-    class QuotedTokenizedString : public String
+    class OOO_DLLPUBLIC_FILE QuotedTokenizedString : public String
     {
     public:
         QuotedTokenizedString(){}

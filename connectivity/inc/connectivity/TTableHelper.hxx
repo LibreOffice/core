@@ -31,6 +31,7 @@
 #ifndef CONNECTIVITY_TABLEHELPER_HXX
 #define CONNECTIVITY_TABLEHELPER_HXX
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VTable.hxx"
 #include "connectivity/sdbcx/VKey.hxx"
 #include "connectivity/StdTypeDefs.hxx"
@@ -40,11 +41,11 @@ namespace connectivity
 {
     typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-    ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
     DECLARE_STL_USTRINGACCESS_MAP( sdbcx::TKeyProperties , TKeyMap);
 
-    class OTableHelper : public OTable_TYPEDEF
+    class OOO_DLLPUBLIC_DBTOOLS OTableHelper : public OTable_TYPEDEF
     {
         TKeyMap  m_aKeys;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;

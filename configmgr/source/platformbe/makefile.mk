@@ -42,6 +42,7 @@ SYSMGR_MAJOR=1
 # --- Settings ---
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 DLLPRE =
 
 # --- Files ---

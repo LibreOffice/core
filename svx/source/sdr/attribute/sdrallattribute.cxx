@@ -29,6 +29,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #include <drawinglayer/attribute/fillattribute.hxx>

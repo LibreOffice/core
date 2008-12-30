@@ -72,9 +72,7 @@ public:
     virtual bool next(rtl::OUString * argument) {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_count) {
-            if (!rtl_getAppCommandArg(m_index++, &argument->pData )) {
-                OSL_ASSERT(false);
-            }
+            rtl_getAppCommandArg(m_index++, &argument->pData);
             return true;
         } else {
             return false;

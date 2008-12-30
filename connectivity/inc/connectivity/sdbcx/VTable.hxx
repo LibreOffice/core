@@ -45,6 +45,7 @@
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "connectivity/sdbcx/VDescriptor.hxx"
 #include "connectivity/CommonTools.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity
@@ -68,7 +69,8 @@ namespace connectivity
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OTable> OTable_PROP;
 
 
-        class OTable :           public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_DBTOOLS OTable :
+                                 public comphelper::OBaseMutex,
                                  public OTable_BASE,
                                  public OTableDescriptor_BASE,
                                  public IRefreshableColumns,

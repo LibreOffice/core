@@ -60,7 +60,8 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 //------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /* ppEnv */
             )
@@ -70,17 +71,19 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *aServiceManager,
-                                                 void *aRegistryKey) {
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+    void *aServiceManager, void *aRegistryKey)
+{
     return cppu::component_writeInfoHelper(aServiceManager,
                                            aRegistryKey,
                                            kImplementations_entries) ;
 }
 //------------------------------------------------------------------------------
 
-extern "C" void *component_getFactory(const sal_Char *aImplementationName,
-                                      void *aServiceManager,
-                                      void *aRegistryKey) {
+extern "C" SAL_DLLPUBLIC_EXPORT void *component_getFactory(
+    const sal_Char *aImplementationName, void *aServiceManager,
+    void *aRegistryKey)
+{
     return cppu::component_getFactoryHelper(aImplementationName,
                                             aServiceManager,
                                             aRegistryKey,

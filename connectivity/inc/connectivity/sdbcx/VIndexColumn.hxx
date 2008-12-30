@@ -31,6 +31,7 @@
 #ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 #define _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 
 namespace connectivity
@@ -40,8 +41,8 @@ namespace connectivity
         class OIndexColumn;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
 
-        class OIndexColumn :    public OColumn,
-                                public OIndexColumn_PROP
+        class OOO_DLLPUBLIC_DBTOOLS OIndexColumn :
+            public OColumn, public OIndexColumn_PROP
         {
         protected:
             sal_Bool    m_IsAscending;

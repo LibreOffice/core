@@ -36,6 +36,7 @@
 
 #include <rtl/ustring.hxx>
 #include <list>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace connectivity
@@ -49,7 +50,7 @@ namespace connectivity
     /** helper class for accessing resources shared by different libraries
         in the connectivity module
     */
-    class SharedResources
+    class OOO_DLLPUBLIC_DBTOOLS SharedResources
     {
     public:
         SharedResources();

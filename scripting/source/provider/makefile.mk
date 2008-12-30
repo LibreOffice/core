@@ -34,6 +34,7 @@ PRJNAME=	scripting
 TARGET=		provider
 USE_DEFFILE=	TRUE
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 COMP1TYPELIST=$(TARGET)
 
 # --- Settings -----------------------------------------------------

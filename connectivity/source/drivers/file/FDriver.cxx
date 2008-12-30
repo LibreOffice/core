@@ -245,9 +245,9 @@ void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORe
 {
     // den alten namen beibehalten
 
-    OSL_ENSURE(getRowPos() < rParameterColumns->size(),"Invalid index for orderkey values!");
+    OSL_ENSURE(getRowPos() < rParameterColumns->get().size(),"Invalid index for orderkey values!");
 
-    Reference< XPropertySet> xColumn = (*rParameterColumns)[getRowPos()];
+    Reference< XPropertySet> xColumn = (rParameterColumns->get())[getRowPos()];
 
     try
     {

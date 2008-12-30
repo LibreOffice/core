@@ -32,10 +32,12 @@
 
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class OResultSetPrivileges : public ODatabaseMetaDataResultSet
+    class OOO_DLLPUBLIC_DBTOOLS OResultSetPrivileges :
+        public ODatabaseMetaDataResultSet
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>   m_xTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>         m_xRow;

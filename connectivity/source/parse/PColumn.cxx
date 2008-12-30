@@ -103,10 +103,10 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
     const Reference< XDatabaseMetaData >& _rxDBMetaData )
 {
     sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
-    ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->reserve( nColumnCount );
+    ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
 
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
-        aReturn->push_back( createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i ) );
+        aReturn->get().push_back( createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i ) );
 
     return aReturn;
 }

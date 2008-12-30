@@ -32,10 +32,11 @@
 #define CONNECTIVITY_TRESULTSETHELPER_HXX
 
 #include <sal/types.h>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class SAL_NO_VTABLE IResultSetHelper
+    class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IResultSetHelper
     {
     public:
         enum Movement

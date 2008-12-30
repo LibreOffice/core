@@ -31,10 +31,11 @@
 #define _CONNECTIVITY_AUTOKEYRETRIEVINGBASE_HXX_
 
 #include <rtl/ustring.hxx>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class OAutoRetrievingBase
+    class OOO_DLLPUBLIC_DBTOOLS OAutoRetrievingBase
     {
         ::rtl::OUString m_sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
         sal_Bool        m_bAutoRetrievingEnabled; // set to when we should allow to query for generated values

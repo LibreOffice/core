@@ -110,14 +110,14 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     if(!m_aColumns.isValid())
         m_aColumns = new OSQLColumns();
     else
-        m_aColumns->clear();
+        m_aColumns->get().clear();
 
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
     // reserve some space
     m_aColumnRawNames.reserve(nFieldCount);
-    m_aColumns->reserve(nFieldCount);
+    m_aColumns->get().reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
@@ -283,12 +283,12 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
         // check if the columname already exists
         String aAlias(aColumnName);
-        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->end())
+        while(aFind != m_aColumns->get().end())
         {
             (aAlias = aColumnName) += String::CreateFromInt32(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
         m_aColumnRawNames.push_back(::rtl::OUString(aAlias));
@@ -430,9 +430,9 @@ void OEvoabTable::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
-    aVector.reserve(m_aColumns->size());
+    aVector.reserve(m_aColumns->get().size());
 
-    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
+    for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != m_aColumns->get().end();++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
     if(m_pColumns)
@@ -514,7 +514,7 @@ sal_Int64 OEvoabTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
 //------------------------------------------------------------------
 sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
-    *(*_rRow)[0] = m_nFilePos;
+    *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
@@ -523,14 +523,14 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
     // Felder:
     xub_StrLen nStartPos = 0;
     String aStr;
-    OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Int32 i = 0; aIter != _rCols.end();++aIter, ++i)
+    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
+    for (sal_Int32 i = 0; aIter != _rCols.get().end();++aIter, ++i)
     {
         m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
         //OSL_TRACE("OEvoabTable::fetchRow()::aStr = %s\n", ((OUtoCStr(::rtl::OUString(aStr))) ? (OUtoCStr(::rtl::OUString(aStr))):("NULL")) );
 
         if (aStr.Len() == 0)
-            (*_rRow)[i+1]->setNull();
+            (_rRow->get())[i+1]->setNull();
         else
         {
             // Laengen je nach Datentyp:
@@ -564,18 +564,18 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                         switch(nType)
                         {
                             case DataType::DATE:
-                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                *(_rRow->get())[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                *(_rRow->get())[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                *(_rRow->get())[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i+1]->setNull();
+                        (_rRow->get())[i+1]->setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -609,15 +609,15 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        *(*_rRow)[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
+                        *(_rRow->get())[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
-                        *(*_rRow)[i+1] = nVal;
+                        *(_rRow->get())[i+1] = nVal;
                 } break;
 
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    *(*_rRow)[i+1] = ORowSetValue(aStr);
+                    *(_rRow->get())[i+1] = ORowSetValue(aStr);
                 }
                 break;
             }
@@ -632,8 +632,8 @@ sal_Bool OEvoabTable::setColumnAliases()
     size_t nSize = m_aColumnRawNames.size();
     if(nSize == 0 || m_aPrecisions.size() != nSize || m_aScales.size() != nSize || m_aTypes.size() != nSize)
         return sal_False;
-    m_aColumns->clear();
-    m_aColumns->reserve(nSize);
+    m_aColumns->get().clear();
+    m_aColumns->get().reserve(nSize);
     ::rtl::OUString  aColumnReadName;
     ::rtl::OUString  aColumnHeadlineName;
     ::rtl::OUString  aColumnDisplayName;
@@ -690,7 +690,7 @@ sal_Bool OEvoabTable::setColumnAliases()
                                                 sal_False,
                                                 bCase);
         Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->get().push_back(xCol);
     }
     return sal_True;
 }

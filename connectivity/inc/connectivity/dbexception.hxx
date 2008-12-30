@@ -33,6 +33,7 @@
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include "connectivity/standardsqlstate.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace com
 {
@@ -69,7 +70,7 @@ enum OOoBaseErrorCode
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
 //==============================================================================
 
-class SQLExceptionInfo
+class OOO_DLLPUBLIC_DBTOOLS SQLExceptionInfo
 {
 public:
     enum TYPE { SQL_EXCEPTION, SQL_WARNING, SQL_CONTEXT, UNDEFINED };
@@ -157,7 +158,7 @@ protected:
 //= SQLExceptionIteratorHelper - iterating through an SQLException chain
 //==============================================================================
 
-class SQLExceptionIteratorHelper
+class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper
 {
 protected:
     const ::com::sun::star::sdbc::SQLException* m_pCurrent;
@@ -242,7 +243,7 @@ public:
     @raises RuntimeException
         in case of an internal error
 */
-::rtl::OUString getStandardSQLState( StandardSQLState _eState );
+OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getStandardSQLState( StandardSQLState _eState );
 
 //----------------------------------------------------------------------------------
 /** returns a standard ASCII string for a given SQLState
@@ -254,10 +255,10 @@ public:
     @raises RuntimeException
         in case of an internal error
 */
-const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState );
+OOO_DLLPUBLIC_DBTOOLS const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState );
 
 //----------------------------------------------------------------------------------
-void throwFunctionNotSupportedException(
+OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
         const ::rtl::OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
@@ -267,7 +268,7 @@ void throwFunctionNotSupportedException(
 //----------------------------------------------------------------------------------
 /** throws an exception with SQL state IM001, saying that a certain function is not supported
 */
-void throwFunctionNotSupportedException(
+OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
         const sal_Char* _pAsciiFunctionName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException = NULL
@@ -277,7 +278,7 @@ void throwFunctionNotSupportedException(
 //----------------------------------------------------------------------------------
 /** throws a function sequence (HY010) exception
 */
-void throwFunctionSequenceException(
+OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
     )
@@ -286,7 +287,7 @@ void throwFunctionSequenceException(
 //----------------------------------------------------------------------------------
 /** throw a invalid index sqlexception
 */
-void throwInvalidIndexException(
+OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
     )
@@ -295,7 +296,7 @@ void throwInvalidIndexException(
 //----------------------------------------------------------------------------------
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
-void throwGenericSQLException(
+OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const ::rtl::OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource
     )
@@ -304,7 +305,7 @@ void throwGenericSQLException(
 //----------------------------------------------------------------------------------
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
-void throwGenericSQLException(
+OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const ::rtl::OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource,
         const ::com::sun::star::uno::Any& _rNextException
@@ -321,7 +322,7 @@ void throwGenericSQLException(
     @param _pNextException
         the next exception to chain into the thrown exception, if any
 */
-void throwFeatureNotImplementedException(
+OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedException(
         const sal_Char* _pAsciiFeatureName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException = NULL
@@ -331,7 +332,7 @@ void throwFeatureNotImplementedException(
 //----------------------------------------------------------------------------------
 /** throws an SQLException
 */
-void throwSQLException(
+OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const sal_Char* _pAsciiMessage,
         const sal_Char* _pAsciiState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
@@ -343,7 +344,7 @@ void throwSQLException(
 //----------------------------------------------------------------------------------
 /** throws an SQLException
 */
-void throwSQLException(
+OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const sal_Char* _pAsciiMessage,
         StandardSQLState _eSQLState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
@@ -355,7 +356,7 @@ void throwSQLException(
 //----------------------------------------------------------------------------------
 /** throws an SQLException
 */
-void throwSQLException(
+OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const ::rtl::OUString& _rMessage,
         StandardSQLState _eSQLState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,

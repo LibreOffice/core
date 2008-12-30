@@ -36,10 +36,11 @@
 #ifndef _MAP_
 #include <map>
 #endif
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace dbtools
 {
-    class OPropertyMap
+    class OOO_DLLPUBLIC_DBTOOLS OPropertyMap
     {
         ::std::map<sal_Int32 , rtl_uString*> m_aPropertyMap;
 
@@ -59,7 +60,7 @@ namespace connectivity
     {
         typedef const sal_Char* (*PVFN)();
 
-        struct UStringDescription
+        struct OOO_DLLPUBLIC_DBTOOLS UStringDescription
         {
             const sal_Char* pZeroTerminatedName;
             sal_Int32 nLength;

@@ -44,6 +44,7 @@
 #include <comphelper/uno3.hxx>
 #include "connectivity/CommonTools.hxx"
 #include "file/FConnection.hxx"
+#include "file/filedllapi.hxx"
 #ifndef _LIST_
 #include <list>
 #endif
@@ -68,7 +69,8 @@ namespace connectivity
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
-        class OStatement_Base       :   public  comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_FILE OStatement_Base :
+                                        public  comphelper::OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::comphelper::OPropertyContainer,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
@@ -180,7 +182,8 @@ namespace connectivity
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
-        class OStatement_BASE2 :    public OStatement_Base,
+        class OOO_DLLPUBLIC_FILE OStatement_BASE2 :
+                                    public OStatement_Base,
                                     public connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>
 
         {
@@ -195,7 +198,8 @@ namespace connectivity
         };
 
         typedef ::cppu::ImplHelper2< ::com::sun::star::sdbc::XStatement,::com::sun::star::lang::XServiceInfo > OStatement_XStatement;
-        class OStatement :  public OStatement_BASE2,
+        class OOO_DLLPUBLIC_FILE OStatement :
+                            public OStatement_BASE2,
                             public OStatement_XStatement
         {
         protected:

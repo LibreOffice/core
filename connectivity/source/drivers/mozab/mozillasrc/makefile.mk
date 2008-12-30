@@ -42,6 +42,7 @@ TARGET=mozabsrc
 
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""

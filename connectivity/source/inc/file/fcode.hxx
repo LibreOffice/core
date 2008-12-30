@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "connectivity/FValue.hxx"
-
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
@@ -58,7 +58,7 @@ namespace connectivity
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> OFileColumns;
 
 
-        class OCode
+        class OOO_DLLPUBLIC_FILE OCode
         {
         public:
             OCode();
@@ -78,7 +78,7 @@ namespace connectivity
 
 
         // operands that the parsetree generate
-        class OOperand : public OCode
+        class OOO_DLLPUBLIC_FILE OOperand : public OCode
         {
         protected:
             sal_Int32 m_eDBType;
@@ -97,7 +97,7 @@ namespace connectivity
             TYPEINFO();
         };
 
-        class OOperandRow : public OOperand
+        class OOO_DLLPUBLIC_FILE OOperandRow : public OOperand
         {
             sal_uInt16  m_nRowPos;
         protected:
@@ -114,7 +114,7 @@ namespace connectivity
         };
 
         // Attribute aus einer Ergebniszeile
-        class OOperandAttr : public OOperandRow
+        class OOO_DLLPUBLIC_FILE OOperandAttr : public OOperandRow
         {
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xColumn;
@@ -129,7 +129,7 @@ namespace connectivity
         };
 
         // Parameter fuer ein Praedikat
-        class OOperandParam : public OOperandRow
+        class OOO_DLLPUBLIC_FILE OOperandParam : public OOperandRow
         {
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
@@ -139,7 +139,7 @@ namespace connectivity
         };
 
         // WerteOperanden
-        class OOperandValue : public OOperand
+        class OOO_DLLPUBLIC_FILE OOperandValue : public OOperand
         {
         protected:
             ORowSetValue m_aValue;
@@ -161,7 +161,7 @@ namespace connectivity
 
 
         // Konstanten
-        class OOperandConst : public OOperandValue
+        class OOO_DLLPUBLIC_FILE OOperandConst : public OOperandValue
         {
         public:
             OOperandConst(const connectivity::OSQLParseNode& rColumnRef, const rtl::OUString& aStrValue);
@@ -171,7 +171,7 @@ namespace connectivity
 
 
         // Ergebnis Operanden
-        class OOperandResult : public OOperandValue
+        class OOO_DLLPUBLIC_FILE OOperandResult : public OOperandValue
         {
         protected:
             OOperandResult(const ORowSetValue& _rVar, sal_Int32 eDbType)
@@ -185,7 +185,7 @@ namespace connectivity
         };
 
 
-        class OOperandResultBOOL : public OOperandResult
+        class OOO_DLLPUBLIC_FILE OOperandResultBOOL : public OOperandResult
         {
         public:
             OOperandResultBOOL(sal_Bool bResult) : OOperandResult(::com::sun::star::sdbc::DataType::BIT)
@@ -195,7 +195,7 @@ namespace connectivity
             }
         };
 
-        class OOperandResultNUM : public OOperandResult
+        class OOO_DLLPUBLIC_FILE OOperandResultNUM : public OOperandResult
         {
         public:
             OOperandResultNUM(double fNum) : OOperandResult(::com::sun::star::sdbc::DataType::DOUBLE)
@@ -208,7 +208,7 @@ namespace connectivity
         /** special stop operand
             is appended when a list of arguments ends
         */
-        class OStopOperand : public OOperandValue
+        class OOO_DLLPUBLIC_FILE OStopOperand : public OOperandValue
         {
         public:
             OStopOperand(){}
@@ -216,7 +216,7 @@ namespace connectivity
         };
 
         // Operatoren
-        class OOperator : public OCode
+        class OOO_DLLPUBLIC_FILE OOperator : public OCode
         {
         public:
             virtual void Exec(OCodeStack&) = 0;
@@ -228,7 +228,7 @@ namespace connectivity
 
         // boolsche Operatoren
 
-        class OBoolOperator : public OOperator
+        class OOO_DLLPUBLIC_FILE OBoolOperator : public OOperator
         {
         public:
             TYPEINFO();
@@ -237,7 +237,7 @@ namespace connectivity
         };
 
 
-        class OOp_AND : public OBoolOperator
+        class OOO_DLLPUBLIC_FILE OOp_AND : public OBoolOperator
         {
         public:
             TYPEINFO();
@@ -246,7 +246,7 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
-        class OOp_OR : public OBoolOperator
+        class OOO_DLLPUBLIC_FILE OOp_OR : public OBoolOperator
         {
         public:
             TYPEINFO();
@@ -254,7 +254,7 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
-        class OOp_ISNULL : public OBoolOperator
+        class OOO_DLLPUBLIC_FILE OOp_ISNULL : public OBoolOperator
         {
         public:
             TYPEINFO();
@@ -264,14 +264,14 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand* = NULL) const;
         };
 
-        class OOp_ISNOTNULL : public OOp_ISNULL
+        class OOO_DLLPUBLIC_FILE OOp_ISNOTNULL : public OOp_ISNULL
         {
         public:
             TYPEINFO();
             virtual sal_Bool operate(const OOperand*, const OOperand* = NULL) const;
         };
 
-        class OOp_LIKE : public OBoolOperator
+        class OOO_DLLPUBLIC_FILE OOp_LIKE : public OBoolOperator
         {
         public:
             TYPEINFO();
@@ -284,7 +284,7 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
-        class OOp_NOTLIKE : public OOp_LIKE
+        class OOO_DLLPUBLIC_FILE OOp_NOTLIKE : public OOp_LIKE
         {
         public:
             TYPEINFO();
@@ -294,7 +294,7 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
-        class OOp_COMPARE : public OBoolOperator
+        class OOO_DLLPUBLIC_FILE OOp_COMPARE : public OBoolOperator
         {
             sal_Int32 aPredicateType;
 
@@ -309,7 +309,7 @@ namespace connectivity
 
         // numerische Operatoren
 
-        class ONumOperator : public OOperator
+        class OOO_DLLPUBLIC_FILE ONumOperator : public OOperator
         {
         public:
             virtual void Exec(OCodeStack&);
@@ -320,25 +320,25 @@ namespace connectivity
             virtual double operate(const double& fLeft,const double& fRight) const = 0;
         };
 
-        class OOp_ADD : public ONumOperator
+        class OOO_DLLPUBLIC_FILE OOp_ADD : public ONumOperator
         {
         protected:
             virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
-        class OOp_SUB : public ONumOperator
+        class OOO_DLLPUBLIC_FILE OOp_SUB : public ONumOperator
         {
         protected:
             virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
-        class OOp_MUL : public ONumOperator
+        class OOO_DLLPUBLIC_FILE OOp_MUL : public ONumOperator
         {
         protected:
             virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
-        class OOp_DIV : public ONumOperator
+        class OOO_DLLPUBLIC_FILE OOp_DIV : public ONumOperator
         {
         protected:
             virtual double operate(const double& fLeft,const double& fRight) const;
@@ -350,7 +350,7 @@ namespace connectivity
         }
 
         // operator
-        class ONthOperator : public OOperator
+        class OOO_DLLPUBLIC_FILE ONthOperator : public OOperator
         {
         public:
             virtual void Exec(OCodeStack&);
@@ -361,7 +361,7 @@ namespace connectivity
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const = 0;
         };
 
-        class OBinaryOperator : public OOperator
+        class OOO_DLLPUBLIC_FILE OBinaryOperator : public OOperator
         {
         public:
             virtual void Exec(OCodeStack&);
@@ -372,7 +372,7 @@ namespace connectivity
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const = 0;
         };
 
-        class OUnaryOperator : public OOperator
+        class OOO_DLLPUBLIC_FILE OUnaryOperator : public OOperator
         {
         public:
             virtual void Exec(OCodeStack&);

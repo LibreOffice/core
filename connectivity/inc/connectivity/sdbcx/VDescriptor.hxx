@@ -37,7 +37,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/stl_types.hxx>
-
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -47,7 +47,7 @@ namespace connectivity
         // = ODescriptor
         // =========================================================================
         typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
-        class ODescriptor
+        class OOO_DLLPUBLIC_DBTOOLS ODescriptor
                     :public ODescriptor_PBASE
                     ,public ::com::sun::star::lang::XUnoTunnel
         {

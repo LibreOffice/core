@@ -31,6 +31,7 @@
 #ifndef _CONNECTIVITY_SDBCX_KEYCOLUMN_HXX_
 #define _CONNECTIVITY_SDBCX_KEYCOLUMN_HXX_
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 
 namespace connectivity
@@ -40,8 +41,8 @@ namespace connectivity
         class OKeyColumn;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OKeyColumn> OKeyColumn_PROP;
 
-        class OKeyColumn :  public OColumn,
-                            public OKeyColumn_PROP
+        class OOO_DLLPUBLIC_DBTOOLS OKeyColumn :
+            public OColumn, public OKeyColumn_PROP
         {
         protected:
             ::rtl::OUString m_ReferencedColumn;

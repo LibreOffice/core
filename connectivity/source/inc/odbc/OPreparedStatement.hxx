@@ -31,7 +31,7 @@
 #ifndef _CONNECTIVITY_ODBC_OPREPAREDSTATEMENT_HXX_
 #define _CONNECTIVITY_ODBC_OPREPAREDSTATEMENT_HXX_
 
-
+#include "odbc/odbcbasedllapi.hxx"
 #include "odbc/OStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -52,7 +52,8 @@ namespace connectivity
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public  OStatement_BASE2,
+        class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement :
+                                    public  OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {
         protected:

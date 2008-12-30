@@ -99,13 +99,13 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
     if(!m_aColumns.isValid())
         m_aColumns = new OSQLColumns();
     else
-        m_aColumns->clear();
+        m_aColumns->get().clear();
 
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
     // reserve some space
-    m_aColumns->reserve(nFieldCount);
+    m_aColumns->get().reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
@@ -259,12 +259,12 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
 
         // check if the columname already exists
         String aAlias(aColumnName);
-        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->end())
+        while(aFind != m_aColumns->get().end())
         {
             (aAlias = aColumnName) += String::CreateFromInt32(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
@@ -277,7 +277,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
                                                 sal_False,
                                                 bCase);
         Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->get().push_back(xCol);
         m_aTypes.push_back(eType);
         m_aPrecisions.push_back(nPrecision);
         m_aScales.push_back(nScale);
@@ -340,20 +340,20 @@ void OEvoabFolderList::construct()
 //------------------------------------------------------------------
 sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
 {
-    (*_rRow)[0] = m_nFilePos;   // the "bookmark"
+    (_rRow->get())[0] = m_nFilePos; // the "bookmark"
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // Felder:
     xub_StrLen nStartPos = 0;
     String aStr;
-    OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Int32 i = 0; aIter != _rCols.end();++aIter, ++i)
+    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
+    for (sal_Int32 i = 0; aIter != _rCols.get().end();++aIter, ++i)
     {
         m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
         //OSL_TRACE("OEvoabFolderList::fetchRow()::aStr = %s\n", ((OUtoCStr(::rtl::OUString(aStr))) ? (OUtoCStr(::rtl::OUString(aStr))):("NULL")) );
 
         if (aStr.Len() == 0)
-            (*_rRow)[i+1].setNull();
+            (_rRow->get())[i+1].setNull();
         else
         {
             // length depending on the data type
@@ -375,18 +375,18 @@ sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
                         switch(nType)
                         {
                             case DataType::DATE:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                (_rRow->get())[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                (_rRow->get())[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                (_rRow->get())[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i+1].setNull();
+                        (_rRow->get())[i+1].setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -420,15 +420,15 @@ sal_Bool OEvoabFolderList::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols)
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        (*_rRow)[i+1] = String::CreateFromDouble(nVal);
+                        (_rRow->get())[i+1] = String::CreateFromDouble(nVal);
                     else
-                        (*_rRow)[i+1] = nVal;
+                        (_rRow->get())[i+1] = nVal;
                 } break;
 
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    (*_rRow)[i+1] = aStr;
+                    (_rRow->get())[i+1] = aStr;
                 }
                 break;
             }
@@ -504,13 +504,13 @@ const ORowSetValue& OEvoabFolderList::getValue(sal_Int32 _nColumnIndex ) throw(:
 {
     checkIndex( _nColumnIndex );
 
-    m_bIsNull = (*m_aRow)[_nColumnIndex].isNull();
-    return (*m_aRow)[_nColumnIndex];
+    m_bIsNull = (m_aRow->get())[_nColumnIndex].isNull();
+    return (m_aRow->get())[_nColumnIndex];
 }
 // -----------------------------------------------------------------------------
 void OEvoabFolderList::checkIndex(sal_Int32 _nColumnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
-    if (   _nColumnIndex <= 0 || _nColumnIndex >= (sal_Int32)m_aRow->size() ) {
+    if (   _nColumnIndex <= 0 || _nColumnIndex >= (sal_Int32)m_aRow->get().size() ) {
 //        ::dbtools::throwInvalidIndexException();
             ;
     }
@@ -531,8 +531,8 @@ void OEvoabFolderList::initializeRow(sal_Int32 _nColumnCount)
     if(!m_aRow.isValid())
     {
         m_aRow  = new OValueVector(_nColumnCount);
-        (*m_aRow)[0].setBound(sal_True);
-        ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
+        (m_aRow->get())[0].setBound(sal_True);
+        ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(sal_False));
     }
     //OSL_TRACE("OEvoabFolderList::initializeRow()::_nColumnCount = %d\n", _nColumnCount);
 

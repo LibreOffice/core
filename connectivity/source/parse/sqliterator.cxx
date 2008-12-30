@@ -355,8 +355,8 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
     } while ( false );
 
     // copy the parameters of the sub query to our own parameter array
-    ::std::copy( pSubQueryParameterColumns->begin(), pSubQueryParameterColumns->end(),
-        ::std::insert_iterator< OSQLColumns >( *m_aParameters, m_aParameters->end() ) );
+    ::std::copy( pSubQueryParameterColumns->get().begin(), pSubQueryParameterColumns->get().end(),
+        ::std::insert_iterator< OSQLColumns::Vector >( m_aParameters->get(), m_aParameters->get().end() ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -671,8 +671,8 @@ namespace
             // look up the column in the select column, to find an possible alias
             if ( _pSelectColumns )
             {
-                for (   OSQLColumns::const_iterator lookupColumn = _pSelectColumns->begin();
-                        lookupColumn != _pSelectColumns->end();
+                for (   OSQLColumns::Vector::const_iterator lookupColumn = _pSelectColumns->get().begin();
+                        lookupColumn != _pSelectColumns->get().end();
                         ++lookupColumn
                     )
                 {
@@ -836,7 +836,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 pColumn->setRealName(aColumnName);
 
                 Reference< XPropertySet> xCol = pColumn;
-                m_aCreateColumns->push_back(xCol);
+                m_aCreateColumns->get().push_back(xCol);
             }
         }
 
@@ -1409,22 +1409,22 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
         pColumn->setFunction(sal_True);
         pColumn->setAggregateFunction(sal_True);
         pColumn->setRealName(sFunctionName);
-        m_aParameters->push_back(pColumn);
+        m_aParameters->get().push_back(pColumn);
     }
     else
     {
         sal_Bool bNotFound = sal_True;
-        OSQLColumns::const_iterator aIter = ::connectivity::find(
-            m_aSelectColumns->begin(),
-            m_aSelectColumns->end(),
+        OSQLColumns::Vector::const_iterator aIter = ::connectivity::find(
+            m_aSelectColumns->get().begin(),
+            m_aSelectColumns->get().end(),
             _aColumnName,::comphelper::UStringMixEqual( isCaseSensitive() )
         );
-        if(aIter != m_aSelectColumns->end())
+        if(aIter != m_aSelectColumns->get().end())
         {
             OParseColumn* pNewColumn = new OParseColumn(*aIter,isCaseSensitive());
             pNewColumn->setName(sParameterName);
             pNewColumn->setRealName(_aColumnName);
-            m_aParameters->push_back(pNewColumn);
+            m_aParameters->get().push_back(pNewColumn);
             bNotFound = sal_False;
         }
         else if(_aColumnName.getLength())// search in the tables for the right one
@@ -1437,7 +1437,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                 OParseColumn* pNewColumn = new OParseColumn(xColumn,isCaseSensitive());
                 pNewColumn->setName(sParameterName);
                 pNewColumn->setRealName(_aColumnName);
-                m_aParameters->push_back(pNewColumn);
+                m_aParameters->get().push_back(pNewColumn);
                 bNotFound = sal_False;
             }
         }
@@ -1457,7 +1457,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                                     isCaseSensitive() );
             pColumn->setName(aNewColName);
             pColumn->setRealName(sParameterName);
-            m_aParameters->push_back(pColumn);
+            m_aParameters->get().push_back(pColumn);
         }
     }
 }
@@ -1596,7 +1596,7 @@ void OSQLParseTreeIterator::appendColumns(::vos::ORef<OSQLColumns>& _rColumns,co
             pColumn->setTableName(_rTableAlias);
             pColumn->setRealName(*pBegin);
             Reference< XPropertySet> xCol = pColumn;
-            _rColumns->push_back(xCol);
+            _rColumns->get().push_back(xCol);
         }
         else
             impl_appendError( IParseContext::ERROR_INVALID_COLUMN, pBegin, &_rTableAlias );
@@ -1680,7 +1680,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
                 pColumn->setRealName( rColumnName );
             }
 
-            _rColumns->push_back( xNewColumn );
+            _rColumns->get().push_back( xNewColumn );
         }
         else
         {
@@ -1693,7 +1693,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
             pColumn->setRealName(rColumnName);
 
             Reference< XPropertySet> xCol = pColumn;
-            _rColumns->push_back(xCol);
+            _rColumns->get().push_back(xCol);
         }
     }
     else    // ColumnName und Tablename vorhanden
@@ -1715,7 +1715,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
                 pColumn->setTableName(aFind->first);
 
                 Reference< XPropertySet> xCol = pColumn;
-                _rColumns->push_back(xCol);
+                _rColumns->get().push_back(xCol);
             }
             else
             {
@@ -1730,7 +1730,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
                     pColumn->setTableName(aFind->first);
 
                     Reference< XPropertySet> xCol = pColumn;
-                    _rColumns->push_back(xCol);
+                    _rColumns->get().push_back(xCol);
                 }
                 else
                     bError = sal_True;
@@ -1755,7 +1755,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
             pColumn->setAggregateFunction(bAggFkt);
 
             Reference< XPropertySet> xCol = pColumn;
-            _rColumns->push_back(xCol);
+            _rColumns->get().push_back(xCol);
         }
     }
 }
@@ -1764,19 +1764,19 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
 {
     ::rtl::OUString aAlias(rColumnName);
 
-    OSQLColumns::const_iterator aIter = find(
-        m_aSelectColumns->begin(),
-        m_aSelectColumns->end(),
+    OSQLColumns::Vector::const_iterator aIter = find(
+        m_aSelectColumns->get().begin(),
+        m_aSelectColumns->get().end(),
         aAlias,
         ::comphelper::UStringMixEqual( isCaseSensitive() )
     );
     sal_Int32 i=1;
-    while(aIter != m_aSelectColumns->end())
+    while(aIter != m_aSelectColumns->get().end())
     {
         (aAlias = rColumnName) += ::rtl::OUString::valueOf(i++);
         aIter = find(
-            m_aSelectColumns->begin(),
-            m_aSelectColumns->end(),
+            m_aSelectColumns->get().begin(),
+            m_aSelectColumns->get().end(),
             aAlias,
             ::comphelper::UStringMixEqual( isCaseSensitive() )
         );
@@ -1788,12 +1788,12 @@ void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumn
 {
     Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
     if ( xColumn.is() )
-        m_aOrderColumns->push_back(new OOrderColumn(xColumn,isCaseSensitive(),bAscending));
+        m_aOrderColumns->get().push_back(new OOrderColumn(xColumn,isCaseSensitive(),bAscending));
     else
     {
         sal_Int32 nId = rColumnName.toInt32();
-        if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->size()) )
-            m_aOrderColumns->push_back(new OOrderColumn((*m_aSelectColumns)[nId-1],isCaseSensitive(),bAscending));
+        if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->get().size()) )
+            m_aOrderColumns->get().push_back(new OOrderColumn((m_aSelectColumns->get())[nId-1],isCaseSensitive(),bAscending));
     }
 
 #ifdef SQL_TEST_PARSETREEITERATOR
@@ -1809,12 +1809,12 @@ void OSQLParseTreeIterator::setGroupByColumnName(const ::rtl::OUString & rColumn
 {
     Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
     if ( xColumn.is() )
-        m_aGroupColumns->push_back(new OParseColumn(xColumn,isCaseSensitive()));
+        m_aGroupColumns->get().push_back(new OParseColumn(xColumn,isCaseSensitive()));
     else
     {
         sal_Int32 nId = rColumnName.toInt32();
-        if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->size()) )
-            m_aGroupColumns->push_back(new OParseColumn((*m_aSelectColumns)[nId-1],isCaseSensitive()));
+        if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->get().size()) )
+            m_aGroupColumns->get().push_back(new OParseColumn((m_aSelectColumns->get())[nId-1],isCaseSensitive()));
     }
 
 #ifdef SQL_TEST_PARSETREEITERATOR

@@ -31,10 +31,11 @@
 #define CONNECTIVITY_TKEYVALUE_HXX
 
 #include "connectivity/FValue.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class OKeyValue
+    class OOO_DLLPUBLIC_DBTOOLS OKeyValue
     {
     private:
         ::std::vector<ORowSetValueDecoratorRef> m_aKeys;

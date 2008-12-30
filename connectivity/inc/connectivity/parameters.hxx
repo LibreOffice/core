@@ -45,6 +45,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 /** === end UNO includes === **/
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/paramwrapper.hxx"
 #include <unotools/sharedunocomponent.hxx>
 #include <comphelper/implementationreference.hxx>
@@ -62,7 +63,7 @@ namespace dbtools
     //= ParameterManager
     //====================================================================
     class FilterManager;
-    class ParameterManager
+    class OOO_DLLPUBLIC_DBTOOLS ParameterManager
     {
     public:
         /// classifies the origin of the data to fill a parameter

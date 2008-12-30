@@ -105,13 +105,13 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     if(!m_aColumns.isValid())
         m_aColumns = new OSQLColumns();
     else
-        m_aColumns->clear();
+        m_aColumns->get().clear();
 
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
     // reserve some space
-    m_aColumns->reserve(nFieldCount);
+    m_aColumns->get().reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
@@ -277,12 +277,12 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
         // check if the columname already exists
         String aAlias(aColumnName);
-        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->end())
+        while(aFind != m_aColumns->get().end())
         {
             (aAlias = aColumnName) += String::CreateFromInt32(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
@@ -295,7 +295,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                                                 sal_False,
                                                 bCase);
         Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->get().push_back(xCol);
         m_aTypes.push_back(eType);
         m_aPrecisions.push_back(nPrecision);
         m_aScales.push_back(nScale);
@@ -410,9 +410,9 @@ void OFlatTable::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
-    aVector.reserve(m_aColumns->size());
+    aVector.reserve(m_aColumns->get().size());
 
-    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
+    for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != m_aColumns->get().end();++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
     if(m_pColumns)
@@ -492,7 +492,7 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 //------------------------------------------------------------------
 sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
-    *(*_rRow)[0] = m_nFilePos;
+    *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
@@ -501,15 +501,15 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     // Felder:
     xub_StrLen nStartPos = 0;
     String aStr;
-    OSQLColumns::const_iterator aIter = _rCols.begin();
-    OSQLColumns::const_iterator aEnd = _rCols.end();
-    for (OValueRefVector::size_type i = 1; aIter != aEnd && i < _rRow->size();
+    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
+    OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
+    for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < _rRow->get().size();
          ++aIter, i++)
     {
         m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
 
         if (aStr.Len() == 0)
-            (*_rRow)[i]->setNull();
+            (_rRow->get())[i]->setNull();
         else
         {
             // Laengen je nach Datentyp:
@@ -543,18 +543,18 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                         switch(nType)
                         {
                             case DataType::DATE:
-                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                *(_rRow->get())[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                *(_rRow->get())[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                *(_rRow->get())[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i]->setNull();
+                        (_rRow->get())[i]->setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -588,15 +588,15 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        *(*_rRow)[i] = ORowSetValue(String::CreateFromDouble(nVal));
+                        *(_rRow->get())[i] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
-                        *(*_rRow)[i] = nVal;
+                        *(_rRow->get())[i] = nVal;
                 } break;
 
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    *(*_rRow)[i] = ORowSetValue(aStr);
+                    *(_rRow->get())[i] = ORowSetValue(aStr);
                 }
                 break;
             }

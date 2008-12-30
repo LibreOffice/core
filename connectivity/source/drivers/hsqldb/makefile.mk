@@ -35,6 +35,7 @@ PRJNAME=connectivity
 TARGET=hsqldb
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------

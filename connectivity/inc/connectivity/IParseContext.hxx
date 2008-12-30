@@ -34,13 +34,14 @@ namespace connectivity { class OSQLParseNode; }
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
     //==========================================================================
     //= IParseContext
     //==========================================================================
-    class IParseContext
+    class OOO_DLLPUBLIC_DBTOOLS IParseContext
     {
     public:
         enum    ErrorCode

@@ -56,7 +56,7 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 // -------------------------------------------------------------------------
 void MacabResultSetMetaData::setMacabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
-    OSQLColumns::const_iterator aIter;
+    OSQLColumns::Vector::const_iterator aIter;
     static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
     MacabRecords *aRecords;
     MacabHeader *aHeader;
@@ -71,7 +71,7 @@ void MacabResultSetMetaData::setMacabFields(const ::vos::ORef<connectivity::OSQL
 
     aHeader = aRecords->getHeader();
 
-    for (aIter = xColumns->begin(); aIter != xColumns->end(); ++aIter)
+    for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
     {
         ::rtl::OUString aFieldName;
         sal_uInt32 nFieldNumber;
