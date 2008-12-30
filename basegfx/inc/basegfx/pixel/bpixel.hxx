@@ -55,45 +55,45 @@ namespace basegfx
                 unsigned                                mnG : 8;        // green intensity
                 unsigned                                mnB : 8;        // blue intensity
                 unsigned                                mnO : 8;        // opacity, 0 == full transparence
-            }                                           maRGBO;
+            } maRGBO;
 
             struct
             {
                 // bitfield
                 unsigned                                mnValue : 32;   // all values
-            }                                           maCombinedRGBO;
-        };
+            } maCombinedRGBO;
+        } maPixelUnion;
 
     public:
         BPixel()
         {
-            maCombinedRGBO.mnValue = 0L;
+            maPixelUnion.maCombinedRGBO.mnValue = 0L;
         }
 
         // use explicit here to make sure everyone knows what he is doing. Values range from
         // 0..255 integer here.
         explicit BPixel(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nOpacity)
         {
-            maRGBO.mnR = nRed;
-            maRGBO.mnG = nGreen;
-            maRGBO.mnB = nBlue;
-            maRGBO.mnO = nOpacity;
+            maPixelUnion.maRGBO.mnR = nRed;
+            maPixelUnion.maRGBO.mnG = nGreen;
+            maPixelUnion.maRGBO.mnB = nBlue;
+            maPixelUnion.maRGBO.mnO = nOpacity;
         }
 
         // constructor from BColor which uses double precision color, so change it
         // to local integer format. It will also be clamped here.
         BPixel(const BColor& rColor, sal_uInt8 nOpacity)
         {
-            maRGBO.mnR = sal_uInt8((rColor.getRed() * 255.0) + 0.5);
-            maRGBO.mnG = sal_uInt8((rColor.getGreen() * 255.0) + 0.5);
-            maRGBO.mnB = sal_uInt8((rColor.getBlue() * 255.0) + 0.5);
-            maRGBO.mnO = nOpacity;
+            maPixelUnion.maRGBO.mnR = sal_uInt8((rColor.getRed() * 255.0) + 0.5);
+            maPixelUnion.maRGBO.mnG = sal_uInt8((rColor.getGreen() * 255.0) + 0.5);
+            maPixelUnion.maRGBO.mnB = sal_uInt8((rColor.getBlue() * 255.0) + 0.5);
+            maPixelUnion.maRGBO.mnO = nOpacity;
         }
 
         // copy constructor
         BPixel(const BPixel& rPixel)
         {
-            maCombinedRGBO.mnValue = rPixel.maCombinedRGBO.mnValue;
+            maPixelUnion.maCombinedRGBO.mnValue = rPixel.maPixelUnion.maCombinedRGBO.mnValue;
         }
 
         ~BPixel()
@@ -102,39 +102,39 @@ namespace basegfx
         // assignment operator
         BPixel& operator=( const BPixel& rPixel )
         {
-            maCombinedRGBO.mnValue = rPixel.maCombinedRGBO.mnValue;
+            maPixelUnion.maCombinedRGBO.mnValue = rPixel.maPixelUnion.maCombinedRGBO.mnValue;
             return *this;
         }
 
         // data access read
-        sal_uInt8 getRed() const { return maRGBO.mnR; }
-        sal_uInt8 getGreen() const { return maRGBO.mnG; }
-        sal_uInt8 getBlue() const { return maRGBO.mnB; }
-        sal_uInt8 getOpacity() const { return maRGBO.mnO; }
-        sal_uInt32 getRedGreenBlueOpacity() const { return maCombinedRGBO.mnValue; }
+        sal_uInt8 getRed() const { return maPixelUnion.maRGBO.mnR; }
+        sal_uInt8 getGreen() const { return maPixelUnion.maRGBO.mnG; }
+        sal_uInt8 getBlue() const { return maPixelUnion.maRGBO.mnB; }
+        sal_uInt8 getOpacity() const { return maPixelUnion.maRGBO.mnO; }
+        sal_uInt32 getRedGreenBlueOpacity() const { return maPixelUnion.maCombinedRGBO.mnValue; }
 
         // data access write
-        void setRed(sal_uInt8 nNew) { maRGBO.mnR = nNew; }
-        void setGreen(sal_uInt8 nNew) { maRGBO.mnG = nNew; }
-        void setBlue(sal_uInt8 nNew) { maRGBO.mnB = nNew; }
-        void setOpacity(sal_uInt8 nNew) { maRGBO.mnO = nNew; }
-        void setRedGreenBlueOpacity(sal_uInt32 nRedGreenBlueOpacity) { maCombinedRGBO.mnValue = nRedGreenBlueOpacity; }
-        void setRedGreenBlue(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB) { maRGBO.mnR = nR; maRGBO.mnG = nG; maRGBO.mnB = nB; }
+        void setRed(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnR = nNew; }
+        void setGreen(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnG = nNew; }
+        void setBlue(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnB = nNew; }
+        void setOpacity(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnO = nNew; }
+        void setRedGreenBlueOpacity(sal_uInt32 nRedGreenBlueOpacity) { maPixelUnion.maCombinedRGBO.mnValue = nRedGreenBlueOpacity; }
+        void setRedGreenBlue(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB) { maPixelUnion.maRGBO.mnR = nR; maPixelUnion.maRGBO.mnG = nG; maPixelUnion.maRGBO.mnB = nB; }
 
         // comparators
-        bool isInvisible() const { return (0 == maRGBO.mnO); }
-        bool isVisible() const { return (0 != maRGBO.mnO); }
+        bool isInvisible() const { return (0 == maPixelUnion.maRGBO.mnO); }
+        bool isVisible() const { return (0 != maPixelUnion.maRGBO.mnO); }
         bool isEmpty() const { return isInvisible(); }
         bool isUsed() const { return isVisible(); }
 
         bool operator==( const BPixel& rPixel ) const
         {
-            return (rPixel.maCombinedRGBO.mnValue == maCombinedRGBO.mnValue);
+            return (rPixel.maPixelUnion.maCombinedRGBO.mnValue == maPixelUnion.maCombinedRGBO.mnValue);
         }
 
         bool operator!=( const BPixel& rPixel ) const
         {
-            return (rPixel.maCombinedRGBO.mnValue != maCombinedRGBO.mnValue);
+            return (rPixel.maPixelUnion.maCombinedRGBO.mnValue != maPixelUnion.maCombinedRGBO.mnValue);
         }
 
         // empty element

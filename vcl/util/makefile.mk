@@ -179,6 +179,7 @@ SHL1STDLIBS+=\
             $(SALLIB)			\
             $(BASEGFXLIB)		\
             $(ICUUCLIB)			\
+            $(ICUDATALIB)		\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
 SHL1USE_EXPORTS=name
