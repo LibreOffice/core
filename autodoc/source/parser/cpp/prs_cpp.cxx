@@ -170,6 +170,9 @@ Udk_MacroMap::Udk_MacroMap()
     String  s__IFC_WRITEOFFSET("__IFC_WRITEOFFSET");
     String  s__DEF_IMPLHELPER_POST("__DEF_IMPLHELPER_POST");
 
+    String  sSAL_EXCEPTION_DLLPUBLIC_EXPORT("SAL_EXCEPTION_DLLPUBLIC_EXPORT");
+    String  sSAL_EXCEPTION_DLLPRIVATE("SAL_EXCEPTION_DLLPRIVATE");
+
 
     StringVector aEmpty;
 
@@ -208,6 +211,10 @@ Udk_MacroMap::Udk_MacroMap()
     aData[s__DEF_IMPLHELPER_POST]
         = new DefineDescription(s__DEF_IMPLHELPER_POST, aCompImplHelperParams, aEmpty);
 
+    aData[sSAL_EXCEPTION_DLLPUBLIC_EXPORT]
+        = new DefineDescription(sSAL_EXCEPTION_DLLPUBLIC_EXPORT, aEmpty);
+    aData[sSAL_EXCEPTION_DLLPRIVATE]
+        = new DefineDescription(sSAL_EXCEPTION_DLLPRIVATE, aEmpty);
 }
 
 Udk_MacroMap::~Udk_MacroMap()
