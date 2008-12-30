@@ -95,8 +95,14 @@ CFLAGSOUTOBJ=-o
 #   compilation unit that uses std::hash_map<sal_Int64, sal_Int64> (see
 #   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
 #   disabled globally
+# - wnoretvalue: warning about the last statement of a function not
+#   returning a value. Unfortunately triggers on perfectly acceptable
+#   code, for example if the last statement in is a throw statement
+# - anonnotype: Warns if a type is declared in an anonymous union. Temporary
+#   disabled until issue i97325 is fixed. Note: The compiler is actually
+#   right about this warning, the C++ standard is explicit about this.
 CFLAGSWARNCC=
-CFLAGSWARNCXX=+w2 -erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn
+CFLAGSWARNCXX=+w2 -erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,anonnotype
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-errwarn=%all
@@ -121,10 +127,10 @@ LINKC=$(CC)
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
 C_RESTRICTIONFLAGS*=-xc99=none
-LD_OPTIONS+:=-L$(SYSBASE)$/usr/lib
+#LD_OPTIONS+:=-L$(SYSBASE)$/usr$/lib
 CDEFS+=-DSYSBASE="$(SYSBASE)"
 CFLAGSCC+=$(C_RESTRICTIONFLAGS)
-.EXPORT : LD_OPTIONS
+#.EXPORT : LD_OPTIONS
 .ENDIF          # "$(SYSBASE)"!=""
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
