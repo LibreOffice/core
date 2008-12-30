@@ -104,7 +104,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/docsh4.obj \
         $(SLO)$/docsh8.obj \
         $(SLO)$/externalrefmgr.obj \
-        $(SLO)$/dbdocimp.obj
+        $(SLO)$/dbdocimp.obj \
+        $(SLO)$/docfunc.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  tpstat.src
