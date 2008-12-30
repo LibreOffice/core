@@ -39,7 +39,7 @@ namespace rtl {
 
     <P>Used when parsing (part of) a URI fails for syntactical reasons.</P>
  */
-class MalformedUriException
+class SAL_EXCEPTION_DLLPUBLIC_EXPORT MalformedUriException
 {
 public:
     /** Create a MalformedUriException.
@@ -47,8 +47,17 @@ public:
         @param rMessage
         A message containing any details about the exception.
      */
-    inline MalformedUriException(rtl::OUString const & rMessage):
-        m_aMessage(rMessage) {}
+    inline SAL_EXCEPTION_DLLPRIVATE MalformedUriException(
+        rtl::OUString const & rMessage): m_aMessage(rMessage) {}
+
+    inline SAL_EXCEPTION_DLLPRIVATE MalformedUriException(
+        MalformedUriException const & other): m_aMessage(other.m_aMessage) {}
+
+    inline SAL_EXCEPTION_DLLPRIVATE ~MalformedUriException() {}
+
+    inline SAL_EXCEPTION_DLLPRIVATE MalformedUriException operator =(
+        MalformedUriException const & other)
+    { m_aMessage = other.m_aMessage; return *this; }
 
     /** Get the message.
 
@@ -56,7 +65,8 @@ public:
         A reference to the message.  The reference is valid for the lifetime of
         this MalformedUriException.
      */
-    inline rtl::OUString const & getMessage() const { return m_aMessage; }
+    inline SAL_EXCEPTION_DLLPRIVATE rtl::OUString const & getMessage() const
+    { return m_aMessage; }
 
 private:
     rtl::OUString m_aMessage;
