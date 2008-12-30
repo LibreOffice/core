@@ -62,7 +62,8 @@ extern "C" void SAL_CALL dbp_initializeModule()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -72,7 +73,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 void* pServiceManager,
                 void* pRegistryKey
             )
@@ -93,7 +94,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)

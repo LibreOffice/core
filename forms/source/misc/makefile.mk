@@ -40,6 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE: $(PRJ)$/makefile.pmk
 
 # --- Types -------------------------------------
 
