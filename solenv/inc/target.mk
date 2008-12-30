@@ -38,6 +38,13 @@ MKFILENAME:=TARGET.MK
 .IF "$(STL_OS2_BUILDING)" != ""
 CDEFS+=-DSTL_OS2_BUILDING
 .ENDIF
+.IF "$(VISIBILITY_HIDDEN)" != ""
+.IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGS += -fvisibility=hidden
+.ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF
+.ENDIF
 
 .IF "$(TARGET)"==""
 target_empty=warn_target_empty

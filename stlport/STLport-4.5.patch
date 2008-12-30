@@ -996,6 +996,21 @@
    }
    inline void _M_release_lock() { DosReleaseMutexSem(*(HMTX*)_M_lock); }
  # else /* No threads */
+--- misc/STLport-4.5/stlport/stl/_tree.c	2001-08-25 03:14:30.000000000 +0200
++++ misc/build/STLport-4.5/stlport/stl/_tree.c	2008-12-02 17:14:29.035425872 +0100
+@@ -404,10 +404,12 @@
+   }
+   iterator __j = iterator(__y);   
+   if (__comp)
++  {
+     if (__j == begin())     
+       return pair<iterator,bool>(_M_insert(__x, __y, __v), true);
+     else
+       --__j;
++  }
+   if (_M_key_compare(_S_key(__j._M_node), _KeyOfValue()(__v)))
+     return pair<iterator,bool>(_M_insert(__x, __y, __v), true);
+   return pair<iterator,bool>(__j, false);
 --- misc/STLport-4.5/stlport/stl/_valarray.h	2001-05-30 05:45:42.000000000 +0200
 +++ misc/build/STLport-4.5/stlport/stl/_valarray.h	2008-07-18 14:13:49.000000000 +0200
 @@ -19,6 +19,10 @@

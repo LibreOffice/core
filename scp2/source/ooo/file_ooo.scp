@@ -2212,16 +2212,6 @@ File gid_File_Registry_Spool_Oo_Common_System_Xcu
 #endif
 End
 
-File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (ja) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (ko) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-End
-
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
@@ -2240,23 +2230,6 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ne) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (fa) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
-    Name (ja) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu

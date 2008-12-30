@@ -2168,7 +2168,7 @@ sub get_tmp_dir {
     } else {
        $tmp_dir = '/tmp/';
     }
-    $tmp_dir .= $$ while (-d $tmp_dir);
+    $tmp_dir .= $$ while (-e $tmp_dir);
     $tmp_dir = CorrectPath($tmp_dir);
     eval {mkpath($tmp_dir)};
     print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
