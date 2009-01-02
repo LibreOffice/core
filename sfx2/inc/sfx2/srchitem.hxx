@@ -86,6 +86,9 @@ class SFX2_DLLPUBLIC SvxSearchItem :
     sal_Bool        bRowDirection;      // Suchrichtung Zeilenweise/Spaltenweise
     sal_Bool        bAllTables;         // in alle Tabellen suchen
 
+    // Writer-spezifisch
+    sal_Bool        bNotes;
+
     sal_Bool        bBackward;          // Suche Rueckwaerts
     sal_Bool        bPattern;           // Suche nach Vorlagen
     sal_Bool        bContent;           // Suche im Inhalt
@@ -152,6 +155,9 @@ public:
 
             sal_uInt16      GetCellType() const { return nCellType; }
             void            SetCellType(sal_uInt16 nNewCellType) { nCellType = nNewCellType; }
+
+            sal_Bool        GetNotes() const { return bNotes; }
+            void            SetNotes(sal_Bool bNew) { bNotes = bNew; }
 
             sal_uInt16      GetAppFlag() const { return nAppFlag; }
             void            SetAppFlag(sal_uInt16 nNewAppFlag) { nAppFlag = nNewAppFlag; }

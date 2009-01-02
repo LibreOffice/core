@@ -206,6 +206,7 @@ private:
     CheckBox        aSimilarityBox;
     PushButton      aSimilarityBtn;
     CheckBox        aLayoutBtn;
+    CheckBox        aNotesBtn;
     CheckBox        aJapMatchFullHalfWidthCB;
     CheckBox        aJapOptionsCB;
     PushButton      aJapOptionsBtn;

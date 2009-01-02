@@ -96,10 +96,11 @@ using namespace comphelper;
 #define MODIFY_SIMILARITY   0x00000100
 #define MODIFY_FORMULAS     0x00000200
 #define MODIFY_VALUES       0x00000400
-#define MODIFY_NOTES        0x00000800
+#define MODIFY_CALC_NOTES   0x00000800
 #define MODIFY_ROWS         0x00001000
 #define MODIFY_COLUMNS      0x00002000
 #define MODIFY_ALLTABLES    0x00004000
+#define MODIFY_NOTES        0x00008000
 
 SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 
@@ -349,6 +350,7 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     aSimilarityBox  ( this, SVX_RES( CB_SIMILARITY) ),                        \
     aSimilarityBtn  ( this, SVX_RES( PB_SIMILARITY) ),                        \
     aLayoutBtn      ( this, SVX_RES( CB_LAYOUTS ) ),                          \
+    aNotesBtn       ( this, SVX_RES( CB_NOTES ) ),                            \
     aJapMatchFullHalfWidthCB( this, SVX_RES( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),\
     aJapOptionsCB   ( this, SVX_RES( CB_JAP_SOUNDS_LIKE ) ),                  \
     aJapOptionsBtn  ( this, SVX_RES( PB_JAP_OPTIONS ) ),                      \
@@ -590,6 +592,7 @@ void SvxSearchDialog::Construct_Impl()
                 &aSimilarityBox,
                 &aSimilarityBtn,
                 &aLayoutBtn,
+                &aNotesBtn,
                 &aJapMatchFullHalfWidthCB,
                 &aJapOptionsCB,
                 &aJapOptionsBtn,
@@ -642,6 +645,7 @@ BOOL SvxSearchDialog::Close()
     aOpt.SetSimilaritySearch        ( aSimilarityBox          .IsChecked() );
     //aOpt.SetMatchFullHalfWidthForms   ( !aJapMatchFullHalfWidthCB.IsChecked() );
     aOpt.SetUseAsianOptions         ( aJapOptionsCB           .IsChecked() );
+        aOpt.SetNotes                   ( aNotesBtn               .IsChecked() );
 
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SFX_CALLMODE_SLOT, ppArgs );
@@ -735,6 +739,7 @@ void SvxSearchDialog::InitControls_Impl()
     aMatchCaseCB.SetClickHdl( aLink );
     aRegExpBtn.SetClickHdl( aLink );
     aBackwardsBtn.SetClickHdl( aLink );
+    aNotesBtn.SetClickHdl( aLink );
     aSimilarityBox.SetClickHdl( aLink );
     aJapOptionsCB.SetClickHdl( aLink );
     aJapMatchFullHalfWidthCB.SetClickHdl( aLink );
@@ -770,6 +775,8 @@ void SvxSearchDialog::CalculateDelta_Impl()
 
     bool bDrawApp = false;
     bool bCalcApp = false;
+    bool bWriterApp = false;
+    bool bImpressApp = false;
     const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
     uno::Reference< frame::XModuleManager > xModuleManager(
         ::comphelper::getProcessServiceFactory()->createInstance(
@@ -781,6 +788,8 @@ void SvxSearchDialog::CalculateDelta_Impl()
             ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
             bCalcApp = aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" );
             bDrawApp = aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" );
+            bImpressApp = aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" );
+            bWriterApp = aModuleIdentifier.equalsAscii( "com.sun.star.text.TextDocument" );
         }
         catch ( uno::Exception& )
         {
@@ -792,9 +801,19 @@ void SvxSearchDialog::CalculateDelta_Impl()
     else
         pImpl->bDeltaCalculated = TRUE;
 
+    ULONG nDelta = 187, nOffset = 0;
+    SvtCJKOptions aCJKOptions;
+
     pMoreBtn->AddWindow( &aOptionsFL );
     if ( !bDrawApp )
         pMoreBtn->AddWindow( &aLayoutBtn );
+    if ( bWriterApp )
+        pMoreBtn->AddWindow( &aNotesBtn );
+    else
+    {
+        aNotesBtn.Hide();
+        nOffset = !bDrawApp ? 13 : 0;
+    }
     pMoreBtn->AddWindow( &aBackwardsBtn );
     if ( !bDrawApp )
         pMoreBtn->AddWindow( &aRegExpBtn );
@@ -802,8 +821,6 @@ void SvxSearchDialog::CalculateDelta_Impl()
     pMoreBtn->AddWindow( &aSimilarityBtn );
     pMoreBtn->AddWindow( &aSelectionBtn );
 
-    ULONG nDelta = 174, nOffset = 0;
-    SvtCJKOptions aCJKOptions;
     if ( aCJKOptions.IsCJKFontEnabled() )
         pMoreBtn->AddWindow( &aJapMatchFullHalfWidthCB );
     else
@@ -836,8 +853,8 @@ void SvxSearchDialog::CalculateDelta_Impl()
         aNewPos = aSimilarityBtn.GetPosPixel();
         aNewPos.Y() -= nH;
         aSimilarityBtn.SetPosPixel( aNewPos );
-        nH *= 2;
-        nOffset += ( 2 * nAppFontHeight );
+        nH *= 3;
+        nOffset += ( 3 * nAppFontHeight );
         if ( aCJKOptions.IsCJKFontEnabled() )
         {
             aNewPos = aJapMatchFullHalfWidthCB.GetPosPixel();
@@ -855,28 +872,41 @@ void SvxSearchDialog::CalculateDelta_Impl()
         }
     }
 
-    if ( bCalcApp )
+    if ( bCalcApp || bImpressApp )
     {
         Window* pWins[] =
         {
             &aCalcFL, &aCalcSearchInFT, &aCalcSearchInLB, &aCalcSearchDirFT,
-            &aRowsBtn, &aColumnsBtn, &aAllSheetsCB
+            &aRowsBtn, &aColumnsBtn, &aAllSheetsCB, &aJapMatchFullHalfWidthCB,
+            &aJapOptionsCB, &aJapOptionsBtn
         };
         Window** pCurrent = pWins;
-        sal_uInt32 i;
+        sal_uInt32 i = 0;
+        const sal_uInt32 nCalcCtrlCount = 7;
         if ( nOffset > 0 )
         {
             long nH = LogicToPixel( Size( 0, nOffset ), MAP_APPFONT ).Height();
             for ( i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
             {
-                Point aNewPos = (*pCurrent)->GetPosPixel();
-                aNewPos.Y() -= nH;
-                (*pCurrent)->SetPosPixel( aNewPos );
+                if ( ( bCalcApp && i < nCalcCtrlCount )
+                    || ( i == nCalcCtrlCount && aCJKOptions.IsCJKFontEnabled() )
+                    || ( i > nCalcCtrlCount && aCJKOptions.IsJapaneseFindEnabled() ) )
+                {
+                    Point aNewPos = (*pCurrent)->GetPosPixel();
+                    aNewPos.Y() -= nH;
+                    (*pCurrent)->SetPosPixel( aNewPos );
+                }
             }
         }
-        pCurrent = pWins;
-        for ( i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
-            pMoreBtn->AddWindow( *pCurrent );
+
+        if ( bCalcApp)
+        {
+            pCurrent = pWins;
+            for ( i = 0; i < nCalcCtrlCount; ++i, ++pCurrent )
+                pMoreBtn->AddWindow( *pCurrent );
+        }
+        else
+            nOffset += 64;
     }
     else
         nOffset += 64;
@@ -924,12 +954,16 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aMatchCaseCB.Check( pSearchItem->GetExact() );
     if ( ( nModifyFlag & MODIFY_BACKWARDS ) == 0 )
         aBackwardsBtn.Check( pSearchItem->GetBackward() );
+    if ( ( nModifyFlag & MODIFY_NOTES ) == 0 )
+        aNotesBtn.Check( pSearchItem->GetNotes() );
     if ( ( nModifyFlag & MODIFY_SELECTION ) == 0 )
         aSelectionBtn.Check( pSearchItem->GetSelection() );
     if ( ( nModifyFlag & MODIFY_REGEXP ) == 0 )
         aRegExpBtn.Check( pSearchItem->GetRegExp() );
     if ( ( nModifyFlag & MODIFY_LAYOUT ) == 0 )
         aLayoutBtn.Check( pSearchItem->GetPattern() );
+    if (aNotesBtn.IsChecked())
+        aLayoutBtn.Disable();
     aSimilarityBox.Check( pSearchItem->IsLevenshtein() );
     if( aJapOptionsCB.IsVisible() )
         aJapOptionsCB.Check( pSearchItem->IsUseAsianOptions() );
@@ -959,7 +993,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
                 break;
 
             case SVX_SEARCHIN_NOTE:
-                if ( ( nModifyFlag & MODIFY_NOTES ) == 0 )
+                if ( ( nModifyFlag & MODIFY_CALC_NOTES ) == 0 )
                     aCalcSearchInLB.SelectEntryPos( SVX_SEARCHIN_NOTE );
                 break;
         }
@@ -1161,9 +1195,17 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     else
     {
         EnableControl_Impl( &aSearchBtn );
-        EnableControl_Impl( &aSearchAllBtn );
         EnableControl_Impl( &aReplaceBtn );
-        EnableControl_Impl( &aReplaceAllBtn );
+        if (!bWriter || (bWriter && !aNotesBtn.IsChecked()))
+        {
+            EnableControl_Impl( &aSearchAllBtn );
+            EnableControl_Impl( &aReplaceAllBtn );
+        }
+        if (bWriter && pSearchItem->GetNotes())
+        {
+            aSearchAllBtn.Disable();
+            aReplaceAllBtn.Disable();
+        }
     }
 
     if ( ( !pImpl->bMultiLineEdit && aSearchAttrText.GetText().Len() ) ||
@@ -1286,12 +1328,28 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
         else
         {
             EnableControl_Impl( &aRegExpBtn );
-            EnableControl_Impl( &aLayoutBtn );
+            if (!aNotesBtn.IsChecked())
+                EnableControl_Impl( &aLayoutBtn );
             EnableControl_Impl( &aFormatBtn );
             EnableControl_Impl( &aAttributeBtn );
             aSimilarityBtn.Disable();
         }
         pSearchItem->SetLevenshtein( bIsChecked );
+    }
+    else
+    if ( pCtrl == &aNotesBtn)
+    {
+        if (aNotesBtn.IsChecked())
+        {
+            aLayoutBtn.Disable();
+            aSearchAllBtn.Disable();
+            aReplaceAllBtn.Disable();
+        }
+        else
+        {
+            EnableControl_Impl( &aLayoutBtn );
+            ModifyHdl_Impl( &aSearchLB );
+        }
     }
     else
     {
@@ -1303,6 +1361,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
             aRegExpBtn.Disable();
             aMatchCaseCB.Check( FALSE );
             aMatchCaseCB.Disable();
+            aNotesBtn.Disable();
 
             if ( aSearchTmplLB.GetEntryCount() )
             {
@@ -1316,6 +1375,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
         {
             EnableControl_Impl( &aRegExpBtn );
             EnableControl_Impl( &aMatchCaseCB );
+            EnableControl_Impl( &aNotesBtn );
 
             if ( aRegExpBtn.IsChecked() )
             {
@@ -1401,6 +1461,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 
         pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
         pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
+        pSearchItem->SetNotes( GetCheckBoxValue( aNotesBtn ) );
         pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
         pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
 
@@ -1551,9 +1612,12 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         if ( nLBTxtLen || nTxtLen )
         {
             EnableControl_Impl( &aSearchBtn );
-            EnableControl_Impl( &aSearchAllBtn );
             EnableControl_Impl( &aReplaceBtn );
-            EnableControl_Impl( &aReplaceAllBtn );
+            if (!bWriter || (bWriter && !aNotesBtn.IsChecked()))
+            {
+                EnableControl_Impl( &aSearchAllBtn );
+                EnableControl_Impl( &aReplaceAllBtn );
+            }
         }
         else
         {
@@ -1822,6 +1886,10 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         aBackwardsBtn.Enable();
     else
         aBackwardsBtn.Disable();
+    //!if ( ( SEARCH_OPTIONS_NOTES & nOptions ) != 0 )
+        aNotesBtn.Enable();
+    //!else
+    //!    aNotesBtn.Disable();
     if ( ( SEARCH_OPTIONS_REG_EXP & nOptions ) != 0 )
         aRegExpBtn.Enable();
     else
@@ -1913,6 +1981,11 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
     if ( &aBackwardsBtn == pCtrl && ( SEARCH_OPTIONS_BACKWARDS & nOptions ) != 0 )
     {
         aBackwardsBtn.Enable();
+        return;
+    }
+    if ( &aNotesBtn == pCtrl /*! && ( SEARCH_OPTIONS_NOTES & nOptions ) != 0 */ )
+    {
+        aNotesBtn.Enable();
         return;
     }
     if ( &aRegExpBtn == pCtrl && ( SEARCH_OPTIONS_REG_EXP & nOptions ) != 0
@@ -2337,6 +2410,8 @@ void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
         nModifyFlag |= MODIFY_EXACT;
     else if ( &aBackwardsBtn == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_BACKWARDS;
+    else if ( &aNotesBtn == (CheckBox*)pCtrl )
+        nModifyFlag |= MODIFY_NOTES;
     else if ( &aSelectionBtn == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_SELECTION;
     else if ( &aRegExpBtn == (CheckBox*)pCtrl )
@@ -2349,7 +2424,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
     {
         nModifyFlag |= MODIFY_FORMULAS;
         nModifyFlag |= MODIFY_VALUES;
-        nModifyFlag |= MODIFY_NOTES;
+        nModifyFlag |= MODIFY_CALC_NOTES;
     }
     else if ( &aRowsBtn == (RadioButton*)pCtrl )
         nModifyFlag |= MODIFY_ROWS;
@@ -2387,6 +2462,7 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
     pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
+    pSearchItem->SetNotes( GetCheckBoxValue( aNotesBtn ) );
     pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
     pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
 
