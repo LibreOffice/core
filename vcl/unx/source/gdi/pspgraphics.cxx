@@ -835,6 +835,8 @@ bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& 
     return false;
 }
 
+void RegisterFontSubstitutors( ImplDevFontList* );
+
 void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     ::std::list< psp::fontID > aList;
@@ -846,6 +848,10 @@ void PspGraphics::GetDevFontList( ImplDevFontList *pList )
     for (it = aList.begin(); it != aList.end(); ++it)
         if (rMgr.getFontFastInfo (*it, aInfo))
             AnnounceFonts( pList, aInfo );
+
+   // register platform specific font substitutions if available
+   if( rMgr.hasFontconfig() )
+    RegisterFontSubstitutors( pList );
 }
 
 void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )

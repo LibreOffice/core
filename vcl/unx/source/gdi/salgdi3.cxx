@@ -1545,7 +1545,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 // ----------------------------------------------------------------------------
 
-static void RegisterFontSubstitutors( ImplDevFontList* );
+void RegisterFontSubstitutors( ImplDevFontList* );
 
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
@@ -1806,7 +1806,7 @@ public:
     bool FindFontSubstitute( ImplFontSelectData&, OUString& rMissingCodes ) const;
 };
 
-static void RegisterFontSubstitutors( ImplDevFontList* pList )
+void RegisterFontSubstitutors( ImplDevFontList* pList )
 {
     // init font substitution defaults
     int nDisableBits = 0;

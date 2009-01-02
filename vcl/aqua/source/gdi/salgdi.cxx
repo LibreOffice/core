@@ -404,6 +404,14 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
     {
         mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
     }
+    else // #i89650# workaround bogus device resolutions
+    {
+        if( mnRealDPIY < 72 )
+            mnRealDPIY = 72;
+        if( mnRealDPIX < mnRealDPIY ) // e.g. for TripleHead2Go only mnRealDPIX is off
+            mnRealDPIX = mnRealDPIY;
+    }
+
     mfFakeDPIScale = 1.0;
 }
 
@@ -1487,12 +1495,7 @@ static bool AddTempFontDir( const char* pDir )
     FSRef aPathFSRef;
     Boolean bIsDirectory = true;
     OSStatus eStatus = FSPathMakeRef( reinterpret_cast<const UInt8*>(pDir), &aPathFSRef, &bIsDirectory );
-    if( eStatus != noErr )
-        return false;
-
-    FSSpec aPathFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
-        NULL, NULL, &aPathFSSpec, NULL );
+    DBG_ASSERTWARNING( (eStatus==noErr) && bIsDirectory, "vcl AddTempFontDir() with invalid directory name!" );
     if( eStatus != noErr )
         return false;
 
@@ -1500,16 +1503,28 @@ static bool AddTempFontDir( const char* pDir )
     ATSFontContainerRef aATSFontContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+    eStatus = ::ATSFontActivateFromFileReference( &aPathFSRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &aATSFontContainer );
+#else
+    FSSpec aPathFSSpec;
+    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
+        NULL, NULL, &aPathFSSpec, NULL );
+    if( eStatus != noErr )
+        return false;
+
     eStatus = ::ATSFontActivateFromFileSpecification( &aPathFSSpec,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &aATSFontContainer );
+#endif
     if( eStatus != noErr )
         return false;
 
     return true;
 }
 
-static bool AddTempFontDir( void )
+static bool AddLocalTempFontDirs( void )
 {
     static bool bFirst = true;
     if( !bFirst )
@@ -1545,7 +1560,7 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 {
     DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
 
-    AddTempFontDir();
+    AddLocalTempFontDirs();
 
     // The idea is to cache the list of system fonts once it has been generated.
     // SalData seems to be a good place for this caching. However we have to
@@ -1575,21 +1590,28 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     Boolean bIsDirectory = true;
     ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
     OSStatus eStatus = FSPathMakeRef( (UInt8*)aCFileName.getStr(), &aNewRef, &bIsDirectory );
-    if( eStatus != noErr )
-        return false;
-
-    FSSpec aFontFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
-        NULL, NULL, &aFontFSSpec, NULL );
+    DBG_ASSERT( (eStatus==noErr) && !bIsDirectory, "vcl AddTempDevFont() with invalid fontfile name!" );
     if( eStatus != noErr )
         return false;
 
     ATSFontContainerRef oContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+    eStatus = ::ATSFontActivateFromFileReference( &aNewRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &oContainer );
+#else
+    FSSpec aFontFSSpec;
+    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
+        NULL, NULL, &aFontFSSpec, NULL );
+    if( eStatus != noErr )
+        return false;
+
     eStatus = ::ATSFontActivateFromFileSpecification( &aFontFSSpec,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &oContainer );
+#endif
     if( eStatus != noErr )
         return false;
 

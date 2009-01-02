@@ -876,6 +876,11 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordLeftAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
 -(void)moveWordRight: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
@@ -891,9 +896,19 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordRightAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfLine: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLine: (id)aSender
@@ -901,14 +916,69 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToBeginningOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfParagraph: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
+-(void)moveToEndOfParagraphAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphForward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphForwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
 -(void)moveToBeginningOfParagraph: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphBackward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfParagraphAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphBackwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfDocument: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfDocumentAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfDocument: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveUp: (id)aSender
@@ -1043,6 +1113,9 @@ private:
         aEvent.mnCharCode       = aChar;
         aEvent.mnRepeat         = FALSE;
         nRet = mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
+        if( it != GetSalData()->maKeyEventAnswer.end() )
+            it->second = nRet ? true : false;
         if( AquaSalFrame::isAlive( mpFrame ) )
             mpFrame->CallCallback( SALEVENT_KEYUP, &aEvent );
     }

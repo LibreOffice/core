@@ -3578,7 +3578,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     {
         SalMenu* pMenu = ImplGetSalMenu();
         Rectangle aNativeRect( aRect );
-        if( pW->IsRTLEnabled() )
+        if( pW->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL() )
         {
             Point aPt( aRect.TopLeft() );
             aPt.X() += aSz.Width();
