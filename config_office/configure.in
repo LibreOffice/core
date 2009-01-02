@@ -4271,6 +4271,11 @@ if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNON
       AC_MSG_RESULT([yes])
       x_includes="no_x_includes"
       x_libraries="no_x_libraries"
+      dnl disable some things used on other Unix versions but not on the aqua build
+      enable_gtk=no
+      enable_cups=no
+      ENABLE_CUPS=""
+      AC_SUBST(ENABLE_CUPS)
    else
       AC_MSG_RESULT([no])
       dnl Probably a pure Darwin system. Check for X11 below.

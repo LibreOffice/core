@@ -18546,6 +18546,10 @@ echo $ECHO_N "checking for /System/Library/Frameworks/AppKit.framework... $ECHO_
 echo "${ECHO_T}yes" >&6; }
       x_includes="no_x_includes"
       x_libraries="no_x_libraries"
+            enable_gtk=no
+      enable_cups=no
+      ENABLE_CUPS=""
+
    else
       { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
