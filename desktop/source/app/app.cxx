@@ -1604,12 +1604,12 @@ void Desktop::Main()
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
-        OfficeIPCThread::BlockAllRequests();
+        OfficeIPCThread::SetDowning();
         FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
     }
     catch(const com::sun::star::configuration::CorruptedConfigurationException& exAnyCfg)
     {
-        OfficeIPCThread::BlockAllRequests();
+        OfficeIPCThread::SetDowning();
         FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
     }
 
@@ -2438,6 +2438,8 @@ void Desktop::OpenClients()
             }
         }
     }
+
+    OfficeIPCThread::EnableRequests();
 
     sal_Bool bShutdown( sal_False );
     if ( !pArgs->IsServer() )

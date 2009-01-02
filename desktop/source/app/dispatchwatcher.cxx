@@ -132,7 +132,7 @@ DispatchWatcher::~DispatchWatcher()
 }
 
 
-sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList )
+sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList, bool bNoTerminate )
 {
     Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
@@ -442,7 +442,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     // No more asynchronous requests?
     // The requests are removed from the request container after they called back to this
     // implementation via statusChanged!!
-    if ( !m_nRequestCount /*m_aRequestContainer.empty()*/ )
+    if ( !m_nRequestCount && ! bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
         Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );

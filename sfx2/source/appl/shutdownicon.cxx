@@ -680,19 +680,6 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                     ShutdownIcon::getInstance()->addTerminateListener();
                 }
 #endif
-#ifdef OS2
-                // above win32 starts the quickstart thread, but we have
-                // quickstart running only when -quickstart is specified
-                // on command line (next boot).
-                // so if -quickstart was not specified, we cannot issue
-                // quickstart veto on shutdown.
-                if (bQuickstart)
-                {
-                    // disable shutdown
-                    ShutdownIcon::getInstance()->SetVeto( true );
-                    ShutdownIcon::getInstance()->addTerminateListener();
-                }
-#endif
             }
             catch(const ::com::sun::star::lang::IllegalArgumentException&)
             {

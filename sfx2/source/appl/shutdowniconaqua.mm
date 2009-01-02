@@ -61,12 +61,13 @@ using namespace ::com::sun::star::beans;
 #define MI_BASE                    6
 #define MI_MATH                    7
 #define MI_TEMPLATE                8
-
+#define MI_STARTMODULE             9
 
 @interface QSMenuExecute : NSObject
 {
 }
 -(void)executeMenuItem: (NSMenuItem*)pItem;
+-(void)dockIconClicked: (NSObject*)pSender;
 @end
 
 @implementation QSMenuExecute
@@ -98,10 +99,20 @@ using namespace ::com::sun::star::beans;
     case MI_TEMPLATE:
         ShutdownIcon::FromTemplate();
         break;
+    case MI_STARTMODULE:
+        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( STARTMODULE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        break;
     default:
         break;
     }
 }
+
+-(void)dockIconClicked: (NSObject*)pSender
+{
+    // start start module
+    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( STARTMODULE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+}
+
 @end
 
 bool ShutdownIcon::IsQuickstarterInstalled()
@@ -119,16 +130,13 @@ static NSString* getAutoreleasedString( const rtl::OUString& rStr )
     return [[[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()] autorelease];
 }
 
-static void appendMenuItem( NSMenu* pMenu, NSMenu* pDockMenu, const rtl::OUString& rTitle, int nTag )
+static rtl::OUString getShortCut( const rtl::OUString i_rTitle )
 {
-    if( ! rTitle.getLength() )
-        return;
-    
     // create shortcut
     rtl::OUString aKeyEquiv;
-    for( sal_Int32 nIndex = 0; nIndex < rTitle.getLength(); nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < i_rTitle.getLength(); nIndex++ )
     {
-        rtl::OUString aShortcut( rTitle.copy( nIndex, 1 ).toAsciiLowerCase() );
+        rtl::OUString aShortcut( i_rTitle.copy( nIndex, 1 ).toAsciiLowerCase() );
         if( aShortcuts.find( aShortcut ) == aShortcuts.end() )
         {
             aShortcuts.insert( aShortcut );
@@ -136,25 +144,36 @@ static void appendMenuItem( NSMenu* pMenu, NSMenu* pDockMenu, const rtl::OUStrin
             break;
         }
     }
-    
-    NSMenuItem* pItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( rTitle )
-                                            action: @selector(executeMenuItem:)
-                                            keyEquivalent: (aKeyEquiv.getLength() ? getAutoreleasedString( aKeyEquiv ) : @"")
-                        ];
-    [pItem setTag: nTag];
-    [pItem setTarget: pExecute];
-    [pItem setEnabled: YES];
-    [pMenu addItem: pItem];
 
-    // create a similar entry in the dock menu
-    pItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( rTitle )
-                                action: @selector(executeMenuItem:)
-                                keyEquivalent: @""
+    return aKeyEquiv;   
+}
+
+static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const rtl::OUString& i_rTitle, int i_nTag, const rtl::OUString& i_rKeyEquiv )
+{
+    if( ! i_rTitle.getLength() )
+        return;
+    
+    NSMenuItem* pItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( i_rTitle )
+                                            action: @selector(executeMenuItem:)
+                                            keyEquivalent: (i_rKeyEquiv.getLength() ? getAutoreleasedString( i_rKeyEquiv ) : @"")
                         ];
-    [pItem setTag: nTag];
+    [pItem setTag: i_nTag];
     [pItem setTarget: pExecute];
     [pItem setEnabled: YES];
-    [pDockMenu addItem: pItem];
+    [i_pMenu addItem: pItem];
+
+    if( i_pDockMenu )
+    {
+        // create a similar entry in the dock menu
+        pItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( i_rTitle )
+                                    action: @selector(executeMenuItem:)
+                                    keyEquivalent: @""
+                            ];
+        [pItem setTag: i_nTag];
+        [pItem setTarget: pExecute];
+        [pItem setEnabled: YES];
+        [i_pDockMenu addItem: pItem];
+    }
 }
 
 
@@ -203,7 +222,7 @@ void aqua_init_systray()
                 if ( sURL.getLength() )
                     aFileNewAppsAvailable.insert( sURL );
             }
-
+            
             // describe the menu entries for launching the applications
             struct MenuEntryDescriptor
             {
@@ -220,6 +239,17 @@ void aqua_init_systray()
                 { SvtModuleOptions::E_SMATH,      MI_MATH,    MATH_URL }
             };
 
+            // insert entry for startcenter
+            if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SSTARTMODULE ) )
+            {
+                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "n" ) ) );
+                if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
+                    [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
+                else
+                    DBG_ERROR( "setDockIconClickHandler selector failed on NSApp\n" );
+
+            }
+            
             // insert the menu entries for launching the applications
             for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
             {
@@ -233,18 +263,24 @@ void aqua_init_systray()
                     // the application is installed, but the entry has been configured to *not* appear in the File/New
                     // menu => also let not appear it in the quickstarter
                     continue;
+                
+                rtl::OUString aKeyEquiv( getShortCut( pShutdownIcon->GetUrlDescription( sURL ) ) );
         
-                appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetUrlDescription( sURL ), aMenuItems[i].nMenuTag );
+                appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetUrlDescription( sURL ), aMenuItems[i].nMenuTag, aKeyEquiv );
             }
 
             // insert the remaining menu entries
-            appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), MI_TEMPLATE );
-            appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), MI_OPEN );
+            rtl::OUString aTitle( pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ) );
+            rtl::OUString aKeyEquiv( getShortCut( aTitle ) );
+            appendMenuItem( pMenu, pDockMenu, aTitle, MI_TEMPLATE, aKeyEquiv );
+            aTitle = pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN );
+            aKeyEquiv = getShortCut( aTitle );
+            appendMenuItem( pMenu, pDockMenu, aTitle, MI_OPEN, aKeyEquiv );
             
             [pDefMenu setSubmenu: pMenu];
             [NSApp performSelector:@selector(addFallbackMenuItem:) withObject: pDefMenu];
 
-            if( [NSApp respondsToSelector: @selector(addFallbackMenuItem:)] )
+            if( [NSApp respondsToSelector: @selector(addDockMenuItem:)] )
             {
                 [pDockSubMenu setSubmenu: pDockMenu];
                 // insert a separator to the dock menu

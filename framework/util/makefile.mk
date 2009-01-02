@@ -332,6 +332,7 @@ SHL4OBJS=       \
                 $(SLO)$/windowcommanddispatch.obj   \
                 $(SLO)$/windowstateconfiguration.obj \
                 $(SLO)$/windowcontentfactorymanager.obj
+                $(SLO)$/startmoduledispatcher.obj
 
 SHL4STDLIBS=    \
                 $(FWILIB)                           \

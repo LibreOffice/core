@@ -930,16 +930,22 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
+            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
             case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
             case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
             case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
             case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
-            case com::sun::star::awt::Key::SELECT_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_FORWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
@@ -969,6 +975,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             case KEY_DELETE:
             case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
             case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             {
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {

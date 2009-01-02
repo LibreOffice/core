@@ -60,6 +60,7 @@ SLOFILES=\
     $(SLO)$/servicehandler.obj                  \
     $(SLO)$/systemexec.obj		                \
     $(SLO)$/windowcommanddispatch.obj           \
+    $(SLO)$/startmoduledispatcher.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -349,7 +349,7 @@ throw( TerminationVetoException, RuntimeException )
     if ( OfficeIPCThread::AreRequestsPending() )
         throw TerminationVetoException();
     else
-        OfficeIPCThread::BlockAllRequests();
+        OfficeIPCThread::SetDowning();
 }
 
 void SAL_CALL OfficeIPCThreadController::notifyTermination( const EventObject& )
@@ -372,7 +372,7 @@ throw( RuntimeException )
     return *pOfficeIPCThreadMutex;
 }
 
-void OfficeIPCThread::BlockAllRequests()
+void OfficeIPCThread::SetDowning()
 {
     // We have the order to block all incoming requests. Framework
     // wants to shutdown and we have to make sure that no loading/printing
@@ -380,7 +380,29 @@ void OfficeIPCThread::BlockAllRequests()
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if ( pGlobalOfficeIPCThread )
-        pGlobalOfficeIPCThread->mbBlockRequests = sal_True;
+        pGlobalOfficeIPCThread->mbDowning = true;
+}
+
+static bool s_bInEnableRequests = false;
+
+void OfficeIPCThread::EnableRequests( bool i_bEnable )
+{
+    // switch between just queueing the requests and executing them
+    ::osl::MutexGuard   aGuard( GetMutex() );
+
+    if ( pGlobalOfficeIPCThread )
+    {
+        s_bInEnableRequests = true;
+        pGlobalOfficeIPCThread->mbRequestsEnabled = i_bEnable;
+        if( i_bEnable )
+        {
+            // hit the compiler over the head
+            ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< rtl::OUString >() );
+            // trigger already queued requests
+            OfficeIPCThread::ExecuteCmdLineRequests( aEmptyReq );
+        }
+        s_bInEnableRequests = false;
+    }
 }
 
 sal_Bool OfficeIPCThread::AreRequestsPending()
@@ -599,7 +621,8 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 }
 
 OfficeIPCThread::OfficeIPCThread() :
-    mbBlockRequests( sal_False ),
+    mbDowning( false ),
+    mbRequestsEnabled( false ),
     mnPendingRequests( 0 ),
     mpDispatchWatcher( 0 )
 {
@@ -679,7 +702,7 @@ void SAL_CALL OfficeIPCThread::run()
 
             // is this a termination message ? if so, terminate
             if(( aArguments.CompareTo( sc_aTerminationSequence, sc_nTSeqLength ) == COMPARE_EQUAL ) ||
-                    mbBlockRequests ) return;
+                    mbDowning ) return;
             String           aEmpty;
             std::auto_ptr< CommandLineArgs > aCmdLineArgs;
             try
@@ -927,9 +950,12 @@ static void AddToDispatchList(
 
 sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
 {
-    ::rtl::OUString                 aEmpty;
-    DispatchWatcher::DispatchList   aDispatchList;
+    // protect the dispatch list
+    osl::ClearableMutexGuard aGuard( GetMutex() );
 
+    static DispatchWatcher::DispatchList    aDispatchList;
+
+    rtl::OUString aEmpty;
     // Create dispatch list for dispatch watcher
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty, aRequest.aModule );
@@ -939,11 +965,13 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
 
-    osl::ClearableMutexGuard aGuard( GetMutex() );
     sal_Bool bShutdown( sal_False );
 
     if ( pGlobalOfficeIPCThread )
     {
+        if( ! pGlobalOfficeIPCThread->AreRequestsEnabled() )
+            return bShutdown;
+
         pGlobalOfficeIPCThread->mnPendingRequests += aDispatchList.size();
         if ( !pGlobalOfficeIPCThread->mpDispatchWatcher )
         {
@@ -951,10 +979,14 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
             pGlobalOfficeIPCThread->mpDispatchWatcher->acquire();
         }
 
+        // copy for execute
+        DispatchWatcher::DispatchList aTempList( aDispatchList );
+        aDispatchList.clear();
+
         aGuard.clear();
 
         // Execute dispatch requests
-        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
+        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aTempList, s_bInEnableRequests );
 
         // set processed flag
         if (aRequest.pcProcessed != NULL)

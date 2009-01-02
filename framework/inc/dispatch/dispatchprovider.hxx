@@ -76,8 +76,6 @@ namespace framework{
     @descr          We know some special dispatch objects with diffrent functionality.
                     The can be created internaly by the following DispatchProvider.
                     Here we define some identifier to force creation of the right one.
-
-    @modified       20.08.2003 08:34, as96863
 */
 enum EDispatchHelper
 {
@@ -87,7 +85,8 @@ enum EDispatchHelper
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
-    E_CLOSEDISPATCHER
+    E_CLOSEDISPATCHER       ,
+    E_STARTMODULEDISPATCHER
 };
 
 //_________________________________________________________________________________________________________________
