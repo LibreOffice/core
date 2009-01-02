@@ -1138,8 +1138,12 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
                 pSTxt = new utl::TextSearch( aTmp );
             }
+
+            // todo/mba: searching for attributes in Outliner text?!
+            BOOL bSearchInNotes = FALSE;
+
             // Bug 24665: suche im richtigen Bereich weiter (pTextRegion!)
-            if( aSrchPam.Find( *pSearchOpt, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
+            if( aSrchPam.Find( *pSearchOpt, bSearchInNotes, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )   // gefunden ?
                 break;                                      // also raus
             else if( !pSet->Count() )

@@ -3779,6 +3779,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                 break;
                         }
             //#i6193#, change ui if mouse is over SwPostItField
+            // TODO: do the same thing for redlines SW_REDLINE
             SwRect aFldRect;
             SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
             if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, FALSE, &aFldRect ) )

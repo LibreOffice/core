@@ -296,6 +296,7 @@ SwDoc::SwDoc() :
     mbClipBoard( false ),
     mbColumnSelection( false ),
     // i#78591#
+    mbProtectForm(false),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False)

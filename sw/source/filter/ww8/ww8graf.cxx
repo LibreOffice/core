@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8graf.cxx,v $
- * $Revision: 1.154 $
+ * $Revision: 1.154.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -952,6 +952,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         }
 
         pRet = new OutlinerParaObject(*mpDrawEditEngine->CreateTextObject());
+        pRet->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
 
         mpDrawEditEngine->SetText( aEmptyStr );
         mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());

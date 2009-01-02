@@ -392,6 +392,7 @@ public:
 
     // die Suchfunktionen
     ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
+                BOOL bSearchInNotes,
                 SwDocPositions eStart, SwDocPositions eEnde,
                 BOOL& bCancel,
                 FindRanges eRng, int bReplace = FALSE );

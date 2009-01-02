@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docvw.src,v $
- * $Revision: 1.52 $
+ * $Revision: 1.52.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,5 +321,20 @@ String STR_DELETE_ALL_NOTES
 String STR_DELETE_AUTHOR_NOTES
 {
     Text [ en-US ] = "Notes by " ;
+};
+
+String STR_NODATE
+{
+    Text [ en-US ] = "(no date)" ;
+};
+
+String STR_NOAUTHOR
+{
+    Text [ en-US ] = "(no author)" ;
+};
+
+String STR_REPLY
+{
+    Text [ en-US ] = "Reply to $1" ;
 };
 

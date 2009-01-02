@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textsh.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.188.1 $
  *
  * This file is part of OpenOffice.org.
  *

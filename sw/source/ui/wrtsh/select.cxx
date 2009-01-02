@@ -175,7 +175,7 @@ long SwWrtShell::SelAll()
 ------------------------------------------------------------------------*/
 
 
-ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt,
+ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,
                                 SwDocPositions eStt, SwDocPositions eEnd,
                                 FindRanges eFlags, int bReplace )
 {
@@ -183,7 +183,7 @@ ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt,
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
     BOOL bCancel = FALSE;
-    ULONG nRet = Find( rSearchOpt, eStt, eEnd, bCancel, eFlags, bReplace );
+    ULONG nRet = Find( rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace );
     if(bCancel)
     {
         Undo(UNDO_EMPTY, 1);

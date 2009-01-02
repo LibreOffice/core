@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.130.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +97,7 @@
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
-static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
+static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL /*bBalloon*/ )
 {
     USHORT nResId = 0;
     switch( rRedl.GetType() )
@@ -301,6 +301,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     if (pMgr->ShowPreview(pFld,pSwFmtFld))
                                     {
                                         SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr,PB_Preview);
+                                        pPostIt->InitControls();
                                         pPostIt->SetReadonly(true);
                                         pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
                                         pPostIt->SetVirtualPosSize(rEvt.GetMousePosPixel(),Size(180,70));

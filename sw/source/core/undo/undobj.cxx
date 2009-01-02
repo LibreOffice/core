@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+#include <docsh.hxx>
 
 class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
                           private SwUndoSaveSection
@@ -1099,6 +1100,10 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
 
     RedlineMode_t eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
+    //#i92154# let UI know about a new redline with comment
+    if (rDoc.GetDocShell() && (pRedl->GetComment() != String(::rtl::OUString::createFromAscii(""))) )
+        rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
+    //
     rDoc.AppendRedline( pRedl, true );
     rDoc.SetRedlineMode_intern( eOld );
 }

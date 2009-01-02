@@ -70,6 +70,10 @@ public:
 
     void        InsertSymbol(SfxRequest& rReq);
 
+    void        ExecSearch(SfxRequest&, BOOL bNoMessage = FALSE);
+    void            StateSearch(SfxItemSet &);
+
+
     virtual SfxUndoManager*     GetUndoManager();
 };
 

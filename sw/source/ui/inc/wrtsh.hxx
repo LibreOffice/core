@@ -377,6 +377,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
 
     //Suchen oder Ersetzen
     ULONG SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
+                         BOOL bSearchInNotes,
                          SwDocPositions eStart, SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
                          int bReplace = FALSE );

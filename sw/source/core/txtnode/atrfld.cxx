@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrfld.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@
 
 #include <svtools/smplhint.hxx>
 
-TYPEINIT2( SwFmtFld, SfxPoolItem, SwClient )
+TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);
 
 /****************************************************************************

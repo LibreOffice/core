@@ -101,30 +101,20 @@
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
 #include <swwait.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uivwimp.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <uitool.hxx>
 #include <shellio.hxx>
 #include <fmtinfmt.hxx>
 #include <mdiexp.hxx>
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
 #include <frmmgr.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
@@ -135,53 +125,25 @@
 #include <workctrl.hxx>
 #include <scroll.hxx>
 #include <edtwin.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
-#ifndef _TABSH_HXX
 #include <tabsh.hxx>
-#endif
-#ifndef _LISTSH_HXX
 #include <listsh.hxx>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _WEB_HRC
 #include <web.hrc>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <fmtclds.hxx>
 #include <helpid.h>
 #include <svtools/templdlg.hxx>
 #include <dbconfig.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 
 #include <PostItMgr.hxx>
 #include <postit.hxx>
@@ -189,7 +151,6 @@
 // #ifndef _FRMMGR_HXX
 // #include <frmmgr.hxx>
 // #endif
-
 
 #include <comphelper/processfactory.hxx>
 
@@ -1895,7 +1856,9 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                                     0,0,0,
                                     TransliterationModules_IGNORE_CASE );
 
-                if( pWrtShell->SearchPattern( aSearchOpt, DOCPOS_START, DOCPOS_END ))
+                //todo/mba: assuming that notes shouldn't be searched
+                BOOL bSearchInNotes = FALSE;
+                if( pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, DOCPOS_START, DOCPOS_END ))
                 {
                     pWrtShell->EnterStdMode();      // Selektion wieder aufheben
                     bRet = TRUE;
@@ -2438,5 +2401,11 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         }
     }
     return 0;
+}
+
+void SwView::ExecuteScan( SfxRequest& rReq )
+{
+    if (pViewImpl)
+        pViewImpl->ExecuteScan(rReq) ;
 }
 

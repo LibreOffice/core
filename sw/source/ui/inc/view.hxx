@@ -659,6 +659,8 @@ public:
                             Graphic* pPreviewGrf = 0,
                             BOOL bRule = FALSE );
 
+    void ExecuteScan( SfxRequest& rReq );
+
     SwPostItMgr* GetPostItMgr() { return mpPostItMgr;}
     const SwPostItMgr* GetPostItMgr() const { return mpPostItMgr;}
 };

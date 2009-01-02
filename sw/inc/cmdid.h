@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdid.h,v $
- * $Revision: 1.84 $
+ * $Revision: 1.84.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1068,6 +1068,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_HIDE_NOTE                (FN_NOTES+3)
 #define FN_HIDE_NOTE_AUTHOR         (FN_NOTES+4)
 #define FN_HIDE_ALL_NOTES           (FN_NOTES+5)
+
+#define FN_DELETE_COMMENT           (FN_NOTES+6)
+#define FN_REPLY                    (FN_NOTES+7)
+
 
 /*--------------------------------------------------------------------
     Bereich: Parameter

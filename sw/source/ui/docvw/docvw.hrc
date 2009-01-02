@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docvw.hrc,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,11 @@
 
 #define STR_DELETE_ALL_NOTES            (RC_DOCVW_BEGIN + 24)
 #define STR_DELETE_AUTHOR_NOTES         (RC_DOCVW_BEGIN + 25)
+
+#define STR_NODATE                      (RC_DOCVW_BEGIN + 26)
+#define STR_NOAUTHOR                    (RC_DOCVW_BEGIN + 27)
+
+#define STR_REPLY                       (RC_DOCVW_BEGIN + 28)
 
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
 

@@ -271,11 +271,6 @@ interface Annotation : _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_SEARCH_DLG
-    [
-        StateMethod = StateDisableItems
-    ]
-
     SID_STYLE_FAMILY1
     [
         StateMethod = StateDisableItems ;

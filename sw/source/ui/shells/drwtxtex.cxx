@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtex.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/cjkoptions.hxx>
+#include <svtools/ctloptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
@@ -84,19 +85,18 @@
 #include <swmodule.hxx>
 #include <initui.hxx>               // fuer SpellPointer
 #include <edtwin.hxx>
+#include <swwait.hxx>
+#include <docstat.hxx>
 
-#ifndef _CMDID_H
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
+#include "misc.hrc"
 
 //modified on Jul. 30th
 #include <svtools/languageoptions.hxx>
@@ -124,9 +124,8 @@ using namespace ::com::sun::star;
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
-
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-    SfxItemSet aEditAttr(pOLV->GetAttribs());
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -298,7 +297,66 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aNewAttr.Put(*pArgs);
         }
         break;
+        case FN_FORMAT_FOOTNOTE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
+            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            break;
+        }
+        case FN_NUMBERING_OUTLINE_DLG:
+        {
+            SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            rReq.Done();
+        }
+        break;
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                if( xDialog.is() )
+                {
+                    xDialog->execute();
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+            rReq.Ignore ();
+        }
+        break;
+        case FN_WORDCOUNT_DIALOG:
+        {
+            SwDocStat aCurr;
+            SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
+            {
+                SwWait aWait( *GetView().GetDocShell(), TRUE );
+                rSh.StartAction();
+                rSh.CountWords( aCurr );
+                rSh.UpdateDocStat( aDocStat );
+                rSh.EndAction();
+            }
+
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
+            pDialog->SetValues(aCurr, aDocStat );
+            pDialog->Execute();
+            delete pDialog;
+        }
+        break;
         case SID_PARA_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -661,6 +719,18 @@ ASK_ESCAPE:
             }
             else
                 GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+        }
+        break;
+        case SID_INSERT_RLM :
+        case SID_INSERT_LRM :
+        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_ZWSP:
+        {
+            SvtCTLOptions aCTLOptions;
+            sal_Bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+            GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
+            if(!bEnabled)
+                rSet.DisableItem(nWhich);
         }
         break;
         default:

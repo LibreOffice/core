@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textsh1.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.70.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,16 +32,10 @@
 #include "precompiled_sw.hxx"
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <hintids.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 
 #include <i18npool/mslangid.hxx>
 #include <svtools/languageoptions.hxx>
@@ -63,9 +57,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/colritem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/brshitem.hxx>
 #include <svx/svxacorr.hxx>
 #include <svtools/cjkoptions.hxx>
@@ -78,18 +70,14 @@
 #include <fmtinfmt.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <swmodule.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <swevent.hxx>
 #include <fmthdft.hxx>
 #include <pagedesc.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <bookmrk.hxx>
 #include <swdtflvr.hxx>
 #include <docstat.hxx>
@@ -97,41 +85,24 @@
 #include <tablemgr.hxx>
 #include <swundo.hxx>       // fuer Undo-IDs
 #include <reffld.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <mdiexp.hxx>
-#ifndef _INPUTWIN_HXX
 #include <inputwin.hxx>
-#endif
-#ifndef _PARDLG_HXX
 #include <pardlg.hxx>
-#endif
 #include <frmatr.hxx>
 #include <fmtcol.hxx>
 #include <cellatr.hxx>
 #include <edtwin.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
 #include "fldmgr.hxx"
 
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _WEB_HRC
 #include <web.hrc>
-#endif
 #include "paratr.hxx"
 #include <crsskip.hxx>
 #include <docstat.hxx>
-#include <swwait.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>

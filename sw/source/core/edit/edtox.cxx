@@ -444,7 +444,10 @@ void SwEditShell::ApplyAutoMark()
 
                     KillPams();
                     BOOL bCancel;
-                    ULONG nRet = Find( aSearchOpt,  DOCPOS_START, DOCPOS_END, bCancel,
+
+                    // todo/mba: assuming that notes shouldn't be searched
+                    BOOL bSearchInNotes = FALSE;
+                    ULONG nRet = Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
                                     (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY),
                                     FALSE );
 

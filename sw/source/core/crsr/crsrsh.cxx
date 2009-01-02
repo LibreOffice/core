@@ -3112,7 +3112,7 @@ bool SwCrsrShell::SelectHiddenRange()
 /*  */
 
     // die Suchfunktionen
-ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt,
+ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,
                             SwDocPositions eStart, SwDocPositions eEnde,
                             BOOL& bCancel,
                             FindRanges eRng, int bReplace )
@@ -3121,7 +3121,7 @@ ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt,
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    ULONG nRet = pCurCrsr->Find( rSearchOpt, eStart, eEnde, bCancel, eRng, bReplace );
+    ULONG nRet = pCurCrsr->Find( rSearchOpt, bSearchInNotes, eStart, eEnde, bCancel, eRng, bReplace );
     if( nRet || bCancel )
         UpdateCrsr();
     return nRet;

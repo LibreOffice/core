@@ -42,6 +42,7 @@ class SwContentType;
 class SwFmtFld;
 class SwTxtINetFmt;
 class SwTOXBase;
+class SwRedline;
 
 //----------------------------------------------------------------------------
 //  Hilfsklassen
@@ -120,20 +121,29 @@ public:
 };
 
 //----------------------------------------------------------------------------
-
 class SwPostItContent : public SwContent
 {
     const SwFmtFld*     pFld;
+    SwRedline*          pRedline;
+    bool                mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const String& rName,
                             const SwFmtFld* pField,
                             long nYPos )
-        : SwContent( pCnt, rName, nYPos ), pFld( pField )
+        : SwContent( pCnt, rName, nYPos ), pFld( pField ),mbPostIt(true)
+    {}
+    SwPostItContent( const SwContentType* pCnt,
+                            const String& rName,
+                            SwRedline* pRed,
+                            long nYPos )
+        : SwContent( pCnt, rName, nYPos ), pRedline( pRed ),mbPostIt(false)
     {}
 
     const SwFmtFld* GetPostIt()     { return pFld; }
-    virtual BOOL    IsProtect() const;
+    SwRedline* GetRedline() { return pRedline; }
+    virtual BOOL    IsProtect()     const;
+    bool            IsPostIt()      {return mbPostIt; }
 };
 
 //----------------------------------------------------------------------------

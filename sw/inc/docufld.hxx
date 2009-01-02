@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,8 @@
 #ifndef _DOCUFLD_HXX
 #define _DOCUFLD_HXX
 
-#ifndef _DATE_HXX //autogen
-    #include <tools/date.hxx>
-#endif
 
+#include <tools/date.hxx>
 #include <tools/datetime.hxx>
 
 

@@ -225,7 +225,6 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                     pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
                 }
             }
-
             switch (pSrchItem->GetCommand())
             {
             case SVX_SEARCHCMD_FIND:
@@ -606,6 +605,8 @@ void SwView::Replace()
     }
     else
     {
+        if (GetPostItMgr()->GetActivePostIt())
+            GetPostItMgr()->Replace(pSrchItem);
         pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
                                             pSrchItem->GetRegExp());
 
@@ -717,7 +718,7 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     else
     {
         // Normale Suche
-        nFound = pWrtShell->SearchPattern(aSearchOpt,
+        nFound = pWrtShell->SearchPattern(aSearchOpt, pSrchItem->GetNotes(),
                                           rOptions.eStart,
                                           rOptions.eEnd,
                                           FindRanges(eRanges),

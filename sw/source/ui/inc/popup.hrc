@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: popup.hrc,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,8 @@
 #define MN_LANGUAGE_FOR_DOCUMENT    (RC_POPUPS_BEGIN + 13)
 #define MN_ANNOTATION_POPUPMENU     (RC_POPUPS_BEGIN + 14)
 #define MN_ANNOTATION_BUTTON        (RC_POPUPS_BEGIN + 15)
+#define MN_REDCOMMENT_POPUPMENU     (RC_POPUPS_BEGIN + 16)
+#define MN_REDCOMMENT_BUTTON        (RC_POPUPS_BEGIN + 17)
 
 #if MN_MEDIA_POPUPMENU > RC_POPUPS_END
 

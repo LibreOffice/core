@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.79.188.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +85,8 @@
 #include <view.hxx>         // fuer die aktuelle Sicht
 #endif
 #include <edtwin.hxx>
+#include <PostItMgr.hxx>
+#include <postit.hxx>
 #include <wrtsh.hxx>        // Verbindung zur Core
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Dokumenterzeugung
@@ -465,6 +467,10 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     if(pView)
         pView->GetEditWin().StopQuickHelp();
 
+    //#i91811# mod if we have an active margin window, write back the text
+    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
+        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+
     if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) &&
         !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS) )
         RemoveOLEObjects();
@@ -618,6 +624,11 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
+
+    //#i91811# mod if we have an active margin window, write back the text
+    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
+        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+
     ULONG nVBWarning = 0;
 
     if( pDoc->ContainsMSVBasic() )

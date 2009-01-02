@@ -10013,6 +10013,55 @@ SfxVoidItem DeleteNote FN_DELETE_NOTE
     GroupId = GID_EDIT;
 ]
 
+SfxVoidItem ReplyNote FN_REPLY
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem DeleteComment FN_DELETE_COMMENT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_NOTE_AUTHOR )
 [
