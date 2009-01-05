@@ -2455,7 +2455,8 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
 void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT,
     const sal_Int32*, const SvxFont&, sal_uInt16, sal_uInt16, BYTE,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
-    const ::com::sun::star::lang::Locale*, const Color&)
+    const ::com::sun::star::lang::Locale*, const Color&, const Color&)
+
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
@@ -2642,6 +2643,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxWeightItem( rFont.GetWeight(), EE_CHAR_WEIGHT )  );
     rSet.Put( SvxColorItem( rFont.GetColor(), EE_CHAR_COLOR )  );
     rSet.Put( SvxUnderlineItem( rFont.GetUnderline(), EE_CHAR_UNDERLINE )  );
+    rSet.Put( SvxOverlineItem( rFont.GetOverline(), EE_CHAR_OVERLINE )  );
     rSet.Put( SvxCrossedOutItem( rFont.GetStrikeout(), EE_CHAR_STRIKEOUT )  );
     rSet.Put( SvxPostureItem( rFont.GetItalic(), EE_CHAR_ITALIC )  );
     rSet.Put( SvxContourItem( rFont.IsOutline(), EE_CHAR_OUTLINE )  );

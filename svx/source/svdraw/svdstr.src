@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdstr.src,v $
- * $Revision: 1.95 $
+ * $Revision: 1.95.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2617,6 +2617,11 @@ String SIP_EE_CHAR_WEIGHT
 String SIP_EE_CHAR_UNDERLINE
 {
     Text [ en-US ] = "Underline";
+};
+
+String SIP_EE_CHAR_OVERLINE
+{
+    Text [ en-US ] = "Overline";
 };
 
 String SIP_EE_CHAR_STRIKEOUT

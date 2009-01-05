@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltypes.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,9 +277,14 @@
 #define XML_TYPE_TEXT_USE_SOFT_PAGE_BREAKS (XML_TEXT_TYPES_START + 107)
 #define XML_TYPE_TEXT_CLIP  (XML_TEXT_TYPES_START + 108)
 
+#define XML_TYPE_TEXT_OVERLINE_TYPE     (XML_TEXT_TYPES_START + 108)
+#define XML_TYPE_TEXT_OVERLINE_STYLE    (XML_TEXT_TYPES_START + 109)
+#define XML_TYPE_TEXT_OVERLINE_WIDTH    (XML_TEXT_TYPES_START + 110)
+#define XML_TYPE_TEXT_OVERLINE_COLOR    (XML_TEXT_TYPES_START + 111)
+#define XML_TYPE_TEXT_OVERLINE_HASCOLOR (XML_TEXT_TYPES_START + 112)
+
 #define XML_SCH_TYPES_START (0x4 << XML_TYPE_APP_SHIFT)
 #define XML_PM_TYPES_START  (0x5 << XML_TYPE_APP_SHIFT) // page master
 #define XML_DB_TYPES_START  (0x6 << XML_TYPE_APP_SHIFT)
 
 #endif      // _XMLOFF_XMLTYPES_HXX
-

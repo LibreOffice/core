@@ -102,6 +102,34 @@ namespace drawinglayer
         using ::com::sun::star::awt::XWindow;
         using ::com::sun::star::awt::PosSize::POSSIZE;
 
+        static FontUnderline mapTextLineStyle(primitive2d::FontUnderline eLineStyle)
+        {
+            switch(eLineStyle)
+            {
+                default:
+                    DBG_WARNING1( "DrawingLayer: Unknown text line style attribute (%d)!", eLineStyle );
+                    // fall through
+                case primitive2d::FONT_UNDERLINE_NONE:          return UNDERLINE_NONE;
+                case primitive2d::FONT_UNDERLINE_SINGLE:        return UNDERLINE_SINGLE;
+                case primitive2d::FONT_UNDERLINE_DOUBLE:        return UNDERLINE_DOUBLE;
+                case primitive2d::FONT_UNDERLINE_DOTTED:        return UNDERLINE_DOTTED;
+                case primitive2d::FONT_UNDERLINE_DASH:          return UNDERLINE_DASH;
+                case primitive2d::FONT_UNDERLINE_LONGDASH:      return UNDERLINE_LONGDASH;
+                case primitive2d::FONT_UNDERLINE_DASHDOT:       return UNDERLINE_DASHDOT;
+                case primitive2d::FONT_UNDERLINE_DASHDOTDOT:    return UNDERLINE_DASHDOTDOT;
+                case primitive2d::FONT_UNDERLINE_SMALLWAVE:     return UNDERLINE_SMALLWAVE;
+                case primitive2d::FONT_UNDERLINE_WAVE:          return UNDERLINE_WAVE;
+                case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:    return UNDERLINE_DOUBLEWAVE;
+                case primitive2d::FONT_UNDERLINE_BOLD:          return UNDERLINE_BOLD;
+                case primitive2d::FONT_UNDERLINE_BOLDDOTTED:    return UNDERLINE_BOLDDOTTED;
+                case primitive2d::FONT_UNDERLINE_BOLDDASH:      return UNDERLINE_BOLDDASH;
+                case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:  return UNDERLINE_LONGDASH;
+                case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:   return UNDERLINE_BOLDDASHDOT;
+                case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:return UNDERLINE_BOLDDASHDOT;
+                case primitive2d::FONT_UNDERLINE_BOLDWAVE:      return UNDERLINE_BOLDWAVE;
+            }
+        }
+
         //////////////////////////////////////////////////////////////////////////////
         // rendering support
 
@@ -140,33 +168,17 @@ namespace drawinglayer
 
                     if( pTCPP != NULL )
                     {
-                        // set Underline attribute
-                        FontUnderline eFontUnderline = UNDERLINE_NONE;
-                        switch( pTCPP->getFontUnderline() )
+                        // set Overline attribute
+                        FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
+                        if( eFontOverline != UNDERLINE_NONE )
                         {
-                            default:
-                                DBG_WARNING1( "DrawingLayer: Unknown underline attribute (%d)!", pTCPP->getFontUnderline() );
-                                // fall through
-                            case primitive2d::FONT_UNDERLINE_NONE:      eFontUnderline = UNDERLINE_NONE; break;
-                            case primitive2d::FONT_UNDERLINE_SINGLE:    eFontUnderline = UNDERLINE_SINGLE; break;
-                            case primitive2d::FONT_UNDERLINE_DOUBLE:    eFontUnderline = UNDERLINE_DOUBLE; break;
-                            case primitive2d::FONT_UNDERLINE_DOTTED:    eFontUnderline = UNDERLINE_DOTTED; break;
-                            case primitive2d::FONT_UNDERLINE_DASH:      eFontUnderline = UNDERLINE_DASH; break;
-                            case primitive2d::FONT_UNDERLINE_LONGDASH:  eFontUnderline = UNDERLINE_LONGDASH; break;
-                            case primitive2d::FONT_UNDERLINE_DASHDOT:   eFontUnderline = UNDERLINE_DASHDOT; break;
-                            case primitive2d::FONT_UNDERLINE_DASHDOTDOT:eFontUnderline = UNDERLINE_DASHDOTDOT; break;
-                            case primitive2d::FONT_UNDERLINE_SMALLWAVE: eFontUnderline = UNDERLINE_SMALLWAVE; break;
-                            case primitive2d::FONT_UNDERLINE_WAVE:      eFontUnderline = UNDERLINE_WAVE; break;
-                            case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:eFontUnderline = UNDERLINE_DOUBLEWAVE; break;
-                            case primitive2d::FONT_UNDERLINE_BOLD:      eFontUnderline = UNDERLINE_BOLD; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDOTTED:eFontUnderline = UNDERLINE_BOLDDOTTED; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDASH:  eFontUnderline = UNDERLINE_BOLDDASH; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:eFontUnderline = UNDERLINE_LONGDASH; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDWAVE:  eFontUnderline = UNDERLINE_BOLDWAVE; break;
+                            aFont.SetOverline( eFontOverline );
+                            if( pTCPP->getWordLineMode() )
+                                aFont.SetWordLineMode( true );
                         }
 
+                        // set Underline attribute
+                        FontUnderline eFontUnderline = mapTextLineStyle( pTCPP->getFontUnderline() );
                         if( eFontUnderline != UNDERLINE_NONE )
                         {
                             aFont.SetUnderline( eFontUnderline );
@@ -181,7 +193,7 @@ namespace drawinglayer
                         switch( pTCPP->getFontStrikeout() )
                         {
                             default:
-                                DBG_WARNING1( "DrawingLayer: Unknown strikeout attribute (%d)!", pTCPP->getFontUnderline() );
+                               DBG_WARNING1( "DrawingLayer: Unknown strikeout attribute (%d)!", pTCPP->getFontStrikeout() );
                                 // fall through
                             case primitive2d::FONT_STRIKEOUT_NONE:      eFontStrikeout = STRIKEOUT_NONE; break;
                             case primitive2d::FONT_STRIKEOUT_SINGLE:    eFontStrikeout = STRIKEOUT_SINGLE; break;

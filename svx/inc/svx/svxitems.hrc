@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxitems.hrc,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,7 +211,7 @@
 #define RID_SVXITEMS_ESCAPEMENT_SUB         (RID_SVXITEMS_START + 168)
 #define RID_SVXITEMS_ESCAPEMENT_AUTO        (RID_SVXITEMS_START + 169)
 
-// enum FontUnderline ----------------------------------------------------
+// enum FontUnderline - used for underline -------------------------------
 #define RID_SVXITEMS_UL_BEGIN               (RID_SVXITEMS_START + 170)
 #define RID_SVXITEMS_UL_NONE                (RID_SVXITEMS_START + 170)
 #define RID_SVXITEMS_UL_SINGLE              (RID_SVXITEMS_START + 171)
@@ -232,6 +232,28 @@
 #define RID_SVXITEMS_UL_BOLDDASHDOT         (RID_SVXITEMS_START + 186)
 #define RID_SVXITEMS_UL_BOLDDASHDOTDOT      (RID_SVXITEMS_START + 187)
 #define RID_SVXITEMS_UL_BOLDWAVE            (RID_SVXITEMS_START + 188)
+
+// enum FontUnderline - used for overline --------------------------------
+#define RID_SVXITEMS_OL_BEGIN               (RID_SVXITEMS_START + 200)
+#define RID_SVXITEMS_OL_NONE                (RID_SVXITEMS_START + 200)
+#define RID_SVXITEMS_OL_SINGLE              (RID_SVXITEMS_START + 201)
+#define RID_SVXITEMS_OL_DOUBLE              (RID_SVXITEMS_START + 202)
+#define RID_SVXITEMS_OL_DOTTED              (RID_SVXITEMS_START + 203)
+#define RID_SVXITEMS_OL_DONTKNOW            (RID_SVXITEMS_START + 204)
+#define RID_SVXITEMS_OL_DASH                (RID_SVXITEMS_START + 205)
+#define RID_SVXITEMS_OL_LONGDASH            (RID_SVXITEMS_START + 206)
+#define RID_SVXITEMS_OL_DASHDOT             (RID_SVXITEMS_START + 207)
+#define RID_SVXITEMS_OL_DASHDOTDOT          (RID_SVXITEMS_START + 208)
+#define RID_SVXITEMS_OL_SMALLWAVE           (RID_SVXITEMS_START + 209)
+#define RID_SVXITEMS_OL_WAVE                (RID_SVXITEMS_START + 210)
+#define RID_SVXITEMS_OL_DOUBLEWAVE          (RID_SVXITEMS_START + 211)
+#define RID_SVXITEMS_OL_BOLD                (RID_SVXITEMS_START + 212)
+#define RID_SVXITEMS_OL_BOLDDOTTED          (RID_SVXITEMS_START + 213)
+#define RID_SVXITEMS_OL_BOLDDASH            (RID_SVXITEMS_START + 214)
+#define RID_SVXITEMS_OL_BOLDLONGDASH        (RID_SVXITEMS_START + 215)
+#define RID_SVXITEMS_OL_BOLDDASHDOT         (RID_SVXITEMS_START + 216)
+#define RID_SVXITEMS_OL_BOLDDASHDOTDOT      (RID_SVXITEMS_START + 217)
+#define RID_SVXITEMS_OL_BOLDWAVE            (RID_SVXITEMS_START + 218)
 
 // enum SvxAdjust -----------------------------------------------------------
 #define RID_SVXITEMS_ADJUST_BEGIN           (RID_SVXITEMS_START + 230)
@@ -322,6 +344,7 @@
 #define RID_ATTR_PARA_KEEP                  (RID_ATTR_BEGIN + 66)
 #define RID_ATTR_CHAR_BLINK                 (RID_ATTR_BEGIN + 67)
 #define RID_ATTR_CHAR_CHARSETCOLOR          (RID_ATTR_BEGIN + 68)
+#define RID_ATTR_CHAR_OVERLINE              (RID_ATTR_BEGIN + 69)
 
 #define RID_ATTR_FLASH                      (RID_ATTR_BEGIN + 406)
 #define RID_ATTR_PARA_REGISTER              (RID_ATTR_BEGIN + 413)

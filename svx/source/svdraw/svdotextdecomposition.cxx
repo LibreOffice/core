@@ -79,6 +79,32 @@ namespace
         return aRetval;
     }
 
+    static drawinglayer::primitive2d::FontUnderline mapTextLineStyle(FontUnderline eLineStyle)
+    {
+        switch(eLineStyle)
+        {
+            case UNDERLINE_SINGLE:          return drawinglayer::primitive2d::FONT_UNDERLINE_SINGLE;
+            case UNDERLINE_DOUBLE:          return drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLE;
+            case UNDERLINE_DOTTED:          return drawinglayer::primitive2d::FONT_UNDERLINE_DOTTED;
+            case UNDERLINE_DASH:            return drawinglayer::primitive2d::FONT_UNDERLINE_DASH;
+            case UNDERLINE_LONGDASH:        return drawinglayer::primitive2d::FONT_UNDERLINE_LONGDASH;
+            case UNDERLINE_DASHDOT:         return drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOT;
+            case UNDERLINE_DASHDOTDOT:      return drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOTDOT;
+            case UNDERLINE_SMALLWAVE:       return drawinglayer::primitive2d::FONT_UNDERLINE_SMALLWAVE;
+            case UNDERLINE_WAVE:            return drawinglayer::primitive2d::FONT_UNDERLINE_WAVE;
+            case UNDERLINE_DOUBLEWAVE:      return drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLEWAVE;
+            case UNDERLINE_BOLD:            return drawinglayer::primitive2d::FONT_UNDERLINE_BOLD;
+            case UNDERLINE_BOLDDOTTED:      return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDOTTED;
+            case UNDERLINE_BOLDDASH:        return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASH;
+            case UNDERLINE_BOLDLONGDASH:    return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDLONGDASH;
+            case UNDERLINE_BOLDDASHDOT:     return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOT;
+            case UNDERLINE_BOLDDASHDOTDOT:  return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT;
+            case UNDERLINE_BOLDWAVE:        return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDWAVE;
+            // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
+            default:                        return drawinglayer::primitive2d::FONT_UNDERLINE_NONE;
+        }
+    }
+
     class impTextBreakupHandler
     {
     private:
@@ -247,30 +273,11 @@ namespace
                 }
             }
 
-            // prepare underline data
-            drawinglayer::primitive2d::FontUnderline eFontUnderline(drawinglayer::primitive2d::FONT_UNDERLINE_NONE);
+            // prepare overline data
+            drawinglayer::primitive2d::FontUnderline eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
 
-            switch(rInfo.mrFont.GetUnderline())
-            {
-                case UNDERLINE_SINGLE : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_SINGLE; break;
-                case UNDERLINE_DOUBLE : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLE; break;
-                case UNDERLINE_DOTTED : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_DOTTED; break;
-                case UNDERLINE_DASH : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_DASH; break;
-                case UNDERLINE_LONGDASH : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_LONGDASH; break;
-                case UNDERLINE_DASHDOT : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOT; break;
-                case UNDERLINE_DASHDOTDOT : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOTDOT; break;
-                case UNDERLINE_SMALLWAVE : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_SMALLWAVE; break;
-                case UNDERLINE_WAVE : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_WAVE; break;
-                case UNDERLINE_DOUBLEWAVE : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLEWAVE; break;
-                case UNDERLINE_BOLD : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLD; break;
-                case UNDERLINE_BOLDDOTTED : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDOTTED; break;
-                case UNDERLINE_BOLDDASH : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASH; break;
-                case UNDERLINE_BOLDLONGDASH : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLDLONGDASH; break;
-                case UNDERLINE_BOLDDASHDOT : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOT; break;
-                case UNDERLINE_BOLDDASHDOTDOT : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT; break;
-                case UNDERLINE_BOLDWAVE : eFontUnderline = drawinglayer::primitive2d::FONT_UNDERLINE_BOLDWAVE; break;
-                default : break; // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
-            }
+            // prepare underline data
+            drawinglayer::primitive2d::FontUnderline eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
 
             const bool bUnderlineAbove(drawinglayer::primitive2d::FONT_UNDERLINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
 
@@ -323,9 +330,13 @@ namespace
             const Color aFontColor(rInfo.mrFont.GetColor());
             const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
-            // get line color. If it's on automatic (0xffffffff) use FontColor instead
-            const Color aLineColor(rInfo.maTextLineColor);
-            const basegfx::BColor aBLineColor((0xffffffff == aLineColor.GetColor()) ? aBFontColor : aLineColor.getBColor());
+            // get overline color. If it's on automatic (0xffffffff) use FontColor instead
+            const Color aOverlineColor(rInfo.maOverlineColor);
+            const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
+
+            // get underline color. If it's on automatic (0xffffffff) use FontColor instead
+            const Color aUnderlineColor(rInfo.maTextLineColor);
+            const basegfx::BColor aBUnderlineColor((0xffffffff == aUnderlineColor.GetColor()) ? aBFontColor : aUnderlineColor.getBColor());
 
             drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
 
@@ -340,7 +351,9 @@ namespace
                 aBFontColor,
 
                 // attributes for TextDecoratedPortionPrimitive2D
-                aBLineColor,
+                aBOverlineColor,
+                aBUnderlineColor,
+                eFontOverline,
                 eFontUnderline,
                 bUnderlineAbove,
                 eFontStrikeout,

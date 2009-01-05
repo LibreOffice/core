@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit4.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.78.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -894,13 +894,27 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             // muesste bei WordLineMode ggf. ulw werden,
             // aber die Information fehlt hier
-            FontUnderline e = ((const SvxUnderlineItem&)rItem).GetUnderline();
+            FontUnderline e = ((const SvxUnderlineItem&)rItem).GetLineStyle();
             switch ( e )
             {
                 case UNDERLINE_NONE:    rOutput << sRTF_ULNONE;     break;
                 case UNDERLINE_SINGLE:  rOutput << sRTF_UL;         break;
                 case UNDERLINE_DOUBLE:  rOutput << sRTF_ULDB;       break;
                 case UNDERLINE_DOTTED:  rOutput << sRTF_ULD;        break;
+                default:
+                    break;
+            }
+        }
+        break;
+        case EE_CHAR_OVERLINE:
+        {
+            FontUnderline e = ((const SvxOverlineItem&)rItem).GetLineStyle();
+            switch ( e )
+            {
+                case UNDERLINE_NONE:    rOutput << sRTF_OLNONE;     break;
+                case UNDERLINE_SINGLE:  rOutput << sRTF_OL;         break;
+                case UNDERLINE_DOUBLE:  rOutput << sRTF_OLDB;       break;
+                case UNDERLINE_DOTTED:  rOutput << sRTF_OLD;        break;
                 default:
                     break;
             }

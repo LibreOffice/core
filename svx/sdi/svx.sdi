@@ -10996,7 +10996,34 @@ SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
 ]
 
 //--------------------------------------------------------------------------
-SvxUnderlineItem Underline SID_ATTR_CHAR_UNDERLINE
+SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
 
 [
     /* flags: */

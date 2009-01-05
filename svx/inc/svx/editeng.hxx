@@ -440,6 +440,7 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
         const Color& rTextLineColor);
 
     virtual String  GetUndoComment( USHORT nUndoId ) const;

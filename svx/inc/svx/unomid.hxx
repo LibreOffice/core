@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomid.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,11 +68,11 @@
 #define MID_FONTWIDTH       0
 #define MID_FONTWIDTH_PROP  1
 
-//SvxUnderlineItem
-#define MID_UNDERLINED      0
-#define MID_UNDERLINE       1
-#define MID_UL_COLOR        2
-#define MID_UL_HASCOLOR     3
+//SvxTextLineItem
+#define MID_TEXTLINED       0
+#define MID_TL_STYLE        1
+#define MID_TL_COLOR        2
+#define MID_TL_HASCOLOR     3
 
 //SvxCrossedOutItem
 #define MID_CROSSED_OUT     0

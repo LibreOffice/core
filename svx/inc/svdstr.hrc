@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdstr.hrc,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -722,59 +722,60 @@
 #define SIP_EE_CHAR_FONTWIDTH               (SIP_Begin + 228)
 #define SIP_EE_CHAR_WEIGHT                  (SIP_Begin + 229)
 #define SIP_EE_CHAR_UNDERLINE               (SIP_Begin + 230)
-#define SIP_EE_CHAR_STRIKEOUT               (SIP_Begin + 231)
-#define SIP_EE_CHAR_ITALIC                  (SIP_Begin + 232)
-#define SIP_EE_CHAR_OUTLINE                 (SIP_Begin + 233)
-#define SIP_EE_CHAR_SHADOW                  (SIP_Begin + 234)
-#define SIP_EE_CHAR_ESCAPEMENT              (SIP_Begin + 235)
-#define SIP_EE_CHAR_PAIRKERNING             (SIP_Begin + 236)
-#define SIP_EE_CHAR_KERNING                 (SIP_Begin + 237)
-#define SIP_EE_CHAR_WLM                     (SIP_Begin + 238)
-#define SIP_EE_FEATURE_TAB                  (SIP_Begin + 239)
-#define SIP_EE_FEATURE_LINEBR               (SIP_Begin + 240)
-#define SIP_EE_FEATURE_NOTCONV              (SIP_Begin + 241)
-#define SIP_EE_FEATURE_FIELD                (SIP_Begin + 242)
+#define SIP_EE_CHAR_OVERLINE                (SIP_Begin + 231)
+#define SIP_EE_CHAR_STRIKEOUT               (SIP_Begin + 232)
+#define SIP_EE_CHAR_ITALIC                  (SIP_Begin + 233)
+#define SIP_EE_CHAR_OUTLINE                 (SIP_Begin + 234)
+#define SIP_EE_CHAR_SHADOW                  (SIP_Begin + 235)
+#define SIP_EE_CHAR_ESCAPEMENT              (SIP_Begin + 236)
+#define SIP_EE_CHAR_PAIRKERNING             (SIP_Begin + 237)
+#define SIP_EE_CHAR_KERNING                 (SIP_Begin + 238)
+#define SIP_EE_CHAR_WLM                     (SIP_Begin + 239)
+#define SIP_EE_FEATURE_TAB                  (SIP_Begin + 240)
+#define SIP_EE_FEATURE_LINEBR               (SIP_Begin + 241)
+#define SIP_EE_FEATURE_NOTCONV              (SIP_Begin + 242)
+#define SIP_EE_FEATURE_FIELD                (SIP_Begin + 243)
 
-#define SIP_SA_GRAFRED                      (SIP_Begin + 243)
-#define SIP_SA_GRAFGREEN                    (SIP_Begin + 244)
-#define SIP_SA_GRAFBLUE                     (SIP_Begin + 245)
-#define SIP_SA_GRAFLUMINANCE                (SIP_Begin + 246)
-#define SIP_SA_GRAFCONTRAST                 (SIP_Begin + 247)
-#define SIP_SA_GRAFGAMMA                    (SIP_Begin + 248)
-#define SIP_SA_GRAFTRANSPARENCE             (SIP_Begin + 249)
-#define SIP_SA_GRAFINVERT                   (SIP_Begin + 250)
-#define SIP_SA_GRAFMODE                     (SIP_Begin + 251)
-#define SIP_SA_GRAFCROP                     (SIP_Begin + 252)
-#define SIP_SA_GRAFRESERVE3                 (SIP_Begin + 253)
-#define SIP_SA_GRAFRESERVE4                 (SIP_Begin + 254)
-#define SIP_SA_GRAFRESERVE5                 (SIP_Begin + 255)
-#define SIP_SA_GRAFRESERVE6                 (SIP_Begin + 256)
-//BFS01#define SIP_SDRATTRSET_GRAF                  (SIP_Begin + 257)
+#define SIP_SA_GRAFRED                      (SIP_Begin + 244)
+#define SIP_SA_GRAFGREEN                    (SIP_Begin + 245)
+#define SIP_SA_GRAFBLUE                     (SIP_Begin + 246)
+#define SIP_SA_GRAFLUMINANCE                (SIP_Begin + 247)
+#define SIP_SA_GRAFCONTRAST                 (SIP_Begin + 248)
+#define SIP_SA_GRAFGAMMA                    (SIP_Begin + 249)
+#define SIP_SA_GRAFTRANSPARENCE             (SIP_Begin + 250)
+#define SIP_SA_GRAFINVERT                   (SIP_Begin + 251)
+#define SIP_SA_GRAFMODE                     (SIP_Begin + 252)
+#define SIP_SA_GRAFCROP                     (SIP_Begin + 253)
+#define SIP_SA_GRAFRESERVE3                 (SIP_Begin + 254)
+#define SIP_SA_GRAFRESERVE4                 (SIP_Begin + 255)
+#define SIP_SA_GRAFRESERVE5                 (SIP_Begin + 256)
+#define SIP_SA_GRAFRESERVE6                 (SIP_Begin + 257)
+//BFS01#define SIP_SDRATTRSET_GRAF                  (SIP_Begin + 258)
 
 #define SIP_SA_MARKERS                      (SIP_Begin + 258)
-#define SIP_SA_FINE_MARKERS                 (SIP_Begin + 259)
+#define SIP_SA_FINE_MARKERS                 (SIP_Begin + 260)
 
 // #100499#
-#define BMP_SVXOLEOBJ                       (SIP_Begin + 260)
+#define BMP_SVXOLEOBJ                       (SIP_Begin + 261)
 
 // #101928#
-#define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 261)
+#define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 262)
 
-#define STR_TABLE_ATTR                      (SIP_Begin + 262)
-#define STR_TABLE_AUTOFMT                   (SIP_Begin + 263)
-#define STR_TABLE_INSCOL                    (SIP_Begin + 264)
-#define STR_TABLE_INSROW                    (SIP_Begin + 265)
-#define STR_UNDO_COL_DELETE                 (SIP_Begin + 266)
-#define STR_UNDO_ROW_DELETE                 (SIP_Begin + 267)
-#define STR_TABLE_SPLIT                     (SIP_Begin + 268)
-#define STR_TABLE_MERGE                     (SIP_Begin + 269)
-#define STR_TABLE_NUMFORMAT                 (SIP_Begin + 270)
-#define STR_TABLE_DISTRIBUTE_ROWS           (SIP_Begin + 271)
-#define STR_TABLE_DISTRIBUTE_COLUMNS        (SIP_Begin + 272)
-#define STR_TABLE_STYLE                     (SIP_Begin + 273)
-#define STR_TABLE_STYLE_SETTINGS            (SIP_Begin + 274)
-#define SIP_SA_CROP_MARKERS                 (SIP_Begin + 275)
-#define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 276)
+#define STR_TABLE_ATTR                      (SIP_Begin + 263)
+#define STR_TABLE_AUTOFMT                   (SIP_Begin + 264)
+#define STR_TABLE_INSCOL                    (SIP_Begin + 265)
+#define STR_TABLE_INSROW                    (SIP_Begin + 266)
+#define STR_UNDO_COL_DELETE                 (SIP_Begin + 267)
+#define STR_UNDO_ROW_DELETE                 (SIP_Begin + 268)
+#define STR_TABLE_SPLIT                     (SIP_Begin + 269)
+#define STR_TABLE_MERGE                     (SIP_Begin + 270)
+#define STR_TABLE_NUMFORMAT                 (SIP_Begin + 271)
+#define STR_TABLE_DISTRIBUTE_ROWS           (SIP_Begin + 272)
+#define STR_TABLE_DISTRIBUTE_COLUMNS        (SIP_Begin + 273)
+#define STR_TABLE_STYLE                     (SIP_Begin + 274)
+#define STR_TABLE_STYLE_SETTINGS            (SIP_Begin + 275)
+#define SIP_SA_CROP_MARKERS                 (SIP_Begin + 276)
+#define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 277)
 #define SIP_SA_ACCESSIBILITY_CROP_MARKERS   (SIP_Begin + 278)
 
 #define SIP_End                             (SIP_SA_ACCESSIBILITY_CROP_MARKERS)
@@ -782,6 +783,4 @@
 #define SDR_ResourceEnd                     (SIP_End)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 

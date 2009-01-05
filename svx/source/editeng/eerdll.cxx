@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eerdll.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,14 +164,15 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         // no need to have alien attributes persistent
         ppDefItems[44] = new SfxVoidItem( EE_CHAR_XMLATTRIBS );
 #endif // #ifndef SVX_LIGHT
+        ppDefItems[45] = new SvxOverlineItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
 
         // Features
-        ppDefItems[45] = new SfxVoidItem( EE_FEATURE_TAB );
-        ppDefItems[46] = new SfxVoidItem( EE_FEATURE_LINEBR );
-        ppDefItems[47] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
-        ppDefItems[48] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+        ppDefItems[46] = new SfxVoidItem( EE_FEATURE_TAB );
+        ppDefItems[47] = new SfxVoidItem( EE_FEATURE_LINEBR );
+        ppDefItems[48] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
+        ppDefItems[49] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-        DBG_ASSERT( EDITITEMCOUNT == 49, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        DBG_ASSERT( EDITITEMCOUNT == 50, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
 
         // Init DefFonts:
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],

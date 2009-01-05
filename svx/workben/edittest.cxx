@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edittest.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -676,7 +676,7 @@ void EditMainWindow::UpdateToolBox()
                 break;
                 case EE_CHAR_UNDERLINE:
                 {
-                    aToolBox.CheckItem( TB_UNDERLINE, ((SvxUnderlineItem&)rItem).GetUnderline() );
+                    aToolBox.CheckItem( TB_UNDERLINE, ((SvxUnderlineItem&)rItem).GetLineStyle() );
                 }
                 break;
                 case EE_CHAR_WLM:
@@ -1222,7 +1222,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                         break;
                         case EE_CHAR_UNDERLINE:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontUnderline=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxUnderlineItem&)rItem).GetUnderline() );
+                            aDebStr += String::CreateFromInt32( ((SvxUnderlineItem&)rItem).GetLineStyle() );
                         break;
                         case EE_CHAR_WLM:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "WordLineMode=" ) );

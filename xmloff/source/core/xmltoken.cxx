@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.130.2.3 $
+ * $Revision: 1.131.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2419,6 +2419,12 @@ namespace xmloff { namespace token {
         TOKEN( "text-underline-style",             XML_TEXT_UNDERLINE_STYLE ),
         TOKEN( "text-underline-type",              XML_TEXT_UNDERLINE_TYPE ),
         TOKEN( "text-underline-width",             XML_TEXT_UNDERLINE_WIDTH ),
+
+        TOKEN( "text-overline-type",               XML_TEXT_OVERLINE_TYPE ),
+        TOKEN( "text-overline-style",              XML_TEXT_OVERLINE_STYLE ),
+        TOKEN( "text-overline-width",              XML_TEXT_OVERLINE_WIDTH ),
+        TOKEN( "text-overline-color",              XML_TEXT_OVERLINE_COLOR ),
+        TOKEN( "text-overline-mode",               XML_TEXT_OVERLINE_MODE ),
 
         TOKEN( "text-line-through-style",          XML_TEXT_LINE_THROUGH_STYLE ),
         TOKEN( "text-line-through-type",           XML_TEXT_LINE_THROUGH_TYPE ),

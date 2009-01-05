@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: udlnitem.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,21 +46,18 @@ namespace rtl
     class OUString;
 }
 
-// class SvxUnderlineItem ------------------------------------------------
+// class SvxTextLineItem ------------------------------------------------
 
-/*  [Beschreibung]
+/* Value container for underline and overline font effects */
 
-    Dieses Item beschreibt, ob und wie unterstrichen ist.
-*/
-
-class SVX_DLLPUBLIC SvxUnderlineItem : public SfxEnumItem
+class SVX_DLLPUBLIC SvxTextLineItem : public SfxEnumItem
 {
     Color mColor;
 public:
     TYPEINFO();
 
-    SvxUnderlineItem( const FontUnderline eSt /*= UNDERLINE_NONE*/,
-                      const USHORT nId  );
+    SvxTextLineItem( const FontUnderline eSt,
+                     const USHORT nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -86,24 +83,57 @@ public:
     virtual BOOL            GetBoolValue() const;
     virtual void            SetBoolValue( BOOL bVal );
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
 
-    inline SvxUnderlineItem& operator=(const SvxUnderlineItem& rUnderline)
+    inline SvxTextLineItem& operator=(const SvxTextLineItem& rTextLine)
         {
-            SetValue( rUnderline.GetValue() );
-            SetColor( rUnderline.GetColor() );
+            SetValue( rTextLine.GetValue() );
+            SetColor( rTextLine.GetColor() );
             return *this;
         }
 
     // enum cast
-    FontUnderline           GetUnderline() const
+    FontUnderline           GetLineStyle() const
                                 { return (FontUnderline)GetValue(); }
-    void                    SetUnderline ( FontUnderline eNew )
+    void                    SetLineStyle( FontUnderline eNew )
                                 { SetValue((USHORT) eNew); }
 
     const Color&            GetColor() const                { return mColor; }
     void                    SetColor( const Color& rCol )   { mColor = rCol; }
 };
 
-#endif // #ifndef _SVX_UDLNITEM_HXX
+// class SvxUnderlineItem ------------------------------------------------
 
+/* Value container for underline font effects */
+
+class SVX_DLLPUBLIC SvxUnderlineItem : public SvxTextLineItem
+{
+public:
+    TYPEINFO();
+
+    SvxUnderlineItem( const FontUnderline eSt,
+                      const USHORT nId );
+
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual String          GetValueTextByPos( USHORT nPos ) const;
+};
+
+// class SvxOverlineItem ------------------------------------------------
+
+/* Value container for overline font effects */
+
+class SVX_DLLPUBLIC SvxOverlineItem : public SvxTextLineItem
+{
+public:
+    TYPEINFO();
+
+    SvxOverlineItem( const FontUnderline eSt,
+                     const USHORT nId );
+
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual String          GetValueTextByPos( USHORT nPos ) const;
+};
+
+#endif // #ifndef _SVX_UDLNITEM_HXX

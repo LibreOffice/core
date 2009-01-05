@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eeitem.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,17 +84,18 @@
 #define EE_CHAR_RELIEF              (EE_ITEMS_START+42)
 #define EE_CHAR_RUBI_DUMMY          (EE_ITEMS_START+43)
 #define EE_CHAR_XMLATTRIBS          (EE_ITEMS_START+44)
-#define EE_CHAR_END                 (EE_ITEMS_START+44)
+#define EE_CHAR_OVERLINE            (EE_ITEMS_START+45)
+#define EE_CHAR_END                 (EE_ITEMS_START+45)
 
 
-#define EE_FEATURE_START            (EE_ITEMS_START+45)
-#define EE_FEATURE_TAB              (EE_ITEMS_START+45)
-#define EE_FEATURE_LINEBR           (EE_ITEMS_START+46)
-#define EE_FEATURE_NOTCONV          (EE_ITEMS_START+47)
-#define EE_FEATURE_FIELD            (EE_ITEMS_START+48)
-#define EE_FEATURE_END              (EE_ITEMS_START+48)
+#define EE_FEATURE_START            (EE_ITEMS_START+46)
+#define EE_FEATURE_TAB              (EE_ITEMS_START+46)
+#define EE_FEATURE_LINEBR           (EE_ITEMS_START+47)
+#define EE_FEATURE_NOTCONV          (EE_ITEMS_START+48)
+#define EE_FEATURE_FIELD            (EE_ITEMS_START+49)
+#define EE_FEATURE_END              (EE_ITEMS_START+49)
 
-#define EE_ITEMS_END                (EE_ITEMS_START+48)
+#define EE_ITEMS_END                (EE_ITEMS_START+49)
 
 #define EDITITEMCOUNT ( EE_ITEMS_END - EE_ITEMS_START + 1 )
 

@@ -68,6 +68,7 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
         const Color& rTextLineColor);
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );

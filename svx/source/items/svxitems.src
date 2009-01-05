@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxitems.src,v $
- * $Revision: 1.83 $
+ * $Revision: 1.83.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -396,7 +396,7 @@ String RID_SVXITEMS_WEIGHT_BLACK
 {
     Text [ en-US ] = "black" ;
 };
- // enum FontUnderline ----------------------------------------------------
+ // enum FontUnderline - used for underline ------------------------------
 String RID_SVXITEMS_UL_NONE
 {
     Text [ en-US ] = "No underline" ;
@@ -407,7 +407,7 @@ String RID_SVXITEMS_UL_SINGLE
 };
 String RID_SVXITEMS_UL_DOUBLE
 {
-    Text [ en-US ] = "Double underlne" ;
+    Text [ en-US ] = "Double underline" ;
 };
 String RID_SVXITEMS_UL_DOTTED
 {
@@ -472,6 +472,83 @@ String RID_SVXITEMS_UL_BOLDDASHDOTDOT
 String RID_SVXITEMS_UL_BOLDWAVE
 {
     Text [ en-US ] = "Underline (wave, bold)";
+};
+ // enum FontUnderline - used for overline -------------------------------
+String RID_SVXITEMS_OL_NONE
+{
+    Text [ en-US ] = "No overline" ;
+};
+String RID_SVXITEMS_OL_SINGLE
+{
+    Text [ en-US ] = "Single overline" ;
+};
+String RID_SVXITEMS_OL_DOUBLE
+{
+    Text [ en-US ] = "Double overline" ;
+};
+String RID_SVXITEMS_OL_DOTTED
+{
+    Text [ en-US ] = "Dotted overline" ;
+};
+String RID_SVXITEMS_OL_DONTKNOW
+{
+    Text [ en-US ] = "Overline";
+};
+String RID_SVXITEMS_OL_DASH
+{
+    Text [ en-US ] = "Overline (dashes)";
+};
+String RID_SVXITEMS_OL_LONGDASH
+{
+    Text [ en-US ] = "Overline (long dashes)";
+};
+String RID_SVXITEMS_OL_DASHDOT
+{
+    Text [ en-US ] = "Overline (dot dash)";
+};
+String RID_SVXITEMS_OL_DASHDOTDOT
+{
+    Text [ en-US ] = "Overline (dot dot dash)";
+};
+String RID_SVXITEMS_OL_SMALLWAVE
+{
+    Text [ en-US ] = "Overline (small wave)";
+};
+String RID_SVXITEMS_OL_WAVE
+{
+    Text [ en-US ] = "Overline (Wave)";
+};
+String RID_SVXITEMS_OL_DOUBLEWAVE
+{
+    Text [ en-US ] = "Overline (Double wave)";
+};
+String RID_SVXITEMS_OL_BOLD
+{
+    Text [ en-US ] = "Overlined (Bold)";
+};
+String RID_SVXITEMS_OL_BOLDDOTTED
+{
+    Text [ en-US ] = "Dotted overline (Bold)";
+};
+String RID_SVXITEMS_OL_BOLDDASH
+{
+    Text [ en-US ] = "Overline (Dash bold)";
+};
+String RID_SVXITEMS_OL_BOLDLONGDASH
+{
+    Text [ en-US ] = "Overline (long dash, bold)";
+};
+String RID_SVXITEMS_OL_BOLDDASHDOT
+{
+    Text [ en-US ] = "Overline (dot dash, bold)";
+};
+String RID_SVXITEMS_OL_BOLDDASHDOTDOT
+{
+    Text [ en-US ] = "Overline (dot dot dash, bold)";
+};
+String RID_SVXITEMS_OL_BOLDWAVE
+{
+    Text [ en-US ] = "Overline (wave, bold)";
 };
  // enum FontStrikeout ----------------------------------------------------
 String RID_SVXITEMS_STRIKEOUT_NONE
@@ -686,6 +763,10 @@ String RID_ATTR_CHAR_BLINK
 String RID_ATTR_CHAR_CHARSETCOLOR
 {
     Text [ en-US ] = "Character set color";
+};
+String RID_ATTR_CHAR_OVERLINE
+{
+    Text [ en-US ] = "Overline" ;
 };
 String RID_ATTR_BORDER_INNER
 {

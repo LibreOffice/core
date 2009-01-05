@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.74.6.2 $
+ * $Revision: 1.75.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -894,6 +894,7 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     {
         aBulletFont = aStdFont;
         aBulletFont.SetUnderline( UNDERLINE_NONE );
+        aBulletFont.SetOverline( UNDERLINE_NONE );
         aBulletFont.SetStrikeout( STRIKEOUT_NONE );
         aBulletFont.SetEmphasisMark( EMPHASISMARK_NONE );
         aBulletFont.SetRelief( RELIEF_NONE );
@@ -1017,7 +1018,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf,
-                        aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color());
+                        aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color(), Color());
 
                     delete[] pBuf;
                 }
@@ -1753,6 +1754,7 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHO
     bool bEndOfParagraph,
     bool bEndOfBullet,
     const ::com::sun::star::lang::Locale* pLocale,
+    const Color& rOverlineColor,
     const Color& rTextLineColor)
 {
     DBG_CHKTHIS(Outliner,0);
@@ -1761,7 +1763,7 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHO
     {
         // #101498#
         DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, pWrongSpellVector,
-            pFieldData, pLocale, rTextLineColor, nRightToLeft, bEndOfLine, bEndOfParagraph, bEndOfBullet);
+            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
         aDrawPortionHdl.Call( &aInfo );
     }

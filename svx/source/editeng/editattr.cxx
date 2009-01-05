@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editattr.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,6 +154,22 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
     rFont.SetUnderline( (FontUnderline)((const SvxUnderlineItem*)GetItem())->GetValue() );
     if ( pOutDev )
         pOutDev->SetTextLineColor( ((const SvxUnderlineItem*)GetItem())->GetColor() );
+}
+
+// -------------------------------------------------------------------------
+// class EditCharAttribOverline
+// -------------------------------------------------------------------------
+EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, USHORT _nStart, USHORT _nEnd )
+    : EditCharAttrib( rAttr, _nStart, _nEnd )
+{
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_OVERLINE, "Kein Overlineattribut!" );
+}
+
+void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
+{
+    rFont.SetOverline( (FontUnderline)((const SvxOverlineItem*)GetItem())->GetValue() );
+    if ( pOutDev )
+        pOutDev->SetOverlineColor( ((const SvxOverlineItem*)GetItem())->GetColor() );
 }
 
 // -------------------------------------------------------------------------

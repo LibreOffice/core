@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unofdesc.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,7 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
     {
         SvxUnderlineItem aUnderlineItem( (FontUnderline)0, EE_CHAR_UNDERLINE );
         aTemp <<= (sal_Int16)rDesc.Underline;
-        ((SfxPoolItem*)&aUnderlineItem)->PutValue( aTemp, MID_UNDERLINE );
+        ((SfxPoolItem*)&aUnderlineItem)->PutValue( aTemp, MID_TL_STYLE );
         rSet.Put( aUnderlineItem );
     }
 
@@ -171,7 +171,7 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
     {
         pItem = &rSet.Get( EE_CHAR_UNDERLINE, TRUE );
         uno::Any aUnderline;
-        if(pItem->QueryValue( aUnderline, MID_UNDERLINE ))
+        if(pItem->QueryValue( aUnderline, MID_TL_STYLE ))
             aUnderline >>= rDesc.Underline;
     }
     {

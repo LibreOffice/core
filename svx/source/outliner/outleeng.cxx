@@ -163,6 +163,7 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
     bool bEndOfParagraph,
     bool bEndOfBullet,
     const ::com::sun::star::lang::Locale* pLocale,
+    const Color& rOverlineColor,
     const Color& rTextLineColor)
 {
     // why do bullet here at all? Just use GetEditEnginePtr()->PaintingFirstLine
@@ -197,7 +198,7 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
 
     // #101498#
     pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft,
-        pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rTextLineColor);
+        pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
 }
 
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )

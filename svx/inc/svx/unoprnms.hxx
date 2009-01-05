@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,6 +340,7 @@
 #define UNO_NAME_EDIT_CHAR_FONTNAME             "CharFontName"
 #define UNO_NAME_EDIT_CHAR_SHADOWED             "CharShadowed"
 #define UNO_NAME_EDIT_CHAR_UNDERLINE            "CharUnderline"
+#define UNO_NAME_EDIT_CHAR_OVERLINE             "CharOverline"
 
 #define UNO_NAME_BITMAP                         "Bitmap"
 

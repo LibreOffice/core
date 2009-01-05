@@ -2546,6 +2546,15 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             pOut->SetTextLineColor();
     }
 
+    if ( pOut )
+    {
+        const SvxOverlineItem& rOverlineColor = (const SvxOverlineItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_OVERLINE );
+        if ( rOverlineColor.GetColor() != COL_TRANSPARENT )
+            pOut->SetOverlineColor( rOverlineColor.GetColor() );
+        else
+            pOut->SetOverlineColor();
+    }
+
     const SvxLanguageItem* pCJKLanguageItem = NULL;
 
     if ( aStatus.UseCharAttribs() )
@@ -3233,6 +3242,10 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     const bool bEndOfLine(y == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
+                                    // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
+                                    // consequence, but also already set at pOutDev)
+                                    const Color aOverlineColor(pOutDev->GetOverlineColor());
+
                                     // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
                                     // consequence, but also already set at pOutDev)
                                     const Color aTextLineColor(pOutDev->GetTextLineColor());
@@ -3247,6 +3260,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         pFieldData,
                                         bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
                                         &aLocale,
+                                        aOverlineColor,
                                         aTextLineColor);
                                 }
                                 else

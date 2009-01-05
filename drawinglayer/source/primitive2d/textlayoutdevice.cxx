@@ -175,6 +175,13 @@ namespace drawinglayer
             setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, mrDevice));
         }
 
+        double TextLayouterDevice::getOverlineOffset() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            double fRet = (rMetric.GetIntLeading() / 2.0) - rMetric.GetAscent();
+            return fRet;
+        }
+
         double TextLayouterDevice::getUnderlineOffset() const
         {
             const ::FontMetric& rMetric = mrDevice.GetFontMetric();
@@ -200,6 +207,13 @@ namespace drawinglayer
             return basegfx::fTools::equalZero(fWidth) ? 1.0 : fHeight / fWidth;
         }
 #endif
+
+        double TextLayouterDevice::getOverlineHeight() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            double fRet = rMetric.GetIntLeading() / 2.5;
+            return fRet;
+        }
 
         double TextLayouterDevice::getUnderlineHeight() const
         {

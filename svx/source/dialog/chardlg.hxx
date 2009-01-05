@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.184.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,17 +196,6 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
-    FixedText           m_aUnderlineFT;
-    ListBox             m_aUnderlineLB;
-    FixedText           m_aColorFT;
-    ColorListBox        m_aColorLB;
-    FixedText           m_aStrikeoutFT;
-    ListBox             m_aStrikeoutLB;
-    CheckBox            m_aIndividualWordsBtn;
-    FixedText           m_aEmphasisFT;
-    ListBox             m_aEmphasisLB;
-    FixedText           m_aPositionFT;
-    ListBox             m_aPositionLB;
     FixedText           m_aFontColorFT;
     ColorListBox        m_aFontColorLB;
 
@@ -222,6 +211,31 @@ private:
     TriStateBox         m_aShadowBtn;
     TriStateBox         m_aBlinkingBtn;
     TriStateBox         m_aHiddenBtn;
+
+    FixedLine           m_aVerticalLine;
+
+    FixedText           m_aOverlineFT;
+    ListBox             m_aOverlineLB;
+    FixedText           m_aOverlineColorFT;
+    ColorListBox        m_aOverlineColorLB;
+
+    FixedText           m_aStrikeoutFT;
+    ListBox             m_aStrikeoutLB;
+
+    FixedText           m_aUnderlineFT;
+    ListBox             m_aUnderlineLB;
+    FixedText           m_aUnderlineColorFT;
+    ColorListBox        m_aUnderlineColorLB;
+
+    CheckBox            m_aIndividualWordsBtn;
+
+    FixedLine           m_aAsianLine;
+
+    FixedText           m_aEmphasisFT;
+    ListBox             m_aEmphasisLB;
+
+    FixedText           m_aPositionFT;
+    ListBox             m_aPositionLB;
 
     USHORT              m_nHtmlMode;
 

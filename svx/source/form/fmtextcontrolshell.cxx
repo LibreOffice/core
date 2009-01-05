@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtextcontrolshell.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,6 +115,7 @@ namespace svx
         SID_ATTR_CHAR_CONTOUR,
         SID_ATTR_CHAR_STRIKEOUT,
         SID_ATTR_CHAR_UNDERLINE,
+        SID_ATTR_CHAR_OVERLINE,
         SID_ATTR_CHAR_FONTHEIGHT,
         SID_ATTR_CHAR_COLOR,
         SID_ATTR_CHAR_KERNING,
@@ -878,20 +879,25 @@ namespace svx
             {
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_CHAR_UNDERLINE:
+            case SID_ATTR_CHAR_OVERLINE:
             {
                 SfxItemSet aToggled( *_rReq.GetArgs() );
 
                 lcl_translateUnoStateToItem( nSlot, aFeaturePos->second->getFeatureState(), aToggled );
                 WhichId nWhich = aToggled.GetPool()->GetWhich( nSlot );
                 const SfxPoolItem* pItem = aToggled.GetItem( nWhich );
-                if ( SID_ATTR_CHAR_UNDERLINE == nSlot )
+                if ( ( SID_ATTR_CHAR_UNDERLINE == nSlot ) || ( SID_ATTR_CHAR_OVERLINE == nSlot ) )
                 {
-                    const SvxUnderlineItem* pUnderline = PTR_CAST( SvxUnderlineItem, pItem );
-                    DBG_ASSERT( pUnderline, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline item!" );
-                    if ( pUnderline )
+                    const SvxOverlineItem* pTextLine = PTR_CAST( SvxOverlineItem, pItem );
+                    DBG_ASSERT( pTextLine, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline/overline item!" );
+                    if ( pTextLine )
                     {
-                        FontUnderline eFU = pUnderline->GetUnderline();
-                        aToggled.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                        FontUnderline eTL = pTextLine->GetLineStyle();
+                        if ( SID_ATTR_CHAR_UNDERLINE == nSlot ) {
+                            aToggled.Put( SvxUnderlineItem( eTL == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                        } else {
+                            aToggled.Put( SvxOverlineItem( eTL == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                        }
                     }
                 }
                 else

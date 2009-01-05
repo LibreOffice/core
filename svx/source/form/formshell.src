@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formshell.src,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,10 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
                     MenuItem
                     {
                         ITEM_FORMAT_ATTR_CHAR_POSTURE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_OVERLINE
                     };
                     MenuItem
                     {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotext.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,9 +114,12 @@
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_LOCALE),      EE_CHAR_LANGUAGE,   &::getCppuType((const ::com::sun::star::lang::Locale*)0),0, MID_LANG_LOCALE }, \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_COLOR),       EE_CHAR_COLOR,      &::getCppuType((const sal_Int32*)0),        0, 0 }, \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_ESCAPEMENT),  EE_CHAR_ESCAPEMENT, &::getCppuType((const sal_Int16*)0),        0, MID_ESC }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_UNDERLINE),   EE_CHAR_UNDERLINE,  &::getCppuType((const sal_Int16*)0),        0, MID_UNDERLINE }, \
-    { MAP_CHAR_LEN("CharUnderlineColor"),           EE_CHAR_UNDERLINE,  &::getCppuType((const sal_Int32*)0),        0, MID_UL_COLOR }, \
-    { MAP_CHAR_LEN("CharUnderlineHasColor"),        EE_CHAR_UNDERLINE,  &::getBooleanCppuType(),                    0, MID_UL_HASCOLOR } , \
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_UNDERLINE),   EE_CHAR_UNDERLINE,  &::getCppuType((const sal_Int16*)0),        0, MID_TL_STYLE }, \
+    { MAP_CHAR_LEN("CharUnderlineColor"),           EE_CHAR_UNDERLINE,  &::getCppuType((const sal_Int32*)0),        0, MID_TL_COLOR }, \
+    { MAP_CHAR_LEN("CharUnderlineHasColor"),        EE_CHAR_UNDERLINE,  &::getBooleanCppuType(),                    0, MID_TL_HASCOLOR } , \
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_OVERLINE),    EE_CHAR_OVERLINE,   &::getCppuType((const sal_Int16*)0),        0, MID_TL_STYLE }, \
+    { MAP_CHAR_LEN("CharOverlineColor"),            EE_CHAR_OVERLINE,   &::getCppuType((const sal_Int32*)0),        0, MID_TL_COLOR }, \
+    { MAP_CHAR_LEN("CharOverlineHasColor"),         EE_CHAR_OVERLINE,   &::getBooleanCppuType(),                    0, MID_TL_HASCOLOR } , \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_CROSSEDOUT),  EE_CHAR_STRIKEOUT,  &::getBooleanCppuType(),                    0, MID_CROSSED_OUT }, \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_STRIKEOUT),   EE_CHAR_STRIKEOUT,  &::getCppuType((const sal_Int16*)0),        0, MID_CROSS_OUT}, \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_SHADOWED),    EE_CHAR_SHADOW,     &::getBooleanCppuType(),                    0, 0 }, \

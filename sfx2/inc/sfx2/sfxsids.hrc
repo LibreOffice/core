@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxsids.hrc,v $
- * $Revision: 1.12.58.1 $
+ * $Revision: 1.12.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1148,6 +1148,7 @@
 #define SID_ATTR_CHAR_MAPTYPE               (SID_SVX_START +  64)
 // zusaetzlich f"ur die Ext-Zeichen-TabPage
 #define SID_ATTR_CHAR_AUTOKERN              (SID_SVX_START +  67)
+#define SID_ATTR_CHAR_OVERLINE              (SID_SVX_START +  68)
 #define SID_ZOOM_TOOLBOX                    (SID_SVX_START +  96)
 #define SID_ZOOM_OUT                        (SID_SVX_START +  97)
 #define SID_ZOOM_IN                         (SID_SVX_START +  98)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxrtf.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,6 +165,7 @@ struct RTFPlainAttrMapIds
             nPosture,
             nShadowed,
             nUnderline,
+            nOverline,
             nWeight,
             nWordlineMode,
             nAutoKerning,

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxrtf.cxx,v $
- * $Revision: 1.34.216.1 $
+ * $Revision: 1.34.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1469,6 +1469,7 @@ RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
     nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, FALSE );
     nShadowed = rPool.GetTrueWhich( SID_ATTR_CHAR_SHADOWED, FALSE );
     nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, FALSE );
+    nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, FALSE );
     nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, FALSE );
     nWordlineMode = rPool.GetTrueWhich( SID_ATTR_CHAR_WORDLINEMODE, FALSE );
     nAutoKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_AUTOKERN, FALSE );
