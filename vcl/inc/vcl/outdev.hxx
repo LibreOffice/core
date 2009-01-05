@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.11.28.1 $
+ * $Revision: 1.7.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1031,6 +1031,19 @@ public:
 
     xub_StrLen          HasGlyphs( const Font& rFont, const String& rStr,
                             xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;
+
+    long                GetMinKashida() const;
+    long                GetMinKashida( const Font& rFont ) const;
+
+    // i60594
+    // validate kashida positions against the current font
+    // returns count of invalid kashida positions
+    xub_StrLen          ValidateKashidas ( const String& rTxt,
+                                            xub_StrLen nIdx, xub_StrLen nLen,
+                                            xub_StrLen nKashCount, // number of suggested kashida positions (in)
+                                            const xub_StrLen* pKashidaPos, // suggested kashida positions (in)
+                                            xub_StrLen* pKashidaPosDropped // invalid kashida positions (out)
+                                            ) const;
 
     USHORT              GetBitCount() const;
 

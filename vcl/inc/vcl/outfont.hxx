@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outfont.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,17 +279,25 @@ public:
     void    ImplInitAboveTextLineSize();
 
 public: // TODO: hide members behind accessor methods
+    // font instance attributes from the font request
     long                mnWidth;                    // Reference Width
+    short               mnOrientation;              // Rotation in 1/10 degrees
+
+    // font metrics measured for the font instance
     long                mnAscent;                   // Ascent
     long                mnDescent;                  // Descent
     long                mnIntLeading;               // Internal Leading
     long                mnExtLeading;               // External Leading
     int                 mnSlant;                    // Slant (Italic/Oblique)
+    long                mnMinKashida;               // Minimal width of kashida (Arabic)
+
+    // font attributes queried from the font instance
     int                 meFamilyType;               // Font Family Type
-    short               mnOrientation;              // Rotation in 1/10 degrees
     bool                mbDevice;                   // Flag for Device Fonts
     bool                mbScalableFont;
     bool                mbKernableFont;
+
+    // font metrics that are usually derived from the measurements
     long                mnUnderlineSize;            // Lineheight of Underline
     long                mnUnderlineOffset;          // Offset from Underline to Baseline
     long                mnBUnderlineSize;           // Hoehe von fetter Unterstreichung

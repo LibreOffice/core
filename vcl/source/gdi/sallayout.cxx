@@ -1715,6 +1715,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 
+        // disable glyph-injection for glyph-fallback SalLayout iteration
+        mpLayouts[n]->DisableGlyphInjection( true );
+
         // remove unused parts of component
         if( n > 0 )
         {
@@ -1893,6 +1896,10 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 
     mpLayouts[0]->Simplify( true );
+
+    // reenable glyph-injection
+    for( n = 0; n < mnLevel; ++n )
+        mpLayouts[n]->DisableGlyphInjection( false );
 }
 
 // -----------------------------------------------------------------------

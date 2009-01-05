@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.245 $
+ * $Revision: 1.240.14.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3734,9 +3734,11 @@ void OutputDevice::ImplInitAboveTextLineSize()
 ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
 :   ImplFontAttributes( rFontSelData )
 {
+    // initialize the members provided by the font request
     mnWidth        = rFontSelData.mnWidth;
     mnOrientation  = sal::static_int_cast<short>(rFontSelData.mnOrientation);
 
+    // intialize the used font name
     if( rFontSelData.mpFontData )
     {
         maName     = rFontSelData.mpFontData->maName;
@@ -3753,12 +3755,15 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
         mbKernableFont = false;
     }
 
+    // reset metrics that are usually measured for the font instance
     mnAscent       = 0;
     mnDescent      = 0;
     mnIntLeading   = 0;
     mnExtLeading   = 0;
     mnSlant        = 0;
+    mnMinKashida   = 0;
 
+    // reset metrics that are usually derived from the measurements
     mnUnderlineSize            = 0;
     mnUnderlineOffset          = 0;
     mnBUnderlineSize           = 0;
@@ -7556,6 +7561,58 @@ FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const
 }
 
 // -----------------------------------------------------------------------
+
+long OutputDevice::GetMinKashida() const
+{
+    DBG_TRACE( "OutputDevice::GetMinKashida()" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+    if( mbNewFont && !ImplNewFont() )
+        return 0;
+
+    ImplFontEntry*      pEntry = mpFontEntry;
+    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+    return ImplDevicePixelToLogicWidth( pMetric->mnMinKashida );
+}
+// -----------------------------------------------------------------------
+
+long OutputDevice::GetMinKashida( const Font& rFont ) const
+{
+    // select font, query Kashida, select original font again
+    Font aOldFont = GetFont();
+    const_cast<OutputDevice*>(this)->SetFont( rFont );
+    long aKashida = GetMinKashida();
+    const_cast<OutputDevice*>(this)->SetFont( aOldFont );
+    return aKashida;
+}
+
+// -----------------------------------------------------------------------
+xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
+                                            xub_StrLen nIdx, xub_StrLen nLen,
+                                            xub_StrLen nKashCount,
+                                            const xub_StrLen* pKashidaPos,
+                                            xub_StrLen* pKashidaPosDropped ) const
+{
+   // do layout
+    SalLayout* pSalLayout = ImplLayout( rTxt, nIdx, nLen );
+    if( !pSalLayout )
+        return 0;
+    xub_StrLen nDropped = 0;
+    for( int i = 0; i < nKashCount; ++i )
+    {
+        if( !pSalLayout->IsKashidaPosValid( pKashidaPos[ i ] ))
+        {
+            pKashidaPosDropped[ nDropped ] = pKashidaPos [ i ];
+            ++nDropped;
+        }
+    }
+    pSalLayout->Release();
+    return nDropped;
+}
+
+
+
+// -----------------------------------------------------------------------
+
 
 // TODO: best is to get rid of this method completely
 ULONG OutputDevice::GetKerningPairCount() const
