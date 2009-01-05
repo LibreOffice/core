@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optctl.src,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.254.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,6 +113,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
             < "Arabic" ; > ;
             < "Hindi" ; > ;
             < "System" ; > ;
+            < "Context" ; > ;
         };
     };
 };

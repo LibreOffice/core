@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotext.cxx,v $
- * $Revision: 1.90.18.1 $
+ * $Revision: 1.90.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1615,6 +1615,13 @@ void SdrTextObj::NbcReformatText()
             SetRectsDirty(sal_True);
         }
         SetTextSizeDirty();
+        ActionChanged();
+        // FME, AW: i22396
+        // Necessary here since we have no compare operator at the outliner
+        // para object which may detect changes regarding the combination
+        // of outliner para data and configuration (e.g., change of
+        // formatting of text numerals)
+        FlushViewContact();
     }
 }
 

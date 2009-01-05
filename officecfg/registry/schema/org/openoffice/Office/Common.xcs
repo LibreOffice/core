@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.156 $
+ * $Revision: 1.156.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6339,7 +6339,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<prop oor:name="CTLTextNumerals" oor:type="xs:int">
 					<!-- UIHints: options-->
 					<info>
-						<desc>Specifies the type of numerals (Arabic (0), Hindi (1) or system settings (2)) is used per default in all applications.</desc>
+                                                <desc>Specifies the type of numerals (Arabic (0), Hindi (1), system settings (2) or Context(3)) is used per default in all applications.</desc>
 					</info>
 					<value>0</value>
 				</prop>
