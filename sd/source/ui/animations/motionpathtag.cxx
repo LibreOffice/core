@@ -85,19 +85,47 @@ static const int DRGPIX     = 2;                               // Drag MinMove i
 
 class PathDragMove : public SdrDragMove
 {
-public:
-    PathDragMove(SdrDragView& rNewView, const rtl::Reference <MotionPathTag >& xTag): SdrDragMove(rNewView), mxTag( xTag ) {}
+private:
+    basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
-    virtual FASTBOOL Beg();
-    virtual void MovAllPoints();
-    virtual FASTBOOL End(FASTBOOL bCopy);
+protected:
+    virtual void createSdrDragEntries();
+
+public:
+    PathDragMove(SdrDragView& rNewView,
+        const rtl::Reference <MotionPathTag >& xTag,
+        const basegfx::B2DPolyPolygon& rPathPolyPolygon)
+    :   SdrDragMove(rNewView),
+        maPathPolyPolygon(rPathPolyPolygon),
+        mxTag( xTag )
+    {}
+
+    PathDragMove(SdrDragView& rNewView,
+        const rtl::Reference <MotionPathTag >& xTag)
+    :   SdrDragMove(rNewView),
+        maPathPolyPolygon(),
+        mxTag( xTag )
+    {}
+
+    virtual bool BeginSdrDrag();
+    virtual bool EndSdrDrag(bool bCopy);
 
     rtl::Reference <MotionPathTag > mxTag;
 };
 
-FASTBOOL PathDragMove::Beg()
+void PathDragMove::createSdrDragEntries()
 {
-//  SetDragPolys();
+    // call parent
+    SdrDragMove::createSdrDragEntries();
+
+    if(maPathPolyPolygon.count())
+    {
+        addSdrDragEntry(new SdrDragEntryPolyPolygon(maPathPolyPolygon));
+    }
+}
+
+bool PathDragMove::BeginSdrDrag()
+{
     if( mxTag.is() )
     {
         SdrPathObj* pPathObj = mxTag->getPathObj();
@@ -110,23 +138,7 @@ FASTBOOL PathDragMove::Beg()
     return TRUE;
 }
 
-void PathDragMove::MovAllPoints()
-{
-    SdrPageView* pPV = rView.GetSdrPageView();
-
-    if(pPV)
-    {
-        basegfx::B2DPolyPolygon aDragPolygon(pPV->getDragPoly0());
-        basegfx::B2DHomMatrix aMatrix;
-
-        aMatrix.translate(DragStat().GetDX(),DragStat().GetDY());
-        aDragPolygon.transform(aMatrix);
-
-        pPV->setDragPoly(aDragPolygon);
-    }
-}
-
-FASTBOOL PathDragMove::End(FASTBOOL /*bCopy*/)
+bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
     if( mxTag.is() )
@@ -137,17 +149,44 @@ FASTBOOL PathDragMove::End(FASTBOOL /*bCopy*/)
 
 class PathDragResize : public SdrDragResize
 {
-public:
-    PathDragResize(SdrDragView& rNewView, const rtl::Reference <MotionPathTag >& xTag): SdrDragResize(rNewView), mxTag( xTag ) {}
+private:
+    basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
-//  virtual FASTBOOL Beg();
-    virtual FASTBOOL End(FASTBOOL bCopy);
+protected:
+    virtual void createSdrDragEntries();
+
+public:
+    PathDragResize(SdrDragView& rNewView,
+        const rtl::Reference <MotionPathTag >& xTag,
+        const basegfx::B2DPolyPolygon& rPathPolyPolygon)
+    :   SdrDragResize(rNewView),
+        maPathPolyPolygon(rPathPolyPolygon),
+        mxTag( xTag )
+    {}
+
+    PathDragResize(SdrDragView& rNewView,
+        const rtl::Reference <MotionPathTag >& xTag)
+    :   SdrDragResize(rNewView),
+        maPathPolyPolygon(),
+        mxTag( xTag )
+    {}
+
+    virtual bool EndSdrDrag(bool bCopy);
     rtl::Reference <MotionPathTag > mxTag;
 };
 
-// --------------------------------------------------------------------
+void PathDragResize::createSdrDragEntries()
+{
+    // call parent
+    SdrDragResize::createSdrDragEntries();
 
-FASTBOOL PathDragResize::End(FASTBOOL /*bCopy*/)
+    if(maPathPolyPolygon.count())
+    {
+        addSdrDragEntry(new SdrDragEntryPolyPolygon(maPathPolyPolygon));
+    }
+}
+
+bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
     if( mxTag.is() )
@@ -172,22 +211,52 @@ FASTBOOL PathDragResize::End(FASTBOOL /*bCopy*/)
 
 class PathDragObjOwn : public SdrDragObjOwn
 {
-public:
-    PathDragObjOwn(SdrDragView& rNewView): SdrDragObjOwn(rNewView) {}
+private:
+    basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
-    virtual FASTBOOL End(FASTBOOL bCopy);
+protected:
+    virtual void createSdrDragEntries();
+
+public:
+    PathDragObjOwn(SdrDragView& rNewView,
+        const basegfx::B2DPolyPolygon& rPathPolyPolygon)
+    :   SdrDragObjOwn(rNewView),
+        maPathPolyPolygon(rPathPolyPolygon)
+    {}
+
+    PathDragObjOwn(SdrDragView& rNewView)
+    :   SdrDragObjOwn(rNewView),
+        maPathPolyPolygon()
+    {}
+
+    virtual bool EndSdrDrag(bool bCopy);
 };
 
-// --------------------------------------------------------------------
+void PathDragObjOwn::createSdrDragEntries()
+{
+    // call parent
+    SdrDragObjOwn::createSdrDragEntries();
 
-FASTBOOL PathDragObjOwn::End(FASTBOOL /*bCopy*/)
+    if(maPathPolyPolygon.count())
+    {
+        addSdrDragEntry(new SdrDragEntryPolyPolygon(maPathPolyPolygon));
+    }
+}
+
+bool PathDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
-    SdrObject* pObj=GetDragObj();
-    if (pObj!=NULL)
-        return pObj->EndDrag(DragStat());
+
+    SdrObject* pObj = GetDragObj();
+
+    if(pObj)
+    {
+        return pObj->applySpecialDrag(DragStat());
+    }
     else
-        return FALSE;
+    {
+        return false;
+    }
 }
 
 // --------------------------------------------------------------------
@@ -199,7 +268,7 @@ public:
     virtual ~SdPathHdl();
     virtual void CreateB2dIAObject();
     virtual BOOL IsFocusHdl() const;
-    virtual Pointer GetPointer() const;
+    virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const;
 
 private:
@@ -285,7 +354,7 @@ bool SdPathHdl::isMarkable() const
 
 // --------------------------------------------------------------------
 
-Pointer SdPathHdl::GetPointer() const
+Pointer SdPathHdl::GetSdrDragPointer() const
 {
     PointerStyle eStyle = POINTER_NOTALLOWED;
     if( mxTag.is() )
@@ -527,25 +596,26 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 
                     rtl::Reference< MotionPathTag > xTag( this );
                     SdrDragMethod* pDragMethod;
+
+                    // #i95646# add DragPoly as geometry to each local SdrDragMethod to be able
+                    // to create the needed local SdrDragEntry for it in createSdrDragEntries()
+                    const basegfx::B2DPolyPolygon aDragPoly(mpPathObj->GetPathPoly());
+
                     if( (pHdl->GetKind() == HDL_MOVE) || (pHdl->GetKind() == HDL_SMARTTAG) )
                     {
-                        pDragMethod = new PathDragMove( mrView, xTag );
+                        pDragMethod = new PathDragMove( mrView, xTag, aDragPoly );
                         pHdl->SetPos( aMDPos );
                     }
                     else if( pHdl->GetKind() == HDL_POLY )
                     {
-                        pDragMethod = new PathDragObjOwn( mrView );
+                        pDragMethod = new PathDragObjOwn( mrView, aDragPoly );
                     }
                     else
                     {
-                        pDragMethod = new PathDragResize( mrView, xTag );
+                        pDragMethod = new PathDragResize( mrView, xTag, aDragPoly );
                     }
 
                     mrView.BegDragObj(aMDPos, NULL, pHdl, nDrgLog, pDragMethod );
-
-                    basegfx::B2DPolyPolygon aDragPoly(mpPathObj->GetPathPoly());
-                    mrView.GetSdrPageView()->setDragPoly0(aDragPoly);
-                    mrView.GetSdrPageView()->setDragPoly(aDragPoly);
                 }
                 return true;
             }

@@ -521,7 +521,7 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     bDoubleClickTextEdit( TRUE ),
     bClickChangeRotation( FALSE ),
     bStartWithActualPage( FALSE ),
-    bSolidDragging( FALSE ),
+    bSolidDragging( TRUE ),
     bSolidMarkHdl( TRUE ),
     bSummationOfParagraphs( FALSE ),
     // #90356#
@@ -555,7 +555,7 @@ void SdOptionsMisc::SetDefaults()
     SetClickChangeRotation( FALSE );
     SetStartWithActualPage( FALSE );
     SetSummationOfParagraphs( FALSE );
-    SetSolidDragging( FALSE );
+    SetSolidDragging( TRUE );
     SetSolidMarkHdl( TRUE );
     // #90356#
     SetShowUndoDeleteWarning( TRUE );
@@ -622,7 +622,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "DclickTextedit",
         "RotateClick",
         "Preview",
-        "CreateWithAttributes",
+        "ModifyWithAttributes",
         "SimpleHandles",
         // #97016#
         "DefaultObjectSize/Width",

@@ -269,7 +269,7 @@ private:
     BOOL    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
     BOOL    bClickChangeRotation    : 1;    // Misc/RotateClick
     BOOL    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
-    BOOL    bSolidDragging          : 1;    // Misc/CreateWithAttributes
+    BOOL    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
     BOOL    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
     BOOL    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
     // #90356#
