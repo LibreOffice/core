@@ -337,8 +337,14 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_UNDERLINE,
             TRUE, &pItem ))
         {
-            SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
+            SetUnderline( ((SvxUnderlineItem*)pItem)->GetLineStyle() );
             SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
+        }
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_OVERLINE,
+            TRUE, &pItem ))
+        {
+            SetOverline( ((SvxOverlineItem*)pItem)->GetLineStyle() );
+            SetOverColor( ((SvxOverlineItem*)pItem)->GetColor() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CROSSEDOUT,
             TRUE, &pItem ))
@@ -438,6 +444,7 @@ SwFont::SwFont( const SwFont &rFont )
     nActual = rFont.nActual;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
     aUnderColor = rFont.GetUnderColor();
+    aOverColor  = rFont.GetOverColor();
     nToxCnt = nRefCnt = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
@@ -515,12 +522,14 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
     }
 
-    const FontUnderline eUnderline = pAttrSet->GetUnderline().GetUnderline();
+    const FontUnderline eUnderline = pAttrSet->GetUnderline().GetLineStyle();
     if ( pAttrSet->GetCharHidden().GetValue() )
         SetUnderline( UNDERLINE_DOTTED );
     else
         SetUnderline( eUnderline );
     SetUnderColor( pAttrSet->GetUnderline().GetColor() );
+    SetOverline( pAttrSet->GetOverline().GetLineStyle() );
+    SetOverColor( pAttrSet->GetOverline().GetColor() );
     SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
@@ -580,6 +589,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     delete pBackColor;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
     aUnderColor = rFont.GetUnderColor();
+    aOverColor  = rFont.GetOverColor();
     nToxCnt = nRefCnt = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
@@ -629,7 +639,9 @@ BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
     pLastFont->SetDevFont( pSh, rOut );
 
     pLastFont->Lock();
-    return UNDERLINE_NONE != GetUnderline() || STRIKEOUT_NONE != GetStrikeout();
+    return UNDERLINE_NONE != GetUnderline() ||
+           UNDERLINE_NONE != GetOverline()  ||
+           STRIKEOUT_NONE != GetStrikeout();
 }
 
 /*************************************************************************
@@ -658,6 +670,8 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
     }
     if( rOut.GetTextLineColor() != aUnderColor )
         rOut.SetTextLineColor( aUnderColor );
+    if( rOut.GetOverlineColor() != aOverColor )
+        rOut.SetOverlineColor( aOverColor );
 }
 
 /*************************************************************************

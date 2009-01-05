@@ -175,8 +175,15 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_ATTR_CHAR_UNDERLINE:
         {
-             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetUnderline();
+             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
             aNewAttr.Put(SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE));
+        }
+        break;
+
+        case SID_ATTR_CHAR_OVERLINE:
+        {
+             FontUnderline eFO = ((const SvxOverlineItem&)aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
+            aNewAttr.Put(SvxOverlineItem(eFO == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_OVERLINE));
         }
         break;
 
@@ -784,6 +791,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
             break;
             case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
             case SID_ATTR_CHAR_UNDERLINE: nEEWhich = EE_CHAR_UNDERLINE;break;
+            case SID_ATTR_CHAR_OVERLINE: nEEWhich = EE_CHAR_OVERLINE;break;
             case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
             case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;

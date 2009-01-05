@@ -243,6 +243,13 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ATTR_CHAR_OVERLINE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ATTR_CHAR_CONTOUR
     [
         ExecMethod = Exec;

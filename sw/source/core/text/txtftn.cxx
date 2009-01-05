@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtftn.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1028,10 +1028,12 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 
     // --> FME 2005-02-17 #i37142#
     // Underline style of paragraph font should not be considered
+    // Overline style of paragraph font should not be considered
     // Weight style of paragraph font should not be considered
     // Posture style of paragraph font should not be considered
     // See also #i18463# and SwTxtFormatter::NewNumberPortion()
     pNumFnt->SetUnderline( UNDERLINE_NONE );
+    pNumFnt->SetOverline( UNDERLINE_NONE );
     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
     pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
     pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );

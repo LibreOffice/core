@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.93.92.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2370,8 +2370,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             break;
 
         case RES_CHRATR_UNDERLINE:
-            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetUnderline());
-            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetUnderline());
+            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetLineStyle());
+            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetLineStyle());
             break;
 
         case RES_CHRATR_CROSSEDOUT:

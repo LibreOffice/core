@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: css1kywd.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,6 +171,7 @@ extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_P_text_decoration, "text-
 
 extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_none, "none" );
 extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_underline, "underline" );
+extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_overline, "overline" );
 extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_line_through, "line-through" );
 extern sal_Char __FAR_DATA CSS1_CONSTASCII_DECL( sCSS1_PV_blink, "blink" );
 

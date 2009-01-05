@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntcap.cxx,v $
- * $Revision: 1.27.214.1 $
+ * $Revision: 1.27.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,6 +380,7 @@ void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
     // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
     // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
+                       GetOverline()  != UNDERLINE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
     SwDoDrawCapital aDo( rInf );
     DoOnCapitals( aDo );
@@ -549,6 +550,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
     rInf.SetPos( rOldPos );
 
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
+                       GetOverline()  != UNDERLINE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
     SwDoDrawStretchCapital aDo( rInf, nCapWidth );
     DoOnCapitals( aDo );
@@ -601,13 +603,14 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     SwSubFont aFont( *this );
     Point aStartPos( rDo.GetInf().GetPos() );
 
-    const BOOL bUnderStriked = aFont.GetUnderline() != UNDERLINE_NONE
-                            || aFont.GetStrikeout() != STRIKEOUT_NONE;
-    const BOOL bWordWise = bUnderStriked && aFont.IsWordLineMode() &&
+    const BOOL bTextLines = aFont.GetUnderline() != UNDERLINE_NONE
+                         || aFont.GetOverline()  != UNDERLINE_NONE
+                         || aFont.GetStrikeout() != STRIKEOUT_NONE;
+    const BOOL bWordWise = bTextLines && aFont.IsWordLineMode() &&
                            rDo.GetInf().GetDrawSpace();
     const long nTmpKern = rDo.GetInf().GetKern();
 
-    if ( bUnderStriked )
+    if ( bTextLines )
     {
         if ( bWordWise )
         {
@@ -621,6 +624,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
         // Wir basteln uns einen Font fuer die Grossbuchstaben:
         aFont.SetUnderline( UNDERLINE_NONE );
+        aFont.SetOverline( UNDERLINE_NONE );
         aFont.SetStrikeout( STRIKEOUT_NONE );
         pMagic2 = NULL;
         nIndex2 = 0;
@@ -827,7 +831,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     if( pBigFont != pOldLast )
         delete pBigFontAccess;
 
-    if( bUnderStriked )
+    if( bTextLines )
     {
         if( rDo.GetInf().GetDrawSpace() )
         {

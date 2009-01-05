@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtrtf.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,6 +108,8 @@ SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL ) :
     bWriteHelpFmt = 'W' == rFltName.GetChar( 0 );
     // schreibe nur Gliederungs Absaetze
     bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
+    // enable non-standard tags for cut and paste
+    bNonStandard = '\0' == rFltName.GetChar( 0 );
 }
 
 
@@ -696,6 +698,16 @@ void SwRTFWriter::OutRTFColorTab()
         {
             if( 0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem( RES_CHRATR_UNDERLINE, n ) ) )
                 InsColor( *pColTbl, pUnder->GetColor() );
+
+        }
+
+        const SvxOverlineItem* pOver = (const SvxOverlineItem*)GetDfltAttr( RES_CHRATR_OVERLINE );
+        InsColor( *pColTbl, pOver->GetColor() );
+        nMaxItem = rPool.GetItemCount(RES_CHRATR_OVERLINE);
+        for( n = 0; n < nMaxItem;n++)
+        {
+            if( 0 != (pOver = (const SvxOverlineItem*)rPool.GetItem( RES_CHRATR_OVERLINE, n ) ) )
+                InsColor( *pColTbl, pOver->GetColor() );
 
         }
 

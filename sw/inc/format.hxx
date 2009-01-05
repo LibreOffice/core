@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: format.hxx,v $
- * $Revision: 1.32.144.1 $
+ * $Revision: 1.32.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,6 +198,7 @@ public:
     inline const SvxContourItem      &GetContour( BOOL = TRUE ) const;
     inline const SvxKerningItem      &GetKerning( BOOL = TRUE ) const;
     inline const SvxUnderlineItem    &GetUnderline( BOOL = TRUE ) const;
+    inline const SvxOverlineItem     &GetOverline( BOOL = TRUE ) const;
     inline const SvxCrossedOutItem   &GetCrossedOut( BOOL = TRUE ) const;
     inline const SvxFontHeightItem   &GetSize( BOOL = TRUE ) const;
     inline const SvxPropSizeItem     &GetPropSize( BOOL = TRUE ) const;

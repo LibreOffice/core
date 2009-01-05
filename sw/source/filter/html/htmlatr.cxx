@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlatr.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1448,7 +1448,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_UNDERLINE:
-        switch( ((const SvxUnderlineItem&)rItem).GetUnderline() )
+        switch( ((const SvxUnderlineItem&)rItem).GetLineStyle() )
         {
         case UNDERLINE_SINGLE:
             eState = HTML_ON_VALUE;
@@ -1461,6 +1461,11 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
                 eState = HTML_STYLE_VALUE;
             break;
         }
+        break;
+
+    case RES_CHRATR_OVERLINE:
+        if( IsHTMLMode(HTMLMODE_SOME_STYLES) )
+            eState = HTML_STYLE_VALUE;
         break;
 
     case RES_CHRATR_WEIGHT:
@@ -1851,7 +1856,9 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             // Zeichen-Hintergrund-Attribut. Es muss immer wie ein
             // Hint behandelt werden.
             bSet = bOutStyles &&
-                   (!bParaAttrs || rItem.Which()==RES_CHRATR_BACKGROUND);
+                   (!bParaAttrs
+                  || rItem.Which()==RES_CHRATR_BACKGROUND
+                  || rItem.Which()==RES_CHRATR_OVERLINE);
             break;
 
         case HTML_CHRFMT_VALUE:
@@ -3004,7 +3011,7 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const FontUnderline eUnder = ((const SvxUnderlineItem&)rHt).GetUnderline();
+    const FontUnderline eUnder = ((const SvxUnderlineItem&)rHt).GetLineStyle();
     if( UNDERLINE_NONE != eUnder )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_underline, rHTMLWrt.bTagOn );
@@ -3384,12 +3391,15 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_CTL_LANGUAGE */       OutHTML_SvxLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutHTML_SwPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutHTML_SwWeight,
-/* RES_CHRATR_WRITING_DIRECTION */  0,
+/* RES_CHRATR_ROTATE */             0,
+/* RES_CHRATR_EMPHASIS_MARK */      0,
+/* RES_CHRATR_TWO_LINES */          0,
+/* RES_CHRATR_SCALEW */             0,
+/* RES_CHRATR_RELIEF */             0,
+/* RES_CHRATR_HIDDEN */             0,
+/* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
+/* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
-/* RES_CHRATR_DUMMY3 */             0,
-/* RES_CHRATR_DUMMY4 */             0,
-/* RES_CHRATR_DUMMY5 */             0,
-/* RES_CHRATR_HIDDEN */             0, // Dummy:
 
 /* RES_TXTATR_DUMMY4    */          0,
 /* RES_TXTATR_INETFMT   */          OutHTML_SwFmtINetFmt,

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfont.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,7 @@ class SwSubFont : public SvxFont
     inline void SetPitch( const FontPitch ePitch );
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontUnderline eUnderline );
+    inline void SetOverline( const FontUnderline eOverline );
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
     inline void SetOutline( const BOOL bOutline );
@@ -137,6 +138,7 @@ class SwFont
     SwSubFont   aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
     Color*      pBackColor;     // background color (i.e. at character styles)
     Color       aUnderColor;    // color of the underlining
+    Color       aOverColor;     // color of the overlining
     BYTE        nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     BYTE        nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
     BYTE        nActual;        // actual font (Latin, CJK or CTL)
@@ -202,6 +204,8 @@ public:
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontUnderline eUnderline );
     inline void SetUnderColor( const Color &rColor ) { aUnderColor = rColor; }
+    inline void SetOverline( const FontUnderline eOverline );
+    inline void SetOverColor( const Color &rColor ) { aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const BOOL bOutline );
            void SetVertical( USHORT nDir, const BOOL nVertLayout = FALSE );
@@ -264,6 +268,8 @@ public:
         { return aSub[nActual].IsSymbol( pSh ); }
     FontUnderline GetUnderline() const { return aSub[nActual].GetUnderline(); }
     const Color& GetUnderColor() const { return aUnderColor; }
+    FontUnderline GetOverline() const { return aSub[nActual].GetOverline(); }
+    const Color& GetOverColor() const { return aOverColor; }
     short GetFixKerning() const { return aSub[nActual].GetFixKerning(); }
     FontStrikeout GetStrikeout() const { return aSub[nActual].GetStrikeout(); }
     const Color& GetColor() const { return aSub[nActual].GetColor(); }
@@ -497,6 +503,21 @@ inline void SwFont::SetUnderline( const FontUnderline eUnderline )
     aSub[0].SetUnderline( eUnderline );
     aSub[1].SetUnderline( eUnderline );
     aSub[2].SetUnderline( eUnderline );
+}
+
+// gekapselte SV-Font-Methode
+inline void SwSubFont::SetOverline( const FontUnderline eOverline )
+{
+    pMagic = 0;
+    Font::SetOverline( eOverline );
+}
+
+inline void SwFont::SetOverline( const FontUnderline eOverline )
+{
+    bFntChg = TRUE;
+    aSub[0].SetOverline( eOverline );
+    aSub[1].SetOverline( eOverline );
+    aSub[2].SetOverline( eOverline );
 }
 
 // gekapselte SV-Font-Methode

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notxtfrm.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.43.54.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,7 +140,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
         SwFmt *pFmt = rSh.GetDoc()->GetFmtFromPool( static_cast<sal_uInt16>
             (bVisited ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL ) );
         aCol = pFmt->GetColor().GetValue();
-        eUnderline = pFmt->GetUnderline().GetUnderline();
+        eUnderline = pFmt->GetUnderline().GetLineStyle();
     }
 
     pFont->SetUnderline( eUnderline );

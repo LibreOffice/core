@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedPDFExportHelper.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -821,6 +821,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         {
             if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Underline );
+            if ( UNDERLINE_NONE    != rInf.GetFont()->GetOverline() )
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
             if ( STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::LineThrough );
             if ( EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() )
@@ -1428,6 +1430,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
                     if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() ||
+                         UNDERLINE_NONE    != rInf.GetFont()->GetOverline()  ||
                          STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() ||
                          EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() ||
                          0                 != rInf.GetFont()->GetEscapement() ||

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unosrch.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     *pDropItem  = 0,
     *pWeightItem  = 0,
     *pULineItem  = 0,
+    *pOLineItem  = 0,
     *pCharFmtItem  = 0,
     *pShadItem  = 0,
     *pPostItem  = 0,
@@ -298,6 +299,11 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
                         pULineItem = rSet.GetPool()->GetDefaultItem(pTempMap->nWID).Clone();
                     pTempItem = pULineItem;
                 break;
+                case  RES_CHRATR_OVERLINE:
+                    if(!pOLineItem)
+                        pOLineItem = rSet.GetPool()->GetDefaultItem(pTempMap->nWID).Clone();
+                    pTempItem = pOLineItem;
+                break;
                 case  RES_CHRATR_WEIGHT:
                     if(!pWeightItem)
                         pWeightItem = rSet.GetPool()->GetDefaultItem(pTempMap->nWID).Clone();
@@ -406,6 +412,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     delete pDropItem;
     delete pWeightItem;
     delete pULineItem;
+    delete pOLineItem;
     delete pCharFmtItem  ;
     delete pShadItem;
     delete pPostItem;

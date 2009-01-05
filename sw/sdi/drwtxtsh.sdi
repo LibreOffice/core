@@ -191,6 +191,13 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ATTR_CHAR_OVERLINE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ATTR_CHAR_CONTOUR
     [
         ExecMethod = Execute ;

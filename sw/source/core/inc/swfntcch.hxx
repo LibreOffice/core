@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfntcch.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 
 #include <tools/mempool.hxx>
 
-#define NUM_DEFAULT_VALUES 35
+#define NUM_DEFAULT_VALUES 36
 
 #include "swcache.hxx"
 #include "swfont.hxx"

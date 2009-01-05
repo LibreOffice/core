@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tblafmt.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +93,7 @@ class SwBoxAutoFmt
     SvxPostureItem      aCTLPosture;
 
     SvxUnderlineItem    aUnderline;
+    SvxOverlineItem     aOverline;
     SvxCrossedOutItem   aCrossedOut;
     SvxContourItem      aContour;
     SvxShadowedItem     aShadowed;
@@ -140,6 +141,7 @@ public:
     const SvxWeightItem     &GetCTLWeight() const   { return aCTLWeight; }
     const SvxPostureItem    &GetCTLPosture() const  { return aCTLPosture; }
     const SvxUnderlineItem  &GetUnderline() const   { return aUnderline; }
+    const SvxOverlineItem   &GetOverline() const    { return aOverline; }
     const SvxCrossedOutItem &GetCrossedOut() const  { return aCrossedOut; }
     const SvxContourItem    &GetContour() const     { return aContour; }
     const SvxShadowedItem   &GetShadowed() const    { return aShadowed; }
@@ -166,6 +168,7 @@ public:
     void SetCTLWeight( const SvxWeightItem& rNew )      { aCTLWeight = rNew; }
     void SetCTLPosture( const SvxPostureItem& rNew )    { aCTLPosture = rNew; }
     void SetUnderline( const SvxUnderlineItem& rNew )   { aUnderline = rNew; }
+    void SetOverline( const SvxOverlineItem& rNew )     { aOverline = rNew; }
     void SetCrossedOut( const SvxCrossedOutItem& rNew ) { aCrossedOut = rNew; }
     void SetContour( const SvxContourItem& rNew )       { aContour = rNew; }
     void SetShadowed( const SvxShadowedItem& rNew )     { aShadowed = rNew; }

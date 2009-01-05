@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _textsh.sdi,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1360,6 +1360,12 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_UNDERLINE // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl;
+        StateMethod = GetTxtCtrlState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_OVERLINE // status(final|play)
     [
         ExecMethod = ExecTxtCtrl;
         StateMethod = GetTxtCtrlState;

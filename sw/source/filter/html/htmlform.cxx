@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlform.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1144,7 +1144,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)((SvxUnderlineItem *)pItem)->GetUnderline();
+            aTmp <<= (sal_Int16)((SvxUnderlineItem *)pItem)->GetLineStyle();
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 

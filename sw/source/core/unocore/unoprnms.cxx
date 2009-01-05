@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.cxx,v $
- * $Revision: 1.139 $
+ * $Revision: 1.139.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -774,7 +774,10 @@ const SwPropNameTab aPropNameTab = {
 /* 0729 UNO_NAME_DEFAULT_LIST_ID*/ {MAP_CHAR_LEN("DefaultListId")},
 /* 0730 UNO_NAME_STREAM_NAME */ {MAP_CHAR_LEN("StreamName")},
 /* 0731 UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE */  {MAP_CHAR_LEN("ContinueingPreviousSubTree")},
-/* 0732 UNO_NAME_PARA_LIST_LABEL_STRING */  {MAP_CHAR_LEN("ListLabelString")}
+/* 0732 UNO_NAME_PARA_LIST_LABEL_STRING */  {MAP_CHAR_LEN("ListLabelString")},
+/* 0733 CHAR_OVERLINE */               {MAP_CHAR_LEN("CharOverline")},
+/* 0734 CHAR_OVERLINE_COLOR */         {MAP_CHAR_LEN("CharOverlineColor")},
+/* 0735 CHAR_OVERLINE_HAS_COLOR */     {MAP_CHAR_LEN("CharOverlineHasColor")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )

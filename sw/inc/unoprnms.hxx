@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.hxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.129.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -800,7 +800,10 @@ enum SwPropNameIds
 /* 0731 */  UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
 /* 0732 */  UNO_NAME_PARA_LIST_LABEL_STRING,
 // <--
-/* 0733 */  SW_PROPNAME_END
+/* 0733 */  UNO_NAME_CHAR_OVERLINE,
+/* 0734 */  UNO_NAME_CHAR_OVERLINE_COLOR,
+/* 0735 */  UNO_NAME_CHAR_OVERLINE_HAS_COLOR,
+/* 0736 */  SW_PROPNAME_END
 };
 
 

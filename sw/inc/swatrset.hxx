@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swatrset.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@ class SvxWordLineModeItem;
 class SvxContourItem;
 class SvxKerningItem;
 class SvxUnderlineItem;
+class SvxOverlineItem;
 class SvxCrossedOutItem;
 class SvxFontHeightItem;
 class SvxPropSizeItem;
@@ -155,6 +156,7 @@ class SwAttrPool : public SfxItemPool
     // OD 2004-01-21 #i18732# - due to extension of attribute set a new version
     // map for binary filter is necessary (version map 5).
     static USHORT* pVersionMap5;
+    static USHORT* pVersionMap6;
 
     SwDoc* pDoc;
 
@@ -232,6 +234,7 @@ public:
     inline const SvxContourItem         &GetContour( BOOL = TRUE ) const;
     inline const SvxKerningItem         &GetKerning( BOOL = TRUE ) const;
     inline const SvxUnderlineItem       &GetUnderline( BOOL = TRUE ) const;
+    inline const SvxOverlineItem        &GetOverline( BOOL = TRUE ) const;
     inline const SvxCrossedOutItem      &GetCrossedOut( BOOL = TRUE ) const;
     inline const SvxFontHeightItem        &GetSize( BOOL = TRUE ) const;
     inline const SvxPropSizeItem        &GetPropSize( BOOL = TRUE ) const;

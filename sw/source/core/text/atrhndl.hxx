@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrhndl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #define _ATRHNDL_HXX
 
 #define INITIAL_NUM_ATTR 3
-#define NUM_ATTRIBUTE_STACKS 38
+#define NUM_ATTRIBUTE_STACKS 39
 
 #include <txatbase.hxx>
 #include <swfntcch.hxx>

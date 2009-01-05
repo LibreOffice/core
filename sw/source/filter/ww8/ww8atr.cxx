@@ -1206,7 +1206,7 @@ static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
                             //  6 = thick,   7 = dash,       8 = dot(not used)
                             //  9 = dotdash 10 = dotdotdash, 11 = wave
     BYTE b = 0;
-    switch (rAttr.GetUnderline())
+    switch (rAttr.GetLineStyle())
     {
         case UNDERLINE_SINGLE:
             b = ( bWord ) ? 2 : 1;
@@ -1261,7 +1261,7 @@ static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
             b = 0;
             break;
         default:
-            ASSERT(rAttr.GetUnderline() == UNDERLINE_NONE, "Unhandled underline type");
+            ASSERT(rAttr.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type");
             break;
     }
 
@@ -4959,6 +4959,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_DUMMY4 */             OutWW8_ScaleWidth,
 /* RES_CHRATR_RELIEF*/              OutWW8_Relief,
 /* RES_CHRATR_HIDDEN */             OutWW8_SvxCharHidden,
+/* RES_CHRATR_OVERLINE */           0,
+/* RES_CHRATR_DUMMY1 */             0,
+/* RES_CHRATR_DUMMY2 */             0,
 
 /* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,

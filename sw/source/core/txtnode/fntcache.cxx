@@ -116,14 +116,14 @@ void SwRVPMarker::Mark( const OutputDevice* pOut )
 {
     if( pOut )
     {
-        Color aOldCol = pOut->GetLineColor();
+        Color aOldCol = pOut->GetUnderColor();
         Color aBlack = Color( COL_BLACK );
         if( aOldCol != aBlack )
         {
-            ((OutputDevice*)pOut)->SetLineColor( aBlack );
+            ((OutputDevice*)pOut)->SetUnderColor( aBlack );
             ((OutputDevice*)pOut)->DrawChord( Rectangle(0,1,0,1),
                                               Point(), Point() );
-            ((OutputDevice*)pOut)->SetLineColor( aOldCol );
+            ((OutputDevice*)pOut)->SetUnderColor( aOldCol );
         }
         else
             ((OutputDevice*)pOut)->DrawChord( Rectangle(0,1,0,1),
@@ -175,8 +175,9 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
     nPrtAscent = USHRT_MAX;
     nPrtHeight = USHRT_MAX;
     bPaintBlank = ( UNDERLINE_NONE != aFont.GetUnderline()
-                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
-                  && !aFont.IsWordLineMode();
+                 || UNDERLINE_NONE != aFont.GetOverline()
+                 || STRIKEOUT_NONE != aFont.GetStrikeout() )
+                 && !aFont.IsWordLineMode();
 }
 
 SwFntObj::~SwFntObj()
@@ -937,10 +938,10 @@ static void lcl_DrawLineForWrongListData(
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Push();
 
-            const Color aCol( rInf.GetOut().GetLineColor() );
+            const Color aCol( rInf.GetOut().GetTextLineColor() );
             const BOOL bColSave = aCol != aLineColor;
             if (bColSave)
-                rInf.GetOut().SetLineColor( aLineColor );
+                rInf.GetOut().SetTextLineColor( aLineColor );
 
             // iterate over all ranges stored in the respective SwWrongList
             do
@@ -1011,7 +1012,7 @@ static void lcl_DrawLineForWrongListData(
             while (nWrLen && pWList->Check( nStart, nWrLen ));
 
             if (bColSave)
-                rInf.GetOut().SetLineColor( aCol );
+                rInf.GetOut().SetTextLineColor( aCol );
 
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Pop();
@@ -1931,10 +1932,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
                             ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                             WAVE_FLAT );
-                        Color aCol( rInf.GetOut().GetLineColor() );
+                        Color aCol( rInf.GetOut().GetTextLineColor() );
                         BOOL bColSave = aCol != *pWaveCol;
                         if ( bColSave )
-                            rInf.GetOut().SetLineColor( *pWaveCol );
+                            rInf.GetOut().SetTextLineColor( *pWaveCol );
 
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
@@ -1981,7 +1982,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         rInf.GetOut().DrawWaveLine( aCurrPos, aEnd, nWave );
 
                         if ( bColSave )
-                            rInf.GetOut().SetLineColor( aCol );
+                            rInf.GetOut().SetTextLineColor( aCol );
 
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Pop();
@@ -2815,27 +2816,28 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
     sal_Bool bPrt = GetShell() && ! GetShell()->GetWin();
     ColorData nNewColor = COL_BLACK;
     sal_Bool bChgFntColor = sal_False;
-    sal_Bool bChgUnderColor = sal_False;
+    sal_Bool bChgLineColor = sal_False;
 
     if( bPrt && GetShell() && GetShell()->GetViewOptions()->IsBlackFont() )
     {
         if ( COL_BLACK != rFnt.GetColor().GetColor() )
             bChgFntColor = sal_True;
 
-        if ( COL_BLACK != GetOut().GetTextLineColor().GetColor() )
-            bChgUnderColor = sal_True;
+        if ( (COL_BLACK != GetOut().GetTextLineColor().GetColor()) ||
+             (COL_BLACK != GetOut().GetOverlineColor().GetColor()) )
+            bChgLineColor = sal_True;
     }
     else
     {
         // FontColor has to be changed if:
         // 1. FontColor = AUTO or 2. IsAlwaysAutoColor is set
-        // UnderLineColor has to be changed if:
+        // LineColor has to be changed if:
         // 1. IsAlwaysAutoColor is set
 
-        bChgUnderColor = ! bPrt && GetShell() &&
+        bChgLineColor = ! bPrt && GetShell() &&
                 GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
 
-        bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgUnderColor;
+        bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgLineColor;
 
         if ( bChgFntColor )
         {
@@ -2893,7 +2895,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
         }
     }
 
-    if ( bChgFntColor || bChgUnderColor )
+    if ( bChgFntColor || bChgLineColor )
     {
         Color aNewColor( nNewColor );
 
@@ -2913,13 +2915,15 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
             }
         }
 
-        // the underline color has to be set separately
-        if ( bChgUnderColor )
+        // the underline and overline colors have to be set separately
+        if ( bChgLineColor )
         {
             // get current font color or color set at output device
             aNewColor = pFont ? pFont->GetColor() : GetOut().GetFont().GetColor();
             if ( aNewColor != GetOut().GetTextLineColor() )
                 GetOut().SetTextLineColor( aNewColor );
+            if ( aNewColor != GetOut().GetOverlineColor() )
+                GetOut().SetOverlineColor( aNewColor );
         }
 
         return sal_True;

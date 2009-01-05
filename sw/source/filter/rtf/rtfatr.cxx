@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.75.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2442,7 +2442,7 @@ static Writer& OutRTF_SwCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const char* pStr = 0;
-    switch( ((const SvxUnderlineItem&)rHt).GetUnderline() )
+    switch( ((const SvxUnderlineItem&)rHt).GetLineStyle() )
     {
         case UNDERLINE_SINGLE:
             pStr = sRTF_UL;
@@ -2503,7 +2503,7 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     {
         SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
 
-        if( UNDERLINE_SINGLE == ((const SvxUnderlineItem&)rHt).GetUnderline()
+        if( UNDERLINE_SINGLE == ((const SvxUnderlineItem&)rHt).GetLineStyle()
             && ((SvxWordLineModeItem&)rRTFWrt.GetItem(
                 RES_CHRATR_WORDLINEMODE )).GetValue() )
             pStr = sRTF_ULW;
@@ -2513,6 +2513,90 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
         rWrt.Strm() << sRTF_ULC;
         rWrt.OutULong( rRTFWrt.GetId(((const SvxUnderlineItem&)rHt).GetColor()) );
+
+    }
+
+    return rWrt;
+}
+
+
+
+static Writer& OutRTF_SwOverline( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    const char* pStr = 0;
+    switch( ((const SvxOverlineItem&)rHt).GetLineStyle() )
+    {
+        case UNDERLINE_SINGLE:
+            pStr = sRTF_OL;
+            break;
+        case UNDERLINE_DOUBLE:
+            pStr = sRTF_OLDB;
+            break;
+        case UNDERLINE_NONE:
+            pStr = sRTF_OLNONE;
+            break;
+        case UNDERLINE_DOTTED:
+            pStr = sRTF_OLD;
+            break;
+        case UNDERLINE_DASH:
+            pStr = sRTF_OLDASH;
+            break;
+        case UNDERLINE_DASHDOT:
+            pStr = sRTF_OLDASHD;
+            break;
+        case UNDERLINE_DASHDOTDOT:
+            pStr = sRTF_OLDASHDD;
+            break;
+        case UNDERLINE_BOLD:
+            pStr = sRTF_OLTH;
+            break;
+        case UNDERLINE_WAVE:
+            pStr = sRTF_OLWAVE;
+            break;
+        case UNDERLINE_BOLDDOTTED:
+            pStr = sRTF_OLTHD;
+            break;
+        case UNDERLINE_BOLDDASH:
+            pStr = sRTF_OLTHDASH;
+            break;
+        case UNDERLINE_LONGDASH:
+            pStr = sRTF_OLLDASH;
+            break;
+        case UNDERLINE_BOLDLONGDASH:
+            pStr = sRTF_OLTHLDASH;
+            break;
+        case UNDERLINE_BOLDDASHDOT:
+            pStr = sRTF_OLTHDASHD;
+            break;
+        case UNDERLINE_BOLDDASHDOTDOT:
+            pStr = sRTF_OLTHDASHDD;
+            break;
+        case UNDERLINE_BOLDWAVE:
+            pStr = sRTF_OLHWAVE;
+            break;
+        case UNDERLINE_DOUBLEWAVE:
+            pStr = sRTF_OLOLDBWAVE;
+            break;
+        default:
+            break;
+    }
+
+    if( pStr )
+    {
+        SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+        if ( rRTFWrt.bNonStandard )
+        {
+            if( UNDERLINE_SINGLE == ((const SvxOverlineItem&)rHt).GetLineStyle()
+                && ((SvxWordLineModeItem&)rRTFWrt.GetItem(
+                    RES_CHRATR_WORDLINEMODE )).GetValue() )
+                pStr = sRTF_OLW;
+
+            rRTFWrt.Strm() << pStr;
+            rRTFWrt.bOutFmtAttr = TRUE;
+
+            rWrt.Strm() << sRTF_OLC;
+            rWrt.OutULong( rRTFWrt.GetId(((const SvxOverlineItem&)rHt).GetColor()) );
+        }
 
     }
 
@@ -4144,6 +4228,9 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_SCALEW */             OutRTF_SwCharScaleW,
 /* RES_CHRATR_RELIEF */             OutRTF_SwCharRelief,
 /* RES_CHRATR_HIDDEN */             OutRTF_SvxCharHiddenItem,
+/* RES_CHRATR_OVERLINE */           OutRTF_SwOverline,
+/* RES_CHRATR_DUMMY1 */             0,
+/* RES_CHRATR_DUMMY2 */             0,
 
 /* RES_TXTATR_AUTOFMT   */          OutRTF_SwTxtAutoFmt,
 /* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy

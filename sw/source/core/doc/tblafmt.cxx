@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tblafmt.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,9 +80,13 @@ const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
 const USHORT AUTOFORMAT_ID_680DR25      = 10021;
 const USHORT AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
+// --- from DEV300/overline2 on: #5991# overline
+const USHORT AUTOFORMAT_ID_300OVRLN      = 10031;
+const USHORT AUTOFORMAT_DATA_ID_300OVRLN = 10032;
+
 // current version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR25;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR25;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_300OVRLN;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
 
 
 #ifdef READ_OLDVERS
@@ -110,6 +114,7 @@ public:
     USHORT nWeightVersion;
     USHORT nPostureVersion;
     USHORT nUnderlineVersion;
+    USHORT nOverlineVersion;
     USHORT nCrossedOutVersion;
     USHORT nContourVersion;
     USHORT nShadowedVersion;
@@ -140,6 +145,7 @@ SwAfVersions::SwAfVersions() :
     nWeightVersion(0),
     nPostureVersion(0),
     nUnderlineVersion(0),
+    nOverlineVersion(0),
     nCrossedOutVersion(0),
     nContourVersion(0),
     nShadowedVersion(0),
@@ -166,6 +172,8 @@ void SwAfVersions::Load( SvStream& rStream, USHORT nVer )
     rStream >> nWeightVersion;
     rStream >> nPostureVersion;
     rStream >> nUnderlineVersion;
+    if ( nVer >= AUTOFORMAT_ID_300OVRLN )
+        rStream >> nOverlineVersion;
     rStream >> nCrossedOutVersion;
     rStream >> nContourVersion;
     rStream >> nShadowedVersion;
@@ -207,6 +215,7 @@ SwBoxAutoFmt::SwBoxAutoFmt()
     aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
 
     aUnderline( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ),
+    aOverline( UNDERLINE_NONE, RES_CHRATR_OVERLINE ),
     aCrossedOut( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ),
     aContour( sal_False, RES_CHRATR_CONTOUR ),
     aShadowed( sal_False, RES_CHRATR_SHADOWED ),
@@ -247,6 +256,7 @@ SwBoxAutoFmt::SwBoxAutoFmt( const SwBoxAutoFmt& rNew )
     aCTLWeight( rNew.aCTLWeight ),
     aCTLPosture( rNew.aCTLPosture ),
     aUnderline( rNew.aUnderline ),
+    aOverline( rNew.aOverline ),
     aCrossedOut( rNew.aCrossedOut ),
     aContour( rNew.aContour ),
     aShadowed( rNew.aShadowed ),
@@ -289,6 +299,7 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
     aCTLWeight = rNew.aCTLWeight;
     aCTLPosture = rNew.aCTLPosture;
     aUnderline = rNew.aUnderline;
+    aOverline = rNew.aOverline;
     aCrossedOut = rNew.aCrossedOut;
     aContour = rNew.aContour;
     aShadowed = rNew.aShadowed;
@@ -346,6 +357,10 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
         READ( aCTLPosture,   SvxPostureItem      , rVersions.nPostureVersion)
     }
     READ( aUnderline,   SvxUnderlineItem   , rVersions.nUnderlineVersion)
+    if( nVer >= AUTOFORMAT_DATA_ID_300OVRLN )
+    {
+        READ( aOverline,       SvxOverlineItem     , rVersions.nOverlineVersion)
+    }
     READ( aCrossedOut,  SvxCrossedOutItem  , rVersions.nCrossedOutVersion)
     READ( aContour,     SvxContourItem     , rVersions.nContourVersion)
     READ( aShadowed,    SvxShadowedItem       , rVersions.nShadowedVersion)
@@ -453,6 +468,7 @@ BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
     aCTLWeight.Store( rStream, aCTLWeight.GetVersion(SOFFICE_FILEFORMAT_40) );
     aCTLPosture.Store( rStream, aCTLPosture.GetVersion(SOFFICE_FILEFORMAT_40) );
     aUnderline.Store( rStream, aUnderline.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aOverline.Store( rStream, aOverline.GetVersion(SOFFICE_FILEFORMAT_40) );
     aCrossedOut.Store( rStream, aCrossedOut.GetVersion(SOFFICE_FILEFORMAT_40) );
     aContour.Store( rStream, aContour.GetVersion(SOFFICE_FILEFORMAT_40) );
     aShadowed.Store( rStream, aShadowed.GetVersion(SOFFICE_FILEFORMAT_40) );
@@ -488,6 +504,7 @@ BOOL SwBoxAutoFmt::SaveVerionNo( SvStream& rStream ) const
     rStream << aWeight.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aPosture.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aUnderline.GetVersion( SOFFICE_FILEFORMAT_40 );
+    rStream << aOverline.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aCrossedOut.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aContour.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aShadowed.GetVersion( SOFFICE_FILEFORMAT_40 );
@@ -630,6 +647,7 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
         pFmt->SetCTLWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_CTL_WEIGHT ) );
         pFmt->SetCTLPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_CTL_POSTURE ) );
         pFmt->SetUnderline( (SvxUnderlineItem&)rSet.Get( RES_CHRATR_UNDERLINE ) );
+        pFmt->SetOverline( (SvxOverlineItem&)rSet.Get( RES_CHRATR_OVERLINE ) );
         pFmt->SetCrossedOut( (SvxCrossedOutItem&)rSet.Get( RES_CHRATR_CROSSEDOUT ) );
         pFmt->SetContour( (SvxContourItem&)rSet.Get( RES_CHRATR_CONTOUR ) );
         pFmt->SetShadowed( (SvxShadowedItem&)rSet.Get( RES_CHRATR_SHADOWED ) );
@@ -709,6 +727,7 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
                 rSet.Put( rChg.GetPosture(), RES_CHRATR_CTL_POSTURE );
             }
             rSet.Put( rChg.GetUnderline() );
+            rSet.Put( rChg.GetOverline() );
             rSet.Put( rChg.GetCrossedOut() );
             rSet.Put( rChg.GetContour() );
             rSet.Put( rChg.GetShadowed() );

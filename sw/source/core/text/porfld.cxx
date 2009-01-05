@@ -708,11 +708,13 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         const SwFont *pTmpFnt = rInf.GetFont();
         sal_Bool bPaintSpace = ( UNDERLINE_NONE != pTmpFnt->GetUnderline() ||
-                             STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
-                            !pTmpFnt->IsWordLineMode();
+                                 UNDERLINE_NONE != pTmpFnt->GetOverline()  ||
+                                 STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
+                                 !pTmpFnt->IsWordLineMode();
         if( bPaintSpace && pFnt )
             bPaintSpace = ( UNDERLINE_NONE != pFnt->GetUnderline() ||
-                             STRIKEOUT_NONE != pFnt->GetStrikeout() ) &&
+                            UNDERLINE_NONE != pFnt->GetOverline()  ||
+                            STRIKEOUT_NONE != pFnt->GetStrikeout() ) &&
                             !pFnt->IsWordLineMode();
 
         SwFontSave aSave( rInf, pFnt );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swatrset.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.16.140.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 4, 1,121, pVersionMap4 );
     // OD 2004-01-21 #i18732# - apply new version map
     SetVersionMap( 5, 1,130, pVersionMap5 );
+    SetVersionMap( 6, 1,136, pVersionMap6 );
 }
 
 
