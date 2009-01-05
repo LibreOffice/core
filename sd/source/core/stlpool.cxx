@@ -272,6 +272,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
                 rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
                 rSet.Put( SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+                rSet.Put( SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ) );
                 rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
                 rSet.Put( SvxShadowedItem(FALSE, EE_CHAR_SHADOW ) );
                 rSet.Put( SvxContourItem(FALSE, EE_CHAR_OUTLINE ) );
@@ -410,6 +411,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT_CJK ) );                 // 44 pt
         rTitleSet.Put(SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1552 ), 100, EE_CHAR_FONTHEIGHT_CTL ) );                   // 44 pt
         rTitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ));
+        rTitleSet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ));
         rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
         rTitleSet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
         rTitleSet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
@@ -455,6 +457,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 32 pt
         rSubtitleSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1129 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 32 pt
         rSubtitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ));
+        rSubtitleSet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ));
         rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
         rSubtitleSet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
         rSubtitleSet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
@@ -503,6 +506,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 20 pt
         rNotesSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 705 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 20 pt
         rNotesSet.Put( SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+        rNotesSet.Put( SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ) );
         rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
         rNotesSet.Put( SvxShadowedItem(FALSE, EE_CHAR_SHADOW ) );
         rNotesSet.Put( SvxContourItem(FALSE, EE_CHAR_OUTLINE ) );
@@ -1203,6 +1207,7 @@ Font SdStyleSheetPool::GetBulletFont() const
     aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(UNDERLINE_NONE);
+    aBulletFont.SetOverline(UNDERLINE_NONE);
     aBulletFont.SetStrikeout(STRIKEOUT_NONE);
     aBulletFont.SetItalic(ITALIC_NONE);
     aBulletFont.SetOutline(FALSE);

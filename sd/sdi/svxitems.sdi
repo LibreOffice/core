@@ -46,6 +46,7 @@ item String SvxNoLinebreakItem;
 item String SvxNumberInfoItem;
 item String SvxOpaqueItem;
 item String SvxOrphansItem;
+item String SvxOverlineItem;
 item String SvxPageItem;
 item String SvxPageModelItem;
 item String SvxPagePosSizeItem;

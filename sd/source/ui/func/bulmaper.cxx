@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bulmaper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,7 +165,10 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             aMyFont.SetItalic(rPItem.GetPosture());
 
             const SvxUnderlineItem& rUItem = (SvxUnderlineItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE));
-            aMyFont.SetUnderline(rUItem.GetUnderline());
+            aMyFont.SetUnderline(rUItem.GetLineStyle());
+
+            const SvxOverlineItem& rOItem = (SvxOverlineItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_OVERLINE));
+            aMyFont.SetOverline(rOItem.GetLineStyle());
 
             const SvxCrossedOutItem& rCOItem = (SvxCrossedOutItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_STRIKEOUT));
             aMyFont.SetStrikeout(rCOItem.GetStrikeout());

@@ -365,10 +365,19 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_ATTR_CHAR_UNDERLINE:
                     {
                         FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.
-                                        Get( EE_CHAR_UNDERLINE ) ).GetUnderline();
+                                        Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
                         aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ?
                                             UNDERLINE_NONE : UNDERLINE_SINGLE,
                                             EE_CHAR_UNDERLINE ) );
+                    }
+                    break;
+                    case SID_ATTR_CHAR_OVERLINE:
+                    {
+                        FontUnderline eFO = ( (const SvxOverlineItem&) aEditAttr.
+                                        Get( EE_CHAR_OVERLINE ) ).GetLineStyle();
+                        aNewAttr.Put( SvxOverlineItem( eFO == UNDERLINE_SINGLE ?
+                                            UNDERLINE_NONE : UNDERLINE_SINGLE,
+                                            EE_CHAR_OVERLINE ) );
                     }
                     break;
                     case SID_ATTR_CHAR_CONTOUR:

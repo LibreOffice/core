@@ -46,6 +46,12 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_ATTR_CHAR_OVERLINE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_CHAR_CONTOUR  // ole : ?, status : ?
     [
         ExecMethod = Execute;

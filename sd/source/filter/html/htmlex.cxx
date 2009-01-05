@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlex.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1411,7 +1411,7 @@ String HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, 
 
     if ( pSet->GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON )
     {
-        bTemp = ((const SvxUnderlineItem&)pSet->Get( EE_CHAR_UNDERLINE )).GetUnderline() != UNDERLINE_NONE;
+        bTemp = ((const SvxUnderlineItem&)pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != UNDERLINE_NONE;
         aTemp = pState->SetUnderline( bTemp );
         if( bTemp )
             aStr.Insert( aTemp, 0 );
