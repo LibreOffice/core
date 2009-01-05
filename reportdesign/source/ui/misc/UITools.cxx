@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.7.28.2 $
+ * $Revision: 1.7.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -513,7 +513,7 @@ namespace
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,sal_True,&pItem) && pItem->ISA(SvxUnderlineItem))
         {
             const SvxUnderlineItem* pFontItem = static_cast<const SvxUnderlineItem*>(pItem);
-            aNewFont.SetUnderline(pFontItem->GetUnderline());
+            aNewFont.SetUnderline(pFontItem->GetLineStyle());
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_COLOR,sal_True,&pItem) && pItem->ISA(SvxColorItem))
         {
