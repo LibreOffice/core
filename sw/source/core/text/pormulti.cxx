@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pormulti.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.89.112.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,9 +231,9 @@ SwBidiPortion::SwBidiPortion( xub_StrLen nEnd, BYTE nLv )
 }
 
 
-long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo & ) const
+long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo& rInf ) const
 {
-    return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd / SPACING_PRECISION_FACTOR;
+    return HasTabulator() ? 0 : GetSpaceCnt(rInf) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
 sal_Bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
@@ -247,6 +247,28 @@ sal_Bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
     }
 
     return bRet;
+}
+
+xub_StrLen SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
+{
+    // Calculate number of blanks for justified alignment
+    SwLinePortion* pPor = GetRoot().GetFirstPortion();
+    xub_StrLen nTmpStart = rInf.GetIdx();
+    xub_StrLen nNull = 0;
+    xub_StrLen nBlanks;
+
+    for( nBlanks = 0; pPor; pPor = pPor->GetPortion() )
+    {
+        if( pPor->InTxtGrp() )
+            nBlanks = nBlanks + ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
+        else if ( pPor->IsMultiPortion() &&
+                 ((SwMultiPortion*)pPor)->IsBidi() )
+            nBlanks = nBlanks + ((SwBidiPortion*)pPor)->GetSpaceCnt( rInf );
+
+        ((SwTxtSizeInfo &)rInf).SetIdx( rInf.GetIdx() + pPor->GetLen() );
+    }
+    ((SwTxtSizeInfo &)rInf).SetIdx( nTmpStart );
+    return nBlanks;
 }
 
 /*-----------------01.11.00 14:22-------------------
@@ -2065,25 +2087,6 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
     else if ( rMulti.IsBidi() )
     {
-        // Calculate number of blanks for justified alignment
-        SwLinePortion* pPor = rMulti.GetRoot().GetFirstPortion();
-        xub_StrLen nTmpStart = rInf.GetIdx();
-        xub_StrLen nNull = 0;
-        xub_StrLen nBlanks;
-
-        for( nBlanks = 0; pPor; pPor = pPor->GetPortion() )
-        {
-            if( pPor->InTxtGrp() )
-                nBlanks = nBlanks + ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
-            else if ( pPor->IsMultiPortion() &&
-                     ((SwMultiPortion*)pPor)->IsBidi() )
-                nBlanks = nBlanks + ((SwBidiPortion*)pPor)->GetSpaceCnt();
-
-            rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
-        }
-        rInf.SetIdx( nTmpStart );
-        ((SwBidiPortion&)rMulti).SetSpaceCnt( nBlanks );
-
         bRet = rMulti.GetLen() < nMultiLen || pNextFirst;
     }
 
@@ -2390,7 +2393,12 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
             nSpaceCnt = ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
         }
         else
-            nSpaceCnt = ((SwBidiPortion*)pMulti)->GetSpaceCnt();
+        {
+            const xub_StrLen nOldIdx = pTxtCursor->GetInfo().GetIdx();
+            pTxtCursor->GetInfo().SetIdx ( nCurrStart );
+            nSpaceCnt = ((SwBidiPortion*)pMulti)->GetSpaceCnt(pTxtCursor->GetInfo());
+            pTxtCursor->GetInfo().SetIdx ( nOldIdx );
+        }
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
             pTxtCursor->pCurr->Width( static_cast<USHORT>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );

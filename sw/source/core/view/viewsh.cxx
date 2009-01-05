@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.87.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1006,6 +1006,14 @@ void ViewShell::Reformat()
         EndAction();
     }
 }
+
+ void ViewShell::ChgNumberDigits()
+ {
+     SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+     if ( pTmpDrawModel )
+            pTmpDrawModel->ReformatAllTextObjects();
+     Reformat();
+ }
 
 /******************************************************************************
 |*

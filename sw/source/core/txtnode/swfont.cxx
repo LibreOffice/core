@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfont.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.59.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -734,6 +734,8 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+
     Size aTxtSize;
     xub_StrLen nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
                                                    : rInf.GetLen() );
@@ -848,6 +850,8 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
 
     if( !pLastFont || pLastFont->GetOwner()!=pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
+
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     Point aPos( rInf.GetPos() );
     const Point &rOld = rInf.GetPos();
@@ -976,6 +980,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     if ( !pLastFont || pLastFont->GetOwner() != pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+
     rInf.ApplyAutoColor();
 
     Point aPos( rInf.GetPos() );
@@ -1045,6 +1051,8 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
+
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     xub_StrLen nLn = rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
                                                  : rInf.GetLen();

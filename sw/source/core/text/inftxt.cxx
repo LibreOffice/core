@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.123 $
+ * $Revision: 1.123.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <svtools/linguprops.hxx>
 #include <svtools/lingucfg.hxx>
 #include <hintids.hxx>
-#include <svtools/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/escpitem.hxx>
@@ -344,7 +343,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         nDirection = DIR_LEFT2RIGHT;
     }
 
-    LanguageType eLang;
+/*    LanguageType eLang;
     const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
     if ( SvtCTLOptions::NUMERALS_HINDI == rCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ARABIC;
@@ -354,7 +353,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         eLang = (LanguageType)::GetAppLanguage();
 
     pOut->SetDigitLanguage( eLang );
-    pRef->SetDigitLanguage( eLang );
+    pRef->SetDigitLanguage( eLang );*/
 
     //
     // The Options

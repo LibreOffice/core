@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrform2.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.107.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -879,17 +879,17 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     Seek( rInf.GetIdx() );
     SwTxtPortion *pPor = WhichTxtPor( rInf );
 
-    // maximal bis zum naechsten Attributwchsel.
-    xub_StrLen nNextAttr = GetNextAttr();
+    // until next attribute change:
+    const xub_StrLen nNextAttr = GetNextAttr();
     xub_StrLen nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
 
-    nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
+    // end of script type:
+    const xub_StrLen nNextScript = pScriptInfo->NextScriptChg( rInf.GetIdx() );
+    nNextChg = Min( nNextChg, nNextScript );
 
-    xub_StrLen nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
-    nNextAttr = Min( nNextAttr, nNextDir );
-
-    if( nNextChg > nNextAttr )
-        nNextChg = nNextAttr;
+    // end of direction:
+    const xub_StrLen nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
+    nNextChg = Min( nNextChg, nNextDir );
 
     // 7515, 7516, 3470, 6441 : Turbo-Boost
     // Es wird unterstellt, dass die Buchstaben eines Fonts nicht

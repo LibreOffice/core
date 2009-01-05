@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thints.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.65.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2331,21 +2331,23 @@ void SwTxtNode::ClearSwpHintsArr( bool bDelFields )
 USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
                            USHORT nScript ) const
 {
-    USHORT nWhichId = RES_CHRATR_LANGUAGE;
     USHORT nRet = LANGUAGE_DONTKNOW;
-    if( pSwpHints )
-    {
+
         if ( ! nScript )
             nScript = pBreakIt->GetRealScriptOfText( aText, nBegin );
 
-        nWhichId = GetWhichOfScript( nWhichId, nScript );
+    // --> FME 2008-09-29 #i91465# hennerdrewes: Consider nScript if pSwpHints == 0
+    const USHORT nWhichId = GetWhichOfScript( RES_CHRATR_LANGUAGE, nScript );
+    // <--
 
-        xub_StrLen nEnd = nBegin + nLen;
+    if( pSwpHints )
+    {
+        const xub_StrLen nEnd = nBegin + nLen;
         for( USHORT i = 0, nSize = pSwpHints->Count(); i < nSize; ++i )
         {
             // ist der Attribut-Anfang schon groesser als der Idx ?
             const SwTxtAttr *pHt = pSwpHints->operator[](i);
-            xub_StrLen nAttrStart = *pHt->GetStart();
+            const xub_StrLen nAttrStart = *pHt->GetStart();
             if( nEnd < nAttrStart )
                 break;
 
@@ -2379,10 +2381,6 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
     }
     if( LANGUAGE_DONTKNOW == nRet )
     {
-        if( !pSwpHints )
-            nWhichId = GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                        pBreakIt->GetRealScriptOfText( aText, nBegin ));
-
         nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
             nRet = static_cast<USHORT>(GetAppLanguage());

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrcrsr.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -506,6 +506,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
         SwBidiPortion* pLastBidiPor = 0;
+        SwTwips nLastBidiPorWidth = 0;
         SvUShorts* pKanaComp = pCurr->GetpKanaComp();
         MSHORT nSpaceIdx = 0;
         MSHORT nKanaIdx = 0;
@@ -649,7 +650,11 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // cursor level
                         if ( ((SwMultiPortion*)pPor)->IsBidi() &&
                              aInf.GetIdx() + pPor->GetLen() == nOfst )
+                        {
                              pLastBidiPor = (SwBidiPortion*)pPor;
+                             nLastBidiPorWidth = pLastBidiPor->Width() +
+                                                 pLastBidiPor->CalcSpacing( nSpaceAdd, aInf );;
+                        }
                     }
 
                     aInf.SetIdx( aInf.GetIdx() + pPor->GetLen() );
@@ -1086,8 +1091,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     // we came from inside the bidi portion, we want to blink
                     // behind the portion
-                    pOrig->Pos().X() -= pLastBidiPor->Width() +
-                                        pLastBidiPor->CalcSpacing( nSpaceAdd, aInf );
+                    pOrig->Pos().X() -= nLastBidiPorWidth;
 
                     // Again, there is a special case: logically behind
                     // the portion can actually mean that the cursor is inside

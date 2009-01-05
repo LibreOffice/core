@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porfld.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.62.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,6 +262,25 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             ubidi_close( pBidi );
             const xub_StrLen nNextDirChg = (xub_StrLen)nEnd;
             nNextScriptChg = Min( nNextScriptChg, nNextDirChg );
+
+            // #i89825# change the script type also to CTL
+            // if there is no strong LTR char in the LTR run (numbers)
+            if ( nCurrDir != UBIDI_RTL )
+            {
+                nCurrDir = UBIDI_RTL;
+                for ( xub_StrLen nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
+                {
+                    UCharDirection nCharDir = u_charDirection ( aTxt.GetChar ( nCharIdx ));
+                    if ( nCharDir == U_LEFT_TO_RIGHT ||
+                         nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
+                         nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
+                    {
+                        nCurrDir = UBIDI_LTR;
+                        break;
+                    }
+                }
+            }
+
             if ( nCurrDir == UBIDI_RTL )
                 nTmp = SW_CTL;
         }
