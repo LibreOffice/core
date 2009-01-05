@@ -264,14 +264,15 @@ public:
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
 
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag) const;
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
+    // special drag methods
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+    // FullDrag support
+    virtual SdrObject* getFullDragClone() const;
+
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcMove(const Size& aSize);
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact);
@@ -319,7 +320,7 @@ public:
 
     // helper method for SdrDragMethod::AddConnectorOverlays. Adds a overlay polygon for
     // this connector to rResult.
-    void ImplAddConnectorOverlay(basegfx::B2DPolyPolygon& rResult, SdrDragMethod& rDragMethod, sal_Bool bTail1, sal_Bool bTail2, sal_Bool bDetail) const;
+    basegfx::B2DPolygon ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

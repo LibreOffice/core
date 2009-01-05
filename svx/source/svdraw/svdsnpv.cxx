@@ -461,9 +461,7 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     return bRet;
 }
 
-void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV,
-    long& nBestXSnap, long& nBestYSnap,
-    BOOL& bXSnapped, BOOL& bYSnapped) const
+void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
 {
     Point aPt(rPt);
     USHORT nRet=SnapPos(aPt,pPV);
@@ -494,8 +492,8 @@ USHORT SdrSnapView::SnapRect(const Rectangle& rRect, const SdrPageView* pPV, lon
 {
     long nBestXSnap=0;
     long nBestYSnap=0;
-    BOOL bXSnapped=FALSE;
-    BOOL bYSnapped=FALSE;
+    bool bXSnapped=FALSE;
+    bool bYSnapped=FALSE;
     CheckSnap(rRect.TopLeft()    ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
     if (!bMoveSnapOnlyTopLeft) {
         CheckSnap(rRect.TopRight()   ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);

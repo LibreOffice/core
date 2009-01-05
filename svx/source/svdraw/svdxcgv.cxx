@@ -628,25 +628,27 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 
 // -----------------------------------------------------------------------------
 
-Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
+Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj )
 {
     Graphic aRet;
 
     if( pModel && pObj )
     {
         // try to get a graphic from the object first
-        if( pObj->ISA( SdrGrafObj ) )
+        const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
+        const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
+
+        if(pSdrGrafObj)
         {
             // #110981# Make behaviour coherent with metafile
             // recording below (which of course also takes
             // view-transformed objects)
-            aRet = static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic();
+            aRet = pSdrGrafObj->GetTransformedGraphic();
         }
-        else if( pObj->ISA( SdrOle2Obj ) )
+        else if(pSdrOle2Obj)
         {
-            SdrOle2Obj* pOLEObj = static_cast< SdrOle2Obj* >( pObj );
-            if ( pOLEObj->GetGraphic() )
-                aRet = *pOLEObj->GetGraphic();
+            if ( pSdrOle2Obj->GetGraphic() )
+                aRet = *pSdrOle2Obj->GetGraphic();
         }
 
         // if graphic could not be retrieved => go the hard way and create a MetaFile
@@ -770,7 +772,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 {
                     // convert SdrPageObj's to a graphic representation, because
                     // virtual connection to referenced page gets lost in new model
-                    pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, const_cast< SdrObject* >( pObj ) ), pObj->GetLogicRect() );
+                    pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, pObj ), pObj->GetLogicRect() );
                     pNeuObj->SetPage( pNeuPag );
                     pNeuObj->SetModel( pNeuMod );
                 }

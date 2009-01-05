@@ -140,6 +140,9 @@ public:
      */
     void SetClosedObj( bool bIsClosed );
 
+    // FullDrag support
+    virtual SdrObject* getFullDragClone() const;
+
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
@@ -147,7 +150,6 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual void operator=(const SdrObject& rObj);
-    virtual FASTBOOL HasSpecialDrag() const;
 
     virtual void NbcMove(const Size& rSize);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);

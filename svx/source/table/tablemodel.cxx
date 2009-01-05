@@ -941,7 +941,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
             }
 
             if( pModel && mpTableObj->IsInserted() )
-            {
+                    {
                 pModel->BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
                 pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
                 TableModelRef xThis( this );

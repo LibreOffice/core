@@ -346,153 +346,108 @@ SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
     }
 }
 
-FASTBOOL SdrCaptionObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrCaptionObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
-FASTBOOL SdrCaptionObj::BegDrag(SdrDragStat& rDrag) const
+bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    const SdrHdl* pHdl=rDrag.GetHdl();
+    const SdrHdl* pHdl = rDrag.GetHdl();
+    rDrag.SetEndDragChangesAttributes(true);
+    rDrag.SetEndDragChangesGeoAndAttributes(true);
 
-    // #109992#
-    // If this is a CaptionObj, set the flags bEndDragChangesAttributes
-    // and bEndDragChangesGeoAndAttributes to create an undo action which
-    // contains geo and attr changes. Joe seems to have added this as a fix
-    // for a similar occurring problem.
-    rDrag.SetEndDragChangesAttributes(TRUE);
-    rDrag.SetEndDragChangesGeoAndAttributes(TRUE);
+    if(pHdl && 0 == pHdl->GetPolyNum())
+    {
+        return SdrRectObj::beginSpecialDrag(rDrag);
+    }
+    else
+    {
+        rDrag.SetOrtho8Possible(true);
 
-    if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
-        return SdrRectObj::BegDrag(rDrag);
-    } else {
-        rDrag.SetOrtho8Possible(TRUE);
-        if (pHdl==NULL) {
-            if (bMovProt) return FALSE; // Position geschuetzt
-            rDrag.SetNoSnap(TRUE); // Snap mache ich in diesem Fall selbst (RectSnap)
+        if(!pHdl)
+        {
+            if (bMovProt)
+                return 0;
+
+            rDrag.SetNoSnap(true);
             rDrag.SetActionRect(aRect);
+
             Point aHit(rDrag.GetStart());
-            if (SdrRectObj::CheckHit(aHit,0,NULL)!=NULL) return TRUE;
-            else return FALSE;
-        } else {
-            return (pHdl->GetPolyNum()==1) && (pHdl->GetPointNum()==0);
+
+            if(SdrRectObj::CheckHit(aHit, 0, NULL))
+                return true;
+        }
+        else
+        {
+            if((1 == pHdl->GetPolyNum()) && (0 == pHdl->GetPointNum()))
+                return true;
         }
     }
+
+    return false;
 }
 
-FASTBOOL SdrCaptionObj::MovDrag(SdrDragStat& rDrag) const
+bool SdrCaptionObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
-        return SdrRectObj::MovDrag(rDrag);
-    } else {
-        SdrView* pView=rDrag.GetView();
-        SdrPageView* pPV=rDrag.GetPageView();
-        Rectangle aR(aRect);
-        aR.Move(rDrag.GetDX(),rDrag.GetDY());
-        if (pView!=NULL && pPV!=NULL && pView->IsSnapEnabled()) { // RectSnap
-            long nDX=0,nDY=0;
-            pView->SnapRect(aR,pPV,nDX,nDY);
-            rDrag.Now().X()+=nDX;
-            rDrag.Now().Y()+=nDY;
-            aR.Move(nDX,nDY);
-        }
-        rDrag.SetActionRect(aR);
-        return TRUE;
-    }
-}
+    const SdrHdl* pHdl = rDrag.GetHdl();
 
-FASTBOOL SdrCaptionObj::EndDrag(SdrDragStat& rDrag)
-{
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
-        FASTBOOL bRet=SdrRectObj::EndDrag(rDrag);
+    if(pHdl && 0 == pHdl->GetPolyNum())
+    {
+        const bool bRet(SdrRectObj::applySpecialDrag(rDrag));
         ImpRecalcTail();
-
-        // Here only redraw wanted
         ActionChanged();
-        // BroadcastObjectChange();
 
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         return bRet;
-    } else {
-        // #110094#-14 SendRepaintBroadcast();
+    }
+    else
+    {
         Point aDelt(rDrag.GetNow()-rDrag.GetStart());
-        if (pHdl==NULL) { // Rect verschoben
+
+        if(!pHdl)
+        {
             aRect.Move(aDelt.X(),aDelt.Y());
-        } else {          // Schwanz verschoben
-            aTailPoly[0]+=aDelt;
         }
+        else
+        {
+            aTailPoly[0] += aDelt;
+        }
+
         ImpRecalcTail();
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-        return TRUE;
+        ActionChanged();
+
+        return true;
     }
 }
 
-void SdrCaptionObj::BrkDrag(SdrDragStat& rDrag) const
+String SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
-        SdrRectObj::BrkDrag(rDrag);
-    } else {
-    }
-}
+    const SdrHdl* pHdl = rDrag.GetHdl();
 
-XubString SdrCaptionObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
-{
-    if (bCreateComment) return String();
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
-        return SdrRectObj::GetDragComment(rDrag,bUndoDragComment,FALSE);
-    } else {
+    if(pHdl && 0 == pHdl->GetPolyNum())
+    {
+        return SdrRectObj::getSpecialDragComment(rDrag);
+    }
+    else
+    {
         XubString aStr;
-        if (pHdl==NULL) {
-            ImpTakeDescriptionStr(STR_DragCaptFram,aStr);
-        } else {
-            ImpTakeDescriptionStr(STR_DragCaptTail,aStr);
+
+        if(!pHdl)
+        {
+            ImpTakeDescriptionStr(STR_DragCaptFram, aStr);
         }
+        else
+        {
+            ImpTakeDescriptionStr(STR_DragCaptTail, aStr);
+        }
+
         return aStr;
     }
 }
 
-basegfx::B2DPolyPolygon SdrCaptionObj::TakeDragPoly(const SdrDragStat& rDrag) const
-{
-    const SdrHdl* pHdl = rDrag.GetHdl();
-    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
-    const bool bRectSiz(pHdl && 0L == pHdl->GetPolyNum());
-
-    if(bRad)
-    {
-        return SdrRectObj::TakeDragPoly(rDrag);
-    }
-    else
-    {
-        XPolyPolygon aXPP;
-
-        Point aDelt(rDrag.GetNow()-rDrag.GetStart());
-        Polygon aTmpPoly(aTailPoly);
-        Rectangle aTmpRect;
-        if (bRectSiz) aTmpRect=ImpDragCalcRect(rDrag);
-        else aTmpRect=aRect;
-        ImpCaptParams aPara;
-        ImpGetCaptParams(aPara);
-        if (!bRectSiz) {
-            if (pHdl==NULL) { // Rect verschieben
-                aTmpRect.Move(aDelt.X(),aDelt.Y());
-            } else {          // Schwanz verschieben
-                aTmpPoly[0]+=aDelt;
-            }
-        }
-        ImpCalcTail(aPara,aTmpPoly,aTmpRect);
-        aXPP.Insert(ImpCalcXPoly(aTmpRect,GetEckenradius()));
-        aXPP.Insert(XPolygon(aTmpPoly));
-
-        return aXPP.getB2DPolyPolygon();
-    }
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
 {

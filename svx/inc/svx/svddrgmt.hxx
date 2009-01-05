@@ -33,6 +33,7 @@
 
 #include <svx/svddrgv.hxx>
 #include "svx/svxdllapi.h"
+#include <svx/sdr/contact/objectcontact.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,43 +52,142 @@
 class SdrDragView;
 class SdrDragStat;
 
-class SVX_DLLPUBLIC SdrDragMethod {
+//////////////////////////////////////////////////////////////////////////////
+
+class SdrDragEntry
+{
+private:
+    // bitfield
+    unsigned                    mbAddToTransparent : 1;
+
 protected:
-    SdrDragView& rView;
-    bool         bMoveOnly;
+    // access for derived classes
+    void setAddToTransparent(bool bNew) { mbAddToTransparent = bNew; }
+
+public:
+    SdrDragEntry();
+    virtual ~SdrDragEntry();
+
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) = 0;
+
+    // data read access
+    bool getAddToTransparent() const { return mbAddToTransparent; }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrDragEntryPolyPolygon : public SdrDragEntry
+{
+private:
+    basegfx::B2DPolyPolygon             maOriginalPolyPolygon;
+
+public:
+    SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon);
+    virtual ~SdrDragEntryPolyPolygon();
+
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SdrDragEntrySdrObject : public SdrDragEntry
+{
+private:
+    const SdrObject&                                maOriginal;
+    SdrObject*                                      mpClone;
+    sdr::contact::ObjectContact&                    mrObjectContact;
+    bool                                            mbModify;
+
+public:
+    SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
+    virtual ~SdrDragEntrySdrObject();
+
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SdrDragEntryPointGlueDrag : public SdrDragEntry
+{
+private:
+    std::vector< basegfx::B2DPoint >                maPositions;
+    bool                                            mbIsPointDrag;
+
+public:
+    SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag);
+    virtual ~SdrDragEntryPointGlueDrag();
+
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrDragMethod
+{
+private:
+    std::vector< SdrDragEntry* >            maSdrDragEntries;
+    sdr::overlay::OverlayObjectList         maOverlayObjectList;
+    SdrDragView&                            mrSdrDragView;
+
+    // bitfield
+    unsigned                                mbMoveOnly : 1;
+    unsigned                                mbSolidDraggingActive : 1;
+
 protected:
-//#if 0 // _SOLAR__PRIVATE
-    void               ImpTakeDescriptionStr(USHORT nStrCacheID, String& rStr, USHORT nVal=0) const;
-//#endif // __PRIVATE
-    SdrHdl*            GetDragHdl() const              { return rView.pDragHdl; }
-    SdrHdlKind         GetDragHdlKind() const          { return rView.eDragHdl; }
-    SdrDragStat&       DragStat()                      { return rView.aDragStat; }
-    const SdrDragStat& DragStat() const                { return rView.aDragStat; }
-    Point&             Ref1() const                    { return rView.aRef1; }
-    Point&             Ref2() const                    { return rView.aRef2; }
-    const SdrHdlList&  GetHdlList() const              { return rView.aHdl; }
-    void               AddUndo(SdrUndoAction* pUndo)   { rView.AddUndo(pUndo); }
-    void               SetDragPolys()                  { rView.SetDragPolys(); }
-    FASTBOOL           IsDragLimit()                   { return rView.bDragLimit; }
-    const Rectangle&   GetDragLimitRect()              { return rView.aDragLimit; }
-    const SdrMarkList& GetMarkedObjectList()                   { return rView.GetMarkedObjectList(); }
-    Point              GetSnapPos(const Point& rPt) const { return rView.GetSnapPos(rPt,rView.pMarkedPV); }
-    USHORT             SnapPos(Point& rPt) const       { return rView.SnapPos(rPt,rView.pMarkedPV); }
+    // access for derivated classes to maSdrDragEntries
+    void clearSdrDragEntries() { for(sal_uInt32 a(0); a < maSdrDragEntries.size(); a++) { delete maSdrDragEntries[a]; } maSdrDragEntries.clear(); }
+    void addSdrDragEntry(SdrDragEntry* pNew) { if(pNew) { maSdrDragEntries.push_back(pNew); }}
+    virtual void createSdrDragEntries();
+
+    // access for derivated classes to maOverlayObjectList
+    void clearOverlayObjectList() { maOverlayObjectList.clear(); }
+    void addToOverlayObjectList(sdr::overlay::OverlayObject& rNew) { maOverlayObjectList.append(rNew); }
+    basegfx::B2DRange getB2DRangeFromOverlayObjectList() const { return maOverlayObjectList.getBaseRange(); }
+
+    // access for derivated classes to mrSdrDragView
+    SdrDragView& getSdrDragView() { return mrSdrDragView; }
+    const SdrDragView& getSdrDragView() const { return mrSdrDragView; }
+
+    // access for derivated classes for bools
+    void setMoveOnly(bool bNew) { mbMoveOnly = bNew; }
+    void setSolidDraggingActive(bool bNew) { mbSolidDraggingActive = bNew; }
+
+    // internal helpers for creation of standard drag entries
+    void createSdrDragEntries_SolidDrag();
+    void createSdrDragEntries_PolygonDrag();
+    void createSdrDragEntries_PointDrag();
+    void createSdrDragEntries_GlueDrag();
+
+    // old call forwarders to the SdrDragView
+    void               ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 nVal=0) const;
+    SdrHdl*            GetDragHdl() const              { return getSdrDragView().pDragHdl; }
+    SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().eDragHdl; }
+    SdrDragStat&       DragStat()                      { return getSdrDragView().aDragStat; }
+    const SdrDragStat& DragStat() const                { return getSdrDragView().aDragStat; }
+    Point&             Ref1() const                    { return mrSdrDragView.aRef1; }
+    Point&             Ref2() const                    { return mrSdrDragView.aRef2; }
+    const SdrHdlList&  GetHdlList() const              { return getSdrDragView().aHdl; }
+    void               AddUndo(SdrUndoAction* pUndo)   { getSdrDragView().AddUndo(pUndo); }
+    bool               IsDragLimit()                   { return getSdrDragView().bDragLimit; }
+    const Rectangle&   GetDragLimitRect()              { return getSdrDragView().aDragLimit; }
+    const SdrMarkList& GetMarkedObjectList()                   { return getSdrDragView().GetMarkedObjectList(); }
+    Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().pMarkedPV); }
+    sal_uInt16         SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().pMarkedPV); }
     inline const Rectangle& GetMarkedRect() const;
     SdrPageView*       GetDragPV() const;
     SdrObject*         GetDragObj() const;
-    OutputDevice*      GetDragWin() const              { return rView.pDragWin; }
-    FASTBOOL           IsDraggingPoints() const        { return rView.IsDraggingPoints(); }
-    FASTBOOL           IsDraggingGluePoints() const    { return rView.IsDraggingGluePoints(); }
+    OutputDevice*      GetDragWin() const              { return getSdrDragView().pDragWin; }
+    bool               IsDraggingPoints() const        { return getSdrDragView().IsDraggingPoints(); }
+    bool               IsDraggingGluePoints() const    { return getSdrDragView().IsDraggingGluePoints(); }
 
-    void CreateOverlayGeometryLines(basegfx::B2DPolyPolygon& rResult);
-    void CreateOverlayGeometryPoints(basegfx::B2DPolyPolygon& rResult, const Size& rLogicSize);
-    sal_Bool DoAddConnectorOverlays();
-    void AddConnectorOverlays(basegfx::B2DPolyPolygon& rResult);
-    sal_Bool DoAddDragStripeOverlay();
+    bool DoAddConnectorOverlays();
+    drawinglayer::primitive2d::Primitive2DSequence AddConnectorOverlays();
 
 public:
     TYPEINFO();
+
+    void resetSdrDragEntries();
+    basegfx::B2DRange getCurrentRange() const;
 
     // #i58950# also moved constructor implementation to cxx
     SdrDragMethod(SdrDragView& rNewView);
@@ -95,63 +195,63 @@ public:
     // #i58950# virtual destructor was missing
     virtual ~SdrDragMethod();
 
-    virtual void Draw() const;
-    virtual void Show();
-    virtual void Hide();
-    virtual void TakeComment(String& rStr) const=0;
-    virtual FASTBOOL Beg()=0;
-    virtual void MovAllPoints();
-    virtual void MovPoint(Point& rPnt);
-    virtual void Mov(const Point& rPnt)=0;
-    virtual FASTBOOL End(FASTBOOL bCopy)=0;
-    virtual void Brk();
-    virtual Pointer GetPointer() const=0;
-    virtual FASTBOOL IsMoveOnly() const; // TRUE, wenn nur verschoben wird
+    void Show();
+    void Hide();
+    virtual void TakeSdrDragComment(String& rStr) const=0;
+    virtual bool BeginSdrDrag()=0;
+    virtual void MoveSdrDrag(const Point& rPnt)=0;
+    virtual bool EndSdrDrag(bool bCopy)=0;
+    virtual void CancelSdrDrag();
+    virtual Pointer GetSdrDragPointer() const=0;
 
-    // for migration from XOR to overlay
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
+    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager);
+    void destroyOverlayGeometry();
+
+    virtual basegfx::B2DHomMatrix getCurrentTransformation();
+    virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
+    virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget);
+
+    // data read access
+    bool getMoveOnly() const { return mbMoveOnly; }
+    bool getSolidDraggingActive() const { return mbSolidDraggingActive; }
 };
 
 inline const Rectangle& SdrDragMethod::GetMarkedRect() const
 {
-    return rView.eDragHdl==HDL_POLY ? rView.GetMarkedPointsRect() :
-           rView.eDragHdl==HDL_GLUE ? rView.GetMarkedGluePointsRect() :
-           rView.GetMarkedObjRect();
+    return getSdrDragView().eDragHdl==HDL_POLY ? getSdrDragView().GetMarkedPointsRect() :
+           getSdrDragView().eDragHdl==HDL_GLUE ? getSdrDragView().GetMarkedGluePointsRect() :
+           getSdrDragView().GetMarkedObjRect();
 }
 
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //   SdrDragMove
-//************************************************************
 
 class SVX_DLLPUBLIC SdrDragMove : public SdrDragMethod
 {
+private:
     long                        nBestXSnap;
     long                        nBestYSnap;
-    FASTBOOL                    bXSnapped;
-    FASTBOOL                    bYSnapped;
+    bool                        bXSnapped;
+    bool                        bYSnapped;
 
-private:
     void ImpCheckSnap(const Point& rPt);
 
 public:
     TYPEINFO();
-    SdrDragMove(SdrDragView& rNewView): SdrDragMethod(rNewView) {}
+    SdrDragMove(SdrDragView& rNewView);
 
-    virtual void TakeComment(String& rStr) const;
+    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual bool BeginSdrDrag();
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual bool EndSdrDrag(bool bCopy);
+    virtual Pointer GetSdrDragPointer() const;
 
-    virtual FASTBOOL Beg();
-    virtual void MovAllPoints();
-    virtual void MovPoint(Point& rPnt);
-//  virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-    virtual FASTBOOL IsMoveOnly() const;
-    virtual Pointer GetPointer() const;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation();
+    virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //   SdrDragResize
-//************************************************************
 
 class SVX_DLLPUBLIC SdrDragResize : public SdrDragMethod
 {
@@ -161,44 +261,47 @@ protected:
 
 public:
     TYPEINFO();
-    SdrDragResize(SdrDragView& rNewView): SdrDragMethod(rNewView), aXFact(1,1), aYFact(1,1) {}
+    SdrDragResize(SdrDragView& rNewView);
 
-    virtual void TakeComment(String& rStr) const;
+    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual bool BeginSdrDrag();
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual bool EndSdrDrag(bool bCopy);
+    virtual Pointer GetSdrDragPointer() const;
 
-    virtual FASTBOOL Beg();
-    virtual void MovPoint(Point& rPnt);
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-    virtual Pointer GetPointer() const;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation();
+    virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //   SdrDragObjOwn
-//************************************************************
 
 class SVX_DLLPUBLIC SdrDragObjOwn : public SdrDragMethod
 {
+private:
+    // SdrDragObjOwn always works on a clone since it has no transformation
+    // mechanism to modify wireframe visualisations, but uses the
+    // SdrObject::applySpecialDrag() method to change a clone of the
+    // SdrObject
+    SdrObject*                  mpClone;
+
+protected:
+    virtual void createSdrDragEntries();
+
 public:
     TYPEINFO();
-    SdrDragObjOwn(SdrDragView& rNewView): SdrDragMethod(rNewView) {}
+    SdrDragObjOwn(SdrDragView& rNewView);
+    virtual ~SdrDragObjOwn();
 
-    virtual void TakeComment(String& rStr) const;
-
-    virtual FASTBOOL Beg();
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-    virtual Pointer GetPointer() const;
-
-    // for migration from XOR to overlay
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
-
-    //SJ: added following method, otherwise the object won't be
-    //able to notice that dragging has been cancelled.
-    virtual void Brk();
+    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual bool BeginSdrDrag();
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual bool EndSdrDrag(bool bCopy);
+    virtual Pointer GetSdrDragPointer() const;
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #endif //_SVDDRGMT_HXX
 
+// eof

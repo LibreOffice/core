@@ -381,16 +381,16 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="CreateWithAttributes" oor:type="xs:boolean">
+			<prop oor:name="ModifyWithAttributes" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Optionbar -->
 				<info>
 					<author>AF</author>
-					<desc>Indicates whether the current attributes will be assigned to newly created objects.</desc>
-					<label>Create with attributes</label>
+					<desc>Indicates whether the object creation and modification will be visualized using the full object attribute set or wireframe.</desc>
+					<label>Modify with attributes</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<group oor:name="TextObject">
 				<info>

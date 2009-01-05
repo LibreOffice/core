@@ -47,8 +47,7 @@ namespace sdr
     namespace contact
     {
         DisplayInfo::DisplayInfo()
-        :   //mpProcessedPage(0),
-            maProcessLayers(true), // init layer info with all bits set to draw everything on default
+        :   maProcessLayers(true), // init layer info with all bits set to draw everything on default
             maRedrawArea(),
             mbControlLayerProcessingActive(false),
             mbPageProcessingActive(true),
@@ -59,22 +58,7 @@ namespace sdr
 
         DisplayInfo::~DisplayInfo()
         {
-            //SetProcessedPage(0);
         }
-
-        // access to ProcessedPage, write for internal use only.
-        //void DisplayInfo::SetProcessedPage(SdrPage* pNew)
-        //{
-        //  if(pNew != mpProcessedPage)
-        //  {
-        //      mpProcessedPage = pNew;
-        //  }
-        //}
-
-        //const SdrPage* DisplayInfo::GetProcessedPage() const
-        //{
-        //  return mpProcessedPage;
-        //}
 
         // Access to LayerInfos (which layers to proccess)
         void DisplayInfo::SetProcessLayers(const SetOfByte& rSet)
@@ -82,20 +66,10 @@ namespace sdr
             maProcessLayers = rSet;
         }
 
-        const SetOfByte& DisplayInfo::GetProcessLayers() const
-        {
-            return maProcessLayers;
-        }
-
         // access to RedrawArea
         void DisplayInfo::SetRedrawArea(const Region& rRegion)
         {
             maRedrawArea = rRegion;
-        }
-
-        const Region& DisplayInfo::GetRedrawArea() const
-        {
-            return maRedrawArea;
         }
 
         void DisplayInfo::SetControlLayerProcessingActive(bool bDoProcess)
@@ -106,22 +80,12 @@ namespace sdr
             }
         }
 
-        bool DisplayInfo::GetControlLayerProcessingActive() const
-        {
-            return mbControlLayerProcessingActive;
-        }
-
         void DisplayInfo::SetPageProcessingActive(bool bDoProcess)
         {
             if((bool)mbPageProcessingActive != bDoProcess)
             {
                 mbPageProcessingActive = bDoProcess;
             }
-        }
-
-        bool DisplayInfo::GetPageProcessingActive() const
-        {
-            return mbPageProcessingActive;
         }
 
         void DisplayInfo::ClearGhostedDrawMode()
@@ -134,16 +98,6 @@ namespace sdr
             mbGhostedDrawModeActive = true;
         }
 
-        bool DisplayInfo::IsGhostedDrawModeActive() const
-        {
-            return mbGhostedDrawModeActive;
-        }
-
-        bool DisplayInfo::GetSubContentActive() const
-        {
-            return mbSubContentActive;
-        }
-
         void DisplayInfo::SetSubContentActive(bool bNew)
         {
             if((bool)mbSubContentActive != bNew)
@@ -151,6 +105,7 @@ namespace sdr
                 mbSubContentActive = bNew;
             }
         }
+
     } // end of namespace contact
 } // end of namespace sdr
 

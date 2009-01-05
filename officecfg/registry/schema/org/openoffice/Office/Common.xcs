@@ -1098,12 +1098,27 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
       <prop oor:name="AntiAliasing" oor:type="xs:boolean">
         <info>
           <author>AW</author>
-          <desc>This switch allows to switch DrawingLayer based views to be rendered using AntiAliasing or not.
-                Of course this takes only effect when AntiAliasing is supported for the System OOo is running on.
+          <desc>
+            This switch allows to switch DrawingLayer based views to be rendered using AntiAliasing or not.
+            Of course this takes only effect when AntiAliasing is supported for the System OOo is running on.
           </desc>
           <label>This switch determines if DrawingLayer based views use AntiAliasing.</label>
         </info>
-        <value>false</value>
+        <value>true</value>
+      </prop>
+      <prop oor:name="SolidDragCreate" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>
+            This switch decides if Interactions in the DrawingLayer are visualized using Wireframe or Full-Object
+            previews. If false, only Wireframe will be used. If true, Full-Object preview which gives a much better
+            feedback about the object interaction will be used. This mode is used for modification and creation of 
+            objects. During interaction, a geometric copy of the object(s) is shown with 50% transparence in the 
+            foreground. That copy shows exactly what You will get when You end the interaction.
+          </desc>
+          <label>This switch determines if DrawingLayer Interactions show Wireframe or Full-Object preview.</label>
+        </info>
+        <value>true</value>
       </prop>
       <prop oor:name="Quadratic3DRenderLimit" oor:type="xs:int">
         <info>

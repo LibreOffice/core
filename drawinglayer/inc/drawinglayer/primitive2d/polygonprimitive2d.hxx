@@ -40,6 +40,7 @@
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // PolygonHairlinePrimitive2D class
@@ -86,7 +87,10 @@ namespace drawinglayer
             basegfx::B2DPolygon                     maPolygon;
             basegfx::BColor                         maRGBColorA;
             basegfx::BColor                         maRGBColorB;
-            double                                  mfDashLength;
+            double                                  mfDiscreteDashLength;
+
+            // decomposition is view-dependent, remember last InverseObjectToViewTransformation
+            basegfx::B2DHomMatrix                   maLastInverseObjectToViewTransformation;
 
         protected:
             // local decomposition.
@@ -97,19 +101,22 @@ namespace drawinglayer
                 const basegfx::B2DPolygon& rPolygon,
                 const basegfx::BColor& rRGBColorA,
                 const basegfx::BColor& rRGBColorB,
-                double fDashLength);
+                double fDiscreteDashLength);
 
             // get data
             const basegfx::B2DPolygon& getB2DPolygon() const { return maPolygon; }
             const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
-            double getDashLength() const { return mfDashLength; }
+            double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // get local decomposition. Overloaded since this decomposition is view-dependent
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

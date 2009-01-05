@@ -86,21 +86,22 @@ protected:
 
 public:
     TYPEINFO();
-    E3dDragMethod(SdrDragView &rView,
+    E3dDragMethod(
+        SdrDragView &rView,
         const SdrMarkList& rMark,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        BOOL bFull=FALSE);
+        BOOL bFull = FALSE);
 
-    virtual void TakeComment(String& rStr) const;
-    virtual FASTBOOL Beg();
-    virtual void Mov(const Point& rPnt);
-    virtual void Brk();
-    virtual FASTBOOL End(FASTBOOL bCopy);
+    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual bool BeginSdrDrag();
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void CancelSdrDrag();
+    virtual bool EndSdrDrag(bool bCopy);
 
-    E3dView& Get3DView()  { return (E3dView&)rView;  }
+    E3dView& Get3DView()  { return (E3dView&)getSdrDragView();  }
 
     // for migration from XOR to overlay
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
+    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager);
 };
 
 
@@ -116,13 +117,14 @@ class E3dDragRotate : public E3dDragMethod
 
 public:
     TYPEINFO();
-    E3dDragRotate(SdrDragView &rView,
+    E3dDragRotate(
+        SdrDragView &rView,
         const SdrMarkList& rMark,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        BOOL bFull=FALSE);
+        BOOL bFull = FALSE);
 
-    virtual void Mov(const Point& rPnt);
-    virtual Pointer GetPointer() const;
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual Pointer GetSdrDragPointer() const;
 };
 
 
@@ -139,14 +141,15 @@ class E3dDragMove : public E3dDragMethod
 
 public:
     TYPEINFO();
-    E3dDragMove(SdrDragView &rView,
+    E3dDragMove(
+        SdrDragView &rView,
         const SdrMarkList& rMark,
         SdrHdlKind eDrgHdl = HDL_MOVE,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        BOOL bFull=FALSE);
+        BOOL bFull = FALSE);
 
-    virtual void Mov(const Point& rPnt);
-    virtual Pointer GetPointer() const;
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual Pointer GetSdrDragPointer() const;
 };
 
 

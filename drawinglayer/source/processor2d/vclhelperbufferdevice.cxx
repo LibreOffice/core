@@ -40,6 +40,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/stream.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // support for rendering Bitmap and BitmapEx contents
@@ -103,27 +104,48 @@ namespace drawinglayer
         const Point aEmptyPoint;
         const Size aSizePixel(maContent.GetOutputSizePixel());
         const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
+        static bool bDoSaveForVisualControl(false);
 
         mrOutDev.EnableMapMode(false);
         maContent.EnableMapMode(false);
         Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
 
+        if(bDoSaveForVisualControl)
+        {
+            SvFileStream aNew((const String&)String(ByteString( "c:\\content.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+            aNew << aContent;
+        }
+
         if(mpAlpha)
         {
             mpAlpha->EnableMapMode(false);
-            AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
+            const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
+
+            if(bDoSaveForVisualControl)
+            {
+                SvFileStream aNew((const String&)String(ByteString( "c:\\alpha.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                aNew << aAlphaMask.GetBitmap();
+            }
+
             mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
         }
         else if(mpMask)
         {
             mpMask->EnableMapMode(false);
-            Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
+            const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
+
+            if(bDoSaveForVisualControl)
+            {
+                SvFileStream aNew((const String&)String(ByteString( "c:\\mask.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                aNew << aMask;
+            }
+
             mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
         }
         else if(0.0 != fTrans)
         {
             sal_uInt8 nMaskValue((sal_uInt8)basegfx::fround(fTrans * 255.0));
-            AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
+            const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
             mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
         }
         else

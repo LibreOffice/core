@@ -110,18 +110,22 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonMarkerPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonMarkerPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(getDashLength() > 0.0)
+            // calculate logic DashLength
+            const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
+            const double fLogicDashLength(aDashVector.getX());
+
+            if(fLogicDashLength > 0.0)
             {
                 // apply dashing; get line and gap snippets
                 ::std::vector< double > aDash;
                 basegfx::B2DPolyPolygon aDashedPolyPolyA;
                 basegfx::B2DPolyPolygon aDashedPolyPolyB;
 
-                aDash.push_back(getDashLength());
-                aDash.push_back(getDashLength());
-                basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * getDashLength());
+                aDash.push_back(fLogicDashLength);
+                aDash.push_back(fLogicDashLength);
+                basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength);
 
                 // prepare return value
                 Primitive2DSequence aRetval(2);
@@ -142,12 +146,13 @@ namespace drawinglayer
             const basegfx::B2DPolygon& rPolygon,
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
-            double fDashLength)
+            double fDiscreteDashLength)
         :   BasePrimitive2D(),
             maPolygon(rPolygon),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
-            mfDashLength(fDashLength)
+            mfDiscreteDashLength(fDiscreteDashLength),
+            maLastInverseObjectToViewTransformation()
         {
         }
 
@@ -160,16 +165,62 @@ namespace drawinglayer
                 return (getB2DPolygon() == rCompare.getB2DPolygon()
                     && getRGBColorA() == rCompare.getRGBColorA()
                     && getRGBColorB() == rCompare.getRGBColorB()
-                    && getDashLength() == rCompare.getDashLength());
+                    && getDiscreteDashLength() == rCompare.getDiscreteDashLength());
             }
 
             return false;
         }
 
-        basegfx::B2DRange PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
+            // this is a hairline, thus the line width is view-dependent. Get range of polygon
+            // as base size
+            basegfx::B2DRange aRetval(getB2DPolygon().getB2DRange());
+
+            if(!aRetval.isEmpty())
+            {
+                // Calculate view-dependent hairline width
+                const basegfx::B2DVector aDiscreteSize(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+                const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
+
+                if(basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+                {
+                    aRetval.grow(fDiscreteHalfLineWidth);
+                }
+            }
+
             // return range
-            return basegfx::tools::getRange(getB2DPolygon());
+            return aRetval;
+        }
+
+        Primitive2DSequence PolygonMarkerPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            bool bNeedNewDecomposition(false);
+
+            if(getLocalDecomposition().hasElements())
+            {
+                if(rViewInformation.getInverseObjectToViewTransformation() != maLastInverseObjectToViewTransformation)
+                {
+                    bNeedNewDecomposition = true;
+                }
+            }
+
+            if(bNeedNewDecomposition)
+            {
+                // conditions of last local decomposition have changed, delete
+                const_cast< PolygonMarkerPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+            }
+
+            if(!getLocalDecomposition().hasElements())
+            {
+                // remember last used InverseObjectToViewTransformation
+                PolygonMarkerPrimitive2D* pThat = const_cast< PolygonMarkerPrimitive2D* >(this);
+                pThat->maLastInverseObjectToViewTransformation = rViewInformation.getInverseObjectToViewTransformation();
+            }
+
+            // use parent implementation
+            return BasePrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

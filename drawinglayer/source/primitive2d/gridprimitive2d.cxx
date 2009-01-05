@@ -175,7 +175,7 @@ namespace drawinglayer
                         {
                             double fF(fX + fSmallStepX);
 
-                            for(sal_uInt32 a(0L); a < nSmallStepsX && fF < aScale.getX(); a++, fF += fSmallStepX)
+                            for(sal_uInt32 a(1L); a < nSmallStepsX && fF < aScale.getX(); a++, fF += fSmallStepX)
                             {
                                 const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fF, fY));
 
@@ -191,7 +191,7 @@ namespace drawinglayer
                         {
                             double fF(fY + fSmallStepY);
 
-                            for(sal_uInt32 a(0L); a < nSmallStepsY && fF < aScale.getY(); a++, fF += fSmallStepY)
+                            for(sal_uInt32 a(1L); a < nSmallStepsY && fF < aScale.getY(); a++, fF += fSmallStepY)
                             {
                                 const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fF));
 
@@ -222,7 +222,16 @@ namespace drawinglayer
                 // add MarkerArrayPrimitive2D if cross markers were added
                 if(nCountCross)
                 {
-                    aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsCross, MARKERSTYLE2D_CROSS, getBColor()));
+                    if(!getSubdivisionsX() && !getSubdivisionsY())
+                    {
+                        // no subdivisions, so fall back to points at grid positions, no need to
+                        // visualize a difference between divisions and sub-divisions
+                        aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsCross, getBColor()));
+                    }
+                    else
+                    {
+                        aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsCross, getCrossMarker()));
+                    }
                 }
             }
 
@@ -237,7 +246,8 @@ namespace drawinglayer
             double fSmallestSubdivisionViewDistance,
             sal_uInt32 nSubdivisionsX,
             sal_uInt32 nSubdivisionsY,
-            const basegfx::BColor& rBColor)
+            const basegfx::BColor& rBColor,
+            const BitmapEx& rCrossMarker)
         :   BasePrimitive2D(),
             maTransform(rTransform),
             mfWidth(fWidth),
@@ -247,6 +257,7 @@ namespace drawinglayer
             mnSubdivisionsX(nSubdivisionsX),
             mnSubdivisionsY(nSubdivisionsY),
             maBColor(rBColor),
+            maCrossMarker(rCrossMarker),
             maLastObjectToViewTransformation(),
             maLastViewport()
         {
@@ -265,7 +276,8 @@ namespace drawinglayer
                     && getSmallestSubdivisionViewDistance() == rCompare.getSmallestSubdivisionViewDistance()
                     && getSubdivisionsX() == rCompare.getSubdivisionsX()
                     && getSubdivisionsY() == rCompare.getSubdivisionsY()
-                    && getBColor() == rCompare.getBColor());
+                    && getBColor() == rCompare.getBColor()
+                    && getCrossMarker() == rCompare.getCrossMarker());
             }
 
             return false;

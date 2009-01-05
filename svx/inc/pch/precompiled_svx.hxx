@@ -805,7 +805,6 @@
 #include "svtools/miscopt.hxx"
 #include "svtools/moduleoptions.hxx"
 #include "svtools/numuno.hxx"
-#include "svtools/options3d.hxx"
 #include "svtools/optionsdlg.hxx"
 #include "svtools/parhtml.hxx"
 #include "svtools/parrtf.hxx"

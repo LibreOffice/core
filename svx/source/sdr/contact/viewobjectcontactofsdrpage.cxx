@@ -44,6 +44,7 @@
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
 #include <drawinglayer/primitive2d/helplineprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -544,8 +545,9 @@ namespace sdr
                 const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0L);
 
                 xRetval.realloc(1);
-                xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::GridPrimitive2D(aGridMatrix, fWidthX, fWidthY,
-                    10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor));
+                xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::GridPrimitive2D(
+                    aGridMatrix, fWidthX, fWidthY, 10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor,
+                    drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor)));
             }
 
             return xRetval;
@@ -623,6 +625,7 @@ namespace sdr
                     {
                         const SdrHelpLine& rHelpLine = rHelpLineList[(sal_uInt16)a];
                         const basegfx::B2DPoint aPosition((double)rHelpLine.GetPos().X(), (double)rHelpLine.GetPos().Y());
+                        const double fDiscreteDashLength(4.0);
 
                         switch(rHelpLine.GetKind())
                         {
@@ -630,21 +633,21 @@ namespace sdr
                             {
                                 xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                                     aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_POINT,
-                                    aRGBColorA, aRGBColorB, 4.0));
+                                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
                                 break;
                             }
                             case SDRHELPLINE_VERTICAL :
                             {
                                 xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                                     aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
-                                    aRGBColorA, aRGBColorB, 4.0));
+                                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
                                 break;
                             }
                             case SDRHELPLINE_HORIZONTAL :
                             {
                                 xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                                     aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
-                                    aRGBColorA, aRGBColorB, 4.0));
+                                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
                                 break;
                             }
                         }
@@ -686,12 +689,6 @@ namespace sdr
                     && !GetObjectContact().isOutputToPrinter()
                     && GetObjectContact().getActiveViewContact() == &GetViewContact());
 
-                //if(!rDisplayInfo.GetSubContentActive())
-                //{
-                //  // Make processed page accessible from SdrPageView via DisplayInfo
-                //  rDisplayInfo.SetProcessedPage(GetViewContact().TryToGetSdrPage());
-                //}
-
                 if(bDoGhostedDisplaying)
                 {
                     rDisplayInfo.ClearGhostedDrawMode();
@@ -719,12 +716,6 @@ namespace sdr
                 {
                     rDisplayInfo.SetGhostedDrawMode();
                 }
-
-                //if(!rDisplayInfo.GetSubContentActive())
-                //{
-                //  // Reset processed page at DisplayInfo and DisplayInfo at SdrPageView
-                //  rDisplayInfo.SetProcessedPage(0);
-                //}
             }
 
             return xRetval;

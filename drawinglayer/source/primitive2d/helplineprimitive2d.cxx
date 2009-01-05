@@ -62,8 +62,6 @@ namespace drawinglayer
             {
                 // position to view coordinates, DashLen and DashLen in logic
                 const basegfx::B2DPoint aViewPosition(rViewInformation.getObjectToViewTransformation() * getPosition());
-                const double fLogicDashLen((rViewInformation.getInverseObjectToViewTransformation() *
-                    basegfx::B2DVector(getViewDashLength(), 0.0)).getLength());
 
                 switch(getStyle())
                 {
@@ -79,7 +77,7 @@ namespace drawinglayer
                         aLineA.append(aStartA);
                         aLineA.append(aEndA);
                         aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
-                        PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), fLogicDashLen);
+                        PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength());
                         aTempPrimitiveTarget.push_back(pNewA);
 
                         const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
@@ -89,7 +87,7 @@ namespace drawinglayer
                         aLineB.append(aStartB);
                         aLineB.append(aEndB);
                         aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
-                        PolygonMarkerPrimitive2D* pNewB = new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), fLogicDashLen);
+                        PolygonMarkerPrimitive2D* pNewB = new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), getDiscreteDashLength());
                         aTempPrimitiveTarget.push_back(pNewB);
 
                         break;
@@ -140,7 +138,7 @@ namespace drawinglayer
                             {
                                 basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
                                 aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
-                                PolygonMarkerPrimitive2D* pNew = new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), fLogicDashLen);
+                                PolygonMarkerPrimitive2D* pNew = new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), getDiscreteDashLength());
                                 aTempPrimitiveTarget.push_back(pNew);
                             }
                         }
@@ -168,14 +166,14 @@ namespace drawinglayer
             HelplineStyle2D eStyle,
             const basegfx::BColor& rRGBColA,
             const basegfx::BColor& rRGBColB,
-            double fViewDashLength)
+            double fDiscreteDashLength)
         :   BasePrimitive2D(),
             maPosition(rPosition),
             maDirection(rDirection),
             meStyle(eStyle),
             maRGBColA(rRGBColA),
             maRGBColB(rRGBColB),
-            mfViewDashLength(fViewDashLength),
+            mfDiscreteDashLength(fDiscreteDashLength),
             maLastObjectToViewTransformation(),
             maLastViewport()
         {
@@ -192,7 +190,7 @@ namespace drawinglayer
                     && getStyle() == rCompare.getStyle()
                     && getRGBColA() == rCompare.getRGBColA()
                     && getRGBColB() == rCompare.getRGBColB()
-                    && getViewDashLength() == rCompare.getViewDashLength());
+                    && getDiscreteDashLength() == rCompare.getDiscreteDashLength());
             }
 
             return false;

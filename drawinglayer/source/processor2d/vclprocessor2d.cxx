@@ -246,11 +246,11 @@ namespace drawinglayer
                     {
                         aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
                         const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
-                        const double fPixelVectorLength(aPixelVector.getLength());
+                        const double fPixelVectorFactor(aPixelVector.getLength());
 
                         for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
                         {
-                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
+                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorFactor));
                         }
                     }
 
@@ -421,82 +421,70 @@ namespace drawinglayer
                         sal_Int32 nOWidth(aObjBR.X() - aObjTL.X());
                         sal_Int32 nOHeight(aObjBR.Y() - aObjTL.Y());
 
-                        if(nOWidth < 0L)
+                        // only do something when object has a size in discrete units
+                        if(nOWidth > 0 && nOHeight > 0)
                         {
-                            nOWidth = 1L;
-                        }
+                            sal_Int32 nBWidth(aBmpBR.X() - aBmpTL.X());
+                            sal_Int32 nBHeight(aBmpBR.Y() - aBmpTL.Y());
 
-                        if(nOHeight < 0L)
-                        {
-                            nOHeight = 1L;
-                        }
-
-                        sal_Int32 nBWidth(aBmpBR.X() - aBmpTL.X());
-                        sal_Int32 nBHeight(aBmpBR.Y() - aBmpTL.Y());
-
-                        if(nBWidth < 0L)
-                        {
-                            nBWidth = 1L;
-                        }
-
-                        if(nBHeight < 0L)
-                        {
-                            nBHeight = 1L;
-                        }
-
-                        sal_Int32 nBLeft(aBmpTL.X());
-                        sal_Int32 nBTop(aBmpTL.Y());
-
-                        if(nBLeft > aObjTL.X())
-                        {
-                            nBLeft -= ((nBLeft / nBWidth) + 1L) * nBWidth;
-                        }
-
-                        if(nBLeft + nBWidth <= aObjTL.X())
-                        {
-                            nBLeft -= (nBLeft / nBWidth) * nBWidth;
-                        }
-
-                        if(nBTop > aObjTL.Y())
-                        {
-                            nBTop -= ((nBTop / nBHeight) + 1L) * nBHeight;
-                        }
-
-                        if(nBTop + nBHeight <= aObjTL.Y())
-                        {
-                            nBTop -= (nBTop / nBHeight) * nBHeight;
-                        }
-
-                        // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
-                        // in vcl many times, create a size-optimized version
-                        const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
-
-                        if(aNeededBitmapSizePixel != aBitmapEx.GetSizePixel())
-                        {
-                            aBitmapEx.Scale(aNeededBitmapSizePixel);
-                        }
-
-                        // prepare OutDev
-                        const Point aEmptyPoint(0, 0);
-                        const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
-                        const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-                        mpOutputDevice->EnableMapMode(false);
-
-                        for(sal_Int32 nXPos(nBLeft); nXPos < aObjTL.X() + nOWidth; nXPos += nBWidth)
-                        {
-                            for(sal_Int32 nYPos(nBTop); nYPos < aObjTL.Y() + nOHeight; nYPos += nBHeight)
+                            // only do something when bitmap fill has a size in discrete units
+                            if(nBWidth > 0 && nBHeight > 0)
                             {
-                                const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                sal_Int32 nBLeft(aBmpTL.X());
+                                sal_Int32 nBTop(aBmpTL.Y());
 
-                                if(aOutRectPixel.IsOver(aVisiblePixel))
+                                if(nBLeft > aObjTL.X())
                                 {
-                                    mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                    nBLeft -= ((nBLeft / nBWidth) + 1L) * nBWidth;
                                 }
+
+                                if(nBLeft + nBWidth <= aObjTL.X())
+                                {
+                                    nBLeft -= (nBLeft / nBWidth) * nBWidth;
+                                }
+
+                                if(nBTop > aObjTL.Y())
+                                {
+                                    nBTop -= ((nBTop / nBHeight) + 1L) * nBHeight;
+                                }
+
+                                if(nBTop + nBHeight <= aObjTL.Y())
+                                {
+                                    nBTop -= (nBTop / nBHeight) * nBHeight;
+                                }
+
+                                // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
+                                // in vcl many times, create a size-optimized version
+                                const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
+
+                                if(aNeededBitmapSizePixel != aBitmapEx.GetSizePixel())
+                                {
+                                    aBitmapEx.Scale(aNeededBitmapSizePixel);
+                                }
+
+                                // prepare OutDev
+                                const Point aEmptyPoint(0, 0);
+                                const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
+                                const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+                                mpOutputDevice->EnableMapMode(false);
+
+                                for(sal_Int32 nXPos(nBLeft); nXPos < aObjTL.X() + nOWidth; nXPos += nBWidth)
+                                {
+                                    for(sal_Int32 nYPos(nBTop); nYPos < aObjTL.Y() + nOHeight; nYPos += nBHeight)
+                                    {
+                                        const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+
+                                        if(aOutRectPixel.IsOver(aVisiblePixel))
+                                        {
+                                            mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                        }
+                                    }
+                                }
+
+                                // restore OutDev
+                                mpOutputDevice->EnableMapMode(bWasEnabled);
                             }
                         }
-
-                        // restore OutDev
-                        mpOutputDevice->EnableMapMode(bWasEnabled);
                     }
                 }
             }
@@ -861,69 +849,42 @@ namespace drawinglayer
                 return;
             }
 
-            switch(rMarkArrayCandidate.getStyle())
+            // get data
+            const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
+            const sal_uInt32 nCount(rPositions.size());
+
+            if(nCount && !rMarkArrayCandidate.getMarker().IsEmpty())
             {
-                default :
+                // get pixel size
+                const BitmapEx& rMarker(rMarkArrayCandidate.getMarker());
+                const Size aBitmapSize(rMarker.GetSizePixel());
+
+                if(aBitmapSize.Width() && aBitmapSize.Height())
                 {
-                    // not handled/unknown MarkerArrayPrimitive2D, use decomposition
-                    process(rMarkArrayCandidate.get2DDecomposition(getViewInformation2D()));
-                    break;
-                }
-                case primitive2d::MARKERSTYLE2D_CROSS :
-                case primitive2d::MARKERSTYLE2D_GLUEPOINT :
-                {
-                    // directly supported markers
-                    const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
-                    const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
-                    const Color aVCLColor(aRGBColor);
-                    const basegfx::B2DHomMatrix aTransObjectToDiscrete(mpOutputDevice->GetViewTransformation() * maCurrentTransformation);
+                    // get discrete half size
+                    const basegfx::B2DVector aDiscreteHalfSize(
+                        (aBitmapSize.getWidth() - 1.0) * 0.5,
+                        (aBitmapSize.getHeight() - 1.0) * 0.5);
+                    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+
+                    // do not forget evtl. moved origin in target device MapMode when
+                    // switching it off; it would be missing and lead to wrong positions.
+                    // All his could be done using logic sizes and coordinates, too, but
+                    // we want a 1:1 bitmap rendering here, so it's more safe and faster
+                    // to work with switching off MapMode usage completely.
+                    const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
+
+                    mpOutputDevice->EnableMapMode(false);
 
                     for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
                     {
-                        const basegfx::B2DPoint aDiscretePosition(aTransObjectToDiscrete * (*aIter));
-                        const Point aPos(basegfx::fround(aDiscretePosition.getX()), basegfx::fround(aDiscretePosition.getY()));
+                        const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * (*aIter)) - aDiscreteHalfSize);
+                        const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
 
-                        switch(rMarkArrayCandidate.getStyle())
-                        {
-                            default :
-                            {
-                                // this would be an error, ther cases here need to be consistent with the initially
-                                // accepted ones
-                                OSL_ENSURE(false, "Inconsistent RenderMarkerArrayPrimitive2D implementation (!)");
-                                break;
-                            }
-                            case primitive2d::MARKERSTYLE2D_CROSS :
-                            {
-                                mpOutputDevice->DrawPixel(aPos, aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aVCLColor);
-
-                                break;
-                            }
-                            case primitive2d::MARKERSTYLE2D_GLUEPOINT :
-                            {
-                                // backpen
-                                mpOutputDevice->SetLineColor(aVCLColor);
-                                mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
-                                mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
-                                mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
-                                mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
-
-                                // frontpen (hard coded)
-                                const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(Color(COL_LIGHTBLUE).getBColor()));
-                                mpOutputDevice->SetLineColor(Color(aRGBFrontColor));
-                                mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
-                                mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
-
-                                break;
-                            }
-                        }
-
+                        mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
                     }
 
-                    break;
+                    mpOutputDevice->EnableMapMode(bWasEnabled);
                 }
             }
         }
@@ -952,8 +913,8 @@ namespace drawinglayer
 
             if(basegfx::fTools::more(fLineWidth, 0.0))
             {
-                const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(1.0, 1.0));
-                const double fDiscreteLineWidth((fLineWidth * aDiscreteUnit.getX() + fLineWidth * aDiscreteUnit.getY()) * 0.5);
+                const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(fLineWidth, 0.0));
+                const double fDiscreteLineWidth(aDiscreteUnit.getLength());
 
                 if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
                 {

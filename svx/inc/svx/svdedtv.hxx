@@ -95,6 +95,8 @@ enum SdrMergeMode {
 class SVX_DLLPUBLIC SdrEditView: public SdrMarkView
 {
     friend class                SdrPageView;
+    friend class                SdrDragDistort;
+    friend class                SdrDragCrook;
 
 protected:
 

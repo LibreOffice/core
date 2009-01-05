@@ -1787,7 +1787,7 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
-    if( pModel->IsWriter() )
+    if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -1796,7 +1796,7 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     }
 
     // force MapUnit to 100th mm
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -1877,7 +1877,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     aGeo.RecalcTan();
 
     // force metric to pool metric
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -1902,7 +1902,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // if anchor is used, make position relative to it
-    if( pModel->IsWriter() )
+    if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {

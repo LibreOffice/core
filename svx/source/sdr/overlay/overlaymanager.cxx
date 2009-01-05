@@ -39,6 +39,8 @@
 #include <vcl/window.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -119,6 +121,19 @@ namespace sdr
             }
         }
 
+        const double OverlayManager::getDiscreteOne() const
+        {
+            if(getOutputDevice().GetViewTransformation() != maViewTransformation)
+            {
+                OverlayManager* pThis = const_cast< OverlayManager* >(this);
+                pThis->maViewTransformation = getOutputDevice().GetViewTransformation();
+                const basegfx::B2DVector aDiscreteInLogic(getOutputDevice().GetInverseViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+                pThis->mfDiscreteOne = aDiscreteInLogic.getLength();
+            }
+
+            return mfDiscreteOne;
+        }
+
         OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
         :   Scheduler(),
             rmOutputDevice(rOutputDevice),
@@ -127,7 +142,9 @@ namespace sdr
             maStripeColorA(Color(COL_BLACK)),
             maStripeColorB(Color(COL_WHITE)),
             mnStripeLengthPixel(5L),
-            maDrawinglayerOpt()
+            maDrawinglayerOpt(),
+            maViewTransformation(),
+            mfDiscreteOne(0.0)
         {
         }
 
@@ -261,12 +278,12 @@ namespace sdr
                 if(maDrawinglayerOpt.IsAntiAliasing())
                 {
                     // assume AA needs one pixel more and invalidate one pixel more
-                    const basegfx::B2DVector aDiscreteInLogic(getOutputDevice().GetViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                    const double fDiscreteOne(getDiscreteOne());
                     const Rectangle aInvalidateRectangle(
-                        (sal_Int32)floor(rRange.getMinX() - aDiscreteInLogic.getX()),
-                        (sal_Int32)floor(rRange.getMinY() - aDiscreteInLogic.getY()),
-                        (sal_Int32)ceil(rRange.getMaxX() + aDiscreteInLogic.getX()),
-                        (sal_Int32)ceil(rRange.getMaxY() + aDiscreteInLogic.getY()));
+                        (sal_Int32)floor(rRange.getMinX() - fDiscreteOne),
+                        (sal_Int32)floor(rRange.getMinY() - fDiscreteOne),
+                        (sal_Int32)ceil(rRange.getMaxX() + fDiscreteOne),
+                        (sal_Int32)ceil(rRange.getMaxY() + fDiscreteOne));
 
                     // simply invalidate
                     ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);

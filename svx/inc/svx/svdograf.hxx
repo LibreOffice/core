@@ -189,7 +189,7 @@ public:
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     virtual void            operator=(const SdrObject& rObj);
-    virtual FASTBOOL        HasSpecialDrag() const;
+
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const;
 

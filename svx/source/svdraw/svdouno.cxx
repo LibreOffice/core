@@ -62,6 +62,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/svdograf.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::sdr::contact;
@@ -406,11 +407,6 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
         m_pImpl->pEventListener->StartListening(xComp);
 }
 
-FASTBOOL SdrUnoObj::HasSpecialDrag() const
-{
-    return FALSE;
-}
-
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
@@ -430,6 +426,46 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         aGeo.nTan       = 0.0;
         SetRectsDirty();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+bool SdrUnoObj::hasSpecialDrag() const
+{
+    // no special drag; we have no rounding rect and
+    // do want frame handles
+    return false;
+}
+
+bool SdrUnoObj::supportsFullDrag() const
+{
+    // overloaded to have the possibility to enable/disable in debug and
+    // to ckeck some things out. Current solution is working, so default is
+    // enabled
+    static bool bDoSupportFullDrag(true);
+
+    return bDoSupportFullDrag;
+}
+
+SdrObject* SdrUnoObj::getFullDragClone() const
+{
+    SdrObject* pRetval = 0;
+    static bool bHandleSpecial(false);
+
+    if(bHandleSpecial)
+    {
+        // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj
+        // for drag containing the graphical representation. This does not work too
+        // well, so the default is to simply clone
+        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
+    }
+    else
+    {
+        // call parent (simply clone)
+        pRetval = SdrRectObj::getFullDragClone();
+    }
+
+    return pRetval;
 }
 
 // -----------------------------------------------------------------------------

@@ -201,17 +201,14 @@ public:
 
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
 
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag( SdrDragStat& rDrag )  const;
-    virtual FASTBOOL EndDrag( SdrDragStat& rDrag );
+    // special drag methods
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
 
     virtual FASTBOOL BegCreate( SdrDragStat& rStat );
     virtual FASTBOOL MovCreate(SdrDragStat& rStat); // #i37448#
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-
-    virtual void     BrkDrag( SdrDragStat& rDrag ) const;
-    virtual FASTBOOL MovDrag( SdrDragStat& rDrag ) const;
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
 
     virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;
     virtual FASTBOOL NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);

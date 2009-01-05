@@ -189,6 +189,18 @@ namespace drawinglayer
             return fRet;
         }
 
+#ifdef WIN32
+        double TextLayouterDevice::getCurrentFontRelation() const
+        {
+            const Font aFont(mrDevice.GetFont());
+            const FontMetric aFontMetric(mrDevice.GetFontMetric(aFont));
+            const double fWidth(aFontMetric.GetWidth());
+            const double fHeight(aFont.GetHeight());
+
+            return basegfx::fTools::equalZero(fWidth) ? 1.0 : fHeight / fWidth;
+        }
+#endif
+
         double TextLayouterDevice::getUnderlineHeight() const
         {
             const ::FontMetric& rMetric = mrDevice.GetFontMetric();

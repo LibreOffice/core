@@ -50,7 +50,6 @@
 #include <svtools/undoopt.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/cacheoptions.hxx>
-#include <svtools/options3d.hxx>
 #include <svtools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/startoptions.hxx>

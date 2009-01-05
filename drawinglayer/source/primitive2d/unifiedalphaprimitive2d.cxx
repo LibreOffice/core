@@ -43,6 +43,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -63,11 +64,29 @@ namespace drawinglayer
             }
             else if(getAlpha() > 0.0 && getAlpha() < 1.0)
             {
-                // create fill polygon for TransparenceList
-                const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation)));
+                // The idea is to create a AlphaPrimitive2D with alpha content using a fill color
+                // corresponding to the alpha value. Problem is that in most systems, the right
+                // and bottom pixel array is not filled when filling polygons, thus this would not
+                // always produce a complete alpha bitmap. There are some solutions:
+                //
+                // - Grow the used polygon range by one discrete unit in X and Y. This
+                // will make the decomposition view-dependent.
+                //
+                // - For all filled polygon renderings, dra wthe polygon outline extra. This
+                // would lead to unwanted side effects when using concatenated polygons.
+                //
+                // - At this decomposition, add a filled polygon and a hairline polygon. This
+                // solution stays view-independent.
+                //
+                // I will take the last one here. The small overhead of two primitives will only be
+                // used when UnifiedAlphaPrimitive2D is not handled directly.
+                const basegfx::B2DRange aPolygonRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
+                const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aPolygonRange));
                 const basegfx::BColor aGray(getAlpha(), getAlpha(), getAlpha());
-                const Primitive2DReference xRefA(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));
-                const Primitive2DSequence aAlphaContent(&xRefA, 1L);
+                Primitive2DSequence aAlphaContent(2);
+
+                aAlphaContent[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));
+                aAlphaContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
 
                 // create sub-transparence group with a gray-colored rectangular fill polygon
                 const Primitive2DReference xRefB(new AlphaPrimitive2D(getChildren(), aAlphaContent));

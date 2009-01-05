@@ -39,6 +39,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // GridPrimitive2D class
@@ -58,6 +59,7 @@ namespace drawinglayer
             sal_uInt32                                      mnSubdivisionsX;
             sal_uInt32                                      mnSubdivisionsY;
             basegfx::BColor                                 maBColor;
+            BitmapEx                                        maCrossMarker;
 
             // the last used object to view transformtion and the last Viewport,
             // used from getDecomposition for decide buffering
@@ -77,7 +79,8 @@ namespace drawinglayer
                 double fSmallestSubdivisionViewDistance,
                 sal_uInt32 nSubdivisionsX,
                 sal_uInt32 nSubdivisionsY,
-                const basegfx::BColor& rBColor);
+                const basegfx::BColor& rBColor,
+                const BitmapEx& rCrossMarker);
 
             // get data
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -88,6 +91,7 @@ namespace drawinglayer
             sal_uInt32 getSubdivisionsX() const { return mnSubdivisionsX; }
             sal_uInt32 getSubdivisionsY() const { return mnSubdivisionsY; }
             const basegfx::BColor& getBColor() const { return maBColor; }
+            const BitmapEx& getCrossMarker() const { return maCrossMarker; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

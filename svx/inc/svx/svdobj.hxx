@@ -76,6 +76,7 @@ class SfxItemPool;
 class PolyPolygon;
 class SfxPoolItem;
 class SdrVirtObj;
+class SdrDragView;
 
 namespace sdr
 {
@@ -734,13 +735,21 @@ public:
     // FALSE kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
     // veraendert hat, wobei dir evtl. Tatsache das die Maus nicht bewegt wurde
     // bereits von der View abgefangen wird.
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const; // True=Xor muss repainted werden
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag) const;
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
+
+    // FullDrag support. This is for standard interactions and for SdrObjOwn
+    // support. If supportsFullDrag() returns true, getFullDragClone has to
+    // return a cloned SdrObject (who's ownership it loses) at which modifications
+    // like Move(), Scale(), etc or applySpecialDrag() will be executed. That
+    // object will be visualized on overlay for full drag, but should not be
+    // part of the model, thus not changing anything since it's only a temporary
+    // helper object for interaction
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 
     // Jedes Objekt muss in der Lage sein sich selbst interaktiv zu erzeugen.
     // Beim MausDown wird zunaechst ein neues Objekt erzeugt und dann seine
@@ -1089,9 +1098,9 @@ public:
     // Give info if object is in destruction
     sal_Bool IsInDestruction() const;
 
-    // #i34682#
     // return if fill is != XFILL_NONE
-    sal_Bool HasFillStyle() const;
+    bool HasFillStyle() const;
+    bool HasLineStyle() const;
 
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // the following methods are used to control it;

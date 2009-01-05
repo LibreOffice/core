@@ -291,6 +291,27 @@ namespace sdr
         {
             return 0;
         }
+
+        void ObjectContact::resetViewPort()
+        {
+            const drawinglayer::geometry::ViewInformation2D& rCurrentVI2D = getViewInformation2D();
+
+            if(!rCurrentVI2D.getViewport().isEmpty())
+            {
+                const basegfx::B2DRange aEmptyRange;
+
+                drawinglayer::geometry::ViewInformation2D aNewVI2D(
+                    rCurrentVI2D.getObjectTransformation(),
+                    rCurrentVI2D.getViewTransformation(),
+                    aEmptyRange,
+                    rCurrentVI2D.getVisualizedPage(),
+                    rCurrentVI2D.getViewTime(),
+                    rCurrentVI2D.getExtendedInformationSequence());
+
+                updateViewInformation2D(aNewVI2D);
+            }
+        }
+
     } // end of namespace contact
 } // end of namespace sdr
 

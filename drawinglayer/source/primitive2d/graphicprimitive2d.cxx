@@ -297,7 +297,18 @@ namespace drawinglayer
 
                         {
                             const MapMode aMapMode100thmm(MAP_100TH_MM);
-                            const Size aBitmapSize(Application::GetDefaultDevice()->LogicToLogic(getGraphicObject().GetPrefSize(), getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
+                            Size aBitmapSize(getGraphicObject().GetPrefSize());
+
+                            // #i95968# better support PrefMapMode; special for MAP_PIXEL was missing
+                            if(MAP_PIXEL == getGraphicObject().GetPrefMapMode().GetMapUnit())
+                            {
+                                aBitmapSize = Application::GetDefaultDevice()->PixelToLogic(aBitmapSize, aMapMode100thmm);
+                            }
+                            else
+                            {
+                                aBitmapSize = Application::GetDefaultDevice()->LogicToLogic(aBitmapSize, getGraphicObject().GetPrefMapMode(), aMapMode100thmm);
+                            }
+
                             const double fDivX(aBitmapSize.Width() - getGraphicAttr().GetLeftCrop() - getGraphicAttr().GetRightCrop());
                             const double fDivY(aBitmapSize.Height() - getGraphicAttr().GetTopCrop() - getGraphicAttr().GetBottomCrop());
 

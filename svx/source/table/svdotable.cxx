@@ -2476,126 +2476,21 @@ SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
     return pRetval;
 }
 
-// --------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Draging
-// --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::HasSpecialDrag() const
+bool SdrTableObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
-// --------------------------------------------------------------------
-
-struct ImpSdrTableObjDragUser : public SdrDragStatUserData
+bool SdrTableObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    Rectangle maRectangle;
-};
-
-// --------------------------------------------------------------------
-
-FASTBOOL SdrTableObj::BegDrag(SdrDragStat& rDrag) const
-{
-    FASTBOOL bRet = TRUE;
-
     const SdrHdl* pHdl = rDrag.GetHdl();
-    SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
+    const SdrHdlKind eHdl((pHdl == NULL) ? HDL_MOVE : pHdl->GetKind());
+
     switch( eHdl )
     {
-    case HDL_UPLFT:
-    case HDL_UPPER:
-    case HDL_UPRGT:
-    case HDL_LEFT:
-    case HDL_RIGHT:
-    case HDL_LWLFT:
-    case HDL_LOWER:
-    case HDL_LWRGT:
-    case HDL_MOVE:
-        break;
-
-    case HDL_USER:
-        rDrag.SetEndDragChangesAttributes( sal_False );
-        rDrag.SetNoSnap( TRUE );
-        break;
-
-    default:
-        bRet = FALSE;
-    }
-
-    if( bRet )
-    {
-        ImpSdrTableObjDragUser* pUser = static_cast<ImpSdrTableObjDragUser*>(rDrag.GetUser());
-
-        if(!pUser)
-            pUser = new ImpSdrTableObjDragUser;
-
-        pUser->maRectangle = aRect;
-        rDrag.SetUser(pUser);
-    }
-
-    return bRet;
-}
-
-// --------------------------------------------------------------------
-
-FASTBOOL SdrTableObj::MovDrag(SdrDragStat& rDrag) const
-{
-    FASTBOOL bRet = TRUE;
-
-    const SdrHdl* pHdl = rDrag.GetHdl();
-    SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
-    ImpSdrTableObjDragUser* pUser = static_cast<ImpSdrTableObjDragUser*>(rDrag.GetUser());
-
-    if( pUser ) switch( eHdl )
-    {
-    case HDL_UPLFT:
-    case HDL_UPPER:
-    case HDL_UPRGT:
-    case HDL_LEFT:
-    case HDL_RIGHT:
-    case HDL_LWLFT:
-    case HDL_LOWER:
-    case HDL_LWRGT:
-    {
-        pUser->maRectangle = ImpDragCalcRect( rDrag );
-        break;
-    }
-    case HDL_MOVE:
-    {
-        pUser->maRectangle = aRect;
-        pUser->maRectangle.Move( rDrag.GetDX(), rDrag.GetDY() );
-        break;
-    }
-
-    case HDL_USER:
-    {
-        rDrag.SetEndDragChangesAttributes( sal_False );
-        rDrag.SetNoSnap( TRUE );
-        break;
-    }
-
-    default:
-        bRet = FALSE;
-    }
-
-    return bRet;
-}
-
-// --------------------------------------------------------------------
-
-FASTBOOL SdrTableObj::EndDrag(SdrDragStat& rDrag)
-{
-    FASTBOOL bRet = TRUE;
-
-    const SdrHdl* pHdl = rDrag.GetHdl();
-    SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
-    ImpSdrTableObjDragUser* pUser = static_cast<ImpSdrTableObjDragUser*>(rDrag.GetUser());
-
-    if( pUser )
-    {
-
-        switch( eHdl )
-        {
         case HDL_UPLFT:
         case HDL_UPPER:
         case HDL_UPRGT:
@@ -2604,21 +2499,72 @@ FASTBOOL SdrTableObj::EndDrag(SdrDragStat& rDrag)
         case HDL_LWLFT:
         case HDL_LOWER:
         case HDL_LWRGT:
-            if(pUser->maRectangle != aRect)
-                SetLogicRect(pUser->maRectangle);
-            break;
-
         case HDL_MOVE:
-            Move( Size( rDrag.GetDX(), rDrag.GetDY() ) );
+        {
             break;
+        }
 
         case HDL_USER:
         {
+            rDrag.SetEndDragChangesAttributes(false);
+            rDrag.SetNoSnap(true);
+            break;
+        }
+
+        default:
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
+{
+    bool bRet(true);
+    const SdrHdl* pHdl = rDrag.GetHdl();
+    const SdrHdlKind eHdl((pHdl == NULL) ? HDL_MOVE : pHdl->GetKind());
+
+    switch( eHdl )
+    {
+        case HDL_UPLFT:
+        case HDL_UPPER:
+        case HDL_UPRGT:
+        case HDL_LEFT:
+        case HDL_RIGHT:
+        case HDL_LWLFT:
+        case HDL_LOWER:
+        case HDL_LWRGT:
+        {
+            const Rectangle aNewRectangle(ImpDragCalcRect(rDrag));
+
+            if(aNewRectangle != aRect)
+            {
+                   NbcSetLogicRect(aNewRectangle);
+            }
+
+            break;
+        }
+
+        case HDL_MOVE:
+        {
+               NbcMove( Size( rDrag.GetDX(), rDrag.GetDY() ) );
+            break;
+        }
+
+        case HDL_USER:
+        {
+            rDrag.SetEndDragChangesAttributes(false);
+            rDrag.SetNoSnap(true);
             const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
+
             if( pEdgeHdl )
             {
                 if( GetModel() && IsInserted() )
-                    GetModel()->AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this) );
+                {
+                    rDrag.SetEndDragChangesAttributes(true);
+                }
 
                 mpImpl->DragEdge( pEdgeHdl->IsHorizontalEdge(), pEdgeHdl->GetPointNum(), pEdgeHdl->GetValidDragOffset( rDrag ) );
             }
@@ -2626,77 +2572,38 @@ FASTBOOL SdrTableObj::EndDrag(SdrDragStat& rDrag)
         }
 
         default:
-            bRet = FALSE;
+        {
+            bRet = false;
         }
-
-        rDrag.SetUser(NULL);
-        delete pUser;
     }
 
     return bRet;
 }
 
-// --------------------------------------------------------------------
-
-void SdrTableObj::BrkDrag(SdrDragStat& rDrag ) const
+String SdrTableObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    ImpSdrTableObjDragUser* pUser = static_cast<ImpSdrTableObjDragUser*>(rDrag.GetUser());
-    if( pUser )
-    {
-        delete pUser;
-        rDrag.SetUser(NULL);
-    }
+    return SdrTextObj::getSpecialDragComment( rDrag );
 }
 
-// --------------------------------------------------------------------
-
-XubString SdrTableObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
+basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
-    return SdrTextObj::GetDragComment( rDrag, bUndoDragComment, bCreateComment );
-}
-
-// --------------------------------------------------------------------
-
-basegfx::B2DPolyPolygon SdrTableObj::TakeDragPoly(const SdrDragStat& rDrag) const
-{
-    basegfx::B2DPolyPolygon aRetVal;
-
+    basegfx::B2DPolyPolygon aRetval;
     const SdrHdl* pHdl = rDrag.GetHdl();
-    SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
-    ImpSdrTableObjDragUser* pUser = static_cast<ImpSdrTableObjDragUser*>(rDrag.GetUser());
 
-    if( pUser ) switch( eHdl )
+    if(HDL_USER == pHdl->GetKind())
     {
-        case HDL_UPLFT:
-        case HDL_UPPER:
-        case HDL_UPRGT:
-        case HDL_LEFT:
-        case HDL_RIGHT:
-        case HDL_LWLFT:
-        case HDL_LOWER:
-        case HDL_LWRGT:
-        case HDL_MOVE:
-        {
-            aRetVal.append(
-                basegfx::tools::createPolygonFromRect(
-                    vcl::unotools::b2DRectangleFromRectangle( pUser->maRectangle ) ) );
-            break;
-        }
+        const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
 
-        case HDL_USER :
+        if( pEdgeHdl )
         {
-            const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
-            if( pEdgeHdl )
-                aRetVal = pEdgeHdl->TakeDragPoly( &rDrag );
-            break;
+            aRetval = pEdgeHdl->getSpecialDragPoly( rDrag );
         }
-
-        default: break;
     }
-    return aRetVal;
+
+    return aRetval;
 }
 
-// --------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create
 // --------------------------------------------------------------------
 

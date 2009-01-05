@@ -41,6 +41,9 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -117,48 +120,80 @@ namespace sdr
         {
             if(getOverlayManager() && rPolygon.count())
             {
-                const sal_uInt32 nLenPixel(getOverlayManager()->getStripeLengthPixel());
-                const Size aDashSizePixel(nLenPixel, nLenPixel);
-                const Size aDashSizeLogic(rOutputDevice.PixelToLogic(aDashSizePixel));
-                const double fDashLength(aDashSizeLogic.Width());
-                const double fFullDotDashLength(fDashLength + fDashLength);
-
-                // fill DashDot vector
-                ::std::vector<double> aDotDashArray;
-                aDotDashArray.push_back(fDashLength);
-                aDotDashArray.push_back(fDashLength);
-
-                // get dash polygons
-                basegfx::B2DPolyPolygon aStripesA;
-                basegfx::B2DPolyPolygon aStripesB;
-                basegfx::tools::applyLineDashing(rPolygon, aDotDashArray, &aStripesA, &aStripesB, fFullDotDashLength);
-
-                // draw stripes A
-                if(aStripesA.count())
+                if(getOverlayManager() && getOverlayManager()->getDrawinglayerOpt().IsAntiAliasing())
                 {
-                    rOutputDevice.SetFillColor();
-                    rOutputDevice.SetLineColor(getOverlayManager()->getStripeColorA());
-                    ImpDrawStripes(rOutputDevice, aStripesA);
-                }
+                    // prepare ViewInformation2D
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
+                        basegfx::B2DHomMatrix(),
+                        rOutputDevice.GetViewTransformation(),
+                        basegfx::B2DRange(),
+                        0,
+                        0.0,
+                        0);
 
-                // draw stripes B
-                if(aStripesB.count())
+                    // create processor
+                    drawinglayer::processor2d::BaseProcessor2D* pProcessor = ::sdr::contact::createBaseProcessor2DFromOutputDevice(
+                        rOutputDevice,
+                        aViewInformation2D);
+
+                    if(pProcessor)
+                    {
+                        // prepare primitives
+                        const drawinglayer::primitive2d::Primitive2DReference aPolygonMarkerPrimitive2D(
+                            new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
+                                rPolygon,
+                                getOverlayManager()->getStripeColorA().getBColor(),
+                                getOverlayManager()->getStripeColorB().getBColor(),
+                                getOverlayManager()->getStripeLengthPixel()));
+                        const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aPolygonMarkerPrimitive2D, 1);
+
+                        pProcessor->process(aSequence);
+
+                        delete pProcessor;
+                    }
+                }
+                else
                 {
-                    rOutputDevice.SetFillColor();
-                    rOutputDevice.SetLineColor(getOverlayManager()->getStripeColorB());
-                    ImpDrawStripes(rOutputDevice, aStripesB);
-                }
-            }
-        }
+                    const sal_uInt32 nLenPixel(getOverlayManager()->getStripeLengthPixel());
+                    const Size aDashSizePixel(nLenPixel, nLenPixel);
+                    const Size aDashSizeLogic(rOutputDevice.PixelToLogic(aDashSizePixel));
+                    const double fDashLength(aDashSizeLogic.Width());
+                    const double fFullDotDashLength(fDashLength + fDashLength);
 
-        void OverlayObject::ImpDrawStripes(OutputDevice& rOutputDevice, const basegfx::B2DPolyPolygon& rPolyPolygon)
-        {
-            for(sal_uInt32 a(0L); a < rPolyPolygon.count();a ++)
-            {
-                // #i82889# Do not just paint from start point to end point
-                // assuming that each partial Polygon contains a single line. Instead,
-                // paint the whole polygon
-                rOutputDevice.DrawPolyLine(Polygon(rPolyPolygon.getB2DPolygon(a)));
+                    // fill DashDot vector
+                    ::std::vector<double> aDotDashArray;
+                    aDotDashArray.push_back(fDashLength);
+                    aDotDashArray.push_back(fDashLength);
+
+                    // get dash polygons
+                    basegfx::B2DPolyPolygon aStripesA;
+                    basegfx::B2DPolyPolygon aStripesB;
+                    basegfx::tools::applyLineDashing(rPolygon, aDotDashArray, &aStripesA, &aStripesB, fFullDotDashLength);
+
+                    // draw stripes A
+                    if(aStripesA.count())
+                    {
+                        rOutputDevice.SetFillColor();
+                        rOutputDevice.SetLineColor(getOverlayManager()->getStripeColorA());
+
+                        for(sal_uInt32 a(0L); a < aStripesA.count();a ++)
+                        {
+                            rOutputDevice.DrawPolyLine(aStripesA.getB2DPolygon(a));
+                        }
+                    }
+
+                    // draw stripes B
+                    if(aStripesB.count())
+                    {
+                        rOutputDevice.SetFillColor();
+                        rOutputDevice.SetLineColor(getOverlayManager()->getStripeColorB());
+
+                        for(sal_uInt32 a(0L); a < aStripesB.count();a ++)
+                        {
+                            rOutputDevice.DrawPolyLine(aStripesB.getB2DPolygon(a));
+                        }
+                    }
+                }
             }
         }
 

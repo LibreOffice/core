@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: objectcontacttools.hxx,v $
+ * $RCSfile: primitiveFactory2d.hxx,v $
  *
  * $Revision: 1.2 $
  *
@@ -29,38 +29,36 @@
  *
  ************************************************************************/
 
-#ifndef _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
-#define _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
+#ifndef INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
+#define INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
 
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// predeclarations
-
-class OutputDevice;
-
-namespace drawinglayer { namespace processor2d {
-    class BaseProcessor2D;
-}}
+#include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
 
-namespace sdr
+namespace basegfx {
+    class BColor;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// helper methods
+
+namespace drawinglayer
 {
-    namespace contact
+    namespace primitive2d
     {
-        // create a mating VCL-Provessor for given OutputDevice. This includes
-        // looking for MetaFile-recording. The returned renderer changes owner,
-        // deletion is duty of the caller
-        drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
-            OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
+        // create a 3x3 cross in given color as BitmapEx
+        BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
 
-    } // end of namespace contact
-} // end of namespace sdr
+        // create a 7x7 gluepoint symbol in given colors as BitmapEx
+        BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB);
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
+#endif //INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
 
 // eof

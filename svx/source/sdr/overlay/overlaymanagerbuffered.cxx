@@ -475,40 +475,43 @@ namespace sdr
 
         void OverlayManagerBuffered::invalidateRange(const basegfx::B2DRange& rRange)
         {
-            // buffered output, do not invalidate but use the timer
-            // to trigger a timer event for refresh
-            maBufferTimer.Start();
-
-            // add the discrete range to the remembered region
-            // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
-            // when the given logic region has a width/height of 0.0. This does NOT work with LogicToPixel
-            // since it just transforms the top left and bottom right points equally without taking
-            // discrete pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
-            // to an also empty discrete pixel rectangle - what is wrong.
-            basegfx::B2DRange aDiscreteRange(rRange);
-            aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
-
-            if(maDrawinglayerOpt.IsAntiAliasing())
+            if(!rRange.isEmpty())
             {
-                // assume AA needs one pixel more and invalidate one pixel more
-                const basegfx::B2DVector aDiscreteInLogic(getOutputDevice().GetViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-                const basegfx::B2IPoint aTopLeft(
-                    (sal_Int32)floor(aDiscreteRange.getMinX() - aDiscreteInLogic.getX()),
-                    (sal_Int32)floor(aDiscreteRange.getMinY() - aDiscreteInLogic.getY()));
-                const basegfx::B2IPoint aBottomRight(
-                    (sal_Int32)ceil(aDiscreteRange.getMaxX() + aDiscreteInLogic.getX()),
-                    (sal_Int32)ceil(aDiscreteRange.getMaxY() + aDiscreteInLogic.getY()));
+                // buffered output, do not invalidate but use the timer
+                // to trigger a timer event for refresh
+                maBufferTimer.Start();
 
-                maBufferRememberedRangePixel.expand(aTopLeft);
-                maBufferRememberedRangePixel.expand(aBottomRight);
-            }
-            else
-            {
-                const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()));
-                const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+                // add the discrete range to the remembered region
+                // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
+                // when the given logic region has a width/height of 0.0. This does NOT work with LogicToPixel
+                // since it just transforms the top left and bottom right points equally without taking
+                // discrete pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
+                // to an also empty discrete pixel rectangle - what is wrong.
+                basegfx::B2DRange aDiscreteRange(rRange);
+                aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
 
-                maBufferRememberedRangePixel.expand(aTopLeft);
-                maBufferRememberedRangePixel.expand(aBottomRight);
+                if(maDrawinglayerOpt.IsAntiAliasing())
+                {
+                    // assume AA needs one pixel more and invalidate one pixel more
+                    const double fDiscreteOne(getDiscreteOne());
+                    const basegfx::B2IPoint aTopLeft(
+                        (sal_Int32)floor(aDiscreteRange.getMinX() - fDiscreteOne),
+                        (sal_Int32)floor(aDiscreteRange.getMinY() - fDiscreteOne));
+                    const basegfx::B2IPoint aBottomRight(
+                        (sal_Int32)ceil(aDiscreteRange.getMaxX() + fDiscreteOne),
+                        (sal_Int32)ceil(aDiscreteRange.getMaxY() + fDiscreteOne));
+
+                    maBufferRememberedRangePixel.expand(aTopLeft);
+                    maBufferRememberedRangePixel.expand(aBottomRight);
+                }
+                else
+                {
+                    const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()));
+                    const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+
+                    maBufferRememberedRangePixel.expand(aTopLeft);
+                    maBufferRememberedRangePixel.expand(aBottomRight);
+                }
             }
         }
 

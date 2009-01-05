@@ -82,6 +82,9 @@ namespace drawinglayer
             double getUnderlineHeight() const;
             double getUnderlineOffset() const;
             double getStrikeoutOffset() const;
+#ifdef WIN32
+            double getCurrentFontRelation() const;
+#endif
 
             double getTextWidth(
                 const String& rText,

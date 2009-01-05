@@ -145,8 +145,7 @@ public:
     USHORT SnapPos(Point& rPnt, const SdrPageView* pPV) const;
     Point GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const;
     USHORT SnapRect(const Rectangle& rRect, const SdrPageView* pPV, long& rDX, long& rDY) const;
-    void CheckSnap(const Point& rPt, const SdrPageView* pPV,
-        long& nBestXSnap, long& nBestYSnap, BOOL& bXSnapped, BOOL& bYSnapped) const;
+    void CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
     // Alle Fangeinstellungen sind Persistent.
     BOOL IsSnapEnabled() const { return bSnapEnab; }

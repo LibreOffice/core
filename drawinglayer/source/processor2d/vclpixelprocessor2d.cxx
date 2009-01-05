@@ -339,8 +339,12 @@ namespace drawinglayer
 
                             if(!bControlIsVisibleAsChildWindow)
                             {
-                                // draw it
-                                xControlView->draw(basegfx::fround(aTopLeftPixel.getX()), basegfx::fround(aTopLeftPixel.getY()));
+                                // draw it. Do not forget to use the evtl. offsetted origin of the target device,
+                                // e.g. when used with mask/transparence buffer device
+                                const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
+                                xControlView->draw(
+                                    aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
+                                    aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
                             }
 
                             // restore original graphics
@@ -466,7 +470,7 @@ namespace drawinglayer
 
                         // create hatch
                         const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
-                        const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getX()));
+                        const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
                         const sal_uInt16 nAngle10((sal_uInt16)basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800));
                         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
 

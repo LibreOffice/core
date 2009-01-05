@@ -57,6 +57,7 @@
 #include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -675,8 +676,6 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     FASTBOOL bObn=nEscAngle==9000;
     FASTBOOL bLks=nEscAngle==18000;
     FASTBOOL bUnt=nEscAngle==27000;
-    //FASTBOOL bHor=bLks || bRts;
-    //FASTBOOL bVer=bObn || bUnt;
 
     Point aP1(rStPt); // erstmal den Pflichtabstand
     if (bLks) aP1.X()=rRect.Left();
@@ -919,8 +918,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 nQ+=Abs(aXP[3].X()-aXP[2].X())+Abs(aXP[3].Y()-aXP[2].Y());
             *pnQuality=nQ;
         }
-        //USHORT n1=1;
-        //USHORT n2=1;
         if (bInfo) {
             pInfo->nObj1Lines=2;
             pInfo->nObj2Lines=2;
@@ -1813,163 +1810,210 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
     return pHdl;
 }
 
-FASTBOOL SdrEdgeObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrEdgeObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
-struct ImpEdgeUser : public SdrDragStatUserData
+SdrObject* SdrEdgeObj::getFullDragClone() const
 {
-    XPolygon          aXP;
-    SdrObjConnection  aCon1;
-    SdrObjConnection  aCon2;
-    SdrObjConnection* pDragCon;
-    SdrEdgeInfoRec    aInfo;
-};
+    // use Clone operator
+    SdrEdgeObj* pRetval = (SdrEdgeObj*)Clone();
 
-FASTBOOL SdrEdgeObj::BegDrag(SdrDragStat& rDragStat) const
+    // copy connections for clone, SdrEdgeObj::operator= does not do this
+    pRetval->ConnectToNode(true, GetConnectedNode(true));
+    pRetval->ConnectToNode(false, GetConnectedNode(false));
+
+    return pRetval;
+}
+
+bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    if (rDragStat.GetHdl()==NULL) return FALSE;
-    rDragStat.SetEndDragChangesAttributes(TRUE);
-    rDragStat.SetUser(new ImpEdgeUser);
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
-    pEdgeUser->aXP=(*pEdgeTrack);
-    pEdgeUser->aInfo=aEdgeInfo;
-    pEdgeUser->aCon1=aCon1;
-    pEdgeUser->aCon2=aCon2;
-    pEdgeUser->pDragCon=NULL;
-    if (rDragStat.GetHdl()->GetPointNum()<2) {
-        rDragStat.SetEndDragChangesGeoAndAttributes(TRUE);
-        if (rDragStat.GetHdl()->GetPointNum()==0) pEdgeUser->pDragCon=&pEdgeUser->aCon1;
-        if (rDragStat.GetHdl()->GetPointNum()==1) pEdgeUser->pDragCon=&pEdgeUser->aCon2;
-        rDragStat.SetNoSnap(TRUE);
+    if(!rDrag.GetHdl())
+        return false;
+
+    rDrag.SetEndDragChangesAttributes(true);
+
+    if(rDrag.GetHdl()->GetPointNum() < 2)
+    {
+        rDrag.SetNoSnap(true);
     }
-    return TRUE;
+
+    return true;
 }
 
-FASTBOOL SdrEdgeObj::MovDrag(SdrDragStat& rDragStat) const
+bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
 {
-    Point aPt(rDragStat.GetNow());
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
-    const SdrHdl* pHdl=rDragStat.GetHdl();
-    const ImpEdgeHdl* pEdgeHdl=(ImpEdgeHdl*)pHdl;
-    pEdgeUser->aXP=(*pEdgeTrack);
-    pEdgeUser->aInfo=aEdgeInfo;
-    if (pHdl->GetPointNum()<2) {
-        pEdgeUser->pDragCon->pObj=NULL;
-        if (rDragStat.GetPageView()!=NULL) {
-            ImpFindConnector(aPt,*rDragStat.GetPageView(),*pEdgeUser->pDragCon,this);
-            if (rDragStat.GetView()!=NULL) {
-                rDragStat.GetView()->SetConnectMarker(*pEdgeUser->pDragCon,*rDragStat.GetPageView());
+    SdrEdgeObj* pOriginalEdge = dynamic_cast< SdrEdgeObj* >(rDragStat.GetHdl()->GetObj());
+    const bool bOriginalEdgeModified(pOriginalEdge == this);
+
+    if(!bOriginalEdgeModified && pOriginalEdge)
+    {
+        // copy connections when clone is modified. This is needed because
+        // as preparation to this modification the data from the original object
+        // was copied to the clone using the operator=. As can be seen there,
+        // that operator does not copy the connections (for good reason)
+        ConnectToNode(true, pOriginalEdge->GetConnection(true).GetObject());
+        ConnectToNode(false, pOriginalEdge->GetConnection(false).GetObject());
+    }
+
+    if(rDragStat.GetHdl()->GetPointNum() < 2)
+    {
+        // start or end point connector drag
+        const bool bDragA(0 == rDragStat.GetHdl()->GetPointNum());
+        const Point aPointNow(rDragStat.GetNow());
+
+        if(rDragStat.GetPageView())
+        {
+            SdrObjConnection* pDraggedOne(bDragA ? &aCon1 : &aCon2);
+
+            // clear connection
+            DisconnectFromNode(bDragA);
+
+            // look for new connection
+            ImpFindConnector(aPointNow, *rDragStat.GetPageView(), *pDraggedOne, pOriginalEdge);
+
+            if(pDraggedOne->pObj)
+            {
+                // if found, officially connect to it; ImpFindConnector only
+                // sets pObj hard
+                SdrObject* pNewConnection = pDraggedOne->pObj;
+                pDraggedOne->pObj = 0;
+                ConnectToNode(bDragA, pNewConnection);
+            }
+
+            if(rDragStat.GetView() && !bOriginalEdgeModified)
+            {
+                // show IA helper, but only do this during IA, so not when the original
+                // Edge gets modified in the last call
+                rDragStat.GetView()->SetConnectMarker(*pDraggedOne, *rDragStat.GetPageView());
             }
         }
-        if (pHdl->GetPointNum()==0) pEdgeUser->aXP[0]=aPt;
-        else pEdgeUser->aXP[USHORT(pEdgeUser->aXP.GetPointCount()-1)]=aPt;
-        pEdgeUser->aInfo.aObj1Line2=Point();
-        pEdgeUser->aInfo.aObj1Line3=Point();
-        pEdgeUser->aInfo.aObj2Line2=Point();
-        pEdgeUser->aInfo.aObj2Line3=Point();
-        pEdgeUser->aInfo.aMiddleLine=Point();
-    } else { // Sonst Dragging eines Linienversatzes
-        SdrEdgeLineCode eLineCode=pEdgeHdl->GetLineCode();
-        Point aDist(rDragStat.GetNow()); aDist-=rDragStat.GetStart();
-        long nDist=pEdgeHdl->IsHorzDrag() ? aDist.X() : aDist.Y();
-        nDist+=pEdgeUser->aInfo.ImpGetLineVersatz(eLineCode,pEdgeUser->aXP);
-        pEdgeUser->aInfo.ImpSetLineVersatz(eLineCode,pEdgeUser->aXP,nDist);
-    }
-    pEdgeUser->aXP=ImpCalcEdgeTrack(pEdgeUser->aXP,pEdgeUser->aCon1,pEdgeUser->aCon2,&pEdgeUser->aInfo);
-    return TRUE;
-}
 
-FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
-{
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
-    if (rDragStat.GetHdl()->GetPointNum()<2) {
-        (*pEdgeTrack)=pEdgeUser->aXP;
-        aEdgeInfo=pEdgeUser->aInfo;
-        if (rDragStat.GetHdl()->GetPointNum()==0) {
-            ConnectToNode(TRUE,pEdgeUser->aCon1.pObj);
-            aCon1=pEdgeUser->aCon1;
-        } else {
-            ConnectToNode(FALSE,pEdgeUser->aCon2.pObj);
-            aCon2=pEdgeUser->aCon2;
+        if(pEdgeTrack)
+        {
+            // change pEdgeTrack to modified position
+            if(bDragA)
+            {
+                (*pEdgeTrack)[0] = aPointNow;
+            }
+            else
+            {
+                (*pEdgeTrack)[sal_uInt16(pEdgeTrack->GetPointCount()-1)] = aPointNow;
+            }
         }
-    } else { // Sonst Dragging eines Linienversatzes
-        (*pEdgeTrack)=pEdgeUser->aXP;
-        aEdgeInfo=pEdgeUser->aInfo;
+
+        // reset edge info's offsets, this is a end point drag
+        aEdgeInfo.aObj1Line2 = Point();
+        aEdgeInfo.aObj1Line3 = Point();
+        aEdgeInfo.aObj2Line2 = Point();
+        aEdgeInfo.aObj2Line3 = Point();
+        aEdgeInfo.aMiddleLine = Point();
     }
+    else
+    {
+        // control point connector drag
+        const ImpEdgeHdl* pEdgeHdl = (ImpEdgeHdl*)rDragStat.GetHdl();
+        const SdrEdgeLineCode eLineCode = pEdgeHdl->GetLineCode();
+        const Point aDist(rDragStat.GetNow() - rDragStat.GetStart());
+        sal_Int32 nDist(pEdgeHdl->IsHorzDrag() ? aDist.X() : aDist.Y());
+
+        nDist += aEdgeInfo.ImpGetLineVersatz(eLineCode, *pEdgeTrack);
+        aEdgeInfo.ImpSetLineVersatz(eLineCode, *pEdgeTrack, nDist);
+    }
+
+    // force recalc EdgeTrack
+    *pEdgeTrack = ImpCalcEdgeTrack(*pEdgeTrack, aCon1, aCon2, &aEdgeInfo);
+    bEdgeTrackDirty=FALSE;
+
+    // save EdgeInfos and mark object as user modified
     ImpSetEdgeInfoToAttr();
-    delete (ImpEdgeUser*)rDragStat.GetUser();
-    rDragStat.SetUser(NULL);
-    bEdgeTrackUserDefined = sal_False;
-    SetRectsDirty();
-    SetChanged();
-    BroadcastObjectChange();
-    if (rDragStat.GetView()!=NULL) {
+    bEdgeTrackUserDefined = false;
+    //SetRectsDirty();
+    //SetChanged();
+
+    if(bOriginalEdgeModified && rDragStat.GetView())
+    {
+        // hide connect marker helper again when original gets changed.
+        // This happens at the end of the interaction
         rDragStat.GetView()->HideConnectMarker();
     }
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    return TRUE;
+
+       return true;
 }
 
-void SdrEdgeObj::BrkDrag(SdrDragStat& rDragStat) const
-{
-    delete (ImpEdgeUser*)rDragStat.GetUser();
-    rDragStat.SetUser(NULL);
-    if (rDragStat.GetView()!=NULL) {
-        rDragStat.GetView()->HideConnectMarker();
-    }
-}
-
-XubString SdrEdgeObj::GetDragComment(const SdrDragStat& /*rDragStat*/, FASTBOOL /*bUndoDragComment*/, FASTBOOL bCreateComment) const
+String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
     XubString aStr;
-    if (!bCreateComment) ImpTakeDescriptionStr(STR_DragEdgeTail,aStr);
+    ImpTakeDescriptionStr(STR_DragEdgeTail,aStr);
     return aStr;
 }
 
-basegfx::B2DPolyPolygon SdrEdgeObj::TakeDragPoly(const SdrDragStat& rDragStat) const
-{
-    ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.GetUser();
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    XPolyPolygon aXPP;
-    aXPP.Insert(pEdgeUser->aXP);
-    return aXPP.getB2DPolyPolygon();
-}
-
-void SdrEdgeObj::ImplAddConnectorOverlay(basegfx::B2DPolyPolygon& rResult, SdrDragMethod& rDragMethod, sal_Bool bTail1, sal_Bool bTail2, sal_Bool bDetail) const
+basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const
 {
+    basegfx::B2DPolygon aResult;
+
     if(bDetail)
     {
         SdrObjConnection aMyCon1(aCon1);
         SdrObjConnection aMyCon2(aCon2);
-        if (bTail1) rDragMethod.MovPoint(aMyCon1.aObjOfs);
-        if (bTail2) rDragMethod.MovPoint(aMyCon2.aObjOfs);
+
+        if (bTail1)
+        {
+            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon1.aObjOfs.X(), aMyCon1.aObjOfs.Y()));
+            aMyCon1.aObjOfs.X() = basegfx::fround(aTemp.getX());
+            aMyCon1.aObjOfs.Y() = basegfx::fround(aTemp.getY());
+        }
+
+        if (bTail2)
+        {
+            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon2.aObjOfs.X(), aMyCon2.aObjOfs.Y()));
+            aMyCon2.aObjOfs.X() = basegfx::fround(aTemp.getX());
+            aMyCon2.aObjOfs.Y() = basegfx::fround(aTemp.getY());
+        }
+
         SdrEdgeInfoRec aInfo(aEdgeInfo);
         XPolygon aXP(ImpCalcEdgeTrack(*pEdgeTrack, aMyCon1, aMyCon2, &aInfo));
 
         if(aXP.GetPointCount())
         {
-            rResult.append(aXP.getB2DPolygon());
+            aResult = aXP.getB2DPolygon();
         }
     }
     else
     {
         Point aPt1((*pEdgeTrack)[0]);
         Point aPt2((*pEdgeTrack)[sal_uInt16(pEdgeTrack->GetPointCount() - 1)]);
-        if (aCon1.pObj && (aCon1.bBestConn || aCon1.bBestVertex)) aPt1 = aCon1.pObj->GetSnapRect().Center();
-        if (aCon2.pObj && (aCon2.bBestConn || aCon2.bBestVertex)) aPt2 = aCon2.pObj->GetSnapRect().Center();
-        if (bTail1) rDragMethod.MovPoint(aPt1);
-        if (bTail2) rDragMethod.MovPoint(aPt2);
 
-        basegfx::B2DPolygon aTemporary;
-        aTemporary.append(basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
-        aTemporary.append(basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
+        if (aCon1.pObj && (aCon1.bBestConn || aCon1.bBestVertex))
+            aPt1 = aCon1.pObj->GetSnapRect().Center();
 
-        rResult.append(aTemporary);
+        if (aCon2.pObj && (aCon2.bBestConn || aCon2.bBestVertex))
+            aPt2 = aCon2.pObj->GetSnapRect().Center();
+
+        if (bTail1)
+        {
+            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
+            aPt1.X() = basegfx::fround(aTemp.getX());
+            aPt1.Y() = basegfx::fround(aTemp.getY());
+        }
+
+        if (bTail2)
+        {
+            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
+            aPt2.X() = basegfx::fround(aTemp.getX());
+            aPt2.Y() = basegfx::fround(aTemp.getY());
+        }
+
+        aResult.append(basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
+        aResult.append(basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
     }
+
+    return aResult;
 }
 
 FASTBOOL SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)

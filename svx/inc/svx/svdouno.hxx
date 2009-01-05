@@ -93,10 +93,15 @@ public:
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
 
     virtual void operator = (const SdrObject& rObj);
-    virtual FASTBOOL HasSpecialDrag() const;
-
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLayer(SdrLayerID nLayer);
+
+    // SpecialDrag support
+    virtual bool hasSpecialDrag() const;
+
+    // FullDrag support
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 
     virtual void TakeObjNameSingul(XubString& rName) const;
     virtual void TakeObjNamePlural(XubString& rName) const;

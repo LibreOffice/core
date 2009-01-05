@@ -88,7 +88,7 @@
 		
 		<Paragraph id="WNT2" os="WNT"><!-- WINDOWS -->
 			<List>
-				<Text id="s2s3sdf2" xml:lang="en-US">Microsoft Windows 2000 (Service Pack 2 or higher), XP, or Vista</Text>
+				<Text id="s2s3sdf2" xml:lang="en-US">Microsoft Windows 2000 (Service Pack 4 or higher), XP, or Vista</Text>
 				<Text id="utzu6" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</Text>
 				<Text id="ghuj67" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</Text>
 				<Text id="jzjtzu6" xml:lang="en-US">370 MB available hard disk space</Text>

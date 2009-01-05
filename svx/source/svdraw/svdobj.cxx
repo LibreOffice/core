@@ -1320,55 +1320,64 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
     return aTmpRect;
 }
 
-FASTBOOL SdrObject::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrObject::hasSpecialDrag() const
 {
-    return FALSE; // noch nicht ganz fertig ...
+    return false;
 }
 
-FASTBOOL SdrObject::BegDrag(SdrDragStat& rDrag) const
+bool SdrObject::supportsFullDrag() const
 {
-    if (bSizProt) return FALSE; // Groesse geschuetzt
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
-    if (eHdl==HDL_UPLFT || eHdl==HDL_UPPER || eHdl==HDL_UPRGT ||
-        eHdl==HDL_LEFT  ||                    eHdl==HDL_RIGHT ||
-        eHdl==HDL_LWLFT || eHdl==HDL_LOWER || eHdl==HDL_LWRGT) return TRUE;
-    return FALSE;
+    return true;
 }
 
-FASTBOOL SdrObject::MovDrag(SdrDragStat& /*rDrag*/) const
+SdrObject* SdrObject::getFullDragClone() const
 {
-    return TRUE;
+    // default uses simple clone
+    return Clone();
 }
 
-FASTBOOL SdrObject::EndDrag(SdrDragStat& rDrag)
+bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const
+{
+    const SdrHdl* pHdl = rDrag.GetHdl();
+
+    SdrHdlKind eHdl = (pHdl == NULL) ? HDL_MOVE : pHdl->GetKind();
+
+    if(eHdl==HDL_UPLFT || eHdl==HDL_UPPER || eHdl==HDL_UPRGT ||
+        eHdl==HDL_LEFT || eHdl==HDL_RIGHT || eHdl==HDL_LWLFT ||
+        eHdl==HDL_LOWER || eHdl==HDL_LWRGT)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool SdrObject::applySpecialDrag(SdrDragStat& rDrag)
 {
     Rectangle aNewRect(ImpDragCalcRect(rDrag));
-    if (aNewRect!=GetSnapRect()) {
-        SetSnapRect(aNewRect);
+
+    if(aNewRect != GetSnapRect())
+    {
+           NbcSetSnapRect(aNewRect);
     }
-    return TRUE;
+
+    return true;
 }
 
-void SdrObject::BrkDrag(SdrDragStat& /*rDrag*/) const
-{
-}
-
-XubString SdrObject::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bDragUndoComment*/, FASTBOOL /*bCreateComment*/) const
+String SdrObject::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
     return String();
 }
 
-basegfx::B2DPolyPolygon SdrObject::TakeDragPoly(const SdrDragStat& rDrag) const
+basegfx::B2DPolyPolygon SdrObject::getSpecialDragPoly(const SdrDragStat& /*rDrag*/) const
 {
-    basegfx::B2DPolyPolygon aRetval;
-    Rectangle aTmpRect(ImpDragCalcRect(rDrag));
-
-    aRetval.append(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom())));
-
-    return aRetval;
+    // default has nothing to add
+    return basegfx::B2DPolyPolygon();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create
 FASTBOOL SdrObject::BegCreate(SdrDragStat& rStat)
 {
@@ -2913,7 +2922,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
-    if( pModel->IsWriter() )
+    if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -2922,7 +2931,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     }
 
     // force MapUnit to 100th mm
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -2983,7 +2992,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // force metric to pool metric
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -3008,7 +3017,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // if anchor is used, make position relative to it
-    if( pModel->IsWriter() )
+    if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -3053,11 +3062,15 @@ sal_Bool SdrObject::IsInDestruction() const
     return sal_False;
 }
 
-// #i34682#
 // return if fill is != XFILL_NONE
-sal_Bool SdrObject::HasFillStyle() const
+bool SdrObject::HasFillStyle() const
 {
     return (((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue() != XFILL_NONE);
+}
+
+bool SdrObject::HasLineStyle() const
+{
+    return (((const XLineStyleItem&)GetObjectItem(XATTR_LINESTYLE)).GetValue() != XLINE_NONE);
 }
 
 

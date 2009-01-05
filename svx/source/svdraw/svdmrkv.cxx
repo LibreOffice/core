@@ -657,7 +657,7 @@ BOOL SdrMarkView::ImpIsFrameHandles() const
         for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && !bFrmHdl; nMarkNum++) {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             const SdrObject* pObj=pM->GetMarkedSdrObj();
-            bFrmHdl=!pObj->HasSpecialDrag();
+            bFrmHdl=!pObj->hasSpecialDrag();
         }
     }
     return bFrmHdl;

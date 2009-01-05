@@ -572,7 +572,9 @@ namespace drawinglayer
 
             if(aBitmap.GetPrefMapMode() != aDestinationMapUnit)
             {
-                aBitmap.SetPrefSize(Application::GetDefaultDevice()->PixelToLogic(aBitmap.GetPrefSize(), aDestinationMapUnit));
+                // #i96237# need to use LogicToLogic, source is not always pixels
+                aBitmap.SetPrefSize(Application::GetDefaultDevice()->LogicToLogic(
+                    aBitmap.GetPrefSize(), aBitmap.GetPrefMapMode(), aDestinationMapUnit));
                 aBitmap.SetPrefMapMode(aDestinationMapUnit);
             }
 

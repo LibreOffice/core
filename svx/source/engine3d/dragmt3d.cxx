@@ -119,7 +119,7 @@ E3dDragMethod::E3dDragMethod (
 |*
 \************************************************************************/
 
-void E3dDragMethod::TakeComment(XubString& /*rStr*/) const
+void E3dDragMethod::TakeSdrDragComment(XubString& /*rStr*/) const
 {
 }
 
@@ -129,7 +129,7 @@ void E3dDragMethod::TakeComment(XubString& /*rStr*/) const
 |*
 \************************************************************************/
 
-FASTBOOL E3dDragMethod::Beg()
+bool E3dDragMethod::BeginSdrDrag()
 {
     if(E3DDRAG_CONSTR_Z == meConstraint)
     {
@@ -162,7 +162,7 @@ FASTBOOL E3dDragMethod::Beg()
 |*
 \************************************************************************/
 
-FASTBOOL E3dDragMethod::End(FASTBOOL /*bCopy*/)
+bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
 {
     const sal_uInt32 nCnt(maGrp.size());
 
@@ -175,7 +175,7 @@ FASTBOOL E3dDragMethod::End(FASTBOOL /*bCopy*/)
     // Alle Transformationen anwenden und UnDo's anlegen
     if(mbMovedAtAll)
     {
-        rView.BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_ROTATE));
+        getSdrDragView().BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_ROTATE));
         sal_uInt32 nOb(0);
 
         for(nOb=0;nOb<nCnt;nOb++)
@@ -183,11 +183,11 @@ FASTBOOL E3dDragMethod::End(FASTBOOL /*bCopy*/)
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
             E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
             rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
-            rView.AddUndo(new E3dRotateUndoAction(rCandidate.mp3DObj->GetModel(),
+            getSdrDragView().AddUndo(new E3dRotateUndoAction(rCandidate.mp3DObj->GetModel(),
                 rCandidate.mp3DObj, rCandidate.maInitTransform,
                 rCandidate.maTransform));
         }
-        rView.EndUndo();
+        getSdrDragView().EndUndo();
     }
 
     return TRUE;
@@ -199,7 +199,7 @@ FASTBOOL E3dDragMethod::End(FASTBOOL /*bCopy*/)
 |*
 \************************************************************************/
 
-void E3dDragMethod::Brk()
+void E3dDragMethod::CancelSdrDrag()
 {
     if(mbMoveFull)
     {
@@ -211,6 +211,7 @@ void E3dDragMethod::Brk()
             {
                 // Transformation restaurieren
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
+                E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                 rCandidate.mp3DObj->SetTransform(rCandidate.maInitTransform);
             }
         }
@@ -224,11 +225,11 @@ void E3dDragMethod::Brk()
 
 /*************************************************************************
 |*
-|* Gemeinsames Mov()
+|* Gemeinsames MoveSdrDrag()
 |*
 \************************************************************************/
 
-void E3dDragMethod::Mov(const Point& /*rPnt*/)
+void E3dDragMethod::MoveSdrDrag(const Point& /*rPnt*/)
 {
     mbMovedAtAll = true;
 }
@@ -240,7 +241,7 @@ void E3dDragMethod::Mov(const Point& /*rPnt*/)
 \************************************************************************/
 
 // for migration from XOR to overlay
-void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList)
+void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager)
 {
     const sal_uInt32 nCnt(maGrp.size());
     basegfx::B2DPolyPolygon aResult;
@@ -248,7 +249,7 @@ void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverl
     for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
     {
         E3dDragMethodUnit& rCandidate = maGrp[nOb];
-        SdrPageView* pPV = rView.GetSdrPageView();
+        SdrPageView* pPV = getSdrDragView().GetSdrPageView();
 
         if(pPV && pPV->HasMarkedObjPageView())
         {
@@ -277,7 +278,7 @@ void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverl
     {
         ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aResult);
         rOverlayManager.add(*pNew);
-        rOverlayList.append(*pNew);
+        addToOverlayObjectList(*pNew);
     }
 }
 
@@ -351,18 +352,18 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
 |*
 \************************************************************************/
 
-void E3dDragRotate::Mov(const Point& rPnt)
+void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 {
     // call parent
-    E3dDragMethod::Mov(rPnt);
+    E3dDragMethod::MoveSdrDrag(rPnt);
 
     if(DragStat().CheckMinMoved(rPnt))
     {
         // Modifier holen
         sal_uInt16 nModifier = 0;
-        if(rView.ISA(E3dView))
+        if(getSdrDragView().ISA(E3dView))
         {
-            const MouseEvent& rLastMouse = ((E3dView&)rView).GetMouseEvent();
+            const MouseEvent& rLastMouse = ((E3dView&)getSdrDragView()).GetMouseEvent();
             nModifier = rLastMouse.GetModifier();
         }
 
@@ -392,7 +393,7 @@ void E3dDragRotate::Mov(const Point& rPnt)
             }
             long nSnap = 0;
 
-            if(!rView.IsRotateAllowed(FALSE))
+            if(!getSdrDragView().IsRotateAllowed(FALSE))
                 nSnap = 90;
 
             if(nSnap != 0)
@@ -446,6 +447,7 @@ void E3dDragRotate::Mov(const Point& rPnt)
 
             if(mbMoveFull)
             {
+                E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                 rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
             }
             else
@@ -464,7 +466,7 @@ void E3dDragRotate::Mov(const Point& rPnt)
 |*
 \************************************************************************/
 
-Pointer E3dDragRotate::GetPointer() const
+Pointer E3dDragRotate::GetSdrDragPointer() const
 {
     return Pointer(POINTER_ROTATE);
 }
@@ -520,7 +522,7 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
     }
 
     // Override wenn IsResizeAtCenter()
-    if(rView.IsResizeAtCenter())
+    if(getSdrDragView().IsResizeAtCenter())
     {
         meWhatDragHdl = HDL_USER;
         maScaleFixPos = maFullBound.Center();
@@ -533,10 +535,10 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
 |*
 \************************************************************************/
 
-void E3dDragMove::Mov(const Point& rPnt)
+void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 {
     // call parent
-    E3dDragMethod::Mov(rPnt);
+    E3dDragMethod::MoveSdrDrag(rPnt);
 
     if(DragStat().CheckMinMoved(rPnt))
     {
@@ -551,9 +553,9 @@ void E3dDragMove::Mov(const Point& rPnt)
             // Modifier holen
             sal_uInt16 nModifier(0);
 
-            if(rView.ISA(E3dView))
+            if(getSdrDragView().ISA(E3dView))
             {
-                const MouseEvent& rLastMouse = ((E3dView&)rView).GetMouseEvent();
+                const MouseEvent& rLastMouse = ((E3dView&)getSdrDragView()).GetMouseEvent();
                 nModifier = rLastMouse.GetModifier();
             }
 
@@ -610,6 +612,7 @@ void E3dDragMove::Mov(const Point& rPnt)
 
                 if(mbMoveFull)
                 {
+                    E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                     rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
                 }
                 else
@@ -696,7 +699,7 @@ void E3dDragMove::Mov(const Point& rPnt)
                 }
 
                 // SHIFT-key used?
-                if(rView.IsOrtho())
+                if(getSdrDragView().IsOrtho())
                 {
                     if(fabs(aScaleVec.getX()) > fabs(aScaleVec.getY()))
                     {
@@ -728,6 +731,7 @@ void E3dDragMove::Mov(const Point& rPnt)
 
                 if(mbMoveFull)
                 {
+                    E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                     rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
                 }
                 else
@@ -749,7 +753,7 @@ void E3dDragMove::Mov(const Point& rPnt)
 |*
 \************************************************************************/
 
-Pointer E3dDragMove::GetPointer() const
+Pointer E3dDragMove::GetSdrDragPointer() const
 {
     return Pointer(POINTER_MOVE);
 }
