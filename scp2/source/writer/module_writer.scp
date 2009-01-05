@@ -50,6 +50,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Lib_Hwpreader,
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
+    gid_File_Lib_Msword,
     gid_File_Lib_Wpft,
     gid_File_Lib_Writerfilter,
     gid_File_Lib_T602Filter,
