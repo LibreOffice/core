@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlexp.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -993,7 +993,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     BOOL bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
     BOOL bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
-    BOOL bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetUnderline() );
+    BOOL bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetLineStyle() );
     BOOL bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // #97650# default is AUTO now
 #if 0
 // keine StyleSheet-Fontangaben: hart fuer jede Zelle

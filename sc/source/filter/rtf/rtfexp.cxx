@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfexp.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,7 +289,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         bResetAttr = TRUE;
         rStrm << sRTF_I;
     }
-    if ( rUnderlineItem.GetUnderline() != UNDERLINE_NONE )
+    if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
         bResetAttr = TRUE;
         rStrm << sRTF_UL;

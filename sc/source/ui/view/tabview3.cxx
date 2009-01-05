@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview3.cxx,v $
- * $Revision: 1.67.22.6 $
+ * $Revision: 1.69.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,6 +233,8 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
+
+    rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
 
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNRIGHT );

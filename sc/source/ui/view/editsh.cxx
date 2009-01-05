@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsh.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -844,7 +844,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ULINE_VAL_DOTTED:
             {
                 FontUnderline eOld = ((const SvxUnderlineItem&) pEditView->
-                                    GetAttribs().Get(EE_CHAR_UNDERLINE)).GetUnderline();
+                                    GetAttribs().Get(EE_CHAR_UNDERLINE)).GetLineStyle();
                 FontUnderline eNew = eOld;
                 switch (nSlot)
                 {
@@ -863,6 +863,16 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 }
                 aSet.Put( SvxUnderlineItem( eNew, EE_CHAR_UNDERLINE ) );
                 lcl_InvalidateUnder( rBindings );
+            }
+            break;
+
+        case SID_ATTR_CHAR_OVERLINE:
+            {
+                FontUnderline eOld = ((const SvxOverlineItem&) pEditView->
+                                    GetAttribs().Get(EE_CHAR_OVERLINE)).GetLineStyle();
+                FontUnderline eNew = ( eOld != UNDERLINE_NONE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
+                aSet.Put( SvxOverlineItem( eNew, EE_CHAR_OVERLINE ) );
+                rBindings.Invalidate( nSlot );
             }
             break;
 
@@ -982,7 +992,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     else
     {
         FontUnderline eUnderline = ((const SvxUnderlineItem&)
-                    aAttribs.Get(EE_CHAR_UNDERLINE)).GetUnderline();
+                    aAttribs.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         USHORT nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {

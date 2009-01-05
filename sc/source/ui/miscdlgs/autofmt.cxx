@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofmt.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -556,6 +556,7 @@ void AutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font
         const SvxWeightItem*      pCTLWeightItem  = (const SvxWeightItem*)    pCurData->GetItem( nIndex, ATTR_CTL_FONT_WEIGHT );
         const SvxPostureItem*     pCTLPostureItem = (const SvxPostureItem*)   pCurData->GetItem( nIndex, ATTR_CTL_FONT_POSTURE );
         const SvxUnderlineItem*   pUnderlineItem  = (const SvxUnderlineItem*) pCurData->GetItem( nIndex, ATTR_FONT_UNDERLINE );
+        const SvxOverlineItem*    pOverlineItem   = (const SvxOverlineItem*)  pCurData->GetItem( nIndex, ATTR_FONT_OVERLINE );
         const SvxCrossedOutItem*  pCrossedOutItem = (const SvxCrossedOutItem*)pCurData->GetItem( nIndex, ATTR_FONT_CROSSEDOUT );
         const SvxContourItem*     pContourItem    = (const SvxContourItem*)   pCurData->GetItem( nIndex, ATTR_FONT_CONTOUR );
         const SvxShadowedItem*    pShadowedItem   = (const SvxShadowedItem*)  pCurData->GetItem( nIndex, ATTR_FONT_SHADOWED );
@@ -573,6 +574,7 @@ void AutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font
 rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Value );
 
         SETONALLFONTS( SetUnderline,    (FontUnderline)pUnderlineItem->GetValue() )
+        SETONALLFONTS( SetOverline,     (FontUnderline)pOverlineItem->GetValue() )
         SETONALLFONTS( SetStrikeout,    (FontStrikeout)pCrossedOutItem->GetValue() )
         SETONALLFONTS( SetOutline,      pContourItem->GetValue() )
         SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )

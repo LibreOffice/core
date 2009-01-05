@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: patattr.cxx,v $
- * $Revision: 1.34.32.1 $
+ * $Revision: 1.34.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,6 +250,7 @@ void ScPatternAttr::GetFont(
     FontWeight eWeight;
     FontItalic eItalic;
     FontUnderline eUnder;
+    FontUnderline eOver;
     BOOL bWordLine;
     FontStrikeout eStrike;
     BOOL bOutline;
@@ -305,6 +306,10 @@ void ScPatternAttr::GetFont(
             pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
         eUnder = (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue();
 
+        if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
+        eOver = (FontUnderline)((const SvxOverlineItem*)pItem)->GetValue();
+
         if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
         bWordLine = ((const SvxWordLineModeItem*)pItem)->GetValue();
@@ -344,6 +349,8 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( nPostureId )).GetValue();
         eUnder = (FontUnderline)((const SvxUnderlineItem&)
                         rItemSet.Get( ATTR_FONT_UNDERLINE )).GetValue();
+        eOver = (FontUnderline)((const SvxOverlineItem&)
+                        rItemSet.Get( ATTR_FONT_OVERLINE )).GetValue();
         bWordLine = ((const SvxWordLineModeItem&)
                         rItemSet.Get( ATTR_FONT_WORDLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
@@ -472,6 +479,7 @@ void ScPatternAttr::GetFont(
     rFont.SetWeight( eWeight );
     rFont.SetItalic( eItalic );
     rFont.SetUnderline( eUnder );
+    rFont.SetOverline( eOver );
     rFont.SetWordLineMode( bWordLine );
     rFont.SetStrikeout( eStrike );
     rFont.SetOutline( bOutline );
@@ -503,6 +511,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
     SvxUnderlineItem aUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
+    SvxOverlineItem aOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE);
     BOOL            bWordLine;
     FontStrikeout   eStrike;
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
@@ -568,6 +577,10 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rSrcSet.Get( ATTR_FONT_UNDERLINE );
         aUnderlineItem = *(const SvxUnderlineItem*)pItem;
+
+        if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rSrcSet.Get( ATTR_FONT_OVERLINE );
+        aOverlineItem = *(const SvxOverlineItem*)pItem;
 
         if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rSrcSet.Get( ATTR_FONT_WORDLINE );
@@ -639,6 +652,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
         eCtlItalic = (FontItalic)((const SvxPostureItem&)
                         rSrcSet.Get( ATTR_CTL_FONT_POSTURE )).GetValue();
         aUnderlineItem = (const SvxUnderlineItem&) rSrcSet.Get( ATTR_FONT_UNDERLINE );
+        aOverlineItem  = (const SvxOverlineItem&) rSrcSet.Get( ATTR_FONT_OVERLINE );
         bWordLine = ((const SvxWordLineModeItem&)
                         rSrcSet.Get( ATTR_FONT_WORDLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
@@ -694,6 +708,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SvxWeightItem ( eCjkWeight,   EE_CHAR_WEIGHT_CJK ) );
     rEditSet.Put( SvxWeightItem ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
     rEditSet.Put( aUnderlineItem );
+    rEditSet.Put( aOverlineItem );
     rEditSet.Put( SvxWordLineModeItem( bWordLine,   EE_CHAR_WLM ) );
     rEditSet.Put( SvxCrossedOutItem( eStrike,       EE_CHAR_STRIKEOUT ) );
     rEditSet.Put( SvxPostureItem    ( eItalic,      EE_CHAR_ITALIC ) );
@@ -759,9 +774,11 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         rDestSet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_CTL_FONT_WEIGHT) );
 
-    // SvxUnderlineItem contains enum and color
+    // SvxTextLineItem contains enum and color
     if (rEditSet.GetItemState(EE_CHAR_UNDERLINE,TRUE,&pItem) == SFX_ITEM_SET)
         rDestSet.Put( SvxUnderlineItem(UNDERLINE_NONE,ATTR_FONT_UNDERLINE) = *(const SvxUnderlineItem*)pItem );
+    if (rEditSet.GetItemState(EE_CHAR_OVERLINE,TRUE,&pItem) == SFX_ITEM_SET)
+        rDestSet.Put( SvxOverlineItem(UNDERLINE_NONE,ATTR_FONT_OVERLINE) = *(const SvxOverlineItem*)pItem );
     if (rEditSet.GetItemState(EE_CHAR_WLM,TRUE,&pItem) == SFX_ITEM_SET)
         rDestSet.Put( SvxWordLineModeItem( ((const SvxWordLineModeItem*)pItem)->GetValue(),
                         ATTR_FONT_WORDLINE) );

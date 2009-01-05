@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatsh.cxx,v $
- * $Revision: 1.41.24.1 $
+ * $Revision: 1.41.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1224,13 +1224,13 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     }
                     else
                     {
-                        SvxUnderlineItem    aUnderline( (const SvxUnderlineItem&)
+                        SvxUnderlineItem aUnderline( (const SvxUnderlineItem&)
                                                         pAttrs->GetItem(
                                                             ATTR_FONT_UNDERLINE ) );
-                        eUnderline = (UNDERLINE_NONE != aUnderline.GetUnderline())
+                        eUnderline = (UNDERLINE_NONE != aUnderline.GetLineStyle())
                                     ? UNDERLINE_NONE
                                     : UNDERLINE_SINGLE;
-                        aUnderline.SetUnderline( eUnderline );
+                        aUnderline.SetLineStyle( eUnderline );
                         pTabViewShell->ApplyAttr( aUnderline );
                         pNewSet->Put( aUnderline,aUnderline.Which() );
                     }
@@ -1245,7 +1245,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ULINE_VAL_DOTTED:
                 {
                     FontUnderline eOld = ((const SvxUnderlineItem&)
-                                            pAttrs->GetItem(ATTR_FONT_UNDERLINE)).GetUnderline();
+                                            pAttrs->GetItem(ATTR_FONT_UNDERLINE)).GetLineStyle();
                     FontUnderline eNew = eOld;
                     switch (nSlot)
                     {
@@ -1447,6 +1447,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
         switch ( nSlot )
         {
+            case SID_ATTR_CHAR_OVERLINE:
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_ALIGN_LINEBREAK:
             case SID_ATTR_CHAR_COLOR:
@@ -1751,7 +1752,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     else
     {
         FontUnderline eUnderline = ((const SvxUnderlineItem&)
-                    rAttrSet.Get(ATTR_FONT_UNDERLINE)).GetUnderline();
+                    rAttrSet.Get(ATTR_FONT_UNDERLINE)).GetLineStyle();
         USHORT nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {

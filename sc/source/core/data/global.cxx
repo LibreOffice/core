@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.cxx,v $
- * $Revision: 1.55.30.2 $
+ * $Revision: 1.56.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -260,6 +260,7 @@ BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CJK_FONT_POSTURE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CTL_FONT_POSTURE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_UNDERLINE )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_OVERLINE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CROSSEDOUT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CONTOUR )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_SHADOWED )

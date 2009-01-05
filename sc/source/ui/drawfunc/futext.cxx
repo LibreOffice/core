@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futext.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,7 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
+    rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docpool.hxx,v $
- * $Revision: 1.10.32.1 $
+ * $Revision: 1.10.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@ class ScDocumentPool: public SfxItemPool
     static USHORT*  pVersionMap8;
     static USHORT*  pVersionMap9;
     static USHORT*  pVersionMap10;
+    static USHORT*  pVersionMap11;
 
 public:
             ScDocumentPool( SfxItemPool* pSecPool = NULL, BOOL bLoadRefCounts = FALSE );

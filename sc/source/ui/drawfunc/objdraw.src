@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objdraw.src,v $
- * $Revision: 1.72 $
+ * $Revision: 1.72.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,10 @@
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_OVERLINE\
                 };\
                 MenuItem\
                 {\
