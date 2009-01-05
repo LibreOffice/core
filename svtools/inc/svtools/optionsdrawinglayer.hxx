@@ -168,12 +168,19 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
         void SetMaximumPaperTopMargin(sal_uInt32 nNew);
         void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
 
+        // #i95644# helper to check if AA is allowed on this system. Currently, for WIN its disabled
+        // and OutDevSupport_TransparentRect is checked (this  hits XRenderExtension, e.g.
+        // currently for SunRay as long as not supported there)
+        sal_Bool IsAAPossibleOnThisSystem() const;
+
         // primitives
         sal_Bool    IsAntiAliasing() const;
+        sal_Bool    IsSolidDragCreate() const;
         sal_uInt32  GetQuadratic3DRenderLimit() const;
         sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
         void        SetAntiAliasing( sal_Bool bState );
+        void        SetSolidDragCreate( sal_Bool bState );
            void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
            void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 

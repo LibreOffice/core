@@ -102,7 +102,16 @@ typedef std::vector< sal_Int32 > Int32Vector;
 class VCL_DLLPUBLIC SalGraphics
 {
     int                     m_nLayout; // 0: mirroring off, 1: mirror x-axis
+
+protected:
+    // flags which hold the SetAntialiasing() value from OutputDevice
+    bool                    m_bAntiAliasB2DDraw;
+
 public:
+    // get/set AA
+    void setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
+    bool getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
+
     SalGraphics();
     virtual ~SalGraphics();
 

@@ -5351,6 +5351,11 @@ void OutputDevice::SetAntialiasing( USHORT nMode )
     {
         mnAntialiasing = nMode;
         mbInitFont = TRUE;
+
+        if(mpGraphics)
+        {
+            mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
+        }
     }
 
     if( mpAlphaVDev )

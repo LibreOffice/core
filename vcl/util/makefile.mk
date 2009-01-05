@@ -229,7 +229,8 @@ SHL1STDLIBS += $(PSPLIB)
 
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \
-               $(MSIMG32LIB)        \
+               $(GDIPLUSLIB)	  \
+               $(MSIMG32LIB)      \
                $(WINSPOOLLIB)     \
                $(OLE32LIB)        \
                $(SHELL32LIB)      \

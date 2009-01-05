@@ -167,6 +167,10 @@ public:
     BOOL                    mbScreen;           // is Screen compatible
     bool                    mbXORMode;          // _every_ output with RasterOp XOR
 
+    // remember RGB values for SetLineColor/SetFillColor
+    SalColor                maLineColor;
+    SalColor                maFillColor;
+
     HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:

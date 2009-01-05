@@ -74,7 +74,7 @@ namespace basegfx
             the number of clip planes hit within the
             getCohenSutherlandClipFlags() method.
          */
-        sal_uInt32 getNumberOfClipPlanes( sal_uInt32 nFlags )
+        inline sal_uInt32 getNumberOfClipPlanes( sal_uInt32 nFlags )
         {
             // classic bit count algo, see e.g. Reingold, Nievergelt,
             // Deo: Combinatorial Algorithms, Theory and Practice,

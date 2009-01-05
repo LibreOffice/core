@@ -81,7 +81,8 @@ SalFrameGeometry SalFrame::GetGeometry()
 // ----------------------------------------------------------------------------
 
 SalGraphics::SalGraphics()
-        : m_nLayout( 0 )
+:   m_nLayout( 0 ),
+    m_bAntiAliasB2DDraw(false)
 {
     // read global RTL settings
     if( Application::GetSettings().GetLayoutRTL() )

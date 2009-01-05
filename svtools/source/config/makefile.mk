@@ -68,7 +68,6 @@ LIB1OBJFILES=  \
     $(SLO)$/inetoptions.obj				\
     $(SLO)$/menuoptions.obj				\
     $(SLO)$/dynamicmenuoptions.obj		\
-    $(SLO)$/options3d.obj				\
     $(SLO)$/optionsdrawinglayer.obj		\
     $(SLO)$/fontoptions.obj				\
     $(SLO)$/addxmltostorageoptions.obj	\

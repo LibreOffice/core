@@ -462,6 +462,14 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         }
 
         ::basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
+
+        if(bPixelSnap)
+        {
+            // snap device coordinates to full pixels
+            aPoint.setX( basegfx::fround( aPoint.getX() ) );
+            aPoint.setY( basegfx::fround( aPoint.getY() ) );
+        }
+
         if( bLineDraw )
             aPoint += aHalfPointOfs;
 
@@ -554,7 +562,7 @@ bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPol
 
     if( !mxClipPath )
         mxClipPath = CGPathCreateMutable();
-    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, false, false );
+    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, !getAntiAliasB2DDraw(), false );
     return true;
 }
 
@@ -906,7 +914,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, true, false, IsPenVisible() );
+        AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
     CGContextSaveGState( mrContext );
     CGContextBeginPath( mrContext );
@@ -952,7 +960,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), false, true );
+    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
     CGContextSaveGState( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );

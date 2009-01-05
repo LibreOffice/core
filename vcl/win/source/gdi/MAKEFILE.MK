@@ -54,6 +54,7 @@ CFLAGS += -DWINVER=0x0400
 SLOFILES=   $(SLO)$/salgdi.obj   \
             $(SLO)$/salgdi2.obj  \
             $(SLO)$/salgdi3.obj  \
+            $(SLO)$/salgdi_gdiplus.obj  \
             $(SLO)$/salvd.obj    \
             $(SLO)$/salprn.obj   \
             $(SLO)$/salbmp.obj	 \

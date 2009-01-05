@@ -208,6 +208,13 @@ namespace basegfx
             mfZ = basegfx::clamp(mfZ, 0.0, 1.0);
         }
 
+        void invert()
+        {
+            mfX = 1.0 - mfX;
+            mfY = 1.0 - mfY;
+            mfZ = 1.0 - mfZ;
+        }
+
         static const BColor& getEmptyBColor()
         {
             return (const BColor&) ::basegfx::B3DTuple::getEmptyTuple();

@@ -1183,9 +1183,18 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             {
                 const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
                 const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
+
                 // convert the B2DPoint into XRENDER units
-                aNewXPF.x = XDoubleToFixed( aPoint.getX() );
-                aNewXPF.y = XDoubleToFixed( aPoint.getY() );
+                if(getAntiAliasB2DDraw())
+                {
+                    aNewXPF.x = XDoubleToFixed( aPoint.getX() );
+                    aNewXPF.y = XDoubleToFixed( aPoint.getY() );
+                }
+                else
+                {
+                    aNewXPF.x = XDoubleToFixed( basegfx::fround( aPoint.getX() ) );
+                    aNewXPF.y = XDoubleToFixed( basegfx::fround( aPoint.getY() ) );
+                }
 
                 // check if enough data is available for a new HalfTrapezoid
                 if( nPointIdx == 0 )

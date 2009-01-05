@@ -135,6 +135,9 @@ public:
     TempFontItem*           mpTempFontItem;
     BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
 
+    // for GdiPlus GdiplusStartup/GdiplusShutdown
+    ULONG_PTR               gdiplusToken;
+
     std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
     std::map< UINT,USHORT > maVKMap;      // map some dynamic VK_* entries
 };

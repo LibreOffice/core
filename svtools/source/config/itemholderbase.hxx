@@ -88,7 +88,6 @@ enum EItem
     E_MODULEOPTIONS                 ,   //
 
     E_OPTIONSDLGOPTIONS             ,   //
-    E_OPTIONS3D                     ,   //
 
     E_PATHOPTIONS                   ,   //
     E_PRINTOPTIONS                  ,   // 2

@@ -186,9 +186,9 @@ fprintf(stderr,"OD::DT( fT=%f, bAA=%d)\n",fTransparency,mnAntialiasing);//######
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
+        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
-#ifdef UNX
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
@@ -209,7 +209,6 @@ fprintf(stderr,"OD::DT( fT=%f, bAA=%d)\n",fTransparency,mnAntialiasing);//######
 #endif
             return;
         }
-#endif
     }
 
     // fallback to old polygon drawing if needed
@@ -265,7 +264,12 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+#ifdef WIN32
+        // workaround bad dithering on remote displaying when using GDI+ with toolbar buttoin hilighting
+        && !rPolyPoly.IsRect()
+#endif
+        )
     {
         // prepare the graphics device
         if( mbInitClipRegion )

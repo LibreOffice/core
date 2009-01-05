@@ -62,8 +62,16 @@ namespace vclcanvas
         mpBackBuffer.reset( new BackBuffer( rOutDev ));
         mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
 
-        mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW |
-                                                   mpBackBuffer->getOutDev().GetAntialiasing() );
+        // #i95645#
+#if defined( QUARTZ )
+        // use AA on VCLCanvas for Mac
+        mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpBackBuffer->getOutDev().GetAntialiasing() );
+#else
+        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+        // is not required to do AA. It would need to be adapted to use it correctly
+        // (especially gradient painting). This will need extra work.
+        mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
+#endif
     }
 
     ::sal_Int32 SpriteDeviceHelper::createBuffers( ::sal_Int32 nBuffers )

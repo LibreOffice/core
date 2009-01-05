@@ -791,6 +791,7 @@ int OutputDevice::ImplGetGraphics() const
     if ( mpGraphics )
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
+        mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
         return TRUE;
     }
 
@@ -2735,15 +2736,14 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
+        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
-#ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
         aB2DPP.transform( aTransform );
         if( mpGraphics->DrawPolyPolygon( aB2DPP, 0.0, this ) )
             return;
-#endif
     }
 
     // fallback to old polygon drawing if needed
