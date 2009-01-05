@@ -38,9 +38,9 @@
 #include "macros.hxx"
 #include "ObjectIdentifier.hxx"
 #include <rtl/math.hxx>
-//header for class SdrPageView
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //.............................................................................
 namespace chart
@@ -85,37 +85,23 @@ DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
 DragMethod_PieSegment::~DragMethod_PieSegment()
 {
 }
-void DragMethod_PieSegment::TakeComment(String& rStr) const
+void DragMethod_PieSegment::TakeSdrDragComment(String& rStr) const
 {
     rStr = String( SchResId( STR_STATUS_PIE_SEGMENT_EXPLODED ) );
     rStr.SearchAndReplaceAscii( "%PERCENTVALUE", String::CreateFromInt32( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
 }
-void DragMethod_PieSegment::MovPoint(Point& rPnt)
-{
-    rPnt.X()+=DragStat().GetDX();
-    rPnt.Y()+=DragStat().GetDY();
-}
-FASTBOOL DragMethod_PieSegment::Beg()
+bool DragMethod_PieSegment::BeginSdrDrag()
 {
     Point aStart( DragStat().GetStart() );
     m_aStartVector = B2DVector( aStart.X(), aStart.Y() );
-
-    SdrObject* pObj = m_rDrawViewWrapper.getSelectedObject();
-    SdrPageView* pPV = m_rDrawViewWrapper.GetPageView();
-    if( pObj && pPV )
-    {
-        pPV->setDragPoly0(pObj->TakeXorPoly());
-        pPV->setDragPoly(pPV->getDragPoly0());
-    }
     Show();
     return true;
 }
-void DragMethod_PieSegment::Mov(const Point& rPnt)
+void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
 {
     if( DragStat().CheckMinMoved(rPnt) )
     {
         //calculate new offset
-
         B2DVector aShiftVector(( B2DVector( rPnt.X(), rPnt.Y() ) - m_aStartVector ));
         m_fAdditionalOffset = m_aDragDirection.scalar( aShiftVector )/m_fDragRange; // projection
 
@@ -130,12 +116,11 @@ void DragMethod_PieSegment::Mov(const Point& rPnt)
         {
             Hide();
             DragStat().NextMove( aNewPos );
-            MovAllPoints();
             Show();
         }
     }
 }
-FASTBOOL DragMethod_PieSegment::End(FASTBOOL /* bCopy */)
+bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
 
@@ -156,6 +141,25 @@ FASTBOOL DragMethod_PieSegment::End(FASTBOOL /* bCopy */)
     }
 
     return true;
+}
+basegfx::B2DHomMatrix DragMethod_PieSegment::getCurrentTransformation()
+{
+    basegfx::B2DHomMatrix aRetval;
+
+    aRetval.translate(DragStat().GetDX(), DragStat().GetDY());
+
+    return aRetval;
+}
+void DragMethod_PieSegment::createSdrDragEntries()
+{
+    SdrObject* pObj = m_rDrawViewWrapper.getSelectedObject();
+    SdrPageView* pPV = m_rDrawViewWrapper.GetPageView();
+
+    if( pObj && pPV )
+    {
+        const basegfx::B2DPolyPolygon aNewPolyPolygon(pObj->TakeXorPoly());
+        addSdrDragEntry(new SdrDragEntryPolyPolygon(aNewPolyPolygon));
+    }
 }
 //.............................................................................
 } //namespace chart

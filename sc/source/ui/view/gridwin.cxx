@@ -5477,9 +5477,6 @@ void ScGridWindow::UpdateDragRectOverlay()
         if(pOverlayManager)
         {
             ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
-
             Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -5531,9 +5528,6 @@ void ScGridWindow::UpdateHeaderOverlay()
         if(pOverlayManager)
         {
             ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
-
             Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -5608,9 +5602,6 @@ void ScGridWindow::UpdateShrinkOverlay()
         if(pOverlayManager)
         {
             ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
-
             Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -5674,6 +5665,10 @@ namespace sdr
 
         void OverlayObjectCell::drawGeometry(OutputDevice& rOutputDevice)
         {
+            // safe original AA and switch off for selection
+            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
+            rOutputDevice.SetAntialiasing(0);
+
             // set colors
             rOutputDevice.SetLineColor();
             rOutputDevice.SetFillColor(getBaseColor());
@@ -5726,32 +5721,11 @@ namespace sdr
                         case SC_OVERLAY_INVERT :
                         {
                             rOutputDevice.DrawRect( aRectangle );
-
-                            // if(OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
-                            // {
-                            //     ((Window&)rOutputDevice).Invert(aRectangle, INVERT_HIGHLIGHT);
-                            // }
-
-                            break;
-                        }
-                        case SC_OVERLAY_HATCH :
-                        {
-                            rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
                             break;
                         }
                         case SC_OVERLAY_SOLID :
                         {
                             rOutputDevice.DrawRect(aRectangle);
-                            break;
-                        }
-                        case SC_OVERLAY_TRANSPARENT :
-                        {
-                            rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
-                            break;
-                        }
-                        case SC_OVERLAY_LIGHT_TRANSPARENT :
-                        {
-                            rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 75);
                             break;
                         }
                         default:
@@ -5762,8 +5736,13 @@ namespace sdr
                 }
 
                 if ( mePaintType == SC_OVERLAY_INVERT )
+                {
                     rOutputDevice.Pop();
+                }
             }
+
+            // restore original AA
+            rOutputDevice.SetAntialiasing(nOriginalAA);
         }
 
         void OverlayObjectCell::createBaseRange(OutputDevice& /* rOutputDevice */)
