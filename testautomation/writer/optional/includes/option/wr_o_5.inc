@@ -47,15 +47,17 @@ testcase tLanguageSettingsComplexTextLayout
 
     Dim i as integer
     Dim j as integer
+    Dim iNumeralsCounter as integer
+    Dim iNumeralsCount as integer
     Dim bAsianLanguage as boolean
     Dim bCTLLanguage as boolean
     Dim sCTLLan() as string
     Dim sCurrentDocumentLanguage as string
     Dim sCurrentCTLLanguage as string
     Dim bSequenceChecking as boolean
-	if Val(mid$(gMinor, 2, Len(gMinor))) < 141 then
-        goto endsub
-    end if
+'	if Val(mid$(gMinor, 2, Len(gMinor))) < 141 then
+'        goto endsub
+'    end if
     '/// Open new writerdocument
     Call hNewDocument
     '/// Activate Asian support
@@ -101,7 +103,6 @@ testcase tLanguageSettingsComplexTextLayout
                 bSequenceChecking = TRUE
                 exit for
             end if
-
         next j
 
 		Select Case bSequenceChecking
@@ -127,16 +128,40 @@ testcase tLanguageSettingsComplexTextLayout
 					QAErrorlog "'Type And Replace' should not checked for language: " & sCurrentDocumentLanguage
 				end if
 		end select
-
+        
+        'Get the number of Numerals-entries.
+        iNumeralsCount = Numerals.GetItemCount
+        
         Kontext "ExtrasOptionenDlg"
 		ExtrasOptionenDlg.Ok
         ToolsOptions
         Call hToolsOptions ("LanguageSettings","Languages")
         Kontext "TabSprachen"
     next i
-
+    
     Kontext "ExtrasOptionenDlg"
 	if ExtrasOptionenDlg.Exists then ExtrasOptionenDlg.Ok
+    
+    printlog "Check the Numerals-menu."
+    ToolsOptions
+    Call hToolsOptions ("LanguageSettings","ComplexTextLayout")
+    
+    Printlog " Select every entry in the list, then press OK to close the dialogue, then open it again and check if the value got saved."
+    for iNumeralsCounter = 1 to iNumeralsCount
+        Numerals.Select iNumeralsCounter
+        Printlog " Numerals nr: " + iNumeralsCounter + " = " + Numerals.GetSelText
+        
+        'Press ok, and open the dialogue again.
+        Kontext "ExtrasOptionenDlg"
+	    if ExtrasOptionenDlg.Exists then ExtrasOptionenDlg.Ok
+        ToolsOptions
+        Call hToolsOptions ("LanguageSettings","ComplexTextLayout")
+        
+        if Numerals.GetSelIndex <> iNumeralsCounter then Warnlog "The Numeral-Entry number: " + iNumeralsCounter + " didn't get saved when pressing OK in the FormatCharacter-dialogue."
+    next iNumeralsCounter
+    
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.Ok
     
     '/// Choose Thai as CTL language
     ToolsOptions
