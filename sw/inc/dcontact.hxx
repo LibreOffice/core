@@ -379,6 +379,10 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual SdrLayerID GetLayer() const;
         virtual void NbcSetLayer(SdrLayerID nLayer);
         virtual void SetLayer(SdrLayerID nLayer);
+
+        // FullDrag support
+        virtual bool supportsFullDrag() const;
+        virtual SdrObject* getFullDragClone() const;
 };
 
 // OD 26.06.2003 #108784#

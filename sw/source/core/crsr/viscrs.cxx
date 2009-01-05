@@ -65,6 +65,15 @@
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
 #endif
 
+// #i75172#
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/hatch.hxx>
+
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
 //Damit beim ShowCrsr nicht immer wieder die gleiche Size teuer ermittelt
@@ -515,23 +524,8 @@ void SwVisCrsr::_SetPosAndShow()
     }
 }
 
-
-/*  */
-// ------ Ab hier Klassen / Methoden fuer die Selectionen -------
-
-// #i75172#
-#include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdrpaintwindow.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcl/hatch.hxx>
-
 //////////////////////////////////////////////////////////////////////////////
 // #i75172#
-
-enum SwOverlayType { SW_OVERLAY_INVERT, SW_OVERLAY_HATCH, SW_OVERLAY_TRANSPARENT, SW_OVERLAY_LIGHT_TRANSPARENT };
 
 namespace sdr
 {
@@ -567,6 +561,10 @@ namespace sdr
 
         void OverlaySwSelPaintRects::drawGeometry(OutputDevice& rOutputDevice)
         {
+            // safe original AA and switch off for selection
+            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
+            rOutputDevice.SetAntialiasing(0);
+
             rOutputDevice.SetLineColor();
             rOutputDevice.SetFillColor(getBaseColor());
 
@@ -580,30 +578,54 @@ namespace sdr
             for(sal_uInt32 a(0); a < maRanges.size(); a++)
             {
                 const basegfx::B2DRange& rRange(maRanges[a]);
-                const Rectangle aRectangle(
-                    basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
-                    basegfx::fround(rRange.getMaxX()), basegfx::fround(rRange.getMaxY()));
 
                 switch(mePaintType)
                 {
                     default: // SW_OVERLAY_INVERT
                     {
-                        rOutputDevice.DrawRect( aRectangle );
-                        break;
-                    }
-                    case SW_OVERLAY_HATCH :
-                    {
-                        rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
+                        const Rectangle aRectangle(
+                            basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
+                            basegfx::fround(rRange.getMaxX()) - 1, basegfx::fround(rRange.getMaxY()) - 1);
+                        Rectangle aPntRect(aRectangle);
+
+                        // avoid single-pixel overlaps
+                        Rectangle aCalcRect( aPntRect );
+                        bool bChange(false);
+
+                        ++aCalcRect.Bottom();
+                        ++aCalcRect.Right();
+
+                        aPntRect = rOutputDevice.LogicToPixel( aPntRect );
+                        aCalcRect = rOutputDevice.LogicToPixel( aCalcRect );
+
+                        if(aPntRect.Bottom() == aCalcRect.Bottom())
+                        {
+                            --aPntRect.Bottom();
+                            bChange = true;
+                        }
+
+                        if(aPntRect.Right() == aCalcRect.Right())
+                        {
+                            --aPntRect.Right();
+                            bChange = true;
+                        }
+
+                        if(bChange)
+                        {
+                            aPntRect = rOutputDevice.PixelToLogic(aPntRect);
+                        }
+                        else
+                        {
+                            aPntRect = aRectangle;
+                        }
+
+                        rOutputDevice.DrawRect(aPntRect);
                         break;
                     }
                     case SW_OVERLAY_TRANSPARENT :
                     {
-                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
-                        break;
-                    }
-                    case SW_OVERLAY_LIGHT_TRANSPARENT :
-                    {
-                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 80);
+                        const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
+                        rOutputDevice.DrawTransparent(basegfx::B2DPolyPolygon(aPolygon), 0.5);
                         break;
                     }
                 }
@@ -613,6 +635,9 @@ namespace sdr
             {
                 rOutputDevice.Pop();
             }
+
+            // restore original AA
+            rOutputDevice.SetAntialiasing(nOriginalAA);
         }
 
         void OverlaySwSelPaintRects::createBaseRange(OutputDevice& /*rOutputDevice*/)
@@ -631,17 +656,6 @@ namespace sdr
             maRanges(rRanges),
             mePaintType(eType)
         {
-#ifdef DBG_UTIL
-            // Here is a debugger test method for checking the new cursor modes.
-            // Default is SW_OVERLAY_INVERT, of course...
-            static sal_uInt16 nChangeForTest(0);
-            switch(nChangeForTest) {
-                default: mePaintType=SW_OVERLAY_INVERT; break;
-                case 1: mePaintType=SW_OVERLAY_HATCH; break;
-                case 2: mePaintType=SW_OVERLAY_TRANSPARENT; break;
-                case 3: mePaintType=SW_OVERLAY_LIGHT_TRANSPARENT; break;
-            }
-#endif
         }
 
         OverlaySwSelPaintRects::~OverlaySwSelPaintRects()
@@ -697,13 +711,6 @@ namespace sdr
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
-// #i75172#
-// Following this flag, a lot of SwSelPaintRects may be removed in the future.
-// This includes ::Invalidate, all ::Paint and the derivated implementations.
-// I leave them for now to be able to follow old behaviour for some time.
-static bool bTestOverlay(true);
-
-//////////////////////////////////////////////////////////////////////////////
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects( 0 ),
@@ -729,12 +736,9 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
     rSwap.Insert(&aTempRects, 0);
 
     // #i75172# also swap mpCursorOverlay
-    if(bTestOverlay)
-    {
-        sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
-        setCursorOverlay(rSwap.getCursorOverlay());
-        rSwap.setCursorOverlay(pTempOverlay);
-    }
+    sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
+    setCursorOverlay(rSwap.getCursorOverlay());
+    rSwap.setCursorOverlay(pTempOverlay);
 }
 
 void SwSelPaintRects::Hide()
@@ -745,140 +749,63 @@ void SwSelPaintRects::Hide()
         mpCursorOverlay = 0;
     }
 
-    for( USHORT n = 0; n < Count(); ++n )
-        Paint( (*this)[n] );
     SwRects::Remove( 0, Count() );
 }
 
 void SwSelPaintRects::Show()
 {
-    if(bTestOverlay)
+    SdrView* pView = (SdrView*)pCShell->GetDrawView();
+
+    if(pView && pView->PaintWindowCount())
     {
-        SdrView* pView = (SdrView*)pCShell->GetDrawView();
-
-        if(pView && pView->PaintWindowCount())
-        {
-            SwRects::Remove( 0, SwRects::Count() );
-            FillRects();
-            std::vector< basegfx::B2DRange > aNewRanges;
-            Window* pWin = GetShell()->GetWin();
-
-            for(sal_uInt16 a(0); a < Count(); a++)
-            {
-                const SwRect aNextRect((*this)[a]);
-                Rectangle aPntRect(aNextRect.SVRect());
-
-                if(pWin)
-                {
-                    // avoid single-pixel overlaps
-                    Rectangle aCalcRect( aPntRect );
-                    bool bChange(false);
-
-                    ++aCalcRect.Bottom();
-                    ++aCalcRect.Right();
-
-                    aPntRect = pWin->LogicToPixel( aPntRect );
-                    aCalcRect = pWin->LogicToPixel( aCalcRect );
-
-                    if(aPntRect.Bottom() == aCalcRect.Bottom())
-                    {
-                        --aPntRect.Bottom();
-                        bChange = true;
-                    }
-
-                    if(aPntRect.Right() == aCalcRect.Right())
-                    {
-                        --aPntRect.Right();
-                        bChange = true;
-                    }
-
-                    if(bChange)
-                    {
-                        aPntRect = pWin->PixelToLogic(aPntRect);
-                    }
-                    else
-                    {
-                        aPntRect = aNextRect.SVRect();
-                    }
-                }
-
-                aNewRanges.push_back(basegfx::B2DRange(aPntRect.Left(), aPntRect.Top(), aPntRect.Right(), aPntRect.Bottom()));
-            }
-
-            if(mpCursorOverlay)
-            {
-                if(aNewRanges.size())
-                {
-                    static_cast< sdr::overlay::OverlaySwSelPaintRects* >(mpCursorOverlay)->setB2DRanges(aNewRanges);
-                }
-                else
-                {
-                    delete mpCursorOverlay;
-                    mpCursorOverlay = 0;
-                }
-            }
-            else if(Count())
-            {
-                SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-                sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
-
-                if(pTargetOverlay)
-                {
-                    Color aHighlight(COL_BLACK);
-                    const OutputDevice *pOut = GetShell()->GetOut();
-
-                    if(pOut)
-                    {
-                        aHighlight = pOut->GetSettings().GetStyleSettings().GetHighlightColor();
-                    }
-
-                    mpCursorOverlay = new sdr::overlay::OverlaySwSelPaintRects(aHighlight, aNewRanges, SW_OVERLAY_INVERT);
-                    pTargetOverlay->add(*mpCursorOverlay);
-                }
-            }
-        }
-    }
-    else
-    {
-        if( pCShell->GetDrawView() )
-        {
-            SdrView* pView = (SdrView*)pCShell->GetDrawView();
-            pView->SetAnimationEnabled( !pCShell->IsSelection() );
-        }
-
-        SwRects aTmp;
-        aTmp.Insert( this, 0 );     // Kopie vom Array
-
         SwRects::Remove( 0, SwRects::Count() );
         FillRects();
+        std::vector< basegfx::B2DRange > aNewRanges;
 
-        if( Count() || aTmp.Count() )
+        for(sal_uInt16 a(0); a < Count(); a++)
         {
-            SwRegionRects aReg( pCShell->VisArea() );
-            USHORT n;
+            const SwRect aNextRect((*this)[a]);
+            const Rectangle aPntRect(aNextRect.SVRect());
 
-            // suche die neu selektierten Rechtecke heraus
-            aReg.Remove( 0, aReg.Count() );
-            aReg.Insert( this, 0 );
+            aNewRanges.push_back(basegfx::B2DRange(
+                aPntRect.Left(), aPntRect.Top(),
+                aPntRect.Right() + 1, aPntRect.Bottom() + 1));
+        }
 
-            for( n = 0; n < aTmp.Count(); ++n )
-                aReg -= aTmp[n];
-
-            // jetzt sollten in aReg nur noch die neuen Rechtecke vorliegen
-            for( n = 0; n < aReg.Count(); ++n )
-                Paint( aReg[n] );
-
-            // suche die nicht mehr selektierten Rechtecke heraus
-            if( aTmp.Count() )
+        if(mpCursorOverlay)
+        {
+            if(aNewRanges.size())
             {
-                aReg.Remove( 0, aReg.Count() );
-                aReg.Insert( &aTmp, 0 );
+                static_cast< sdr::overlay::OverlaySwSelPaintRects* >(mpCursorOverlay)->setB2DRanges(aNewRanges);
+            }
+            else
+            {
+                delete mpCursorOverlay;
+                mpCursorOverlay = 0;
+            }
+        }
+        else if(Count())
+        {
+            SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
+            sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
 
-                for( n = 0; n < Count(); ++n )
-                    aReg -= (*this)[n];
-                // jetzt sollten in aReg nur noch die alten Rechtecke vorliegen
-                for( n = 0; n < aReg.Count(); ++n )
-                    Paint( aReg[n] );
+            if(pTargetOverlay)
+            {
+                Color aHighlight(COL_BLACK);
+                const OutputDevice *pOut = GetShell()->GetOut();
+
+                if(pOut)
+                {
+                    aHighlight = pOut->GetSettings().GetStyleSettings().GetHighlightColor();
+                }
+
+                SwOverlayType aType(GetShell()->getSwOverlayType());
+#ifdef DBG_UTIL
+                static bool bChange(false);
+                if(bChange) aType = (SW_OVERLAY_INVERT == aType) ? SW_OVERLAY_TRANSPARENT : SW_OVERLAY_INVERT;
+#endif
+                mpCursorOverlay = new sdr::overlay::OverlaySwSelPaintRects(aHighlight, aNewRanges, aType);
+                pTargetOverlay->add(*mpCursorOverlay);
             }
         }
     }
@@ -916,15 +843,9 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     }
 }
 
-void SwSelPaintRects::Paint( const Rectangle& rRect )
+void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
 {
-    if(bTestOverlay)
-    {
-    }
-    else
-    {
-        GetShell()->GetWin()->Invert( rRect );
-    }
+    // nothing to do with overlays
 }
 
 /*
@@ -933,60 +854,9 @@ void SwSelPaintRects::Paint( const Rectangle& rRect )
  *      == 0 ->  nur testen, ob es gemalt werden kann
  */
 
-void SwSelPaintRects::Paint( const SwRect& rRect )
+void SwSelPaintRects::Paint( const SwRect& /*rRect*/ )
 {
-    if(bTestOverlay)
-    {
-    }
-    else
-    {
-        Window* pWin = GetShell()->GetWin();
-        const SwRect& rVisArea = GetShell()->VisArea();
-
-        if( !pWin || rRect.IsEmpty() || !rVisArea.IsOver( rRect ) )
-            return;
-
-        Rectangle aPntRect( rRect.SVRect() );
-        Rectangle aCalcRect( aPntRect );
-
-        aPntRect = pWin->LogicToPixel( aPntRect );
-
-        // falls nach der "Normalisierung" kein Rectangle besteht -> Ende
-        if( aPntRect.Left() == aPntRect.Right() ||
-            aPntRect.Top() == aPntRect.Bottom() )
-            return;
-
-        // damit Linien nicht doppelt invertiert werden, muss jeweis von
-        // der rechten und unteren Seite ein PIXEL abgezogen werden !
-        // Pixel heisst, gleichgueltig, welcher MapMode heute zaehlt !
-
-        BOOL bChg = FALSE;
-        BOOL bTstRight  = rRect.Right() < rVisArea.Right();
-        BOOL bTstBottom = rRect.Bottom() < rVisArea.Bottom();
-
-        if( bTstBottom || bTstRight )
-        {
-            ++aCalcRect.Bottom();
-            ++aCalcRect.Right();
-            aCalcRect = pWin->LogicToPixel( aCalcRect );
-
-            if( bTstBottom && aPntRect.Bottom() == aCalcRect.Bottom() )
-            {
-                --aPntRect.Bottom();
-                bChg = TRUE;
-            }
-            if( bTstRight && aPntRect.Right() == aCalcRect.Right() )
-            {
-                --aPntRect.Right();
-                bChg = TRUE;
-            }
-        }
-
-        if( bChg )
-            Paint( pWin->PixelToLogic( aPntRect ));
-        else
-            Paint( rRect.SVRect() );
-    }
+    // nothing to do with overlays
 }
 
 // check current MapMode of the shell and set possibly the static members.

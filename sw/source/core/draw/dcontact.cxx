@@ -2758,5 +2758,18 @@ void SwDrawVirtObj::SetLayer(SdrLayerID nLayer)
     ReferencedObj().SetLayer( nLayer );
     SdrVirtObj::NbcSetLayer( ReferencedObj().GetLayer() );
 }
+
+bool SwDrawVirtObj::supportsFullDrag() const
+{
+    // call parent
+    return SdrVirtObj::supportsFullDrag();
+}
+
+SdrObject* SwDrawVirtObj::getFullDragClone() const
+{
+    // call parent
+    return SdrVirtObj::getFullDragClone();
+}
+
 // eof
 

@@ -922,4 +922,16 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
     return SdrObject::CheckMacroHit( rRec );
 }
 
+bool SwVirtFlyDrawObj::supportsFullDrag() const
+{
+    // call parent
+    return SdrVirtObj::supportsFullDrag();
+}
 
+SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
+{
+    // call parent
+    return SdrVirtObj::getFullDragClone();
+}
+
+// eof
