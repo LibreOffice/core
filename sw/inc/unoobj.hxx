@@ -710,7 +710,7 @@ public:
 /*-----------------23.02.98 12:05-------------------
 
 --------------------------------------------------*/
-class SwXTextRange : public cppu::WeakImplHelper8
+class SW_DLLPUBLIC SwXTextRange : public cppu::WeakImplHelper8
 <
     ::com::sun::star::text::XTextRange,
     ::com::sun::star::lang::XUnoTunnel,

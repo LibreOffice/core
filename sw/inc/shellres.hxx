@@ -42,7 +42,7 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-struct ShellResource : public Resource
+struct SW_DLLPUBLIC ShellResource : public Resource
 {
     String          aPostItAuthor;
     String          aPostItPage;

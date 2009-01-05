@@ -140,6 +140,11 @@ inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,BOOL bInP=TRUE)
 
 /*  */
 
+extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
+{
+    return new RtfReader();
+}
+
 // Aufruf fuer die allg. Reader-Schnittstelle
 ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String &)
 {

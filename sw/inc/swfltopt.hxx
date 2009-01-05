@@ -32,7 +32,7 @@
 
 #include <unotools/configitem.hxx>
 
-class SwFilterOptions : public utl::ConfigItem
+class SW_DLLPUBLIC SwFilterOptions : public utl::ConfigItem
 {
 public:
     SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,

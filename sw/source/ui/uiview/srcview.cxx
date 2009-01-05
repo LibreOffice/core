@@ -71,43 +71,21 @@
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <viewfunc.hxx>
 #include <doc.hxx>
-#ifndef _ITEMDEF_HXX
 #include <itemdef.hxx>
-#endif
 #include <shellio.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>          // FN_       ...
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _WEB_HRC
 #include <web.hrc>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
@@ -130,8 +108,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 using namespace ::sfx2;
+using ::rtl::OUString;
+using ::com::sun::star::util::SearchOptions;
 
 
 #define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \

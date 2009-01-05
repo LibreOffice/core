@@ -82,16 +82,16 @@ public:
     BOOL bCopied;
     BOOL bConsumedByField;
 
-    SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
-    SwFltStackEntry(const SwFltStackEntry& rEntry);
-    ~SwFltStackEntry();
+    SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
+    SW_DLLPUBLIC SwFltStackEntry(const SwFltStackEntry& rEntry);
+    SW_DLLPUBLIC ~SwFltStackEntry();
 
     void SetStartPos(const SwPosition & rStartPos);
-    void SetEndPos(  const SwPosition & rEndPos);
-    BOOL MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck );
+    SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
+    SW_DLLPUBLIC BOOL MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck );
 };
 
-class SwFltControlStack
+class SW_DLLPUBLIC SwFltControlStack
 {
     typedef std::deque<SwFltStackEntry*> Entries;
     typedef Entries::iterator myEIter;
@@ -144,7 +144,7 @@ public:
     void DeleteAndDestroy(Entries::size_type nCnt);
 };
 
-class SwFltAnchor : public SfxPoolItem
+class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
 {
     SwFrmFmt* pFrmFmt;
 public:
@@ -157,7 +157,7 @@ public:
           SwFrmFmt* GetFrmFmt()             { return pFrmFmt; }
 };
 
-class SwFltRedline : public SfxPoolItem
+class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
 public:
     DateTime        aStamp;
@@ -194,7 +194,7 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
 };
 
-class SwFltBookmark : public SfxPoolItem
+class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
     friend class SwFltShell;    // darf aName und aVal uebersetzen
     long nHandle;
@@ -220,7 +220,7 @@ public:
     long GetHandle() const              { return nHandle; }
 };
 
-class SwFltTOX : public SfxPoolItem
+class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 {
     SwTOXBase* pTOXBase;
     USHORT nCols;
@@ -608,7 +608,7 @@ public:
     const String& GetBaseURL() const { return sBaseURL; }
 };
 
-void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
+SW_DLLPUBLIC void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
 
 #endif
 

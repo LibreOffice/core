@@ -38,11 +38,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 
-
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
-
 
 #include <hintids.hxx>
 #include <string.h>             // memcpy()
@@ -88,9 +84,7 @@
 #include <fltini.hxx>
 #include <swmodule.hxx>
 #include <section.hxx>
-#ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
-#endif
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <fmturl.hxx>
@@ -99,18 +93,14 @@
 #include <svtools/imapobj.hxx>
 #include <tools/urlobj.hxx>
 #include <mdiexp.hxx>           // Progress
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 
-#ifndef IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
 #include <IDocumentBookmarkAccess.hxx>
-#endif
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -3044,7 +3034,7 @@ SwWW8Writer::~SwWW8Writer()
     delete pOleMap;
 }
 
-void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName, rBaseURL );
 }

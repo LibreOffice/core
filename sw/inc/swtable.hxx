@@ -85,7 +85,7 @@ typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 )
 typedef SwTableLine* SwTableLinePtr;
 
-class SwTable: public SwClient           //Client vom FrmFmt
+class SW_DLLPUBLIC SwTable: public SwClient          //Client vom FrmFmt
 {
     using SwClient::IsModifyLocked;
 
@@ -328,7 +328,7 @@ public:
 #endif
 };
 
-class SwTableLine: public SwClient      // Client vom FrmFmt
+class SW_DLLPUBLIC SwTableLine: public SwClient     // Client vom FrmFmt
 {
     SwTableBoxes aBoxes;
     SwTableBox *pUpper;
@@ -367,7 +367,7 @@ public:
     bool hasSoftPageBreak() const;
 };
 
-class SwTableBox: public SwClient       //Client vom FrmFmt
+class SW_DLLPUBLIC SwTableBox: public SwClient      //Client vom FrmFmt
 {
     friend class SwNodes;           // um den Index umzusetzen !
     friend void DelBoxNode(SwTableSortBoxes&);  // um den StartNode* zu loeschen !

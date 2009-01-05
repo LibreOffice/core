@@ -38,7 +38,7 @@ class PolyPolygon;
 // SwNoTxtNode
 // --------------------
 
-class SwNoTxtNode : public SwCntntNode
+class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
 {
     friend class SwNodes;
     friend class SwNoTxtFrm;

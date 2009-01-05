@@ -315,7 +315,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
         WriterRef xWrt;
-        SwIoSystem::GetWriter( String::CreateFromAscii( FILTER_TEXT ), String(), xWrt );
+        SwReaderWriter::GetWriter( String::CreateFromAscii( FILTER_TEXT ), String(), xWrt );
         if( xWrt.Is() )
         {
                 // Selektierte Bereiche in ein ASCII Dokument schreiben

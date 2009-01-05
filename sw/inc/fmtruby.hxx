@@ -36,7 +36,7 @@
 
 class SwTxtRuby;
 
-class SwFmtRuby : public SfxPoolItem
+class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
 {
     friend class SwTxtRuby;
 

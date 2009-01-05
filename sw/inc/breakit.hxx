@@ -36,10 +36,8 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-
-#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
-#endif
+#include <swdllapi.h>
 
 class String;
 
@@ -48,7 +46,7 @@ class String;
  *************************************************************************/
 
 
-class SwBreakIt
+class SW_DLLPUBLIC SwBreakIt
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
 
@@ -110,7 +108,7 @@ public:
 #define SW_XBREAKITER() SW_BREAKITER()->GetBreakIter()
 
 // @@@ backward compatibility @@@
-extern SwBreakIt* pBreakIt;
+SW_DLLPUBLIC extern SwBreakIt* pBreakIt;
 
 #endif
 

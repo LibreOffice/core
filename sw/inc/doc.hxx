@@ -267,7 +267,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 // global function to start grammar checking in the document
 void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame );
 
-class SwDoc :
+class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentSettingAccess,
     public IDocumentDeviceAccess,
@@ -966,7 +966,7 @@ public:
     virtual void DocInfoChgd();
     virtual const SwDocStat &GetDocStat() const;
     virtual void SetDocStat(const SwDocStat& rStat);
-    SW_DLLPUBLIC virtual void UpdateDocStat(SwDocStat& rStat);
+    virtual void UpdateDocStat(SwDocStat& rStat);
 
     /** IDocumentState
     */
@@ -1121,7 +1121,7 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
 
-    SW_DLLPUBLIC sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
+    sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
@@ -1238,7 +1238,7 @@ public:
     void SetDefault( const SfxItemSet& );
 
     // Erfrage das Default Attribut in diesem Dokument.
-    SW_DLLPUBLIC const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
+    const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
     // TextAttribute nicht mehr aufspannen lassen
     sal_Bool DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag = sal_True );
 
@@ -2092,8 +2092,8 @@ public:
     // <--
 
     //Update all the page masters
-    SW_DLLPUBLIC void SetDefaultPageMode(bool bSquaredPageMode);
-    SW_DLLPUBLIC sal_Bool IsSquaredPageMode() const;
+    void SetDefaultPageMode(bool bSquaredPageMode);
+    sal_Bool IsSquaredPageMode() const;
 
     // i#78591#
     void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )

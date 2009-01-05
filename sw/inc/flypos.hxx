@@ -32,12 +32,13 @@
 
 
 #include <svtools/svarray.hxx>
+#include <swdllapi.h>
 
 class SwFrmFmt;
 class SwNodeIndex;
 
 // Struktur zum Erfragen der akt. freifliegenden Rahmen am Dokument.
-class SwPosFlyFrm
+class SW_DLLPUBLIC SwPosFlyFrm
 {
     const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
 //  SwPosition* pPos;           // Position in den ContentNode
@@ -57,6 +58,6 @@ public:
 };
 
 typedef SwPosFlyFrm* SwPosFlyFrmPtr;
-SV_DECL_PTRARR_SORT( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40 )
+SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40, SW_DLLPUBLIC )
 
 #endif // _FLYPOS_HXX

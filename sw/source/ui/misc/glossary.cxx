@@ -680,7 +680,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             SvtPathOptions aPathOpt;
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
-            String sWW8( C2S(GetFILTER_WW8()) );
+            String sWW8( C2S( FILTER_WW8 ) );
 
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
             SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );

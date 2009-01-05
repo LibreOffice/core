@@ -52,7 +52,6 @@ SRC1FILES =  \
 SLOFILES =  \
         $(SLO)$/inputwin.obj \
         $(SLO)$/tbxanchr.obj \
-        $(SLO)$/tbxmgr.obj \
         $(SLO)$/conrect.obj \
         $(SLO)$/conform.obj \
         $(SLO)$/conpoly.obj \

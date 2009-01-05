@@ -386,15 +386,7 @@ typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 extern SwDfltAttrTab __FAR_DATA aAttrTab;
 extern SfxItemInfo   __FAR_DATA aSlotTab[];
 
-
-#ifndef PRODUCT
-const SfxPoolItem* GetDfltAttr( USHORT nWhich );
-#else
-inline const SfxPoolItem* GetDfltAttr( USHORT nWhich )
-{
-    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
-}
-#endif
+SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( USHORT nWhich );
 
 SW_DLLPUBLIC USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
 
@@ -414,7 +406,7 @@ extern USHORT __FAR_DATA aTxtFmtCollSetRange[];
 // AttrSet-Range fuer die GrfFmtColl
 extern USHORT __FAR_DATA aGrfFmtCollSetRange[];
 // AttrSet-Range fuer die TextNode
-extern USHORT __FAR_DATA aTxtNodeSetRange[];
+SW_DLLPUBLIC extern USHORT __FAR_DATA aTxtNodeSetRange[];
 // AttrSet-Range fuer die NoTxtNode
 extern USHORT __FAR_DATA aNoTxtNodeSetRange[];
 // AttrSet-Range fuer die SwTable
@@ -424,7 +416,7 @@ extern USHORT __FAR_DATA aTableLineSetRange[];
 // AttrSet-Range fuer die SwTableBox
 extern USHORT __FAR_DATA aTableBoxSetRange[];
 // AttrSet-Range fuer die SwFrmFmt
-extern USHORT __FAR_DATA aFrmFmtSetRange[];
+SW_DLLPUBLIC extern USHORT __FAR_DATA aFrmFmtSetRange[];
 // AttrSet-Range fuer die SwCharFmt
 extern USHORT __FAR_DATA aCharFmtSetRange[];
 // AttrSet-Range fuer die character autostyles

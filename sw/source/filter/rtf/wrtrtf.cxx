@@ -1744,7 +1744,7 @@ RTFSaveData::~RTFSaveData()
     rWrt.bOutSection = bOldOutSection;
 }
 
-void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwRTFWriter( rFltName, rBaseURL );
 }

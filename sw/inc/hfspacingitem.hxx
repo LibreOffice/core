@@ -37,7 +37,7 @@
 
 class IntlWrapper;
 
-class SwHeaderAndFooterEatSpacingItem : public SfxBoolItem
+class SW_DLLPUBLIC SwHeaderAndFooterEatSpacingItem : public SfxBoolItem
 {
 public:
     SwHeaderAndFooterEatSpacingItem( USHORT nId = RES_HEADER_FOOTER_EAT_SPACING,

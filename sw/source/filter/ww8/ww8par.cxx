@@ -49,13 +49,9 @@
 #include <svtools/docpasswdrequest.hxx>
 #include <hintids.hxx>
 
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/cscoitem.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
@@ -98,15 +94,11 @@
 #include <section.hxx>
 #include <docsh.hxx>
 #include <docufld.hxx>
-#ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
-#endif
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <mdiexp.hxx>           // Progress
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <swerror.h>            // ERR_WW8_...
 #include <swunodef.hxx>
 #include <unodraw.hxx>
@@ -1058,92 +1050,6 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
         }
     }
     return 0;
-}
-
-void SwFltControlStack::Delete(const SwPaM &rPam)
-{
-    const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
-
-    if( !rPam.HasMark() || *pStt >= *pEnd )
-        return;
-
-    SwNodeIndex aStartNode(pStt->nNode, -1);
-    USHORT nStartIdx = pStt->nContent.GetIndex();
-    SwNodeIndex aEndNode(pEnd->nNode, -1);
-    USHORT nEndIdx = pEnd->nContent.GetIndex();
-
-    //We don't support deleting content that is over one node, or removing a node.
-    ASSERT(aEndNode == aStartNode, "nodes must be the same, or this method extended");
-    if (aEndNode != aStartNode)
-        return;
-
-    for (USHORT nSize = static_cast< USHORT >(Count()); nSize > 0;)
-    {
-        SwFltStackEntry* pEntry = (*this)[--nSize];
-
-        bool bEntryStartAfterSelStart =
-            (pEntry->nMkNode == aStartNode && pEntry->nMkCntnt >= nStartIdx);
-
-        bool bEntryStartBeforeSelEnd =
-            (pEntry->nMkNode == aEndNode && pEntry->nMkCntnt <= nEndIdx);
-
-        bool bEntryEndAfterSelStart = false;
-        bool bEntryEndBeforeSelEnd = false;
-        if (!pEntry->bLocked)
-        {
-            bEntryEndAfterSelStart =
-                (pEntry->nPtNode == aStartNode && pEntry->nPtCntnt >= nStartIdx);
-
-            bEntryEndBeforeSelEnd =
-                (pEntry->nPtNode == aEndNode && pEntry->nPtCntnt <= nEndIdx);
-        }
-
-        bool bTotallyContained = false;
-        if (
-             bEntryStartAfterSelStart && bEntryStartBeforeSelEnd &&
-             bEntryEndAfterSelStart && bEntryEndBeforeSelEnd
-           )
-        {
-           bTotallyContained = true;
-        }
-
-        if (bTotallyContained)
-        {
-            //after start, before end, delete
-            DeleteAndDestroy(nSize);
-            continue;
-        }
-
-        xub_StrLen nCntntDiff = nEndIdx - nStartIdx;
-
-        //to be adjusted
-        if (bEntryStartAfterSelStart)
-        {
-            if (bEntryStartBeforeSelEnd)
-            {
-                //move start to new start
-                pEntry->nMkNode = aStartNode;
-                pEntry->nMkCntnt = nStartIdx;
-            }
-            else
-                pEntry->nMkCntnt = pEntry->nMkCntnt - nCntntDiff;
-        }
-
-        if (bEntryEndAfterSelStart)
-        {
-            if (bEntryEndBeforeSelEnd)
-            {
-                pEntry->nPtNode = aStartNode;
-                pEntry->nPtCntnt = nStartIdx;
-            }
-            else
-                pEntry->nPtCntnt = pEntry->nPtCntnt - nCntntDiff;
-        }
-
-        //That's what locked is, end equal to start, and nPtCntnt is invalid
-        if (pEntry->bLocked)
-            pEntry->nPtNode = pEntry->nMkNode;
-    }
 }
 
 bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
@@ -4759,6 +4665,11 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     rDoc.PropagateOutlineRule();
 
     return nErrRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
+{
+    return new WW8Reader();
 }
 
 ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & /* FileName */)

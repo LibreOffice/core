@@ -39,7 +39,7 @@
 
     @author OD
 */
-class SwAnchoredDrawObject : public SwAnchoredObject
+class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 {
     private:
         // boolean, indicating that the object position has been invalidated

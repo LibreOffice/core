@@ -1704,7 +1704,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             {
                 pStream = &xStrm;
                 if( SOT_FORMAT_RTF == nFmt )
-                    pRead = ReadRtf;
+                    pRead = SwReaderWriter::GetReader( READER_WRITER_RTF );
                 else if( !pRead )
                 {
                     pRead = ReadHTML;

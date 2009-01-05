@@ -33,7 +33,7 @@
 
 
 
-
+#include <mdiexp.hxx>
 #include <tools/shl.hxx>
 #include <tools/string.hxx>
 #ifndef _SVARRAY_HXX

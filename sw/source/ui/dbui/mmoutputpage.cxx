@@ -778,7 +778,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                String::CreateFromAscii( GetFILTER_XML() ),
+                String::CreateFromAscii( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
 
         uno::Sequence< beans::PropertyValue > aValues(1);
@@ -1093,7 +1093,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
             SfxFilterMatcherIter aIter( &aMatcher );
             const SfxFilter* pFilter = aIter.First();
-            String sFilterUserData( String::CreateFromAscii(GetFILTER_WW8()));
+            String sFilterUserData( String::CreateFromAscii( FILTER_WW8 ));
             while ( pFilter )
             {
                 if( pFilter->GetUserData() == sFilterUserData   && pFilter->CanExport() )
@@ -1180,7 +1180,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
-            String::CreateFromAscii( GetFILTER_XML() ),
+            String::CreateFromAscii( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
 
     uno::Sequence< beans::PropertyValue > aValues(1);

@@ -172,7 +172,7 @@ public:
     Beschreibung: Datenbankfeld Naechster Satz
  --------------------------------------------------------------------*/
 
-class SwDBNextSetFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
 {
 public:
     SwDBNextSetFieldType();
@@ -286,7 +286,7 @@ public:
     Beschreibung: Datenbankfeld
  --------------------------------------------------------------------*/
 
-class SwDBNameField : public SwDBNameInfField
+class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 {
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, ULONG nFmt = 0);
@@ -301,7 +301,7 @@ public:
     Beschreibung: Datensatznummer
  --------------------------------------------------------------------*/
 
-class SwDBSetNumberFieldType : public SwFieldType
+class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
 {
 public:
     SwDBSetNumberFieldType();
@@ -313,7 +313,7 @@ public:
     Beschreibung: Datenbankfeld
  --------------------------------------------------------------------*/
 
-class SwDBSetNumberField : public SwDBNameInfField
+class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 {
     long    nNumber;
 

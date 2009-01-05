@@ -38,7 +38,7 @@ class Color;
 
 // ATT_INETFMT *********************************************
 
-class SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
+class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
 {
     SwTxtNode* pMyTxtNd;
     BOOL bVisited       : 1; // Besuchter Link?

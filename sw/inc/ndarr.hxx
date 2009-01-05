@@ -84,7 +84,7 @@ typedef BOOL (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
 
 SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0, 10 )
 
-class SwNodes: private BigPtrArray
+class SW_DLLPUBLIC SwNodes: private BigPtrArray
 {
     friend class SwDoc;
     friend class SwNode;

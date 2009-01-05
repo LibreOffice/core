@@ -284,7 +284,7 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
 #endif
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
-    SwIoSystem::GetWriter( C2S(FILTER_TEXT_DLG), String(), xWrt );
+    SwReaderWriter::GetWriter( C2S(FILTER_TEXT_DLG), String(), xWrt );
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, aCrsr );

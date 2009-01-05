@@ -99,7 +99,7 @@ public:
  *  class SwAttrCropGrf
  ******************************************************************************/
 
-class SwCropGrf : public SvxGrfCrop
+class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
 {
 public:
     TYPEINFO();
@@ -139,7 +139,7 @@ public:
     const Size& GetUnrotatedSize() const            { return aUnrotatedSize; }
 };
 
-class SwLuminanceGrf : public SfxInt16Item
+class SW_DLLPUBLIC SwLuminanceGrf : public SfxInt16Item
 {
 public:
     SwLuminanceGrf( sal_Int16 nVal = 0 )
@@ -155,7 +155,7 @@ public:
                                     const IntlWrapper* pIntl = 0 ) const;
 };
 
-class SwContrastGrf : public SfxInt16Item
+class SW_DLLPUBLIC SwContrastGrf : public SfxInt16Item
 {
 public:
     SwContrastGrf( sal_Int16 nVal = 0 )
@@ -212,7 +212,7 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 };
 
-class SwGammaGrf : public SfxPoolItem
+class SW_DLLPUBLIC SwGammaGrf : public SfxPoolItem
 {
     double nValue;
 public:
@@ -285,7 +285,7 @@ public:
                                         BYTE nMemberId = 0 );
 };
 
-class SwDrawModeGrf : public SfxEnumItem
+class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem
 {
 public:
     SwDrawModeGrf( USHORT nMode = 0 )

@@ -91,7 +91,7 @@ public:
 };
 
 
-class SwRedlineData
+class SW_DLLPUBLIC SwRedlineData
 {
     friend class SwRedline;
     SwRedlineData* pNext;       // Verweis auf weitere Daten
@@ -169,7 +169,7 @@ public:
 };
 
 
-class SwRedline : public SwPaM
+class SW_DLLPUBLIC SwRedline : public SwPaM
 {
     SwRedlineData* pRedlineData;
     SwNodeIndex* pCntntSect;

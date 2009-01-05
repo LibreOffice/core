@@ -33,6 +33,7 @@
 
 #include <tools/solar.h>
 #include <tools/debug.hxx>
+#include <swdllapi.h>
 
 struct BlockInfo;
 class BigPtrArray;
@@ -73,7 +74,7 @@ struct BlockInfo {                  // Block-Info:
     USHORT nElem;                   // Anzahl Elemente
 };
 
-class BigPtrArray
+class SW_DLLPUBLIC BigPtrArray
 {
     BlockInfo** ppInf;              // Block-Infos
     ULONG       nSize;              // Anzahl Elemente

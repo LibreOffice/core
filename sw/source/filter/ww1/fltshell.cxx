@@ -638,6 +638,92 @@ const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, USHORT 
     return &pNd->GetAttr(nWhich);
 }
 
+void SwFltControlStack::Delete(const SwPaM &rPam)
+{
+    const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+
+    if( !rPam.HasMark() || *pStt >= *pEnd )
+        return;
+
+    SwNodeIndex aStartNode(pStt->nNode, -1);
+    USHORT nStartIdx = pStt->nContent.GetIndex();
+    SwNodeIndex aEndNode(pEnd->nNode, -1);
+    USHORT nEndIdx = pEnd->nContent.GetIndex();
+
+    //We don't support deleting content that is over one node, or removing a node.
+    ASSERT(aEndNode == aStartNode, "nodes must be the same, or this method extended");
+    if (aEndNode != aStartNode)
+        return;
+
+    for (USHORT nSize = static_cast< USHORT >(Count()); nSize > 0;)
+    {
+        SwFltStackEntry* pEntry = (*this)[--nSize];
+
+        bool bEntryStartAfterSelStart =
+            (pEntry->nMkNode == aStartNode && pEntry->nMkCntnt >= nStartIdx);
+
+        bool bEntryStartBeforeSelEnd =
+            (pEntry->nMkNode == aEndNode && pEntry->nMkCntnt <= nEndIdx);
+
+        bool bEntryEndAfterSelStart = false;
+        bool bEntryEndBeforeSelEnd = false;
+        if (!pEntry->bLocked)
+        {
+            bEntryEndAfterSelStart =
+                (pEntry->nPtNode == aStartNode && pEntry->nPtCntnt >= nStartIdx);
+
+            bEntryEndBeforeSelEnd =
+                (pEntry->nPtNode == aEndNode && pEntry->nPtCntnt <= nEndIdx);
+        }
+
+        bool bTotallyContained = false;
+        if (
+             bEntryStartAfterSelStart && bEntryStartBeforeSelEnd &&
+             bEntryEndAfterSelStart && bEntryEndBeforeSelEnd
+           )
+        {
+           bTotallyContained = true;
+        }
+
+        if (bTotallyContained)
+        {
+            //after start, before end, delete
+            DeleteAndDestroy(nSize);
+            continue;
+        }
+
+        xub_StrLen nCntntDiff = nEndIdx - nStartIdx;
+
+        //to be adjusted
+        if (bEntryStartAfterSelStart)
+        {
+            if (bEntryStartBeforeSelEnd)
+            {
+                //move start to new start
+                pEntry->nMkNode = aStartNode;
+                pEntry->nMkCntnt = nStartIdx;
+            }
+            else
+                pEntry->nMkCntnt = pEntry->nMkCntnt - nCntntDiff;
+        }
+
+        if (bEntryEndAfterSelStart)
+        {
+            if (bEntryEndBeforeSelEnd)
+            {
+                pEntry->nPtNode = aStartNode;
+                pEntry->nPtCntnt = nStartIdx;
+            }
+            else
+                pEntry->nPtCntnt = pEntry->nPtCntnt - nCntntDiff;
+        }
+
+        //That's what locked is, end equal to start, and nPtCntnt is invalid
+        if (pEntry->bLocked)
+            pEntry->nPtNode = pEntry->nMkNode;
+    }
+}
+
 //------ hier stehen die Methoden von SwFltAnchor -----------
 SwFltAnchor::SwFltAnchor(SwFrmFmt* pFmt) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrmFmt(pFmt)

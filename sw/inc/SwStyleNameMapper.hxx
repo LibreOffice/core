@@ -164,7 +164,7 @@ public:
 
     // This gets the programmatic Name from the Pool ID
     static          void FillProgName( sal_uInt16 nId, String& rFillName );
-    static const String& GetProgName ( sal_uInt16 nId, const String& rName );
+    SW_DLLPUBLIC static const String& GetProgName ( sal_uInt16 nId, const String& rName );
 
     // This gets the PoolId from the UI Name
     SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );

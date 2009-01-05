@@ -81,6 +81,11 @@ class SwNodeNum;
 class SwTxtNode;
 struct SvxRTFPictureType;
 
+class RtfReader: public Reader
+{
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+};
+
 class SwNodeIdx : public SvxNodeIdx
 {
     SwNodeIndex aIdx;

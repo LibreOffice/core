@@ -56,7 +56,7 @@ class SwFmtAnchor;
 
     @author OD
 */
-class SwAnchoredObject
+class SW_DLLPUBLIC SwAnchoredObject
 {
     private:
         // drawing object representing the anchored object in the drawing layer

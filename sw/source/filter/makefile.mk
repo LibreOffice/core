@@ -51,10 +51,8 @@ SUBLIBS= \
     $(SLB)$/ascii.lib \
     $(SLB)$/basflt.lib \
     $(SLB)$/html.lib \
-    $(SLB)$/rtf.lib \
     $(SLB)$/writer.lib \
     $(SLB)$/ww1.lib \
-    $(SLB)$/ww8.lib \
     $(SLB)$/xml.lib
 
 # -----------------------------------------------------------

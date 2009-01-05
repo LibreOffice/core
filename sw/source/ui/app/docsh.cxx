@@ -206,7 +206,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         return 0;
     }
     String aFileName( rMedium.GetName() );
-    SwRead pRead = SwIoSystem::GetReader( pFlt->GetUserData() );
+    SwRead pRead = SwReaderWriter::GetReader( pFlt->GetUserData() );
     if( !pRead )
         return 0;
 
@@ -602,7 +602,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         return FALSE;
 
     WriterRef xWriter;
-    SwIoSystem::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
+    SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.Is() )
     {   // Der Filter ist nicht vorhanden
         InfoBox( 0,

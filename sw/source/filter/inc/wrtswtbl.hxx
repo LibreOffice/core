@@ -236,7 +236,7 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableCols, SwWriteTableColPtr, 5, 5 )
 
 //-----------------------------------------------------------------------
 
-class SwWriteTable
+class SW_DLLPUBLIC SwWriteTable
 {
 protected:
     SwWriteTableCols aCols; // alle Spalten

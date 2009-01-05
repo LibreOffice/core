@@ -181,11 +181,14 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * hole aus der Default-Attribut Tabelle ueber den Which-Wert
  * das entsprechende default Attribut.
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
- * inline (hintids.hxx) im PRODUCT.
+ * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#ifndef PRODUCT
-
-
+#ifdef PRODUCT
+const SfxPoolItem* GetDfltAttr( USHORT nWhich )
+{
+    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
+}
+#else
 const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 {
     ASSERT_ID( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN,
@@ -195,7 +198,6 @@ const SfxPoolItem* GetDfltAttr( USHORT nWhich )
     ASSERT( pHt, "GetDfltFmtAttr(): Dflt == 0" );
     return pHt;
 }
-
 #endif
 
 

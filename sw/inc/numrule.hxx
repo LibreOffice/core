@@ -347,7 +347,7 @@ namespace numfunc
 
         @author OD
     */
-    const Font& GetDefBulletFont();
+    SW_DLLPUBLIC const Font& GetDefBulletFont();
 
     /** retrieve unicode of character used for the default bullet list for the given list level
 

@@ -130,7 +130,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     friend class SwClientIter;
     SwClient* pRoot;
 
-    SW_DLLPRIVATE SwClient *_Remove(SwClient *pDepend);
+    SwClient *_Remove(SwClient *pDepend);
 
 public:
     SwModify() : pRoot(0) {}
@@ -176,7 +176,7 @@ protected:
  * abhaengig ist. Diese sollte fuer jede Abhaengigkeit ein Objekt
  * der Klasse SwDepend als Member haben.
  */
-class SwDepend: public SwClient
+class SW_DLLPUBLIC SwDepend: public SwClient
 {
     SwClient *pToTell;
 
@@ -197,7 +197,7 @@ private:
 };
 
 
-class SW_DLLPUBLIC SwClientIter
+class SwClientIter
 {
     friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
     friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
@@ -213,8 +213,8 @@ class SW_DLLPUBLIC SwClientIter
     TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
 public:
-    SwClientIter( SwModify& );
-    ~SwClientIter();
+    SW_DLLPUBLIC SwClientIter( SwModify& );
+    SW_DLLPUBLIC ~SwClientIter();
 
     const SwModify& GetModify() const       { return rRoot; }
           SwModify& GetModify()             { return rRoot; }
@@ -236,8 +236,8 @@ public:
 
     int IsChanged() const { return pDelNext != pAkt; }
 
-    SwClient* First( TypeId nType );
-    SwClient* Next();
+    SW_DLLPUBLIC SwClient* First( TypeId nType );
+    SW_DLLPUBLIC SwClient* Next();
 
     const SwClient* GetWatchClient() const { return mpWatchClient; }
     void SetWatchClient( SwClient* pWatch ) { mpWatchClient = pWatch; }

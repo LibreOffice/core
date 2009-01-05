@@ -156,6 +156,16 @@ SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16,16)
 // SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,16,16)
 SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
+class WW8Reader : public StgReader
+{
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+public:
+    virtual int GetReaderType();
+
+    virtual BOOL HasGlossaries() const;
+    virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
+};
+
 struct WW8OleMap
 {
     sal_uInt32 mnWWid;

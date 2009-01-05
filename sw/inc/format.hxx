@@ -45,7 +45,7 @@ class IDocumentFieldsAccess;
 class IDocumentChartDataProviderAccess;
 class SwDoc;
 
-class SwFmt : public SwModify
+class SW_DLLPUBLIC SwFmt : public SwModify
 {
 //  friend class SwSwgReader;
 //  friend class SwSwgWriter;
@@ -105,9 +105,9 @@ public:
                                     const SfxPoolItem **ppItem = 0 ) const;
     // --> OD 2008-03-03 #refactorlists#
     // methods renamed and made virtual
-    SW_DLLPUBLIC virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
-    SW_DLLPUBLIC virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
-    SW_DLLPUBLIC virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
+    virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
     // <--
 
     // --> OD 2007-01-24 #i73790#

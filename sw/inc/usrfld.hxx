@@ -105,7 +105,7 @@ inline void SwUserFieldType::SetType(USHORT nSub)
     Beschreibung: Benutzerfelder
  --------------------------------------------------------------------*/
 
-class SwUserField : public SwValueField
+class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     USHORT  nSubType;
 

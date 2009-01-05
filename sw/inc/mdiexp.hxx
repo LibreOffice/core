@@ -32,6 +32,8 @@
 
 #include <tools/solar.h>
 #include <tblenum.hxx>
+#include <swdllapi.h>
+
 class UniString;
 class SwRect;
 class Size;
@@ -53,9 +55,9 @@ extern void PageNumNotify( ViewShell* pVwSh,
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-void StartProgress     ( USHORT nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
-void EndProgress       ( SwDocShell *pDocSh = 0 );
-void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
+SW_DLLPUBLIC void StartProgress    ( USHORT nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
 void SetProgressText   ( USHORT nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );
 

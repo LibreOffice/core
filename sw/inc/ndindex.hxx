@@ -39,7 +39,7 @@
 class SwNode;
 class SwNodes;
 
-class SwNodeIndex
+class SW_DLLPUBLIC SwNodeIndex
 {
     friend void SwNodes::RegisterIndex( SwNodeIndex& );
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
@@ -112,7 +112,7 @@ public:
 /*
  * SwRange
  */
-class SwNodeRange
+class SW_DLLPUBLIC SwNodeRange
 {
 public:
     SwNodeIndex aStart;

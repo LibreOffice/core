@@ -33,7 +33,7 @@
 #include <tools/mempool.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/itempool.hxx>
-
+#include <swdllapi.h>
 
 class SwModify;
 class SwDoc;
@@ -171,7 +171,7 @@ public:
 };
 
 
-class SwAttrSet : public SfxItemSet
+class SW_DLLPUBLIC SwAttrSet : public SfxItemSet
 {
     // Pointer fuers Modify-System
     SwAttrSet *pOldSet, *pNewSet;
@@ -344,7 +344,7 @@ public:
 };
 
 //Helper for filters to find true lineheight of a font
-long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
+SW_DLLPUBLIC long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
                           const OutputDevice &rOut, sal_Int16 nScript);
 #endif

@@ -42,7 +42,7 @@ class IntlWrapper;
 // ATT_CHARFMT *********************************************
 
 
-class SwFmtCharFmt: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;
     SwTxtCharFmt* pTxtAttr;     // mein TextAttribut

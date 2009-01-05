@@ -55,7 +55,7 @@ namespace utl {
     class TextSearch;
 }
 
-struct SwPosition
+struct SW_DLLPUBLIC SwPosition
 {
     SwNodeIndex nNode;
     SwIndex nContent;
@@ -113,12 +113,12 @@ SwComparePosition ComparePosition(
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
 SW_DLLPUBLIC extern SwMoveFn fnMoveForward; // SwPam::Move()/Find() default argument.
-extern SwMoveFn fnMoveBackward;
+SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 
 typedef BOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
-extern SwGoInDoc fnGoDoc;
+SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
-extern SwGoInDoc fnGoNode;
+SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
 SW_DLLPUBLIC extern SwGoInDoc fnGoCntnt; // SwPam::Move() default argument.
 extern SwGoInDoc fnGoCntntCells;
 extern SwGoInDoc fnGoCntntSkipHidden;
@@ -126,7 +126,7 @@ extern SwGoInDoc fnGoCntntCellsSkipHidden;
 
 void _InitPam();
 
-class SwPaM : public Ring
+class SW_DLLPUBLIC SwPaM : public Ring
 {
     SwPosition aBound1;
     SwPosition aBound2;

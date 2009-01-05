@@ -38,6 +38,7 @@ TARGET=ww8
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
+MAKING_LIBMSWORD=TRUE
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
 
 .IF "$(mydebug)" != ""

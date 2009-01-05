@@ -103,9 +103,9 @@ const SwTwips lMinBorder = 1134;
 #define UNDO_ACTION_COUNT 20
 
 // Konstante Strings
-extern UniString aEmptyStr;         // ""
+SW_DLLPUBLIC extern UniString aEmptyStr;            // ""
 extern ByteString aEmptyByteStr;    // ""
-extern UniString aDotStr;           // '.'
+SW_DLLPUBLIC extern UniString aDotStr;          // '.'
 
 //Zum Einfuegen von Beschriftungen (wie bzw. wo soll eingefuegt werden).
 //Hier weil ein eigenes hxx nicht lohnt und es sonst nirgendwo so recht
@@ -208,7 +208,7 @@ const sal_Unicode cMarkSeperator = '|';
 extern const sal_Char* __FAR_DATA pMarkToTable;             // Strings stehen
 extern const sal_Char* __FAR_DATA pMarkToFrame;             // im Init.cxx
 extern const sal_Char* __FAR_DATA pMarkToRegion;
-extern const sal_Char* __FAR_DATA pMarkToOutline;
+SW_DLLPUBLIC extern const sal_Char* __FAR_DATA pMarkToOutline;
 extern const sal_Char* __FAR_DATA pMarkToText;
 extern const sal_Char* __FAR_DATA pMarkToGraphic;
 extern const sal_Char* __FAR_DATA pMarkToOLE;

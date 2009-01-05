@@ -1340,7 +1340,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         break;
 
     case FORMAT_RTF:
-        pRead = ReadRtf;
+        pRead = SwReaderWriter::GetReader( READER_WRITER_RTF );
         break;
 
     case FORMAT_FILE:

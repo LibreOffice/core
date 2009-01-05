@@ -34,6 +34,7 @@
 #include <tools/solar.h>
 #include <tools/rtti.hxx>               // for RTTI of SwIndexReg
 #include <tools/string.hxx>             // for xub_StrLen
+#include <swdllapi.h>
 
 #define INVALID_INDEX STRING_NOTFOUND
 
@@ -48,7 +49,7 @@ struct SwPosition;
 #define INLINE
 #endif
 
-class SwIndex
+class SW_DLLPUBLIC SwIndex
 {
     friend class SwIndexReg;
 
