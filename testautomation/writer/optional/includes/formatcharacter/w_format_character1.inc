@@ -37,7 +37,7 @@
 '\***********************************************************************
 
 testcase tFormatCharacter1
-	printlog "- Check if 'Pair Kerning' is enabled by default!"
+    printlog "- Check if 'Pair Kerning' is enabled by default!"
     '/// Format / Character / Tab Position ///
     Call hNewDocument
     '/// Open new document
@@ -76,336 +76,329 @@ endcase
 '------------------------------------------------------------------------------------------------------------------------------
 
 testcase tFormatCharacter2
-	'/// Format / Default ///
-	Call hNewDocument
-	'/// New document ///
-	Printlog "  - adjust Font- and Paragraph-Format"
-	Call wTypeKeys "Format<Shift Mod1 Left>"
-	'/// Insert a word and select it ///
-	FormatCharacter
-	'/// Select Format / Character and adjust Font- and Paragraph-Formats ///
-	Sleep 5
-	Kontext
-	active.SetPage TabFontEffects
-	kontext "TabFontEffects"
-	Outline.Check
-	Shadow.Check
-	Underline.Select 2
-	StrikeThrough.Select 2
-	TabFontEffects.OK
-	FormatParagraph
-	Kontext
-	active.SetPage TabEinzuegeUndAbstaende
-	kontext "TabEinzuegeUndAbstaende"
-	Automatisch.Check
-	TabEinzuegeUndAbstaende.OK
-	'/// Close dialog ///
-	Wait 500
-	
-	Printlog "  - Format / Default"
-	'/// Select Format / Default ///
-	FormatDefaultWriter
-	Wait 500
-	
-	Printlog "  - check Font- and Paragraph-Formats"
-	'/// Check if Font- and Paragraph-Formats have benn set to default ///
-	FormatCharacter
-	Kontext
-	active.SetPage TabFontEffects
-	kontext "TabFontEffects"
-	if Outline.IsChecked then Warnlog "Outline is checked"
-	if Shadow.IsChecked then Warnlog "Shadow is checked"
-	if Underline.GetSelIndex = 2 then Warnlog "Wrong entry in 'Underline' is selected"
-	if StrikeThrough.GetSelIndex = 2 then Warnlog "Wrong entry in 'StrikeThrough' is selected"
-	TabFontEffects.OK
-	FormatParagraph
-	Kontext
-	active.SetPage TabEinzuegeUndAbstaende
-	kontext "TabEinzuegeUndAbstaende"
-	if Automatisch.IsChecked then Warnlog "Automatic is checked"
-	TabEinzuegeUndAbstaende.OK
-	
-	'/// Close document ///
-	Call hCloseDocument
+    '/// Format / Default ///
+    '/// New document ///
+    Call hNewDocument
+    Printlog "  - adjust Font- and Paragraph-Format"
+    '/// Insert a word and select it ///
+    Call wTypeKeys "Format<Shift Mod1 Left>"
+    '/// Select Format / Character and adjust Font- and Paragraph-Formats ///
+    FormatCharacter
+    Sleep 5
+    Kontext
+    active.SetPage TabFontEffects
+    kontext "TabFontEffects"
+    Outline.Check
+    Shadow.Check
+    Underline.Select 2
+    StrikeThrough.Select 2
+    TabFontEffects.OK
+    FormatParagraph
+    Kontext
+    active.SetPage TabEinzuegeUndAbstaende
+    kontext "TabEinzuegeUndAbstaende"
+    Automatisch.Check
+    '/// Close dialog ///
+    TabEinzuegeUndAbstaende.OK
+    Wait 500
+    
+    Printlog "  - Format / Default"
+    FormatDefaultWriter
+    Wait 500
+    
+    Printlog "  - check Font- and Paragraph-Formats"
+    
+    '/// Check if Font- and Paragraph-Formats have benn set to default ///
+    FormatCharacter
+    Kontext
+    active.SetPage TabFontEffects
+    kontext "TabFontEffects"
+    if Outline.IsChecked then Warnlog "Outline is checked"
+    if Shadow.IsChecked then Warnlog "Shadow is checked"
+    if Underline.GetSelIndex = 2 then Warnlog "Wrong entry in 'Underline' is selected"
+    if StrikeThrough.GetSelIndex = 2 then Warnlog "Wrong entry in 'StrikeThrough' is selected"
+    TabFontEffects.OK
+    
+    FormatParagraph
+    Kontext
+    active.SetPage TabEinzuegeUndAbstaende
+    kontext "TabEinzuegeUndAbstaende"
+    if Automatisch.IsChecked then Warnlog "Automatic is checked"
+    TabEinzuegeUndAbstaende.OK
+    
+    '/// Close document ///
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------------------------------------------------------------------------------
 
 testcase tFormatCharacter3
-	Dim Vergleich1 as integer
+    Dim Vergleich1 as integer
     Dim Vergleich2 as string
     Dim Vergleich3 as string
     Dim Vergleich4 as string
     Dim vLink as integer
-	'/// Format / Character ///
-	PrintLog "- Format / Character"
-	
-	'/// New document ///
-	Call hNewDocument
-	printlog "  - adjust character"
-	'/// Select Format / Character ///
-	FormatCharacter
-	Sleep 5
-	Kontext
-	'/// On Tabpage 'Font' adjust settings ///
-	active.SetPage TabFont
-	kontext "TabFont"
-	try
-		FontWest.Select 1
-		Vergleich2 = FontWest.GetSelText
-		Vergleich1 = StyleWest.GetItemCount
-		StyleWest.Select Vergleich1
-		Vergleich3 = StyleWest.GetSelText
-		SizeWest.Select 24
-	catch
-		Font.Select 1
-		Vergleich2 = Font.GetSelText
-		Vergleich1 = Style.GetItemCount
-		Style.Select Vergleich1
-		Vergleich3 = Style.GetSelText
-		Size.Select 24
-	endcatch
-	wait 100
-	Kontext
-	'/// On Tabpage 'Font Effects' adjust settings ///
-	active.SetPage TabFontEffects
-	kontext "TabFontEffects"
-	Blinking.Check
-	Kontext
-	Active.Setpage TabFontPosition
-	'/// On Tabpage 'Font Position ' adjust settings ///
-	Kontext "TabFontPosition"
-	Spacing.Select 2
-	SpacingBy.More 3
-	Vergleich4 = SpacingBy.GetText
-	if Right ( Vergleich4, 2 ) <> "pt" then Warnlog "Wrong Unit at Spacing by"
-	Kontext
-	'/// On Tabpage 'Hyperlink' adjust settings ///
-	active.SetPage TabHyperlinkZeichen
-	kontext "TabHyperlinkZeichen"
-	URLName.SetText "www.mikeportnoy.com"
-	NameText.SetText "A hyperlink with testtool"
-	TargetFrame.Select 2
-	Select Case iSprache
+    '/// Format / Character ///
+    PrintLog "- Format / Character"
+    
+    '/// New document ///
+    Call hNewDocument
+    printlog "  - adjust character"
+    '/// Select Format / Character ///
+    FormatCharacter
+    WaitSlot (5)
+    Kontext
+    '/// On Tabpage 'Font' adjust settings ///
+    active.SetPage TabFont
+    kontext "TabFont"
+    try
+        FontWest.Select 1
+        Vergleich2 = FontWest.GetSelText
+        Vergleich1 = StyleWest.GetItemCount
+        StyleWest.Select Vergleich1
+        Vergleich3 = StyleWest.GetSelText
+        SizeWest.Select 24
+    catch
+        Font.Select 1
+        Vergleich2 = Font.GetSelText
+        Vergleich1 = Style.GetItemCount
+        Style.Select Vergleich1
+        Vergleich3 = Style.GetSelText
+        Size.Select 24
+    endcatch
+    wait 100
+    Kontext
+    '/// On Tabpage 'Font Effects' adjust settings ///
+    active.SetPage TabFontEffects
+    kontext "TabFontEffects"
+    Blinking.Check
+    Kontext
+    Active.Setpage TabFontPosition
+    '/// On Tabpage 'Font Position ' adjust settings ///
+    Kontext "TabFontPosition"
+    Spacing.Select 2
+    SpacingBy.More 3
+    Vergleich4 = SpacingBy.GetText
+    if Right ( Vergleich4, 2 ) <> "pt" then Warnlog "Wrong Unit at Spacing by"
+    Kontext
+    '/// On Tabpage 'Hyperlink' adjust settings ///
+    active.SetPage TabHyperlinkZeichen
+    kontext "TabHyperlinkZeichen"
+    URLName.SetText "www.mikeportnoy.com"
+    NameText.SetText "A hyperlink with testtool"
+    TargetFrame.Select 2
+    Select Case iSprache
         Case 36
             vLink = 2
         Case else
             vLink = 6
     end select
     UnbesuchterLink.Select vLink
-            
-	Kontext
-	active.SetPage TabHintergrund
-	kontext "TabHintergrund"
-	Sleep 1
-	Hintergrundfarbe.Typekeys "<Down><Left>", 4
-	TabHintergrund.OK
-	'/// Close dialog and reopen with Format / Character ///
-	
-	Call wTypeKeys "This is formatted text <Home><Right>"
-	
-	printlog "  - check character"
-	
-	'/// Check settings made ///
-	Call wTypeKeys "<Home><Right>"
-	FormatCharacter
-	Kontext
-	active.SetPage TabFont
-	kontext "TabFont"
-	try
-		if FontWest.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ FontWest.GetSelText
-		if StyleWest.GetSelText <> Vergleich3 then Warnlog "FontStyle should " +Vergleich3+" is "+ StyleWest.GetSelText
-		if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
-	catch
-		if Font.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ Font.GetSelText
-		if Style.GetSelText <> Vergleich3 then Warnlog "FontStyle should " + Vergleich3 + " is "+ Style.GetSelText
-		if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
-	endcatch
-	Kontext
-	active.SetPage TabFontEffects
-	kontext "TabFontEffects"
-	if NOT Blinking.IsChecked then Warnlog "Blinking is not checked"
-	Kontext
-	Active.Setpage TabFontPosition
-	Kontext "TabFontPosition"
-	if Spacing.GetSelIndex <> 2 then Warnlog "Wrong Spacing activated, is not the 2. but " + Spacing.GetSelText
-	if SpacingBy.GetText <> Vergleich4 then Warnlog "Wrong Value selected. Not: " + Vergleich4 +" but " + SpacingBy.GetText
-	
-	Kontext
-	active.SetPage TabHyperlinkZeichen
-	kontext "TabHyperlinkZeichen"
-	if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#Wrong URL : " + URLName.GetText
-	SetClipboard UrlName.Gettext
-	if NameText.GetText <> "A hyperlink with testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
-	if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
-	if UnbesuchterLink.GetSelIndex <> vLink then Warnlog "Wrong Style for unused Link :" + UnbesuchterLink.GetSelIndex
-	TabHyperlinkZeichen.OK
-	
-	if gApplication = "WRITER" then
-		Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odt", "writer8")
-	else
-		Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odm", "writer8")  'gMasterDocFilter
-	end if
-	'/// Save document as '../user/work/format1.sxw' and close it ///
-	
-	if getclipboardtext="http://www.mikeportnoy.com/" then
-		printlog "  - activate Link"
-	end if
-	Sleep 20
-	
-	printlog "  - check saved character format"
-	Sleep 1
-	Call hCloseDocument
-	Sleep 2
-	if gApplication = "WRITER" then
-		Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
-	else
-		Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
-	end if
-	Call wTypeKeys "<Home><Right>"
-	Wait 500
-	'/// Reopen previous saved documentand check settings made under Format / Character ///
-	
-	FormatCharacter
-	
-	Sleep 3
-	Kontext
-	active.SetPage TabFont
-	kontext "TabFont"
-	try
-		if FontWest.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ FontWest.GetSelText
-		if StyleWest.GetSelText <> Vergleich3 then Warnlog "FontStyle should " + Vergleich3 + " is "+ StyleWest.GetSelText
-		if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
-	catch
-		if Font.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ Font.GetSelText
-		if Style.GetSelText <> Vergleich3 then Warnlog "FontStyle should " +Vergleich3+" is "+ Style.GetSelText
-		if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
-	endcatch
-	Kontext
-	active.SetPage TabFontEffects
-	kontext "TabFontEffects"
-	if NOT Blinking.IsChecked then Warnlog "Blinking is not checked"
-	Kontext
-	Active.Setpage TabFontPosition
-	Kontext "TabFontPosition"
-	if Spacing.GetSelIndex <> 2 then Warnlog "Wrong Spacing selected. Not 2. but " + Spacing.GetSelText
-	if SpacingBy.GetText <> Vergleich4 then Warnlog "Wrong value selectzed. Not " + Vergleich4 +" but " + SpacingBy.GetText
-	Kontext
-	active.SetPage TabHyperlinkZeichen
-	kontext "TabHyperlinkZeichen"
-	if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#Wrong URL : " + URLName.GetText
-	if NameText.GetText <> "A hyperlink with testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
-	if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
-	TabHyperlinkZeichen.OK
-	'/// Close document ///
-	Call hCloseDocument
+    kontext
+    active.SetPage TabHintergrund
+    kontext "TabHintergrund"
+    Sleep 1
+    Hintergrundfarbe.Typekeys "<Down><Left>", 4
+    TabHintergrund.OK
+    '/// Close dialog and reopen with Format / Character ///
+
+    Call wTypeKeys "This is formatted text <Home><Right>"
+
+    printlog "  - check character"
+
+    '/// Check settings made ///
+    Call wTypeKeys "<Home><Right>"
+    FormatCharacter
+    Kontext
+    active.SetPage TabFont
+    kontext "TabFont"
+    try
+        if FontWest.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ FontWest.GetSelText
+        if StyleWest.GetSelText <> Vergleich3 then Warnlog "FontStyle should " +Vergleich3+" is "+ StyleWest.GetSelText
+        if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
+    catch
+        if Font.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ Font.GetSelText
+        if Style.GetSelText <> Vergleich3 then Warnlog "FontStyle should " + Vergleich3 + " is "+ Style.GetSelText
+        if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
+    endcatch
+    Kontext
+    active.SetPage TabFontEffects
+    kontext "TabFontEffects"
+    if NOT Blinking.IsChecked then Warnlog "Blinking is not checked"
+    Kontext
+    Active.Setpage TabFontPosition
+    Kontext "TabFontPosition"
+    if Spacing.GetSelIndex <> 2 then Warnlog "Wrong Spacing activated, is not the 2. but " + Spacing.GetSelText
+    if SpacingBy.GetText <> Vergleich4 then Warnlog "Wrong Value selected. Not: " + Vergleich4 +" but " + SpacingBy.GetText
+
+    Kontext
+    active.SetPage TabHyperlinkZeichen
+    kontext "TabHyperlinkZeichen"
+    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#Wrong URL : " + URLName.GetText
+    SetClipboard UrlName.Gettext
+    if NameText.GetText <> "A hyperlink with testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
+    if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
+    if UnbesuchterLink.GetSelIndex <> vLink then Warnlog "Wrong Style for unused Link :" + UnbesuchterLink.GetSelIndex
+    TabHyperlinkZeichen.OK
+
+    if gApplication = "WRITER" then
+        Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odt", "writer8")
+    else
+        Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odm", "writer8")  'gMasterDocFilter
+    end if
+    '/// Save document as '../user/work/format1.sxw' and close it ///
+
+    if getclipboardtext="http://www.mikeportnoy.com/" then
+        printlog "  - activate Link"
+    end if
+    Sleep 20
+
+    printlog "  - check saved character format"
+    Sleep 1
+    Call hCloseDocument
+    Sleep 2
+    if gApplication = "WRITER" then
+        Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+    else
+        Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+    end if
+    Call wTypeKeys "<Home><Right>"
+    Wait 500
+    '/// Reopen previous saved documentand check settings made under Format / Character ///
+
+    FormatCharacter
+    WaitSlot (3)
+    Kontext
+    active.SetPage TabFont
+    kontext "TabFont"
+    try
+        if FontWest.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ FontWest.GetSelText
+        if StyleWest.GetSelText <> Vergleich3 then Warnlog "FontStyle should " + Vergleich3 + " is "+ StyleWest.GetSelText
+        if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
+    catch
+        if Font.GetSelIndex <> 1 then Warnlog "Font should "+ Vergleich2 +" is "+ Font.GetSelText
+        if Style.GetSelText <> Vergleich3 then Warnlog "FontStyle should " +Vergleich3+" is "+ Style.GetSelText
+        if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
+    endcatch
+    Kontext
+    active.SetPage TabFontEffects
+    kontext "TabFontEffects"
+    if NOT Blinking.IsChecked then Warnlog "Blinking is not checked"
+    Kontext
+    Active.Setpage TabFontPosition
+    Kontext "TabFontPosition"
+    if Spacing.GetSelIndex <> 2 then Warnlog "Wrong Spacing selected. Not 2. but " + Spacing.GetSelText
+    if SpacingBy.GetText <> Vergleich4 then Warnlog "Wrong value selectzed. Not " + Vergleich4 +" but " + SpacingBy.GetText
+    Kontext
+    active.SetPage TabHyperlinkZeichen
+    kontext "TabHyperlinkZeichen"
+    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#Wrong URL : " + URLName.GetText
+    if NameText.GetText <> "A hyperlink with testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
+    if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
+    TabHyperlinkZeichen.OK
+    '/// Close document ///
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------------------------------------------------------------------------------
 
 testcase tFormatHyperlink
-	' /// This testcase has been written due to bug #109488
-	'/// Open a new writerdocument
-	Call hNewDocument
-	'/// Enter a URL (www.sun.com) in document
-	Call wTypeKeys "Autocorrect my URL www.sun.com"
-	'/// Enter a space after URL
-	Call wTypeKeys " "
-	'/// URL should have been autocompleted to http://www.sun.com
-	Call wTypeKeys "<Left>",7
-	FormatCharacter
-	Kontext
-	Active.Setpage TabHyperlinkZeichen
-	Kontext "TabHyperlinkZeichen"
-	if URLName.GetText <> "http://www.sun.com/" then
-		Warnlog "Autocorrection for hyperlink does not work!"
-	else
-		printlog "Hyperlink has been auto-corrected"
-	end if
-	TabHyperlinkZeichen.Cancel
+    ' /// This testcase has been written due to bug #109488
+    '/// Open a new writerdocument
+    Call hNewDocument
+    '/// Enter a URL (www.sun.com) in document
+    Call wTypeKeys "Autocorrect my URL www.sun.com"
+    '/// Enter a space after URL
+    Call wTypeKeys " "
+    '/// URL should have been autocompleted to http://www.sun.com
+    Call wTypeKeys "<Left>",7
+    FormatCharacter
+    Kontext
+    Active.Setpage TabHyperlinkZeichen
+    Kontext "TabHyperlinkZeichen"
+    if URLName.GetText <> "http://www.sun.com/" then
+        Warnlog "Autocorrection for hyperlink does not work!"
+    else
+        printlog "Hyperlink has been auto-corrected"
+    end if
+    TabHyperlinkZeichen.Cancel
 
-	'/// Change URL to www.sauna.com
-	Call wTypeKeys "a"
-	Call wTypeKeys "<Left>" ,2
-	Call wTypeKeys "a"
-	
-	'/// Check whether URL has been changed
-	FormatCharacter
-	Kontext
-	Active.Setpage TabHyperlinkZeichen
-	Kontext "TabHyperlinkZeichen"
-	if URLName.GetText <> "http://www.sun.com/" then
-		Warnlog "Autocorrection for hyperlink should not have been affected to URL!"
-	else
-		printlog "Hyperlink has not been auto-corrected"
-	end if
-	TabHyperlinkZeichen.Cancel
-	'/// Close document
-	Call hCloseDocument
+    '/// Change URL to www.sauna.com
+    Call wTypeKeys "a"
+    Call wTypeKeys "<Left>" ,2
+    Call wTypeKeys "a"
+
+    '/// Check whether URL has been changed
+    FormatCharacter
+    Kontext
+    Active.Setpage TabHyperlinkZeichen
+    Kontext "TabHyperlinkZeichen"
+    if URLName.GetText <> "http://www.sun.com/" then
+        Warnlog "Autocorrection for hyperlink should not have been affected to URL!"
+    else
+        printlog "Hyperlink has not been auto-corrected"
+    end if
+    TabHyperlinkZeichen.Cancel
+    '/// Close document
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------------------------------------------------------------------------------
 
 testcase tFormatStyles1
-	Dim iMenuEntry as integer
-    
-    if hIsExtensionAlreadyInstalled("SunSearchToolbar.oxt") = true then
-        iMenuEntry = 5
-    else
-        iMenuEntry = 4
-    end if
-	'/// All format styles in context-menu ///
-	'/// Open a new document ///
-	Call hNewDocument
-	printlog "- Style 'Bold' "
-	'/// Write 'Style Bold' - execute Context menu 'Style Bold'
-	Call wTypeKeys "Style Bold"
-	Call wTypeKeys "<Shift Home>"
-	Kontext "DocumentWriter"
-	DocumentWriter.OpenContextMenu
-	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
-    wait 500
-    Call hMenuSelectNr(1)
-    wait 500
-	' /// Check if changes to style have been made ///
-    Kontext "TextObjectbar"
-    if Fett.Getstate(2) = 0 then
-        Warnlog "Style 'Bold' with context menu has not been set!"
-    end if
+    Dim iMenuEntry as integer
 
-	Call wTypeKeys "<End><Mod1 Shift X>"
-    wait 500
-	Call wTypeKeys "<Return>"
-	
-	printlog "- Style 'Italic' "
-	'/// Write 'Style Itlaic' - execute Context menu 'Style Italic'
-	Call wTypeKeys "Style Italic"
-	Call wTypeKeys "<Shift Home>"
-	Kontext "DocumentWriter"
-	DocumentWriter.OpenContextMenu
-	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
-    wait 500
-    Call hMenuSelectNr(2)
-    wait 500
-	' /// Check if changes to style have been made ///
-    Kontext "TextObjectbar"
-    if Kursiv.Getstate(2) = 0 then
-        Warnlog "#58722#Style 'Italic' with context menu has not been set!"
+    if hIsExtensionAlreadyInstalled("SunSearchToolbar.oxt") = true then
+        iMenuEntry = 6
+    else
+        iMenuEntry = 5
     end if
+    '/// All format styles in context-menu ///
+    '/// Open a new document ///
+    Call hNewDocument
+    printlog "- Style 'Bold' "
+    '/// Write 'Style Bold' - execute Context menu 'Style Bold'
+    Call wTypeKeys "Style Bold"
+    Call wTypeKeys "<Shift Home>"
+        Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:Bold", true, 1, false)   'Find 'Bold' and call the slot.
+        '/// Check if changes to style have been made ///
+        Kontext "TextObjectbar"
+        if Fett.Getstate(2) = 0 then
+            Warnlog "Style 'Bold' with context menu has not been set!"
+        end if
+
+        Call wTypeKeys "<End><Mod1 Shift X>"
+        wait 500                                                                           
+        Call wTypeKeys "<Return>"
+
+    printlog "- Style 'Italic' "
+    '/// Write 'Style Italic' - execute Context menu 'Style Italic'
+    Call wTypeKeys "Style Italic"
+    Call wTypeKeys "<Shift Home>"
+        Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:Italic", true, 2, false)   'Find 'Italic' and call the slot.
+	' /// Check if changes to style have been made ///
+        Kontext "TextObjectbar"
+        if Kursiv.Getstate(2) = 0 then
+            Warnlog "#58722#Style 'Italic' with context menu has not been set!"
+        end if
 
 	Call wTypeKeys "<End><Right>"
 	Call wTypeKeys "<Return>"
-	
-	printlog "- Style 'Underline' "
-	'/// Write 'Style Underline' - execute Context menu 'Style Underline'
-	Call wTypeKeys "Style Underline"
-	Call wTypeKeys "<Shift Home>"
-	Kontext "DocumentWriter"
-	DocumentWriter.OpenContextMenu
-	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
-    wait 500
-    Call hMenuSelectNr(3)
-    wait 500
+
+    printlog "- Style 'Underline' "
+    '/// Write 'Style Underline' - execute Context menu 'Style Underline'
+    Call wTypeKeys "Style Underline"
+    Call wTypeKeys "<Shift Home>"
+        Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:Underline", true, 4, false)   'Find 'Underline' and call the slot.
 	' /// Check if changes to style have been made ///
 	FormatCharacter
 	Kontext
@@ -416,16 +409,32 @@ testcase tFormatStyles1
 	Call wTypeKeys "<End><Right>"
 	Call wTypeKeys "<Return>"
 	
-	printlog "- Style 'StrikeThrough' "
-	'/// Write 'Style Strikethrough' - execute Context menu 'Style Strikethrough'
-	Call wTypeKeys "Style Strikethrough"
-	Call wTypeKeys "<Shift Home>"
-	Kontext "DocumentWriter"
-	DocumentWriter.OpenContextMenu
-	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
-    wait 500
-    Call hMenuSelectNr(4)
-    wait 500
+    printlog "- Style 'Overline' "
+    '/// Write 'Style Overline' - execute Context menu 'Style Strikethrough'
+    Call wTypeKeys "Style Overline"
+    Call wTypeKeys "<Shift Home>"
+        Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:Overline", true, 3, false)   'Find 'Overline' and call the slot.
+	' /// Check if changes to style have been made ///
+	FormatCharacter
+	Kontext
+	Active.Setpage TabFontEffects
+	Kontext "TabFontEffects"
+	if Overline.GetSelIndex <> 2 then Warnlog "Style 'Overline' with context menu has not been set!"
+	TabFontEffects.Cancel
+	Call wTypeKeys "<End><Right>"
+	Call wTypeKeys "<Return>"
+
+    printlog "- Style 'StrikeThrough' "
+    '/// Write 'Style Strikethrough' - execute Context menu 'Style Strikethrough'
+    Call wTypeKeys "Style Strikethrough"
+    Call wTypeKeys "<Shift Home>"
+    Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:Strikeout", true, 5, false)   'Find 'Strikethrough' and call the slot.
 	' /// Check if changes to style have been made ///
 	FormatCharacter
 	Kontext
@@ -436,16 +445,14 @@ testcase tFormatStyles1
 	Call wTypeKeys "<End>"
 	Call wTypeKeys "<Right><Return>"
 
-	printlog "- Style 'Shadow' "
-	'/// Write 'Style Shadow' - execute Context menu 'Style Shadow'
-	Call wTypeKeys "Style Shadow"
-	Call wTypeKeys "<Shift Home>"
-	Kontext "DocumentWriter"
-	DocumentWriter.OpenContextMenu
-	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
-    wait 500
-    Call hMenuSelectNr(5)
-    wait 500
+    printlog "- Style 'Shadow' "
+    '/// Write 'Style Shadow' - execute Context menu 'Style Shadow'
+    Call wTypeKeys "Style Shadow"
+    Call wTypeKeys "<Shift Home>"
+    Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:Shadowed", true, 6, false)   'Find 'Shadowed' and call the slot.
 	' /// Check if changes to style have been made ///
 	FormatCharacter
 	Kontext
@@ -456,16 +463,14 @@ testcase tFormatStyles1
 	Call wTypeKeys "<End><Right>"
 	Call wTypeKeys "<Return>"
 
-	printlog "- Style 'Outline' "
-	'/// Write 'Style Outline' - execute Context menu 'Style Outline'
-	Call wTypeKeys "Style Outline"
-	Call wTypeKeys "<Shift Home>"
-	Kontext "DocumentWriter"
-	DocumentWriter.OpenContextMenu
-	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
-    wait 500
-    Call hMenuSelectNr(6)
-    wait 500
+    printlog "- Style 'Outline' "
+    '/// Write 'Style Outline' - execute Context menu 'Style Outline'
+    Call wTypeKeys "Style Outline"
+    Call wTypeKeys "<Shift Home>"
+    Kontext "DocumentWriter"
+        DocumentWriter.OpenContextMenu
+        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+        Call hMenuFindSelect (".uno:OutlineFont", true, 7, false)   'Find 'Outline' and call the slot.
 	' /// Check if changes to style have been made ///
 	FormatCharacter
 	Kontext
@@ -474,8 +479,8 @@ testcase tFormatStyles1
 	if Outline.IsChecked = false then Warnlog "Style 'Outline' with context menu has not been set!"
 	TabFontEffects.Cancel
 
-	Call hCloseDocument
-
+    printlog "Close Document."
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------------------------------------
@@ -598,9 +603,9 @@ testcase tFormatCharacter
 	Call hCloseDocument
 	Sleep 2
 	if gApplication = "WRITER" then
-    	Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+    	    Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
 	else
-    	Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+    	    Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
 	end if
    	Call wTypeKeys "<Home><Right>"
 	Wait 500
@@ -613,13 +618,13 @@ testcase tFormatCharacter
 	active.SetPage TabFont
 	kontext "TabFont"
 	try
-		if FontWest.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ FontWest.GetSelText
-		if StyleWest.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ StyleWest.GetSelText
-		if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
+            if FontWest.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ FontWest.GetSelText
+            if StyleWest.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ StyleWest.GetSelText
+            if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
 	catch
-		if Font.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ Font.GetSelText
-		if Style.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ Style.GetSelText
-		if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
+            if Font.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ Font.GetSelText
+            if Style.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ Style.GetSelText
+            if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
 	endcatch
 	Kontext
 	active.SetPage TabFontEffects
@@ -639,6 +644,124 @@ testcase tFormatCharacter
 	TabHyperlinkZeichen.OK
 	'/// Close document ///
 	Call hCloseDocument
+endcase
+
+'------------------------------------------------------------------------------------------------------------------------------
+
+testcase tFormatCharacterOverline1
+    Dim iCounter as integer
+    Dim CompareValue1 as string
+    Dim CompareValue2 as string
+    Dim CompareValue3 as string
+    Dim CompareValue4 as string
+    
+    Printlog " New Writer document."
+    Call hNewDocument
+    Printlog " Format Character."
+    FormatCharacter
+    Printlog " Tab 'Font Effects'."
+    Kontext
+    active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+    Printlog " Select Overline Listbox."
+    Printlog " Default (first) entry is 'Without'."
+    Overline.Select (1)
+    
+    Printlog " Select Colour Listbox."
+    Printlog " Verify that Colour List box is DISABLED."
+    try
+        OverlineColor.Select (1)
+        warnlog "Color-listbox was falsely enabled."
+    catch
+        printlog "Color-listbox is correctly disabled by default."
+    endcatch
+    
+    Printlog " Select Overline Listbox again."
+    Printlog " Select second entry 'Single'."
+    Overline.Select (2)
+    
+    Printlog " Step down all 14 entries (Last: 'Double Wave' in English UI)."
+    for iCounter = 2 to Overline.GetItemCount
+        Overline.Select (iCounter)
+	wait (500)
+    next iCounter
+    
+    Printlog " Select Color Listbox."
+    Printlog " Verify that Color List box is ENABLED."
+    try
+        OverlineColor.Select (OverlineColor.GetItemCount)
+        printlog "Color-listbox is correctly enabled."
+    catch
+        warnlog "Color-listbox was falsely disabled."
+    endcatch
+    
+    'CompareValue2 = OverlineColor.GetSelIndex
+    
+    Printlog " Close dialog."
+    TabFontEffects.Ok
+    Printlog " Close document."
+    Call hCloseDocument
+endcase
+
+'------------------------------------------------------------------------------------------------------------------------------
+
+testcase tFormatCharacterOverline2
+    Dim CompareValue1 as string
+    Dim CompareValue2 as string
+    Dim CompareValue3 as string
+    Dim CompareValue4 as string
+    Dim SaveFilePathAndName as String
+    
+    SaveFilePathAndName = gOfficePath + "user\work\OverlineTest2.odt"
+    
+    Printlog " New Writer document."
+    Call hNewDocument
+    Printlog " Type 'Overline Single Red' (without quotes)."
+    Call wTypeKeys "Overline Single Red"
+    Printlog " Select entire string."
+    Call wTypeKeys "<HOME>"
+    Call wTypeKeys "<SHIFT END>"
+    Printlog " Format Character."
+    FormatCharacter
+    Printlog " Tab 'Font Effects'."
+    Kontext
+    active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+    Printlog " Select Overline Listbox."
+    Printlog " Select second entry 'Single'."
+    Overline.Select (2)
+    
+    Printlog " Select Color Listbox."
+    Printlog " In Color List box, select Color 'Red', OK."
+    OverlineColor.Select (6)
+    
+    CompareValue1 = Overline.GetSelIndex
+    CompareValue2 = OverlineColor.GetSelIndex
+    
+    Printlog " Close dialog."
+    TabFontEffects.Ok
+    
+    Printlog " Save document."
+    Call hFileSaveAsKill ( SaveFilePathAndName )
+    Printlog " Reload document."
+    FileReload
+    Printlog " Select entire string."
+    Call wTypeKeys "<HOME><SHIFT END>"
+    Printlog " Format Character."
+    FormatCharacter
+    Printlog " Tab 'Font Effects'."
+    Kontext
+    active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+    Printlog " Verify that 'Overline Single' and Overline Colour 'Red' is set."
+    
+    If Overline.GetSelIndex <> CompareValue1 then warnlog "The Overline-Value wasn't saved after closing the options-dialogue."
+    If OverlineColor.GetSelIndex <> CompareValue2 then warnlog "The Color-Value wasn't saved after closing the options-dialogue."
+    
+    Printlog " Close dialog."
+    TabFontEffects.Ok
+    Printlog " Close document."
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------------------------------------------------------------------------------

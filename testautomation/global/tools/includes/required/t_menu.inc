@@ -300,7 +300,7 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
             hMenuClose()
         endif
     endif 'StringType = TRUE
-    wait 200   'Wait 0,2 seconds in case we just have called a Submenu.
+    wait 500   'Wait 0,5 seconds in case we just have called a Submenu.
 
 end function
 
