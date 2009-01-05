@@ -619,9 +619,8 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                         nDx = -aNewRect.Left();
                     if ( (nDy + aNewRect.Top()) < 0 )
                         nDy = -aNewRect.Top();
-                    Point aTest;
-                    rDragStat.GetDragMethod()->MovPoint(aTest);
-                    if ( rDragStat.GetDragMethod()->IsMoveOnly() )
+
+                    if ( rDragStat.GetDragMethod()->getMoveOnly() )
                         aNewRect.Move(nDx,nDy);
                     else
                         ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());
