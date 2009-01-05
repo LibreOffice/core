@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69.24.1 $
+ * $Revision: 1.69.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1620,7 +1620,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_TEXTLINE_ACTION ):
                 {
                     const MetaTextLineAction* pA = (const MetaTextLineAction*) pAction;
-                    rWriter.DrawTextLine( pA->GetStartPoint(), pA->GetWidth(), pA->GetStrikeout(), pA->GetUnderline() );
+                    rWriter.DrawTextLine( pA->GetStartPoint(), pA->GetWidth(), pA->GetStrikeout(), pA->GetUnderline(), pA->GetOverline() );
 
                 }
                 break;
@@ -1694,6 +1694,17 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                         rWriter.SetTextLineColor( pA->GetColor() );
                     else
                         rWriter.SetTextLineColor();
+                }
+                break;
+
+                case( META_OVERLINECOLOR_ACTION ):
+                {
+                    const MetaOverlineColorAction* pA = (const MetaOverlineColorAction*) pAction;
+
+                    if( pA->IsSetting() )
+                        rWriter.SetOverlineColor( pA->GetColor() );
+                    else
+                        rWriter.SetOverlineColor();
                 }
                 break;
 
