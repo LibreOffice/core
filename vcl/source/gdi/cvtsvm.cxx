@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cvtsvm.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1087,7 +1087,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
                                                             (FontStrikeout) nStrikeout,
-                                                            (FontUnderline) nUnderline ) );
+                                                            (FontUnderline) nUnderline,
+                                                            UNDERLINE_NONE ) );
 
 #ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
@@ -2061,6 +2062,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 nCount++;
             }
             break;
+
+#if 0
+            case( META_OVERLINECOLOR_ACTION ):
+            break;
+#endif
 
             case( META_TEXTLINE_ACTION ):
             {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,9 +102,10 @@ void PDFWriter::DrawTextLine(
                              long nWidth,
                              FontStrikeout eStrikeout,
                              FontUnderline eUnderline,
+                             FontUnderline eOverline,
                              BOOL bUnderlineAbove )
 {
-    ((PDFWriterImpl*)pImplementation)->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, bUnderlineAbove );
+    ((PDFWriterImpl*)pImplementation)->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
 void PDFWriter::DrawTextArray(
@@ -403,6 +404,16 @@ void PDFWriter::SetTextLineColor()
 void PDFWriter::SetTextLineColor( const Color& rColor )
 {
     ((PDFWriterImpl*)pImplementation)->setTextLineColor( rColor );
+}
+
+void PDFWriter::SetOverlineColor()
+{
+    ((PDFWriterImpl*)pImplementation)->setOverlineColor();
+}
+
+void PDFWriter::SetOverlineColor( const Color& rColor )
+{
+    ((PDFWriterImpl*)pImplementation)->setOverlineColor( rColor );
 }
 
 void PDFWriter::SetTextAlign( ::TextAlign eAlign )

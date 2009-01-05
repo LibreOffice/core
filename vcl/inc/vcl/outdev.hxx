@@ -158,7 +158,8 @@ struct KerningPair
 #define PUSH_TEXTLINECOLOR              ((USHORT)0x0400)
 #define PUSH_TEXTLAYOUTMODE             ((USHORT)0x0800)
 #define PUSH_TEXTLANGUAGE               ((USHORT)0x1000)
-#define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
+#define PUSH_OVERLINECOLOR              ((USHORT)0x2000)
+#define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
 #define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
 #define PUSH_ALL                        ((USHORT)0xFFFF)
 
@@ -364,6 +365,7 @@ private:
     Font                maFont;
     Color               maTextColor;
     Color               maTextLineColor;
+    Color               maOverlineColor;
     TextAlign           meTextAlign;
     RasterOp            meRasterOp;
     Wallpaper           maBackground;
@@ -430,7 +432,7 @@ public:
                                               const String& rOrigStr, USHORT nStyle,
                                               MetricVector* pVector, String* pDisplayText );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, BOOL bWordLine, BOOL bUnderlineAbove );
+    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, BOOL bWordLine, BOOL bUnderlineAbove );
     SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, BOOL bTextLines );
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
@@ -443,7 +445,11 @@ public:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
     SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
-    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, BOOL bUnderlineAbove );
+    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, BOOL bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, BOOL bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, BOOL bUnderlineAbove );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
@@ -581,6 +587,7 @@ public:
     void                DrawTextLine( const Point& rPos, long nWidth,
                                       FontStrikeout eStrikeout,
                                       FontUnderline eUnderline,
+                                      FontUnderline eOverline,
                                       BOOL bUnderlineAbove = FALSE );
     static BOOL         IsTextUnderlineAbove( const Font& rFont );
 
@@ -886,6 +893,10 @@ public:
     void                SetTextLineColor( const Color& rColor );
     const Color&        GetTextLineColor() const { return maTextLineColor; }
     BOOL                IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+    void                SetOverlineColor();
+    void                SetOverlineColor( const Color& rColor );
+    const Color&        GetOverlineColor() const { return maOverlineColor; }
+    BOOL                IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
     void                SetTextAlign( TextAlign eAlign );
     TextAlign           GetTextAlign() const { return maFont.GetAlign(); }
 

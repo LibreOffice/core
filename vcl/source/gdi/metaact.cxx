@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: metaact.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,6 +231,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
         case( META_TEXTCOLOR_ACTION ): pAction = new MetaTextColorAction; break;
         case( META_TEXTFILLCOLOR_ACTION ): pAction = new MetaTextFillColorAction; break;
         case( META_TEXTLINECOLOR_ACTION ): pAction = new MetaTextLineColorAction; break;
+        case( META_OVERLINECOLOR_ACTION ): pAction = new MetaOverlineColorAction; break;
         case( META_TEXTALIGN_ACTION ): pAction = new MetaTextAlignAction; break;
         case( META_MAPMODE_ACTION ): pAction = new MetaMapModeAction; break;
         case( META_FONT_ACTION ): pAction = new MetaFontAction; break;
@@ -1677,12 +1678,14 @@ IMPL_META_ACTION( TextLine, META_TEXTLINE_ACTION )
 
 MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
                                         FontStrikeout eStrikeout,
-                                        FontUnderline eUnderline ) :
+                                        FontUnderline eUnderline,
+                                        FontUnderline eOverline ) :
     MetaAction  ( META_TEXTLINE_ACTION ),
     maPos       ( rPos ),
     mnWidth     ( nWidth ),
     meStrikeout ( eStrikeout ),
-    meUnderline ( eUnderline )
+    meUnderline ( eUnderline ),
+    meOverline  ( eOverline )
 {
 }
 
@@ -1690,7 +1693,7 @@ MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
 
 void MetaTextLineAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline );
+    pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline, meOverline );
 }
 
 // ------------------------------------------------------------------------
@@ -1724,7 +1727,8 @@ sal_Bool MetaTextLineAction::Compare( const MetaAction& rMetaAction ) const
     return ( maPos == ((MetaTextLineAction&)rMetaAction).maPos ) &&
            ( mnWidth == ((MetaTextLineAction&)rMetaAction).mnWidth ) &&
            ( meStrikeout == ((MetaTextLineAction&)rMetaAction).meStrikeout ) &&
-           ( meUnderline == ((MetaTextLineAction&)rMetaAction).meUnderline );
+           ( meUnderline == ((MetaTextLineAction&)rMetaAction).meUnderline ) &&
+           ( meOverline  == ((MetaTextLineAction&)rMetaAction).meOverline );
 }
 
 // ------------------------------------------------------------------------
@@ -1737,6 +1741,8 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm << mnWidth;
     rOStm << static_cast<sal_uInt32>(meStrikeout);
     rOStm << static_cast<sal_uInt32>(meUnderline);
+    // new in version 2
+    rOStm << static_cast<sal_uInt32>(meOverline);
 }
 
 // ------------------------------------------------------------------------
@@ -1752,6 +1758,10 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     meStrikeout = (FontStrikeout)nTemp;
     rIStm >> nTemp;
     meUnderline = (FontUnderline)nTemp;
+    if ( aCompat.GetVersion() >= 2 ) {
+        rIStm >> nTemp;
+        meUnderline = (FontUnderline)nTemp;
+    }
 }
 
 // ========================================================================
@@ -3256,6 +3266,64 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 // ------------------------------------------------------------------------
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
+{
+    COMPAT( rIStm );
+    maColor.Read( rIStm, TRUE );
+    rIStm >> mbSet;
+}
+
+// ========================================================================
+
+IMPL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
+
+// ------------------------------------------------------------------------
+
+MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, BOOL bSet ) :
+    MetaAction  ( META_OVERLINECOLOR_ACTION ),
+    maColor     ( rColor ),
+    mbSet       ( bSet )
+{
+}
+
+// ------------------------------------------------------------------------
+
+void MetaOverlineColorAction::Execute( OutputDevice* pOut )
+{
+    if( mbSet )
+        pOut->SetOverlineColor( maColor );
+    else
+        pOut->SetOverlineColor();
+}
+
+// ------------------------------------------------------------------------
+
+MetaAction* MetaOverlineColorAction::Clone()
+{
+    MetaAction* pClone = (MetaAction*) new MetaOverlineColorAction( *this );
+    pClone->ResetRefCount();
+    return pClone;
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
+{
+    return ( maColor == ((MetaOverlineColorAction&)rMetaAction).maColor ) &&
+           ( mbSet == ((MetaOverlineColorAction&)rMetaAction).mbSet );
+}
+
+// ------------------------------------------------------------------------
+
+void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
+{
+    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    maColor.Write( rOStm, TRUE );
+    rOStm << mbSet;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     maColor.Read( rIStm, TRUE );

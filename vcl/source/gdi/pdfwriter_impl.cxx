@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.133.16.2 $
+ * $Revision: 1.132.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6458,11 +6458,14 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bT
 
     Color aTextColor = m_aCurrentPDFState.m_aFont.GetColor();
     Color aTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
+    Color aOverlineColor = m_aCurrentPDFState.m_aOverlineColor;
     Color aReliefColor( COL_LIGHTGRAY );
     if( aTextColor == COL_BLACK )
         aTextColor = Color( COL_WHITE );
     if( aTextLineColor == COL_BLACK )
         aTextLineColor = Color( COL_WHITE );
+    if( aOverlineColor == COL_BLACK )
+        aOverlineColor = Color( COL_WHITE );
     if( aTextColor == COL_WHITE )
         aReliefColor = Color( COL_BLACK );
 
@@ -6471,7 +6474,8 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bT
     aSetFont.SetShadow( FALSE );
 
     aSetFont.SetColor( aReliefColor );
-    setTextLineColor( aTextLineColor );
+    setTextLineColor( aReliefColor );
+    setOverlineColor( aReliefColor );
     setFont( aSetFont );
     long nOff = 1 + getReferenceDevice()->mnDPIX/300;
     if( eRelief == RELIEF_ENGRAVED )
@@ -6483,6 +6487,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bT
 
     rLayout.DrawOffset() -= Point( nOff, nOff );
     setTextLineColor( aTextLineColor );
+    setOverlineColor( aOverlineColor );
     aSetFont.SetColor( aTextColor );
     setFont( aSetFont );
     updateGraphicsState();
@@ -6496,6 +6501,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bT
 {
     Font aSaveFont = m_aCurrentPDFState.m_aFont;
     Color aSaveTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
+    Color aSaveOverlineColor = m_aCurrentPDFState.m_aOverlineColor;
 
     Font& rFont = m_aCurrentPDFState.m_aFont;
     if( rFont.GetColor() == Color( COL_BLACK ) || rFont.GetColor().GetLuminance() < 8 )
@@ -6506,6 +6512,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bT
     rFont.SetOutline( FALSE );
     setFont( rFont );
     setTextLineColor( rFont.GetColor() );
+    setOverlineColor( rFont.GetColor() );
     updateGraphicsState();
 
     long nOff = 1 + ((m_pReferenceDevice->mpFontEntry->mnLineHeight-24)/24);
@@ -6517,6 +6524,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bT
 
     setFont( aSaveFont );
     setTextLineColor( aSaveTextLineColor );
+    setOverlineColor( aSaveOverlineColor );
     updateGraphicsState();
 }
 
@@ -6908,9 +6916,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     // draw eventual textlines
     FontStrikeout eStrikeout = m_aCurrentPDFState.m_aFont.GetStrikeout();
     FontUnderline eUnderline = m_aCurrentPDFState.m_aFont.GetUnderline();
+    FontUnderline eOverline  = m_aCurrentPDFState.m_aFont.GetOverline();
     if( bTextLines &&
         (
          ( eUnderline != UNDERLINE_NONE && eUnderline != UNDERLINE_DONTKNOW ) ||
+         ( eOverline  != UNDERLINE_NONE && eOverline  != UNDERLINE_DONTKNOW ) ||
          ( eStrikeout != STRIKEOUT_NONE && eStrikeout != STRIKEOUT_DONTKNOW )
          )
         )
@@ -6937,7 +6947,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 {
                     drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
                                   m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
-                                  eStrikeout, eUnderline, bUnderlineAbove );
+                                  eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                     nWidth = 0;
                 }
             }
@@ -6946,7 +6956,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             {
                 drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
                               m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
-                              eStrikeout, eUnderline, bUnderlineAbove );
+                              eStrikeout, eUnderline, eOverline, bUnderlineAbove );
             }
         }
         else
@@ -6955,7 +6965,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
             drawTextLine( m_pReferenceDevice->PixelToLogic( aStartPt ),
                           m_pReferenceDevice->ImplDevicePixelToLogicWidth( nWidth ),
-                          eStrikeout, eUnderline, bUnderlineAbove );
+                          eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }
 
@@ -7364,11 +7374,350 @@ void PDFWriterImpl::drawWaveLine( const Point& rStart, const Point& rStop, sal_I
 #define WCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicWidth( x )
 #define HCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicHeight( x )
 
-void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, bool bUnderlineAbove )
+void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove )
+{
+    // note: units in pFontEntry are ref device pixel
+    ImplFontEntry*  pFontEntry = m_pReferenceDevice->mpFontEntry;
+    long            nLineHeight = 0;
+    long            nLinePos = 0;
+
+    appendStrokingColor( aColor, aLine );
+    aLine.append( "\n" );
+
+    if ( bIsAbove )
+    {
+        if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
+            m_pReferenceDevice->ImplInitAboveTextLineSize();
+        nLineHeight = HCONV( pFontEntry->maMetric.mnAboveWUnderlineSize );
+        nLinePos = HCONV( pFontEntry->maMetric.mnAboveWUnderlineOffset );
+    }
+    else
+    {
+        if ( !pFontEntry->maMetric.mnWUnderlineSize )
+            m_pReferenceDevice->ImplInitTextLineSize();
+        nLineHeight = HCONV( pFontEntry->maMetric.mnWUnderlineSize );
+        nLinePos = HCONV( pFontEntry->maMetric.mnWUnderlineOffset );
+    }
+    if ( (eTextLine == UNDERLINE_SMALLWAVE) && (nLineHeight > 3) )
+        nLineHeight = 3;
+
+    long nLineWidth = getReferenceDevice()->mnDPIX/450;
+    if ( ! nLineWidth )
+        nLineWidth = 1;
+
+    if ( eTextLine == UNDERLINE_BOLDWAVE )
+        nLineWidth = 3*nLineWidth;
+
+    m_aPages.back().appendMappedLength( (sal_Int32)nLineWidth, aLine );
+    aLine.append( " w " );
+
+    if ( eTextLine == UNDERLINE_DOUBLEWAVE )
+    {
+        long nOrgLineHeight = nLineHeight;
+        nLineHeight /= 3;
+        if ( nLineHeight < 2 )
+        {
+            if ( nOrgLineHeight > 1 )
+                nLineHeight = 2;
+            else
+                nLineHeight = 1;
+        }
+        long nLineDY = nOrgLineHeight-(nLineHeight*2);
+        if ( nLineDY < nLineWidth )
+            nLineDY = nLineWidth;
+        long nLineDY2 = nLineDY/2;
+        if ( !nLineDY2 )
+            nLineDY2 = 1;
+
+        nLinePos -= nLineWidth-nLineDY2;
+
+        m_aPages.back().appendWaveLine( nWidth, -nLinePos, 2*nLineHeight, aLine );
+
+        nLinePos += nLineWidth+nLineDY;
+        m_aPages.back().appendWaveLine( nWidth, -nLinePos, 2*nLineHeight, aLine );
+    }
+    else
+    {
+        if ( eTextLine != UNDERLINE_BOLDWAVE )
+            nLinePos -= nLineWidth/2;
+        m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
+    }
+}
+
+void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove )
+{
+    // note: units in pFontEntry are ref device pixel
+    ImplFontEntry*  pFontEntry = m_pReferenceDevice->mpFontEntry;
+    long            nLineHeight = 0;
+    long            nLinePos  = 0;
+    long            nLinePos2 = 0;
+
+    if ( eTextLine > UNDERLINE_BOLDWAVE )
+        eTextLine = UNDERLINE_SINGLE;
+
+    switch ( eTextLine )
+    {
+        case UNDERLINE_SINGLE:
+        case UNDERLINE_DOTTED:
+        case UNDERLINE_DASH:
+        case UNDERLINE_LONGDASH:
+        case UNDERLINE_DASHDOT:
+        case UNDERLINE_DASHDOTDOT:
+            if ( bIsAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
+                    m_pReferenceDevice->ImplInitAboveTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveUnderlineOffset );
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnUnderlineSize )
+                    m_pReferenceDevice->ImplInitTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnUnderlineOffset );
+            }
+            break;
+        case UNDERLINE_BOLD:
+        case UNDERLINE_BOLDDOTTED:
+        case UNDERLINE_BOLDDASH:
+        case UNDERLINE_BOLDLONGDASH:
+        case UNDERLINE_BOLDDASHDOT:
+        case UNDERLINE_BOLDDASHDOTDOT:
+            if ( bIsAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveBUnderlineSize )
+                    m_pReferenceDevice->ImplInitAboveTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveBUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveBUnderlineOffset );
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnBUnderlineSize )
+                    m_pReferenceDevice->ImplInitTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnBUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnBUnderlineOffset );
+                nLinePos += nLineHeight/2;
+            }
+            break;
+        case UNDERLINE_DOUBLE:
+            if ( bIsAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveDUnderlineSize )
+                    m_pReferenceDevice->ImplInitAboveTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveDUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset1 );
+                nLinePos2   = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset2 );
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnDUnderlineSize )
+                    m_pReferenceDevice->ImplInitTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnDUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnDUnderlineOffset1 );
+                nLinePos2   = HCONV( pFontEntry->maMetric.mnDUnderlineOffset2 );
+            }
+        default:
+            break;
+    }
+
+    if ( nLineHeight )
+    {
+        m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, true );
+        aLine.append( " w " );
+        appendStrokingColor( aColor, aLine );
+        aLine.append( "\n" );
+
+        switch ( eTextLine )
+        {
+            case UNDERLINE_DOTTED:
+            case UNDERLINE_BOLDDOTTED:
+                aLine.append( "[ " );
+                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                aLine.append( " ] 0 d\n" );
+                break;
+            case UNDERLINE_DASH:
+            case UNDERLINE_LONGDASH:
+            case UNDERLINE_BOLDDASH:
+            case UNDERLINE_BOLDLONGDASH:
+                {
+                    sal_Int32 nDashLength = 4*nLineHeight;
+                    sal_Int32 nVoidLength = 2*nLineHeight;
+                    if ( ( eTextLine == UNDERLINE_LONGDASH ) || ( eTextLine == UNDERLINE_BOLDLONGDASH ) )
+                        nDashLength = 8*nLineHeight;
+
+                    aLine.append( "[ " );
+                    m_aPages.back().appendMappedLength( nDashLength, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                    aLine.append( " ] 0 d\n" );
+                }
+                break;
+            case UNDERLINE_DASHDOT:
+            case UNDERLINE_BOLDDASHDOT:
+                {
+                    sal_Int32 nDashLength = 4*nLineHeight;
+                    sal_Int32 nVoidLength = 2*nLineHeight;
+                    aLine.append( "[ " );
+                    m_aPages.back().appendMappedLength( nDashLength, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                    aLine.append( " ] 0 d\n" );
+                }
+                break;
+            case UNDERLINE_DASHDOTDOT:
+            case UNDERLINE_BOLDDASHDOTDOT:
+                {
+                    sal_Int32 nDashLength = 4*nLineHeight;
+                    sal_Int32 nVoidLength = 2*nLineHeight;
+                    aLine.append( "[ " );
+                    m_aPages.back().appendMappedLength( nDashLength, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                    aLine.append( " ] 0 d\n" );
+                }
+                break;
+            default:
+                break;
+        }
+
+        aLine.append( "0 " );
+        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
+        aLine.append( " m " );
+        m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
+        aLine.append( ' ' );
+        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
+        aLine.append( " l S\n" );
+        if ( eTextLine == UNDERLINE_DOUBLE )
+        {
+            aLine.append( "0 " );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
+            aLine.append( " m " );
+            m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
+            aLine.append( ' ' );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
+            aLine.append( " l S\n" );
+        }
+    }
+}
+
+void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor )
+{
+    // note: units in pFontEntry are ref device pixel
+    ImplFontEntry*  pFontEntry = m_pReferenceDevice->mpFontEntry;
+    long            nLineHeight = 0;
+    long            nLinePos  = 0;
+    long            nLinePos2 = 0;
+
+    if ( eStrikeout > STRIKEOUT_X )
+        eStrikeout = STRIKEOUT_SINGLE;
+
+    switch ( eStrikeout )
+    {
+        case STRIKEOUT_SINGLE:
+            if ( !pFontEntry->maMetric.mnStrikeoutSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLineHeight = HCONV( pFontEntry->maMetric.mnStrikeoutSize );
+            nLinePos    = HCONV( pFontEntry->maMetric.mnStrikeoutOffset );
+            break;
+        case STRIKEOUT_BOLD:
+            if ( !pFontEntry->maMetric.mnBStrikeoutSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLineHeight = HCONV( pFontEntry->maMetric.mnBStrikeoutSize );
+            nLinePos    = HCONV( pFontEntry->maMetric.mnBStrikeoutOffset );
+            break;
+        case STRIKEOUT_DOUBLE:
+            if ( !pFontEntry->maMetric.mnDStrikeoutSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLineHeight = HCONV( pFontEntry->maMetric.mnDStrikeoutSize );
+            nLinePos    = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset1 );
+            nLinePos2   = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset2 );
+            break;
+        default:
+            break;
+    }
+
+    if ( nLineHeight )
+    {
+        m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, true );
+        aLine.append( " w " );
+        appendStrokingColor( aColor, aLine );
+        aLine.append( "\n" );
+
+        aLine.append( "0 " );
+        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
+        aLine.append( " m " );
+        m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, true );
+        aLine.append( ' ' );
+        m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
+        aLine.append( " l S\n" );
+
+        if ( eStrikeout == STRIKEOUT_DOUBLE )
+        {
+            aLine.append( "0 " );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
+            aLine.append( " m " );
+            m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, true );
+            aLine.append( ' ' );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
+            aLine.append( " l S\n" );
+        }
+    }
+}
+
+void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout )
+{
+    String aStrikeoutChar = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
+    String aStrikeout = aStrikeoutChar;
+    while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
+        aStrikeout.Append( aStrikeout );
+
+    // do not get broader than nWidth modulo 1 character
+    while( m_pReferenceDevice->GetTextWidth( aStrikeout ) >= nWidth )
+        aStrikeout.Erase( 0, 1 );
+    aStrikeout.Append( aStrikeoutChar );
+    BOOL bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
+    if ( bShadow )
+    {
+        Font aFont = m_aCurrentPDFState.m_aFont;
+        aFont.SetShadow( FALSE );
+        setFont( aFont );
+        updateGraphicsState();
+    }
+
+    // strikeout string is left aligned non-CTL text
+    ULONG nOrigTLM = m_pReferenceDevice->GetLayoutMode();
+    m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
+    drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
+    m_pReferenceDevice->SetLayoutMode( nOrigTLM );
+
+    if ( bShadow )
+    {
+        Font aFont = m_aCurrentPDFState.m_aFont;
+        aFont.SetShadow( TRUE );
+        setFont( aFont );
+        updateGraphicsState();
+    }
+}
+
+void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove )
 {
     if ( !nWidth ||
          ( ((eStrikeout == STRIKEOUT_NONE)||(eStrikeout == STRIKEOUT_DONTKNOW)) &&
-           ((eUnderline == UNDERLINE_NONE)||(eUnderline == UNDERLINE_DONTKNOW)) ) )
+           ((eUnderline == UNDERLINE_NONE)||(eUnderline == UNDERLINE_DONTKNOW)) &&
+           ((eOverline  == UNDERLINE_NONE)||(eOverline  == UNDERLINE_DONTKNOW)) ) )
         return;
 
     MARK( "drawTextLine" );
@@ -7377,64 +7726,16 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     // note: units in pFontEntry are ref device pixel
     ImplFontEntry*  pFontEntry = m_pReferenceDevice->mpFontEntry;
     Color           aUnderlineColor = m_aCurrentPDFState.m_aTextLineColor;
+    Color           aOverlineColor  = m_aCurrentPDFState.m_aOverlineColor;
     Color           aStrikeoutColor = m_aCurrentPDFState.m_aFont.GetColor();
-    long            nLineHeight = 0;
-    long            nLinePos = 0;
-    long            nLinePos2 = 0;
-    bool            bNormalLines = true;
+    bool            bStrikeoutDone = false;
+    bool            bUnderlineDone = false;
+    bool            bOverlineDone  = false;
 
-    if ( bNormalLines &&
-         ((eStrikeout == STRIKEOUT_SLASH) || (eStrikeout == STRIKEOUT_X)) )
+    if ( (eStrikeout == STRIKEOUT_SLASH) || (eStrikeout == STRIKEOUT_X) )
     {
-        String aStrikeoutChar = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
-        String aStrikeout = aStrikeoutChar;
-        while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
-            aStrikeout.Append( aStrikeout );
-
-        // do not get broader than nWidth modulo 1 character
-        while( m_pReferenceDevice->GetTextWidth( aStrikeout ) >= nWidth )
-            aStrikeout.Erase( 0, 1 );
-        aStrikeout.Append( aStrikeoutChar );
-        BOOL bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
-        if( bShadow )
-        {
-            Font aFont = m_aCurrentPDFState.m_aFont;
-            aFont.SetShadow( FALSE );
-            setFont( aFont );
-            updateGraphicsState();
-        }
-
-        // strikeout string is left aligned non-CTL text
-        ULONG nOrigTLM = m_pReferenceDevice->GetLayoutMode();
-        m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
-        drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
-        m_pReferenceDevice->SetLayoutMode( nOrigTLM );
-
-        if( bShadow )
-        {
-            Font aFont = m_aCurrentPDFState.m_aFont;
-            aFont.SetShadow( TRUE );
-            setFont( aFont );
-            updateGraphicsState();
-        }
-
-        switch( eUnderline )
-        {
-            case UNDERLINE_NONE:
-            case UNDERLINE_DONTKNOW:
-            case UNDERLINE_SMALLWAVE:
-            case UNDERLINE_WAVE:
-            case UNDERLINE_DOUBLEWAVE:
-            case UNDERLINE_BOLDWAVE:
-            {
-                bNormalLines = FALSE;
-            }
-            break;
-            default:
-            {
-                ; // No gcc warning
-            }
-        }
+        drawStrikeoutChar( rPos, nWidth, eStrikeout );
+        bStrikeoutDone = true;
     }
 
     Point aPos( rPos );
@@ -7464,290 +7765,34 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
          (eUnderline == UNDERLINE_DOUBLEWAVE) ||
          (eUnderline == UNDERLINE_BOLDWAVE) )
     {
-        appendStrokingColor( aUnderlineColor, aLine );
-        aLine.append( "\n" );
-
-        if ( bUnderlineAbove )
-        {
-            if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
-                m_pReferenceDevice->ImplInitAboveTextLineSize();
-            nLinePos = HCONV( pFontEntry->maMetric.mnAboveWUnderlineOffset );
-            nLineHeight = HCONV( pFontEntry->maMetric.mnAboveWUnderlineSize );
-        }
-        else
-        {
-            if ( !pFontEntry->maMetric.mnWUnderlineSize )
-                m_pReferenceDevice->ImplInitTextLineSize();
-            nLinePos = HCONV( pFontEntry->maMetric.mnWUnderlineOffset );
-            nLineHeight = HCONV( pFontEntry->maMetric.mnWUnderlineSize );
-
-        }
-        if ( (eUnderline == UNDERLINE_SMALLWAVE) &&
-             (nLineHeight > 3) )
-            nLineHeight = 3;
-
-        long nLineWidth = getReferenceDevice()->mnDPIX/450;
-        if( ! nLineWidth )
-            nLineWidth = 1;
-
-        if ( eUnderline == UNDERLINE_BOLDWAVE )
-            nLineWidth = 3*nLineWidth;
-
-        m_aPages.back().appendMappedLength( (sal_Int32)nLineWidth, aLine );
-        aLine.append( " w " );
-
-        if ( eUnderline == UNDERLINE_DOUBLEWAVE )
-        {
-            long nOrgLineHeight = nLineHeight;
-            nLineHeight /= 3;
-            if ( nLineHeight < 2 )
-            {
-                if ( nOrgLineHeight > 1 )
-                    nLineHeight = 2;
-                else
-                    nLineHeight = 1;
-            }
-            long nLineDY = nOrgLineHeight-(nLineHeight*2);
-            if ( nLineDY < nLineWidth )
-                nLineDY = nLineWidth;
-            long nLineDY2 = nLineDY/2;
-            if ( !nLineDY2 )
-                nLineDY2 = 1;
-
-            nLinePos -= nLineWidth-nLineDY2;
-
-            m_aPages.back().appendWaveLine( nWidth, -nLinePos, 2*nLineHeight, aLine );
-
-            nLinePos += nLineWidth+nLineDY;
-            m_aPages.back().appendWaveLine( nWidth, -nLinePos, 2*nLineHeight, aLine );
-        }
-        else
-        {
-            if( eUnderline != UNDERLINE_BOLDWAVE )
-                nLinePos -= nLineWidth/2;
-            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
-        }
-
-        if ( (eStrikeout == STRIKEOUT_NONE) ||
-             (eStrikeout == STRIKEOUT_DONTKNOW) )
-            bNormalLines = false;
+        drawWaveTextLine( aLine, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+        bUnderlineDone = true;
     }
 
-    if ( bNormalLines )
+    if ( (eOverline == UNDERLINE_SMALLWAVE) ||
+         (eOverline == UNDERLINE_WAVE) ||
+         (eOverline == UNDERLINE_DOUBLEWAVE) ||
+         (eOverline == UNDERLINE_BOLDWAVE) )
     {
-        if ( eUnderline > UNDERLINE_BOLDWAVE )
-            eUnderline = UNDERLINE_SINGLE;
-
-        if ( (eUnderline == UNDERLINE_SINGLE) ||
-             (eUnderline == UNDERLINE_DOTTED) ||
-             (eUnderline == UNDERLINE_DASH) ||
-             (eUnderline == UNDERLINE_LONGDASH) ||
-             (eUnderline == UNDERLINE_DASHDOT) ||
-             (eUnderline == UNDERLINE_DASHDOTDOT) )
-        {
-            if ( bUnderlineAbove )
-            {
-                if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
-                    m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveUnderlineOffset );
-            }
-            else
-            {
-                if ( !pFontEntry->maMetric.mnUnderlineSize )
-                    m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnUnderlineOffset );
-            }
-        }
-        else if ( (eUnderline == UNDERLINE_BOLD) ||
-                  (eUnderline == UNDERLINE_BOLDDOTTED) ||
-                  (eUnderline == UNDERLINE_BOLDDASH) ||
-
-                  (eUnderline == UNDERLINE_BOLDLONGDASH) ||
-                  (eUnderline == UNDERLINE_BOLDDASHDOT) ||
-                  (eUnderline == UNDERLINE_BOLDDASHDOTDOT) )
-        {
-            if ( bUnderlineAbove )
-            {
-                if ( !pFontEntry->maMetric.mnAboveBUnderlineSize )
-                    m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveBUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveBUnderlineOffset );
-            }
-            else
-            {
-                if ( !pFontEntry->maMetric.mnBUnderlineSize )
-                    m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnBUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnBUnderlineOffset );
-                nLinePos += nLineHeight/2;
-            }
-        }
-        else if ( eUnderline == UNDERLINE_DOUBLE )
-        {
-            if ( bUnderlineAbove )
-            {
-                if ( !pFontEntry->maMetric.mnAboveDUnderlineSize )
-                    m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveDUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset1 );
-                nLinePos2   = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset2 );
-            }
-            else
-            {
-                if ( !pFontEntry->maMetric.mnDUnderlineSize )
-                    m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnDUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnDUnderlineOffset1 );
-                nLinePos2   = HCONV( pFontEntry->maMetric.mnDUnderlineOffset2 );
-            }
-        }
-        else
-            nLineHeight = 0;
-
-        if ( nLineHeight )
-        {
-            m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, true );
-            aLine.append( " w " );
-            appendStrokingColor( aUnderlineColor, aLine );
-            aLine.append( "\n" );
-
-            if ( (eUnderline == UNDERLINE_DOTTED) ||
-                 (eUnderline == UNDERLINE_BOLDDOTTED) )
-            {
-                aLine.append( "[ " );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
-                aLine.append( " ] 0 d\n" );
-            }
-            else if ( (eUnderline == UNDERLINE_DASH) ||
-                      (eUnderline == UNDERLINE_LONGDASH) ||
-                      (eUnderline == UNDERLINE_BOLDDASH) ||
-                      (eUnderline == UNDERLINE_BOLDLONGDASH) )
-            {
-                sal_Int32 nDashLength = 4*nLineHeight;
-                sal_Int32 nVoidLength = 2*nLineHeight;
-                if ( ( eUnderline == UNDERLINE_LONGDASH ) || ( eUnderline == UNDERLINE_BOLDLONGDASH ) )
-                    nDashLength = 8*nLineHeight;
-
-                aLine.append( "[ " );
-                m_aPages.back().appendMappedLength( nDashLength, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
-                aLine.append( " ] 0 d\n" );
-            }
-            else if ( (eUnderline == UNDERLINE_DASHDOT) ||
-                      (eUnderline == UNDERLINE_BOLDDASHDOT) )
-            {
-                sal_Int32 nDashLength = 4*nLineHeight;
-                sal_Int32 nVoidLength = 2*nLineHeight;
-                aLine.append( "[ " );
-                m_aPages.back().appendMappedLength( nDashLength, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
-                aLine.append( " ] 0 d\n" );
-            }
-            else if ( (eUnderline == UNDERLINE_DASHDOTDOT) ||
-
-                      (eUnderline == UNDERLINE_BOLDDASHDOTDOT) )
-            {
-                sal_Int32 nDashLength = 4*nLineHeight;
-                sal_Int32 nVoidLength = 2*nLineHeight;
-                aLine.append( "[ " );
-                m_aPages.back().appendMappedLength( nDashLength, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
-                aLine.append( " ] 0 d\n" );
-            }
-
-            aLine.append( "0 " );
-            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
-            aLine.append( " m " );
-            m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
-            aLine.append( ' ' );
-            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
-            aLine.append( " l S\n" );
-            if ( eUnderline == UNDERLINE_DOUBLE )
-            {
-                aLine.append( "0 " );
-                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
-                aLine.append( " m " );
-                m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
-                aLine.append( " l S\n" );
-            }
-        }
-
-        if ( eStrikeout > STRIKEOUT_X )
-            eStrikeout = STRIKEOUT_SINGLE;
-
-        if ( eStrikeout == STRIKEOUT_SINGLE )
-        {
-            if ( !pFontEntry->maMetric.mnStrikeoutSize )
-                m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontEntry->maMetric.mnStrikeoutSize );
-            nLinePos    = HCONV( pFontEntry->maMetric.mnStrikeoutOffset );
-        }
-        else if ( eStrikeout == STRIKEOUT_BOLD )
-        {
-            if ( !pFontEntry->maMetric.mnBStrikeoutSize )
-                m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontEntry->maMetric.mnBStrikeoutSize );
-            nLinePos    = HCONV( pFontEntry->maMetric.mnBStrikeoutOffset );
-
-        }
-        else if ( eStrikeout == STRIKEOUT_DOUBLE )
-        {
-            if ( !pFontEntry->maMetric.mnDStrikeoutSize )
-                m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontEntry->maMetric.mnDStrikeoutSize );
-            nLinePos    = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset1 );
-            nLinePos2   = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset2 );
-        }
-        else
-            nLineHeight = 0;
-
-        if ( nLineHeight )
-        {
-            m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, true );
-            aLine.append( " w " );
-            appendStrokingColor( aStrikeoutColor, aLine );
-            aLine.append( "\n" );
-
-            aLine.append( "0 " );
-            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
-            aLine.append( " m " );
-            m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, true );
-            aLine.append( ' ' );
-            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
-            aLine.append( " l S\n" );
-
-            if ( eStrikeout == STRIKEOUT_DOUBLE )
-            {
-                aLine.append( "0 " );
-                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
-                aLine.append( " m " );
-                m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, true );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
-                aLine.append( " l S\n" );
-
-            }
-        }
+        drawWaveTextLine( aLine, nWidth, eOverline, aOverlineColor, true );
+        bOverlineDone = true;
     }
+
+    if ( !bUnderlineDone )
+    {
+        drawStraightTextLine( aLine, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+    }
+
+    if ( !bOverlineDone )
+    {
+        drawStraightTextLine( aLine, nWidth, eOverline, aOverlineColor, true );
+    }
+
+    if ( !bStrikeoutDone )
+    {
+        drawStrikeoutLine( aLine, nWidth, eStrikeout, aStrikeoutColor );
+    }
+
     aLine.append( "Q\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
@@ -9972,6 +10017,8 @@ void PDFWriterImpl::pop()
         rOld.m_aClipRegion = aState.m_aClipRegion;
     if( ! (aState.m_nFlags & PUSH_TEXTLINECOLOR ) )
         setTextLineColor( aState.m_aTextLineColor );
+    if( ! (aState.m_nFlags & PUSH_OVERLINECOLOR ) )
+        setOverlineColor( aState.m_aOverlineColor );
     if( ! (aState.m_nFlags & PUSH_TEXTALIGN ) )
         setTextAlign( aState.m_aFont.GetAlign() );
     if( ! (aState.m_nFlags & PUSH_TEXTFILLCOLOR) )

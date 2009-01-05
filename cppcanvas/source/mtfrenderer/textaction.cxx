@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textaction.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2183,7 +2183,8 @@ namespace cppcanvas
             if( !pDXArray && !bSubsettable )
             {
                 // effects, or not?
-                if( !rState.textUnderlineStyle &&
+                if( !rState.textOverlineStyle &&
+                    !rState.textUnderlineStyle &&
                     !rState.textStrikeoutStyle &&
                     rReliefColor == aEmptyColor &&
                     rShadowColor == aEmptyColor )
@@ -2246,7 +2247,8 @@ namespace cppcanvas
             else
             {
                 // DX array necessary - any effects?
-                if( !rState.textUnderlineStyle &&
+                if( !rState.textOverlineStyle &&
+                    !rState.textUnderlineStyle &&
                     !rState.textStrikeoutStyle &&
                     rReliefColor == aEmptyColor &&
                     rShadowColor == aEmptyColor )

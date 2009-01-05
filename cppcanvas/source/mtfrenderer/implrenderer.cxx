@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implrenderer.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.25.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +200,7 @@ namespace
                 aCalculatedNewState.xFont                   = rNewState.xFont;
                 aCalculatedNewState.fontRotation            = rNewState.fontRotation;
                 aCalculatedNewState.textReliefStyle         = rNewState.textReliefStyle;
+                aCalculatedNewState.textOverlineStyle       = rNewState.textOverlineStyle;
                 aCalculatedNewState.textUnderlineStyle      = rNewState.textUnderlineStyle;
                 aCalculatedNewState.textStrikeoutStyle      = rNewState.textStrikeoutStyle;
                 aCalculatedNewState.textEmphasisMarkStyle   = rNewState.textEmphasisMarkStyle;
@@ -1636,6 +1637,7 @@ namespace cppcanvas
 
                         // TODO(Q2): define and use appropriate enumeration types
                         rState.textReliefStyle          = (sal_Int8)rFont.GetRelief();
+                        rState.textOverlineStyle        = (sal_Int8)rFont.GetOverline();
                         rState.textUnderlineStyle       = rParms.maFontUnderline.isValid() ?
                             (rParms.maFontUnderline.getValue() ? (sal_Int8)UNDERLINE_SINGLE : (sal_Int8)UNDERLINE_NONE) :
                             (sal_Int8)rFont.GetUnderline();

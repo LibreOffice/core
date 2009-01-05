@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impfont.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,7 @@ private:
     FontWidth           meWidthType;
     FontItalic          meItalic;
     FontUnderline       meUnderline;
+    FontUnderline       meOverline;
     FontStrikeout       meStrikeout;
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;

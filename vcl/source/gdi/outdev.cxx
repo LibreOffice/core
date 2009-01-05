@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.60.30.1 $
+ * $Revision: 1.59.74.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,6 +117,7 @@ struct ImplObjStack
     Color*          mpTextColor;
     Color*          mpTextFillColor;
     Color*          mpTextLineColor;
+    Color*          mpOverlineColor;
     Point*          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
@@ -152,6 +153,11 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
     {
         if ( pObjStack->mpTextLineColor )
             delete pObjStack->mpTextLineColor;
+    }
+    if ( pObjStack->mnFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( pObjStack->mpOverlineColor )
+            delete pObjStack->mpOverlineColor;
     }
     if ( pObjStack->mnFlags & PUSH_MAPMODE )
     {
@@ -464,6 +470,7 @@ OutputDevice::OutputDevice() :
     mbDevOutput         = FALSE;
     mbOutputClipped     = FALSE;
     maTextColor         = Color( COL_BLACK );
+    maOverlineColor     = Color( COL_TRANSPARENT );
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
@@ -2872,6 +2879,13 @@ void OutputDevice::Push( USHORT nFlags )
         else
             pData->mpTextLineColor = NULL;
     }
+    if ( nFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( IsOverlineColor() )
+            pData->mpOverlineColor = new Color( GetOverlineColor() );
+        else
+            pData->mpOverlineColor = NULL;
+    }
     if ( nFlags & PUSH_TEXTALIGN )
         pData->meTextAlign = GetTextAlign();
     if( nFlags & PUSH_TEXTLAYOUTMODE )
@@ -2962,6 +2976,13 @@ void OutputDevice::Pop()
             SetTextLineColor( *pData->mpTextLineColor );
         else
             SetTextLineColor();
+    }
+    if ( pData->mnFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( pData->mpOverlineColor )
+            SetOverlineColor( *pData->mpOverlineColor );
+        else
+            SetOverlineColor();
     }
     if ( pData->mnFlags & PUSH_TEXTALIGN )
         SetTextAlign( pData->meTextAlign );

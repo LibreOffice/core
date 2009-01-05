@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.286 $
+ * $Revision: 1.285.38.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -9750,6 +9750,10 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         SetTextLineColor( GetTextLineColor() );
     else
         SetTextLineColor();
+    if( IsOverlineColor() )
+        SetOverlineColor( GetOverlineColor() );
+    else
+        SetOverlineColor();
     if( IsTextFillColor() )
         SetTextFillColor( GetTextFillColor() );
     else
