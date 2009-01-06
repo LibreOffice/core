@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WindowUpdater.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,7 +143,7 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
         switch (aNumeralMode)
         {
             case SvtCTLOptions::NUMERALS_HINDI:
-                aLanguage = LANGUAGE_ARABIC;
+                aLanguage = LANGUAGE_ARABIC_SAUDI_ARABIA;
                 break;
 
             case SvtCTLOptions::NUMERALS_SYSTEM:

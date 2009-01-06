@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterTextView.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.5.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -378,7 +378,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
             // info to get CTL font to be used
-            {   LANGUAGE_ARABIC,        LANGUAGE_NONE,
+            {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
         aTable[0].nLang = aOpt.nDefaultLanguage;

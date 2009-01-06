@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EditWindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +171,7 @@ EditEngine* EditWindow::CreateEditEngine (void)
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
             // info to get CTL font to be used
-            {   LANGUAGE_ARABIC,        LANGUAGE_NONE,
+            {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
         aTable[0].nLang = aOpt.nDefaultLanguage;
